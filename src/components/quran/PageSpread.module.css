@@ -1,6 +1,7 @@
 .spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
 .page { display: grid; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); color: var(--home-ink); }
 .page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
+.titled { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
 .page header p { color: var(--home-muted); font-size: 0.9375rem; }
 .lines { display: contents; font-family: var(--font-quran); font-size: 1.5rem; line-height: 2.5; text-align: center; }

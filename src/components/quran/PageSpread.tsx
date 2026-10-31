@@ -5,7 +5,7 @@ import styles from './PageSpread.module.css';
 
 export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; title?: string };
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; current?: boolean; bare?: boolean };
-export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; footer?: React.ReactNode };
+export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; footer?: React.ReactNode; action?: React.ReactNode };
 
 const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`]].filter(Boolean).join(' ') || undefined;
 
@@ -33,7 +33,7 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
     <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''}`} dir="rtl">
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + (page.footer ? 2 : 1)}` }} aria-label={page.label ?? page.title}>
-          <header><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>
+          <header>{page.action ? <div className={styles.titled}><h3>{page.title}</h3>{page.action}</div> : <h3>{page.title}</h3>}{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>
           <div className={styles.lines} lang="ar">
             {Array.from({ length: rows }, (_, row) => (
               <p key={row} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>{(page.rows[row] ?? []).map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}<Ayah ayah={ayah} /></Fragment>)}</p>
