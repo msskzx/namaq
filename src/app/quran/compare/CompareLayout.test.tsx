@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import CompareLayout from './CompareLayout';
 
 const navigation = { search: 'a=1' };
@@ -39,13 +39,30 @@ describe('CompareLayout', () => {
     expect(screen.getByRole('button', { name: /تغيير السورتين/ }).getAttribute('aria-expanded')).toBe('false');
   });
 
-  it.each([[false, ['شريط', 'اعرض قائمة السور'], ['شريط', 'تغيير السورتين']], [true, ['اعرض قائمة السور', 'شريط'], ['تغيير السورتين', 'شريط']]])('with paneToggleFirst=%s orders the surah controls around the bar', (first, wide, phone) => {
+  it('keeps the wide-screen surah list buttons around the bar by default', () => {
     localStorage.setItem('compare-pane-hidden', '1');
-    render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>} paneToggleFirst={first}><p>المقارنة</p></CompareLayout>);
-    const order = (names: string[]) => names.map(name => screen.getByRole('button', { name: new RegExp(name) }));
-    const [a, b] = order(wide);
-    expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    const [c, d] = order(phone);
-    expect(c.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>}><p>المقارنة</p></CompareLayout>);
+    expect(screen.getByRole('button', { name: 'شريط' }).compareDocumentPosition(screen.getByRole('button', { name: 'اعرض قائمة السور' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    act(() => fireEvent.click(screen.getByRole('button', { name: 'اعرض قائمة السور' })));
+    expect(within(screen.getByRole('complementary')).getByRole('button', { name: 'إخفاء القائمة' })).toBeTruthy();
+  });
+
+  it('with paneToggleFirst keeps one surah list toggle first in the bar, whether the list is shown or hidden', () => {
+    render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>} paneToggleFirst><p>المقارنة</p></CompareLayout>);
+    const bar = screen.getByRole('button', { name: 'شريط' });
+    const toggle = screen.getByRole('button', { name: 'أخفِ قائمة السور' });
+    expect(toggle.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(within(screen.getByRole('complementary', { hidden: true })).queryByRole('button', { name: 'إخفاء القائمة' })).toBeNull();
+    act(() => fireEvent.click(toggle));
+    expect(localStorage.getItem('compare-pane-hidden')).toBe('1');
+    expect(toggle.textContent).toBe('اعرض قائمة السور');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('with paneToggleFirst puts the phone surah button before the bar', () => {
+    render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>} paneToggleFirst><p>المقارنة</p></CompareLayout>);
+    expect(screen.getByRole('button', { name: /تغيير السورتين/ }).compareDocumentPosition(screen.getByRole('button', { name: 'شريط' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });

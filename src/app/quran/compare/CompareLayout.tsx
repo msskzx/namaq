@@ -40,7 +40,7 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
     (hidden ? show : hide).current?.querySelector('button')?.focus();
   }, [hidden]);
   const toggle = (next: boolean) => {
-    moved.current = true;
+    moved.current = !paneToggleFirst;
     write(storageKey, next);
   };
   const showPane = hidden && (
@@ -61,11 +61,19 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
       </span>
     </button>
   );
+  const paneButton = (
+    <span className="hidden lg:block">
+      <Button size="sm" aria-expanded={!hidden} aria-controls={id} onClick={() => toggle(!hidden)}>
+        {hidden ? <PanelRightOpen size={14} aria-hidden /> : <PanelRightClose size={14} aria-hidden />}
+        {hidden ? 'اعرض قائمة السور' : 'أخفِ قائمة السور'}
+      </Button>
+    </span>
+  );
   return (
     <div className="flex flex-col gap-4">
       {paneToggleFirst && phoneToggle}
       {(bar || hidden) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
-        {paneToggleFirst && showPane}
+        {paneToggleFirst && paneButton}
         {bar}
         {!paneToggleFirst && showPane}
       </div>}
@@ -74,12 +82,12 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
         <aside id={id} aria-label={title} className={`${PANE} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl">{title}</h2>
-            <span ref={hide} className="hidden lg:block">
+            {!paneToggleFirst && <span ref={hide} className="hidden lg:block">
               <Button size="sm" onClick={() => toggle(true)}>
                 <PanelRightClose size={14} aria-hidden />
                 إخفاء القائمة
               </Button>
-            </span>
+            </span>}
           </div>
           {pane}
         </aside>
