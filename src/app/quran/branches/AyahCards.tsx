@@ -10,8 +10,9 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
 import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
-import { loadContext, MAX_KEYS, sharedMarks } from './AyahContext';
-import type { Steps } from './TreeSteps';
+import { quranContexts, quranSurrounding } from '@/lib/quran/quranText';
+import { MAX_KEYS, sharedMarks } from './AyahContext';
+import { usePreload, type Steps } from './TreeSteps';
 import styles from './AyahCards.module.css';
 
 const COLUMNS = ['before', 'ayah', 'after'] as const;
@@ -35,16 +36,13 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const [column, setColumn] = useState(1);
   const [lit, setLit] = useState<number[] | null>(null);
   const [fits, setFits] = useState(false);
-  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(`/api/quran/context?${new URLSearchParams({ q: shown.join(',') })}`, loadContext, { revalidateOnFocus: false });
-  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(`/api/quran/surrounding?${new URLSearchParams({ before: shown.join(','), after: shown.join(',') })}`, async (url: string) => {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Could not load surrounding ayat');
-    return response.json();
-  }, { revalidateOnFocus: false });
+  const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
+  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(['quran-context', ...shown], loadContexts, { revalidateOnFocus: false });
+  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(['quran-surrounding', shown.join(','), shown.join(',')], () => quranSurrounding(shown, shown), { revalidateOnFocus: false });
   const sideKeys = (side: 'before' | 'after') => around && [...new Set(Object.values(around[side]).flatMap(ayah => ayah ? [ayah.key] : []))];
-  const sideUrl = (keys?: string[]) => keys && keys.length > 1 ? `/api/quran/context?${new URLSearchParams({ q: keys.slice(0, MAX_KEYS).join(',') })}` : null;
-  const { data: beforeMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('before')), loadContext, { revalidateOnFocus: false });
-  const { data: afterMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('after')), loadContext, { revalidateOnFocus: false });
+  const sideKey = (keys?: string[]) => keys && keys.length > 1 ? ['quran-context', ...keys.slice(0, MAX_KEYS)] : null;
+  const { data: beforeMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('before')), loadContexts, { revalidateOnFocus: false });
+  const { data: afterMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('after')), loadContexts, { revalidateOnFocus: false });
   const { exact: exactLabel, root: rootLabel } = matchLabels(ar);
   const read = ar ? 'قراءة الآية' : 'Read ayah';
 
@@ -172,6 +170,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   }, [ready]);
 
   const router = useNavigatingRouter();
+  usePreload(steps?.next, steps?.previous);
   const leave = (forward: boolean) => {
     const href = forward ? steps?.next : steps?.previous;
     if (!href || column !== (forward ? COLUMNS.length - 1 : 0)) return false;

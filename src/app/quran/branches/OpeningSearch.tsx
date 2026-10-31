@@ -16,7 +16,23 @@ type Suggestion = Opening;
 
 export const SUGGESTIONS = 10;
 
-export default function OpeningSearch({ phrases, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+const inventories = new Map<string, Promise<Opening[]>>();
+const NONE: Opening[] = [];
+
+function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
+  const params = new URLSearchParams({ all: '1', ...(juz && { juzFrom: String(juz.from), juzTo: String(juz.to) }) });
+  const key = params.toString();
+  if (!inventories.has(key)) inventories.set(key, fetch(`/api/quran/branch-phrases?${key}`)
+    .then(response => (response.ok ? response.json() : Promise.reject(new Error('Phrases failed'))))
+    .then((data: { phrases: Opening[] }) => data.phrases)
+    .catch(error => {
+      inventories.delete(key);
+      throw error;
+    }));
+  return inventories.get(key)!;
+}
+
+export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -24,9 +40,18 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
   const [query, setQuery] = useState(submitted);
   const [dismissed, setDismissed] = useState(!!submitted);
   const [selected, setSelected] = useState(-1);
-  useEffect(() => setSelected(-1), [phrases]);
   const from = juz?.from;
   const to = juz?.to;
+  const [loaded, setLoaded] = useState<{ range: string; phrases: Opening[] }>();
+  const range = `${from}-${to}`;
+  useEffect(() => {
+    if (given || remote) return;
+    let live = true;
+    loadPhrases(from !== undefined && to !== undefined ? { from, to } : null).then(phrases => live && setLoaded({ range, phrases }), () => {});
+    return () => { live = false; };
+  }, [given, remote, from, to, range]);
+  const phrases = given ?? (loaded?.range === range ? loaded.phrases : NONE);
+  useEffect(() => setSelected(-1), [phrases]);
   const request = new URLSearchParams({ q: query });
   if (from !== undefined && to !== undefined) { request.set('juzFrom', String(from)); request.set('juzTo', String(to)); }
   const requestKey = request.toString();

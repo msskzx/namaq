@@ -2,10 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BranchAyah } from '@/lib/quran/branches';
 
 const { loadReaderAyat } = vi.hoisted(() => ({ loadReaderAyat: vi.fn() }));
-vi.mock('@/lib/quran/ayahContext', async importOriginal => ({
-  ...await importOriginal<typeof import('@/lib/quran/ayahContext')>(),
-  loadReaderAyat,
-}));
+vi.mock('@/lib/quran/readerAyat', () => ({ loadReaderAyat }));
 
 import { GET } from './route';
 

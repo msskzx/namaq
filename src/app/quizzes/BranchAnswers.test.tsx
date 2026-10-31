@@ -7,6 +7,10 @@ import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
 import { branchesCorrect, emptyBranchAnswers } from '@/lib/quiz/score';
 
+const quranSurrounding = vi.hoisted(() => vi.fn());
+const quranContexts = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding, quranContexts }));
+
 const tree = {
   words: ['يَطُوفُ', 'عَلَيْهِمْ'], ayat: [], children: [
     { words: ['غِلْمَانٌ', 'لَهُمْ'], ayat: ['52:24'], children: [] },
@@ -27,10 +31,10 @@ describe('complete branch tree answers', () => {
       { words: ['نَبِّـُٔونِى', 'بِعِلْمٍ'], ayat: ['6:143'], children: [] },
       { words: ['أَمْ', 'كُنتُمْ', 'شُهَدَآءَ'], ayat: ['6:144'], children: [] },
     ] }, asked: [0, 1] };
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {
+    quranSurrounding.mockReset().mockResolvedValue({ before: {}, after: {
       '6:143': { key: '6:144', words: ['السياق الأول'] },
       '6:144': { key: '6:145', words: ['السياق الثاني'] },
-    } }) }));
+    } });
     try {
       const { container } = render(<BranchFeedback question={own} typed={['ام كنتم', 'نبئوني بعلم']} names={{}} ar />);
       const first = container.querySelector('[data-answer]')!.closest('[data-node]')!;
@@ -45,8 +49,7 @@ describe('complete branch tree answers', () => {
   });
 
   it('offers surrounding ayat only after revealing the solution and loads them on demand', async () => {
-    const fetchContext = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: { '52:24': { key: '52:23', words: ['السياق السابق'] } }, after: {} }) });
-    vi.stubGlobal('fetch', fetchContext);
+    const fetchContext = quranSurrounding.mockReset().mockResolvedValue({ before: { '52:24': { key: '52:23', words: ['السياق السابق'] } }, after: {} });
     try {
       const { rerender } = render(<BranchInputs question={question} typed={[]} onChange={() => {}} onCheck={() => {}} ar />);
       expect(screen.queryByRole('switch')).toBeNull();
@@ -57,7 +60,7 @@ describe('complete branch tree answers', () => {
       expect(fetchContext).not.toHaveBeenCalled();
       fireEvent.click(toggle);
       expect(await screen.findByText('السياق السابق')).toBeTruthy();
-      expect(fetchContext).toHaveBeenCalledWith(expect.stringContaining('/api/quran/surrounding?'));
+      expect(fetchContext).toHaveBeenCalledWith(['52:24', '56:17', '76:19'], expect.arrayContaining(['52:24']));
       fireEvent.click(toggle);
       expect(screen.queryByText('السياق السابق')).toBeNull();
     } finally {
@@ -96,28 +99,24 @@ describe('complete branch tree answers', () => {
 
   it('opens a feedback leaf on its siblings under the same parent', async () => {
     HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
+    quranContexts.mockReset().mockResolvedValue([]);
     const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب'], ayat: ['1:1'], children: [] }, { words: ['يا'], ayat: ['1:2', '1:3'], children: [] }] }, branches: [] };
     render(<BranchFeedback question={own} typed={['رب', 'يا']} names={{}} ar />);
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-    const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
-    expect(params.get('q')).toBe('1:1,1:2,1:3');
-    vi.unstubAllGlobals();
+    await waitFor(() => expect(quranContexts).toHaveBeenCalledWith(['1:1', '1:2', '1:3']));
   });
 
   it('marks only the words every ayah of a feedback dialog shares', async () => {
     HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [
+    quranContexts.mockReset().mockResolvedValue([
       { ayah: { key: '1:1', page: 1, words: ['قال', 'رب', 'اغفر', 'لي'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
       { ayah: { key: '1:2', page: 1, words: ['قال', 'ربي', 'يا'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
-    ] }));
+    ]);
     const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }, { words: ['ربي', 'يا'], ayat: ['1:2'], children: [] }] }, branches: [] };
     render(<BranchFeedback question={own} typed={['رب اغفر', 'ربي يا']} names={{}} ar />);
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
     await waitFor(() => expect(screen.getAllByTitle('نفس الكلمة').map(word => word.textContent)).toEqual(['قال', 'قال']));
     expect(screen.getAllByTitle('نفس الجذر').map(word => word.textContent)).toEqual(['رب', 'ربي']);
-    vi.unstubAllGlobals();
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {

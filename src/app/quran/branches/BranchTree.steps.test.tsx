@@ -8,14 +8,15 @@ import TreeSteps from './TreeSteps';
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 const lang = vi.hoisted(() => ({ language: 'ar' as 'ar' | 'en' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: lang.language }) }));
-const { replace, search } = vi.hoisted(() => ({ replace: vi.fn(), search: { params: new URLSearchParams() } }));
-vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }), useSearchParams: () => search.params }));
+const { replace, prefetch, search } = vi.hoisted(() => ({ replace: vi.fn(), prefetch: vi.fn(), search: { params: new URLSearchParams() } }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ replace, prefetch }), useSearchParams: () => search.params }));
 
 type Props = React.ComponentProps<typeof BranchTree> & { steps?: React.ComponentProps<typeof TreeSteps>['steps'] | null };
 
 beforeEach(() => {
   lang.language = 'ar';
   search.params = new URLSearchParams();
+  prefetch.mockClear();
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
 });
@@ -33,6 +34,13 @@ const tree = {
 const steps = { previous: '/quran/branches?juz=2&tree=2', next: '/quran/branches?juz=2&tree=4', position: 3, total: 120 };
 const AR = { previous: 'الشجرة السابقة', next: 'الشجرة التالية', nav: 'التنقل بين الأشجار' };
 const EN = { previous: 'Previous tree', next: 'Next tree', nav: 'Tree navigation' };
+
+it('loads the neighbouring trees ahead, with the surrounding-ayat switch carried', () => {
+  search.params = new URLSearchParams('c=1');
+  renderTree();
+  expect([...new Set(prefetch.mock.calls.map(([href]) => href))]).toEqual(['/quran/branches?juz=2&tree=4&c=1', '/quran/branches?juz=2&tree=2&c=1']);
+  expect(prefetch.mock.calls.every(([, options]) => options?.kind === 'full')).toBe(true);
+});
 
 function renderTree({ steps: given = steps, ...props }: Partial<Props> = {}) {
   return render(<>{given && <TreeSteps steps={given} />}<BranchTree tree={tree} names={{}} steppable={!!given} {...props} /></>);

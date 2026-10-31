@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { ayahContexts, sharedByAll, loadReaderAyat, surrounding } from './ayahContext';
+import { ayahContexts, sharedByAll, surrounding } from './ayahContext';
+import { loadReaderAyat } from './readerAyat';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
 

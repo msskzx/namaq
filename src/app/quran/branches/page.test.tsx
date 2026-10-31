@@ -9,15 +9,17 @@ import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
 import { buildTreeGroups } from '@/lib/quran/phraseTrees';
 import { inJuzRange } from '@/lib/quran/juz';
 import data from './trees.json';
+import { NextRequest } from 'next/server';
+import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 
 const params = new URLSearchParams();
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
   usePathname: () => '/quran/branches',
   useSearchParams: () => params,
   redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); },
 }));
-vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: vi.fn(async () => []) } } }));
+vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => []) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(cleanup);
@@ -32,10 +34,15 @@ describe('Quran branch trees', () => {
     expect(screen.getByText(/^يَوْمَ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ/)).toBeTruthy();
     expect(screen.getByText('فِيهِ يُصْعَقُونَ')).toBeTruthy();
   });
-  it('suggests the retained tree when typing absorbed wording', async () => {
-    render(await open({ juzFrom: '25', juzTo: '30', s: '43', m: 'list' }));
+  it('suggests the retained tree when typing absorbed wording, from phrases fetched once and not sent with the page', async () => {
+    const fetch = vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetch);
+    const page = await open({ juzFrom: '25', juzTo: '30', s: '43', m: 'list' });
+    render(page);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'فذرهم يخوضوا ويلعبوا' } });
-    const options = screen.getAllByRole('option');
+    const options = await screen.findAllByRole('option');
+    vi.unstubAllGlobals();
+    expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30']);
     expect(options).toHaveLength(1);
     expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
   });

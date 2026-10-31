@@ -1,24 +1,14 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '@/app/quran/compare/wordKeys.json';
-import { readerAyat, spell, type BranchAyah } from './branches';
-import { mushafPages } from './readerPage';
+import { spell, type BranchAyah } from './branches';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
 export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[] } };
 
-let source: Promise<BranchAyah[]> | undefined;
-
 export function isAyahKey(key: string) {
   const [surah, ayah] = key.split(':').map(Number);
   return /^[1-9]\d*:[1-9]\d*$/.test(key) && Number.isSafeInteger(surah) && surah <= 114 && Number.isSafeInteger(ayah);
-}
-
-export function loadReaderAyat(): Promise<BranchAyah[]> {
-  const all = <T,>(load: (page: number) => Promise<T>) => Promise.all(Array.from({ length: 604 }, (_, i) => load(i + 1)));
-  return source ??= Promise.all([all(page => import(`../../app/quran/read/data/${page}.json`)), all(page => import(`../../app/quran/read/mushaf/${page}.json`))])
-    .then(([pages, mushaf]) => readerAyat(pages.map(page => page.default), mushafPages(mushaf.map(page => page.default))))
-    .catch(error => { source = undefined; throw error; });
 }
 
 export function ayahContexts(all: BranchAyah[], wanted: string[]): AyahContext[] {

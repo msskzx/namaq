@@ -1,7 +1,9 @@
 'use client';
 
 import { ArrowLeft, ArrowRight, GalleryHorizontal, GitBranch, List } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -14,6 +16,15 @@ function withContext(href: string | undefined, on: boolean) {
   if (on) url.searchParams.set('c', '1');
   else url.searchParams.delete('c');
   return `${url.pathname}${url.search}`;
+}
+
+/** Loads the neighbouring trees ahead, so stepping to one shows it at once. */
+export function usePreload(...hrefs: (string | undefined)[]) {
+  const router = useRouter();
+  const wanted = hrefs.filter(Boolean).join(' ');
+  useEffect(() => {
+    for (const href of wanted.split(' ').filter(Boolean)) router.prefetch(href, { kind: PrefetchKind.FULL });
+  }, [router, wanted]);
 }
 
 export type View = 'list' | 'tree' | 'cards';
@@ -33,11 +44,13 @@ export default function TreeSteps({ steps }: { steps: Steps }) {
   const Back = ar ? ArrowRight : ArrowLeft;
   const Forward = ar ? ArrowLeft : ArrowRight;
   const labels = ar ? { previous: 'الشجرة السابقة', next: 'الشجرة التالية' } : { previous: 'Previous tree', next: 'Next tree' };
-  const step = (href?: string) => href ? { href: withContext(href, on)! } : { disabled: true };
+  const [previous, next] = [withContext(steps.previous, on), withContext(steps.next, on)];
+  usePreload(next, previous);
+  const step = (href?: string) => href ? { href } : { disabled: true };
   return (
     <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex shrink-0 items-center gap-2">
-      <Button size="lg" data-step="previous" aria-label={labels.previous} title={labels.previous} {...step(steps.previous)}><Back aria-hidden /></Button>
-      <Button size="lg" data-step="next" aria-label={labels.next} title={labels.next} {...step(steps.next)}><Forward aria-hidden /></Button>
+      <Button size="lg" data-step="previous" aria-label={labels.previous} title={labels.previous} {...step(previous)}><Back aria-hidden /></Button>
+      <Button size="lg" data-step="next" aria-label={labels.next} title={labels.next} {...step(next)}><Forward aria-hidden /></Button>
     </nav>
   );
 }

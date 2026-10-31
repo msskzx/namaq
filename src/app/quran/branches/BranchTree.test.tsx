@@ -11,12 +11,15 @@ import { inJuzRange } from '@/lib/quran/juz';
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
+const { quranContexts, quranSurrounding } = vi.hoisted(() => ({ quranContexts: vi.fn(), quranSurrounding: vi.fn() }));
+vi.mock('@/lib/quran/quranText', () => ({ quranContexts, quranSurrounding }));
 
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
+  quranContexts.mockReset().mockResolvedValue([]);
+  quranSurrounding.mockReset().mockResolvedValue({ before: {}, after: {} });
 });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+afterEach(cleanup);
 
 const tree = {
   words: ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى'],
@@ -218,7 +221,7 @@ describe('BranchTree', () => {
     expect(screen.getByRole('button', { name: 'عرض الآيات في سياقها: مَقَامٍ أَمِينٍۢ' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'إظهار المسار: مَقَامٍ أَمِينٍۢ' })).toBeTruthy();
     expect(screen.queryByRole('link')).toBeNull();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(quranContexts).not.toHaveBeenCalled();
   });
 
   it('replaces repeated leaf originals with an amber button for every represented ayah', async () => {
@@ -231,8 +234,8 @@ describe('BranchTree', () => {
     expect(screen.queryByRole('link', { name: /الشرح/ })).toBeNull();
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
     fireEvent.click(button);
-    await vi.waitFor(() => expect(fetch).toHaveBeenCalled());
-    expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:5,94:6');
+    await vi.waitFor(() => expect(quranContexts).toHaveBeenCalled());
+    expect(quranContexts.mock.calls[0][0]).toEqual(['94:5', '94:6']);
   });
 
   it('keeps an amber button on an inner node with differing marks', () => {
@@ -260,7 +263,7 @@ describe('BranchTree', () => {
   it('opens every inner node on all its ayat and every leaf on its siblings under the same parent', async () => {
     render(<BranchTree tree={tree} names={{}} />);
     const [inner, , leaf] = screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ });
-    const asked = () => new URL(vi.mocked(fetch).mock.calls.at(-1)![0] as string, 'http://localhost').searchParams.get('q');
+    const asked = () => quranContexts.mock.calls.at(-1)![0].join(',');
     fireEvent.click(inner);
     await vi.waitFor(() => expect(asked()).toBe('15:45,51:15,44:51'));
     fireEvent.click(leaf);
@@ -272,9 +275,8 @@ describe('BranchTree', () => {
     render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     fireEvent.click(within(firstWords).getAllByRole('button', { name: /عرض/ })[1]);
-    await vi.waitFor(() => expect(fetch).toHaveBeenCalled());
-    const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
-    expect(params.get('q')).toBe('13:25,2:27');
+    await vi.waitFor(() => expect(quranContexts).toHaveBeenCalled());
+    expect(quranContexts.mock.calls[0][0]).toEqual(['13:25', '2:27']);
   });
 
   it('opens the overlay only from its button, never from the node text or box', () => {
@@ -366,7 +368,7 @@ describe('BranchTree', () => {
 
     beforeEach(() => {
       replace.mockReset();
-      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => around }));
+      quranSurrounding.mockResolvedValue(around);
     });
 
     it('shows preceding neighbors for both prefixed and trunk-starting ayat', () => {
@@ -402,15 +404,12 @@ describe('BranchTree', () => {
 
     it('loads nothing until the switch is turned on, then draws the ayah before and after every branch', async () => {
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      expect(fetch).not.toHaveBeenCalled();
+      expect(quranSurrounding).not.toHaveBeenCalled();
       expect(container.querySelector('[data-ctx]')).toBeNull();
 
       fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
-      const url = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost');
-      expect(url.pathname).toBe('/api/quran/surrounding');
-      expect(url.searchParams.get('before')).toBe('15:45,51:15,44:51');
-      expect(url.searchParams.get('after')).toBe('15:45,51:15,44:51');
+      expect(quranSurrounding).toHaveBeenCalledWith(['15:45', '51:15', '44:51'], ['15:45', '51:15', '44:51']);
       expect(within(screen.getByRole('list', { name: 'الآيات السابقة' })).getByText('لَهَا سَبْعَةُ أَبْوَٰبٍ')).toBeTruthy();
       expect(screen.getByText('ٱدْخُلُوهَا بِسَلَـٰمٍ').closest('[data-ctx]')?.getAttribute('data-ctx')).toBe('15:45');
       expect(replace).not.toHaveBeenCalled();
@@ -455,11 +454,11 @@ describe('BranchTree', () => {
 
     it('shows, after a leaf that runs into the next ayah, the ayah after that one', async () => {
       const group = startingWith(data.ayat as BranchAyah[], 'يطوف عليهم');
-      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: { '56:18': { key: '56:19', page: 535, words: ['لَّا', 'يُصَدَّعُونَ'] } } }) }));
+      quranSurrounding.mockResolvedValue({ before: {}, after: { '56:18': { key: '56:19', page: 535, words: ['لَّا', 'يُصَدَّعُونَ'] } } });
       render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 56: 'الواقعة' }} surround={{ on: true }} />);
       const box = (await screen.findByText('لَّا يُصَدَّعُونَ')).closest('[data-ctx]')!;
       expect(box.getAttribute('data-ctx')).toBe('56:17');
-      expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('after')!.split(',')).toEqual(expect.arrayContaining(['56:18', '52:24', '76:19']));
+      expect(quranSurrounding.mock.calls[0][1]).toEqual(expect.arrayContaining(['56:18', '52:24', '76:19']));
       expect(box.closest('li')!.parentElement!.closest('li')!.textContent).toContain('﴿١٧﴾');
     });
 
@@ -497,7 +496,7 @@ describe('BranchTree', () => {
       fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
-      expect(fetch).not.toHaveBeenCalled();
+      expect(quranSurrounding).not.toHaveBeenCalled();
     });
 
   });

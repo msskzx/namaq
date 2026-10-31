@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { loadReaderAyat } from '@/lib/quran/ayahContext';
+import { loadReaderAyat } from '@/lib/quran/readerAyat';
 
 export const dynamic = 'force-static';
 

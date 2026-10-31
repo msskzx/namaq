@@ -7,6 +7,8 @@ import { SWRConfig } from 'swr';
 import AyahContextButton from './AyahContext';
 import type { AyahContext } from '@/lib/quran/ayahContext';
 
+const quranContexts = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/quran/quranText', () => ({ quranContexts }));
 const language = { current: 'en' };
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: language.current }) }));
 const source: AyahContext[] = [{
@@ -22,17 +24,14 @@ const source: AyahContext[] = [{
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
   HTMLDialogElement.prototype.close = function () { this.open = false; this.dispatchEvent(new Event('close')); };
-  vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => {
-    const wanted = new URL(url, 'http://localhost').searchParams.get('q')!.split(',');
-    return { ok: true, json: async () => source.filter(context => wanted.includes(context.ayah.key)) };
-  }));
+  quranContexts.mockReset().mockImplementation(async (wanted: string[]) => source.filter(context => wanted.includes(context.ayah.key)));
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); language.current = 'en'; });
 const wrap = (children: React.ReactNode) => <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>{children}</SWRConfig>;
 
 it('loads on demand and shows each original with its neighbors, differing words and exact reader link', async () => {
   render(wrap(<AyahContextButton ayahKeys={['94:5', '94:6']} differentWords={[3]} names={{ 94: 'الشرح' }}>Shared display</AyahContextButton>));
-  expect(fetch).not.toHaveBeenCalled();
+  expect(quranContexts).not.toHaveBeenCalled();
   const trigger = screen.getByRole('button', { name: 'View spelling differences and context' });
   expect(trigger.getAttribute('data-variant')).toBe('highlight');
   fireEvent.click(trigger);
@@ -53,7 +52,7 @@ it('loads on demand and shows each original with its neighbors, differing words 
 
 it('puts references above its row of buttons, outside the context button, and handles the first ayah without inventing a predecessor', async () => {
   language.current = 'ar';
-  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ayah: { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] }, before: null, after: null }] } as Response);
+  quranContexts.mockResolvedValue([{ ayah: { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] }, before: null, after: null }]);
   render(wrap(<AyahContextButton ayahKeys={['1:1']} differentWords={[]} names={{}} references={<span>١:١</span>} before={<button>before</button>} after={<button>after</button>}>Opening</AyahContextButton>));
   const trigger = screen.getByRole('button', { name: 'عرض الآيات في سياقها' });
   expect(trigger.getAttribute('data-variant')).toBe('outline');
@@ -68,14 +67,14 @@ it('puts references above its row of buttons, outside the context button, and ha
 });
 
 it('reports a loading failure and lets the learner retry', async () => {
-  vi.mocked(fetch).mockResolvedValueOnce({ ok: false } as Response);
+  quranContexts.mockRejectedValueOnce(new Error('offline'));
   render(wrap(<AyahContextButton ayahKeys={['94:5']} differentWords={[]} names={{}}>Display</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   await screen.findByRole('alert');
   fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
   await screen.findByRole('link', { name: 'Read ayah' });
   await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
-  expect(vi.mocked(fetch)).toHaveBeenCalledTimes(2);
+  expect(quranContexts).toHaveBeenCalledTimes(2);
 });
 
 it('shows the node\'s own ayat first with a branch label, then its siblings in the same grid', async () => {
@@ -83,13 +82,13 @@ it('shows the node\'s own ayat first with a branch label, then its siblings in t
   fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
   const dialog = screen.getByRole('dialog');
   await within(dialog).findAllByRole('article');
-  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:6,94:5');
+  expect(quranContexts.mock.calls[0][0]).toEqual(['94:6', '94:5']);
   expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6 · this branch', 'الشرح 5']);
   expect(within(dialog).getAllByText(/^Ayah \d/).map(label => label.textContent)).toEqual(['Ayah 6 · this branch', 'Ayah 5 in context']);
 });
 
 it('marks the words every card shares, exact and by root apart, on own and sibling cards alike', async () => {
-  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2, 3], rooted: [0] } }, { ...source[1], match: { exact: [1, 2, 3], rooted: [0] } }] } as Response);
+  quranContexts.mockResolvedValue([{ ...source[0], match: { exact: [1, 2, 3], rooted: [0] } }, { ...source[1], match: { exact: [1, 2, 3], rooted: [0] } }]);
   render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[]} names={{ 94: 'الشرح' }}>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   const dialog = screen.getByRole('dialog');
@@ -103,7 +102,7 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
 });
 
 it('marks shared words in an inner-node dialog too, and nothing in the neighbouring ayat', async () => {
-  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2], rooted: [] } }, { ...source[1], match: { exact: [1, 2], rooted: [] } }] } as Response);
+  quranContexts.mockResolvedValue([{ ...source[0], match: { exact: [1, 2], rooted: [] } }, { ...source[1], match: { exact: [1, 2], rooted: [] } }]);
   render(wrap(<AyahContextButton ayahKeys={['94:5', '94:6']} differentWords={[]} names={{}}>Node</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   await screen.findAllByRole('link', { name: 'Read ayah' });

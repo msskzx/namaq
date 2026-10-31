@@ -8,7 +8,9 @@ import BranchTree from './BranchTree';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace: vi.fn() }) }));
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+const quranSurrounding = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding, quranContexts: vi.fn() }));
+afterEach(() => { cleanup(); quranSurrounding.mockReset(); });
 
 const trunk = ['ذَٰلِكَ فَضْلُ اللَّهِ يُؤْتِيهِ مَن يَشَاءُ'];
 const prefix = (key: string) => [{ word: '', conj: '', keys: [key], id: 'phrase' }];
@@ -21,20 +23,17 @@ function tree(key: string, on = false) {
 
 describe('preceding ayat as empty phrase prefixes', () => {
   it('loads a preceding ayah with surrounding off, including an all-empty prefix group', async () => {
-    const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: { '34:2': { key: '34:1', page: 428, words: ['الْحَمْدُ لِلَّهِ'] } }, after: {} }) });
-    vi.stubGlobal('fetch', fetch);
+    const load = quranSurrounding.mockResolvedValue({ before: { '34:2': { key: '34:1', page: 428, words: ['الْحَمْدُ لِلَّهِ'] } }, after: {} });
     render(tree('34:2'), { wrapper });
     expect(screen.getByRole('status').textContent).toContain('جارٍ تحميل');
     await screen.findByText('الْحَمْدُ لِلَّهِ');
     expect(screen.queryByText('بداية الآية')).toBeNull();
-    const url = new URL(fetch.mock.calls[0][0], 'http://localhost');
-    expect(url.searchParams.get('before')).toBe('34:2');
-    expect(url.searchParams.get('after')).toBe('');
-    expect(fetch).toHaveBeenCalledOnce();
+    expect(load.mock.calls[0]).toEqual([['34:2'], []]);
+    expect(load).toHaveBeenCalledOnce();
   });
 
   it('adds one earlier ayah on the same source path when surrounding is enabled', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before, after: {} }) }));
+    quranSurrounding.mockResolvedValue({ before, after: {} });
     const { container } = render(tree('62:4'), { wrapper });
     await screen.findByText(before['62:4'].words[0]);
     expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
@@ -52,8 +51,7 @@ describe('preceding ayat as empty phrase prefixes', () => {
   });
 
   it('reuses preloaded neighbors without adding a step before the first ayah of a surah', () => {
-    const fetch = vi.fn();
-    vi.stubGlobal('fetch', fetch);
+    const load = quranSurrounding;
     const { container } = render(<BranchTree tree={{ words: trunk, ayat: ['62:4', '34:2'], children: [] }} names={{}}
       prefixes={[...prefix('62:4'), ...prefix('34:2')]}
       surround={{ on: true, data: { before: { ...before, '34:2': { key: '34:1', page: 428, words: ['الْحَمْدُ لِلَّهِ'] } }, after: {} } }} />, { wrapper });
@@ -66,22 +64,20 @@ describe('preceding ayat as empty phrase prefixes', () => {
     const previous = container.querySelector<HTMLElement>('[data-node="before34:2"]')!;
     fireEvent.click(within(previous).getByRole('button', { name: /عرض الآيات في سياقها/ }));
     expect(click).toHaveBeenCalledOnce();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(load).not.toHaveBeenCalled();
   });
 
   it('shows the start-of-surah fallback without requesting a cross-surah neighbor', () => {
-    const fetch = vi.fn();
-    vi.stubGlobal('fetch', fetch);
+    const load = quranSurrounding;
     render(tree('34:1'), { wrapper });
     const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
     expect(within(before).getByText('بداية السورة')).toBeTruthy();
     expect(within(before).getByText('٣٤:١')).toBeTruthy();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(load).not.toHaveBeenCalled();
   });
 
   it('offers a retry when mandatory preceding ayat fail to load', async () => {
-    const fetch = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue({ ok: true, json: async () => ({ before, after: {} }) });
-    vi.stubGlobal('fetch', fetch);
+    quranSurrounding.mockRejectedValueOnce(new Error('offline')).mockResolvedValue({ before, after: {} });
     render(tree('62:4'), { wrapper });
     await screen.findByRole('alert');
     fireEvent.click(screen.getByRole('button', { name: 'حاول مجددًا' }));
@@ -91,20 +87,18 @@ describe('preceding ayat as empty phrase prefixes', () => {
 });
 
 it('still loads the following ayah at the start of a surah when surrounding is enabled', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: { '34:1': null }, after: { '34:1': { key: '34:2', page: 428, words: ['يَعْلَمُ مَا يَلِجُ'] } } }) }));
+  quranSurrounding.mockResolvedValue({ before: { '34:1': null }, after: { '34:1': { key: '34:2', page: 428, words: ['يَعْلَمُ مَا يَلِجُ'] } } });
   render(tree('34:1', true), { wrapper });
   expect(await screen.findByText('يَعْلَمُ مَا يَلِجُ')).toBeTruthy();
 });
 
 it('uses the actual wrapped predecessor for the extra step before al-Fatiha', async () => {
-  const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: { '1:2': { key: '114:6', page: 604, words: ['مِنَ الْجِنَّةِ وَالنَّاسِ'], basmala: ['بِسْمِ اللَّهِ'] }, '114:6': { key: '114:5', page: 604, words: ['الَّذِي يُوَسْوِسُ'] } }, after: {} }) });
-  vi.stubGlobal('fetch', fetch);
+  const load = quranSurrounding.mockResolvedValue({ before: { '1:2': { key: '114:6', page: 604, words: ['مِنَ الْجِنَّةِ وَالنَّاسِ'], basmala: ['بِسْمِ اللَّهِ'] }, '114:6': { key: '114:5', page: 604, words: ['الَّذِي يُوَسْوِسُ'] } }, after: {} });
   render(tree('1:2'), { wrapper });
   await screen.findByText('مِنَ الْجِنَّةِ وَالنَّاسِ');
   expect(screen.getByText('بِسْمِ اللَّهِ')).toBeTruthy();
   fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
   await screen.findByText('الَّذِي يُوَسْوِسُ');
-  const last = new URL(fetch.mock.calls[fetch.mock.calls.length - 1][0], 'http://localhost');
-  expect(last.searchParams.get('before')).toBe('114:6');
+  expect(load.mock.calls.at(-1)![0]).toEqual(['114:6']);
   expect(screen.getAllByText('مِنَ الْجِنَّةِ وَالنَّاسِ')).toHaveLength(1);
 });

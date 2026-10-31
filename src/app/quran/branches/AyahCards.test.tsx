@@ -11,6 +11,8 @@ const router = { push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() };
 let params = new URLSearchParams();
 vi.mock('next/navigation', () => ({ useRouter: () => router, useSearchParams: () => params, usePathname: () => '/quran/branches' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+const { quranContexts, quranSurrounding } = vi.hoisted(() => ({ quranContexts: vi.fn(), quranSurrounding: vi.fn() }));
+vi.mock('@/lib/quran/quranText', () => ({ quranContexts, quranSurrounding }));
 
 const ayah = (key: string, words: string[]) => ({ key, page: 1, words });
 const source: AyahContext[] = [
@@ -31,12 +33,8 @@ const side: AyahContext[] = [
 beforeEach(() => {
   params = new URLSearchParams();
   window.history.replaceState(null, '', '/quran/branches?o=x&m=cards');
-  vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => {
-    const { pathname, searchParams } = new URL(url, 'http://localhost');
-    if (pathname === '/api/quran/surrounding') return { ok: true, json: async () => around };
-    const wanted = searchParams.get('q')!.split(',');
-    return { ok: true, json: async () => [...source, ...side].filter(context => wanted.includes(context.ayah.key)) };
-  }));
+  quranSurrounding.mockReset().mockResolvedValue(around);
+  quranContexts.mockReset().mockImplementation(async (wanted: string[]) => [...source, ...side].filter(context => wanted.includes(context.ayah.key)));
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); router.push.mockClear(); });
 
@@ -154,9 +152,8 @@ it.each([
   ['9:1', '8:75', false],
 ] as const)('places the basmala after the previous surah before %s only when supplied', async (current, previous, hasBasmala) => {
   const own = { ayah: ayah(current, ['الحالية']), before: null, after: null };
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => ({ ok: true, json: async () => url.startsWith('/api/quran/surrounding')
-    ? { before: { [current]: { ...ayah(previous, ['السابقة']), ...(hasBasmala ? { basmala } : {}) } }, after: { [current]: null } }
-    : [own] })));
+  quranSurrounding.mockResolvedValue({ before: { [current]: { ...ayah(previous, ['السابقة']), ...(hasBasmala ? { basmala } : {}) } }, after: { [current]: null } });
+  quranContexts.mockResolvedValue([own]);
   show([current]);
   const card = await screen.findByLabelText(`سورة ${previous === '3:200' ? '٣ ٢٠٠' : '٨ ٧٥'}`);
   expect(card.textContent?.includes(basmala.join(' '))).toBe(hasBasmala);

@@ -9,6 +9,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend, type SpreadMark } from '@/components/quran/PageSpread';
 import { ayatCount, num } from '@/lib/quran/arabicNumber';
 import type { AyahContext } from '@/lib/quran/ayahContext';
+import { quranContexts } from '@/lib/quran/quranText';
 import styles from './AyahContext.module.css';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
@@ -20,12 +21,6 @@ export function sharedMarks(context: AyahContext, exact: string, root: string): 
     if (context.match?.exact.includes(i)) return [[i, { kind: 'exact', title: exact }]];
     return [];
   }));
-}
-
-export async function loadContext(url: string): Promise<AyahContext[]> {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Could not load ayah context');
-  return response.json();
 }
 
 // docs/plans/quran-shared-openings.md
@@ -41,8 +36,8 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
   const several = new Set([...ayahKeys, ...siblings]).size > 1;
   const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
   const rootLabel = ar ? 'نفس الجذر' : 'Same root';
-  const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].slice(0, MAX_KEYS).join(',') })}`;
-  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? url : null, loadContext, { revalidateOnFocus: false });
+  const wanted = [...ayahKeys, ...siblings].slice(0, MAX_KEYS);
+  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? ['quran-context', ...wanted] : null, ([, ...keys]: string[]) => quranContexts(keys), { revalidateOnFocus: false });
 
   useEffect(() => {
     if (!open) return;

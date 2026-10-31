@@ -6,11 +6,11 @@ import { LocateFixed, Network, TextSearch } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
-import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Neighbour, Surrounding } from '@/lib/quran/ayahContext';
+import { quranSurrounding } from '@/lib/quran/quranText';
 import InkLoader from '@/components/common/InkLoader';
 
 export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string };
@@ -18,8 +18,8 @@ export type Around = { data: Surrounding; ends: Record<string, string>; inTree: 
 export const anchorOf = (tree: string, key: string) => `${tree}-${key.replace(':', '-')}`;
 
 export function useSurrounding(on: boolean, keys: string[], ends: Record<string, string>, given?: Surrounding) {
-  const url = `/api/quran/surrounding?${new URLSearchParams({ before: keys.join(','), after: [...new Set(Object.values(ends))].join(',') })}`;
-  const fetched = useSWR<Surrounding>(on && !given && keys.length > 0 ? url : null, fetcher, { revalidateOnFocus: false });
+  const after = [...new Set(Object.values(ends))];
+  const fetched = useSWR<Surrounding>(on && !given && keys.length > 0 ? ['quran-surrounding', keys.join(','), after.join(',')] : null, () => quranSurrounding(keys, after), { revalidateOnFocus: false });
   return given ? { data: given, isLoading: false, error: undefined, mutate: fetched.mutate } : fetched;
 }
 
