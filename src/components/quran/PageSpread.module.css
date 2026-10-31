@@ -3,7 +3,7 @@
 .page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
 .page header p { color: var(--home-muted); font-size: 0.9375rem; }
-.lines { display: contents; font-family: var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.5; text-align: center; }
+.lines { display: contents; font-family: var(--font-quran); font-size: 1.5rem; line-height: 2.5; text-align: center; }
 .lines > p { align-self: start; }
 .ruled .lines > p:not(:first-child) { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; }
 .spread mark, .legend mark { color: var(--home-accent); background: transparent; }

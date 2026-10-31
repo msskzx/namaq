@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { BookOpen, RotateCcw, TextSearch, X } from 'lucide-react';
 import Button from '@/components/common/Button';
+import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend, type SpreadMark } from '@/components/quran/PageSpread';
 import { ayatCount, num } from '@/lib/quran/arabicNumber';
@@ -90,7 +91,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
         {open && error && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="sm" onClick={() => void mutate()}><RotateCcw size={16} aria-hidden />{ar ? 'إعادة المحاولة' : 'Try again'}</Button></div>}
         {spellings.length > 0 && <section className={styles.spellings} aria-labelledby={`${titleId}-marks`}>
           <h3 id={`${titleId}-marks`}>{ar ? 'الضبط في هذه العقدة' : 'Marks in this node'}</h3>
-          <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-arabic">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark>{word}</mark> : word}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
+          <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-quran">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
         </section>}
         {open && data && several && <p className={styles.note}>{siblings.length > 0 ? (ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها. ' : 'This branch\'s ayat come first, then the ayat that meet it at the same node. ') : ''}{ar ? 'تُعلَّم الكلمات الموجودة في كل الآيات المعروضة هنا فقط.' : 'Only words found in every ayah shown here are marked.'}</p>}
         {open && data && <div className={styles.cards}>

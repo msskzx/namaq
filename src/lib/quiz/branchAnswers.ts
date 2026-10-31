@@ -113,27 +113,30 @@ export function matchTreeAnswers(tree: Branch, given: string[], fixed: ReadonlyS
   const pair = (slots: Branch[], expected: Branch[]): Paired => {
     const key = `${slots.map(slot => indices.get(slot)).join(',')}|${expected.map(node => indices.get(node)).join(',')}`;
     if (paired.has(key)) return paired.get(key)!;
-    let best: Paired = null;
-    for (const order of orders(expected.length)) {
-      const result = new Map<number, TreeAnswerMatch>();
-      let correct = 0;
-      let words = 0;
-      const possible = slots.every((slot, at) => {
-        const answer = expected[order[at]];
-        if (slot.children.length !== answer.children.length) return false;
-        const index = indices.get(slot)!;
-        if (fixed.has(index) && answer !== slot) return false;
-        const own = grade(index, answer);
-        result.set(index, { node: answer, correct: own.correct });
+    const assignments = new Map<number, Paired>();
+    const assign = (at: number, used: number): Paired => {
+      if (at === slots.length) return { result: new Map(), correct: 0, words: 0 };
+      if (assignments.has(used)) return assignments.get(used)!;
+      const slot = slots[at];
+      const index = indices.get(slot)!;
+      let best: Paired = null;
+      expected.forEach((answer, position) => {
+        if ((used & (1 << position)) || slot.children.length !== answer.children.length || (fixed.has(index) && answer !== slot)) return;
         const children = pair(slot.children, answer.children);
-        if (!children) return false;
-        children.result.forEach((value, child) => result.set(child, value));
-        correct += Number(own.correct) + children.correct;
-        words += own.words + children.words;
-        return true;
+        if (!children) return;
+        const rest = assign(at + 1, used | (1 << position));
+        if (!rest) return;
+        const own = grade(index, answer);
+        const correct = Number(own.correct) + children.correct + rest.correct;
+        const words = own.words + children.words + rest.words;
+        if (!best || correct > best.correct || (correct === best.correct && words > best.words)) {
+          best = { result: new Map([[index, { node: answer, correct: own.correct }], ...children.result, ...rest.result]), correct, words };
+        }
       });
-      if (possible && (!best || correct > best.correct || (correct === best.correct && words > best.words))) best = { result, correct, words };
-    }
+      assignments.set(used, best);
+      return best;
+    };
+    const best = assign(0, 0);
     paired.set(key, best);
     return best;
   };

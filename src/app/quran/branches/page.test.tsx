@@ -1,3 +1,4 @@
+vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -78,7 +79,7 @@ describe('Quran branch trees', () => {
 
   it('does not render an opening-or-inside filter', async () => {
     render(await open({}));
-    expect(screen.getByRole('heading', { name: 'أشجار العبارات المشتركة' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'متشابهات القرآن' })).toBeTruthy();
     expect(screen.queryByText('أول الآية')).toBeNull();
     expect(screen.queryByText('داخل الآية')).toBeNull();
     expect(within(screen.getByRole('list', { name: 'المتشابهات' })).getAllByRole('region', { name: 'شجرة العبارات المشتركة' })).toHaveLength(10);

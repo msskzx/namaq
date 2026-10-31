@@ -25,8 +25,6 @@ export default function PartyStartPage() {
     <div className={styles.page}>
       <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         <header className={styles.heading}>
-          <p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p>
-          <h1>{ar ? "اختبار جماعي" : "Party quiz"}</h1>
           <p>{ar
             ? "يبدأ أحدكم الاختبار ويشارك رقمه، ويدخل الباقون من أجهزتهم. يجيب الجميع السؤال نفسه، وتظهر الإجابة والترتيب بعد أن يجيب الكل."
             : "One of you starts a party and shares its number, and the others join on their own devices. Everyone answers the same question, and the answer and leaderboard show once everyone has answered."}</p>

@@ -2,7 +2,7 @@ import { branchNodes, givenAnswer, matchTreeAnswers } from './branchAnswers';
 import type { BranchAnswer } from './branchQuestions';
 import type { Branch, Variant } from '@/lib/quran/branches';
 
-export type ScoredQuestion = { correctAnswer?: string; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; asked?: number[] };
+export type ScoredQuestion = { correctAnswer?: string; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[] };
 export type QuestionAnswer = string | string[];
 
 export const isAsked = (question: ScoredQuestion, index: number) => !question.asked || question.asked.includes(index);

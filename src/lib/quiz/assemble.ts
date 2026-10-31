@@ -21,6 +21,7 @@ export interface AssembledQuestion {
   branches?: BranchAnswer[];
   tree?: Branch;
   variants?: Variant[];
+  prefixes?: Variant[];
   asked?: number[];
   evidence: { claimKeys: string[] };
 }

@@ -21,7 +21,7 @@ import styles from '@/components/common/PaperPage.module.css';
 const PER_PAGE = 10;
 const SEARCHES = 50;
 
-export const metadata: Metadata = { title: 'القرآن: أشجار العبارات المشتركة' };
+export const metadata: Metadata = { title: 'متشابهات القرآن' };
 
 const source = treeData as { ayat: BranchAyah[]; trees: TreeGroup[] };
 const views = new Map<string, ReturnType<typeof build>>();

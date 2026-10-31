@@ -149,8 +149,13 @@ function sharedDisplay(forms: string[]) {
 }
 
 export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
+  return createPhrasePresenter(ayat, continueIdentical, followCorpus)(group);
+}
+
+export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true) {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const positions = new Map(ayat.map((ayah, index) => [ayah.key, index]));
+  return (group: PhraseGroup): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } => {
   const seen = new Set<string>();
   const occurrences = group.occurrences.filter(o => {
     if (seen.has(o.key)) return false;
@@ -231,6 +236,7 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], conti
     return { ...prefix, word, ...(new Set(forms.map(words => words.join(' '))).size > 1 ? {} : { forms: undefined }) };
   });
   return { tree: grow(expanded.map((_, i) => i), 0), prefixes: variants, offsets: Object.fromEntries(occurrences.map(o => [o.key, o.start + (mixedConjunctions ? 1 : 0)])) };
+  };
 }
 
 export function phraseSubtreeTargets(tree: Branch, groups: PhraseGroup[], ayat: BranchAyah[]): Record<string, PhraseGroup> {

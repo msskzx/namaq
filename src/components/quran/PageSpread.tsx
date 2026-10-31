@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import MushafText from '@/components/common/MushafText';
 import { num } from '@/lib/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
@@ -12,7 +13,7 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;
   return ayah.words.map((word, index) => {
     const mark = ayah.marks?.[index];
-    const text = mark ? <mark className={markClass(mark)} title={mark.title}>{word}</mark> : word;
+    const text = mark ? <mark className={markClass(mark)} title={mark.title}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
     return <Fragment key={index}>{index > 0 && ' '}{index === last ? <span className={styles.verseEnd}>{text}{' '}<span className={styles.verseSeal}>{num(ayah.number)}</span></span> : text}</Fragment>;
   });
 }

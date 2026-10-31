@@ -13,7 +13,7 @@ describe('Footer', () => {
     language.loaded = false;
     const view = render(<Footer />);
     expect(screen.getByRole('link', { name: 'نَمَق' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'أشجار متشابهات القرآن' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'متشابهات القرآن' })).toBeTruthy();
     language.loaded = true;
     view.rerender(<Footer />);
     expect(screen.getByRole('link', { name: 'Namaq' })).toBeTruthy();
