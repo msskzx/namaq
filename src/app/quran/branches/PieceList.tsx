@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { ayatCount } from '@/lib/quran/arabicNumber';
 import { branch, variants, type BranchAyah, type BranchesView, type Piece } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import BranchTree from './BranchTree';
@@ -24,10 +23,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
   return (
     <li>
       <BranchTree
-        header={<p className={NOTE}>
-          {piece.family && <>{ar ? piece.opening.text : piece.opening.textEn} · </>}
-          {ar ? ayatCount(piece.count) : `${piece.count} ayat`}
-        </p>}
+        header={piece.family ? <p className={NOTE}>{ar ? piece.opening.text : piece.opening.textEn}</p> : undefined}
         tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
         juz={juz} view={view} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />

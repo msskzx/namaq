@@ -7,7 +7,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { surahInRange } from '@/lib/quran/compareRange';
-import { surahMatch } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@/lib/quran/surahSearch';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { FIELD, NOTE } from '../panel';
 import { PathButton } from './Paths';
@@ -26,7 +26,7 @@ export default function SurahPane({ counts, total, names, surah, juz, view, inTr
   const ar = language === 'ar';
   const label = ar ? 'ابحث عن سورة' : 'Find a surah';
   const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { surah: next } : { ...view, page: 1, surah: next });
-  const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (inTree ? counts[n] : surahInRange(n, { unit: 'juz', range: juz })) && surahMatch(search, n, names[n]) !== null);
+  const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (inTree ? counts[n] : surahInRange(n, { unit: 'juz', range: juz })) && matchesSurah({ number: n, name: names[n] }, search));
   return (
     <>
       <p className={NOTE}>{inTree

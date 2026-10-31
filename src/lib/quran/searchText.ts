@@ -150,3 +150,17 @@ export function textKeys(text: string): WordKeys[] {
   if (!keys) keyedTexts.set(text, keys = text.normalize('NFC').trim().split(/\s+/).map(wordKeys).filter(word => word.strict.length > 0));
   return keys;
 }
+
+const fold = (value: string) => value.replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/ء/g, '').replace(/ا+/g, 'ا');
+
+/** Keys of a short name read as one run of letters (surah names): every spelling, spaces dropped, hamza optional (المؤمنون = مومنون). */
+export function compactKeys(text: string): string[] {
+  const keys = unique([text, ...spellings(text)].map(asText).map(key));
+  return unique([...keys, ...keys.map(fold)]);
+}
+
+/** A typed name as one run of letters, as typed and with hamza folded. */
+export function compactQuery(text: string): string[] {
+  const typed = key(asQuery(text));
+  return typed ? unique([typed, fold(typed)]) : [];
+}
