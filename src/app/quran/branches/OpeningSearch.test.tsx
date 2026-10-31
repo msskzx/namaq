@@ -100,6 +100,24 @@ describe('OpeningSearch', () => {
     expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14 }));
   });
 
+  it('stays on the results while the search is deleted key by key, and leaves on Enter in the empty box', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ query: 'الم تر', surah: 14 }} />);
+    const box = screen.getByRole('combobox') as HTMLInputElement;
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(box, '');
+    fireEvent(box, new InputEvent('input', { bubbles: true, inputType: 'deleteContentBackward' }));
+    expect(router.push).not.toHaveBeenCalled();
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14 }));
+  });
+
+  it('opens a suggestion without the earlier search once a new phrase is typed', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ page: 2, query: 'الم تر', surah: 14 }} />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: phrases[0].text } });
+    fireEvent.click(within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option')[0]);
+    expect(router.push).toHaveBeenCalledTimes(1);
+    expect(router.push.mock.calls[0][0]).not.toContain('q=');
+  });
+
   it('does not navigate when a box that held no search is emptied', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="" />);
     const box = screen.getByRole('combobox');

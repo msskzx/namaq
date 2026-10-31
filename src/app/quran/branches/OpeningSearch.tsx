@@ -44,7 +44,7 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
   }, [query, remote, dismissed, requestKey]);
   const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : searchPhrases(phrases, query).slice(0, SUGGESTIONS);
   const visible = !!query.trim() && !dismissed;
-  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined });
+  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() === view.query ? view.query : undefined });
   const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);
@@ -66,7 +66,7 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
             setQuery(event.target.value);
             setSelected(-1);
             setDismissed(false);
-            if (!event.target.value && submitted) router.push(branchesHref('', juz ?? undefined, { surah: view.surah }));
+            if (!event.target.value && submitted && !(event.nativeEvent instanceof InputEvent && event.nativeEvent.inputType)) router.push(branchesHref('', juz ?? undefined, { surah: view.surah }));
           }}
             placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
             onKeyDown={event => {
@@ -76,6 +76,7 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
                 setDismissed(false);
                 setSelected(index => event.key === 'ArrowDown' ? (index + 1) % suggestions.length : (index <= 0 ? suggestions.length - 1 : index - 1));
               }
+              if (event.key === 'Enter' && !query.trim() && submitted) router.push(branchesHref('', juz ?? undefined, { surah: view.surah }));
               if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && suggestions[selected]) open(suggestions[selected]); else search(); }
             }} className={SEARCH} />
         </label>
