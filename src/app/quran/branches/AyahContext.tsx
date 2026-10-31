@@ -39,8 +39,8 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
   const label = differing ? (ar ? 'عرض اختلافات الضبط والسياق' : 'View spelling differences and context') : (ar ? 'عرض الآيات في سياقها' : 'View ayat in context');
   const title = differing ? (ar ? 'اختلافات الضبط والسياق' : 'Spelling differences and context') : (ar ? 'الآيات في سياقها' : 'Ayat in context');
   const several = new Set([...ayahKeys, ...siblings]).size > 1;
-  const exactLabel = ar ? 'في كل الآيات بلفظها' : 'In every ayah, same form';
-  const rootLabel = ar ? 'في كل الآيات بجذرها أو بضبط مختلف' : 'In every ayah, by root or other marks';
+  const exactLabel = ar ? 'الكلمة نفسها' : 'Same word';
+  const rootLabel = ar ? 'الجذر نفسه' : 'Same root';
   const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].slice(0, MAX_KEYS).join(',') })}`;
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? url : null, loadContext, { revalidateOnFocus: false });
 

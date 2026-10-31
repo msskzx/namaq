@@ -115,8 +115,8 @@ describe('complete branch tree answers', () => {
     const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }, { words: ['ربي', 'يا'], ayat: ['1:2'], children: [] }] }, branches: [] };
     render(<BranchFeedback question={own} typed={['رب اغفر', 'ربي يا']} names={{}} ar />);
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
-    await waitFor(() => expect(screen.getAllByTitle('في كل الآيات بلفظها').map(word => word.textContent)).toEqual(['قال', 'قال']));
-    expect(screen.getAllByTitle('في كل الآيات بجذرها أو بضبط مختلف').map(word => word.textContent)).toEqual(['رب', 'ربي']);
+    await waitFor(() => expect(screen.getAllByTitle('الكلمة نفسها').map(word => word.textContent)).toEqual(['قال', 'قال']));
+    expect(screen.getAllByTitle('الجذر نفسه').map(word => word.textContent)).toEqual(['رب', 'ربي']);
     vi.unstubAllGlobals();
   });
 
