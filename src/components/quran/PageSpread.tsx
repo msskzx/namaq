@@ -33,7 +33,7 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
     <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''}`} dir="rtl">
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + (page.footer ? 2 : 1)}` }} aria-label={page.label ?? page.title}>
-          <header>{page.action ? <div className={styles.titled}><h3>{page.title}</h3>{page.action}</div> : <h3>{page.title}</h3>}{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>
+          <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.action && <span className={styles.action}>{page.action}</span>}{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>
           <div className={styles.lines} lang="ar">
             {Array.from({ length: rows }, (_, row) => (
               <p key={row} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>{(page.rows[row] ?? []).map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}<Ayah ayah={ayah} /></Fragment>)}</p>
