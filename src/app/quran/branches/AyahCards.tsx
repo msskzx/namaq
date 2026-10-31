@@ -98,7 +98,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           [{ number, words: ayah.words, current: at === 'ayah', marks: at === 'ayah' ? sharedMarks(context, exactLabel, rootLabel) : undefined }],
         ],
-        action: current ? <Button size="sm" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen aria-hidden /></Button> : undefined,
+        action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
       }]} />
     </div>;
   };
