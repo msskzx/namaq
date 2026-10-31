@@ -5,6 +5,7 @@ import TreeIntro, { SEEN } from './TreeIntro';
 
 const opened = vi.fn();
 let reduced = false;
+let surround = false;
 
 const lit = vi.fn();
 const PathToggle = () => <button aria-pressed="false" onClick={event => { lit(); event.currentTarget.setAttribute('aria-pressed', String(event.currentTarget.getAttribute('aria-pressed') !== 'true')); }}>path</button>;
@@ -12,6 +13,7 @@ const PathToggle = () => <button aria-pressed="false" onClick={event => { lit();
 function Tree() {
   const root = useRef<HTMLDivElement>(null);
   return <div ref={root}>
+    <label><input type="checkbox" role="switch" aria-label="الآيات المحيطة" defaultChecked={surround} /></label>
     <div data-tree-content>
       <div data-node="n-1" data-keys="1:1 1:2"><button data-context-open onClick={opened}>open</button></div>
       <span data-line />
@@ -33,6 +35,7 @@ const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAs
 beforeEach(() => {
   vi.useFakeTimers();
   reduced = false;
+  surround = false;
   localStorage.clear();
   window.history.replaceState(null, '', '/');
   opened.mockClear();
@@ -116,3 +119,14 @@ it('replays with ?intro=1', () => {
   expect(skip()).toBeTruthy();
 });
 
+
+it('turns the surrounding ayat off and locks the switch while playing, then gives it back', async () => {
+  surround = true;
+  render(<Tree />);
+  const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
+  expect(toggle.checked).toBe(false);
+  expect(toggle.closest('label')!.inert).toBe(true);
+  fireEvent.click(skip()!);
+  expect(toggle.checked).toBe(true);
+  expect(toggle.closest('label')!.inert).toBe(false);
+});
