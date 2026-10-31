@@ -96,7 +96,7 @@ it('steps between trees with the tree navigation, the edge links and one more st
   expect(router.push).toHaveBeenLastCalledWith(steps.previous, { scroll: false });
   expect(screen.getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(steps.previous);
   expect(screen.getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(steps.next);
-  expect(screen.getByText('٢ / ٣')).toBeTruthy();
+  expect(screen.queryByText('٢ / ٣')).toBeNull();
 });
 
 it('opens a next ayah in the following surah under its basmala, without a seal on the basmala', async () => {
