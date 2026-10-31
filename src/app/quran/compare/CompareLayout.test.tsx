@@ -38,4 +38,14 @@ describe('CompareLayout', () => {
     rerender(<CompareLayout title="السور" current="الطور والواقعة" pane={<p>القائمة</p>}><p>المقارنة</p></CompareLayout>);
     expect(screen.getByRole('button', { name: /تغيير السورتين/ }).getAttribute('aria-expanded')).toBe('false');
   });
+
+  it.each([[false, ['شريط', 'اعرض قائمة السور'], ['شريط', 'تغيير السورتين']], [true, ['اعرض قائمة السور', 'شريط'], ['تغيير السورتين', 'شريط']]])('with paneToggleFirst=%s orders the surah controls around the bar', (first, wide, phone) => {
+    localStorage.setItem('compare-pane-hidden', '1');
+    render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>} paneToggleFirst={first}><p>المقارنة</p></CompareLayout>);
+    const order = (names: string[]) => names.map(name => screen.getByRole('button', { name: new RegExp(name) }));
+    const [a, b] = order(wide);
+    expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const [c, d] = order(phone);
+    expect(c.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });
