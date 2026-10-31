@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CircleHelp } from 'lucide-react';
+import useDismissable from '@/components/common/useDismissable';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 export default function BranchHeading() {
@@ -12,7 +13,8 @@ export default function BranchHeading() {
 export function MatchingRules({ children }: { children?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const rules = ar ? 'قواعد المطابقة' : 'Matching rules';
-  return <details className="group relative shrink-0">
+  const ref = useDismissable();
+  return <details ref={ref} className="group relative shrink-0">
       <summary title={rules} className="flex size-11 cursor-pointer list-none items-center justify-center rounded-sm border border-[var(--home-rule)] text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
         <CircleHelp size={20} aria-hidden /><span className="sr-only">{rules}</span>
       </summary>

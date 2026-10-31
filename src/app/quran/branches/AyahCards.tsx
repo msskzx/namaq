@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import { BookOpen, CircleHelp, GitBranch, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import useDismissable from '@/components/common/useDismissable';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
@@ -38,6 +39,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const rootLabel = ar ? 'نفس الجذر' : 'Same root';
   const read = ar ? 'قراءة الآية' : 'Read ayah';
   const legend = ar ? 'دليل الألوان' : 'Colour key';
+  const keyRef = useDismissable();
 
   const track = useRef<HTMLDivElement>(null);
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
@@ -165,7 +167,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {steps && <TreeSteps steps={steps} />}
-        {shown.length > 1 && <details className="group relative shrink-0">
+        {shown.length > 1 && <details ref={keyRef} className="group relative shrink-0">
           <summary title={legend} className="flex size-8 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
             <CircleHelp size={16} aria-hidden /><span className="sr-only">{legend}</span>
           </summary>
