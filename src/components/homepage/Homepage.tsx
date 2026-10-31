@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BookOpen, GitBranch, ListChecks, Shuffle, Users } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
@@ -8,6 +8,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { HomePreviews } from '@/lib/homePreviewData';
 import WorkInProgressBanner from './WorkInProgressBanner';
+import TreeIntro from './TreeIntro';
 import styles from './Home.module.css';
 
 export default function Homepage({ data, fontClass = '' }: { data: HomePreviews; fontClass?: string }) {
@@ -15,6 +16,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   const [preview, setPreview] = useState(data.branches);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const launchTree = useRef<HTMLDivElement>(null);
   const randomTree = async () => {
     setLoading(true);
     setError(false);
@@ -48,11 +50,12 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
             </div>
             {error && <p role="alert">{ar ? 'تعذّر تحميل الشجرة. حاول مجددًا.' : 'Could not load a tree. Try again.'}</p>}
           </div></div>
-          <div className={styles.launchTree} dir="rtl" aria-busy={loading}>
+          <div ref={launchTree} className={styles.launchTree} dir="rtl" aria-busy={loading}>
             {loading && <LoadingSpinner className="absolute inset-0 z-10 bg-[var(--home-paper)]" />}
             <div inert={loading}>
               <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
+            <TreeIntro target={launchTree} ar={ar} />
           </div>
         </section>
         <section className={styles.feature} aria-labelledby="journey-title">
