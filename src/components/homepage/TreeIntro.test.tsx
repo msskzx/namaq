@@ -101,6 +101,27 @@ it('skip while a path is lit turns the light off', async () => {
   expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
 });
 
+it.each([true, false])('preserves a pinned leaf when replay is skipped: %s', async skipped => {
+  localStorage.setItem(SEEN, '1');
+  render(<Tree />);
+  const path = screen.getAllByRole('button', { name: 'path' })[0];
+  fireEvent.click(path);
+  fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
+  await advance(100);
+  expect(path.getAttribute('aria-pressed')).toBe('true');
+  if (skipped) fireEvent.click(skip()!);
+  else await advance(14000);
+  expect(path.getAttribute('aria-pressed')).toBe('true');
+});
+
+it('makes the animated content inert and restores it on skip', () => {
+  render(<Tree />);
+  const content = document.querySelector<HTMLElement>('[data-tree-content]')!;
+  expect(content.inert).toBe(true);
+  fireEvent.click(skip()!);
+  expect(content.inert).not.toBe(true);
+});
+
 it('does not play again after a visit, or when the reader prefers reduced motion', () => {
   localStorage.setItem(SEEN, '1');
   render(<Tree />);

@@ -53,7 +53,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
             <div inert={loading}>
               <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
-            <TreeIntro target={launchTree} ar={ar} />
+            <TreeIntro key={preview.id} target={launchTree} ar={ar} />
           </div>
         </section>
         <section className={styles.feature} aria-labelledby="journey-title">

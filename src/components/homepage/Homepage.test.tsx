@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Homepage from './Homepage';
 import { getHomePreviews } from '@/lib/homePreviewData';
+import { SEEN } from './TreeIntro';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar', languageLoaded: true } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
@@ -75,5 +76,32 @@ describe('Quran learning homepage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Random' }));
     expect(await screen.findByRole('button', { name: 'Random' })).toHaveProperty('disabled', false);
     expect(screen.queryByRole('alert')).toBeNull();
+  });
+  it('cleans up the old intro and animates the replacement random tree', async () => {
+    state.language = 'en';
+    localStorage.removeItem(SEEN);
+    const animate = vi.fn(() => ({ cancel: vi.fn(), finished: Promise.resolve() }) as unknown as Animation);
+    const original = Element.prototype.animate;
+    Element.prototype.animate = animate;
+    try {
+      const data = await getHomePreviews();
+      const next = await getHomePreviews(data.branches.id, () => 0);
+      vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => next.branches })));
+      render(<Homepage data={data} />);
+      const oldContent = document.querySelector<HTMLElement>('[data-tree-content]')!;
+      expect(oldContent.inert).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Random' }));
+      await screen.findByRole('button', { name: `Show path: ${next.branches.tree.words.join(' ')}` });
+      const newContent = document.querySelector<HTMLElement>('[data-tree-content]')!;
+      expect(newContent).not.toBe(oldContent);
+      expect(oldContent.inert).not.toBe(true);
+      expect(newContent.inert).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Skip' }));
+      expect(newContent.inert).not.toBe(true);
+    } finally {
+      cleanup();
+      Element.prototype.animate = original;
+      localStorage.removeItem(SEEN);
+    }
   });
 });

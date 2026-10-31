@@ -26,8 +26,9 @@ export type View = { visible: boolean; waiting: Set<() => void>; running: Set<An
 async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement, view: View, signal: AbortSignal, undo: (() => void)[]) {
   const sleep = (ms: number) => new Promise<void>((resolve, reject) => {
     if (signal.aborted) return reject(signal.reason);
-    const timer = setTimeout(resolve, ms);
-    signal.addEventListener('abort', () => { clearTimeout(timer); reject(signal.reason); }, { once: true });
+    const abort = () => { clearTimeout(timer); reject(signal.reason); };
+    const timer = setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, ms);
+    signal.addEventListener('abort', abort, { once: true });
   });
   const seen = () => view.visible ? Promise.resolve() : new Promise<void>(resolve => view.waiting.add(resolve));
   const wait = async (ms: number) => {
@@ -49,9 +50,9 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     view.running.delete(animation);
     signal.throwIfAborted();
   };
-  const pointer = content.style.pointerEvents;
-  content.style.pointerEvents = 'none';
-  undo.push(() => { content.style.pointerEvents = pointer; });
+  const inert = content.inert;
+  content.inert = true;
+  undo.push(() => { content.inert = inert; });
   const surround = root.querySelector<HTMLInputElement>('input[role="switch"]');
   const toggle = surround?.closest('label');
   if (surround && toggle) {
@@ -98,10 +99,12 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
   const lit = async (leaf: HTMLElement, during: () => Promise<void>) => {
     const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
     if (!light) return during();
-    light.click();
-    undo.push(() => { if (light.getAttribute('aria-pressed') === 'true') light.click(); });
+    const was = light.getAttribute('aria-pressed') === 'true';
+    if (!was) light.click();
+    const restore = () => { if ((light.getAttribute('aria-pressed') === 'true') !== was) light.click(); };
+    undo.push(restore);
     await during();
-    light.click();
+    restore();
   };
   const shown = new Set<Element>();
   for (const { key, leaf } of leaves) {
