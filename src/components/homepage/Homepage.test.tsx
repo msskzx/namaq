@@ -1,6 +1,6 @@
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Homepage from './Homepage';
 import { getHomePreviews } from '@/lib/homePreviewData';
 import { SEEN } from './TreeIntro';
@@ -94,8 +94,10 @@ describe('Quran learning homepage', () => {
       await screen.findByRole('button', { name: `Show path: ${next.branches.tree.words.join(' ')}` });
       const newContent = document.querySelector<HTMLElement>('[data-tree-content]')!;
       expect(newContent).not.toBe(oldContent);
-      expect(oldContent.inert).not.toBe(true);
-      expect(newContent.inert).toBe(true);
+      await waitFor(() => {
+        expect(oldContent.inert).not.toBe(true);
+        expect(newContent.inert).toBe(true);
+      });
       fireEvent.click(await screen.findByRole('button', { name: 'Skip' }));
       expect(newContent.inert).not.toBe(true);
     } finally {
