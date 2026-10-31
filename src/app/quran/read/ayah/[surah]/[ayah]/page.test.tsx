@@ -8,8 +8,8 @@ vi.mock('next/navigation', () => ({
     throw new Error(`REDIRECT ${url}`);
   },
 }));
-vi.mock('@/lib/prisma', () => ({
-  prisma: { surah: { findFirst: async ({ where }: { where: { number: number } }) => ({ page: { 1: 1, 2: 2, 114: 604 }[where.number] ?? null }) } },
+vi.mock('@/lib/quran/surahList', () => ({
+  surahList: async () => [{ number: 1, page: 1 }, { number: 2, page: 2 }, { number: 114, page: 604 }],
 }));
 
 import AyahRedirect from './page';

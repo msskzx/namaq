@@ -4,13 +4,18 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render as rtlRender, screen } from '@testing-library/react';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { MushafPage } from '@/lib/quran/readerPage';
-import ReaderView from './ReaderView';
+import ReaderView, { MarkedReaderView } from './ReaderView';
 import SurahIndex from './SurahIndex';
 
 const push = vi.fn();
+const replace = vi.fn();
+const prefetch = vi.fn();
+let search = new URLSearchParams();
 vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push, replace, prefetch }), useSearchParams: () => search }));
+const searchQuran = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/quran/quranText', () => ({ searchQuran, preloadQuranSearch: () => {} }));
 
 const render = (ui: React.ReactElement) => rtlRender(ui, { wrapper: LanguageProvider });
 
@@ -19,6 +24,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
   vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
   push.mockClear();
+  replace.mockClear();
+  prefetch.mockClear();
+  search = new URLSearchParams();
+  searchQuran.mockReset();
 });
 
 const names = { 2: 'سُورَةُ ٱلْبَقَرَةِ', 9: 'سُورَةُ ٱلتَّوْبَةِ', 23: 'سُورَةُ ٱلْمُؤْمِنُونَ', 114: 'سُورَةُ ٱلنَّاسِ' };
@@ -61,6 +70,43 @@ describe('ReaderView', () => {
     const page = data({ line: ['مِن', 5, 'إِنَّ', 'ٱلَّذِينَ'] }, { line: ['كَفَرُواْ', 6, 'خَتَمَ'] });
     const { container } = render(<ReaderView page={3} pages={one(3, page, 2)} names={names} mark={{ surah: 2, ayah: 6 }} />);
     expect([...container.querySelectorAll('[data-marked]')].map(span => span.textContent)).toEqual(['إِنَّ', 'ٱلَّذِينَ', 'كَفَرُواْ ٦']);
+  });
+
+  it('marks the ayah named in the address, and sends one not on the page to the page that holds it', () => {
+    search = new URLSearchParams('a=2:1');
+    const { container, unmount } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(container.querySelectorAll('[data-marked]').length).toBeGreaterThan(0);
+    expect(replace).not.toHaveBeenCalled();
+    unmount();
+    search = new URLSearchParams('a=2:9');
+    render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(replace).toHaveBeenCalledWith('/quran/read/ayah/2/9');
+  });
+
+  it('takes the first ayah named, moves the mark when the address changes, and ignores a malformed one', () => {
+    search = new URLSearchParams('a=2:2&a=2:9');
+    const marked = (container: HTMLElement) => [...container.querySelectorAll('[data-marked]')].map(span => span.textContent);
+    const { container, rerender } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(marked(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    search = new URLSearchParams('a=2:1');
+    rerender(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(marked(container)).toContain('الٓمٓ ١');
+    for (const bad of ['x', '2:', ':1']) {
+      search = new URLSearchParams(`a=${bad}`);
+      rerender(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+      expect(marked(container)).toEqual([]);
+    }
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('preloads the pages either side, a spread at a time', () => {
+    media(false);
+    const { unmount } = render(<ReaderView page={42} pages={one(42, opening)} names={names} />);
+    expect([...new Set(prefetch.mock.calls.map(([href]) => href))].sort()).toEqual(['/quran/read/41', '/quran/read/43']);
+    unmount();
+    prefetch.mockClear();
+    render(<ReaderView page={604} pages={one(604, opening)} names={names} />);
+    expect([...new Set(prefetch.mock.calls.map(([href]) => href))]).toEqual(['/quran/read/603']);
   });
 
   it('shows two facing pages, the odd one on the right, when two pages are chosen', () => {
@@ -214,17 +260,13 @@ describe('SurahIndex', () => {
     expect(screen.queryByText(/افتح/)).toBeNull();
   });
 
-  it('lists the ayat whose words a search names, with the match marked, once the server answers', async () => {
-    const fetchMock = vi.fn(async () => ({
-      ok: true,
-      json: async () => ({ total: 2, hits: [{ key: '2:255', page: 42, words: ['ٱللَّهُ', 'لَآ', 'إِلَـٰهَ', 'إِلَّا', 'هُوَ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 5, to: 6 }, { key: '3:2', page: 50, words: ['ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 0, to: 1 }] }),
-    }));
-    vi.stubGlobal('fetch', fetchMock);
+  it('lists the ayat whose words a search names, with the match marked', async () => {
+    searchQuran.mockResolvedValue({ total: 2, hits: [{ key: '2:255', page: 42, words: ['ٱللَّهُ', 'لَآ', 'إِلَـٰهَ', 'إِلَّا', 'هُوَ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 5, to: 6 }, { key: '3:2', page: 50, words: ['ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 0, to: 1 }] });
     render(<SurahIndex surahs={surahs} />);
     fireEvent.change(screen.getByLabelText('ابحث عن سورة أو آية'), { target: { value: 'الحي القيوم' } });
     const results = await screen.findByRole('region', { name: 'آيات' });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith(`/api/quran/search?q=${encodeURIComponent('الحي القيوم')}`, expect.anything());
+    expect(searchQuran).toHaveBeenCalledTimes(1);
+    expect(searchQuran).toHaveBeenCalledWith('الحي القيوم');
     expect([...results.querySelectorAll('a')].map(a => a.getAttribute('href'))).toEqual(['/quran/read/ayah/2/255', '/quran/read/ayah/3/2']);
     expect([...results.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['ٱلْحَىُّ', 'ٱلْقَيُّومُ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ']);
     expect(results.textContent).toContain('البقرة ٢٥٥');
@@ -232,25 +274,23 @@ describe('SurahIndex', () => {
   });
 
   it('says when no ayah matches, and when the search fails', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ total: 0, hits: [] }) })));
+    searchQuran.mockResolvedValue({ total: 0, hits: [] });
     render(<SurahIndex surahs={surahs} />);
     const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: 'كلمة غائبة' } });
     expect(screen.getByRole('status')).not.toBeNull();
     expect(await screen.findByText('لا توجد سورة ولا آية بهذا النص.')).not.toBeNull();
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 500 })));
+    searchQuran.mockRejectedValue(new Error('offline'));
     fireEvent.change(search, { target: { value: 'كلمة أخرى' } });
     expect(await screen.findByText('تعذّر البحث في الآيات الآن.')).not.toBeNull();
   });
 
   it('does not search ayat for a reference or a single letter', async () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal('fetch', fetchMock);
     render(<SurahIndex surahs={surahs} />);
     const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: '2:255' } });
     fireEvent.change(search, { target: { value: 'ق' } });
     await new Promise(resolve => setTimeout(resolve, 300));
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(searchQuran).not.toHaveBeenCalled();
   });
 });
