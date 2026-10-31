@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import TreeIntro, { SEEN } from './TreeIntro';
 
 const opened = vi.fn();
@@ -12,14 +12,16 @@ const PathToggle = () => <button aria-pressed="false" onClick={event => { lit();
 
 function Tree() {
   const root = useRef<HTMLDivElement>(null);
+  const [on, setOn] = useState(surround);
   return <div ref={root}>
-    <label><input type="checkbox" role="switch" aria-label="الآيات المحيطة" defaultChecked={surround} /></label>
+    <label><input type="checkbox" role="switch" aria-label="الآيات المحيطة" checked={on} onChange={event => setOn(event.currentTarget.checked)} /></label>
     <div data-tree-content>
-      <div data-node="n-1" data-keys="1:1 1:2"><button data-context-open onClick={opened}>open</button></div>
+      <div data-node="n-1" data-keys="1:1 1:2"><span className="font-quran">إن</span><button data-context-open onClick={opened}>open</button></div>
       <span data-line />
       <ul>
         <li><div data-node="n0" data-keys="1:1"><PathToggle /><span className="font-quran">جنات</span></div></li>
         <li><div data-node="n1" data-keys="1:2"><PathToggle /><span className="font-quran">عيون</span></div></li>
+        {on && <li data-testid="around"><div data-node="after1:1" data-ctx="1:1" data-keys="1:1"><span>بعدها</span></div></li>}
       </ul>
     </div>
     <TreeIntro target={root} ar />
@@ -31,6 +33,8 @@ const typed = (node: string) => document.querySelector(`[data-node="${node}"]`)!
 const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
 const skip = () => screen.queryByRole('button', { name: 'تخطّ' });
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+const elementFromPoint = document.elementFromPoint;
+const answer = (ok: boolean) => vi.fn(async () => ({ ok, json: async () => [context] }));
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -42,14 +46,15 @@ beforeEach(() => {
   lit.mockClear();
   Element.prototype.animate = vi.fn(() => ({ cancel: vi.fn(), finished: Promise.resolve() }) as unknown as Animation);
   window.matchMedia = vi.fn(() => ({ matches: reduced }) as MediaQueryList);
+  vi.stubGlobal('fetch', answer(false));
 });
-afterEach(() => { cleanup(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); document.elementFromPoint = elementFromPoint; });
 
 const context = { ayah: { key: '1:2', words: ['عيون', 'ثانية'], page: 1 }, before: { key: '1:1', words: ['جنات', 'أولى'], page: 1 }, after: null };
 const showAll = () => { document.elementFromPoint = () => document.querySelector('[data-tree-content]'); };
 
-it('grows the tree level by level with every node typed, then shows the surrounding ayat, one lit path and a small ayah card, and remembers', async () => {
-  const fetched = vi.fn(async () => ({ ok: true, json: async () => [context] }));
+it('grows the tree level by level with every node typed, then fades in the surrounding ayat, lights one path and shows a small ayah card, and remembers', async () => {
+  const fetched = answer(true);
   vi.stubGlobal('fetch', fetched);
   showAll();
   render(<Tree />);
@@ -57,8 +62,10 @@ it('grows the tree level by level with every node typed, then shows the surround
   const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
   const pressed = (node: string) => document.querySelector(`[data-node="${node}"] [aria-pressed]`)!.getAttribute('aria-pressed');
   await advance(100);
+  expect(words('n-1').style.visibility).toBe('hidden');
   expect([branch('n0'), branch('n1')]).toEqual(['0', '0']);
-  await advance(500);
+  await advance(700);
+  expect(words('n-1').style.visibility).toBe('');
   expect([branch('n0'), branch('n1')]).toEqual(['', '']);
   expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['hidden', 'hidden']);
   expect(document.querySelector('[data-node="n0"] .font-quran')!.className).toBe('font-quran');
@@ -67,25 +74,51 @@ it('grows the tree level by level with every node typed, then shows the surround
   expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['', '']);
   expect(lit).not.toHaveBeenCalled();
   expect(toggle.checked).toBe(false);
-  await advance(1400);
+  await advance(1300);
   expect(toggle.checked).toBe(true);
-  await advance(6000);
+  const around = screen.getByTestId('around');
+  expect(vi.mocked(Element.prototype.animate).mock.contexts).toContain(around);
+  expect(around.style.opacity).toBe('');
+  expect(fetched).not.toHaveBeenCalled();
+  await advance(1900);
   expect(lit).toHaveBeenCalledOnce();
   expect(pressed('n0')).toBe('true');
-  await advance(2700);
+  expect(fetched).toHaveBeenCalledWith('/api/quran/context?q=1%3A1', expect.objectContaining({ signal: expect.any(AbortSignal) }));
+  await advance(2600);
   expect(lit).toHaveBeenCalledTimes(2);
   expect(pressed('n0')).toBe('false');
-  await advance(700);
-  expect(fetched).toHaveBeenCalledWith('/api/quran/context?q=1%3A1');
+  await advance(600);
   expect(document.body.textContent).toContain('الآيات في سياقها');
   expect(document.body.textContent).toContain('عيون ثانية');
   expect(opened).not.toHaveBeenCalled();
-  await advance(8000);
+  await advance(5300);
   expect(document.body.textContent).not.toContain('عيون ثانية');
   expect(skip()).toBeNull();
   expect(toggle.checked).toBe(false);
+  expect(screen.queryByTestId('around')).toBeNull();
+  expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
   expect(localStorage.getItem(SEEN)).toBe('1');
-  vi.unstubAllGlobals();
+});
+
+it('skip while the ayah card is open removes it and leaves nothing hidden', async () => {
+  vi.stubGlobal('fetch', answer(true));
+  showAll();
+  render(<Tree />);
+  await advance(8000);
+  expect(document.body.textContent).toContain('عيون ثانية');
+  fireEvent.click(skip()!);
+  expect(document.body.textContent).not.toContain('عيون ثانية');
+  expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
+  expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(false);
+});
+
+it('finishes without the card when the ayah context fails to load', async () => {
+  showAll();
+  render(<Tree />);
+  await advance(13000);
+  expect(document.body.textContent).not.toContain('الآيات في سياقها');
+  expect(skip()).toBeNull();
+  expect(localStorage.getItem(SEEN)).toBe('1');
 });
 
 it('skip while nodes are being typed shows the whole tree with its words and lights nothing', async () => {
@@ -106,7 +139,7 @@ it('skip while the path is lit turns the light off and puts the surrounding ayat
   showAll();
   render(<Tree />);
   const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
-  await advance(2400 + 6000);
+  await advance(5000);
   expect(lit).toHaveBeenCalledOnce();
   expect(toggle.checked).toBe(true);
   fireEvent.click(skip()!);
@@ -174,7 +207,7 @@ it('replays from the replay button, which gives way to skip while playing', asyn
   fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
   expect(skip()).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'إعادة العرض' })).toBeNull();
-  await advance(600);
+  await advance(900);
   expect(words('n0').style.visibility).toBe('hidden');
   fireEvent.click(skip()!);
   expect(screen.getByRole('button', { name: 'إعادة العرض' })).toBeTruthy();
@@ -191,7 +224,7 @@ it('waits for the tree to come into view, and pauses while it is out of view', a
   await advance(3000);
   expect(branch('n0')).toBe('0');
   act(() => report(0.7));
-  await advance(600);
+  await advance(900);
   expect(words('n0').style.visibility).toBe('hidden');
   act(() => report(0.1));
   await advance(5000);
@@ -199,5 +232,4 @@ it('waits for the tree to come into view, and pauses while it is out of view', a
   act(() => report(0.7));
   await advance(1000);
   expect(typed('n0')).toBeUndefined();
-  vi.unstubAllGlobals();
 });

@@ -73,7 +73,7 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
   undo.push(() => pins.forEach(pin => { if (pin.isConnected && pin.getAttribute('aria-pressed') !== 'true') pin.click(); }));
 
   const depth = (piece: HTMLElement) => { let count = piece.matches('li') ? 1 : 0; for (let at = piece.parentElement; at && at !== content; at = at.parentElement) if (at.matches('li')) count++; return count; };
-  const own = (piece: HTMLElement) => piece.matches('[data-node]') ? piece : piece.querySelector<HTMLElement>('[data-node]');
+  const own = (piece: HTMLElement) => piece.matches('[data-node]') ? piece : piece.querySelector<HTMLElement>(':scope > [data-node], :scope > div > [data-node]');
   const pieces = [...content.querySelectorAll<HTMLElement>('li, [data-node="n-1"], [data-line]')].filter(piece => piece.matches('li, [data-node]') || !piece.closest('li'));
   pieces.forEach(piece => {
     const opacity = piece.style.opacity;
@@ -135,17 +135,23 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
 
   // The ayah before the tree and after each leaf.
   if (surround && toggle && !surround.checked) {
-    const before = new Set(content.querySelectorAll('li, [data-line], [data-node]'));
+    const added: HTMLElement[] = [];
+    const hide = (records: MutationRecord[]) => records.forEach(record => record.addedNodes.forEach(node => {
+      if (!(node instanceof HTMLElement) || added.some(piece => piece.contains(node))) return;
+      const opacity = node.style.opacity;
+      node.style.opacity = '0';
+      undo.push(() => { node.style.opacity = opacity; });
+      added.push(node);
+    }));
+    const watcher = new MutationObserver(hide);
+    watcher.observe(content, { childList: true, subtree: true });
+    undo.push(() => watcher.disconnect());
     toggle.inert = false;
     surround.click();
     toggle.inert = true;
     for (let tries = 0; tries < 60 && content.querySelectorAll('[data-ctx]').length === 0; tries++) await wait(100);
-    const added = [...content.querySelectorAll<HTMLElement>('li, [data-line], [data-node]')].filter(piece => !before.has(piece) && !(piece.parentElement?.closest('li, [data-node]') && !before.has(piece.parentElement.closest('li, [data-node]')!)));
-    added.forEach(piece => {
-      const opacity = piece.style.opacity;
-      piece.style.opacity = '0';
-      undo.push(() => { piece.style.opacity = opacity; });
-    });
+    hide(watcher.takeRecords());
+    watcher.disconnect();
     if (added.length > 0) {
       added.forEach(piece => { piece.style.opacity = ''; });
       await Promise.all(added.map(piece => run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP * 2 })));
@@ -159,6 +165,9 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
   const leaves = [...new Set(nodes.flatMap(keysOf))].map(key => nodes.filter(box => keysOf(box).includes(key)).at(-1)!);
   const light = [...content.querySelectorAll<HTMLButtonElement>('[data-node]:not([data-ctx]) button[aria-pressed]')].find(button => showing(button) && leaves.some(leaf => leaf.contains(button)))
     ?? [...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed]')].find(showing);
+  const open = [light?.closest<HTMLElement>('[data-node]')?.querySelector<HTMLElement>('[data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
+  const key = open?.closest<HTMLElement>('[data-node]')?.dataset.keys?.split(' ')[0];
+  const loading = key ? fetch(`/api/quran/context?${new URLSearchParams({ q: key })}`, { signal }).then(response => response.ok ? response.json() as Promise<AyahContext[]> : []).then(found => found[0], () => undefined) : Promise.resolve(undefined);
   if (light) {
     await tap(light);
     light.click();
@@ -170,12 +179,9 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
   }
 
   // The ayah in its context, in a small card.
-  const open = [light?.closest<HTMLElement>('[data-node]')?.querySelector<HTMLElement>('[data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
-  const key = open?.closest<HTMLElement>('[data-node]')?.dataset.keys?.split(' ')[0];
-  if (!open || !key) return;
-  const context = await fetch(`/api/quran/context?${new URLSearchParams({ q: key })}`).then(response => response.ok ? response.json() as Promise<AyahContext[]> : []).then(found => found[0], () => undefined);
+  const context = await loading;
   signal.throwIfAborted();
-  if (!context) return;
+  if (!open || !context) return;
   await tap(open);
   const box = area();
   const target = open.getBoundingClientRect();
