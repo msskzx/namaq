@@ -9,7 +9,7 @@ export default function JuzFilter({ range, phrase, view }: { range: JuzRange | n
   const { language } = useLanguage();
   const ar = language === 'ar';
   return (
-    <RangeFilter range={range} max={JUZ_STARTS.length} names={['juzFrom', 'juzTo']} href={next => branchesHref(phrase, next, { ...view, page: 1 })}
+    <RangeFilter iconOnly range={range} max={JUZ_STARTS.length} names={['juzFrom', 'juzTo']} href={next => branchesHref(phrase, next, { ...view, page: 1 })}
       labels={{
         from: ar ? 'من الجزء' : 'From juz',
         to: ar ? 'إلى الجزء' : 'To juz',

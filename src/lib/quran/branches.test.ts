@@ -641,8 +641,8 @@ describe('search', () => {
     expect(searchPieces(list, phrases, shared, 'كهيعص')).toEqual([]);
   });
 
-  it('carries the search on the list only', () => {
+  it('carries the search and surah on the list and into an open tree', () => {
     expect(branchesHref('', undefined, { query: 'قال', page: 2 })).toBe('/quran/branches?p=2&q=%D9%82%D8%A7%D9%84');
-    expect(branchesHref('قال رب', undefined, { query: 'قال' })).not.toContain('q=');
+    expect(branchesHref('قال رب', undefined, { query: 'قال', surah: 7 })).toBe('/quran/branches?o=%D9%82%D8%A7%D9%84+%D8%B1%D8%A8&q=%D9%82%D8%A7%D9%84&s=7');
   });
 });
