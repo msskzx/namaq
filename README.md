@@ -1,20 +1,22 @@
 # Namaq
 
 نَمَق تطبيق تعليمي موجّه للمسلمين وطلاب العلم، والعربية لغته الأساسية.
-يعين على دراسة القرآن الكريم والحديث النبوي وتاريخ صدر الإسلام من خلال
-نصوص المصادر والمقارنة بينها، واستكشاف الشخصيات والعلاقات بينها بصريًا.
+يعين على تعلّم القرآن الكريم والحديث النبوي وتاريخ صدر الإسلام من خلال
+التصورات التفاعلية والاختبارات، مع إتاحة نصوص المصادر للقراءة المتعمقة.
+التركيز الحالي على تدبّر القرآن.
 
 [افتح نَمَق](https://namaq.app).
 
 Namaq is an Arabic-first learning application for Muslims and students of Islamic
-knowledge. It helps readers study the Quran, Hadith, and early Islamic history
-through source texts, comparisons, and visual exploration of people and their
-relationships.
+knowledge. It helps people learn the Quran, Hadith, and early Islamic history
+through interactive visualizations and quizzes, with source texts available
+for deeper reading. The current public focus is Quran learning and reflection.
 
 [Open Namaq](https://namaq.app).
 
 ## Documentation
 
+- [Product goal and phases](docs/product-roadmap.md).
 - [Local setup and verification](docs/local-setup.md).
 - [Shared ayah openings](docs/plans/quran-shared-openings.md): opening trees and phrase trees inside ayat, with scoped search, juz filtering, and word matches checked against corpus roots.
 - Data architecture and design: [data pipelines](docs/data-pipelines.md),
