@@ -15,7 +15,7 @@
 .spread mark.slot4 { color: var(--home-slot-4); }
 .spread mark.root, .legend mark.root { color: var(--home-root); }
 .verseEnd { white-space: nowrap; }
-.verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; line-height: 1; vertical-align: middle; white-space: nowrap; }
+.verseSeal { color: var(--home-muted); white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }
 
 @media (max-width: 600px) {
