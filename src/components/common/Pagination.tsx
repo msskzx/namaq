@@ -18,6 +18,7 @@ interface PaginationProps {
   pageLabels?: string[];
   scrollTarget?: string;
   iconFamily?: 'fontawesome' | 'lucide';
+  iconOnly?: boolean;
 }
 
 export default function Pagination({
@@ -31,6 +32,7 @@ export default function Pagination({
   hrefs,
   scrollTarget,
   language: pageLanguage,
+  iconOnly = false,
 }: PaginationProps) {
   const { language: siteLanguage } = useLanguage();
   const language = pageLanguage ?? siteLanguage;
@@ -57,12 +59,13 @@ export default function Pagination({
     >
       <Button
         variant="outline"
-        size="sm"
+        size={iconOnly ? 'lg' : 'sm'}
         className="shrink-0"
+        {...(iconOnly ? { 'aria-label': rightToLeft ? 'السابق' : 'Previous', title: rightToLeft ? 'السابق' : 'Previous' } : {})}
         {...step(page - 1, page <= 1)}
       >
-        <BackArrow className="size-3" aria-hidden />
-        {rightToLeft ? 'السابق' : 'Previous'}
+        <BackArrow className={iconOnly ? undefined : 'size-3'} aria-hidden />
+        {!iconOnly && (rightToLeft ? 'السابق' : 'Previous')}
       </Button>
 
       {showSelect ? (
@@ -91,12 +94,13 @@ export default function Pagination({
 
       <Button
         variant="outline"
-        size="sm"
+        size={iconOnly ? 'lg' : 'sm'}
         className="shrink-0"
+        {...(iconOnly ? { 'aria-label': rightToLeft ? 'التالي' : 'Next', title: rightToLeft ? 'التالي' : 'Next' } : {})}
         {...step(page + 1, page >= pageCount)}
       >
-        {rightToLeft ? 'التالي' : 'Next'}
-        <ForwardArrow className="size-3" aria-hidden />
+        {!iconOnly && (rightToLeft ? 'التالي' : 'Next')}
+        <ForwardArrow className={iconOnly ? undefined : 'size-3'} aria-hidden />
       </Button>
     </nav>
   );

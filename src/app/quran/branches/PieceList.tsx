@@ -29,7 +29,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
           {ar ? ayatCount(piece.count) : `${piece.count} ayat`}
         </p>}
         tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
-        juz={juz} view={view} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
+        juz={juz} view={{ ...view, query: undefined, surah: undefined }} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />
     </li>
   );

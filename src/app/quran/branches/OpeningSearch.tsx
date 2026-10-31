@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useState } from 'react';
 
-import { ArrowLeft, ArrowRight, GitBranch, Search } from 'lucide-react';
+import { GitBranch, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
@@ -10,13 +10,13 @@ import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/
 import type { JuzRange } from '@/lib/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 const NOTE = 'text-sm text-[var(--home-muted)]';
-const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
+const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 h-11 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 type Suggestion = Opening;
 
 export const SUGGESTIONS = 10;
 
-export default function OpeningSearch({ phrases, current, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases: Opening[]; current: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -62,7 +62,12 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
           <span className="sr-only">{ar ? 'ابحث عن عبارة مشتركة بين آيتين أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
           <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
           <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && suggestions[selected] ? `${listId}-${selected}` : undefined} value={query}
-            onChange={event => { setQuery(event.target.value); setSelected(-1); setDismissed(false); }}
+            onChange={event => {
+            setQuery(event.target.value);
+            setSelected(-1);
+            setDismissed(false);
+            if (!event.target.value && submitted) router.push(branchesHref('', juz ?? undefined, { surah: view.surah }));
+          }}
             placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
             onKeyDown={event => {
               if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
@@ -85,10 +90,6 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
           ))}
         </ul>}
       </div>
-      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { page: submitted ? undefined : view.page })}>
-        {ar ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
-        {ar ? 'العودة إلى القائمة' : 'Return to list'}
-      </Button>}
       {unavailable && <p role="status" className={NOTE}>{ar
         ? 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. عد إلى القائمة أو امسح نطاق الأجزاء.'
         : 'No two ayat share the requested phrase in this range. Return to the list or clear the juz range.'}</p>}

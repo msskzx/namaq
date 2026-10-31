@@ -13,8 +13,8 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
 const LINE = 'border-[var(--home-rule)]';
@@ -114,6 +114,7 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 2;
 const SCALE_STEP = 0.1;
+const SWIPE = 60;
 
 type DiagramSize = { width: number; height: number; availableWidth: number; availableHeight: number };
 
@@ -121,7 +122,7 @@ function fitTreeScale({ width, height, availableWidth, availableHeight }: Diagra
   return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
 
-function TreeViewport({ children, controls, enabled, ar, height }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string }) {
+function TreeViewport({ children, controls, enabled, ar, height, onStep }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void }) {
   const viewport = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
@@ -163,6 +164,8 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
   // The point between the fingers stays put while the tree grows around it.
   const scaleRef = useRef(scale);
   scaleRef.current = scale;
+  const stepRef = useRef<((forward: boolean) => void) | undefined>(undefined);
+  stepRef.current = manualScale === null ? onStep : undefined;
   const anchor = useRef<{ x: number; y: number; fx: number; fy: number } | null>(null);
   useEffect(() => {
     const outer = viewport.current;
@@ -193,6 +196,24 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
       const now = fingers(event);
       if (pinch.distance) zoomAt(pinch.scale * now.distance / pinch.distance, now.x, now.y);
     };
+    let swipe: { x: number; y: number } | null = null;
+    const onSwipeStart = (event: TouchEvent) => {
+      swipe = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    };
+    const onSwipeEnd = (event: TouchEvent) => {
+      const end = event.changedTouches[0];
+      if (!swipe || event.touches.length || !end) return;
+      const dx = end.clientX - swipe.x;
+      const dy = end.clientY - swipe.y;
+      swipe = null;
+      if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(dy)) stepRef.current?.(ar ? dx > 0 : dx < 0);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
+      stepRef.current?.((event.key === 'ArrowLeft') === ar);
+    };
     let gesture = 1;
     const onGestureStart = (event: Event) => { event.preventDefault(); gesture = scaleRef.current; };
     const onGestureChange = (event: Event) => {
@@ -206,18 +227,24 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     outer.addEventListener('touchmove', onTouchMove, { passive: false });
     outer.addEventListener('touchend', onTouches);
     outer.addEventListener('touchcancel', onTouches);
+    outer.addEventListener('touchstart', onSwipeStart, { passive: true });
+    outer.addEventListener('touchend', onSwipeEnd);
     outer.addEventListener('gesturestart', onGestureStart);
     outer.addEventListener('gesturechange', onGestureChange);
+    window.addEventListener('keydown', onKey);
     return () => {
+      window.removeEventListener('keydown', onKey);
       outer.removeEventListener('wheel', onWheel);
       outer.removeEventListener('touchstart', onTouches);
       outer.removeEventListener('touchmove', onTouchMove);
       outer.removeEventListener('touchend', onTouches);
       outer.removeEventListener('touchcancel', onTouches);
+      outer.removeEventListener('touchstart', onSwipeStart);
+      outer.removeEventListener('touchend', onSwipeEnd);
       outer.removeEventListener('gesturestart', onGestureStart);
       outer.removeEventListener('gesturechange', onGestureChange);
     };
-  }, [enabled]);
+  }, [enabled, ar]);
   useLayoutEffect(() => {
     const outer = viewport.current;
     const point = anchor.current;
@@ -249,10 +276,10 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button size="icon" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
+        <Button size="lg" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
-          <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
-          <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
         </div>
       </div>
     </div>
@@ -265,7 +292,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, view: given, surround }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
@@ -297,6 +324,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   visit(tree);
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
   const rootId = nodeId(-1);
+  const step = (forward: boolean) => document.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click();
   const controls = (header || surround) ? <>
     {header}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
@@ -308,9 +336,9 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
-          <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
+          <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined}>
+        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />

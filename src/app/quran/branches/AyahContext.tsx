@@ -64,7 +64,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
     });
     return <article key={context.ayah.key} className={styles.card} aria-label={`${name} ${ar ? num(number) : number}${own ? (ar ? ' · آية هذا الفرع' : ' · this branch') : ''}`}>
       <PageSpread pages={[{ title: name, subtitle: own ? (ar ? `الآية ${num(number)} · آية هذا الفرع` : `Ayah ${number} · this branch`) : (ar ? `الآية ${num(number)} في سياقها` : `Ayah ${number} in context`), rows }]} />
-      <Button size="sm" className="self-start" href={`/quran/read/${context.ayah.page}?a=${context.ayah.key}`}><BookOpen size={16} aria-hidden />{ar ? 'قراءة الآية' : 'Read ayah'}</Button>
+      <Button size="lg" className="self-start" href={`/quran/read/${context.ayah.page}?a=${context.ayah.key}`} aria-label={ar ? 'قراءة الآية' : 'Read ayah'} title={ar ? 'قراءة الآية' : 'Read ayah'}><BookOpen aria-hidden /></Button>
     </article>;
   };
 
@@ -85,10 +85,10 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
       }}>
         <div className={styles.header}>
           <div className={styles.heading}><h2 id={titleId}>{title}</h2>{several && <MatchLegend exact={exactLabel} root={rootLabel} />}{differing && <p className={styles.note}>{ar ? 'النص كما ورد في كل آية.' : 'Each ayah keeps its original text.'}</p>}{open && data && several && siblings.length > 0 && <p className={styles.note}>{ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها.' : 'This branch\'s ayat come first, then the ayat that meet it at the same node.'}</p>}</div>
-          <Button size="icon" aria-label={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X size={18} aria-hidden /></Button>
+          <Button size="lg" aria-label={ar ? 'إغلاق' : 'Close'} title={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X aria-hidden /></Button>
         </div>
         {open && isLoading && <LoadingSpinner />}
-        {open && error && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="sm" onClick={() => void mutate()}><RotateCcw size={16} aria-hidden />{ar ? 'إعادة المحاولة' : 'Try again'}</Button></div>}
+        {open && error && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => void mutate()} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
         {spellings.length > 0 && <section className={styles.spellings} aria-labelledby={`${titleId}-marks`}>
           <h3 id={`${titleId}-marks`}>{ar ? 'الضبط في هذه العقدة' : 'Marks in this node'}</h3>
           <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-quran">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
