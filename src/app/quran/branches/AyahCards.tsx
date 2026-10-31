@@ -47,13 +47,17 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const read = ar ? 'قراءة الآية' : 'Read ayah';
 
   const track = useRef<HTMLDivElement>(null);
+  const selectColumn = (i: number) => {
+    if (i !== column && document.activeElement?.closest('[data-col]') && track.current?.contains(document.activeElement)) track.current.focus({ preventScroll: true });
+    setColumn(i);
+  };
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
   const goTo = (i: number, behavior: ScrollBehavior = 'smooth') => {
     const box = track.current?.getBoundingClientRect();
     const rect = head(i)?.getBoundingClientRect();
     const left = box && rect ? rect.left + rect.width / 2 - (box.left + box.width / 2) : 0;
     if (Math.abs(left) > 1 && track.current?.scrollBy) track.current.scrollBy({ left, behavior });
-    else setColumn(i);
+    else selectColumn(i);
   };
   const centred = () => {
     const box = track.current?.getBoundingClientRect();
@@ -67,7 +71,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       const gap = Math.abs(rect.left + rect.width / 2 - middle);
       if (gap < distance) { distance = gap; best = i; }
     });
-    if (best !== column) setColumn(best);
+    if (best !== column) selectColumn(best);
   };
   const rows = () => [...(track.current?.querySelectorAll<HTMLElement>('[data-col="1"]') ?? [])];
   const measure = () => {
@@ -80,10 +84,8 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       const rect = cell.getBoundingClientRect();
       return rect.top >= top - 1 && rect.bottom <= bottom + 1 ? [row] : [];
     });
-    if (!shown.length) {
-      const seen = cells.map(cell => { const rect = cell.getBoundingClientRect(); return Math.min(rect.bottom, bottom) - Math.max(rect.top, top); });
-      shown.push(seen.indexOf(Math.max(...seen)));
-    }
+    const focused = document.activeElement?.closest<HTMLElement>('[data-row]');
+    if (focused && element.contains(focused) && !shown.includes(Number(focused.dataset.row))) element.focus({ preventScroll: true });
     setLit(previous => previous?.join() === shown.join() ? previous : shown);
     setFits(cells[cells.length - 1].getBoundingClientRect().bottom - cells[0].getBoundingClientRect().top <= element.clientHeight);
   };
@@ -182,7 +184,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const current = i === column;
     const shownRow = !lit || lit.includes(row);
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': shownRow || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && shownRow ? undefined : () => { if (!current) goTo(i); if (!shownRow) reveal(row); } };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': shownRow || undefined, 'aria-hidden': !current || !shownRow, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && shownRow ? undefined : () => { if (!current) goTo(i); if (!shownRow) reveal(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
@@ -194,6 +196,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key) }],
+          ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
         action: current && shownRow ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
       }]} />
@@ -213,7 +216,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
+      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
         {edge(false)}
         {edge(true)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}

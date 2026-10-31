@@ -38,7 +38,7 @@ beforeEach(() => {
     return { ok: true, json: async () => [...source, ...side].filter(context => wanted.includes(context.ayah.key)) };
   }));
 });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); router.push.mockClear(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); router.push.mockClear(); });
 
 const steps = { previous: '/quran/branches?o=a&m=cards', next: '/quran/branches?o=b&m=cards', position: 2, total: 3 };
 const show = (keys = ['94:5', '94:6', '65:7']) => render(
@@ -51,20 +51,20 @@ const key = (name: string) => act(() => { window.dispatchEvent(new KeyboardEvent
 
 it('stacks every tree ayah as a row, its previous and next ayah beside it, the tree column current', async () => {
   show();
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   expect(document.querySelectorAll('[data-col]')).toHaveLength(9);
   expect(screen.queryByText('دليل الألوان')).toBeNull();
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
-  const card = screen.getByRole('article', { name: 'الشرح ٥' });
+  const card = screen.getByLabelText('الشرح ٥');
   expect(within(card).getAllByTitle('نفس الكلمة').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
   expect(within(card).getByTitle('نفس الجذر').textContent).toBe('يُسْرًا');
   expect(within(card).getByRole('link', { name: 'قراءة الآية' }).getAttribute('href')).toBe('/quran/read/1?a=94:5');
-  expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByRole('mark')).toBeNull();
+  expect(within(screen.getByLabelText('الشرح ٤')).queryByRole('mark')).toBeNull();
 });
 
 it('moves every row together to the next or previous ayah with the arrow keys and a click on a side card', async () => {
   show();
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   key('ArrowLeft');
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
   key('ArrowLeft');
@@ -72,15 +72,15 @@ it('moves every row together to the next or previous ayah with the arrow keys an
   key('ArrowRight');
   key('ArrowRight');
   expect(column()).toEqual(['الشرح ٤', '', '']);
-  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٥' }));
+  fireEvent.click(screen.getByLabelText('الشرح ٥'));
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
-  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٧' }));
+  fireEvent.click(screen.getByLabelText('الشرح ٧'));
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
 });
 
 it('steps between trees with the tree navigation, the edge links and one more step past a side column', async () => {
   show();
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   expect(document.querySelector('a[data-edge="next"]')!.getAttribute('href')).toBe(steps.next);
   expect(document.querySelector('a[data-edge="previous"]')!.getAttribute('href')).toBe(steps.previous);
   key('ArrowLeft');
@@ -98,7 +98,7 @@ it('steps between trees with the tree navigation, the edge links and one more st
 
 it('opens a next ayah in the following surah under its basmala, without a seal on the basmala', async () => {
   show();
-  const next = await screen.findByRole('article', { name: 'الطلاق ٨' });
+  const next = await screen.findByLabelText('الطلاق ٨');
   expect(next.textContent).toContain(basmala.join(' '));
   expect(next.textContent!.indexOf('بِسْمِ')).toBeLessThan(next.textContent!.indexOf('وَكَأَيِّن'));
   expect(next.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(1);
@@ -106,14 +106,14 @@ it('opens a next ayah in the following surah under its basmala, without a seal o
 
 it('marks what the next ayat share with each other, as in the tree column', async () => {
   show();
-  const next = await screen.findByRole('article', { name: 'الشرح ٧' });
+  const next = await screen.findByLabelText('الشرح ٧');
   await waitFor(() => expect(within(next).getByTitle('نفس الكلمة').textContent).toBe('فَإِذَا'));
-  expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByTitle('نفس الكلمة')).toBeNull();
+  expect(within(screen.getByLabelText('الشرح ٤')).queryByTitle('نفس الكلمة')).toBeNull();
 });
 
 it('lights every row fully in view and dims only a row cut off at the edge, which a press brings into view', async () => {
   show();
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   const track = document.querySelector<HTMLElement>('[data-col]')!.parentElement!;
   Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
   const scrollBy = vi.fn();
@@ -124,9 +124,9 @@ it('lights every row fully in view and dims only a row cut off at the edge, whic
   fireEvent.scroll(track);
   const lit = () => [...document.querySelectorAll<HTMLElement>('[data-col="1"]')].map(cell => cell.hasAttribute('data-reading'));
   expect(lit()).toEqual([true, true, false]);
-  expect(within(screen.getByRole('article', { name: 'الشرح ٦' })).getByRole('link', { name: 'قراءة الآية' })).toBeTruthy();
-  expect(within(screen.getByRole('article', { name: 'الطلاق ٧' })).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
-  fireEvent.click(screen.getByRole('article', { name: 'الطلاق ٧' }));
+  expect(within(screen.getByLabelText('الشرح ٦')).getByRole('link', { name: 'قراءة الآية' })).toBeTruthy();
+  expect(within(screen.getByLabelText('الطلاق ٧')).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
+  fireEvent.click(screen.getByLabelText('الطلاق ٧'));
   expect(scrollBy).toHaveBeenCalledWith({ top: 140, behavior: 'smooth' });
 });
 
@@ -136,7 +136,7 @@ it('keeps every card in its own row and column when the first tree has no previo
       <AyahCards ayahKeys={['94:5', '94:6']} names={{ 94: 'الشرح' }} steps={{ next: steps.next, position: 1, total: 3 }} />
     </SWRConfig>,
   );
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   expect(document.querySelector('[data-edge="previous"]')).toBeNull();
   expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/2', '1/3', '1/4', '2/2', '2/3', '2/4']);
 });
@@ -144,7 +144,99 @@ it('keeps every card in its own row and column when the first tree has no previo
 it('lights every row when all rows fit in the frame', async () => {
   vi.stubGlobal('ResizeObserver', class { constructor(private callback: () => void) {} observe() { this.callback(); } disconnect() {} });
   show();
-  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await screen.findByLabelText('الشرح ٥');
   await waitFor(() => expect(document.querySelector('[data-fits]')).toBeTruthy());
   expect(document.querySelectorAll('[data-col="1"][data-reading]')).toHaveLength(3);
+});
+
+it.each([
+  ['4:1', '3:200', true],
+  ['9:1', '8:75', false],
+] as const)('places the basmala after the previous surah before %s only when supplied', async (current, previous, hasBasmala) => {
+  const own = { ayah: ayah(current, ['الحالية']), before: null, after: null };
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => ({ ok: true, json: async () => url.startsWith('/api/quran/surrounding')
+    ? { before: { [current]: { ...ayah(previous, ['السابقة']), ...(hasBasmala ? { basmala } : {}) } }, after: { [current]: null } }
+    : [own] })));
+  show([current]);
+  const card = await screen.findByLabelText(`سورة ${previous === '3:200' ? '٣ ٢٠٠' : '٨ ٧٥'}`);
+  expect(card.textContent?.includes(basmala.join(' '))).toBe(hasBasmala);
+  if (hasBasmala) expect(card.textContent!.indexOf('السابقة')).toBeLessThan(card.textContent!.indexOf('بِسْمِ'));
+  expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(1);
+});
+
+it('keeps focus in the keyboard-scrollable matrix when the focused column changes', async () => {
+  show();
+  const own = await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  expect(track.tabIndex).toBe(0);
+  within(own).getByRole('link', { name: 'قراءة الآية' }).focus();
+  key('ArrowLeft');
+  expect(document.activeElement).toBe(track);
+  expect(screen.queryByRole('article', { name: 'الشرح ٥' })).toBeNull();
+  expect(screen.getByRole('article', { name: 'الشرح ٧' })).toBeTruthy();
+});
+
+it('keeps focus in the matrix when scrolling clips the focused row', async () => {
+  show();
+  const own = await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
+  const rect = (top: number, height: number) => new DOMRect(0, top, 100, height);
+  track.getBoundingClientRect = () => rect(0, 500);
+  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => { cell.getBoundingClientRect = () => rect(Number(cell.dataset.row) * 220 - 100, 200); });
+  within(own).getByRole('link', { name: 'قراءة الآية' }).focus();
+  fireEvent.scroll(track);
+  expect(document.activeElement).toBe(track);
+  expect(screen.queryByRole('article', { name: 'الشرح ٥' })).toBeNull();
+  expect(screen.getByRole('article', { name: 'الشرح ٦' })).toBeTruthy();
+});
+
+it('dims every row when the visible rows are all cut by the frame edges', async () => {
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
+  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
+  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
+    cell.getBoundingClientRect = () => new DOMRect(0, Number(cell.dataset.row) * 412 - 150, 100, 400);
+  });
+  fireEvent.scroll(track);
+  expect(document.querySelectorAll('[data-reading]')).toHaveLength(0);
+  expect(within(track).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
+});
+
+it('waits for a horizontal scroll to settle before a further wheel or touch gesture opens a tree', async () => {
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  let offset = 0;
+  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
+  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
+    cell.getBoundingClientRect = () => new DOMRect((1 - Number(cell.dataset.col)) * 100 + offset, Number(cell.dataset.row) * 100, 100, 100);
+  });
+  track.scrollBy = vi.fn();
+  vi.useFakeTimers();
+  key('ArrowLeft');
+  expect(track.scrollBy).toHaveBeenCalledWith({ left: -100, behavior: 'smooth' });
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
+  expect(router.push).not.toHaveBeenCalled();
+  offset = 100;
+  fireEvent.scroll(track);
+  act(() => vi.advanceTimersByTime(80));
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
+  fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
+  expect(router.push).not.toHaveBeenCalled();
+  act(() => vi.advanceTimersByTime(600));
+  fireEvent.wheel(track, { deltaX: -60, deltaY: 100 });
+  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  fireEvent.touchEnd(track, { touches: [], changedTouches: [{ clientX: 60, clientY: 100 }] });
+  expect(router.push).not.toHaveBeenCalled();
+  fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
+  expect(router.push).toHaveBeenCalledExactlyOnceWith(steps.next, { scroll: false });
+  act(() => vi.advanceTimersByTime(600));
+  router.push.mockClear();
+  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  fireEvent.touchEnd(track, { touches: [], changedTouches: [{ clientX: 60, clientY: 0 }] });
+  expect(router.push).toHaveBeenCalledExactlyOnceWith(steps.next, { scroll: false });
 });
