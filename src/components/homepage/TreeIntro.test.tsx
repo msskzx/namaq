@@ -36,15 +36,15 @@ afterEach(() => { cleanup(); vi.useRealTimers(); });
 it('plays once on a first visit: grows the tree, opens an inner node, retypes a leaf, then remembers', async () => {
   render(<Tree />);
   expect(skip()).toBeTruthy();
-  await advance(2200);
+  await advance(3400);
   expect(Element.prototype.animate).toHaveBeenCalled();
   expect(opened).toHaveBeenCalledOnce();
-  await advance(2800);
+  await advance(4400);
   expect(leaf().style.visibility).toBe('hidden');
-  await advance(400);
+  await advance(500);
   expect(typed()?.length).toBeGreaterThan(0);
   expect(typed()?.length).toBeLessThan(5);
-  await advance(3000);
+  await advance(4000);
   expect(skip()).toBeNull();
   expect(leaf().style.visibility).toBe('');
   expect(typed()).toBeUndefined();
@@ -53,7 +53,7 @@ it('plays once on a first visit: grows the tree, opens an inner node, retypes a 
 
 it('skip restores the tree mid-play and stops the remaining scenes', async () => {
   render(<Tree />);
-  await advance(5400);
+  await advance(8200);
   expect(leaf().style.visibility).toBe('hidden');
   fireEvent.click(skip()!);
   expect(skip()).toBeNull();
@@ -68,7 +68,7 @@ it('skip during the growth never opens the overlay', async () => {
   render(<Tree />);
   await advance(500);
   fireEvent.click(skip()!);
-  await advance(8000);
+  await advance(14000);
   expect(opened).not.toHaveBeenCalled();
 });
 

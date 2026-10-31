@@ -7,7 +7,6 @@ import Button from '../common/Button';
 import LoadingSpinner from '../common/LoadingSpinner';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { HomePreviews } from '@/lib/homePreviewData';
-import WorkInProgressBanner from './WorkInProgressBanner';
 import TreeIntro from './TreeIntro';
 import styles from './Home.module.css';
 
@@ -38,7 +37,6 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   ];
   return (
     <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
-      <WorkInProgressBanner />
       <div className={styles.content}>
         <section className={styles.feature} aria-labelledby="openings-title">
           <div className={styles.featureHeading}><div>

@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
-const GROW = 1800;
+const GROW = 2800;
 
 function shouldPlay() {
   try {
@@ -39,10 +39,10 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
   const boxes = [...content.querySelectorAll<HTMLElement>('[data-node]')];
   run(content, [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: GROW });
   boxes.forEach(box => run(box, [{ opacity: 0, transform: 'scale(0.92)' }, { opacity: 1, transform: 'none' }], {
-    duration: 400,
-    delay: ((bounds.right - box.getBoundingClientRect().right) / (bounds.width || 1)) * (GROW - 400),
+    duration: 600,
+    delay: ((bounds.right - box.getBoundingClientRect().right) / (bounds.width || 1)) * (GROW - 600),
   }));
-  await wait(GROW + 400);
+  await wait(GROW + 600);
 
   const open = content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]') ?? content.querySelector<HTMLElement>('[data-context-open]');
   if (open) {
@@ -55,13 +55,13 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
       { opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)`, offset: 0.6 },
       { opacity: 1, transform: `translate(${x}px, ${y}px) scale(0.7)`, offset: 0.8 },
       { opacity: 0, transform: `translate(${x}px, ${y}px) scale(1.2)` },
-    ], { duration: 900, fill: 'none' });
+    ], { duration: 1400, fill: 'none' });
     signal.throwIfAborted();
     undo.push(() => document.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach(dialog => dialog.close()));
     open.click();
-    await wait(1800);
+    await wait(2800);
     document.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach(dialog => dialog.close());
-    await wait(400);
+    await wait(700);
   }
 
   const leaf = boxes.filter(box => box.dataset.node !== 'n-1').sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left)[0];
@@ -76,13 +76,13 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
   words.after(typed);
   undo.push(() => { typed.remove(); words.style.visibility = ''; leaf.style.position = position; });
   const letters = typeof Intl.Segmenter === 'function' ? [...new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(words.textContent)].map(part => part.segment) : Array.from(words.textContent);
-  await wait(600);
-  const step = Math.min(90, 1500 / letters.length);
+  await wait(900);
+  const step = Math.min(140, 2500 / letters.length);
   for (let i = 1; i <= letters.length; i++) {
     typed.textContent = letters.slice(0, i).join('');
     await wait(step);
   }
-  await wait(500);
+  await wait(800);
 }
 
 export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElement | null>; ar: boolean }) {
