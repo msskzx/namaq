@@ -134,7 +134,7 @@ describe('BranchTree', () => {
     expect(fireEvent.wheel(viewport, { deltaY: -100, ctrlKey: true })).toBe(false);
     expect(Number(content.style.transform.slice(6, -1))).toBeCloseTo(0.5 * Math.E);
 
-    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة' }));
     const touch = (x: number) => ({ clientX: x, clientY: 0 });
     fireEvent.touchStart(viewport, { touches: [touch(100), touch(200)] });
     expect(fireEvent.touchMove(viewport, { touches: [touch(50), touch(250)] })).toBe(false);
