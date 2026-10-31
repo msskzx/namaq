@@ -61,7 +61,7 @@ describe('OpeningSearch', () => {
     const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: ' الم تر ' } });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { grouped: true, query: 'الم تر' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر', mode: 'list' }));
     expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
   });
 
@@ -70,7 +70,7 @@ describe('OpeningSearch', () => {
     const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: 'الم تر' } });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14, query: 'الم تر' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14, query: 'الم تر', mode: 'list' }));
   });
 
   it('leaves a suggestion under the mouse out of Enter', () => {
@@ -79,7 +79,7 @@ describe('OpeningSearch', () => {
     fireEvent.change(box, { target: { value: 'الم تر' } });
     fireEvent.mouseEnter(screen.getAllByRole('option')[1]);
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر', mode: 'list' }));
   });
 
   it('opens the highlighted suggestion on Enter', () => {

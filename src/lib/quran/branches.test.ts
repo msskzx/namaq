@@ -646,3 +646,14 @@ describe('search', () => {
     expect(branchesHref('قال رب', undefined, { query: 'قال', surah: 7 })).toBe('/quran/branches?o=%D9%82%D8%A7%D9%84+%D8%B1%D8%A8&q=%D9%82%D8%A7%D9%84&s=7');
   });
 });
+
+describe('branchesHref view modes', () => {
+  it('writes the list mode only without a tree and the cards mode and card only with one', () => {
+    expect(branchesHref('', undefined, { mode: 'list' })).toBe('/quran/branches?m=list');
+    expect(branchesHref('', undefined, { mode: 'cards' })).toBe('/quran/branches');
+    expect(branchesHref('x', undefined, { mode: 'list' })).toBe('/quran/branches?o=x');
+    expect(branchesHref('x', undefined, { mode: 'cards', card: 1 })).toBe('/quran/branches?o=x&m=cards');
+    expect(branchesHref('x', undefined, { mode: 'cards', card: 'last' })).toBe('/quran/branches?o=x&m=cards&n=last');
+    expect(branchesHref('x', undefined, { card: 'last' })).toBe('/quran/branches?o=x');
+  });
+});

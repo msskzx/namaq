@@ -12,9 +12,17 @@ import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './AyahContext.module.css';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
-const MAX_KEYS = 200;
+export const MAX_KEYS = 200;
 
-async function loadContext(url: string): Promise<AyahContext[]> {
+export function sharedMarks(context: AyahContext, exact: string, root: string): Record<number, SpreadMark> {
+  return Object.fromEntries(context.ayah.words.flatMap((_, i): [number, SpreadMark][] => {
+    if (context.match?.rooted.includes(i)) return [[i, { kind: 'root', title: root }]];
+    if (context.match?.exact.includes(i)) return [[i, { kind: 'exact', title: exact }]];
+    return [];
+  }));
+}
+
+export async function loadContext(url: string): Promise<AyahContext[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error('Could not load ayah context');
   return response.json();
@@ -54,12 +62,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
     const rows = [context.before, context.ayah, context.after].flatMap(ayah => {
       if (!ayah) return [[]];
       const target = ayah === context.ayah;
-      const markAt = (i: number): SpreadMark | null => {
-        if (target && context.match?.rooted.includes(i)) return { kind: 'root', title: rootLabel };
-        if (target && context.match?.exact.includes(i)) return { kind: 'exact', title: exactLabel };
-        return null;
-      };
-      const marks: Record<number, SpreadMark> = Object.fromEntries(ayah.words.flatMap((_, i) => { const mark = markAt(i); return mark ? [[i, mark]] : []; }));
+      const marks = target ? sharedMarks(context, exactLabel, rootLabel) : {};
       return [[{ number: Number(ayah.key.split(':')[1]), words: ayah.words, current: ayah === context.ayah, marks }]];
     });
     return <article key={context.ayah.key} className={styles.card} aria-label={`${name} ${ar ? num(number) : number}${own ? (ar ? ' · آية هذا الفرع' : ' · this branch') : ''}`}>

@@ -1,0 +1,8 @@
+.card { touch-action: pan-y; }
+.card > div { grid-template-columns: minmax(0, 1fr); }
+.footer { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; }
+.fromLeft { animation: from-left 0.28s ease-out; }
+.fromRight { animation: from-right 0.28s ease-out; }
+@keyframes from-left { from { opacity: 0; transform: translateX(-2.5rem); } }
+@keyframes from-right { from { opacity: 0; transform: translateX(2.5rem); } }
+@media (prefers-reduced-motion: reduce) { .fromLeft, .fromRight { animation: none; } }
