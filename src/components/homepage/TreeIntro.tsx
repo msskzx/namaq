@@ -6,10 +6,10 @@ import Button from '../common/Button';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
-const STEP = 300;
-const HOLD = 600;
-const TYPE = 70;
-const TYPING = 1200;
+const STEP = 450;
+const HOLD = 900;
+const TYPE = 110;
+const TYPING = 1800;
 
 function shouldPlay() {
   try {
@@ -72,7 +72,7 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     undo.push(restore);
     const letters = typeof Intl.Segmenter === 'function' ? [...new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(words.textContent)].map(part => part.segment) : Array.from(words.textContent);
     return async () => {
-      await wait(300);
+      await wait(450);
       const step = Math.min(TYPE, TYPING / letters.length);
       for (let i = 1; i <= letters.length; i++) {
         typed.textContent = letters.slice(0, i).join('');
@@ -100,15 +100,15 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
       await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
       if (type) await lit(leaf, type);
     }
-    await wait(250);
+    await wait(400);
   }
   pieces.forEach(piece => { piece.style.opacity = ''; });
-  await wait(400);
+  await wait(600);
   for (const { leaf } of leaves) {
     await lit(leaf, () => wait(HOLD));
-    await wait(200);
+    await wait(300);
   }
-  await wait(400);
+  await wait(600);
 
   const seen = (button: HTMLElement) => {
     const { left, top, width, height } = button.getBoundingClientRect();
@@ -126,13 +126,13 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     { opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)`, offset: 0.6 },
     { opacity: 1, transform: `translate(${x}px, ${y}px) scale(0.7)`, offset: 0.8 },
     { opacity: 0, transform: `translate(${x}px, ${y}px) scale(1.2)` },
-  ], { duration: 1400, fill: 'none' });
+  ], { duration: 1800, fill: 'none' });
   const half = bubble.offsetWidth / 2;
   const left = Math.min(Math.max(x, half + 8), area.width - half - 8);
   const at = `translate(${left - half}px, ${target.bottom - area.top + 10}px)`;
   bubble.style.setProperty('--tail', `${x - left + half}px`);
   await run(bubble, [{ opacity: 0, transform: `${at} translateY(6px)` }, { opacity: 1, transform: at }], { duration: 300, fill: 'forwards' });
-  await wait(2000);
+  await wait(2800);
   await run(bubble, [{ opacity: 1, transform: at }, { opacity: 0, transform: at }], { duration: 400, fill: 'forwards' });
   await wait(300);
 }

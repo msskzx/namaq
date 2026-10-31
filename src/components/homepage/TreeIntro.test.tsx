@@ -54,22 +54,22 @@ it('draws each path with its leaf typed in while the path is lit, then lights ev
   expect(typed('n0')).toBe('');
   expect(lit).toHaveBeenCalledOnce();
   expect(document.querySelector('[data-node="n0"] [aria-pressed]')!.getAttribute('aria-pressed')).toBe('true');
-  await advance(600);
+  await advance(900);
   expect(lit).toHaveBeenCalledTimes(2);
   expect(words('n0').style.visibility).toBe('');
   expect(typed('n0')).toBeUndefined();
   expect(branch('n1')).toBe('0');
-  await advance(300);
+  await advance(400);
   expect(branch('n1')).toBe('');
   expect(words('n1').style.visibility).toBe('hidden');
   expect(lit).toHaveBeenCalledTimes(3);
-  await advance(1100);
+  await advance(1900);
   expect(typed('n1')).toBeUndefined();
   expect(lit).toHaveBeenCalledTimes(5);
-  await advance(1900);
+  await advance(2400);
   expect(lit).toHaveBeenCalledTimes(8);
   expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
-  await advance(3000);
+  await advance(4000);
   expect(opened).not.toHaveBeenCalled();
   expect(skip()).toBeNull();
   expect(localStorage.getItem(SEEN)).toBe('1');
@@ -93,7 +93,7 @@ it('skip while a leaf is being typed shows the whole tree with its words and nev
 
 it('skip while a path is lit turns the light off', async () => {
   render(<Tree />);
-  await advance(2100);
+  await advance(3300);
   expect(lit).toHaveBeenCalledTimes(5);
   fireEvent.click(skip()!);
   expect(lit).toHaveBeenCalledTimes(6);
