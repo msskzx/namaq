@@ -91,10 +91,20 @@ describe('OpeningSearch', () => {
     expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف'));
   });
 
-  it('keeps the search in the box on the results, with a way back to the list', () => {
-    render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ page: 2, query: 'الم تر' }} />);
-    expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('الم تر');
+  it('keeps the search in the box on the results, and clearing the box returns to the whole list', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ page: 2, query: 'الم تر', surah: 14 }} />);
+    const box = screen.getByRole('combobox') as HTMLInputElement;
+    expect(box.value).toBe('الم تر');
     expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
-    expect(screen.getByRole('link', { name: /العودة إلى القائمة/ }).getAttribute('href')).toBe(branchesHref(''));
+    fireEvent.change(box, { target: { value: '' } });
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14 }));
+  });
+
+  it('does not navigate when a box that held no search is emptied', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" />);
+    const box = screen.getByRole('combobox');
+    fireEvent.change(box, { target: { value: 'ا' } });
+    fireEvent.change(box, { target: { value: '' } });
+    expect(router.push).not.toHaveBeenCalled();
   });
 });
