@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Info } from 'lucide-react';
+import { CircleHelp } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 export default function BranchHeading() {
@@ -14,7 +14,7 @@ export function MatchingRules({ children }: { children?: React.ReactNode }) {
   const rules = ar ? 'قواعد المطابقة' : 'Matching rules';
   return <details className="group relative shrink-0">
       <summary title={rules} className="flex size-11 cursor-pointer list-none items-center justify-center rounded-sm border border-[var(--home-rule)] text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
-        <Info size={20} aria-hidden /><span className="sr-only">{rules}</span>
+        <CircleHelp size={20} aria-hidden /><span className="sr-only">{rules}</span>
       </summary>
       <div className="absolute start-0 top-full z-20 mt-1 flex w-80 max-w-[85vw] flex-col gap-2 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 text-sm text-[var(--home-muted)] shadow-md"><p>{ar
         ? 'تجمع كل شجرة عبارة تكررت في آيتين أو أكثر أينما وردت. لا تفصل واو أو فاء مثبتة صرفيًّا في أول العبارة، ولا اختلافات كرسي الهمزة، بين فروع الشجرة، مع إبقاء الصيغ الأصلية ظاهرة. وتظهر مجموعات السور المسماة في القائمة نفسها. النص برواية حفص كما في صفحة القراءة.'

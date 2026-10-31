@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BookOpen, GitBranch, Highlighter, RotateCcw } from 'lucide-react';
+import { BookOpen, CircleHelp, GitBranch, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -167,7 +167,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
         {steps && <TreeSteps steps={steps} />}
         {shown.length > 1 && <details className="group relative shrink-0">
           <summary title={legend} className="flex size-8 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
-            <Highlighter size={16} aria-hidden /><span className="sr-only">{legend}</span>
+            <CircleHelp size={16} aria-hidden /><span className="sr-only">{legend}</span>
           </summary>
           <div className="absolute end-0 top-full z-20 mt-1 whitespace-nowrap rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] px-3 shadow-md"><MatchLegend exact={exactLabel} root={rootLabel} /></div>
         </details>}
