@@ -2,6 +2,7 @@
 import { num } from './arabicNumber';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
+import { findText, searchQuery, textKeys, type WordKeys } from './searchText';
 import type { ReaderPageData } from './readerPage';
 
 export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
@@ -244,12 +245,44 @@ export const opens = (ayah: BranchAyah, phrase: string) => {
 
 export const searchKey = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ').replace(/(^| )يا (?=\S)/g, '$1ي').replace(/ا+/g, 'ا');
 
-export function searchPhrases(phrases: Opening[], query: string) {
-  const needle = searchKey(query);
-  if (!needle) return [];
-  const keyed = phrases.map(phrase => ({ phrase, values: [phrase.id, phrase.text, phrase.textEn ?? '', ...(phrase.aliases ?? [])].map(searchKey) }));
-  const starts = (candidate: typeof keyed[number]) => candidate.values.some(value => value.startsWith(needle));
-  return [...keyed.filter(starts), ...keyed.filter(candidate => !starts(candidate) && candidate.values.some(value => value.includes(needle)))].map(candidate => candidate.phrase);
+type KeyedPhrase = { phrase: Opening; texts: WordKeys[][]; english: string[] };
+const keyedPhrases = new WeakMap<Opening[], KeyedPhrase[]>();
+const keyPhrases = (phrases: Opening[]) => {
+  let keyed = keyedPhrases.get(phrases);
+  if (!keyed) keyedPhrases.set(phrases, keyed = phrases.map(phrase => ({ phrase, texts: [phrase.text, ...(phrase.aliases ?? [])].map(textKeys), english: phrase.textEn ? [phrase.textEn.toLowerCase()] : [] })));
+  return keyed;
+};
+
+/** Phrases holding the query (see searchText.ts), those that open with it first. */
+export function rankPhrases(phrases: Opening[], query: string): { phrase: Opening; start: boolean }[] {
+  const wanted = searchQuery(query);
+  const english = /[a-z]/i.test(query) ? query.trim().toLowerCase() : '';
+  if (!wanted.strict.length && !english) return [];
+  const starts: Opening[] = [];
+  const inside: Opening[] = [];
+  for (const { phrase, texts, english: values } of keyPhrases(phrases)) {
+    if (texts.some(words => findText(words, wanted, true)) || (english && values.some(value => value.startsWith(english)))) starts.push(phrase);
+    else if (texts.some(words => findText(words, wanted)) || (english && values.some(value => value.includes(english)))) inside.push(phrase);
+  }
+  return [...starts.map(phrase => ({ phrase, start: true })), ...inside.map(phrase => ({ phrase, start: false }))];
+}
+
+export const searchPhrases = (phrases: Opening[], query: string) => rankPhrases(phrases, query).map(found => found.phrase);
+
+/** Does the text hold the query anywhere (a leading و / ف on the query may be dropped)? */
+export function textHolds(text: string, query: string): boolean {
+  const words = textKeys(text);
+  const wanted = searchQuery(query);
+  if (findText(words, wanted)) return true;
+  const [head, ...rest] = wanted.strict;
+  return !!head && /^[وف]./.test(head) && !!findText(words, searchQuery([head.slice(1), ...rest].join(' ')));
+}
+
+/** Is the text exactly the query, word for word? */
+export function textIs(text: string, query: string): boolean {
+  const words = textKeys(text);
+  const wanted = searchQuery(query);
+  return wanted.strict.length === words.length && words.every((word, at) => word.strict.includes(wanted.strict[at]) || word.loose.includes(wanted.loose[at]));
 }
 
 export const startingWith = (ayat: BranchAyah[], phrase: string, partition?: string) => ayat.filter(ayah => opens(ayah, phrase) && (!partition || rootPartition(ayah, phrase.split(' ').length) === partition));
@@ -517,18 +550,17 @@ export function ayahEnds(node: Branch, path: string[] = []): Record<string, stri
 }
 
 export function searchPieces(found: Piece[], phrases: Opening[], ayat: BranchAyah[], query: string) {
-  const needle = searchKey(query);
   const owner = new Map(found.flatMap((piece, index) => piece.keys.map(key => [key, index] as const)));
   const byFirst = new Map<string, Set<BranchAyah>>();
   ayat.forEach(ayah => [norm(ayah)[0], norm(stem(ayah))[0]].forEach(word => byFirst.set(word, (byFirst.get(word) ?? new Set()).add(ayah))));
   const rank = new Map<number, number>();
-  searchPhrases(phrases, query).forEach(phrase => {
+  rankPhrases(phrases, query).forEach(({ phrase, start }) => {
     const hits = new Map<number, number>();
     startingWith([...byFirst.get(phrase.id.split(' ')[0]) ?? []], phrase.id, phrase.partition).forEach(ayah => {
       const index = owner.get(ayah.key);
       if (index !== undefined) hits.set(index, (hits.get(index) ?? 0) + 1);
     });
-    hits.forEach((count, index) => { if (count >= 2 && !rank.has(index)) rank.set(index, Number(!searchKey(phrase.id).startsWith(needle))); });
+    hits.forEach((count, index) => { if (count >= 2 && !rank.has(index)) rank.set(index, Number(!start)); });
   });
   return [0, 1].flatMap(level => found.filter((_, index) => rank.get(index) === level));
 }

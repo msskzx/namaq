@@ -32,7 +32,7 @@ describe('searchAyat', () => {
     expect(searchAyat(ayat, 'حمد لله رب').hits.map(hit => hit.key)).toContain('1:2');
   });
 
-  it('falls back to spelling without alif or hamza, so السماوات finds ٱلسَّمَـٰوَٰتِ', () => {
+  it('matches the normal spelling, so السماوات finds ٱلسَّمَـٰوَٰتِ', () => {
     expect(searchAyat(ayat, 'خلق السماوات').total).toBeGreaterThan(20);
     expect(searchAyat(ayat, 'قال').hits.every(hit => hit.words.map(normalizeWord).join(' ').includes('قال'))).toBe(true);
   });
@@ -48,7 +48,7 @@ describe('searchAyat', () => {
     expect(sajda && [sajda.to - sajda.from, sajda.to]).toEqual([2, sajda!.words.length - 1]);
   });
 
-  it('gives the word range of a match found without alif', () => {
+  it('gives the word range of a match found by its normal spelling', () => {
     expect(covered('خلق السماوات', '2:164')).toEqual(['خلق', 'السموت']);
   });
 
@@ -59,11 +59,39 @@ describe('searchAyat', () => {
     expect(result.hits[0].key).toBe('55:13');
   });
 
+  it('finds dagger-alif and waw-for-alif words by their normal spelling', () => {
+    expect(covered('صراط', '1:7')).toEqual(['صرط']);
+    expect(covered('الصراط المستقيم', '1:6')).toEqual(['الصرط', 'المستقيم']);
+    expect(covered('الصلاة', '2:3')).toEqual(['الصلوه']);
+    expect(covered('الزكاة', '2:43')).toEqual(['الزكوه']);
+    expect(covered('غلام', '3:40')).toEqual(['غلم']);
+    expect(covered('إبراهيم', '2:124')).toEqual(['ابرهم']);
+    expect(covered('إبراهيم', '3:33')).toEqual(['ابرهيم']);
+    expect(covered('التوراة', '3:3')).toEqual(['التوريه']);
+  });
+
+  it('still finds the rasm spelling, and mixes both in one phrase', () => {
+    expect(searchAyat(ayat, 'صرط').total).toBe(searchAyat(ayat, 'صراط').total);
+    expect(covered('ذلك الكتاب', '2:2')).toEqual(['ذلك', 'الكتب']);
+  });
+
+  it('does not let a few full-alif spellings hide the rest', () => {
+    expect(searchAyat(ayat, 'كتاب').total).toBeGreaterThan(200);
+    expect(searchAyat(ayat, 'مالك', 10000).hits.map(hit => hit.key)).not.toContain('2:102');
+  });
+
+  it('tolerates hamza typed differently or left out, after exact matches', () => {
+    expect(covered('القرآن', '2:185')).toEqual(['القرءان']);
+    expect(covered('الذين امنوا', '2:62')).toEqual(['الذين', 'ءامنوا']);
+    expect(covered('يا أيها الذين', '2:104')).toEqual(['يايها', 'الذين']);
+    expect(covered('هؤلاء', '2:31')).toEqual(['هؤلاء']);
+  });
+
   it('searches nothing shorter than two Arabic letters', () => {
     expect(searchable('ق')).toBe(false);
     expect(searchable('baqara')).toBe(false);
     expect(searchAyat(ayat, 'ق').total).toBe(0);
-    expect(searchAyat(ayat, 'ءء').total).toBe(0);
+    expect(searchAyat(ayat, 'ء').total).toBe(0);
     expect(searchAyat(ayat, 'ا ا ا').total).toBe(0);
   });
 });

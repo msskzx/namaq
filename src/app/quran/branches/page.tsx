@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { ayahEnds, branchesHref, keys, listPage, searchKey, searchPhrases, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, listPage, searchKey, searchPhrases, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
 import { buildPhraseGroups, buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
@@ -79,8 +79,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const needle = searchKey(query);
   if (needle && !built.searches.has(needle)) {
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
-    const bareNeedle = /^[وف]/.test(needle) ? needle.slice(1) : needle;
-    built.searches.set(needle, pieces.filter(piece => searchPhrases([piece.opening, piece], query).length > 0 || searchKey(piece.text).includes(bareNeedle)));
+    built.searches.set(needle, pieces.filter(piece => searchPhrases([piece.opening, piece], query).length > 0 || textHolds(piece.text, query)));
   }
   const found = needle ? built.searches.get(needle)! : pieces;
   const surahOf = (key: string) => Number(key.split(':')[0]);
@@ -96,7 +95,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const tree = presentation?.tree ?? null;
   const subtreeLinks = tree ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) })])) : undefined;
   const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
-  const exact: Opening[] = needle ? built.trees.filter(candidate => [candidate.id, candidate.text, candidate.textEn ?? ''].some(text => searchKey(text) === needle)).map(candidate => ({ id: candidate.id, text: candidate.text, textEn: candidate.textEn, count: new Set(candidate.occurrences.map(occurrence => occurrence.key)).size })) : [];
+  const exact: Opening[] = needle ? built.trees.filter(candidate => textIs(candidate.text, query) || (!!candidate.textEn && candidate.textEn.toLowerCase() === query.toLowerCase())).map(candidate => ({ id: candidate.id, text: candidate.text, textEn: candidate.textEn, count: new Set(candidate.occurrences.map(occurrence => occurrence.key)).size })) : [];
   const { page, pageCount } = listPage(first(params.p), id ? Number.MAX_SAFE_INTEGER : cut.length, PER_PAGE);
   state.page = page;
   const numbers = id ? [...new Set(drawn.flatMap(ayah => {
