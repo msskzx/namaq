@@ -112,6 +112,44 @@ describe('BranchTree', () => {
     expect(content.style.transform).toBe('scale(1.6)');
   });
 
+  it('zooms the tree, not the page, on a trackpad or touch pinch', () => {
+    let resize: ResizeObserverCallback = () => {};
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { resize = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    });
+    const { container } = render(<BranchTree tree={tree} names={{}} viewportHeight="320px" />);
+    const viewport = container.querySelector<HTMLElement>('[data-tree-viewport]')!;
+    const content = container.querySelector<HTMLElement>('[data-tree-content]')!;
+    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 }, clientHeight: { configurable: true, value: 320 } });
+    Object.defineProperties(content, { offsetWidth: { configurable: true, value: 1000 }, offsetHeight: { configurable: true, value: 640 } });
+    act(() => resize([], {} as ResizeObserver));
+    expect(content.style.transform).toBe('scale(0.5)');
+    expect(viewport.classList.contains('touch-pan-x')).toBe(true);
+    expect(viewport.classList.contains('touch-pan-y')).toBe(true);
+
+    expect(fireEvent.wheel(viewport, { deltaY: -10 })).toBe(true);
+    expect(content.style.transform).toBe('scale(0.5)');
+    expect(fireEvent.wheel(viewport, { deltaY: -100, ctrlKey: true })).toBe(false);
+    expect(Number(content.style.transform.slice(6, -1))).toBeCloseTo(0.5 * Math.E);
+
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
+    const touch = (x: number) => ({ clientX: x, clientY: 0 });
+    fireEvent.touchStart(viewport, { touches: [touch(100), touch(200)] });
+    expect(fireEvent.touchMove(viewport, { touches: [touch(50), touch(250)] })).toBe(false);
+    expect(content.style.transform).toBe('scale(1)');
+    fireEvent.touchStart(viewport, { touches: [touch(50), touch(250), touch(300)] });
+    fireEvent.touchEnd(viewport, { touches: [touch(50), touch(250)] });
+    fireEvent.touchMove(viewport, { touches: [touch(0), touch(300)] });
+    expect(content.style.transform).toBe('scale(1.5)');
+    fireEvent.touchMove(viewport, { touches: [touch(-1000), touch(1300)] });
+    expect(content.style.transform).toBe('scale(2)');
+    fireEvent.touchEnd(viewport, { touches: [] });
+    expect(fireEvent.touchMove(viewport, { touches: [touch(0)] })).toBe(true);
+  });
+
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
     const group = startingWith(data.ayat as BranchAyah[], 'اما من').filter(a => inJuzRange(a.key, { from: 30, to: 30 }));
     const tree = branch(group);
