@@ -52,8 +52,8 @@ it('stacks every tree ayah as a row, its previous and next ayah beside it, the t
   expect(document.querySelectorAll('[data-col]')).toHaveLength(9);
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   const card = screen.getByRole('article', { name: 'الشرح ٥' });
-  expect(within(card).getAllByTitle('الكلمة نفسها').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
-  expect(within(card).getByTitle('الجذر نفسه').textContent).toBe('يُسْرًا');
+  expect(within(card).getAllByTitle('نفس الكلمة').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
+  expect(within(card).getByTitle('نفس الجذر').textContent).toBe('يُسْرًا');
   expect(within(card).getByRole('link', { name: 'قراءة الآية' }).getAttribute('href')).toBe('/quran/read/1?a=94:5');
   expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByRole('mark')).toBeNull();
 });

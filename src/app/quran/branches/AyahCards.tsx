@@ -27,8 +27,8 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     if (!response.ok) throw new Error('Could not load surrounding ayat');
     return response.json();
   }, { revalidateOnFocus: false });
-  const exactLabel = ar ? 'الكلمة نفسها' : 'Same word';
-  const rootLabel = ar ? 'الجذر نفسه' : 'Same root';
+  const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
+  const rootLabel = ar ? 'نفس الجذر' : 'Same root';
   const headings: Record<Column, string> = ar ? { before: 'الآية السابقة', ayah: 'آيات الشجرة', after: 'الآية التالية' } : { before: 'Previous ayah', ayah: 'Tree ayat', after: 'Next ayah' };
   const read = ar ? 'قراءة الآية' : 'Read ayah';
 
