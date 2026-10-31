@@ -96,7 +96,7 @@ describe('Quran branch trees', () => {
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz, { context: true }));
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz, { context: true }));
-    expect(steps.textContent).toContain(`${num(2)} من ${num(trees.length)}`);
+    expect(steps.textContent).toContain(`${num(2)} / ${num(trees.length)}`);
   });
 
   it('disables the previous step on the first tree', async () => {
@@ -104,5 +104,24 @@ describe('Quran branch trees', () => {
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(data.trees[1].id));
+  });
+
+  it('steps through the trees a surah filter leaves, keeping the filter', async () => {
+    render(await open({ juzFrom: '30', juzTo: '30', s: '78' }));
+    const opens = screen.getAllByRole('link', { name: 'افتح الشجرة' }).map(link => link.getAttribute('href')!);
+    expect(opens.length).toBeGreaterThan(2);
+    expect(opens.every(href => href.includes('s=78'))).toBe(true);
+    cleanup();
+    render(await open(Object.fromEntries(new URL(opens[1], 'http://localhost').searchParams)));
+    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(opens[0]);
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(opens[2]);
+    expect(steps.textContent).toContain(`${num(2)} / `);
+  });
+
+  it('keeps the search in the open-tree links of a search result', async () => {
+    render(await open({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
+    const href = screen.getByRole('link', { name: 'افتح الشجرة' }).getAttribute('href')!;
+    expect(new URL(href, 'http://localhost').searchParams.get('q')).toBe('فذرهم يخوضوا ويلعبوا');
   });
 });

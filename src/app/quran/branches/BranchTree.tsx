@@ -131,7 +131,7 @@ function TreeSteps({ steps, ar }: { steps: Steps; ar: boolean }) {
   return (
     <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex items-center gap-2">
       <Button size="sm" data-step="previous" {...step(steps.previous)}><Back className="size-3" aria-hidden />{labels.previous}</Button>
-      <span className="text-sm tabular-nums text-[var(--home-muted)]">{ar ? `${num(steps.position)} من ${num(steps.total)}` : `${steps.position} of ${steps.total}`}</span>
+      <span className="text-sm tabular-nums text-[var(--home-muted)]">{ar ? `${num(steps.position)} / ${num(steps.total)}` : `${steps.position} / ${steps.total}`}</span>
       <Button size="sm" data-step="next" {...step(steps.next)}>{labels.next}<Forward className="size-3" aria-hidden /></Button>
     </nav>
   );

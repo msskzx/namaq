@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
+import { Expand } from 'lucide-react';
+import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { ayatCount } from '@/lib/quran/arabicNumber';
-import { branch, variants, type BranchAyah, type BranchesView, type Piece } from '@/lib/quran/branches';
+import { branch, branchesHref, variants, type BranchAyah, type BranchesView, type Piece } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import BranchTree from './BranchTree';
 import { phrasePresentation, type PhraseGroup } from '@/lib/quran/phraseTrees';
@@ -24,10 +26,13 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
   return (
     <li>
       <BranchTree
-        header={<p className={NOTE}>
-          {piece.family && <>{ar ? piece.opening.text : piece.opening.textEn} · </>}
-          {ar ? ayatCount(piece.count) : `${piece.count} ayat`}
-        </p>}
+        header={<>
+          <p className={NOTE}>
+            {piece.family && <>{ar ? piece.opening.text : piece.opening.textEn} · </>}
+            {ar ? ayatCount(piece.count) : `${piece.count} ayat`}
+          </p>
+          <Button size="sm" href={branchesHref(piece.id, juz ?? undefined, { query: view?.query, surah: view?.surah })}><Expand size={16} aria-hidden />{ar ? 'افتح الشجرة' : 'Open tree'}</Button>
+        </>}
         tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
         juz={juz} view={view} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />

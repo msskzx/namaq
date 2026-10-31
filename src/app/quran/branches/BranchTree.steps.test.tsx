@@ -70,7 +70,7 @@ describe('BranchTree steps in Arabic', () => {
 
   it('shows the position as Arabic-Indic digits between the step controls', () => {
     renderTree();
-    expect(within(screen.getByRole('navigation', { name: AR.nav })).getByText('٣ من ١٢٠')).toBeTruthy();
+    expect(within(screen.getByRole('navigation', { name: AR.nav })).getByText('٣ / ١٢٠')).toBeTruthy();
   });
 
   it('renders the previous control as a disabled button, not a link, when there is no previous tree', () => {
@@ -166,7 +166,7 @@ describe('BranchTree steps in English', () => {
 
   it('shows the position as plain digits in English', () => {
     renderTree();
-    expect(within(screen.getByRole('navigation', { name: EN.nav })).getByText('3 of 120')).toBeTruthy();
+    expect(within(screen.getByRole('navigation', { name: EN.nav })).getByText('3 / 120')).toBeTruthy();
   });
 
   it('disables the previous English control on the first tree', () => {
