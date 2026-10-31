@@ -1,13 +1,15 @@
-.track { display: grid; grid-template-columns: repeat(3, 84%); gap: 0.75rem 1rem; overflow: auto; max-height: 75vh; scroll-snap-type: both mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: 8%; padding-bottom: 20vh; scrollbar-width: none; }
+.track { display: grid; grid-template-columns: 3rem repeat(3, 84%) 3rem; gap: 0.75rem 1rem; overflow: auto; max-height: 75vh; scroll-snap-type: both mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: max(0px, calc(8% - 4rem)); padding-bottom: 20vh; scrollbar-width: none; }
 .track::-webkit-scrollbar { display: none; }
 .cell { min-width: 0; scroll-snap-align: start center; scroll-snap-stop: always; transition: opacity 0.3s ease; }
 .cell:not([data-current]) { opacity: 0.45; cursor: pointer; height: 0; min-height: 100%; overflow: hidden; }
 .cell:not([data-current]) > div { height: 100%; }
 .cell:not([data-current]) article { height: 100%; overflow: hidden; }
+.edge { display: flex; justify-content: center; border-inline: 1px dashed var(--home-rule); border-radius: 0.25rem; }
+.edgeButton { position: sticky; top: 40%; flex-direction: column; align-self: flex-start; }
 .cell > div { display: block; }
 .cell article { display: block; padding: 0.75rem; }
 .cell article header { margin-bottom: 0.5rem; padding: 0.25rem; }
 .cell article h3 { font-size: 1.125rem; }
 .cell article > div { font-size: 1.25rem; line-height: 2.1; }
-@media (max-width: 600px) { .track { grid-template-columns: repeat(3, 86%); padding-inline: 7%; column-gap: 0.5rem; } }
+@media (max-width: 600px) { .track { grid-template-columns: 2.5rem repeat(3, 86%) 2.5rem; padding-inline: max(0px, calc(7% - 3rem)); column-gap: 0.5rem; } }
 @media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .cell { transition: none; } }

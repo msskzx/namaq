@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BookOpen, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, GitBranch, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
@@ -14,6 +15,8 @@ import TreeSteps, { type Steps } from './TreeSteps';
 import styles from './AyahCards.module.css';
 
 const COLUMNS = ['before', 'ayah', 'after'] as const;
+const SWIPE = 50;
+const SETTLE = 600;
 type Column = typeof COLUMNS[number];
 
 export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string[]; names: Record<number, string>; steps?: Steps }) {
@@ -34,10 +37,11 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const track = useRef<HTMLDivElement>(null);
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
   const goTo = (i: number, behavior: ScrollBehavior = 'smooth') => {
-    setColumn(i);
     const box = track.current?.getBoundingClientRect();
     const rect = head(i)?.getBoundingClientRect();
-    if (box && rect) track.current?.scrollBy?.({ left: rect.left + rect.width / 2 - (box.left + box.width / 2), behavior });
+    const left = box && rect ? rect.left + rect.width / 2 - (box.left + box.width / 2) : 0;
+    if (Math.abs(left) > 1 && track.current?.scrollBy) track.current.scrollBy({ left, behavior });
+    else setColumn(i);
   };
   const centred = () => {
     const box = track.current?.getBoundingClientRect();
@@ -64,10 +68,36 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
+  const router = useNavigatingRouter();
+  const arrived = useRef(0);
+  useEffect(() => { arrived.current = Date.now(); }, [column]);
+  const leave = (forward: boolean) => {
+    const href = forward ? steps?.next : steps?.previous;
+    if (!href || column !== (forward ? COLUMNS.length - 1 : 0)) return false;
+    router.push(href, { scroll: false });
+    return true;
+  };
   const stepRef = useRef<(forward: boolean) => void>(() => {});
   stepRef.current = forward => {
     const i = column + (forward ? 1 : -1);
     if (i >= 0 && i < COLUMNS.length) goTo(i);
+    else leave(forward);
+  };
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (event: React.TouchEvent) => {
+    swipe.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+  };
+  const onTouchEnd = (event: React.TouchEvent) => {
+    const start = swipe.current;
+    const end = event.changedTouches[0];
+    swipe.current = null;
+    if (!start || event.touches.length || !end || Date.now() - arrived.current < SETTLE) return;
+    const dx = end.clientX - start.x;
+    if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(end.clientY - start.y)) leave(dx > 0);
+  };
+  const onWheel = (event: React.WheelEvent) => {
+    if (Math.abs(event.deltaX) < SWIPE || Math.abs(event.deltaX) < 2 * Math.abs(event.deltaY) || Date.now() - arrived.current < SETTLE) return;
+    if (leave(event.deltaX < 0)) arrived.current = Date.now();
   };
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -106,6 +136,16 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     </div>;
   };
 
+  const edge = (forward: boolean) => {
+    const href = forward ? steps?.next : steps?.previous;
+    if (!href) return null;
+    const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
+    const Arrow = forward ? ArrowLeft : ArrowRight;
+    return <div className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }}>
+      <Button size="icon" variant="muted" className={styles.edgeButton} href={href} scroll={false} aria-label={label} title={label}><Arrow size={16} aria-hidden /><GitBranch size={16} aria-hidden /></Button>
+    </div>;
+  };
+
   return (
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -114,7 +154,9 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       </div>
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll}>
+      {contexts && around && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
+        {edge(false)}
+        {edge(true)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
       </div>}
     </section>

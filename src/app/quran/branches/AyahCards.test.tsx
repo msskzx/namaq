@@ -73,11 +73,21 @@ it('moves every row together to the next or previous ayah with the arrow keys an
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
 });
 
-it('steps between trees with the tree navigation', async () => {
+it('steps between trees with the tree navigation, the edge links and one more step past a side column', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  expect(screen.getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(steps.previous);
-  expect(screen.getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(steps.next);
+  expect(document.querySelector('[data-edge="next"] a')!.getAttribute('href')).toBe(steps.next);
+  expect(document.querySelector('[data-edge="previous"] a')!.getAttribute('href')).toBe(steps.previous);
+  key('ArrowLeft');
+  expect(router.push).not.toHaveBeenCalled();
+  key('ArrowLeft');
+  expect(router.push).toHaveBeenCalledWith(steps.next, { scroll: false });
+  key('ArrowRight');
+  key('ArrowRight');
+  key('ArrowRight');
+  expect(router.push).toHaveBeenLastCalledWith(steps.previous, { scroll: false });
+  expect(screen.getAllByRole('link', { name: 'الشجرة السابقة' }).map(link => link.getAttribute('href'))).toEqual([steps.previous, steps.previous]);
+  expect(screen.getAllByRole('link', { name: 'الشجرة التالية' }).map(link => link.getAttribute('href'))).toEqual([steps.next, steps.next]);
 });
 
 it('opens a next ayah in the following surah under its basmala, without a seal on the basmala', async () => {
