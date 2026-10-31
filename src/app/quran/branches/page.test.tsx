@@ -8,7 +8,6 @@ import CompareLayout from '../compare/CompareLayout';
 import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
 import { buildTreeGroups } from '@/lib/quran/phraseTrees';
 import { inJuzRange } from '@/lib/quran/juz';
-import { num } from '@/lib/quran/arabicNumber';
 import data from './trees.json';
 
 const params = new URLSearchParams();
@@ -102,7 +101,6 @@ describe('Quran branch trees', () => {
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz));
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz));
-    expect(steps.textContent).toContain(`${num(2)} / ${num(trees.length)}`);
   });
 
   it('disables the previous step on the first tree', async () => {
@@ -122,7 +120,6 @@ describe('Quran branch trees', () => {
     render(await open(Object.fromEntries(new URL(first, 'http://localhost').searchParams)));
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
-    expect(steps.textContent).toContain(`${num(1)} / `);
     expect(within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'شجرة' }).getAttribute('aria-current')).toBe('page');
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
     expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('78');
@@ -130,7 +127,6 @@ describe('Quran branch trees', () => {
     render(await open(Object.fromEntries(new URL(second, 'http://localhost').searchParams)));
     steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(first);
-    expect(steps.textContent).toContain(`${num(2)} / `);
   });
 
   it('returns from browsing to the list page holding the current tree', async () => {
@@ -150,7 +146,6 @@ describe('Quran branch trees', () => {
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
     expect(new URL(second, 'http://localhost').searchParams.get('q')).toBe(query);
-    expect(steps.textContent).toContain(`${num(1)} / `);
   });
 
   it('gives a tree outside the list no steps', async () => {

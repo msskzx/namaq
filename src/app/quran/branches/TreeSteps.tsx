@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };
 
@@ -38,7 +37,6 @@ export default function TreeSteps({ steps }: { steps: Steps }) {
   return (
     <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex shrink-0 items-center gap-2">
       <Button size="lg" data-step="previous" aria-label={labels.previous} title={labels.previous} {...step(steps.previous)}><Back aria-hidden /></Button>
-      <span className="text-sm tabular-nums text-[var(--home-muted)]">{ar ? `${num(steps.position)} / ${num(steps.total)}` : `${steps.position} / ${steps.total}`}</span>
       <Button size="lg" data-step="next" aria-label={labels.next} title={labels.next} {...step(steps.next)}><Forward aria-hidden /></Button>
     </nav>
   );

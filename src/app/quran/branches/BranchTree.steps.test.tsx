@@ -70,11 +70,6 @@ describe('BranchTree steps in Arabic', () => {
     expect((within(nav).getByRole('link', { name: AR.next }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.next);
   });
 
-  it('shows the position as Arabic-Indic digits between the step controls', () => {
-    renderTree();
-    expect(within(screen.getByRole('navigation', { name: AR.nav })).getByText('٣ / ١٢٠')).toBeTruthy();
-  });
-
   it('renders the previous control as a disabled button, not a link, when there is no previous tree', () => {
     renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
     const previous = screen.getByRole('button', { name: AR.previous }) as HTMLButtonElement;
@@ -192,11 +187,6 @@ describe('BranchTree steps in English', () => {
     const nav = screen.getByRole('navigation', { name: EN.nav });
     expect((within(nav).getByRole('link', { name: EN.previous }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.previous);
     expect((within(nav).getByRole('link', { name: EN.next }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.next);
-  });
-
-  it('shows the position as plain digits in English', () => {
-    renderTree();
-    expect(within(screen.getByRole('navigation', { name: EN.nav })).getByText('3 / 120')).toBeTruthy();
   });
 
   it('disables the previous English control on the first tree', () => {
