@@ -46,7 +46,7 @@ export function AyahRefs({ keys, names, tags = {}, className = 'mt-1' }: Refs & 
 
 function SubtreeButton({ href }: { href: string }) {
   const { language } = useLanguage();
-  const label = language === 'ar' ? 'عرض هذا الجزء من الشجرة وحده' : 'Show only this part of the tree';
+  const label = language === 'ar' ? 'عرض هذا الجزء وحده' : 'Show only this part of the tree';
   return <Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button>;
 }
 
@@ -261,9 +261,11 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
   </>;
 
   const labels = ar ? {
-    out: 'تصغير الشجرة',
-    in: 'تكبير الشجرة',
+    fit: 'ملاءمة',
+    out: 'تصغير',
+    in: 'تكبير',
   } : {
+    fit: 'Fit',
     out: 'Zoom out',
     in: 'Zoom in',
   };
@@ -274,10 +276,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة الشجرة' : 'Fit tree'}</Button>
+        <Button size="icon" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
           <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
-          <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
           <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
         </div>
       </div>

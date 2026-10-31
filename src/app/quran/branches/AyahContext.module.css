@@ -1,7 +1,10 @@
 .dialog { position: fixed; inset: 0; margin: auto; width: min(70rem, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); overflow-y: auto; overscroll-behavior: contain; background: var(--home-paper); color: var(--home-ink); padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--home-rule); box-shadow: 0 20px 80px #0006; }
 .dialog::backdrop { background: #0009; backdrop-filter: blur(3px); }
-.header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
-.header h2 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+.heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1.25rem; }
+.heading > :is(h2, p) { margin: 0; }
+.heading h2 { font-size: 1.4rem; }
+.heading .note { flex-basis: 100%; }
 .note { color: var(--home-muted); font-size: 0.875rem; line-height: 1.8; }
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
 .card { min-width: 0; display: grid; grid-row: span 5; grid-template-rows: subgrid; }

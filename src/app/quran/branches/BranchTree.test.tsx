@@ -61,17 +61,16 @@ describe('BranchTree', () => {
     expect(viewport.style.height).toBe('clamp(22rem, 70svh, 36rem)');
     expect(viewport.classList.contains('overflow-hidden')).toBe(true);
     expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
-    expect(screen.getByText('٥٠٪')).toBeTruthy();
-    const fit = screen.getByRole('button', { name: 'ملاءمة الشجرة' });
+    const fit = screen.getByRole('button', { name: 'ملاءمة' });
     expect(fit.getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     expect(content.style.transform).toBe('scale(0.6)');
     expect(viewport.classList.contains('overflow-auto')).toBe(true);
     expect(fit.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
     expect(fit.getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'تصغير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تصغير' }));
     expect(content.style.transform).toBe('scale(0.4)');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
@@ -96,12 +95,12 @@ describe('BranchTree', () => {
     act(() => resize([], {} as ResizeObserver));
     expect(content.style.transform).toBe('scale(0.4)');
     expect(viewport.style.height).toBe('320px');
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     expect(content.style.transform).toBe('scale(0.5)');
     expect(viewport.style.height).toBe('320px');
     Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
     act(() => resize([], {} as ResizeObserver));
-    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة' }));
     expect(content.style.transform).toBe('scale(1)');
     expect(viewport.style.height).toBe('320px');
     Object.defineProperties(content, { offsetWidth: { configurable: true, value: 200 }, offsetHeight: { configurable: true, value: 100 } });
@@ -135,7 +134,7 @@ describe('BranchTree', () => {
     expect(fireEvent.wheel(viewport, { deltaY: -100, ctrlKey: true })).toBe(false);
     expect(Number(content.style.transform.slice(6, -1))).toBeCloseTo(0.5 * Math.E);
 
-    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة' }));
     const touch = (x: number) => ({ clientX: x, clientY: 0 });
     fireEvent.touchStart(viewport, { touches: [touch(100), touch(200)] });
     expect(fireEvent.touchMove(viewport, { touches: [touch(50), touch(250)] })).toBe(false);
@@ -155,7 +154,7 @@ describe('BranchTree', () => {
     const tree = branch(group);
     const { container } = render(<BranchTree tree={tree} variants={variants(group)} names={{}} />);
     expect(screen.getByRole('list', { name: 'صيغ الكلمة الأولى' }).children).toHaveLength(3);
-    expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim())).toHaveLength(0);
+    expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim() && !node.closest('[role="toolbar"]') && !node.querySelector('[role="toolbar"]'))).toHaveLength(0);
     expect(container.querySelectorAll('a[href^="/quran/read/"]')).toHaveLength(0);
     expect(screen.getAllByRole('button', { name: /عرض.*السياق|عرض الآيات/ }).length).toBeGreaterThan(0);
     expect(screen.getByText('طَغَىٰ')).toBeTruthy();
@@ -185,7 +184,7 @@ describe('BranchTree', () => {
   it('gives a branch a button to the tree of its own phrase, but not the root or a leaf, and no text links', () => {
     const deep = { ...tree, children: [{ words: ['جَنَّـٰتٍۢ'], ayat: [], children: tree.children }] };
     render(<BranchTree tree={deep} names={{}} />);
-    expect(screen.getAllByRole('link').map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])).toEqual([['عرض هذا الجزء من الشجرة وحده', branchesHref('ان المتقين في جنت')]]);
+    expect(screen.getAllByRole('link').map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])).toEqual([['عرض هذا الجزء وحده', branchesHref('ان المتقين في جنت')]]);
     expect(screen.getByText('جَنَّـٰتٍۢ').closest('a')).toBeNull();
   });
 
@@ -203,7 +202,7 @@ describe('BranchTree', () => {
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     expect(within(firstWords).getAllByRole('listitem').map(item => item.querySelector('[data-node] span.block')?.textContent)).toEqual(['يَطُوفُ', 'وَيَطُوفُ']);
     expect(screen.getByText('عَلَيْهِمْ')).toBeTruthy();
-    expect(within(firstWords).getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).map(link => link.getAttribute('href'))).toEqual([
+    expect(within(firstWords).getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).map(link => link.getAttribute('href'))).toEqual([
       branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'يَطُوفُ' }),
       branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'وَيَطُوفُ' }),
     ]);
@@ -388,10 +387,12 @@ describe('BranchTree', () => {
       expect(open).toHaveBeenCalledOnce();
     });
 
-    it('gives the surrounding-ayat switch one visible label', () => {
+    it('names the surrounding-ayat and fit controls without visible labels', () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' })).toBeTruthy();
-      expect(screen.getAllByText('الآيات المحيطة')).toHaveLength(1);
+      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('[title]')?.getAttribute('title')).toBe('الآيات المحيطة');
+      expect(screen.getByRole('button', { name: 'ملاءمة' }).getAttribute('title')).toBe('ملاءمة');
+      expect(screen.queryByText('الآيات المحيطة')).toBeNull();
+      expect(screen.queryByText('ملاءمة')).toBeNull();
     });
 
     it('has no surrounding-ayat switch unless the page asks for one', () => {
@@ -462,11 +463,6 @@ describe('BranchTree', () => {
       expect(box.closest('li')!.parentElement!.closest('li')!.textContent).toContain('﴿١٧﴾');
     });
 
-    it('turns on from its visible label too', () => {
-      render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      fireEvent.click(screen.getByText('الآيات المحيطة'));
-      expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
-    });
 
     it('keeps the switch in the address without asking the server for the page again', () => {
       window.history.replaceState(null, '', '/quran/branches?o=x');

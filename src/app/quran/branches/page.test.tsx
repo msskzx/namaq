@@ -44,7 +44,7 @@ describe('Quran branch trees', () => {
   it('keeps zoom links to an absorbed phrase after an ayah ending', async () => {
     render(await open({ o: 'لا اثم عليه' }));
     const href = branchesHref('ان الله غفور رحيم', undefined, { occurrences: ['2:173:21', '2:182:12'] });
-    expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
+    expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
   });
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
     render(await open({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
@@ -149,7 +149,7 @@ describe('Quran branch trees', () => {
 
   it('gives a tree outside the list no steps', async () => {
     render(await open({ o: 'لا اثم عليه' }));
-    const href = screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' })[0].getAttribute('href')!;
+    const href = screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' })[0].getAttribute('href')!;
     cleanup();
     render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
     expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
@@ -158,7 +158,7 @@ describe('Quran branch trees', () => {
 
   it('keeps the list filter off subtree links of an open tree', async () => {
     render(await open({ o: 'لا اثم عليه', s: '2', q: 'لا' }));
-    const links = screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' });
+    const links = screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' });
     expect(links.length).toBeGreaterThan(0);
     links.forEach(link => {
       const params = new URL(link.getAttribute('href')!, 'http://localhost').searchParams;

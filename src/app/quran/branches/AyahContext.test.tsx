@@ -99,7 +99,7 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
   expect(within(sibling).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
   expect(within(own).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
   expect(within(own).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
-  expect(within(dialog).getByText(/Only words found in every ayah shown here are marked/)).toBeTruthy();
+  expect(within(dialog).getByText("This branch's ayat come first, then the ayat that meet it at the same node.")).toBeTruthy();
 });
 
 it('marks shared words in an inner-node dialog too, and nothing in the neighbouring ayat', async () => {

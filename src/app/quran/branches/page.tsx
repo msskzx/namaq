@@ -121,26 +121,24 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <BranchHeading />
-      <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? treeView : state} />
       <Scope>
         <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
+          bar={<>
+            <div className="min-w-64 flex-[1_1_24rem]">
+              <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? treeView : state} />
+            </div>
+            <JuzFilter range={range} phrase={id} view={state} />
+            {id ? <div className="flex flex-wrap items-center gap-3">
+              <TreeMode browsing list={branchesHref('', juz, { query: state.query, surah: state.surah, page: steps ? Math.ceil(steps.position / PER_PAGE) : 1 })} browse={branchesHref(id, juz, state)} />
+              {steps && <TreeSteps steps={steps} />}
+            </div> : <TreeMode browsing={false} list={branchesHref('', juz, { query, surah, page })} browse={shown[0] && branchesHref(shown[0].id, juz, { query, surah })} />}
+          </>}
           pane={<SurahPane key="pane" counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />}>
           {!id ? <>
-            <div className="flex flex-wrap items-end justify-between gap-3">
-              <JuzFilter range={range} phrase={id} view={state} />
-              <TreeMode browsing={false} list={branchesHref('', juz, { query, surah, page })} browse={shown[0] && branchesHref(shown[0].id, juz, { query, surah })} />
-            </div>
             {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz, { query, surah }) }))} />}
             {(!needle || cut.length > 0) && <PieceList pieces={shown} ayat={shownAyat} names={names} juz={range} view={state} />}
             <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, page: index + 1 }))} />
           </> : <>
-            <div className="flex flex-wrap items-end justify-between gap-3">
-              <JuzFilter range={range} phrase={id} view={state} />
-              <div className="flex flex-wrap items-center gap-3">
-                <TreeMode browsing list={branchesHref('', juz, { query: state.query, surah: state.surah, page: steps ? Math.ceil(steps.position / PER_PAGE) : 1 })} browse={branchesHref(id, juz, state)} />
-                {steps && <TreeSteps steps={steps} />}
-              </div>
-            </div>
             {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} surround={{ on: !!state.context, sync: true, data: around }} steppable={!!steps} label="شجرة العبارات المشتركة" />}
           </>}
         </CompareLayout>

@@ -163,7 +163,7 @@ describe('BranchTree steps in Arabic', () => {
   it('ignores arrow keys once the tree is zoomed in', () => {
     renderTree();
     const clicks = recordStepClicks(AR);
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
     fireEvent.keyDown(window, { key: 'ArrowRight' });
     expect(clicks).toEqual([]);
@@ -252,7 +252,7 @@ describe('BranchTree swipe gestures that do not step', () => {
   it('ignores a long horizontal swipe once the tree is zoomed in', () => {
     const { container } = renderTree();
     const clicks = recordStepClicks(AR);
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     swipeBy(container.querySelector('[data-tree-viewport]')!, 100, 0);
     expect(clicks).toEqual([]);
   });
