@@ -10,7 +10,7 @@ import Segmented from '@/components/common/Segmented';
 import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@/lib/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
-import { surahMatch } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@/lib/quran/surahSearch';
 import { FIELD, NOTE } from '../panel';
 import { pairHref, surahHref, type CompareTab } from './modeHref';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -36,7 +36,7 @@ export function SurahPairs({ groups, names, tab, query, surah, within = false, a
     announceNavigation();
     router.push(href, { scroll: false });
   };
-  const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => surahMatch(search, g.surah, names[g.surah] ?? '') !== null);
+  const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => matchesSurah({ number: g.surah, name: names[g.surah] ?? '' }, search));
   const open = (s: number) => (surah === null ? s === a || s === b : s === surah);
   const unit = mode === 'themes' ? 'موضوع مشترك' : 'آية متشابهة';
 

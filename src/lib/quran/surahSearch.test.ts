@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { searchSurahs, surahMatch } from './surahSearch';
+import { matchesSurah, searchSurahs, surahRank } from './surahSearch';
+
+const surahMatch = (query: string, number: number, name: string) => surahRank({ number, name }, query);
 
 const surahs = [
   { number: 2, name: 'البَقَرَةِ' },
@@ -36,6 +38,29 @@ describe('surahSearch', () => {
   it('keeps every surah for an empty query and none for a miss', () => {
     expect(names('  ')).toEqual([2, 3, 20, 23, 55, 56]);
     expect(names('يوسف')).toEqual([]);
+  });
+
+  it('matches dagger-alif names by their normal spelling (one search with the ayah search)', () => {
+    const named = [{ number: 6, name: 'سُورَةُ ٱلْأَنْعَـٰمِ' }, { number: 14, name: 'سُورَةُ إِبْرَٰهِيمَ' }, { number: 37, name: 'سُورَةُ ٱلصَّـٰٓفَّـٰتِ' }];
+    expect(searchSurahs(named, 'الأنعام').map(s => s.number)).toEqual([6]);
+    expect(searchSurahs(named, 'انعم').map(s => s.number)).toEqual([6]);
+    expect(searchSurahs(named, 'ابراهيم').map(s => s.number)).toEqual([14]);
+    expect(searchSurahs(named, 'الصافات').map(s => s.number)).toEqual([37]);
+    expect(searchSurahs(surahs, 'آل عمران').map(s => s.number)).toEqual([3]);
+  });
+
+  it('ranks transliterations too when the surah carries one', () => {
+    const latin = [{ number: 2, name: 'البقرة', nameTransliterated: 'Al-Baqara' }, { number: 3, name: 'آل عمران', nameTransliterated: 'Aal-i-Imraan' }];
+    expect(searchSurahs(latin, 'baqarah').map(s => s.number)).toEqual([2]);
+    expect(searchSurahs(latin, 'imran').map(s => s.number)).toEqual([3]);
+    expect(matchesSurah(latin[0], 'nisa')).toBe(false);
+    const yasin = [...latin, { number: 36, name: 'يس', nameTransliterated: 'Yaseen' }];
+    expect(searchSurahs(yasin, 'al').map(s => s.number)).toEqual([2, 3]);
+    expect(searchSurahs(yasin, 'Al-').map(s => s.number)).toEqual([2, 3]);
+  });
+
+  it('matches nothing for digits with punctuation, as typed on the way to 2:255', () => {
+    for (const query of ['2:', '114.', '1-5']) expect(searchSurahs(surahs, query), query).toEqual([]);
   });
 
   it('reads stored names that carry the word surah or a tatweel', () => {

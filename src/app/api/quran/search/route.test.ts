@@ -7,8 +7,8 @@ const search = async (q: string) => (await GET(new Request(`http://localhost/api
 describe('/api/quran/search', () => {
   it('answers with the matching ayat and their count', async () => {
     const result = await search('الحي القيوم');
-    expect(result.total).toBe(2);
-    expect(result.hits.map((hit: { key: string }) => hit.key)).toEqual(['2:255', '3:2']);
+    expect(result.total).toBe(3);
+    expect(result.hits.map((hit: { key: string }) => hit.key)).toEqual(['2:255', '3:2', '20:111']);
   });
 
   it('gives each hit its page in the 1441 mushaf the reader shows', async () => {
