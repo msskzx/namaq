@@ -80,3 +80,6 @@
   .choices { grid-template-columns: 1fr; }
 }
 
+.tapMarker { position: absolute; top: 0; left: 0; z-index: 20; width: 2.5rem; height: 2.5rem; margin: -1.25rem 0 0 -1.25rem; border: 2px solid var(--home-accent); border-radius: 9999px; background: color-mix(in srgb, var(--home-accent) 18%, transparent); opacity: 0; pointer-events: none; }
+.skipIntro { position: absolute; bottom: 100%; margin-bottom: 0.5rem; inset-inline-end: 0; z-index: 20; }
+.typing { border-bottom: 1px dashed var(--home-accent); }
