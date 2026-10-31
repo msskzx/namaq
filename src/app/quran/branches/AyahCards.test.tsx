@@ -136,3 +136,11 @@ it('keeps every card in its own row and column when the first tree has no previo
   expect(document.querySelector('[data-edge="previous"]')).toBeNull();
   expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/2', '1/3', '1/4', '2/2', '2/3', '2/4']);
 });
+
+it('lights every row when all rows fit in the frame', async () => {
+  vi.stubGlobal('ResizeObserver', class { constructor(private callback: () => void) {} observe() { this.callback(); } disconnect() {} });
+  show();
+  await screen.findByRole('article', { name: 'الشرح ٥' });
+  await waitFor(() => expect(document.querySelector('[data-fits]')).toBeTruthy());
+  expect(document.querySelectorAll('[data-col="1"][data-reading]')).toHaveLength(3);
+});

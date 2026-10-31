@@ -26,6 +26,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const [column, setColumn] = useState(1);
   const [reading, setReading] = useState(0);
+  const [fits, setFits] = useState(false);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(`/api/quran/context?${new URLSearchParams({ q: shown.join(',') })}`, loadContext, { revalidateOnFocus: false });
   const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(`/api/quran/surrounding?${new URLSearchParams({ before: shown.join(','), after: shown.join(',') })}`, async (url: string) => {
     const response = await fetch(url);
@@ -98,6 +99,20 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
+  useEffect(() => {
+    const element = track.current;
+    if (!ready || !element || typeof ResizeObserver === 'undefined') return;
+    const measure = () => {
+      const cells = element.querySelectorAll<HTMLElement>('[data-col="1"]');
+      if (!cells.length) return;
+      setFits(cells[cells.length - 1].getBoundingClientRect().bottom - cells[0].getBoundingClientRect().top <= element.clientHeight);
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    element.querySelectorAll('[data-col="1"]').forEach(cell => observer.observe(cell));
+    return () => observer.disconnect();
+  }, [ready]);
+
   const router = useNavigatingRouter();
   const arrived = useRef(0);
   useEffect(() => { arrived.current = Date.now(); }, [column]);
@@ -152,7 +167,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': row === reading || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && row === reading ? undefined : () => { if (!current) goTo(i); if (row !== reading) goToRow(row); } };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': fits || row === reading || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && (fits || row === reading) ? undefined : () => { if (!current) goTo(i); if (!fits && row !== reading) goToRow(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
@@ -191,7 +206,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       </div>
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
+      {contexts && around && !missing && <div ref={track} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
         {edge(false)}
         {edge(true)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
