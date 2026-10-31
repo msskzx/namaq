@@ -114,16 +114,23 @@ it('marks what the next ayat share with each other, as in the tree column', asyn
   expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByTitle('نفس الكلمة')).toBeNull();
 });
 
-it('reads one row at a time, the rows above and below peeking, and moves to a row on a press', async () => {
+it('lights every row fully in view and dims only a row cut off at the edge, which a press brings into view', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  const reading = () => [...document.querySelectorAll<HTMLElement>('[data-col][data-current][data-reading]')].map(cell => cell.querySelector('article')?.getAttribute('aria-label'));
-  expect(reading()).toEqual(['الشرح ٥']);
+  const track = document.querySelector<HTMLElement>('[data-col]')!.parentElement!;
+  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
+  const scrollBy = vi.fn();
+  track.scrollBy = scrollBy;
+  const rect = (top: number, height: number) => ({ top, bottom: top + height, left: 0, right: 0, width: 0, height, x: 0, y: top, toJSON: () => ({}) });
+  track.getBoundingClientRect = () => rect(0, 500);
+  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => { cell.getBoundingClientRect = () => rect(Number(cell.dataset.row) * 220, 200); });
+  fireEvent.scroll(track);
+  const lit = () => [...document.querySelectorAll<HTMLElement>('[data-col="1"]')].map(cell => cell.hasAttribute('data-reading'));
+  expect(lit()).toEqual([true, true, false]);
+  expect(within(screen.getByRole('article', { name: 'الشرح ٦' })).getByRole('link', { name: 'قراءة الآية' })).toBeTruthy();
+  expect(within(screen.getByRole('article', { name: 'الطلاق ٧' })).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
   fireEvent.click(screen.getByRole('article', { name: 'الطلاق ٧' }));
-  expect(reading()).toEqual(['الطلاق ٧']);
-  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٧' }));
-  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
-  expect(reading()).toEqual(['الشرح ٧']);
+  expect(scrollBy).toHaveBeenCalledWith({ top: 140, behavior: 'smooth' });
 });
 
 it('keeps every card in its own row and column when the first tree has no previous tree', async () => {

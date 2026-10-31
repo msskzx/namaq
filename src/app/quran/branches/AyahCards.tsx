@@ -25,7 +25,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const ar = language === 'ar';
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const [column, setColumn] = useState(1);
-  const [reading, setReading] = useState(0);
+  const [lit, setLit] = useState<number[] | null>(null);
   const [fits, setFits] = useState(false);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(`/api/quran/context?${new URLSearchParams({ q: shown.join(',') })}`, loadContext, { revalidateOnFocus: false });
   const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(`/api/quran/surrounding?${new URLSearchParams({ before: shown.join(','), after: shown.join(',') })}`, async (url: string) => {
@@ -65,24 +65,37 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       if (gap < distance) { distance = gap; best = i; }
     });
     if (best !== column) setColumn(best);
-    const top = box.top + parseFloat(getComputedStyle(track.current!).scrollPaddingTop || '0');
-    let nearest = reading;
-    distance = Infinity;
-    track.current!.querySelectorAll<HTMLElement>(`[data-col="${best}"]`).forEach(cell => {
-      const gap = Math.abs(cell.getBoundingClientRect().top - top);
-      if (gap < distance) { distance = gap; nearest = Number(cell.dataset.row); }
-    });
-    if (nearest !== reading) setReading(nearest);
   };
-  const goToRow = (r: number) => {
-    const box = track.current?.getBoundingClientRect();
-    const rect = track.current?.querySelector(`[data-col="${column}"][data-row="${r}"]`)?.getBoundingClientRect();
-    const top = box && rect ? rect.top - box.top - parseFloat(getComputedStyle(track.current!).scrollPaddingTop || '0') : 0;
-    if (Math.abs(top) > 1 && track.current?.scrollBy) track.current.scrollBy({ top, behavior: 'smooth' });
-    else setReading(r);
+  const rows = () => [...(track.current?.querySelectorAll<HTMLElement>('[data-col="1"]') ?? [])];
+  const measure = () => {
+    const element = track.current;
+    const cells = rows();
+    if (!element || !cells.length) return;
+    const top = element.getBoundingClientRect().top;
+    const bottom = top + element.clientHeight;
+    const shown = cells.flatMap((cell, row) => {
+      const rect = cell.getBoundingClientRect();
+      return rect.top >= top - 1 && rect.bottom <= bottom + 1 ? [row] : [];
+    });
+    if (!shown.length) {
+      const seen = cells.map(cell => { const rect = cell.getBoundingClientRect(); return Math.min(rect.bottom, bottom) - Math.max(rect.top, top); });
+      shown.push(seen.indexOf(Math.max(...seen)));
+    }
+    setLit(previous => previous?.join() === shown.join() ? previous : shown);
+    setFits(cells[cells.length - 1].getBoundingClientRect().bottom - cells[0].getBoundingClientRect().top <= element.clientHeight);
+  };
+  const reveal = (r: number) => {
+    const element = track.current;
+    const rect = rows()[r]?.getBoundingClientRect();
+    if (!element || !rect) return;
+    const top = element.getBoundingClientRect().top;
+    const bottom = top + element.clientHeight;
+    const by = rect.top < top ? rect.top - top - parseFloat(getComputedStyle(element).scrollPaddingTop || '0') : rect.bottom > bottom ? rect.bottom - bottom : 0;
+    if (by) element.scrollBy?.({ top: by, behavior: 'smooth' });
   };
   const settle = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const onScroll = () => {
+    measure();
     clearTimeout(settle.current);
     settle.current = setTimeout(centred, 80);
   };
@@ -101,16 +114,14 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
 
   useEffect(() => {
     const element = track.current;
-    if (!ready || !element || typeof ResizeObserver === 'undefined') return;
-    const measure = () => {
-      const cells = element.querySelectorAll<HTMLElement>('[data-col="1"]');
-      if (!cells.length) return;
-      setFits(cells[cells.length - 1].getBoundingClientRect().bottom - cells[0].getBoundingClientRect().top <= element.clientHeight);
-    };
-    const observer = new ResizeObserver(measure);
+    if (!ready || !element) return;
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => measure());
     observer.observe(element);
-    element.querySelectorAll('[data-col="1"]').forEach(cell => observer.observe(cell));
+    rows().forEach(cell => observer.observe(cell));
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
   const router = useNavigatingRouter();
@@ -166,8 +177,9 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
+    const shownRow = !lit || lit.includes(row);
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': fits || row === reading || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && (fits || row === reading) ? undefined : () => { if (!current) goTo(i); if (!fits && row !== reading) goToRow(row); } };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': shownRow || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && shownRow ? undefined : () => { if (!current) goTo(i); if (!shownRow) reveal(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
@@ -180,7 +192,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key) }],
         ],
-        action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
+        action: current && shownRow ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
       }]} />
     </div>;
   };
