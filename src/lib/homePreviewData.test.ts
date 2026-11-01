@@ -11,15 +11,4 @@ describe('homepage preview data', () => {
     expect(data.branches.tree.words.join(' ')).toContain('ٱلْمُتَّقِينَ');
     expect(Object.keys(data)).toEqual(['branches']);
   });
-  it('selects another complete tree and keeps its controls data', async () => {
-    const initial = await getHomePreviews();
-    for (const random of [0, 0.5, 0.999999]) {
-      const { branches } = await getHomePreviews(initial.branches.id, () => random);
-      expect(branches.id).not.toBe(initial.branches.id);
-      expect(branches.count).toBe(keys(branches.tree).length);
-      expect(branches.count).toBeGreaterThanOrEqual(2);
-      expect(branches.count).toBeLessThanOrEqual(8);
-      expect(Object.keys(branches.offsets).sort()).toEqual(keys(branches.tree).sort());
-    }
-  });
 });

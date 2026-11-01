@@ -1,10 +1,9 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { BookOpen, Feather, GitBranch, Shuffle } from 'lucide-react';
+import { useRef } from 'react';
+import { BookOpen, Feather, GitBranch } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
-import LoadingSpinner from '../common/LoadingSpinner';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { HomePreviews } from '@/lib/homePreviewData';
 import TreeIntro from './TreeIntro';
@@ -12,23 +11,8 @@ import styles from './Home.module.css';
 
 export default function Homepage({ data, fontClass = '' }: { data: HomePreviews; fontClass?: string }) {
   const ar = useLanguage().language === 'ar';
-  const [preview, setPreview] = useState(data.branches);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const preview = data.branches;
   const launchTree = useRef<HTMLDivElement>(null);
-  const randomTree = async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const response = await fetch(`/api/quran/random-tree?${new URLSearchParams({ exclude: preview.id })}`, { cache: 'no-store' });
-      if (!response.ok) throw new Error('Could not load tree');
-      setPreview(await response.json());
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
   const steps = [
     { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
     { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
@@ -43,13 +27,10 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
             <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
             <div className={styles.launchActions}>
               <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
-              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'عشوائي' : 'Random'}</Button>
             </div>
-            {error && <p role="alert">{ar ? 'تعذّر تحميل الشجرة. حاول مجددًا.' : 'Could not load a tree. Try again.'}</p>}
           </div>
-          <div ref={launchTree} className={styles.launchTree} dir="rtl" aria-busy={loading}>
-            {loading && <LoadingSpinner className="absolute inset-0 z-10 bg-[var(--home-paper)]" />}
-            <div inert={loading}>
+          <div ref={launchTree} className={styles.launchTree} dir="rtl">
+            <div>
               <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
             <TreeIntro key={preview.id} target={launchTree} ar={ar} names={preview.names} />

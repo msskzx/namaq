@@ -106,3 +106,11 @@
 .introPeekBody p { margin: 0; color: var(--home-muted); font-size: 1.125rem; line-height: 2.1; }
 .introPeekBody .introPeekAyah { color: var(--home-ink); }
 .introPeekNumber { font-size: 0.875rem; color: var(--home-accent); }
+.inkDrop, .inkBlot { position: absolute; top: 0; left: 0; z-index: 20; opacity: 0; pointer-events: none; }
+.inkDrop { width: 6px; height: 8px; margin: -4px 0 0 -3px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--home-ink); }
+.inkBlot { width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 9999px; background: var(--home-accent); }
+.introLogo { position: absolute; top: 0; left: 0; z-index: 19; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; translate: -50% -50%; color: var(--home-ink); opacity: 0; pointer-events: none; }
+.introLogo svg { display: block; width: 150px; height: 150px; overflow: visible; --logo-accent: var(--home-accent); }
+.introLogo svg :is(path, circle) { transform-box: fill-box; transform-origin: center; }
+.introLogo svg g[fill] > path { transform-origin: bottom center; }
+.introLogo [data-logo-words] { font-family: var(--font-amiri), serif; font-size: 1.25rem; color: var(--home-accent); white-space: nowrap; }
