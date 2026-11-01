@@ -156,9 +156,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           bar={unavailable ? <div className="min-w-0 flex-1"><UnavailableNote /></div> : undefined}
           pane={<Fragment key="pane">
             <div className="flex flex-wrap items-start gap-3">
-              <MatchingRules><PaneNote inTree={!!id} /></MatchingRules>
+              <MatchingRules><p><PaneNote inTree={!!id} /></p>{cards && <CardsLegend />}</MatchingRules>
             </div>
-            {cards && <CardsLegend />}
             <JuzFilter range={range} view={state} />
             <SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />
           </Fragment>}>
