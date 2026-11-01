@@ -6,7 +6,7 @@ import { faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
 import type { Title } from '@/generated/prisma';
 import Button from '@/components/common/Button';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import InkLoader from '@/components/common/InkLoader';
+import LoadingDots from '@/components/common/LoadingDots';
 
 interface PeopleSearchProps {
   titles: Title[];
@@ -144,7 +144,7 @@ export default function PeopleSearch({
 
           {isLoading && (
             <div className="absolute inset-y-0 end-3 flex items-center">
-              <InkLoader className="h-8 w-auto" />
+              <LoadingDots />
             </div>
           )}
 

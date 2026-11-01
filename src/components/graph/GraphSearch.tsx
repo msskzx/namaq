@@ -12,7 +12,7 @@ import { profilePath } from '@/lib/nodeProfile';
 import { DEFAULT_KINDS, NodeKind, subjectId } from '@/lib/relationship/types';
 import Button from '@/components/common/Button';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import InkLoader from '@/components/common/InkLoader';
+import LoadingDots from '@/components/common/LoadingDots';
 
 interface Suggestion {
   id: string;
@@ -171,7 +171,7 @@ export default function GraphSearch({ personOnly = false, hint }: { personOnly?:
 
             {isLoading && (
               <div className="absolute inset-y-0 end-3 flex items-center">
-                <InkLoader variant="graph" className="h-8 w-auto" />
+                <LoadingDots />
               </div>
             )}
           </div>

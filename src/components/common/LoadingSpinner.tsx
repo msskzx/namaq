@@ -3,6 +3,7 @@
 import React from 'react';
 import { useLanguage } from '../language/LanguageContext';
 import InkLoader, { type InkLoaderVariant } from './InkLoader';
+import LoadingDots from './LoadingDots';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
@@ -24,6 +25,7 @@ function LoadingSpinner({
     lg: 'h-32',
   };
 
+  if (size === 'sm' && !fill) return <div className={`flex justify-center items-center ${className}`}><LoadingDots /></div>;
   return (
     <div className={`flex justify-center items-center ${fill ? 'min-h-[60vh] w-full' : ''} ${className}`}>
       <span role="status">

@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingDots from '@/components/common/LoadingDots';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 
 import { GitBranch, Search } from 'lucide-react';
@@ -109,7 +110,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             }} className={SEARCH} />
         </label>
         {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
-          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{!ready ? (ar ? 'جارٍ تحميل العبارات…' : 'Loading phrases…') : ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
+          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}>{!ready ? <LoadingDots label={ar ? 'جارٍ تحميل العبارات' : 'Loading phrases'} /> : <span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span>}</li> : suggestions.map((opening, index) => (
             <li key={opening.id} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
                 <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>

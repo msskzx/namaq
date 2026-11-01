@@ -1,26 +1,8 @@
 import { useId, type CSSProperties } from 'react';
+import { MARK } from './Emblem';
 import styles from './InkLoader.module.css';
 
 export type InkLoaderVariant = 'tree' | 'graph';
-
-const ROOTS = { tree: [100, 118], graph: [100, 150] } as const;
-
-const TREE_EDGES: [string, string][] = [
-  ['step1', 'M100 118 C100 140 66 136 64 160'],
-  ['step1', 'M100 118 C100 140 134 136 136 160'],
-  ['step2', 'M64 160 C64 180 44 178 42 204'],
-  ['step2', 'M64 160 C64 180 84 178 86 204'],
-  ['step3', 'M136 160 C136 180 116 178 114 204'],
-  ['step3', 'M136 160 C136 180 156 178 158 204'],
-];
-const TREE_NODES: [string, string, number, number][] = [
-  ['step1', 'inner', 64, 160],
-  ['step1', 'inner', 136, 160],
-  ['step2', 'green', 42, 204],
-  ['step2', 'root', 86, 204],
-  ['step3', 'green', 114, 204],
-  ['step3', 'root', 158, 204],
-];
 
 const GRAPH_POINTS: [number, number][] = [[120, 105], [157, 142], [137, 187], [80, 195], [43, 158], [63, 114]];
 const GRAPH_COLOURS = ['accent', 'root', 'green', 'root', 'green', 'accent'];
@@ -30,11 +12,27 @@ const GRAPH_EDGES: [string, string][] = [
 ];
 const GRAPH_NODES = GRAPH_POINTS.map(([x, y], i): [string, string, number, number] => [i % 2 ? 'step2' : 'step1', GRAPH_COLOURS[i], x, y]);
 
+function LogoLoader({ className }: { className: string }) {
+  return (
+    <svg viewBox="12 0 76 101" aria-hidden className={`${styles.loader} ${styles.logo} ${className}`}>
+      <g className={styles.loop}>
+        <circle className={`${styles.blot} ${styles.accent}`} cx={50} cy={84} r={4} />
+        <g className={styles.logoMark} style={{ '--logo-accent': 'var(--home-accent)' } as CSSProperties} dangerouslySetInnerHTML={{ __html: MARK }} />
+        <ellipse className={`${styles.drop} ${styles.ink}`} style={{ '--fall': '76px' } as CSSProperties} cx={50} cy={8} rx={2} ry={2.6} />
+      </g>
+    </svg>
+  );
+}
+
 export default function InkLoader({ variant = 'tree', className = '' }: { variant?: InkLoaderVariant; className?: string }) {
+  return variant === 'tree' ? <LogoLoader className={className} /> : <GraphLoader className={className} />;
+}
+
+function GraphLoader({ className }: { className: string }) {
   const filter = `ink-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
-  const [rx, ry] = ROOTS[variant];
-  const edges = variant === 'tree' ? TREE_EDGES : GRAPH_EDGES;
-  const nodes = variant === 'tree' ? TREE_NODES : GRAPH_NODES;
+  const [rx, ry] = [100, 150];
+  const edges = GRAPH_EDGES;
+  const nodes = GRAPH_NODES;
   return (
     <svg viewBox="20 -40 160 255" aria-hidden className={`${styles.loader} ${className}`}>
       <defs>
@@ -44,13 +42,13 @@ export default function InkLoader({ variant = 'tree', className = '' }: { varian
         </filter>
       </defs>
       <g className={styles.loop}>
-        <g strokeWidth={variant === 'tree' ? 1.6 : 1.4}>
+        <g strokeWidth={1.4}>
           {edges.map(([step, d]) => <path key={d} className={`${styles.edge} ${styles[step]}`} pathLength={1} d={d} />)}
         </g>
         {nodes.map(([step, colour, cx, cy]) => (
-          <circle key={`${cx} ${cy}`} className={`${styles.node} ${styles[step]} ${styles[colour]}`} cx={cx} cy={cy} r={colour === 'inner' ? 4.5 : 5} strokeWidth={1.6} />
+          <circle key={`${cx} ${cy}`} className={`${styles.node} ${styles[step]} ${styles[colour]}`} cx={cx} cy={cy} r={5} strokeWidth={1.6} />
         ))}
-        <circle className={`${styles.blot} ${variant === 'tree' ? styles.accent : styles.ink}`} cx={rx} cy={ry} r={variant === 'tree' ? 6 : 7} filter={`url(#${filter})`} />
+        <circle className={`${styles.blot} ${styles.ink}`} cx={rx} cy={ry} r={7} filter={`url(#${filter})`} />
         <ellipse className={`${styles.drop} ${styles.ink}`} style={{ '--fall': `${ry - 77}px` } as CSSProperties} cx={98.2} cy={76} rx={2.4} ry={3} />
         <g className={styles.quill}>
           <g transform="translate(100 70) rotate(28)">
