@@ -276,6 +276,13 @@ describe('BranchTree slide', () => {
     expect(clicks).toEqual(['previous']);
   });
 
+  it('puts the neighbouring trees\' cards beside this one, with their opening phrases, so a swipe brings one in', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} steppable={{ next: true, previous: false, nextText: 'قال رب' }} />);
+    expect(container.querySelector('[data-tree-neighbour="next"]')?.textContent).toBe('قال رب');
+    expect(container.querySelector('[data-tree-neighbour="previous"]')).toBeNull();
+    expect(container.querySelector('[data-tree-lane] > [data-tree] ~ *, [data-tree-lane] [data-tree-neighbour]')).not.toBeNull();
+  });
+
   it('shows no strip for a side with no tree', () => {
     const { container } = renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
     expect(container.querySelector('[data-tree-edge="next"]')).not.toBeNull();

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
@@ -13,11 +13,10 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
-import { noteStep, takeEntering } from './slide';
 
 type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
-type Neighbours = { next: boolean; previous: boolean };
+type Neighbours = { next: boolean; previous: boolean; nextText?: string; previousText?: string };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -125,6 +124,9 @@ type Camera = { s: number; x: number; y: number };
 function fitTreeScale({ width, height, availableWidth, availableHeight }: DiagramSize) {
   return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
+
+/** Room between the card and its neighbours' cards, enough for the arrows. */
+const NEIGHBOUR_GAP = '2rem';
 
 const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
 
@@ -318,8 +320,8 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     };
   }, [enabled]);
 
-  // Swiping drags the tree and its neighbour strips with the finger; past the threshold the tree slides out
-  // and the neighbouring tree opens, sliding in from the other side (see slide.ts).
+  // Swiping drags the card with the finger, and the neighbouring tree's card comes in beside it; past the threshold
+  // the neighbour's card slides into place and that tree opens where its card stopped.
   const sliding = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const leaving = useRef(false);
   const paint = (x: number, animate = false) => {
@@ -336,9 +338,13 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     clearTimeout(sliding.current);
     leaving.current = true;
     // If the next tree never arrives (an offline phone), the old one comes back after a while.
-    const leave = () => { noteStep(forward); onStep?.(forward); sliding.current = setTimeout(() => { leaving.current = false; paint(0); }, 8000); };
-    if (reducedMotion() || !lane.current?.clientWidth) { leave(); return; }
-    paint(sign(forward) * lane.current.clientWidth, true);
+    const leave = () => { onStep?.(forward); sliding.current = setTimeout(() => { leaving.current = false; paint(0); }, 8000); };
+    const element = lane.current;
+    if (reducedMotion() || !element?.clientWidth) { leave(); return; }
+    // Move by exactly the distance to the neighbour's card, so it ends where this card was.
+    const incoming = element.querySelector<HTMLElement>(`[data-tree-neighbour="${forward ? 'next' : 'previous'}"]`)?.getBoundingClientRect();
+    const box = element.getBoundingClientRect();
+    paint(incoming?.width ? box.left - incoming.left : sign(forward) * element.clientWidth, true);
     sliding.current = setTimeout(leave, SLIDE);
   };
   const settleBack = () => {
@@ -371,20 +377,6 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     return () => window.removeEventListener('keydown', onKey);
   }, [enabled, ar]);
   useEffect(() => () => clearTimeout(sliding.current), []);
-  // A tree opened by a step slides in from the side the previous one left towards, once it has its fit size.
-  const entered = useRef(false);
-  useLayoutEffect(() => {
-    if (entered.current || !size || !enabled) return;
-    entered.current = true;
-    const forward = takeEntering();
-    const element = lane.current;
-    if (forward === null || !element?.clientWidth || reducedMotion()) return;
-    paint(-sign(forward) * element.clientWidth);
-    void element.offsetWidth;
-    paint(0, true);
-    sliding.current = setTimeout(() => paint(0), SLIDE);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size, enabled]);
 
   if (!enabled) return <>
     {controls && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">{controls}</div>}
@@ -415,6 +407,15 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
       <Arrow size={18} aria-hidden />
     </button>;
   };
+  // The neighbouring tree's card, beyond the arrow: its opening phrase on an empty card, until the tree itself opens.
+  const neighbour = (forward: boolean) => {
+    if (!has(forward)) return null;
+    const text = forward ? neighbours?.nextText : neighbours?.previousText;
+    return <div aria-hidden data-tree-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 flex w-full items-center justify-center rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4"
+      style={forward ? { insetInlineStart: `calc(100% + ${NEIGHBOUR_GAP})` } : { insetInlineEnd: `calc(100% + ${NEIGHBOUR_GAP})` }}>
+      {text && <span className="font-quran text-2xl leading-loose text-[var(--home-muted)]"><MushafText>{text}</MushafText></span>}
+    </div>;
+  };
   const viewportHeight = height ?? (size ? viewHeight(view.s) : undefined);
   const touch = manual ? 'touch-none cursor-grab active:cursor-grabbing' : onStep ? 'touch-pan-y' : 'touch-pan-x touch-pan-y';
 
@@ -431,6 +432,8 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     </div>
     {onStep && peek(false)}
     {onStep && peek(true)}
+    {onStep && neighbour(false)}
+    {onStep && neighbour(true)}
     <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
         <div ref={frameRef} data-tree-frame dir="ltr" className="absolute left-0 top-0" style={{ transform: `translate(${view.x}px, ${view.y}px)` }}>
           <div ref={content} data-tree-content dir={ar ? 'rtl' : 'ltr'} className="absolute left-0 top-0 flex w-max items-center" style={{ transform: `scale(${view.s})`, transformOrigin: '0 0' }}>{children}</div>
@@ -530,7 +533,9 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
   return (
     <PathProvider value={paths}>
-      {steppable && zoomable ? <div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div> : card}
+      {/* The clip keeps the arrows (within 1.75rem of the card) in view but hides the neighbours' cards (2rem out)
+          until a swipe brings them in, so they never cover the side pane beside the tree. */}
+      {steppable && zoomable ? <div className="-mx-7 overflow-x-clip px-7"><div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div></div> : card}
     </PathProvider>
   );
 }
