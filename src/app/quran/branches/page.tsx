@@ -155,10 +155,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst toggleInNav
           bar={unavailable ? <div className="min-w-0 flex-1"><UnavailableNote /></div> : undefined}
           pane={<Fragment key="pane">
-            <div className="flex flex-wrap items-start gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <JuzFilter range={range} view={state} />
               <MatchingRules><p><PaneNote inTree={!!id} /></p>{cards && <CardsLegend />}</MatchingRules>
             </div>
-            <JuzFilter range={range} view={state} />
             <SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />
           </Fragment>}>
           {!id ? <>
