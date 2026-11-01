@@ -29,7 +29,7 @@
 @media (min-width: 1024px) { .menuButton, .menuOnly { display: none; } }
 
 .menuOnly { position: absolute; top: 0; inset-inline-end: 0; z-index: 50; color: var(--home-ink); }
-.menuOnly .band { min-height: 0; padding: 0.75rem; justify-content: flex-end; }
+.menuOnly .band { min-height: 0; padding: calc(0.75rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right)) 0.75rem calc(0.75rem + env(safe-area-inset-left)); justify-content: flex-end; }
 .menuOnly .menuButton { background: var(--home-paper); }
 .menuOnly .mobile { width: min(22rem, 100vw); max-height: calc(100dvh - 3.75rem); background: var(--home-paper); border: 1px solid var(--home-rule); }
 
@@ -78,9 +78,9 @@
 .tab[aria-current] .tabPill, .tab[aria-expanded="true"] .tabPill { background: color-mix(in srgb, var(--home-accent) 14%, transparent); }
 .tab:focus-visible { outline: 2px solid var(--home-accent); outline-offset: -4px; }
 
-.shade { position: fixed; inset: 0; z-index: 48; background: #0006; animation: shade-in 0.2s ease-out; }
+.shade { position: fixed; inset: 0; z-index: 51; background: #0006; animation: shade-in 0.2s ease-out; }
 .sheet {
-  position: fixed; inset-inline: 0; bottom: var(--app-tabbar); z-index: 49;
+  position: fixed; inset-inline: 0; bottom: var(--app-tabbar); z-index: 52;
   background: var(--home-paper); color: var(--home-ink); border-top: 1px solid var(--home-rule); border-radius: 1rem 1rem 0 0;
   padding: 0.5rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.75rem;
   animation: sheet-up 0.22s ease-out;

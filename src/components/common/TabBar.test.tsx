@@ -36,7 +36,11 @@ describe('TabBar', () => {
     expect(state.setTheme).toHaveBeenCalledWith('dark');
     expect(within(sheet).getByRole('button', { name: 'Device' }).getAttribute('aria-pressed')).toBe('true');
     expect(within(sheet).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/about', '/privacy']);
-    fireEvent.keyDown(sheet, { key: 'Escape' });
+    const items = within(sheet).getAllByRole('button').concat(within(sheet).getAllByRole('link'));
+    items.at(-1)!.focus();
+    fireEvent.keyDown(document, { key: 'Tab' });
+    expect(document.activeElement).toBe(items[0]);
+    fireEvent.keyDown(document.body, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(document.activeElement).toBe(toggle);
   });

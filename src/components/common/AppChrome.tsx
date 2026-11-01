@@ -22,6 +22,11 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [footerHidden, setFooterHidden] = useState(false);
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(usePathname() ?? '/');
+  const tabs = !footerHidden && !partyRoom;
+  useEffect(() => {
+    document.documentElement.toggleAttribute('data-tabbar', tabs);
+    return () => document.documentElement.removeAttribute('data-tabbar');
+  }, [tabs]);
   return (
     <NavigationLoaderProvider>
       <FooterContext.Provider value={setFooterHidden}>
@@ -33,7 +38,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
                 {children}
               </main>
               {!footerHidden && <Footer />}
-              {!footerHidden && !partyRoom && <TabBar />}
+              {tabs && <TabBar />}
             </div>
           </NavSlotElement.Provider>
         </NavSlotContext.Provider>

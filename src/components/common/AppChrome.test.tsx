@@ -21,9 +21,11 @@ describe('AppChrome', () => {
     render(<AppChrome><Page /></AppChrome>);
     expect(screen.getByText('site footer')).toBeTruthy();
     expect(screen.getByRole('navigation', { name: 'tabs' })).toBeTruthy();
+    expect(document.documentElement.hasAttribute('data-tabbar')).toBe(true);
     fireEvent.click(screen.getByText('toggle'));
     expect(screen.queryByText('site footer')).toBeNull();
     expect(screen.queryByRole('navigation', { name: 'tabs' })).toBeNull();
+    expect(document.documentElement.hasAttribute('data-tabbar')).toBe(false);
     fireEvent.click(screen.getByText('toggle'));
     expect(screen.getByText('site footer')).toBeTruthy();
   });

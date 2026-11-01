@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
@@ -20,7 +20,22 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
   const { theme, setTheme } = useTheme();
   const ar = language === 'ar';
   const sheet = useRef<HTMLDivElement>(null);
-  useEffect(() => { sheet.current?.querySelector<HTMLElement>('button, a')?.focus(); }, []);
+  useEffect(() => {
+    const element = sheet.current;
+    element?.querySelector<HTMLElement>('button, a')?.focus();
+    // Modal: Escape closes from anywhere, Tab cycles inside the sheet.
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); onClose(); return; }
+      if (event.key !== 'Tab' || !element) return;
+      const items = [...element.querySelectorAll<HTMLElement>('button, a')];
+      const first = items[0], last = items[items.length - 1];
+      if (!element.contains(document.activeElement)) { event.preventDefault(); first?.focus(); }
+      else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
   const themes = [
     { value: 'light', Icon: Sun, label: ar ? 'فاتح' : 'Light' },
     { value: 'dark', Icon: Moon, label: ar ? 'داكن' : 'Dark' },
@@ -33,8 +48,7 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
   return (
     <>
       <div className={styles.shade} onClick={onClose} aria-hidden />
-      <div ref={sheet} id={id} role="dialog" aria-modal="true" aria-label={ar ? 'الإعدادات' : 'Settings'} className={styles.sheet} dir={ar ? 'rtl' : 'ltr'}
-        onKeyDown={event => { if (event.key === 'Escape') onClose(); }}>
+      <div ref={sheet} id={id} role="dialog" aria-modal="true" aria-label={ar ? 'الإعدادات' : 'Settings'} className={styles.sheet} dir={ar ? 'rtl' : 'ltr'}>
         <div className={styles.grab} aria-hidden />
         <div className={styles.sheetRow}>
           <div className={styles.segment} role="group" aria-label={ar ? 'اللغة' : 'Language'}>
@@ -74,15 +88,15 @@ export default function TabBar() {
   const sheetId = useId();
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => setOpen(false), [path]);
+  const close = useCallback(() => { setOpen(false); toggle.current?.focus(); }, []);
   if (!languageLoaded) return <div className={styles.tabSpacer} />;
   const ar = language === 'ar';
-  const close = () => { setOpen(false); toggle.current?.focus(); };
   const settings = ar ? 'الإعدادات' : 'Settings';
   return (
     <>
       <div className={styles.tabSpacer} />
       {open && <SettingsSheet id={sheetId} onClose={close} />}
-      <nav className={styles.tabs} aria-label={ar ? 'الأبواب' : 'Sections'} dir={ar ? 'rtl' : 'ltr'}>
+      <nav className={styles.tabs} aria-label={ar ? 'شريط التبويب' : 'Tab bar'} dir={ar ? 'rtl' : 'ltr'}>
         {NAV_SECTIONS.map(section => {
           const Icon = SECTION_ICONS[section.href];
           const label = section.label[language];
