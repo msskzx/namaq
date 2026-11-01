@@ -66,12 +66,12 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
   const phoneLabel = open ? 'إخفاء السور' : `${change}: ${current}`;
   const paneButtons = <>
     <span className="hidden lg:block">
-      <Button size="lg" aria-expanded={!hidden} aria-controls={id} onClick={() => toggle(!hidden)} aria-label={paneLabel} title={paneLabel}>
+      <Button size="lg" variant="muted" aria-expanded={!hidden} aria-controls={id} onClick={() => toggle(!hidden)} aria-label={paneLabel} title={paneLabel}>
         {hidden ? <PanelRightOpen aria-hidden /> : <PanelRightClose aria-hidden />}
       </Button>
     </span>
     <span className="lg:hidden">
-      <Button size="lg" active={open} aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)} aria-label={phoneLabel} title={phoneLabel}>
+      <Button size="lg" variant="muted" aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)} aria-label={phoneLabel} title={phoneLabel}>
         {open ? <PanelRightClose aria-hidden /> : <PanelRightOpen aria-hidden />}
       </Button>
     </span>

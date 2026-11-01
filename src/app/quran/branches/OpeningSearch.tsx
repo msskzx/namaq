@@ -33,7 +33,7 @@ function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
   return inventories.get(key)!;
 }
 
-export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false }: { remote?: boolean; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -97,7 +97,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             setDismissed(false);
             if (!event.target.value && submitted && !(event.nativeEvent instanceof InputEvent && event.nativeEvent.inputType)) router.push(branchesHref('', juz ?? undefined, { surah: view.surah, mode: view.mode }));
           }}
-            placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
+            placeholder={ar ? 'ابحث' : 'Search'}
             onKeyDown={event => {
               if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
               if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
