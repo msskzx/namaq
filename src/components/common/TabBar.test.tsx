@@ -17,7 +17,8 @@ describe('TabBar', () => {
     state.language = language;
     state.path = '/quizzes/party';
     render(<TabBar />);
-    const tabs = within(screen.getByRole('navigation')).getAllByRole('link');
+    const [logo, ...tabs] = within(screen.getByRole('navigation')).getAllByRole('link');
+    expect(logo.getAttribute('href')).toBe('/');
     expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
@@ -56,7 +57,7 @@ describe('TabBar', () => {
     state.loaded = false;
     render(<TabBar />);
     expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/read', '/quizzes']);
   });
 
   it('closes the desktop settings panel on a press outside it, but not inside', () => {

@@ -45,7 +45,7 @@
 .pageActions input { height: 2.5rem; }
 
 .tabs, .tabSpacer { display: none; }
-.railActions { display: none; }
+.railActions, .railLogo { display: none; }
 @media (max-width: 1023.98px) {
   .tabSpacer { display: block; height: calc(var(--app-tabbar)); }
   .tabs {
@@ -94,6 +94,9 @@
   .tabPill { padding: 0.5rem 1rem; }
   .tab:hover:not([aria-current]) { color: var(--home-ink); }
   .tab:last-child { margin-top: auto; }
+  /* Desktop: the logo heads the rail, and the top bar only shows when a page puts its search there. */
+  .railLogo { display: flex; justify-content: center; padding-bottom: 0.5rem; color: var(--home-ink); }
+  .railEmblem { height: 2.25rem; width: auto; }
   /* Page buttons (NavButtons) under the sections, set off by a rule. */
   .railActions { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; padding-top: 0.75rem; border-top: 1px solid var(--home-rule); }
   .railActions:empty { display: none; }
@@ -117,4 +120,8 @@
   .search { display: none; }
   .searchOpen { display: flex; position: absolute; inset: 0; z-index: 1; max-width: none; background: var(--home-paper); padding-inline: max(var(--home-gutter), env(safe-area-inset-left)) max(var(--home-gutter), env(safe-area-inset-right)); }
   .searchOpen .searchClose { display: inline-flex; }
+}
+@media (min-width: 1024px) {
+  .bar .wordmark { display: none; }
+  .bar:not(:has(.pageActions:not(:empty))), .bar:not(:has(.pageActions:not(:empty))) + .spacer { display: none; }
 }

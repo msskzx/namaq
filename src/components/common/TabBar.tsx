@@ -121,6 +121,7 @@ export default function TabBar() {
     <>
       {open && <SettingsSheet id={sheetId} onClose={close} toggle={toggle} />}
       <nav className={styles.tabs} aria-label={ar ? 'شريط التبويب' : 'Tab bar'} dir={ar ? 'rtl' : 'ltr'}>
+        <Link href="/" className={styles.railLogo} aria-label={ar ? 'نمق' : 'Namaq'} title={ar ? 'نمق' : 'Namaq'}><Emblem className={styles.railEmblem} /></Link>
         {NAV_SECTIONS.map(section => {
           const Icon = SECTION_ICONS[section.href];
           const label = section.label[language];
