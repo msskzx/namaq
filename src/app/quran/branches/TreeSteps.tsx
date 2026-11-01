@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { noteStep } from './slide';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };
 
@@ -45,11 +46,11 @@ export default function TreeSteps({ steps }: { steps: Steps }) {
   const labels = ar ? { previous: 'الشجرة السابقة', next: 'الشجرة التالية' } : { previous: 'Previous tree', next: 'Next tree' };
   const [previous, next] = [withContext(steps.previous, on), withContext(steps.next, on)];
   usePreload(next, previous);
-  const step = (href?: string) => href ? { href } : { disabled: true };
+  const step = (href: string | undefined, forward: boolean) => href ? { href, onClick: () => noteStep(forward) } : { disabled: true };
   return (
-    <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex shrink-0 items-center gap-2">
-      <Button size="lg" data-step="previous" aria-label={labels.previous} title={labels.previous} {...step(previous)}><Back aria-hidden /></Button>
-      <Button size="lg" data-step="next" aria-label={labels.next} title={labels.next} {...step(next)}><Forward aria-hidden /></Button>
+    <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex shrink-0 items-center gap-2 max-sm:hidden">
+      <Button size="lg" data-step="previous" aria-label={labels.previous} title={labels.previous} {...step(previous, false)}><Back aria-hidden /></Button>
+      <Button size="lg" data-step="next" aria-label={labels.next} title={labels.next} {...step(next, true)}><Forward aria-hidden /></Button>
     </nav>
   );
 }
