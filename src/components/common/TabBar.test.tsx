@@ -21,6 +21,7 @@ describe('TabBar', () => {
     expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
+    expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('-rotate-90');
   });
 
   it('opens settings with language, theme, about and privacy, and closes with Escape', () => {

@@ -14,6 +14,8 @@ export const SECTION_ICONS: Record<string, LucideIcon> = {
   '/quran/read': BookOpen,
   '/quizzes': Feather,
 };
+// GitFork stands root-down; turned a quarter counterclockwise it grows like the Arabic trees: one root on the right, two branches to the left.
+const SECTION_ICON_CLASS: Record<string, string | undefined> = { '/quran/branches': '-rotate-90' };
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {
   const { language, toggleLanguage } = useLanguage();
@@ -122,7 +124,7 @@ export default function TabBar() {
           return (
             <Link key={section.href} href={section.href} className={styles.tab} aria-label={label} title={label}
               aria-current={section.href === active ? 'page' : undefined}>
-              <span className={styles.tabPill}><Icon size={24} strokeWidth={1.75} aria-hidden /></span>
+              <span className={styles.tabPill}><Icon size={24} strokeWidth={1.75} className={SECTION_ICON_CLASS[section.href]} aria-hidden /></span>
             </Link>
           );
         })}
