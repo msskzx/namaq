@@ -126,7 +126,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const Scope = id ? PathScope : 'div';
 
   return (
-    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
+    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4 overflow-x-clip`}>
       <PreloadQuranText />
       <BranchHeading />
       <Scope>

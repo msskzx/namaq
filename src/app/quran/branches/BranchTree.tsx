@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { GitBranch, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
+import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -128,9 +128,8 @@ function fitTreeScale({ width, height, availableWidth, availableHeight }: Diagra
 
 const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
 
-function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours }) {
+function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null> }) {
   const viewport = useRef<HTMLDivElement>(null);
-  const lane = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
@@ -402,13 +401,16 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     in: 'Zoom in',
   };
   const view = shown();
-  // The dashed strips at the sides are the neighbouring trees peeking in, as in the ayah matrix.
-  const edge = (forward: boolean) => {
-    if (!has(forward)) return <div aria-hidden className="w-4 shrink-0 sm:w-8" />;
+  // The neighbouring trees' cards peek in beside this card, as the matrix shows its neighbour columns.
+  // They are placed against the sliding lane around the card (the card itself is not positioned),
+  // so the card's overflow does not clip them and they slide with it.
+  const peek = (forward: boolean) => {
+    if (!has(forward)) return null;
     const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
-    return <button type="button" data-tree-edge={forward ? 'next' : 'previous'} aria-label={label} className="flex w-5 shrink-0 items-start justify-center rounded-sm border-x border-dashed border-[var(--home-rule)] pt-4 text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] sm:w-8" title={label} onClick={() => { if (!justSwiped()) slide(forward); }}>
-      <GitBranch size={16} aria-hidden />
-    </button>;
+    return <button type="button" data-tree-edge={forward ? 'next' : 'previous'} aria-label={label} title={label} onClick={() => { if (!justSwiped()) slide(forward); }}
+      className="absolute inset-y-4 w-2.5 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] opacity-70 transition-opacity hover:opacity-100 sm:w-3"
+      // insetInlineStart: 100% pushes it past the end side (the left in Arabic), where the next tree is.
+      style={forward ? { insetInlineStart: 'calc(100% + 4px)' } : { insetInlineEnd: 'calc(100% + 4px)' }} />;
   };
   const viewportHeight = height ?? (size ? viewHeight(view.s) : undefined);
   const touch = manual ? 'touch-none cursor-grab active:cursor-grabbing' : onStep ? 'touch-pan-y' : 'touch-pan-x touch-pan-y';
@@ -424,15 +426,13 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
         </div>
       </div>
     </div>
-    <div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="flex items-stretch gap-1 sm:gap-2 data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">
-      {onStep && edge(false)}
-      <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
+    {onStep && peek(false)}
+    {onStep && peek(true)}
+    <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
         <div ref={frameRef} data-tree-frame dir="ltr" className="absolute left-0 top-0" style={{ transform: `translate(${view.x}px, ${view.y}px)` }}>
           <div ref={content} data-tree-content dir={ar ? 'rtl' : 'ltr'} className="absolute left-0 top-0 flex w-max items-center" style={{ transform: `scale(${view.s})`, transformOrigin: '0 0' }}>{children}</div>
         </div>
       </div>
-      {onStep && edge(true)}
-    </div>
   </>;
 }
 
@@ -474,8 +474,8 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
     {header}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
   </> : undefined;
-  return (
-    <PathProvider value={paths}>
+  const lane = useRef<HTMLDivElement>(null);
+  const card = (
       <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
@@ -483,7 +483,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined}>
+        <TreeViewport lane={lane} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
@@ -523,6 +523,11 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <Node node={tree} path={[]} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
         </TreeViewport>
       </div>
+  );
+  // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
+  return (
+    <PathProvider value={paths}>
+      {steppable && zoomable ? <div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div> : card}
     </PathProvider>
   );
 }
