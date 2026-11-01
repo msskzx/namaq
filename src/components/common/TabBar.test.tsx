@@ -4,13 +4,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import TabBar from './TabBar';
 
-const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', toggleLanguage: vi.fn(), setTheme: vi.fn() } }));
+const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', loaded: true, toggleLanguage: vi.fn(), setTheme: vi.fn() } }));
 vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
 vi.mock('@/components/language/LanguageContext', () => ({
-  useLanguage: () => ({ language: state.language, languageLoaded: true, toggleLanguage: state.toggleLanguage }),
+  useLanguage: () => ({ language: state.language, languageLoaded: state.loaded, toggleLanguage: state.toggleLanguage }),
 }));
 vi.mock('next-themes', () => ({ useTheme: () => ({ theme: 'system', setTheme: state.setTheme }) }));
-afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.clearAllMocks(); });
+afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.loaded = true; vi.clearAllMocks(); });
 
 describe('TabBar', () => {
   it.each(['ar', 'en'] as const)('shows icon-only section tabs with names for screen readers in %s', language => {
@@ -48,5 +48,21 @@ describe('TabBar', () => {
     window.removeEventListener('keydown', pageShortcut);
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(document.activeElement).toBe(toggle);
+  });
+
+  it('renders the Arabic tabs before the language loads, as the server does', () => {
+    state.loaded = false;
+    render(<TabBar />);
+    expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
+  });
+
+  it('closes the settings panel on a press outside it, but not inside', () => {
+    render(<><TabBar /><p>page</p></>);
+    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    fireEvent.pointerDown(within(screen.getByRole('dialog')).getByRole('button', { name: 'Dark' }));
+    expect(screen.getByRole('dialog')).toBeTruthy();
+    fireEvent.pointerDown(screen.getByText('page'));
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 });

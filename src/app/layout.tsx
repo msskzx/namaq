@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-tabbar="" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" data-tabbar="" suppressHydrationWarning>
       <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
         <CustomThemeProvider>
           <LanguageProvider>

@@ -67,6 +67,9 @@ describe('launch navigation', () => {
     scroll(250);
     expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(400);
+    expect(bar.className).toMatch(/scrolledAway/);
+    act(() => { within(bar).getByRole('link').focus(); });
+    expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(20);
     expect(bar.className).not.toMatch(/scrolledAway/);
   });

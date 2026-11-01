@@ -15,7 +15,7 @@ export const SECTION_ICONS: Record<string, LucideIcon> = {
   '/quizzes': Feather,
 };
 
-function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
+function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {
   const { language, toggleLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
   const ar = language === 'ar';
@@ -37,10 +37,16 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
     // Phones show a bottom sheet, desktops a panel beside the rail: close it when the layout switches.
     const wide = window.matchMedia?.('(min-width: 1024px)');
     const onWide = () => onClose();
+    // Desktop has no shade: a press outside the panel closes it and still reaches what was pressed.
+    const onPointer = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (!element?.contains(target) && !toggle.current?.contains(target)) onClose();
+    };
+    document.addEventListener('pointerdown', onPointer);
     window.addEventListener('keydown', onKey, true);
     wide?.addEventListener?.('change', onWide);
-    return () => { window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
-  }, [onClose]);
+    return () => { document.removeEventListener('pointerdown', onPointer); window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
+  }, [onClose, toggle]);
   const themes = [
     { value: 'light', Icon: Sun, label: ar ? 'فاتح' : 'Light' },
     { value: 'dark', Icon: Moon, label: ar ? 'داكن' : 'Dark' },
@@ -84,9 +90,17 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
   );
 }
 
-/** Section tabs plus settings, icon-only with names for screen readers and on hover: bottom bar on phones, side rail on desktop. */
+/** Keeps page content clear of the phone tab bar; render it after the page. */
+export function TabSpacer() {
+  return <div className={styles.tabSpacer} />;
+}
+
+/** Section tabs plus settings, icon-only with names for screen readers and on hover: bottom bar on phones, side rail on desktop.
+ *  Render it before the page so keyboard users reach the sections first. */
 export default function TabBar() {
-  const { language, languageLoaded } = useLanguage();
+  const { language: chosen, languageLoaded } = useLanguage();
+  // Same fallback as the server render, so the links exist before the language loads.
+  const language = languageLoaded ? chosen : 'ar';
   const path = usePathname() ?? '/';
   const active = activeSection(path);
   const [open, setOpen] = useState(false);
@@ -94,13 +108,11 @@ export default function TabBar() {
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => setOpen(false), [path]);
   const close = useCallback(() => { setOpen(false); toggle.current?.focus(); }, []);
-  if (!languageLoaded) return <div className={styles.tabSpacer} />;
   const ar = language === 'ar';
   const settings = ar ? 'الإعدادات' : 'Settings';
   return (
     <>
-      <div className={styles.tabSpacer} />
-      {open && <SettingsSheet id={sheetId} onClose={close} />}
+      {open && <SettingsSheet id={sheetId} onClose={close} toggle={toggle} />}
       <nav className={styles.tabs} aria-label={ar ? 'شريط التبويب' : 'Tab bar'} dir={ar ? 'rtl' : 'ltr'}>
         {NAV_SECTIONS.map(section => {
           const Icon = SECTION_ICONS[section.href];

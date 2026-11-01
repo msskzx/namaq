@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import NavBar, { NavSlotContext, NavSlotElement } from './NavBar';
-import TabBar from './TabBar';
+import TabBar, { TabSpacer } from './TabBar';
 import { NavigationLoaderProvider } from './NavigationLoader';
 
 const FooterContext = createContext<(hidden: boolean) => void>(() => {});
@@ -31,10 +31,11 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
           <NavSlotElement.Provider value={slot}>
             <div className="min-h-screen flex flex-col">
               <NavBar />
+              {tabs && <TabBar />}
               <main className="flex-1">
                 {children}
               </main>
-              {tabs && <TabBar />}
+              {tabs && <TabSpacer />}
             </div>
           </NavSlotElement.Provider>
         </NavSlotContext.Provider>

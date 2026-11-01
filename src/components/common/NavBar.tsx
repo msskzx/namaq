@@ -24,7 +24,7 @@ export function NavActions({ children }: { children: React.ReactNode }) {
   return slot ? createPortal(children, slot) : null;
 }
 
-/** True after the page scrolls down past the bar, false again as soon as it scrolls up. */
+/** True after the page scrolls down past the bar, false again as soon as it scrolls up. `show` brings it back, e.g. on focus. */
 export function useHideOnScroll(threshold = 8) {
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
@@ -43,7 +43,7 @@ export function useHideOnScroll(threshold = 8) {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); };
   }, [threshold]);
-  return hidden;
+  return [hidden, () => setHidden(false)] as const;
 }
 
 export default function NavBar() {
@@ -53,7 +53,7 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const actions = useRef<HTMLDivElement>(null);
-  const scrolledAway = useHideOnScroll();
+  const [scrolledAway, showBar] = useHideOnScroll();
   const setPageSlot = useContext(NavSlotContext);
   if (!languageLoaded && menuOnly) return null;
   if (!languageLoaded) {
@@ -67,6 +67,7 @@ export default function NavBar() {
   return (
     <>
       <nav className={menuOnly ? styles.menuOnly : `${styles.bar} ${scrolledAway ? styles.scrolledAway : ''}`} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}
+        onFocus={showBar}
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
           {!menuOnly && <>
