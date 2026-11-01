@@ -23,10 +23,8 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(usePathname() ?? '/');
   const tabs = !footerHidden && !partyRoom;
-  useEffect(() => {
-    document.documentElement.toggleAttribute('data-tabbar', tabs);
-    return () => document.documentElement.removeAttribute('data-tabbar');
-  }, [tabs]);
+  // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
+  useEffect(() => { document.documentElement.toggleAttribute('data-tabbar', tabs); }, [tabs]);
   return (
     <NavigationLoaderProvider>
       <FooterContext.Provider value={setFooterHidden}>

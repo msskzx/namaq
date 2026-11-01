@@ -40,7 +40,12 @@ describe('TabBar', () => {
     items.at(-1)!.focus();
     fireEvent.keyDown(document, { key: 'Tab' });
     expect(document.activeElement).toBe(items[0]);
+    const pageShortcut = vi.fn();
+    window.addEventListener('keydown', pageShortcut);
+    fireEvent.keyDown(document.body, { key: 'ArrowLeft' });
+    expect(pageShortcut).not.toHaveBeenCalled();
     fireEvent.keyDown(document.body, { key: 'Escape' });
+    window.removeEventListener('keydown', pageShortcut);
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(document.activeElement).toBe(toggle);
   });

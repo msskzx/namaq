@@ -23,18 +23,23 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
   useEffect(() => {
     const element = sheet.current;
     element?.querySelector<HTMLElement>('button, a')?.focus();
-    // Modal: Escape closes from anywhere, Tab cycles inside the sheet.
+    // Modal: Escape closes from anywhere, Tab cycles inside the sheet, and no other key reaches
+    // the page's own shortcuts behind it (reader page turns, tree steps).
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); onClose(); return; }
-      if (event.key !== 'Tab' || !element) return;
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose(); return; }
+      if (event.key !== 'Tab' || !element) { event.stopPropagation(); return; }
       const items = [...element.querySelectorAll<HTMLElement>('button, a')];
       const first = items[0], last = items[items.length - 1];
       if (!element.contains(document.activeElement)) { event.preventDefault(); first?.focus(); }
       else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    // The sheet is phone-only: close it if the screen grows past the tab bar (rotation, resize).
+    const wide = window.matchMedia?.('(min-width: 1024px)');
+    const onWide = () => { if (wide?.matches) onClose(); };
+    window.addEventListener('keydown', onKey, true);
+    wide?.addEventListener?.('change', onWide);
+    return () => { window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
   }, [onClose]);
   const themes = [
     { value: 'light', Icon: Sun, label: ar ? 'فاتح' : 'Light' },
