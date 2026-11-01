@@ -86,6 +86,8 @@ export function useSwipe(ref: RefObject<HTMLElement | null>, enabled: boolean, h
       if (event.ctrlKey || Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
       const h = latest.current;
       if (h.allowed && !h.allowed()) return;
+      // Keeps a two-finger trackpad swipe from also going back or forward in the browser history.
+      if (event.cancelable) event.preventDefault();
       clearTimeout(gesture.timer);
       gesture.timer = setTimeout(() => { gesture.sum = 0; gesture.done = false; }, WHEEL_GAP);
       if (gesture.done) return;
@@ -100,7 +102,7 @@ export function useSwipe(ref: RefObject<HTMLElement | null>, enabled: boolean, h
     element.addEventListener('touchmove', move, { passive: false });
     element.addEventListener('touchend', end);
     element.addEventListener('touchcancel', end);
-    element.addEventListener('wheel', wheel, { passive: true });
+    element.addEventListener('wheel', wheel, { passive: false });
     return () => {
       clearTimeout(gesture.timer);
       element.removeEventListener('touchstart', start);

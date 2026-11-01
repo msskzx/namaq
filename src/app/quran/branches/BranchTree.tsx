@@ -194,6 +194,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
   };
   const api = useRef({ zoomTo, paintCamera, clamp, shown });
   api.current = { zoomTo, paintCamera, clamp, shown };
+  // A size change (a turned phone, the side pane) keeps the zoom but pulls the tree back into view,
+  // or back to the fit when the fit is now bigger.
+  if (camera.current) camera.current = clamp(camera.current);
   const manual = camera.current !== null;
 
   // Pinch (two fingers on a touch screen, a trackpad pinch that browsers send
@@ -251,18 +254,35 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     let drag: { x: number; y: number; from: Camera; moved: boolean } | null = null;
     const onPointerDown = (event: PointerEvent) => {
       if (event.pointerType !== 'mouse' || event.button !== 0 || !camera.current || (event.target instanceof Element && event.target.closest(interactive))) return;
+      event.preventDefault();
+      outer.setPointerCapture?.(event.pointerId);
       drag = { x: event.clientX, y: event.clientY, from: camera.current, moved: false };
     };
     const onPointerMove = (event: PointerEvent) => {
       if (!drag) return;
+      if (event.buttons === 0) { onPointerUp(); return; }
       const [dx, dy] = [event.clientX - drag.x, event.clientY - drag.y];
       if (!drag.moved && Math.hypot(dx, dy) < 4) return;
       drag.moved = true;
       api.current.paintCamera(api.current.clamp({ ...drag.from, x: drag.from.x + dx, y: drag.from.y + dy }));
     };
-    const onPointerUp = () => {
-      if (drag?.moved) window.addEventListener('click', event => event.stopPropagation(), { capture: true, once: true });
+    function onPointerUp() {
+      if (drag?.moved) {
+        // The click the browser sends after a drag must not press the node under the pointer.
+        const swallow = (event: MouseEvent) => event.stopPropagation();
+        window.addEventListener('click', swallow, { capture: true, once: true });
+        setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 0);
+      }
       drag = null;
+    }
+    // Focusing a node outside the shown part (a quiz field, the tab key) scrolls the viewport; move the camera instead.
+    const onScroll = () => {
+      const [dx, dy] = [outer.scrollLeft, outer.scrollTop];
+      if (!dx && !dy) return;
+      outer.scrollLeft = 0;
+      outer.scrollTop = 0;
+      const from = camera.current;
+      if (from) api.current.paintCamera(api.current.clamp({ ...from, x: from.x - dx, y: from.y - dy }));
     };
     let gesture: Camera | null = null;
     const onGestureStart = (event: Event) => { event.preventDefault(); gesture = api.current.shown(); };
@@ -279,6 +299,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     outer.addEventListener('touchend', onTouches);
     outer.addEventListener('touchcancel', onTouches);
     outer.addEventListener('pointerdown', onPointerDown);
+    outer.addEventListener('scroll', onScroll);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
     outer.addEventListener('gesturestart', onGestureStart);
@@ -290,6 +311,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
       outer.removeEventListener('touchend', onTouches);
       outer.removeEventListener('touchcancel', onTouches);
       outer.removeEventListener('pointerdown', onPointerDown);
+      outer.removeEventListener('scroll', onScroll);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
       outer.removeEventListener('gesturestart', onGestureStart);
@@ -300,6 +322,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
   // Swiping drags the tree and its neighbour strips with the finger; past the threshold the tree slides out
   // and the neighbouring tree opens, sliding in from the other side (see slide.ts).
   const sliding = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const leaving = useRef(false);
   const paint = (x: number, animate = false) => {
     const element = lane.current;
     if (!element) return;
@@ -310,9 +333,11 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
   // Forward is a drag to the right in Arabic (the next tree sits on the left) and to the left in English.
   const sign = (forward: boolean) => (forward === ar ? 1 : -1);
   const slide = (forward: boolean) => {
-    if (!has(forward)) return;
+    if (!has(forward) || leaving.current) return;
     clearTimeout(sliding.current);
-    const leave = () => { noteStep(forward); onStep?.(forward); sliding.current = setTimeout(() => paint(0), 2000); };
+    leaving.current = true;
+    // If the next tree never arrives (an offline phone), the old one comes back after a while.
+    const leave = () => { noteStep(forward); onStep?.(forward); sliding.current = setTimeout(() => { leaving.current = false; paint(0); }, 8000); };
     if (reducedMotion() || !lane.current?.clientWidth) { leave(); return; }
     paint(sign(forward) * lane.current.clientWidth, true);
     sliding.current = setTimeout(leave, SLIDE);
@@ -323,9 +348,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     sliding.current = setTimeout(() => paint(0), SLIDE);
   };
   const { justSwiped } = useSwipe(lane, enabled && !!onStep, {
-    allowed: () => camera.current === null,
     forward: dx => (ar ? dx > 0 : dx < 0),
     canStep: has,
+    allowed: () => camera.current === null && !leaving.current,
     start: () => { clearTimeout(sliding.current); paint(0); },
     drag: x => paint(x),
     step: slide,
@@ -376,8 +401,6 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     out: 'Zoom out',
     in: 'Zoom in',
   };
-  // A size change (a turned phone, the side pane) keeps the zoom but pulls the tree back into view.
-  if (camera.current) camera.current = clamp(camera.current);
   const view = shown();
   // The dashed strips at the sides are the neighbouring trees peeking in, as in the ayah matrix.
   const edge = (forward: boolean) => {

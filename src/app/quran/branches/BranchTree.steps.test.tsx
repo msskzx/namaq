@@ -264,8 +264,16 @@ describe('BranchTree slide', () => {
     const { container } = renderTree();
     const clicks = recordStepClicks(AR);
     fireEvent.click(container.querySelector('[data-tree-edge="next"]')!);
+    // One step at a time: a second press while the first tree is still leaving does nothing.
     fireEvent.click(container.querySelector('[data-tree-edge="previous"]')!);
-    expect(clicks).toEqual(['next', 'previous']);
+    expect(clicks).toEqual(['next']);
+  });
+
+  it('opens the previous tree from its strip', () => {
+    const { container } = renderTree();
+    const clicks = recordStepClicks(AR);
+    fireEvent.click(container.querySelector('[data-tree-edge="previous"]')!);
+    expect(clicks).toEqual(['previous']);
   });
 
   it('shows no strip for a side with no tree', () => {
