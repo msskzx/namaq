@@ -229,9 +229,11 @@ describe('Quran branch trees', () => {
       expect(control.textContent).toBe('');
       expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
     });
-    const bar = screen.getByTestId('nav-actions');
-    expect(within(bar).getByRole('combobox')).toBeTruthy();
-    expect(within(bar).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
+    const [page, layout] = screen.getAllByTestId('nav-actions');
+    expect(within(page).getByRole('combobox')).toBeTruthy();
+    expect(within(page).getByRole('button', { name: 'البحث' })).toBeTruthy();
+    expect(within(page).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
+    expect(within(layout).getAllByRole('button', { name: /قائمة السور|اختر سورة/ }).length).toBeGreaterThan(0);
   });
 
   it('shows the tree as ayah cards in cards view, crossing to the previous tree on its last card', async () => {

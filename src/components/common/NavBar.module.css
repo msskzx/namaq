@@ -102,3 +102,13 @@
   }
   .grab { display: none; }
 }
+
+/* NavSearch: the box on desktop, an icon that opens it across the bar on phones. */
+.search { min-width: 0; flex: 1; max-width: 36rem; display: flex; align-items: center; gap: 0.375rem; }
+.searchToggle, .searchClose { width: 2.5rem; height: 2.5rem; flex: none; display: none; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 0.5rem; color: var(--home-accent); }
+@media (max-width: 1023.98px) {
+  .searchToggle { display: inline-flex; }
+  .search { display: none; }
+  .searchOpen { display: flex; position: absolute; inset: 0; z-index: 1; max-width: none; background: var(--home-paper); padding-inline: max(var(--home-gutter), env(safe-area-inset-left)) max(var(--home-gutter), env(safe-area-inset-right)); }
+  .searchOpen .searchClose { display: inline-flex; }
+}
