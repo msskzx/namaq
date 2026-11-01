@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import NavBar, { NavActions, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
+import NavBar, { NavActions, NavButtons, RailSlotElement, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
 
 const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', toggleLanguage: vi.fn() } }));
 vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
@@ -81,5 +81,24 @@ describe('launch navigation', () => {
     }
     render(<Chrome />);
     expect(within(screen.getByRole('navigation')).getByRole('textbox', { name: 'page search' })).toBeTruthy();
+  });
+
+  it('puts page buttons in the rail on desktop and in the top bar on phones', () => {
+    const rail = document.createElement('div');
+    document.body.appendChild(rail);
+    function Chrome() {
+      const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+      return <NavSlotContext.Provider value={setSlot}><NavSlotElement.Provider value={slot}><RailSlotElement.Provider value={rail}><NavBar /><NavButtons><button>view</button></NavButtons></RailSlotElement.Provider></NavSlotElement.Provider></NavSlotContext.Provider>;
+    }
+    window.matchMedia = vi.fn(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() })) as unknown as typeof window.matchMedia;
+    render(<Chrome />);
+    expect(within(rail).getByRole('button', { name: 'view' })).toBeTruthy();
+    cleanup();
+    window.matchMedia = vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })) as unknown as typeof window.matchMedia;
+    render(<Chrome />);
+    expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'view' })).toBeTruthy();
+    // @ts-expect-error jsdom has no matchMedia
+    delete window.matchMedia;
+    rail.remove();
   });
 });

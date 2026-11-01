@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
@@ -8,6 +8,7 @@ import { BookOpen, Feather, GitFork, Monitor, Moon, Settings, ShieldCheck, Sun, 
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
+import { RailSlotContext } from './NavBar';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon> = {
@@ -113,6 +114,7 @@ export default function TabBar() {
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => setOpen(false), [path]);
   const close = useCallback(() => { setOpen(false); toggle.current?.focus(); }, []);
+  const setRailSlot = useContext(RailSlotContext);
   const ar = language === 'ar';
   const settings = ar ? 'الإعدادات' : 'Settings';
   return (
@@ -129,6 +131,7 @@ export default function TabBar() {
             </Link>
           );
         })}
+        <div ref={setRailSlot} className={styles.railActions} />
         <button ref={toggle} type="button" className={styles.tab} aria-label={settings} title={settings}
           aria-expanded={open} aria-controls={open ? sheetId : undefined} onClick={() => setOpen(value => !value)}>
           <span className={styles.tabPill}><Settings size={24} strokeWidth={1.75} aria-hidden /></span>

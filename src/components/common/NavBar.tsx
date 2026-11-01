@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,9 +18,29 @@ export { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 export const NavSlotContext = createContext<(element: HTMLDivElement | null) => void>(() => {});
 export const NavSlotElement = createContext<HTMLDivElement | null>(null);
 
-/** Puts a page's own icon buttons into the top bar (start of the actions, before the theme and language buttons). */
+/** The side rail's slot for page buttons on desktop (TabBar fills it). */
+export const RailSlotContext = createContext<(element: HTMLDivElement | null) => void>(() => {});
+export const RailSlotElement = createContext<HTMLDivElement | null>(null);
+
+/** Puts a page's own search box (or other wide input) into the top bar. */
 export function NavActions({ children }: { children: React.ReactNode }) {
   const slot = useContext(NavSlotElement);
+  return slot ? createPortal(children, slot) : null;
+}
+
+const WIDE = '(min-width: 1024px)';
+const subscribeWide = (change: () => void) => {
+  const query = window.matchMedia?.(WIDE);
+  query?.addEventListener?.('change', change);
+  return () => query?.removeEventListener?.('change', change);
+};
+
+/** Puts a page's own icon buttons and toggles into the side rail on desktop, and into the top bar on phones. */
+export function NavButtons({ children }: { children: React.ReactNode }) {
+  const top = useContext(NavSlotElement);
+  const rail = useContext(RailSlotElement);
+  const wide = useSyncExternalStore(subscribeWide, () => !!window.matchMedia?.(WIDE).matches, () => false);
+  const slot = wide && rail ? rail : top;
   return slot ? createPortal(children, slot) : null;
 }
 

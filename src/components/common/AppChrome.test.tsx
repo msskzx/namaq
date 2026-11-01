@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import AppChrome, { useHideFooter } from './AppChrome';
 
-vi.mock('./NavBar', () => ({ default: () => <nav />, NavSlotContext: React.createContext(() => {}), NavSlotElement: React.createContext(null) }));
+vi.mock('./NavBar', () => ({ default: () => <nav />, NavSlotContext: React.createContext(() => {}), NavSlotElement: React.createContext(null), RailSlotContext: React.createContext(() => {}), RailSlotElement: React.createContext(null) }));
 vi.mock('./TabBar', () => ({ default: () => <nav aria-label="tabs" />, TabSpacer: () => <div /> }));
 vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
 vi.mock('./NavigationLoader', () => ({ NavigationLoaderProvider: ({ children }: { children: React.ReactNode }) => <>{children}</> }));

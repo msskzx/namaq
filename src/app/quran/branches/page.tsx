@@ -19,7 +19,7 @@ import PieceList, { type SharedPiece } from './PieceList';
 import BranchHeading, { MatchingRules } from './BranchHeading';
 import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';
-import { NavActions } from '@/components/common/NavBar';
+import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import SearchSummary from './SearchSummary';
 import SurahPane, { PaneNote } from './SurahPane';
@@ -142,11 +142,13 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         <NavSearch>
           <OpeningSearch key={listQuery} query={listQuery} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} view={id ? { ...treeView, mode: state.mode, query: state.query } : state} />
         </NavSearch>
+      </NavActions>
+      <NavButtons>
         <TreeMode current={!id ? 'list' : cards ? 'cards' : 'tree'}
           list={branchesHref('', juz, { query: state.query, surah: state.surah, mode: 'list', page: id ? (steps ? Math.ceil(steps.position / PER_PAGE) : 1) : page })}
           tree={id ? branchesHref(id, juz, { ...state, mode: undefined }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah })}
           cards={id ? branchesHref(id, juz, { ...state, mode: 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah, mode: 'cards' })} />
-      </NavActions>
+      </NavButtons>
       <Scope>
         <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst toggleInNav
           bar={unavailable ? <div className="min-w-0 flex-1"><UnavailableNote /></div> : undefined}

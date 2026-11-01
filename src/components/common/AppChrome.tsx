@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import NavBar, { NavSlotContext, NavSlotElement } from './NavBar';
+import NavBar, { NavSlotContext, NavSlotElement, RailSlotContext, RailSlotElement } from './NavBar';
 import TabBar, { TabSpacer } from './TabBar';
 import { NavigationLoaderProvider } from './NavigationLoader';
 
@@ -20,6 +20,7 @@ export function useHideFooter(hidden: boolean) {
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [footerHidden, setFooterHidden] = useState(false);
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
+  const [railSlot, setRailSlot] = useState<HTMLDivElement | null>(null);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(usePathname() ?? '/');
   const tabs = !footerHidden && !partyRoom;
   // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
@@ -29,6 +30,8 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
       <FooterContext.Provider value={setFooterHidden}>
         <NavSlotContext.Provider value={setSlot}>
           <NavSlotElement.Provider value={slot}>
+          <RailSlotContext.Provider value={setRailSlot}>
+          <RailSlotElement.Provider value={railSlot}>
             <div className="min-h-screen flex flex-col">
               <NavBar />
               {tabs && <TabBar />}
@@ -37,6 +40,8 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
               </main>
               {tabs && <TabSpacer />}
             </div>
+          </RailSlotElement.Provider>
+          </RailSlotContext.Provider>
           </NavSlotElement.Provider>
         </NavSlotContext.Provider>
       </FooterContext.Provider>

@@ -1,6 +1,9 @@
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 // The site's top bar is not rendered here; its page-actions slot shows in place.
-vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-actions">{children}</div> }));
+vi.mock('@/components/common/NavBar', () => ({
+  NavActions: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-actions">{children}</div>,
+  NavButtons: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-buttons">{children}</div>,
+}));
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -229,11 +232,12 @@ describe('Quran branch trees', () => {
       expect(control.textContent).toBe('');
       expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
     });
-    const [page, layout] = screen.getAllByTestId('nav-actions');
-    expect(within(page).getByRole('combobox')).toBeTruthy();
-    expect(within(page).getByRole('button', { name: 'البحث' })).toBeTruthy();
-    expect(within(page).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
-    expect(within(layout).getAllByRole('button', { name: /قائمة السور|اختر سورة/ }).length).toBeGreaterThan(0);
+    const search = screen.getByTestId('nav-actions');
+    expect(within(search).getByRole('combobox')).toBeTruthy();
+    expect(within(search).getByRole('button', { name: 'البحث' })).toBeTruthy();
+    const [view, pane] = screen.getAllByTestId('nav-buttons');
+    expect(within(view).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
+    expect(within(pane).getAllByRole('button', { name: /قائمة السور|اختر سورة/ }).length).toBeGreaterThan(0);
   });
 
   it('shows the tree as ayah cards in cards view, crossing to the previous tree on its last card', async () => {

@@ -45,6 +45,7 @@
 .pageActions input { height: 2.5rem; }
 
 .tabs, .tabSpacer { display: none; }
+.railActions { display: none; }
 @media (max-width: 1023.98px) {
   .tabSpacer { display: block; height: calc(var(--app-tabbar)); }
   .tabs {
@@ -93,6 +94,11 @@
   .tabPill { padding: 0.5rem 1rem; }
   .tab:hover:not([aria-current]) { color: var(--home-ink); }
   .tab:last-child { margin-top: auto; }
+  /* Page buttons (NavButtons) under the sections, set off by a rule. */
+  .railActions { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; padding-top: 0.75rem; border-top: 1px solid var(--home-rule); }
+  .railActions:empty { display: none; }
+  .railActions [role="group"] { flex-direction: column; flex-wrap: nowrap; padding: 2px; }
+  .railActions [role="group"] :is(a, button) { width: 2.5rem; height: 2.5rem; min-width: 0; min-height: 0; padding: 0; }
   /* Settings opens as a small panel beside the rail. */
   .shade { display: none; }
   .sheet {

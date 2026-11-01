@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
-import { NavActions } from '@/components/common/NavBar';
+import { NavButtons } from '@/components/common/NavBar';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -78,7 +78,7 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
   </>;
   return (
     <div className="flex flex-col gap-4">
-      {toggleInNav && <NavActions>{paneButtons}</NavActions>}
+      {toggleInNav && <NavButtons>{paneButtons}</NavButtons>}
       {(bar || (hidden && !toggleInNav)) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
         {paneToggleFirst && !toggleInNav && paneButtons}
         {bar}
