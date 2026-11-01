@@ -47,9 +47,9 @@ describe('Quran branch trees', () => {
     expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
   });
 
-  it('keeps zoom links to an absorbed phrase after an ayah ending', async () => {
+  it('keeps zoom links to the subtree after an ayah ending', async () => {
     render(await open({ o: 'لا اثم عليه' }));
-    const href = branchesHref('ان الله غفور رحيم', undefined, { occurrences: ['2:173:21', '2:182:12'] });
+    const href = branchesHref('لا اثم عليه ان الله غفور رحيم ۝');
     expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
   });
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
@@ -161,12 +161,30 @@ describe('Quran branch trees', () => {
   });
 
   it('gives a tree outside the list no steps', async () => {
+    render(await open({ o: 'ان الله غفور رحيم', at: '2:173:21,2:182:12' }));
+    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+    expect(screen.queryByRole('navigation', { name: 'التنقل بين الأشجار' })).toBeNull();
+  });
+
+  it('opens a subtree by its id, stepping among the trees beside its parent', async () => {
     render(await open({ o: 'لا اثم عليه' }));
+    const parentSteps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' }).textContent;
     const href = screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' })[0].getAttribute('href')!;
     cleanup();
     render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
-    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
-    expect(screen.queryByRole('navigation', { name: 'التنقل بين الأشجار' })).toBeNull();
+    const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
+    expect(tree.textContent).toContain('٢:١٧٣');
+    expect(tree.textContent).toContain('٢:١٨٢');
+    expect(screen.getByRole('navigation', { name: 'التنقل بين الأشجار' }).textContent).toBe(parentSteps);
+  });
+
+  it('opens the subtree a search names, lighting the ayah that holds the words before it', async () => {
+    const href = await open({ q: 'قل أطيعوا الله وأطيعوا الرسول' }).then(() => '', (error: Error) => error.message.replace('REDIRECT ', ''));
+    expect(new URL(href, 'http://localhost').searchParams.get('o')).toBe('اطيعوا الله واطيعوا الرسول');
+    render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
+    const lit = [...document.querySelectorAll('[data-lit]')].map(box => box.getAttribute('data-keys'));
+    expect(lit.length).toBeGreaterThan(0);
+    expect(lit.every(keys => keys!.split(' ').includes('24:54'))).toBe(true);
   });
 
   it('keeps the list filter off subtree links of an open tree', async () => {

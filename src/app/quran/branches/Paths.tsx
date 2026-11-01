@@ -12,8 +12,8 @@ const PathContext = createContext<Paths | null>(null);
 const LINE = 'border-[var(--home-rule)]';
 const LIT = 'border-[var(--home-accent)]';
 
-export function usePaths() {
-  const [pinned, setPinned] = useState(new Map<string, string[]>());
+export function usePaths(lit: string[] = []) {
+  const [pinned, setPinned] = useState(() => new Map<string, string[]>(lit.length ? [['search', lit]] : []));
   return useMemo<Paths>(() => ({
     lit: new Set([...pinned.values()].flat()),
     pinned,
@@ -28,8 +28,9 @@ export function usePaths() {
 export const PathProvider = PathContext.Provider;
 export const useOuterPaths = () => useContext(PathContext);
 
-export function PathScope({ children }: { children: React.ReactNode }) {
-  return <PathProvider value={usePaths()}>{children}</PathProvider>;
+/** `lit`: ayat whose paths start lit (those holding the search). */
+export function PathScope({ children, lit }: { children: React.ReactNode; lit?: string[] }) {
+  return <PathProvider value={usePaths(lit)}>{children}</PathProvider>;
 }
 
 export function useIsLit() {

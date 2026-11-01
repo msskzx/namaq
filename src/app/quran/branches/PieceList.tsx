@@ -8,7 +8,7 @@ import BranchTree from './BranchTree';
 import { phrasePresentation, type PhraseGroup } from '@/lib/quran/phraseTrees';
 import { subtreeLinks } from '@/lib/quran/branchTreeLinks';
 
-export type SharedPiece = Piece & { phrase?: PhraseGroup };
+export type SharedPiece = Piece & { phrase?: PhraseGroup; ids?: Record<string, string> };
 const NOTE = 'text-sm text-[var(--home-muted)]';
 
 export const PER_PAGE = 10;
@@ -21,7 +21,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
   const ar = language === 'ar';
   const group = piece.keys.map(key => ayat.get(key)!);
   const presentation = piece.phrase ? phrasePresentation(piece.phrase, group, false, false) : undefined;
-  const links = presentation && piece.phrase ? subtreeLinks(piece.phrase, presentation.tree, juz ?? undefined, {}, view?.context) : undefined;
+  const links = presentation && piece.phrase ? subtreeLinks(piece.phrase, presentation.tree, juz ?? undefined, {}, view?.context, piece.ids) : undefined;
   return (
     <li>
       <BranchTree

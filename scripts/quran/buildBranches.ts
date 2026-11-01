@@ -4,6 +4,7 @@ import { readerAyat, sharedOpenings, withConjunctions, withNext, withRoots } fro
 import { chapterFamilies } from '../../src/lib/quran/chapterFamilies';
 import { mushafPages, type MushafPage, type ReaderPageData } from '../../src/lib/quran/readerPage';
 import { buildTreeGroups, phrasePieces } from '../../src/lib/quran/phraseTrees';
+import { buildSubtrees } from '../../src/lib/quran/subtrees';
 
 // docs/plans/quran-shared-openings.md
 const READER = join(__dirname, '../../src/app/quran/read/data');
@@ -23,9 +24,9 @@ const continuations = withNext(new Map([
 ]), read);
 const continued = new Map(continuations.map(ayah => [ayah.key, ayah]));
 const ayat = read.map(ayah => continued.get(ayah.key) ?? ayah);
-const trees = buildTreeGroups(ayat);
-const serialized = `${JSON.stringify({ ayat, trees })}\n`;
+const { trees, subtrees } = buildSubtrees(buildTreeGroups(ayat), ayat);
+const serialized = `${JSON.stringify({ ayat, trees, subtrees })}\n`;
 writeFileSync(OUT, serialized);
 const entries = trees.flatMap(group => phrasePieces(group, ayat));
-console.log(`trees ${trees.length}, ayat ${ayat.length}, entries ${entries.length}, repeated occurrences ${trees.filter(group => group.occurrences.length > new Set(group.occurrences.map(o => o.key)).size).length}`);
+console.log(`trees ${trees.length}, subtrees ${subtrees.length}, ayat ${ayat.length}, entries ${entries.length}, repeated occurrences ${trees.filter(group => group.occurrences.length > new Set(group.occurrences.map(o => o.key)).size).length}`);
 console.log(`phrase generation ${Math.round(performance.now() - started)} ms, artifact ${Buffer.byteLength(serialized)} bytes, largest piece ${Math.max(...entries.map(group => new Set(group.occurrences.map(o => o.key)).size))} ayat`);
