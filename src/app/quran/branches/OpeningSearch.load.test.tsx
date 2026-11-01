@@ -20,7 +20,7 @@ it('fetches the phrases once per juz range, says it is loading meanwhile, and re
   expect(fetchMock).toHaveBeenCalledWith('/api/quran/branch-phrases?all=1&juzFrom=29&juzTo=30');
   const box = screen.getByRole('combobox');
   fireEvent.change(box, { target: { value: 'وقعت' } });
-  expect(screen.getByRole('status').textContent).toBe('Loading phrases…');
+  expect(screen.getByRole('status').textContent).toBe('Loading phrases');
   answer(new Response(JSON.stringify({ phrases })));
   expect(await screen.findByRole('option', { name: /وَقَعَتِ/ })).toBeTruthy();
 
@@ -28,7 +28,7 @@ it('fetches the phrases once per juz range, says it is loading meanwhile, and re
   expect(fetchMock).toHaveBeenLastCalledWith('/api/quran/branch-phrases?all=1&juzFrom=30&juzTo=30');
   await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
   await new Promise(resolve => setTimeout(resolve, 0));
-  expect(screen.getByRole('status').textContent).toBe('Loading phrases…');
+  expect(screen.getByRole('status').textContent).toBe('Loading phrases');
   fireEvent.change(box, { target: { value: '' } });
   fireEvent.change(box, { target: { value: 'وقعت' } });
   expect(await screen.findByRole('option', { name: /وَقَعَتِ/ })).toBeTruthy();

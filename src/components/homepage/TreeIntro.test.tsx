@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { useRef, useState } from 'react';
-import TreeIntro, { SEEN } from './TreeIntro';
+import TreeIntro, { LOGO, SEEN } from './TreeIntro';
 
 const opened = vi.fn();
 let reduced = false;
@@ -61,6 +61,15 @@ it('grows the tree level by level with every node typed, then fades in the surro
   expect(skip()).toBeTruthy();
   const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
   const pressed = (node: string) => document.querySelector(`[data-node="${node}"] [aria-pressed]`)!.getAttribute('aria-pressed');
+  // A drop of ink falls, the logo grows out of it with its words, then shrinks into the first node.
+  await advance(100);
+  expect(words('n-1').style.visibility).toBe('');
+  const animated = () => (vi.mocked(Element.prototype.animate).mock.contexts as Element[]).map(element => element.getAttribute('class') ?? element.tagName);
+  expect(animated()).toEqual(expect.arrayContaining([expect.stringMatching(/inkDrop/), expect.stringMatching(/inkBlot/), 'path', 'circle', 'SPAN']));
+  expect(screen.getByText('تدبّر القرآن')).toBeTruthy();
+  expect(animated()).not.toContainEqual(expect.stringMatching(/introLogo/));
+  await advance(LOGO);
+  expect(animated()).toContainEqual(expect.stringMatching(/introLogo/));
   await advance(100);
   expect(words('n-1').style.visibility).toBe('hidden');
   expect([branch('n0'), branch('n1')]).toEqual(['0', '0']);
@@ -104,7 +113,7 @@ it('skip while the ayah card is open removes it and leaves nothing hidden', asyn
   vi.stubGlobal('fetch', answer(true));
   showAll();
   render(<Tree />);
-  await advance(8000);
+  await advance(8000 + LOGO);
   expect(document.body.textContent).toContain('عيون ثانية');
   fireEvent.click(skip()!);
   expect(document.body.textContent).not.toContain('عيون ثانية');
@@ -115,7 +124,7 @@ it('skip while the ayah card is open removes it and leaves nothing hidden', asyn
 it('finishes without the card when the ayah context fails to load', async () => {
   showAll();
   render(<Tree />);
-  await advance(13000);
+  await advance(13000 + LOGO);
   expect(document.body.textContent).not.toContain('الآيات في سياقها');
   expect(skip()).toBeNull();
   expect(localStorage.getItem(SEEN)).toBe('1');
@@ -123,7 +132,7 @@ it('finishes without the card when the ayah context fails to load', async () => 
 
 it('skip while nodes are being typed shows the whole tree with its words and lights nothing', async () => {
   render(<Tree />);
-  await advance(700);
+  await advance(700 + LOGO);
   fireEvent.click(skip()!);
   expect(skip()).toBeNull();
   expect(words('n0').style.visibility).toBe('');
@@ -139,7 +148,7 @@ it('skip while the path is lit turns the light off and puts the surrounding ayat
   showAll();
   render(<Tree />);
   const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
-  await advance(5000);
+  await advance(5000 + LOGO);
   expect(lit).toHaveBeenCalledOnce();
   expect(toggle.checked).toBe(true);
   fireEvent.click(skip()!);
@@ -207,7 +216,7 @@ it('replays from the replay button, which gives way to skip while playing', asyn
   fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
   expect(skip()).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'إعادة العرض' })).toBeNull();
-  await advance(900);
+  await advance(900 + LOGO);
   expect(words('n0').style.visibility).toBe('hidden');
   fireEvent.click(skip()!);
   expect(screen.getByRole('button', { name: 'إعادة العرض' })).toBeTruthy();
@@ -224,7 +233,7 @@ it('waits for the tree to come into view, and pauses while it is out of view', a
   await advance(3000);
   expect(branch('n0')).toBe('0');
   act(() => report(0.7));
-  await advance(900);
+  await advance(900 + LOGO);
   expect(words('n0').style.visibility).toBe('hidden');
   act(() => report(0.1));
   await advance(5000);

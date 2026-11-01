@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 import { RotateCcw, SkipForward } from 'lucide-react';
 import Button from '../common/Button';
 import MushafText from '../common/MushafText';
+import { MARK } from '../common/Emblem';
 import { num } from '@/lib/quran/arabicNumber';
 import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './Home.module.css';
@@ -14,6 +15,7 @@ const HOLD = 900;
 const TYPE = 110;
 const TYPING = 1800;
 const LEVEL = 500;
+export const LOGO = HOLD + 300;
 
 function shouldPlay() {
   try {
@@ -29,7 +31,9 @@ export type View = { visible: boolean; waiting: Set<() => void>; running: Set<An
 
 export type Peek = { context: AyahContext; top: number };
 
-async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek | null) => void, cardRef: () => HTMLElement | null, view: View, signal: AbortSignal, undo: (() => void)[]) {
+export type Ink = { drop: HTMLElement | null; blot: HTMLElement | null; logo: HTMLElement | null };
+
+async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek | null) => void, cardRef: () => HTMLElement | null, view: View, signal: AbortSignal, undo: (() => void)[], ink: Ink = { drop: null, blot: null, logo: null }) {
   const sleep = (ms: number) => new Promise<void>((resolve, reject) => {
     if (signal.aborted) return reject(signal.reason);
     const abort = () => { clearTimeout(timer); reject(signal.reason); };
@@ -103,6 +107,49 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
   };
   // Breadth first: each level of the tree appears together and its words are typed together.
   const levels = [...new Set(pieces.map(depth))].sort((a, b) => a - b);
+  // A drop of ink falls, the logo grows out of it, then it shrinks into the first node.
+  const first = pieces.filter(piece => depth(piece) === levels[0]).map(own).find(Boolean);
+  if (first && ink.drop && ink.blot && ink.logo) {
+    const { drop, blot, logo } = ink;
+    await seen();
+    const box = root.getBoundingClientRect();
+    const stage = (content.closest('[data-tree-frame]')?.parentElement ?? root).getBoundingClientRect();
+    const node = first.getBoundingClientRect();
+    const size = Math.min(150, stage.width * 0.4, stage.height * 0.4);
+    const cx = stage.left + stage.width / 2 - box.left;
+    const cy = stage.top + stage.height / 2 - box.top - size * 0.1;
+    const at = (x: number, y: number) => `translate(${x}px, ${y}px)`;
+    const mark = logo.querySelector<SVGSVGElement>('svg');
+    const words = logo.querySelector<HTMLElement>('[data-logo-words]');
+    const parts = mark ? { bowl: mark.querySelector(':scope > path'), boughs: [...mark.querySelectorAll('g[fill] > path')], nodes: [...mark.querySelectorAll('circle')] } : null;
+    if (mark) { mark.style.width = `${size}px`; mark.style.height = `${size}px`; }
+    const bowl = cy + size * 0.25 - (words?.offsetHeight ?? 0) / 2;
+    logo.style.transform = at(cx, cy);
+    const hidden = [parts?.bowl, ...(parts?.boughs ?? []), ...(parts?.nodes ?? []), words].filter((part): part is Element => !!part) as (HTMLElement | SVGElement)[];
+    hidden.forEach(part => { part.style.opacity = '0'; });
+    logo.style.opacity = '1';
+    undo.push(() => { logo.style.opacity = '0'; hidden.forEach(part => { part.style.opacity = ''; }); [logo, blot, ...hidden].forEach(element => element.getAnimations?.().forEach(animation => animation.cancel())); });
+    const show = async (part: Element | null | undefined, keyframes: Keyframe[], options: KeyframeAnimationOptions) => {
+      if (!part) return;
+      (part as HTMLElement).style.opacity = '';
+      await run(part, keyframes, options);
+    };
+    const top = Math.max(stage.top - box.top + 8, bowl - 110);
+    await run(drop, [{ opacity: 0, transform: `${at(cx, top)} scale(1)` }, { opacity: 1, transform: `${at(cx, top)} scale(1)`, offset: 0.15 }, { opacity: 1, transform: `${at(cx, bowl)} scale(.9, 1.3)` }], { duration: 650, easing: 'cubic-bezier(.5, 0, 1, 1)', fill: 'none' });
+    await run(blot, [{ opacity: 1, transform: `${at(cx, bowl)} scale(0)` }, { opacity: 1, transform: `${at(cx, bowl)} scale(1.7)`, offset: 0.45 }, { opacity: 1, transform: `${at(cx, bowl)} scale(1)` }], { duration: 420, fill: 'forwards' });
+    await Promise.all([
+      run(blot, [{ opacity: 1, transform: `${at(cx, bowl)} scale(1)` }, { opacity: 0, transform: `${at(cx, bowl)} scale(3)` }], { duration: 500, fill: 'forwards' }),
+      show(parts?.bowl, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { duration: 500 }),
+    ]);
+    await Promise.all((parts?.boughs ?? []).map((bough, i) => show(bough, [{ opacity: 0, transform: 'scale(.15)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: i * 90 })));
+    await Promise.all((parts?.nodes ?? []).map((dot, i) => show(dot, [{ opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1.3)', offset: 0.7 }, { opacity: 1, transform: 'none' }], { duration: 350, delay: i * 60 })));
+    await show(words, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 400 });
+    await wait(LOGO);
+    const x = node.left + node.width / 2 - box.left;
+    const y = node.top + node.height / 2 - box.top;
+    await run(logo, [{ opacity: 1, transform: `${at(cx, cy)} scale(1)` }, { opacity: 0, transform: `${at(x, y)} scale(${Math.max(0.15, node.height / size)})` }], { duration: 650, easing: 'ease-in', fill: 'forwards' });
+    logo.style.opacity = '0';
+  }
   for (const level of levels) {
     const row = pieces.filter(piece => depth(piece) === level);
     const typing = row.flatMap(piece => { const box = own(piece); return box ? [blank(box)] : []; });
@@ -209,6 +256,9 @@ export default function TreeIntro({ target, ar, names = {} }: { target: RefObjec
   const [shown, setShown] = useState<Peek | null>(null);
   const marker = useRef<HTMLSpanElement>(null);
   const card = useRef<HTMLDivElement>(null);
+  const drop = useRef<HTMLSpanElement>(null);
+  const blot = useRef<HTMLSpanElement>(null);
+  const logo = useRef<HTMLDivElement>(null);
   const skip = useRef<() => void>(() => {});
   useEffect(() => {
     const root = target.current;
@@ -235,7 +285,7 @@ export default function TreeIntro({ target, ar, names = {} }: { target: RefObjec
     };
     skip.current = done;
     setPlaying(true);
-    play(root, marker.current, setShown, () => card.current, view, controller.signal, undo).then(done, () => {});
+    play(root, marker.current, setShown, () => card.current, view, controller.signal, undo, { drop: drop.current, blot: blot.current, logo: logo.current }).then(done, () => {});
     return stop;
   }, [target, round]);
   const ref = (key: string) => {
@@ -244,6 +294,12 @@ export default function TreeIntro({ target, ar, names = {} }: { target: RefObjec
   };
   return <>
     <span ref={marker} aria-hidden className={styles.tapMarker} />
+    <span ref={drop} aria-hidden className={styles.inkDrop} />
+    <span ref={blot} aria-hidden className={styles.inkBlot} />
+    <div ref={logo} aria-hidden className={styles.introLogo}>
+      <svg viewBox="12 24.7 76 76" dangerouslySetInnerHTML={{ __html: MARK }} />
+      <span data-logo-words>{ar ? 'تدبّر القرآن' : 'Reflect on the Quran'}</span>
+    </div>
     {shown && <div ref={card} aria-hidden className={styles.introPeek} style={{ top: shown.top, opacity: 0 }}>
       <div className={styles.introPeekHead}><strong>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</strong><span>{ref(shown.context.ayah.key)}</span></div>
       <div data-peek-scroll className={styles.introPeekBody} dir="rtl">
