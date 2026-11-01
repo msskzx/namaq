@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
@@ -74,9 +74,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const juz = range ?? undefined;
   const requestedId = first(params.o) ?? '';
   const built = view(range);
-  const resolved: TreeGroup | undefined = built.subtrees?.byId.get(requestedId) ?? resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
-  const id = resolved?.id ?? requestedId;
   const requestedOccurrences = parseOccurrences(first(params.at));
+  const subtree = built.subtrees?.byId.get(requestedId);
+  const subtreeHolds = subtree && requestedOccurrences.every(entry => subtree.occurrences.some(occurrence => entry.startsWith(`${occurrence.key}:`)));
+  const resolved: TreeGroup | undefined = (subtreeHolds ? subtree : undefined) ?? resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
+  const id = resolved?.id ?? requestedId;
   const listQuery = (first(params.q) ?? '').trim();
   const query = id ? '' : listQuery;
   const picked = Number(first(params.s));
@@ -127,7 +129,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
   const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE).map(piece => built.subtrees && piece.phrase ? { ...piece, ids: built.subtrees.idsFor(piece.phrase) } : piece);
   const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, built.byKey.get(key)!] as const)));
-  const Scope = id ? ({ children }: { children: React.ReactNode }) => <PathScope key={marked.join(' ')} lit={marked}>{children}</PathScope> : 'div';
+  const Scope = id ? ({ children }: { children: ReactNode }) => <PathScope key={marked.join(' ')} lit={marked}>{children}</PathScope> : 'div';
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>

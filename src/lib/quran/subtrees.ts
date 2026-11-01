@@ -1,4 +1,3 @@
-// Subtree ids: /mnt/project-files/branches-subtree-ids/plan.md
 import { keys, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { createPhrasePresenter, type TreeGroup } from './phraseTrees';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useMemo, useState } from 'react';
 
 import { GitBranch, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -69,7 +69,8 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
     }, 150);
     return () => { clearTimeout(timer); controller.abort(); };
   }, [query, remote, dismissed, requestKey]);
-  const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : searchPhrases(phrases, query).slice(0, SUGGESTIONS);
+  const local = useMemo(() => remote ? [] : searchPhrases(phrases, query).slice(0, SUGGESTIONS), [remote, phrases, query]);
+  const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : local;
   const visible = !!query.trim() && !dismissed;
   const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() || view.query });
   const open = (phrase: Suggestion) => {

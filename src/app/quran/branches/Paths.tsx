@@ -28,7 +28,6 @@ export function usePaths(lit: string[] = []) {
 export const PathProvider = PathContext.Provider;
 export const useOuterPaths = () => useContext(PathContext);
 
-/** `lit`: ayat whose paths start lit (those holding the search). */
 export function PathScope({ children, lit }: { children: React.ReactNode; lit?: string[] }) {
   return <PathProvider value={usePaths(lit)}>{children}</PathProvider>;
 }

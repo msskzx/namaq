@@ -42,7 +42,6 @@ describe('subtree links', () => {
     expect(index.byId.get('اطيعوا الله واطيعوا الرسول')!.text.normalize('NFC')).toBe('أَطِيعُوا۟ ٱللَّهَ وَأَطِيعُوا۟ ٱلرَّسُولَ'.normalize('NFC'));
   });
 
-  // A subtree drawn alone can group its words apart from its parent tree (إنّ / أنّ in ان الله): those few nodes keep ?at=.
   it('opens exactly the subtree ayat for every inner node of every tree and subtree, by subtree id in every tree', () => {
     const present = createPhrasePresenter(source.ayat);
     const broken: string[] = [];
