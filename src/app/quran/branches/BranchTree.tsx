@@ -76,7 +76,7 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));
   const id = nodeId(indices.get(node)!);
   const subject = (root ? shownWords : node.words).join(' ');
-  const subtreeHref = linkable(words) ? branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : subtreeLinks?.[keys(node).join(' ')];
+  const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(words) ? branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
   const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
     const neighbour = around.data.after[around.ends[key]];
     return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} opens={id} /> }] : [];
