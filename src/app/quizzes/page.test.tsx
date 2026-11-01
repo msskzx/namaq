@@ -275,7 +275,21 @@ describe('QuizzesPage', () => {
     expect(screen.getByText('Passed')).toBeTruthy();
   });
 
-  it('marks a partial tree answer wrong and reveals the intermediate split and every leaf', () => {
+  it('keeps a tree answer with no right leaf marked incorrect', () => {
+    const original = questions[0];
+    questions[0] = branchQuestion;
+    try {
+      nav.reset('/quizzes?topic=BRANCHES&length=5');
+      render(<QuizzesPage />);
+      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'خطأ' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('marks a partial tree answer partly correct and reveals the intermediate split and every leaf', () => {
     const original = questions[0];
     questions[0] = branchQuestion;
     try {
@@ -287,7 +301,7 @@ describe('QuizzesPage', () => {
       fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'فيحلفون له' } });
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
 
-      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Question 1 - partly correct' })).toBeTruthy();
       for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
         expect(document.body.textContent).toContain(words);
       }
