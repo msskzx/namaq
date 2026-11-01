@@ -6,6 +6,7 @@ import { branch, variants, type BranchAyah, type BranchesView, type Piece } from
 import type { JuzRange } from '@/lib/quran/juz';
 import BranchTree from './BranchTree';
 import { phrasePresentation, type PhraseGroup } from '@/lib/quran/phraseTrees';
+import { subtreeLinks } from '@/lib/quran/branchTreeLinks';
 
 export type SharedPiece = Piece & { phrase?: PhraseGroup };
 const NOTE = 'text-sm text-[var(--home-muted)]';
@@ -20,11 +21,12 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
   const ar = language === 'ar';
   const group = piece.keys.map(key => ayat.get(key)!);
   const presentation = piece.phrase ? phrasePresentation(piece.phrase, group, false, false) : undefined;
+  const links = presentation && piece.phrase ? subtreeLinks(piece.phrase, presentation.tree, juz ?? undefined, {}, view?.context) : undefined;
   return (
     <li>
       <BranchTree
         header={piece.family ? <p className={NOTE}>{ar ? piece.opening.text : piece.opening.textEn}</p> : undefined}
-        tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
+        tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={links} names={names}
         juz={juz} view={{ ...view, query: undefined, surah: undefined }} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />
     </li>
