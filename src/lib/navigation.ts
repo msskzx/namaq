@@ -55,8 +55,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 export const NAV_SECTIONS: NavSection[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
-  { href: '/quizzes?topic=BRANCHES', label: { ar: 'اختبار فردي', en: 'Solo quiz' }, groups: [] },
-  { href: '/quizzes/party', label: { ar: 'اختبار جماعي', en: 'Party quiz' }, groups: [] },
+  { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];
 
 export function activeSection(path: string): string | undefined {

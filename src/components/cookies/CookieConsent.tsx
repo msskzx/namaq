@@ -50,7 +50,7 @@ function CookieConsent() {
   if (!showBanner && !showSettings) return null;
 
   return (
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed bottom-0 left-0 right-0 bg-[var(--home-paper)] border-t border-[var(--home-rule)] p-4 z-50 shadow-lg">
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed bottom-[var(--app-tabbar)] left-0 right-0 bg-[var(--home-paper)] border-t border-[var(--home-rule)] p-4 pb-[calc(1rem+var(--app-safe-bottom))] z-50 shadow-lg">
       <div className="mx-auto max-w-6xl">
         {showSettings ? (
           <div className="space-y-4">

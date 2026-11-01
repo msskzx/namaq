@@ -79,7 +79,7 @@ function Countdown({ deadline, total, offset, ar, big }: { deadline: number; tot
   }, []);
   return (
     <span ref={anchor} className={`inline-flex shrink-0 justify-end ${big ? "h-20 w-60" : "h-11 w-32"}`}>
-      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-3 z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
+      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-[calc(0.75rem+env(safe-area-inset-top))] z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
         <FontAwesomeIcon icon={faHourglassHalf} className={big ? "text-3xl" : "text-lg"} />{ar ? `${num(Math.floor(left / 60))}:${num(left % 60).padStart(2, "٠")}` : text}
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-1">
           <span className={`block h-full transition-[width] duration-300 ease-linear ${urgent ? "bg-[var(--home-paper)]" : "bg-[var(--home-accent)]"}`} style={{ width: `${Math.min(1, Math.max(0, (deadline - now) / total)) * 100}%` }} />

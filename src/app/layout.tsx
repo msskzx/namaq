@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Amiri, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -34,13 +34,23 @@ export const metadata: Metadata = {
   openGraph: { siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, locale: "ar_AR", type: "website" },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4ecdb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0b" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-tabbar="" suppressHydrationWarning>
       <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
         <CustomThemeProvider>
           <LanguageProvider>

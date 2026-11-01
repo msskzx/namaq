@@ -31,6 +31,17 @@
   --text-6xl: 4.25rem;
 }
 
+/* Height of the phone tab bar (TabBar.tsx); zero where it isn't shown. AppChrome sets data-tabbar. */
+:root { --app-tabbar: 0px; --app-safe-bottom: env(safe-area-inset-bottom); }
+html[data-tabbar] { --app-safe-bottom: 0px; }
+@media (max-width: 1023.98px) {
+  html[data-tabbar] { --app-tabbar: calc(3.5rem + env(safe-area-inset-bottom)); scroll-padding-bottom: var(--app-tabbar); }
+  html { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+  /* viewport-fit=cover: keep page content off the side notch, and off the home bar when there are no tabs. */
+  body { padding-inline: env(safe-area-inset-left) env(safe-area-inset-right); }
+  html:not([data-tabbar]) body { padding-bottom: env(safe-area-inset-bottom); }
+}
+
 body {
   font-family: var(--font-amiri), ui-serif, Georgia, serif;
   background: var(--home-paper);

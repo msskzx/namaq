@@ -37,6 +37,28 @@ import PersonPicker from "./PersonPicker";
 import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@/lib/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
+import Link from "next/link";
+import { User, Users } from "lucide-react";
+
+/** /quizzes with no settings: pick solo or party first, then that mode's settings. */
+function QuizModes({ ar }: { ar: boolean }) {
+  const modes = [
+    { href: "/quizzes?topic=BRANCHES", Icon: User, label: ar ? "اختبار فردي" : "Solo quiz" },
+    { href: "/quizzes/party", Icon: Users, label: ar ? "اختبار جماعي" : "Party quiz" },
+  ];
+  return (
+    <div className={styles.page}>
+      <nav className="mx-auto grid max-w-xl grid-cols-2 gap-4 px-4 py-10" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
+        {modes.map(({ href, Icon, label }) => (
+          <Link key={href} href={href} aria-label={label} title={label}
+            className={`${styles.panel} flex aspect-square items-center justify-center text-[var(--home-accent)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
+            <Icon className="size-20 sm:size-24" strokeWidth={1.5} aria-hidden />
+          </Link>
+        ))}
+      </nav>
+    </div>
+  );
+}
 
 interface QuizQuestionView {
   key: string;
@@ -128,8 +150,8 @@ export default function QuizzesPage() {
     setTyped({});
     setSubmitted(false);
     setReferenceIndex(null);
-    router.push(pathname);
-  }, [pathname, router]);
+    router.push(`${pathname}?${topicQuery || "solo=1"}`);
+  }, [pathname, router, topicQuery]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
   const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree ? typed[index] : answers[index])), [questions, answers, typed]);
@@ -153,10 +175,13 @@ export default function QuizzesPage() {
     return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
   };
 
+  if (!searchParams.get("topic") && !searchParams.get("solo")) return <QuizModes ar={ar} />;
+
   if (!started) {
     const hasBranches = topics.includes("BRANCHES");
     const toggleTopic = (value: QuizTopic) => setParam({
       topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
+      solo: topics.length === 1 && topics[0] === value ? "1" : undefined,
       length: undefined,
       person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
     });
