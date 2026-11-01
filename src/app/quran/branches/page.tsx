@@ -2,11 +2,12 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
-import { ayahEnds, branchesHref, keys, listPage, piecesHolding, searchKey, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, listPage, piecesHolding, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
 import { searchQuery } from '@/lib/quran/searchText';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { surrounding } from '@/lib/quran/ayahContext';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
+import { parseOccurrences, resolveTree, scopeTree, subtreeLinks as subtreeLinksFor } from '@/lib/quran/branchTreeLinks';
 import { buildPhraseGroups, buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
 import treeData from './trees.json';
 import BranchTree from './BranchTree';
@@ -68,14 +69,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const juz = range ?? undefined;
   const requestedId = first(params.o) ?? '';
   const built = view(range);
-  const requestedKey = searchKey(requestedId);
-  const withoutConjunction = /^[وف]/.test(requestedKey) ? requestedKey.slice(1) : requestedKey;
-  const candidates = requestedId && !built.trees.some(tree => tree.id === requestedId) ? [...built.trees, ...(built.phrases ??= buildPhraseGroups(built.ayat))] : built.trees;
-  const resolved = candidates.find(tree => tree.id === requestedId) ?? candidates
-    .filter(tree => tree.id.startsWith(`${requestedKey} `) || tree.id === withoutConjunction || tree.id.startsWith(`${withoutConjunction} `))
-    .sort((a, b) => new Set(b.occurrences.map(occurrence => occurrence.key)).size - new Set(a.occurrences.map(occurrence => occurrence.key)).size)[0];
+  const resolved = resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
   const id = resolved?.id ?? requestedId;
-  const requestedOccurrences = first(params.at)?.split(',').filter(value => /^\d+:\d+:\d+$/.test(value)) ?? [];
+  const requestedOccurrences = parseOccurrences(first(params.at));
   const listQuery = (first(params.q) ?? '').trim();
   const query = id ? '' : listQuery;
   const picked = Number(first(params.s));
@@ -97,13 +93,13 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const opening = listQuery ? cut.find(piece => textIs(piece.text, listQuery)) ?? cut[0] : cut[0];
   if (!id && state.mode !== 'list' && opening) redirect(branchesHref(opening.id, juz, { query: state.query, surah: state.surah, mode: state.mode }));
   const selected = resolved;
-  const scoped = selected && requestedOccurrences.length ? { ...selected, occurrences: selected.occurrences.filter(occurrence => requestedOccurrences.includes(`${occurrence.key}:${occurrence.start}`)) } : selected;
+  const scoped = scopeTree(selected, requestedOccurrences);
   const treeGroup = scoped && new Set(scoped.occurrences.map(occurrence => occurrence.key)).size >= 2 ? scoped : undefined;
   const unavailable = !!id && !treeGroup;
   const drawn = treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
   const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat, true, !range) : undefined;
   const tree = presentation?.tree ?? null;
-  const subtreeLinks = tree ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) })])) : undefined;
+  const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), state.context) : undefined;
   const treeView = { ...state, query: undefined, surah: undefined, mode: undefined };
   const cards = !!tree && state.mode === 'cards';
   const position = tree ? cut.findIndex(piece => piece.id === id) : -1;

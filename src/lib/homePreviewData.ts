@@ -1,5 +1,6 @@
 import treeData from '@/app/quran/branches/trees.json';
-import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
+import type { BranchAyah } from '@/lib/quran/branches';
+import { subtreeLinks as linksFor } from '@/lib/quran/branchTreeLinks';
 import { phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
 
 export async function getHomePreviews(randomExcept?: string, random = Math.random) {
@@ -10,10 +11,7 @@ export async function getHomePreviews(randomExcept?: string, random = Math.rando
   });
   const group = randomExcept === undefined ? source.trees.find(tree => tree.id === 'ان المتقين في')! : candidates[Math.floor(random() * candidates.length)];
   const presentation = phrasePresentation(group, source.ayat);
-  const subtreeLinks = Object.fromEntries(Object.entries(phraseSubtreeTargets(presentation.tree, source.trees, source.ayat)).map(([node, target]) => [
-    node,
-    branchesHref(target.id, undefined, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) }),
-  ]));
+  const subtreeLinks = linksFor(group, presentation.tree, undefined, phraseSubtreeTargets(presentation.tree, source.trees, source.ayat));
   const names: Record<number, string> = { 15: 'الحجر', 44: 'الدخان', 51: 'الذاريات', 52: 'الطور', 54: 'القمر', 77: 'المرسلات' };
   return { branches: { id: group.id, count: new Set(group.occurrences.map(occurrence => occurrence.key)).size, names, ...presentation, subtreeLinks } };
 }
