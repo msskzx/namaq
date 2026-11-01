@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import NavBar, { NAV_SECTIONS, NavActions, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
+import NavBar, { NavActions, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
 
 const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', toggleLanguage: vi.fn() } }));
 vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
@@ -15,20 +15,17 @@ afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restore
 const destinations = ['/quran/branches', '/quran/read', '/quizzes'];
 
 describe('launch navigation', () => {
-  it.each(['ar', 'en'] as const)('links home and to the launch sections on desktop in %s', language => {
+  it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
     state.language = language;
     render(<NavBar />);
     const nav = screen.getByRole('navigation');
-    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', ...destinations]);
-    expect(within(nav).getAllByRole('link').slice(1).map(link => link.textContent)).toEqual(NAV_SECTIONS.map(section => section.label[language]));
-    expect(screen.queryByRole('button', { name: language === 'ar' ? 'فتح القائمة' : 'Open menu' })).toBeNull();
+    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/']);
+    expect(within(nav).getByRole('link').querySelectorAll('svg')).toHaveLength(1);
+    expect(within(nav).queryAllByRole('button')).toHaveLength(0);
   });
 
   it('marks the quizzes section on solo and party routes', () => {
-    state.path = '/quizzes/party';
-    render(<NavBar />);
-    const marked = screen.getAllByRole('link').filter(link => link.getAttribute('aria-current') === 'page');
-    expect(marked.map(link => link.getAttribute('href'))).toEqual(['/quizzes']);
+    expect(activeSection('/quizzes')).toBe('/quizzes');
     expect(activeSection('/quizzes?topic=BRANCHES')).toBe('/quizzes');
     expect(activeSection('/quizzes/party/123456')).toBe('/quizzes');
     expect(activeSection('/quran/read/3')).toBe('/quran/read');
@@ -58,14 +55,6 @@ describe('launch navigation', () => {
     expect(screen.queryByRole('link')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(destinations);
-  });
-
-  it('keeps theme and one-tap language controls', () => {
-    render(<NavBar />);
-    expect(screen.getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'التبديل إلى العربية' }));
-    expect(state.toggleLanguage).toHaveBeenCalledOnce();
-    expect(screen.getByRole('link', { name: 'Namaq' }).querySelectorAll('svg')).toHaveLength(2);
   });
 
   it('slides the bar away on scroll down and back on scroll up', () => {

@@ -43,16 +43,20 @@ import { User, Users } from "lucide-react";
 /** /quizzes with no settings: pick solo or party first, then that mode's settings. */
 function QuizModes({ ar }: { ar: boolean }) {
   const modes = [
-    { href: "/quizzes?topic=BRANCHES", Icon: User, label: ar ? "اختبار فردي" : "Solo quiz" },
-    { href: "/quizzes/party", Icon: Users, label: ar ? "اختبار جماعي" : "Party quiz" },
+    { href: "/quizzes?topic=BRANCHES", Icon: User, title: ar ? "اختبار فردي" : "Solo quiz",
+      text: ar ? "أجب عن أسئلة الأشجار، ثم راجع الإجابة والآيات المرتبطة بها." : "Answer questions about the trees, then review the answer and its ayat." },
+    { href: "/quizzes/party", Icon: Users, title: ar ? "اختبار جماعي" : "Party quiz",
+      text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
   ];
   return (
     <div className={styles.page}>
-      <nav className="mx-auto grid max-w-xl grid-cols-2 gap-4 px-4 py-10" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
-        {modes.map(({ href, Icon, label }) => (
-          <Link key={href} href={href} aria-label={label} title={label}
-            className={`${styles.panel} flex aspect-square items-center justify-center text-[var(--home-accent)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
-            <Icon className="size-20 sm:size-24" strokeWidth={1.5} aria-hidden />
+      <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
+        {modes.map(({ href, Icon, title, text }) => (
+          <Link key={href} href={href}
+            className={`${styles.panel} flex flex-col items-start gap-2 text-[var(--home-ink)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
+            <Icon className="size-12 text-[var(--home-accent)]" strokeWidth={1.5} aria-hidden />
+            <span className="text-xl font-bold">{title}</span>
+            <span className="text-[var(--home-muted)]">{text}</span>
           </Link>
         ))}
       </nav>

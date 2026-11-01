@@ -1,25 +1,21 @@
 .bar {
   position: fixed;
-  inset-inline: 0;
+  inset-inline: var(--app-rail, 0px) 0;
   top: 0;
   z-index: 50;
   background: var(--home-paper);
   color: var(--home-ink);
-  border-bottom: 3px double var(--home-rule);
+  border-bottom: 1px solid var(--home-rule);
+  padding-top: env(safe-area-inset-top);
+  transition: transform 0.22s ease;
 }
-.band { position: relative; max-width: var(--home-width); min-height: 56px; margin-inline: auto; padding-inline: var(--home-gutter); display: flex; align-items: center; gap: 1.5rem; }
-.spacer { height: 59px; }
+.band { position: relative; max-width: var(--home-width); min-height: 48px; margin-inline: auto; padding-inline: max(var(--home-gutter), env(safe-area-inset-left)) max(var(--home-gutter), env(safe-area-inset-right)); display: flex; align-items: center; gap: 0.75rem; }
+.spacer { height: calc(49px + env(safe-area-inset-top)); }
+.scrolledAway { transform: translateY(calc(-100% + env(safe-area-inset-top))); }
+@media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
 
-.wordmark { display: flex; align-items: center; gap: 0.5rem; color: var(--home-ink); }
-.emblem { display: block; height: 2.25rem; width: auto; }
-.logo { display: block; height: 2.25rem; width: auto; }
-
-.chapters { display: none; flex: 1; gap: 0.25rem; }
-@media (min-width: 1024px) { .chapters { display: flex; } }
-.chapter { position: relative; display: flex; align-items: center; }
-.chapter > a { padding: 0.5rem 0.5rem; font-size: 1.125rem; color: var(--home-ink); text-underline-offset: 0.45em; }
-.chapter > a:hover, .chapter > a[aria-current] { color: var(--home-accent); }
-.chapter > a[aria-current] { text-decoration: underline; text-decoration-color: var(--home-accent); }
+.wordmark { display: flex; align-items: center; color: var(--home-ink); }
+.emblem { display: block; height: 2rem; width: auto; }
 
 .actions { margin-inline-start: auto; display: flex; align-items: center; gap: 0.375rem; }
 .language, .iconButton { min-width: 1.875rem; height: 1.875rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
@@ -40,27 +36,12 @@
 .mobileChapter { display: block; padding-block: 0.75rem; font-size: 1.25rem; border-bottom: 1px solid var(--home-rule); color: var(--home-ink); }
 .mobileChapter[aria-current] { color: var(--home-accent); }
 
-/* Phones: app chrome. The top bar keeps the logo (home) and the page's own search boxes and toggles (NavActions), slides away on scroll down,
-   and the sections and settings live in the bottom tab bar. */
-.pageActions { display: flex; align-items: center; gap: 0.375rem; }
-.pageActions:empty { display: none; }
-.desktopActions { display: none; align-items: center; gap: 0.375rem; }
-@media (min-width: 1024px) {
-  .desktopActions { display: flex; }
-  .pageActions { margin-inline-start: auto; }
-}
-@media (max-width: 1023.98px) {
-  .bar { padding-top: env(safe-area-inset-top); transition: transform 0.22s ease; border-bottom-width: 1px; border-bottom-style: solid; }
-  .bar .band { min-height: 48px; padding-inline: max(var(--home-gutter), env(safe-area-inset-left)) max(var(--home-gutter), env(safe-area-inset-right)); }
-  .bar .emblem, .bar .logo { height: 1.875rem; }
-  .bar .actions:empty { display: none; }
-  .pageActions { flex: 1; min-width: 0; justify-content: flex-end; }
-  .bar .band { gap: 0.75rem; }
-  .scrolledAway { transform: translateY(calc(-100% + env(safe-area-inset-top))); }
-  .spacer { height: calc(49px + env(safe-area-inset-top)); }
-  .pageActions :is(a, button) { min-width: 2.5rem; min-height: 2.5rem; }
-}
-@media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
+/* The top bar keeps the tree logo (home) and the page's own search boxes and toggles (NavActions)
+   and slides away on scroll down. Sections and settings live in the tab bar: at the bottom on
+   phones, a rail on the inline-start side (right in Arabic) from 1024px. */
+.pageActions { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 0.375rem; }
+.actions:empty { display: none; }
+@media (max-width: 1023.98px) { .pageActions :is(a, button) { min-width: 2.5rem; min-height: 2.5rem; } }
 
 .tabs, .tabSpacer { display: none; }
 @media (max-width: 1023.98px) {
@@ -96,4 +77,22 @@
 @keyframes sheet-up { from { transform: translateY(100%); } }
 @keyframes shade-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .sheet, .shade { animation: none; } }
-@media (min-width: 1024px) { .sheet, .shade { display: none; } }
+@media (min-width: 1024px) {
+  .tabs {
+    position: fixed; inset-inline-start: 0; top: 0; bottom: 0; z-index: 50; width: var(--app-rail);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding-block: 0.75rem;
+    background: var(--home-paper); border-inline-end: 1px solid var(--home-rule);
+  }
+  .tab { flex: none; width: 100%; }
+  .tabPill { padding: 0.5rem 1rem; }
+  .tab:hover:not([aria-current]) { color: var(--home-ink); }
+  .tab:last-child { margin-top: auto; }
+  /* Settings opens as a small panel beside the rail. */
+  .shade { background: transparent; animation: none; }
+  .sheet {
+    inset-inline: calc(var(--app-rail) + 0.5rem) auto; bottom: 0.75rem; width: 20rem;
+    border: 1px solid var(--home-rule); border-radius: 0.75rem; box-shadow: 0 10px 30px var(--home-shadow);
+    padding: 1rem; animation: none;
+  }
+  .grab { display: none; }
+}

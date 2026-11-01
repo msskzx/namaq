@@ -9,7 +9,7 @@ const { state } = vi.hoisted(() => ({ state: { language: 'ar', languageLoaded: t
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
 afterEach(() => { cleanup(); sessionStorage.clear(); vi.unstubAllGlobals(); });
 describe('Quran learning homepage', () => {
-  it.each(['ar', 'en'])('offers exploration, reading and solo/party quizzes in %s', async language => {
+  it.each(['ar', 'en'])('offers exploration, reading and quizzes in three cards in %s', async language => {
     state.language = language;
     render(<Homepage data={await getHomePreviews()} />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
@@ -21,9 +21,8 @@ describe('Quran learning homepage', () => {
     const hrefs = screen.getAllByRole('link').map(link => link.getAttribute('href')!);
     expect(hrefs).toContain('/quran/branches');
     expect(hrefs).toContain('/quran/read');
-    expect(hrefs).toContain('/quizzes?topic=BRANCHES');
-    expect(hrefs).toContain('/quizzes/party');
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(4);
+    expect(hrefs).toContain('/quizzes');
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
     expect(hrefs.every(href => href.startsWith('/quran/branches') || href === '/quran/read' || href.startsWith('/quizzes'))).toBe(true);
     expect(screen.getByRole('region', { name: language === 'ar' ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example' })).toBeTruthy();
     expect(screen.getAllByRole('button', { name: language === 'ar' ? /إظهار المسار/ : /Show path/ }).length).toBeGreaterThan(0);

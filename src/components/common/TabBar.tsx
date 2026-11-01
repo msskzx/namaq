@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BookOpen, GitFork, Info, ListChecks, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { BookOpen, Feather, GitFork, Info, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import styles from './NavBar.module.css';
@@ -12,7 +12,7 @@ import styles from './NavBar.module.css';
 export const SECTION_ICONS: Record<string, LucideIcon> = {
   '/quran/branches': GitFork,
   '/quran/read': BookOpen,
-  '/quizzes': ListChecks,
+  '/quizzes': Feather,
 };
 
 function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
@@ -34,9 +34,9 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
       else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     };
-    // The sheet is phone-only: close it if the screen grows past the tab bar (rotation, resize).
+    // Phones show a bottom sheet, desktops a panel beside the rail: close it when the layout switches.
     const wide = window.matchMedia?.('(min-width: 1024px)');
-    const onWide = () => { if (wide?.matches) onClose(); };
+    const onWide = () => onClose();
     window.addEventListener('keydown', onKey, true);
     wide?.addEventListener?.('change', onWide);
     return () => { window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
@@ -84,7 +84,7 @@ function SettingsSheet({ id, onClose }: { id: string; onClose: () => void }) {
   );
 }
 
-/** Phone-only bottom tabs: an icon per launch section plus settings, labelled for screen readers and on hover. */
+/** Section tabs plus settings, icon-only with names for screen readers and on hover: bottom bar on phones, side rail on desktop. */
 export default function TabBar() {
   const { language, languageLoaded } = useLanguage();
   const path = usePathname() ?? '/';

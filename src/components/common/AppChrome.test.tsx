@@ -7,7 +7,6 @@ import AppChrome, { useHideFooter } from './AppChrome';
 vi.mock('./NavBar', () => ({ default: () => <nav />, NavSlotContext: React.createContext(() => {}), NavSlotElement: React.createContext(null) }));
 vi.mock('./TabBar', () => ({ default: () => <nav aria-label="tabs" /> }));
 vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
-vi.mock('./Footer', () => ({ default: () => <footer>site footer</footer> }));
 vi.mock('./NavigationLoader', () => ({ NavigationLoaderProvider: ({ children }: { children: React.ReactNode }) => <>{children}</> }));
 
 function Page() {
@@ -17,16 +16,15 @@ function Page() {
 }
 
 describe('AppChrome', () => {
-  it('hides the footer while a page asks for it and shows it again after', () => {
+  it('has no footer, and hides the tab bar while a page asks for it and shows it again after', () => {
     render(<AppChrome><Page /></AppChrome>);
-    expect(screen.getByText('site footer')).toBeTruthy();
+    expect(document.querySelector('footer')).toBeNull();
     expect(screen.getByRole('navigation', { name: 'tabs' })).toBeTruthy();
     expect(document.documentElement.hasAttribute('data-tabbar')).toBe(true);
     fireEvent.click(screen.getByText('toggle'));
-    expect(screen.queryByText('site footer')).toBeNull();
     expect(screen.queryByRole('navigation', { name: 'tabs' })).toBeNull();
     expect(document.documentElement.hasAttribute('data-tabbar')).toBe(false);
     fireEvent.click(screen.getByText('toggle'));
-    expect(screen.getByText('site footer')).toBeTruthy();
+    expect(screen.getByRole('navigation', { name: 'tabs' })).toBeTruthy();
   });
 });

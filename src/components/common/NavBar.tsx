@@ -7,9 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
 import { X, Menu } from 'lucide-react';
 import translations from '../language/translations';
-import ThemeSwitcher from '../theme/ThemeSwitcher';
 import Button from './Button';
-import Logo from './Logo';
 import Emblem from './Emblem';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import styles from './NavBar.module.css';
@@ -49,7 +47,7 @@ export function useHideOnScroll(threshold = 8) {
 }
 
 export default function NavBar() {
-  const { language, languageLoaded, toggleLanguage } = useLanguage();
+  const { language, languageLoaded } = useLanguage();
   const path = usePathname() ?? '/';
   const menuOnly = /^\/quizzes\/party\/[^/]+/.test(path);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -72,23 +70,10 @@ export default function NavBar() {
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
           {!menuOnly && <>
-            <Link href="/" className={styles.wordmark} onClick={closeMenu} aria-label={translations[language].appName}><Emblem className={styles.emblem} /><Logo small className={styles.logo} /></Link>
-            <ul className={styles.chapters}>
-              {NAV_SECTIONS.map(section => (
-                <li key={section.href} className={styles.chapter}>
-                  <Link href={section.href} aria-current={section.href === active ? 'page' : undefined}>{section.label[language]}</Link>
-                </li>
-              ))}
-            </ul>
+            <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>
+            <div ref={setPageSlot} className={styles.pageActions} />
           </>}
-          {!menuOnly && <div ref={setPageSlot} className={styles.pageActions} />}
           <div ref={actions} className={styles.actions}>
-            {!menuOnly && <div className={styles.desktopActions}>
-              <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
-                {ar ? 'EN' : 'ع'}
-              </button>
-              <ThemeSwitcher palette="site" />
-            </div>}
             {menuOnly && <Button size="icon" className={styles.menuButton}
               onClick={() => setMenuOpen(open => !open)}
               aria-expanded={menuOpen} aria-controls={menuId}

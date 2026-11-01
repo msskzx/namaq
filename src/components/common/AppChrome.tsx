@@ -4,12 +4,11 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import NavBar, { NavSlotContext, NavSlotElement } from './NavBar';
 import TabBar from './TabBar';
-import Footer from './Footer';
 import { NavigationLoaderProvider } from './NavigationLoader';
 
 const FooterContext = createContext<(hidden: boolean) => void>(() => {});
 
-/** Hides the site footer and the phone tab bar while `hidden` is true, e.g. while a quiz is running. */
+/** Hides the tab bar (bottom bar on phones, side rail on desktop) while `hidden` is true, e.g. while a quiz is running. */
 export function useHideFooter(hidden: boolean) {
   const setHidden = useContext(FooterContext);
   useEffect(() => {
@@ -35,7 +34,6 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
               <main className="flex-1">
                 {children}
               </main>
-              {!footerHidden && <Footer />}
               {tabs && <TabBar />}
             </div>
           </NavSlotElement.Provider>

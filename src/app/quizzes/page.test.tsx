@@ -167,15 +167,14 @@ describe('QuizzesPage', () => {
     expect(screen.queryByRole('button', { name: '5' })).toBeNull();
   });
 
-  it('asks solo or party first with icon-only cards, and keeps the settings when the last topic is removed', () => {
+  it('asks solo or party first with cards, and keeps the settings when the last topic is removed', () => {
     nav.reset('/quizzes');
     render(<QuizzesPage />);
     const modes = screen.getByRole('navigation', { name: 'Quiz mode' });
     const links = within(modes).getAllByRole('link');
-    expect(links.map(link => [link.getAttribute('href'), link.getAttribute('aria-label'), link.textContent])).toEqual([
-      ['/quizzes?topic=BRANCHES', 'Solo quiz', ''],
-      ['/quizzes/party', 'Party quiz', ''],
-    ]);
+    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party']);
+    expect(within(links[0]).getByText('Solo quiz')).toBeTruthy();
+    expect(within(links[1]).getByText('Party quiz')).toBeTruthy();
     cleanup();
     nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);

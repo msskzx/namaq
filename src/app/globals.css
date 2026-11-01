@@ -32,8 +32,13 @@
 }
 
 /* Height of the phone tab bar (TabBar.tsx); zero where it isn't shown. AppChrome sets data-tabbar. */
-:root { --app-tabbar: 0px; --app-safe-bottom: env(safe-area-inset-bottom); }
+:root { --app-tabbar: 0px; --app-rail: 0px; --app-safe-bottom: env(safe-area-inset-bottom); }
 html[data-tabbar] { --app-safe-bottom: 0px; }
+/* Desktop: the tabs are a rail on the inline-start side (right in Arabic). */
+@media (min-width: 1024px) {
+  html[data-tabbar] { --app-rail: 4.5rem; }
+  html[data-tabbar] body { padding-inline-start: var(--app-rail); }
+}
 @media (max-width: 1023.98px) {
   html[data-tabbar] { --app-tabbar: calc(3.5rem + env(safe-area-inset-bottom)); scroll-padding-bottom: var(--app-tabbar); }
   html { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
