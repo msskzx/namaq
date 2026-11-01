@@ -118,7 +118,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { context: state.context, query: state.query, surah: state.surah, mode: state.mode, card });
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const neighbourAt = (index: number) => {
-    const phrase = steps && cut[index]?.phrase;
+    const phrase = steps && !cards && cut[index]?.phrase;
     return phrase ? phrasePresentation(phrase, built.ayat, true, !range) : undefined;
   };
   const neighbours = { previous: steps?.previous ? neighbourAt(position - 1) : undefined, next: steps?.next ? neighbourAt(position + 1) : undefined };

@@ -120,6 +120,15 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz));
   });
 
+  it('draws the neighbouring trees beside this one, so a swipe brings in the finished card', async () => {
+    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
+    const drawn = (side: string) => new Set([...document.querySelectorAll(`[data-tree-neighbour="${side}"] [data-keys]`)].flatMap(box => box.getAttribute('data-keys')!.split(' ')));
+    const keysOf = (index: number) => [...new Set(trees[index].occurrences.map(occurrence => occurrence.key))].sort();
+    expect([...drawn('next')].sort()).toEqual(keysOf(2));
+    expect([...drawn('previous')].sort()).toEqual(keysOf(0));
+  });
+
   it('disables the previous step on the first tree', async () => {
     render(await open({ o: data.trees[0].id }));
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
