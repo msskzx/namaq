@@ -2,14 +2,13 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import NavBar, { NavSlotContext, NavSlotElement } from './NavBar';
-import TabBar from './TabBar';
-import Footer from './Footer';
+import NavBar, { NavSlotContext, NavSlotElement, RailSlotContext, RailSlotElement } from './NavBar';
+import TabBar, { TabSpacer } from './TabBar';
 import { NavigationLoaderProvider } from './NavigationLoader';
 
 const FooterContext = createContext<(hidden: boolean) => void>(() => {});
 
-/** Hides the site footer and the phone tab bar while `hidden` is true, e.g. while a quiz is running. */
+/** Hides the tab bar (bottom bar on phones, side rail on desktop) while `hidden` is true, e.g. while a quiz is running. */
 export function useHideFooter(hidden: boolean) {
   const setHidden = useContext(FooterContext);
   useEffect(() => {
@@ -21,6 +20,7 @@ export function useHideFooter(hidden: boolean) {
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [footerHidden, setFooterHidden] = useState(false);
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
+  const [railSlot, setRailSlot] = useState<HTMLDivElement | null>(null);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(usePathname() ?? '/');
   const tabs = !footerHidden && !partyRoom;
   // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
@@ -30,14 +30,18 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
       <FooterContext.Provider value={setFooterHidden}>
         <NavSlotContext.Provider value={setSlot}>
           <NavSlotElement.Provider value={slot}>
+          <RailSlotContext.Provider value={setRailSlot}>
+          <RailSlotElement.Provider value={railSlot}>
             <div className="min-h-screen flex flex-col">
               <NavBar />
+              {tabs && <TabBar />}
               <main className="flex-1">
                 {children}
               </main>
-              {!footerHidden && <Footer />}
-              {tabs && <TabBar />}
+              {tabs && <TabSpacer />}
             </div>
+          </RailSlotElement.Provider>
+          </RailSlotContext.Provider>
           </NavSlotElement.Provider>
         </NavSlotContext.Provider>
       </FooterContext.Provider>

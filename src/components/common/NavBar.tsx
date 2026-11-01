@@ -1,15 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
 import { X, Menu } from 'lucide-react';
 import translations from '../language/translations';
-import ThemeSwitcher from '../theme/ThemeSwitcher';
 import Button from './Button';
-import Logo from './Logo';
 import Emblem from './Emblem';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import styles from './NavBar.module.css';
@@ -20,13 +18,33 @@ export { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 export const NavSlotContext = createContext<(element: HTMLDivElement | null) => void>(() => {});
 export const NavSlotElement = createContext<HTMLDivElement | null>(null);
 
-/** Puts a page's own icon buttons into the top bar (start of the actions, before the theme and language buttons). */
+/** The side rail's slot for page buttons on desktop (TabBar fills it). */
+export const RailSlotContext = createContext<(element: HTMLDivElement | null) => void>(() => {});
+export const RailSlotElement = createContext<HTMLDivElement | null>(null);
+
+/** Puts a page's own search box (or other wide input) into the top bar. */
 export function NavActions({ children }: { children: React.ReactNode }) {
   const slot = useContext(NavSlotElement);
   return slot ? createPortal(children, slot) : null;
 }
 
-/** True after the page scrolls down past the bar, false again as soon as it scrolls up. */
+const WIDE = '(min-width: 1024px)';
+const subscribeWide = (change: () => void) => {
+  const query = window.matchMedia?.(WIDE);
+  query?.addEventListener?.('change', change);
+  return () => query?.removeEventListener?.('change', change);
+};
+
+/** Puts a page's own icon buttons and toggles into the side rail on desktop, and into the top bar on phones. */
+export function NavButtons({ children }: { children: React.ReactNode }) {
+  const top = useContext(NavSlotElement);
+  const rail = useContext(RailSlotElement);
+  const wide = useSyncExternalStore(subscribeWide, () => !!window.matchMedia?.(WIDE).matches, () => false);
+  const slot = wide && rail ? rail : top;
+  return slot ? createPortal(children, slot) : null;
+}
+
+/** True after the page scrolls down past the bar, false again as soon as it scrolls up. `show` brings it back, e.g. on focus. */
 export function useHideOnScroll(threshold = 8) {
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
@@ -45,17 +63,17 @@ export function useHideOnScroll(threshold = 8) {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); };
   }, [threshold]);
-  return hidden;
+  return [hidden, () => setHidden(false)] as const;
 }
 
 export default function NavBar() {
-  const { language, languageLoaded, toggleLanguage } = useLanguage();
+  const { language, languageLoaded } = useLanguage();
   const path = usePathname() ?? '/';
   const menuOnly = /^\/quizzes\/party\/[^/]+/.test(path);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const actions = useRef<HTMLDivElement>(null);
-  const scrolledAway = useHideOnScroll();
+  const [scrolledAway, showBar] = useHideOnScroll();
   const setPageSlot = useContext(NavSlotContext);
   if (!languageLoaded && menuOnly) return null;
   if (!languageLoaded) {
@@ -69,26 +87,14 @@ export default function NavBar() {
   return (
     <>
       <nav className={menuOnly ? styles.menuOnly : `${styles.bar} ${scrolledAway ? styles.scrolledAway : ''}`} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}
+        onFocus={showBar}
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
           {!menuOnly && <>
-            <Link href="/" className={styles.wordmark} onClick={closeMenu} aria-label={translations[language].appName}><Emblem className={styles.emblem} /><Logo small className={styles.logo} /></Link>
-            <ul className={styles.chapters}>
-              {NAV_SECTIONS.map(section => (
-                <li key={section.href} className={styles.chapter}>
-                  <Link href={section.href} aria-current={section.href === active ? 'page' : undefined}>{section.label[language]}</Link>
-                </li>
-              ))}
-            </ul>
+            <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>
+            <div ref={setPageSlot} className={styles.pageActions} />
           </>}
-          {!menuOnly && <div ref={setPageSlot} className={styles.pageActions} />}
           <div ref={actions} className={styles.actions}>
-            {!menuOnly && <div className={styles.desktopActions}>
-              <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
-                {ar ? 'EN' : 'ع'}
-              </button>
-              <ThemeSwitcher palette="site" />
-            </div>}
             {menuOnly && <Button size="icon" className={styles.menuButton}
               onClick={() => setMenuOpen(open => !open)}
               aria-expanded={menuOpen} aria-controls={menuId}

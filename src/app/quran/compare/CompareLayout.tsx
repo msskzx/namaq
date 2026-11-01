@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import { NavButtons } from '@/components/common/NavBar';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -25,7 +26,7 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener);
 };
 
-export default function CompareLayout({ title, current, pane, children, bar, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين', paneToggleFirst = false, hideTitle = false }: { title: string; hideTitle?: boolean; current: string; pane: React.ReactNode; children: React.ReactNode; bar?: React.ReactNode; storageKey?: string; change?: string; paneToggleFirst?: boolean }) {
+export default function CompareLayout({ title, current, pane, children, bar, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين', paneToggleFirst = false, hideTitle = false, toggleInNav = false }: { title: string; hideTitle?: boolean; toggleInNav?: boolean; current: string; pane: React.ReactNode; children: React.ReactNode; bar?: React.ReactNode; storageKey?: string; change?: string; paneToggleFirst?: boolean }) {
   const id = useId();
   const search = useSearchParams().toString();
   const hidden = useSyncExternalStore(subscribe, () => read(storageKey), () => false);
@@ -77,8 +78,9 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
   </>;
   return (
     <div className="flex flex-col gap-4">
-      {(bar || hidden) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
-        {paneToggleFirst && paneButtons}
+      {toggleInNav && <NavButtons>{paneButtons}</NavButtons>}
+      {(bar || (hidden && !toggleInNav)) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
+        {paneToggleFirst && !toggleInNav && paneButtons}
         {bar}
         {!paneToggleFirst && showPane}
       </div>}

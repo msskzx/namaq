@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import NavBar, { NAV_SECTIONS, NavActions, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
+import NavBar, { NavActions, NavButtons, RailSlotElement, NavSlotContext, NavSlotElement, activeSection } from './NavBar';
 
 const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', toggleLanguage: vi.fn() } }));
 vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
@@ -15,20 +15,17 @@ afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restore
 const destinations = ['/quran/branches', '/quran/read', '/quizzes'];
 
 describe('launch navigation', () => {
-  it.each(['ar', 'en'] as const)('links home and to the launch sections on desktop in %s', language => {
+  it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
     state.language = language;
     render(<NavBar />);
     const nav = screen.getByRole('navigation');
-    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', ...destinations]);
-    expect(within(nav).getAllByRole('link').slice(1).map(link => link.textContent)).toEqual(NAV_SECTIONS.map(section => section.label[language]));
-    expect(screen.queryByRole('button', { name: language === 'ar' ? 'فتح القائمة' : 'Open menu' })).toBeNull();
+    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/']);
+    expect(within(nav).getByRole('link').querySelectorAll('svg')).toHaveLength(1);
+    expect(within(nav).queryAllByRole('button')).toHaveLength(0);
   });
 
   it('marks the quizzes section on solo and party routes', () => {
-    state.path = '/quizzes/party';
-    render(<NavBar />);
-    const marked = screen.getAllByRole('link').filter(link => link.getAttribute('aria-current') === 'page');
-    expect(marked.map(link => link.getAttribute('href'))).toEqual(['/quizzes']);
+    expect(activeSection('/quizzes')).toBe('/quizzes');
     expect(activeSection('/quizzes?topic=BRANCHES')).toBe('/quizzes');
     expect(activeSection('/quizzes/party/123456')).toBe('/quizzes');
     expect(activeSection('/quran/read/3')).toBe('/quran/read');
@@ -60,14 +57,6 @@ describe('launch navigation', () => {
     expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(destinations);
   });
 
-  it('keeps theme and one-tap language controls', () => {
-    render(<NavBar />);
-    expect(screen.getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'التبديل إلى العربية' }));
-    expect(state.toggleLanguage).toHaveBeenCalledOnce();
-    expect(screen.getByRole('link', { name: 'Namaq' }).querySelectorAll('svg')).toHaveLength(2);
-  });
-
   it('slides the bar away on scroll down and back on scroll up', () => {
     vi.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => { callback(0); return 0; });
     render(<NavBar />);
@@ -78,6 +67,9 @@ describe('launch navigation', () => {
     scroll(250);
     expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(400);
+    expect(bar.className).toMatch(/scrolledAway/);
+    act(() => { within(bar).getByRole('link').focus(); });
+    expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(20);
     expect(bar.className).not.toMatch(/scrolledAway/);
   });
@@ -89,5 +81,24 @@ describe('launch navigation', () => {
     }
     render(<Chrome />);
     expect(within(screen.getByRole('navigation')).getByRole('textbox', { name: 'page search' })).toBeTruthy();
+  });
+
+  it('puts page buttons in the rail on desktop and in the top bar on phones', () => {
+    const rail = document.createElement('div');
+    document.body.appendChild(rail);
+    function Chrome() {
+      const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+      return <NavSlotContext.Provider value={setSlot}><NavSlotElement.Provider value={slot}><RailSlotElement.Provider value={rail}><NavBar /><NavButtons><button>view</button></NavButtons></RailSlotElement.Provider></NavSlotElement.Provider></NavSlotContext.Provider>;
+    }
+    window.matchMedia = vi.fn(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() })) as unknown as typeof window.matchMedia;
+    render(<Chrome />);
+    expect(within(rail).getByRole('button', { name: 'view' })).toBeTruthy();
+    cleanup();
+    window.matchMedia = vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })) as unknown as typeof window.matchMedia;
+    render(<Chrome />);
+    expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'view' })).toBeTruthy();
+    // @ts-expect-error jsdom has no matchMedia
+    delete window.matchMedia;
+    rail.remove();
   });
 });
