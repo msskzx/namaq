@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -12,8 +12,12 @@ import AyahContextButton from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
+import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
+import { noteStep, takeEntering } from './slide';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+/** Which neighbouring trees exist; `true` means both. */
+type Neighbours = { next: boolean; previous: boolean };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -111,22 +115,24 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
   </>;
 }
 
-const MIN_SCALE = 0.1;
 const MAX_SCALE = 2;
 const SCALE_STEP = 0.1;
-const SWIPE = 60;
 
 type DiagramSize = { width: number; height: number; availableWidth: number; availableHeight: number };
+/** Where the tree sits in its viewport: its scale and the offset of its top left corner, in pixels. */
+type Camera = { s: number; x: number; y: number };
 
 function fitTreeScale({ width, height, availableWidth, availableHeight }: DiagramSize) {
   return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
 
-function TreeViewport({ children, controls, enabled, ar, height, onStep }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void }) {
+const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
+
+function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null> }) {
   const viewport = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
-  const [manualScale, setManualScale] = useState<number | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
@@ -151,109 +157,234 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
     return () => observer.disconnect();
   }, [enabled, height]);
 
+  // The tree is placed with a transform, never by scrolling, so a pinch can keep any point of the tree under
+  // the fingers, and each finger move only writes one transform (no re-render, no flicker).
+  // null is the fit: the whole tree, centred. Zooming out past the fit goes back to the fit.
+  const camera = useRef<Camera | null>(null);
+  const [, redraw] = useState(0);
   const fitted = size ? fitTreeScale(size) : 1;
-  const scale = manualScale ?? fitted;
-  const clampScale = (next: number) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, next));
-  const setScale = (next: number) => {
-    anchor.current = null;
-    setManualScale(clampScale(Number(next.toFixed(2))));
+  const viewHeight = (scale: number) => (size ? (height ? size.availableHeight : Math.min(size.height * scale, size.availableHeight)) : 0);
+  const fitCamera = (): Camera => (size ? { s: fitted, x: (size.availableWidth - size.width * fitted) / 2, y: (viewHeight(fitted) - size.height * fitted) / 2 } : { s: 1, x: 0, y: 0 });
+  /** Keeps the tree covering the viewport when it is bigger, and inside it when it is smaller. */
+  const clamp = (wanted: Camera): Camera | null => {
+    const scale = Math.min(MAX_SCALE, wanted.s);
+    if (scale <= fitted + 0.005) return null;
+    if (!size) return { ...wanted, s: scale };
+    const span = (at: number, view: number, length: number) => Math.min(Math.max(at, Math.min(0, view - length)), Math.max(0, view - length));
+    return { s: scale, x: span(wanted.x, size.availableWidth, size.width * scale), y: span(wanted.y, viewHeight(scale), size.height * scale) };
   };
+  const shown = () => camera.current ?? fitCamera();
+  const paintCamera = (next: Camera | null) => {
+    const fitChanged = (next === null) !== (camera.current === null);
+    camera.current = next;
+    const view = shown();
+    if (frameRef.current) frameRef.current.style.transform = `translate(${view.x}px, ${view.y}px)`;
+    if (content.current) content.current.style.transform = `scale(${view.s})`;
+    if (!height && viewport.current) viewport.current.style.height = `${viewHeight(view.s)}px`;
+    if (fitChanged) redraw(version => version + 1);
+  };
+  /** Scales to `scale` keeping the viewport point (px, py) over the same spot of the tree. */
+  const zoomTo = (scale: number, px: number, py: number, from = shown()) => {
+    paintCamera(clamp({ s: scale, x: px - (px - from.x) * scale / from.s, y: py - (py - from.y) * scale / from.s }));
+  };
+  const zoomBy = (step: number) => {
+    const from = shown();
+    zoomTo(Number((from.s + step).toFixed(2)), (size?.availableWidth ?? 0) / 2, viewHeight(from.s) / 2);
+  };
+  const api = useRef({ zoomTo, paintCamera, clamp, shown });
+  api.current = { zoomTo, paintCamera, clamp, shown };
+  // A size change (a turned phone, the side pane) keeps the zoom but pulls the tree back into view,
+  // or back to the fit when the fit is now bigger.
+  if (camera.current) camera.current = clamp(camera.current);
+  const manual = camera.current !== null;
 
   // Pinch (two fingers on a touch screen, a trackpad pinch that browsers send
   // as ctrl+wheel, or Safari's gesture events) zooms the tree, not the page.
   // The point between the fingers stays put while the tree grows around it.
-  const scaleRef = useRef(scale);
-  scaleRef.current = scale;
-  const stepRef = useRef<((forward: boolean) => void) | undefined>(undefined);
-  stepRef.current = manualScale === null ? onStep : undefined;
-  const anchor = useRef<{ x: number; y: number; fx: number; fy: number } | null>(null);
+  // Once zoomed in, one finger, a mouse drag or the wheel moves the tree around.
   useEffect(() => {
     const outer = viewport.current;
     if (!enabled || !outer) return;
-    const zoomAt = (wanted: number, x: number, y: number) => {
-      const next = clampScale(wanted);
-      if (next === scaleRef.current) return;
-      const frame = outer.querySelector<HTMLElement>('[data-tree-frame]')?.getBoundingClientRect();
-      if (frame?.width && frame.height) anchor.current = { x, y, fx: (x - frame.left) / frame.width, fy: (y - frame.top) / frame.height };
-      setManualScale(next);
-    };
+    const local = (x: number, y: number) => { const box = outer.getBoundingClientRect(); return { x: x - box.left, y: y - box.top }; };
     const onWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey) return;
+      const { zoomTo, paintCamera, clamp, shown } = api.current;
+      if (event.ctrlKey) {
+        event.preventDefault();
+        const at = local(event.clientX, event.clientY);
+        zoomTo(shown().s * Math.exp(-event.deltaY * 0.01), at.x, at.y);
+        return;
+      }
+      const from = camera.current;
+      if (!from) return;
+      const next = clamp({ ...from, x: from.x - event.deltaX, y: from.y - event.deltaY });
+      if (!next || (next.x === from.x && next.y === from.y)) return;
       event.preventDefault();
-      zoomAt(scaleRef.current * Math.exp(-event.deltaY * 0.01), event.clientX, event.clientY);
+      paintCamera(next);
     };
-    let pinch: { distance: number; scale: number } | null = null;
+    let pinch: { distance: number; x: number; y: number; from: Camera } | null = null;
+    let pan: { x: number; y: number; from: Camera } | null = null;
     const fingers = (event: TouchEvent) => {
       const [a, b] = [event.touches[0], event.touches[1]];
-      return { distance: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+      return { distance: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), ...local((a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2) };
     };
     const onTouches = (event: TouchEvent) => {
-      pinch = event.touches.length === 2 ? { distance: fingers(event).distance, scale: scaleRef.current } : null;
+      pinch = null;
+      pan = null;
+      if (event.touches.length === 2) pinch = { ...fingers(event), from: api.current.shown() };
+      else if (event.touches.length === 1 && camera.current) pan = { x: event.touches[0].clientX, y: event.touches[0].clientY, from: camera.current };
     };
     const onTouchMove = (event: TouchEvent) => {
-      if (!pinch || event.touches.length !== 2) return;
+      if (pinch && event.touches.length === 2) {
+        event.preventDefault();
+        const now = fingers(event);
+        if (!pinch.distance) return;
+        const { from } = pinch;
+        const scale = from.s * now.distance / pinch.distance;
+        // The spot of the tree that was between the fingers follows them, both when they spread and when they move.
+        api.current.paintCamera(api.current.clamp({ s: scale, x: now.x - (pinch.x - from.x) * scale / from.s, y: now.y - (pinch.y - from.y) * scale / from.s }));
+        return;
+      }
+      if (pan && event.touches.length === 1) {
+        if (event.cancelable) event.preventDefault();
+        const { from } = pan;
+        api.current.paintCamera(api.current.clamp({ ...from, x: from.x + event.touches[0].clientX - pan.x, y: from.y + event.touches[0].clientY - pan.y }));
+      }
+    };
+    let drag: { x: number; y: number; from: Camera; moved: boolean } | null = null;
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0 || !camera.current || (event.target instanceof Element && event.target.closest(interactive))) return;
       event.preventDefault();
-      const now = fingers(event);
-      if (pinch.distance) zoomAt(pinch.scale * now.distance / pinch.distance, now.x, now.y);
+      outer.setPointerCapture?.(event.pointerId);
+      drag = { x: event.clientX, y: event.clientY, from: camera.current, moved: false };
     };
-    let swipe: { x: number; y: number } | null = null;
-    const onSwipeStart = (event: TouchEvent) => {
-      swipe = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    const onPointerMove = (event: PointerEvent) => {
+      if (!drag) return;
+      if (event.buttons === 0) { onPointerUp(); return; }
+      const [dx, dy] = [event.clientX - drag.x, event.clientY - drag.y];
+      if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+      drag.moved = true;
+      api.current.paintCamera(api.current.clamp({ ...drag.from, x: drag.from.x + dx, y: drag.from.y + dy }));
     };
-    const onSwipeEnd = (event: TouchEvent) => {
-      const end = event.changedTouches[0];
-      if (!swipe || event.touches.length || !end) return;
-      const dx = end.clientX - swipe.x;
-      const dy = end.clientY - swipe.y;
-      swipe = null;
-      if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(dy)) stepRef.current?.(ar ? dx > 0 : dx < 0);
+    function onPointerUp() {
+      if (drag?.moved) {
+        // The click the browser sends after a drag must not press the node under the pointer.
+        const swallow = (event: MouseEvent) => event.stopPropagation();
+        window.addEventListener('click', swallow, { capture: true, once: true });
+        setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 0);
+      }
+      drag = null;
+    }
+    // Focusing a node outside the shown part (a quiz field, the tab key) scrolls the viewport; move the camera instead.
+    const onScroll = () => {
+      const [dx, dy] = [outer.scrollLeft, outer.scrollTop];
+      if (!dx && !dy) return;
+      outer.scrollLeft = 0;
+      outer.scrollTop = 0;
+      const from = camera.current;
+      if (from) api.current.paintCamera(api.current.clamp({ ...from, x: from.x - dx, y: from.y - dy }));
     };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
-      stepRef.current?.((event.key === 'ArrowLeft') === ar);
-    };
-    let gesture = 1;
-    const onGestureStart = (event: Event) => { event.preventDefault(); gesture = scaleRef.current; };
+    let gesture: Camera | null = null;
+    const onGestureStart = (event: Event) => { event.preventDefault(); gesture = api.current.shown(); };
     const onGestureChange = (event: Event) => {
       event.preventDefault();
-      if ('ontouchstart' in window) return;
+      if ('ontouchstart' in window || !gesture) return;
       const { scale: ratio, clientX, clientY } = event as Event & { scale: number; clientX: number; clientY: number };
-      zoomAt(gesture * ratio, clientX, clientY);
+      const at = local(clientX, clientY);
+      api.current.zoomTo(gesture.s * ratio, at.x, at.y, gesture);
     };
     outer.addEventListener('wheel', onWheel, { passive: false });
     outer.addEventListener('touchstart', onTouches, { passive: true });
     outer.addEventListener('touchmove', onTouchMove, { passive: false });
     outer.addEventListener('touchend', onTouches);
     outer.addEventListener('touchcancel', onTouches);
-    outer.addEventListener('touchstart', onSwipeStart, { passive: true });
-    outer.addEventListener('touchend', onSwipeEnd);
+    outer.addEventListener('pointerdown', onPointerDown);
+    outer.addEventListener('scroll', onScroll);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
     outer.addEventListener('gesturestart', onGestureStart);
     outer.addEventListener('gesturechange', onGestureChange);
-    window.addEventListener('keydown', onKey);
     return () => {
-      window.removeEventListener('keydown', onKey);
       outer.removeEventListener('wheel', onWheel);
       outer.removeEventListener('touchstart', onTouches);
       outer.removeEventListener('touchmove', onTouchMove);
       outer.removeEventListener('touchend', onTouches);
       outer.removeEventListener('touchcancel', onTouches);
-      outer.removeEventListener('touchstart', onSwipeStart);
-      outer.removeEventListener('touchend', onSwipeEnd);
+      outer.removeEventListener('pointerdown', onPointerDown);
+      outer.removeEventListener('scroll', onScroll);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
       outer.removeEventListener('gesturestart', onGestureStart);
       outer.removeEventListener('gesturechange', onGestureChange);
     };
+  }, [enabled]);
+
+  // Swiping drags the tree and its neighbour strips with the finger; past the threshold the tree slides out
+  // and the neighbouring tree opens, sliding in from the other side (see slide.ts).
+  const sliding = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const leaving = useRef(false);
+  const paint = (x: number, animate = false) => {
+    const element = lane.current;
+    if (!element) return;
+    element.toggleAttribute('data-sliding', animate);
+    element.style.transform = x ? `translate3d(${x}px, 0, 0)` : '';
+  };
+  const has = (forward: boolean) => !!onStep && (!neighbours || (forward ? neighbours.next : neighbours.previous));
+  // Forward is a drag to the right in Arabic (the next tree sits on the left) and to the left in English.
+  const sign = (forward: boolean) => (forward === ar ? 1 : -1);
+  const slide = (forward: boolean) => {
+    if (!has(forward) || leaving.current) return;
+    clearTimeout(sliding.current);
+    leaving.current = true;
+    // If the next tree never arrives (an offline phone), the old one comes back after a while.
+    const leave = () => { noteStep(forward); onStep?.(forward); sliding.current = setTimeout(() => { leaving.current = false; paint(0); }, 8000); };
+    if (reducedMotion() || !lane.current?.clientWidth) { leave(); return; }
+    paint(sign(forward) * lane.current.clientWidth, true);
+    sliding.current = setTimeout(leave, SLIDE);
+  };
+  const settleBack = () => {
+    clearTimeout(sliding.current);
+    paint(0, true);
+    sliding.current = setTimeout(() => paint(0), SLIDE);
+  };
+  const { justSwiped } = useSwipe(lane, enabled && !!onStep, {
+    forward: dx => (ar ? dx > 0 : dx < 0),
+    canStep: has,
+    allowed: () => camera.current === null && !leaving.current,
+    start: () => { clearTimeout(sliding.current); paint(0); },
+    drag: x => paint(x),
+    step: slide,
+    cancel: settleBack,
+  });
+  const stepRef = useRef<((forward: boolean) => void) | undefined>(undefined);
+  stepRef.current = !manual && onStep ? slide : undefined;
+  useEffect(() => {
+    if (!enabled) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
+      const step = stepRef.current;
+      if (!step) return;
+      step((event.key === 'ArrowLeft') === ar);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [enabled, ar]);
+  useEffect(() => () => clearTimeout(sliding.current), []);
+  // A tree opened by a step slides in from the side the previous one left towards, once it has its fit size.
+  const entered = useRef(false);
   useLayoutEffect(() => {
-    const outer = viewport.current;
-    const point = anchor.current;
-    anchor.current = null;
-    const frame = outer?.querySelector<HTMLElement>('[data-tree-frame]')?.getBoundingClientRect();
-    if (!outer || !point || !frame) return;
-    outer.scrollLeft += frame.left - (point.x - point.fx * frame.width);
-    outer.scrollTop += frame.top - (point.y - point.fy * frame.height);
-  }, [scale]);
+    if (entered.current || !size || !enabled) return;
+    entered.current = true;
+    const forward = takeEntering();
+    const element = lane.current;
+    if (forward === null || !element?.clientWidth || reducedMotion()) return;
+    paint(-sign(forward) * element.clientWidth);
+    void element.offsetWidth;
+    paint(0, true);
+    sliding.current = setTimeout(() => paint(0), SLIDE);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [size, enabled]);
 
   if (!enabled) return <>
     {controls && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">{controls}</div>}
@@ -269,25 +400,42 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
     out: 'Zoom out',
     in: 'Zoom in',
   };
-  const frame = size ? { width: size.width * scale, height: size.height * scale } : undefined;
-  const viewportHeight = height ?? (size ? Math.min(frame!.height, size.availableHeight) : undefined);
+  const view = shown();
+  // Small arrows beside the card open the neighbouring trees (they replace the step buttons).
+  // They are placed against the sliding lane around the card (the card itself is not positioned),
+  // so the card's overflow does not clip them and they slide with it.
+  const peek = (forward: boolean) => {
+    if (!has(forward)) return null;
+    const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
+    const Arrow = forward === ar ? ChevronLeft : ChevronRight;
+    // Forward sits past the card's end side (the left in Arabic): insetInlineStart: 100% puts it there.
+    return <button type="button" data-tree-edge={forward ? 'next' : 'previous'} aria-label={label} title={label} onClick={() => { if (!justSwiped()) slide(forward); }}
+      className="absolute top-1/2 flex h-12 w-4 -translate-y-1/2 items-center justify-center rounded-sm text-[var(--home-muted)] transition-colors hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] sm:w-6"
+      style={forward ? { insetInlineStart: 'calc(100% + 1px)' } : { insetInlineEnd: 'calc(100% + 1px)' }}>
+      <Arrow size={18} aria-hidden />
+    </button>;
+  };
+  const viewportHeight = height ?? (size ? viewHeight(view.s) : undefined);
+  const touch = manual ? 'touch-none cursor-grab active:cursor-grabbing' : onStep ? 'touch-pan-y' : 'touch-pan-x touch-pan-y';
 
   return <>
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
-      <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button size="lg" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
+      <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className={`flex flex-wrap items-center gap-2 ${onStep ? 'max-sm:hidden' : ''}`}>
+        <Button size="lg" aria-pressed={!manual} onClick={() => paintCamera(null)} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
-          <Button size="lg" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
-          <Button size="lg" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => zoomBy(-SCALE_STEP)} disabled={!manual} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => zoomBy(SCALE_STEP)} disabled={view.s >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
         </div>
       </div>
     </div>
-    <div ref={viewport} data-tree-viewport className={`flex touch-pan-x touch-pan-y ${manualScale === null ? 'overflow-hidden' : 'overflow-auto'}`} style={{ height: viewportHeight }}>
-      <div data-tree-frame className="relative m-auto shrink-0" style={frame}>
-        <div ref={content} data-tree-content className="absolute top-0 flex w-max items-center" style={{ insetInlineStart: 0, transform: `scale(${scale})`, transformOrigin: ar ? 'top right' : 'top left' }}>{children}</div>
+    {onStep && peek(false)}
+    {onStep && peek(true)}
+    <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
+        <div ref={frameRef} data-tree-frame dir="ltr" className="absolute left-0 top-0" style={{ transform: `translate(${view.x}px, ${view.y}px)` }}>
+          <div ref={content} data-tree-content dir={ar ? 'rtl' : 'ltr'} className="absolute left-0 top-0 flex w-max items-center" style={{ transform: `scale(${view.s})`, transformOrigin: '0 0' }}>{children}</div>
+        </div>
       </div>
-    </div>
   </>;
 }
 
@@ -329,16 +477,16 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
     {header}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
   </> : undefined;
-  return (
-    <PathProvider value={paths}>
-      <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]`}>
+  const lane = useRef<HTMLDivElement>(null);
+  const card = (
+      <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined}>
+        <TreeViewport lane={lane} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
@@ -378,6 +526,11 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <Node node={tree} path={[]} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
         </TreeViewport>
       </div>
+  );
+  // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
+  return (
+    <PathProvider value={paths}>
+      {steppable && zoomable ? <div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div> : card}
     </PathProvider>
   );
 }

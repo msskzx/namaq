@@ -43,7 +43,7 @@ it('loads the neighbouring trees ahead, with the surrounding-ayat switch carried
 });
 
 function renderTree({ steps: given = steps, ...props }: Partial<Props> = {}) {
-  return render(<>{given && <TreeSteps steps={given} />}<BranchTree tree={tree} names={{}} steppable={!!given} {...props} /></>);
+  return render(<>{given && <TreeSteps steps={given} />}<BranchTree tree={tree} names={{}} steppable={given ? { next: !!given.next, previous: !!given.previous } : false} {...props} /></>);
 }
 
 function recordStepClicks(names: { previous: string; next: string }) {
@@ -62,6 +62,8 @@ function recordStepClicks(names: { previous: string; next: string }) {
 function swipeBy(viewport: Element, dx: number, dy: number) {
   const start = { clientX: 200, clientY: 200 };
   fireEvent.touchStart(viewport, { touches: [start] });
+  fireEvent.touchMove(viewport, { touches: [{ clientX: 200 + dx / 2, clientY: 200 + dy / 2 }] });
+  fireEvent.touchMove(viewport, { touches: [{ clientX: 200 + dx, clientY: 200 + dy }] });
   fireEvent.touchEnd(viewport, { touches: [], changedTouches: [{ clientX: 200 + dx, clientY: 200 + dy }] });
 }
 
@@ -229,6 +231,66 @@ describe('BranchTree steps in English', () => {
     const clicks = recordStepClicks(EN);
     swipeBy(container.querySelector('[data-tree-viewport]')!, 100, 5);
     expect(clicks).toEqual(['previous']);
+  });
+});
+
+describe('BranchTree slide', () => {
+  it('drags the tree with the finger and slides back on a short swipe', () => {
+    vi.useFakeTimers();
+    const { container } = renderTree();
+    const clicks = recordStepClicks(AR);
+    const viewport = container.querySelector('[data-tree-viewport]')!;
+    const lane = container.querySelector<HTMLElement>('[data-tree-lane]')!;
+    fireEvent.touchStart(viewport, { touches: [{ clientX: 200, clientY: 200 }] });
+    fireEvent.touchMove(viewport, { touches: [{ clientX: 230, clientY: 201 }] });
+    expect(lane.style.transform).toBe('translate3d(30px, 0, 0)');
+    fireEvent.touchEnd(viewport, { touches: [], changedTouches: [{ clientX: 230, clientY: 201 }] });
+    expect(lane.hasAttribute('data-sliding')).toBe(true);
+    vi.advanceTimersByTime(300);
+    expect(lane.style.transform).toBe('');
+    expect(clicks).toEqual([]);
+    vi.useRealTimers();
+  });
+
+  it('pulls only a quarter of the way towards a side with no tree', () => {
+    const { container } = renderTree({ steps: { previous: steps.previous, position: 120, total: 120 } });
+    const viewport = container.querySelector('[data-tree-viewport]')!;
+    fireEvent.touchStart(viewport, { touches: [{ clientX: 200, clientY: 200 }] });
+    fireEvent.touchMove(viewport, { touches: [{ clientX: 280, clientY: 200 }] });
+    expect(container.querySelector<HTMLElement>('[data-tree-lane]')!.style.transform).toBe('translate3d(20px, 0, 0)');
+  });
+
+  it('shows the neighbouring trees as strips at the sides that open them', () => {
+    const { container } = renderTree();
+    const clicks = recordStepClicks(AR);
+    fireEvent.click(container.querySelector('[data-tree-edge="next"]')!);
+    // One step at a time: a second press while the first tree is still leaving does nothing.
+    fireEvent.click(container.querySelector('[data-tree-edge="previous"]')!);
+    expect(clicks).toEqual(['next']);
+  });
+
+  it('opens the previous tree from its strip', () => {
+    const { container } = renderTree();
+    const clicks = recordStepClicks(AR);
+    fireEvent.click(container.querySelector('[data-tree-edge="previous"]')!);
+    expect(clicks).toEqual(['previous']);
+  });
+
+  it('shows no strip for a side with no tree', () => {
+    const { container } = renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
+    expect(container.querySelector('[data-tree-edge="next"]')).not.toBeNull();
+    expect(container.querySelector('[data-tree-edge="previous"]')).toBeNull();
+  });
+
+  it('ignores the click a strip gets when a swipe ends on it', () => {
+    const { container } = renderTree();
+    const clicks = recordStepClicks(AR);
+    const strip = container.querySelector('[data-tree-edge="previous"]')!;
+    fireEvent.touchStart(strip, { touches: [{ clientX: 200, clientY: 200 }] });
+    fireEvent.touchMove(strip, { touches: [{ clientX: 220, clientY: 200 }] });
+    fireEvent.touchEnd(strip, { touches: [], changedTouches: [{ clientX: 220, clientY: 200 }] });
+    fireEvent.click(strip);
+    expect(clicks).toEqual([]);
   });
 });
 

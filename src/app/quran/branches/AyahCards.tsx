@@ -6,6 +6,7 @@ import { BookOpen, GitBranch, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
@@ -16,10 +17,6 @@ import { usePreload, type Steps } from './TreeSteps';
 import styles from './AyahCards.module.css';
 
 const COLUMNS = ['before', 'ayah', 'after'] as const;
-const SWIPE = 50;
-const SLIDE = 250;
-const LOCK = 8;
-const WHEEL_GAP = 250;
 type Column = typeof COLUMNS[number];
 
 const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس الجذر' } : { exact: 'Same word', root: 'Same root' };
@@ -179,69 +176,15 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     else if (!leave(forward)) settleBack();
   };
   const canStep = (forward: boolean) => (forward ? column < COLUMNS.length - 1 || !!steps?.next : column > 0 || !!steps?.previous);
-  const touchRef = useRef<{ start: (event: TouchEvent) => void; move: (event: TouchEvent) => void; end: () => void }>(null!);
-  const swipe = useRef<{ x: number; y: number; axis?: 'x' | 'y' } | null>(null);
-  const swiped = useRef(0);
-  touchRef.current = {
-    start: event => {
-      flush();
-      swipe.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
-    },
-    move: event => {
-      const start = swipe.current;
-      if (!start || event.touches.length !== 1) { swipe.current = null; if (dragged.current) settleBack(); return; }
-      const dx = event.touches[0].clientX - start.x;
-      const dy = event.touches[0].clientY - start.y;
-      if (!start.axis) {
-        // Claim a sideways-leaning move before the browser starts scrolling up or down; once it has, iOS no longer lets it be stopped.
-        // Only a clearly sideways move: cancelling one jittery first move would stop the browser scrolling for the whole touch.
-        if (Math.abs(dx) >= 3 && Math.abs(dx) > 2 * Math.abs(dy) && event.cancelable) event.preventDefault();
-        if (Math.abs(dx) < LOCK && Math.abs(dy) < LOCK) return;
-        start.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-      }
-      if (start.axis !== 'x') return;
-      if (event.cancelable) event.preventDefault();
-      setDrag(canStep(dx > 0) ? dx : dx / 4);
-    },
-    end: () => {
-      const start = swipe.current;
-      swipe.current = null;
-      if (start?.axis !== 'x') return;
-      const dx = dragged.current;
-      swiped.current = Date.now();
-      if (Math.abs(dx) >= SWIPE && canStep(dx > 0)) stepRef.current(dx > 0);
-      else settleBack();
-    },
-  };
-  const wheel = useRef({ sum: 0, done: false, timer: undefined as ReturnType<typeof setTimeout> | undefined });
-  const onWheel = (event: React.WheelEvent) => {
-    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
-    const gesture = wheel.current;
-    clearTimeout(gesture.timer);
-    gesture.timer = setTimeout(() => { gesture.sum = 0; gesture.done = false; }, WHEEL_GAP);
-    if (gesture.done) return;
-    gesture.sum += event.deltaX;
-    if (Math.abs(gesture.sum) < SWIPE) return;
-    gesture.done = true;
-    stepRef.current(gesture.sum < 0);
-  };
-  useEffect(() => {
-    const element = track.current;
-    if (!ready || !element) return;
-    const start = (event: TouchEvent) => touchRef.current.start(event);
-    const move = (event: TouchEvent) => touchRef.current.move(event);
-    const end = () => touchRef.current.end();
-    element.addEventListener('touchstart', start, { passive: true });
-    element.addEventListener('touchmove', move, { passive: false });
-    element.addEventListener('touchend', end);
-    element.addEventListener('touchcancel', end);
-    return () => {
-      element.removeEventListener('touchstart', start);
-      element.removeEventListener('touchmove', move);
-      element.removeEventListener('touchend', end);
-      element.removeEventListener('touchcancel', end);
-    };
-  }, [ready]);
+  // The shared swipe gesture (also used by the tree view): axis lock, finger-following drag, one step per trackpad swipe.
+  const { justSwiped } = useSwipe(track, ready, {
+    forward: dx => dx > 0,
+    canStep,
+    start: flush,
+    drag: setDrag,
+    step: forward => stepRef.current(forward),
+    cancel: settleBack,
+  });
   useEffect(() => () => { const slide = sliding.current; if (slide) clearTimeout(slide.timer); }, []);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -290,7 +233,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const href = forward ? steps?.next : steps?.previous;
     if (!href) return null;
     const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
-    return <Button size="icon" variant="muted" className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }} href={href} scroll={false} onClick={event => { if (Date.now() - swiped.current < 500) event.preventDefault(); }} aria-label={label} title={label}>
+    return <Button size="icon" variant="muted" className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }} href={href} scroll={false} onClick={event => { if (justSwiped()) event.preventDefault(); }} aria-label={label} title={label}>
       <GitBranch size={16} aria-hidden className={styles.edgeIcon} />
     </Button>;
   };
@@ -299,7 +242,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onWheel={onWheel}>
+      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll}>
         <div ref={lane} className={styles.lane}>
           {edge(false)}
           {edge(true)}

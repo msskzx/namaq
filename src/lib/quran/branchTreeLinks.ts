@@ -2,6 +2,7 @@
 import { branchesHref, keys, searchKey, type Branch } from './branches';
 import type { JuzRange } from './juz';
 import type { PhraseGroup } from './phraseTrees';
+import { keySet } from './subtrees';
 
 const memberCount = (group: PhraseGroup) => new Set(group.occurrences.map(occurrence => occurrence.key)).size;
 
@@ -34,16 +35,20 @@ const at = (group: PhraseGroup, wanted?: Set<string>) => {
 
 /**
  * The subtree button's link for every inner node of `tree` (drawn from `group`), keyed by the node's ayat.
- * A node whose own words form a tree of their own (`own`, from phraseSubtreeTargets) opens that tree;
- * any other node opens the same tree narrowed (?at=) to the node's ayat, so the link always finds them.
+ * A node with a subtree id (`ids`, by keySet, full Quran only) opens it; else a node whose own words form
+ * a tree of their own (`own`, from phraseSubtreeTargets) opens that tree; any other node opens the same
+ * tree narrowed (?at=) to the node's ayat, so the link always finds them.
  */
-export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false): Record<string, string> {
+export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false, ids: Record<string, string> = {}): Record<string, string> {
   const links: Record<string, string> = {};
   const visit = (node: Branch, root: boolean) => {
     if (!root && node.children.length > 0) {
       const nodeKeys = keys(node).join(' ');
+      const id = ids[keySet(keys(node))];
       const target = own[nodeKeys];
-      links[nodeKeys] = target
+      links[nodeKeys] = id
+        ? branchesHref(id, juz, { context })
+        : target
         ? branchesHref(target.id, juz, { occurrences: at(target), context })
         : branchesHref(group.id, juz, { occurrences: at(group, new Set(keys(node))), context });
     }
