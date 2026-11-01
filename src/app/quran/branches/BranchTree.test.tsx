@@ -68,15 +68,18 @@ describe('BranchTree', () => {
     expect(fit.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     expect(content.style.transform).toBe('scale(0.6)');
-    expect(viewport.classList.contains('overflow-auto')).toBe(true);
+    expect(viewport.hasAttribute('data-zoomed')).toBe(true);
     expect(fit.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
     expect(fit.getAttribute('aria-pressed')).toBe('true');
+    // Zooming out stops at the fit: the button is off at the fit, and zooming out from a zoom-in lands on the fit.
+    expect((screen.getByRole('button', { name: 'تصغير' }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     fireEvent.click(screen.getByRole('button', { name: 'تصغير' }));
-    expect(content.style.transform).toBe('scale(0.4)');
-    fireEvent.click(fit);
+    fireEvent.click(screen.getByRole('button', { name: 'تصغير' }));
     expect(content.style.transform).toBe('scale(0.5)');
+    expect(fit.getAttribute('aria-pressed')).toBe('true');
     Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
     act(() => resize([], {} as ResizeObserver));
     expect(viewport.style.height).toBe('clamp(22rem, 70svh, 36rem)');
@@ -148,8 +151,42 @@ describe('BranchTree', () => {
     expect(content.style.transform).toBe('scale(1.5)');
     fireEvent.touchMove(viewport, { touches: [touch(-1000), touch(1300)] });
     expect(content.style.transform).toBe('scale(2)');
+    // Pinching in past the fit lands on the fit, not on a smaller tree.
+    fireEvent.touchMove(viewport, { touches: [touch(140), touch(160)] });
+    expect(content.style.transform).toBe('scale(0.5)');
+    expect(screen.getByRole('button', { name: 'ملاءمة' }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.touchEnd(viewport, { touches: [] });
     expect(fireEvent.touchMove(viewport, { touches: [touch(0)] })).toBe(true);
+  });
+
+  it('keeps the spot between the fingers under them while pinching, then pans with one finger', () => {
+    let resize: ResizeObserverCallback = () => {};
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { resize = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    });
+    const { container } = render(<BranchTree tree={tree} names={{}} viewportHeight="320px" />);
+    const viewport = container.querySelector<HTMLElement>('[data-tree-viewport]')!;
+    const frame = container.querySelector<HTMLElement>('[data-tree-frame]')!;
+    const content = container.querySelector<HTMLElement>('[data-tree-content]')!;
+    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 }, clientHeight: { configurable: true, value: 320 } });
+    Object.defineProperties(content, { offsetWidth: { configurable: true, value: 1000 }, offsetHeight: { configurable: true, value: 640 } });
+    act(() => resize([], {} as ResizeObserver));
+    expect(frame.style.transform).toBe('translate(0px, 0px)');
+    const at = (x: number, y: number) => ({ clientX: x, clientY: y });
+    fireEvent.touchStart(viewport, { touches: [at(50, 50), at(150, 50)] });
+    fireEvent.touchMove(viewport, { touches: [at(0, 50), at(200, 50)] });
+    // Twice the size around (100, 50): the tree point there was (200, 100) and is still under the fingers.
+    expect(content.style.transform).toBe('scale(1)');
+    expect(frame.style.transform).toBe('translate(-100px, -50px)');
+    fireEvent.touchEnd(viewport, { touches: [at(0, 50)] });
+    fireEvent.touchMove(viewport, { touches: [at(30, 70)] });
+    expect(frame.style.transform).toBe('translate(-70px, -30px)');
+    // The tree cannot be dragged out of the viewport.
+    fireEvent.touchMove(viewport, { touches: [at(900, 900)] });
+    expect(frame.style.transform).toBe('translate(0px, 0px)');
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {

@@ -74,7 +74,8 @@ describe('Quran learning homepage', () => {
     expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Could not load a tree. Try again.');
     expect(screen.getByRole('button', { name: `Show path: ${data.branches.tree.words.join(' ')}` })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Random' }));
-    expect(await screen.findByRole('button', { name: 'Random' })).toHaveProperty('disabled', false);
+    // The button is disabled while the retry loads; findByRole alone could resolve before it finishes.
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Random' })).toHaveProperty('disabled', false));
     expect(screen.queryByRole('alert')).toBeNull();
   });
   it('cleans up the old intro and animates the replacement random tree', async () => {

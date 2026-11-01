@@ -132,7 +132,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const Scope = id ? ({ children }: { children: ReactNode }) => <PathScope key={marked.join(' ')} lit={marked}>{children}</PathScope> : 'div';
 
   return (
-    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
+    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4 overflow-x-clip`}>
       <PreloadQuranText />
       <BranchHeading />
       <Scope>
@@ -157,7 +157,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {(!needle || cut.length > 0) && <PieceList pieces={shown} ayat={shownAyat} names={names} juz={range} view={state} />}
             <Pagination iconOnly iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, mode: 'list', page: index + 1 }))} />
           </> : cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} /> : <>
-            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} header={steps && <TreeSteps steps={steps} />} surround={{ on: !!state.context, sync: true, data: around }} steppable={!!steps} label="شجرة العبارات المشتركة" />}
+            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} header={steps && <TreeSteps steps={steps} />} surround={{ on: !!state.context, sync: true, data: around }} steppable={{ next: !!steps?.next, previous: !!steps?.previous }} label="شجرة العبارات المشتركة" />}
           </>}
         </CompareLayout>
       </Scope>
