@@ -4,20 +4,19 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BookOpen, Feather, GitFork, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { BookOpen, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
 import { RailSlotContext } from './NavBar';
+import TreeIcon from './TreeIcon';
 import styles from './NavBar.module.css';
 
-export const SECTION_ICONS: Record<string, LucideIcon> = {
-  '/quran/branches': GitFork,
+export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
+  '/quran/branches': TreeIcon,
   '/quran/read': BookOpen,
   '/quizzes': Feather,
 };
-// GitFork stands root-down; turned a quarter counterclockwise it grows like the Arabic trees: one root on the right, two branches to the left.
-const SECTION_ICON_CLASS: Record<string, string | undefined> = { '/quran/branches': '-rotate-90' };
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {
   const { language, toggleLanguage } = useLanguage();
@@ -128,7 +127,7 @@ export default function TabBar() {
           return (
             <Link key={section.href} href={section.href} className={styles.tab} aria-label={label} title={label}
               aria-current={section.href === active ? 'page' : undefined}>
-              <span className={styles.tabPill}><Icon size={24} strokeWidth={1.75} className={SECTION_ICON_CLASS[section.href]} aria-hidden /></span>
+              <span className={styles.tabPill}><Icon size={24} strokeWidth={1.75} aria-hidden /></span>
             </Link>
           );
         })}

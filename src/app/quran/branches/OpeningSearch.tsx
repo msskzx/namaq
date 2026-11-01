@@ -3,7 +3,8 @@
 import LoadingDots from '@/components/common/LoadingDots';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 
-import { GitBranch, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
@@ -124,7 +125,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
       {alternatives.length > 1 && <div role="group" aria-label={ar ? 'مجموعات العبارة' : 'Matching phrase groups'} className="flex flex-col gap-2">
         <p className={NOTE}>{ar ? 'تطابق هذه العبارة مجموعات مختلفة. اختر العبارة المقصودة.' : 'This link matches different groups. Choose the intended phrase.'}</p>
         {alternatives.map(phrase => <Button key={phrase.partition} href={href(phrase)} onClick={() => { setQuery(''); setSelected(-1); }} className="self-start">
-          <GitBranch size={16} aria-hidden />
+          <TreeIcon size={16} aria-hidden />
           <span dir="rtl">{phrase.text}</span>
           <span>{ar ? num(phrase.count) : phrase.count}</span>
         </Button>)}
