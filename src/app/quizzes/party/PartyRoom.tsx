@@ -329,7 +329,7 @@ export default function PartyRoom({ code }: { code: string }) {
   return (
     <div className={styles.page}>
       <div className="mx-auto max-w-5xl px-4 pt-3 pb-8" dir={ar ? "rtl" : "ltr"}>
-        <header className="mb-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 pe-14 lg:pe-0">
+        <header className="mb-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 pe-14">
           <h1 className="sr-only">{ar ? `الاختبار ${code}` : `Party ${code}`}</h1>
           {view && (view.phase === "question" || view.phase === "reveal") ? <p className="text-sm text-[var(--home-muted)]">{ar ? `السؤال ${num(view.index + 1)} من ${num(view.total)}` : `Question ${view.index + 1} of ${view.total}`}</p> : <span />}
           <div className="flex items-center gap-3">

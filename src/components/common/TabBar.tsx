@@ -35,10 +35,12 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     };
     // Phones show a bottom sheet, desktops a panel beside the rail: close it when the layout switches.
-    const wide = window.matchMedia?.('(min-width: 1024px)');
     const onWide = () => onClose();
+    const wide = window.matchMedia?.('(min-width: 1024px)');
     // Desktop has no shade: a press outside the panel closes it and still reaches what was pressed.
+    // Phones keep the shade, which closes the sheet without pressing what lies under it.
     const onPointer = (event: PointerEvent) => {
+      if (!wide?.matches) return;
       const target = event.target as Node;
       if (!element?.contains(target) && !toggle.current?.contains(target)) onClose();
     };

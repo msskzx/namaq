@@ -57,12 +57,15 @@ describe('TabBar', () => {
     expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
   });
 
-  it('closes the settings panel on a press outside it, but not inside', () => {
+  it('closes the desktop settings panel on a press outside it, but not inside', () => {
+    window.matchMedia = vi.fn(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() })) as unknown as typeof window.matchMedia;
     render(<><TabBar /><p>page</p></>);
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     fireEvent.pointerDown(within(screen.getByRole('dialog')).getByRole('button', { name: 'Dark' }));
     expect(screen.getByRole('dialog')).toBeTruthy();
     fireEvent.pointerDown(screen.getByText('page'));
     expect(screen.queryByRole('dialog')).toBeNull();
+    // @ts-expect-error jsdom has no matchMedia
+    delete window.matchMedia;
   });
 });
