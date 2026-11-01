@@ -533,7 +533,9 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
   return (
     <PathProvider value={paths}>
-      {steppable && zoomable ? <div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div> : card}
+      {/* The clip keeps the arrows (within 1.75rem of the card) in view but hides the neighbours' cards (2rem out)
+          until a swipe brings them in, so they never cover the side pane beside the tree. */}
+      {steppable && zoomable ? <div className="-mx-7 overflow-x-clip px-7"><div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div></div> : card}
     </PathProvider>
   );
 }
