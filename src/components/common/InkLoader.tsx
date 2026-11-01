@@ -14,11 +14,9 @@ const GRAPH_NODES = GRAPH_POINTS.map(([x, y], i): [string, string, number, numbe
 
 function LogoLoader({ className }: { className: string }) {
   return (
-    <svg viewBox="12 0 76 101" aria-hidden className={`${styles.loader} ${styles.logo} ${className}`}>
+    <svg viewBox="12 24.7 76 76" aria-hidden className={`${styles.loader} ${styles.logo} ${className}`}>
       <g className={styles.loop}>
-        <circle className={`${styles.blot} ${styles.accent}`} cx={50} cy={84} r={4} />
         <g className={styles.logoMark} style={{ '--logo-accent': 'var(--home-accent)' } as CSSProperties} dangerouslySetInnerHTML={{ __html: MARK }} />
-        <ellipse className={`${styles.drop} ${styles.ink}`} style={{ '--fall': '76px' } as CSSProperties} cx={50} cy={8} rx={2} ry={2.6} />
       </g>
     </svg>
   );

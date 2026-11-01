@@ -51,14 +51,12 @@
 @keyframes n2 { 0%, 61% { transform: scale(0); } 66%, 100% { transform: scale(1); } }
 @keyframes n3 { 0%, 69% { transform: scale(0); } 74%, 100% { transform: scale(1); } }
 
-/* The logo loader: a drop falls into the nun bowl, the boughs grow, the nodes pop in. */
-.logo { --ink-loop: 1.8s; }
+/* The logo loader: the nun bowl, then the boughs grow, then the nodes pop in. */
+.logo { --ink-loop: 1.6s; }
 .logo .logoMark :is(path, circle) { transform-box: fill-box; transform-origin: center; }
 .logo .logoMark g[fill] > path { transform-origin: center bottom; }
 @media (prefers-reduced-motion: no-preference) {
   .logo .loop { animation: logoFade var(--ink-loop) infinite linear; }
-  .logo .drop { animation: logoDrop var(--ink-loop) infinite; }
-  .logo .blot { animation: logoBlot var(--ink-loop) infinite ease-out; }
   .logo .logoMark > path { animation: logoBowl var(--ink-loop) infinite ease-out; }
   .logo .logoMark g[fill] > path:nth-child(1) { animation: logoBough0 var(--ink-loop) infinite ease-out; }
   .logo .logoMark g[fill] > path:nth-child(2) { animation: logoBough1 var(--ink-loop) infinite ease-out; }
@@ -76,22 +74,20 @@
   .logo .logoMark circle:nth-of-type(8) { animation: logoNode7 var(--ink-loop) infinite; }
   .logo .logoMark circle:nth-of-type(9) { animation: logoNode8 var(--ink-loop) infinite; }
 }
-@keyframes logoFade { 0%, 92% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes logoDrop { 0% { opacity: 0; transform: translateY(0); } 4% { opacity: 1; transform: translateY(0); } 18% { opacity: 1; transform: translateY(var(--fall)) scale(.9, 1.3); } 18.5%, 100% { opacity: 0; transform: translateY(var(--fall)); } }
-@keyframes logoBlot { 0%, 18% { opacity: 1; transform: scale(0); } 23% { opacity: 1; transform: scale(1.6); } 32%, 100% { opacity: 0; transform: scale(2.6); } }
-@keyframes logoBowl { 0%, 22% { opacity: 0; transform: scale(.6); } 34%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough0 { 0%, 30% { opacity: 0; transform: scale(.15); } 44%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough1 { 0%, 35% { opacity: 0; transform: scale(.15); } 49%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough2 { 0%, 40% { opacity: 0; transform: scale(.15); } 54%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough3 { 0%, 45% { opacity: 0; transform: scale(.15); } 59%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough4 { 0%, 50% { opacity: 0; transform: scale(.15); } 64%, 100% { opacity: 1; transform: none; } }
-@keyframes logoBough5 { 0%, 55% { opacity: 0; transform: scale(.15); } 69%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode0 { 0%, 58% { opacity: 0; transform: scale(0); } 62% { opacity: 1; transform: scale(1.3); } 64%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode1 { 0%, 61% { opacity: 0; transform: scale(0); } 65% { opacity: 1; transform: scale(1.3); } 67%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode2 { 0%, 64% { opacity: 0; transform: scale(0); } 68% { opacity: 1; transform: scale(1.3); } 70%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode3 { 0%, 67% { opacity: 0; transform: scale(0); } 71% { opacity: 1; transform: scale(1.3); } 73%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode4 { 0%, 70% { opacity: 0; transform: scale(0); } 74% { opacity: 1; transform: scale(1.3); } 76%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode5 { 0%, 73% { opacity: 0; transform: scale(0); } 77% { opacity: 1; transform: scale(1.3); } 79%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode6 { 0%, 76% { opacity: 0; transform: scale(0); } 80% { opacity: 1; transform: scale(1.3); } 82%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode7 { 0%, 79% { opacity: 0; transform: scale(0); } 83% { opacity: 1; transform: scale(1.3); } 85%, 100% { opacity: 1; transform: none; } }
-@keyframes logoNode8 { 0%, 82% { opacity: 0; transform: scale(0); } 86% { opacity: 1; transform: scale(1.3); } 88%, 100% { opacity: 1; transform: none; } }
+@keyframes logoFade { 0%, 90% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes logoBowl { 0% { opacity: 0; transform: scale(.6); } 12%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough0 { 0%, 8% { opacity: 0; transform: scale(.15); } 24%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough1 { 0%, 13% { opacity: 0; transform: scale(.15); } 29%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough2 { 0%, 18% { opacity: 0; transform: scale(.15); } 34%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough3 { 0%, 23% { opacity: 0; transform: scale(.15); } 39%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough4 { 0%, 28% { opacity: 0; transform: scale(.15); } 44%, 100% { opacity: 1; transform: none; } }
+@keyframes logoBough5 { 0%, 33% { opacity: 0; transform: scale(.15); } 49%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode0 { 0%, 42% { opacity: 0; transform: scale(0); } 46% { opacity: 1; transform: scale(1.3); } 49%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode1 { 0%, 45.5% { opacity: 0; transform: scale(0); } 49.5% { opacity: 1; transform: scale(1.3); } 52.5%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode2 { 0%, 49% { opacity: 0; transform: scale(0); } 53% { opacity: 1; transform: scale(1.3); } 56%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode3 { 0%, 52.5% { opacity: 0; transform: scale(0); } 56.5% { opacity: 1; transform: scale(1.3); } 59.5%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode4 { 0%, 56% { opacity: 0; transform: scale(0); } 60% { opacity: 1; transform: scale(1.3); } 63%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode5 { 0%, 59.5% { opacity: 0; transform: scale(0); } 63.5% { opacity: 1; transform: scale(1.3); } 66.5%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode6 { 0%, 63% { opacity: 0; transform: scale(0); } 67% { opacity: 1; transform: scale(1.3); } 70%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode7 { 0%, 66.5% { opacity: 0; transform: scale(0); } 70.5% { opacity: 1; transform: scale(1.3); } 73.5%, 100% { opacity: 1; transform: none; } }
+@keyframes logoNode8 { 0%, 70% { opacity: 0; transform: scale(0); } 74% { opacity: 1; transform: scale(1.3); } 77%, 100% { opacity: 1; transform: none; } }
