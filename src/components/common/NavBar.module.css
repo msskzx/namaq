@@ -39,7 +39,10 @@
    phones, a rail on the inline-start side (right in Arabic) from 1024px. */
 .pageActions { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 0.375rem; }
 .actions:empty { display: none; }
-@media (max-width: 1023.98px) { .pageActions :is(a, button) { min-width: 2.5rem; min-height: 2.5rem; } }
+/* Page controls are sized to the 48px bar. */
+.pageActions [role="group"] { flex: none; flex-wrap: nowrap; padding: 2px; }
+.pageActions [role="group"] :is(a, button) { width: 2.5rem; height: 2.5rem; min-width: 0; min-height: 0; padding: 0; }
+.pageActions input { height: 2.5rem; }
 
 .tabs, .tabSpacer { display: none; }
 @media (max-width: 1023.98px) {

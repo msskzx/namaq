@@ -119,9 +119,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
           ))}
         </ul>}
       </div>
-      {unavailable && <p role="status" className={NOTE}>{ar
-        ? 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. عد إلى القائمة أو امسح نطاق الأجزاء.'
-        : 'No two ayat share the requested phrase in this range. Return to the list or clear the juz range.'}</p>}
+      {unavailable && <UnavailableNote />}
       {alternatives.length > 1 && <div role="group" aria-label={ar ? 'مجموعات العبارة' : 'Matching phrase groups'} className="flex flex-col gap-2">
         <p className={NOTE}>{ar ? 'تطابق هذه العبارة مجموعات مختلفة. اختر العبارة المقصودة.' : 'This link matches different groups. Choose the intended phrase.'}</p>
         {alternatives.map(phrase => <Button key={phrase.partition} href={href(phrase)} onClick={() => { setQuery(''); setSelected(-1); }} className="self-start">
@@ -132,4 +130,12 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
       </div>}
     </div>
   );
+}
+
+/** Said in the page when the requested phrase has no tree in the chosen juz range (the search box itself sits in the top bar). */
+export function UnavailableNote() {
+  const ar = useLanguage().language === 'ar';
+  return <p role="status" className={NOTE}>{ar
+    ? 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. عد إلى القائمة أو امسح نطاق الأجزاء.'
+    : 'No two ayat share the requested phrase in this range. Return to the list or clear the juz range.'}</p>;
 }

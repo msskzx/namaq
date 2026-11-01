@@ -1,4 +1,6 @@
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
+// The site's top bar is not rendered here; its page-actions slot shows in place.
+vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-actions">{children}</div> }));
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -227,6 +229,9 @@ describe('Quran branch trees', () => {
       expect(control.textContent).toBe('');
       expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
     });
+    const bar = screen.getByTestId('nav-actions');
+    expect(within(bar).getByRole('combobox')).toBeTruthy();
+    expect(within(bar).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
   });
 
   it('shows the tree as ayah cards in cards view, crossing to the previous tree on its last card', async () => {
