@@ -70,7 +70,12 @@
 .segment button { min-width: 3rem; min-height: 2.75rem; display: flex; align-items: center; justify-content: center; color: var(--home-ink); font-size: 1.125rem; }
 .segment button + button { border-inline-start: 1px solid var(--home-rule); }
 .segment button[aria-pressed="true"] { background: var(--home-accent); color: var(--home-paper); }
-.sheetLink { flex: 1; min-height: 2.75rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 0.5rem; color: var(--home-accent); }
+.sheetLinks { display: flex; flex-direction: column; border-top: 1px solid var(--home-rule); }
+.sheetLink { min-height: 3rem; display: flex; align-items: center; gap: 0.75rem; padding-inline: 0.25rem; border-bottom: 1px solid var(--home-rule); color: var(--home-ink); font-size: 1.125rem; }
+.sheetLink:last-child { border-bottom: 0; }
+.sheetLink > svg { color: var(--home-accent); flex: none; }
+.sheetLink:hover { color: var(--home-accent); }
+.sheetEmblem { width: 1.375rem; height: 1.375rem; }
 :is(.sheet, .tabs) :is(a, button):focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
 @keyframes sheet-up { from { transform: translateY(100%); } }
 @keyframes shade-in { from { opacity: 0; } }

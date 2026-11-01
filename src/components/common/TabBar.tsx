@@ -4,9 +4,10 @@ import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BookOpen, Feather, GitFork, Info, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { BookOpen, Feather, GitFork, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
+import Emblem from './Emblem';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon> = {
@@ -57,8 +58,8 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
     { value: 'system', Icon: Monitor, label: ar ? 'حسب الجهاز' : 'Device' },
   ];
   const links = [
-    { href: '/about', Icon: Info, label: ar ? 'حول نمق' : 'About Namaq' },
-    { href: '/privacy', Icon: ShieldCheck, label: ar ? 'سياسة الخصوصية' : 'Privacy policy' },
+    { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
+    { href: '/privacy', icon: <ShieldCheck size={20} aria-hidden />, label: ar ? 'سياسة الخصوصية' : 'Privacy policy' },
   ];
   return (
     <>
@@ -82,10 +83,10 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
             ))}
           </div>
         </div>
-        <div className={styles.sheetRow}>
-          {links.map(({ href, Icon, label }) => (
-            <Link key={href} href={href} className={styles.sheetLink} aria-label={label} title={label} onClick={onClose}>
-              <Icon size={20} aria-hidden />
+        <div className={styles.sheetLinks}>
+          {links.map(({ href, icon, label }) => (
+            <Link key={href} href={href} className={styles.sheetLink} onClick={onClose}>
+              {icon}<span>{label}</span>
             </Link>
           ))}
         </div>

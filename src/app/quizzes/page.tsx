@@ -44,7 +44,7 @@ import { User, Users } from "lucide-react";
 function QuizModes({ ar }: { ar: boolean }) {
   const modes = [
     { href: "/quizzes?topic=BRANCHES", Icon: User, title: ar ? "اختبار فردي" : "Solo quiz",
-      text: ar ? "أجب عن أسئلة الأشجار، ثم راجع الإجابة والآيات المرتبطة بها." : "Answer questions about the trees, then review the answer and its ayat." },
+      text: ar ? "أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها." : "Answer questions on the ayat of the Quran, then review the answer and its ayat." },
     { href: "/quizzes/party", Icon: Users, title: ar ? "اختبار جماعي" : "Party quiz",
       text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
   ];

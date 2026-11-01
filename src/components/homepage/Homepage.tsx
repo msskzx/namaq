@@ -32,7 +32,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   const steps = [
     { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
     { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
-    { Icon: Feather, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة الأشجار وحدك أو مع غيرك، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions about the trees alone or with others, then review the answer and its ayat.', href: '/quizzes', action: ar ? 'الاختبارات' : 'Quizzes' },
+    { Icon: Feather, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة في آيات القرآن وحدك أو مع غيرك، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions on the ayat of the Quran alone or with others, then review the answer and its ayat.', href: '/quizzes', action: ar ? 'الاختبارات' : 'Quizzes' },
   ];
   return (
     <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
