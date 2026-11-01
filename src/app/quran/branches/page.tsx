@@ -136,6 +136,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
   const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE).map(piece => built.subtrees && piece.phrase ? { ...piece, ids: built.subtrees.idsFor(piece.phrase) } : piece);
   const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, built.byKey.get(key)!] as const)));
+  const switchTo = id ? branchesHref(id, juz, { ...state, mode: cards ? undefined : 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah });
   const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} surround={{ on: false }} />;
   const Scope = id ? ({ children }: { children: ReactNode }) => <PathScope key={marked.join(' ')} lit={marked}>{children}</PathScope> : 'div';
 
@@ -149,12 +150,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           <OpeningSearch key={listQuery} query={listQuery} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} current={id} juz={range} view={id ? { ...treeView, mode: state.mode, query: state.query } : state} />
         </NavSearch>
       </NavActions>
-      <NavButtons>
-        <TreeMode current={!id ? 'list' : cards ? 'cards' : 'tree'}
-          list={branchesHref('', juz, { query: state.query, surah: state.surah, mode: 'list', page: id ? (steps ? Math.ceil(steps.position / PER_PAGE) : 1) : page })}
-          tree={id ? branchesHref(id, juz, { ...state, mode: undefined }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah })}
-          cards={id ? branchesHref(id, juz, { ...state, mode: 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah, mode: 'cards' })} />
-      </NavButtons>
+      {switchTo && <NavButtons><TreeMode to={cards ? 'tree' : id ? 'cards' : 'tree'} href={switchTo} /></NavButtons>}
       <Scope>
         <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst toggleInNav
           bar={unavailable ? <div className="min-w-0 flex-1"><UnavailableNote /></div> : undefined}

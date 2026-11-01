@@ -1,10 +1,9 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, GalleryHorizontal, GitBranch, List } from 'lucide-react';
+import { ArrowLeft, ArrowRight, GalleryHorizontal, GitBranch } from 'lucide-react';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
-import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };
@@ -26,15 +25,13 @@ export function usePreload(...hrefs: (string | undefined)[]) {
   }, [router, wanted]);
 }
 
-export type View = 'list' | 'tree' | 'cards';
-
-export function TreeMode({ current, list, tree, cards }: { current: View; list: string; tree?: string; cards?: string }) {
+/** One button that switches to the other view: the tree, or its ayah as cards. */
+export function TreeMode({ to, href }: { to: 'tree' | 'cards'; href: string }) {
   const ar = useLanguage().language === 'ar';
-  return <Segmented iconOnly label={ar ? 'طريقة العرض' : 'View'} options={[
-    { key: 'list', label: ar ? 'قائمة' : 'List', icon: <List aria-hidden />, current: current === 'list', href: list },
-    ...(tree ? [{ key: 'tree', label: ar ? 'شجرة' : 'Tree', icon: <GitBranch aria-hidden />, current: current === 'tree', href: tree }] : []),
-    ...(cards ? [{ key: 'cards', label: ar ? 'بطاقات الآيات' : 'Ayah cards', icon: <GalleryHorizontal aria-hidden />, current: current === 'cards', href: cards }] : []),
-  ]} />;
+  const label = to === 'cards' ? (ar ? 'اعرض بطاقات الآيات' : 'Show ayah cards') : (ar ? 'اعرض الشجرة' : 'Show tree');
+  return <Button size="lg" variant="muted" href={href} scroll={false} aria-label={label} title={label}>
+    {to === 'cards' ? <GalleryHorizontal aria-hidden /> : <GitBranch aria-hidden />}
+  </Button>;
 }
 
 /**
