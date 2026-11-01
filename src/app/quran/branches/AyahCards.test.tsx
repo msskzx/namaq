@@ -112,7 +112,7 @@ it('marks what the next ayat share with each other, as in the tree column', asyn
 it('lights every row fully in view and dims only a row cut off at the edge, which a press brings into view', async () => {
   show();
   await screen.findByLabelText('الشرح ٥');
-  const track = document.querySelector<HTMLElement>('[data-col]')!.parentElement!;
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
   Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
   const scrollBy = vi.fn();
   track.scrollBy = scrollBy;
@@ -203,30 +203,50 @@ it('dims every row when the visible rows are all cut by the frame edges', async 
 });
 
 
+/** Columns 100px wide, column i's left edge at -100 * i in the lane (RTL), the lane 100px wide. */
 const sideways = (track: HTMLElement) => {
-  let left = 0;
-  Object.defineProperty(track, 'scrollLeft', { configurable: true, get: () => left, set: value => { left = value; } });
-  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
+  const lane = track.firstElementChild as HTMLElement;
+  Object.defineProperty(lane, 'clientWidth', { configurable: true, value: 100 });
   document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
-    cell.getBoundingClientRect = () => new DOMRect((1 - Number(cell.dataset.col)) * 100 - left, Number(cell.dataset.row) * 100, 100, 100);
+    Object.defineProperty(cell, 'offsetLeft', { configurable: true, value: -100 * Number(cell.dataset.col) });
+    Object.defineProperty(cell, 'offsetWidth', { configurable: true, value: 100 });
   });
+  return lane;
 };
+const moved = (lane: HTMLElement) => lane.style.transform.match(/translate3d\((-?[\d.]+)px/)?.[1];
 
-it('slides the cards to the next column, then moves the scroll position in one jump', async () => {
+it('slides the whole matrix as one layer to the next column', async () => {
   show();
   await screen.findByLabelText('الشرح ٥');
   const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  sideways(track);
+  const lane = sideways(track);
   vi.useFakeTimers();
   key('ArrowLeft');
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
-  expect(track.hasAttribute('data-sliding')).toBe(true);
-  expect(track.style.getPropertyValue('--drag')).toBe('100px');
+  expect(lane.hasAttribute('data-sliding')).toBe(true);
+  expect(moved(lane)).toBe('200');
   act(() => vi.advanceTimersByTime(250));
-  expect(track.scrollLeft).toBe(-100);
-  expect(track.style.getPropertyValue('--drag')).toBe('0px');
-  expect(track.hasAttribute('data-sliding')).toBe(false);
+  expect(moved(lane)).toBe('200');
+  expect(lane.hasAttribute('data-sliding')).toBe(false);
+  expect(track.scrollLeft).toBe(0);
   vi.useRealTimers();
+});
+
+it('keeps the current column centred when the frame changes width', async () => {
+  const observers: (() => void)[] = [];
+  vi.stubGlobal('ResizeObserver', class { constructor(run: () => void) { observers.push(run); } observe() {} disconnect() {} });
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  const lane = sideways(track);
+  Object.defineProperty(track, 'clientWidth', { configurable: true, value: 100 });
+  act(() => observers.forEach(run => run()));
+  expect(moved(lane)).toBe('100');
+  Object.defineProperty(lane, 'clientWidth', { configurable: true, value: 300 });
+  Object.defineProperty(track, 'clientWidth', { configurable: true, value: 300 });
+  act(() => observers.forEach(run => run()));
+  expect(moved(lane)).toBe('200');
+  expect(lane.hasAttribute('data-sliding')).toBe(false);
 });
 
 it('steps once per sideways wheel gesture and opens the next tree only from the last column', async () => {
@@ -253,21 +273,22 @@ it('locks a touch gesture to one axis: an upward swipe never moves sideways, a s
   show();
   await screen.findByLabelText('الشرح ٥');
   const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  sideways(track);
+  const lane = sideways(track);
   vi.useFakeTimers();
   fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  expect(fireEvent.touchMove(track, { touches: [{ clientX: 2, clientY: 1 }] })).toBe(true);
   expect(fireEvent.touchMove(track, { touches: [{ clientX: 20, clientY: 40 }] })).toBe(true);
   fireEvent.touchMove(track, { touches: [{ clientX: 90, clientY: 50 }] });
   fireEvent.touchEnd(track, { touches: [] });
-  expect(track.style.getPropertyValue('--drag')).toBe('');
+  expect(moved(lane)).toBeUndefined();
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
   expect(fireEvent.touchMove(track, { touches: [{ clientX: 30, clientY: 5 }] })).toBe(false);
-  expect(track.style.getPropertyValue('--drag')).toBe('30px');
+  expect(moved(lane)).toBe('30');
   fireEvent.touchEnd(track, { touches: [] });
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   act(() => vi.advanceTimersByTime(250));
-  expect(track.style.getPropertyValue('--drag')).toBe('0px');
+  expect(moved(lane)).toBe('0');
   fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
   fireEvent.touchMove(track, { touches: [{ clientX: 70, clientY: 5 }] });
   fireEvent.touchEnd(track, { touches: [] });
