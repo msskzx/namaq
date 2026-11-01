@@ -6,7 +6,7 @@ import { normalizeWord } from './normalize';
 
 export type PhraseOccurrence = { key: string; start: number; end: number };
 export type PhraseGroup = { id: string; text: string; occurrences: PhraseOccurrence[] };
-export type TreeGroup = PhraseGroup & { textEn?: string; family?: true; aliases?: string[] };
+export type TreeGroup = PhraseGroup & { textEn?: string; family?: true; aliases?: string[]; subtrees?: string[] };
 
 const letters = (word: string) => normalizeWord(word.normalize('NFC')).replace(/[ؤئء]/g, 'ا');
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');

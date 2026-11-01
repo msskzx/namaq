@@ -1,14 +1,15 @@
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
-import { ayahEnds, branchesHref, keys, listPage, piecesHolding, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, listPage, piecesHolding, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
 import { searchQuery } from '@/lib/quran/searchText';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { surrounding } from '@/lib/quran/ayahContext';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks as subtreeLinksFor } from '@/lib/quran/branchTreeLinks';
 import { buildPhraseGroups, buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
+import { subtreeIndex, type Subtree } from '@/lib/quran/subtrees';
 import treeData from './trees.json';
 import BranchTree from './BranchTree';
 import TreeSteps, { TreeMode } from './TreeSteps';
@@ -30,17 +31,18 @@ const SEARCHES = 50;
 
 export const metadata: Metadata = { title: 'متشابهات القرآن' };
 
-const source = treeData as { ayat: BranchAyah[]; trees: TreeGroup[] };
+const source = treeData as { ayat: BranchAyah[]; trees: TreeGroup[]; subtrees: Subtree[] };
 const views = new Map<string, ReturnType<typeof build>>();
 
 function build(range: JuzRange | null) {
   const ayat = range ? source.ayat.filter(ayah => inJuzRange(ayah.key, range)) : source.ayat;
   const trees = range ? buildTreeGroups(ayat) : source.trees;
-  return { ayat, byKey: new Map(ayat.map(ayah => [ayah.key, ayah])), trees, phrases: undefined as ReturnType<typeof buildPhraseGroups> | undefined, pieces: undefined as SharedPiece[] | undefined, searches: new Map<string, SharedPiece[]>() };
+  const subtrees = range ? undefined : subtreeIndex(source.trees, source.subtrees);
+  return { ayat, byKey: new Map(ayat.map(ayah => [ayah.key, ayah])), trees, subtrees, phrases: undefined as ReturnType<typeof buildPhraseGroups> | undefined, pieces: undefined as SharedPiece[] | undefined, searchable: undefined as SharedPiece[] | undefined, searches: new Map<string, SharedPiece[]>() };
 }
 
-function piecesFor(built: ReturnType<typeof build>) {
-  return built.pieces ??= built.trees.map(tree => {
+function toPieces(trees: TreeGroup[]): SharedPiece[] {
+  return trees.map(tree => {
     const keys = [...new Set(tree.occurrences.map(occurrence => occurrence.key))];
     return {
       id: tree.id,
@@ -54,6 +56,9 @@ function piecesFor(built: ReturnType<typeof build>) {
     };
   });
 }
+
+const piecesFor = (built: ReturnType<typeof build>) => built.pieces ??= toPieces(built.trees);
+const searchableFor = (built: ReturnType<typeof build>) => built.searchable ??= [...piecesFor(built), ...toPieces(built.subtrees?.groups ?? [])];
 
 function view(range: JuzRange | null) {
   const key = range ? `${range.from}-${range.to}` : '';
@@ -69,9 +74,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const juz = range ?? undefined;
   const requestedId = first(params.o) ?? '';
   const built = view(range);
-  const resolved = resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
-  const id = resolved?.id ?? requestedId;
   const requestedOccurrences = parseOccurrences(first(params.at));
+  const subtree = built.subtrees?.byId.get(requestedId);
+  const subtreeHolds = subtree && requestedOccurrences.every(entry => subtree.occurrences.some(occurrence => entry.startsWith(`${occurrence.key}:`)));
+  const resolved: TreeGroup | undefined = (subtreeHolds ? subtree : undefined) ?? resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
+  const id = resolved?.id ?? requestedId;
   const listQuery = (first(params.q) ?? '').trim();
   const query = id ? '' : listQuery;
   const picked = Number(first(params.s));
@@ -83,7 +90,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const needle = listQuery ? (/[a-z]/i.test(listQuery) ? listQuery.toLowerCase() : JSON.stringify(searchQuery(listQuery))) : '';
   if (needle && !built.searches.has(needle)) {
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
-    built.searches.set(needle, piecesHolding(pieces, listQuery));
+    built.searches.set(needle, piecesHolding(searchableFor(built), listQuery));
   }
   const found = needle ? built.searches.get(needle)! : pieces;
   const surahOf = (key: string) => Number(key.split(':')[0]);
@@ -99,10 +106,13 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const drawn = treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
   const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat, true, !range) : undefined;
   const tree = presentation?.tree ?? null;
-  const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), state.context) : undefined;
+  const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), state.context, built.subtrees?.idsFor(treeGroup)) : undefined;
+  const holding = tree && listQuery ? drawn.filter(ayah => textHolds(ayah.words.join(' '), listQuery)).map(ayah => ayah.key) : [];
+  const marked = holding.length < drawn.length ? holding : [];
   const treeView = { ...state, query: undefined, surah: undefined, mode: undefined };
   const cards = !!tree && state.mode === 'cards';
-  const position = tree ? cut.findIndex(piece => piece.id === id) : -1;
+  const parent = built.subtrees?.byId.get(id)?.parent;
+  const position = tree ? cut.findIndex(piece => piece.id === id || piece.id === parent) : -1;
   const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { context: state.context, query: state.query, surah: state.surah, mode: state.mode, card });
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
@@ -117,9 +127,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const names = Object.fromEntries((await surahList()).filter(row => !wantedNames || wantedNames.has(row.number)).map(row => [row.number, row.name]));
   const ayatBySurah: Record<number, number> = {};
   drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
-  const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE).map(piece => built.subtrees && piece.phrase ? { ...piece, ids: built.subtrees.idsFor(piece.phrase) } : piece);
   const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, built.byKey.get(key)!] as const)));
-  const Scope = id ? PathScope : 'div';
+  const Scope = id ? ({ children }: { children: ReactNode }) => <PathScope key={marked.join(' ')} lit={marked}>{children}</PathScope> : 'div';
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4 overflow-x-clip`}>
