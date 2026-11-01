@@ -276,9 +276,11 @@ describe('BranchTree slide', () => {
     expect(clicks).toEqual(['previous']);
   });
 
-  it('puts the neighbouring trees\' cards beside this one, with their opening phrases, so a swipe brings one in', () => {
-    const { container } = render(<BranchTree tree={tree} names={{}} steppable={{ next: true, previous: false, nextText: 'قال رب' }} />);
-    expect(container.querySelector('[data-tree-neighbour="next"]')?.textContent).toBe('قال رب');
+  it('draws the neighbouring tree beside this one, inert, so a swipe brings in the finished card', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} steppable={{ next: true, previous: false, nextCard: <BranchTree tree={tree} names={{}} label="next" /> }} />);
+    const next = container.querySelector('[data-tree-neighbour="next"]');
+    expect(next?.querySelector('[data-tree][aria-label="next"]')).not.toBeNull();
+    expect(next?.hasAttribute('inert')).toBe(true);
     expect(container.querySelector('[data-tree-neighbour="previous"]')).toBeNull();
     expect(container.querySelector('[data-tree-lane] > [data-tree] ~ *, [data-tree-lane] [data-tree-neighbour]')).not.toBeNull();
   });

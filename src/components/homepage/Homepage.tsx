@@ -1,7 +1,8 @@
 'use client';
 
 import { useRef } from 'react';
-import { BookOpen, Feather, GitBranch } from 'lucide-react';
+import { BookOpen, Feather } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
 import BranchTree from '@/app/quran/branches/BranchTree';
@@ -14,7 +15,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   const preview = data.branches;
   const launchTree = useRef<HTMLDivElement>(null);
   const steps = [
-    { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
+    { Icon: TreeIcon, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
     { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
     { Icon: Feather, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة في آيات القرآن وحدك أو مع غيرك، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions on the ayat of the Quran alone or with others, then review the answer and its ayat.', href: '/quizzes', action: ar ? 'الاختبارات' : 'Quizzes' },
   ];
@@ -26,7 +27,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
           <div className={styles.launchText}>
             <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
             <div className={styles.launchActions}>
-              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
+              <Button href="/quran/branches"><TreeIcon size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
             </div>
           </div>
           <div ref={launchTree} className={styles.launchTree} dir="rtl">

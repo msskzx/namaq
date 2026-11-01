@@ -2,7 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BookOpen, GitBranch, RotateCcw } from 'lucide-react';
+import { BookOpen, RotateCcw } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -234,7 +235,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     if (!href) return null;
     const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
     return <Button size="icon" variant="muted" className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }} href={href} scroll={false} onClick={event => { if (justSwiped()) event.preventDefault(); }} aria-label={label} title={label}>
-      <GitBranch size={16} aria-hidden className={styles.edgeIcon} />
+      <TreeIcon size={16} aria-hidden className={styles.edgeIcon} />
     </Button>;
   };
 

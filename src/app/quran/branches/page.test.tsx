@@ -120,6 +120,15 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz));
   });
 
+  it('draws the neighbouring trees beside this one, so a swipe brings in the finished card', async () => {
+    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
+    const drawn = (side: string) => new Set([...document.querySelectorAll(`[data-tree-neighbour="${side}"] [data-keys]`)].flatMap(box => box.getAttribute('data-keys')!.split(' ')));
+    const keysOf = (index: number) => [...new Set(trees[index].occurrences.map(occurrence => occurrence.key))].sort();
+    expect([...drawn('next')].sort()).toEqual(keysOf(2));
+    expect([...drawn('previous')].sort()).toEqual(keysOf(0));
+  });
+
   it('disables the previous step on the first tree', async () => {
     render(await open({ o: data.trees[0].id }));
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
@@ -129,15 +138,13 @@ describe('Quran branch trees', () => {
 
   it('browses the trees a surah filter leaves from the first tree on the page, keeping the filter', async () => {
     render(await open({ juzFrom: '30', juzTo: '30', s: '78', m: 'list' }));
-    const mode = screen.getByRole('group', { name: 'طريقة العرض' });
-    expect(within(mode).getByRole('link', { name: 'قائمة' }).getAttribute('aria-current')).toBe('page');
-    const first = within(mode).getByRole('link', { name: 'شجرة' }).getAttribute('href')!;
+    const first = screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')!;
     expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('78');
     cleanup();
     render(await open(Object.fromEntries(new URL(first, 'http://localhost').searchParams)));
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
-    expect(within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'شجرة' }).getAttribute('aria-current')).toBe('page');
+    expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
     expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('78');
     cleanup();
@@ -146,17 +153,10 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(first);
   });
 
-  it('returns from browsing to the list page holding the current tree', async () => {
-    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
-    render(await open({ o: trees[11].id, juzFrom: '30', juzTo: '30' }));
-    const list = within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'قائمة' }).getAttribute('href');
-    expect(list).toBe(branchesHref('', { from: 30, to: 30 }, { page: 2, mode: 'list' }));
-  });
-
   it('browses a search result in its order, keeping the search', async () => {
     const query = 'قال';
     render(await open({ q: query, m: 'list' }));
-    const first = within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'شجرة' }).getAttribute('href')!;
+    const first = screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')!;
     expect(new URL(first, 'http://localhost').searchParams.get('q')).toBe(query);
     cleanup();
     render(await open(Object.fromEntries(new URL(first, 'http://localhost').searchParams)));
@@ -223,7 +223,7 @@ describe('Quran branch trees', () => {
     render(await open({ juzFrom: '30', juzTo: '30', p: '2', m: 'list' }));
     expect(screen.getByRole('heading', { level: 1, name: 'متشابهات القرآن' }).className).toContain('sr-only');
     const named = [
-      ...within(screen.getByRole('group', { name: 'طريقة العرض' })).getAllByRole('link'),
+      screen.getByRole('link', { name: 'اعرض الشجرة' }),
       screen.getByRole('link', { name: 'كل الأجزاء' }),
       screen.getByRole('link', { name: 'السابق' }),
       screen.getByRole('link', { name: 'التالي' }),
@@ -236,7 +236,7 @@ describe('Quran branch trees', () => {
     expect(within(search).getByRole('combobox')).toBeTruthy();
     expect(within(search).getByRole('button', { name: 'البحث' })).toBeTruthy();
     const [view, pane] = screen.getAllByTestId('nav-buttons');
-    expect(within(view).getByRole('group', { name: 'طريقة العرض' })).toBeTruthy();
+    expect(within(view).getByRole('link', { name: 'اعرض الشجرة' })).toBeTruthy();
     expect(within(pane).getAllByRole('button', { name: /قائمة السور|اختر سورة/ }).length).toBeGreaterThan(0);
   });
 
@@ -246,18 +246,17 @@ describe('Quran branch trees', () => {
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
     expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
     expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
-    const mode = screen.getByRole('group', { name: 'طريقة العرض' });
-    expect(within(mode).getByRole('link', { name: 'بطاقات الآيات' }).getAttribute('aria-current')).toBe('page');
-    expect(within(mode).getByRole('link', { name: 'شجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz));
-    expect(within(mode).getByRole('link', { name: 'قائمة' }).getAttribute('href')).toBe(branchesHref('', juz, { mode: 'list' }));
+    expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz));
+    expect(screen.queryByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeNull();
   });
 
-  it('keeps the colour legend in the side pane in cards view only, under an unheaded pane', async () => {
+  it('keeps the colour legend in the side pane\'s help in cards view only, under an unheaded pane', async () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
     const pane = screen.getByRole('complementary', { name: 'السور' });
-    expect(within(pane).getByText('نفس الكلمة')).toBeTruthy();
-    expect(within(pane).getByText('نفس الجذر')).toBeTruthy();
+    const help = within(pane).getByText('قواعد المطابقة').closest('details')!;
+    expect(within(help).getByText('نفس الكلمة')).toBeTruthy();
+    expect(within(help).getByText('نفس الجذر')).toBeTruthy();
     expect(within(pane).queryByRole('heading', { name: 'السور' })).toBeNull();
     cleanup();
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));

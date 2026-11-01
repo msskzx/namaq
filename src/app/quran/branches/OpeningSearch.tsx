@@ -3,7 +3,8 @@
 import LoadingDots from '@/components/common/LoadingDots';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 
-import { GitBranch, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
@@ -33,7 +34,7 @@ function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
   return inventories.get(key)!;
 }
 
-export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false }: { remote?: boolean; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -97,7 +98,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             setDismissed(false);
             if (!event.target.value && submitted && !(event.nativeEvent instanceof InputEvent && event.nativeEvent.inputType)) router.push(branchesHref('', juz ?? undefined, { surah: view.surah, mode: view.mode }));
           }}
-            placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
+            placeholder={ar ? 'ابحث' : 'Search'}
             onKeyDown={event => {
               if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
               if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
@@ -124,7 +125,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
       {alternatives.length > 1 && <div role="group" aria-label={ar ? 'مجموعات العبارة' : 'Matching phrase groups'} className="flex flex-col gap-2">
         <p className={NOTE}>{ar ? 'تطابق هذه العبارة مجموعات مختلفة. اختر العبارة المقصودة.' : 'This link matches different groups. Choose the intended phrase.'}</p>
         {alternatives.map(phrase => <Button key={phrase.partition} href={href(phrase)} onClick={() => { setQuery(''); setSelected(-1); }} className="self-start">
-          <GitBranch size={16} aria-hidden />
+          <TreeIcon size={16} aria-hidden />
           <span dir="rtl">{phrase.text}</span>
           <span>{ar ? num(phrase.count) : phrase.count}</span>
         </Button>)}

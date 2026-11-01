@@ -1,7 +1,7 @@
 'use client';
 
 import LoadingDots from '@/components/common/LoadingDots';
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
@@ -10,14 +10,14 @@ import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
-import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
+import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 
 type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
-type Neighbours = { next: boolean; previous: boolean; nextText?: string; previousText?: string };
+type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -137,7 +137,8 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
 
-  useEffect(() => {
+  // Measured before the first paint, so a tree opens at its fit size rather than growing into it.
+  useLayoutEffect(() => {
     if (!enabled) return;
     const outer = viewport.current;
     const inner = content.current;
@@ -408,13 +409,12 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
       <Arrow size={18} aria-hidden />
     </button>;
   };
-  // The neighbouring tree's card, beyond the arrow: its opening phrase on an empty card, until the tree itself opens.
+  // The neighbouring tree, already drawn beyond the arrow, so a swipe brings in the finished card.
   const neighbour = (forward: boolean) => {
     if (!has(forward)) return null;
-    const text = forward ? neighbours?.nextText : neighbours?.previousText;
-    return <div aria-hidden data-tree-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 flex w-full items-center justify-center rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4"
+    return <div inert aria-hidden data-tree-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 w-full [&>[data-tree]]:p-2 sm:[&>[data-tree]]:p-4"
       style={forward ? { insetInlineStart: `calc(100% + ${NEIGHBOUR_GAP})` } : { insetInlineEnd: `calc(100% + ${NEIGHBOUR_GAP})` }}>
-      {text && <span className="font-quran text-2xl leading-loose text-[var(--home-muted)]"><MushafText>{text}</MushafText></span>}
+      <PathScope>{forward ? neighbours?.nextCard : neighbours?.previousCard}</PathScope>
     </div>;
   };
   const viewportHeight = height ?? (size ? viewHeight(view.s) : undefined);
