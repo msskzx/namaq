@@ -31,6 +31,13 @@
   --text-6xl: 4.25rem;
 }
 
+/* Height of the phone tab bar (TabBar.tsx); zero where it isn't shown. */
+:root { --app-tabbar: 0px; }
+@media (max-width: 1023.98px) {
+  :root { --app-tabbar: calc(3.5rem + env(safe-area-inset-bottom)); }
+  html { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; scroll-padding-bottom: var(--app-tabbar); }
+}
+
 body {
   font-family: var(--font-amiri), ui-serif, Georgia, serif;
   background: var(--home-paper);

@@ -23,9 +23,9 @@ describe('Footer', () => {
     language.current = current;
     render(<Footer />);
     const nav = screen.getByRole('navigation');
-    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes?topic=BRANCHES', '/quizzes/party']);
+    expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
     expect(screen.queryByRole('note')).toBeNull();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/read', '/quizzes?topic=BRANCHES', '/quizzes/party', '/about', '/privacy']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/read', '/quizzes', '/about', '/privacy']);
   });
 
   it('shows only the wordless icon in its home link', () => {

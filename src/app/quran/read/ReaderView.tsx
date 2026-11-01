@@ -95,7 +95,7 @@ export default function ReaderView({
     const element = frame.current;
     if (!element) return;
     const size = () => {
-      element.style.height = `calc(100dvh - ${Math.max(0, element.getBoundingClientRect().top + window.scrollY)}px)`;
+      element.style.height = `calc(100dvh - var(--app-tabbar, 0px) - ${Math.max(0, element.getBoundingClientRect().top + window.scrollY)}px)`;
     };
     size();
     window.addEventListener('resize', size);

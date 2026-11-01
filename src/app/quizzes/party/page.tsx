@@ -62,7 +62,7 @@ export default function PartyStartPage() {
             </section>
           </div>
         )}
-        <p className="mt-6 text-sm text-[var(--home-muted)]"><FontAwesomeIcon icon={faUsers} className="me-2" />{ar ? "يمكنك أن تختبر وحدك أيضًا من " : "You can also take a quiz alone from "}<Link className="text-[var(--home-accent)] underline" href="/quizzes">{ar ? "صفحة الاختبارات" : "the quizzes page"}</Link>.</p>
+        <p className="mt-6 text-sm text-[var(--home-muted)]"><FontAwesomeIcon icon={faUsers} className="me-2" />{ar ? "يمكنك أن تختبر وحدك أيضًا من " : "You can also take a quiz alone from "}<Link className="text-[var(--home-accent)] underline" href="/quizzes?topic=BRANCHES">{ar ? "صفحة الاختبارات" : "the quizzes page"}</Link>.</p>
       </div>
     </div>
   );
