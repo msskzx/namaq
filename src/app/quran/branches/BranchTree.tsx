@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -401,16 +401,19 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     in: 'Zoom in',
   };
   const view = shown();
-  // The neighbouring trees' cards peek in beside this card, as the matrix shows its neighbour columns.
+  // Small arrows beside the card open the neighbouring trees (they replace the step buttons).
   // They are placed against the sliding lane around the card (the card itself is not positioned),
   // so the card's overflow does not clip them and they slide with it.
   const peek = (forward: boolean) => {
     if (!has(forward)) return null;
     const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
+    const Arrow = forward === ar ? ChevronLeft : ChevronRight;
+    // Forward sits past the card's end side (the left in Arabic): insetInlineStart: 100% puts it there.
     return <button type="button" data-tree-edge={forward ? 'next' : 'previous'} aria-label={label} title={label} onClick={() => { if (!justSwiped()) slide(forward); }}
-      className="absolute inset-y-4 w-2.5 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] opacity-70 transition-opacity hover:opacity-100 sm:w-3"
-      // insetInlineStart: 100% pushes it past the end side (the left in Arabic), where the next tree is.
-      style={forward ? { insetInlineStart: 'calc(100% + 4px)' } : { insetInlineEnd: 'calc(100% + 4px)' }} />;
+      className="absolute top-1/2 flex h-12 w-4 -translate-y-1/2 items-center justify-center rounded-sm text-[var(--home-muted)] transition-colors hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] sm:w-6"
+      style={forward ? { insetInlineStart: 'calc(100% + 1px)' } : { insetInlineEnd: 'calc(100% + 1px)' }}>
+      <Arrow size={18} aria-hidden />
+    </button>;
   };
   const viewportHeight = height ?? (size ? viewHeight(view.s) : undefined);
   const touch = manual ? 'touch-none cursor-grab active:cursor-grabbing' : onStep ? 'touch-pan-y' : 'touch-pan-x touch-pan-y';
