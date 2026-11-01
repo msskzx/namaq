@@ -420,9 +420,11 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
   const touch = manual ? 'touch-none cursor-grab active:cursor-grabbing' : onStep ? 'touch-pan-y' : 'touch-pan-x touch-pan-y';
 
   return <>
-    <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
+    {/* Phones pinch to zoom, so the zoom buttons are hidden there on every tree (branches, quizzes, the homepage),
+        and a tree with nothing else in its header has no header row there. */}
+    <div dir={ar ? 'rtl' : 'ltr'} className={`mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 ${controls ? '' : 'max-sm:hidden'}`}>
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
-      <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className={`flex flex-wrap items-center gap-2 ${onStep ? 'max-sm:hidden' : ''}`}>
+      <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2 max-sm:hidden">
         <Button size="lg" aria-pressed={!manual} onClick={() => paintCamera(null)} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
           <Button size="lg" onClick={() => zoomBy(-SCALE_STEP)} disabled={!manual} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>

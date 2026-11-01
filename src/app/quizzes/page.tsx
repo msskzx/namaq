@@ -9,6 +9,7 @@ import {
   faArrowRight,
   faBookOpen,
   faCircle,
+  faCircleHalfStroke,
   faCircleCheck,
   faCircleQuestion,
   faCircleXmark,
@@ -166,11 +167,13 @@ export default function QuizzesPage() {
   const questionState = (index: number) => {
     const given = answers[index];
     if (given === undefined) return 'unanswered' as const;
-    return given === questions[index].correctAnswer ? 'correct' as const : 'incorrect' as const;
+    if (given === questions[index].correctAnswer) return 'correct' as const;
+    // A tree with some of its asked leaves right is partly solved, not wrong.
+    return questions[index].tree && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
   };
-  const stateLabel = (state: 'correct' | 'incorrect' | 'unanswered') =>
-    ar ? ({ correct: 'صحيح', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
-      : ({ correct: 'correct', incorrect: 'incorrect', unanswered: 'unanswered' } as const)[state];
+  const stateLabel = (state: ReturnType<typeof questionState>) =>
+    ar ? ({ correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
+      : ({ correct: 'correct', partial: 'partly correct', incorrect: 'incorrect', unanswered: 'unanswered' } as const)[state];
   const answerContent = (question: QuizQuestionView, value: string | undefined) => {
     const choice = question.choices.find((item) => item.value === value);
     if (!choice) return null;
@@ -327,8 +330,8 @@ export default function QuizzesPage() {
                     aria-label={`${ar ? `السؤال ${index + 1}` : `Question ${index + 1}`} - ${stateLabel(state)}`}
                   >
                     <FontAwesomeIcon
-                      icon={state === 'correct' ? faCircleCheck : state === 'incorrect' ? faCircleXmark : faCircleQuestion}
-                      className={state === 'correct' ? 'text-green-600' : state === 'incorrect' ? 'text-red-500' : undefined}
+                      icon={state === 'correct' ? faCircleCheck : state === 'partial' ? faCircleHalfStroke : state === 'incorrect' ? faCircleXmark : faCircleQuestion}
+                      className={state === 'correct' ? 'text-green-600' : state === 'partial' ? 'text-amber-600 dark:text-amber-400' : state === 'incorrect' ? 'text-red-500' : undefined}
                     />
                     {index + 1}
                   </Button>
