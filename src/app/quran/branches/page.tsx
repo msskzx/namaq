@@ -77,7 +77,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const query = (first(params.q) ?? '').trim();
   const picked = Number(first(params.s));
   const surah = Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
-  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode: params.m === 'cards' ? 'cards' : undefined };
+  const savedIds = (first(params.b) ?? '').split('|').filter(Boolean);
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode: params.m === 'cards' ? 'cards' : undefined, saved: savedIds.length ? savedIds : undefined };
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const pieces = piecesFor(built);
@@ -86,10 +87,13 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
     built.searches.set(needle, piecesHolding(searchableFor(built), query));
   }
-  const found = needle ? built.searches.get(needle)! : pieces;
+  const searched = needle ? built.searches.get(needle)! : pieces;
+  // The saved-only switch: the trees bookmarked in this browser, newest first, sent in the address.
+  const savedSet = savedIds.length ? new Map(searchableFor(built).map(piece => [piece.id, piece])) : undefined;
+  const found = savedSet ? (needle ? searched.filter(piece => savedIds.includes(piece.id)) : savedIds.flatMap(saved => savedSet.get(saved) ?? [])) : searched;
   const cut = surah ? found.filter(piece => piece.keys.some(key => surahOf(key) === surah)) : found;
   const opening = query ? cut.find(piece => textIs(piece.text, query)) ?? cut[0] : cut[0];
-  if (!id && opening) redirect(branchesHref(opening.id, juz, { query: state.query, surah, mode: state.mode }));
+  if (!id && opening) redirect(branchesHref(opening.id, juz, { query: state.query, surah, mode: state.mode, saved: state.saved }));
   const scoped = scopeTree(resolved, requestedOccurrences);
   const treeGroup = scoped && new Set(scoped.occurrences.map(occurrence => occurrence.key)).size >= 2 ? scoped : undefined;
   const unavailable = !!id && !treeGroup;
@@ -99,11 +103,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), false, built.subtrees?.idsFor(treeGroup)) : undefined;
   const holding = tree && query ? drawn.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key) : [];
   const marked = holding.length < drawn.length ? holding : [];
-  const treeView = { ...state, query: undefined, surah: undefined, mode: undefined };
+  const treeView = { ...state, query: undefined, surah: undefined, mode: undefined, saved: undefined };
   const cards = !!tree && state.mode === 'cards';
   const parent = built.subtrees?.byId.get(id)?.parent;
   const position = tree ? cut.findIndex(piece => piece.id === id || piece.id === parent) : -1;
-  const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { query: state.query, surah, mode: state.mode, card });
+  const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { query: state.query, surah, mode: state.mode, saved: state.saved, card });
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const neighbourAt = (index: number) => {
     const phrase = steps && !cards && cut[index]?.phrase;
@@ -115,7 +119,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const surahCounts = built.surahCounts ??= countSurahs(pieces);
   const surahs = allSurahs.filter(row => surahCounts[row.number]).map(row => ({ number: row.number, name: row.name, count: surahCounts[row.number] }));
   const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? undefined : 'cards' });
-  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} surround={{ on: false }} />;
+  const viewportHeight = 'clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)';
+  // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
+  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} surround={{ on: false, sync: true }} />;
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
@@ -124,7 +130,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {/* The search box and the filter live in the site's top bar; the page's buttons in the side rail (the top bar on phones). */}
       <NavActions>
         <NavSearch>
-          <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah }} />
+          <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah, saved: state.saved }} />
         </NavSearch>
         <FilterButton range={range} view={state} />
       </NavActions>
@@ -135,12 +141,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <NavButtons bottom>
         <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
       </NavButtons>
-      {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode })} />}
+      {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode, saved: state.saved })} />}
       {!id && <NoTrees query={query} />}
       {unavailable && <UnavailableNote />}
       <PathScope key={marked.join(' ')} lit={marked}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
-          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight="clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)" header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} label="شجرة العبارات المشتركة" />}
+          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} label="شجرة العبارات المشتركة" />}
       </PathScope>
       {treeGroup && <CardActions id={id} text={treeGroup.text} />}
     </div>

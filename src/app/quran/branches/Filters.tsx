@@ -6,7 +6,9 @@ import { Bookmark, BookmarkCheck, Check, Funnel, Share2, X } from 'lucide-react'
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import type { BranchesView } from '@/lib/quran/branches';
+import { branchesHref, type BranchesView } from '@/lib/quran/branches';
+import Toggle from '@/components/common/Toggle';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import type { JuzRange } from '@/lib/quran/juz';
 import JuzFilter from './JuzFilter';
 
@@ -19,7 +21,7 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
   return <>
     <span className="relative shrink-0">
       <Button size="lg" variant="muted" aria-haspopup="dialog" onClick={() => sheet.current?.showModal()} aria-label={label} title={label}><Funnel aria-hidden /></Button>
-      {range && <span aria-hidden className="pointer-events-none absolute end-2 top-2 size-2 rounded-full bg-[var(--home-accent)]" />}
+      {(range || !!view.saved?.length) && <span aria-hidden className="pointer-events-none absolute end-2 top-2 size-2 rounded-full bg-[var(--home-accent)]" />}
     </span>
     <dialog ref={sheet} aria-label={label} dir={ar ? 'rtl' : 'ltr'} onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
       className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-0 text-[var(--home-ink)] shadow-lg backdrop:bg-black/40 max-sm:mb-0 max-sm:w-full max-sm:max-w-none max-sm:rounded-b-none">
@@ -28,8 +30,10 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
           <h2 className="text-lg">{label}</h2>
           <Button size="lg" variant="muted" onClick={() => sheet.current?.close()} aria-label={close} title={close}><X aria-hidden /></Button>
         </div>
-        <JuzFilter range={range} view={view} />
-        <Saved onOpen={() => sheet.current?.close()} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <JuzFilter range={range} view={view} />
+          <SavedOnly range={range} view={view} onDone={() => sheet.current?.close()} />
+        </div>
       </div>
     </dialog>
   </>;
@@ -37,17 +41,20 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
 
 const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
 
-function Saved({ onOpen }: { onOpen: () => void }) {
+/** Narrows the trees to the ones saved in this browser; their ids travel in the address, so the server can step through them. */
+function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: BranchesView; onDone: () => void }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks();
-  return <section aria-label={ar ? 'المحفوظة' : 'Saved'} className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-3">
-    <h3 className="text-sm text-[var(--home-muted)]">{ar ? 'المحفوظة' : 'Saved'}</h3>
-    {saved.length === 0
-      ? <p className="text-sm text-[var(--home-muted)]">{ar ? 'احفظ شجرة بزر الحفظ تحتها لتجدها هنا.' : 'Save a tree with the bookmark under it to find it here.'}</p>
-      : <ul className="flex max-h-60 flex-col overflow-y-auto">{saved.map(item => <li key={item.id}>
-        <Link href={item.href} onClick={onOpen} className="block rounded px-2 py-1.5 font-arabic text-lg hover:bg-[var(--home-paper-deep)]" dir="rtl">{item.text}</Link>
-      </li>)}</ul>}
-  </section>;
+  const router = useNavigatingRouter();
+  const on = !!view.saved?.length;
+  const label = ar ? 'المحفوظة فقط' : 'Saved only';
+  const hint = !on && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
+  return <span title={hint} className="inline-flex shrink-0">
+    <Toggle size="lg" checked={on} label={label} disabled={!on && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={checked => {
+      onDone();
+      router.push(branchesHref('', range ?? undefined, { query: view.query, surah: view.surah, mode: view.mode, saved: checked ? saved.map(item => item.id) : undefined }));
+    }} />
+  </span>;
 }
 
 /** Under the tree or matrix, as on a post: share on one side, save on the other. */
@@ -57,7 +64,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
   const save = () => {
     const url = new URL(window.location.href);
-    ['q', 's', 'n'].forEach(key => url.searchParams.delete(key));
+    ['q', 's', 'n', 'b'].forEach(key => url.searchParams.delete(key));
     toggleBookmark({ id, text, href: `${url.pathname}${url.search}` });
   };
   return <div className="flex items-center justify-between gap-2">
