@@ -32,7 +32,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
           </div>
           <div ref={launchTree} className={styles.launchTree} dir="rtl">
             <div>
-              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
+              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
             <TreeIntro key={preview.id} target={launchTree} ar={ar} names={preview.names} />
           </div>

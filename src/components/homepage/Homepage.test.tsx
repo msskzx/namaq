@@ -12,7 +12,7 @@ describe('Quran learning homepage', () => {
     state.language = language;
     render(<Homepage data={await getHomePreviews()} />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
-    expect(screen.getByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toHaveProperty('checked', false);
+    expect(screen.queryByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toBeNull();
     expect(screen.queryByRole('list', { name: /ما قبل العبارة|Before the phrase/ })).toBeNull();
     expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير' : 'Zoom out' })).toBeTruthy();
     expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير' : 'Zoom in' })).toBeTruthy();
@@ -34,17 +34,6 @@ describe('Quran learning homepage', () => {
     expect(path.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(path);
     expect(path.getAttribute('aria-pressed')).toBe('false');
-  });
-  it('shows surrounding ayat only when requested and hides them again', async () => {
-    state.language = 'en';
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ before: { '15:45': { key: '15:44', words: ['السياق السابق للاختبار'] } }, after: {} }) })));
-    render(<Homepage data={await getHomePreviews()} />);
-    expect(screen.queryByText('السياق السابق للاختبار')).toBeNull();
-    const toggle = screen.getByRole('switch', { name: 'Surrounding ayat' });
-    fireEvent.click(toggle);
-    expect(await screen.findByText('السياق السابق للاختبار')).toBeTruthy();
-    fireEvent.click(toggle);
-    expect(screen.queryByText('السياق السابق للاختبار')).toBeNull();
   });
   it('places navigation above the example and offers no random tree', async () => {
     state.language = 'en';
