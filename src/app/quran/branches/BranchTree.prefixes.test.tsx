@@ -102,3 +102,26 @@ it('uses the actual wrapped predecessor for the extra step before al-Fatiha', as
   expect(load.mock.calls.at(-1)![0]).toEqual(['114:6']);
   expect(screen.getAllByText('مِنَ الْجِنَّةِ وَالنَّاسِ')).toHaveLength(1);
 });
+
+describe('the ayah before a phrase on the branches page (one switch for every tree)', () => {
+  const synced = (key: string) => <BranchTree tree={{ words: trunk, ayat: [key], children: [] }} names={{}} prefixes={prefix(key)} surround={{ on: false, sync: true }} />;
+  afterEach(() => localStorage.clear());
+
+  it('draws no ayah before while the switch is off', async () => {
+    localStorage.setItem('branches-surround', '0');
+    quranSurrounding.mockResolvedValue({ before, after: {} });
+    const { container } = render(synced('62:4'), { wrapper });
+    await new Promise(resolve => setTimeout(resolve, 20));
+    expect(quranSurrounding).not.toHaveBeenCalled();
+    expect(screen.queryByText(before['62:4'].words[0])).toBeNull();
+    expect(container.querySelector('[aria-label="ما قبل العبارة"]')).toBeNull();
+  });
+
+  it('draws exactly one ayah before while the switch is on', async () => {
+    localStorage.setItem('branches-surround', '1');
+    quranSurrounding.mockResolvedValue({ before, after: {} });
+    render(synced('62:4'), { wrapper });
+    await screen.findByText(before['62:4'].words[0]);
+    expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
+  });
+});
