@@ -37,9 +37,17 @@ export function useIsLit() {
   return (keys: string[]) => !!paths && keys.some(key => paths.lit.has(key));
 }
 
+// A tap on a node lights its path, like its path button (not on the node's buttons, links or fields, nor when selecting text).
+const INTERACTIVE = 'button, a, input, textarea, select, summary, label, [role="button"]';
+
 export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id: string; keys: string[]; className: string; tone: string; lit: string; ctx?: string; children: React.ReactNode }) {
   const on = useIsLit()(keys);
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} className={`${className} ${on ? lit : tone}`}>{children}</div>;
+  const paths = useContext(PathContext);
+  const tap = paths ? (event: React.MouseEvent) => {
+    if ((event.target as Element).closest(INTERACTIVE) || window.getSelection()?.toString()) return;
+    paths.pin(id, keys);
+  } : undefined;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onClick={tap} className={`${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {

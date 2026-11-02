@@ -358,6 +358,17 @@ describe('BranchTree', () => {
     expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'مَقَامٍ أَمِينٍۢ']);
   });
 
+  it('lights a node\'s path when the node itself is tapped, and turns it off on a second tap', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} />);
+    const pin = screen.getByRole('button', { name: 'إظهار المسار: مَقَامٍ أَمِينٍۢ' });
+    const node = pin.closest('[data-node]')!;
+    fireEvent.click(node.querySelector('.font-quran')!);
+    expect(pin.getAttribute('aria-pressed')).toBe('true');
+    expect(container.querySelectorAll('[data-lit]').length).toBeGreaterThan(1);
+    fireEvent.click(node.querySelector('.font-quran')!);
+    expect(pin.getAttribute('aria-pressed')).toBe('false');
+  });
+
   it('lights only the connector to the lit branch, with the vertical segment from the junction to it', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     fireEvent.click(screen.getByRole('button', { name: 'إظهار المسار: مَقَامٍ أَمِينٍۢ' }));
