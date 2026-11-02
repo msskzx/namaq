@@ -16,7 +16,7 @@ import OpeningSearch, { UnavailableNote } from './OpeningSearch';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton } from './Surroundings';
-import { FilterButton, NoTrees, ResultsBar } from './Filters';
+import { CardActions, FilterButton, NoTrees, SurahChip } from './Filters';
 import { PathScope } from './Paths';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
@@ -116,10 +116,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const surahs = allSurahs.filter(row => surahCounts[row.number]).map(row => ({ number: row.number, name: row.name, count: surahCounts[row.number] }));
   const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? undefined : 'cards' });
   const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} surround={{ on: false }} />;
-  const narrowed = !!query || !!surah;
 
   return (
-    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:17rem] max-sm:[--tree-chrome:12rem] flex flex-col gap-3 overflow-x-clip`}>
+    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
       <PreloadQuranText />
       <BranchHeading />
       {/* The search box and the filter live in the site's top bar; the page's buttons in the side rail (the top bar on phones). */}
@@ -132,15 +131,18 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <NavButtons>
         {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}
         <AroundButton />
+      </NavButtons>
+      <NavButtons bottom>
         <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
       </NavButtons>
-      {narrowed && <ResultsBar surah={surah ? names[surah] : undefined} clear={id ? branchesHref(id, juz, { query: state.query, mode: state.mode }) : branchesHref('', juz, { query: state.query, mode: state.mode })} position={steps?.position} total={cut.length} />}
+      {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode })} />}
       {!id && <NoTrees query={query} />}
       {unavailable && <UnavailableNote />}
       <PathScope key={marked.join(' ')} lit={marked}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight="clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)" header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} label="شجرة العبارات المشتركة" />}
       </PathScope>
+      {treeGroup && <CardActions id={id} text={treeGroup.text} />}
     </div>
   );
 }

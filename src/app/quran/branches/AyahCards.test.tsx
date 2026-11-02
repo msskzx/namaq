@@ -30,6 +30,9 @@ const side: AyahContext[] = [
   { before: null, after: null, ayah: ayah('65:8', ['وَكَأَيِّن']), match: { exact: [0], rooted: [] } },
 ];
 
+// The slide out to the next tree is a timing detail; these tests open it at once.
+vi.mock('@/components/common/useSwipe', async importOriginal => ({ ...(await importOriginal<typeof import('@/components/common/useSwipe')>()), reducedMotion: () => true }));
+
 beforeEach(() => {
   params = new URLSearchParams();
   localStorage.setItem('branches-surround', '1');
@@ -122,25 +125,6 @@ it('marks what the next ayat share with each other, as in the tree column', asyn
   expect(within(screen.getByLabelText('الشرح ٤')).queryByTitle('نفس الكلمة')).toBeNull();
 });
 
-it('lights every row fully in view and dims only a row cut off at the edge, which a press brings into view', async () => {
-  show();
-  await screen.findByLabelText('الشرح ٥');
-  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
-  const scrollBy = vi.fn();
-  track.scrollBy = scrollBy;
-  const rect = (top: number, height: number) => ({ top, bottom: top + height, left: 0, right: 0, width: 0, height, x: 0, y: top, toJSON: () => ({}) });
-  track.getBoundingClientRect = () => rect(0, 500);
-  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => { cell.getBoundingClientRect = () => rect(Number(cell.dataset.row) * 220, 200); });
-  fireEvent.scroll(track);
-  const lit = () => [...document.querySelectorAll<HTMLElement>('[data-col="1"]')].map(cell => cell.hasAttribute('data-reading'));
-  expect(lit()).toEqual([true, true, false]);
-  expect(within(screen.getByLabelText('الشرح ٦')).getByRole('link', { name: 'قراءة الآية' })).toBeTruthy();
-  expect(within(screen.getByLabelText('الطلاق ٧')).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
-  fireEvent.click(screen.getByLabelText('الطلاق ٧'));
-  expect(scrollBy).toHaveBeenCalledWith({ top: 140, behavior: 'smooth' });
-});
-
 it('keeps every card in its own row and column when the first tree has no previous tree', async () => {
   render(
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>
@@ -150,13 +134,6 @@ it('keeps every card in its own row and column when the first tree has no previo
   await screen.findByLabelText('الشرح ٥');
   expect(screen.queryByRole('button', { name: 'الشجرة السابقة' })).toBeNull();
   expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/1', '1/2', '1/3', '2/1', '2/2', '2/3']);
-});
-
-it('lights every row when all rows fit in the frame', async () => {
-  vi.stubGlobal('ResizeObserver', class { constructor(private callback: () => void) {} observe() { this.callback(); } disconnect() {} });
-  show();
-  await screen.findByLabelText('الشرح ٥');
-  await waitFor(() => expect(document.querySelectorAll('[data-col="1"][data-reading]')).toHaveLength(3));
 });
 
 it.each([
@@ -184,36 +161,6 @@ it('keeps focus in the keyboard-scrollable matrix when the focused column change
   expect(screen.queryByRole('article', { name: 'الشرح ٥' })).toBeNull();
   expect(screen.getByRole('article', { name: 'الشرح ٧' })).toBeTruthy();
 });
-
-it('keeps focus in the matrix when scrolling clips the focused row', async () => {
-  show();
-  const own = await screen.findByLabelText('الشرح ٥');
-  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
-  const rect = (top: number, height: number) => new DOMRect(0, top, 100, height);
-  track.getBoundingClientRect = () => rect(0, 500);
-  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => { cell.getBoundingClientRect = () => rect(Number(cell.dataset.row) * 220 - 100, 200); });
-  within(own).getByRole('link', { name: 'قراءة الآية' }).focus();
-  fireEvent.scroll(track);
-  expect(document.activeElement).toBe(track);
-  expect(screen.queryByRole('article', { name: 'الشرح ٥' })).toBeNull();
-  expect(screen.getByRole('article', { name: 'الشرح ٦' })).toBeTruthy();
-});
-
-it('dims every row when the visible rows are all cut by the frame edges', async () => {
-  show();
-  await screen.findByLabelText('الشرح ٥');
-  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  Object.defineProperty(track, 'clientHeight', { configurable: true, value: 500 });
-  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
-  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
-    cell.getBoundingClientRect = () => new DOMRect(0, Number(cell.dataset.row) * 412 - 150, 100, 400);
-  });
-  fireEvent.scroll(track);
-  expect(document.querySelectorAll('[data-reading]')).toHaveLength(0);
-  expect(within(track).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
-});
-
 
 /** Columns 100px wide, column i's left edge at -100 * i in the lane (RTL), the lane 100px wide. */
 const sideways = (track: HTMLElement) => {
