@@ -483,7 +483,10 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
     return ayah > 1 ? `${surah}:${ayah - 1}` : surah === 1 ? '114:6' : undefined;
   };
   const requiredKeys = emptyKeys.filter(key => previousKey(key));
-  const mandatory = useSurrounding(requiredKeys.length > 0, requiredKeys, {}, surround?.data);
+  // On the branches page a phrase that opens its ayah shows the ayah before only with the surrounding-ayat switch on;
+  // elsewhere (quizzes) that ayah stays, as the phrase's context.
+  const showBefore = !surround?.sync || on;
+  const mandatory = useSurrounding(showBefore && requiredKeys.length > 0, requiredKeys, {}, surround?.data);
   const precedingKey = (key: string) => mandatory.data?.before[key]?.key ?? previousKey(key);
   const optionalKeys = all.flatMap(key => emptyKeys.includes(key) ? precedingKey(key) ?? key : key);
   const extraKeys = emptyKeys.flatMap(key => precedingKey(key) ?? []);
@@ -503,6 +506,29 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   // On the branches page the surrounding-ayat switch is one setting in the side rail; the tree only says when it is loading.
   const controls = surround && !surround.sync ? <SurroundToggle on={on} onChange={setOn} loading={isLoading} failed={!!error} />
     : surround && on && (isLoading || error) ? <AroundStatus loading={isLoading} failed={!!error} /> : undefined;
+  const beforeEntries: FanEntry[] = (prefixes ?? []).flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
+              <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
+              <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-52 shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose [[data-down]_&]:max-w-44">
+                <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
+                  <span className="block font-quran"><MushafText>{prefix.word}</MushafText></span>
+                </Marked>
+              </PathBox>
+            </> }] : prefix.keys.flatMap(key => {
+              if (!showBefore) return [];
+              const previous = precedingKey(key);
+              if (!previous) return [{ key, keys: [key], item: <PathBox id={`p${i}:${key}`} keys={[key]} lit={LIT} tone={LINE} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5">
+                <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية السورة' : 'Start of surah'}</span>
+                <AyahRefs keys={[key]} names={names} />
+              </PathBox> }];
+              const neighbour = mandatoryAround?.data.before[key];
+              if (!neighbour || !mandatoryAround) return [];
+              // The branches page shows one ayah before (with the switch on); elsewhere the switch adds one more.
+              const earlier = surround?.sync ? undefined : around?.data.before[previous];
+              return [{ key, keys: [key], item: <>
+                {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} opens={rootId} nodeId={`earlier${key}`} /><Stub keys={[key]} /></>}
+                <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} opens={rootId} />
+              </> }];
+            }));
   const lane = useRef<HTMLDivElement>(null);
   const card = (
       <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
@@ -514,30 +540,10 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
         <TreeViewport lane={lane} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} flip={rotatable && rotated}>
-          {prefixes && prefixes.length > 0 ? <>
-            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
-              <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
-              <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-sm shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose">
-                <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
-                  <span className="block font-quran"><MushafText>{prefix.word}</MushafText></span>
-                </Marked>
-              </PathBox>
-            </> }] : prefix.keys.flatMap(key => {
-              const previous = precedingKey(key);
-              if (!previous) return [{ key, keys: [key], item: <PathBox id={`p${i}:${key}`} keys={[key]} lit={LIT} tone={LINE} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5">
-                <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية السورة' : 'Start of surah'}</span>
-                <AyahRefs keys={[key]} names={names} />
-              </PathBox> }];
-              const neighbour = mandatoryAround?.data.before[key];
-              if (!neighbour || !mandatoryAround) return [];
-              const earlier = around?.data.before[previous];
-              return [{ key, keys: [key], item: <>
-                {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} opens={rootId} nodeId={`earlier${key}`} /><Stub keys={[key]} /></>}
-                <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} opens={rootId} />
-              </> }];
-            }))} />
+          {beforeEntries.length > 0 ? <>
+            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={beforeEntries} />
             <Stub keys={all} />
-          </> : variants.length > 0 ? <>
+          </> : prefixes && prefixes.length > 0 ? null : variants.length > 0 ? <>
             <Fan side="end" label="صيغ الكلمة الأولى" entries={variants.map((variant, i) => ({ key: variant.word, keys: variant.keys, item: <>
               <BeforeFan ayahKeys={variant.keys} around={around} opens={`v${i}`} />
               <PathBox id={`v${i}`} keys={variant.keys} lit={`${LIT} ${TONE[variant.conj]}`} tone={`${LINE} ${TONE[variant.conj]}`} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose">
