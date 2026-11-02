@@ -73,8 +73,8 @@ export function RotateButton() {
   const ar = useLanguage().language === 'ar';
   const [on, set] = useRotated();
   const label = ar ? 'تدوير الشجرة' : 'Rotate tree';
-  return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
-    className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
+  // An action, not a setting: it never takes the accent colour.
+  return <Button size="lg" variant="muted" onClick={() => set(!on)} aria-label={label} title={label}>
     <RotateCwSquare aria-hidden />
   </Button>;
 }

@@ -8,6 +8,13 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 
 describe('NavSearch', () => {
+  it('shows a dot on the icon only while a search is set', () => {
+    const { rerender, container } = render(<NavSearch><input aria-label="phrase" /></NavSearch>);
+    expect(container.querySelector('[data-search-dot]')).toBeNull();
+    rerender(<NavSearch active><input aria-label="phrase" /></NavSearch>);
+    expect(container.querySelector('[data-search-dot]')).toBeTruthy();
+  });
+
   it('opens the box from the icon, focuses it, and closes back to the icon', () => {
     render(<NavSearch><input aria-label="phrase" /></NavSearch>);
     const icon = screen.getByRole('button', { name: 'Search' });

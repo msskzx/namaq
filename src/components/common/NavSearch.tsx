@@ -9,7 +9,8 @@ import styles from './NavBar.module.css';
  * A page's search box in the top bar. Desktop shows the box; phones show a search icon that opens
  * the box across the whole bar, with a close button.
  */
-export default function NavSearch({ children }: { children: React.ReactNode }) {
+/** `active`: a search is set, shown as a dot on the phone's search icon (like the filter's dot). */
+export default function NavSearch({ children, active = false }: { children: React.ReactNode; active?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
@@ -28,6 +29,7 @@ export default function NavSearch({ children }: { children: React.ReactNode }) {
     <>
       <button ref={toggle} type="button" className={styles.searchToggle} aria-label={label} title={label} aria-expanded={open} onClick={() => setOpen(true)}>
         <Search size={20} aria-hidden />
+        {active && <span aria-hidden data-search-dot className={styles.searchDot} />}
       </button>
       <div ref={box} className={`${styles.search} ${open ? styles.searchOpen : ''}`}
         onKeyDown={event => { if (event.key === 'Escape' && !event.defaultPrevented && open && !box.current?.querySelector('[role="listbox"]')) close(); }}>

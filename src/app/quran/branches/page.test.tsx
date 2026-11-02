@@ -14,6 +14,12 @@ import { inJuzRange } from '@/lib/quran/juz';
 import data from './trees.json';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
+import { usePageHelp } from '@/components/common/SettingsHelp';
+
+function HelpProbe() {
+  const help = usePageHelp();
+  return help ? <div data-testid="page-help" title={help.label}>{help.content}</div> : null;
+}
 
 const params = new URLSearchParams();
 vi.mock('next/navigation', () => ({
@@ -218,7 +224,7 @@ describe('Quran branch trees', () => {
     });
   });
 
-  it('puts search and filter in the top bar, page buttons in the side rail, help in the bottom bar and share and save under the tree', async () => {
+  it('puts search and filter in the top bar, page buttons in the side rail, help in settings and share and save under the tree', async () => {
     render(await follow({ juzFrom: '30', juzTo: '30' }));
     expect(screen.getByRole('heading', { level: 1, name: 'متشابهات القرآن' }).className).toContain('sr-only');
     const bar = screen.getByTestId('nav-actions');
@@ -236,7 +242,8 @@ describe('Quran branch trees', () => {
       expect(control.textContent).toBe('');
       expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
     });
-    expect(within(screen.getByTestId('nav-bottom')).getByTitle('قواعد المطابقة')).toBeTruthy();
+    render(<HelpProbe />);
+    expect(screen.getByTestId('page-help').getAttribute('title')).toBe('قواعد المطابقة');
     const actions = screen.getByRole('button', { name: 'حفظ' }).parentElement!;
     expect(within(actions).getByRole('button', { name: 'مشاركة' })).toBeTruthy();
     expect(within(rail).queryByRole('button', { name: 'مشاركة' })).toBeNull();
@@ -254,13 +261,13 @@ describe('Quran branch trees', () => {
 
   it('keeps the colour legend in the help in cards view only', async () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
-    const help = within(screen.getByTestId('nav-bottom')).getByTitle('قواعد المطابقة').closest('details')!;
+    render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' })}<HelpProbe /></>);
+    const help = screen.getByTestId('page-help');
     expect(within(help).getByText('نفس الكلمة')).toBeTruthy();
     expect(within(help).getByText('نفس الجذر')).toBeTruthy();
     cleanup();
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
-    expect(within(screen.getByTestId('nav-bottom')).queryByText('نفس الكلمة')).toBeNull();
+    render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' })}<HelpProbe /></>);
+    expect(within(screen.getByTestId('page-help')).queryByText('نفس الكلمة')).toBeNull();
   });
 
   it('keeps the juz range in the filter sheet, named once', async () => {
@@ -269,6 +276,9 @@ describe('Quran branch trees', () => {
     expect(form.closest('dialog')).toBeTruthy();
     expect(form.textContent!.match(/الجزء/g)).toHaveLength(1);
     expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).parentElement!.querySelector('.rounded-full')).toBeNull();
+    HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) { this.open = true; };
+    fireEvent.click(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }));
+    expect(document.activeElement).toBe(form.querySelector('input'));
   });
 });
 

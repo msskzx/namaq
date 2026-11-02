@@ -16,7 +16,7 @@ import OpeningSearch, { UnavailableNote } from './OpeningSearch';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton, RotateButton } from './Surroundings';
-import { CardActions, FilterButton, NoTrees, SurahChip } from './Filters';
+import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
 import { PathScope } from './Paths';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
@@ -129,7 +129,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <BranchHeading />
       {/* The search box and the filter live in the site's top bar; the page's buttons in the side rail (the top bar on phones). */}
       <NavActions>
-        <NavSearch>
+        <NavSearch active={!!query}>
           <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah, saved: state.saved }} />
         </NavSearch>
         <FilterButton range={range} view={state} />
@@ -139,16 +139,16 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         {!cards && tree && <RotateButton />}
         <AroundButton />
       </NavButtons>
-      <NavButtons bottom>
-        <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
-      </NavButtons>
+      <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode, saved: state.saved })} />}
       {!id && <NoTrees query={query} />}
       {unavailable && <UnavailableNote />}
+      <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''}>
       <PathScope key={marked.join(' ')} lit={marked}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable label="شجرة العبارات المشتركة" />}
       </PathScope>
+      </DoubleTapSave>
       {treeGroup && <CardActions id={id} text={treeGroup.text} />}
     </div>
   );

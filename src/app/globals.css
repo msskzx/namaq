@@ -57,6 +57,14 @@ body {
   line-height: 2;
 }
 
+@keyframes saved-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  20% { opacity: 0.95; transform: scale(1.1); }
+  40% { transform: scale(1); }
+  80% { opacity: 0.95; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
 @keyframes fade-in-down {
   from {
     opacity: 0;
