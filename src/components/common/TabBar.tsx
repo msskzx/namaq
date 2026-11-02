@@ -4,7 +4,8 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BookOpen, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { usePageHelp } from './SettingsHelp';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
@@ -57,6 +58,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
     { value: 'dark', Icon: Moon, label: ar ? 'داكن' : 'Dark' },
     { value: 'system', Icon: Monitor, label: ar ? 'حسب الجهاز' : 'Device' },
   ];
+  const help = usePageHelp();
   const links = [
     { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
     { href: '/privacy', icon: <ShieldCheck size={20} aria-hidden />, label: ar ? 'سياسة الخصوصية' : 'Privacy policy' },
@@ -84,6 +86,12 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
           </div>
         </div>
         <div className={styles.sheetLinks}>
+          {help && <details className="group">
+            <summary className={`${styles.sheetLink} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
+              <CircleHelp size={20} aria-hidden /><span>{help.label}</span>
+            </summary>
+            <div data-page-help className="flex flex-col gap-2 px-3 pb-3 text-sm text-[var(--home-muted)]">{help.content}</div>
+          </details>}
           {links.map(({ href, icon, label }) => (
             <Link key={href} href={href} className={styles.sheetLink} onClick={onClose}>
               {icon}<span>{label}</span>

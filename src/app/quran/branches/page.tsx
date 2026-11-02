@@ -15,8 +15,8 @@ import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
-import { AroundButton } from './Surroundings';
-import { CardActions, FilterButton, NoTrees, SurahChip } from './Filters';
+import { AroundButton, RotateButton } from './Surroundings';
+import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
 import { PathScope } from './Paths';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
@@ -121,7 +121,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? undefined : 'cards' });
   const viewportHeight = 'clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)';
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
-  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} surround={{ on: false, sync: true }} />;
+  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" surround={{ on: false, sync: true }} />;
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
@@ -129,25 +129,26 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <BranchHeading />
       {/* The search box and the filter live in the site's top bar; the page's buttons in the side rail (the top bar on phones). */}
       <NavActions>
-        <NavSearch>
+        <NavSearch active={!!query}>
           <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah, saved: state.saved }} />
         </NavSearch>
         <FilterButton range={range} view={state} />
       </NavActions>
       <NavButtons>
         {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}
+        {!cards && tree && <RotateButton />}
         <AroundButton />
       </NavButtons>
-      <NavButtons bottom>
-        <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
-      </NavButtons>
+      <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode, saved: state.saved })} />}
       {!id && <NoTrees query={query} />}
       {unavailable && <UnavailableNote />}
+      <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''}>
       <PathScope key={marked.join(' ')} lit={marked}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
-          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} label="شجرة العبارات المشتركة" />}
+          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable label="شجرة العبارات المشتركة" />}
       </PathScope>
+      </DoubleTapSave>
       {treeGroup && <CardActions id={id} text={treeGroup.text} />}
     </div>
   );

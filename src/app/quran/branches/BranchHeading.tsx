@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CircleHelp } from 'lucide-react';
-import useDismissable from '@/components/common/useDismissable';
+import { SettingsHelp } from '@/components/common/SettingsHelp';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 export default function BranchHeading() {
@@ -10,16 +9,11 @@ export default function BranchHeading() {
   return <h1 className="sr-only">{ar ? 'متشابهات القرآن' : 'Shared phrase trees'}</h1>;
 }
 
+/** The page's matching rules, as a row in the settings sheet. */
 export function MatchingRules({ children }: { children?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const rules = ar ? 'قواعد المطابقة' : 'Matching rules';
-  const ref = useDismissable();
-  return <details ref={ref} className="group relative shrink-0">
-      <summary title={rules} className="flex size-11 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
-        <CircleHelp size={20} aria-hidden /><span className="sr-only">{rules}</span>
-      </summary>
-      <div className="absolute end-0 top-full z-20 mt-1 max-lg:fixed max-lg:inset-x-4 max-lg:top-auto max-lg:bottom-[calc(var(--app-tabbar)+0.5rem)] max-lg:mt-0 max-lg:w-auto max-lg:max-w-none lg:left-auto lg:right-full lg:top-0 lg:mt-0 lg:mr-2 flex w-80 max-w-[85vw] flex-col gap-2 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 text-sm text-[var(--home-muted)] shadow-md"><p>{ar
+  return <SettingsHelp label={rules}><p>{ar
         ? 'تجمع كل شجرة عبارة تكررت في آيتين أو أكثر أينما وردت. لا تفصل واو أو فاء مثبتة صرفيًّا في أول العبارة، ولا اختلافات كرسي الهمزة، بين فروع الشجرة، مع إبقاء الصيغ الأصلية ظاهرة. وتظهر مجموعات السور المسماة في القائمة نفسها. النص برواية حفص كما في صفحة القراءة.'
-        : 'Each tree joins wording shared by two or more ayat wherever it occurs. A morphology-marked initial wa or fa and hamza seat differences do not split a tree; original forms remain visible. Named chapter families appear in the same list. Text follows the Hafs reading used in the reader.'}</p>{children}</div>
-    </details>;
+        : 'Each tree joins wording shared by two or more ayat wherever it occurs. A morphology-marked initial wa or fa and hamza seat differences do not split a tree; original forms remain visible. Named chapter families appear in the same list. Text follows the Hafs reading used in the reader.'}</p>{children}</SettingsHelp>;
 }

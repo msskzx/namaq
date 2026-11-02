@@ -116,7 +116,9 @@
 
 /* NavSearch: the box on desktop, an icon that opens it across the bar on phones. */
 .search { min-width: 0; flex: 1; max-width: 36rem; display: flex; align-items: center; gap: 0.375rem; }
-.searchToggle, .searchClose { width: 2.5rem; height: 2.5rem; flex: none; display: none; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 0.5rem; color: var(--home-accent); }
+.searchToggle, .searchClose { position: relative; width: 2.75rem; height: 2.75rem; flex: none; display: none; align-items: center; justify-content: center; border-radius: 0.125rem; color: var(--home-muted); }
+.searchToggle:hover, .searchClose:hover { background: var(--home-paper-deep); color: var(--home-ink); }
+.searchDot { position: absolute; inset-inline-end: 0.5rem; top: 0.5rem; width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: var(--home-accent); pointer-events: none; }
 @media (max-width: 1023.98px) {
   .searchToggle { display: inline-flex; }
   .search { display: none; }
