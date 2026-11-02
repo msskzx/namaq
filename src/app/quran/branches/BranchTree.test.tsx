@@ -4,6 +4,7 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
+import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
 import data from './trees.json';
 import { inJuzRange } from '@/lib/quran/juz';
@@ -500,40 +501,16 @@ describe('BranchTree', () => {
     });
 
 
-    it('keeps the switch in the address without asking the server for the page again', () => {
-      window.history.replaceState(null, '', '/quran/branches?o=x');
-      render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
-      expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x&c=1');
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
-      expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x');
-      expect(replace).not.toHaveBeenCalled();
-    });
-
-    it('follows the address over a cached page when the browser goes back to a tree it switched on', async () => {
-      window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
-      const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
-      expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
+    it('follows the one surrounding-ayat setting from the side rail, on every synced tree, with no switch of its own', async () => {
+      localStorage.setItem('branches-surround', '1');
+      const { container } = render(<><AroundButton /><BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} /></>);
+      expect(screen.queryByRole('switch', { name: 'الآيات المحيطة' })).toBeNull();
       await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
-      window.history.replaceState(null, '', '/');
-    });
-
-    it('carries the switch into the branch links once it is turned on', () => {
-      const group = startingWith(data.ayat as BranchAyah[], 'ان المتقين');
-      render(<BranchTree tree={branch(group)} names={names} view={{}} surround={{ on: false, sync: true }} />);
-      const link = () => screen.getAllByRole('link').find(a => a.getAttribute('href')!.startsWith('/quran/branches?'))!;
-      expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.has('c')).toBe(false);
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
-      expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
-    });
-
-    it('draws the ayat the page already loaded without fetching them', () => {
-      const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: true, sync: true, data: around }} />);
-      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
-      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
-      expect(quranSurrounding).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByRole('button', { name: 'الآيات المحيطة' }));
+      expect(localStorage.getItem('branches-surround')).toBe('0');
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(0);
+      expect(replace).not.toHaveBeenCalled();
+      localStorage.clear();
     });
 
   });

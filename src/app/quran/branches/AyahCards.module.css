@@ -1,17 +1,14 @@
-.track { overflow-x: hidden; overflow-y: auto; touch-action: pan-y pinch-zoom; max-height: 75vh; scroll-padding-top: 2.5rem; scroll-snap-type: y mandatory; padding-bottom: 20vh; scrollbar-width: none; }
-.lane { position: relative; display: grid; grid-template-columns: 3rem repeat(3, 84%) 3rem; gap: 0.75rem 1rem; align-items: stretch; padding-inline: max(0px, calc(8% - 4rem)); will-change: transform; backface-visibility: hidden; }
+.track { overflow-x: hidden; overflow-y: auto; touch-action: pan-y pinch-zoom; max-height: min(75vh, calc(100svh - var(--tree-chrome, 13rem))); scroll-padding-top: 2.5rem; scroll-snap-type: y mandatory; scrollbar-width: none; }
+.lane { position: relative; display: grid; grid-template-columns: repeat(var(--columns), 84%); gap: 0.75rem 1rem; align-items: stretch; will-change: transform; backface-visibility: hidden; }
 .track::-webkit-scrollbar { display: none; }
-.track[data-fits] { padding-bottom: 0; }
-.cell { min-width: 0; max-height: calc(75vh - 6rem); transition: opacity 0.3s ease; }
+.cell { min-width: 0; max-height: calc(min(75vh, 100svh - var(--tree-chrome, 13rem)) - 3rem); transition: opacity 0.3s ease; }
 .cell[data-current] { scroll-snap-align: start; scroll-snap-stop: always; }
 .lane[data-sliding] { transition: transform 0.25s ease; }
 .cell:not([data-current]), .cell:not([data-reading]) { opacity: 0.45; cursor: pointer; }
-.edge { border-inline: 1px dashed var(--home-rule); }
-.edgeIcon { position: sticky; top: 1rem; bottom: 1rem; }
 .cell > div { display: block; height: 100%; }
 .cell article { display: block; height: 100%; overflow-y: auto; padding: 0.75rem; }
 .cell article header { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem; }
 .cell article h3 { font-size: 1.125rem; }
 .cell article > div { font-size: 1.25rem; line-height: 2.1; }
-@media (max-width: 600px) { .lane { grid-template-columns: 2.5rem repeat(3, 86%) 2.5rem; padding-inline: max(0px, calc(7% - 3rem)); column-gap: 0.5rem; } }
+@media (max-width: 600px) { .lane { grid-template-columns: repeat(var(--columns), 86%); column-gap: 0.5rem; } }
 @media (prefers-reduced-motion: reduce) { .cell, .lane[data-sliding] { transition: none; } }

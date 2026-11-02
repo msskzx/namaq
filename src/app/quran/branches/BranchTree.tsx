@@ -12,7 +12,7 @@ import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import type { Surrounding } from '@/lib/quran/ayahContext';
-import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
+import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 
 type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
@@ -449,8 +449,10 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, view: given, surround }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
-  const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
-  const view = surround?.sync && given ? { ...given, context: on } : given;
+  const [local, setOn] = useState(surround?.on ?? false);
+  const [global] = useAroundSetting();
+  const on = surround?.sync ? global : local;
+  const view = given;
   const outer = useOuterPaths();
   const own = usePaths();
   const paths = outer ?? own;
@@ -479,13 +481,13 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
   const rootId = nodeId(-1);
   const step = (forward: boolean) => document.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click();
-  const controls = (header || surround) ? <>
-    {header}
-    {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
-  </> : undefined;
+  // On the branches page the surrounding-ayat switch is one setting in the side rail; the tree only says when it is loading.
+  const controls = surround && !surround.sync ? <SurroundToggle on={on} onChange={setOn} loading={isLoading} failed={!!error} />
+    : surround && on && (isLoading || error) ? <AroundStatus loading={isLoading} failed={!!error} /> : undefined;
   const lane = useRef<HTMLDivElement>(null);
   const card = (
       <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
+        {header}
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p className="text-sm"><LoadingDots label={ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'} /></p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">

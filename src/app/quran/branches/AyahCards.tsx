@@ -2,8 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BookOpen, RotateCcw } from 'lucide-react';
-import TreeIcon from '@/components/common/TreeIcon';
+import { BookOpen, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -15,10 +14,10 @@ import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
 import { quranContexts, quranSurrounding } from '@/lib/quran/quranText';
 import { MAX_KEYS, sharedMarks } from './AyahContext';
 import { usePreload, type Steps } from './TreeSteps';
+import { useAroundSetting } from './Surroundings';
 import styles from './AyahCards.module.css';
 
-const COLUMNS = ['before', 'ayah', 'after'] as const;
-type Column = typeof COLUMNS[number];
+type Column = 'before' | 'ayah' | 'after';
 
 const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس الجذر' } : { exact: 'Same word', root: 'Same root' };
 
@@ -27,16 +26,24 @@ export function CardsLegend() {
   return <MatchLegend exact={exact} root={root} />;
 }
 
-export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string[]; names: Record<number, string>; steps?: Steps }) {
+type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps };
+
+/** The surrounding-ayat setting adds the ayah before and after each one as columns beside it. */
+export default function AyahCards(props: Props) {
+  const [context] = useAroundSetting();
+  return <Matrix key={String(context)} context={context} {...props} />;
+}
+
+function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const shown = ayahKeys.slice(0, MAX_KEYS);
-  const [column, setColumn] = useState(1);
+  const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];
+  const [column, setColumn] = useState(context ? 1 : 0);
   const [lit, setLit] = useState<number[] | null>(null);
-  const [fits, setFits] = useState(false);
   const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(['quran-context', ...shown], loadContexts, { revalidateOnFocus: false });
-  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(['quran-surrounding', shown.join(','), shown.join(',')], () => quranSurrounding(shown, shown), { revalidateOnFocus: false });
+  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(context ? ['quran-surrounding', shown.join(','), shown.join(',')] : null, () => quranSurrounding(shown, shown), { revalidateOnFocus: false });
   const sideKeys = (side: 'before' | 'after') => around && [...new Set(Object.values(around[side]).flatMap(ayah => ayah ? [ayah.key] : []))];
   const sideKey = (keys?: string[]) => keys && keys.length > 1 ? ['quran-context', ...keys.slice(0, MAX_KEYS)] : null;
   const { data: beforeMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('before')), loadContexts, { revalidateOnFocus: false });
@@ -98,7 +105,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     dragged.current = 0;
     paint();
   };
-  const rows = () => [...(track.current?.querySelectorAll<HTMLElement>('[data-col="1"]') ?? [])];
+  const rows = () => [...(track.current?.querySelectorAll<HTMLElement>(`[data-col="${context ? 1 : 0}"]`) ?? [])];
   const measure = () => {
     const element = track.current;
     const cells = rows();
@@ -112,7 +119,6 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const focused = document.activeElement?.closest<HTMLElement>('[data-row]');
     if (focused && element.contains(focused) && !shown.includes(Number(focused.dataset.row))) element.focus({ preventScroll: true });
     setLit(previous => previous?.join() === shown.join() ? previous : shown);
-    setFits(cells[cells.length - 1].getBoundingClientRect().bottom - cells[0].getBoundingClientRect().top <= element.clientHeight);
   };
   const reveal = (r: number) => {
     const element = track.current;
@@ -129,7 +135,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     if (element?.scrollLeft) element.scrollLeft = 0;
     measure();
   };
-  const ready = !!data && !!around;
+  const ready = !!data && (!context || !!around);
   const columnRef = useRef(column);
   columnRef.current = column;
   useEffect(() => {
@@ -207,11 +213,11 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     return match && sharedMarks(match, exactLabel, rootLabel);
   };
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
-    const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
+    const ayah = at === 'ayah' ? context.ayah : around?.[at][context.ayah.key];
     const current = i === column;
     const shownRow = !lit || lit.includes(row);
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': shownRow || undefined, 'aria-hidden': !current || !shownRow, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && shownRow ? undefined : () => { if (!current) goTo(i); if (!shownRow) reveal(row); } };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': shownRow || undefined, 'aria-hidden': !current || !shownRow, className: styles.cell, style: { gridColumn: i + 1, gridRow: row + 1 }, onClick: current && shownRow ? undefined : () => { if (!current) goTo(i); if (!shownRow) reveal(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
@@ -230,26 +236,29 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     </div>;
   };
 
-  const edge = (forward: boolean) => {
-    const href = forward ? steps?.next : steps?.previous;
-    if (!href) return null;
-    const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
-    return <Button size="icon" variant="muted" className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }} href={href} scroll={false} onClick={event => { if (justSwiped()) event.preventDefault(); }} aria-label={label} title={label}>
-      <TreeIcon size={16} aria-hidden className={styles.edgeIcon} />
-    </Button>;
+  // Chevrons beside the matrix step a column, then on to the neighbouring tree. Phones swipe instead.
+  const chevron = (forward: boolean) => {
+    if (!canStep(forward)) return null;
+    const leaves = column === (forward ? COLUMNS.length - 1 : 0);
+    const label = leaves ? (forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree')) : (ar ? (forward ? 'الآية التالية' : 'الآية السابقة') : (forward ? 'Next ayah' : 'Previous ayah'));
+    const Arrow = forward ? ChevronLeft : ChevronRight;
+    return <button type="button" data-edge={forward ? 'next' : 'previous'} aria-label={label} title={label} onClick={() => { if (!justSwiped()) stepRef.current(forward); }}
+      className={`absolute top-1/2 z-10 flex h-12 w-6 -translate-y-1/2 items-center justify-center rounded-sm text-[var(--home-muted)] transition-colors hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] max-sm:hidden ${forward ? 'left-0' : 'right-0'}`}>
+      <Arrow size={18} aria-hidden />
+    </button>;
   };
 
   return (
-    <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
+    <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="relative flex flex-col gap-2">
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll}>
-        <div ref={lane} className={styles.lane}>
-          {edge(false)}
-          {edge(true)}
+      {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track} onScroll={onScroll}>
+        <div ref={lane} className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
         </div>
       </div>}
+      {ready && chevron(false)}
+      {ready && chevron(true)}
     </section>
   );
 }
