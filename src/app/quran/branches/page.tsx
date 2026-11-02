@@ -106,8 +106,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const treeView = { ...state, query: undefined, surah: undefined, mode: undefined, saved: undefined };
   const cards = !!tree && state.mode === 'cards';
   const parent = built.subtrees?.byId.get(id)?.parent;
-  const position = tree ? cut.findIndex(piece => piece.id === id || piece.id === parent) : -1;
-  const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { query: state.query, surah, mode: state.mode, saved: state.saved, card });
+  // The tree itself first: a subtree saved beside its parent tree must not step to itself.
+  const exact = tree ? cut.findIndex(piece => piece.id === id) : -1;
+  const position = exact >= 0 || !tree ? exact : cut.findIndex(piece => piece.id === parent);
+  // A neighbour that is this same tree is no neighbour: swiping there bounces back instead of reopening this page.
+  const stepTo = (index: number, card?: 'last') => cut[index] && cut[index].id !== id ? branchesHref(cut[index].id, juz, { query: state.query, surah, mode: state.mode, saved: state.saved, card }) : undefined;
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const neighbourAt = (index: number) => {
     const phrase = steps && !cards && cut[index]?.phrase;
