@@ -77,7 +77,8 @@ export function Stem({ lit, side }: { lit: number[]; side: 'start' | 'end' }) {
   }, [shown]);
   const across = span?.[2] === 1;
   const style: React.CSSProperties = !span ? { display: 'none' }
-    : across ? { left: span[0], width: span[1] - span[0], [side === 'start' ? 'top' : 'bottom']: 0, borderTopWidth: side === 'start' ? 2 : 0, borderBottomWidth: side === 'start' ? 0 : 2, borderInlineWidth: 0 }
+    // right/left: auto, or the start-0 class (right: 0 in Arabic) would win over left and pin the stem to the edge.
+    : across ? { left: span[0], right: 'auto', width: span[1] - span[0], [side === 'start' ? 'top' : 'bottom']: 0, borderTopWidth: side === 'start' ? 2 : 0, borderBottomWidth: side === 'start' ? 0 : 2, borderInlineWidth: 0 }
     : { top: span[0], height: span[1] - span[0] };
   return <span ref={line} aria-hidden data-stem className={`pointer-events-none absolute z-[1] ${LIT} ${side === 'start' ? 'start-0 border-s-2' : 'end-0 border-e-2'}`} style={style} />;
 }
