@@ -53,6 +53,8 @@
     background: var(--home-paper); border-top: 1px solid var(--home-rule);
     padding: 0.25rem max(0.25rem, env(safe-area-inset-right)) calc(0.25rem + env(safe-area-inset-bottom)) max(0.25rem, env(safe-area-inset-left));
   }
+  /* Page buttons sent to the bottom bar (NavButtons bottom) sit as one more tab. */
+  .railActions:not(:empty) { display: flex; flex: 1; align-items: center; justify-content: center; }
 }
 .tab { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 3rem; color: var(--home-muted); -webkit-tap-highlight-color: transparent; }
 .tabPill { display: flex; padding: 0.375rem 1.25rem; border-radius: 999px; transition: background-color 0.15s, transform 0.1s; }

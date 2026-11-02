@@ -1,10 +1,8 @@
-.track { overflow-x: hidden; overflow-y: auto; touch-action: pan-y pinch-zoom; max-height: min(75vh, calc(100svh - var(--tree-chrome, 13rem))); scroll-padding-top: 2.5rem; scroll-snap-type: y mandatory; scrollbar-width: none; }
+.track { overflow-x: clip; touch-action: pan-y pinch-zoom; }
 .lane { position: relative; display: grid; grid-template-columns: repeat(var(--columns), 84%); gap: 0.75rem 1rem; align-items: stretch; will-change: transform; backface-visibility: hidden; }
-.track::-webkit-scrollbar { display: none; }
-.cell { min-width: 0; max-height: calc(min(75vh, 100svh - var(--tree-chrome, 13rem)) - 3rem); transition: opacity 0.3s ease; }
-.cell[data-current] { scroll-snap-align: start; scroll-snap-stop: always; }
+.cell { min-width: 0; transition: opacity 0.3s ease; }
 .lane[data-sliding] { transition: transform 0.25s ease; }
-.cell:not([data-current]), .cell:not([data-reading]) { opacity: 0.45; cursor: pointer; }
+.cell:not([data-current]) { opacity: 0.45; cursor: pointer; }
 .cell > div { display: block; height: 100%; }
 .cell article { display: block; height: 100%; overflow-y: auto; padding: 0.75rem; }
 .cell article header { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem; }

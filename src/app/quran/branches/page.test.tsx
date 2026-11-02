@@ -2,7 +2,7 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 // The site's top bar is not rendered here; its page-actions slot shows in place.
 vi.mock('@/components/common/NavBar', () => ({
   NavActions: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-actions">{children}</div>,
-  NavButtons: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-buttons">{children}</div>,
+  NavButtons: ({ children, bottom }: { children: React.ReactNode; bottom?: boolean }) => <div data-testid={bottom ? 'nav-bottom' : 'nav-buttons'}>{children}</div>,
 }));
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -140,7 +140,6 @@ describe('Quran branch trees', () => {
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
     expect(screen.getByText('سورة النبأ')).toBeTruthy();
     expect(new URL(screen.getByRole('link', { name: 'إزالة السورة' }).getAttribute('href')!, 'http://localhost').searchParams.has('s')).toBe(false);
-    expect(screen.getByText(/^١ من /)).toBeTruthy();
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
     expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('78');
     cleanup();
@@ -149,12 +148,12 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(first);
   });
 
-  it('opens the first search result and swipes through the rest in order, counting them', async () => {
+  it('opens the first search result and swipes through the rest in order, with no result count', async () => {
     const query = 'قال';
     const first = await target({ q: query });
     expect(new URL(first, 'http://localhost').searchParams.get('q')).toBe(query);
     render(await open(paramsOf(first)));
-    expect(screen.getByText(/^١ من /)).toBeTruthy();
+    expect(screen.queryByText(/^١ من /)).toBeNull();
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
     expect(new URL(second, 'http://localhost').searchParams.get('q')).toBe(query);
@@ -208,7 +207,7 @@ describe('Quran branch trees', () => {
     });
   });
 
-  it('puts search and filter in the top bar and the page buttons in the side rail, as named icons', async () => {
+  it('puts search and filter in the top bar, page buttons in the side rail, help in the bottom bar and share and save under the tree', async () => {
     render(await follow({ juzFrom: '30', juzTo: '30' }));
     expect(screen.getByRole('heading', { level: 1, name: 'متشابهات القرآن' }).className).toContain('sr-only');
     const bar = screen.getByTestId('nav-actions');
@@ -226,7 +225,10 @@ describe('Quran branch trees', () => {
       expect(control.textContent).toBe('');
       expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
     });
-    expect(within(rail).getByTitle('قواعد المطابقة')).toBeTruthy();
+    expect(within(screen.getByTestId('nav-bottom')).getByTitle('قواعد المطابقة')).toBeTruthy();
+    const actions = screen.getByRole('button', { name: 'حفظ' }).parentElement!;
+    expect(within(actions).getByRole('button', { name: 'مشاركة' })).toBeTruthy();
+    expect(within(rail).queryByRole('button', { name: 'مشاركة' })).toBeNull();
   });
 
   it('shows the tree as ayah cards in cards view, crossing to the previous tree on its last card', async () => {
@@ -242,12 +244,12 @@ describe('Quran branch trees', () => {
   it('keeps the colour legend in the help in cards view only', async () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
-    const help = within(screen.getByTestId('nav-buttons')).getByTitle('قواعد المطابقة').closest('details')!;
+    const help = within(screen.getByTestId('nav-bottom')).getByTitle('قواعد المطابقة').closest('details')!;
     expect(within(help).getByText('نفس الكلمة')).toBeTruthy();
     expect(within(help).getByText('نفس الجذر')).toBeTruthy();
     cleanup();
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
-    expect(within(screen.getByTestId('nav-buttons')).queryByText('نفس الكلمة')).toBeNull();
+    expect(within(screen.getByTestId('nav-bottom')).queryByText('نفس الكلمة')).toBeNull();
   });
 
   it('keeps the juz range in the filter sheet, named once', async () => {

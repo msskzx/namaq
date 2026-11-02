@@ -2,7 +2,7 @@
 
 import React, { useSyncExternalStore } from 'react';
 import useSWR from 'swr';
-import { LocateFixed, Network, TextSearch } from 'lucide-react';
+import { LocateFixed, TextSearch, UnfoldHorizontal } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
@@ -49,7 +49,7 @@ export function AroundButton() {
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
     className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
-    <Network aria-hidden />
+    <UnfoldHorizontal aria-hidden />
   </Button>;
 }
 
@@ -67,7 +67,7 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return (
     <span title={label} className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
-      <Toggle checked={on} label={label} onChange={onChange} onIcon={<Network className="size-3" aria-hidden />} />
+      <Toggle checked={on} label={label} onChange={onChange} onIcon={<UnfoldHorizontal className="size-3" aria-hidden />} />
       {on && loading && <LoadingDots />}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>
