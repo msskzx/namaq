@@ -30,8 +30,10 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
           <h2 className="text-lg">{label}</h2>
           <Button size="lg" variant="muted" onClick={() => sheet.current?.close()} aria-label={close} title={close}><X aria-hidden /></Button>
         </div>
-        <JuzFilter range={range} view={view} />
-        <SavedOnly range={range} view={view} onDone={() => sheet.current?.close()} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <JuzFilter range={range} view={view} />
+          <SavedOnly range={range} view={view} onDone={() => sheet.current?.close()} />
+        </div>
       </div>
     </dialog>
   </>;
@@ -46,16 +48,13 @@ function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: Bran
   const router = useNavigatingRouter();
   const on = !!view.saved?.length;
   const label = ar ? 'المحفوظة فقط' : 'Saved only';
-  return <div className="flex items-center justify-between gap-3 border-t border-[var(--home-rule)] pt-3">
-    <span className="flex flex-col">
-      <span>{label}</span>
-      {!on && saved.length === 0 && <span className="text-xs text-[var(--home-muted)]">{ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا.' : 'Save a tree with the bookmark under it first.'}</span>}
-    </span>
-    <Toggle checked={on} label={label} disabled={!on && saved.length === 0} onChange={checked => {
+  const hint = !on && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
+  return <span title={hint} className="inline-flex shrink-0">
+    <Toggle size="lg" checked={on} label={label} disabled={!on && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={checked => {
       onDone();
       router.push(branchesHref('', range ?? undefined, { query: view.query, surah: view.surah, mode: view.mode, saved: checked ? saved.map(item => item.id) : undefined }));
     }} />
-  </div>;
+  </span>;
 }
 
 /** Under the tree or matrix, as on a post: share on one side, save on the other. */
