@@ -12,10 +12,10 @@ import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import type { Surrounding } from '@/lib/quran/ayahContext';
-import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useSurrounding, type Around } from './Surroundings';
+import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
@@ -87,9 +87,9 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
   });
   const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
-    <div className="flex items-center">
+    <div className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
-      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} bg-[var(--home-paper)] ${root ? 'text-xl' : 'text-lg'}`}>
+      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} bg-[var(--home-paper)] ${root ? 'text-xl' : 'text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
@@ -116,6 +116,7 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 }
 
 const MAX_SCALE = 2;
+const DOWN_GAIN = 1.15;
 const SCALE_STEP = 0.1;
 
 type DiagramSize = { width: number; height: number; availableWidth: number; availableHeight: number };
@@ -131,11 +132,12 @@ const NEIGHBOUR_GAP = '2rem';
 
 const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
 
-function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null> }) {
+function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane, auto = false, flip = false }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null>; auto?: boolean; flip?: boolean }) {
   const viewport = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
+  const [down, setDown] = useState(false);
 
   // Measured before the first paint, so a tree opens at its fit size rather than growing into it.
   useLayoutEffect(() => {
@@ -143,13 +145,24 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     const outer = viewport.current;
     const inner = content.current;
     if (!outer || !inner) return;
+    // Draws the tree both ways (a data attribute switches the layout in CSS, no re-render) and keeps the one that fits bigger.
+    const drawn = (top: boolean) => {
+      inner.toggleAttribute('data-down', top);
+      return { width: inner.offsetWidth, height: inner.offsetHeight };
+    };
     const measure = () => {
-      const next = {
-        width: inner.offsetWidth,
-        height: inner.offsetHeight,
-        availableWidth: outer.clientWidth,
-        availableHeight: height ? outer.clientHeight : Math.max(240, Math.round(window.innerHeight * 0.7)),
-      };
+      const available = { availableWidth: outer.clientWidth, availableHeight: height ? outer.clientHeight : Math.max(240, Math.round(window.innerHeight * 0.7)) };
+      let box = { width: inner.offsetWidth, height: inner.offsetHeight };
+      if (auto) {
+        const side = drawn(false);
+        const top = drawn(true);
+        const fit = (size: { width: number; height: number }) => fitTreeScale({ ...size, ...available });
+        // Top-down only when it is clearly bigger: right to left stays the usual way to read a tree.
+        const pick = side.width > 0 && (fit(top) > fit(side) * DOWN_GAIN) !== flip;
+        box = drawn(pick);
+        setDown(pick);
+      }
+      const next = { ...box, ...available };
       if (!next.width || !next.height || !next.availableWidth) return;
       setSize(previous => previous && Object.keys(next).every(key => previous[key as keyof DiagramSize] === next[key as keyof DiagramSize]) ? previous : next);
     };
@@ -159,7 +172,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     observer.observe(outer);
     observer.observe(inner);
     return () => observer.disconnect();
-  }, [enabled, height]);
+  }, [enabled, height, auto, flip]);
 
   // The tree is placed with a transform, never by scrolling, so a pinch can keep any point of the tree under
   // the fingers, and each finger move only writes one transform (no re-render, no flicker).
@@ -188,6 +201,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     if (fitChanged) redraw(version => version + 1);
   };
   /** Scales to `scale` keeping the viewport point (px, py) over the same spot of the tree. */
+  // A rotated tree starts again at its fit.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (camera.current) paintCamera(null); }, [down]);
   const zoomTo = (scale: number, px: number, py: number, from = shown()) => {
     paintCamera(clamp({ s: scale, x: px - (px - from.x) * scale / from.s, y: py - (py - from.y) * scale / from.s }));
   };
@@ -439,18 +455,21 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     {onStep && neighbour(true)}
     <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
         <div ref={frameRef} data-tree-frame dir="ltr" className="absolute left-0 top-0" style={{ transform: `translate(${view.x}px, ${view.y}px)` }}>
-          <div ref={content} data-tree-content dir={ar ? 'rtl' : 'ltr'} className="absolute left-0 top-0 flex w-max items-center" style={{ transform: `scale(${view.s})`, transformOrigin: '0 0' }}>{children}</div>
+          <div ref={content} data-tree-content data-down={down || undefined} dir={ar ? 'rtl' : 'ltr'} className="absolute left-0 top-0 flex w-max items-center data-down:flex-col" style={{ transform: `scale(${view.s})`, transformOrigin: '0 0' }}>{children}</div>
         </div>
       </div>
   </>;
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, view: given, surround }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
   const [global] = useAroundSetting();
+  const [rotated, setRotated] = useRotated();
+  // The rotate button turns only the open tree: the next tree opens in its own best direction again.
+  useEffect(() => { if (rotatable) return () => setRotated(false); }, [rotatable, setRotated]);
   const on = surround?.sync ? global : local;
   const view = given;
   const outer = useOuterPaths();
@@ -494,7 +513,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport lane={lane} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined}>
+        <TreeViewport lane={lane} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} flip={rotatable && rotated}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />

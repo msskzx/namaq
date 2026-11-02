@@ -2,7 +2,7 @@
 
 import React, { useSyncExternalStore } from 'react';
 import useSWR from 'swr';
-import { LocateFixed, TextSearch, UnfoldHorizontal } from 'lucide-react';
+import { LocateFixed, RotateCwSquare, TextSearch, UnfoldHorizontal } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
@@ -50,6 +50,32 @@ export function AroundButton() {
   return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
     className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
     <UnfoldHorizontal aria-hidden />
+  </Button>;
+}
+
+// Whether the open tree is drawn the other way round from the direction it picked for itself (not kept: each tree opens in its own best direction).
+let rotated = false;
+const rotateListeners = new Set<() => void>();
+const subscribeRotate = (listener: () => void) => { rotateListeners.add(listener); return () => { rotateListeners.delete(listener); }; };
+const setRotatedValue = (next: boolean) => {
+  if (rotated === next) return;
+  rotated = next;
+  rotateListeners.forEach(listener => listener());
+};
+
+export function useRotated() {
+  const on = useSyncExternalStore(subscribeRotate, () => rotated, () => false);
+  return [on, setRotatedValue] as const;
+}
+
+/** Turns the open tree between right to left and top down; beside the surrounding-ayat switch. */
+export function RotateButton() {
+  const ar = useLanguage().language === 'ar';
+  const [on, set] = useRotated();
+  const label = ar ? 'تدوير الشجرة' : 'Rotate tree';
+  return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
+    className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
+    <RotateCwSquare aria-hidden />
   </Button>;
 }
 
