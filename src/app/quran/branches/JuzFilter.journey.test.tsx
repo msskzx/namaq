@@ -115,7 +115,7 @@ describe('automatic juz range updates', () => {
 
     await vi.advanceTimersByTimeAsync(500);
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', juz, { query: 'ارءيتم', mode: 'list' }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', juz, { query: 'ارءيتم' }));
     expect(navigation.replace).not.toHaveBeenCalled();
   });
 });

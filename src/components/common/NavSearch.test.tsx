@@ -22,4 +22,14 @@ describe('NavSearch', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Close search' }));
     expect(icon.getAttribute('aria-expanded')).toBe('false');
   });
+
+  it('closes on a press outside the box', () => {
+    render(<><p>page</p><NavSearch><input aria-label="phrase" /></NavSearch></>);
+    const icon = screen.getByRole('button', { name: 'Search' });
+    fireEvent.click(icon);
+    fireEvent.pointerDown(screen.getByRole('textbox', { name: 'phrase' }));
+    expect(icon.getAttribute('aria-expanded')).toBe('true');
+    fireEvent.pointerDown(screen.getByText('page'));
+    expect(icon.getAttribute('aria-expanded')).toBe('false');
+  });
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import LoadingDots from '@/components/common/LoadingDots';
-import React, { useEffect, useId, useMemo, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { Search } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -11,10 +11,13 @@ import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { matchesSurah } from '@/lib/quran/surahSearch';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 h-11 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 type Suggestion = Opening;
+export type SurahCount = { number: number; name: string; count: number };
+const SURAH_HITS = 3;
 
 export const SUGGESTIONS = 10;
 
@@ -34,7 +37,7 @@ function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
   return inventories.get(key)!;
 }
 
-export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false }: { remote?: boolean; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, surahs = [] }: { surahs?: SurahCount[]; remote?: boolean; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -73,25 +76,40 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
   }, [query, remote, dismissed, requestKey]);
   const local = useMemo(() => remote ? [] : searchPhrases(phrases, query).slice(0, SUGGESTIONS), [remote, phrases, query]);
   const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : local;
+  const surahHits = useMemo(() => query.trim() ? surahs.filter(surah => matchesSurah(surah, query.trim())).slice(0, SURAH_HITS) : [], [surahs, query]);
+  const options = [...surahHits.map(surah => ({ surah })), ...suggestions.map(phrase => ({ phrase }))];
   const visible = !!query.trim() && !dismissed;
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!visible) return;
+    const close = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) { setDismissed(true); setSelected(-1); } };
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [visible]);
   const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() || view.query });
   const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);
     router.push(href(phrase));
   };
+  const pickSurah = (surah: SurahCount) => {
+    setQuery('');
+    setSelected(-1);
+    router.push(branchesHref('', juz ?? undefined, { surah: surah.number, mode: view.mode }));
+  };
+  const choose = (option: typeof options[number]) => 'surah' in option ? pickSurah(option.surah) : open(option.phrase);
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: 'list' }));
+    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: view.mode }));
   };
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative">
+      <div ref={box} className="relative">
         <label className="relative block">
           <span className="sr-only">{ar ? 'ابحث عن عبارة مشتركة بين آيتين أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
           <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
-          <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && suggestions[selected] ? `${listId}-${selected}` : undefined} value={query}
+          <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && options[selected] ? `${listId}-${selected}` : undefined} value={query}
             onChange={event => {
             setQuery(event.target.value);
             setSelected(-1);
@@ -101,24 +119,34 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             placeholder={ar ? 'ابحث' : 'Search'}
             onKeyDown={event => {
               if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
-              if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
+              if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && options.length) {
                 event.preventDefault();
                 setDismissed(false);
-                setSelected(index => event.key === 'ArrowDown' ? (index + 1) % suggestions.length : (index <= 0 ? suggestions.length - 1 : index - 1));
+                setSelected(index => event.key === 'ArrowDown' ? (index + 1) % options.length : (index <= 0 ? options.length - 1 : index - 1));
               }
               if (event.key === 'Enter' && !query.trim() && submitted) router.push(branchesHref('', juz ?? undefined, { surah: view.surah, mode: view.mode }));
-              if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && suggestions[selected]) open(suggestions[selected]); else search(); }
+              if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && options[selected]) choose(options[selected]); else search(); }
             }} className={SEARCH} />
         </label>
         {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
-          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}>{!ready ? <LoadingDots label={ar ? 'جارٍ تحميل العبارات' : 'Loading phrases'} /> : <span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span>}</li> : suggestions.map((opening, index) => (
-            <li key={opening.id} role="presentation">
+          {surahHits.length > 0 && <li role="presentation" className={`${NOTE} px-3 pt-2 text-xs`}>{ar ? 'السور' : 'Surahs'}</li>}
+          {surahHits.map((surah, index) => <li key={`s${surah.number}`} role="presentation">
+            <button id={`${listId}-${index}`} type="button" role="option" aria-selected={selected === index} onClick={() => pickSurah(surah)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
+              <span className={`${NOTE} w-7 shrink-0 tabular-nums`}>{ar ? num(surah.number) : surah.number}</span>
+              <span className="flex-1">{surah.name}</span>
+              <span className="text-[var(--home-accent)]">{ar ? num(surah.count) : surah.count}</span>
+            </button>
+          </li>)}
+          {surahHits.length > 0 && suggestions.length > 0 && <li role="presentation" className={`${NOTE} border-t border-[var(--home-rule)] px-3 pt-2 text-xs`}>{ar ? 'العبارات' : 'Phrases'}</li>}
+          {suggestions.length === 0 ? surahHits.length > 0 && ready ? null : <li role="presentation" className={`${NOTE} px-3 py-2`}>{!ready ? <LoadingDots label={ar ? 'جارٍ تحميل العبارات' : 'Loading phrases'} /> : <span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span>}</li> : suggestions.map((opening, i) => {
+            const index = surahHits.length + i;
+            return <li key={opening.id} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
                 <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
                 <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
               </button>
-            </li>
-          ))}
+            </li>;
+          })}
         </ul>}
       </div>
       {unavailable && <UnavailableNote />}
@@ -138,6 +166,6 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
 export function UnavailableNote() {
   const ar = useLanguage().language === 'ar';
   return <p role="status" className={NOTE}>{ar
-    ? 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. عد إلى القائمة أو امسح نطاق الأجزاء.'
-    : 'No two ayat share the requested phrase in this range. Return to the list or clear the juz range.'}</p>;
+    ? 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. امسح نطاق الأجزاء من زر التصفية.'
+    : 'No two ayat share the requested phrase in this range. Clear the juz range from the filter button.'}</p>;
 }

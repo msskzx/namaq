@@ -56,12 +56,12 @@ describe('OpeningSearch', () => {
     expect(suggested()).toEqual(['يَـٰٓأَيُّهَا ٱلَّذِينَ٩٠', 'إِنَّ ٱلَّذِينَ٧٣']);
   });
 
-  it('shows every result on Enter when no suggestion is highlighted', () => {
+  it('opens the first result on Enter when no suggestion is highlighted', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" view={{ grouped: true, page: 3 }} />);
     const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: ' الم تر ' } });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر', mode: 'list' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر' }));
     expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
   });
 
@@ -70,7 +70,7 @@ describe('OpeningSearch', () => {
     const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: 'الم تر' } });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14, query: 'الم تر', mode: 'list' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14, query: 'الم تر' }));
   });
 
   it('leaves a suggestion under the mouse out of Enter', () => {
@@ -79,7 +79,7 @@ describe('OpeningSearch', () => {
     fireEvent.change(box, { target: { value: 'الم تر' } });
     fireEvent.mouseEnter(screen.getAllByRole('option')[1]);
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر', mode: 'list' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر' }));
   });
 
   it('opens the highlighted suggestion on Enter', () => {
@@ -124,5 +124,24 @@ describe('OpeningSearch', () => {
     fireEvent.change(box, { target: { value: 'ا' } });
     fireEvent.change(box, { target: { value: '' } });
     expect(router.push).not.toHaveBeenCalled();
+  });
+});
+
+describe('surahs in the search', () => {
+  it('lists matching surahs first and adds the picked one as a filter', async () => {
+    render(<OpeningSearch top={[]} phrases={[]} surahs={[{ number: 2, name: 'البقرة', count: 40 }, { number: 3, name: 'آل عمران', count: 30 }]} />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'البقرة' } });
+    const options = screen.getAllByRole('option');
+    expect(options[0].textContent).toContain('البقرة');
+    fireEvent.click(options[0]);
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 2 }));
+  });
+
+  it('closes the suggestions on a press outside the search', () => {
+    render(<><button type="button">outside</button><OpeningSearch top={[]} phrases={[]} surahs={[{ number: 2, name: 'البقرة', count: 40 }]} /></>);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'البقرة' } });
+    expect(screen.getByRole('listbox')).toBeTruthy();
+    fireEvent.pointerDown(screen.getByText('outside'));
+    expect(screen.queryByRole('listbox')).toBeNull();
   });
 });

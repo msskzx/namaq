@@ -15,6 +15,12 @@ export default function NavSearch({ children }: { children: React.ReactNode }) {
   const box = useRef<HTMLDivElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => { if (open) box.current?.querySelector<HTMLInputElement>('input')?.focus(); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node) && !toggle.current?.contains(event.target as Node)) setOpen(false); };
+    document.addEventListener('pointerdown', outside);
+    return () => document.removeEventListener('pointerdown', outside);
+  }, [open]);
   const close = () => { setOpen(false); toggle.current?.focus(); };
   const label = ar ? 'البحث' : 'Search';
   const closeLabel = ar ? 'إغلاق البحث' : 'Close search';

@@ -32,7 +32,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
           <NavSlotElement.Provider value={slot}>
           <RailSlotContext.Provider value={setRailSlot}>
           <RailSlotElement.Provider value={railSlot}>
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-svh flex flex-col">
               <NavBar />
               {tabs && <TabBar />}
               <main className="flex-1">

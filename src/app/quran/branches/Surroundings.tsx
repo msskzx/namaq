@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import useSWR from 'swr';
 import { LocateFixed, Network, TextSearch } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -23,17 +23,43 @@ export function useSurrounding(on: boolean, keys: string[], ends: Record<string,
   return given ? { data: given, isLoading: false, error: undefined, mutate: fetched.mutate } : fetched;
 }
 
-type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
+const AROUND = 'branches-surround';
+const listeners = new Set<() => void>();
+const readAround = () => { try { return localStorage.getItem(AROUND) === '1'; } catch { return false; } };
+const subscribeAround = (listener: () => void) => {
+  listeners.add(listener);
+  window.addEventListener('storage', listener);
+  return () => { listeners.delete(listener); window.removeEventListener('storage', listener); };
+};
 
-function AddressToggle({ onChange, ...props }: ToggleProps) {
-  return <SurroundSwitch {...props} onChange={checked => {
-    onChange(checked);
-    const url = new URL(window.location.href);
-    if (checked) url.searchParams.set('c', '1');
-    else url.searchParams.delete('c');
-    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
-  }} />;
+/** One setting for every tree and matrix on the branches page, kept in this browser. */
+export function useAroundSetting() {
+  const on = useSyncExternalStore(subscribeAround, readAround, () => false);
+  const set = (next: boolean) => {
+    try { localStorage.setItem(AROUND, next ? '1' : '0'); } catch {}
+    listeners.forEach(listener => listener());
+  };
+  return [on, set] as const;
 }
+
+/** The surrounding-ayat switch in the side rail (the top bar on phones). */
+export function AroundButton() {
+  const ar = useLanguage().language === 'ar';
+  const [on, set] = useAroundSetting();
+  const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
+  return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
+    className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
+    <Network aria-hidden />
+  </Button>;
+}
+
+export function AroundStatus({ loading, failed }: { loading: boolean; failed: boolean }) {
+  const ar = useLanguage().language === 'ar';
+  if (failed) return <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>;
+  return loading ? <LoadingDots label={ar ? 'جارٍ تحميل الآيات المحيطة' : 'Loading surrounding ayat'} /> : null;
+}
+
+type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
 
 function SurroundSwitch({ on, onChange, loading = false, failed = false }: ToggleProps) {
   const { language } = useLanguage();
@@ -48,7 +74,7 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
   );
 }
 
-export const SurroundToggle = ({ sync = false, ...props }: ToggleProps & { sync?: boolean }) => (sync ? <AddressToggle {...props} /> : <SurroundSwitch {...props} />);
+export const SurroundToggle = SurroundSwitch;
 
 export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around; opens: string }) {
   const { language } = useLanguage();

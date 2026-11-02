@@ -32,11 +32,12 @@ const side: AyahContext[] = [
 
 beforeEach(() => {
   params = new URLSearchParams();
+  localStorage.setItem('branches-surround', '1');
   window.history.replaceState(null, '', '/quran/branches?o=x&m=cards');
   quranSurrounding.mockReset().mockResolvedValue(around);
   quranContexts.mockReset().mockImplementation(async (wanted: string[]) => [...source, ...side].filter(context => wanted.includes(context.ayah.key)));
 });
-afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); router.push.mockClear(); });
+afterEach(() => { cleanup(); localStorage.clear(); vi.useRealTimers(); vi.unstubAllGlobals(); router.push.mockClear(); });
 
 const steps = { previous: '/quran/branches?o=a&m=cards', next: '/quran/branches?o=b&m=cards', position: 2, total: 3 };
 const show = (keys = ['94:5', '94:6', '65:7']) => render(
@@ -76,12 +77,13 @@ it('moves every row together to the next or previous ayah with the arrow keys an
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
 });
 
-it('steps between trees with the tree navigation, the edge links and one more step past a side column', async () => {
+it('steps between trees with the tree navigation, the chevrons and one more step past a side column', async () => {
   show();
   await screen.findByLabelText('الشرح ٥');
-  expect(document.querySelector('a[data-edge="next"]')!.getAttribute('href')).toBe(steps.next);
-  expect(document.querySelector('a[data-edge="previous"]')!.getAttribute('href')).toBe(steps.previous);
+  expect(screen.getByRole('button', { name: 'الآية التالية' }).getAttribute('data-edge')).toBe('next');
+  expect(screen.getByRole('button', { name: 'الآية السابقة' }).getAttribute('data-edge')).toBe('previous');
   key('ArrowLeft');
+  expect(screen.getByRole('button', { name: 'الشجرة التالية' })).toBeTruthy();
   expect(router.push).not.toHaveBeenCalled();
   key('ArrowLeft');
   expect(router.push).toHaveBeenCalledWith(steps.next, { scroll: false });
@@ -89,9 +91,20 @@ it('steps between trees with the tree navigation, the edge links and one more st
   key('ArrowRight');
   key('ArrowRight');
   expect(router.push).toHaveBeenLastCalledWith(steps.previous, { scroll: false });
-  expect(screen.getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(steps.previous);
-  expect(screen.getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(steps.next);
+  fireEvent.click(screen.getByRole('button', { name: 'الشجرة السابقة' }));
+  expect(router.push).toHaveBeenCalledTimes(3);
   expect(screen.queryByText('٢ / ٣')).toBeNull();
+});
+
+it('shows only the tree ayat while the surrounding-ayat setting is off, and steps straight to the next tree', async () => {
+  localStorage.setItem('branches-surround', '0');
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  expect(document.querySelectorAll('[data-col]')).toHaveLength(3);
+  expect(quranSurrounding).not.toHaveBeenCalled();
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  key('ArrowLeft');
+  expect(router.push).toHaveBeenCalledWith(steps.next, { scroll: false });
 });
 
 it('opens a next ayah in the following surah under its basmala, without a seal on the basmala', async () => {
@@ -135,16 +148,15 @@ it('keeps every card in its own row and column when the first tree has no previo
     </SWRConfig>,
   );
   await screen.findByLabelText('الشرح ٥');
-  expect(document.querySelector('[data-edge="previous"]')).toBeNull();
-  expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/2', '1/3', '1/4', '2/2', '2/3', '2/4']);
+  expect(screen.queryByRole('button', { name: 'الشجرة السابقة' })).toBeNull();
+  expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/1', '1/2', '1/3', '2/1', '2/2', '2/3']);
 });
 
 it('lights every row when all rows fit in the frame', async () => {
   vi.stubGlobal('ResizeObserver', class { constructor(private callback: () => void) {} observe() { this.callback(); } disconnect() {} });
   show();
   await screen.findByLabelText('الشرح ٥');
-  await waitFor(() => expect(document.querySelector('[data-fits]')).toBeTruthy());
-  expect(document.querySelectorAll('[data-col="1"][data-reading]')).toHaveLength(3);
+  await waitFor(() => expect(document.querySelectorAll('[data-col="1"][data-reading]')).toHaveLength(3));
 });
 
 it.each([
