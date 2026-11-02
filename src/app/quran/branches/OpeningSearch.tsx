@@ -95,13 +95,13 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
   const pickSurah = (surah: SurahCount) => {
     setQuery('');
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { surah: surah.number, mode: view.mode }));
+    router.push(branchesHref('', juz ?? undefined, { surah: surah.number, mode: view.mode, saved: view.saved }));
   };
   const choose = (option: typeof options[number]) => 'surah' in option ? pickSurah(option.surah) : open(option.phrase);
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: view.mode }));
+    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: view.mode, saved: view.saved }));
   };
   return (
     <div className="flex flex-col gap-3">

@@ -183,6 +183,17 @@ describe('Quran branch trees', () => {
     expect(tree.textContent).toContain('٢٧:٩١');
   });
 
+  it('steps through the saved trees only, newest first, while the saved-only switch is on', async () => {
+    const [a, b] = [data.trees[5].id, data.trees[2].id];
+    const first = await target({ b: `${a}|${b}` });
+    expect(paramsOf(first)).toEqual({ o: a, b: `${a}|${b}` });
+    render(await open(paramsOf(first)));
+    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(b, undefined, { saved: [a, b] }));
+    expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
+    expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).parentElement!.querySelector('.rounded-full')).toBeTruthy();
+  });
+
   it('says so when no tree matches the search', async () => {
     render(await open({ q: 'كلمات لا توجد أبدا' }));
     expect(screen.getByText('لا شجرة تطابق «كلمات لا توجد أبدا».')).toBeTruthy();
