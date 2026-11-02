@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { Bookmark, BookmarkCheck, Check, Funnel, Share2, X } from 'lucide-react';
+import { Bookmark, BookmarkCheck, Check, Funnel, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -57,7 +57,7 @@ function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: Bran
   </span>;
 }
 
-/** Under the tree or matrix, as on a post: share on one side, save on the other. */
+/** Under the tree or matrix, as on a post: save, with share right beside it. */
 export function CardActions({ id, text }: { id: string; text: string }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id);
@@ -67,7 +67,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
     ['q', 's', 'n', 'b'].forEach(key => url.searchParams.delete(key));
     toggleBookmark({ id, text, href: `${url.pathname}${url.search}` });
   };
-  return <div className="flex items-center justify-between gap-2">
+  return <div className="flex items-center justify-end gap-1">
     <ShareButton />
     <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
       {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
@@ -93,7 +93,7 @@ export function ShareButton() {
     } catch {}
   };
   return <Button size="lg" variant="muted" onClick={() => void share()} aria-label={label} title={label}>
-    {copied ? <Check aria-hidden /> : <Share2 aria-hidden />}
+    {copied ? <Check aria-hidden /> : <Send aria-hidden />}
   </Button>;
 }
 
