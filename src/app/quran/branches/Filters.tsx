@@ -114,12 +114,12 @@ export function CardActions({ id, text }: { id: string; text: string }) {
   return <div className="flex flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
-    <GrowControls />
     <span className="flex-1" />
     <ShareButton video />
     <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
       {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
     </Button>
+    <GrowControls />
     </div>
     <GrowVideo title={text} />
   </div>;

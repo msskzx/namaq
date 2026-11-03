@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useSyncExternalStore } from 'react';
-import { CircleHelp, Pause, Play, RotateCcw } from 'lucide-react';
+import { Pause, Play, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { GrowthStep } from '@/lib/quran/growth';
@@ -41,7 +41,7 @@ function loadPrefs() {
   try {
     const saved = JSON.parse(localStorage.getItem(PREFS) ?? '{}');
     set({
-      mode: saved.mode === 'ask' ? 'ask' : 'watch',
+      mode: 'watch',
       speed: SPEEDS.includes(saved.speed) ? saved.speed : 1,
       timer: TIMERS.includes(saved.timer) ? saved.timer : 3,
     });
@@ -218,7 +218,7 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
 
 const SPEED_LABEL = (speed: number) => `${speed}×`;
 
-/** Under the tree, beside save and share: play, ask mode, and while playing the speed, the timer and a bar per ayah. */
+/** Under the tree, beside save and share: play, and while playing the speed, the timer and a bar per ayah. */
 export function GrowControls() {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
@@ -231,15 +231,11 @@ export function GrowControls() {
     else void play();
   };
   const ask = growth.mode === 'ask';
-  const askLabel = ar ? (ask ? 'وضع السؤال: يتوقف عند كل تفرّع' : 'وضع السؤال') : (ask ? 'Ask mode: stops at each split' : 'Ask mode');
   const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
   const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
   return <>
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
       {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
-    </Button>
-    <Button size="lg" variant="muted" aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel} className={ask ? 'text-[var(--home-accent)]' : undefined}>
-      <CircleHelp aria-hidden />
     </Button>
     {active && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
       <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
