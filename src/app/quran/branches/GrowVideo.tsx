@@ -119,17 +119,13 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.stroke();
     context.setLineDash([]);
     if (box.element.hasAttribute('data-ask')) {
+      // As on the page: the seconds left in the empty box, and a bar along its foot shrinking from its start.
       const left = askLeft() ?? 1;
-      const [cx, cy, r] = [x + w / 2, y + h / 2, 12];
-      context.lineWidth = 3;
-      context.strokeStyle = look.rule;
-      context.beginPath();
-      context.arc(cx, cy, r, 0, Math.PI * 2);
-      context.stroke();
-      context.strokeStyle = look.accent;
-      context.beginPath();
-      context.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * left);
-      context.stroke();
+      context.fillStyle = look.accent;
+      context.font = `700 ${Math.min(28, h * 0.6)}px system-ui, sans-serif`;
+      context.fillText(box.element.getAttribute('data-left') ?? '؟', x + w / 2, y + h / 2);
+      const bar = (w - 2) * left;
+      context.fillRect(style.direction === 'rtl' ? x + w - 1 - bar : x + 1, y + h - 4, bar, 3);
       continue;
     }
     for (const word of box.words) {

@@ -30,12 +30,14 @@ const page = () => render(<>
   <GrowControls />
 </>);
 const box = (text: string) => screen.getByText(text).closest('[data-node]')!;
+const studio = () => fireEvent.click(screen.getByRole('button', { name: 'استوديو النمو' }));
+const grow = () => { studio(); fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })); };
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 
 describe('growing a tree', () => {
   it('hides the branches, grows them one ayah at a time, then shows the whole tree', async () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     expect(box('إِنَّ ٱلْمُتَّقِينَ فِى').hasAttribute('data-hide')).toBe(false);
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(true);
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
@@ -46,32 +48,49 @@ describe('growing a tree', () => {
     await advance(10000);
     expect(document.querySelectorAll('[data-hide]')).toHaveLength(0);
     expect(screen.getByRole('button', { name: 'إعادة' })).toBeTruthy();
-    expect(screen.queryByRole('group', { name: 'تقدّم الشجرة' })).toBeNull();
+    expect(screen.getByRole('group', { name: 'تقدّم الشجرة' })).toBeTruthy();
   });
 
-  it('places playback beside the bookmark without an ask-mode button', () => {
+  it('opens a studio in place of save and share, plays only on play, and stays open until closed', async () => {
     render(<>
       <BranchTree tree={tree} names={{}} growable />
       <CardActions id="t" text="إن المتقين في" />
     </>);
     const save = screen.getByRole('button', { name: 'حفظ' });
-    const play = screen.getByRole('button', { name: 'شاهد الشجرة تنمو' });
-    expect(save.nextElementSibling).toBe(play);
-    expect(screen.queryByRole('button', { name: /وضع السؤال/ })).toBeNull();
+    expect(save.nextElementSibling).toBe(screen.getByRole('button', { name: 'استوديو النمو' }));
+    expect(screen.queryByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeNull();
+    studio();
+    expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'مشاركة' })).toBeNull();
+    expect(screen.getByRole('button', { name: /^السرعة/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /^وضع السؤال/ }).getAttribute('aria-pressed')).toBe('false');
+    expect(screen.queryByRole('button', { name: /^مهلة السؤال/ })).toBeNull();
+    expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);
+    await advance(3000);
+    expect(document.querySelectorAll('[data-hide]')).toHaveLength(0);
+    fireEvent.click(screen.getByRole('button', { name: /^وضع السؤال/ }));
+    expect(screen.getByRole('button', { name: /^مهلة السؤال/ })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    await advance(400);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-ask')).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'إغلاق الاستوديو' }));
+    expect(document.querySelectorAll('[data-hide], [data-ask]')).toHaveLength(0);
+    expect(screen.getByRole('button', { name: 'حفظ' })).toBeTruthy();
+    expect(screen.queryByRole('group', { name: 'تقدّم الشجرة' })).toBeNull();
   });
 
-  it('starts in watch mode when ask mode was saved before its toggle was removed', async () => {
+  it('remembers the ask mode for the next visit', async () => {
     localStorage.setItem('branches-grow', JSON.stringify({ mode: 'ask', speed: 1, timer: 0 }));
     page();
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     await advance(1200);
-    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-ask')).toBe(false);
-    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(false);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-ask')).toBe(true);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-wait')).toBe(true);
   });
 
   it('pauses the clock', async () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
     await advance(5000);
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(true);
@@ -83,12 +102,14 @@ describe('growing a tree', () => {
   it('asks for the box where each ayah splits off, revealing it after the timer or a tap', async () => {
     page();
     act(() => setPrefs({ mode: 'ask' }));
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     await advance(400);
     const first = box('جَنَّـٰتٍ وَعُيُونٍ');
     expect(first.hasAttribute('data-ask')).toBe(true);
+    expect(first.getAttribute('data-left')).toBe('٣');
     await advance(2000);
     expect(first.hasAttribute('data-ask')).toBe(true);
+    expect(first.getAttribute('data-left')).toBe('١');
     await advance(1100);
     expect(first.hasAttribute('data-ask')).toBe(false);
     await advance(1500);
@@ -105,7 +126,7 @@ describe('growing a tree', () => {
     act(() => setPrefs({ mode: 'ask' }));
     expect(JSON.parse(localStorage.getItem('branches-grow')!).mode).toBe('ask');
     act(() => setPrefs({ mode: 'watch' }));
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     fireEvent.click(screen.getByRole('button', { name: 'من الآية 2' }));
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(false);
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
@@ -116,7 +137,7 @@ describe('growing a tree', () => {
       <BranchTree tree={tree} names={{}} growable steppable={{ next: false, previous: true, previousCard: <BranchTree tree={tree} names={{}} /> }} />
       <GrowControls />
     </>);
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     const boxes = screen.getAllByText('مَقَامٍ أَمِينٍ').map(text => text.closest('[data-node]')!);
     expect(boxes.map(box => [!!box.closest('[data-tree-neighbour]'), box.hasAttribute('data-hide')])).toEqual(expect.arrayContaining([[true, false], [false, true]]));
   });
@@ -124,7 +145,7 @@ describe('growing a tree', () => {
   it('stops and shows the tree when the tree goes away', async () => {
     const { unmount } = render(<BranchTree tree={tree} names={{}} growable />);
     render(<GrowControls />);
-    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    grow();
     const hidden = box('مَقَامٍ أَمِينٍ');
     expect(hidden.hasAttribute('inert')).toBe(true);
     unmount();

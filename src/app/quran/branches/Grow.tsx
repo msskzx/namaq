@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useSyncExternalStore } from 'react';
-import { Pause, Play, RotateCcw } from 'lucide-react';
+import { Clapperboard, Pause, Play, RotateCcw, Timer, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { GrowthStep } from '@/lib/quran/growth';
@@ -11,7 +11,8 @@ import styles from './Grow.module.css';
 export type GrowMode = 'watch' | 'ask';
 type Status = 'idle' | 'playing' | 'paused' | 'done';
 type Prefs = { mode: GrowMode; speed: number; timer: number };
-type GrowState = Prefs & { status: Status; at: number; total: number };
+/** `studio` is the card's animation state: its controls replace save and share until it is closed. */
+type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean };
 
 export const SPEEDS = [1, 1.5, 2, 0.5];
 /** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
@@ -24,7 +25,7 @@ const LEAF = 700;
 
 const PREFS = 'branches-grow';
 const listeners = new Set<() => void>();
-let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0 };
+let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false };
 let target: { card: HTMLElement; plan: GrowthStep[] } | null = null;
 let run = 0;
 let reveal: (() => void) | null = null;
@@ -41,7 +42,7 @@ function loadPrefs() {
   try {
     const saved = JSON.parse(localStorage.getItem(PREFS) ?? '{}');
     set({
-      mode: 'watch',
+      mode: saved.mode === 'ask' ? 'ask' : 'watch',
       speed: SPEEDS.includes(saved.speed) ? saved.speed : 1,
       timer: TIMERS.includes(saved.timer) ? saved.timer : 3,
     });
@@ -58,21 +59,29 @@ const serverState = state;
 export const growthState = () => state;
 export const useGrowth = () => useSyncExternalStore(subscribe, () => state, () => serverState);
 
-/** Waits `ms` of playing time (a pause stops the clock), or until a tap reveals the asked box. False once a newer run started. */
-function wait(ms: number, token: number, tappable = false) {
+// Arabic-Indic digits in Arabic, as the ayah numbers are.
+const seconds = (n: number) => document.documentElement.lang === 'en' ? String(n) : n.toLocaleString('ar-EG');
+
+/** Waits `ms` of playing time (a pause stops the clock), or until a tap reveals the asked box. False once a newer run started.
+ * While a box is asked, it shows the whole seconds left and a bar along its foot that shrinks with them. */
+function wait(ms: number, token: number, ask?: HTMLElement) {
   return new Promise<boolean>(resolve => {
     let left = ms;
     let last = Date.now();
     let tapped = false;
-    if (tappable) reveal = () => { tapped = true; };
+    if (ask) reveal = () => { tapped = true; };
     const tick = () => {
       if (token !== run) return resolve(false);
       const now = Date.now();
       if (state.status === 'playing') left -= now - last;
       last = now;
-      if (tappable) asking = ms > 0 ? Math.max(0, left / ms) : 1;
+      if (ask) {
+        asking = ms > 0 ? Math.max(0, left / ms) : 1;
+        ask.style.setProperty('--grow-left', String(asking));
+        if (ms > 0) ask.setAttribute('data-left', seconds(Math.max(1, Math.ceil(left / 1000))));
+      }
       if (tapped || (ms > 0 && left <= 0)) {
-        if (tappable) { reveal = null; asking = null; }
+        if (ask) { reveal = null; asking = null; ask.style.removeProperty('--grow-left'); }
         return resolve(true);
       }
       setTimeout(tick, 30);
@@ -84,7 +93,7 @@ function wait(ms: number, token: number, tappable = false) {
 // Hidden parts are inert too, so a screen reader or the tab key cannot give the answer away.
 const hide = (element: Element | null | undefined) => { element?.setAttribute('data-hide', ''); element?.setAttribute('inert', ''); };
 const show = (element: Element | null | undefined) => { element?.removeAttribute('data-hide'); element?.removeAttribute('inert'); };
-const ASK = ['data-ask', 'data-wait', 'role', 'tabindex', 'aria-label'];
+const ASK = ['data-ask', 'data-wait', 'data-left', 'role', 'tabindex', 'aria-label'];
 // The card also holds its neighbours' cards, ready for a swipe: only its own tree grows.
 const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySelectorAll<HTMLElement>('[data-grow="n-1"]')].find(root => !root.closest('[data-tree-neighbour]'));
 
@@ -165,10 +174,9 @@ export async function play(from = 0, { video = false } = {}) {
         shown.setAttribute('role', 'button');
         shown.setAttribute('tabindex', '0');
         shown.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Show the next word' : 'اكشف الكلمة التالية');
-        if (timer) (shown as HTMLElement).style.setProperty('--grow-timer', `${timer}s`);
-        else shown.setAttribute('data-wait', '');
+        if (!timer) shown.setAttribute('data-wait', '');
         show(shown);
-        if (!(await wait(timer * 1000, token, true))) return;
+        if (!(await wait(timer * 1000, token, shown as HTMLElement))) return;
         ASK.forEach(name => shown.removeAttribute(name));
       }
       show(shown);
@@ -190,6 +198,17 @@ export function pause(paused: boolean) {
   set({ status: paused ? 'paused' : 'playing' });
 }
 
+/** Opens the card's animation studio: its controls show, the tree waits for play. */
+export function openStudio() {
+  if (state.total > 0) set({ studio: true });
+}
+
+/** Leaves the studio, stopping a growth on its way, back to save and share. */
+export function closeStudio() {
+  stop();
+  set({ studio: false });
+}
+
 export function stop() {
   run++;
   reveal = null;
@@ -206,23 +225,29 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
     if (!plan || !card.current) return;
     const mine = { card: card.current, plan };
     target = mine;
-    set({ status: 'idle', at: 0, total: plan.length });
+    set({ status: 'idle', at: 0, total: plan.length, studio: false });
     return () => {
       if (target !== mine) return;
       stop();
       target = null;
-      set({ total: 0 });
+      set({ total: 0, studio: false });
     };
   }, [card, plan]);
 }
 
 const SPEED_LABEL = (speed: number) => `${speed}×`;
 
-/** Under the tree, beside save and share: play, and while playing the speed, the timer and a bar per ayah. */
+/** Under the tree. Outside the studio, one button opens it. In it, in place of save and share: close, speed, the ask mode
+ * and its timer, and play, which starts the growth only when pressed and stays a replay once the tree is grown. */
 export function GrowControls() {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
   if (growth.total === 0) return null;
+  const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
+  if (!growth.studio) {
+    const label = ar ? 'استوديو النمو' : 'Growth studio';
+    return <Button size="lg" variant="muted" onClick={openStudio} aria-label={label} title={label}><Clapperboard aria-hidden /></Button>;
+  }
   const active = growth.status === 'playing' || growth.status === 'paused';
   const playing = growth.status === 'playing';
   const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
@@ -232,30 +257,36 @@ export function GrowControls() {
   };
   const ask = growth.mode === 'ask';
   const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
-  const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
+  const close = ar ? 'إغلاق الاستوديو' : 'Close the studio';
+  const askLabel = ar ? 'وضع السؤال: يتوقف عند كل فرع حتى تتذكّر' : 'Ask mode: stops at each branch for you to recall';
   return <>
+    <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
+    <span className="flex-1" />
+    <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
+      <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
+    </Button>
+    {ask && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
+      <span dir="ltr">{growth.timer ? `${growth.timer}s` : '∞'}</span>
+    </Button>}
+    <Button size="lg" variant="muted" aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel} className={ask ? 'text-[var(--home-accent)]' : undefined}>
+      <Timer aria-hidden />
+    </Button>
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
       {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
     </Button>
-    {active && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
-      <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
-    </Button>}
-    {active && ask && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
-      <span dir="ltr">{growth.timer ? `${growth.timer}s` : '∞'}</span>
-    </Button>}
   </>;
 }
 
-/** A bar per ayah under the tree while it grows; a tap on one grows the tree again from that ayah. */
+/** A bar per ayah under the tree in the studio; a tap on one grows the tree from that ayah. */
 export function GrowProgress() {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
-  if (growth.status !== 'playing' && growth.status !== 'paused') return null;
+  if (!growth.studio || growth.total === 0) return null;
   return <div role="group" aria-label={ar ? 'تقدّم الشجرة' : 'Tree progress'} className="flex gap-1">
     {Array.from({ length: growth.total }, (_, i) => {
       const label = ar ? `من الآية ${i + 1}` : `From ayah ${i + 1}`;
       return <button key={i} type="button" onClick={() => void play(i)} aria-label={label} title={label} aria-current={i === growth.at || undefined} className="group flex h-6 flex-1 items-center">
-        <span className={`block h-1 w-full rounded-full transition-colors ${i <= growth.at ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
+        <span className={`block h-1 w-full rounded-full transition-colors ${(growth.status === 'done' || (growth.status !== 'idle' && i <= growth.at)) ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
       </button>;
     })}
   </div>;

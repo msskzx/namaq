@@ -111,14 +111,18 @@ export function CardActions({ id, text }: { id: string; text: string }) {
   const saved = useBookmarks().some(item => item.id === id);
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
   const save = () => toggleBookmark(bookmarkOf(id, text));
+  // In the growth studio its controls take the row; save and share come back when it closes.
+  const studio = useGrowth().studio;
   return <div className="flex flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
-    <span className="flex-1" />
-    <ShareButton video />
-    <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
-      {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
-    </Button>
+    {!studio && <>
+      <span className="flex-1" />
+      <ShareButton video />
+      <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+        {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
+      </Button>
+    </>}
     <GrowControls />
     </div>
     <GrowVideo title={text} />
