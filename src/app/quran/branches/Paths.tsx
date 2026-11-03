@@ -4,6 +4,7 @@ import React, { createContext, useContext, useLayoutEffect, useMemo, useRef, use
 import { Route } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { litPaths, pathToggleKey, togglePath } from '@/lib/quran/pathHighlight';
 
 // Only the path button lights a path: hover lit paths by accident on phones.
 type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin(id: string, keys: string[]): void };
@@ -15,13 +16,9 @@ const LIT = 'border-[var(--home-accent)]';
 export function usePaths(lit: string[] = []) {
   const [pinned, setPinned] = useState(() => new Map<string, string[]>(lit.length ? [['search', lit]] : []));
   return useMemo<Paths>(() => ({
-    lit: new Set([...pinned.values()].flat()),
+    lit: litPaths(pinned),
     pinned,
-    pin: (id, keys) => setPinned(current => {
-      const next = new Map(current);
-      if (!next.delete(id)) next.set(id, keys);
-      return next;
-    }),
+    pin: (id, keys) => setPinned(current => togglePath(current, id, keys)),
   }), [pinned]);
 }
 
@@ -55,8 +52,9 @@ export function PathButton({ id, keys, subject }: { id: string; keys: string[]; 
   const { language } = useLanguage();
   const label = language === 'ar' ? 'إظهار المسار' : 'Show path';
   if (!paths) return null;
+  const active = paths.pinned.has(pathToggleKey(id, keys));
   return (
-    <Button size="sm" active={paths.pinned.has(id)} aria-pressed={paths.pinned.has(id)} aria-label={subject ? `${label}: ${subject}` : label} title={label} onClick={() => paths.pin(id, keys)}>
+    <Button size="sm" data-path-toggle={pathToggleKey(id, keys)} active={active} aria-pressed={active} aria-label={subject ? `${label}: ${subject}` : label} title={label} onClick={() => paths.pin(id, keys)}>
       <Route size={16} aria-hidden />
     </Button>
   );

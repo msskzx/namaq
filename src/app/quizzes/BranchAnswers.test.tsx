@@ -26,6 +26,22 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 
 describe('complete branch tree answers', () => {
+  it('shares a feedback path toggle between its opening and leaf without changing grading', () => {
+    const prefixes = [{ word: 'بداية المسار', keys: ['52:24'], conj: '', id: 'بداية' }];
+    const { container } = render(<BranchFeedback question={{ ...question, prefixes }} typed={typed} names={{}} ar />);
+    const opening = screen.getByRole('button', { name: 'إظهار المسار: بداية المسار' });
+    const leaf = screen.getByRole('button', { name: 'إظهار المسار: غِلْمَانٌ لَهُمْ' });
+    fireEvent.click(opening);
+    expect(leaf.getAttribute('aria-pressed')).toBe('true');
+    expect(leaf.closest('[data-node]')!.hasAttribute('data-lit')).toBe(true);
+    fireEvent.click(leaf.closest('[data-node]')!);
+    expect(opening.getAttribute('aria-pressed')).toBe('false');
+    expect(leaf.getAttribute('aria-pressed')).toBe('false');
+    expect(container.querySelectorAll('[data-lit]')).toHaveLength(0);
+    expect(container.querySelectorAll('[data-answer="correct"]')).toHaveLength(4);
+    expect(branchesCorrect(question, typed)).toBe(true);
+  });
+
   it('keeps surrounding ayat and path keys attached to reordered answer text', async () => {
     const own = { tree: { words: ['حرم'], ayat: [], children: [
       { words: ['نَبِّـُٔونِى', 'بِعِلْمٍ'], ayat: ['6:143'], children: [] },

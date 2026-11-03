@@ -72,7 +72,7 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
     undo.push(() => { toggle.inert = false; if (surround.isConnected && surround.checked !== was) surround.click(); });
   }
 
-  const pins = [...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed="true"]')];
+  const pins = [...new Map([...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed="true"]')].map(pin => [pin.dataset.pathToggle ?? pin, pin])).values()];
   pins.forEach(pin => pin.click());
   undo.push(() => pins.forEach(pin => { if (pin.isConnected && pin.getAttribute('aria-pressed') !== 'true') pin.click(); }));
 
