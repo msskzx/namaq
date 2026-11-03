@@ -124,4 +124,14 @@ describe('the ayah before a phrase on the branches page (one switch for every tr
     await screen.findByText(before['62:4'].words[0]);
     expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
   });
+
+  it('draws the ayah before with the switch off when another ayah has words before the phrase', async () => {
+    localStorage.setItem('branches-surround', '0');
+    quranSurrounding.mockResolvedValue({ before, after: {} });
+    const mixed = [{ word: 'وَيَقُولُ الَّذِينَ كَفَرُوا', conj: '', keys: ['13:7'], id: 'p' }, ...prefix('62:4')];
+    render(<BranchTree tree={{ words: trunk, ayat: ['13:7', '62:4'], children: [] }} names={{}} prefixes={mixed} surround={{ on: false, sync: true }} />, { wrapper });
+    await screen.findByText(before['62:4'].words[0]);
+    expect(screen.getByText('وَيَقُولُ الَّذِينَ كَفَرُوا')).toBeTruthy();
+    expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
+  });
 });

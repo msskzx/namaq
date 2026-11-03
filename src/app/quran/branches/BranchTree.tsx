@@ -485,9 +485,11 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
     return ayah > 1 ? `${surah}:${ayah - 1}` : surah === 1 ? '114:6' : undefined;
   };
   const requiredKeys = emptyKeys.filter(key => previousKey(key));
-  // On the branches page a phrase that opens its ayah shows the ayah before only with the surrounding-ayat switch on;
-  // elsewhere (quizzes) that ayah stays, as the phrase's context.
-  const showBefore = !surround?.sync || on;
+  // On the branches page a phrase that opens its ayah shows the ayah before only with the surrounding-ayat switch on,
+  // unless another ayah has words before the phrase: then the ayah before is always drawn beside those words, so they
+  // never read as a trunk every ayah shares. Elsewhere (quizzes) that ayah stays, as the phrase's context.
+  const mixedBefore = (prefixes ?? []).some(prefix => prefix.word);
+  const showBefore = !surround?.sync || on || mixedBefore;
   const mandatory = useSurrounding(showBefore && requiredKeys.length > 0, requiredKeys, {}, surround?.data);
   const precedingKey = (key: string) => mandatory.data?.before[key]?.key ?? previousKey(key);
   const optionalKeys = all.flatMap(key => emptyKeys.includes(key) ? precedingKey(key) ?? key : key);
@@ -524,8 +526,8 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
               </PathBox> }];
               const neighbour = mandatoryAround?.data.before[key];
               if (!neighbour || !mandatoryAround) return [];
-              // The branches page shows one ayah before (with the switch on); elsewhere the switch adds one more.
-              const earlier = surround?.sync ? undefined : around?.data.before[previous];
+              // The switch adds one more ayah before, except on the branches page when the ayah before is itself what the switch shows.
+              const earlier = surround?.sync && !mixedBefore ? undefined : around?.data.before[previous];
               return [{ key, keys: [key], item: <>
                 {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} opens={rootId} nodeId={`earlier${key}`} /><Stub keys={[key]} /></>}
                 <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} opens={rootId} />
