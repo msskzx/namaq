@@ -3,7 +3,7 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import BranchTree from './BranchTree';
-import { GrowControls, GrowProgress } from './Grow';
+import { GrowControls, GrowProgress, setPrefs } from './Grow';
 import { CardActions } from './Filters';
 
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
@@ -49,6 +49,26 @@ describe('growing a tree', () => {
     expect(screen.queryByRole('group', { name: 'تقدّم الشجرة' })).toBeNull();
   });
 
+  it('places playback beside the bookmark without an ask-mode button', () => {
+    render(<>
+      <BranchTree tree={tree} names={{}} growable />
+      <CardActions id="t" text="إن المتقين في" />
+    </>);
+    const save = screen.getByRole('button', { name: 'حفظ' });
+    const play = screen.getByRole('button', { name: 'شاهد الشجرة تنمو' });
+    expect(save.nextElementSibling).toBe(play);
+    expect(screen.queryByRole('button', { name: /وضع السؤال/ })).toBeNull();
+  });
+
+  it('starts in watch mode when ask mode was saved before its toggle was removed', async () => {
+    localStorage.setItem('branches-grow', JSON.stringify({ mode: 'ask', speed: 1, timer: 0 }));
+    page();
+    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    await advance(1200);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-ask')).toBe(false);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(false);
+  });
+
   it('pauses the clock', async () => {
     page();
     fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
@@ -62,7 +82,7 @@ describe('growing a tree', () => {
 
   it('asks for the box where each ayah splits off, revealing it after the timer or a tap', async () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: 'وضع السؤال' }));
+    act(() => setPrefs({ mode: 'ask' }));
     fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
     await advance(400);
     const first = box('جَنَّـٰتٍ وَعُيُونٍ');
@@ -82,9 +102,9 @@ describe('growing a tree', () => {
 
   it('remembers the ask mode and starts again from a tapped ayah', async () => {
     page();
-    fireEvent.click(screen.getByRole('button', { name: 'وضع السؤال' }));
+    act(() => setPrefs({ mode: 'ask' }));
     expect(JSON.parse(localStorage.getItem('branches-grow')!).mode).toBe('ask');
-    fireEvent.click(screen.getByRole('button', { name: 'وضع السؤال: يتوقف عند كل تفرّع' }));
+    act(() => setPrefs({ mode: 'watch' }));
     fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
     fireEvent.click(screen.getByRole('button', { name: 'من الآية 2' }));
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(false);
