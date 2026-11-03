@@ -1,9 +1,3 @@
-@property --grow-left {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 1;
-}
-
 .growing :global(li),
 .growing :global([data-line]),
 .growing :global([data-node]) {
@@ -24,9 +18,11 @@
   border-color: var(--home-accent);
 }
 
-/* Ask mode: the next box stands empty, a ring counting down inside it, until the timer ends or a tap reveals it. */
+/* Ask mode: the next box stands empty with the seconds left counting down in it and a bar along its foot
+   shrinking with them, until the timer ends or a tap reveals it. With no timer it shows a question mark and waits. */
 .growing :global([data-ask]) {
   position: relative;
+  overflow: hidden;
   cursor: pointer;
   border-style: dashed;
   border-color: var(--home-accent);
@@ -36,30 +32,37 @@
   visibility: hidden;
 }
 
+.growing :global([data-ask])::before {
+  content: attr(data-left);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--home-accent);
+  font-family: system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.growing :global([data-ask][data-wait])::before {
+  content: '؟';
+}
+
 .growing :global([data-ask])::after {
   content: '';
   position: absolute;
-  inset: 50% auto auto 50%;
-  width: 1.75rem;
-  height: 1.75rem;
-  margin: -0.875rem 0 0 -0.875rem;
-  border-radius: 50%;
-  background: conic-gradient(var(--home-accent) calc(var(--grow-left) * 1turn), color-mix(in srgb, var(--home-accent) 15%, transparent) 0);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-  animation: ring var(--grow-timer, 3s) linear forwards;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 3px;
+  width: calc(var(--grow-left, 1) * 100%);
+  background: var(--home-accent);
 }
 
 .growing :global([data-ask][data-wait])::after {
-  animation: none;
-}
-
-.paused :global([data-ask])::after {
-  animation-play-state: paused;
-}
-
-@keyframes ring {
-  from { --grow-left: 1; }
-  to { --grow-left: 0; }
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
