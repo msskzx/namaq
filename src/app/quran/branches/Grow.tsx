@@ -1,0 +1,266 @@
+'use client';
+
+import { useEffect, useSyncExternalStore } from 'react';
+import { CircleHelp, Pause, Play, RotateCcw } from 'lucide-react';
+import Button from '@/components/common/Button';
+import { useLanguage } from '@/components/language/LanguageContext';
+import type { GrowthStep } from '@/lib/quran/growth';
+import styles from './Grow.module.css';
+
+/** Watch grows the tree on its own; ask stops at each split with the next box empty until the timer ends or a tap. */
+export type GrowMode = 'watch' | 'ask';
+type Status = 'idle' | 'playing' | 'paused' | 'done';
+type Prefs = { mode: GrowMode; speed: number; timer: number };
+type GrowState = Prefs & { status: Status; at: number; total: number };
+
+export const SPEEDS = [1, 1.5, 2, 0.5];
+/** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
+export const TIMERS = [3, 5, 10, 0];
+// Milliseconds at 1×: a connector, a box fading in, a box an earlier ayah drew lighting again, the pause at an ayah's end.
+const LINE = 200;
+const BOX = 300;
+const RELIGHT = 140;
+const LEAF = 700;
+
+const PREFS = 'branches-grow';
+const listeners = new Set<() => void>();
+let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0 };
+let target: { card: HTMLElement; plan: GrowthStep[] } | null = null;
+let run = 0;
+let reveal: (() => void) | null = null;
+/** The share of the asked box's timer still left, for the video to draw its ring. */
+let asking: number | null = null;
+export const askLeft = () => asking;
+
+function set(next: Partial<GrowState>) {
+  state = { ...state, ...next };
+  listeners.forEach(listener => listener());
+}
+
+function loadPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PREFS) ?? '{}');
+    set({
+      mode: saved.mode === 'ask' ? 'ask' : 'watch',
+      speed: SPEEDS.includes(saved.speed) ? saved.speed : 1,
+      timer: TIMERS.includes(saved.timer) ? saved.timer : 3,
+    });
+  } catch {}
+}
+
+export function setPrefs(next: Partial<Prefs>) {
+  set(next);
+  try { localStorage.setItem(PREFS, JSON.stringify({ mode: state.mode, speed: state.speed, timer: state.timer })); } catch {}
+}
+
+const subscribe = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
+const serverState = state;
+export const growthState = () => state;
+export const useGrowth = () => useSyncExternalStore(subscribe, () => state, () => serverState);
+
+/** Waits `ms` of playing time (a pause stops the clock), or until a tap reveals the asked box. False once a newer run started. */
+function wait(ms: number, token: number, tappable = false) {
+  return new Promise<boolean>(resolve => {
+    let left = ms;
+    let last = Date.now();
+    let tapped = false;
+    if (tappable) reveal = () => { tapped = true; };
+    const tick = () => {
+      if (token !== run) return resolve(false);
+      const now = Date.now();
+      if (state.status === 'playing') left -= now - last;
+      last = now;
+      if (tappable) asking = ms > 0 ? Math.max(0, left / ms) : 1;
+      if (tapped || (ms > 0 && left <= 0)) {
+        if (tappable) { reveal = null; asking = null; }
+        return resolve(true);
+      }
+      setTimeout(tick, 30);
+    };
+    tick();
+  });
+}
+
+// Hidden parts are inert too, so a screen reader or the tab key cannot give the answer away.
+const hide = (element: Element | null | undefined) => { element?.setAttribute('data-hide', ''); element?.setAttribute('inert', ''); };
+const show = (element: Element | null | undefined) => { element?.removeAttribute('data-hide'); element?.removeAttribute('inert'); };
+const ASK = ['data-ask', 'data-wait', 'role', 'tabindex', 'aria-label'];
+// The card also holds its neighbours' cards, ready for a swipe: only its own tree grows.
+const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySelectorAll<HTMLElement>('[data-grow="n-1"]')].find(root => !root.closest('[data-tree-neighbour]'));
+
+/** The connector into a node: its list item in the parent's fan, and the stub between the parent's box and that fan. */
+function showLine(item: Element | null | undefined) {
+  if (!item) return;
+  show(item);
+  const stub = item.parentElement?.parentElement?.previousElementSibling;
+  if (stub?.hasAttribute('data-line')) show(stub);
+}
+
+function clear(root: HTMLElement) {
+  root.classList.remove(styles.growing, styles.paused);
+  root.querySelectorAll('[data-hide]').forEach(show);
+  root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
+  root.querySelectorAll('[data-ask]').forEach(element => ASK.forEach(name => element.removeAttribute(name)));
+  root.removeEventListener('click', onTap, true);
+  root.removeEventListener('keydown', onKey, true);
+}
+
+function onKey(event: KeyboardEvent) {
+  if ((event.key !== 'Enter' && event.key !== ' ') || !(event.target as Element).closest('[data-ask]') || !reveal) return;
+  event.preventDefault();
+  event.stopPropagation();
+  reveal();
+}
+
+function onTap(event: MouseEvent) {
+  if (!(event.target as Element).closest('[data-ask]') || !reveal) return;
+  event.preventDefault();
+  event.stopPropagation();
+  reveal();
+}
+
+export const growRoot = () => (target ? rootOf(target.card) : undefined);
+
+/** Plays the tree from ayah `from`: the ayat before it are drawn at once. A video never waits for a tap: its ask timer is never off. */
+export async function play(from = 0, { video = false } = {}) {
+  if (!target) return;
+  const { card, plan } = target;
+  const root = rootOf(card);
+  if (!root || plan.length === 0) return;
+  const token = ++run;
+  clear(root);
+  root.classList.add(styles.growing);
+  root.addEventListener('click', onTap, true);
+  root.addEventListener('keydown', onKey, true);
+  // Not the lists inside a box (its spellings dialog).
+  root.querySelectorAll('li, [data-grow] > [data-line]').forEach(element => { if (!element.closest('[data-node]')) hide(element); });
+  root.querySelectorAll('[data-grow] > [data-node]').forEach(box => { if (box.parentElement !== root) hide(box); });
+  const node = (id: number) => root.querySelector(`[data-grow="n${id}"]`);
+  const box = (id: number) => node(id)?.querySelector(':scope > [data-node]');
+  const after = (key: string) => root.querySelector(`[data-node="after${key}"]`)?.closest('li');
+  const drawAt = (step: GrowthStep) => {
+    step.nodes.forEach(id => { if (id >= 0) { showLine(node(id)?.parentElement); show(box(id)); } });
+    showLine(after(step.key));
+  };
+  plan.slice(0, from).forEach(drawAt);
+  set({ status: 'playing', at: from, total: plan.length });
+  const speed = () => state.speed;
+  for (let i = from; i < plan.length; i++) {
+    const step = plan[i];
+    set({ at: i });
+    for (let j = 0; j < step.nodes.length; j++) {
+      const id = step.nodes[j];
+      const shown = box(id);
+      if (j < step.fresh) {
+        shown?.setAttribute('data-grow-now', '');
+        if (!(await wait(RELIGHT / speed(), token))) return;
+        continue;
+      }
+      showLine(node(id)?.parentElement);
+      if (!(await wait(LINE / speed(), token))) return;
+      if (state.mode === 'ask' && j === step.fresh && shown) {
+        const timer = state.timer || (video ? TIMERS[0] : 0);
+        shown.setAttribute('data-ask', '');
+        // A button for the keyboard and screen readers too; DoubleTapSave also skips taps on buttons.
+        shown.setAttribute('role', 'button');
+        shown.setAttribute('tabindex', '0');
+        shown.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Show the next word' : 'اكشف الكلمة التالية');
+        if (timer) (shown as HTMLElement).style.setProperty('--grow-timer', `${timer}s`);
+        else shown.setAttribute('data-wait', '');
+        show(shown);
+        if (!(await wait(timer * 1000, token, true))) return;
+        ASK.forEach(name => shown.removeAttribute(name));
+      }
+      show(shown);
+      shown?.setAttribute('data-grow-now', '');
+      if (!(await wait(BOX / speed(), token))) return;
+    }
+    showLine(after(step.key));
+    if (!(await wait(LEAF / speed(), token))) return;
+    root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
+  }
+  clear(root);
+  set({ status: 'done', at: plan.length });
+}
+
+export function pause(paused: boolean) {
+  if (state.status !== 'playing' && state.status !== 'paused') return;
+  const root = target && rootOf(target.card);
+  root?.classList.toggle(styles.paused, paused);
+  set({ status: paused ? 'paused' : 'playing' });
+}
+
+export function stop() {
+  run++;
+  reveal = null;
+  asking = null;
+  const root = target && rootOf(target.card);
+  if (root) clear(root);
+  set({ status: 'idle', at: 0 });
+}
+
+/** Lets the open tree be grown; a tree swiped away (unmounted) stops its growth. */
+export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: GrowthStep[] | null) {
+  useEffect(() => {
+    loadPrefs();
+    if (!plan || !card.current) return;
+    const mine = { card: card.current, plan };
+    target = mine;
+    set({ status: 'idle', at: 0, total: plan.length });
+    return () => {
+      if (target !== mine) return;
+      stop();
+      target = null;
+      set({ total: 0 });
+    };
+  }, [card, plan]);
+}
+
+const SPEED_LABEL = (speed: number) => `${speed}×`;
+
+/** Under the tree, beside save and share: play, ask mode, and while playing the speed, the timer and a bar per ayah. */
+export function GrowControls() {
+  const ar = useLanguage().language === 'ar';
+  const growth = useGrowth();
+  if (growth.total === 0) return null;
+  const active = growth.status === 'playing' || growth.status === 'paused';
+  const playing = growth.status === 'playing';
+  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
+  const press = () => {
+    if (active) pause(playing);
+    else void play();
+  };
+  const ask = growth.mode === 'ask';
+  const askLabel = ar ? (ask ? 'وضع السؤال: يتوقف عند كل تفرّع' : 'وضع السؤال') : (ask ? 'Ask mode: stops at each split' : 'Ask mode');
+  const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
+  const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
+  return <>
+    <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
+      {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
+    </Button>
+    <Button size="lg" variant="muted" aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel} className={ask ? 'text-[var(--home-accent)]' : undefined}>
+      <CircleHelp aria-hidden />
+    </Button>
+    {active && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
+      <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
+    </Button>}
+    {active && ask && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
+      <span dir="ltr">{growth.timer ? `${growth.timer}s` : '∞'}</span>
+    </Button>}
+  </>;
+}
+
+/** A bar per ayah under the tree while it grows; a tap on one grows the tree again from that ayah. */
+export function GrowProgress() {
+  const ar = useLanguage().language === 'ar';
+  const growth = useGrowth();
+  if (growth.status !== 'playing' && growth.status !== 'paused') return null;
+  return <div role="group" aria-label={ar ? 'تقدّم الشجرة' : 'Tree progress'} className="flex gap-1">
+    {Array.from({ length: growth.total }, (_, i) => {
+      const label = ar ? `من الآية ${i + 1}` : `From ayah ${i + 1}`;
+      return <button key={i} type="button" onClick={() => void play(i)} aria-label={label} title={label} aria-current={i === growth.at || undefined} className="group flex h-6 flex-1 items-center">
+        <span className={`block h-1 w-full rounded-full transition-colors ${i <= growth.at ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
+      </button>;
+    })}
+  </div>;
+}

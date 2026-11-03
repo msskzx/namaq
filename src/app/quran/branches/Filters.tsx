@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { Bookmark, BookmarkCheck, Check, Funnel, Send, X } from 'lucide-react';
+import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -11,6 +11,8 @@ import Toggle from '@/components/common/Toggle';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import type { JuzRange } from '@/lib/quran/juz';
 import JuzFilter from './JuzFilter';
+import { GrowControls, GrowProgress, useGrowth } from './Grow';
+import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 
 /** The funnel beside the search box: a sheet with the juz range, and a dot while the range is narrowed. */
 export function FilterButton({ range, view }: { range: JuzRange | null; view: BranchesView }) {
@@ -109,18 +111,35 @@ export function CardActions({ id, text }: { id: string; text: string }) {
   const saved = useBookmarks().some(item => item.id === id);
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
   const save = () => toggleBookmark(bookmarkOf(id, text));
-  return <div className="flex items-center justify-end gap-1">
-    <ShareButton />
+  return <div className="flex flex-col gap-1">
+    <GrowProgress />
+    <div className="flex flex-wrap items-center gap-1">
+    <GrowControls />
+    <span className="flex-1" />
+    <ShareButton video />
     <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
       {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
     </Button>
+    </div>
+    <GrowVideo title={text} />
   </div>;
 }
 
 /** Shares the page's address, which holds the tree, the view and the filters: the phone's share sheet, or a copied link. */
-export function ShareButton() {
+export function ShareButton({ video = false }: { video?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const [copied, setCopied] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const growing = useGrowth().total > 0;
+  const holder = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!menu) return;
+    const away = (event: Event) => { if (!holder.current?.contains(event.target as Node)) setMenu(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenu(false); };
+    document.addEventListener('pointerdown', away);
+    document.addEventListener('keydown', escape);
+    return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', escape); };
+  }, [menu]);
   const label = copied ? (ar ? 'نُسخ الرابط' : 'Link copied') : (ar ? 'مشاركة' : 'Share');
   const share = async () => {
     const url = window.location.href;
@@ -134,9 +153,19 @@ export function ShareButton() {
       setTimeout(() => setCopied(false), 2000);
     } catch {}
   };
-  return <Button size="lg" variant="muted" onClick={() => void share()} aria-label={label} title={label}>
+  const button = (onClick: () => void) => <Button data-share-tree={video || undefined} size="lg" variant="muted" onClick={onClick} aria-label={label} title={label} aria-expanded={video && growing ? menu : undefined}>
     {copied ? <Check aria-hidden /> : <Send aria-hidden />}
   </Button>;
+  // A tree can also go out as a video of it growing: the button then asks which.
+  if (!video || !growing || !canRecord()) return button(() => void share());
+  const item = 'flex w-full items-center gap-3 whitespace-nowrap px-4 py-3 text-start text-sm hover:bg-[var(--home-paper-deep)]';
+  return <div ref={holder} className="relative">
+    {button(() => setMenu(open => !open))}
+    {menu && <div className="absolute bottom-full end-0 z-30 mb-2 overflow-hidden rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
+      <button type="button" className={item} onClick={() => { setMenu(false); void share(); }}><Link2 size={18} aria-hidden />{ar ? 'مشاركة الرابط' : 'Share link'}</button>
+      <button type="button" className={item} onClick={() => { setMenu(false); openVideo(); }}><Clapperboard size={18} aria-hidden />{ar ? 'مشاركة كفيديو' : 'Share as video'}</button>
+    </div>}
+  </div>;
 }
 
 /** Above the tree while a surah narrows the trees: its chip, which removes the filter. */

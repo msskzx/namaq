@@ -1,0 +1,71 @@
+@property --grow-left {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+.growing :global(li),
+.growing :global([data-line]),
+.growing :global([data-node]) {
+  transition: opacity var(--grow-fade, 250ms) ease-out, border-color 150ms;
+}
+
+.growing :global([data-hide]) {
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+
+.growing :global([data-stem]) {
+  display: none;
+}
+
+.growing :global([data-grow-now]) {
+  border-color: var(--home-accent);
+}
+
+/* Ask mode: the next box stands empty, a ring counting down inside it, until the timer ends or a tap reveals it. */
+.growing :global([data-ask]) {
+  position: relative;
+  cursor: pointer;
+  border-style: dashed;
+  border-color: var(--home-accent);
+}
+
+.growing :global([data-ask]) > * {
+  visibility: hidden;
+}
+
+.growing :global([data-ask])::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.875rem 0 0 -0.875rem;
+  border-radius: 50%;
+  background: conic-gradient(var(--home-accent) calc(var(--grow-left) * 1turn), color-mix(in srgb, var(--home-accent) 15%, transparent) 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  animation: ring var(--grow-timer, 3s) linear forwards;
+}
+
+.growing :global([data-ask][data-wait])::after {
+  animation: none;
+}
+
+.paused :global([data-ask])::after {
+  animation-play-state: paused;
+}
+
+@keyframes ring {
+  from { --grow-left: 1; }
+  to { --grow-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .growing :global(li),
+  .growing :global([data-line]),
+  .growing :global([data-node]) {
+    transition: none;
+  }
+}
