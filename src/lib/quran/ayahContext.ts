@@ -31,14 +31,38 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]) };
 };
 
+/** Indices of `a` on a longest in-order run of words shared with `b` (LCS), so a repeated word is matched where it lines up. */
+function aligned(a: string[], b: string[]) {
+  const table = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--)
+    table[i][j] = a[i] === b[j] ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
+  const on = new Set<number>();
+  for (let i = 0, j = 0; i < a.length && j < b.length;) {
+    if (a[i] === b[j]) { on.add(i); i++; j++; } else if (table[i + 1][j] >= table[i][j + 1]) i++; else j++;
+  }
+  return on;
+}
+
 export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   if (contexts.length < 2) return contexts;
-  const all = contexts.map(context => {
-    const { keys } = tokens(context.ayah);
+  const raw = contexts.map(context => tokens(context.ayah).keys);
+  // A word with no corpus key falls back to its letters, so «وفي» would miss «في»: drop a leading و/ف
+  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too).
+  const sets = raw.map(keys => new Set(keys));
+  const tokenised = raw.map((keys, n) => keys.map(key => {
+    if (!/^[وف]./.test(key) || sets.every((set, m) => m === n || set.has(key))) return key;
+    const bare = key.slice(1);
+    return sets.every((set, m) => m === n || set.has(bare)) ? bare : key;
+  }));
+  const all = contexts.map((context, n) => {
+    const keys = tokenised[n];
     const forms = context.ayah.words.map(spell);
     const byKey = new Map<string, number[]>();
     keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
-    return { forms, byKey };
+    // Lined up with every other ayah: where a word repeats, these occurrences are the ones the ayat share.
+    const lined = tokenised.filter((_, m) => m !== n).map(other => aligned(keys, other));
+    const rank = (i: number) => -lined.filter(set => set.has(i)).length;
+    return { forms, byKey, rank };
   });
   const shared = [...all[0].byKey.keys()].flatMap(key => {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
@@ -50,7 +74,7 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     const rooted: number[] = [];
     shared.forEach(({ key, count, common }) => {
       const list = all[n].byKey.get(key)!;
-      const chosen = [...list.filter(i => common.has(all[n].forms[i])), ...list.filter(i => !common.has(all[n].forms[i]))].slice(0, count);
+      const chosen = list.length === count ? list : [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || Number(!common.has(all[n].forms[x])) - Number(!common.has(all[n].forms[y])) || x - y).slice(0, count);
       chosen.forEach(i => (common.has(all[n].forms[i]) ? exact : rooted).push(i));
     });
     return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y) } };

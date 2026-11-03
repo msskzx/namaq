@@ -82,6 +82,25 @@ describe('sharedByAll', () => {
     expect(own.match!.rooted.some(i => own.ayah.words[i].includes('غْفِر'))).toBe(true);
   });
 
+  it('marks a repeated word where it lines up with the other ayah (16:35 has «من شيء» twice; 6:148 once)', async () => {
+    const all = await loadReaderAyat();
+    const [, nahl] = sharedByAll(ayahContexts(all, ['6:148', '16:35']));
+    const marked = [...nahl.match!.exact, ...nahl.match!.rooted].sort((a, b) => a - b);
+    const words = nahl.ayah.words.map(normalizeWord);
+    const harramna = words.findIndex(word => word.includes('حرمنا'));
+    const shay = words.map((word, i) => (word.startsWith('شي') ? i : -1)).filter(i => i >= 0);
+    expect(shay).toHaveLength(2);
+    expect(marked).toContain(shay[1]);
+    expect(marked).not.toContain(shay[0]);
+    expect(shay[1]).toBeGreaterThan(harramna);
+  });
+
+  it('matches «في» in «وفي» (83:26) with «في» in the other ayat', async () => {
+    const all = await loadReaderAyat();
+    const marked = sharedByAll(ayahContexts(all, ['50:37', '83:26', '89:5'])).map(context => [...context.match!.exact, ...context.match!.rooted].length);
+    expect(marked).toEqual([2, 2, 2]);
+  });
+
   it('leaves a single ayah unmarked', async () => {
     const all = await loadReaderAyat();
     expect(sharedByAll(ayahContexts(all, ['1:1']))[0].match).toBeUndefined();
