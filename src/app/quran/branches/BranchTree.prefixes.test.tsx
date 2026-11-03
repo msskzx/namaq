@@ -67,13 +67,12 @@ describe('preceding ayat as empty phrase prefixes', () => {
     expect(load).not.toHaveBeenCalled();
   });
 
-  it('shows the start-of-surah fallback without requesting a cross-surah neighbor', () => {
-    const load = quranSurrounding;
+  it('goes back to the previous surah\'s last ayah before a first ayah', async () => {
+    const load = quranSurrounding.mockResolvedValue({ before: { '34:1': { key: '33:73', page: 427, words: ['لِيُعَذِّبَ اللَّهُ الْمُنَافِقِينَ'], basmala: ['بِسْمِ اللَّهِ'] } }, after: {} });
     render(tree('34:1'), { wrapper });
-    const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
-    expect(within(before).getByText('بداية السورة')).toBeTruthy();
-    expect(within(before).getByText('٣٤:١')).toBeTruthy();
-    expect(load).not.toHaveBeenCalled();
+    await screen.findByText('لِيُعَذِّبَ اللَّهُ الْمُنَافِقِينَ');
+    expect(screen.queryByText('بداية السورة')).toBeNull();
+    expect(load.mock.calls[0]).toEqual([['34:1'], []]);
   });
 
   it('offers a retry when mandatory preceding ayat fail to load', async () => {
@@ -122,6 +121,16 @@ describe('the ayah before a phrase on the branches page (one switch for every tr
     quranSurrounding.mockResolvedValue({ before, after: {} });
     render(synced('62:4'), { wrapper });
     await screen.findByText(before['62:4'].words[0]);
+    expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
+  });
+
+  it('draws the ayah before with the switch off when another ayah has words before the phrase', async () => {
+    localStorage.setItem('branches-surround', '0');
+    quranSurrounding.mockResolvedValue({ before, after: {} });
+    const mixed = [{ word: 'وَيَقُولُ الَّذِينَ كَفَرُوا', conj: '', keys: ['13:7'], id: 'p' }, ...prefix('62:4')];
+    render(<BranchTree tree={{ words: trunk, ayat: ['13:7', '62:4'], children: [] }} names={{}} prefixes={mixed} surround={{ on: false, sync: true }} />, { wrapper });
+    await screen.findByText(before['62:4'].words[0]);
+    expect(screen.getByText('وَيَقُولُ الَّذِينَ كَفَرُوا')).toBeTruthy();
     expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
   });
 });
