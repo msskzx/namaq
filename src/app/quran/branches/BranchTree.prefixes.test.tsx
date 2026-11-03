@@ -67,13 +67,12 @@ describe('preceding ayat as empty phrase prefixes', () => {
     expect(load).not.toHaveBeenCalled();
   });
 
-  it('shows the start-of-surah fallback without requesting a cross-surah neighbor', () => {
-    const load = quranSurrounding;
+  it('goes back to the previous surah\'s last ayah before a first ayah', async () => {
+    const load = quranSurrounding.mockResolvedValue({ before: { '34:1': { key: '33:73', page: 427, words: ['لِيُعَذِّبَ اللَّهُ الْمُنَافِقِينَ'], basmala: ['بِسْمِ اللَّهِ'] } }, after: {} });
     render(tree('34:1'), { wrapper });
-    const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
-    expect(within(before).getByText('بداية السورة')).toBeTruthy();
-    expect(within(before).getByText('٣٤:١')).toBeTruthy();
-    expect(load).not.toHaveBeenCalled();
+    await screen.findByText('لِيُعَذِّبَ اللَّهُ الْمُنَافِقِينَ');
+    expect(screen.queryByText('بداية السورة')).toBeNull();
+    expect(load.mock.calls[0]).toEqual([['34:1'], []]);
   });
 
   it('offers a retry when mandatory preceding ayat fail to load', async () => {
