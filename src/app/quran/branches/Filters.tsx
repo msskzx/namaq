@@ -113,6 +113,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
   const save = () => toggleBookmark(bookmarkOf(id, text));
   // In the growth studio its controls take the row; save and share come back when it closes.
   const studio = useGrowth().studio;
+  const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
   return <div className="flex flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
@@ -123,7 +124,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
       </Button>
     </>}
-    <GrowControls />
+    <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
     </div>
     <GrowVideo title={text} />
   </div>;

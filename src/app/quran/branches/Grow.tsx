@@ -238,8 +238,8 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
 const SPEED_LABEL = (speed: number) => `${speed}×`;
 
 /** Under the tree. Outside the studio, one button opens it. In it, in place of save and share: close, speed, the ask mode
- * and its timer, and play, which starts the growth only when pressed and stays a replay once the tree is grown. */
-export function GrowControls() {
+ * and its timer, sharing as a video, and play, which starts the growth only when pressed and stays a replay once the tree is grown. */
+export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
   if (growth.total === 0) return null;
@@ -271,6 +271,7 @@ export function GrowControls() {
     <Button size="lg" variant="muted" aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel} className={ask ? 'text-[var(--home-accent)]' : undefined}>
       <Timer aria-hidden />
     </Button>
+    {share}
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
       {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
     </Button>

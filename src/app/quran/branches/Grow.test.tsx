@@ -168,6 +168,19 @@ describe('growing a tree', () => {
     vi.unstubAllGlobals();
   });
 
+  it('shares the tree as a video from inside the studio', () => {
+    vi.stubGlobal('MediaRecorder', { isTypeSupported: () => true });
+    HTMLCanvasElement.prototype.captureStream = () => ({}) as MediaStream;
+    render(<>
+      <BranchTree tree={tree} names={{}} growable />
+      <CardActions id="t" text="إن المتقين في" />
+    </>);
+    studio();
+    const video = screen.getByRole('button', { name: 'مشاركة كفيديو' });
+    expect(video.nextElementSibling).toBe(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    vi.unstubAllGlobals();
+  });
+
   it('shares the link straight away when no tree is open (the ayah cards)', () => {
     render(<CardActions id="t" text="إن المتقين في" />);
     expect(screen.getByRole('button', { name: 'مشاركة' }).hasAttribute('aria-expanded')).toBe(false);
