@@ -101,14 +101,14 @@ export function useSwipe(ref: RefObject<HTMLElement | null>, enabled: boolean, h
     element.addEventListener('touchstart', start, { passive: true });
     element.addEventListener('touchmove', move, { passive: false });
     element.addEventListener('touchend', end);
-    element.addEventListener('touchcancel', end);
+    element.addEventListener('touchcancel', abandon);
     element.addEventListener('wheel', wheel, { passive: false });
     return () => {
       clearTimeout(gesture.timer);
       element.removeEventListener('touchstart', start);
       element.removeEventListener('touchmove', move);
       element.removeEventListener('touchend', end);
-      element.removeEventListener('touchcancel', end);
+      element.removeEventListener('touchcancel', abandon);
       element.removeEventListener('wheel', wheel);
     };
   }, [ref, enabled]);

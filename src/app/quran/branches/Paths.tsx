@@ -44,7 +44,7 @@ export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id:
     if ((event.target as Element).closest(INTERACTIVE) || window.getSelection()?.toString()) return;
     paths.pin(id, keys);
   } : undefined;
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onClick={tap} className={`${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onClick={tap} className={`shrink-0 bg-[var(--home-paper-deep)] px-3 py-1.5 text-center ${ctx ? "border border-dashed" : "border-4 border-double"} ${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {

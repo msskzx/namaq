@@ -26,7 +26,7 @@ export default async function QuranReadPage({ params }: { params: Promise<{ page
   const shown = new Set([...datas.flatMap(data => data.items.flatMap(item => ('surah' in item ? [item.surah] : []))), ...spread.flatMap(at => before(at)?.number ?? [])]);
   const names = Object.fromEntries(surahs.filter(surah => shown.has(surah.number)).map(surah => [surah.number, surah.name]));
   const pages = spread.map((at, i) => ({ page: at, data: datas[i], top: before(at)?.number }));
-  const props = { page: number, pages, names, fontClass: garamond.variable };
+  const props = { page: number, pages, names, surahs, fontClass: garamond.variable };
   return (
     <Suspense fallback={<ReaderView {...props} />}>
       <MarkedReaderView {...props} />

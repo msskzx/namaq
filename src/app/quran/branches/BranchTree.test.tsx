@@ -4,6 +4,7 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
+import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
 import data from './trees.json';
@@ -34,6 +35,38 @@ const tree = {
 };
 
 describe('BranchTree', () => {
+  it('moves the active zoom toolbar between the card and the desktop rail', () => {
+    const media = Object.assign(new EventTarget(), { matches: false });
+    vi.stubGlobal('matchMedia', () => media);
+    const rail = document.createElement('div');
+    try {
+      const { container, unmount } = render(<RailSlotElement.Provider value={rail}>
+        <BranchTree tree={tree} names={{}} zoomInRail />
+        <BranchTree tree={tree} names={{}} zoomInRail="preview" />
+      </RailSlotElement.Provider>);
+      expect(container.querySelectorAll('[role="toolbar"]')).toHaveLength(2);
+      act(() => {
+        media.matches = true;
+        media.dispatchEvent(new Event('change'));
+      });
+      expect(container.querySelector('[role="toolbar"]')).toBeNull();
+      expect(rail.querySelectorAll('[role="toolbar"]')).toHaveLength(1);
+      const zoomIn = within(rail).getByRole('button', { name: 'تكبير' });
+      expect(zoomIn.getAttribute('data-variant')).toBe('muted');
+      fireEvent.click(zoomIn);
+      expect(container.querySelector('[data-tree-viewport]')?.hasAttribute('data-zoomed')).toBe(true);
+      act(() => {
+        media.matches = false;
+        media.dispatchEvent(new Event('change'));
+      });
+      expect(rail.querySelector('[role="toolbar"]')).toBeNull();
+      expect(container.querySelectorAll('[role="toolbar"]')).toHaveLength(2);
+      unmount();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('uses matrix matches in the phrase trunk, prefixes and leaves at their original offsets', () => {
     const group = data.trees.find(group => group.id === 'يادم اسكن انت وزوجك الجنه')!;
     const ayat = (data.ayat as BranchAyah[]).filter(ayah => group.occurrences.some(o => o.key === ayah.key));
@@ -254,9 +287,9 @@ describe('BranchTree', () => {
     expect(references.textContent?.startsWith('·')).toBe(false);
   });
 
-  it('identifies al-Qamar ayah 54 under its leaf', () => {
+  it('identifies al-Qamar ayah 54 in the node header', () => {
     render(<BranchTree tree={{ words: ['إِنَّ', 'ٱلْمُتَّقِينَ'], ayat: ['54:54'], children: [] }} names={{ 54: 'سُورَةُ القَمَرِ' }} />);
-    expect(screen.getByText('سُورَةُ القَمَرِ ٥٤')).toBeTruthy();
+    expect(screen.getByText('سُورَةُ القَمَرِ ٥٤').closest('header')).toBeTruthy();
     expect(screen.queryByRole('link')).toBeNull();
     expect(screen.queryByText('·')).toBeNull();
   });

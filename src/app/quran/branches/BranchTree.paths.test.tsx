@@ -23,6 +23,29 @@ const box = (text: string) => screen.getByText(text).closest('[data-node]')!;
 const button = (text: string) => screen.getByRole('button', { name: `إظهار المسار: ${text}` });
 
 describe('path toggles across tree nodes', () => {
+  it('shows references at endpoints and summarizes pinned ayat at the start', () => {
+    render(<BranchTree tree={tree} names={{ 1: 'الفاتحة' }} />);
+    const start = box('وسط');
+    const end = box('طرف أول');
+    expect(start.querySelector('header')).toBeNull();
+    expect(end.querySelector('header')?.textContent).toBe('الفاتحة ١');
+    fireEvent.click(button('طرف أول'));
+    expect(start.querySelector('header')?.textContent).toBe('الفاتحة ١');
+    fireEvent.click(button('طرف ثان'));
+    expect(start.querySelector('header')?.textContent).toBe('الآيات: ٢');
+    fireEvent.click(button('طرف أول'));
+    fireEvent.click(button('طرف ثان'));
+    expect(start.querySelector('header')).toBeNull();
+  });
+
+  it('shows a pinned reference on its prefix when the path starts before the root', () => {
+    render(<BranchTree tree={tree} prefixes={prefixes} names={{ 1: 'الفاتحة' }} />);
+    fireEvent.click(button('طرف أول'));
+    expect(box('بداية أولى').querySelector('header')?.textContent).toBe('الفاتحة ١');
+    expect(box('بداية ثانية').querySelector('header')).toBeNull();
+    expect(box('وسط').querySelector('header')).toBeNull();
+  });
+
   it.each([['بداية أولى', 'طرف أول'], ['طرف أول', 'بداية أولى']])('clears the path from %s through %s', (first, second) => {
     const { container } = render(<BranchTree tree={tree} prefixes={prefixes} names={{}} />);
     fireEvent.click(box(first));

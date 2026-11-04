@@ -1,6 +1,7 @@
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 // The site's top bar is not rendered here; its page-actions slot shows in place.
 vi.mock('@/components/common/NavBar', () => ({
+  useDesktopRail: () => null,
   NavActions: ({ children }: { children: React.ReactNode }) => <div data-testid="nav-actions">{children}</div>,
   NavButtons: ({ children, bottom }: { children: React.ReactNode; bottom?: boolean }) => <div data-testid={bottom ? 'nav-bottom' : 'nav-buttons'}>{children}</div>,
 }));

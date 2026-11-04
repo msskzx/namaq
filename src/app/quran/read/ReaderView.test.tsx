@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render as rtlRender, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render as rtlRender, screen, within } from '@testing-library/react';
+import { NavSlotElement, RailSlotElement } from '@/components/common/NavBar';
+import { usePageHelp } from '@/components/common/SettingsHelp';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { MushafPage } from '@/lib/quran/readerPage';
 import ReaderView, { MarkedReaderView } from './ReaderView';
@@ -40,6 +42,35 @@ const media = (wide: boolean, phone = false) =>
   vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('max-width') ? phone : wide, addEventListener() {}, removeEventListener() {} }));
 
 describe('ReaderView', () => {
+  it('keeps desktop reading controls in the rail and shortcuts in Settings', () => {
+    media(true);
+    localStorage.setItem('quran-reader-spread', 'one');
+    const rail = document.createElement('div');
+    function HelpProbe() {
+      const help = usePageHelp();
+      return help && <section aria-label={help.label}>{help.content}</section>;
+    }
+    const pages = [...one(3, opening), ...one(4, opening)];
+    const { container } = render(<RailSlotElement.Provider value={rail}>
+      <ReaderView page={3} pages={pages} names={names} />
+      <HelpProbe />
+    </RailSlotElement.Provider>);
+    expect(screen.queryByRole('navigation', { name: 'أدوات القراءة' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'فهرس السور' })).toBeNull();
+    expect(screen.queryByLabelText('رقم الصفحة')).toBeNull();
+    expect(within(screen.getByRole('region', { name: 'اختصارات القراءة' })).getByText('D')).toBeTruthy();
+    const tools = within(rail);
+    const next = tools.getByRole('button', { name: 'الصفحة التالية' });
+    expect(next.getAttribute('data-variant')).toBe('muted');
+    fireEvent.click(next);
+    expect(push).toHaveBeenLastCalledWith('/quran/read/4');
+    fireEvent.click(tools.getByRole('button', { name: 'اعرض صفحتين' }));
+    localStorage.removeItem('quran-reader-spread');
+    expect(container.querySelectorAll('section[data-side]')).toHaveLength(2);
+    expect(tools.getByRole('button', { name: 'فهرس السور' }).hasAttribute('popovertarget')).toBe(true);
+    expect(tools.getByRole('button', { name: 'ابحث عن سورة أو آية' }).hasAttribute('popovertarget')).toBe(true);
+  });
+
   it('draws the page right to left with the surah title, basmala and one rosette per ayah', () => {
     const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
@@ -151,17 +182,6 @@ describe('ReaderView', () => {
     expect(push).not.toHaveBeenCalled();
   });
 
-  it('opens hidden tools and selects the page box on G', async () => {
-    localStorage.setItem('quran-reader-bar', 'hidden');
-    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
-    localStorage.removeItem('quran-reader-bar');
-    expect(screen.queryByLabelText('رقم الصفحة')).toBeNull();
-    fireEvent.keyDown(window, { key: 'g' });
-    const input = screen.getByLabelText('رقم الصفحة');
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    expect(document.activeElement).toBe(input);
-  });
-
   it('restores two pages when chosen before, and stops at both ends of the mushaf', () => {
     media(false);
     localStorage.setItem('quran-reader-spread', 'two');
@@ -183,19 +203,13 @@ describe('ReaderView', () => {
     expect(localStorage.getItem('quran-reader-spread')).toBeNull();
   });
 
-  it('ignores the arrow keys while typing in the page box', () => {
-    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
-    fireEvent.keyDown(screen.getByLabelText('رقم الصفحة'), { key: 'ArrowLeft' });
-    expect(push).not.toHaveBeenCalled();
-  });
-
   it('hides and shows the tools, remembering the choice', () => {
     render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
     fireEvent.click(screen.getByRole('button', { name: 'إخفاء الأدوات' }));
-    expect(screen.queryByLabelText('رقم الصفحة')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'الصفحة التالية' })).toBeNull();
     expect(localStorage.getItem('quran-reader-bar')).toBe('hidden');
     fireEvent.click(screen.getByRole('button', { name: 'إظهار الأدوات' }));
-    expect(screen.getByLabelText('رقم الصفحة')).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'الصفحة التالية' })).not.toBeNull();
     localStorage.removeItem('quran-reader-bar');
   });
 
@@ -204,19 +218,46 @@ describe('ReaderView', () => {
     const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
     localStorage.removeItem('language');
     expect(screen.getByRole('button', { name: 'Next page' })).not.toBeNull();
-    expect(screen.getByLabelText('Page number')).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Index of surahs' })).not.toBeNull();
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
   });
 
-  it('jumps to a page by number and ignores one out of range', () => {
-    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
-    const input = screen.getByLabelText('رقم الصفحة');
-    fireEvent.change(input, { target: { value: '77' } });
-    fireEvent.submit(input.closest('form')!);
-    expect(push).toHaveBeenCalledWith('/quran/read/77');
-    fireEvent.change(input, { target: { value: '605' } });
-    fireEvent.submit(input.closest('form')!);
-    expect(push).toHaveBeenCalledTimes(1);
+  it('reveals the surah index and search in the phone top bar and turns pages by swipe', () => {
+    media(false, true);
+    const top = document.createElement('div');
+    const surahs = [{ number: 2, name: names[2], nameTransliterated: 'Al-Baqarah', numberOfAyat: 286, page: 2 }];
+    const { container } = render(<NavSlotElement.Provider value={top}>
+      <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />
+    </NavSlotElement.Provider>);
+    const reader = container.querySelector('[data-reader-immersive]')!;
+    const stage = screen.getByRole('article');
+    expect(reader.getAttribute('data-reader-immersive')).toBe('true');
+    expect(top.childElementCount).toBe(0);
+    fireEvent.click(stage);
+    expect(reader.getAttribute('data-reader-immersive')).toBe('false');
+    const index = within(top).getByRole('button', { name: 'فهرس السور' });
+    const dropdown = top.querySelector('[popover="auto"]')!;
+    expect(index.getAttribute('popovertarget')).toBe(dropdown.id);
+    expect(dropdown.querySelector('a')?.getAttribute('href')).toBe('/quran/read/2');
+    const search = within(top).getByRole('button', { name: 'ابحث عن سورة أو آية' });
+    const panel = within(top).getByRole('searchbox').closest('[popover]')!;
+    expect(search.getAttribute('popovertarget')).toBe(panel.id);
+    fireEvent.change(within(panel as HTMLElement).getByRole('searchbox'), { target: { value: '2:255' } });
+    expect(within(panel as HTMLElement).getByRole('link', { name: /افتح/ }).getAttribute('href')).toBe('/quran/read/ayah/2/255');
+    expect(push).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'الصفحة التالية' })).toBeNull();
+    fireEvent.click(stage);
+    expect(top.childElementCount).toBe(0);
+    fireEvent.touchStart(stage, { touches: [{ clientX: 30, clientY: 100 }] });
+    fireEvent.touchMove(stage, { touches: [{ clientX: 120, clientY: 100 }] });
+    fireEvent.touchCancel(stage);
+    expect(push).not.toHaveBeenCalled();
+    fireEvent.touchStart(stage, { touches: [{ clientX: 30, clientY: 100 }] });
+    fireEvent.touchMove(stage, { touches: [{ clientX: 120, clientY: 100 }] });
+    fireEvent.touchEnd(stage);
+    fireEvent.click(stage);
+    expect(push).toHaveBeenLastCalledWith('/quran/read/4');
+    expect(top.childElementCount).toBe(0);
   });
 });
 
