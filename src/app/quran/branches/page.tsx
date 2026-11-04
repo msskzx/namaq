@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { BRANCH_VIEW_COOKIE, parseBranchView } from '@/lib/quran/branchView';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
 import { branchesHref, piecesHolding, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
@@ -78,7 +80,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const picked = Number(first(params.s));
   const surah = Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
   const savedIds = (first(params.b) ?? '').split('|').filter(Boolean);
-  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode: params.m === 'cards' ? 'cards' : undefined, saved: savedIds.length ? savedIds : undefined };
+  const explicitMode = parseBranchView(first(params.m));
+  const preferredMode = explicitMode ? undefined : parseBranchView((await cookies()).get(BRANCH_VIEW_COOKIE)?.value);
+  const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, saved: savedIds.length ? savedIds : undefined };
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const pieces = piecesFor(built);
@@ -100,10 +105,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const drawn = treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
   const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat, true, !range) : undefined;
   const tree = presentation?.tree ?? null;
-  const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), false, built.subtrees?.idsFor(treeGroup)) : undefined;
+  const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), false, built.subtrees?.idsFor(treeGroup), state.mode) : undefined;
   const holding = tree && query ? drawn.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key) : [];
   const marked = holding.length < drawn.length ? holding : [];
-  const treeView = { ...state, query: undefined, surah: undefined, mode: undefined, saved: undefined };
+  const treeView = { ...state, query: undefined, surah: undefined, saved: undefined };
   const cards = !!tree && state.mode === 'cards';
   const parent = built.subtrees?.byId.get(id)?.parent;
   const position = tree ? cut.findIndex(piece => piece.id === id || piece.id === parent) : -1;
@@ -118,10 +123,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const names = Object.fromEntries(allSurahs.map(row => [row.number, row.name]));
   const surahCounts = built.surahCounts ??= countSurahs(pieces);
   const surahs = allSurahs.filter(row => surahCounts[row.number]).map(row => ({ number: row.number, name: row.name, count: surahCounts[row.number] }));
-  const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? undefined : 'cards' });
+  const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? 'tree' : 'cards' });
   const viewportHeight = 'clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)';
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
-  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" surround={{ on: false, sync: true }} />;
+  const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree ayat={neighbour.ayat} tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" surround={{ on: false, sync: true }} />;
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
@@ -139,14 +144,14 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         {!cards && tree && <RotateButton />}
         <AroundButton />
       </NavButtons>
-      <MatchingRules>{cards && <CardsLegend />}</MatchingRules>
+      <MatchingRules>{tree && <CardsLegend />}</MatchingRules>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { query: state.query, mode: state.mode, saved: state.saved })} />}
       {!id && <NoTrees query={query} />}
       {unavailable && <UnavailableNote />}
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''}>
       <PathScope key={`${id}:${marked.join(' ')}`} lit={marked}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
-          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable label="شجرة العبارات المشتركة" />}
+          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable label="شجرة العبارات المشتركة" />}
       </PathScope>
       </DoubleTapSave>
       {treeGroup && <CardActions id={id} text={treeGroup.text} />}

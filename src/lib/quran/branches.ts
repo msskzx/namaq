@@ -1,4 +1,5 @@
 // docs/plans/quran-shared-openings.md
+import type { BranchView } from './branchView';
 import { num } from './arabicNumber';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
@@ -8,7 +9,7 @@ import type { ReaderPageData } from './readerPage';
 export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
-export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
+export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
@@ -35,7 +36,7 @@ const chapterOpening = (ayah: BranchAyah) => {
 };
 const openingLength = (ayah: BranchAyah) => chapterOpening(ayah)?.split(' ').length ?? OPENING_WORDS;
 
-export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; mode?: 'list' | 'cards'; card?: number | 'last'; saved?: string[] };
+export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; mode?: 'list' | BranchView; card?: number | 'last'; saved?: string[] };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -45,7 +46,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (juz) params.set('juzTo', `${juz.to}`);
   if (view.page && view.page > 1) params.set('p', `${view.page}`);
   if (id && view.context) params.set('c', '1');
-  if (view.mode === 'cards' || (view.mode === 'list' && !id)) params.set('m', view.mode);
+  if (view.mode === 'cards' || view.mode === 'tree' || (view.mode === 'list' && !id)) params.set('m', view.mode);
   if (id && view.mode === 'cards' && view.card && view.card !== 1) params.set('n', `${view.card}`);
   if (view.query) params.set('q', view.query);
   if (view.surah) params.set('s', `${view.surah}`);

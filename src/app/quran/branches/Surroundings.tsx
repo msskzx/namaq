@@ -9,7 +9,7 @@ import { PathBox, PathButton } from './Paths';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import type { Neighbour, Surrounding } from '@/lib/quran/ayahContext';
+import { sharedByAll, type Neighbour, type Surrounding } from '@/lib/quran/ayahContext';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
 
@@ -109,12 +109,17 @@ export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { n
   const id = nodeId ?? `${side}${of}`;
   const ref = around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
+  const others = [...new Map(Object.values(around.data[side]).flatMap(ayah => ayah ? [[ayah.key, ayah] as const] : [])).values()];
+  const match = sharedByAll(others.map(ayah => ({ ayah, before: null, after: null }))).find(context => context.ayah.key === neighbour.key)?.match;
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
   return (
     <PathBox id={id} ctx={of} keys={[of]} lit="border-dashed border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-dashed border-[var(--home-muted)] text-[var(--home-muted)]" className="w-52 max-w-[70vw] shrink-0 rounded border text-lg [[data-down]_&]:w-44 bg-[var(--home-paper)] px-3 py-1.5">
       <span className="block font-quran leading-loose">
         {side === 'after' && basmala}
-        <span className="block"><MushafText>{neighbour.words.join(' ')}</MushafText></span>
+        <span className="block">{neighbour.words.map((word, i) => {
+          const kind = match?.rooted.includes(i) ? 'root' : match?.exact.includes(i) ? 'exact' : undefined;
+          return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
+        })}</span>
         {side === 'before' && basmala}
       </span>
       <span className="mt-1 block text-xs">{ref}</span>

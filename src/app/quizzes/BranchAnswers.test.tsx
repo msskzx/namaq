@@ -183,7 +183,7 @@ describe('complete branch tree answers', () => {
     render(<BranchFeedback question={own} typed={['رب اغفر', 'ربي يا']} names={{}} ar />);
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
     await waitFor(() => expect(screen.getAllByTitle('نفس الكلمة').map(word => word.textContent)).toEqual(['قال', 'قال']));
-    expect(screen.getAllByTitle('نفس الجذر').map(word => word.textContent)).toEqual(['رب', 'ربي']);
+    expect(screen.getAllByTitle('نفس اللفظ أو الجذر').map(word => word.textContent)).toEqual(['رب', 'ربي']);
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {

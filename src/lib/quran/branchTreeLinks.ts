@@ -1,5 +1,5 @@
 // Subtree buttons on /quran/branches: the link each node opens, and how the page reads ?o= and ?at= back.
-import { branchesHref, keys, searchKey, type Branch } from './branches';
+import { branchesHref, keys, searchKey, type Branch, type BranchesView } from './branches';
 import type { JuzRange } from './juz';
 import type { PhraseGroup } from './phraseTrees';
 import { keySet } from './subtrees';
@@ -39,7 +39,7 @@ const at = (group: PhraseGroup, wanted?: Set<string>) => {
  * a tree of their own (`own`, from phraseSubtreeTargets) opens that tree; any other node opens the same
  * tree narrowed (?at=) to the node's ayat, so the link always finds them.
  */
-export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false, ids: Record<string, string> = {}): Record<string, string> {
+export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false, ids: Record<string, string> = {}, mode?: BranchesView['mode']): Record<string, string> {
   const links: Record<string, string> = {};
   const visit = (node: Branch, root: boolean) => {
     if (!root && node.children.length > 0) {
@@ -47,10 +47,10 @@ export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, o
       const id = ids[keySet(keys(node))];
       const target = own[nodeKeys];
       links[nodeKeys] = id
-        ? branchesHref(id, juz, { context })
+        ? branchesHref(id, juz, { context, mode })
         : target
-        ? branchesHref(target.id, juz, { occurrences: at(target), context })
-        : branchesHref(group.id, juz, { occurrences: at(group, new Set(keys(node))), context });
+        ? branchesHref(target.id, juz, { occurrences: at(target), context, mode })
+        : branchesHref(group.id, juz, { occurrences: at(group, new Set(keys(node))), context, mode });
     }
     node.children.forEach(child => visit(child, false));
   };

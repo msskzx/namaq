@@ -28,7 +28,8 @@ export function ayahContexts(all: BranchAyah[], wanted: string[]): AyahContext[]
 const tokens = (ayah: BranchAyah) => {
   const [surah, number] = ayah.key.split(':').map(Number);
   const norm = ayah.words.map(normalizeWord);
-  return { norm, keys: wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]) };
+  const fallback = wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]);
+  return { norm, keys: norm.map((_, i) => ayah.roots?.[i] ? `r:${ayah.roots[i]}` : ayah.lemmas?.[i] ? `p:${ayah.lemmas[i]!.replace(/\d+$/, '')}` : fallback[i]) };
 };
 
 /** Indices of `a` on a longest in-order run of words shared with `b` (LCS), so a repeated word is matched where it lines up. */
@@ -67,21 +68,45 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   const shared = [...all[0].byKey.keys()].flatMap(key => {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
     const count = Math.min(...lists.map(list => list.length));
-    return count === 0 ? [] : [{ key, count, common: lists.map((list, n) => new Set(list.map(i => all[n].forms[i]))).reduce((a, b) => new Set([...a].filter(form => b.has(form)))) }];
+    const chosen = lists.map((list, n) => [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || x - y).slice(0, count).sort((x, y) => x - y));
+    return Array.from({ length: count }, (_, at) => {
+      const indices = chosen.map(list => list[at]);
+      return { indices, exact: new Set(indices.map((i, n) => all[n].forms[i])).size === 1 };
+    });
   });
   return contexts.map((context, n) => {
     const exact: number[] = [];
     const rooted: number[] = [];
-    shared.forEach(({ key, count, common }) => {
-      const list = all[n].byKey.get(key)!;
-      const chosen = list.length === count ? list : [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || Number(!common.has(all[n].forms[x])) - Number(!common.has(all[n].forms[y])) || x - y).slice(0, count);
-      chosen.forEach(i => (common.has(all[n].forms[i]) ? exact : rooted).push(i));
+    shared.forEach(match => {
+      (match.exact ? exact : rooted).push(match.indices[n]);
     });
     return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y) } };
   });
 }
 
-export type Neighbour = { key: string; page: number; words: string[]; basmala?: string[] };
+export function treeContexts(ayat: BranchAyah[]): AyahContext[] {
+  const contexts = ayat.map(ayah => ({ ayah, before: null, after: null, match: { exact: [] as number[], rooted: [] as number[] } }));
+  const runs = ayat.map(ayah => {
+    const boundaries = [-1, ...ayah.words.flatMap((word, i) => word === '۝' || word.startsWith('﴿') ? [i] : []), ayah.words.length];
+    return boundaries.slice(1).flatMap((end, i) => {
+      const start = boundaries[i] + 1;
+      return start === end ? [] : [{ start, ayah: { ...ayah, words: ayah.words.slice(start, end), roots: ayah.roots?.slice(start, end), lemmas: ayah.lemmas?.slice(start, end) } }];
+    });
+  });
+  for (let step = 0; step < Math.max(0, ...runs.map(run => run.length)); step++) {
+    const selected = runs.flatMap((run, index) => run[step] ? [{ ...run[step], index }] : []);
+    const matches = sharedByAll(selected.map(({ ayah }) => ({ ayah, before: null, after: null })));
+    matches.forEach((context, i) => {
+      const { index, start } = selected[i];
+      for (const kind of ['exact', 'rooted'] as const) {
+        contexts[index].match[kind].push(...(context.match?.[kind] ?? []).map(at => start + at));
+      }
+    });
+  }
+  return contexts;
+}
+
+export type Neighbour = Pick<BranchAyah, 'key' | 'page' | 'words' | 'roots' | 'lemmas'> & { basmala?: string[] };
 export type Surrounding = { before: Record<string, Neighbour | null>; after: Record<string, Neighbour | null> };
 
 const NO_BASMALA = 9;
@@ -95,7 +120,7 @@ export function surrounding(all: BranchAyah[], before: string[], after: string[]
       const last = at.get('114:6');
       if (last !== undefined) {
         const { key: previous, page, words } = all[last];
-        return { key: previous, page, words, ...(key === '1:2' && basmala && { basmala }) };
+        return { key: previous, page, words, ...(all[last].roots && { roots: all[last].roots, lemmas: all[last].lemmas }), ...(key === '1:2' && basmala && { basmala }) };
       }
     }
     const found = i === undefined ? undefined : all[i + step];
@@ -103,7 +128,7 @@ export function surrounding(all: BranchAyah[], before: string[], after: string[]
     const { page, words } = found;
     const crossed = found.key.split(':')[0] !== key.split(':')[0];
     const opened = Number((step === 1 ? found.key : key).split(':')[0]);
-    return { key: found.key, page, words, ...(crossed && basmala && opened !== NO_BASMALA && { basmala }) };
+    return { key: found.key, page, words, ...(found.roots && { roots: found.roots, lemmas: found.lemmas }), ...(crossed && basmala && opened !== NO_BASMALA && { basmala }) };
   };
   return {
     before: Object.fromEntries(before.map(key => [key, neighbour(key, -1)])),

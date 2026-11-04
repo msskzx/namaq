@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { BranchAyah } from './branches';
+import { grown, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { ayahContexts, sharedByAll, surrounding } from './ayahContext';
+import { ayahContexts, sharedByAll, surrounding, treeContexts } from './ayahContext';
+import treeData from '@/app/quran/branches/trees.json';
 import { loadReaderAyat } from './readerAyat';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
@@ -49,14 +50,36 @@ describe('loadReaderAyat', () => {
     expect(crossPage.ayah).toMatchObject({ key: '2:142', page: 22 });
     expect(crossPage.after).toMatchObject({ key: '2:143', page: 22 });
     const [first, second] = ayahContexts(all, ['94:6', '94:5']);
-    expect(first.ayah).toEqual({ key: '94:5', page: 597, words: ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا'] });
-    expect(second.ayah).toEqual({ key: '94:6', page: 597, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
+    expect(first.ayah).toMatchObject({ key: '94:5', page: 597, words: ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا'] });
+    expect(second.ayah).toMatchObject({ key: '94:6', page: 597, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
     expect(first.after).toEqual(second.ayah);
     expect(second.before).toEqual(first.ayah);
   });
 });
 
 describe('sharedByAll', () => {
+  it('matches من with منها by lemma and حيث exactly despite their corpus POS difference', async () => {
+    const all = await loadReaderAyat();
+    const [a, b] = sharedByAll(ayahContexts(all, ['2:35', '7:19']));
+    expect(a.match!.rooted).toContain(7);
+    expect(b.match!.rooted).toContain(6);
+    expect(a.match!.exact).toContain(9);
+    expect(b.match!.exact).toContain(7);
+    expect(a.match!.exact).toContain(16);
+    expect(b.match!.exact).toContain(14);
+    expect(a.match!.exact).not.toContain(7);
+    expect(b.match!.exact).not.toContain(6);
+  });
+
+  it('compares each repeated ما with its corresponding occurrence in 2:170 and 31:21', async () => {
+    const all = await loadReaderAyat();
+    for (const context of sharedByAll(ayahContexts(all, ['2:170', '31:21']))) {
+      expect(context.match!.exact).toContain(4);
+      expect(context.match!.exact).not.toContain(10);
+      expect(context.match!.rooted).toContain(10);
+    }
+  });
+
   it('marks only the words found in every ayah: the same form exact, otherwise by root', async () => {
     const all = await loadReaderAyat();
     const [first, second, third] = sharedByAll(ayahContexts(all, ['2:6', '94:5', '94:6']));
@@ -101,6 +124,24 @@ describe('sharedByAll', () => {
     expect(marked).toEqual([2, 2, 2]);
   });
 
+  it('assigns equal exact and lemma/root match counts across every generated tree', async () => {
+    const all = await loadReaderAyat();
+    const byKey = new Map(all.map(ayah => [ayah.key, ayah]));
+    for (const tree of treeData.trees) {
+      const contexts = [...new Set(tree.occurrences.map(o => o.key))].map(key => ({ ayah: byKey.get(key)!, before: null, after: null }));
+      if (contexts.length < 2) continue;
+      const matches = sharedByAll(contexts);
+      for (const kind of ['exact', 'rooted'] as const) {
+        expect(new Set(matches.map(context => context.match![kind].length)).size, tree.id).toBe(1);
+      }
+      for (const context of matches) {
+        const indices = [...context.match!.exact, ...context.match!.rooted];
+        expect(new Set(indices).size, context.ayah.key).toBe(indices.length);
+        expect(indices.every(i => i >= 0 && i < context.ayah.words.length), context.ayah.key).toBe(true);
+      }
+    }
+  }, 30_000);
+
   it('leaves a single ayah unmarked', async () => {
     const all = await loadReaderAyat();
     expect(sharedByAll(ayahContexts(all, ['1:1']))[0].match).toBeUndefined();
@@ -138,14 +179,14 @@ describe('surrounding', () => {
     const last = all.find(entry => entry.key === '114:6')!;
     const basmala = all.find(entry => entry.key === '1:1')!;
     expect(surrounding(all, ['1:2'], []).before['1:2']).toEqual({
-      key: last.key, page: last.page, words: last.words, basmala: basmala.words,
+      ...last, basmala: basmala.words,
     });
   });
 
   it('wraps before the basmala ayah without repeating the basmala', async () => {
     const all = await loadReaderAyat();
     const last = all.find(entry => entry.key === '114:6')!;
-    expect(surrounding(all, ['1:1'], []).before['1:1']).toEqual({ key: last.key, page: last.page, words: last.words });
+    expect(surrounding(all, ['1:1'], []).before['1:1']).toEqual({ ...last });
   });
 
   it('does not wrap a partial corpus without the actual final ayah of an-Nas', () => {
@@ -158,5 +199,31 @@ describe('surrounding', () => {
 
   it('gives no neighbour for an unknown ayah', () => {
     expect(surrounding([ayah('2:1'), ayah('2:2')], ['2:9'], ['2:2'])).toEqual({ before: { '2:9': null }, after: { '2:2': null } });
+  });
+});
+
+
+describe('treeContexts', () => {
+  it('compares continuation ayat separately and leaves their end signs unmarked', () => {
+    const ayat: BranchAyah[] = [
+      { key: '1:1', page: 1, words: ['قَالَ'], roots: ['qwl'], next: ['رَبِّ'], nextRoots: ['rbb'] },
+      { key: '2:1', page: 2, words: ['قَالَ'], roots: ['qwl'], next: ['رَبِّ'], nextRoots: ['rbb'] },
+    ];
+    expect(treeContexts(grown(ayat)).map(context => context.match)).toEqual([
+      { exact: [0, 2], rooted: [] }, { exact: [0, 2], rooted: [] },
+    ]);
+  });
+
+  it('keeps original-ayah matches identical to the matrix when the tree continues into later ayat', () => {
+    const group = treeData.trees.find(tree => tree.id === 'انما هي زجره وحده')!;
+    const contexts = ayahContexts(treeData.ayat as BranchAyah[], group.occurrences.map(o => o.key));
+    const matrix = sharedByAll(contexts);
+    const tree = treeContexts(grown(contexts.map(context => context.ayah)));
+    tree.forEach((context, i) => {
+      for (const kind of ['exact', 'rooted'] as const) {
+        expect(context.match![kind].filter(at => at < matrix[i].ayah.words.length)).toEqual(matrix[i].match![kind]);
+      }
+      expect(context.match!.exact).not.toContain(matrix[i].ayah.words.length);
+    });
   });
 });

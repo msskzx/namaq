@@ -148,14 +148,14 @@ function sharedDisplay(forms: string[]) {
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }
 
-export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
+export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
   return createPhrasePresenter(ayat, continueIdentical, followCorpus)(group);
 }
 
 export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true) {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const positions = new Map(ayat.map((ayah, index) => [ayah.key, index]));
-  return (group: PhraseGroup): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } => {
+  return (group: PhraseGroup): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } => {
   const seen = new Set<string>();
   const occurrences = group.occurrences.filter(o => {
     if (seen.has(o.key)) return false;
@@ -232,10 +232,16 @@ export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = tr
   });
   const variants = [...prefixes.values()].map(prefix => {
     const forms = Object.values(prefix.forms!);
-    const word = forms[0].map((_, i) => sharedDisplay(forms.map(words => words[i]))).join(' ');
-    return { ...prefix, word, ...(new Set(forms.map(words => words.join(' '))).size > 1 ? {} : { forms: undefined }) };
+    const words = forms[0].map((_, i) => sharedDisplay(forms.map(words => words[i])));
+    return { ...prefix, words, word: words.join(' '), ...(new Set(forms.map(words => words.join(' '))).size > 1 ? {} : { forms: undefined }) };
   });
-  return { tree: grow(expanded.map((_, i) => i), 0), prefixes: variants, offsets: Object.fromEntries(occurrences.map(o => [o.key, o.start + (mixedConjunctions ? 1 : 0)])) };
+  const comparisonAyat = expanded.map((ayah, i) => ({
+    ...ayah,
+    words: [...before[i].words, ...ayah.words],
+    roots: [...(before[i].roots ?? before[i].words.map(() => null)), ...(ayah.roots ?? ayah.words.map(() => null))],
+    lemmas: [...(before[i].lemmas ?? before[i].words.map(() => null)), ...(ayah.lemmas ?? ayah.words.map(() => null))],
+  }));
+  return { tree: grow(expanded.map((_, i) => i), 0), prefixes: variants, offsets: Object.fromEntries(occurrences.map(o => [o.key, o.start + (mixedConjunctions ? 1 : 0)])), ayat: comparisonAyat };
   };
 }
 
