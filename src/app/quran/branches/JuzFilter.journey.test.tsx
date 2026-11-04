@@ -97,7 +97,7 @@ describe('automatic juz range updates', () => {
     await vi.advanceTimersByTimeAsync(500);
 
     expect(navigation.replace).not.toHaveBeenCalled();
-    expect(input(container, 'juzFrom').value).toBe('25');
+    expect(input(container, 'juzFrom').value).toBe('٢٥');
   });
 
   it('lets Enter search before a pending range update can overwrite it', async () => {

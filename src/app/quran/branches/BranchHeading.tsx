@@ -6,7 +6,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 
 export default function BranchHeading() {
   const ar = useLanguage().language === 'ar';
-  return <h1 className="sr-only">{ar ? 'متشابهات القرآن' : 'Shared phrase trees'}</h1>;
+  return <h1 className="sr-only">{ar ? 'متشابهات القرآن' : 'Quran parallels'}</h1>;
 }
 
 /** The page's matching rules, as a row in the settings sheet. */
@@ -14,6 +14,6 @@ export function MatchingRules({ children }: { children?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const rules = ar ? 'قواعد المطابقة' : 'Matching rules';
   return <SettingsHelp label={rules}><p>{ar
-        ? 'تجمع كل شجرة عبارة تكررت في آيتين أو أكثر أينما وردت. لا تفصل واو أو فاء مثبتة صرفيًّا في أول العبارة، ولا اختلافات كرسي الهمزة، بين فروع الشجرة، مع إبقاء الصيغ الأصلية ظاهرة. وتظهر مجموعات السور المسماة في القائمة نفسها. النص برواية حفص كما في صفحة القراءة.'
-        : 'Each tree joins wording shared by two or more ayat wherever it occurs. A morphology-marked initial wa or fa and hamza seat differences do not split a tree; original forms remain visible. Named chapter families appear in the same list. Text follows the Hafs reading used in the reader.'}</p>{children}</SettingsHelp>;
+        ? 'تجمع البطاقة مواضع متشابهة، وتعرضها كشجرة أو مصفوفة. تطابق كل موضعين شرط للتجميع الآلي، وتحفظ مجموعات الكتب كما وردت. نوع الاختلاف تحت البطاقة قابل للنقر لتصفية المواضع، وبجانبه مثال الكلمات الخاصة به. الرمز ∅ يدل على حذف. الخط تحت الكلمة يبين اختلافًا يحتاج الانتباه، والألوان تبقى للمطابقة اللفظية أو الصرفية. تظل العبارات العامة متاحة بالبحث. وسوم التذكير والتأنيث والإظهار والإضمار والإعراب والقالب الواحد امتدادات نمق. حدود المطابقة العددية اختيارات نمق، والنص برواية حفص كما في صفحة القراءة.'
+        : 'Each card groups parallel passages, shown as a tree or matrix. Automatic groups require every pair to match; cited book groups are retained. Click a difference type below a card to filter passages. Its word example appears beside it; ∅ indicates an omission. Underlines highlight differing words, while colors show word or morphology matches. General phrases remain available through search. Gender, noun/pronoun, case and same-frame tags are Namaq extensions. Numerical matching thresholds are Namaq choices. Text follows the Hafs reading used in the reader.'}</p>{children}</SettingsHelp>;
 }

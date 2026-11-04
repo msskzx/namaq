@@ -1,12 +1,15 @@
 // docs/plans/quran-shared-openings.md
 import type { BranchView } from './branchView';
 import { num } from './arabicNumber';
+import type { GroupFilters } from './mutashabih/browse';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import { findText, firstLevel, searchQuery, textKeys, type Level, type SearchQuery } from './searchText';
 import type { ReaderPageData } from './readerPage';
 
-export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
+export type WordFeatures = { gender?: string; number?: string; case?: string; pos?: string };
+
+export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
 export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
@@ -36,7 +39,7 @@ const chapterOpening = (ayah: BranchAyah) => {
 };
 const openingLength = (ayah: BranchAyah) => chapterOpening(ayah)?.split(' ').length ?? OPENING_WORDS;
 
-export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; mode?: 'list' | BranchView; card?: number | 'last'; saved?: string[] };
+export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; mode?: 'list' | BranchView; card?: number | 'last'; saved?: string[]; filters?: GroupFilters };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -51,6 +54,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (view.query) params.set('q', view.query);
   if (view.surah) params.set('s', `${view.surah}`);
   if (view.saved?.length) params.set('b', view.saved.join('|'));
+  for (const [key, value] of Object.entries(view.filters ?? {})) if (value) params.set(key, value);
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 

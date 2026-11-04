@@ -4,7 +4,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
 export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; title?: string };
-export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; current?: boolean; bare?: boolean };
+export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; differences?: number[]; current?: boolean; bare?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; footer?: React.ReactNode; action?: React.ReactNode };
 
 const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`]].filter(Boolean).join(' ') || undefined;
@@ -13,7 +13,10 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;
   return ayah.words.map((word, index) => {
     const mark = ayah.marks?.[index];
-    const text = mark ? <mark className={markClass(mark)} title={mark.title}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
+    const wordText = mark ? <mark className={markClass(mark)} title={mark.title}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
+    const text = ayah.differences?.includes(index)
+      ? <span className="underline decoration-[var(--home-accent)] decoration-2 underline-offset-4">{wordText}</span>
+      : wordText;
     return <Fragment key={index}>{index > 0 && ' '}{index === last && !ayah.bare ? <span className={styles.verseEnd}>{text}{' '}<span className={styles.verseSeal}>{num(ayah.number)}</span></span> : text}</Fragment>;
   });
 }

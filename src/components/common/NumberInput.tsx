@@ -15,6 +15,7 @@ type NumberInputProps = {
   value?: number;
   defaultValue?: number;
   draftValue?: string;
+  arabicDigits?: boolean;
   onDraftChange?: (value: string) => void;
   onChange?: (value: number) => void;
   name?: string;
@@ -24,7 +25,7 @@ type NumberInputProps = {
   steppers?: boolean;
 };
 
-export default function NumberInput({ label, min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className, steppers = true }: NumberInputProps) {
+export default function NumberInput({ label, min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className, steppers = true, arabicDigits = false }: NumberInputProps) {
   const { language } = useLanguage();
   const initial = draftValue ?? value ?? defaultValue ?? min;
   const [draft, setDraft] = useState(String(initial));
@@ -55,17 +56,17 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
         ref={input}
         id={id}
         name={name}
-        type="number"
+        type={ar && arabicDigits ? "text" : "number"}
         inputMode="numeric"
         min={min}
         max={max}
         step={step}
         required
         disabled={disabled}
-        value={draft}
+        value={ar && arabicDigits ? draft.replace(/[0-9]/g, digit => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]) : draft}
         aria-label={label}
-        className="w-16 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-1 py-1.5 text-center text-sm tabular-nums text-[var(--home-ink)] [appearance:textfield] focus:outline-2 focus:outline-[var(--home-accent)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-        onChange={(event) => { setDraft(event.target.value); onDraftChange?.(event.target.value); }}
+        className={`w-16 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-1 py-1.5 text-center ${arabicDigits ? 'text-base' : 'text-sm'} tabular-nums text-[var(--home-ink)] [appearance:textfield] focus:outline-2 focus:outline-[var(--home-accent)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+        onChange={(event) => { const next = event.target.value.replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit))); setDraft(next); onDraftChange?.(next); }}
         onBlur={() => { if (!onDraftChange) commit(current); }}
         onKeyDown={(event) => {
           if (event.key === 'Enter' && !onDraftChange) commit(current);

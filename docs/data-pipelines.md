@@ -398,6 +398,16 @@ the file free of charge but not selling or changing it, so ship the file as it
 is: no subsetting and no conversion. [Quran mushaf fonts](quran-mushaf-fonts.md)
 explains why the reader does not use the page fonts that copy the print exactly.
 
+## Quran comparison groups
+
+`npm run quran:mutashabih` reads the existing Quran branch words and morphology
+corpus, combines them with the thirty cited cases in
+`src/lib/quran/mutashabih/evidence.json`, and writes
+`src/app/quran/branches/mutashabih.json`. Run it after changing those inputs.
+The branches page uses this artifact for its default swipe sequence.
+[Matching and browsing decisions](plans/quran-mutashabih.md) record the
+owner's grouping and evidence rules.
+
 ## Layout
 
 `npm run graph:layout -- --apply` computes prominence, community and position

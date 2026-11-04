@@ -11,7 +11,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
-import AyahContextButton from './AyahContext';
+import AyahContextButton, { GroupLinks } from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { treeContexts, type AyahContext, type Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
@@ -19,7 +19,7 @@ import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@/lib/quran/growth';
 import { useGrowTarget } from './Grow';
 
-type Props = { ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { hideArrows?: boolean; groupLinks?: Record<string, string>; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
@@ -161,7 +161,7 @@ const NEIGHBOUR_GAP = '2rem';
 
 const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
 
-function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane, auto = false, flip = false, zoomInRail = false }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null>; auto?: boolean; flip?: boolean; zoomInRail?: boolean | 'preview' }) {
+function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane, auto = false, flip = false, zoomInRail = false, hideArrows = false }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null>; auto?: boolean; flip?: boolean; zoomInRail?: boolean | 'preview'; hideArrows?: boolean }) {
   const desktopRail = useDesktopRail();
   const rail = zoomInRail ? desktopRail : null;
   const viewport = useRef<HTMLDivElement>(null);
@@ -484,8 +484,8 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       {!rail && zoom}
     </div>}
-    {onStep && peek(false)}
-    {onStep && peek(true)}
+    {onStep && !hideArrows && peek(false)}
+    {onStep && !hideArrows && peek(true)}
     {onStep && neighbour(false)}
     {onStep && neighbour(true)}
     <div ref={viewport} data-tree-viewport data-zoomed={manual || undefined} className={`relative min-w-0 flex-1 overflow-hidden ${touch}`} style={{ height: viewportHeight }}>
@@ -497,7 +497,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, ayat, offsets = {}, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = {}, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, groupLinks }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
@@ -585,7 +585,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport lane={lane} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} flip={rotatable && rotated}>
+        <TreeViewport lane={lane} hideArrows={hideArrows} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} flip={rotatable && rotated}>
           {beforeEntries.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={beforeEntries} />
             <Stub keys={all} />
@@ -609,10 +609,10 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   );
   // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
   return (
-    <Comparison.Provider value={{ contexts: ayat ? treeContexts(ayat) : [], offsets }}><PathProvider value={paths}>
+    <GroupLinks.Provider value={groupLinks}><Comparison.Provider value={{ contexts: ayat ? treeContexts(ayat) : [], offsets }}><PathProvider value={paths}>
       {/* The clip keeps the arrows (within 1.75rem of the card) in view but hides the neighbours' cards (2rem out)
           until a swipe brings them in, so they never cover the side pane beside the tree. */}
       {steppable && zoomable ? <div className="-mx-7 overflow-x-clip px-7"><div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div></div> : card}
-    </PathProvider></Comparison.Provider>
+    </PathProvider></Comparison.Provider></GroupLinks.Provider>
   );
 }
