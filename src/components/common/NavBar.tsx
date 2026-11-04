@@ -91,10 +91,10 @@ export default function NavBar() {
         onFocus={showBar}
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
-          {!menuOnly && <>
+          {!menuOnly &&
             <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>
-            <div ref={setPageSlot} className={styles.pageActions} />
-          </>}
+          }
+          <div ref={setPageSlot} className={styles.pageActions} />
           <div ref={actions} className={styles.actions}>
             {menuOnly && <Button size="icon" className={styles.menuButton}
               onClick={() => setMenuOpen(open => !open)}
@@ -112,7 +112,7 @@ export default function NavBar() {
           </div>
         )}
       </nav>
-      {!menuOnly && <div className={styles.spacer} />}
+      <div className={menuOnly ? styles.partySpacer : styles.spacer} />
     </>
   );
 }

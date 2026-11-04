@@ -118,6 +118,26 @@ afterEach(() => {
 });
 
 describe('QuizzesPage', () => {
+  it('reveals a tree without awarding points for unfinished text, then starts over', () => {
+    const original = questions[0];
+    questions[0] = branchQuestion;
+    try {
+      nav.reset('/quizzes?topic=BRANCHES&length=5');
+      render(<QuizzesPage />);
+      fireEvent.change(screen.getByLabelText('Node 1'), { target: { value: 'فينبئهم' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Show answer' }));
+      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+      expect(screen.queryByRole('textbox')).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
+      expect(screen.getByLabelText('Node 1')).toHaveProperty('value', '');
+      expect(screen.getByRole('button', { name: 'Question 1 - unanswered' })).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Exit to setup' }));
+      expect(nav.getUrl()).toBe('/quizzes?topic=BRANCHES');
+      expect(screen.getByRole('button', { name: 'Start quiz' })).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
+  });
   it('keeps a typed juz range when Start is clicked before navigation completes', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     const pushes: string[] = [];
@@ -155,7 +175,15 @@ describe('QuizzesPage', () => {
 
     expect(screen.getByText('Score: 0 / 5 (0%)')).toBeTruthy();
     expect(screen.getByText('Not passed')).toBeTruthy();
-    expect(screen.getAllByText('No answer')).toHaveLength(5);
+    expect(screen.queryByText('No answer')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Review questions' }));
+    expect(screen.getByText('No answer')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Review question 5' }));
+    expect(screen.getByText('السؤال العربي 5؟')).toBeTruthy();
+    expect(screen.getByText('No answer')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to results' }));
+    expect(screen.queryByRole('region', { name: 'Question review' })).toBeNull();
+    expect(screen.getByText('Score: 0 / 5 (0%)')).toBeTruthy();
   });
 
   it('shows the exact small supply and offers no impossible length', () => {
@@ -333,6 +361,7 @@ describe('QuizzesPage', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
       expect(screen.getByText('Score: 4 / 8 (50%)')).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Review questions' }));
       expect(screen.getByText('4 of 4 leaves')).toBeTruthy();
     } finally {
       questions[0] = original;

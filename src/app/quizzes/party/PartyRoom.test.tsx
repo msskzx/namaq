@@ -77,6 +77,31 @@ describe('party lobby', () => {
 describe('party question', () => {
   const asked = () => party([{ type: 'start', playerId: 'p0', early: true }, { type: 'loaded', questions: [question, { ...question, key: 'q2' }], surahNames: {} }]);
 
+  it('lets every player review their own answers from the final leaderboard and return to it', () => {
+    const actions: Action[] = [
+      { type: 'submit', playerId: 'p0', answer: 'a' },
+      { type: 'submit', playerId: 'p1', answer: 'b' },
+      { type: 'next', playerId: 'p0' },
+      { type: 'submit', playerId: 'p0', answer: 'b' },
+      { type: 'submit', playerId: 'p1', answer: 'a' },
+      { type: 'next', playerId: 'p0' },
+    ];
+    const final = actions.reduce((state, action) => reduce(state, action, 0).state, asked());
+    show(final, 'p1');
+    expect(screen.getByRole('heading', { name: 'Final leaderboard' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Review questions' }));
+    const review = screen.getByRole('region', { name: 'Question review' });
+    expect(within(review).getByText('عمر')).toBeTruthy();
+    expect(within(review).getByText('Incorrect')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Review question 2' }));
+    expect(within(review).getByText('أبو بكر')).toBeTruthy();
+    expect(within(review).getByText('Correct')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to leaderboard' }));
+    expect(screen.queryByRole('region', { name: 'Question review' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Final leaderboard' })).toBeTruthy();
+    expect(socket.send).not.toHaveBeenCalled();
+  });
+
   it('waits for the others with the timer and leaderboard, hiding the question and whether it was right', () => {
     show(reduce(asked(), { type: 'submit', playerId: 'p0', answer: 'b' }, 0).state);
     const board = screen.getByRole('region', { name: 'Leaderboard' });

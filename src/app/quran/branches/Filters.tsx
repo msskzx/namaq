@@ -65,8 +65,8 @@ function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: Bran
 }
 
 // The saved address keeps the tree, the view and the juz range, not the search or the surah narrowing.
-function bookmarkOf(id: string, text: string) {
-  const url = new URL(window.location.href);
+function bookmarkOf(id: string, text: string, href?: string) {
+  const url = new URL(href ?? window.location.href, window.location.origin);
   ['q', 's', 'n', 'b'].forEach(key => url.searchParams.delete(key));
   return { id, text, href: `${url.pathname}${url.search}` };
 }
@@ -106,11 +106,11 @@ export function DoubleTapSave({ id, text, children }: { id: string; text: string
 }
 
 /** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text }: { id: string; text: string }) {
+export function CardActions({ id, text, href }: { id: string; text: string; href?: string }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id);
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
-  const save = () => toggleBookmark(bookmarkOf(id, text));
+  const save = () => toggleBookmark(bookmarkOf(id, text, href));
   // In the growth studio its controls take the row; save and share come back when it closes.
   const studio = useGrowth().studio;
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
@@ -119,7 +119,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
     <div className="flex flex-wrap items-center gap-1">
     {!studio && <>
       <span className="flex-1" />
-      <ShareButton video />
+      <ShareButton video href={href} />
       <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
       </Button>
@@ -131,7 +131,7 @@ export function CardActions({ id, text }: { id: string; text: string }) {
 }
 
 /** Shares the page's address, which holds the tree, the view and the filters: the phone's share sheet, or a copied link. */
-export function ShareButton({ video = false }: { video?: boolean }) {
+export function ShareButton({ video = false, href }: { video?: boolean; href?: string }) {
   const ar = useLanguage().language === 'ar';
   const [copied, setCopied] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -147,7 +147,7 @@ export function ShareButton({ video = false }: { video?: boolean }) {
   }, [menu]);
   const label = copied ? (ar ? 'نُسخ الرابط' : 'Link copied') : (ar ? 'مشاركة' : 'Share');
   const share = async () => {
-    const url = window.location.href;
+    const url = href ? new URL(href, window.location.origin).href : window.location.href;
     if (navigator.share) {
       try { await navigator.share({ title: document.title, url }); } catch {}
       return;
