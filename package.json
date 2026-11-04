@@ -26,6 +26,7 @@
     "quran:prophets": "tsx --env-file=.env scripts/quran/buildProphets.ts",
     "quran:openings": "tsx --env-file=.env scripts/quran/buildOpenings.ts",
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",
+    "quran:mutashabih": "tsx scripts/quran/buildMutashabih.ts",
     "quran:branches": "tsx scripts/quran/buildBranches.ts",
     "quran:similar": "tsx scripts/quran/buildSimilar.ts",
     "people:sync":"tsx scripts/people/syncCanonicalPeople.ts",

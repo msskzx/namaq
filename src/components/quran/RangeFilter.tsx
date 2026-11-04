@@ -13,7 +13,7 @@ export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGAT
 
 export type RangeLabels = { from: string; to: string; toText?: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
-export default function RangeFilter({ range, max, names, href, labels, iconOnly = false }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels; iconOnly?: boolean }) {
+export default function RangeFilter({ range, max, names, href, labels, iconOnly = false, arabicDigits = false }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels; iconOnly?: boolean; arabicDigits?: boolean }) {
   const router = useNavigatingRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -96,7 +96,7 @@ export default function RangeFilter({ range, max, names, href, labels, iconOnly 
       {[0, 1].map(index => (
         <span key={index} className="flex items-center gap-2">
           {index === 1 ? labels.toText ?? labels.to : labels.from}
-          <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} steppers={false} />
+          <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} steppers={false} arabicDigits={arabicDigits} />
         </span>
       ))}
       {range && (iconOnly

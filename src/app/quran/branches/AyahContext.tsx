@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { BookOpen, RotateCcw, TextSearch, X } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -12,6 +13,8 @@ import type { AyahContext } from '@/lib/quran/ayahContext';
 import { quranContexts } from '@/lib/quran/quranText';
 import styles from './AyahContext.module.css';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+
+export const GroupLinks = createContext<Record<string, string> | undefined>(undefined);
 
 export const MAX_KEYS = 200;
 
@@ -25,6 +28,7 @@ export function sharedMarks(context: AyahContext, exact: string, root: string): 
 
 // docs/plans/quran-shared-openings.md
 export default function AyahContextButton({ children, ayahKeys, subject, siblings = [], spellings = [], spellingAt = 0, differentWords, names, references, before, after }: { before?: React.ReactNode; after?: React.ReactNode; references?: React.ReactNode; children: React.ReactNode; ayahKeys: string[]; subject?: string; siblings?: string[]; spellings?: { words: string[]; keys: string[] }[]; spellingAt?: number; differentWords: number[]; names: Record<number, string> }) {
+  const groupLinks = useContext(GroupLinks);
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [open, setOpen] = useState(false);
@@ -62,7 +66,10 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
     });
     return <article key={context.ayah.key} className={styles.card} aria-label={`${name} ${ar ? num(number) : number}${own ? (ar ? ' · آية هذا الفرع' : ' · this branch') : ''}`}>
       <PageSpread pages={[{ title: name, subtitle: own ? (ar ? `الآية ${num(number)} · آية هذا الفرع` : `Ayah ${number} · this branch`) : (ar ? `الآية ${num(number)} في سياقها` : `Ayah ${number} in context`), rows }]} />
-      <Button size="lg" className="self-start" href={`/quran/read/${context.ayah.page}?a=${context.ayah.key}`} aria-label={ar ? 'قراءة الآية' : 'Read ayah'} title={ar ? 'قراءة الآية' : 'Read ayah'}><BookOpen aria-hidden /></Button>
+      <div className="flex gap-1">
+      {groupLinks?.[context.ayah.key] && <Button size="lg" href={groupLinks[context.ayah.key]} aria-label={ar ? 'عرض المتشابه' : 'View parallels'} title={ar ? 'عرض المتشابه' : 'View parallels'} onClick={() => dialog.current?.close()}><TreeIcon aria-hidden /></Button>}
+      <Button size="lg" href={`/quran/read/${context.ayah.page}?a=${context.ayah.key}`} aria-label={ar ? 'قراءة الآية' : 'Read ayah'} title={ar ? 'قراءة الآية' : 'Read ayah'}><BookOpen aria-hidden /></Button>
+      </div>
     </article>;
   };
 

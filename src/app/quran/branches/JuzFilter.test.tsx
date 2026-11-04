@@ -14,22 +14,22 @@ afterEach(cleanup);
 describe('JuzFilter', () => {
   it('shows the applied range and clears it back to the first tree, keeping the view', () => {
     render(<JuzFilter range={{ from: 25, to: 30 }} view={{ page: 4, mode: 'cards', query: 'قال' }} />);
-    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('25');
-    expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
+    expect((screen.getByRole('textbox', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('٢٥');
+    expect((screen.getByRole('textbox', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('٣٠');
     expect(screen.queryByRole('button', { name: 'تطبيق' })).toBeNull();
     expect(screen.getByRole('link', { name: 'كل الأجزاء' }).getAttribute('href')).toBe(branchesHref('', undefined, { mode: 'cards', query: 'قال' }));
   });
 
   it('starts on the whole mushaf with nothing to reset', () => {
     render(<JuzFilter range={null} view={{}} />);
-    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
-    expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
+    expect((screen.getByRole('textbox', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('١');
+    expect((screen.getByRole('textbox', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('٣٠');
     expect(screen.queryByRole('link', { name: 'كل الأجزاء' })).toBeNull();
   });
 
   it('shows the whole mushaf again once the range is cleared', () => {
     const { rerender } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{}} />);
     rerender(<JuzFilter range={null} view={{}} />);
-    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
+    expect((screen.getByRole('textbox', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('١');
   });
 });

@@ -11,15 +11,29 @@ import Toggle from '@/components/common/Toggle';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import type { JuzRange } from '@/lib/quran/juz';
 import JuzFilter from './JuzFilter';
+import GroupFilterControls, { type ScopeOption } from './GroupFilters';
+import { hasGroupFilters } from '@/lib/quran/mutashabih/browse';
 import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 
 /** The funnel beside the search box: a sheet with the juz range, and a dot while the range is narrowed. */
-export function FilterButton({ range, view }: { range: JuzRange | null; view: BranchesView }) {
+export function FilterButton({ range, view, allSurahs = [] }: { range: JuzRange | null; view: BranchesView; allSurahs?: ScopeOption[] }) {
   const ar = useLanguage().language === 'ar';
   const sheet = useRef<HTMLDialogElement>(null);
   const label = ar ? 'تصفية' : 'Filter';
   const close = ar ? 'إغلاق' : 'Close';
+  const filterState = JSON.stringify(view.filters);
+  useEffect(() => {
+    let field: string | null = null;
+    try {
+      field = sessionStorage.getItem('quran:filter-navigation');
+      sessionStorage.removeItem('quran:filter-navigation');
+    } catch {}
+    if (!field || !sheet.current || sheet.current.open) return;
+    sheet.current.showModal();
+    const label = field === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a surah') : field === 'juz' ? (ar ? 'ابحث عن جزء' : 'Find a juz') : null;
+    if (label) sheet.current.querySelector<HTMLInputElement>(`input[aria-label="${label}"]`)?.focus();
+  }, [filterState, ar]);
   // The sheet opens on its first field (the dialog would otherwise focus the close button).
   const open = () => {
     sheet.current?.showModal();
@@ -28,10 +42,10 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
   return <>
     <span className="relative shrink-0">
       <Button size="lg" variant="muted" aria-haspopup="dialog" onClick={open} aria-label={label} title={label}><Funnel aria-hidden /></Button>
-      {(range || !!view.saved?.length) && <span aria-hidden className="pointer-events-none absolute end-2 top-2 size-2 rounded-full bg-[var(--home-accent)]" />}
+      {(range || !!view.saved?.length || hasGroupFilters(view.filters ?? {}) || view.filters?.sort) && <span aria-hidden className="pointer-events-none absolute end-2 top-2 size-2 rounded-full bg-[var(--home-accent)]" />}
     </span>
-    <dialog ref={sheet} aria-label={label} dir={ar ? 'rtl' : 'ltr'} onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
-      className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-0 text-[var(--home-ink)] shadow-lg backdrop:bg-black/40 max-sm:mb-0 max-sm:w-full max-sm:max-w-none max-sm:rounded-b-none">
+    <dialog ref={sheet} aria-label={label} onClose={() => { try { sessionStorage.removeItem('quran:filter-navigation'); } catch {} }} dir={ar ? 'rtl' : 'ltr'} onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
+      className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-0 text-[var(--home-ink)] shadow-lg backdrop:bg-black/40 max-sm:mb-0 max-sm:w-full max-sm:max-w-none max-sm:rounded-b-none max-h-[90dvh] overflow-y-auto">
       <div className="flex flex-col gap-3 p-4">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-lg">{label}</h2>
@@ -41,6 +55,7 @@ export function FilterButton({ range, view }: { range: JuzRange | null; view: Br
           <JuzFilter range={range} view={view} />
           <SavedOnly range={range} view={view} onDone={() => sheet.current?.close()} />
         </div>
+        <GroupFilterControls surahs={allSurahs} filters={view.filters ?? {}} />
       </div>
     </dialog>
   </>;
@@ -59,7 +74,7 @@ function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: Bran
   return <span title={hint} className="inline-flex shrink-0">
     <Toggle size="lg" checked={on} label={label} disabled={!on && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={checked => {
       onDone();
-      router.push(branchesHref('', range ?? undefined, { query: view.query, surah: view.surah, mode: view.mode, saved: checked ? saved.map(item => item.id) : undefined }));
+      router.push(branchesHref('', range ?? undefined, { ...view, occurrences: undefined, saved: checked ? saved.map(item => item.id) : undefined }));
     }} />
   </span>;
 }
@@ -67,7 +82,7 @@ function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: Bran
 // The saved address keeps the tree, the view and the juz range, not the search or the surah narrowing.
 function bookmarkOf(id: string, text: string, href?: string) {
   const url = new URL(href ?? window.location.href, window.location.origin);
-  ['q', 's', 'n', 'b'].forEach(key => url.searchParams.delete(key));
+  ['q', 's', 'n', 'b', 'relations', 'differences', 'surahs', 'juz', 'pageFrom', 'pageTo', 'sort', 'cited'].forEach(key => url.searchParams.delete(key));
   return { id, text, href: `${url.pathname}${url.search}` };
 }
 
@@ -106,7 +121,7 @@ export function DoubleTapSave({ id, text, children }: { id: string; text: string
 }
 
 /** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text, href }: { id: string; text: string; href?: string }) {
+export function CardActions({ id, text, href, details }: { id: string; text: string; href?: string; details?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id);
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -126,6 +141,7 @@ export function CardActions({ id, text, href }: { id: string; text: string; href
     </>}
     <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
     </div>
+    {details}
     <GrowVideo title={text} />
   </div>;
 }
@@ -183,9 +199,9 @@ export function SurahChip({ surah, clear }: { surah: string; clear: string }) {
   </span>;
 }
 
-export function NoTrees({ query }: { query: string }) {
+export function NoTrees({ query, grouped = false }: { query: string; grouped?: boolean }) {
   const ar = useLanguage().language === 'ar';
-  return <p role="status" className="text-sm text-[var(--home-muted)]">{query
+  return <p role="status" className="text-sm text-[var(--home-muted)]">{grouped ? (ar ? 'لا مواضع متشابهة تطابق التصفية.' : 'No parallel passages match these filters.') : query
     ? (ar ? `لا شجرة تطابق «${query}».` : `No tree matches «${query}».`)
     : (ar ? 'لا شجرة في هذا النطاق.' : 'No tree in this range.')}</p>;
 }

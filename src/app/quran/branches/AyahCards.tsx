@@ -27,7 +27,7 @@ export function CardsLegend() {
   return <MatchLegend exact={exact} root={root} />;
 }
 
-type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps };
+type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps; differences?: Record<string, number[]> };
 
 /** The surrounding-ayat setting adds the ayah before and after each one as columns beside it. */
 export default function AyahCards(props: Props) {
@@ -35,7 +35,7 @@ export default function AyahCards(props: Props) {
   return <Matrix key={String(context)} context={context} {...props} />;
 }
 
-function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean }) {
+function Matrix({ ayahKeys, names, steps, context, differences }: Props & { context: boolean }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const shown = ayahKeys.slice(0, MAX_KEYS);
@@ -212,7 +212,8 @@ function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean 
         label: `${name} ${ar ? num(number) : number}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
-          [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key) }],
+          [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key),
+            differences: at === 'ayah' ? differences?.[ayah.key] : undefined }],
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
         action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
@@ -241,8 +242,8 @@ function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean 
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
         </div>
       </div>}
-      {ready && chevron(false)}
-      {ready && chevron(true)}
+      {ready && !differences && chevron(false)}
+      {ready && !differences && chevron(true)}
     </section>
   );
 }

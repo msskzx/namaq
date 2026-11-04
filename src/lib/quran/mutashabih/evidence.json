@@ -1,0 +1,418 @@
+{
+  "books": {
+    "Z": [
+      "الزركشي، البرهان في علوم القرآن",
+      "تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ"
+    ],
+    "K": [
+      "الكرماني، أسرار التكرار في القرآن",
+      "تحقيق عبد القادر أحمد عطا، مراجعة أحمد عبد التواب عوض، دار الفضيلة"
+    ],
+    "I": [
+      "الإسكافي، درة التنزيل وغرة التأويل",
+      "تحقيق محمد مصطفى آيدين، جامعة أم القرى، الطبعة الأولى، ١٤٢٢هـ"
+    ]
+  },
+  "cases": [
+    {
+      "id": "Z01",
+      "places": [
+        "2:58",
+        "7:161"
+      ],
+      "tags": [
+        "inversion"
+      ],
+      "quote": "أن يكون في موضع على نظم وفي آخر على عكسه",
+      "locator": "1:113",
+      "url": "https://shamela.ws/book/11436/130"
+    },
+    {
+      "id": "Z02",
+      "places": [
+        "2:6",
+        "36:10"
+      ],
+      "tags": [
+        "addition_omission"
+      ],
+      "quote": "بزيادة واو",
+      "locator": "1:115",
+      "url": "https://quranpedia.app/books/b11436/s10.html"
+    },
+    {
+      "id": "Z03",
+      "places": [
+        "2:129",
+        "2:151"
+      ],
+      "tags": [
+        "order"
+      ],
+      "quote": "الثالث: التقديم والتأخير",
+      "locator": "1:120–121",
+      "url": "https://quranpedia.app/books/b11436/s10.html"
+    },
+    {
+      "id": "Z04",
+      "places": [
+        "2:61",
+        "3:21"
+      ],
+      "tags": [
+        "definiteness"
+      ],
+      "quote": "الرابع: بالتعريف والتنكير",
+      "locator": "1:127",
+      "url": "https://quranpedia.app/books/b11436/s11.html"
+    },
+    {
+      "id": "Z05",
+      "places": [
+        "2:80",
+        "3:24"
+      ],
+      "tags": [
+        "number"
+      ],
+      "quote": "الخامس بالجمع والإفراد",
+      "locator": "1:128",
+      "url": "https://quranpedia.app/books/b11436/s11.html"
+    },
+    {
+      "id": "Z06",
+      "places": [
+        "2:35",
+        "7:19"
+      ],
+      "tags": [
+        "particle"
+      ],
+      "quote": "السادس: إبدال حرف بحرف غيره",
+      "locator": "1:128",
+      "url": "https://quranpedia.app/books/b11436/s11.html"
+    },
+    {
+      "id": "Z07",
+      "places": [
+        "2:170",
+        "31:21"
+      ],
+      "tags": [
+        "word"
+      ],
+      "quote": "السابع إبدال كلمة بأخرى",
+      "locator": "1:130",
+      "url": "https://shamela.ws/book/11436/147"
+    },
+    {
+      "id": "Z08",
+      "places": [
+        "8:13",
+        "59:4"
+      ],
+      "tags": [
+        "assimilation"
+      ],
+      "quote": "الثامن: الإدغام وتركه",
+      "locator": "1:132",
+      "url": "https://quranpedia.app/books/b11436/s11.html"
+    },
+    {
+      "id": "Z09",
+      "places": [
+        "2:219",
+        "2:266"
+      ],
+      "tags": [],
+      "quote": "في القرآن اثنان في البقرة",
+      "locator": "1:133",
+      "url": "https://quranpedia.app/books/b11436/s11.html"
+    },
+    {
+      "id": "Z10",
+      "places": [
+        "3:126",
+        "8:10"
+      ],
+      "tags": [
+        "inversion"
+      ],
+      "quote": "ولتطمئن قلوبكم به … ولتطمئن به قلوبكم",
+      "locator": "1:114",
+      "url": "https://quranpedia.app/books/b11436/s10.html"
+    },
+    {
+      "id": "K01",
+      "places": [
+        "2:35",
+        "7:19"
+      ],
+      "tags": [
+        "particle",
+        "addition_omission"
+      ],
+      "quote": "بالواو … بالفاء",
+      "locator": "§ البقرة، قوله: اسكن أنت وزوجك الجنة",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya35.html"
+    },
+    {
+      "id": "K02",
+      "places": [
+        "2:48",
+        "2:123"
+      ],
+      "tags": [
+        "order",
+        "word"
+      ],
+      "quote": "قدم الشفاعة … وأخر العدل",
+      "locator": "§ البقرة، قوله: ولا يقبل منها شفاعة",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya48.html"
+    },
+    {
+      "id": "K03",
+      "places": [
+        "2:49",
+        "14:6"
+      ],
+      "tags": [
+        "addition_omission"
+      ],
+      "quote": "بغير واو هنا … بالواو",
+      "locator": "§ البقرة، قوله: يذبحون",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya49.html"
+    },
+    {
+      "id": "K04",
+      "places": [
+        "2:58-59",
+        "7:161-162"
+      ],
+      "tags": [
+        "particle",
+        "addition_omission",
+        "order",
+        "number",
+        "word"
+      ],
+      "quote": "قدم … وأخرها",
+      "locator": "§ البقرة، قوله: وإذ قلنا ادخلوا هذه القرية",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya58.html"
+    },
+    {
+      "id": "K05",
+      "places": [
+        "2:61",
+        "3:21"
+      ],
+      "tags": [
+        "definiteness"
+      ],
+      "quote": "أن يذكر معرفا … نكرة",
+      "locator": "§ البقرة، قوله: ويقتلون النبيين بغير الحق",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya61.html"
+    },
+    {
+      "id": "K06",
+      "places": [
+        "2:80",
+        "3:24"
+      ],
+      "tags": [
+        "number"
+      ],
+      "quote": "الأصل في الجمع",
+      "locator": "§ البقرة، قوله: أياما معدودة",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya80.html"
+    },
+    {
+      "id": "K07",
+      "places": [
+        "2:136",
+        "3:84"
+      ],
+      "tags": [
+        "particle",
+        "addition_omission"
+      ],
+      "quote": "زاد في هذه السورة … وحذف",
+      "locator": "§ البقرة، قوله: وما أنزل إلينا",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya136.html"
+    },
+    {
+      "id": "K08",
+      "places": [
+        "2:170",
+        "31:21"
+      ],
+      "tags": [
+        "word"
+      ],
+      "quote": "الموضع الأول باللفظ الأخص أولى",
+      "locator": "§ البقرة، قوله: ما ألفينا عليه آباءنا",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya170.html"
+    },
+    {
+      "id": "K09",
+      "places": [
+        "8:13",
+        "59:4"
+      ],
+      "tags": [
+        "assimilation",
+        "addition_omission"
+      ],
+      "quote": "بالإظهار … وفي الحشر بالإدغام",
+      "locator": "p. 97, item 76",
+      "url": "https://ablibrary.net/book_content/b/12494/97?lang=ar"
+    },
+    {
+      "id": "K10",
+      "places": [
+        "55:13",
+        "55:16"
+      ],
+      "tags": [],
+      "quote": "كرر الآية إحدى وثلاثين مرة",
+      "locator": "§ الرحمن، قوله: فبأي آلاء ربكما تكذبان",
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura55-aya13.html"
+    },
+    {
+      "id": "I01",
+      "places": [
+        "2:35",
+        "7:19"
+      ],
+      "tags": [
+        "particle"
+      ],
+      "quote": "فعطف … بالفاء … بالواو",
+      "locator": "1:222; § البقرة، الآية الأولى",
+      "url": "https://shamela.ws/book/1340/215"
+    },
+    {
+      "id": "I02",
+      "places": [
+        "2:48",
+        "2:123"
+      ],
+      "tags": [
+        "order",
+        "word"
+      ],
+      "quote": "فقدم في الأولى قبول الشفاعة",
+      "locator": "§ البقرة، قوله: واتقوا يوما",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya48.html"
+    },
+    {
+      "id": "I03",
+      "places": [
+        "2:49",
+        "14:6"
+      ],
+      "tags": [
+        "addition_omission"
+      ],
+      "quote": "فأدخل الواو … وحذفها",
+      "locator": "§ البقرة، قوله: وإذ نجيناكم",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya49.html"
+    },
+    {
+      "id": "I04",
+      "places": [
+        "2:58-59",
+        "7:161-162"
+      ],
+      "tags": [
+        "particle",
+        "number",
+        "addition_omission",
+        "order"
+      ],
+      "quote": "ست مسائل",
+      "locator": "§ البقرة، قوله: وإذ قلنا ادخلوا هذه القرية، المسائل الست",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya58.html"
+    },
+    {
+      "id": "I05",
+      "places": [
+        "2:61",
+        "3:21"
+      ],
+      "tags": [
+        "definiteness"
+      ],
+      "quote": "نكرة غير معرفة",
+      "locator": "§ البقرة، قوله: ويقتلون النبيين بغير الحق",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya61.html"
+    },
+    {
+      "id": "I06",
+      "places": [
+        "2:62",
+        "5:69"
+      ],
+      "tags": [
+        "order",
+        "case"
+      ],
+      "quote": "بتقديم الفرق وتأخيرها",
+      "locator": "§ البقرة، قوله: إن الذين آمنوا",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya62.html"
+    },
+    {
+      "id": "I07",
+      "places": [
+        "2:80",
+        "3:24"
+      ],
+      "tags": [
+        "number"
+      ],
+      "quote": "الجمع بالألف والتاء",
+      "locator": "§ البقرة، قوله: أياما معدودة",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya80.html"
+    },
+    {
+      "id": "I08",
+      "places": [
+        "2:126",
+        "14:35"
+      ],
+      "tags": [
+        "definiteness"
+      ],
+      "quote": "بلدا نكرة … معرفة",
+      "locator": "§ البقرة، قوله: رب اجعل هذا بلدا آمنا",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya126.html"
+    },
+    {
+      "id": "I09",
+      "places": [
+        "2:136",
+        "3:84"
+      ],
+      "tags": [
+        "particle",
+        "addition_omission"
+      ],
+      "quote": "تكرار … وحذفها",
+      "locator": "§ البقرة، قوله: قولوا آمنا، السؤالان",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya136.html"
+    },
+    {
+      "id": "I10",
+      "places": [
+        "2:170",
+        "31:21"
+      ],
+      "tags": [
+        "word"
+      ],
+      "quote": "استعمال اللفظ الأخص أولى",
+      "locator": "§ البقرة، قوله: ما ألفينا عليه آباءنا",
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya170.html"
+    }
+  ]
+}

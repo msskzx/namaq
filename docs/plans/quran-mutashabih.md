@@ -1,0 +1,31 @@
+# Mutashabih groups on branches
+
+The branch page opens on groups of similar Quran passages in mushaf order. Each group uses the existing tree and matrix views, swipe gestures, bookmark and share row. The selected default view still comes from the saved preference. Phrase trees remain available through search and existing links.
+
+## Matching and evidence
+
+The engine compares ayat and selected spans, retaining the original word indices. An explicitly cited passage can continue into the next ayah. Automatic groups require every pair to satisfy the same matching policy. Exact repeats remain accessible. Broad phrase groups are restricted to search.
+
+The thirty cases supplied in the owner's book-rules report are recorded in `src/lib/quran/mutashabih/evidence.json`. Their quotations, edition locators and selected passages retain the report's attribution and verification limits. A section link stands in for pagination only where the report provides no printed page. The four messenger passages are held together as the requested regression example. Only the cited places inherit the citation.
+
+`MATCH_CONFIG` in the engine holds Namaq's retrieval choices. The books provide no numeric thresholds. Initial settings require six strongly matching words and 72% coverage for a complete ayah comparison. A local span needs eight matches, with at most three intervening words. Unattributed shared phrases need six words and at most thirty-six places. The labelled set includes fifteen common-formula negatives. These values passed that bounded set and require further corpus review.
+
+The static build stores group places, original word indices, alignment levels, moved-word tags, all supported difference tags and citations. Alignments use one reference place against each other place to keep the artifact linear in group size. Clique membership is checked independently across every pair.
+
+The extra tags for gender, noun/pronoun, case and frame are Namaq extensions. They are identified as extensions in help and controls. Automatic tags describe computed differences. Book terminology remains attached to the source case.
+
+## Browsing
+
+The type chip below the card toggles the same difference filter as the funnel while retaining the current group. The differing expression is plain text. Book references and short quotations follow beneath. Both views use the same footer.
+
+The funnel applies filters live and stores them in the URL. Selected surahs and juz' combine by union. Page range, legacy juz' range, relation kind, difference kind, saved-only and book-only filters restrict those results. Sorting supports mushaf order, closest first, most places and fewest marked word differences.
+
+## Verification
+
+Keep existing tests for search, old phrase links, bookmarked trees, zoom targets, default-view preference, matrix matching, swipe and accessibility. Rewrite assertions tied to the previous default inventory for the group feed. Add regression tests for all thirty book cases, fifteen negatives, nontransitive chains, filters, footer-chip toggling and citations in both views.
+
+Run lint, TypeScript, the full Vitest suite and the production build. Inspect the running app at 390 px in light mode before opening the PR. Run an independent review and answer each finding.
+
+## Prior records
+
+Distillate record namaq/0021, “Absorbing a phrase must preserve its entry points,” informed retaining the legacy phrase inventory for search and zoom targets. Existing links and bookmarks keep their entry points when the default inventory changes.
