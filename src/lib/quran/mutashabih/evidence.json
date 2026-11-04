@@ -154,7 +154,11 @@
       ],
       "quote": "بالواو … بالفاء",
       "locator": "§ البقرة، قوله: اسكن أنت وزوجك الجنة",
-      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya35.html"
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya35.html",
+      "examples": {
+        "particle": "وكلا / فكلا",
+        "addition_omission": "رغدا / ∅"
+      }
     },
     {
       "id": "K02",
@@ -168,7 +172,11 @@
       ],
       "quote": "قدم الشفاعة … وأخر العدل",
       "locator": "§ البقرة، قوله: ولا يقبل منها شفاعة",
-      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya48.html"
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya48.html",
+      "examples": {
+        "order": "شفاعة / عدل",
+        "word": "يؤخذ منها / تنفعها"
+      }
     },
     {
       "id": "K03",
@@ -181,7 +189,10 @@
       ],
       "quote": "بغير واو هنا … بالواو",
       "locator": "§ البقرة، قوله: يذبحون",
-      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya49.html"
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya49.html",
+      "examples": {
+        "addition_omission": "يذبحون / ويذبحون"
+      }
     },
     {
       "id": "K04",
@@ -198,7 +209,14 @@
       ],
       "quote": "قدم … وأخرها",
       "locator": "§ البقرة، قوله: وإذ قلنا ادخلوا هذه القرية",
-      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya58.html"
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya58.html",
+      "examples": {
+        "particle": "فكلوا / وكلوا",
+        "addition_omission": "رغدا / ∅",
+        "order": "ادخلوا الباب / قولوا حطة",
+        "number": "خطاياكم / خطيئاتكم",
+        "word": "فأنزلنا / فأرسلنا"
+      }
     },
     {
       "id": "K05",
@@ -238,7 +256,11 @@
       ],
       "quote": "زاد في هذه السورة … وحذف",
       "locator": "§ البقرة، قوله: وما أنزل إلينا",
-      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya136.html"
+      "url": "https://quranpedia.app/uloom/karmani-burhan/sura2-aya136.html",
+      "examples": {
+        "particle": "إلينا / علينا",
+        "addition_omission": "وما أوتي / ∅"
+      }
     },
     {
       "id": "K08",
@@ -265,7 +287,11 @@
       ],
       "quote": "بالإظهار … وفي الحشر بالإدغام",
       "locator": "p. 97, item 76",
-      "url": "https://ablibrary.net/book_content/b/12494/97?lang=ar"
+      "url": "https://ablibrary.net/book_content/b/12494/97?lang=ar",
+      "examples": {
+        "assimilation": "يشاقق / يشاقّ",
+        "addition_omission": "ورسوله / ∅"
+      }
     },
     {
       "id": "K10",
@@ -303,7 +329,11 @@
       ],
       "quote": "فقدم في الأولى قبول الشفاعة",
       "locator": "§ البقرة، قوله: واتقوا يوما",
-      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya48.html"
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya48.html",
+      "examples": {
+        "order": "شفاعة / عدل",
+        "word": "يؤخذ منها / تنفعها"
+      }
     },
     {
       "id": "I03",
@@ -316,7 +346,10 @@
       ],
       "quote": "فأدخل الواو … وحذفها",
       "locator": "§ البقرة، قوله: وإذ نجيناكم",
-      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya49.html"
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya49.html",
+      "examples": {
+        "addition_omission": "يذبحون / ويذبحون"
+      }
     },
     {
       "id": "I04",
@@ -332,7 +365,13 @@
       ],
       "quote": "ست مسائل",
       "locator": "§ البقرة، قوله: وإذ قلنا ادخلوا هذه القرية، المسائل الست",
-      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya58.html"
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya58.html",
+      "examples": {
+        "particle": "فكلوا / وكلوا",
+        "addition_omission": "رغدا / ∅",
+        "order": "ادخلوا الباب / قولوا حطة",
+        "number": "خطاياكم / خطيئاتكم"
+      }
     },
     {
       "id": "I05",
@@ -359,7 +398,11 @@
       ],
       "quote": "بتقديم الفرق وتأخيرها",
       "locator": "§ البقرة، قوله: إن الذين آمنوا",
-      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya62.html"
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya62.html",
+      "examples": {
+        "order": "النصارى والصابئين / الصابئون والنصارى",
+        "case": "الصابئين / الصابئون"
+      }
     },
     {
       "id": "I07",
@@ -399,7 +442,11 @@
       ],
       "quote": "تكرار … وحذفها",
       "locator": "§ البقرة، قوله: قولوا آمنا، السؤالان",
-      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya136.html"
+      "url": "https://quranpedia.app/uloom/durrat-tanzil/sura2-aya136.html",
+      "examples": {
+        "particle": "إلينا / علينا",
+        "addition_omission": "وما أوتي / ∅"
+      }
     },
     {
       "id": "I10",

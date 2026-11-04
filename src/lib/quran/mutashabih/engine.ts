@@ -1,6 +1,6 @@
 // docs/plans/quran-mutashabih.md
 import { spell, type BranchAyah } from '../branches';
-import { normalizeWord } from '../normalize';
+import { normalizeWord, plainName } from '../normalize';
 import { buildPhraseGroups, type PhraseOccurrence } from '../phraseTrees';
 import rawEvidence from './evidence.json';
 
@@ -186,7 +186,7 @@ export function compareAyat(a: BranchAyah, b: BranchAyah, config = MATCH_CONFIG)
   return compareWords(left, right, config);
 }
 
-const cases = rawEvidence.cases.map(row => {
+const cases: Citation[] = rawEvidence.cases.map(row => {
   const [book, edition] = rawEvidence.books[row.id[0] as keyof typeof rawEvidence.books];
   return { ...row, tags: row.tags as Tag[], book, edition };
 });
@@ -196,7 +196,7 @@ type Attested = { places: Selection[]; citations: string[]; focus?: Record<strin
 const attested: Attested[] = [
   { places: [['2:6', 3, 11], ['36:10', 0, 8]], citations: ['Z02'], focus: { '2:6': [3], '36:10': [0] }, detail: 'سواء / وسواء' },
   { places: [['2:35', 1, 18], ['7:19', 0, 16]], citations: ['Z06', 'K01', 'I01'], focus: { '2:35': [6, 8], '7:19': [5] }, detail: 'وكلا / فكلا' },
-  { places: [['2:48', 0, 19], ['2:123', 0, 18]], citations: ['K02', 'I02'], focus: { '2:48': [11, 15], '2:123': [11, 14] }, detail: 'شفاعة / عدل' },
+  { places: [['2:48', 0, 19], ['2:123', 0, 18]], citations: ['K02', 'I02'], focus: { '2:48': [11, 13, 14, 15], '2:123': [11, 13, 14] }, detail: 'شفاعة / عدل' },
   { places: [['2:49', 2, 18], ['7:141', 2, 18], ['14:6', 10, 26]], citations: ['K03', 'I03'], focus: { '2:49': [8], '7:141': [8], '14:6': [16] }, detail: 'يذبحون / يقتلون / ويذبحون' },
   { places: [['2:58', 0, 20], ['7:161', 0, 20]], citations: ['Z01'], focus: { '2:58': [10, 11, 12, 13, 14], '7:161': [10, 11, 12, 13, 14] }, detail: 'ادخلوا الباب / قولوا حطة' },
   { places: [['2:58', 0, 18, '2:59'], ['7:161', 0, 17, '7:162']], citations: ['K04', 'I04'], focus: { '2:58': [5, 9, 10, 11, 12, 13, 14, 17, 18], '7:161': [6, 10, 11, 12, 13, 14, 17, 18], '2:59': [8], '7:162': [3, 9] }, detail: 'ادخلوا الباب / قولوا حطة' },
@@ -249,6 +249,29 @@ function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citat
     return { a: places[i].key, b: places[j].key, ...comparison };
   });
   const tags = unique(citations.length ? citations.flatMap(citation => citation.tags) : kind === 'same_frame' ? ['frame' as const] : kind === 'identical' || kind === 'shared_phrase' ? [] : pairs.flatMap(pair => pair.tags));
+  const examples: Partial<Record<Tag, string>> = {};
+  const words = new Map(rows.flatMap(row => row.map(word => [`${word.key}:${word.index}`, word] as const)));
+  for (const tag of tags) {
+    const cited = citations.find(citation => citation.examples?.[tag])?.examples?.[tag];
+    if (cited || tags.length === 1 && detail) {
+      examples[tag] = cited ?? detail!;
+      continue;
+    }
+    const pair = pairs.find(pair => pair.columns.some(column => column.tags.includes(tag) || tag === 'frame' && column.tags.length));
+    const changed = pair?.columns.filter(column => column.tags.includes(tag) || tag === 'frame' && column.tags.length);
+    if (!changed?.length) continue;
+    const selected = tag === 'order' || tag === 'inversion' ? changed : changed.slice(0, 1);
+    const side = (key: 'a' | 'b') => {
+      const positions = selected.flatMap(column => column[key] ? [column[key]!] : []);
+      positions.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }) || a.index - b.index);
+      const values = unique(positions.map(position => {
+        const word = words.get(`${position.key}:${position.index}`)!;
+        return tag === 'case' ? spell(word.text) : plainName(word.text);
+      }));
+      return values.slice(0, 3).join(' ') + (values.length > 3 ? ' …' : '') || '∅';
+    };
+    examples[tag] = `${side('a')} / ${side('b')}`;
+  }
   const differences: Record<string, number[]> = {};
   if (focus) Object.assign(differences, focus);
   else if (tags.length) {
@@ -263,14 +286,15 @@ function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citat
   }
   return {
     id, text: anchor.text, tree: { ...anchor, id }, places, kind, tags, differences,
-    score: Math.min(...pairs.map(pair => pair.score)), citations, detail,
+    score: Math.min(...pairs.map(pair => pair.score)), citations, detail, examples,
     columns: pairs.map(({ a, b, columns }) => ({
       a, b, columns: columns.map(column => {
         if (!focus) return column;
         const focused = [column.a, column.b].some(cell => cell && focus[cell.key]?.includes(cell.index));
         if (!focused) return { ...column, tags: [] };
         const matching = column.tags.filter(tag => tags.includes(tag));
-        return { ...column, tags: matching.length ? matching : tags.length === 1 ? tags : [] };
+        const replacement = tags.includes('word') && !column.level ? ['word' as const] : [];
+        return { ...column, tags: matching.length ? matching : replacement.length ? replacement : tags.length === 1 ? tags : [] };
       }),
     })),
   };

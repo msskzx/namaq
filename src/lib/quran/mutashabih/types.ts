@@ -30,7 +30,7 @@ export type Position = { key: string; index: number };
 export type Word = Position & { features?: WordFeatures; text: string; letters: string; lemma?: string; root?: string; conj?: string; base: string };
 export type Column = { a?: Position; b?: Position; level?: Level; tags: Tag[] };
 export type Place = PhraseOccurrence & { through?: string };
-export type Citation = { id: string; book: string; edition: string; locator: string; quote: string; url: string; places: string[]; tags: Tag[] };
+export type Citation = { id: string; book: string; edition: string; locator: string; quote: string; url: string; examples?: Partial<Record<Tag, string>>; places: string[]; tags: Tag[] };
 export type Comparison = { columns: Column[]; tags: Tag[]; score: number; coverage: number; kind?: Kind; spans: [Place, Place] };
 
 export type Group = {
@@ -44,5 +44,6 @@ export type Group = {
   score: number;
   citations: Citation[];
   detail?: string;
+  examples?: Partial<Record<Tag, string>>;
   columns: { a: string; b: string; columns: Column[] }[];
 };

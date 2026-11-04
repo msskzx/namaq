@@ -97,6 +97,18 @@ describe('the classical benchmark groups', () => {
     expect(group?.tags).toContain('order');
   });
 
+  it('tags and highlights the lexical replacement separately from the swapped nouns', () => {
+    const group = artifact.find(group => group.citations.some(citation => citation.id === 'K02'))!;
+    const columns = group.columns.flatMap(pair => pair.columns).filter(column => column.tags.includes('word'));
+    expect(columns).toEqual(expect.arrayContaining([
+      expect.objectContaining({ a: { key: '2:48', index: 13 } }),
+      expect.objectContaining({ b: { key: '2:123', index: 13 } }),
+    ]));
+    expect(group.differences['2:48']).toEqual(expect.arrayContaining([13, 14]));
+    expect(group.differences['2:123']).toContain(13);
+    expect(group.examples?.word).toBe('يؤخذ منها / تنفعها');
+  });
+
   it('marks both words of the 2:48 and 2:123 swap in each ayah', () => {
     const group = artifact.find(group => group.citations.some(citation => citation.id === 'K02'));
     const differences: Record<string, number[]> | undefined = group?.differences;

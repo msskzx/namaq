@@ -9,6 +9,15 @@ afterEach(cleanup);
 
 const group = groups.find(group => group.citations.some(citation => citation.id === 'K02'))!;
 describe('group footer', () => {
+  it('names the words for each difference type independently', () => {
+    render(<GroupDetails group={group} range={null} view={{}} />);
+    const order = screen.getByRole('link', { name: 'تقديم وتأخير' });
+    const replacement = screen.getByRole('link', { name: 'إبدال كلمة' });
+    expect(order.parentElement?.textContent).toContain('شفاعة / عدل');
+    expect(replacement.parentElement?.textContent).toContain('يؤخذ منها / تنفعها');
+    expect(replacement.parentElement?.textContent).not.toContain('شفاعة / عدل');
+  });
+
   it('hides a citation when the focused places exclude its comparison', () => {
     const messenger = groups.find(group => group.citations.some(citation => citation.id === 'Z03'))!;
     render(<GroupDetails group={messenger} range={null} view={{}} shownKeys={['3:164', '62:2']} />);

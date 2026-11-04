@@ -16,13 +16,13 @@ export function GroupDetails({ group, range, view, shownKeys }: { group: Group; 
       {group.tags.map(tag => {
         const label = TAGS[tag];
         const active = selected?.split(',').includes(tag) ?? false;
-        return <Button key={tag} size="sm" active={active} aria-pressed={active} scroll={false}
+        const example = group.examples?.[tag] ?? (group.tags.length === 1 ? group.detail : undefined);
+        return <span key={tag} className="inline-flex flex-wrap items-center gap-1.5"><Button size="sm" active={active} aria-pressed={active} scroll={false}
           href={branchesHref(group.id, range ?? undefined, { ...view, filters: { ...view.filters, differences: toggleFilter(selected, tag) } })}>
           <Tags size={12} aria-hidden />{ar ? label.ar : label.en}{'extension' in label && <span>{ar ? ' · امتداد نمق' : ' · Namaq extension'}</span>}
-        </Button>;
+        </Button>{example && <span lang="ar" dir="rtl">{example}</span>}</span>;
       })}
       {!group.citations.length && <span className="text-xs text-[var(--home-muted)]">{ar ? 'تحديد آلي' : 'Automatically identified'}</span>}
-      {group.detail && <span lang="ar" dir="rtl">{group.detail}</span>}
     </div>}
     {group.citations.filter(citation => !shownKeys || citation.places.every(place => shownKeys.includes(place.split('-')[0]))).map(citation => <p key={citation.id} lang="ar" dir="rtl" className="m-0 text-xs leading-relaxed text-[var(--home-muted)]">
       {citation.book}، {citation.edition}{' · '}
