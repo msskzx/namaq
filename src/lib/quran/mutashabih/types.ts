@@ -46,4 +46,3 @@ export type Group = {
   detail?: string;
   columns: { a: string; b: string; columns: Column[] }[];
 };
-
