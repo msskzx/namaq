@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import TabBar from './TabBar';
 
 const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', loaded: true, toggleLanguage: vi.fn(), setTheme: vi.fn() } }));
-vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
+vi.mock('next/navigation', () => ({ usePathname: () => state.path, useRouter: () => ({ refresh: vi.fn() }) }));
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: state.language, languageLoaded: state.loaded, toggleLanguage: state.toggleLanguage }),
 }));
@@ -30,6 +30,7 @@ describe('TabBar', () => {
     const toggle = screen.getByRole('button', { name: 'Settings' });
     fireEvent.click(toggle);
     const sheet = screen.getByRole('dialog', { name: 'Settings' });
+    expect(within(sheet).getByRole('group', { name: 'Default similar-ayat view' })).toBeTruthy();
     fireEvent.click(within(sheet).getByRole('button', { name: 'العربية' }));
     expect(state.toggleLanguage).toHaveBeenCalledOnce();
     fireEvent.click(within(sheet).getByRole('button', { name: 'English' }));

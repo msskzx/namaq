@@ -35,7 +35,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
   const title = differing ? (ar ? 'اختلافات الضبط والسياق' : 'Spelling differences and context') : (ar ? 'الآيات في سياقها' : 'Ayat in context');
   const several = new Set([...ayahKeys, ...siblings]).size > 1;
   const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
-  const rootLabel = ar ? 'نفس الجذر' : 'Same root';
+  const rootLabel = ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root';
   const wanted = [...ayahKeys, ...siblings].slice(0, MAX_KEYS);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? ['quran-context', ...wanted] : null, ([, ...keys]: string[]) => quranContexts(keys), { revalidateOnFocus: false });
 

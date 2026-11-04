@@ -1,23 +1,23 @@
 'use client';
 
 import LoadingDots from '@/components/common/LoadingDots';
-import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
-import type { Surrounding } from '@/lib/quran/ayahContext';
+import { treeContexts, type AyahContext, type Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@/lib/quran/growth';
 import { useGrowTarget } from './Grow';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
@@ -73,6 +73,22 @@ export function Marked({ node, ayahKeys, subject, siblings, names, children, ski
   return <AyahContextButton ayahKeys={ayahKeys} subject={subject} siblings={others} spellings={spellings(node, skip)} spellingAt={offset + skip} differentWords={differentWords} names={names} references={references} before={before} after={after}>{children}</AyahContextButton>;
 }
 
+const Comparison = createContext<{ contexts: AyahContext[]; offsets: Record<string, number> }>({ contexts: [], offsets: {} });
+
+function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: string[]; ayahKeys: string[]; at?: number; prefix?: boolean }) {
+  const { contexts, offsets } = useContext(Comparison);
+  const ar = useLanguage().language === 'ar';
+  return words.map((word, i) => {
+    const matches = ayahKeys.map(key => {
+      const match = contexts.find(context => context.ayah.key === key)?.match;
+      const index = (prefix ? 0 : offsets[key] ?? 0) + at + i;
+      return match?.rooted.includes(index) ? 'root' : match?.exact.includes(index) ? 'exact' : undefined;
+    });
+    const kind = word !== '۝' && !word.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : 'exact' : undefined;
+    return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
+  });
+}
+
 const nodeId = (index: number) => `n${index}`;
 
 function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
@@ -97,7 +113,7 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
           before={<PathButton id={id} keys={keys(node)} subject={subject} />}
           after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
-          <span className="block font-quran leading-loose"><MushafText>{shownWords.join(' ')}</MushafText></span>
+          <span className="block font-quran leading-loose"><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} /></span>
         </Marked>}
       </PathBox>}
       {entries.length > 0 && <>
@@ -464,7 +480,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = {}, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
@@ -515,7 +531,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
               <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-52 shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose [[data-down]_&]:max-w-44">
                 <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
-                  <span className="block font-quran"><MushafText>{prefix.word}</MushafText></span>
+                  <span className="block font-quran"><TreeWords words={prefix.words ?? prefix.word.split(' ')} ayahKeys={prefix.keys} prefix /></span>
                 </Marked>
               </PathBox>
             </> }] : prefix.keys.flatMap(key => {
@@ -553,7 +569,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
                 <Marked node={variant} ayahKeys={variant.keys} subject={variant.word} siblings={variants.flatMap(other => other.keys)} names={names} enabled={showSpellings}
                   before={<PathButton id={`v${i}`} keys={variant.keys} subject={variant.word} />}
                   after={!renderNode && <SubtreeButton href={branchesHref(variant.id, juz ?? undefined, { ...view, spelling: spell(variant.word), partition: variant.partition })} />}>
-                  <span className="block font-quran"><MushafText>{variant.word}</MushafText></span>
+                  <span className="block font-quran"><TreeWords words={[variant.word]} ayahKeys={variant.keys} prefix /></span>
                 </Marked>
               </PathBox>
             </> }))} />
@@ -565,10 +581,10 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   );
   // A tree that steps to its neighbours slides as a whole card, its neighbours peeking in beside it.
   return (
-    <PathProvider value={paths}>
+    <Comparison.Provider value={{ contexts: ayat ? treeContexts(ayat) : [], offsets }}><PathProvider value={paths}>
       {/* The clip keeps the arrows (within 1.75rem of the card) in view but hides the neighbours' cards (2rem out)
           until a swipe brings them in, so they never cover the side pane beside the tree. */}
       {steppable && zoomable ? <div className="-mx-7 overflow-x-clip px-7"><div ref={lane} data-tree-lane dir={ar ? 'rtl' : 'ltr'} className="relative data-[sliding]:transition-transform data-[sliding]:duration-[250ms] data-[sliding]:ease-out motion-reduce:transition-none">{card}</div></div> : card}
-    </PathProvider>
+    </PathProvider></Comparison.Provider>
   );
 }

@@ -650,6 +650,7 @@ describe('search', () => {
 describe('branchesHref view modes', () => {
   it('writes the list mode only without a tree and the card number only with one', () => {
     expect(branchesHref('', undefined, { mode: 'list' })).toBe('/quran/branches?m=list');
+    expect(branchesHref('x', undefined, { mode: 'tree' })).toBe('/quran/branches?o=x&m=tree');
     expect(branchesHref('', undefined, { mode: 'cards' })).toBe('/quran/branches?m=cards');
     expect(branchesHref('x', undefined, { mode: 'list' })).toBe('/quran/branches?o=x');
     expect(branchesHref('x', undefined, { mode: 'cards', card: 1 })).toBe('/quran/branches?o=x&m=cards');

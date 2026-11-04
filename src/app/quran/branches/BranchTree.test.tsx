@@ -7,6 +7,8 @@ import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
 import data from './trees.json';
+import { phrasePresentation } from '@/lib/quran/phraseTrees';
+import { ayahContexts, sharedByAll, surrounding } from '@/lib/quran/ayahContext';
 import { inJuzRange } from '@/lib/quran/juz';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
@@ -32,6 +34,43 @@ const tree = {
 };
 
 describe('BranchTree', () => {
+  it('uses matrix matches in the phrase trunk, prefixes and leaves at their original offsets', () => {
+    const group = data.trees.find(group => group.id === 'يادم اسكن انت وزوجك الجنه')!;
+    const ayat = (data.ayat as BranchAyah[]).filter(ayah => group.occurrences.some(o => o.key === ayah.key));
+    const presentation = phrasePresentation(group, data.ayat as BranchAyah[]);
+    const { container } = render(<BranchTree {...presentation} names={{}} zoomable={false} />);
+    const matches = sharedByAll(ayahContexts(ayat, ayat.map(ayah => ayah.key)));
+    const purple = [...container.querySelectorAll('mark[title="نفس اللفظ أو الجذر"]')].map(mark => mark.textContent);
+    const red = [...container.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent);
+    expect(purple).toContain(ayat[0].words[7]);
+    expect(purple).toContain(ayat[1].words[6]);
+    expect(red).toContain(ayat[0].words[9]);
+    expect(red).toContain(ayat[0].words[2]);
+    expect(matches[0].match!.rooted).toContain(7);
+    expect(matches[1].match!.rooted).toContain(6);
+    expect(container.querySelector('mark')?.closest('[data-node]')).toBeTruthy();
+  });
+
+  it('colors the merged second ما by lemma while keeping the first exact', () => {
+    const ayat = (data.ayat as BranchAyah[]).filter(ayah => ['2:170', '31:21'].includes(ayah.key));
+    const { container } = render(<BranchTree tree={branch(ayat)} ayat={ayat} names={{}} zoomable={false} />);
+    const purple = [...container.querySelectorAll('mark[title="نفس اللفظ أو الجذر"]')].map(mark => mark.textContent);
+    expect(purple).toEqual(['مَا']);
+    const red = [...container.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent);
+    expect(red.filter(word => word === ayat[0].words[4])).toHaveLength(1);
+  });
+
+  it('compares preceding ayat using their stem annotations', () => {
+    const around = surrounding(data.ayat as BranchAyah[], ['2:36', '7:20'], []);
+    const { container } = render(<BranchTree tree={{ words: ['السياق'], ayat: ['2:36', '7:20'], children: [] }} names={{}} surround={{ on: true, data: around }} zoomable={false} />);
+    for (const key of ['2:36', '7:20']) {
+      const previous = container.querySelector(`[data-node="before${key}"]`)!;
+      const purple = [...previous.querySelectorAll('mark[title="نفس اللفظ أو الجذر"]')].map(mark => mark.textContent);
+      expect(purple).toContain(key === '2:36' ? 'مِنْهَا' : 'مِنْ');
+      expect([...previous.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent)).toContain('حَيْثُ');
+    }
+  });
+
   it('draws the shared words once and each branch after them', () => {
     render(<BranchTree tree={tree} names={{ 15: 'سُورَةُ الحِجۡرِ', 44: 'سُورَةُ الدُّخَانِ', 51: 'سُورَةُ الذَّارِيَاتِ' }} />);
     expect(screen.getAllByText('إِنَّ ٱلْمُتَّقِينَ فِى')).toHaveLength(1);

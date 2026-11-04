@@ -21,6 +21,8 @@ function HelpProbe() {
   return help ? <div data-testid="page-help" title={help.label}>{help.content}</div> : null;
 }
 
+const preference = vi.hoisted(() => ({ value: undefined as string | undefined }));
+vi.mock('next/headers', () => ({ cookies: async () => ({ get: () => preference.value ? { value: preference.value } : undefined }) }));
 const params = new URLSearchParams();
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
@@ -31,7 +33,7 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 78, name: 'النبأ' }]) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
-afterEach(cleanup);
+afterEach(() => { cleanup(); preference.value = undefined; });
 const open = (values: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(values) });
 const target = (values: Record<string, string>) => open(values).then(() => '', (error: Error) => error.message.replace('REDIRECT ', ''));
 const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://localhost').searchParams);
@@ -39,6 +41,35 @@ const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://loca
 const follow = async (values: Record<string, string>) => open(paramsOf(await target(values)));
 
 describe('Quran branch trees', () => {
+  it('opens the saved default view and preserves it through the initial redirect', async () => {
+    preference.value = 'cards';
+    expect(new URL(await target({}), 'http://localhost').searchParams.get('m')).toBe('cards');
+    render(await open({ o: 'لا اثم عليه' }));
+    expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
+  });
+
+  it.each([['cards', 'tree'], ['tree', 'cards']])('honors explicit %s links over the %s default', async (mode, saved) => {
+    preference.value = saved;
+    render(await open({ o: 'لا اثم عليه', m: mode }));
+    expect(screen.getByRole('region', { name: mode === 'cards' ? 'آيات الشجرة في سياقها' : 'شجرة العبارات المشتركة' })).toBeTruthy();
+  });
+
+  it('keeps the explicit tree override when zooming into a subtree above a matrix default', async () => {
+    preference.value = 'cards';
+    render(await open({ o: 'لا اثم عليه', m: 'tree' }));
+    const href = screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' })[0].getAttribute('href')!;
+    expect(paramsOf(href).m).toBe('tree');
+    cleanup();
+    render(await open(paramsOf(href)));
+    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+  });
+
+  it('ignores an invalid saved preference', async () => {
+    preference.value = 'invalid';
+    render(await open({ o: 'لا اثم عليه' }));
+    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+  });
+
   it('shows an ayah boundary between continuations without a separate phrase node', async () => {
     render(await open({ o: 'يومهم الذي', juzFrom: '25', juzTo: '30' }));
     expect(screen.getByText('۝').closest('[data-node]')).toBeNull();
@@ -255,19 +286,19 @@ describe('Quran branch trees', () => {
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
     expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
     expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
-    expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz));
+    expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz, { mode: 'tree' }));
     expect(screen.queryByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeNull();
   });
 
-  it('keeps the colour legend in the help in cards view only', async () => {
+  it('keeps the colour legend in the help in both views', async () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
     render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' })}<HelpProbe /></>);
     const help = screen.getByTestId('page-help');
     expect(within(help).getByText('نفس الكلمة')).toBeTruthy();
-    expect(within(help).getByText('نفس الجذر')).toBeTruthy();
+    expect(within(help).getByText('نفس اللفظ أو الجذر')).toBeTruthy();
     cleanup();
     render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' })}<HelpProbe /></>);
-    expect(within(screen.getByTestId('page-help')).queryByText('نفس الكلمة')).toBeNull();
+    expect(within(screen.getByTestId('page-help')).queryByText('نفس الكلمة')).toBeTruthy();
   });
 
   it('keeps the juz range in the filter sheet, named once', async () => {

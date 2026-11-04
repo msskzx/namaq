@@ -20,7 +20,7 @@ import styles from './AyahCards.module.css';
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
 
-const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس الجذر' } : { exact: 'Same word', root: 'Same root' };
+const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس اللفظ أو الجذر' } : { exact: 'Same word', root: 'Same lemma or root' };
 
 export function CardsLegend() {
   const { exact, root } = matchLabels(useLanguage().language === 'ar');

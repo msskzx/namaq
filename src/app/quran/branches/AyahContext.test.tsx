@@ -95,9 +95,9 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
   const own = await within(dialog).findByRole('article', { name: 'الشرح 6 · this branch' });
   const sibling = within(dialog).getByRole('article', { name: 'الشرح 5' });
   expect(within(sibling).getAllByTitle('Same word').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));
-  expect(within(sibling).getAllByTitle('Same root').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
+  expect(within(sibling).getAllByTitle('Same lemma or root').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
   expect(within(own).getAllByTitle('Same word').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
-  expect(within(own).getAllByTitle('Same root').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
+  expect(within(own).getAllByTitle('Same lemma or root').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
   expect(within(dialog).getByText("This branch's ayat come first, then the ayat that meet it at the same node.")).toBeTruthy();
 });
 
