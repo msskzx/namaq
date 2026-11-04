@@ -1,19 +1,26 @@
 'use client';
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight, faList } from '@fortawesome/free-solid-svg-icons';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, File, List, Search } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import Button from '@/components/common/Button';
+import { NavActions, useDesktopRail } from '@/components/common/NavBar';
+import { useSwipe } from '@/components/common/useSwipe';
+import { SettingsHelp } from '@/components/common/SettingsHelp';
 import Segmented from '@/components/common/Segmented';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useSearchParams } from 'next/navigation';
+import { num } from '@/lib/quran/arabicNumber';
 import { pageGroups, spreadOf, turn, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import styles from '@/components/homepage/Home.module.css';
 import mushaf from './Mushaf.module.css';
+import type { IndexSurah } from '@/lib/quran/juzIndex';
+import SurahIndex from './SurahIndex';
 import MushafPage from './MushafPage';
-import JumpForm from './JumpForm';
 
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
@@ -39,12 +46,14 @@ export default function ReaderView({
   page,
   pages,
   names,
+  surahs = [],
   mark,
   fontClass,
 }: {
   page: number;
   pages: ReaderPage[];
   names: Record<number, string>;
+  surahs?: IndexSurah[];
   mark?: { surah: number; ayah: number };
   fontClass?: string;
 }) {
@@ -52,6 +61,12 @@ export default function ReaderView({
   const ar = !languageLoaded || language === 'ar';
   const router = useNavigatingRouter();
   const frame = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLElement>(null);
+  const indexId = useId();
+  const searchId = useId();
+  const searchPanel = useRef<HTMLDivElement>(null);
+  const [phoneTools, setPhoneTools] = useState(false);
+  const rail = useDesktopRail();
   const [spread, setSpread] = useState(false);
   const [phone, setPhone] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -95,7 +110,7 @@ export default function ReaderView({
     const element = frame.current;
     if (!element) return;
     const size = () => {
-      element.style.height = `calc(100dvh - var(--app-tabbar, 0px) - ${Math.max(0, element.getBoundingClientRect().top + window.scrollY)}px)`;
+      element.style.setProperty('--reader-height', `calc(100dvh - var(--app-tabbar, 0px) - ${Math.max(0, element.getBoundingClientRect().top + window.scrollY)}px)`);
     };
     size();
     window.addEventListener('resize', size);
@@ -106,28 +121,72 @@ export default function ReaderView({
     const onKey = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.defaultPrevented) return;
       if (event.shiftKey && event.key.startsWith('Arrow')) return;
-      if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, [popover], [contenteditable]:not([contenteditable="false"])')) return;
       if (event.key === 'ArrowLeft') go(1);
       else if (event.key === 'ArrowRight') go(-1);
       else if (event.key.toLowerCase() === 'd' && !phone) chooseSpread(!spread);
-      else if (event.key.toLowerCase() === 'g') {
-        setHidden(false);
-        requestAnimationFrame(() => {
-          const input = frame.current?.querySelector<HTMLInputElement>('input[name="page"]');
-          input?.focus();
-          input?.select();
-        });
-      } else return;
+      else return;
       event.preventDefault();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [go, chooseSpread, spread, phone]);
 
-  const kbd = 'rounded border border-b-2 border-[var(--home-rule)] px-1.5 text-[0.7rem]';
+  const previous = ar ? 'الصفحة السابقة' : 'Previous page';
+  const next = ar ? 'الصفحة التالية' : 'Next page';
+  const layout = ar ? (two ? 'اعرض صفحة واحدة' : 'اعرض صفحتين') : (two ? 'Show one page' : 'Show two pages');
+  const index = ar ? 'فهرس السور' : 'Index of surahs';
+  const search = ar ? 'ابحث عن سورة أو آية' : 'Search surahs or ayat';
+  const toggleTools = phoneTools ? (ar ? 'إخفاء الأدوات' : 'Hide tools') : (ar ? 'إظهار الأدوات' : 'Show tools');
+  const first = (two ? spreadOf(page)[0] : page) === 1;
+  const last = (two ? spreadOf(page)[1] : page) === 604;
+  const PreviousIcon = ar ? ArrowRight : ArrowLeft;
+  const NextIcon = ar ? ArrowLeft : ArrowRight;
+  const LayoutIcon = two ? File : BookOpen;
+  const { justSwiped } = useSwipe(stage, phone, {
+    forward: dx => dx > 0,
+    canStep: forward => !(forward ? last : first),
+    drag: () => {},
+    step: forward => go(forward ? 1 : -1),
+    cancel: () => {},
+  });
+  const indexAndSearch = <>
+    <Button size="lg" variant="muted" popoverTarget={indexId} aria-label={index} title={index}><List aria-hidden /></Button>
+    <div id={indexId} popover="auto" dir={ar ? 'rtl' : 'ltr'} className={mushaf.index}>
+      <nav aria-label={index}>
+        <ol>
+          {surahs.map(surah => surah.page && <li key={surah.number}>
+            <Link prefetch={false} href={`/quran/read/${surah.page}`} className="flex items-baseline gap-3 border-b border-[var(--home-rule)] px-4 py-2 hover:bg-[var(--home-paper-deep)]" onClick={event => event.currentTarget.closest<HTMLElement>('[popover]')?.hidePopover?.()}>
+              <span className="w-8 shrink-0 text-sm text-[var(--home-muted)]">{ar ? num(surah.number) : surah.number}</span>
+              <span>{ar ? surah.name : surah.nameTransliterated || surah.name}</span>
+            </Link>
+          </li>)}
+        </ol>
+      </nav>
+    </div>
+    <Button size="lg" variant="muted" popoverTarget={searchId} aria-label={search} title={search}><Search aria-hidden /></Button>
+    <div ref={searchPanel} id={searchId} popover="auto" className={mushaf.index} aria-label={search}>
+      <SurahIndex surahs={surahs} fontClass={fontClass} onNavigate={() => searchPanel.current?.hidePopover?.()} />
+    </div>
+  </>;
   return (
-    <div ref={frame} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} flex flex-col`}>
-      {hidden ? (
+    <div ref={frame} data-reader-immersive={!phoneTools} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} ${mushaf.reader} flex flex-col`}>
+      {rail && <SettingsHelp label={ar ? 'اختصارات القراءة' : 'Reading shortcuts'}>
+        <ul className="space-y-2">
+          <li><kbd>←</kbd> <kbd>→</kbd> {ar ? 'لتقليب الصفحات' : 'Turn pages'}</li>
+          <li><kbd>D</kbd> {ar ? 'للتبديل بين صفحة وصفحتين' : 'Switch between one and two pages'}</li>
+        </ul>
+      </SettingsHelp>}
+      {rail && createPortal(<>
+        <Button size="lg" variant="muted" onClick={() => go(-1)} disabled={first} aria-label={previous} title={previous}><PreviousIcon aria-hidden /></Button>
+        <Button size="lg" variant="muted" onClick={() => go(1)} disabled={last} aria-label={next} title={next}><NextIcon aria-hidden /></Button>
+        {indexAndSearch}
+        <Button size="lg" variant="muted" onClick={() => chooseSpread(!spread)} aria-label={layout} title={layout}><LayoutIcon aria-hidden /></Button>
+      </>, rail)}
+      {phone && phoneTools && <NavActions>
+        {indexAndSearch}
+      </NavActions>}
+      {!rail && !phone && (hidden ? (
         <div className="flex justify-end px-3 pt-1">
           <Button size="sm" variant="ghost" onClick={() => hide(false)} aria-expanded={false}>
             <ChevronDown size={16} aria-hidden />
@@ -135,45 +194,42 @@ export default function ReaderView({
           </Button>
         </div>
       ) : (
-        <nav aria-label={ar ? 'أدوات القراءة' : 'Reading tools'} className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--home-rule)] px-3 py-2">
+        <nav aria-label={ar ? 'أدوات القراءة' : 'Reading tools'} className={`${mushaf.tools} flex flex-wrap items-center justify-between gap-2 border-b border-[var(--home-rule)] px-3 py-2`}>
           <div className="flex flex-wrap items-center gap-2">
-            <Button size="sm" onClick={() => go(-1)} disabled={(two ? spreadOf(page)[0] : page) === 1}>
+            <Button size="sm" onClick={() => go(-1)} disabled={first}>
               <FontAwesomeIcon icon={ar ? faArrowRight : faArrowLeft} aria-hidden />
-              <span className="max-sm:sr-only">{ar ? 'الصفحة السابقة' : 'Previous page'}</span>
+              <span className="max-sm:sr-only">{previous}</span>
             </Button>
-            <Button size="sm" onClick={() => go(1)} disabled={(two ? spreadOf(page)[1] : page) === 604}>
-              <span className="max-sm:sr-only">{ar ? 'الصفحة التالية' : 'Next page'}</span>
+            <Button size="sm" onClick={() => go(1)} disabled={last}>
+              <span className="max-sm:sr-only">{next}</span>
               <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} aria-hidden />
             </Button>
-            <JumpForm page={page} />
-            <Button size="sm" href="/quran/read">
-              <FontAwesomeIcon icon={faList} aria-hidden />
-              <span className="max-sm:sr-only">{ar ? 'فهرس السور' : 'Index of surahs'}</span>
-            </Button>
+            {indexAndSearch}
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            {!phone && (
-              <Segmented
-                label={ar ? 'عدد الصفحات' : 'Pages shown'}
-                options={[
-                  { key: 'one', label: ar ? 'صفحة' : 'One page', current: !spread, onClick: () => chooseSpread(false) },
-                  { key: 'two', label: ar ? 'صفحتان' : 'Two pages', current: spread, onClick: () => chooseSpread(true) },
-                ]}
-              />
-            )}
-            <p className="hidden items-center gap-1.5 text-xs text-[var(--home-muted)] lg:flex">
-              <kbd className={kbd}>←</kbd>
-              <kbd className={kbd}>→</kbd>
-              {ar ? 'للتقليب' : 'turn'} · <kbd className={kbd}>D</kbd> {ar ? 'صفحة/صفحتان' : 'one/two'} · <kbd className={kbd}>G</kbd> {ar ? 'انتقال' : 'go to'}
-            </p>
+            <Segmented
+              label={ar ? 'عدد الصفحات' : 'Pages shown'}
+              options={[
+                { key: 'one', label: ar ? 'صفحة' : 'One page', current: !spread, onClick: () => chooseSpread(false) },
+                { key: 'two', label: ar ? 'صفحتان' : 'Two pages', current: spread, onClick: () => chooseSpread(true) },
+              ]}
+            />
             <Button size="sm" variant="ghost" onClick={() => hide(true)} aria-expanded>
               <ChevronUp size={16} aria-hidden />
               <span className="max-sm:sr-only">{ar ? 'إخفاء الأدوات' : 'Hide tools'}</span>
             </Button>
           </div>
         </nav>
-      )}
-      <article dir="rtl" lang="ar" className={`${mushaf.stage} ${two ? mushaf.spread : ''}`}>
+      ))}
+      <article ref={stage} dir="rtl" lang="ar" className={`${mushaf.stage} ${two ? mushaf.spread : ''}`} onClick={phone ? event => {
+        if (!(event.target as Element).closest('button, a') && !justSwiped() && !window.getSelection()?.toString()) {
+          setPhoneTools(shown => !shown);
+        }
+      } : undefined}>
+        {phone && <Button size="sm" variant="muted" className="sr-only focus:not-sr-only focus:absolute focus:bottom-16 focus:z-10" aria-expanded={phoneTools} onClick={() => setPhoneTools(shown => !shown)}>
+          {phoneTools ? <ChevronUp size={16} aria-hidden /> : <ChevronDown size={16} aria-hidden />}
+          {toggleTools}
+        </Button>}
         {shown.map(entry => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} />
         ))}

@@ -35,12 +35,21 @@ const subscribeWide = (change: () => void) => {
   return () => query?.removeEventListener?.('change', change);
 };
 
+function useWideNav() {
+  return useSyncExternalStore(subscribeWide, () => !!window.matchMedia?.(WIDE).matches, () => false);
+}
+
+export function useDesktopRail() {
+  const rail = useContext(RailSlotElement);
+  return useWideNav() ? rail : null;
+}
+
 /** Puts a page's own icon buttons and toggles into the side rail on desktop, and into the top bar on phones
  *  (or, with `bottom`, into the bottom tab bar on phones). */
 export function NavButtons({ children, bottom = false }: { children: React.ReactNode; bottom?: boolean }) {
   const top = useContext(NavSlotElement);
   const rail = useContext(RailSlotElement);
-  const wide = useSyncExternalStore(subscribeWide, () => !!window.matchMedia?.(WIDE).matches, () => false);
+  const wide = useWideNav();
   const slot = (wide || bottom) && rail ? rail : top;
   return slot ? createPortal(children, slot) : null;
 }

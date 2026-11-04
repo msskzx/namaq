@@ -1,3 +1,5 @@
+.reader { height: var(--reader-height); }
+
 .stage {
   container-type: size;
   display: flex;
@@ -103,12 +105,12 @@
 .title {
   display: flex;
   width: 100%;
-  height: 88%;
+  height: 94%;
   align-items: center;
   justify-content: center;
   border: 3px double var(--home-rule);
   color: var(--home-accent);
-  font-size: 1.05em;
+  font-size: 0.8em;
   line-height: 1;
 }
 
@@ -154,8 +156,34 @@
   font-size: 12px;
 }
 
+.index {
+  position: fixed;
+  inset: 1rem auto auto;
+  inset-inline-start: calc(var(--app-rail) + 0.5rem);
+  margin: 0;
+  width: min(22rem, calc(100vw - var(--app-rail) - 1rem));
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--home-rule);
+  background: var(--home-paper);
+  color: var(--home-ink);
+}
+
 @media (max-width: 640px) {
-  .stage { align-items: flex-start; padding: 0.5rem 0.25rem; }
+  .reader { position: fixed; inset: 0; z-index: 40; height: 100dvh; background: var(--home-paper-deep); }
+  .stage {
+    align-items: stretch;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: pan-y pinch-zoom;
+  }
+  .page { --width: 100cqw; height: 100%; aspect-ratio: auto; border: 0; }
+  .tools { display: none; }
+  .index {
+    inset: calc(49px + env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) auto max(0.5rem, env(safe-area-inset-left));
+    width: auto;
+    max-height: calc(100dvh - 49px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
   .page[data-side] { padding: calc(var(--width) * 0.03) calc(var(--width) * 0.04) calc(var(--width) * 0.02); }
   .row .badge { display: none; }
   .strip { display: flex; }

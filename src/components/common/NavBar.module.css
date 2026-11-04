@@ -94,6 +94,7 @@
 @media (min-width: 1024px) {
   .tabs {
     position: fixed; inset-inline-start: 0; top: 0; bottom: 0; z-index: 50; width: var(--app-rail);
+    overflow-y: auto;
     display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding-block: 0.75rem;
     background: var(--home-paper); border-inline-end: 1px solid var(--home-rule);
   }
@@ -134,4 +135,9 @@
   .bar .wordmark { display: none; }
   .pageActions { justify-content: center; }
   .bar:not(:has(.pageActions:not(:empty))), .bar:not(:has(.pageActions:not(:empty))) + .spacer { display: none; }
+}
+
+@media (max-width: 640px) {
+  :global(body):has(:global([data-reader-immersive="false"])) .bar { transform: none; }
+  :global(body):has(:global([data-reader-immersive="true"])) :is(.bar, .spacer, .tabs, .tabSpacer) { display: none; }
 }
