@@ -39,6 +39,7 @@ export type PartyState = {
   deadline: number | null;
   answers: Record<string, QuestionAnswer>;
   results: Record<string, Points>;
+  history?: Record<string, QuestionAnswer>[];
   hostAwaySince: number | null;
   removed: string[];
   error: string | null;
@@ -69,7 +70,7 @@ const cleanName = (name: string) => name.normalize('NFC').trim().replace(/\s+/g,
 
 export function createParty(code: string, hostId: string, hostName: string, now: number): PartyState {
   const host = { id: hostId, name: cleanName(hostName) || '…', ready: false, connected: false, score: 0 };
-  return { code, hostId, phase: 'lobby', settings: DEFAULT_SETTINGS, players: [host], questions: [], surahNames: {}, current: 0, deadline: null, answers: {}, results: {}, hostAwaySince: now, removed: [], error: null, touched: now };
+  return { code, hostId, phase: 'lobby', settings: DEFAULT_SETTINGS, players: [host], questions: [], surahNames: {}, current: 0, deadline: null, answers: {}, results: {}, history: [], hostAwaySince: now, removed: [], error: null, touched: now };
 }
 
 const pick = <T,>(options: readonly T[], value: unknown, fallback: T) => options.includes(value as T) ? value as T : fallback;
@@ -122,7 +123,9 @@ function ask(state: PartyState, index: number, now: number): PartyState {
 function reveal(state: PartyState): PartyState {
   const question = state.questions[state.current];
   const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, state.answers[player.id])]));
-  return { ...state, phase: 'reveal', deadline: null, results, players: state.players.map(player => ({ ...player, score: player.score + results[player.id].earned })) };
+  const history = [...(state.history ?? [])];
+  history[state.current] = { ...state.answers };
+  return { ...state, phase: 'reveal', deadline: null, results, history, players: state.players.map(player => ({ ...player, score: player.score + results[player.id].earned })) };
 }
 
 const everyoneAnswered = (state: PartyState) => state.players.length > 0 && state.players.every(player => player.id in state.answers);
@@ -216,7 +219,7 @@ function apply(state: PartyState, action: Action, now: number): { state: PartySt
       return { state: ask(state, state.current + 1, now) };
     case 'again':
       if (state.phase !== 'final') return { state, error: 'wrong-phase' };
-      return { state: { ...state, phase: 'lobby', questions: [], surahNames: {}, current: 0, answers: {}, results: {}, players: state.players.map(item => ({ ...item, ready: false, score: 0 })) } };
+      return { state: { ...state, phase: 'lobby', questions: [], surahNames: {}, current: 0, answers: {}, results: {}, history: [], players: state.players.map(item => ({ ...item, ready: false, score: 0 })) } };
   }
   return { state };
 }
@@ -247,6 +250,7 @@ export type PartyView = {
   now: number;
   answer: QuestionAnswer | null;
   result: Points | null;
+  review?: { question: PartyQuestion; answer: QuestionAnswer | null; result: Points }[];
   error: string | null;
 };
 
@@ -270,6 +274,10 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
     now,
     answer: state.answers[playerId] ?? null,
     result: revealed ? state.results[playerId] ?? null : null,
+    review: state.phase === 'final' && state.players.some(player => player.id === playerId) ? state.questions.map((question, index) => {
+      const answer = state.history?.[index]?.[playerId] ?? (index === state.current ? state.answers[playerId] : undefined);
+      return { question, answer: answer ?? null, result: questionPoints(question, answer) };
+    }) : undefined,
     error: state.error,
   };
 }

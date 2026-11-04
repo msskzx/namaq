@@ -2,14 +2,19 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { cleanup, fireEvent, render as renderUI, screen, waitFor, within } from '@testing-library/react';
+import { NavSlotElement } from '@/components/common/NavBar';
 import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
 import { branchesCorrect, emptyBranchAnswers } from '@/lib/quiz/score';
+import { readBookmarks } from '@/lib/bookmarks';
+import { branchesHref } from '@/lib/quran/branches';
+import { SWRConfig } from 'swr';
 
 const quranSurrounding = vi.hoisted(() => vi.fn());
 const quranContexts = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding, quranContexts }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn(), prefetch: vi.fn() }) }));
 
 const tree = {
   words: ['يَطُوفُ', 'عَلَيْهِمْ'], ayat: [], children: [
@@ -23,7 +28,13 @@ const tree = {
 const question = { tree, phrase: 'يطوف عليهم', branches: [{ words: [], ayat: [{ key: '52:24', page: 524, words: [] }, { key: '56:17', page: 535, words: [] }, { key: '76:19', page: 579, words: [] }] }] };
 const typed = ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم'];
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
-afterEach(cleanup);
+afterEach(() => { cleanup(); localStorage.clear(); });
+
+function Chrome({ children }: { children: React.ReactNode }) {
+  const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+  return <><header aria-label="Quiz top bar"><div ref={setSlot} /></header><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
+}
+const render = (ui: React.ReactNode) => renderUI(ui, { wrapper: Chrome });
 
 describe('complete branch tree answers', () => {
   it('shares a feedback path toggle between its opening and leaf without changing grading', () => {
@@ -42,6 +53,44 @@ describe('complete branch tree answers', () => {
     expect(branchesCorrect(question, typed)).toBe(true);
   });
 
+  it('keeps the animation studio open when the same revealed answer arrives again', () => {
+    const { rerender } = render(<BranchFeedback question={question} typed={typed} names={{}} ar />);
+    fireEvent.click(screen.getByRole('button', { name: 'استوديو النمو' }));
+    expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
+    rerender(<BranchFeedback question={JSON.parse(JSON.stringify(question))} typed={[...typed]} names={{ 52: 'الطور' }} ar />);
+    expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'استوديو النمو' })).toBeNull();
+  });
+  it('clears only the requested answers without checking or revealing the solution', () => {
+    const own = { ...question, asked: [0, 2] };
+    const onChange = vi.fn();
+    const onCheck = vi.fn();
+    render(<BranchInputs question={own} typed={typed} onChange={onChange} onCheck={onCheck} ar />);
+    fireEvent.click(screen.getByRole('button', { name: 'مسح الإجابات' }));
+    expect(onChange).toHaveBeenCalledWith(emptyBranchAnswers(own));
+    expect(onCheck).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'اعرض بطاقات الآيات' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'مشاركة' })).toBeNull();
+    expect(screen.queryByText(/اكتب كل طرف فارغ/)).toBeNull();
+  });
+
+  it('switches the revealed answer to the ayah matrix and back, and saves the tree address', async () => {
+    quranContexts.mockReset().mockResolvedValue(['52:24', '56:17', '76:19'].map(key => ({ before: null, after: null, ayah: { key, page: 1, words: ['آية'] }, match: { exact: [], rooted: [] } })));
+    localStorage.clear();
+    try {
+      render(<SWRConfig value={{ provider: () => new Map() }}><BranchFeedback question={question} typed={typed} names={{}} ar /></SWRConfig>);
+      fireEvent.click(screen.getByRole('button', { name: 'حفظ' }));
+      expect(readBookmarks().find(saved => saved.id === question.phrase)?.href).toBe(branchesHref(question.phrase));
+      fireEvent.click(screen.getByRole('button', { name: 'اعرض بطاقات الآيات' }));
+      expect(await screen.findByRole('region', { name: 'مصفوفة الآيات' })).toBeTruthy();
+      expect(quranContexts).toHaveBeenCalledWith(['52:24', '56:17', '76:19']);
+      fireEvent.click(screen.getByRole('button', { name: 'اعرض الشجرة' }));
+      expect(screen.getByRole('region', { name: 'شجرة الإجابة' })).toBeTruthy();
+      expect(screen.getAllByText('صحيح')).toHaveLength(4);
+    } finally {
+      localStorage.clear();
+    }
+  });
   it('keeps surrounding ayat and path keys attached to reordered answer text', async () => {
     const own = { tree: { words: ['حرم'], ayat: [], children: [
       { words: ['نَبِّـُٔونِى', 'بِعِلْمٍ'], ayat: ['6:143'], children: [] },
@@ -55,7 +104,7 @@ describe('complete branch tree answers', () => {
       const { container } = render(<BranchFeedback question={own} typed={['ام كنتم', 'نبئوني بعلم']} names={{}} ar />);
       const first = container.querySelector('[data-answer]')!.closest('[data-node]')!;
       expect(first.getAttribute('data-keys')).toBe('6:144');
-      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
+      fireEvent.click(within(screen.getByRole('banner')).getByRole('button', { name: 'الآيات المحيطة' }));
       const following = await screen.findByText('السياق الثاني');
       expect(first.parentElement!.contains(following)).toBe(true);
       expect(first.parentElement!.textContent).not.toContain('السياق الأول');
@@ -69,10 +118,12 @@ describe('complete branch tree answers', () => {
     try {
       const { rerender } = render(<BranchInputs question={question} typed={[]} onChange={() => {}} onCheck={() => {}} ar />);
       expect(screen.queryByRole('switch')).toBeNull();
+      expect(within(screen.getByRole('banner')).queryByRole('button', { name: 'الآيات المحيطة' })).toBeNull();
+      expect(within(screen.getByRole('banner')).getByRole('button', { name: 'تدوير الشجرة' })).toBeTruthy();
       rerender(<BranchFeedback question={question} typed={typed} names={{}} ar />);
-      const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' });
+      const toggle = within(screen.getByRole('banner')).getByRole('button', { name: 'الآيات المحيطة' });
       expect(screen.queryByRole('link', { name: 'شجرة العبارة' })).toBeNull();
-      expect(toggle).toHaveProperty('checked', false);
+      expect(toggle.getAttribute('aria-pressed')).toBe('false');
       expect(fetchContext).not.toHaveBeenCalled();
       fireEvent.click(toggle);
       expect(await screen.findByText('السياق السابق')).toBeTruthy();
@@ -144,9 +195,10 @@ describe('complete branch tree answers', () => {
     const own = { tree: branch(group), variants: variants(group) };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
     const zoom = within(screen.getByRole('region', { name: 'أكمل الشجرة' })).getByRole('toolbar', { name: 'تكبير الشجرة' });
-    // Phones pinch instead: the zoom and fit buttons, and the otherwise empty header row, are hidden there.
+    expect(within(zoom).getByRole('button', { name: 'ملاءمة' })).toBeTruthy();
     expect(zoom.className).toContain('max-sm:hidden');
     expect(zoom.parentElement!.className).toContain('max-sm:hidden');
+    expect(screen.getByRole('button', { name: 'تدوير الشجرة' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
     expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();

@@ -35,11 +35,12 @@ import type { Branch, Variant } from "@/lib/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
 import PersonPicker from "./PersonPicker";
+import QuestionReview from "./QuestionReview";
 import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@/lib/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
-import { User, Users } from "lucide-react";
+import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings. */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -126,6 +127,7 @@ export default function QuizzesPage() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [typed, setTyped] = useState<Record<number, string[]>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -133,6 +135,7 @@ export default function QuizzesPage() {
     setAnswers({});
     setTyped({});
     setSubmitted(false);
+    setReviewing(false);
     setReferenceIndex(null);
   }, [query]);
 
@@ -154,6 +157,7 @@ export default function QuizzesPage() {
     setAnswers({});
     setTyped({});
     setSubmitted(false);
+    setReviewing(false);
     setReferenceIndex(null);
     router.push(`${pathname}?${topicQuery || "solo=1"}`);
   }, [pathname, router, topicQuery]);
@@ -286,30 +290,8 @@ export default function QuizzesPage() {
               <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
               {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
             </p>
-            <ul className="space-y-4">
-              {questions.map((question, index) => {
-                const given = answers[index];
-                const correct = given === question.correctAnswer;
-                return (
-                  <li key={question.key} className={styles.panel}>
-                    <p className={`mb-3 text-[var(--home-ink)] ${question.tree ? "text-base leading-relaxed" : "font-semibold"}`}>{question.promptArabic}</p>
-                    {question.branches && <p className="mb-2 text-sm text-[var(--home-muted)]">{ar ? `${num(points[index].earned)} من ${num(points[index].total)} أطراف` : `${points[index].earned} of ${points[index].total} leaves`}</p>}
-                    {question.ayah && <AskedAyah ayah={question.ayah} />}
-                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
-                      <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
-                      <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
-                    </div>
-                    {!correct && <p className="text-sm text-[var(--home-muted)]">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}</>}
-                    {question.evidence.reference && (
-                      <Button className="mt-2" size="sm" variant="outline" onClick={() => setReferenceIndex(index)}>
-                        <FontAwesomeIcon icon={faBookOpen} />
-                        {ar ? "المصدر" : "Source"}
-                      </Button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+            <Button className="mb-4" aria-expanded={reviewing} onClick={() => setReviewing(value => !value)}><Eye size={16} aria-hidden />{reviewing ? (ar ? "العودة للنتيجة" : "Back to results") : (ar ? "مراجعة الأسئلة" : "Review questions")}</Button>
+            {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree ? typed[index] ?? null : answers[index] ?? null, result: points[index] }))} names={data.surahNames ?? {}} ar={ar} />}
             <Button className="mt-6" variant="primary" onClick={reset}>
               <FontAwesomeIcon icon={faRotateLeft} />
               {ar ? "اختبار جديد" : "New quiz"}
@@ -317,6 +299,10 @@ export default function QuizzesPage() {
           </div>
         ) : (
           <div>
+            <div className="mb-4 flex flex-wrap gap-2">
+              <Button size="sm" onClick={() => { setCurrent(0); setAnswers({}); setTyped({}); setReferenceIndex(null); }}><RotateCcw size={16} aria-hidden />{ar ? "ابدأ من جديد" : "Start over"}</Button>
+              <Button size="sm" onClick={reset}><LogOut size={16} aria-hidden />{ar ? "الخروج للإعدادات" : "Exit to setup"}</Button>
+            </div>
             <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={ar ? "الأسئلة" : "Questions"}>
               {questions.map((_, index) => {
                 const state = questionState(index);
@@ -343,9 +329,9 @@ export default function QuizzesPage() {
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
-                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
+                  <BranchFeedback key={questions[current].key} question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
                 ) : (
-                  <BranchInputs
+                  <BranchInputs key={questions[current].key}
                     question={questions[current]}
                     typed={typed[current] ?? emptyBranchAnswers(questions[current])}
                     onChange={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
@@ -382,6 +368,10 @@ export default function QuizzesPage() {
                   );
                 })}
               </div>}
+              {answers[current] === undefined && <Button className="mt-3" size="sm" onClick={() => {
+                if (questions[current].tree) setTyped(previous => ({ ...previous, [current]: emptyBranchAnswers(questions[current]) }));
+                setAnswers(previous => ({ ...previous, [current]: "" }));
+              }}><Eye size={16} aria-hidden />{ar ? "إظهار الإجابة" : "Show answer"}</Button>}
               {answers[current] !== undefined && questions[current].evidence.reference && (
                 <Button className="mt-3" size="sm" variant="outline" onClick={() => setReferenceIndex(current)}>
                   <FontAwesomeIcon icon={faBookOpen} />

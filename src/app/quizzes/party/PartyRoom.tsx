@@ -18,6 +18,8 @@ import { leaderboard, NAME_MAX, type ActionError, type PartyQuestion, type Party
 import { playerId, saveName, savedName, usePartySocket, type PartyStatus } from "@/lib/party/client";
 import { BranchFeedback, BranchInputs } from "../BranchAnswers";
 import PartySettingsPanel from "./PartySettings";
+import { Eye } from "lucide-react";
+import QuestionReview from "../QuestionReview";
 
 type Question = PartyQuestion & {
   promptArabic: string;
@@ -79,7 +81,7 @@ function Countdown({ deadline, total, offset, ar, big }: { deadline: number; tot
   }, []);
   return (
     <span ref={anchor} className={`inline-flex shrink-0 justify-end ${big ? "h-20 w-60" : "h-11 w-32"}`}>
-      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-[calc(0.75rem+env(safe-area-inset-top))] z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
+      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-[calc(0.75rem+env(safe-area-inset-top)+var(--party-controls-height,0px))] z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
         <FontAwesomeIcon icon={faHourglassHalf} className={big ? "text-3xl" : "text-lg"} />{ar ? `${num(Math.floor(left / 60))}:${num(left % 60).padStart(2, "٠")}` : text}
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-1">
           <span className={`block h-full transition-[width] duration-300 ease-linear ${urgent ? "bg-[var(--home-paper)]" : "bg-[var(--home-accent)]"}`} style={{ width: `${Math.min(1, Math.max(0, (deadline - now) / total)) * 100}%` }} />
@@ -297,6 +299,16 @@ function Notice({ status, ar }: { status: PartyStatus | "started"; ar: boolean }
   return <div className="flex flex-col items-start gap-4"><p>{text}</p><Button variant="primary" href="/quizzes/party"><FontAwesomeIcon icon={faRotateLeft} />{ar ? "اختبار جماعي جديد" : "New party quiz"}</Button></div>;
 }
 
+function FinalResults({ view, send, ar }: { view: PartyView; send: ReturnType<typeof usePartySocket>["send"]; ar: boolean }) {
+  const [reviewing, setReviewing] = useState(false);
+  return <div className="flex flex-col gap-5">
+    <Leaderboard players={view.players} you={view.you} ar={ar} final />
+    {!!view.review?.length && <Button className="self-start" aria-expanded={reviewing} onClick={() => setReviewing(value => !value)}><Eye size={16} aria-hidden />{reviewing ? (ar ? "العودة للترتيب" : "Back to leaderboard") : (ar ? "مراجعة الأسئلة" : "Review questions")}</Button>}
+    {reviewing && <QuestionReview entries={(view.review ?? []).map(entry => ({ ...entry, question: entry.question as Question }))} names={view.surahNames} ar={ar} />}
+    {view.you === view.hostId && <Button className="self-start" variant="primary" onClick={() => send({ type: "again" })}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "اختبار آخر بالفريق نفسه" : "Play again with this party"}</Button>}
+  </div>;
+}
+
 export default function PartyRoom({ code }: { code: string }) {
   const { language } = useLanguage();
   const ar = language === "ar";
@@ -318,12 +330,7 @@ export default function PartyRoom({ code }: { code: string }) {
   else if (!view) body = <LoadingSpinner fill />;
   else if (view.phase === "lobby") body = <Lobby view={view} send={send} error={error} ar={ar} />;
   else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
-  else if (view.phase === "final") body = (
-    <div className="flex flex-col gap-5">
-      <Leaderboard players={view.players} you={view.you} ar={ar} final />
-      {view.you === view.hostId && <Button className="self-start" variant="primary" onClick={() => send({ type: "again" })}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "اختبار آخر بالفريق نفسه" : "Play again with this party"}</Button>}
-    </div>
-  );
+  else if (view.phase === "final") body = <FinalResults view={view} send={send} ar={ar} />;
   else body = <QuestionStage key={view.question?.key} view={view} send={send} offset={offset} ar={ar} />;
 
   return (

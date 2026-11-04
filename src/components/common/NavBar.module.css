@@ -27,6 +27,11 @@
 .menuOnly .band { min-height: 0; padding: calc(0.75rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right)) 0.75rem calc(0.75rem + env(safe-area-inset-left)); justify-content: flex-end; }
 .menuOnly .menuButton { background: var(--home-paper); }
 .menuOnly .mobile { width: min(22rem, 100vw); max-height: calc(100dvh - 3.75rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)); background: var(--home-paper); border: 1px solid var(--home-rule); }
+.partySpacer { display: none; }
+.menuOnly:has(.pageActions:not(:empty)) { position: fixed; inset-inline: 0; background: var(--home-paper); border-bottom: 1px solid var(--home-rule); padding-top: env(safe-area-inset-top); }
+.menuOnly:has(.pageActions:not(:empty)) .band { min-height: 48px; padding: 0 max(var(--home-gutter), env(safe-area-inset-right)) 0 max(var(--home-gutter), env(safe-area-inset-left)); }
+.menuOnly:has(.pageActions:not(:empty)) + .partySpacer { display: block; height: calc(49px + env(safe-area-inset-top)); }
+:global(body):has(.menuOnly .pageActions:not(:empty)) { --party-controls-height: 49px; }
 
 :is(.bar, .menuOnly) :is(a, button):focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
 

@@ -23,6 +23,36 @@ function playing(questions: PartyQuestion[] = [choice('q1'), choice('q2')]) {
 }
 
 describe('party lobby', () => {
+  it('keeps each player’s answers for final review across questions and reconnects, then clears them for another quiz', () => {
+    let state = playing([choice('q1'), tree]);
+    expect(viewFor(state, 'p0', 0).review).toBeUndefined();
+    state = run(state, [
+      { type: 'submit', playerId: 'p0', answer: 'a' },
+      { type: 'submit', playerId: 'p1', answer: 'b' },
+      { type: 'tick' },
+    ], 60_000);
+    expect(state.phase).toBe('reveal');
+    expect(viewFor(state, 'p0', 60_000).review).toBeUndefined();
+    state = run(state, [
+      { type: 'next', playerId: 'p0' },
+      { type: 'submit', playerId: 'p0', answer: ['رب', 'خطأ'] },
+      { type: 'submit', playerId: 'p1', answer: ['رب', 'يا'] },
+    ], 60_000);
+    state = act(state, { type: 'tick' }, 600_000).state;
+    if (state.phase === 'reveal') state = act(state, { type: 'next', playerId: 'p0' }, 600_000).state;
+    const restored = JSON.parse(JSON.stringify(state)) as PartyState;
+    expect(restored.phase).toBe('final');
+    expect(viewFor(restored, 'p0', 600_000).review).toEqual([
+      { question: choice('q1'), answer: 'a', result: { earned: 1, total: 1 } },
+      { question: tree, answer: ['رب', 'خطأ'], result: { earned: 1, total: 2 } },
+    ]);
+    expect(viewFor(restored, 'p1', 600_000).review?.map(entry => entry.answer)).toEqual(['b', ['رب', 'يا']]);
+    expect(viewFor(restored, 'p2', 600_000).review?.map(entry => entry.answer)).toEqual([null, null]);
+    expect(viewFor(restored, 'outsider', 600_000).review).toBeUndefined();
+    const again = act(restored, { type: 'again', playerId: 'p0' }, 600_000).state;
+    expect(again.history).toEqual([]);
+    expect(viewFor(again, 'p0', 600_000).review).toBeUndefined();
+  });
   it('keeps names unique, ignoring case and spaces', () => {
     const state = lobby('Host', 'Amina');
     expect(act(state, { type: 'join', playerId: 'p2', name: '  amina ' }, 0).error).toBe('name-taken');

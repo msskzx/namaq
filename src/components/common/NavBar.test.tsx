@@ -83,6 +83,22 @@ describe('launch navigation', () => {
     expect(within(screen.getByRole('navigation')).getByRole('textbox', { name: 'page search' })).toBeTruthy();
   });
 
+  it('provides the party room top bar slot and removes its actions when the question closes', () => {
+    state.path = '/quizzes/party/123456';
+    function Chrome({ shown }: { shown: boolean }) {
+      const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+      return <NavSlotContext.Provider value={setSlot}><NavSlotElement.Provider value={slot}><NavBar />{shown && <NavButtons><button>Rotate tree</button><button>Surrounding ayat</button></NavButtons>}</NavSlotElement.Provider></NavSlotContext.Provider>;
+    }
+    const { rerender } = render(<Chrome shown />);
+    const nav = screen.getByRole('navigation');
+    expect(within(nav).getByRole('button', { name: 'Rotate tree' })).toBeTruthy();
+    expect(within(nav).getByRole('button', { name: 'Surrounding ayat' })).toBeTruthy();
+    expect(within(nav).getByRole('button', { name: 'Open menu' })).toBeTruthy();
+    rerender(<Chrome shown={false} />);
+    expect(within(nav).queryByRole('button', { name: 'Rotate tree' })).toBeNull();
+    expect(within(nav).getByRole('button', { name: 'Open menu' })).toBeTruthy();
+  });
+
   it('puts page buttons in the rail on desktop and in the top bar on phones', () => {
     const rail = document.createElement('div');
     document.body.appendChild(rail);

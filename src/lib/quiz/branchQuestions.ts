@@ -5,7 +5,6 @@ import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '@/lib/qu
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
 const MAX_BRANCHES = 10;
-const COUNTS: Record<number, string> = { 2: 'فرعين', 3: 'ثلاثة فروع', 4: 'أربعة فروع', 5: 'خمسة فروع', 6: 'ستة فروع', 7: 'سبعة فروع', 8: 'ثمانية فروع', 9: 'تسعة فروع', 10: 'عشرة فروع' };
 
 export type BranchAnswer = { words: string[]; ayat: { key: string; page: number; words: string[] }[] };
 
@@ -35,11 +34,10 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     const tree = presentation.tree;
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
     if (!tree.words.length || tree.children.length < 2 || tree.children.length > MAX_BRANCHES || tree.ayat.length > 0 || memberKeys.length > MAX_BRANCHES) return [];
-    const opening = `«${tree.words.join(' ')}»`;
     return [{
       key: `${BRANCH_FAMILY}:${group.id}`,
       family: BRANCH_FAMILY,
-      promptArabic: `تتفرع شجرة العبارة ${opening} إلى ${COUNTS[tree.children.length]}. أكمل الأطراف الفارغة، وتكفي من كل طرف كلمتاه الأوليان.`,
+      promptArabic: 'أكمل الأطراف الفارغة، وتكفي من كل طرف كلمتاه الأوليان.',
       phrase: group.id,
       choices: [],
       correctAnswer: tree.words.join(' '),
