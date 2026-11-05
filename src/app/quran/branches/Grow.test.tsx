@@ -113,8 +113,13 @@ describe('growing a tree', () => {
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
     await advance(10000);
     expect(document.querySelectorAll('[data-hide]')).toHaveLength(0);
-    expect(screen.getByRole('button', { name: 'إعادة' })).toBeTruthy();
+    const replay = screen.getByRole('button', { name: 'إعادة' });
+    expect(replay.querySelector('svg.lucide-play')).toBeTruthy();
+    expect(document.querySelectorAll('button svg.lucide-rotate-ccw')).toHaveLength(1);
     expect(screen.getByRole('group', { name: 'تقدّم الشجرة' })).toBeTruthy();
+    fireEvent.click(replay);
+    expect(screen.getByRole('button', { name: 'إيقاف مؤقت' })).toBeTruthy();
+    expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
   });
 
   it('lights the current path, switches it in depth-first order, and restores pinned paths', async () => {

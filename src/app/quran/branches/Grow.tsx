@@ -356,7 +356,7 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
     </Button>
     {share}
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
-      {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
+      {playing ? <Pause aria-hidden /> : <Play aria-hidden />}
     </Button>
     <Button size="lg" variant="muted" onClick={stop} aria-label={resetLabel} title={resetLabel}><RotateCcw aria-hidden /></Button>
   </>;
