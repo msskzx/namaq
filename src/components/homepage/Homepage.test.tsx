@@ -1,46 +1,72 @@
-vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen, within } from '@testing-library/react';
+import { toggleBookmark } from '@/lib/bookmarks';
+import { homeQuranSections } from '@/lib/homeQuranSections';
 import Homepage from './Homepage';
-import { getHomePreviews } from '@/lib/homePreviewData';
 
-const { state } = vi.hoisted(() => ({ state: { language: 'ar', languageLoaded: true } }));
+const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
-afterEach(() => { cleanup(); sessionStorage.clear(); vi.unstubAllGlobals(); });
-describe('Quran learning homepage', () => {
-  it.each(['ar', 'en'])('offers exploration, reading and quizzes in three cards in %s', async language => {
+vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => children }));
+vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
+vi.mock('@/app/quran/branches/OpeningSearch', () => ({ default: () => <input aria-label="Phrase search" /> }));
+vi.mock('@/app/quran/branches/Filters', () => ({ FilterButton: () => <button>Filter</button> }));
+
+const surahs = [
+  { number: 2, name: 'البقرة', nameEn: undefined, count: 0 },
+  { number: 3, name: 'آل عمران', nameEn: undefined, count: 0 },
+  { number: 62, name: 'الجمعة', nameEn: undefined, count: 0 },
+];
+const data = {
+  surahs,
+  sections: homeQuranSections(surahs),
+  bookmarkAyat: { family: ['2:129', '2:151', '3:164', '62:2'] },
+};
+const bookmark = { id: 'family', text: 'الكتاب والحكمة', href: '/quran/branches?o=family', savedAt: 1 };
+
+afterEach(() => { cleanup(); localStorage.clear(); state.language = 'ar'; });
+
+describe('release homepage', () => {
+  it.each(['ar', 'en'])('places saved material between the Quran widget and quizzes in %s', language => {
     state.language = language;
-    render(<Homepage data={await getHomePreviews()} />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
-    expect(screen.queryByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toBeNull();
-    expect(screen.queryByRole('list', { name: /ما قبل العبارة|Before the phrase/ })).toBeNull();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير' : 'Zoom out' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير' : 'Zoom in' })).toBeTruthy();
-    expect(document.querySelector('[dir]')?.getAttribute('dir')).toBe(language === 'ar' ? 'rtl' : 'ltr');
-    const hrefs = screen.getAllByRole('link').map(link => link.getAttribute('href')!);
-    expect(hrefs).toContain('/quran/branches');
-    expect(hrefs).toContain('/quran/read');
-    expect(hrefs).toContain('/quizzes');
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
-    expect(hrefs.every(href => href.startsWith('/quran/branches') || href === '/quran/read' || href.startsWith('/quizzes'))).toBe(true);
-    expect(screen.getByRole('region', { name: language === 'ar' ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example' })).toBeTruthy();
-    expect(screen.getAllByRole('button', { name: language === 'ar' ? /إظهار المسار/ : /Show path/ }).length).toBeGreaterThan(0);
+    render(<Homepage data={data} />);
+    const ar = language === 'ar';
+    const quran = screen.getByRole('region', { name: ar ? 'القرآن الكريم' : 'Quran' });
+    const saved = screen.getByRole('region', { name: ar ? 'المحفوظات' : 'Saved' });
+    const quizzes = screen.getByRole('region', { name: ar ? 'اختبارات القرآن' : 'Quran quizzes' });
+    expect(quran.compareDocumentPosition(saved) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(saved.compareDocumentPosition(quizzes) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(within(quizzes).getByRole('link', { name: ar ? 'بمفردك' : 'Solo' }).getAttribute('href')).toBe('/quizzes');
+    expect(within(quizzes).getByRole('link', { name: ar ? 'مع غيرك' : 'Party' }).getAttribute('href')).toBe('/quizzes/party');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(ar ? 'نمق' : 'Namaq');
+    expect(screen.getByRole('heading', { level: 1 }).querySelector('svg')).toBeNull();
   });
-  it('allows pinning and unpinning a real example path', async () => {
-    state.language = 'en';
-    render(<Homepage data={await getHomePreviews()} />);
-    const path = screen.getAllByRole('button', { name: /Show path/ })[0];
-    fireEvent.click(path);
-    expect(path.getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(path);
-    expect(path.getAttribute('aria-pressed')).toBe('false');
+
+  it('shows grouped references and saved text as one link without card icons or action labels', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
+    render(<Homepage data={data} />);
+    const card = screen.getByRole('link', { name: /الكتاب والحكمة/ });
+    expect(card.getAttribute('href')).toBe(bookmark.href);
+    expect(card.textContent).toContain('البقرة ١٢٩، ١٥١');
+    expect(card.textContent).toContain('آل عمران ١٦٤');
+    expect(card.textContent).toContain('الجمعة ٢');
+    expect(card.querySelector('svg')).toBeNull();
+    expect(card.textContent).not.toMatch(/عائلة|فتح للمقارنة|فتح للاستكشاف/);
   });
-  it('places navigation above the example and offers no random tree', async () => {
-    state.language = 'en';
-    render(<Homepage data={await getHomePreviews()} />);
-    const all = screen.getByRole('link', { name: 'Browse all' });
-    const example = screen.getByRole('region', { name: 'Interactive Quran phrase tree example' });
-    expect(all.compareDocumentPosition(example) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Random' })).toBeNull();
+
+  it('reacts to saves and removals made through the existing bookmark API', () => {
+    render(<Homepage data={data} />);
+    expect(screen.queryByRole('link', { name: /الكتاب والحكمة/ })).toBeNull();
+    act(() => { toggleBookmark(bookmark); });
+    expect(screen.getByRole('link', { name: /الكتاب والحكمة/ })).toBeTruthy();
+    act(() => { toggleBookmark(bookmark); });
+    expect(screen.queryByRole('link', { name: /الكتاب والحكمة/ })).toBeNull();
+    expect(screen.getByText(/احفظ شجرة أو عائلة بزر/)).toBeTruthy();
+  });
+
+  it('keeps old bookmarks readable and navigable when their inventory entry is unknown', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([{ ...bookmark, id: 'old-tree', text: 'عبارة محفوظة' }]));
+    render(<Homepage data={data} />);
+    const card = screen.getByRole('link', { name: 'عبارة محفوظة' });
+    expect(card.getAttribute('href')).toBe(bookmark.href);
   });
 });
