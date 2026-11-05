@@ -25,8 +25,8 @@ function HelpProbe() {
   return help ? <div data-testid="page-help" title={help.label}>{help.content}</div> : null;
 }
 
-const preference = vi.hoisted(() => ({ value: undefined as string | undefined }));
-vi.mock('next/headers', () => ({ cookies: async () => ({ get: () => preference.value ? { value: preference.value } : undefined }) }));
+const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
+vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
 const params = new URLSearchParams();
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
@@ -37,7 +37,7 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 78, name: 'النبأ' }]) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
-afterEach(() => { cleanup(); preference.value = undefined; });
+afterEach(() => { cleanup(); preference.value = undefined; preference.connectors = undefined; });
 const open = (values: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(values) });
 const target = (values: Record<string, string>) => open(values).then(() => '', (error: Error) => error.message.replace('REDIRECT ', ''));
 const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://localhost').searchParams);
@@ -45,6 +45,16 @@ const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://loca
 const follow = async (values: Record<string, string>) => open(paramsOf(await target(values)));
 
 describe('Quran branch trees', () => {
+  it('loads the connector default independently from an explicit matrix view', async () => {
+    const group = groupData.find(group => group.citations.some(citation => citation.id === 'K02'))!;
+    render(await open({ o: group.id, m: 'cards' }));
+    expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('false');
+    cleanup();
+    preference.connectors = 'on';
+    render(await open({ o: group.id, m: 'cards' }));
+    expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
   it('retains the occurrence scope when zooming into a generated group', async () => {
     const group = groupData.find(group => group.citations.some(citation => citation.id === 'Z03'))!;
     const wanted = group.tree.occurrences.slice(0, 2);

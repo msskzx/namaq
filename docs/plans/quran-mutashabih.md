@@ -16,7 +16,7 @@ The extra tags for gender, noun/pronoun, case and frame are Namaq extensions. Th
 
 ## Browsing
 
-The type chip below the card toggles the same difference filter as the funnel while retaining the current group. The differing expression is plain text. Book references and short quotations follow beneath. Both views use the same footer.
+The type chip below the card toggles word connectors in the matrix. Selecting another type switches connectors, and pressing the active type hides them. Connectors start off. A saved setting next to the default view can enable the first type when opening a group. Card-chip toggles apply to the current group. Filtering remains in the funnel. The differing expression is plain text. Book references and short quotations follow beneath. Both views use the same footer.
 
 The funnel applies filters live and stores them in the URL. Selected surahs and juz' combine by union. Page range, legacy juz' range, relation kind, difference kind, saved-only and book-only filters restrict those results. Sorting supports mushaf order, closest first, most places and fewest marked word differences.
 
