@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { BRANCH_VIEW_COOKIE, parseBranchView } from '@/lib/quran/branchView';
+import { BRANCH_VIEW_COOKIE, BRANCH_CONNECTORS_COOKIE, parseBranchView } from '@/lib/quran/branchView';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
 import { branchesHref, piecesHolding, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
@@ -13,6 +13,7 @@ import treeData from './trees.json';
 import BranchTree from './BranchTree';
 import TreeSteps, { TreeMode } from './TreeSteps';
 import BranchHeading, { MatchingRules } from './BranchHeading';
+import { GroupConnections } from './GroupConnections';
 import { GroupDetails } from './GroupDetails';
 import { browseGroups, groupFilters, hasGroupFilters } from '@/lib/quran/mutashabih/browse';
 import type { Group } from '@/lib/quran/mutashabih/types';
@@ -94,8 +95,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const picked = Number(first(params.s));
   const surah = Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
   const savedIds = (first(params.b) ?? '').split('|').filter(Boolean);
+  const settings = await cookies();
+  const defaultConnections = settings.get(BRANCH_CONNECTORS_COOKIE)?.value === 'on';
   const explicitMode = parseBranchView(first(params.m));
-  const preferredMode = explicitMode ? undefined : parseBranchView((await cookies()).get(BRANCH_VIEW_COOKIE)?.value);
+  const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
   const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
   const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, filters, saved: savedIds.length ? savedIds : undefined };
   // The list view is gone: search results and surahs are swiped through as trees.
@@ -174,13 +177,15 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { ...state, surah: undefined })} />}
       {(!id || constrained && !opening) && <NoTrees query={query} grouped={constrained} />}
       {unavailable && !(constrained && !opening) && <UnavailableNote />}
+      <GroupConnections key={`${id}:${defaultConnections}`} group={requestedGroup} defaultOn={defaultConnections}>
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''}>
       <PathScope key={`${id}:${marked.join(' ')}`} lit={marked}>
-        {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} differences={requestedGroup?.differences} />
+        {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} groupLinks={requestedGroup ? undefined : Object.fromEntries(drawn.flatMap(ayah => { const group = groupsByAyah.get(ayah.key); return group ? [[ayah.key, branchesHref(group.id, undefined, { mode })]] : []; }))} label="شجرة العبارات المشتركة" />}
       </PathScope>
       </DoubleTapSave>
-      {treeGroup && <CardActions id={id} text={treeGroup.text} details={requestedGroup && <GroupDetails group={requestedGroup} range={range} view={state} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      {treeGroup && <CardActions id={id} text={treeGroup.text} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      </GroupConnections>
     </div>
   );
 }

@@ -16,6 +16,7 @@ import { MAX_KEYS, sharedMarks } from './AyahContext';
 import { usePreload, type Steps } from './TreeSteps';
 import { useAroundSetting } from './Surroundings';
 import styles from './AyahCards.module.css';
+import { ConnectionLines, useGroupConnections } from './GroupConnections';
 
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
@@ -27,7 +28,7 @@ export function CardsLegend() {
   return <MatchLegend exact={exact} root={root} />;
 }
 
-type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps; differences?: Record<string, number[]> };
+type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps };
 
 /** The surrounding-ayat setting adds the ayah before and after each one as columns beside it. */
 export default function AyahCards(props: Props) {
@@ -35,9 +36,10 @@ export default function AyahCards(props: Props) {
   return <Matrix key={String(context)} context={context} {...props} />;
 }
 
-function Matrix({ ayahKeys, names, steps, context, differences }: Props & { context: boolean }) {
+function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
+  const connections = useGroupConnections();
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];
   const [column, setColumn] = useState(context ? 1 : 0);
@@ -213,7 +215,7 @@ function Matrix({ ayahKeys, names, steps, context, differences }: Props & { cont
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key),
-            differences: at === 'ayah' ? differences?.[ayah.key] : undefined }],
+            wordKey: at === 'ayah' && connections?.group ? ayah.key : undefined }],
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
         action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
@@ -240,10 +242,11 @@ function Matrix({ ayahKeys, names, steps, context, differences }: Props & { cont
       {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track}>
         <div ref={lane} className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
+          <ConnectionLines lane={lane} column={column} ready={ready} />
         </div>
       </div>}
-      {ready && !differences && chevron(false)}
-      {ready && !differences && chevron(true)}
+      {ready && !connections?.group && chevron(false)}
+      {ready && !connections?.group && chevron(true)}
     </section>
   );
 }

@@ -11,6 +11,7 @@ import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
 import { RailSlotContext } from './NavBar';
 import TreeIcon from './TreeIcon';
+import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import styles from './NavBar.module.css';
 
@@ -87,6 +88,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
           </div>
         </div>
         <BranchViewSetting />
+        <BranchConnectorSetting />
         <div className={styles.sheetLinks}>
           {help && <details className="group">
             <summary className={`${styles.sheetLink} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
