@@ -10,7 +10,8 @@ import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
 const router = { push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() };
 let params = new URLSearchParams();
 vi.mock('next/navigation', () => ({ useRouter: () => router, useSearchParams: () => params, usePathname: () => '/quran/branches' }));
-vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+let language = 'ar';
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language }) }));
 const { quranContexts, quranSurrounding } = vi.hoisted(() => ({ quranContexts: vi.fn(), quranSurrounding: vi.fn() }));
 vi.mock('@/lib/quran/quranText', () => ({ quranContexts, quranSurrounding }));
 
@@ -34,6 +35,7 @@ const side: AyahContext[] = [
 vi.mock('@/components/common/useSwipe', async importOriginal => ({ ...(await importOriginal<typeof import('@/components/common/useSwipe')>()), reducedMotion: () => true }));
 
 beforeEach(() => {
+  language = 'ar';
   params = new URLSearchParams();
   localStorage.setItem('branches-surround', '1');
   window.history.replaceState(null, '', '/quran/branches?o=x&m=cards');
@@ -43,9 +45,9 @@ beforeEach(() => {
 afterEach(() => { cleanup(); localStorage.clear(); vi.useRealTimers(); vi.unstubAllGlobals(); router.push.mockClear(); });
 
 const steps = { previous: '/quran/branches?o=a&m=cards', next: '/quran/branches?o=b&m=cards', position: 2, total: 3 };
-const show = (keys = ['94:5', '94:6', '65:7']) => render(
+const show = (keys = ['94:5', '94:6', '65:7'], passageKeys?: string[][]) => render(
   <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>
-    <AyahCards ayahKeys={keys} names={{ 94: 'الشرح', 65: 'الطلاق' }} steps={steps} />
+    <AyahCards ayahKeys={keys} passageKeys={passageKeys} names={{ 94: 'الشرح', 65: 'الطلاق' }} steps={steps} />
   </SWRConfig>,
 );
 const column = () => [...document.querySelectorAll<HTMLElement>('[data-col][data-current]')].map(cell => cell.querySelector('article')?.getAttribute('aria-label') ?? '');
@@ -258,4 +260,68 @@ it('locks a touch gesture to one axis: an upward swipe never moves sideways, a s
   fireEvent.touchEnd(track, { touches: [] });
   expect(router.push).toHaveBeenCalledExactlyOnceWith(steps.next, { scroll: false });
   vi.useRealTimers();
+});
+
+const passageSource: AyahContext[] = [
+  { before: null, after: null, ayah: ayah('2:1', ['الم']) },
+  { before: null, after: null, ayah: ayah('2:2', ['ذلك', 'الكتاب']), match: { exact: [], rooted: [1] } },
+  { before: null, after: null, ayah: ayah('2:3', ['الذين', 'يؤمنون']) },
+  { before: null, after: null, ayah: ayah('3:1', ['الم']) },
+  { before: null, after: null, ayah: ayah('3:2', ['الله', 'الحي']) },
+];
+
+it.each(['ar', 'en'])('shows the complete tree passage by default in %s, keeping verse boundaries and continuation marks', async lang => {
+  language = lang;
+  const ar = lang === 'ar';
+  localStorage.setItem('branches-surround', '0');
+  quranContexts.mockImplementation(async (wanted: string[]) => passageSource.filter(item => wanted.includes(item.ayah.key)));
+  show(['2:1', '3:1'], [['2:1', '2:2', '2:3'], ['3:1', '3:2']]);
+  const first = await screen.findByLabelText(ar ? 'سورة ٢ ١–٣' : 'Surah 2 1–3');
+  expect(first.textContent).toContain('الم');
+  expect(first.textContent).toContain('ذلك الكتاب');
+  expect(first.textContent).toContain('الذين يؤمنون');
+  const seals = [...first.querySelectorAll('span[class*="verseSeal"]')];
+  expect(seals).toHaveLength(3);
+  expect(new Set(seals.map(seal => seal.closest('p'))).size).toBe(1);
+  expect(within(first).getByTitle(ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root').textContent).toBe('الكتاب');
+  expect(within(first).getByRole('link', { name: ar ? 'قراءة الآية' : 'Read ayah' }).getAttribute('href')).toBe('/quran/read/1?a=2:1');
+  expect(screen.getByLabelText(ar ? 'سورة ٣ ١–٢' : 'Surah 3 1–2').textContent).toContain('الله الحي');
+  expect(quranContexts.mock.calls.map(([wanted]) => wanted)).toEqual([['2:1', '3:1'], ['2:2', '3:2'], ['2:3']]);
+  expect(quranSurrounding).not.toHaveBeenCalled();
+});
+
+it('shows surrounding ayat outside the whole passage and moves the passage as one column', async () => {
+  quranContexts.mockImplementation(async (wanted: string[]) => passageSource.filter(item => wanted.includes(item.ayah.key)));
+  quranSurrounding.mockResolvedValue({
+    before: { '2:1': null, '3:1': ayah('2:286', ['قبل']) },
+    after: { '2:3': ayah('2:4', ['بعد']), '3:2': null },
+  });
+  show(['2:1', '3:1'], [['2:1', '2:2', '2:3'], ['3:1', '3:2']]);
+  await screen.findByLabelText('سورة ٢ ١–٣');
+  expect(quranSurrounding).toHaveBeenCalledWith(['2:1', '3:1'], ['2:3', '3:2']);
+  key('ArrowLeft');
+  expect(column()).toEqual(['سورة ٢ ٤', '']);
+  key('ArrowRight');
+  expect(column()).toEqual(['سورة ٢ ١–٣', 'سورة ٣ ١–٢']);
+  key('ArrowRight');
+  expect(column()).toEqual(['', 'سورة ٢ ٢٨٦']);
+});
+
+it('offers retry when a continuation is missing and restores the complete passage', async () => {
+  localStorage.setItem('branches-surround', '0');
+  quranContexts.mockImplementation(async (wanted: string[]) => passageSource.filter(item => item.ayah.key !== '2:2' && wanted.includes(item.ayah.key)));
+  show(['2:1', '3:1'], [['2:1', '2:2'], ['3:1', '3:2']]);
+  await screen.findByRole('alert');
+  expect(screen.queryByRole('region', { name: 'مصفوفة الآيات' })).toBeNull();
+  quranContexts.mockImplementation(async (wanted: string[]) => passageSource.filter(item => wanted.includes(item.ayah.key)));
+  fireEvent.click(screen.getByRole('button', { name: 'إعادة المحاولة' }));
+  expect((await screen.findByLabelText('سورة ٢ ١–٢')).textContent).toContain('ذلك الكتاب');
+});
+
+it('shows a recoverable error for an empty passage instead of crashing', async () => {
+  localStorage.setItem('branches-surround', '0');
+  show(['2:1'], [[]]);
+  await screen.findByRole('alert');
+  expect(screen.queryByRole('region', { name: 'مصفوفة الآيات' })).toBeNull();
+  expect(screen.getByRole('button', { name: 'إعادة المحاولة' })).toBeTruthy();
 });

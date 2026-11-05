@@ -176,7 +176,7 @@ export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = tr
     const extend = expanded.map((ayah, i) => {
       const position = positions.get(ayah.through!);
       const [surah, number] = ayah.through!.split(':').map(Number);
-      const explicit = ayah.next ? { key: `${surah}:${number + 1}`, page: ayah.page, words: ayah.next, roots: ayah.nextRoots, lemmas: ayah.nextLemmas } : undefined;
+      const explicit = ayah.next ? { key: source[i].through ?? `${surah}:${number + 1}`, page: ayah.page, words: ayah.next, roots: ayah.nextRoots, lemmas: ayah.nextLemmas } : undefined;
       const next = explicit ?? (followCorpus && position !== undefined ? ayat[position + 1] : undefined);
       if (!next) return undefined;
       const prefix = sourceIds.some((other, at) => at !== i && (other.length > sourceIds[i].length || continueIdentical && other.length === sourceIds[i].length) && sourceIds[i].every((token, word) => token === other[word]));

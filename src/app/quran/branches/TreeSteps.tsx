@@ -6,8 +6,23 @@ import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { num } from '@/lib/quran/arabicNumber';
+import styles from './TreeSteps.module.css';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };
+
+export function TreeProgress({ steps }: { steps: Steps }) {
+  const ar = useLanguage().language === 'ar';
+  const { position, total } = steps;
+  const remaining = total - position;
+  const description = ar
+    ? `الشجرة ${num(position)} من ${num(total)}، المتبقي ${num(remaining)}`
+    : `Tree ${position} of ${total}, ${remaining} remaining`;
+  return <div className="flex items-center gap-2 text-xs text-[var(--home-muted)]" dir={ar ? 'rtl' : 'ltr'} title={description}>
+    <progress className={styles.progress} value={position} max={total} aria-label={ar ? 'التقدم بين الأشجار' : 'Tree progress'} aria-valuetext={description} />
+    <span className="shrink-0 tabular-nums" dir="ltr" aria-hidden>{ar ? num(position) : position} / {ar ? num(total) : total}</span>
+  </div>;
+}
 
 function withContext(href: string | undefined, on: boolean) {
   if (!href) return href;

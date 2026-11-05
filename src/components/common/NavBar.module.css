@@ -37,7 +37,7 @@
 
 .mobile { max-height: calc(100dvh - 59px); overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--home-rule); padding: 0.5rem var(--home-gutter) 1.5rem; }
 .mobileChapter { display: block; padding-block: 0.75rem; font-size: 1.25rem; border-bottom: 1px solid var(--home-rule); color: var(--home-ink); }
-.mobileChapter[aria-current] { color: var(--home-accent); }
+.mobileChapter[aria-current] { background: var(--home-paper-deep); }
 
 /* The top bar keeps the tree logo (home) and the page's own search boxes and toggles (NavActions)
    and slides away on scroll down. Sections and settings live in the tab bar: at the bottom on
@@ -64,8 +64,8 @@
 .tab { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 3rem; color: var(--home-muted); -webkit-tap-highlight-color: transparent; }
 .tabPill { display: flex; padding: 0.375rem 1.25rem; border-radius: 999px; transition: background-color 0.15s, transform 0.1s; }
 .tab:active .tabPill { transform: scale(0.92); }
-.tab[aria-current], .tab[aria-expanded="true"] { color: var(--home-accent); }
-.tab[aria-current] .tabPill, .tab[aria-expanded="true"] .tabPill { background: color-mix(in srgb, var(--home-accent) 14%, transparent); }
+.tab[aria-current], .tab[aria-expanded="true"] { color: var(--home-ink); }
+.tab[aria-current] .tabPill, .tab[aria-expanded="true"] .tabPill { background: var(--home-paper-deep); }
 .tab:focus-visible { outline: 2px solid var(--home-accent); outline-offset: -4px; }
 
 .shade { position: fixed; inset: 0; z-index: 51; background: #0006; animation: shade-in 0.2s ease-out; }

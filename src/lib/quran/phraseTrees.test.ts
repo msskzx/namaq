@@ -310,3 +310,14 @@ it('preserves a common hamza seat when only vowel marks differ', () => {
   expect(tree.words.join(' ')).toContain('ؤ');
   expect(tree.words.join(' ')).not.toContain('ءَ');
 });
+
+it('uses the recorded endpoint when an explicit continuation crosses a surah boundary', () => {
+  const wanted = new Set(['56:74', '56:75', '56:96', '57:1', '69:52', '70:1']);
+  const ayat = (treeData.ayat as BranchAyah[]).filter(ayah => wanted.has(ayah.key));
+  const group: PhraseGroup = {
+    id: 'باسم ربك', text: 'باسم ربك',
+    occurrences: ['56:74', '56:96', '69:52'].map(key => ({ key, start: 1, end: 3 })),
+  };
+  const presentation = phrasePresentation(group, ayat);
+  expect(ayahEnds(presentation.tree)).toMatchObject({ '56:96': '57:1', '69:52': '70:1' });
+});
