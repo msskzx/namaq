@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Download, Pause, Play, RotateCcw, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
+import { HOURGLASS_FRAME, hourglassSand } from '@/lib/quran/hourglass';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { askLeft, growRoot, growthState, pause, play, stop, useGrowth } from './Grow';
@@ -18,7 +19,7 @@ type Rect = { x: number; y: number; w: number; h: number };
 type Word = Rect & { text: string; font: string; color: string };
 type Shape = { element: HTMLElement; rect: Rect; words: Word[] };
 type Segment = [number, number, number, number, number];
-type Line = { element: HTMLElement; color: string; segments: Segment[] };
+type Line = { element: HTMLElement; segments: Segment[] };
 type Drawing = { content: HTMLElement; width: number; height: number; boxes: Shape[]; lines: Line[] };
 
 /** Where every box, word and connector of the tree sits, in the tree's own unscaled pixels. Measured once: growing only fades them. */
@@ -46,7 +47,14 @@ function measure(root: HTMLElement): Drawing | null {
     }
     return { element, rect: place(element.getBoundingClientRect()), words };
   });
-  const lines = [...content.querySelectorAll<HTMLElement>('span[aria-hidden]')].flatMap(element => {
+  return { content, width: content.offsetWidth, height: content.offsetHeight, boxes, lines: measureLines(content, 'span[aria-hidden]') };
+}
+
+function measureLines(content: HTMLElement, selector: string): Line[] {
+  const frame = content.getBoundingClientRect();
+  const k = frame.width ? content.offsetWidth / frame.width : 1;
+  const place = (box: DOMRect): Rect => ({ x: (box.left - frame.left) * k, y: (box.top - frame.top) * k, w: box.width * k, h: box.height * k });
+  return [...content.querySelectorAll<HTMLElement>(selector)].flatMap(element => {
     if (element.closest('[data-node]')) return [];
     const style = getComputedStyle(element);
     const [top, right, bottom, left] = [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth].map(parseFloat);
@@ -57,9 +65,8 @@ function measure(root: HTMLElement): Drawing | null {
     if (bottom) segments.push([x, y + h - bottom / 2, x + w, y + h - bottom / 2, bottom]);
     if (left) segments.push([x + left / 2, y, x + left / 2, y + h, left]);
     if (right) segments.push([x + w - right / 2, y, x + w - right / 2, y + h, right]);
-    return [{ element, color: style.borderTopColor !== 'rgba(0, 0, 0, 0)' && top ? style.borderTopColor : style.borderLeftColor || style.borderRightColor, segments }];
+    return [{ element, segments }];
   });
-  return { content, width: content.offsetWidth, height: content.offsetHeight, boxes, lines };
 }
 
 /** How visible an element is now: its own fade and its branch's. */
@@ -71,7 +78,7 @@ function alpha(element: HTMLElement, content: HTMLElement) {
   return value;
 }
 
-type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; font: string; title: string; host: string; logo: HTMLImageElement | null; ask: boolean };
+type Look = { paper: string; ink: string; rule: string; accent: string; font: string; logo: HTMLImageElement | null; ask: boolean };
 
 function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, progress: { at: number; total: number }) {
   context.save();
@@ -83,23 +90,27 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   if (look.logo?.complete && look.logo.naturalWidth) context.drawImage(look.logo, WIDTH / 2 - 70, 70, 140, 140);
   context.fillStyle = look.ask ? look.accent : look.ink;
   context.font = `56px ${look.font}`;
-  context.fillText(look.ask ? 'أكمل الآية…' : look.title, WIDTH / 2, 290, WIDTH - 120);
+  if (look.ask) context.fillText('اكمل الايات', WIDTH / 2, 290, WIDTH - 120);
 
   const area = { x: 60, y: 380, w: WIDTH - 120, h: 1300 };
   const scale = Math.min(area.w / drawing.width, area.h / drawing.height, 3);
   context.translate(area.x + (area.w - drawing.width * scale) / 2, area.y + (area.h - drawing.height * scale) / 2);
   context.scale(scale, scale);
   context.lineCap = 'butt';
-  for (const line of drawing.lines) {
+  const lines = [...drawing.lines.filter(line => !line.element.hasAttribute('data-stem')), ...measureLines(drawing.content, '[data-stem]')];
+  for (const line of lines) {
     const seen = alpha(line.element, drawing.content);
     if (seen < 0.02 || getComputedStyle(line.element).display === 'none') continue;
     context.globalAlpha = seen;
-    context.strokeStyle = line.color;
+    const style = getComputedStyle(line.element);
+    context.strokeStyle = parseFloat(style.borderTopWidth) ? style.borderTopColor : parseFloat(style.borderLeftWidth) ? style.borderLeftColor : style.borderRightColor;
     for (const [x1, y1, x2, y2, width] of line.segments) {
       context.lineWidth = width;
       context.beginPath();
-      context.moveTo(x1, y1);
-      context.lineTo(x2, y2);
+      const fraction = Number(line.element.style.getPropertyValue('--grow-line') || 1);
+      const reverse = line.element.getAttribute('data-drawing') === 'left';
+      context.moveTo(reverse ? x2 : x1, reverse ? y2 : y1);
+      context.lineTo(reverse ? x2 + (x1 - x2) * fraction : x1 + (x2 - x1) * fraction, reverse ? y2 + (y1 - y2) * fraction : y1 + (y2 - y1) * fraction);
       context.stroke();
     }
   }
@@ -119,13 +130,23 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.stroke();
     context.setLineDash([]);
     if (box.element.hasAttribute('data-ask')) {
-      // As on the page: the seconds left in the empty box, and a bar along its foot shrinking from its start.
-      const left = askLeft() ?? 1;
+      const size = Math.min(24, h - 24, w - 8);
+      context.save();
+      context.translate(x + (w - size) / 2, y + (h - size - 14) / 2);
+      context.scale(size / 24, size / 24);
       context.fillStyle = look.accent;
-      context.font = `700 ${Math.min(28, h * 0.6)}px system-ui, sans-serif`;
-      context.fillText(box.element.getAttribute('data-left') ?? '؟', x + w / 2, y + h / 2);
-      const bar = (w - 2) * left;
-      context.fillRect(style.direction === 'rtl' ? x + w - 1 - bar : x + 1, y + h - 4, bar, 3);
+      context.strokeStyle = look.accent;
+      const sand = hourglassSand(askLeft() ?? 1);
+      context.lineWidth = 1.5;
+      context.stroke(new Path2D(HOURGLASS_FRAME));
+      context.fill(new Path2D(sand.top));
+      context.fill(new Path2D(sand.bottom));
+      context.lineWidth = 1;
+      context.stroke(new Path2D(sand.stream));
+      context.restore();
+      context.fillStyle = look.accent;
+      context.font = '12px system-ui, sans-serif';
+      context.fillText(box.element.getAttribute('data-left') ?? '', x + w / 2, y + (h + size + 2) / 2);
       continue;
     }
     for (const word of box.words) {
@@ -144,10 +165,6 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.roundRect(WIDTH - 60 - (i + 1) * bar - i * gap, 1740, bar, 8, 4);
     context.fill();
   }
-  context.fillStyle = look.muted;
-  context.font = `36px ${look.font}`;
-  context.direction = 'ltr';
-  context.fillText(look.host, WIDTH / 2, 1830);
 }
 
 const TYPES = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
@@ -158,7 +175,7 @@ let opener: (() => void) | null = null;
 export const openVideo = () => opener?.();
 
 /** Share as video: the tree grows in a story frame; what plays here is recorded, then shared or saved. */
-export default function GrowVideo({ title }: { title: string }) {
+export default function GrowVideo() {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -193,7 +210,7 @@ export default function GrowVideo({ title }: { title: string }) {
     const dark = parseInt(String(context.fillStyle).slice(1, 3), 16) < 128;
     const logo = new Image();
     logo.src = `/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`;
-    const look: Look = { paper: token('--home-paper'), ink: token('--home-ink'), muted: token('--home-muted'), rule: token('--home-rule'), accent: token('--home-accent'), font: getComputedStyle(root).getPropertyValue('--font-quran') || 'serif', title, host: location.host, logo, ask: false };
+    const look: Look = { paper: token('--home-paper'), ink: token('--home-ink'), rule: token('--home-rule'), accent: token('--home-accent'), font: getComputedStyle(root).getPropertyValue('--font-quran') || 'serif', logo, ask: false };
     const stream = element.captureStream(FPS);
     const recorder = new MediaRecorder(stream, { mimeType: type });
     const chunks: Blob[] = [];

@@ -429,7 +429,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 
   if (!enabled) return <>
     {controls && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">{controls}</div>}
-    <div className="flex w-max items-center">{children}</div>
+    <div data-tree-content className="flex w-max items-center">{children}</div>
   </>;
 
   const labels = ar ? {
@@ -497,7 +497,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, ayat, offsets = {}, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, groupLinks }: Props) {
+const NO_VARIANTS: Variant[] = [];
+
+export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, groupLinks }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
@@ -509,7 +511,9 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const view = given;
   const outer = useOuterPaths();
   const own = usePaths();
-  const paths = outer ?? own;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const growingKey = useGrowTarget(cardRef, useMemo(() => (growable ? growthPlan(tree, (prefixes ?? variants).map(start => start.keys)) : null), [growable, tree, prefixes, variants]));
+  const paths = growingKey ? { ...(outer ?? own), lit: new Set([growingKey]) } : outer ?? own;
   const all = keys(tree);
   const ends = ayahEnds(tree);
   const emptyKeys = (prefixes ?? []).filter(prefix => !prefix.word).flatMap(prefix => prefix.keys);
@@ -574,8 +578,6 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
               </> }];
             }));
   const lane = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  useGrowTarget(cardRef, useMemo(() => (growable ? growthPlan(tree) : null), [growable, tree]));
   const card = (
       <div ref={cardRef} tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
         {header}

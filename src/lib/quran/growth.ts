@@ -11,11 +11,11 @@ export function byMushaf(a: string, b: string) {
 }
 
 /**
- * Grows a tree depth first, one ayah at a time in mushaf order: each ayah walks from the root to its end,
+ * Grows a tree depth first, one ayah at a time: each ayah walks from the root to its end,
  * reusing the nodes earlier ayat drew and growing its own branch from where it splits off (`fresh`).
  * Nodes are numbered as BranchTree numbers them: the root is -1, then depth first.
  */
-export function growthPlan(tree: Branch): GrowthStep[] {
+export function growthPlan(tree: Branch, starts: string[][] = []): GrowthStep[] {
   const index = new Map<Branch, number>();
   const visit = (node: Branch) => {
     index.set(node, index.size - 1);
@@ -24,7 +24,9 @@ export function growthPlan(tree: Branch): GrowthStep[] {
   visit(tree);
   const holds = new Map<Branch, Set<string>>([...index.keys()].map(node => [node, new Set(keys(node))]));
   const drawn = new Set([-1]);
-  return [...new Set(keys(tree))].sort(byMushaf).map(key => {
+  const ordered = [...new Set([...index.keys()].flatMap(node => [...node.ayat].sort(byMushaf)))];
+  const starting = starts.flatMap(group => ordered.filter(key => group.includes(key)));
+  return [...new Set([...starting, ...ordered])].map(key => {
     const nodes = [-1];
     let node: Branch | undefined = tree;
     while ((node = node.children.find(child => holds.get(child)!.has(key)))) nodes.push(index.get(node)!);

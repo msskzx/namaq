@@ -142,7 +142,7 @@ export function CardActions({ id, text, href, details }: { id: string; text: str
     <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
     </div>
     {details}
-    <GrowVideo title={text} />
+    <GrowVideo />
   </div>;
 }
 

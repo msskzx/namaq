@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Clapperboard, Pause, Play, RotateCcw, Timer, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { HOURGLASS_FRAME, hourglassSand } from '@/lib/quran/hourglass';
 import type { GrowthStep } from '@/lib/quran/growth';
 import styles from './Grow.module.css';
 
@@ -16,7 +17,7 @@ type GrowState = Prefs & { status: Status; at: number; total: number; studio: bo
 
 export const SPEEDS = [1, 1.5, 2, 0.5];
 /** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
-export const TIMERS = [3, 5, 10, 0];
+export const TIMERS = [3, 5, 10, 0, 1];
 // Milliseconds at 1×: a connector, a box fading in, a box an earlier ayah drew lighting again, the pause at an ayah's end.
 const LINE = 200;
 const BOX = 300;
@@ -26,10 +27,10 @@ const LEAF = 700;
 const PREFS = 'branches-grow';
 const listeners = new Set<() => void>();
 let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false };
-let target: { card: HTMLElement; plan: GrowthStep[] } | null = null;
+let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void } | null = null;
 let run = 0;
 let reveal: (() => void) | null = null;
-/** The share of the asked box's timer still left, for the video to draw its ring. */
+/** The share of the asked box's timer still left. */
 let asking: number | null = null;
 export const askLeft = () => asking;
 
@@ -59,12 +60,8 @@ const serverState = state;
 export const growthState = () => state;
 export const useGrowth = () => useSyncExternalStore(subscribe, () => state, () => serverState);
 
-// Arabic-Indic digits in Arabic, as the ayah numbers are.
-const seconds = (n: number) => document.documentElement.lang === 'en' ? String(n) : n.toLocaleString('ar-EG');
-
-/** Waits `ms` of playing time (a pause stops the clock), or until a tap reveals the asked box. False once a newer run started.
- * While a box is asked, it shows the whole seconds left and a bar along its foot that shrinks with them. */
-function wait(ms: number, token: number, ask?: HTMLElement) {
+/** Waits `ms` of playing time, or until a tap reveals the asked box. False once a newer run started. */
+function wait(ms: number, token: number, ask?: HTMLElement, progress?: (fraction: number) => void) {
   return new Promise<boolean>(resolve => {
     let left = ms;
     let last = Date.now();
@@ -75,16 +72,24 @@ function wait(ms: number, token: number, ask?: HTMLElement) {
       const now = Date.now();
       if (state.status === 'playing') left -= now - last;
       last = now;
+      progress?.(ms > 0 ? Math.min(1, 1 - left / ms) : 1);
       if (ask) {
         asking = ms > 0 ? Math.max(0, left / ms) : 1;
-        ask.style.setProperty('--grow-left', String(asking));
-        if (ms > 0) ask.setAttribute('data-left', seconds(Math.max(1, Math.ceil(left / 1000))));
+        const seconds = Math.max(1, Math.ceil(left / 1000));
+        const label = document.documentElement.lang === 'en' ? String(seconds) : seconds.toLocaleString('ar-EG');
+        if (ms > 0) {
+          ask.setAttribute('data-left', label);
+          const countdown = ask.querySelector('[data-seconds]');
+          if (countdown) countdown.textContent = label;
+        }
+        const sand = hourglassSand(asking);
+        for (const part of ['top', 'bottom', 'stream'] as const) ask.querySelector(`[data-sand="${part}"]`)?.setAttribute('d', sand[part]);
       }
       if (tapped || (ms > 0 && left <= 0)) {
-        if (ask) { reveal = null; asking = null; ask.style.removeProperty('--grow-left'); }
+        if (ask) { reveal = null; asking = null; }
         return resolve(true);
       }
-      setTimeout(tick, 30);
+      setTimeout(tick, 16);
     };
     tick();
   });
@@ -95,21 +100,75 @@ const hide = (element: Element | null | undefined) => { element?.setAttribute('d
 const show = (element: Element | null | undefined) => { element?.removeAttribute('data-hide'); element?.removeAttribute('inert'); };
 const ASK = ['data-ask', 'data-wait', 'data-left', 'role', 'tabindex', 'aria-label'];
 // The card also holds its neighbours' cards, ready for a swipe: only its own tree grows.
-const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySelectorAll<HTMLElement>('[data-grow="n-1"]')].find(root => !root.closest('[data-tree-neighbour]'));
+const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySelectorAll<HTMLElement>('[data-grow="n-1"]')].find(root => !root.closest('[data-tree-neighbour]'))?.closest<HTMLElement>('[data-tree-content]') ?? undefined;
 
 /** The connector into a node: its list item in the parent's fan, and the stub between the parent's box and that fan. */
 function showLine(item: Element | null | undefined) {
   if (!item) return;
   show(item);
+  item.querySelectorAll(':scope > span[aria-hidden]').forEach(show);
   const stub = item.parentElement?.parentElement?.previousElementSibling;
   if (stub?.hasAttribute('data-line')) show(stub);
+  show(item.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
+}
+
+async function drawSegment(element: HTMLElement | null | undefined, token: number) {
+  if (!element || !element.hasAttribute('data-hide')) return token === run;
+  element.setAttribute('data-drawing', element.closest('[data-down]') ? 'down' : getComputedStyle(element).direction === 'ltr' ? 'right' : 'left');
+  element.style.setProperty('--grow-line', '0');
+  show(element);
+  if (!(await wait(LINE / state.speed, token, undefined, fraction => element.style.setProperty('--grow-line', String(fraction))))) return false;
+  element.removeAttribute('data-drawing');
+  element.style.removeProperty('--grow-line');
+  return true;
+}
+
+async function drawLine(item: Element | null | undefined, token: number) {
+  if (!item || !item.hasAttribute('data-hide')) return token === run;
+  const stub = item.parentElement?.parentElement?.previousElementSibling;
+  if (stub?.hasAttribute('data-line') && !(await drawSegment(stub as HTMLElement, token))) return false;
+  show(item);
+  item.querySelectorAll(':scope > span[aria-hidden]:not([data-line])').forEach(show);
+  show(item.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
+  return drawSegment(item.querySelector<HTMLElement>(':scope > [data-line]'), token);
+}
+
+function showHourglass(box: Element) {
+  const timer = document.createElement('span');
+  timer.setAttribute('data-timer', '');
+  timer.setAttribute('aria-hidden', 'true');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('data-hourglass', '');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const [part, d] of Object.entries({ frame: HOURGLASS_FRAME, ...hourglassSand(1) })) {
+    const path = document.createElementNS(svg.namespaceURI, 'path');
+    path.setAttribute('data-sand', part);
+    path.setAttribute('d', d);
+    path.setAttribute('fill', part === 'frame' || part === 'stream' ? 'none' : 'currentColor');
+    if (part === 'frame' || part === 'stream') {
+      path.setAttribute('stroke', 'currentColor');
+      path.setAttribute('stroke-width', part === 'frame' ? '1.5' : '1');
+    }
+    svg.append(path);
+  }
+  const countdown = document.createElement('span');
+  countdown.setAttribute('data-seconds', '');
+  timer.append(svg, countdown);
+  box.append(timer);
+}
+
+function clearAsk(box: Element) {
+  ASK.forEach(name => box.removeAttribute(name));
+  box.querySelector('[data-timer]')?.remove();
 }
 
 function clear(root: HTMLElement) {
   root.classList.remove(styles.growing, styles.paused);
   root.querySelectorAll('[data-hide]').forEach(show);
   root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
-  root.querySelectorAll('[data-ask]').forEach(element => ASK.forEach(name => element.removeAttribute(name)));
+  root.querySelectorAll('[data-ask]').forEach(clearAsk);
+  root.querySelectorAll<HTMLElement>('[data-drawing]').forEach(element => { element.removeAttribute('data-drawing'); element.style.removeProperty('--grow-line'); });
   root.removeEventListener('click', onTap, true);
   root.removeEventListener('keydown', onKey, true);
 }
@@ -141,13 +200,27 @@ export async function play(from = 0, { video = false } = {}) {
   root.classList.add(styles.growing);
   root.addEventListener('click', onTap, true);
   root.addEventListener('keydown', onKey, true);
-  // Not the lists inside a box (its spellings dialog).
-  root.querySelectorAll('li, [data-grow] > [data-line]').forEach(element => { if (!element.closest('[data-node]')) hide(element); });
-  root.querySelectorAll('[data-grow] > [data-node]').forEach(box => { if (box.parentElement !== root) hide(box); });
+  const starts = [...root.querySelectorAll<HTMLElement>('[data-node]')].filter(box => !box.closest('[data-grow]'));
+  const shared = root.querySelector<HTMLElement>('[data-grow="n-1"]');
+  const bridge = shared?.previousElementSibling;
+  root.querySelectorAll('li, [data-line], [data-stem], li > span[aria-hidden]').forEach(element => { if (!element.closest('[data-node]')) hide(element); });
+  root.querySelectorAll('[data-node]').forEach(box => { if (starts.length || box.parentElement !== shared) hide(box); });
   const node = (id: number) => root.querySelector(`[data-grow="n${id}"]`);
   const box = (id: number) => node(id)?.querySelector(':scope > [data-node]');
   const after = (key: string) => root.querySelector(`[data-node="after${key}"]`)?.closest('li');
+  const startsFor = (key: string) => starts.filter(box => box.getAttribute('data-keys')?.split(' ').includes(key));
+  const showStart = (box: HTMLElement) => {
+    for (let parent: HTMLElement | null = box.parentElement; parent && parent !== root; parent = parent.parentElement) if (parent.tagName === 'LI') show(parent);
+    show(box);
+  };
   const drawAt = (step: GrowthStep) => {
+    startsFor(step.key).forEach(box => {
+      showStart(box);
+      if (box.previousElementSibling?.hasAttribute('data-line')) show(box.previousElementSibling);
+      showLine(box.closest('li'));
+    });
+    if (bridge?.hasAttribute('data-line')) show(bridge);
+    show(box(-1));
     step.nodes.forEach(id => { if (id >= 0) { showLine(node(id)?.parentElement); show(box(id)); } });
     showLine(after(step.key));
   };
@@ -156,17 +229,34 @@ export async function play(from = 0, { video = false } = {}) {
   const speed = () => state.speed;
   for (let i = from; i < plan.length; i++) {
     const step = plan[i];
+    target.light(step.key);
     set({ at: i });
+    const route = startsFor(step.key);
+    for (const [at, start] of route.entries()) {
+      if (!start.hasAttribute('data-hide')) continue;
+      const before = start.previousElementSibling;
+      if (before?.hasAttribute('data-line') && !(await drawSegment(before as HTMLElement, token))) return;
+      showStart(start);
+      start.setAttribute('data-grow-now', '');
+      if (!(await wait(BOX / speed(), token))) return;
+      const item = start.closest('li');
+      if (route[at + 1]?.closest('li') === item) continue;
+      item?.querySelectorAll(':scope > span[aria-hidden]:not([data-line])').forEach(show);
+      show(item?.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
+      if (!(await drawSegment(item?.querySelector<HTMLElement>(':scope > [data-line]'), token))) return;
+    }
+    if (route.length && bridge?.hasAttribute('data-line') && !(await drawSegment(bridge as HTMLElement, token))) return;
     for (let j = 0; j < step.nodes.length; j++) {
       const id = step.nodes[j];
       const shown = box(id);
       if (j < step.fresh) {
+        const hidden = shown?.hasAttribute('data-hide');
+        show(shown);
         shown?.setAttribute('data-grow-now', '');
-        if (!(await wait(RELIGHT / speed(), token))) return;
+        if (!(await wait((hidden ? BOX : RELIGHT) / speed(), token))) return;
         continue;
       }
-      showLine(node(id)?.parentElement);
-      if (!(await wait(LINE / speed(), token))) return;
+      if (!(await drawLine(node(id)?.parentElement, token))) return;
       if (state.mode === 'ask' && j === step.fresh && shown) {
         const timer = state.timer || (video ? TIMERS[0] : 0);
         shown.setAttribute('data-ask', '');
@@ -175,19 +265,21 @@ export async function play(from = 0, { video = false } = {}) {
         shown.setAttribute('tabindex', '0');
         shown.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Show the next word' : 'اكشف الكلمة التالية');
         if (!timer) shown.setAttribute('data-wait', '');
+        else showHourglass(shown);
         show(shown);
         if (!(await wait(timer * 1000, token, shown as HTMLElement))) return;
-        ASK.forEach(name => shown.removeAttribute(name));
+        clearAsk(shown);
       }
       show(shown);
       shown?.setAttribute('data-grow-now', '');
       if (!(await wait(BOX / speed(), token))) return;
     }
-    showLine(after(step.key));
+    if (!(await drawLine(after(step.key), token))) return;
     if (!(await wait(LEAF / speed(), token))) return;
     root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
   }
   clear(root);
+  target.light(null);
   set({ status: 'done', at: plan.length });
 }
 
@@ -215,15 +307,17 @@ export function stop() {
   asking = null;
   const root = target && rootOf(target.card);
   if (root) clear(root);
+  target?.light(null);
   set({ status: 'idle', at: 0 });
 }
 
 /** Lets the open tree be grown; a tree swiped away (unmounted) stops its growth. */
 export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: GrowthStep[] | null) {
+  const [lit, light] = useState<string | null>(null);
   useEffect(() => {
     loadPrefs();
     if (!plan || !card.current) return;
-    const mine = { card: card.current, plan };
+    const mine = { card: card.current, plan, light };
     target = mine;
     set({ status: 'idle', at: 0, total: plan.length, studio: false });
     return () => {
@@ -233,6 +327,7 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
       set({ total: 0, studio: false });
     };
   }, [card, plan]);
+  return lit;
 }
 
 const SPEED_LABEL = (speed: number) => `${speed}×`;
@@ -258,23 +353,25 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   const ask = growth.mode === 'ask';
   const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
   const close = ar ? 'إغلاق الاستوديو' : 'Close the studio';
-  const askLabel = ar ? 'وضع السؤال: يتوقف عند كل فرع حتى تتذكّر' : 'Ask mode: stops at each branch for you to recall';
+  const resetLabel = ar ? 'إعادة ضبط' : 'Reset';
+  const askLabel = ar ? 'اكمل الايات' : 'Complete the ayat';
   return <>
     <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
     <span className="flex-1" />
     <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
       <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
     </Button>
-    {ask && <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
+    {ask && <Button size="md" variant={growth.timer ? 'ghost' : 'muted'} className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
       <span dir="ltr">{growth.timer ? `${growth.timer}s` : '∞'}</span>
     </Button>}
-    <Button size="lg" variant="muted" aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel} className={ask ? 'text-[var(--home-accent)]' : undefined}>
+    <Button size="lg" variant={ask ? 'ghost' : 'muted'} aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel}>
       <Timer aria-hidden />
     </Button>
     {share}
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
-      {playing ? <Pause aria-hidden /> : growth.status === 'done' ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
+      {playing ? <Pause aria-hidden /> : <Play aria-hidden />}
     </Button>
+    <Button size="lg" variant="muted" onClick={stop} aria-label={resetLabel} title={resetLabel}><RotateCcw aria-hidden /></Button>
   </>;
 }
 
