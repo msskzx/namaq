@@ -28,24 +28,29 @@ export function CardsLegend() {
   return <MatchLegend exact={exact} root={root} />;
 }
 
-type Props = { ayahKeys: string[]; names: Record<number, string>; steps?: Steps };
+type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<number, string>; steps?: Steps };
 
-/** The surrounding-ayat setting adds the ayah before and after each one as columns beside it. */
 export default function AyahCards(props: Props) {
   const [context] = useAroundSetting();
   return <Matrix key={String(context)} context={context} {...props} />;
 }
 
-function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean }) {
+function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { context: boolean }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const connections = useGroupConnections();
   const shown = ayahKeys.slice(0, MAX_KEYS);
+  const passages = shown.map((key, i) => passageKeys?.[i] ?? [key]);
+  const ends = passages.map(passage => passage[passage.length - 1]);
   const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];
   const [column, setColumn] = useState(context ? 1 : 0);
   const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
-  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(['quran-context', ...shown], loadContexts, { revalidateOnFocus: false });
-  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(context ? ['quran-surrounding', shown.join(','), shown.join(',')] : null, () => quranSurrounding(shown, shown), { revalidateOnFocus: false });
+  const { data, error, isLoading, mutate } = useSWR<AyahContext[][]>(['quran-passages', passages], async () => {
+    const columns = await Promise.all(Array.from({ length: Math.max(0, ...passages.map(passage => passage.length)) }, (_, step) =>
+      quranContexts([...new Set(passages.flatMap(passage => passage[step] ? [passage[step]] : []))])));
+    return passages.map(passage => passage.flatMap((key, step) => columns[step].filter(item => item.ayah.key === key)));
+  }, { revalidateOnFocus: false });
+  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(context ? ['quran-surrounding', shown.join(','), ends.join(',')] : null, () => quranSurrounding(shown, ends), { revalidateOnFocus: false });
   const sideKeys = (side: 'before' | 'after') => around && [...new Set(Object.values(around[side]).flatMap(ayah => ayah ? [ayah.key] : []))];
   const sideKey = (keys?: string[]) => keys && keys.length > 1 ? ['quran-context', ...keys.slice(0, MAX_KEYS)] : null;
   const { data: beforeMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('before')), loadContexts, { revalidateOnFocus: false });
@@ -192,30 +197,37 @@ function Matrix({ ayahKeys, names, steps, context }: Props & { context: boolean 
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const contexts = data && shown.map(key => data.find(item => item.ayah.key === key));
-  const missing = contexts?.some(context => !context);
+  const contexts = data?.map(passage => passage[0]);
+  const missing = data?.some((passage, i) => !passage.length || passage.length !== passages[i].length);
 
-  const marksFor = (at: Column, context: AyahContext, key: string) => {
-    const match = at === 'ayah' ? context : (at === 'before' ? beforeMatch : afterMatch)?.find(item => item.ayah.key === key);
+  const marksFor = (at: 'before' | 'after', key: string) => {
+    const match = (at === 'before' ? beforeMatch : afterMatch)?.find(item => item.ayah.key === key);
     return match && sharedMarks(match, exactLabel, rootLabel);
   };
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
-    const ayah = at === 'ayah' ? context.ayah : around?.[at][context.ayah.key];
+    const ayah = at === 'ayah' ? context.ayah : around?.[at][at === 'after' ? ends[row] : context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
     const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'aria-hidden': !current, className: styles.cell, style: { gridColumn: i + 1, gridRow: row + 1 }, onClick: current ? undefined : () => goTo(i) };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
-    const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
+    const end = at === 'ayah' ? ends[row] : ayah.key;
+    const [lastSurah, lastNumber] = end.split(':').map(Number);
+    const nameOf = (surah: number) => names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
+    const first = ar ? num(number) : number;
+    const last = ar ? num(lastNumber) : lastNumber;
+    const range = end === ayah.key ? `${first}` : `${first}–${lastSurah === surah ? last : `${nameOf(lastSurah)} ${last}`}`;
+    const name = nameOf(surah);
     return <div key={key} {...props}>
       <PageSpread pages={[{
         title: name,
-        subtitle: ar ? `الآية ${num(number)}` : `Ayah ${number}`,
-        label: `${name} ${ar ? num(number) : number}`,
+        subtitle: ar ? `${end === ayah.key ? 'الآية' : 'الآيات'} ${range}` : `${end === ayah.key ? 'Ayah' : 'Ayat'} ${range}`,
+        label: `${name} ${range}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
-          [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key),
-            wordKey: at === 'ayah' && connections?.group ? ayah.key : undefined }],
+          ...(at === 'ayah' ? [data![row].map(item => ({ number: Number(item.ayah.key.split(':')[1]), words: item.ayah.words, current: true,
+            marks: sharedMarks(item, exactLabel, rootLabel), wordKey: connections?.group ? item.ayah.key : undefined }))]
+            : [[{ number, words: ayah.words, marks: marksFor(at, ayah.key) }]]),
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
         action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
