@@ -252,7 +252,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track}>
-        <div ref={lane} className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
+        <div ref={lane} data-matrix-content className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
           <ConnectionLines lane={lane} column={column} ready={ready} />
         </div>

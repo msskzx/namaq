@@ -18,6 +18,7 @@ import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useA
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@/lib/quran/growth';
 import { useGrowTarget } from './Grow';
+import { useGroupConnections } from './GroupConnections';
 
 type Props = { hideArrows?: boolean; groupLinks?: Record<string, string>; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
@@ -501,6 +502,7 @@ const NO_VARIANTS: Variant[] = [];
 
 export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, groupLinks }: Props) {
   const id = useId();
+  const group = useGroupConnections()?.group;
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
   const [global] = useAroundSetting();
@@ -579,7 +581,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
             }));
   const lane = useRef<HTMLDivElement>(null);
   const card = (
-      <div ref={cardRef} tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
+      <div ref={cardRef} tabIndex={0} role="region" aria-label={label} data-tree={id} data-connection-group={group?.id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] ${steppable ? 'p-2 sm:p-4' : 'p-4'} text-[var(--home-ink)]`}>
         {header}
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p className="text-sm"><LoadingDots label={ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'} /></p>}

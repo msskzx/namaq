@@ -4,20 +4,20 @@ import { Tags } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { TAGS, type Group } from '@/lib/quran/mutashabih/types';
-import { useGroupConnections } from './GroupConnections';
+import { connectionColor, useGroupConnections } from './GroupConnections';
 
 export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: string[] }) {
   const ar = useLanguage().language === 'ar';
   const connections = useGroupConnections();
   return <div className="flex flex-col gap-2 text-sm">
-    {(group.tags.length > 0 || group.detail) && <div className="flex flex-wrap items-center gap-1.5">
+    {(group.tags.length > 0 || group.detail) && <div data-connection-legend={group.id} className="flex flex-wrap items-center gap-1.5">
       {group.tags.map(tag => {
         const label = TAGS[tag];
-        const active = connections?.selected === tag;
+        const active = connections?.selected.includes(tag) ?? false;
         const example = group.examples?.[tag] ?? (group.tags.length === 1 ? group.detail : undefined);
-        return <span key={tag} className="inline-flex flex-wrap items-center gap-1.5"><Button size="sm" active={active} aria-pressed={active} onClick={() => connections?.select(tag)}>
+        return <span key={tag} className="inline-flex flex-wrap items-center gap-1.5"><Button data-connection-chip={tag} size="sm" tone={connectionColor(tag)} active={active} aria-pressed={active} onClick={() => connections?.select(tag)}>
           <Tags size={12} aria-hidden />{ar ? label.ar : label.en}{'extension' in label && <span>{ar ? ' · امتداد نمق' : ' · Namaq extension'}</span>}
-        </Button>{example && <span lang="ar" dir="rtl">{example}</span>}</span>;
+        </Button>{example && <span data-connection-words lang="ar" dir="rtl">{example}</span>}</span>;
       })}
       {!group.citations.length && <span className="text-xs text-[var(--home-muted)]">{ar ? 'تحديد آلي' : 'Automatically identified'}</span>}
     </div>}
