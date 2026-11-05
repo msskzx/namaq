@@ -74,6 +74,7 @@ export default function GroupFilterControls({ surahs, filters }: { surahs: Scope
     pending.current = true;
     setDraft(next);
     const url = new URL(location.href);
+    url.pathname = '/quran/branches';
     for (const filter of FILTER_KEYS) url.searchParams.delete(filter);
     for (const [param, selected] of Object.entries(next)) {
       if (selected) url.searchParams.set(param, selected);

@@ -1,52 +1,60 @@
 'use client';
 
-import { useRef } from 'react';
-import { BookOpen, Feather } from 'lucide-react';
-import TreeIcon from '@/components/common/TreeIcon';
-import { useLanguage } from '../language/LanguageContext';
-import Button from '../common/Button';
-import BranchTree from '@/app/quran/branches/BranchTree';
-import type { HomePreviews } from '@/lib/homePreviewData';
-import TreeIntro from './TreeIntro';
-import styles from './Home.module.css';
+import { useSyncExternalStore } from 'react';
+import Link from 'next/link';
+import { Bookmark, Feather, Library, Users } from 'lucide-react';
+import Button from '@/components/common/Button';
+import { NavActions } from '@/components/common/NavBar';
+import MushafText from '@/components/common/MushafText';
+import { useLanguage } from '@/components/language/LanguageContext';
+import OpeningSearch from '@/app/quran/branches/OpeningSearch';
+import { FilterButton } from '@/app/quran/branches/Filters';
+import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@/lib/bookmarks';
+import { bookmarkReferences } from '@/lib/bookmarkReferences';
+import { num } from '@/lib/quran/arabicNumber';
+import { plainName } from '@/lib/quran/normalize';
+import type { HomepageData } from '@/lib/homepageData';
+import styles from './Homepage.module.css';
+import HomeQuranWidget from './HomeQuranWidget';
 
-export default function Homepage({ data, fontClass = '' }: { data: HomePreviews; fontClass?: string }) {
+export default function Homepage({ data }: { data: HomepageData }) {
   const ar = useLanguage().language === 'ar';
-  const preview = data.branches;
-  const launchTree = useRef<HTMLDivElement>(null);
-  const steps = [
-    { Icon: TreeIcon, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
-    { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
-    { Icon: Feather, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة في آيات القرآن وحدك أو مع غيرك، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions on the ayat of the Quran alone or with others, then review the answer and its ayat.', href: '/quizzes', action: ar ? 'الاختبارات' : 'Quizzes' },
-  ];
-  return (
-    <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
-      <div className={styles.content}>
-        <section className={`${styles.feature} ${styles.launch}`} aria-labelledby="openings-title">
-          <h1 id="openings-title" className={styles.launchTitle}>{ar ? 'متشابهات القرآن' : 'Quran phrase trees'}</h1>
-          <div className={styles.launchText}>
-            <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
-            <div className={styles.launchActions}>
-              <Button href="/quran/branches"><TreeIcon size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
-            </div>
-          </div>
-          <div ref={launchTree} className={styles.launchTree} dir="rtl">
-            <div>
-              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
-            </div>
-            <TreeIntro key={preview.id} target={launchTree} ar={ar} names={preview.names} />
-          </div>
-        </section>
-        <section className={styles.feature} aria-labelledby="journey-title">
-          <div className={styles.featureHeading}><div>
-            <h2 id="journey-title">{ar ? 'من الملاحظة إلى التعلّم' : 'From noticing to learning'}</h2>
-            <p>{ar ? 'ابدأ بالاستكشاف أو القراءة أو سؤال. يمكنك العودة إلى الآيات كلما أردت فهم الإجابة.' : 'Start with exploration, reading or a question. Return to the ayat whenever you want to understand an answer.'}</p>
-          </div></div>
-          <ol className={styles.learningSteps}>{steps.map(({ Icon, title, text, href, action }) => <li key={href}>
-            <Icon aria-hidden /><h3>{title}</h3><p>{text}</p><Button href={href}><Icon size={16} aria-hidden />{action}</Button>
-          </li>)}</ol>
-        </section>
+  const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
+  return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
+    <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
+    <NavActions>
+      <div className={styles.search}>
+        <OpeningSearch top={[]} remote surahs={data.surahs} />
+        <FilterButton range={null} view={{}} allSurahs={data.surahs} />
       </div>
-    </div>
-  );
+    </NavActions>
+
+    <HomeQuranWidget sections={data.sections} />
+
+    <section aria-labelledby="saved-title">
+      <div className={styles.sectionHeading}>
+        <h2 id="saved-title"><Bookmark size={18} aria-hidden />{ar ? 'المحفوظات' : 'Saved'}</h2>
+        {saved.length > 0 && <Button size="lg" href={`/quran/branches?b=${encodeURIComponent(saved.map(item => item.id).join('|'))}`} aria-label={ar ? 'افتح المحفوظات' : 'Open saved'} title={ar ? 'افتح المحفوظات' : 'Open saved'}><Library aria-hidden /></Button>}
+      </div>
+      {saved.length ? <div className={styles.shelf}>
+        {saved.map(item => {
+          const references = bookmarkReferences(item, data.bookmarkAyat);
+          return <Link key={item.id} href={item.href} className={styles.book}>
+            {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
+              {references.map(reference => <span key={reference.surah}>
+                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('، ')}</bdi>
+              </span>)}
+            </span>}
+            <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
+          </Link>;
+        })}
+      </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو عائلة بزر' : 'Save a tree or family with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
+    </section>
+    <section className={styles.quiz} aria-labelledby="quiz-title">
+      <Feather size={26} aria-hidden />
+      <div><h2 id="quiz-title">{ar ? 'اختبارات القرآن' : 'Quran quizzes'}</h2><p>{ar ? 'تأمّل الآيات، ثم اختبر مواضع التشابه.' : 'Read the ayat, then try a question on their shared wording.'}</p></div>
+      <div className={styles.quizActions}><Button href="/quizzes"><Feather size={18} aria-hidden />{ar ? 'بمفردك' : 'Solo'}</Button><Button href="/quizzes/party"><Users size={18} aria-hidden />{ar ? 'مع غيرك' : 'Party'}</Button></div>
+    </section>
+  </div>;
 }

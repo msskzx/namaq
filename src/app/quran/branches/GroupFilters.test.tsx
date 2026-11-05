@@ -11,6 +11,14 @@ const surahs = [{ number: 50, name: 'ق' }, { number: 70, name: 'المعارج'
 const params = () => new URL(replace.mock.calls.at(-1)![0], 'https://namaq.test').searchParams;
 
 describe('group funnel', () => {
+  it('opens branches when a filter is chosen from the homepage', () => {
+    window.history.replaceState(null, '', '/');
+    render(<GroupFilterControls surahs={surahs} filters={{}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'متشابه لفظي' }));
+    expect(new URL(replace.mock.calls.at(-1)![0], 'https://namaq.test').pathname).toBe('/quran/branches');
+    expect(params().get('relations')).toBe('mutashabih_lafzi');
+  });
+
   it('does not resurrect a cleared filter during a second pending change', () => {
     window.history.replaceState(null, '', '/quran/branches?differences=order&m=cards');
     render(<GroupFilterControls surahs={surahs} filters={{ differences: 'order' }} />);
