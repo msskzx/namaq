@@ -1,5 +1,6 @@
 .growing :global(li),
 .growing :global([data-line]),
+.growing :global([data-stem]),
 .growing :global([data-node]) {
   transition: opacity var(--grow-fade, 250ms) ease-out, border-color 150ms;
 }
@@ -10,30 +11,24 @@
   transition: none;
 }
 
-.growing :global([data-stem]) {
-  display: none;
-}
-
 .growing :global([data-grow-now]) {
   border-color: var(--home-accent);
 }
 
-/* Ask mode: the next box stands empty with the seconds left counting down in it and a bar along its foot
-   shrinking with them, until the timer ends or a tap reveals it. With no timer it shows a question mark and waits. */
 .growing :global([data-ask]) {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  border-style: dashed;
+  border-style: solid;
   border-color: var(--home-accent);
 }
 
-.growing :global([data-ask]) > * {
+.growing :global([data-ask]) > :not([data-hourglass]) {
   visibility: hidden;
 }
 
 .growing :global([data-ask])::before {
-  content: attr(data-left);
+  content: '';
   position: absolute;
   inset: 0;
   display: flex;
@@ -51,24 +46,36 @@
   content: '؟';
 }
 
-.growing :global([data-ask])::after {
-  content: '';
+.growing :global([data-hourglass]) {
   position: absolute;
-  inset-inline-start: 0;
-  bottom: 0;
-  height: 3px;
-  width: calc(var(--grow-left, 1) * 100%);
-  background: var(--home-accent);
+  top: 50%;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  transform: translate(-50%, -50%);
+  color: var(--home-accent);
 }
 
-.growing :global([data-ask][data-wait])::after {
-  display: none;
+.growing :global([data-drawing="left"]) {
+  clip-path: inset(0 0 0 calc((1 - var(--grow-line)) * 100%));
+}
+
+.growing :global([data-drawing="right"]) {
+  clip-path: inset(0 calc((1 - var(--grow-line)) * 100%) 0 0);
+}
+
+.growing :global([data-drawing="down"]) {
+  clip-path: inset(0 0 calc((1 - var(--grow-line)) * 100%) 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .growing :global(li),
   .growing :global([data-line]),
+  .growing :global([data-stem]),
   .growing :global([data-node]) {
     transition: none;
+  }
+  .growing :global([data-drawing]) {
+    clip-path: none;
   }
 }

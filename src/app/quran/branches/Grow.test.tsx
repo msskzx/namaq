@@ -35,6 +35,72 @@ const grow = () => { studio(); fireEvent.click(screen.getByRole('button', { name
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 
 describe('growing a tree', () => {
+  it('draws the segment leaving the root before the first branch connector or box', async () => {
+    page();
+    const root = document.querySelector('[data-grow="n-1"]')!;
+    const stub = root.querySelector(':scope > [data-line]')!;
+    const branch = box('جَنَّـٰتٍ وَعُيُونٍ').closest('li')!;
+    grow();
+    await advance(200);
+    expect(stub.hasAttribute('data-hide')).toBe(false);
+    expect(branch.hasAttribute('data-hide')).toBe(true);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(true);
+    await advance(250);
+    expect(branch.hasAttribute('data-hide')).toBe(false);
+    expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(true);
+  });
+
+  it.each(['prefixes', 'variants'] as const)('starts with each rendered %s root before drawing its path into the shared phrase', async kind => {
+    render(<>
+      <BranchTree tree={{ words: kind === 'variants' ? ['بادئة', 'مشترك'] : ['مشترك'], ayat: ['1:1', '2:1'], children: [] }} names={{}} growable
+        {...{ [kind]: [
+          { word: 'الثاني', conj: '', keys: ['2:1'], id: 'second' },
+          { word: 'الأول', conj: '', keys: ['1:1'], id: 'first' },
+        ] }} />
+      <GrowControls />
+    </>);
+    const start = (i: number) => document.querySelector(`[data-node="${kind === 'prefixes' ? 'p' : 'v'}${i}"]`)!;
+    grow();
+    expect(start(0).hasAttribute('data-hide')).toBe(false);
+    expect(start(1).hasAttribute('data-hide')).toBe(true);
+    expect(box('مشترك').hasAttribute('data-hide')).toBe(true);
+    const content = box('مشترك').closest('[data-tree-content]')!;
+    const bridge = content.querySelector(':scope > [data-line]')!;
+    expect(bridge.hasAttribute('data-hide')).toBe(true);
+    await advance(1200);
+    expect(box('مشترك').hasAttribute('data-hide')).toBe(false);
+    expect(start(1).hasAttribute('data-hide')).toBe(true);
+    await advance(1200);
+    expect(start(1).hasAttribute('data-hide')).toBe(false);
+    await advance(10000);
+    expect(content.querySelectorAll('[data-hide], [data-drawing]')).toHaveLength(0);
+  });
+
+  it.each([true, false])('connects preceding ayat to their following start before playback completes (word prefix: %s)', async wordPrefix => {
+    render(<>
+      <BranchTree tree={{ words: ['مشترك'], ayat: ['62:4', '34:2'], children: [] }} names={{}} growable
+        prefixes={[
+          { word: wordPrefix ? 'بادئة' : '', conj: '', keys: ['62:4'], id: 'first' },
+          { word: 'أخرى', conj: '', keys: ['34:2'], id: 'second' },
+        ]}
+        surround={{ on: true, data: { before: {
+          '62:4': { key: '62:3', page: 553, words: ['سابق'] },
+          '62:3': { key: '62:2', page: 553, words: ['أسبق'] },
+          '34:2': { key: '34:1', page: 428, words: ['بعيد'] },
+        }, after: {} } }} />
+      <GrowControls />
+    </>);
+    const start = document.querySelector(`[data-node="${wordPrefix ? 'p0' : 'before62:4'}"]`)!;
+    const connecting = start.previousElementSibling!;
+    expect(connecting.hasAttribute('data-line')).toBe(true);
+    grow();
+    expect(connecting.hasAttribute('data-hide')).toBe(true);
+    await advance(1800);
+    expect(screen.getByRole('button', { name: 'إيقاف مؤقت' })).toBeTruthy();
+    expect(start.hasAttribute('data-hide')).toBe(false);
+    expect(connecting.hasAttribute('data-hide')).toBe(false);
+  });
+
   it('hides the branches, grows them one ayah at a time, then shows the whole tree', async () => {
     page();
     grow();
@@ -51,6 +117,82 @@ describe('growing a tree', () => {
     expect(screen.getByRole('group', { name: 'تقدّم الشجرة' })).toBeTruthy();
   });
 
+  it('lights the current path, switches it in depth-first order, and restores pinned paths', async () => {
+    page();
+    const first = box('جَنَّـٰتٍ وَعُيُونٍ');
+    const second = box('مَقَامٍ أَمِينٍ');
+    fireEvent.click(second);
+    grow();
+    expect(first.getAttribute('data-lit')).toBe('true');
+    expect(second.hasAttribute('data-lit')).toBe(false);
+    expect(first.closest('li')?.querySelector(':scope > [data-line]')?.className).toContain('home-accent');
+    await advance(1800);
+    expect(first.getAttribute('data-lit')).toBe('true');
+    await advance(1000);
+    expect(second.getAttribute('data-lit')).toBe('true');
+    expect(first.hasAttribute('data-lit')).toBe(false);
+    await advance(5000);
+    expect(second.getAttribute('data-lit')).toBe('true');
+    expect(first.hasAttribute('data-lit')).toBe(false);
+  });
+
+  it('uses accent for an enabled answer timer and muted for an unlimited wait', () => {
+    page();
+    studio();
+    fireEvent.click(screen.getByRole('button', { name: 'اكمل الايات' }));
+    const timer = screen.getByRole('button', { name: /^مهلة السؤال/ });
+    expect(timer.getAttribute('data-variant')).toBe('ghost');
+    fireEvent.click(timer);
+    fireEvent.click(timer);
+    fireEvent.click(timer);
+    expect(timer.getAttribute('aria-label')).toContain('∞');
+    expect(timer.getAttribute('data-variant')).toBe('muted');
+  });
+
+  it('resets beside Play, stops a paused countdown, and keeps the studio preferences', async () => {
+    page();
+    studio();
+    act(() => setPrefs({ mode: 'ask', timer: 1 }));
+    const reset = screen.getByRole('button', { name: 'إعادة ضبط' });
+    expect(reset.previousElementSibling).toBe(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
+    await advance(600);
+    expect(document.querySelector('[data-hourglass]')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
+    fireEvent.click(reset);
+    expect(document.querySelectorAll('[data-hide], [data-ask], [data-hourglass], [data-drawing]')).toHaveLength(0);
+    expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'مهلة السؤال 1s' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'إغلاق الاستوديو' })).toBeTruthy();
+    await advance(5000);
+    expect(screen.queryByRole('button', { name: 'إعادة' })).toBeNull();
+  });
+
+  it('offers and remembers a one-second timer, with flowing sand that pauses with playback', async () => {
+    localStorage.setItem('branches-grow', JSON.stringify({ mode: 'ask', speed: 1, timer: 1 }));
+    page();
+    grow();
+    expect(screen.getByRole('button', { name: 'مهلة السؤال 1s' })).toBeTruthy();
+    await advance(600);
+    const asked = box('جَنَّـٰتٍ وَعُيُونٍ');
+    const top = asked.querySelector('[data-sand="top"]')!;
+    const full = top.getAttribute('d');
+    await advance(300);
+    expect(top.getAttribute('d')).not.toBe(full);
+    fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
+    const paused = top.getAttribute('d');
+    await advance(2000);
+    expect(top.getAttribute('d')).toBe(paused);
+    expect(asked.hasAttribute('data-ask')).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'متابعة' }));
+    await advance(800);
+    expect(asked.querySelector('[data-hourglass]')).toBeNull();
+    expect(asked.hasAttribute('data-ask')).toBe(false);
+    fireEvent.click(screen.getByRole('button', { name: 'إعادة ضبط' }));
+    fireEvent.click(screen.getByRole('button', { name: 'مهلة السؤال 1s' }));
+    expect(JSON.parse(localStorage.getItem('branches-grow')!).timer).toBe(3);
+  });
+
   it('opens a studio in place of save and share, plays only on play, and stays open until closed', async () => {
     render(<>
       <BranchTree tree={tree} names={{}} growable />
@@ -63,15 +205,15 @@ describe('growing a tree', () => {
     expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'مشاركة' })).toBeNull();
     expect(screen.getByRole('button', { name: /^السرعة/ })).toBeTruthy();
-    expect(screen.getByRole('button', { name: /^وضع السؤال/ }).getAttribute('aria-pressed')).toBe('false');
+    expect(screen.getByRole('button', { name: 'اكمل الايات' }).getAttribute('aria-pressed')).toBe('false');
     expect(screen.queryByRole('button', { name: /^مهلة السؤال/ })).toBeNull();
     expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);
     await advance(3000);
     expect(document.querySelectorAll('[data-hide]')).toHaveLength(0);
-    fireEvent.click(screen.getByRole('button', { name: /^وضع السؤال/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'اكمل الايات' }));
     expect(screen.getByRole('button', { name: /^مهلة السؤال/ })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
-    await advance(400);
+    await advance(600);
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-ask')).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'إغلاق الاستوديو' }));
     expect(document.querySelectorAll('[data-hide], [data-ask]')).toHaveLength(0);
@@ -103,16 +245,17 @@ describe('growing a tree', () => {
     page();
     act(() => setPrefs({ mode: 'ask' }));
     grow();
-    await advance(400);
+    await advance(600);
     const first = box('جَنَّـٰتٍ وَعُيُونٍ');
     expect(first.hasAttribute('data-ask')).toBe(true);
-    expect(first.getAttribute('data-left')).toBe('٣');
+    const sand = first.querySelector('[data-sand="top"]')!;
+    const initial = sand.getAttribute('d');
     await advance(2000);
     expect(first.hasAttribute('data-ask')).toBe(true);
-    expect(first.getAttribute('data-left')).toBe('١');
+    expect(sand.getAttribute('d')).not.toBe(initial);
     await advance(1100);
     expect(first.hasAttribute('data-ask')).toBe(false);
-    await advance(1500);
+    await advance(2500);
     const second = box('مَقَامٍ أَمِينٍ');
     expect(second.hasAttribute('data-ask')).toBe(true);
     expect(second.getAttribute('role')).toBe('button');
@@ -127,7 +270,7 @@ describe('growing a tree', () => {
     expect(JSON.parse(localStorage.getItem('branches-grow')!).mode).toBe('ask');
     act(() => setPrefs({ mode: 'watch' }));
     grow();
-    fireEvent.click(screen.getByRole('button', { name: 'من الآية 2' }));
+    fireEvent.click(screen.getByRole('button', { name: 'من الآية 3' }));
     expect(box('جَنَّـٰتٍ وَعُيُونٍ').hasAttribute('data-hide')).toBe(false);
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
   });
