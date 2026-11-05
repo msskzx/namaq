@@ -6,6 +6,8 @@ vi.mock('@/components/common/NavBar', () => ({
   NavButtons: ({ children, bottom }: { children: React.ReactNode; bottom?: boolean }) => <div data-testid={bottom ? 'nav-bottom' : 'nav-buttons'}>{children}</div>,
 }));
 // @vitest-environment jsdom
+import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
+import BranchTree from './BranchTree';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import QuranBranchesPage from './page';
@@ -198,6 +200,25 @@ describe('Quran branch trees', () => {
     expect(screen.queryByText('أول الآية')).toBeNull();
     expect(screen.queryByText('داخل الآية')).toBeNull();
     expect(screen.queryByRole('complementary')).toBeNull();
+  });
+
+  it('keys the server-supplied tree header and renders it without React console errors', async () => {
+    const page = await open({ o: 'ان المتقين في' });
+    const headers: ReactElement[] = [];
+    const visit = (nodes: ReactNode) => Children.forEach(nodes, child => {
+      if (!isValidElement<{ children?: ReactNode; header?: ReactElement }>(child)) return;
+      if (child.type === BranchTree && child.props.header) headers.push(child.props.header);
+      visit(child.props.children);
+    });
+    visit(page);
+    expect(headers).toHaveLength(1);
+    expect(headers[0].key).not.toBeNull();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      render(page);
+      expect(screen.getByRole('navigation', { name: 'التنقل بين الأشجار' })).toBeTruthy();
+      expect(error).not.toHaveBeenCalled();
+    } finally { error.mockRestore(); }
   });
 
   it('steps to the neighbouring trees in list order, keeping the juz range', async () => {

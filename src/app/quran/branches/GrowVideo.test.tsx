@@ -48,14 +48,18 @@ it('exports without a title or URL, uses the plural prompt, and follows live pat
   expect(fillText.mock.calls.map(call => call[0])).toEqual(['اكمل الايات']);
   const node = document.querySelector<HTMLElement>('[data-node]')!;
   node.setAttribute('data-ask', '');
+  node.setAttribute('data-left', '٣');
   node.style.borderStyle = 'solid';
   const fill = context.fill;
   act(() => frame(60));
+  expect(fillText.mock.calls.at(-1)?.[0]).toBe('٣');
   const full = fill.mock.calls.map(call => call[0]).filter(Boolean);
   growth.left = 0.3;
+  node.setAttribute('data-left', '١');
   act(() => frame(90));
   const drained = fill.mock.calls.map(call => call[0]).filter(Boolean).slice(-2);
   expect(drained).not.toEqual(full.slice(-2));
+  expect(fillText.mock.calls.at(-1)?.[0]).toBe('١');
   expect(context.setLineDash).not.toHaveBeenCalledWith([4, 3]);
   expect(fillText.mock.calls.map(call => call[0])).not.toContain('؟');
 

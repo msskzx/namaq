@@ -75,6 +75,13 @@ function wait(ms: number, token: number, ask?: HTMLElement, progress?: (fraction
       progress?.(ms > 0 ? Math.min(1, 1 - left / ms) : 1);
       if (ask) {
         asking = ms > 0 ? Math.max(0, left / ms) : 1;
+        const seconds = Math.max(1, Math.ceil(left / 1000));
+        const label = document.documentElement.lang === 'en' ? String(seconds) : seconds.toLocaleString('ar-EG');
+        if (ms > 0) {
+          ask.setAttribute('data-left', label);
+          const countdown = ask.querySelector('[data-seconds]');
+          if (countdown) countdown.textContent = label;
+        }
         const sand = hourglassSand(asking);
         for (const part of ['top', 'bottom', 'stream'] as const) ask.querySelector(`[data-sand="${part}"]`)?.setAttribute('d', sand[part]);
       }
@@ -91,7 +98,7 @@ function wait(ms: number, token: number, ask?: HTMLElement, progress?: (fraction
 // Hidden parts are inert too, so a screen reader or the tab key cannot give the answer away.
 const hide = (element: Element | null | undefined) => { element?.setAttribute('data-hide', ''); element?.setAttribute('inert', ''); };
 const show = (element: Element | null | undefined) => { element?.removeAttribute('data-hide'); element?.removeAttribute('inert'); };
-const ASK = ['data-ask', 'data-wait', 'role', 'tabindex', 'aria-label'];
+const ASK = ['data-ask', 'data-wait', 'data-left', 'role', 'tabindex', 'aria-label'];
 // The card also holds its neighbours' cards, ready for a swipe: only its own tree grows.
 const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySelectorAll<HTMLElement>('[data-grow="n-1"]')].find(root => !root.closest('[data-tree-neighbour]'))?.closest<HTMLElement>('[data-tree-content]') ?? undefined;
 
@@ -127,6 +134,9 @@ async function drawLine(item: Element | null | undefined, token: number) {
 }
 
 function showHourglass(box: Element) {
+  const timer = document.createElement('span');
+  timer.setAttribute('data-timer', '');
+  timer.setAttribute('aria-hidden', 'true');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('data-hourglass', '');
   svg.setAttribute('viewBox', '0 0 24 24');
@@ -142,12 +152,15 @@ function showHourglass(box: Element) {
     }
     svg.append(path);
   }
-  box.append(svg);
+  const countdown = document.createElement('span');
+  countdown.setAttribute('data-seconds', '');
+  timer.append(svg, countdown);
+  box.append(timer);
 }
 
 function clearAsk(box: Element) {
   ASK.forEach(name => box.removeAttribute(name));
-  box.querySelector('[data-hourglass]')?.remove();
+  box.querySelector('[data-timer]')?.remove();
 }
 
 function clear(root: HTMLElement) {

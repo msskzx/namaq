@@ -165,7 +165,7 @@ describe('growing a tree', () => {
     expect(document.querySelector('[data-hourglass]')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
     fireEvent.click(reset);
-    expect(document.querySelectorAll('[data-hide], [data-ask], [data-hourglass], [data-drawing]')).toHaveLength(0);
+    expect(document.querySelectorAll('[data-hide], [data-ask], [data-hourglass], [data-timer], [data-drawing]')).toHaveLength(0);
     expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'مهلة السؤال 1s' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'إغلاق الاستوديو' })).toBeTruthy();
@@ -186,8 +186,10 @@ describe('growing a tree', () => {
     expect(top.getAttribute('d')).not.toBe(full);
     fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
     const paused = top.getAttribute('d');
+    const seconds = asked.querySelector('[data-seconds]')?.textContent;
     await advance(2000);
     expect(top.getAttribute('d')).toBe(paused);
+    expect(asked.querySelector('[data-seconds]')?.textContent).toBe(seconds);
     expect(asked.hasAttribute('data-ask')).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'متابعة' }));
     await advance(800);
@@ -255,9 +257,11 @@ describe('growing a tree', () => {
     expect(first.hasAttribute('data-ask')).toBe(true);
     const sand = first.querySelector('[data-sand="top"]')!;
     const initial = sand.getAttribute('d');
+    expect(first.querySelector('[data-seconds]')?.textContent).toBe('٣');
     await advance(2000);
     expect(first.hasAttribute('data-ask')).toBe(true);
     expect(sand.getAttribute('d')).not.toBe(initial);
+    expect(first.querySelector('[data-seconds]')?.textContent).toBe('١');
     await advance(1100);
     expect(first.hasAttribute('data-ask')).toBe(false);
     await advance(2500);

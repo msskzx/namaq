@@ -23,7 +23,7 @@
   border-color: var(--home-accent);
 }
 
-.growing :global([data-ask]) > :not([data-hourglass]) {
+.growing :global([data-ask]) > :not([data-timer]) {
   visibility: hidden;
 }
 
@@ -46,14 +46,26 @@
   content: '؟';
 }
 
-.growing :global([data-hourglass]) {
+.growing :global([data-timer]) {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2rem;
-  height: 2rem;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   color: var(--home-accent);
+}
+
+.growing :global([data-hourglass]) {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.growing :global([data-seconds]) {
+  font: 0.75rem/1 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 .growing :global([data-drawing="left"]) {

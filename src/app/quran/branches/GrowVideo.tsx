@@ -130,9 +130,9 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.stroke();
     context.setLineDash([]);
     if (box.element.hasAttribute('data-ask')) {
-      const size = Math.min(32, h - 8, w - 8);
+      const size = Math.min(24, h - 24, w - 8);
       context.save();
-      context.translate(x + (w - size) / 2, y + (h - size) / 2);
+      context.translate(x + (w - size) / 2, y + (h - size - 14) / 2);
       context.scale(size / 24, size / 24);
       context.fillStyle = look.accent;
       context.strokeStyle = look.accent;
@@ -144,6 +144,9 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
       context.lineWidth = 1;
       context.stroke(new Path2D(sand.stream));
       context.restore();
+      context.fillStyle = look.accent;
+      context.font = '12px system-ui, sans-serif';
+      context.fillText(box.element.getAttribute('data-left') ?? '', x + w / 2, y + (h + size + 2) / 2);
       continue;
     }
     for (const word of box.words) {
