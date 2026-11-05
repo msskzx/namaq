@@ -1,15 +1,17 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode, type RefObject } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode, type RefObject } from 'react';
+import { closeStudio, growthState, useGrowth, useMatrixGrowTarget } from './Grow';
 import { wordConnections, type ConnectionEnd } from '@/lib/quran/mutashabih/connections';
 import type { Group, Tag } from '@/lib/quran/mutashabih/types';
 
-const Connections = createContext<{ group?: Group; selected: Tag | null; select: (tag: Tag) => void } | null>(null);
+const Connections = createContext<{ group?: Group; selected: Tag[]; select: (tag: Tag) => void; enable: () => void } | null>(null);
 export const useGroupConnections = () => useContext(Connections);
 
 export function GroupConnections({ group, children, defaultOn = false }: { group?: Group; children: ReactNode; defaultOn?: boolean }) {
-  const [selected, setSelected] = useState<Tag | null>(defaultOn ? group?.tags[0] ?? null : null);
-  return <Connections.Provider value={{ group, selected, select: tag => setSelected(current => current === tag ? null : tag) }}>
+  const [selected, setSelected] = useState<Tag[]>(defaultOn ? group?.tags ?? [] : []);
+  const enable = useCallback(() => setSelected(current => current.length ? current : group?.tags ?? []), [group]);
+  return <Connections.Provider value={{ group, selected, select: tag => { if (growthState().kind === 'matrix') closeStudio(); setSelected(current => current.includes(tag) ? current.filter(value => value !== tag) : [...current, tag]); }, enable }}>
     {children}
   </Connections.Provider>;
 }
@@ -20,19 +22,27 @@ const COLORS: Partial<Record<Tag, string>> = {
   particle: '--home-root', number: '--home-green', definiteness: '--home-slot-4',
 };
 
+export const connectionColor = (tag: Tag) => `var(${COLORS[tag] ?? '--home-muted'})`;
+
+const noConnections = () => {};
+const NO_TAGS: Tag[] = [];
+
 type Point = { x: number; y: number };
-type Route = { d: string; from: Point; to: Point };
+type Route = { tag: Tag; d: string; from: Point; to: Point };
 
 export function ConnectionLines({ lane, column, ready }: { lane: RefObject<HTMLDivElement | null>; column: number; ready: boolean }) {
   const state = useGroupConnections();
+  const growth = useGrowth();
+  const selected = state?.selected.length ? state.selected : state?.group?.tags ?? NO_TAGS;
   const [routes, setRoutes] = useState<Route[]>([]);
   useEffect(() => {
     const frame = lane.current;
-    if (!frame || !ready || !state?.group || !state.selected) {
+    if (!frame || !ready || !state?.group || !selected.length) {
       setRoutes([]);
       return;
     }
-    const links = wordConnections(state.group, state.selected);
+    const group = state.group;
+    const links = selected.flatMap(tag => wordConnections(group, tag).map(link => ({ ...link, tag })));
     let active = true;
     const draw = () => {
       if (!active) return;
@@ -60,7 +70,7 @@ export function ConnectionLines({ lane, column, ready }: { lane: RefObject<HTMLD
         const from = { x: (a.left + a.right) / 2 - bounds.left, y: a.bottom - bounds.top + 2 };
         const to = { x: (b.left + b.right) / 2 - bounds.left, y: b.top - bounds.top - 2 };
         const middle = (from.y + to.y) / 2;
-        return [{ from, to, d: `M ${from.x} ${from.y} C ${from.x} ${middle}, ${to.x} ${middle}, ${to.x} ${to.y}` }];
+        return [{ tag: link.tag, from, to, d: `M ${from.x} ${from.y} C ${from.x} ${middle}, ${to.x} ${middle}, ${to.x} ${to.y}` }];
       }));
     };
     draw();
@@ -70,11 +80,11 @@ export function ConnectionLines({ lane, column, ready }: { lane: RefObject<HTMLD
     void document.fonts?.ready.then(() => { if (frame.isConnected) draw(); });
     window.addEventListener('resize', draw);
     return () => { active = false; observer?.disconnect(); window.removeEventListener('resize', draw); };
-  }, [lane, column, ready, state?.group, state?.selected]);
-  const color = COLORS[state?.selected ?? 'order'] ?? '--home-muted';
-  return <svg aria-hidden data-word-connectors className="pointer-events-none absolute inset-0 z-10 h-full w-full overflow-visible" fill="none" stroke={`color-mix(in srgb, var(${color}) 65%, var(--home-paper-deep))`} strokeWidth="1.25">
-    {routes.map((route, index) => <g key={index}>
-      <path d={route.d} />
+  }, [lane, column, ready, state?.group, selected]);
+  useMatrixGrowTarget(lane, routes.length, routes, state?.enable ?? noConnections);
+  return <svg aria-hidden data-word-connectors data-connection-group={state?.group?.id} style={{ visibility: state?.selected.length || growth.studio && growth.kind === 'matrix' ? undefined : 'hidden' }} className="pointer-events-none absolute inset-0 z-10 h-full w-full overflow-visible" fill="none" strokeWidth="1.25">
+    {(state?.selected.length || growth.studio && growth.kind === 'matrix' ? routes : []).map((route, index) => <g key={index} stroke={connectionColor(route.tag)} data-tag={route.tag} data-connection data-to-x={route.to.x} data-to-y={route.to.y}>
+      <path d={route.d} pathLength="1" />
       <circle cx={route.from.x} cy={route.from.y} r="2" fill="var(--home-paper-deep)" />
       <circle cx={route.to.x} cy={route.to.y} r="2" fill="var(--home-paper-deep)" />
     </g>)}

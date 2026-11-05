@@ -13,7 +13,7 @@ export type GrowMode = 'watch' | 'ask';
 type Status = 'idle' | 'playing' | 'paused' | 'done';
 type Prefs = { mode: GrowMode; speed: number; timer: number };
 /** `studio` is the card's animation state: its controls replace save and share until it is closed. */
-type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean };
+type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean; kind: 'tree' | 'matrix' };
 
 export const SPEEDS = [1, 1.5, 2, 0.5];
 /** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
@@ -26,8 +26,8 @@ const LEAF = 700;
 
 const PREFS = 'branches-grow';
 const listeners = new Set<() => void>();
-let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false };
-let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void } | null = null;
+let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, kind: 'tree' };
+let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void; matrix?: { root: HTMLElement; enable: () => void } } | null = null;
 let run = 0;
 let reveal: (() => void) | null = null;
 /** The share of the asked box's timer still left. */
@@ -169,6 +169,8 @@ function clear(root: HTMLElement) {
   root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
   root.querySelectorAll('[data-ask]').forEach(clearAsk);
   root.querySelectorAll<HTMLElement>('[data-drawing]').forEach(element => { element.removeAttribute('data-drawing'); element.style.removeProperty('--grow-line'); });
+  root.querySelectorAll('[data-matrix-prompt]').forEach(element => element.remove());
+  root.querySelectorAll<SVGPathElement>('[data-connection] path').forEach(path => { path.style.removeProperty('stroke-dasharray'); path.style.removeProperty('stroke-dashoffset'); });
   root.removeEventListener('click', onTap, true);
   root.removeEventListener('keydown', onKey, true);
 }
@@ -187,11 +189,12 @@ function onTap(event: MouseEvent) {
   reveal();
 }
 
-export const growRoot = () => (target ? rootOf(target.card) : undefined);
+export const growRoot = () => target?.matrix?.root ?? (target ? rootOf(target.card) : undefined);
 
-/** Plays the tree from ayah `from`: the ayat before it are drawn at once. A video never waits for a tap: its ask timer is never off. */
+/** Plays from an ayah or connector index. Video recall always uses a finite timer. */
 export async function play(from = 0, { video = false } = {}) {
   if (!target) return;
+  if (target.matrix) return playMatrix(from, video);
   const { card, plan } = target;
   const root = rootOf(card);
   if (!root || plan.length === 0) return;
@@ -285,14 +288,14 @@ export async function play(from = 0, { video = false } = {}) {
 
 export function pause(paused: boolean) {
   if (state.status !== 'playing' && state.status !== 'paused') return;
-  const root = target && rootOf(target.card);
+  const root = growRoot();
   root?.classList.toggle(styles.paused, paused);
   set({ status: paused ? 'paused' : 'playing' });
 }
 
 /** Opens the card's animation studio: its controls show, the tree waits for play. */
 export function openStudio() {
-  if (state.total > 0) set({ studio: true });
+  if (state.total > 0) { target?.matrix?.enable(); set({ studio: true }); }
 }
 
 /** Leaves the studio, stopping a growth on its way, back to save and share. */
@@ -305,7 +308,7 @@ export function stop() {
   run++;
   reveal = null;
   asking = null;
-  const root = target && rootOf(target.card);
+  const root = growRoot();
   if (root) clear(root);
   target?.light(null);
   set({ status: 'idle', at: 0 });
@@ -319,7 +322,7 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
     if (!plan || !card.current) return;
     const mine = { card: card.current, plan, light };
     target = mine;
-    set({ status: 'idle', at: 0, total: plan.length, studio: false });
+    set({ status: 'idle', at: 0, total: plan.length, studio: false, kind: 'tree' });
     return () => {
       if (target !== mine) return;
       stop();
@@ -328,6 +331,68 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
     };
   }, [card, plan]);
   return lit;
+}
+
+export function useMatrixGrowTarget(root: React.RefObject<HTMLDivElement | null>, total: number, revision: unknown, enable: () => void) {
+  useEffect(() => {
+    if (!root.current || !total) return;
+    loadPrefs();
+    const mine = { card: root.current, plan: [], light: () => {}, matrix: { root: root.current, enable } };
+    target = mine;
+    set({ status: 'idle', at: 0, total, studio: false, kind: 'matrix' });
+    return () => {
+      if (target !== mine) return;
+      stop();
+      target = null;
+      set({ total: 0, studio: false });
+    };
+  }, [root, total, revision, enable]);
+}
+
+async function playMatrix(from: number, video: boolean) {
+  const matrix = target?.matrix;
+  if (!matrix) return;
+  const root = matrix.root;
+  const token = ++run;
+  clear(root);
+  root.classList.add(styles.growing);
+  root.addEventListener('click', onTap, true);
+  root.addEventListener('keydown', onKey, true);
+  const routes = [...root.querySelectorAll<SVGGElement>('[data-connection]')];
+  routes.forEach((route, i) => {
+    const path = route.querySelector('path')!;
+    path.style.strokeDasharray = '1';
+    path.style.strokeDashoffset = i < from ? '0' : '1';
+    route.querySelectorAll('circle').forEach(circle => { if (i >= from) hide(circle); });
+  });
+  set({ status: 'playing', at: from });
+  for (let i = from; i < routes.length; i++) {
+    set({ at: i });
+    const route = routes[i];
+    const path = route.querySelector('path')!;
+    show(route.querySelector('circle'));
+    if (state.mode === 'ask') {
+      const prompt = document.createElement('div');
+      prompt.setAttribute('data-matrix-prompt', '');
+      prompt.setAttribute('data-ask', '');
+      prompt.setAttribute('role', 'button');
+      prompt.setAttribute('tabindex', '0');
+      prompt.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Reveal connection' : 'اكشف الرابط');
+      prompt.style.left = `${Number(route.dataset.toX) - 28}px`;
+      prompt.style.top = `${Number(route.dataset.toY) - 64}px`;
+      const timer = state.timer || (video ? TIMERS[0] : 0);
+      if (timer) showHourglass(prompt);
+      else prompt.setAttribute('data-wait', '');
+      root.append(prompt);
+      if (!(await wait(timer * 1000, token, prompt))) return;
+      prompt.remove();
+    }
+    if (!(await wait(700 / state.speed, token, undefined, fraction => { path.style.strokeDashoffset = String(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 1 - fraction); }))) return;
+    show(route.querySelector('circle:last-child'));
+    if (!(await wait(500 / state.speed, token))) return;
+  }
+  clear(root);
+  set({ status: 'done', at: routes.length });
 }
 
 const SPEED_LABEL = (speed: number) => `${speed}×`;
@@ -340,12 +405,12 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   if (growth.total === 0) return null;
   const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
   if (!growth.studio) {
-    const label = ar ? 'استوديو النمو' : 'Growth studio';
+    const label = growth.kind === 'matrix' ? (ar ? 'استوديو الروابط' : 'Connector studio') : (ar ? 'استوديو النمو' : 'Growth studio');
     return <Button size="lg" variant="muted" onClick={openStudio} aria-label={label} title={label}><Clapperboard aria-hidden /></Button>;
   }
   const active = growth.status === 'playing' || growth.status === 'paused';
   const playing = growth.status === 'playing';
-  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
+  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : growth.kind === 'matrix' ? (ar ? 'شاهد الروابط' : 'Watch the connections') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
   const press = () => {
     if (active) pause(playing);
     else void play();
@@ -354,7 +419,7 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
   const close = ar ? 'إغلاق الاستوديو' : 'Close the studio';
   const resetLabel = ar ? 'إعادة ضبط' : 'Reset';
-  const askLabel = ar ? 'اكمل الايات' : 'Complete the ayat';
+  const askLabel = growth.kind === 'matrix' ? (ar ? 'تذكّر الرابط' : 'Recall the connection') : (ar ? 'اكمل الايات' : 'Complete the ayat');
   return <>
     <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
     <span className="flex-1" />
@@ -375,16 +440,16 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   </>;
 }
 
-/** A bar per ayah under the tree in the studio; a tap on one grows the tree from that ayah. */
+/** A bar per ayah or connector; a tap starts playback from that step. */
 export function GrowProgress() {
   const ar = useLanguage().language === 'ar';
   const growth = useGrowth();
   if (!growth.studio || growth.total === 0) return null;
-  return <div role="group" aria-label={ar ? 'تقدّم الشجرة' : 'Tree progress'} className="flex gap-1">
+  return <div role="group" aria-label={growth.kind === 'matrix' ? (ar ? 'تقدّم الروابط' : 'Connection progress') : (ar ? 'تقدّم الشجرة' : 'Tree progress')} className="flex gap-1">
     {Array.from({ length: growth.total }, (_, i) => {
-      const label = ar ? `من الآية ${i + 1}` : `From ayah ${i + 1}`;
+      const label = growth.kind === 'matrix' ? (ar ? `من الرابط ${i + 1}` : `From connection ${i + 1}`) : (ar ? `من الآية ${i + 1}` : `From ayah ${i + 1}`);
       return <button key={i} type="button" onClick={() => void play(i)} aria-label={label} title={label} aria-current={i === growth.at || undefined} className="group flex h-6 flex-1 items-center">
-        <span className={`block h-1 w-full rounded-full transition-colors ${(growth.status === 'done' || (growth.status !== 'idle' && i <= growth.at)) ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
+        <span className={`block h-1 w-full rounded-full transition-colors ${(growth.status === 'done' || (growth.status !== 'idle' && i <= growth.at)) ? 'bg-[var(--home-green)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
       </button>;
     })}
   </div>;

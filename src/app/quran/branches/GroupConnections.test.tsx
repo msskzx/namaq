@@ -52,15 +52,24 @@ describe('matrix connector overlay', () => {
     await waitFor(() => expect(container.querySelectorAll('[data-word-connectors] path')).toHaveLength(2));
   });
 
-  it('draws the default type on the first mount, then switches color and clears', async () => {
+  it('enables all default chips and toggles each independently with its own color', async () => {
     const { container } = render(<Matrix defaultOn />);
     const paths = () => container.querySelectorAll('[data-word-connectors] path');
+    await waitFor(() => expect(paths()).toHaveLength(3));
+    expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'إبدال كلمة' }).getAttribute('aria-pressed')).toBe('true');
+    expect(container.querySelector('[data-tag="order"]')?.getAttribute('stroke')).toContain('--home-slot-1');
+    expect(container.querySelector('[data-tag="word"]')?.getAttribute('stroke')).toContain('--home-slot-3');
+    expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).style.getPropertyValue('--button-color')).toBe(container.querySelector('[data-tag="order"]')?.getAttribute('stroke'));
+    expect(screen.getByRole('button', { name: 'إبدال كلمة' }).style.getPropertyValue('--button-color')).toBe(container.querySelector('[data-tag="word"]')?.getAttribute('stroke'));
+    fireEvent.click(screen.getByRole('button', { name: 'إبدال كلمة' }));
     await waitFor(() => expect(paths()).toHaveLength(2));
-    expect(container.querySelector('[data-word-connectors]')?.getAttribute('stroke')).toContain('--home-slot-1');
+    expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'تقديم وتأخير' }));
+    await waitFor(() => expect(paths()).toHaveLength(0));
     fireEvent.click(screen.getByRole('button', { name: 'إبدال كلمة' }));
     await waitFor(() => expect(paths()).toHaveLength(1));
-    expect(container.querySelector('[data-word-connectors]')?.getAttribute('stroke')).toContain('--home-slot-3');
-    fireEvent.click(screen.getByRole('button', { name: 'إبدال كلمة' }));
-    await waitFor(() => expect(paths()).toHaveLength(0));
+    fireEvent.click(screen.getByRole('button', { name: 'تقديم وتأخير' }));
+    await waitFor(() => expect(paths()).toHaveLength(3));
   });
 });
