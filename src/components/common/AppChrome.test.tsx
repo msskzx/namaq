@@ -18,7 +18,7 @@ function Page() {
 }
 
 describe('AppChrome', () => {
-  it.each(['/quran', '/quran/read/1', '/quran/branches', '/quizzes', '/quizzes/party/abc'])('applies the feature palette including chrome on %s', pathname => {
+  it.each(['/', '/quran', '/quran/read/1', '/quran/branches', '/quizzes', '/quizzes/party/abc'])('applies the feature palette including chrome on %s', pathname => {
     route.pathname = pathname;
     const { container } = render(<AppChrome><Page /></AppChrome>);
     const scope = container.querySelector('[data-feature-theme]');
@@ -26,7 +26,7 @@ describe('AppChrome', () => {
     expect(scope?.querySelector('nav')).toBeTruthy();
   });
 
-  it.each(['/', '/experiments', '/experiments/quran', '/quran/words', '/quran/compare', '/quran/prophets/musa', '/quran/qiraat', '/people', '/quizzes-other'])('keeps the existing palette on %s', pathname => {
+  it.each(['/experiments', '/experiments/quran', '/quran/words', '/quran/compare', '/quran/prophets/musa', '/quran/qiraat', '/people', '/quizzes-other'])('keeps the existing palette on %s', pathname => {
     route.pathname = pathname;
     const { container } = render(<AppChrome><Page /></AppChrome>);
     expect(container.querySelector('[data-feature-theme]')).toBeNull();

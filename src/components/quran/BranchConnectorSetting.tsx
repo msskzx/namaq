@@ -11,11 +11,15 @@ export default function BranchConnectorSetting() {
   const id = useId();
   const router = useRouter();
   const ar = useLanguage().language === 'ar';
-  const label = ar ? 'روابط الكلمات افتراضيًا' : 'Show word connectors by default';
+  const label = ar ? 'خطوط الربط في المصفوفة' : 'Connection lines in the matrix';
+  const description = ar ? 'إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.' : 'Show lines between shared words by default when opening the matrix.';
   const [enabled, setEnabled] = useState(() => Cookies.get(BRANCH_CONNECTORS_COOKIE) === 'on');
   return <div className="flex items-center justify-between gap-3 px-3 py-2">
-    <label htmlFor={id} className="text-sm text-[var(--home-muted)]">{label}</label>
-    <Toggle id={id} label={label} checked={enabled} onChange={checked => {
+    <div className="min-w-0">
+      <label htmlFor={id} className="text-sm text-[var(--home-ink)]">{label}</label>
+      <p id={`${id}-description`} className="mt-1 text-xs text-[var(--home-muted)]">{description}</p>
+    </div>
+    <Toggle id={id} label={label} describedBy={`${id}-description`} checked={enabled} onChange={checked => {
       Cookies.set(BRANCH_CONNECTORS_COOKIE, checked ? 'on' : 'off', { expires: 365, sameSite: 'lax', path: '/' });
       setEnabled(checked);
       router.refresh();
