@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 
-export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost' | 'muted';
+export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost' | 'muted' | 'neutral';
 export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
   muted: 'text-[var(--home-muted)] hover:text-[var(--home-ink)] hover:bg-[var(--home-paper-deep)]',
+  neutral: 'border border-[var(--home-rule)] bg-[var(--home-paper-deep)] text-[var(--home-muted)] hover:text-[var(--home-ink)]',
   highlight: 'bg-[var(--home-highlight)] text-[var(--home-on-highlight)] hover:opacity-90',
   primary: 'bg-[var(--button-color,var(--home-action,var(--home-accent)))] text-[var(--button-ink,var(--home-on-action,var(--home-paper)))] hover:opacity-90',
   outline: 'border border-[var(--button-color,var(--home-rule))] text-[var(--button-color,var(--home-accent))] hover:bg-[var(--home-paper-deep)]',
@@ -18,7 +19,7 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   lg: 'size-11 shrink-0 [&_svg]:size-5',
 };
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
-  return ['inline-flex items-center justify-center gap-2 rounded-sm transition disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && variant === 'outline' ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
+  return ['inline-flex items-center justify-center gap-2 rounded-sm transition disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
 }
 
 type CommonProps = {

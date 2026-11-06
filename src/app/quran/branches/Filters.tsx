@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, Send, X } from 'lucide-react';
+import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -10,73 +10,134 @@ import { branchesHref, type BranchesView } from '@/lib/quran/branches';
 import Toggle from '@/components/common/Toggle';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import type { JuzRange } from '@/lib/quran/juz';
-import JuzFilter from './JuzFilter';
-import GroupFilterControls, { type ScopeOption } from './GroupFilters';
-import { hasGroupFilters } from '@/lib/quran/mutashabih/browse';
+import { RangeFields, rangeFromDraft, type RangeDraft } from '@/components/quran/RangeFilter';
+import { num } from '@/lib/quran/arabicNumber';
+import ScopePicker, { type ScopeOption } from './ScopePicker';
+import GroupFilterControls from './GroupFilters';
+import { hasGroupFilters, type GroupFilters } from '@/lib/quran/mutashabih/browse';
 import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 
-/** The funnel beside the search box: a sheet with the juz range, and a dot while the range is narrowed. */
+type FilterUnit = 'juz' | 'surah' | 'page' | 'surahs' | 'juzs';
+const RANGE_MAX = { juz: 30, surah: 114, page: 604 };
+type FilterDraft = { unit: FilterUnit; values: RangeDraft; filters: GroupFilters; saved: boolean };
+
 export function FilterButton({ range, view, allSurahs = [] }: { range: JuzRange | null; view: BranchesView; allSurahs?: ScopeOption[] }) {
   const ar = useLanguage().language === 'ar';
-  const sheet = useRef<HTMLDialogElement>(null);
+  const router = useNavigatingRouter();
+  const sheet = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLSpanElement>(null);
+  const panelId = useId();
+  const [expanded, setExpanded] = useState(false);
   const label = ar ? 'تصفية' : 'Filter';
   const close = ar ? 'إغلاق' : 'Close';
-  const filterState = JSON.stringify(view.filters);
-  useEffect(() => {
-    let field: string | null = null;
-    try {
-      field = sessionStorage.getItem('quran:filter-navigation');
-      sessionStorage.removeItem('quran:filter-navigation');
-    } catch {}
-    if (!field || !sheet.current || sheet.current.open) return;
-    sheet.current.showModal();
-    const label = field === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a surah') : field === 'juz' ? (ar ? 'ابحث عن جزء' : 'Find a juz') : null;
-    if (label) sheet.current.querySelector<HTMLInputElement>(`input[aria-label="${label}"]`)?.focus();
-  }, [filterState, ar]);
-  // The sheet opens on its first field (the dialog would otherwise focus the close button).
-  const open = () => {
-    sheet.current?.showModal();
-    sheet.current?.querySelector<HTMLInputElement>('input:not([type="hidden"]):not([disabled])')?.focus();
+  const initial = (): FilterDraft => {
+    const filters = view.filters ?? {};
+    const unit: FilterUnit = filters.surahFrom || filters.surahTo ? 'surah' : filters.pageFrom || filters.pageTo ? 'page' : filters.surahs ? 'surahs' : filters.juz ? 'juzs' : view.surah ? 'surah' : 'juz';
+    const values: RangeDraft = unit === 'surah' ? [filters.surahFrom ?? String(view.surah ?? 1), filters.surahTo ?? String(view.surah ?? 114)]
+      : unit === 'page' ? [filters.pageFrom ?? '1', filters.pageTo ?? '604'] : [String(range?.from ?? 1), String(range?.to ?? 30)];
+    return { unit, values, filters, saved: !!view.saved?.length };
   };
+  const [draft, setDraft] = useState<FilterDraft>(initial);
+  const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
+  const max = ranged ? RANGE_MAX[draft.unit as keyof typeof RANGE_MAX] : 30;
+  const next = rangeFromDraft(draft.values, max);
+  const units: { value: FilterUnit; label: string }[] = [
+    { value: 'juz', label: ar ? 'من الجزء' : 'From juz' },
+    { value: 'surah', label: ar ? 'من السورة' : 'From chapter' },
+    { value: 'page', label: ar ? 'من الصفحة' : 'From page' },
+    { value: 'surahs', label: ar ? 'سور محددة' : 'Specific chapters' },
+    { value: 'juzs', label: ar ? 'أجزاء محددة' : 'Specific juz' },
+  ];
+  const place = () => {
+    const panel = sheet.current;
+    const button = trigger.current;
+    if (!panel || !button) return;
+    const bounds = button.getBoundingClientRect();
+    const top = bounds.bottom + 8;
+    panel.style.top = `${top}px`;
+    const buttonCenter = bounds.left + bounds.width / 2;
+    const center = buttonCenter + (window.innerWidth / 2 - buttonCenter) / 3;
+    panel.style.left = `${Math.max(8, Math.min(center - panel.offsetWidth / 2, window.innerWidth - panel.offsetWidth - 8))}px`;
+    panel.style.maxHeight = `${Math.max(0, window.innerHeight - top - 8)}px`;
+  };
+  useEffect(() => {
+    if (!expanded) return;
+    const onScroll = (event: Event) => { if (!sheet.current?.contains(event.target as Node)) place(); };
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', onScroll, true);
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', onScroll, true); };
+  }, [expanded]);
+  const closePanel = () => { sheet.current?.hidePopover(); trigger.current?.querySelector('button')?.focus(); };
+  const open = () => {
+    if (expanded) { closePanel(); return; }
+    setDraft(initial());
+    sheet.current?.showPopover();
+    place();
+    sheet.current?.querySelector<HTMLElement>('input:not([disabled]), select')?.focus();
+  };
+  const apply = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (ranged && !next) return;
+    const filters = { ...draft.filters };
+    for (const key of ['surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo'] as const) delete filters[key];
+    if (draft.unit === 'surahs') filters.surahs = draft.filters.surahs ?? '';
+    else if (draft.unit === 'juzs') filters.juz = draft.filters.juz ?? '';
+    else if (draft.unit !== 'juz' && next) {
+      filters[draft.unit === 'surah' ? 'surahFrom' : 'pageFrom'] = String(next.from);
+      filters[draft.unit === 'surah' ? 'surahTo' : 'pageTo'] = String(next.to);
+    }
+    const juz = draft.unit === 'juz' && next && (next.from !== 1 || next.to !== 30) ? next : undefined;
+    router.replace(branchesHref('', juz, { ...view, surah: undefined, occurrences: undefined, page: undefined, card: undefined, filters,
+      saved: draft.saved ? view.saved?.length ? view.saved : readBookmarks().map(item => item.id) : undefined }), { scroll: false });
+    closePanel();
+  };
+  const fromLabel = draft.unit === 'surah' ? (ar ? 'من السورة' : 'From chapter') : draft.unit === 'page' ? (ar ? 'من الصفحة' : 'From page') : (ar ? 'من الجزء' : 'From juz');
+  const toLabel = draft.unit === 'surah' ? (ar ? 'إلى السورة' : 'To chapter') : draft.unit === 'page' ? (ar ? 'إلى الصفحة' : 'To page') : (ar ? 'إلى الجزء' : 'To juz');
   return <>
-    <span className="relative shrink-0">
-      <Button size="lg" variant="muted" aria-haspopup="dialog" onClick={open} aria-label={label} title={label}><Funnel aria-hidden /></Button>
+    <span ref={trigger} className="relative shrink-0">
+      <Button size="lg" variant="muted" aria-haspopup="dialog" aria-expanded={expanded} aria-controls={panelId} onClick={open} aria-label={label} title={label}><Funnel aria-hidden /></Button>
       {(range || !!view.saved?.length || hasGroupFilters(view.filters ?? {}) || view.filters?.sort) && <span aria-hidden className="pointer-events-none absolute end-2 top-2 size-2 rounded-full bg-[var(--home-accent)]" />}
     </span>
-    <dialog ref={sheet} aria-label={label} onClose={() => { try { sessionStorage.removeItem('quran:filter-navigation'); } catch {} }} dir={ar ? 'rtl' : 'ltr'} onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
-      className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-0 text-[var(--home-ink)] shadow-lg backdrop:bg-black/40 max-sm:mb-0 max-sm:w-full max-sm:max-w-none max-sm:rounded-b-none max-h-[90dvh] overflow-y-auto">
-      <div className="flex flex-col gap-3 p-4">
+    <div ref={sheet} id={panelId} popover="auto" role="dialog" aria-hidden={!expanded} aria-label={label} dir={ar ? 'rtl' : 'ltr'} onKeyDown={event => { event.stopPropagation(); if (event.key === 'Escape') { event.preventDefault(); closePanel(); } }} onToggle={event => setExpanded((event.nativeEvent as ToggleEvent).newState === 'open')}
+      className="fixed m-0 w-[min(26rem,calc(100vw-1rem))] rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-0 text-[var(--home-ink)] shadow-lg overflow-hidden" style={{ inset: 'auto' }}>
+      <form aria-label={label} onSubmit={apply} className="flex max-h-[inherit] flex-col">
+        <div className="flex min-h-0 flex-col gap-3 overflow-y-auto p-4">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg">{label}</h2>
-          <Button size="lg" variant="muted" onClick={() => sheet.current?.close()} aria-label={close} title={close}><X aria-hidden /></Button>
+          <SavedOnly checked={draft.saved} onChange={saved => setDraft({ ...draft, saved })} />
+          <Button size="lg" variant="muted" onClick={closePanel} aria-label={close} title={close}><X aria-hidden /></Button>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <JuzFilter range={range} view={view} />
-          <SavedOnly range={range} view={view} onDone={() => sheet.current?.close()} />
+        <div className="flex items-start gap-2">
+          <select aria-label={ar ? 'التصفية حسب' : 'Filter by'} value={draft.unit} onChange={event => { const unit = event.target.value as FilterUnit; setDraft({ ...draft, unit, values: ['1', String(unit in RANGE_MAX ? RANGE_MAX[unit as keyof typeof RANGE_MAX] : 30)] }); }}
+            className="h-10 max-w-[45%] shrink-0 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base">
+            {units.map(unit => <option key={unit.value} value={unit.value}>{unit.label}</option>)}
+          </select>
+        {ranged ? <RangeFields range={draft.unit === 'juz' ? range : null} max={max} names={[`${draft.unit}From`, `${draft.unit}To`]} draft={draft.values} onChange={values => setDraft({ ...draft, values })} iconOnly arabicDigits hideFromLabel
+          labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to', form: label, all: ar ? 'الكل' : 'All', invalid: () => ar ? `أدخل رقمين من ١ إلى ${num(max)}، على أن تكون البداية قبل النهاية أو مساوية لها.` : `Enter whole numbers from 1 to ${max}, with From no greater than To.` }} />
+          : <ScopePicker key={draft.unit} name={draft.unit === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a chapter') : (ar ? 'ابحث عن جزء' : 'Find a juz')}
+            value={draft.unit === 'surahs' ? draft.filters.surahs : draft.filters.juz} onChange={value => setDraft({ ...draft, filters: { ...draft.filters, [draft.unit === 'surahs' ? 'surahs' : 'juz']: value } })}
+            options={draft.unit === 'surahs' ? allSurahs : Array.from({ length: 30 }, (_, index) => ({ number: index + 1, name: ar ? `الجزء ${num(index + 1)}` : `Juz ${index + 1}` }))} />}
         </div>
-        <GroupFilterControls surahs={allSurahs} filters={view.filters ?? {}} />
-      </div>
-    </dialog>
+        <GroupFilterControls filters={draft.filters} onChange={filters => setDraft({ ...draft, filters })} />
+        </div>
+        <div className="flex shrink-0 gap-2 border-t border-[var(--home-rule)] p-4">
+        <Button className="flex-1" type="submit" variant="primary" disabled={ranged && !next}><Check size={16} aria-hidden />{ar ? 'تطبيق' : 'Apply'}</Button>
+        <Button variant="neutral" onClick={() => setDraft({ unit: 'juz', values: ['1', '30'], filters: {}, saved: false })}><RotateCcw size={16} aria-hidden />{ar ? 'إعادة ضبط' : 'Reset'}</Button>
+        </div>
+      </form>
+    </div>
   </>;
 }
 
 const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
 
-/** Narrows the trees to the ones saved in this browser; their ids travel in the address, so the server can step through them. */
-function SavedOnly({ range, view, onDone }: { range: JuzRange | null; view: BranchesView; onDone: () => void }) {
+function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks();
-  const router = useNavigatingRouter();
-  const on = !!view.saved?.length;
+  const id = useId();
   const label = ar ? 'المحفوظة فقط' : 'Saved only';
-  const hint = !on && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
-  return <span title={hint} className="inline-flex shrink-0">
-    <Toggle size="lg" checked={on} label={label} disabled={!on && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={checked => {
-      onDone();
-      router.push(branchesHref('', range ?? undefined, { ...view, occurrences: undefined, saved: checked ? saved.map(item => item.id) : undefined }));
-    }} />
-  </span>;
+  const hint = !checked && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
+  return <span title={hint} className="inline-flex items-center gap-2 text-sm"><Toggle id={id} size="lg" checked={checked} label={label} disabled={!checked && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={onChange} /><label htmlFor={id}>{label}</label></span>;
 }
 
 // The saved address keeps the tree, the view and the juz range, not the search or the surah narrowing.

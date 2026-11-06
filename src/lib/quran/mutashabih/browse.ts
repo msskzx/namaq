@@ -4,7 +4,7 @@ import { num } from '../arabicNumber';
 import type { Group } from './types';
 
 export const SORTS = ['mushaf', 'closest', 'places', 'differences'] as const;
-export const FILTER_KEYS = ['relations', 'differences', 'surahs', 'juz', 'pageFrom', 'pageTo', 'sort', 'cited'] as const;
+export const FILTER_KEYS = ['relations', 'differences', 'surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo', 'sort', 'cited'] as const;
 type FilterKey = typeof FILTER_KEYS[number];
 export type GroupFilters = Partial<Record<FilterKey, string>>;
 
@@ -23,24 +23,34 @@ export function hasGroupFilters(filters: GroupFilters) {
 
 const numbers = (input: string | undefined, max: number) => new Set((input ?? '').split(',').map(Number).filter(n => Number.isInteger(n) && n > 0 && n <= max));
 const order = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
-export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<string, BranchAyah>, range: JuzRange | null) {
+export function filteredAyat(ayat: Map<string, BranchAyah>, filters: GroupFilters, range: JuzRange | null) {
   const surahs = numbers(filters.surahs, 114);
   const juz = numbers(filters.juz, 30);
+  const firstSurah = [...numbers(filters.surahFrom, 114)][0] ?? 1;
+  const lastSurah = [...numbers(filters.surahTo, 114)][0] ?? 114;
   const firstPage = [...numbers(filters.pageFrom, 604)][0] ?? 1;
   const lastPage = [...numbers(filters.pageTo, 604)][0] ?? 604;
+  return new Map([...ayat].filter(([key, ayah]) => {
+    const surah = Number(key.split(':')[0]);
+    return surah >= firstSurah && surah <= lastSurah && ayah.page >= firstPage && ayah.page <= lastPage &&
+      (!range || inJuzRange(key, range)) && (!surahs.size && !juz.size || surahs.has(surah) || juz.has(juzOf(key)));
+  }));
+}
+
+export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<string, BranchAyah>, range: JuzRange | null) {
+  const visible = filteredAyat(ayat, filters, range);
   const tags = filters.differences?.split(',');
   const kinds = filters.relations?.split(',');
-  return groups.filter(group =>
+  const scoped = groups.flatMap(group => {
+    const places = group.places.filter(place => visible.has(place.key) && (!place.through || visible.has(place.through)));
+    const keys = new Set(places.map(place => place.key));
+    if (keys.size < 2) return [];
+    return [{ ...group, places, tree: { ...group.tree, occurrences: group.tree.occurrences.filter(occurrence => keys.has(occurrence.key)) } }];
+  });
+  return scoped.filter(group =>
     (!tags?.length || group.tags.some(tag => tags.includes(tag))) &&
     (!kinds?.length || kinds.includes(group.kind)) &&
-    (filters.cited !== '1' || group.citations.length > 0) &&
-    group.places.some(place => [place.key, place.through].some(key => {
-      if (!key) return false;
-      const page = ayat.get(key)?.page;
-      return page !== undefined && page >= firstPage && page <= lastPage &&
-        (!range || inJuzRange(key, range)) &&
-        (!surahs.size && !juz.size || surahs.has(Math.floor(order(key) / 1000)) || juz.has(juzOf(key)));
-    }))
+    (filters.cited !== '1' || group.citations.length > 0)
   ).sort((a, b) => {
     const byOrder = order(a.places[0].key) - order(b.places[0].key);
     if (filters.sort === 'closest') return b.score - a.score || byOrder;
@@ -57,7 +67,7 @@ export function groupAyat(group: Group, ayat: Map<string, BranchAyah>): BranchAy
   return group.places.map(place => {
     const first = ayat.get(place.key)!;
     const last = place.through && ayat.get(place.through);
-    if (!last) return { ...first, next: undefined, nextRoots: undefined, nextLemmas: undefined };
+    if (!last) return { ...first, through: undefined, next: undefined, nextRoots: undefined, nextLemmas: undefined };
     return {
       ...first,
       words: [...first.words, `﴿${num(Number(first.key.split(':')[1]))}﴾`, ...last.words],

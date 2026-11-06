@@ -86,7 +86,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
     document.addEventListener('pointerdown', close);
     return () => document.removeEventListener('pointerdown', close);
   }, [visible]);
-  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() || view.query });
+  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, card: undefined, query: phrase.text });
   const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);

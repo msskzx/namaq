@@ -88,7 +88,7 @@ describe('OpeningSearch', () => {
     fireEvent.change(box, { target: { value: 'الم تر كيف' } });
     fireEvent.keyDown(box, { key: 'ArrowDown' });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف', undefined, { query: 'الم تر كيف' }));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف', undefined, { query: 'أَلَمْ تَرَ كَيْفَ' }));
   });
 
   it('keeps the search in the box on the results, and clearing the box returns to the whole list', () => {

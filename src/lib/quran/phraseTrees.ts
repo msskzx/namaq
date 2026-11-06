@@ -148,11 +148,11 @@ function sharedDisplay(forms: string[]) {
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }
 
-export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
-  return createPhrasePresenter(ayat, continueIdentical, followCorpus)(group);
+export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
+  return createPhrasePresenter(ayat, continueIdentical, followCorpus, within)(group);
 }
 
-export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true) {
+export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const positions = new Map(ayat.map((ayah, index) => [ayah.key, index]));
   return (group: PhraseGroup): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } => {
@@ -170,7 +170,7 @@ export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = tr
     const words = ayah.words.slice(start);
     return { ...ayah, conj: undefined, conjs: undefined, words, roots: ayah.roots?.slice(start), lemmas: ayah.lemmas?.slice(start) };
   });
-  const expanded = source.map(ayah => ({ ...ayah, through: ayah.key }));
+  const expanded = source.map(ayah => ({ ...ayah, through: ayah.next ? ayah.key : ayah.through ?? ayah.key }));
   while (true) {
     const sourceIds = wordIds(expanded);
     const extend = expanded.map((ayah, i) => {
@@ -178,7 +178,7 @@ export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = tr
       const [surah, number] = ayah.through!.split(':').map(Number);
       const explicit = ayah.next ? { key: source[i].through ?? `${surah}:${number + 1}`, page: ayah.page, words: ayah.next, roots: ayah.nextRoots, lemmas: ayah.nextLemmas } : undefined;
       const next = explicit ?? (followCorpus && position !== undefined ? ayat[position + 1] : undefined);
-      if (!next) return undefined;
+      if (!next || within && !within(next.key)) return undefined;
       const prefix = sourceIds.some((other, at) => at !== i && (other.length > sourceIds[i].length || continueIdentical && other.length === sourceIds[i].length) && sourceIds[i].every((token, word) => token === other[word]));
       return prefix ? next : undefined;
     });

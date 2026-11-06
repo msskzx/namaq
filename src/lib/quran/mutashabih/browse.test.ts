@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
-import { browseGroups, groupFilters, toggleFilter, type GroupFilters } from './browse';
+import { browseGroups, filteredAyat, groupFilters, toggleFilter, type GroupFilters } from './browse';
 import type { Group } from './types';
 
 function group(id: string, keys: string[], options: Partial<Pick<Group, 'kind' | 'score' | 'tags' | 'citations' | 'differences'>> = {}): Group {
@@ -46,6 +46,16 @@ describe('browse groups', () => {
     expect(ids(matches)).toEqual(['mulk']);
   });
 
+  it('limits group members and tree occurrences to the selected juz range without changing the source group', () => {
+    const mixed = group('mixed', ['2:1', '67:1', '67:2']);
+    const single = group('single', ['2:1', '67:1']);
+    const scoped = browseGroups([mixed, single], {}, ayat, { from: 29, to: 30 });
+    expect(ids(scoped)).toEqual(['mixed']);
+    expect(scoped[0].places.map(place => place.key)).toEqual(['67:1', '67:2']);
+    expect(scoped[0].tree.occurrences.map(place => place.key)).toEqual(['67:1', '67:2']);
+    expect(mixed.places.map(place => place.key)).toEqual(['2:1', '67:1', '67:2']);
+  });
+
   it('combines the relation, difference and cited filters', () => {
     const citation = { id: 'K02', book: 'Book', edition: 'Edition', locator: '1:2', quote: 'Quote', url: 'https://example.com', places: ['50:1', '50:2'], tags: ['order' as const] };
     const cited = group('cited', ['50:1', '50:2'], { citations: [citation] });
@@ -78,5 +88,25 @@ describe('difference filter links', () => {
     expect(url.searchParams.get('o')).toBe('the-group');
     expect(url.searchParams.get('m')).toBe('cards');
     expect(groupFilters(Object.fromEntries(url.searchParams))).toEqual({ ...initial, differences: selected });
+  });
+});
+
+
+describe('scope units', () => {
+  const source = new Map<string, BranchAyah>([
+    ['50:1', { key: '50:1', page: 518, words: ['أ'] }],
+    ['55:1', { key: '55:1', page: 531, words: ['ب'] }],
+    ['60:1', { key: '60:1', page: 549, words: ['ج'] }],
+    ['61:1', { key: '61:1', page: 551, words: ['د'] }],
+  ]);
+
+  it('distinguishes chapter ranges from a list of specific chapters', () => {
+    expect([...filteredAyat(source, { surahFrom: '50', surahTo: '60' }, null).keys()]).toEqual(['50:1', '55:1', '60:1']);
+    expect([...filteredAyat(source, { surahs: '50,60' }, null).keys()]).toEqual(['50:1', '60:1']);
+  });
+
+  it('includes both page boundaries and excludes ayat beyond them', () => {
+    expect([...filteredAyat(source, { pageFrom: '518', pageTo: '549' }, null).keys()]).toEqual(['50:1', '55:1', '60:1']);
+    expect(groupFilters({ surahFrom: '50', surahTo: '60', pageFrom: '518', pageTo: '549' })).toEqual({ surahFrom: '50', surahTo: '60', pageFrom: '518', pageTo: '549' });
   });
 });
