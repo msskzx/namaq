@@ -93,6 +93,17 @@ export function buildPhraseGroups(ayat: BranchAyah[]): PhraseGroup[] {
     .sort((a, b) => b.occurrences[0].end - b.occurrences[0].start - (a.occurrences[0].end - a.occurrences[0].start) || members(a.occurrences).length - members(b.occurrences).length || a.id.localeCompare(b.id));
 }
 
+export function focusPhraseGroup<T extends PhraseGroup>(group: T, ayat: Map<string, BranchAyah> | BranchAyah[]): T {
+  const byKey = Array.isArray(ayat) ? new Map(ayat.map(ayah => [ayah.key, ayah])) : ayat;
+  const keys = new Set(group.occurrences.map(occurrence => occurrence.key));
+  if (keys.size < 2) return group;
+  const selected = [...keys].flatMap(key => byKey.get(key) ?? []);
+  if (selected.length !== keys.size) return group;
+  const contains = (outer: PhraseOccurrence, inner: PhraseOccurrence) => outer.key === inner.key && outer.start <= inner.start && outer.end >= inner.end;
+  const focused = buildPhraseGroups(selected).find(phrase => keys.size === new Set(phrase.occurrences.map(occurrence => occurrence.key)).size && group.occurrences.every(original => phrase.occurrences.some(occurrence => contains(occurrence, original))));
+  return focused ? { ...group, text: focused.text, occurrences: group.occurrences.map(original => focused.occurrences.find(occurrence => contains(occurrence, original))!) } : group;
+}
+
 export function buildTreeGroups(ayat: BranchAyah[]): TreeGroup[] {
   const single = new Map<string, BranchAyah[]>();
   ayat.filter(ayah => ayah.key.endsWith(':1') && ayah.words.length === 1).forEach(ayah => {

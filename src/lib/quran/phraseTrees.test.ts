@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { buildPhraseGroups, buildTreeGroups, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
+import { buildPhraseGroups, buildTreeGroups, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
 import treeData from '@/app/quran/branches/trees.json';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
@@ -14,6 +14,26 @@ const members = (group: PhraseGroup) => [...new Set(group.occurrences.map(occurr
 const treeKeys = (tree: Branch): string[] => [...tree.ayat, ...tree.children.flatMap(treeKeys)];
 const normalized = (text: string) => normalizeWord(text).replace(/[ؤئء]/g, 'ا');
 const find = (groups: PhraseGroup[], text: string) => groups.find(group => normalized(group.text) === normalized(text));
+
+describe('focused phrase groups', () => {
+  it('rebuilds the shared span around surviving occurrences without changing their identity or membership', () => {
+    const ayat = [ayah('1:1', 'قبل قال رب اغفر نهاية'), ayah('1:2', 'قبل قال رب اغفر آخر'), ayah('1:3', 'بعيد قال رب ارحم آخر')];
+    const group = { id: 'stable-tree', text: 'قال رب', parent: 'parent-tree', occurrences: [{ key: '1:1', start: 1, end: 3 }, { key: '1:2', start: 1, end: 3 }] };
+    const focused = focusPhraseGroup(group, new Map(ayat.map(ayah => [ayah.key, ayah])));
+    expect(focused.id).toBe('stable-tree');
+    expect(focused.parent).toBe('parent-tree');
+    expect(focused.text).toBe('قبل قال رب اغفر');
+    expect(focused.occurrences).toEqual([{ key: '1:1', start: 0, end: 4 }, { key: '1:2', start: 0, end: 4 }]);
+    expect(members(focused)).toEqual(['1:1', '1:2']);
+    expect(group.occurrences[0].start).toBe(1);
+  });
+
+  it('keeps the selected phrase when a longer disjoint phrase appears in the same ayat', () => {
+    const ayat = [ayah('1:1', 'قال رب اغفر فاصل عبارة أطول مشتركة هنا'), ayah('1:2', 'قال رب ارحم مختلف عبارة أطول مشتركة هنا')];
+    const group = { id: 'stable-tree', text: 'قال رب', occurrences: [{ key: '1:1', start: 0, end: 2 }, { key: '1:2', start: 0, end: 2 }] };
+    expect(focusPhraseGroup(group, ayat)).toEqual(group);
+  });
+});
 
 it('shows the three فذرهم passages once, with ف attached to its word', () => {
   const wanted = ['43:83', '52:45', '70:42'];

@@ -1,10 +1,12 @@
 import type { BranchAyah } from '../branches';
 import { inJuzRange, juzOf, type JuzRange } from '../juz';
 import { num } from '../arabicNumber';
-import type { Group } from './types';
+import { focusPhraseGroup } from '../phraseTrees';
+import type { Group, Place } from './types';
+import { evidenceGroup } from './evidence';
 
 export const SORTS = ['mushaf', 'closest', 'places', 'differences'] as const;
-export const FILTER_KEYS = ['relations', 'differences', 'surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo', 'sort', 'cited'] as const;
+export const FILTER_KEYS = ['categories', 'relations', 'differences', 'surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo', 'sort', 'cited'] as const;
 type FilterKey = typeof FILTER_KEYS[number];
 export type GroupFilters = Partial<Record<FilterKey, string>>;
 
@@ -41,17 +43,22 @@ export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<s
   const visible = filteredAyat(ayat, filters, range);
   const tags = filters.differences?.split(',');
   const kinds = filters.relations?.split(',');
+  const categories = filters.categories?.split(',');
   const scoped = groups.flatMap(group => {
     const places = group.places.filter(place => visible.has(place.key) && (!place.through || visible.has(place.through)));
     const keys = new Set(places.map(place => place.key));
     if (keys.size < 2) return [];
-    return [{ ...group, places, tree: { ...group.tree, occurrences: group.tree.occurrences.filter(occurrence => keys.has(occurrence.key)) } }];
+    const occurrences = group.tree.occurrences.filter(occurrence => keys.has(occurrence.key));
+    const scopedTree = { ...group.tree, occurrences };
+    const tree = places.length !== group.places.length ? focusPhraseGroup(scopedTree, ayat) : scopedTree;
+    return [evidenceGroup({ ...group, places, tree, differences: Object.fromEntries(Object.entries(group.differences).filter(([key]) => keys.has(key))) })];
   });
-  return scoped.filter(group =>
+  return deduplicateGroups(scoped.filter(group =>
     (!tags?.length || group.tags.some(tag => tags.includes(tag))) &&
     (!kinds?.length || kinds.includes(group.kind)) &&
+    (!categories?.length || group.categories?.some(category => categories.includes(category))) &&
     (filters.cited !== '1' || group.citations.length > 0)
-  ).sort((a, b) => {
+  )).sort((a, b) => {
     const byOrder = order(a.places[0].key) - order(b.places[0].key);
     if (filters.sort === 'closest') return b.score - a.score || byOrder;
     if (filters.sort === 'places') return b.places.length - a.places.length || byOrder;
@@ -61,6 +68,30 @@ export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<s
     }
     return byOrder;
   });
+}
+
+export function deduplicateGroups(groups: Group[]): Group[] {
+  const retained: Group[] = [];
+  const signature = (group: Group) => group.places.map(place => `${place.key}-${place.through ?? ''}`).sort().join(',');
+  const contains = (outer: Place[], inner: Place[]) => inner.every(place => outer.some(other => other.key === place.key && other.through === place.through && other.start <= place.start && other.end >= place.end));
+  const length = (group: Group) => group.tree.occurrences.reduce((sum, occurrence) => sum + occurrence.end - occurrence.start, 0);
+  for (const group of [...groups].sort((a, b) => length(b) - length(a) || b.citations.length - a.citations.length)) {
+    const existing = retained.find(other => signature(other) === signature(group) && (contains(other.tree.occurrences, group.tree.occurrences) || contains(group.tree.occurrences, other.tree.occurrences)));
+    if (!existing) {
+      retained.push({ ...group });
+      continue;
+    }
+    existing.aliases = [...new Set([...(existing.aliases ?? []), group.id, ...(group.aliases ?? [])])].filter(id => id !== existing.id);
+    existing.citations = [...new Map([...existing.citations, ...group.citations].map(citation => [citation.id, citation])).values()];
+    existing.places = existing.places.map(place => {
+      const other = group.places.find(other => other.key === place.key && other.through === place.through)!;
+      return { ...place, start: Math.min(place.start, other.start), end: Math.max(place.end, other.end) };
+    });
+    existing.tags = [...new Set([...existing.tags, ...group.tags])];
+    existing.categories = [...new Set([...(existing.categories ?? []), ...(group.categories ?? [])])];
+    existing.examples = { ...group.examples, ...existing.examples };
+  }
+  return retained.map(group => evidenceGroup(group));
 }
 
 export function groupAyat(group: Group, ayat: Map<string, BranchAyah>): BranchAyah[] {

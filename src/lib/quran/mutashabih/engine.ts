@@ -286,7 +286,9 @@ function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citat
   }
   return {
     id, text: anchor.text, tree: { ...anchor, id }, places, kind, tags, differences,
-    score: Math.min(...pairs.map(pair => pair.score)), citations, detail, examples,
+    score: Math.min(...pairs.map(pair => pair.score)),
+    citations: citations.map(citation => ({ ...citation, examples: Object.fromEntries(citation.tags.flatMap(tag => examples[tag] ? [[tag, examples[tag]]] : [])) })),
+    detail, examples,
     columns: pairs.map(({ a, b, columns }) => ({
       a, b, columns: columns.map(column => {
         if (!focus) return column;
@@ -363,7 +365,13 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
     const selected = places.map(p => p.through
       ? [...source(p.key).filter(word => word.index >= p.start), ...source(p.through).filter(word => word.index < p.end)]
       : source(p.key).filter(word => word.index >= p.start && word.index < p.end));
-    const citations = cases.filter(citation => ids.includes(citation.id));
+    const citations = cases.filter(citation => ids.includes(citation.id)).map(citation => ({
+      ...citation,
+      selections: places.filter(place => citation.places.some(reference => {
+        const [key, last] = reference.split('-');
+        return place.key === key && (!last || place.through === `${key.split(':')[0]}:${last}`);
+      })),
+    }));
     groups.push(makeGroup(places, selected, kind, citations, focus, detail));
     for (const a of places) for (const b of places) if (a.key !== b.key) declared.add(pairKey(a.key, b.key));
   }

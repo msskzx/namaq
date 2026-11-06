@@ -29,6 +29,20 @@ const innerNodes = (tree: Branch) => {
 };
 
 describe('subtree links', () => {
+  it('keeps applied filters and bookmarks while focusing a node and clears the parent query', () => {
+    const group = source.trees.find(tree => tree.id === 'اطيعوا الله')!;
+    const { tree } = phrasePresentation(group, source.ayat);
+    const view = { filters: { surahs: '4,24,47', sort: 'closest' }, saved: ['saved-tree'], query: 'أطيعوا الله' };
+    const links = subtreeLinks(group, tree, undefined, {}, false, index.idsFor(group), 'cards', view);
+    const href = Object.values(links)[0];
+    const params = new URL(href, 'https://namaq.test').searchParams;
+    expect(params.get('surahs')).toBe('4,24,47');
+    expect(params.get('sort')).toBe('closest');
+    expect(params.get('b')).toBe('saved-tree');
+    expect(params.get('m')).toBe('cards');
+    expect(params.has('q')).toBe(false);
+  });
+
   it('opens the subtree under وأطيعوا الرسول from the أطيعوا الله tree', () => {
     const group = source.trees.find(tree => tree.id === 'اطيعوا الله')!;
     const { tree } = phrasePresentation(group, source.ayat);

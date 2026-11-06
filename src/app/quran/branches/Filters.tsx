@@ -140,10 +140,10 @@ function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked
   return <span title={hint} className="inline-flex items-center gap-2 text-sm"><Toggle id={id} size="lg" checked={checked} label={label} disabled={!checked && saved.length === 0} onIcon={<Bookmark className="size-4" aria-hidden />} onChange={onChange} /><label htmlFor={id}>{label}</label></span>;
 }
 
-// The saved address keeps the tree, the view and the juz range, not the search or the surah narrowing.
 function bookmarkOf(id: string, text: string, href?: string) {
   const url = new URL(href ?? window.location.href, window.location.origin);
-  ['q', 's', 'n', 'b', 'relations', 'differences', 'surahs', 'juz', 'pageFrom', 'pageTo', 'sort', 'cited'].forEach(key => url.searchParams.delete(key));
+  ['q', 's', 'n', 'b'].forEach(key => url.searchParams.delete(key));
+  url.searchParams.set('o', id);
   return { id, text, href: `${url.pathname}${url.search}` };
 }
 
@@ -151,7 +151,7 @@ const TAP_GAP = 300;
 const TAP_SLOP = 24;
 
 /** As on a post: a double tap on the tree or matrix saves it (never unsaves), with a bookmark popping up in the middle. */
-export function DoubleTapSave({ id, text, children }: { id: string; text: string; children: React.ReactNode }) {
+export function DoubleTapSave({ id, text, aliases = [], children }: { id: string; text: string; aliases?: string[]; children: React.ReactNode }) {
   const [pop, setPop] = useState(0);
   const down = useRef<{ x: number; y: number } | null>(null);
   const last = useRef<{ x: number; y: number; at: number } | null>(null);
@@ -167,7 +167,7 @@ export function DoubleTapSave({ id, text, children }: { id: string; text: string
     const previous = last.current;
     if (previous && tap.at - previous.at < TAP_GAP && Math.hypot(tap.x - previous.x, tap.y - previous.y) < TAP_SLOP * 2) {
       last.current = null;
-      if (!readBookmarks().some(item => item.id === id)) toggleBookmark(bookmarkOf(id, text));
+      if (!readBookmarks().some(item => item.id === id || aliases.includes(item.id))) toggleBookmark(bookmarkOf(id, text));
       setPop(count => count + 1);
       return;
     }
@@ -182,11 +182,11 @@ export function DoubleTapSave({ id, text, children }: { id: string; text: string
 }
 
 /** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text, href, details }: { id: string; text: string; href?: string; details?: React.ReactNode }) {
+export function CardActions({ id, text, href, aliases = [], details }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
-  const saved = useBookmarks().some(item => item.id === id);
+  const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
-  const save = () => toggleBookmark(bookmarkOf(id, text, href));
+  const save = () => toggleBookmark(bookmarkOf(id, text, href), aliases);
   // In the growth studio its controls take the row; save and share come back when it closes.
   const studio = useGrowth().studio;
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';

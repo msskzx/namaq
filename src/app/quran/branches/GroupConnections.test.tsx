@@ -10,16 +10,16 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 const group = groups.find(group => group.citations.some(citation => citation.id === 'K02'))!;
 
-function Matrix({ defaultOn = false }: { defaultOn?: boolean }) {
+function Matrix({ defaultOn = false, shownKeys }: { defaultOn?: boolean; shownKeys?: string[] }) {
   const lane = useRef<HTMLDivElement>(null);
-  return <GroupConnections group={group} defaultOn={defaultOn}>
+  return <GroupConnections group={group} shownKeys={shownKeys} defaultOn={defaultOn}>
     <div ref={lane}>
       {(['2:48', '2:123'] as const).map(key => <div data-current data-col="0" key={key}>
         {[11, 13, 14, 15].map(index => <span key={index} data-word-position={`${key}:${index}`}>word</span>)}
       </div>)}
       <ConnectionLines lane={lane} column={0} ready />
     </div>
-    <GroupDetails group={group} />
+    <GroupDetails group={group} shownKeys={shownKeys} />
   </GroupConnections>;
 }
 
@@ -39,6 +39,12 @@ function SurroundingColumn() {
 }
 
 describe('matrix connector overlay', () => {
+  it('does not draw source connectors after their cited comparison is filtered out', () => {
+    const { container } = render(<Matrix defaultOn shownKeys={['2:48']} />);
+    expect(container.querySelectorAll('[data-word-connectors] path')).toHaveLength(0);
+    expect(screen.queryByRole('button', { name: 'تقديم وتأخير' })).toBeNull();
+  });
+
   it('does not draw through a surrounding column from hidden main-ayah words', () => {
     const { container } = render(<SurroundingColumn />);
     expect(container.querySelectorAll('[data-word-connectors] path')).toHaveLength(0);

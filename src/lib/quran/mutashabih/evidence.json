@@ -204,7 +204,6 @@
         "particle",
         "addition_omission",
         "order",
-        "number",
         "word"
       ],
       "quote": "قدم … وأخرها",
@@ -214,7 +213,6 @@
         "particle": "فكلوا / وكلوا",
         "addition_omission": "رغدا / ∅",
         "order": "ادخلوا الباب / قولوا حطة",
-        "number": "خطاياكم / خطيئاتكم",
         "word": "فأنزلنا / فأرسلنا"
       }
     },
@@ -359,7 +357,6 @@
       ],
       "tags": [
         "particle",
-        "number",
         "addition_omission",
         "order"
       ],
@@ -369,8 +366,7 @@
       "examples": {
         "particle": "فكلوا / وكلوا",
         "addition_omission": "رغدا / ∅",
-        "order": "ادخلوا الباب / قولوا حطة",
-        "number": "خطاياكم / خطيئاتكم"
+        "order": "ادخلوا الباب / قولوا حطة"
       }
     },
     {

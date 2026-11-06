@@ -8,7 +8,8 @@ import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { branchesHref, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { searchSharedPhrases } from '@/lib/quran/branchSearch';
 import type { JuzRange } from '@/lib/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { matchesSurah } from '@/lib/quran/surahSearch';
@@ -24,9 +25,7 @@ export const SUGGESTIONS = 10;
 const inventories = new Map<string, Promise<Opening[]>>();
 const NONE: Opening[] = [];
 
-function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
-  const params = new URLSearchParams({ all: '1', ...(juz && { juzFrom: String(juz.from), juzTo: String(juz.to) }) });
-  const key = params.toString();
+function loadPhrases(key: string): Promise<Opening[]> {
   if (!inventories.has(key)) inventories.set(key, fetch(`/api/quran/branch-phrases?${key}`)
     .then(response => (response.ok ? response.json() : Promise.reject(new Error('Phrases failed'))))
     .then((data: { phrases: Opening[] }) => data.phrases)
@@ -48,18 +47,20 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
   const from = juz?.from;
   const to = juz?.to;
   const [loaded, setLoaded] = useState<{ range: string; phrases: Opening[] }>();
-  const range = `${from}-${to}`;
+  const scope = new URLSearchParams({ ...view.filters, ...(from !== undefined && to !== undefined && { juzFrom: String(from), juzTo: String(to) }), ...(view.saved?.length && { b: view.saved.join('|') }), ...(view.surah && { s: String(view.surah) }) });
+  const range = scope.toString();
   const ready = !!given || remote || loaded?.range === range;
   const typed = !!query.trim();
   useEffect(() => {
     if (ready) return;
     let live = true;
-    loadPhrases(from !== undefined && to !== undefined ? { from, to } : null).then(phrases => live && setLoaded({ range, phrases }), () => {});
+    loadPhrases(`all=1${range ? `&${range}` : ''}`).then(phrases => live && setLoaded({ range, phrases }), () => {});
     return () => { live = false; };
   }, [ready, from, to, range, typed]);
   const phrases = given ?? (loaded?.range === range ? loaded.phrases : NONE);
   useEffect(() => setSelected(-1), [phrases]);
-  const request = new URLSearchParams({ q: query });
+  const request = new URLSearchParams(range);
+  request.set('q', query);
   if (from !== undefined && to !== undefined) { request.set('juzFrom', String(from)); request.set('juzTo', String(to)); }
   const requestKey = request.toString();
   const [fetched, setFetched] = useState<{ key: string; suggestions: Suggestion[] }>();
@@ -74,7 +75,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
     }, 150);
     return () => { clearTimeout(timer); controller.abort(); };
   }, [query, remote, dismissed, requestKey]);
-  const local = useMemo(() => remote ? [] : searchPhrases(phrases, query).slice(0, SUGGESTIONS), [remote, phrases, query]);
+  const local = useMemo(() => remote ? [] : searchSharedPhrases(phrases, query).slice(0, SUGGESTIONS), [remote, phrases, query]);
   const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : local;
   const surahHits = useMemo(() => query.trim() ? surahs.filter(surah => matchesSurah(surah, query.trim())).slice(0, SURAH_HITS) : [], [surahs, query]);
   const options = [...surahHits.map(surah => ({ surah })), ...suggestions.map(phrase => ({ phrase }))];
@@ -95,13 +96,13 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
   const pickSurah = (surah: SurahCount) => {
     setQuery('');
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { surah: surah.number, mode: view.mode, saved: view.saved }));
+    router.push(branchesHref('', juz ?? undefined, { surah: surah.number, mode: view.mode, saved: view.saved, filters: view.filters }));
   };
   const choose = (option: typeof options[number]) => 'surah' in option ? pickSurah(option.surah) : open(option.phrase);
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: view.mode, saved: view.saved }));
+    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim(), mode: view.mode, saved: view.saved, filters: view.filters }));
   };
   return (
     <div className="flex flex-col gap-3">
