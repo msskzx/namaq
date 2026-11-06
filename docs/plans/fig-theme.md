@@ -1,6 +1,6 @@
 # Quran, branches and quiz theme
 
-Base the changes on fetched main. Scope is Quran, branches in tree and matrix views, and quizzes. Experiments and other features keep their presentation.
+Base the changes on fetched main. Scope is the Quran hub and reader, branches in tree and matrix views, and quizzes. Experimental Quran tools, experiments and other features keep their presentation.
 
 ## Acceptance
 

@@ -26,7 +26,7 @@ describe('AppChrome', () => {
     expect(scope?.querySelector('nav')).toBeTruthy();
   });
 
-  it.each(['/', '/experiments', '/experiments/quran', '/people', '/quizzes-other'])('keeps the existing palette on %s', pathname => {
+  it.each(['/', '/experiments', '/experiments/quran', '/quran/words', '/quran/compare', '/quran/prophets/musa', '/quran/qiraat', '/people', '/quizzes-other'])('keeps the existing palette on %s', pathname => {
     route.pathname = pathname;
     const { container } = render(<AppChrome><Page /></AppChrome>);
     expect(container.querySelector('[data-feature-theme]')).toBeNull();
