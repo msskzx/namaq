@@ -8,7 +8,7 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
   muted: 'text-[var(--home-muted)] hover:text-[var(--home-ink)] hover:bg-[var(--home-paper-deep)]',
   highlight: 'bg-[var(--home-highlight)] text-[var(--home-on-highlight)] hover:opacity-90',
-  primary: 'bg-[var(--button-color,var(--home-accent))] text-[var(--home-paper)] hover:opacity-90',
+  primary: 'bg-[var(--button-color,var(--home-action,var(--home-accent)))] text-[var(--button-ink,var(--home-on-action,var(--home-paper)))] hover:opacity-90',
   outline: 'border border-[var(--button-color,var(--home-rule))] text-[var(--button-color,var(--home-accent))] hover:bg-[var(--home-paper-deep)]',
 };
 const SIZE_CLASSES: Record<ButtonSize, string> = {
@@ -38,7 +38,7 @@ type LinkButtonProps = CommonProps &
 
 export default function Button(props: ButtonProps | LinkButtonProps) {
   const { variant = 'outline', size = 'md', active = false, tone, className, children, ...rest } = props;
-  const style = tone ? { ...rest.style, '--button-color': tone } as React.CSSProperties : rest.style;
+  const style = tone ? { ...rest.style, '--button-color': tone, '--button-ink': 'var(--home-paper)' } as React.CSSProperties : rest.style;
   const classes = classesFor(variant, size, active, className);
   if (rest.href !== undefined) {
     const { href, ...linkRest } = rest as LinkButtonProps;

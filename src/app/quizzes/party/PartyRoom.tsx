@@ -81,10 +81,10 @@ function Countdown({ deadline, total, offset, ar, big }: { deadline: number; tot
   }, []);
   return (
     <span ref={anchor} className={`inline-flex shrink-0 justify-end ${big ? "h-20 w-60" : "h-11 w-32"}`}>
-      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-[calc(0.75rem+env(safe-area-inset-top)+var(--party-controls-height,0px))] z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
+      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-action,var(--home-accent))] text-[var(--home-on-action,var(--home-paper))]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-[calc(0.75rem+env(safe-area-inset-top)+var(--party-controls-height,0px))] z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
         <FontAwesomeIcon icon={faHourglassHalf} className={big ? "text-3xl" : "text-lg"} />{ar ? `${num(Math.floor(left / 60))}:${num(left % 60).padStart(2, "٠")}` : text}
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-1">
-          <span className={`block h-full transition-[width] duration-300 ease-linear ${urgent ? "bg-[var(--home-paper)]" : "bg-[var(--home-accent)]"}`} style={{ width: `${Math.min(1, Math.max(0, (deadline - now) / total)) * 100}%` }} />
+          <span className={`block h-full transition-[width] duration-300 ease-linear ${urgent ? "bg-[var(--home-on-action,var(--home-paper))]" : "bg-[var(--home-accent)]"}`} style={{ width: `${Math.min(1, Math.max(0, (deadline - now) / total)) * 100}%` }} />
         </span>
       </span>
     </span>
@@ -102,7 +102,7 @@ function Leaderboard({ players, you, ar, final, answering }: { players: PlayerVi
           const rank = ranked.findIndex((other) => other.score === player.score) + 1;
           return (
             <li key={player.id} data-player={player.name} className={`flex items-center gap-3 rounded-sm px-2 py-1.5 ${player.id === you ? "bg-[var(--home-paper-deep)]" : ""}`}>
-              <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-green)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
+              <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[color-mix(in_srgb,var(--home-green)_15%,var(--home-paper))] text-[var(--home-green)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
               <span className="flex min-w-0 flex-1 flex-col gap-1">
                 <span className="flex min-w-0 items-center gap-2">
                   <span className="truncate text-[var(--home-ink)]">{player.name}</span>

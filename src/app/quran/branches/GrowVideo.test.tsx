@@ -77,6 +77,44 @@ it('exports without a title or URL, uses the plural prompt, and follows live pat
 
 });
 
+it('exports curved tree links at their SVG origins, tracks growth, and omits hidden legacy lines', () => {
+  const { context, colors, stroke, tick } = setupVideo();
+  const rect = (left: number, top: number, width: number, height: number) => ({ left, top, right: left + width, bottom: top + height, x: left, y: top, width, height, toJSON: () => ({}) });
+  render(<><div data-tree-content>
+    <div data-node="n-1" style={{ opacity: 1, backgroundColor: 'rgb(20, 30, 40)', borderRadius: '6px 12px' }} />
+    <span aria-hidden="true" data-line style={{ opacity: 1, visibility: 'hidden', borderTop: '2px solid rgb(9, 8, 7)' }} />
+    <span aria-hidden="true" data-stem style={{ opacity: 1, visibility: 'hidden', borderLeft: '2px solid rgb(9, 8, 7)' }} />
+    <span aria-hidden="true" data-line style={{ opacity: 1, borderTop: '2px solid rgb(3, 2, 1)' }} />
+    <svg data-tree-links><path d="M 0 0 C 0 10, 20 10, 20 20" pathLength="1" style={{ opacity: 1, stroke: 'rgb(1, 2, 3)', strokeWidth: 2, strokeDashoffset: 0.5 }} /></svg>
+  </div><GrowVideo /></>);
+  const content = document.querySelector<HTMLElement>('[data-tree-content]')!;
+  content.getBoundingClientRect = () => rect(100, 100, 800, 400);
+  Object.defineProperties(content, { offsetWidth: { value: 400 }, offsetHeight: { value: 200 } });
+  document.querySelector('svg[data-tree-links]')!.getBoundingClientRect = () => rect(300, 200, 200, 100);
+  const path = document.querySelector<SVGPathElement>('[data-tree-links] path')!;
+  path.getTotalLength = () => 100;
+  const progress: number[] = [];
+  const strokes = stroke.getMockImplementation()!;
+  stroke.mockImplementation(curve => { if (curve) progress.push(context.lineDashOffset); strokes(curve); });
+  const fills: string[] = [];
+  context.fill.mockImplementation(() => { fills.push(context.fillStyle); });
+  act(() => openVideo());
+  tick(0);
+  expect(stroke.mock.calls.some(([curve]) => (curve as { path?: string } | undefined)?.path === path.getAttribute('d'))).toBe(true);
+  expect(context.translate).toHaveBeenCalledWith(100, 50);
+  expect(progress).toEqual([50]);
+  expect(colors).toContain('rgb(1, 2, 3)');
+  expect(colors).toContain('rgb(3, 2, 1)');
+  expect(colors).not.toContain('rgb(9, 8, 7)');
+  expect(fills).toContain('rgb(20, 30, 40)');
+  path.style.strokeDashoffset = '0.25';
+  tick(30);
+  expect(progress).toEqual([50, 25]);
+  path.setAttribute('data-hide', '');
+  tick(60);
+  expect(progress).toEqual([50, 25]);
+});
+
 it('exports only the current matrix column, draws its live SVG curves and countdown, and renders its timer', () => {
   const { context, fillText, drawnWords, stroke, tick } = setupVideo();
   const rect = (x: number, y: number, width: number, height: number) => ({ x, y, left: x, top: y, right: x + width, bottom: y + height, width, height, toJSON: () => ({}) });

@@ -20,7 +20,8 @@ type Word = Rect & { text: string; font: string; color: string };
 type Shape = { element: HTMLElement; rect: Rect; words: Word[] };
 type Segment = [number, number, number, number, number];
 type Line = { element: HTMLElement; segments: Segment[] };
-type Drawing = { content: HTMLElement; width: number; height: number; boxes: Shape[]; lines: Line[]; matrix?: { x: number; y: number }; chips: { text: string; words: string; color: string; ink: string; font: string; wordFont: string }[] };
+type Curve = { element: SVGPathElement; x: number; y: number };
+type Drawing = { content: HTMLElement; width: number; height: number; boxes: Shape[]; lines: Line[]; curves: Curve[]; matrix?: { x: number; y: number }; chips: { text: string; words: string; color: string; ink: string; font: string; wordFont: string }[] };
 
 /** Where every box, word and connector of the tree sits, in the tree's own unscaled pixels. Measured once: growing only fades them. */
 function measure(root: HTMLElement): Drawing | null {
@@ -66,7 +67,8 @@ function measure(root: HTMLElement): Drawing | null {
       color: active ? style.backgroundColor : style.color, ink: active ? style.color : getComputedStyle(document.documentElement).getPropertyValue('--home-paper'),
     };
   });
-  return { content, chips, width: matrix && bounds.length ? (Math.max(...bounds.map(box => box.right)) - origin.x) * k : content.offsetWidth, height: matrix && bounds.length ? (Math.max(...bounds.map(box => box.bottom)) - origin.y) * k : content.offsetHeight, boxes, lines: matrix ? [] : measureLines(content, 'span[aria-hidden]'), matrix: matrix ? { x: (frame.left - origin.x) * k, y: (frame.top - origin.y) * k } : undefined };
+  const curves = [...content.querySelectorAll<SVGPathElement>('[data-tree-links] > path')].map(element => ({ element, ...place(element.ownerSVGElement!.getBoundingClientRect()) }));
+  return { content, chips, curves, width: matrix && bounds.length ? (Math.max(...bounds.map(box => box.right)) - origin.x) * k : content.offsetWidth, height: matrix && bounds.length ? (Math.max(...bounds.map(box => box.bottom)) - origin.y) * k : content.offsetHeight, boxes, lines: matrix ? [] : measureLines(content, 'span[aria-hidden]'), matrix: matrix ? { x: (frame.left - origin.x) * k, y: (frame.top - origin.y) * k } : undefined };
 }
 
 function measureLines(content: HTMLElement, selector: string): Line[] {
@@ -76,6 +78,7 @@ function measureLines(content: HTMLElement, selector: string): Line[] {
   return [...content.querySelectorAll<HTMLElement>(selector)].flatMap(element => {
     if (element.closest('[data-node]')) return [];
     const style = getComputedStyle(element);
+    if (style.visibility === 'hidden') return [];
     const [top, right, bottom, left] = [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth].map(parseFloat);
     if (!top && !right && !bottom && !left) return [];
     const { x, y, w, h } = place(element.getBoundingClientRect());
@@ -89,9 +92,9 @@ function measureLines(content: HTMLElement, selector: string): Line[] {
 }
 
 /** How visible an element is now: its own fade and its branch's. */
-function alpha(element: HTMLElement, content: HTMLElement) {
+function alpha(element: Element, content: HTMLElement) {
   let value = 1;
-  for (let at: HTMLElement | null = element; at && at !== content; at = at.parentElement) {
+  for (let at: Element | null = element; at && at !== content; at = at.parentElement) {
     if (at === element || at.tagName === 'LI') value *= Number(getComputedStyle(at).opacity);
   }
   return value;
@@ -121,7 +124,7 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   const lines = [...drawing.lines.filter(line => !line.element.hasAttribute('data-stem')), ...measureLines(drawing.content, '[data-stem]')];
   for (const line of lines) {
     const seen = alpha(line.element, drawing.content);
-    if (seen < 0.02 || getComputedStyle(line.element).display === 'none') continue;
+    if (seen < 0.02 || getComputedStyle(line.element).display === 'none' || getComputedStyle(line.element).visibility === 'hidden') continue;
     context.globalAlpha = seen;
     const style = getComputedStyle(line.element);
     context.strokeStyle = parseFloat(style.borderTopWidth) ? style.borderTopColor : parseFloat(style.borderLeftWidth) ? style.borderLeftColor : style.borderRightColor;
@@ -135,18 +138,34 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
       context.stroke();
     }
   }
+  for (const curve of drawing.curves) {
+    const seen = alpha(curve.element, drawing.content);
+    if (seen < 0.02 || curve.element.hasAttribute('data-hide')) continue;
+    const style = getComputedStyle(curve.element);
+    const length = curve.element.getTotalLength();
+    context.save();
+    context.translate(curve.x, curve.y);
+    context.globalAlpha = seen;
+    context.strokeStyle = style.stroke;
+    context.lineWidth = parseFloat(style.strokeWidth) || 1.5;
+    context.lineCap = 'round';
+    context.setLineDash([length]);
+    context.lineDashOffset = (parseFloat(style.strokeDashoffset) || 0) * length;
+    context.stroke(new Path2D(curve.element.getAttribute('d') ?? ''));
+    context.restore();
+  }
   for (const box of drawing.boxes) {
     const seen = alpha(box.element, drawing.content);
     if (seen < 0.02) continue;
     const style = getComputedStyle(box.element);
     const { x, y, w, h } = box.rect;
     context.globalAlpha = seen;
-    context.fillStyle = look.paper;
+    context.fillStyle = style.backgroundColor || look.paper;
     context.strokeStyle = style.borderTopColor;
     context.lineWidth = 1;
     context.setLineDash(style.borderTopStyle === 'dashed' ? [4, 3] : []);
     context.beginPath();
-    context.roundRect(x + 0.5, y + 0.5, w - 1, h - 1, 4);
+    context.roundRect(x + 0.5, y + 0.5, w - 1, h - 1, [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(radius => parseFloat(radius) || 4));
     context.fill();
     context.stroke();
     context.setLineDash([]);

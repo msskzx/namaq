@@ -187,7 +187,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {steps && <TreeProgress steps={steps} />}
       <GroupConnections key={`${id}:${defaultConnections}`} group={requestedGroup} defaultOn={defaultConnections}>
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''}>
-      <PathScope key={`${id}:${marked.join(' ')}`} lit={marked}>
+      <PathScope key={`${id}:${marked.join(' ')}`} lit={marked} organic>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} groupLinks={requestedGroup ? undefined : Object.fromEntries(drawn.flatMap(ayah => { const group = groupsByAyah.get(ayah.key); return group ? [[ayah.key, branchesHref(group.id, undefined, { mode })]] : []; }))} label="شجرة العبارات المشتركة" />}
       </PathScope>

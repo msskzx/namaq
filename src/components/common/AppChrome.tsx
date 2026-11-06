@@ -21,7 +21,9 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [footerHidden, setFooterHidden] = useState(false);
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
   const [railSlot, setRailSlot] = useState<HTMLDivElement | null>(null);
-  const partyRoom = /^\/quizzes\/party\/[^/]+/.test(usePathname() ?? '/');
+  const pathname = usePathname() ?? '/';
+  const featureTheme = pathname === '/quran' || /^\/quran\/(read|branches)(?:\/|$)/.test(pathname) || /^\/quizzes(?:\/|$)/.test(pathname);
+  const partyRoom = /^\/quizzes\/party\/[^/]+/.test(pathname);
   const tabs = !footerHidden && !partyRoom;
   // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
   useEffect(() => { document.documentElement.toggleAttribute('data-tabbar', tabs); }, [tabs]);
@@ -32,7 +34,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
           <NavSlotElement.Provider value={slot}>
           <RailSlotContext.Provider value={setRailSlot}>
           <RailSlotElement.Provider value={railSlot}>
-            <div className="min-h-svh flex flex-col">
+            <div data-feature-theme={featureTheme || undefined} className="min-h-svh flex flex-col">
               <NavBar />
               {tabs && <TabBar />}
               <main className="flex-1">

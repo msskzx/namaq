@@ -53,7 +53,7 @@ function corrections(question: Question, typed: string[], matches: ReturnType<ty
 }
 
 function Badge({ row, ar }: { row: Correction; ar: boolean }) {
-  return <span aria-hidden className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold text-[var(--home-paper)] ${row.correct ? "bg-[var(--home-green)]" : "bg-[var(--home-accent)]"}`}>{ar ? num(row.number) : row.number}</span>;
+  return <span aria-hidden className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold ${row.correct ? "bg-[color-mix(in_srgb,var(--home-green)_15%,var(--home-paper))] text-[var(--home-green)]" : "bg-[var(--home-action,var(--home-accent))] text-[var(--home-on-action,var(--home-paper))]"}`}>{ar ? num(row.number) : row.number}</span>;
 }
 
 /** The node's words with the ones that are enough to type underlined. */
@@ -111,7 +111,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
         {!matrix && <RotateButton />}
         <AroundButton />
       </NavButtons>}
-      {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} /> : <BranchTree tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
+      {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
         renderNode={(node, index, tags) => {
           const answer = matches[index]?.node ?? node;
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
@@ -143,7 +143,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
       {!question.asked && <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>}
       <div dir="rtl">
         <NavButtons><RotateButton /></NavButtons>
-        <BranchTree tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
+        <BranchTree organic tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
           <span className="font-quran text-lg leading-loose text-[var(--home-muted)]"><MushafText>{givenAnswer(node)}</MushafText></span>
         ) : (
           <label className="flex w-36 max-w-full flex-col gap-1">
@@ -171,7 +171,7 @@ export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
   const asked = askedNodes(tree, leaves, () => 0.5);
   return (
     <div dir="rtl">
-      <BranchTree tree={tree} variants={example.variants as Variant[]} names={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
+      <BranchTree organic tree={tree} variants={example.variants as Variant[]} names={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
         if (node.children.length > 0) return <span className="flex flex-col items-start">
           <span className="font-quran leading-loose"><MushafText>{node.words.join(" ")}</MushafText></span>
         </span>;

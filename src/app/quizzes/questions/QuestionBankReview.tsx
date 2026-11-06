@@ -61,17 +61,17 @@ export default function QuestionBankReview() {
   const choiceContent = (question: ReviewQuestion, choice: QuestionChoice) => {
     const detail = question.choiceDetails?.[choice.value];
     if (!detail) return choice.labelArabic;
-    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{detail.reference}</span></span>;
+    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
   };
 
   return (
     <main className="w-full px-4 py-8" dir={ar ? 'rtl' : 'ltr'}>
-      <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">{ar ? 'بنك أسئلة الاختبار' : 'Quiz question bank'}</h1>
-      <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">{ar ? 'عرض تحريري عام للقراءة فقط.' : 'Public, read-only editorial review.'}</p>
+      <h1 className="mb-2 text-2xl font-bold text-[var(--home-ink)]">{ar ? 'بنك أسئلة الاختبار' : 'Quiz question bank'}</h1>
+      <p className="mb-6 text-sm text-[var(--home-muted)]">{ar ? 'عرض تحريري عام للقراءة فقط.' : 'Public, read-only editorial review.'}</p>
       <div className="mb-6 grid gap-3 md:grid-cols-5">
         <label className="md:col-span-2">
           <span className="mb-1 flex items-center gap-2 text-sm font-semibold"><FontAwesomeIcon icon={faMagnifyingGlass} />{ar ? 'بحث' : 'Search'}</span>
-          <input defaultValue={searchParams.get('search') ?? ''} onBlur={(event) => setParam('search', event.target.value.trim())} className="w-full rounded border border-gray-300 bg-transparent px-3 py-2 dark:border-white/20" />
+          <input defaultValue={searchParams.get('search') ?? ''} onBlur={(event) => setParam('search', event.target.value.trim())} className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2" />
         </label>
         <Filter label={ar ? 'الحالة' : 'Status'} value={searchParams.get('status') ?? ''} values={QUESTION_STATUSES} onChange={(value) => setParam('status', value)} />
         <Filter label={ar ? 'الموضوع' : 'Topic'} value={searchParams.get('topic') ?? ''} values={TOPICS} onChange={(value) => setParam('topic', value)} />
@@ -85,34 +85,34 @@ export default function QuestionBankReview() {
       {error ? <ErrorMessage title={ar ? 'تعذر تحميل الأسئلة' : 'Failed to load questions'} /> : null}
       {isLoading || !data ? <LoadingSpinner fill /> : (
         <>
-          <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">{ar ? `${data.pagination.total} سؤالًا` : `${data.pagination.total} questions`}</p>
+          <p className="mb-4 text-sm text-[var(--home-muted)]">{ar ? `${data.pagination.total} سؤالًا` : `${data.pagination.total} questions`}</p>
           <ol className="space-y-5">
             {data.questions.map((question) => {
               const prompt = question.promptArabicOverride ?? question.generatedPromptArabic;
               return (
-                <li key={question.key} className="rounded-lg border border-gray-200 p-5 dark:border-white/10">
-                  <div className="mb-3 flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <li key={question.key} className="rounded-lg border border-[var(--home-rule)] p-5">
+                  <div className="mb-3 flex flex-wrap gap-2 text-xs text-[var(--home-muted)]">
                     <span>{question.status}</span><span>{question.topic}</span><span>{question.family}</span>
                   </div>
                   <p className="mb-3 font-semibold" dir="rtl">{prompt}</p>
                   {question.ayah ? (
-                    <blockquote className="mb-3 border-s-2 border-amber-400 ps-3" dir="rtl">
+                    <blockquote className="mb-3 border-s-2 border-[var(--home-accent)] ps-3" dir="rtl">
                       <p className="leading-relaxed">{question.ayah.text}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{question.ayah.reference}</p>
+                      <p className="text-xs text-[var(--home-muted)]">{question.ayah.reference}</p>
                     </blockquote>
                   ) : null}
                   {question.promptArabicOverride && question.promptArabicOverride !== question.generatedPromptArabic ? (
-                    <p className="mb-3 text-sm text-gray-500" dir="rtl">المولّد: {question.generatedPromptArabic}</p>
+                    <p className="mb-3 text-sm text-[var(--home-muted)]" dir="rtl">المولّد: {question.generatedPromptArabic}</p>
                   ) : null}
                   <ul className="mb-3 grid gap-2 md:grid-cols-2" dir="rtl">
                     {question.choices.map((choice) => (
-                      <li key={choice.value} className={`flex items-start justify-between gap-3 rounded border px-3 py-2 ${choice.value === question.correctAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : 'border-gray-200 dark:border-white/10'}`}>
+                      <li key={choice.value} className={`flex items-start justify-between gap-3 rounded border px-3 py-2 ${choice.value === question.correctAnswer ? 'border-[var(--home-green)] bg-[color-mix(in_srgb,var(--home-green)_10%,var(--home-paper))]' : 'border-[var(--home-rule)]'}`}>
                         {choiceContent(question, choice)}
-                        {choice.value === question.correctAnswer ? <span className="shrink-0 text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'الإجابة الصحيحة' : 'Correct answer'}</span> : null}
+                        {choice.value === question.correctAnswer ? <span className="shrink-0 text-xs font-semibold text-[var(--home-green)]">{ar ? 'الإجابة الصحيحة' : 'Correct answer'}</span> : null}
                       </li>
                     ))}
                   </ul>
-                  {question.rejectionReason ? <p className="mb-2 text-sm text-red-700 dark:text-red-300">{question.rejectionReason}</p> : null}
+                  {question.rejectionReason ? <p className="mb-2 text-sm text-[var(--home-accent)]">{question.rejectionReason}</p> : null}
                   {question.evidence.reference && (
                     <Button className="mt-2" size="sm" variant="outline" onClick={() => setReference(question.evidence.reference)}>
                       <FontAwesomeIcon icon={faBookOpen} />
@@ -143,7 +143,7 @@ function Filter({ label, value, values, onChange }: { label: string; value: stri
   return (
     <label>
       <span className="mb-1 block text-sm font-semibold">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded border border-gray-300 bg-white px-3 py-2 dark:border-white/20 dark:bg-black">
+      <select value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-3 py-2">
         <option value="">All</option>
         {values.map((item) => <option key={item} value={item}>{item}</option>)}
       </select>

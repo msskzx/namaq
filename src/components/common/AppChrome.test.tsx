@@ -1,12 +1,14 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import AppChrome, { useHideFooter } from './AppChrome';
 
 vi.mock('./NavBar', () => ({ default: () => <nav />, NavSlotContext: React.createContext(() => {}), NavSlotElement: React.createContext(null), RailSlotContext: React.createContext(() => {}), RailSlotElement: React.createContext(null) }));
 vi.mock('./TabBar', () => ({ default: () => <nav aria-label="tabs" />, TabSpacer: () => <div /> }));
-vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
+const route = vi.hoisted(() => ({ pathname: '/' }));
+vi.mock('next/navigation', () => ({ usePathname: () => route.pathname }));
+afterEach(() => { cleanup(); route.pathname = '/'; });
 vi.mock('./NavigationLoader', () => ({ NavigationLoaderProvider: ({ children }: { children: React.ReactNode }) => <>{children}</> }));
 
 function Page() {
@@ -16,6 +18,20 @@ function Page() {
 }
 
 describe('AppChrome', () => {
+  it.each(['/quran', '/quran/read/1', '/quran/branches', '/quizzes', '/quizzes/party/abc'])('applies the feature palette including chrome on %s', pathname => {
+    route.pathname = pathname;
+    const { container } = render(<AppChrome><Page /></AppChrome>);
+    const scope = container.querySelector('[data-feature-theme]');
+    expect(scope?.querySelector('main')).toBeTruthy();
+    expect(scope?.querySelector('nav')).toBeTruthy();
+  });
+
+  it.each(['/', '/experiments', '/experiments/quran', '/quran/words', '/quran/compare', '/quran/prophets/musa', '/quran/qiraat', '/people', '/quizzes-other'])('keeps the existing palette on %s', pathname => {
+    route.pathname = pathname;
+    const { container } = render(<AppChrome><Page /></AppChrome>);
+    expect(container.querySelector('[data-feature-theme]')).toBeNull();
+  });
+
   it('has no footer, and hides the tab bar while a page asks for it and shows it again after', () => {
     render(<AppChrome><Page /></AppChrome>);
     expect(document.querySelector('footer')).toBeNull();

@@ -1,0 +1,47 @@
+.page:global([data-tree]) { border-color: transparent; }
+
+.page :global([data-node]) {
+  border: 1px solid var(--home-rule);
+  border-radius: 0.35rem 0.85rem;
+  background: transparent;
+  transition: opacity var(--grow-fade, 250ms) ease-out, background-color 160ms, border-color 160ms;
+}
+
+.page :global([data-node]:hover),
+.page :global([data-node][data-lit]) {
+  background: color-mix(in srgb, var(--branch-blue) 12%, var(--home-paper));
+}
+
+.page :global([data-node][data-selected]) {
+  border-color: var(--branch-blue);
+  background: color-mix(in srgb, var(--branch-blue) 22%, var(--home-paper));
+}
+
+.page :global([data-node]:has(:focus-visible)) {
+  outline: 2px solid var(--branch-blue);
+  outline-offset: 3px;
+}
+
+.page :global([data-node][data-ctx]) { border: 1px dashed var(--home-rule); }
+.page :global([data-node] header) { border-bottom: 0; }
+
+.page :global([data-fan]:has(> [data-tree-links]) > ul > li > span[aria-hidden]),
+.page :global([data-fan]:has(> [data-tree-links]) > [data-stem]) { visibility: hidden; }
+
+.page :global([data-tree-links] path) {
+  stroke: var(--home-rule);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.page :global([data-tree-links] path[data-connected]) {
+  stroke: var(--branch-blue);
+  stroke-width: 2.5;
+}
+
+.page :global(span[data-line]) { border-color: var(--home-rule); }
+.page :global(span[data-line][data-connected]) { border-color: var(--branch-blue); }
+
+@media (prefers-reduced-motion: reduce) {
+  .page :global([data-node]) { transition: none; }
+}
