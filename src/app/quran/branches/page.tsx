@@ -15,7 +15,7 @@ import TreeSteps, { TreeMode, TreeProgress } from './TreeSteps';
 import BranchHeading, { MatchingRules } from './BranchHeading';
 import { GroupConnections } from './GroupConnections';
 import { GroupDetails } from './GroupDetails';
-import { browseGroups, groupFilters, hasGroupFilters } from '@/lib/quran/mutashabih/browse';
+import { browseGroups, filteredAyat, groupFilters, hasGroupFilters } from '@/lib/quran/mutashabih/browse';
 import type { Group } from '@/lib/quran/mutashabih/types';
 import { groupPresentation } from '@/lib/quran/mutashabih/presentation';
 import { groups } from '@/lib/quran/mutashabih/data';
@@ -89,7 +89,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const requestedOccurrences = parseOccurrences(first(params.at));
   const subtree = built.subtrees?.byId.get(requestedId);
   const subtreeHolds = subtree && requestedOccurrences.every(entry => subtree.occurrences.some(occurrence => entry.startsWith(`${occurrence.key}:`)));
-  const requestedGroup = groupsById.get(requestedId);
+  const visibleAyat = filteredAyat(allAyat, filters, range);
+  const withinScope = (key: string) => visibleAyat.has(key);
+  const matchingGroups = browseGroups(groups, filters, allAyat, range);
+  const requestedGroup = matchingGroups.find(group => group.id === requestedId) ?? groupsById.get(requestedId);
   const resolved: TreeGroup | undefined = requestedGroup?.tree ?? (subtreeHolds ? subtree : undefined) ?? resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
   const id = requestedGroup?.id ?? resolved?.id ?? requestedId;
   const query = (first(params.q) ?? '').trim();
@@ -102,9 +105,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
   const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
   const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, filters, saved: savedIds.length ? savedIds : undefined };
+  if (resolved?.family && query && !textIs(resolved.text, query)) redirect(branchesHref(id, juz, { ...state, query: resolved.text }));
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
-  const groupPieces = toPieces(browseGroups(groups, filters, allAyat, range).map(group => ({ ...group.tree, id: group.id })));
+  const groupPieces = toPieces(matchingGroups.map(group => ({ ...group.tree, id: group.id })));
   const legacy = searchableFor(built);
   const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? toPieces(built.trees) : groupPieces;
   const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), filters]) : '';
@@ -130,7 +134,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     ? [...new Set(requestedGroup.places.filter(place => treeGroup.occurrences.some(occurrence => occurrence.key === place.key)).flatMap(place => place.through ? [place.key, place.through] : [place.key]))].map(key => allAyat.get(key)!)
     : treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
   const presentation = treeGroup
-    ? requestedGroup ? groupPresentation({ ...requestedGroup, tree: treeGroup }, allAyat) : phrasePresentation(treeGroup, built.ayat, true, !range)
+    ? requestedGroup ? groupPresentation({ ...requestedGroup, tree: treeGroup }, allAyat, range, filters) : phrasePresentation(treeGroup, built.ayat, true, !range, withinScope)
     : undefined;
   const tree = presentation?.tree ?? null;
   const subtreeLinks = tree && treeGroup ? subtreeLinksFor(treeGroup, tree, juz, phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat), false, built.subtrees?.idsFor(treeGroup), state.mode) : undefined;
@@ -151,8 +155,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const neighbourAt = (index: number) => {
     const phrase = steps && !cards && cut[index]?.phrase;
     if (!phrase) return undefined;
-    const group = groupsById.get(phrase.id);
-    return group ? groupPresentation(group, allAyat) : phrasePresentation(phrase, built.ayat, true, !range);
+    const group = matchingGroups.find(group => group.id === phrase.id);
+    return group ? groupPresentation(group, allAyat, range, filters) : phrasePresentation(phrase, built.ayat, true, !range, withinScope);
   };
   const neighbours = { previous: steps?.previous ? neighbourAt(position - 1) : undefined, next: steps?.next ? neighbourAt(position + 1) : undefined };
   const allSurahs = await surahList();

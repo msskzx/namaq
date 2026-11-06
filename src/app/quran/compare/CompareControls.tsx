@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layers3, ListOrdered, Waves } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import RangeFilter from '@/components/quran/RangeFilter';
@@ -30,15 +30,19 @@ export function rangeHref(query: Query, range: CompareRange) {
 
 export default function CompareControls({ tab, query, range, summary }: { tab: CompareTab; query: Query; range: CompareRange; summary: string }) {
   const { unit } = range;
-  const labels = LABELS[unit];
+  const [selectedUnit, setSelectedUnit] = useState(unit);
+  useEffect(() => { setSelectedUnit(unit); }, [unit]);
+  const labels = LABELS[selectedUnit];
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper-deep)] p-3">
       <Segmented label="طريقة المقارنة" options={TABS.map(t => ({ key: t.tab, label: t.label, icon: t.icon, current: t.tab === tab, href: t.tab === tab ? rangeHref(query, range) : tabHref(t.tab, query) }))} />
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-[var(--home-muted)]">النطاق</span>
-        <Segmented label="النطاق بالأجزاء أو بالسور" options={(['juz', 'surah'] as const).map(u => ({ key: u, label: u === 'juz' ? 'بالأجزاء' : 'بالسور', current: u === unit, href: rangeHref(query, u === unit ? range : { unit: u, range: null }) }))} />
-        <RangeFilter key={unit} range={range.range} max={RANGE_MAX[unit]} names={[`${unit}From`, `${unit}To`]} href={(next?: JuzRange) => rangeHref(query, { unit, range: next ?? null })}
-          labels={{ ...labels, invalid: shown => `أدخل رقمين من ١ إلى ${num(RANGE_MAX[unit])}، على أن تكون البداية قبل النهاية أو مساوية لها. النتائج المعروضة ما زالت ${labels.of} ${num(shown.from)}–${num(shown.to)}.` }} />
+        <select aria-label="النطاق بالأجزاء أو بالسور" value={selectedUnit} onChange={event => setSelectedUnit(event.target.value as RangeUnit)} className="h-10 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base">
+          <option value="juz">بالأجزاء</option><option value="surah">بالسور</option>
+        </select>
+        <RangeFilter key={selectedUnit} range={selectedUnit === unit ? range.range : null} max={RANGE_MAX[selectedUnit]} names={[`${selectedUnit}From`, `${selectedUnit}To`]} href={(next?: JuzRange) => rangeHref(query, { unit: selectedUnit, range: next ?? null })}
+          labels={{ ...labels, invalid: shown => `أدخل رقمين من ١ إلى ${num(RANGE_MAX[selectedUnit])}، على أن تكون البداية قبل النهاية أو مساوية لها. النتائج المعروضة ما زالت ${labels.of} ${num(shown.from)}–${num(shown.to)}.` }} />
       </div>
       <p role="status" className="text-sm text-[var(--home-muted)] lg:ms-auto">{summary}</p>
     </div>

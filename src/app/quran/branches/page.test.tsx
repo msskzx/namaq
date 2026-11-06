@@ -78,6 +78,110 @@ describe('Quran branch trees', () => {
     }
   });
 
+  it('continues the identical الم group in matrix view just like the plain phrase URL', async () => {
+    localStorage.setItem('branches-surround', '0');
+    const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
+    try {
+      render(await open({ o: 'group:2:1,3:1,29:1,30:1,31:1,32:1', m: 'cards' }));
+      const card = await screen.findByLabelText('البقرة ١–٢');
+      expect(card.textContent).toContain((data.ayat as BranchAyah[]).find(ayah => ayah.key === '2:2')!.words.join(' '));
+      expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(2);
+      expect(document.querySelectorAll('[data-col][data-current]')).toHaveLength(6);
+    } finally {
+      context.mockRestore();
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
+  it('shows only ayat inside juz 25–30 after entering the matrix through the range filter', async () => {
+    localStorage.setItem('branches-surround', '0');
+    const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
+    try {
+      render(await follow({ juzFrom: '25', juzTo: '30', m: 'cards' }));
+      await screen.findByRole('region', { name: 'مصفوفة الآيات' });
+      const shown = context.mock.calls.flatMap(([keys]) => keys);
+      expect(shown.length).toBeGreaterThan(1);
+      expect(shown.filter(key => !inJuzRange(key, { from: 25, to: 30 }))).toEqual([]);
+    } finally {
+      context.mockRestore();
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
+  it('limits the tree and its neighboring previews to the selected juz range', async () => {
+    localStorage.setItem('branches-surround', '0');
+    try {
+      render(await follow({ juzFrom: '25', juzTo: '30', m: 'tree' }));
+      const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
+      const shown = [...new Set([...tree.querySelectorAll('[data-keys]')].flatMap(element => element.getAttribute('data-keys')!.split(' ')))];
+      expect(shown.length).toBeGreaterThan(1);
+      expect(shown.filter(key => !inJuzRange(key, { from: 25, to: 30 }))).toEqual([]);
+    } finally {
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
+  it('does not extend a plain phrase beyond the selected final juz', async () => {
+    localStorage.setItem('branches-surround', '0');
+    const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
+    const values = { o: 'العزيز الحكيم', juzFrom: '25', juzTo: '25', m: 'cards' };
+    try {
+      const destination = await target(values);
+      render(await open(destination ? paramsOf(destination) : values));
+      await screen.findByRole('region', { name: 'مصفوفة الآيات' });
+      const shown = context.mock.calls.flatMap(([keys]) => keys);
+      expect(shown).toContain('45:37');
+      expect(shown.filter(key => !inJuzRange(key, { from: 25, to: 25 }))).toEqual([]);
+    } finally {
+      context.mockRestore();
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
+  it.each(['chapter', 'page'])('limits displayed cards and continuation to a %s range', async unit => {
+    localStorage.setItem('branches-surround', '0');
+    const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
+    const values: Record<string, string> = unit === 'chapter' ? { surahFrom: '50', surahTo: '60' } : { pageFrom: '500', pageTo: '550' };
+    try {
+      render(await follow({ ...values, m: 'cards' }));
+      await screen.findByRole('region', { name: 'مصفوفة الآيات' });
+      const shown = context.mock.calls.flatMap(([keys]) => keys);
+      expect(shown.length).toBeGreaterThan(1);
+      for (const key of shown) {
+        const ayah = (data.ayat as BranchAyah[]).find(ayah => ayah.key === key)!;
+        const position = unit === 'chapter' ? Number(key.split(':')[0]) : ayah.page;
+        expect(position).toBeGreaterThanOrEqual(unit === 'chapter' ? 50 : 500);
+        expect(position).toBeLessThanOrEqual(unit === 'chapter' ? 60 : 550);
+      }
+    } finally {
+      context.mockRestore();
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
+  it('canonicalizes a selected family away from the old partial search and shows one family result', async () => {
+    const destination = await target({ o: 'family:hamidat', m: 'cards', n: 'last', q: 'الح' });
+    expect(paramsOf(destination)).toEqual({ o: 'family:hamidat', m: 'cards', q: 'الحامدات' });
+    render(await open(paramsOf(destination)));
+    expect(screen.getByRole('progressbar').getAttribute('max')).toBe('1');
+  });
+
+  it('keeps stored continuation text inside juz 1 for the plain لكم ما matrix', async () => {
+    localStorage.setItem('branches-surround', '0');
+    const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
+    try {
+      render(await open({ o: 'لكم ما', juzFrom: '1', juzTo: '1', m: 'cards' }));
+      await screen.findByRole('region', { name: 'مصفوفة الآيات' });
+      const shown = context.mock.calls.flatMap(([keys]) => keys);
+      expect(shown).toContain('2:141');
+      expect(shown).not.toContain('2:142');
+      expect(shown.filter(key => !inJuzRange(key, { from: 1, to: 1 }))).toEqual([]);
+    } finally {
+      context.mockRestore();
+      localStorage.removeItem('branches-surround');
+    }
+  });
+
   it('loads the connector default independently from an explicit matrix view', async () => {
     const group = groupData.find(group => group.citations.some(citation => citation.id === 'K02'))!;
     render(await open({ o: group.id, m: 'cards' }));
@@ -157,7 +261,7 @@ describe('Quran branch trees', () => {
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
     render(await follow({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
-    expect(within(tree).getAllByText(/^فَذَرْهُمْ/).filter(element => !element.closest('[data-tree-neighbour]'))).toHaveLength(1);
+    expect(within(tree).getAllByText(/^فَذَرْهُمْ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
     expect(within(tree).queryByText('ف')).toBeNull();
     expect(tree.textContent).toContain('الزخرف ٨٣');
     expect(tree.textContent).toContain('٧٠:٤٢');
@@ -396,15 +500,16 @@ describe('Quran branch trees', () => {
     expect(within(screen.getByTestId('page-help')).queryByText('نفس الكلمة')).toBeTruthy();
   });
 
-  it('keeps the juz range in the filter sheet, named once', async () => {
+  it('keeps the scope dropdown and a single Apply inside the filter sheet', async () => {
     render(await open({ o: 'لا اثم عليه' }));
-    const form = screen.getByRole('form', { name: 'نطاق الأجزاء', hidden: true });
-    expect(form.closest('dialog')).toBeTruthy();
-    expect(form.textContent!.match(/الجزء/g)).toHaveLength(1);
+    const form = screen.getByRole('form', { name: 'تصفية', hidden: true });
+    expect(form.closest('[popover="auto"]')).toBeTruthy();
+    expect(form.querySelector('select')).toBeTruthy();
+    expect(form.querySelectorAll('button[type="submit"]')).toHaveLength(1);
     expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).parentElement!.querySelector('.rounded-full')).toBeNull();
-    HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) { this.open = true; };
+    HTMLElement.prototype.showPopover ??= function () { this.dispatchEvent(Object.assign(new Event('toggle'), { newState: 'open' })); };
     fireEvent.click(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }));
-    expect(document.activeElement).toBe(form.querySelector('input'));
+    expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).getAttribute('aria-expanded')).toBe('true');
   });
 });
 

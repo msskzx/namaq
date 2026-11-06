@@ -35,6 +35,13 @@ const phrase = (id: string, text: string, count: number, partition?: string) => 
 const suggestionOptions = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option');
 
 describe('opening search journey', () => {
+  it('uses the selected family name instead of retaining the broad typed prefix', () => {
+    render(<OpeningSearch top={[]} phrases={[phrase('family:hamidat', 'الحامدات', 5)]} current="" view={{ mode: 'cards', card: 'last' }} />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'الح' } });
+    fireEvent.click(suggestionOptions()[0]);
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('family:hamidat', undefined, { mode: 'cards', query: 'الحامدات' }));
+  });
+
   it('shows the results, not a stale suggestion, after a range update removes the highlighted candidate', () => {
     const first = phrase('قال رب', 'قَالَ رَبِّ', 4);
     const second = phrase('قال رب اني', 'قَالَ رَبِّ إِنِّي', 2);
@@ -74,7 +81,7 @@ describe('opening search journey', () => {
     expect(suggestionOptions()[0].textContent).toContain('أَرَءَيْتُمْ');
     fireEvent.click(suggestionOptions()[0]);
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', { from: 25, to: 30 }, { grouped: true, page: 4, query: 'ارايتم' }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', { from: 25, to: 30 }, { grouped: true, page: 4, query: 'أَرَءَيْتُمْ' }));
   });
 
   it('uses arrow keys to select a suggestion and Enter to open it', () => {
@@ -86,7 +93,7 @@ describe('opening search journey', () => {
     fireEvent.keyDown(box, { key: 'ArrowDown' });
     fireEvent.keyDown(box, { key: 'Enter' });
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('قال رب اني', undefined, { partition: 'seven', query: 'قال رب اني' }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('قال رب اني', undefined, { partition: 'seven', query: 'قَالَ رَبِّ إِنِّي' }));
   });
 
   it('offers distinct vocalized choices and counts for an ambiguous legacy phrase', () => {
@@ -97,8 +104,8 @@ describe('opening search journey', () => {
     expect(choices).toHaveLength(2);
     expect(choices.map(choice => choice.textContent)).toEqual(expect.arrayContaining([expect.stringMatching(/2|٢/), expect.stringMatching(/7|٧/)]));
     expect(choices.map(choice => choice.getAttribute('href'))).toEqual([
-      branchesHref('قال رب اني', { from: 1, to: 9 }, { partition: 'two', grouped: true, page: 3 }),
-      branchesHref('قال رب اني', { from: 1, to: 9 }, { partition: 'seven', grouped: true, page: 3 }),
+      branchesHref('قال رب اني', { from: 1, to: 9 }, { partition: 'two', grouped: true, page: 3, query: 'قَالَ رَبِّ أَنَّىٰ' }),
+      branchesHref('قال رب اني', { from: 1, to: 9 }, { partition: 'seven', grouped: true, page: 3, query: 'قَالَ رَبِّ إِنِّي' }),
     ]);
   });
 
