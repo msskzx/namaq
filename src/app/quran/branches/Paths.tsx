@@ -5,28 +5,31 @@ import { Route } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { litPaths, pathToggleKey, togglePath } from '@/lib/quran/pathHighlight';
+import TreeLinks from './TreeLinks';
 
 // Only the path button lights a path: hover lit paths by accident on phones.
-type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin(id: string, keys: string[]): void };
+type Paths = { lit: Set<string>; pinned: Map<string, string[]>; organic: boolean; pin(id: string, keys: string[]): void };
 
 const PathContext = createContext<Paths | null>(null);
 const LINE = 'border-[var(--home-rule)]';
 const LIT = 'border-[var(--home-accent)]';
 
-export function usePaths(lit: string[] = []) {
+export function usePaths(lit: string[] = [], organic = false) {
   const [pinned, setPinned] = useState(() => new Map<string, string[]>(lit.length ? [['search', lit]] : []));
   return useMemo<Paths>(() => ({
     lit: litPaths(pinned),
     pinned,
+    organic,
     pin: (id, keys) => setPinned(current => togglePath(current, id, keys)),
-  }), [pinned]);
+  }), [pinned, organic]);
 }
 
 export const PathProvider = PathContext.Provider;
 export const useOuterPaths = () => useContext(PathContext);
 
-export function PathScope({ children, lit }: { children: React.ReactNode; lit?: string[] }) {
-  return <PathProvider value={usePaths(lit)}>{children}</PathProvider>;
+export function PathScope({ children, lit, organic }: { children: React.ReactNode; lit?: string[]; organic?: boolean }) {
+  const parent = useOuterPaths();
+  return <PathProvider value={usePaths(lit, organic ?? parent?.organic)}>{children}</PathProvider>;
 }
 
 export function useIsLit() {
@@ -44,7 +47,7 @@ export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id:
     if ((event.target as Element).closest(INTERACTIVE) || window.getSelection()?.toString()) return;
     paths.pin(id, keys);
   } : undefined;
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onClick={tap} className={`shrink-0 bg-[var(--home-paper-deep)] px-3 py-1.5 text-center ${ctx ? "border border-dashed" : "border-4 border-double"} ${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} data-selected={paths?.pinned.has(pathToggleKey(id, keys)) || undefined} onClick={tap} className={`shrink-0 bg-[var(--home-paper-deep)] px-3 py-1.5 text-center ${ctx ? "border border-dashed" : "border-4 border-double"} ${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {
@@ -92,15 +95,16 @@ export function Stem({ lit, side }: { lit: number[]; side: 'start' | 'end' }) {
 export type FanEntry = { key: string; keys: string[]; item: React.ReactNode };
 
 export function Fan({ side, entries, label }: { side: 'start' | 'end'; entries: FanEntry[]; label?: string }) {
+  const organic = useContext(PathContext)?.organic;
   const isLit = useIsLit();
   const lit = entries.flatMap((entry, i) => (isLit(entry.keys) ? [i] : []));
   const start = side === 'start';
   return (
-    <div className="relative shrink-0">
+    <div data-fan={side} className="relative shrink-0">
       {/* Right to left by default; inside a top-down tree ([data-down]) the fan becomes a row under (start) or above (end) its node. */}
       <ul aria-label={label} className={`flex flex-col [[data-down]_&]:flex-row ${start ? '[[data-down]_&]:items-start' : '[[data-down]_&]:items-end'}`}>
         {entries.map((entry, i) => (
-          <li key={entry.key} className={`relative flex items-center py-1 [[data-down]_&]:flex-col [[data-down]_&]:px-1 ${start ? 'ps-6 [[data-down]_&]:pb-0 [[data-down]_&]:pt-6' : 'justify-end pe-6 [[data-down]_&]:pt-0 [[data-down]_&]:pb-6'}`}>
+          <li key={entry.key} data-entry={i} className={`relative flex items-center py-1 [[data-down]_&]:flex-col [[data-down]_&]:px-1 ${start ? 'ps-6 [[data-down]_&]:pb-0 [[data-down]_&]:pt-6' : 'justify-end pe-6 [[data-down]_&]:pt-0 [[data-down]_&]:pb-6'}`}>
             <span aria-hidden data-line className={`absolute top-1/2 w-6 -translate-y-1/2 border-t-2 [[data-down]_&]:start-1/2 [[data-down]_&]:end-auto [[data-down]_&]:h-6 [[data-down]_&]:w-0 [[data-down]_&]:translate-y-0 [[data-down]_&]:rtl:translate-x-px [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${start ? 'start-0 [[data-down]_&]:top-0' : 'end-0 [[data-down]_&]:top-auto [[data-down]_&]:bottom-0'} ${lit.includes(i) ? LIT : LINE}`} />
             {entries.length > 1 && <span aria-hidden className={`absolute ${start ? 'start-0 border-s-2 [[data-down]_&]:top-0 [[data-down]_&]:bottom-auto' : 'end-0 border-e-2 [[data-down]_&]:top-auto [[data-down]_&]:bottom-0'} ${LINE} ${i === 0 ? 'top-1/2 [[data-down]_&]:start-1/2' : 'top-0 [[data-down]_&]:start-0'} ${i === entries.length - 1 ? 'bottom-1/2 [[data-down]_&]:end-1/2' : 'bottom-0 [[data-down]_&]:end-0'} [[data-down]_&]:h-0 [[data-down]_&]:border-x-0 [[data-down]_&]:border-t-2`} />}
             {entry.item}
@@ -108,8 +112,12 @@ export function Fan({ side, entries, label }: { side: 'start' | 'end'; entries: 
         ))}
       </ul>
       {entries.length > 1 && <Stem lit={lit} side={side} />}
+      {organic && <TreeLinks key={JSON.stringify(entries.map(entry => entry.key))} side={side} lit={lit} />}
     </div>
   );
 }
 
-export const Stub = ({ keys }: { keys: string[] }) => <span aria-hidden data-line className={`w-4 shrink-0 border-t-2 [[data-down]_&]:h-4 [[data-down]_&]:w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${useIsLit()(keys) ? LIT : LINE}`} />;
+export const Stub = ({ keys }: { keys: string[] }) => {
+  const on = useIsLit()(keys);
+  return <span aria-hidden data-line data-connected={on || undefined} className={`w-4 shrink-0 border-t-2 [[data-down]_&]:h-4 [[data-down]_&]:w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${on ? LIT : LINE}`} />;
+};

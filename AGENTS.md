@@ -91,6 +91,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Git
 
+- Before planning or editing in a new or reused worktree, run `git fetch origin main`
+  and integrate the fetched `origin/main`, preserving existing work. Verify with
+  `git merge-base --is-ancestor origin/main HEAD` before editing. Fetch again
+  before opening a PR and integrate any new commits, then rerun the required checks.
+
 - Keep worktrees inside the main checkout, under a root named for the agent that
   creates them: Codex uses `.codex/worktrees/<branch-name>` with
   `codex/<branch-name>` branches, Claude Code uses `.claude/worktrees/<branch-name>`

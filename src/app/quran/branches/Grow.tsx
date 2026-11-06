@@ -7,6 +7,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { HOURGLASS_FRAME, hourglassSand } from '@/lib/quran/hourglass';
 import type { GrowthStep } from '@/lib/quran/growth';
 import styles from './Grow.module.css';
+import { reducedMotion } from '@/components/common/useSwipe';
 
 /** Watch grows the tree on its own; ask stops at each split with the next box empty until the timer ends or a tap. */
 export type GrowMode = 'watch' | 'ask';
@@ -106,20 +107,30 @@ const rootOf = (card: HTMLElement): HTMLElement | undefined => [...card.querySel
 function showLine(item: Element | null | undefined) {
   if (!item) return;
   show(item);
+  show(treeLink(item));
   item.querySelectorAll(':scope > span[aria-hidden]').forEach(show);
   const stub = item.parentElement?.parentElement?.previousElementSibling;
   if (stub?.hasAttribute('data-line')) show(stub);
   show(item.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
 }
 
-async function drawSegment(element: HTMLElement | null | undefined, token: number) {
+function treeLink(item: Element | null | undefined) {
+  return item?.parentElement?.parentElement?.querySelector<SVGPathElement>(`:scope > [data-tree-links] > [data-entry="${item.getAttribute('data-entry')}"]`);
+}
+
+async function drawSegment(element: HTMLElement | SVGPathElement | null | undefined, token: number) {
   if (!element || !element.hasAttribute('data-hide')) return token === run;
-  element.setAttribute('data-drawing', element.closest('[data-down]') ? 'down' : getComputedStyle(element).direction === 'ltr' ? 'right' : 'left');
-  element.style.setProperty('--grow-line', '0');
+  const curved = element.tagName.toLowerCase() === 'path';
+  if (curved) element.style.strokeDasharray = '1';
+  else element.setAttribute('data-drawing', element.closest('[data-down]') ? 'down' : getComputedStyle(element).direction === 'ltr' ? 'right' : 'left');
+  const progress = (fraction: number) => curved ? element.style.setProperty('stroke-dashoffset', String(1 - fraction)) : element.style.setProperty('--grow-line', String(fraction));
+  progress(0);
   show(element);
-  if (!(await wait(LINE / state.speed, token, undefined, fraction => element.style.setProperty('--grow-line', String(fraction))))) return false;
+  if (!(await wait(LINE / state.speed, token, undefined, progress))) return false;
   element.removeAttribute('data-drawing');
   element.style.removeProperty('--grow-line');
+  element.style.removeProperty('stroke-dasharray');
+  element.style.removeProperty('stroke-dashoffset');
   return true;
 }
 
@@ -130,7 +141,7 @@ async function drawLine(item: Element | null | undefined, token: number) {
   show(item);
   item.querySelectorAll(':scope > span[aria-hidden]:not([data-line])').forEach(show);
   show(item.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
-  return drawSegment(item.querySelector<HTMLElement>(':scope > [data-line]'), token);
+  return drawSegment(treeLink(item) ?? item.querySelector<HTMLElement>(':scope > [data-line]'), token);
 }
 
 function showHourglass(box: Element) {
@@ -170,7 +181,7 @@ function clear(root: HTMLElement) {
   root.querySelectorAll('[data-ask]').forEach(clearAsk);
   root.querySelectorAll<HTMLElement>('[data-drawing]').forEach(element => { element.removeAttribute('data-drawing'); element.style.removeProperty('--grow-line'); });
   root.querySelectorAll('[data-matrix-prompt]').forEach(element => element.remove());
-  root.querySelectorAll<SVGPathElement>('[data-connection] path').forEach(path => { path.style.removeProperty('stroke-dasharray'); path.style.removeProperty('stroke-dashoffset'); });
+  root.querySelectorAll<SVGPathElement>('[data-connection] path, [data-tree-links] path').forEach(path => { path.style.removeProperty('stroke-dasharray'); path.style.removeProperty('stroke-dashoffset'); });
   root.removeEventListener('click', onTap, true);
   root.removeEventListener('keydown', onKey, true);
 }
@@ -200,6 +211,10 @@ export async function play(from = 0, { video = false } = {}) {
   if (!root || plan.length === 0) return;
   const token = ++run;
   clear(root);
+  if (!video && card.hasAttribute('data-organic') && reducedMotion()) {
+    set({ status: 'done', at: plan.length, total: plan.length });
+    return;
+  }
   root.classList.add(styles.growing);
   root.addEventListener('click', onTap, true);
   root.addEventListener('keydown', onKey, true);
@@ -246,7 +261,7 @@ export async function play(from = 0, { video = false } = {}) {
       if (route[at + 1]?.closest('li') === item) continue;
       item?.querySelectorAll(':scope > span[aria-hidden]:not([data-line])').forEach(show);
       show(item?.parentElement?.parentElement?.querySelector(':scope > [data-stem]'));
-      if (!(await drawSegment(item?.querySelector<HTMLElement>(':scope > [data-line]'), token))) return;
+      if (!(await drawSegment(treeLink(item) ?? item?.querySelector<HTMLElement>(':scope > [data-line]'), token))) return;
     }
     if (route.length && bridge?.hasAttribute('data-line') && !(await drawSegment(bridge as HTMLElement, token))) return;
     for (let j = 0; j < step.nodes.length; j++) {

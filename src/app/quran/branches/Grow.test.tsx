@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import BranchTree from './BranchTree';
 import { GrowControls, GrowProgress, setPrefs } from './Grow';
+import { PathScope } from './Paths';
 import { CardActions } from './Filters';
 
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
@@ -198,6 +199,41 @@ describe('growing a tree', () => {
     fireEvent.click(screen.getByRole('button', { name: 'إعادة ضبط' }));
     fireEvent.click(screen.getByRole('button', { name: 'مهلة السؤال 1s' }));
     expect(JSON.parse(localStorage.getItem('branches-grow')!).timer).toBe(3);
+  });
+
+  it('shows the complete pilot tree immediately when reduced motion is requested', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
+    try {
+      render(<><PathScope organic><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
+      grow();
+      expect(document.querySelectorAll('[data-hide], [inert], [data-ask]')).toHaveLength(0);
+      expect(screen.getByRole('button', { name: 'إعادة' })).toBeTruthy();
+    } finally { vi.unstubAllGlobals(); }
+  });
+
+  it('reveals a curved connector before its words, then clears hidden links when stopped', async () => {
+    const width = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(400);
+    const height = vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
+    try {
+      render(<><PathScope organic><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
+      grow();
+      const first = box('جَنَّـٰتٍ وَعُيُونٍ');
+      const link = document.querySelector('[data-tree-links] > [data-entry="0"]')!;
+      expect(link.hasAttribute('data-hide')).toBe(true);
+      await advance(450);
+      expect(link.hasAttribute('data-hide')).toBe(false);
+      expect(first.hasAttribute('data-hide')).toBe(true);
+      const progress = link.getAttribute('style');
+      fireEvent.click(screen.getByRole('button', { name: 'إيقاف مؤقت' }));
+      await advance(500);
+      expect(link.getAttribute('style')).toBe(progress);
+      fireEvent.click(screen.getByRole('button', { name: 'متابعة' }));
+      await advance(250);
+      expect(first.hasAttribute('data-hide')).toBe(false);
+      fireEvent.click(screen.getByRole('button', { name: 'إغلاق الاستوديو' }));
+      expect(document.querySelectorAll('[data-hide], [inert]')).toHaveLength(0);
+      expect(link.getAttribute('style') ?? '').not.toContain('stroke-dash');
+    } finally { width.mockRestore(); height.mockRestore(); }
   });
 
   it('opens a studio in place of save and share, plays only on play, and stays open until closed', async () => {

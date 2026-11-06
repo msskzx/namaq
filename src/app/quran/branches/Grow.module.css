@@ -12,7 +12,7 @@
 }
 
 .growing :global([data-grow-now]) {
-  border-color: var(--home-accent);
+  border-color: var(--branch-blue, var(--home-accent));
 }
 
 .growing :global([data-ask]) {

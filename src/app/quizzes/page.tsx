@@ -286,7 +286,7 @@ export default function QuizzesPage() {
         ) : submitted ? (
           <div>
             <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>
-            <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400'}`}>
+            <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
               <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
               {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
             </p>
@@ -317,7 +317,7 @@ export default function QuizzesPage() {
                   >
                     <FontAwesomeIcon
                       icon={state === 'correct' ? faCircleCheck : state === 'partial' ? faCircleHalfStroke : state === 'incorrect' ? faCircleXmark : faCircleQuestion}
-                      className={state === 'correct' ? 'text-green-600' : state === 'partial' ? 'text-amber-600 dark:text-amber-400' : state === 'incorrect' ? 'text-red-500' : undefined}
+                      className={index === current ? undefined : state === 'correct' ? 'text-[var(--home-green)]' : state === 'partial' ? 'text-[var(--home-slot-4)]' : state === 'incorrect' ? 'text-[var(--home-accent)]' : undefined}
                     />
                     {index + 1}
                   </Button>
@@ -359,11 +359,11 @@ export default function QuizzesPage() {
                     >
                       <FontAwesomeIcon
                         icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}
-                        className={locked && isAnswer ? 'text-green-600' : locked && isGiven ? 'text-red-500' : undefined}
+                        className={locked && isAnswer && !isGiven ? 'text-[var(--home-green)]' : undefined}
                       />
                       {answerContent(questions[current], choice.value)}
-                      {locked && isAnswer ? <span className="text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'صحيح' : 'Correct'}</span> : null}
-                      {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold text-red-600 dark:text-red-400">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
+                      {locked && isAnswer ? <span className={`text-xs font-semibold ${isGiven ? '' : 'text-[var(--home-green)]'}`}>{ar ? 'صحيح' : 'Correct'}</span> : null}
+                      {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
                     </Button>
                   );
                 })}

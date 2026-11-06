@@ -13,3 +13,7 @@ Namaq gives the source text the most space and contrast. Warm paper, ink, fine r
 - Support Arabic and English, both directions, both themes, visible keyboard focus and reduced motion. Restore focus after overlays close; use `:focus-visible` so mouse clicks do not leave a keyboard ring.
 
 Amiri gives vocalized Arabic room to read. Its type scale is larger because its letters occupy less of the em than a UI sans. Source passages use double leading so vowel marks do not collide. English homepage headings retain the existing serif face.
+
+Quran and quiz routes use the fig palette in `theme.css`, including their navigation and overlays. Experiments and other routes retain the existing palette. Fig red filled actions use the same color in both modes with warm white labels. Text accents become lighter in dark mode. Dusty blue identifies selected branch paths; sand, leaf green and fig purple support the existing content distinctions. Exact and root word matches use text color alone in both tree and matrix views, without underlines or disconnected background pills.
+
+Branch nodes have fine, asymmetrically rounded borders and curved connectors. Selected nodes gain a blue border and tint. The growth studio draws connectors before revealing their words; reduced motion shows the completed tree immediately.
