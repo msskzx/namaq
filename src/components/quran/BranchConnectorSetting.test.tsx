@@ -14,7 +14,7 @@ afterEach(() => { cleanup(); Cookies.remove(BRANCH_CONNECTORS_COOKIE, { path: '/
 describe('default word connectors', () => {
   it('starts off, saves on across remounts and can save off again', () => {
     const { unmount } = render(<BranchConnectorSetting />);
-    const toggle = screen.getByRole('switch', { name: 'Connection lines in the matrix' });
+    const toggle = screen.getByRole('switch', { name: 'Connect matching words automatically' });
     expect((toggle as HTMLInputElement).checked).toBe(false);
     expect(document.getElementById(toggle.getAttribute('aria-describedby')!)?.textContent).toBe('Show lines between shared words by default when opening the matrix.');
     fireEvent.click(toggle);
@@ -22,7 +22,7 @@ describe('default word connectors', () => {
     expect(refresh).toHaveBeenCalledOnce();
     unmount();
     render(<BranchConnectorSetting />);
-    const saved = screen.getByRole('switch', { name: 'Connection lines in the matrix' });
+    const saved = screen.getByRole('switch', { name: 'Connect matching words automatically' });
     expect((saved as HTMLInputElement).checked).toBe(true);
     fireEvent.click(saved);
     expect(Cookies.get(BRANCH_CONNECTORS_COOKIE)).toBe('off');
@@ -32,7 +32,7 @@ describe('default word connectors', () => {
     Cookies.set(BRANCH_CONNECTORS_COOKIE, 'invalid');
     language.value = 'ar';
     render(<BranchConnectorSetting />);
-    const toggle = screen.getByRole('switch', { name: 'خطوط الربط في المصفوفة' }) as HTMLInputElement;
+    const toggle = screen.getByRole('switch', { name: 'ربط الكلمات المتشابهة بخطوط تلقائيًا' }) as HTMLInputElement;
     expect(toggle.checked).toBe(false);
     expect(document.getElementById(toggle.getAttribute('aria-describedby')!)?.textContent).toBe('إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.');
   });
