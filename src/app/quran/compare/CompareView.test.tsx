@@ -120,3 +120,21 @@ describe('curated passage context', () => {
     expect(container.textContent).not.toContain(side(57, '').words[0]);
   });
 });
+
+describe('curated match colours', () => {
+  const plain = (number: number, text: string[]) => ({ number, name: `s${number}`, plain: `s${number}`, words: text, range: { from: 1, to: text.length } });
+  const pair = (a: number, b: number, marksA: number[], marksB: number[]) => ({ a, b, run: 4, shared: ['x'], marksA, marksB, rootsA: [], rootsB: [] });
+  const rows = [{ type: 'block' as const, block: { kind: 'words' as const, anchors: 2, pairs: [pair(1, 1, [0], [0]), pair(2, 1, [1], [2])] } }];
+
+  it('uses one colour and lights the words of a tapped pair on both pages', () => {
+    const { container } = render(<WithBar><CompareView a={plain(1, ['أ ب', 'ج د'])} b={plain(2, ['أ ه د'])} rows={rows} curated /></WithBar>);
+    const marks = Array.from(container.querySelectorAll('mark'));
+    expect(marks.every(mark => !/slot/.test(mark.className))).toBe(true);
+    const second = marks.filter(mark => mark.getAttribute('data-link') === '0-1');
+    expect(second).toHaveLength(2);
+    fireEvent.click(second[0]);
+    expect(marks.filter(mark => mark.getAttribute('aria-pressed') === 'true')).toEqual(second);
+    fireEvent.click(second[1]);
+    expect(marks.filter(mark => mark.getAttribute('aria-pressed') === 'true')).toHaveLength(0);
+  });
+});

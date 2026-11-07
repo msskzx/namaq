@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { alignSurahs, clampRange, wordTokens } from '@/lib/quran/compare';
+import { alignSurahs, clampRange, strictRows, wordTokens, type Row } from '@/lib/quran/compare';
 import { rangeParams, type CompareRange } from '@/lib/quran/compareRange';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
@@ -47,8 +47,8 @@ export default async function TextCompare({ query, range, curated = false }: { q
     <CompareView key={curated ? `${a}:${ra.from}:${ra.to}/${b}:${rb.from}:${rb.to}` : undefined} controls={controls} curated={curated}
       a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
       b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
-      rows={alignSurahs(slice(wordsA, ra).map(w => w.tokens), slice(wordsB, rb).map(w => w.tokens), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean),
-        { a: slice(wordsA, ra).map(w => w.norm), b: slice(wordsB, rb).map(w => w.norm) })}
+      rows={(whole || (ra.to - ra.from === rb.to - rb.from && [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean)) ? (rows: Row[]) => rows : strictRows)(alignSurahs(slice(wordsA, ra).map(w => w.tokens), slice(wordsB, rb).map(w => w.tokens), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean),
+        { a: slice(wordsA, ra).map(w => w.norm), b: slice(wordsB, rb).map(w => w.norm) }))}
     />
   );
 }

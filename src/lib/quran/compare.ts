@@ -204,3 +204,33 @@ export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }
 export function compareHref(a: number, ra: { from: number; to: number }, b: number, rb: { from: number; to: number }) {
   return `/quran/compare?${new URLSearchParams({ a: `${a}`, af: `${ra.from}`, at: `${ra.to}`, b: `${b}`, bf: `${rb.from}`, bt: `${rb.to}` })}`;
 }
+
+/** Passage comparisons only show what really matches: a block is split where a pair shares no word, and a piece is
+ *  kept only when one of its pairs has KEEP_RUN words in a row. Weak or filler pairs, such as a lone «من بعد», are
+ *  turned back into unmatched ayat, so every ayah is still shown once. */
+export function strictRows(rows: Row[]): Row[] {
+  const out: Row[] = [];
+  const gap = (ra: Range, rb: Range) => {
+    if (!ra && !rb) return;
+    const last = out[out.length - 1];
+    const join = (x: Range, y: Range): Range => (x && y ? { from: Math.min(x.from, y.from), to: Math.max(x.to, y.to) } : x ?? y);
+    if (last?.type === 'gap') out[out.length - 1] = { type: 'gap', a: join(last.a, ra), b: join(last.b, rb) };
+    else out.push({ type: 'gap', a: ra, b: rb });
+  };
+  const span = (pairs: Pair[], side: 'a' | 'b'): Range => ({ from: Math.min(...pairs.map(p => p[side])), to: Math.max(...pairs.map(p => p[side])) });
+  for (const row of rows) {
+    if (row.type === 'gap') { gap(row.a, row.b); continue; }
+    const pieces: Pair[][] = [[]];
+    for (const p of row.block.pairs) {
+      if (p.shared.length === 0) pieces.push([p], []);
+      else pieces[pieces.length - 1].push(p);
+    }
+    for (const piece of pieces.filter(piece => piece.length > 0)) {
+      if (piece.some(p => p.run >= KEEP_RUN)) {
+        while (piece.length > 1 && piece[0].run < MIN_RUN) { const lead = piece.shift()!; gap(span([lead], 'a'), span([lead], 'b')); }
+        out.push({ type: 'block', block: { ...row.block, anchors: piece.filter(p => p.run >= MIN_RUN).length, pairs: piece } });
+      } else gap(span(piece, 'a'), span(piece, 'b'));
+    }
+  }
+  return out;
+}

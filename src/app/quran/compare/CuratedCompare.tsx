@@ -2,7 +2,7 @@
 
 import React, { useId, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Columns2, Search } from 'lucide-react';
+import { ArrowLeftRight, ChevronDown, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { NavActions } from '@/components/common/NavBar';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -41,7 +41,7 @@ export default function CuratedCompare({ selectedId, unavailable, children }: { 
           panel.current?.showPopover();
           input.current?.focus();
         }} className="min-w-0 max-w-full">
-          <Columns2 size={16} aria-hidden /><span id={`${id}-selected`} className="truncate">{selected ? curatedTitle(selected, ar ? 'ar' : 'en') : label}</span><ChevronDown size={14} aria-hidden />
+          <ArrowLeftRight size={16} aria-hidden /><span id={`${id}-selected`} className="truncate">{selected ? curatedTitle(selected, ar ? 'ar' : 'en') : label}</span><ChevronDown size={14} aria-hidden />
         </Button>
         </span>
         <div ref={panel} id={id} popover="auto" role="dialog" aria-label={label} aria-hidden={!open} dir={ar ? 'rtl' : 'ltr'}

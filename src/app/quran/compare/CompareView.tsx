@@ -23,9 +23,15 @@ const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 const title = (s: Side) => (s.range ? label(s, s.range) : s.plain);
 const ROOT_TITLE = 'من جذر مشترك بلفظ مختلف';
 
-function marksOf(group: Group, side: 'a' | 'b', ayah: number, slots: Record<number, number>, ar = true): Record<number, SpreadMark> {
+/** Curated pages keep one match colour; a tap on a word lights the words of its pair (`link`) on both pages instead. */
+function marksOf(group: Group, side: 'a' | 'b', ayah: number, slots: Record<number, number>, ar = true, link?: { group: number; active: string | null }): Record<number, SpreadMark> {
   const roots = new Set(group.pairs.flatMap((p, k) => (p[side] === ayah ? (side === 'a' ? p.rootsA : p.rootsB).filter(i => slots[i] === k) : [])));
-  return Object.fromEntries(Object.entries(slots).map(([i, slot]) => [i, roots.has(Number(i)) ? { kind: 'root', slot, title: ar ? ROOT_TITLE : 'Shared root with a different form' } : { kind: 'exact', slot }]));
+  return Object.fromEntries(Object.entries(slots).map(([i, slot]) => {
+    const mark: SpreadMark = roots.has(Number(i)) ? { kind: 'root', title: ar ? ROOT_TITLE : 'Shared root with a different form' } : { kind: 'exact' };
+    if (!link) return [i, { ...mark, slot }];
+    const id = `${link.group}-${slot}`;
+    return [i, { ...mark, link: id, lit: link.active === id }];
+  }));
 }
 
 function pairLabel(p: Pair) {
@@ -60,15 +66,22 @@ function Gap({ a, b, ra, rb, curated = false, ar = true, shown = true }: { a: Si
 }
 
 function BlockSpread({ a, b, pairs, ar = true, curated = false }: { a: Side; b: Side; pairs: Pair[]; ar?: boolean; curated?: boolean }) {
+  const [active, setActive] = useState<string | null>(null);
   const groups = groupPairs(pairs);
-  const rows = (side: Side, key: 'a' | 'b') => groups.map(g => (key === 'a' ? g.as : g.bs).map(n => {
+  const rows = (side: Side, key: 'a' | 'b') => groups.map((g, gi) => (key === 'a' ? g.as : g.bs).map(n => {
     const slots = wordSlots(g, key, n, side.words[n - 1].split(' ').length);
-    return { ...plainAyah(side, n), marks: marksOf(g, key, n, slots, ar) };
+    return { ...plainAyah(side, n), marks: marksOf(g, key, n, slots, ar, curated ? { group: gi, active } : undefined) };
   }));
+  const pick = (target: EventTarget) => {
+    const id = (target as HTMLElement).closest?.('mark[data-link]')?.getAttribute('data-link');
+    if (id) setActive(current => (current === id ? null : id));
+  };
   const range = (key: 'a' | 'b') => ({ from: Math.min(...pairs.map(p => p[key])), to: Math.max(...pairs.map(p => p[key])) });
   return (
     <>
-      <PageSpread ruled stackOnMobile={curated} pages={[page(a, range('a'), rows(a, 'a'), ar), page(b, range('b'), rows(b, 'b'), ar)]} />
+      <div onClick={curated ? event => pick(event.target) : undefined} onKeyDown={curated ? event => { if (event.key === 'Enter' || event.key === ' ') { if ((event.target as HTMLElement).closest('mark[data-link]')) event.preventDefault(); pick(event.target); } } : undefined}>
+        <PageSpread ruled stackOnMobile={curated} pages={[page(a, range('a'), rows(a, 'a'), ar), page(b, range('b'), rows(b, 'b'), ar)]} />
+      </div>
       {!curated && <ul className="mt-3 flex flex-wrap gap-2">
         {pairs.map((p, k) => (
           <li key={k}><Badge size="sm" color={p.run >= MIN_RUN ? 'rose' : 'gray'} text={ar ? (pairs.length > 1 ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)) : `${p.a} / ${p.b}: ${p.run >= MIN_RUN ? `${p.run} consecutive matching words` : p.shared.length > 0 ? 'Shared words' : 'No shared words'}`} /></li>
