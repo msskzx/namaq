@@ -1743,6 +1743,110 @@
   "3:200|8:45": {
    "keep": false,
    "why": "Only the common frame 'O you who believe … that you may succeed'."
+  },
+  "4:13|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "4:13|9:89": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "4:13|9:100": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "4:14|9:63": {
+   "keep": true,
+   "why": "Same warning: whoever opposes Allah and His Messenger has the Fire, abiding in it."
+  },
+  "4:16|9:104": {
+   "keep": false,
+   "why": "Only repentance and the closing 'Relenting, Merciful'."
+  },
+  "4:17|9:15": {
+   "keep": true,
+   "why": "Same phrase: Allah turns to them in repentance; Allah is Knowing, Wise."
+  },
+  "4:17|9:106": {
+   "keep": true,
+   "why": "Same phrase: He turns to them in repentance; Allah is Knowing, Wise."
+  },
+  "4:26|9:15": {
+   "keep": true,
+   "why": "Same phrase: Allah turns to you in repentance; Allah is Knowing, Wise."
+  },
+  "4:26|9:104": {
+   "keep": false,
+   "why": "Only repentance and 'Allah'."
+  },
+  "4:26|9:106": {
+   "keep": true,
+   "why": "Same phrase: He turns to them in repentance; Allah is Knowing, Wise."
+  },
+  "4:39|9:18": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "4:39|9:44": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "4:39|9:45": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "4:39|9:99": {
+   "keep": true,
+   "why": "Same pairing: believing in Allah and the Last Day and spending (for Allah)."
+  },
+  "4:45|9:116": {
+   "keep": false,
+   "why": "Shares the protector-and-helper idea only; each makes a different point."
+  },
+  "4:57|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "4:59|9:99": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day' and 'the Messenger'."
+  },
+  "4:93|9:89": {
+   "keep": false,
+   "why": "Only 'abiding in it' and 'prepared … great': Hell for a killer vs gardens."
+  },
+  "4:96|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:104|9:106": {
+   "keep": false,
+   "why": "Only the closing 'Knowing, Wise'."
+  },
+  "4:106|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:110|9:27": {
+   "keep": false,
+   "why": "Only 'then' and the closing 'Forgiving, Merciful'."
+  },
+  "4:110|9:102": {
+   "keep": false,
+   "why": "Only evil deeds and the closing 'Forgiving, Merciful'."
+  },
+  "4:122|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "4:152|9:91": {
+   "keep": false,
+   "why": "Only 'Allah and His Messenger' and the closing 'Forgiving, Merciful'."
+  },
+  "4:169|9:22": {
+   "keep": false,
+   "why": "Only 'abiding in it forever': Hell vs the Garden."
   }
  }
 }
