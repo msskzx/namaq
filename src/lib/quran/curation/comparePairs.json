@@ -7172,6 +7172,418 @@
   "3:189|19:93": {
    "keep": false,
    "why": "Shared heavens-and-earth phrase only; different subjects."
+  },
+  "3:57|20:75": {
+   "keep": true,
+   "why": "Reward of the believer who does righteous deeds."
+  },
+  "3:57|20:82": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds, and Allah's reward or forgiveness."
+  },
+  "3:57|20:112": {
+   "keep": true,
+   "why": "The believer doing righteous deeds is rewarded and not wronged."
+  },
+  "3:94|20:61": {
+   "keep": true,
+   "why": "Inventing lies against Allah, and the one who does so loses."
+  },
+  "3:136|20:76": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, as a reward."
+  },
+  "3:198|20:76": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, for the pious."
+  },
+  "3:16|23:109": {
+   "keep": true,
+   "why": "Believers' prayer: our Lord, we have believed, so forgive us."
+  },
+  "3:94|23:38": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "3:169|23:117": {
+   "keep": false,
+   "why": "Shared 'with their Lord' only; different subjects."
+  },
+  "3:189|23:18": {
+   "keep": false,
+   "why": "Shared common words only; different subjects."
+  },
+  "3:29|25:2": {
+   "keep": false,
+   "why": "Shared heavens-and-earth phrase only; different subjects."
+  },
+  "3:38|25:74": {
+   "keep": true,
+   "why": "Prayer for good offspring: grant us from ... offspring."
+  },
+  "3:57|25:71": {
+   "keep": false,
+   "why": "Shared 'did righteous deeds' only; one is reward, the other repentance."
+  },
+  "3:89|25:70": {
+   "keep": true,
+   "why": "Except those who repent and reform; Allah is Forgiving, Merciful."
+  },
+  "3:89|25:71": {
+   "keep": true,
+   "why": "Repentance and reform after sin."
+  },
+  "3:129|25:6": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing names only; different subjects."
+  },
+  "3:136|25:10": {
+   "keep": false,
+   "why": "Shared gardens phrase only; reward of believers versus the disbelievers' demand."
+  },
+  "3:189|25:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth."
+  },
+  "3:6|27:9": {
+   "keep": false,
+   "why": "Shared closing names only; different scenes."
+  },
+  "3:29|27:65": {
+   "keep": false,
+   "why": "Shared knowledge-of-heavens-and-earth wording; different subjects."
+  },
+  "3:56|27:21": {
+   "keep": false,
+   "why": "Shared 'punish with a severe punishment' only; Allah's punishment of disbelievers versus Sulayman and the hoopoe."
+  },
+  "3:62|27:9": {
+   "keep": false,
+   "why": "Shared closing names only; different scenes."
+  },
+  "3:80|27:91": {
+   "keep": false,
+   "why": "Shared 'muslims' only; different subjects."
+  },
+  "3:89|27:11": {
+   "keep": true,
+   "why": "Except one who repents or replaces evil with good; Forgiving, Merciful."
+  },
+  "3:129|27:87": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'whom He wills' only; different subjects."
+  },
+  "3:137|27:14": {
+   "keep": true,
+   "why": "See how was the end of the deniers / corrupters."
+  },
+  "3:137|27:51": {
+   "keep": true,
+   "why": "See how was the end."
+  },
+  "3:137|27:69": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
+  },
+  "3:189|27:23": {
+   "keep": false,
+   "why": "Shared 'all things' only; different subjects."
+  },
+  "3:189|27:87": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:18|28:70": {
+   "keep": true,
+   "why": "There is no god but He: tawhid declaration."
+  },
+  "3:57|28:67": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds, and its good end."
+  },
+  "3:57|28:80": {
+   "keep": true,
+   "why": "Allah's reward for whoever believes and does righteous deeds."
+  },
+  "3:86|28:50": {
+   "keep": true,
+   "why": "Allah does not guide the wrongdoing people: those who turn away from guidance."
+  },
+  "3:95|28:49": {
+   "keep": false,
+   "why": "Shared 'say' and 'follow' only; different subjects."
+  },
+  "3:102|28:53": {
+   "keep": false,
+   "why": "Shared 'muslims' only; different subjects."
+  },
+  "3:137|28:40": {
+   "keep": true,
+   "why": "See how was the end of the deniers / wrongdoers."
+  },
+  "3:148|28:77": {
+   "keep": true,
+   "why": "This world and the Hereafter, and doing good: same idea."
+  },
+  "3:9|30:6": {
+   "keep": true,
+   "why": "Allah does not break His promise."
+  },
+  "3:27|30:19": {
+   "keep": true,
+   "why": "He brings the living out of the dead and the dead out of the living."
+  },
+  "3:29|30:50": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:57|30:15": {
+   "keep": true,
+   "why": "As for those who believe and do righteous deeds: their reward."
+  },
+  "3:57|30:45": {
+   "keep": true,
+   "why": "Reward of the believers; and He does not love the wrongdoers / disbelievers."
+  },
+  "3:137|30:42": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
+  },
+  "3:189|30:26": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:189|30:50": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:190|30:22": {
+   "keep": true,
+   "why": "Creation of the heavens and the earth and the alternation ... are signs."
+  },
+  "3:6|31:9": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:57|31:8": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:62|31:9": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:104|31:17": {
+   "keep": true,
+   "why": "Enjoining good and forbidding evil."
+  },
+  "3:114|31:17": {
+   "keep": true,
+   "why": "Enjoining good and forbidding evil."
+  },
+  "3:57|34:4": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:62|34:27": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:94|34:8": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "3:3|35:31": {
+   "keep": true,
+   "why": "The Book sent with the truth, confirming what came before it."
+  },
+  "3:29|35:1": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:57|35:7": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:109|35:4": {
+   "keep": false,
+   "why": "Shared closing 'to Allah all matters return' only; different subjects."
+  },
+  "3:184|35:4": {
+   "keep": true,
+   "why": "If they deny you, messengers before you were denied."
+  },
+  "3:184|35:25": {
+   "keep": true,
+   "why": "If they deny you: messengers before came with clear proofs, scriptures and the enlightening Book."
+  },
+  "3:189|35:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only; different subjects."
+  },
+  "3:51|36:61": {
+   "keep": true,
+   "why": "Worship Me / Him: this is a straight path."
+  },
+  "3:142|36:26": {
+   "keep": false,
+   "why": "Shared 'enter Paradise' only; different scenes."
+  },
+  "3:189|36:83": {
+   "keep": true,
+   "why": "Dominion over all things belongs to Allah."
+  },
+  "3:11|40:22": {
+   "keep": true,
+   "why": "Peoples who denied, so Allah seized them; severe in punishment."
+  },
+  "3:16|40:49": {
+   "keep": false,
+   "why": "Shared plea wording only; believers' prayer versus the people of the Fire."
+  },
+  "3:25|40:17": {
+   "keep": true,
+   "why": "Every soul repaid for what it earned, and no wrong that Day."
+  },
+  "3:95|40:84": {
+   "keep": false,
+   "why": "Shared 'polytheists' only; different scenes."
+  },
+  "3:137|40:82": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
+  },
+  "3:161|40:17": {
+   "keep": true,
+   "why": "Every soul repaid for what it earned, without wrong."
+  },
+  "3:196|40:4": {
+   "keep": true,
+   "why": "Do not be deceived by the disbelievers' movement in the lands."
+  },
+  "3:3|41:42": {
+   "keep": false,
+   "why": "Shared 'before it' only; different meaning."
+  },
+  "3:12|41:26": {
+   "keep": false,
+   "why": "Shared root of overcoming only; different subjects."
+  },
+  "3:56|41:27": {
+   "keep": true,
+   "why": "Severe punishment for those who disbelieve."
+  },
+  "3:57|41:8": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:57|41:46": {
+   "keep": false,
+   "why": "Shared 'righteous deeds' only; different statements."
+  },
+  "3:83|41:11": {
+   "keep": true,
+   "why": "Willingly or unwillingly: submission of heavens and earth."
+  },
+  "3:165|41:21": {
+   "keep": false,
+   "why": "Shared 'all things' only; different scenes."
+  },
+  "3:50|43:63": {
+   "keep": true,
+   "why": "Isa to his people: I came to you ... so fear Allah and obey me."
+  },
+  "3:51|43:64": {
+   "keep": true,
+   "why": "Isa: Allah is my Lord and your Lord, so worship Him; a straight path."
+  },
+  "3:105|43:65": {
+   "keep": true,
+   "why": "They differed after the clear proofs, and their punishment."
+  },
+  "3:137|43:25": {
+   "keep": true,
+   "why": "See how was the end of the deniers."
+  },
+  "3:6|45:2": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:9|45:26": {
+   "keep": true,
+   "why": "Gathering people to a Day in which there is no doubt."
+  },
+  "3:21|45:8": {
+   "keep": true,
+   "why": "Those who reject Allah's signs: give them tidings of a painful punishment."
+  },
+  "3:25|45:22": {
+   "keep": true,
+   "why": "Every soul repaid for what it earned, and they are not wronged."
+  },
+  "3:57|45:30": {
+   "keep": true,
+   "why": "As for those who believe and do righteous deeds: their reward."
+  },
+  "3:62|45:2": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:93|45:25": {
+   "keep": true,
+   "why": "Challenge: bring ... if you are truthful."
+  },
+  "3:108|45:6": {
+   "keep": true,
+   "why": "These are the verses of Allah We recite to you in truth."
+  },
+  "3:177|45:11": {
+   "keep": true,
+   "why": "Those who disbelieve: a painful punishment."
+  },
+  "3:189|45:22": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:189|45:27": {
+   "keep": true,
+   "why": "To Allah belongs the dominion of the heavens and the earth."
+  },
+  "3:3|46:30": {
+   "keep": true,
+   "why": "A Book confirming what came before it."
+  },
+  "3:6|46:2": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:16|46:31": {
+   "keep": true,
+   "why": "Belief brings forgiveness of sins and protection from punishment."
+  },
+  "3:29|46:33": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:57|46:19": {
+   "keep": true,
+   "why": "Allah repays their deeds in full, and no wrong."
+  },
+  "3:62|46:2": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:86|46:10": {
+   "keep": true,
+   "why": "Rejecting after witness; Allah does not guide the wrongdoing people."
+  },
+  "3:106|46:34": {
+   "keep": true,
+   "why": "Taste the punishment for what you used to disbelieve."
+  },
+  "3:189|46:33": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
   }
  }
 }
