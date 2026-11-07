@@ -27,3 +27,13 @@ The earlier comparison page, with ayah-by-ayah blocks, topics and ranges, stays 
 Data-level tests check that the stored pairs are what the engine finds today, the six At-Tur/Al-Qalam pairs, that pairs sharing only common words are left out, that branches links point to a family holding both ayat, that counts match and no listed pair is shorter than three cards, and that every pinned story is listed.
 
 Distillate namaq/0021 informs keeping the old entry points reachable when changing exploration defaults.
+
+## Next steps
+
+In this order, agreed with the owner on 2026-11-07:
+
+1. Finish the verdict review of every pair in `src/lib/quran/curation/comparePairs.json`.
+2. Merge cards that share or continue ayat on both sides into range cards (for example 7:106-125 with 26:31-50), keeping verdicts per ayah pair.
+3. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
+4. Bookmarks on the compare page (what is bookmarked to be decided with the owner).
+5. Animation on the compare page (what animates to be decided with the owner).

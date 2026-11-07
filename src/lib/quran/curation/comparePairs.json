@@ -5925,15 +5925,18 @@
   },
   "2:34|17:61": {
    "keep": true,
-   "why": "Same scene: the angels bow to Adam except Iblis."
+   "why": "Same scene: the angels bow to Adam except Iblis.",
+   "checked": true
   },
   "2:53|17:2": {
    "keep": true,
-   "why": "Same idea: We gave Musa the Book as guidance."
+   "why": "Same idea: We gave Musa the Book as guidance.",
+   "checked": true
   },
   "2:119|17:105": {
    "keep": true,
-   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner.",
+   "checked": true
   },
   "2:70|18:24": {
    "keep": false,
