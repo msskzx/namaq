@@ -22,7 +22,7 @@ async function load(number: number) {
   });
 }
 
-export default async function TextCompare({ query, range }: { query: Record<string, string | string[] | undefined>; range: CompareRange }) {
+export default async function TextCompare({ query, range, curated = false }: { query: Record<string, string | string[] | undefined>; range: CompareRange; curated?: boolean }) {
   const [a, b] = [pick(query.a, 56), pick(query.b, 69)];
   const surahs = await prisma.surah.findMany({ select: { number: true, name: true }, orderBy: { number: 'asc' } });
   const [wordsA, wordsB] = await Promise.all([load(a), load(b)]);
@@ -35,7 +35,7 @@ export default async function TextCompare({ query, range }: { query: Record<stri
 
   const ayat = query.view === 'ayat';
   const keep = { ...rangeParams(range), ...(ayat ? { view: 'ayat' } : {}) };
-  const controls = (
+  const controls = !curated && (
     <PairForm surahs={surahs.map(s => ({ number: s.number, name: plainName(s.name) }))} ayat keep={keep}
       a={{ surah: a, from: ra.from, to: ra.to, max: wordsA.length }} b={{ surah: b, from: rb.from, to: rb.to, max: wordsB.length }} />
   );
@@ -44,7 +44,7 @@ export default async function TextCompare({ query, range }: { query: Record<stri
   if (!ayat) return <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} range={range} controls={controls} query={strings} />;
   if (a === b && ra.from === rb.from && ra.to === rb.to) return <div className="flex flex-col gap-3">{controls}<p className={NOTE}>اختر مقطعين مختلفين.</p></div>;
   return (
-    <CompareView controls={controls}
+    <CompareView key={curated ? `${a}:${ra.from}:${ra.to}/${b}:${rb.from}:${rb.to}` : undefined} controls={controls} curated={curated}
       a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
       b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
       rows={alignSurahs(slice(wordsA, ra).map(w => w.tokens), slice(wordsB, rb).map(w => w.tokens), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean),

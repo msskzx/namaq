@@ -13,6 +13,7 @@ import treeData from './trees.json';
 import BranchTree from './BranchTree';
 import TreeSteps, { TreeMode, TreeProgress } from './TreeSteps';
 import BranchHeading, { MatchingRules } from './BranchHeading';
+import CuratedCompareLink from './CuratedCompareLink';
 import { GroupConnections } from './GroupConnections';
 import { GroupDetails } from './GroupDetails';
 import { browseGroups, filteredAyat, groupFilters, hasGroupFilters } from '@/lib/quran/mutashabih/browse';
@@ -211,6 +212,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         <AroundButton />
       </NavButtons>
       <MatchingRules>{tree && <CardsLegend />}</MatchingRules>
+      <div><CuratedCompareLink /></div>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { ...state, surah: undefined })} />}
       {(!id || constrained && !opening && !focusedRequest) && <NoTrees query={query} grouped={constrained} />}
       {unavailable && !(constrained && !opening && !focusedRequest) && <UnavailableNote />}

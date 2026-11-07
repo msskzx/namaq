@@ -59,6 +59,11 @@ const shortTree = (id: string) => {
 const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
 
 describe('Quran branch trees', () => {
+  it('offers an accessible link from the tree to curated passage comparisons', async () => {
+    render(await open({ o: 'لا اثم عليه' }));
+    expect(screen.getByRole('link', { name: /مقار.*المقاطع/ }).getAttribute('href')).toBe('/quran/compare');
+  });
+
   it('keeps the tree continuation in the matrix for الم without enabling surrounding ayat', async () => {
     localStorage.setItem('branches-surround', '0');
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
