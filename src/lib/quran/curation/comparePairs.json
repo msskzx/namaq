@@ -4440,11 +4440,13 @@
   },
   "9:9|16:95": {
    "keep": true,
-   "why": "Same image: selling Allah's signs/covenant for a small price."
+   "why": "Same image: selling Allah's signs/covenant for a small price.",
+   "checked": true
   },
   "9:27|16:119": {
    "keep": true,
-   "why": "Same thought: turning in repentance after that; Forgiving, Merciful."
+   "why": "Same thought: turning in repentance after that; Forgiving, Merciful.",
+   "checked": true
   },
   "9:41|16:95": {
    "keep": false,
@@ -4453,47 +4455,58 @@
   },
   "9:70|16:33": {
    "keep": true,
-   "why": "Same sentence: Allah did not wrong them, but they wronged themselves."
+   "why": "Same sentence: Allah did not wrong them, but they wronged themselves.",
+   "checked": true
   },
   "9:78|16:19": {
    "keep": true,
-   "why": "Same thought: Allah knows what they conceal."
+   "why": "Same thought: Allah knows what they conceal.",
+   "checked": true
   },
   "9:78|16:23": {
    "keep": true,
-   "why": "Same thought: Allah knows what they conceal."
+   "why": "Same thought: Allah knows what they conceal.",
+   "checked": true
   },
   "9:89|16:31": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath."
+   "why": "Same reward: gardens with rivers flowing beneath.",
+   "checked": true
   },
   "9:102|16:119": {
    "keep": true,
-   "why": "Same thought: those who did evil then repented; Forgiving, Merciful."
+   "why": "Same thought: those who did evil then repented; Forgiving, Merciful.",
+   "checked": true
   },
   "9:27|16:18": {
    "keep": false,
-   "why": "Only the closing names Forgiving, Merciful."
+   "why": "Only the closing names Forgiving, Merciful.",
+   "checked": true
   },
   "9:55|16:107": {
    "keep": false,
-   "why": "Only 'the worldly life' and 'disbelievers'; different points."
+   "why": "Only 'the worldly life' and 'disbelievers'; different points.",
+   "checked": true
   },
   "9:79|16:104": {
    "keep": false,
-   "why": "Only the formula 'and for them a painful punishment'."
+   "why": "Only the formula 'and for them a painful punishment'.",
+   "checked": true
   },
   "9:105|16:28": {
    "keep": false,
-   "why": "Only the formula 'of what you used to do'."
+   "why": "Only the formula 'of what you used to do'.",
+   "checked": true
   },
   "9:116|16:65": {
    "keep": false,
-   "why": "Only words about heavens, earth, life and death; different points."
+   "why": "Only words about heavens, earth, life and death; different points.",
+   "checked": true
   },
   "9:116|16:73": {
    "keep": false,
-   "why": "Only 'besides Allah' and heavens and earth; different points."
+   "why": "Only 'besides Allah' and heavens and earth; different points.",
+   "checked": true
   },
   "10:6|45:5": {
    "keep": true,
