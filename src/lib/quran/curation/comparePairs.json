@@ -749,6 +749,199 @@
   "15:85|38:27": {
    "keep": true,
    "why": "Same statement: We did not create the heavens and earth and what is between them (in truth / in vain)."
+  },
+  "3:11|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Allah is severe in punishment'."
+  },
+  "3:15|5:119": {
+   "keep": true,
+   "why": "Same promise: gardens beneath which rivers flow, abiding in them, with Allah's pleasure (رضوان / رضي)."
+  },
+  "3:18|5:38": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:26|5:40": {
+   "keep": true,
+   "why": "Same statement: Allah's dominion; He gives and takes, punishes and forgives whom He wills.",
+   "ask": "Both describe Allah's dominion and will, with different verbs (gives/takes, honours/humbles vs punishes/forgives). Keep?"
+  },
+  "3:29|5:40": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'power over all things'."
+  },
+  "3:29|5:97": {
+   "keep": true,
+   "why": "Same statement: Allah knows what is in the heavens and what is in the earth."
+  },
+  "3:29|5:120": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'power over all things'."
+  },
+  "3:31|5:74": {
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "3:32|5:92": {
+   "keep": true,
+   "why": "Same command: obey Allah and the Messenger; if you turn away …"
+  },
+  "3:42|5:76": {
+   "keep": false,
+   "why": "Only common words."
+  },
+  "3:49|5:110": {
+   "keep": true,
+   "why": "Same miracles of Jesus: the bird of clay, healing the blind and the leper, raising the dead, by Allah's leave."
+  },
+  "3:52|5:72": {
+   "keep": false,
+   "why": "Only 'helpers', disbelief and saying; different statements."
+  },
+  "3:52|5:112": {
+   "keep": true,
+   "why": "Same story: the disciples answer Jesus.",
+   "ask": "Both are the disciples speaking to Jesus, but about different things (supporting him / the table). Keep?"
+  },
+  "3:53|5:83": {
+   "keep": true,
+   "why": "Same prayer: Our Lord, we believe, so write us among the witnesses."
+  },
+  "3:53|5:111": {
+   "keep": true,
+   "why": "Same story: the disciples declare faith in Allah and His messenger and ask Him to bear witness."
+  },
+  "3:57|5:9": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good get their reward."
+  },
+  "3:62|5:38": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:68|5:81": {
+   "keep": false,
+   "why": "Only belief, the Prophet and allies as words; different statements."
+  },
+  "3:72|5:59": {
+   "keep": false,
+   "why": "Only 'People of the Book' and belief in what was revealed; different statements."
+  },
+  "3:73|5:54": {
+   "keep": true,
+   "why": "Same closing: that is Allah's bounty, He gives it to whom He wills; All-Encompassing, Knowing."
+  },
+  "3:84|5:59": {
+   "keep": true,
+   "why": "Same statement: we believe in Allah and what was revealed to us and what was revealed before."
+  },
+  "3:89|5:9": {
+   "keep": false,
+   "why": "Only forgiveness as a word."
+  },
+  "3:89|5:34": {
+   "keep": true,
+   "why": "Same exception: except those who repent … Allah is Forgiving, Merciful."
+  },
+  "3:89|5:39": {
+   "keep": true,
+   "why": "Same statement: whoever repents after … and reforms, Allah is Forgiving, Merciful."
+  },
+  "3:89|5:74": {
+   "keep": false,
+   "why": "Only repentance and the closing 'Forgiving, Merciful'."
+  },
+  "3:89|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:91|5:36": {
+   "keep": true,
+   "why": "Same statement: even the earth's fill as ransom will not be accepted from the disbelievers."
+  },
+  "3:98|5:59": {
+   "keep": true,
+   "why": "Same address: Say, O People of the Book, why … ",
+   "ask": "Both open 'Say, O People of the Book' but ask different things. Keep?"
+  },
+  "3:101|5:67": {
+   "keep": false,
+   "why": "Only the roots of protect and guide; different statements."
+  },
+  "3:114|5:69": {
+   "keep": true,
+   "why": "Same phrase: believing in Allah and the Last Day and doing good."
+  },
+  "3:126|5:38": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:129|5:18": {
+   "keep": true,
+   "why": "Same statement: He forgives whom He wills and punishes whom He wills; to Allah belongs the heavens and earth."
+  },
+  "3:129|5:40": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs the heavens and earth; He punishes and forgives whom He wills."
+  },
+  "3:129|5:74": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:129|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:129|5:120": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula."
+  },
+  "3:130|5:35": {
+   "keep": true,
+   "why": "Same address and close: O you who believe … fear Allah, that you may succeed."
+  },
+  "3:130|5:88": {
+   "keep": false,
+   "why": "Only eating and 'fear Allah'."
+  },
+  "3:136|5:85": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the reward."
+  },
+  "3:157|5:74": {
+   "keep": false,
+   "why": "Only forgiveness and mercy as words."
+  },
+  "3:160|5:23": {
+   "keep": true,
+   "why": "Same call: put your trust in Allah, believers; with victory and being overcome.",
+   "ask": "Both say 'upon Allah let the believers rely' with victory, in different battles. Keep?"
+  },
+  "3:166|5:109": {
+   "keep": false,
+   "why": "Only 'day' and gathering."
+  },
+  "3:189|5:40": {
+   "keep": false,
+   "why": "Only the dominion formula and 'power over all things'."
+  },
+  "3:189|5:120": {
+   "keep": true,
+   "why": "Same ayah ending: to Allah belongs the dominion of the heavens and earth, and He has power over all things.",
+   "ask": "Both are the dominion formula, nearly whole ayat. Keep, or drop like the 2/3 formula pairs?"
+  },
+  "3:198|5:85": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:198|5:119": {
+   "keep": true,
+   "why": "Same reward: for them are gardens beneath which rivers flow, abiding in them."
+  },
+  "3:200|5:35": {
+   "keep": true,
+   "why": "Same address and close: O you who believe … fear Allah, that you may succeed."
   }
  }
 }
