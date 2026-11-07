@@ -389,6 +389,102 @@
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'power over all things'.",
    "checked": true
+  },
+  "2:15|7:186": {
+   "keep": true,
+   "why": "Same phrase: (He) leaves them wandering blindly in their transgression."
+  },
+  "2:23|7:70": {
+   "keep": false,
+   "why": "Only 'bring it, if you are truthful'; different speakers and points."
+  },
+  "2:23|7:194": {
+   "keep": true,
+   "why": "Same challenge: those you call besides Allah … if you are truthful.",
+   "ask": "Both challenge the deniers with 'if you are truthful', but one is about the Quran and the other about idols. Keep?"
+  },
+  "2:34|7:11": {
+   "keep": true,
+   "why": "Same scene: the angels prostrate to Adam, except Iblis."
+  },
+  "2:34|7:76": {
+   "keep": false,
+   "why": "Only arrogance and disbelief as words; different people and scenes."
+  },
+  "2:35|7:19": {
+   "keep": true,
+   "why": "Same command: dwell, you and your wife, in the Garden, and do not approach this tree."
+  },
+  "2:36|7:24": {
+   "keep": true,
+   "why": "Same verdict: go down, some of you enemies to others, with a dwelling on earth for a time."
+  },
+  "2:39|7:36": {
+   "keep": true,
+   "why": "Same verdict: those who deny Our signs are the companions of the Fire."
+  },
+  "2:49|7:141": {
+   "keep": true,
+   "why": "Same blessing: saved from Pharaoh's people who slew your sons; نجّى and أنجى, يذبحون and يقتلون."
+  },
+  "2:57|7:160": {
+   "keep": true,
+   "why": "Same blessing: the shade of clouds, manna and quails."
+  },
+  "2:58|7:161": {
+   "keep": true,
+   "why": "Same command: enter the town, say حطة, enter the gate prostrating; with differences in order and wording."
+  },
+  "2:59|7:162": {
+   "keep": true,
+   "why": "Same story: the wrongdoers changed the word, and a punishment came from the sky."
+  },
+  "2:60|7:160": {
+   "keep": true,
+   "why": "Same story: Moses struck the rock and twelve springs gushed out."
+  },
+  "2:63|7:171": {
+   "keep": true,
+   "why": "Same story: the mountain raised above them, take what We gave you with strength."
+  },
+  "2:64|7:23": {
+   "keep": false,
+   "why": "Only 'mercy … we would be among the losers'; different speakers and events.",
+   "ask": "Shares 'mercy … among the losers' (Adam's prayer vs the Children of Israel). Drop?"
+  },
+  "2:65|7:166": {
+   "keep": true,
+   "why": "Same story: the Sabbath breakers told 'be apes, despised'."
+  },
+  "2:81|7:36": {
+   "keep": true,
+   "why": "Same verdict: they are the companions of the Fire, abiding in it."
+  },
+  "2:82|7:42": {
+   "keep": true,
+   "why": "Same verdict: those who believe and do good are the companions of the Garden."
+  },
+  "2:169|7:28": {
+   "keep": true,
+   "why": "Same charge: commanding indecency and saying about Allah what you do not know."
+  },
+  "2:176|7:196": {
+   "keep": false,
+   "why": "Only 'Allah sent down the Book'; different points."
+  },
+  "2:212|7:32": {
+   "keep": false,
+   "why": "Shares this world's life and the Day of Resurrection; different statements.",
+   "ask": "Both contrast the believers and the worldly life with the Day of Resurrection (adornment of this life). Drop?"
+  },
+  "2:250|7:93": {
+   "keep": false,
+   "why": "Only 'the disbelieving people'; a prayer for victory vs Shuayb's farewell."
+  },
+  "2:268|7:28": {
+   "keep": false,
+   "why": "Only commanding indecency; Satan vs the idolaters' claim.",
+   "ask": "Satan 'commands you indecency' vs 'Allah does not command indecency'. A real contrast or only shared words?"
   }
  }
 }
