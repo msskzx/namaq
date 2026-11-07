@@ -1638,6 +1638,111 @@
   "6:162|10:10": {
    "keep": false,
    "why": "Only 'to Allah, Lord of the worlds'."
+  },
+  "3:4|8:52": {
+   "keep": false,
+   "why": "Only 'disbelieved in the signs of Allah … severe'; the real parallel is 3:11."
+  },
+  "3:10|8:28": {
+   "keep": true,
+   "why": "Same pairing: wealth and children, which avail nothing against Allah / are a trial.",
+   "ask": "Same words, different angle: one warns they won't help, one calls them a trial. Keep?"
+  },
+  "3:11|8:13": {
+   "keep": false,
+   "why": "Only the closing 'Allah is severe in penalty'."
+  },
+  "3:11|8:52": {
+   "keep": true,
+   "why": "Same sentence: like the way of Pharaoh's people and those before them; Allah seized them for their sins."
+  },
+  "3:11|8:54": {
+   "keep": true,
+   "why": "Same opening: like the way of Pharaoh's people and those before them, who denied the signs."
+  },
+  "3:18|8:49": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:31|8:70": {
+   "keep": false,
+   "why": "Only 'He will forgive you' and the closing 'Forgiving, Merciful'."
+  },
+  "3:32|8:20": {
+   "keep": true,
+   "why": "Same command: obey Allah and the Messenger, and do not turn away."
+  },
+  "3:32|8:46": {
+   "keep": false,
+   "why": "Only the common command 'obey Allah and His Messenger'."
+  },
+  "3:54|8:30": {
+   "keep": true,
+   "why": "Same statement: they plotted and Allah plotted, and Allah is the best of planners."
+  },
+  "3:62|8:10": {
+   "keep": false,
+   "why": "Only 'none but Allah' and the closing 'Mighty, Wise'."
+  },
+  "3:62|8:49": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:68|8:64": {
+   "keep": false,
+   "why": "Prophet, followers and believers appear in both, but the statements differ."
+  },
+  "3:99|8:47": {
+   "keep": true,
+   "why": "Same charge: they turn people from the way of Allah, and Allah knows what they do."
+  },
+  "3:126|8:10": {
+   "keep": true,
+   "why": "Same sentence: Allah made it only good news and to reassure your hearts; victory is only from Allah."
+  },
+  "3:126|8:49": {
+   "keep": false,
+   "why": "Only hearts and the closing 'Mighty, Wise'."
+  },
+  "3:129|8:69": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:130|8:45": {
+   "keep": false,
+   "why": "Only the common frame 'O you who believe … that you may succeed'."
+  },
+  "3:132|8:20": {
+   "keep": false,
+   "why": "Only the common command 'obey Allah and the Messenger'."
+  },
+  "3:150|8:40": {
+   "keep": true,
+   "why": "Same statement: Allah is your Master, the best of helpers."
+  },
+  "3:157|8:30": {
+   "keep": false,
+   "why": "Only killing and 'Allah … best'; different points."
+  },
+  "3:162|8:16": {
+   "keep": true,
+   "why": "Same verdict: he returns with Allah's anger, his refuge is Hell, a wretched destination."
+  },
+  "3:163|8:39": {
+   "keep": false,
+   "why": "Only the closing 'Allah sees what they do'."
+  },
+  "3:174|8:29": {
+   "keep": false,
+   "why": "Only the closing 'Allah has great bounty'."
+  },
+  "3:182|8:51": {
+   "keep": true,
+   "why": "Identical: that is for what your hands sent ahead, and Allah is never unjust to His servants."
+  },
+  "3:200|8:45": {
+   "keep": false,
+   "why": "Only the common frame 'O you who believe … that you may succeed'."
   }
  }
 }
