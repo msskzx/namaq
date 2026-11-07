@@ -10049,6 +10049,190 @@
   "6:87|67:22": {
    "keep": false,
    "why": "Only 'straight path'; different subjects."
+  },
+  "7:153|9:27": {
+   "keep": true,
+   "why": "Allah accepts repentance after sin; Forgiving, Merciful."
+  },
+  "7:153|9:102": {
+   "keep": true,
+   "why": "Those who did evil then repented; Allah forgives."
+  },
+  "7:190|9:75": {
+   "keep": true,
+   "why": "Promise to be righteous if Allah gives, then breaking it once given."
+  },
+  "7:23|12:92": {
+   "keep": false,
+   "why": "Shares only forgiveness and mercy words; different scenes."
+  },
+  "7:23|12:98": {
+   "keep": false,
+   "why": "Shares only forgiveness words; different scenes."
+  },
+  "7:60|12:8": {
+   "keep": true,
+   "why": "A prophet accused of clear error by those around him."
+  },
+  "7:71|12:40": {
+   "keep": true,
+   "why": "Names you and your fathers named; Allah sent down no authority for them."
+  },
+  "7:131|12:96": {
+   "keep": false,
+   "why": "Only 'they do not know'; different scenes."
+  },
+  "7:151|12:64": {
+   "keep": false,
+   "why": "Only the closing 'Most Merciful of the merciful'."
+  },
+  "7:151|12:92": {
+   "keep": false,
+   "why": "Only the closing 'Most Merciful of the merciful'."
+  },
+  "7:151|12:98": {
+   "keep": false,
+   "why": "Only forgiveness and mercy words."
+  },
+  "7:153|12:53": {
+   "keep": false,
+   "why": "Only 'Forgiving, Merciful' closing."
+  },
+  "7:45|14:3": {
+   "keep": true,
+   "why": "They bar from Allah's path and seek it crooked."
+  },
+  "7:141|14:6": {
+   "keep": true,
+   "why": "Saved from Pharaoh's people who killed sons and spared women."
+  },
+  "7:151|14:36": {
+   "keep": false,
+   "why": "Only forgiveness and mercy words; different prayers."
+  },
+  "7:185|14:19": {
+   "keep": false,
+   "why": "Only creation of heavens and earth; different statements."
+  },
+  "7:11|15:32": {
+   "keep": true,
+   "why": "Iblis would not be among those who prostrate."
+  },
+  "7:14|15:36": {
+   "keep": true,
+   "why": "Iblis: give me respite until the day they are raised."
+  },
+  "7:16|15:41": {
+   "keep": true,
+   "why": "Iblis and the straight path, same scene."
+  },
+  "7:34|15:5": {
+   "keep": true,
+   "why": "Every nation has a term it cannot delay."
+  },
+  "7:106|15:7": {
+   "keep": true,
+   "why": "Demand for a sign: if you are truthful."
+  },
+  "7:109|15:15": {
+   "keep": true,
+   "why": "Signs dismissed as magic."
+  },
+  "7:9|16:118": {
+   "keep": false,
+   "why": "Only 'wronging themselves' words; different subjects."
+  },
+  "7:34|16:61": {
+   "keep": true,
+   "why": "When their term comes they cannot delay it an hour nor advance."
+  },
+  "7:52|16:64": {
+   "keep": true,
+   "why": "The Book sent as guidance and mercy for a believing people."
+  },
+  "7:131|16:101": {
+   "keep": false,
+   "why": "Only 'most of them do not know'."
+  },
+  "7:153|16:110": {
+   "keep": true,
+   "why": "Your Lord, after that, is Forgiving, Merciful, to those who repent and strive."
+  },
+  "7:153|16:119": {
+   "keep": true,
+   "why": "Did evil, then repented: your Lord after that is Forgiving, Merciful."
+  },
+  "7:167|16:119": {
+   "keep": false,
+   "why": "Only 'your Lord is Forgiving, Merciful'."
+  },
+  "7:177|16:118": {
+   "keep": true,
+   "why": "Not wronged by Allah, they wronged themselves."
+  },
+  "7:178|16:37": {
+   "keep": true,
+   "why": "Whom Allah guides and whom He lets go astray."
+  },
+  "7:185|16:73": {
+   "keep": false,
+   "why": "Only 'heavens and earth'; different statements."
+  },
+  "7:190|16:1": {
+   "keep": false,
+   "why": "Only the closing 'exalted above what they associate'."
+  },
+  "7:200|16:98": {
+   "keep": true,
+   "why": "Seek refuge in Allah from Satan."
+  },
+  "7:11|17:61": {
+   "keep": true,
+   "why": "Angels prostrate to Adam except Iblis."
+  },
+  "7:12|17:61": {
+   "keep": true,
+   "why": "Iblis refuses to prostrate to one made from clay."
+  },
+  "7:118|17:81": {
+   "keep": true,
+   "why": "Truth came and falsehood perished."
+  },
+  "7:149|17:100": {
+   "keep": false,
+   "why": "Only mercy of Lord words; different scenes."
+  },
+  "7:185|17:99": {
+   "keep": true,
+   "why": "Creator of heavens and earth, and a term set for them."
+  },
+  "7:42|18:107": {
+   "keep": true,
+   "why": "Believers who do good deeds and their gardens."
+  },
+  "7:147|18:105": {
+   "keep": true,
+   "why": "Denied signs and meeting with Him: their deeds are void."
+  },
+  "7:196|18:1": {
+   "keep": true,
+   "why": "Allah who sent down the Book."
+  },
+  "7:25|19:66": {
+   "keep": true,
+   "why": "Therein you die and are brought out, and man doubting he will be brought out alive."
+  },
+  "7:42|19:60": {
+   "keep": true,
+   "why": "Believers who do good enter the Garden."
+  },
+  "7:52|19:43": {
+   "keep": false,
+   "why": "Only knowledge and guidance words; different scenes."
+  },
+  "7:194|19:48": {
+   "keep": true,
+   "why": "Those you call upon besides Allah."
   }
  }
 }
