@@ -4340,8 +4340,9 @@
    "why": "Only 'muslims' at the end; different contexts."
   },
   "3:137|10:39": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of ...'."
+   "keep": true,
+   "why": "Same warning about those before them who denied: see how was the end of the deniers / wrongdoers.",
+   "checked": true
   },
   "6:22|28:62": {
    "keep": true,

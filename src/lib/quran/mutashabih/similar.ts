@@ -38,20 +38,27 @@ const NAMES = new Set(['<iboraAhiym', 'muwsaY`', 'firoEawon', 'jahan~am', '<isor
 
 const isContent = (ayah: BranchAyah, i: number) => Boolean(ayah.roots?.[i] || NAMES.has(ayah.lemmas?.[i] ?? ''));
 
-/** Words with the same lemma that the in-order alignment left apart because they cross (هودا … إبراهيم / إبراهيم يهوديا). */
+/**
+ * Words that the in-order alignment left apart because they cross: first the same lemma (هودا … إبراهيم / إبراهيم يهوديا),
+ * then the same root (الظالمون at the end of 3:94 / أظلم at the start of 10:17).
+ */
 export function crossingColumns(a: BranchAyah, b: BranchAyah, taken: CompactColumn[]): CompactColumn[] {
   const usedA = new Set(taken.map(column => column[0]));
   const usedB = new Set(taken.map(column => column[1]));
   const columns: CompactColumn[] = [];
-  a.words.forEach((_, i) => {
-    const lemma = a.lemmas?.[i];
-    if (usedA.has(i) || !lemma || !isContent(a, i)) return;
-    const j = b.words.findIndex((__, k) => !usedB.has(k) && b.lemmas?.[k] === lemma);
-    if (j < 0) return;
-    usedA.add(i);
-    usedB.add(j);
-    columns.push([i, j, 'lemma']);
-  });
+  const pass = (level: 'lemma' | 'root', keyOf: (ayah: BranchAyah, i: number) => string | null | undefined) => {
+    a.words.forEach((_, i) => {
+      const key = keyOf(a, i);
+      if (usedA.has(i) || !key || !isContent(a, i)) return;
+      const j = b.words.findIndex((__, k) => !usedB.has(k) && keyOf(b, k) === key);
+      if (j < 0) return;
+      usedA.add(i);
+      usedB.add(j);
+      columns.push([i, j, level]);
+    });
+  };
+  pass('lemma', (ayah, i) => ayah.lemmas?.[i]);
+  pass('root', (ayah, i) => ayah.roots?.[i]);
   return columns;
 }
 
