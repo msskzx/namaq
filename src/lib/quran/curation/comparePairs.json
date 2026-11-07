@@ -3389,6 +3389,78 @@
   "21:112|43:82": {
    "keep": false,
    "why": "Only 'Lord' and 'what they describe'."
+  },
+  "3:172|33:29": {
+   "keep": true,
+   "why": "Same promise: for those of them who do good is a great reward."
+  },
+  "3:29|33:27": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
+  },
+  "3:31|33:73": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:32|33:48": {
+   "keep": false,
+   "why": "Only obeying and 'the disbelievers'."
+  },
+  "3:32|33:66": {
+   "keep": false,
+   "why": "Only obeying Allah and the Messenger: a command vs a regret in the Fire."
+  },
+  "3:52|33:22": {
+   "keep": false,
+   "why": "Only 'when … said' and belief."
+  },
+  "3:59|33:69": {
+   "keep": false,
+   "why": "Only 'with Allah'."
+  },
+  "3:68|33:56": {
+   "keep": false,
+   "why": "Only 'the Prophet' and 'those who believe'."
+  },
+  "3:97|33:1": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "3:101|33:34": {
+   "keep": false,
+   "why": "Only 'recited … the verses of Allah'."
+  },
+  "3:102|33:56": {
+   "keep": false,
+   "why": "Only the opening 'O you who believe'."
+  },
+  "3:129|33:24": {
+   "keep": false,
+   "why": "Only punishing and the closing 'Forgiving, Merciful'."
+  },
+  "3:148|33:29": {
+   "keep": false,
+   "why": "Only the Hereafter and doers of good."
+  },
+  "3:148|33:57": {
+   "keep": false,
+   "why": "Only 'this world and the Hereafter'."
+  },
+  "3:171|33:47": {
+   "keep": false,
+   "why": "Only 'bounty from Allah' and believers."
+  },
+  "3:176|33:29": {
+   "keep": false,
+   "why": "Only 'Allah wills' and the Hereafter."
+  },
+  "3:177|33:8": {
+   "keep": false,
+   "why": "Only 'painful punishment' for disbelief."
+  },
+  "3:189|33:27": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
   }
  }
 }
