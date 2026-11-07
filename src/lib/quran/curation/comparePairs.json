@@ -4510,64 +4510,78 @@
   },
   "10:6|45:5": {
    "keep": true,
-   "why": "Same sign: the alternation of night and day and what Allah created/sent down are signs for a people."
+   "why": "Same sign: the alternation of night and day and what Allah created/sent down are signs for a people.",
+   "checked": true
   },
   "10:75|45:31": {
    "keep": true,
-   "why": "Same ending: they were arrogant and were a criminal people."
+   "why": "Same ending: they were arrogant and were a criminal people.",
+   "checked": true
   },
   "10:93|45:17": {
    "keep": true,
-   "why": "Same sentence: they did not differ until knowledge came; your Lord will judge between them on the Day of Resurrection."
+   "why": "Same sentence: they did not differ until knowledge came; your Lord will judge between them on the Day of Resurrection.",
+   "checked": true
   },
   "10:6|45:13": {
    "keep": false,
-   "why": "Only the formula 'in that are signs for a people ...'."
+   "why": "Only the formula 'in that are signs for a people ...'.",
+   "checked": true
   },
   "10:6|45:22": {
    "keep": false,
-   "why": "Only 'Allah created the heavens and the earth'; different points."
+   "why": "Only 'Allah created the heavens and the earth'; different points.",
+   "checked": true
   },
   "10:6|45:27": {
    "keep": false,
-   "why": "Only the formula about the heavens and the earth."
+   "why": "Only the formula about the heavens and the earth.",
+   "checked": true
   },
   "10:9|45:30": {
    "keep": false,
-   "why": "Only the formula 'those who believe and do righteous deeds'."
+   "why": "Only the formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "10:10|45:36": {
    "keep": false,
-   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'.",
+   "checked": true
   },
   "10:52|45:14": {
    "keep": false,
-   "why": "Only the formula 'for what they used to earn'."
+   "why": "Only the formula 'for what they used to earn'.",
+   "checked": true
   },
   "10:55|45:22": {
    "keep": false,
-   "why": "Only heavens and earth and 'truth'; different points."
+   "why": "Only heavens and earth and 'truth'; different points.",
+   "checked": true
   },
   "10:55|45:36": {
    "keep": false,
-   "why": "Only the formula about the heavens and the earth."
+   "why": "Only the formula about the heavens and the earth.",
+   "checked": true
   },
   "10:60|45:26": {
    "keep": false,
-   "why": "Only 'Day of Resurrection' and 'most people do not ...'."
+   "why": "Only 'Day of Resurrection' and 'most people do not ...'.",
+   "checked": true
   },
   "10:97|45:11": {
    "keep": false,
-   "why": "Only 'signs' and 'painful punishment'."
+   "why": "Only 'signs' and 'painful punishment'.",
+   "checked": true
   },
   "10:101|45:13": {
    "keep": false,
-   "why": "Only the formula about the heavens and the earth and signs."
+   "why": "Only the formula about the heavens and the earth and signs.",
+   "checked": true
   },
   "10:101|45:3": {
-   "keep": true,
-   "why": "Same subject: signs in the heavens and the earth; one for believers, one useless to those who do not believe.",
-   "ask": "These two say opposite sides of the same idea (signs for believers / signs don't help those who don't believe). Keep as a contrast pair?"
+   "keep": false,
+   "why": "Shares only signs in the heavens and the earth; one says signs do not help those who will not believe, the other lists signs for believers (owner removed).",
+   "checked": true
   },
   "18:4|19:88": {
    "keep": true,
