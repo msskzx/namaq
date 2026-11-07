@@ -39,7 +39,7 @@ const at = (group: PhraseGroup, wanted?: Set<string>) => {
  * a tree of their own (`own`, from phraseSubtreeTargets) opens that tree; any other node opens the same
  * tree narrowed (?at=) to the node's ayat, so the link always finds them.
  */
-export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false, ids: Record<string, string> = {}, mode?: BranchesView['mode']): Record<string, string> {
+export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, own: Record<string, PhraseGroup> = {}, context = false, ids: Record<string, string> = {}, mode?: BranchesView['mode'], view: BranchesView = {}): Record<string, string> {
   const links: Record<string, string> = {};
   const visit = (node: Branch, root: boolean) => {
     if (!root && node.children.length > 0) {
@@ -47,10 +47,10 @@ export function subtreeLinks(group: PhraseGroup, tree: Branch, juz?: JuzRange, o
       const id = ids[keySet(keys(node))];
       const target = own[nodeKeys];
       links[nodeKeys] = id
-        ? branchesHref(id, juz, { context, mode })
+        ? branchesHref(id, juz, { filters: view.filters, saved: view.saved, context, mode })
         : target
-        ? branchesHref(target.id, juz, { occurrences: at(target), context, mode })
-        : branchesHref(group.id, juz, { occurrences: at(group, new Set(keys(node))), context, mode });
+        ? branchesHref(target.id, juz, { filters: view.filters, saved: view.saved, occurrences: at(target), context, mode })
+        : branchesHref(group.id, juz, { filters: view.filters, saved: view.saved, occurrences: at(group, new Set(keys(node))), context, mode });
     }
     node.children.forEach(child => visit(child, false));
   };

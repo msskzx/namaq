@@ -26,10 +26,11 @@ function write(list: Bookmark[]) {
 export const isBookmarked = (id: string) => readBookmarks().some(item => item.id === id);
 
 /** Saves the tree, or removes it when it is already saved. Returns whether it is saved now. */
-export function toggleBookmark(item: Omit<Bookmark, 'savedAt'>): boolean {
+export function toggleBookmark(item: Omit<Bookmark, 'savedAt'>, aliases: string[] = []): boolean {
   const list = readBookmarks();
-  if (list.some(saved => saved.id === item.id)) {
-    write(list.filter(saved => saved.id !== item.id));
+  const ids = new Set([item.id, ...aliases]);
+  if (list.some(saved => ids.has(saved.id))) {
+    write(list.filter(saved => !ids.has(saved.id)));
     return false;
   }
   write([{ ...item, savedAt: Date.now() }, ...list]);

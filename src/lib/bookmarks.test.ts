@@ -22,3 +22,9 @@ it('returns the same list until the stored one changes, and ignores broken data'
   localStorage.setItem('bookmarks', '{not json');
   expect(readBookmarks()).toEqual([]);
 });
+
+it('removes legacy aliases instead of saving the same comparison twice', () => {
+  toggleBookmark({ id: 'old', text: 'عبارة', href: '/quran/branches?o=old' });
+  expect(toggleBookmark({ id: 'cmp:stable', text: 'عبارة', href: '/quran/branches?o=cmp:stable' }, ['old'])).toBe(false);
+  expect(readBookmarks()).toEqual([]);
+});

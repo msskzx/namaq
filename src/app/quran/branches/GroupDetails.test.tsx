@@ -38,6 +38,23 @@ describe('group footer', () => {
     const messenger = groups.find(group => group.citations.some(citation => citation.id === 'Z03'))!;
     render(<GroupConnections group={messenger}><GroupDetails group={messenger} shownKeys={['3:164', '62:2']} /></GroupConnections>);
     expect(screen.queryByText('الثالث: التقديم والتأخير')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'تقديم وتأخير' })).toBeNull();
+    expect(screen.queryByText('ويعلمهم / ويزكيهم')).toBeNull();
+  });
+
+  it('does not render unsupported generated chips or their examples', () => {
+    const uncited = groups.find(group => group.tags.includes('gender') && !group.citations.length)!;
+    const { container } = render(<GroupConnections group={uncited} defaultOn><GroupDetails group={uncited} /></GroupConnections>);
+    expect(screen.queryByRole('button', { name: /تذكير وتأنيث/ })).toBeNull();
+    expect(container.querySelector('[data-connection-words]')).toBeNull();
+    expect(screen.queryByText('تحديد آلي')).toBeNull();
+  });
+
+  it('shows a source-backed case difference without an extension warning', () => {
+    const grammar = groups.find(group => group.citations.some(citation => citation.id === 'I06'))!;
+    render(<GroupConnections group={grammar}><GroupDetails group={grammar} /></GroupConnections>);
+    expect(screen.getByRole('button', { name: 'رفع ونصب' })).toBeTruthy();
+    expect(screen.queryByText(/امتداد نمق/)).toBeNull();
   });
 
   it('starts with all types and toggles each without changing filters', () => {

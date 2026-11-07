@@ -1,17 +1,20 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode, type RefObject } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode, type RefObject } from 'react';
 import { closeStudio, growthState, useGrowth, useMatrixGrowTarget } from './Grow';
 import { wordConnections, type ConnectionEnd } from '@/lib/quran/mutashabih/connections';
 import type { Group, Tag } from '@/lib/quran/mutashabih/types';
+import { evidenceGroup } from '@/lib/quran/mutashabih/evidence';
 
 const Connections = createContext<{ group?: Group; selected: Tag[]; select: (tag: Tag) => void; enable: () => void } | null>(null);
 export const useGroupConnections = () => useContext(Connections);
 
-export function GroupConnections({ group, children, defaultOn = false }: { group?: Group; children: ReactNode; defaultOn?: boolean }) {
-  const [selected, setSelected] = useState<Tag[]>(defaultOn ? group?.tags ?? [] : []);
+export function GroupConnections({ group: original, shownKeys, children, defaultOn = false }: { group?: Group; shownKeys?: string[]; children: ReactNode; defaultOn?: boolean }) {
+  const group = useMemo(() => original ? evidenceGroup(original, shownKeys) : undefined, [original, shownKeys]);
+  const [enabled, setSelected] = useState<Tag[]>(defaultOn ? group?.tags ?? [] : []);
+  const selected = useMemo(() => enabled.every(tag => group?.tags.includes(tag)) ? enabled : enabled.filter(tag => group?.tags.includes(tag)), [enabled, group]);
   const enable = useCallback(() => setSelected(current => current.length ? current : group?.tags ?? []), [group]);
-  return <Connections.Provider value={{ group, selected, select: tag => { if (growthState().kind === 'matrix') closeStudio(); setSelected(current => current.includes(tag) ? current.filter(value => value !== tag) : [...current, tag]); }, enable }}>
+  return <Connections.Provider value={{ group, selected, select: tag => { if (!group?.tags.includes(tag)) return; if (growthState().kind === 'matrix') closeStudio(); setSelected(current => current.includes(tag) ? current.filter(value => value !== tag) : [...current, tag]); }, enable }}>
     {children}
   </Connections.Provider>;
 }

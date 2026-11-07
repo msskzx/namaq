@@ -25,16 +25,19 @@ export const KINDS = {
 
 export type Tag = keyof typeof TAGS;
 export type Kind = keyof typeof KINDS;
+export type Category = 'mutashabeh' | 'pondering' | 'words';
 export type Level = 'exact' | 'letters' | 'lemma' | 'root';
 export type Position = { key: string; index: number };
 export type Word = Position & { features?: WordFeatures; text: string; letters: string; lemma?: string; root?: string; conj?: string; base: string };
 export type Column = { a?: Position; b?: Position; level?: Level; tags: Tag[] };
 export type Place = PhraseOccurrence & { through?: string };
-export type Citation = { id: string; book: string; edition: string; locator: string; quote: string; url: string; examples?: Partial<Record<Tag, string>>; places: string[]; tags: Tag[] };
+export type Citation = { id: string; book: string; edition: string; locator: string; quote: string; url: string; examples?: Partial<Record<Tag, string>>; places: string[]; selections?: Place[]; tags: Tag[] };
 export type Comparison = { columns: Column[]; tags: Tag[]; score: number; coverage: number; kind?: Kind; spans: [Place, Place] };
 
 export type Group = {
   id: string;
+  aliases?: string[];
+  categories?: Category[];
   text: string;
   places: Place[];
   tree: PhraseGroup;
