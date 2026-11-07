@@ -2053,6 +2053,102 @@
    "keep": true,
    "why": "Same subject: forbidding good things that were made lawful.",
    "ask": "One is Allah forbidding them as punishment, the other forbids believers from banning them. Keep as a contrast?"
+  },
+  "3:3|16:64": {
+   "keep": true,
+   "why": "Same phrase: He sent down the Book to you."
+  },
+  "3:25|16:111": {
+   "keep": true,
+   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged."
+  },
+  "3:29|16:77": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and the closing 'Allah has power over all things'."
+  },
+  "3:67|16:120": {
+   "keep": true,
+   "why": "Same description of Abraham: upright, and not of the associators."
+  },
+  "3:67|16:123": {
+   "keep": true,
+   "why": "Same description of Abraham: upright, and he was not of the associators."
+  },
+  "3:77|16:95": {
+   "keep": true,
+   "why": "Same warning: selling Allah's covenant for a small price."
+  },
+  "3:83|16:52": {
+   "keep": true,
+   "why": "Same argument: all in the heavens and earth belong to Him and the religion is His; do they seek other than Allah?"
+  },
+  "3:83|16:73": {
+   "keep": false,
+   "why": "Only 'Allah' and 'the heavens and the earth'."
+  },
+  "3:88|16:85": {
+   "keep": true,
+   "why": "Same sentence: the punishment will not be lightened for them, nor will they be reprieved."
+  },
+  "3:89|16:18": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:89|16:119": {
+   "keep": true,
+   "why": "Same exception: those who repent after that and reform; Allah is Forgiving, Merciful."
+  },
+  "3:94|16:105": {
+   "keep": true,
+   "why": "Same verdict: whoever invents lies (against Allah), those are the wrongdoers/liars."
+  },
+  "3:95|16:120": {
+   "keep": true,
+   "why": "Same description of Abraham: upright, and not of the associators."
+  },
+  "3:95|16:123": {
+   "keep": true,
+   "why": "Same command: follow the religion of Abraham, upright, and he was not of the associators."
+  },
+  "3:129|16:18": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:129|16:73": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "3:136|16:31": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "3:137|16:36": {
+   "keep": true,
+   "why": "Same command: travel through the land and see the end of the deniers."
+  },
+  "3:148|16:122": {
+   "keep": true,
+   "why": "Same reward: good in this world and in the Hereafter."
+  },
+  "3:161|16:111": {
+   "keep": true,
+   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged."
+  },
+  "3:177|16:104": {
+   "keep": false,
+   "why": "Only 'those who …' and the closing 'painful punishment'."
+  },
+  "3:189|16:73": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "3:189|16:77": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'Allah has power over all things'."
+  },
+  "3:198|16:31": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
   }
  }
 }
