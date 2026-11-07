@@ -6508,6 +6508,162 @@
   "2:127|44:6": {
    "keep": false,
    "why": "Shares only the closing names Hearing, Knowing."
+  },
+  "2:8|45:26": {
+   "keep": false,
+   "why": "Only 'people' and 'day' as words."
+  },
+  "2:82|45:30": {
+   "keep": true,
+   "why": "Same idea: those who believe and do good enter His mercy."
+  },
+  "2:107|45:27": {
+   "keep": false,
+   "why": "Shares only the dominion of the heavens and earth; different points."
+  },
+  "2:116|45:22": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
+  },
+  "2:164|45:5": {
+   "keep": true,
+   "why": "Same signs: alternation of night and day, rain reviving the earth, the winds, for people who reason."
+  },
+  "2:176|45:2": {
+   "keep": false,
+   "why": "Only the Book sent down by Allah as words."
+  },
+  "2:209|45:2": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:252|45:6": {
+   "keep": true,
+   "why": "Same sentence: these are the signs of Allah We recite to you in truth."
+  },
+  "2:281|45:22": {
+   "keep": true,
+   "why": "Same idea: every soul is paid what it earned, and they are not wronged."
+  },
+  "2:97|46:30": {
+   "keep": true,
+   "why": "Same phrase: the revelation confirms what came before it and guides."
+  },
+  "2:98|46:6": {
+   "keep": false,
+   "why": "Only enmity and disbelief as roots; different points."
+  },
+  "2:107|46:32": {
+   "keep": true,
+   "why": "Same idea: no protector besides Allah."
+  },
+  "2:176|46:2": {
+   "keep": false,
+   "why": "Only the Book sent down by Allah as words."
+  },
+  "2:209|46:2": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:284|46:33": {
+   "keep": false,
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
+  },
+  "2:25|47:12": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good."
+  },
+  "2:154|47:34": {
+   "keep": false,
+   "why": "Only 'the way of Allah' and death as words; martyrs vs deniers."
+  },
+  "2:161|47:34": {
+   "keep": true,
+   "why": "Same sentence: those who disbelieve and die as disbelievers."
+  },
+  "2:263|47:21": {
+   "keep": true,
+   "why": "Same phrase: a kind word is better."
+  },
+  "2:106|48:21": {
+   "keep": false,
+   "why": "Shares only the closing 'able over all things'."
+  },
+  "2:107|48:14": {
+   "keep": false,
+   "why": "Shares only the dominion of the heavens and earth."
+  },
+  "2:117|48:7": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
+  },
+  "2:119|48:8": {
+   "keep": true,
+   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+  },
+  "2:148|48:21": {
+   "keep": false,
+   "why": "Shares only the closing 'able over all things'."
+  },
+  "2:209|48:7": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:209|48:19": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:284|48:14": {
+   "keep": true,
+   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills."
+  },
+  "2:95|49:1": {
+   "keep": false,
+   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing."
+  },
+  "2:103|49:1": {
+   "keep": false,
+   "why": "Only belief and fearing Allah as words."
+  },
+  "2:107|49:16": {
+   "keep": false,
+   "why": "Only heavens and earth and knowing as words."
+  },
+  "2:116|49:16": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
+  },
+  "2:137|49:1": {
+   "keep": false,
+   "why": "Shares only the names Hearing, Knowing."
+  },
+  "2:160|49:10": {
+   "keep": false,
+   "why": "Only reconciling and mercy roots; repentance vs brotherhood."
+  },
+  "2:182|49:10": {
+   "keep": true,
+   "why": "Same idea: making peace between people, and mercy."
+  },
+  "2:192|49:5": {
+   "keep": false,
+   "why": "Shares only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|49:15": {
+   "keep": true,
+   "why": "Same description: those who believe and strive in the way of Allah."
+  },
+  "2:224|49:1": {
+   "keep": false,
+   "why": "Only fearing Allah and the names Hearing, Knowing."
+  },
+  "2:224|49:13": {
+   "keep": false,
+   "why": "Only fearing Allah and 'Knowing' as words."
+  },
+  "2:284|49:16": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
   }
  }
 }
