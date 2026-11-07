@@ -3085,6 +3085,82 @@
   "3:189|24:64": {
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "4:13|48:5": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "4:13|48:17": {
+   "keep": true,
+   "why": "Same sentence: whoever obeys Allah and His Messenger, He admits him to gardens beneath which rivers flow."
+  },
+  "4:57|48:5": {
+   "keep": true,
+   "why": "Same reward: admitted to gardens beneath which rivers flow, abiding in them."
+  },
+  "4:79|48:28": {
+   "keep": true,
+   "why": "Same phrase: (He) sent (you as) a messenger, and Allah is sufficient as witness."
+  },
+  "4:122|48:5": {
+   "keep": true,
+   "why": "Same reward: admitted to gardens beneath which rivers flow, abiding in them."
+  },
+  "4:86|48:21": {
+   "keep": false,
+   "why": "Only the closing about 'all things'."
+  },
+  "4:96|48:14": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:106|48:14": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:126|48:7": {
+   "keep": false,
+   "why": "Only 'to Allah belongs … the heavens and the earth'."
+  },
+  "4:126|48:14": {
+   "keep": false,
+   "why": "Only 'to Allah belongs … the heavens and the earth'."
+  },
+  "4:126|48:21": {
+   "keep": false,
+   "why": "Only the closing about 'all things'."
+  },
+  "4:133|48:21": {
+   "keep": false,
+   "why": "Only the closing 'Allah is able'."
+  },
+  "4:152|48:14": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:158|48:7": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:158|48:19": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:165|48:7": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:170|48:4": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and the closing 'Knowing, Wise'."
+  },
+  "4:170|48:7": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and the closing 'Wise'."
+  },
+  "4:175|48:2": {
+   "keep": false,
+   "why": "Only the formula 'guide to a straight path'."
   }
  }
 }
