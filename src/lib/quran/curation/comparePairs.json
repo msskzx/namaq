@@ -5449,6 +5449,54 @@
   "33:73|48:14": {
    "keep": true,
    "why": "Same idea: Allah punishes and forgives, ending with forgiving and merciful."
+  },
+  "29:7|39:35": {
+   "keep": true,
+   "why": "Same promise: Allah removes their bad deeds and rewards them by the best of what they did."
+  },
+  "29:16|39:39": {
+   "keep": false,
+   "why": "Only shared words (said to his people, you know); the messages differ."
+  },
+  "29:39|39:59": {
+   "keep": true,
+   "why": "Same pattern: the proofs came to them and they were arrogant."
+  },
+  "29:42|39:1": {
+   "keep": false,
+   "why": "Shares only the names the Almighty, the Wise."
+  },
+  "29:44|39:63": {
+   "keep": false,
+   "why": "Shares only the heavens and the earth and the word signs."
+  },
+  "29:52|39:46": {
+   "keep": false,
+   "why": "Shares only heavens and earth and the word between; the subjects differ."
+  },
+  "29:52|39:63": {
+   "keep": true,
+   "why": "Same closing sentence: those who disbelieve in Allah, they are the losers."
+  },
+  "29:55|39:24": {
+   "keep": true,
+   "why": "Same scene: the punishment, and they are told taste what you used to do."
+  },
+  "29:58|39:74": {
+   "keep": true,
+   "why": "Same reward: settling in Paradise, and excellent is the reward of the workers."
+  },
+  "29:62|39:52": {
+   "keep": true,
+   "why": "Same sentence: Allah extends provision for whom He wills and restricts it."
+  },
+  "29:64|39:26": {
+   "keep": true,
+   "why": "Same contrast: the life of this world against the Hereafter, if they only knew."
+  },
+  "29:68|39:32": {
+   "keep": true,
+   "why": "Nearly the same ayah: who does more wrong than one who lies about Allah; is not Hell a home for the disbelievers."
   }
  }
 }
