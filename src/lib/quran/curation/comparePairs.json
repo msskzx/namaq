@@ -2853,6 +2853,86 @@
    "keep": true,
    "why": "Same subject in Moses's story: one who wronged, then sought forgiveness; Allah is Forgiving, Merciful.",
    "ask": "27:11 is often read as a hint at Moses's own slip, which 28:16 tells. The words overlap only a little. Keep?"
+  },
+  "16:22|39:45": {
+   "keep": true,
+   "why": "Same subject: the hearts of those who do not believe in the Hereafter recoil at the One God."
+  },
+  "16:26|39:25": {
+   "keep": true,
+   "why": "Same sentence: those before them …, so the punishment came to them from where they did not perceive."
+  },
+  "16:29|39:72": {
+   "keep": true,
+   "why": "Same sentence: enter the gates of Hell, abiding in it; wretched is the abode of the arrogant."
+  },
+  "16:30|39:10": {
+   "keep": true,
+   "why": "Same phrase: for those who do good in this world is good."
+  },
+  "16:34|39:48": {
+   "keep": true,
+   "why": "Same sentence: the evil of what they did struck them, and what they mocked surrounded them."
+  },
+  "16:41|39:26": {
+   "keep": true,
+   "why": "Same frame: in this world …, and the Hereafter's (reward / punishment) is greater, if they only knew."
+  },
+  "16:45|39:25": {
+   "keep": true,
+   "why": "Same phrase: the punishment comes to them from where they do not perceive."
+  },
+  "16:75|39:29": {
+   "keep": true,
+   "why": "Same parable form: Allah strikes a parable … are they equal? Praise be to Allah; but most of them do not know."
+  },
+  "16:79|39:52": {
+   "keep": true,
+   "why": "Same ending: do they not see …; in that are signs for a people who believe."
+  },
+  "16:96|39:35": {
+   "keep": true,
+   "why": "Same promise: We will reward them according to the best of what they used to do."
+  },
+  "16:97|39:35": {
+   "keep": true,
+   "why": "Same promise: We will reward them according to the best of what they used to do."
+  },
+  "16:111|39:70": {
+   "keep": true,
+   "why": "Same phrase: every soul will be paid in full for what it did."
+  },
+  "16:20|39:62": {
+   "keep": false,
+   "why": "Only creating and 'thing': idols create nothing vs Allah creates all."
+  },
+  "16:51|39:4": {
+   "keep": false,
+   "why": "Only 'take' and Allah's oneness; different points."
+  },
+  "16:65|39:63": {
+   "keep": false,
+   "why": "Only heaven, earth and signs."
+  },
+  "16:65|39:68": {
+   "keep": false,
+   "why": "Only heaven and earth."
+  },
+  "16:73|39:43": {
+   "keep": false,
+   "why": "Only 'besides Allah … possess nothing'."
+  },
+  "16:73|39:44": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "16:73|39:68": {
+   "keep": false,
+   "why": "Only heaven and earth."
+  },
+  "16:107|39:26": {
+   "keep": false,
+   "why": "Only 'this world and the Hereafter'."
   }
  }
 }
