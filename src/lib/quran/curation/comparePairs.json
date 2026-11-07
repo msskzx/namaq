@@ -4245,8 +4245,8 @@
    "checked": true
   },
   "2:142|10:25": {
-   "keep": false,
-   "why": "Only the formula 'He guides whom He wills to a straight path'.",
+   "keep": true,
+   "why": "Same closing: He guides whom He wills to a straight path (owner kept on second review).",
    "checked": true
   },
   "2:176|10:32": {
