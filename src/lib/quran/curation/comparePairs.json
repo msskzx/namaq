@@ -3237,6 +3237,82 @@
   "4:165|8:67": {
    "keep": false,
    "why": "Only the closing 'Mighty, Wise'."
+  },
+  "6:3|16:19": {
+   "keep": true,
+   "why": "Same statement: Allah knows what you conceal and what you reveal."
+  },
+  "6:3|16:23": {
+   "keep": true,
+   "why": "Same statement: Allah knows what they conceal and what they reveal."
+  },
+  "6:10|16:34": {
+   "keep": true,
+   "why": "Same sentence: what they used to mock surrounded them."
+  },
+  "6:11|16:36": {
+   "keep": true,
+   "why": "Same command: travel through the land and see the end of the deniers."
+  },
+  "6:21|16:105": {
+   "keep": true,
+   "why": "Same subject: inventing lies against Allah and denying His signs."
+  },
+  "6:24|16:87": {
+   "keep": true,
+   "why": "Same ending: what they used to invent has left them."
+  },
+  "6:54|16:119": {
+   "keep": true,
+   "why": "Same promise: whoever does evil in ignorance, then repents after it and reforms, finds Him Forgiving, Merciful."
+  },
+  "6:87|16:121": {
+   "keep": true,
+   "why": "Same phrase: (He) chose them and guided them to a straight path."
+  },
+  "6:109|16:38": {
+   "keep": true,
+   "why": "Same phrase: they swore by Allah their strongest oaths."
+  },
+  "6:117|16:125": {
+   "keep": true,
+   "why": "Same sentence: your Lord knows best who strays from His way, and He knows best the guided."
+  },
+  "6:145|16:115": {
+   "keep": true,
+   "why": "Same ruling: carrion, blood, pork and what is dedicated to other than Allah; whoever is forced … is forgiven."
+  },
+  "6:148|16:35": {
+   "keep": true,
+   "why": "Same argument of the associators: had Allah willed, neither we nor our fathers would have …; so did those before them."
+  },
+  "6:149|16:9": {
+   "keep": true,
+   "why": "Same phrase: had He willed, He would have guided you all."
+  },
+  "6:161|16:123": {
+   "keep": true,
+   "why": "Same phrase: the religion of Abraham, upright, and he was not of the associators."
+  },
+  "6:37|16:101": {
+   "keep": false,
+   "why": "Only signs and 'most of them do not know'."
+  },
+  "6:79|16:3": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and associating."
+  },
+  "6:88|16:93": {
+   "keep": false,
+   "why": "Only 'He guides whom He wills'."
+  },
+  "6:118|16:79": {
+   "keep": false,
+   "why": "Only Allah, signs and believing."
+  },
+  "6:126|16:13": {
+   "keep": false,
+   "why": "Only the formula 'signs for a people who remember'."
   }
  }
 }
