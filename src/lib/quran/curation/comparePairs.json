@@ -3737,6 +3737,70 @@
   "5:120|22:6": {
    "keep": false,
    "why": "Only the closing 'He has power over all things'."
+  },
+  "2:77|6:3": {
+   "keep": true,
+   "why": "Same statement: Allah knows what they conceal and what they reveal."
+  },
+  "2:118|6:37": {
+   "keep": true,
+   "why": "Same demand: why does a sign not come to us / was a sign not sent down?"
+  },
+  "2:119|6:48": {
+   "keep": true,
+   "why": "Same role: messengers sent as bringers of good news and warners."
+  },
+  "2:121|6:20": {
+   "keep": true,
+   "why": "Same opening: those to whom We gave the Book …"
+  },
+  "2:135|6:161": {
+   "keep": true,
+   "why": "Same phrase: the religion of Abraham, upright, and he was not of the associators."
+  },
+  "2:146|6:20": {
+   "keep": true,
+   "why": "Same sentence: those to whom We gave the Book recognise it as they recognise their sons."
+  },
+  "2:168|6:142": {
+   "keep": true,
+   "why": "Same command: eat of what … and do not follow the footsteps of Satan; he is a clear enemy to you."
+  },
+  "2:173|6:145": {
+   "keep": true,
+   "why": "Same ruling: carrion, blood, pork and what is dedicated to other than Allah; whoever is forced … is forgiven."
+  },
+  "2:202|6:62": {
+   "keep": true,
+   "why": "Same attribute: Allah is swift in reckoning."
+  },
+  "2:208|6:142": {
+   "keep": true,
+   "why": "Same command: do not follow the footsteps of Satan; he is a clear enemy to you."
+  },
+  "2:29|6:101": {
+   "keep": false,
+   "why": "Only creation and the closing 'He knows all things'."
+  },
+  "2:55|6:47": {
+   "keep": false,
+   "why": "Only 'openly'."
+  },
+  "2:106|6:17": {
+   "keep": false,
+   "why": "Only good and the closing 'Allah has power over all things'."
+  },
+  "2:117|6:75": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "2:170|6:56": {
+   "keep": false,
+   "why": "Only following and guidance."
+  },
+  "2:243|6:95": {
+   "keep": false,
+   "why": "Only life and death."
   }
  }
 }
