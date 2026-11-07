@@ -5800,31 +5800,38 @@
   },
   "2:23|11:13": {
    "keep": true,
-   "why": "Same challenge: bring a surah like it and call on whom you can besides Allah, if you are truthful."
+   "why": "Same challenge: bring a surah like it and call on whom you can besides Allah, if you are truthful.",
+   "checked": true
   },
   "2:37|11:90": {
-   "keep": true,
-   "why": "Same theme: repentance to the Lord, who is merciful."
+   "keep": false,
+   "why": "Shares only repentance words; Adam's repentance vs Shu'ayb's call (owner removed).",
+   "checked": true
   },
   "2:82|11:23": {
    "keep": true,
-   "why": "Same sentence: those who believe and do good are the people of Paradise, abiding in it."
+   "why": "Same sentence: those who believe and do good are the people of Paradise, abiding in it.",
+   "checked": true
   },
   "2:94|11:13": {
    "keep": false,
-   "why": "Only 'if you are truthful' and 'besides'; wishing for death vs the challenge of ten surahs."
+   "why": "Only 'if you are truthful' and 'besides'; wishing for death vs the challenge of ten surahs.",
+   "checked": true
   },
   "2:106|11:4": {
    "keep": false,
-   "why": "Shares only the closing 'over all things able'; abrogation vs the return to Allah."
+   "why": "Shares only the closing 'over all things able'; abrogation vs the return to Allah.",
+   "checked": true
   },
   "2:107|11:113": {
    "keep": true,
-   "why": "Same idea: besides Allah you have no protector and no helper."
+   "why": "Same idea: besides Allah you have no protector and no helper.",
+   "checked": true
   },
   "2:139|11:92": {
    "keep": false,
-   "why": "Only Allah and 'Lord' and deeds as words; different arguments."
+   "why": "Only Allah and 'Lord' and deeds as words; different arguments.",
+   "checked": true
   },
   "2:11|12:73": {
    "keep": false,
