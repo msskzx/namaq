@@ -3801,6 +3801,70 @@
   "2:243|6:95": {
    "keep": false,
    "why": "Only life and death."
+  },
+  "3:84|29:46": {
+   "keep": true,
+   "why": "Same creed: we believe in what was sent down to us and (to others), and we submit to Him."
+  },
+  "3:136|29:58": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; excellent is the reward of the workers."
+  },
+  "3:184|29:18": {
+   "keep": true,
+   "why": "Same consolation: if they deny you, (messengers / nations) before you were denied."
+  },
+  "3:198|29:58": {
+   "keep": true,
+   "why": "Same reward: (gardens) beneath which rivers flow, abiding in them."
+  },
+  "3:199|29:46": {
+   "keep": true,
+   "why": "Same subject: the People of the Book and belief in what was sent down to you and to them."
+  },
+  "3:6|29:42": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:18|29:42": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:21|29:23": {
+   "keep": false,
+   "why": "Only 'disbelieve in Allah's signs' and 'painful punishment'."
+  },
+  "3:29|29:20": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
+  },
+  "3:29|29:52": {
+   "keep": false,
+   "why": "Only 'He knows what is in the heavens and the earth'."
+  },
+  "3:57|29:9": {
+   "keep": false,
+   "why": "Only the common formula 'those who believe and do righteous deeds'."
+  },
+  "3:100|29:47": {
+   "keep": false,
+   "why": "Only 'those given the Book' and belief."
+  },
+  "3:115|29:16": {
+   "keep": false,
+   "why": "Only good and piety."
+  },
+  "3:150|29:22": {
+   "keep": false,
+   "why": "Only 'Allah … protector … helper'."
+  },
+  "3:177|29:23": {
+   "keep": false,
+   "why": "Only the closing 'for them is a painful punishment'."
+  },
+  "3:190|29:44": {
+   "keep": false,
+   "why": "Only the formula 'in the creation of the heavens and the earth are signs'."
   }
  }
 }
