@@ -5556,51 +5556,63 @@
   },
   "29:7|30:45": {
    "keep": true,
-   "why": "Same promise: Allah rewards those who believe and do righteous deeds."
+   "why": "Same promise: Allah rewards those who believe and do righteous deeds.",
+   "checked": true
   },
   "29:9|30:15": {
    "keep": false,
-   "why": "Shares only the formula those who believe and do righteous deeds."
+   "why": "Shares only the formula those who believe and do righteous deeds.",
+   "checked": true
   },
   "29:9|30:45": {
    "keep": false,
-   "why": "Shares only the formula those who believe and do righteous deeds."
+   "why": "Shares only the formula those who believe and do righteous deeds.",
+   "checked": true
   },
   "29:19|30:11": {
    "keep": true,
-   "why": "Same sentence: Allah begins creation and then repeats it."
+   "why": "Same sentence: Allah begins creation and then repeats it.",
+   "checked": true
   },
   "29:20|30:50": {
    "keep": true,
-   "why": "Same topic: look how Allah begins creation and brings life again, proof of the resurrection."
+   "why": "Same topic: look how Allah begins creation and brings life again, proof of the resurrection.",
+   "checked": true
   },
   "29:23|30:16": {
    "keep": true,
-   "why": "Same idea: those who disbelieve in Our signs and the meeting, and their punishment."
+   "why": "Same idea: those who disbelieve in Our signs and the meeting, and their punishment.",
+   "checked": true
   },
   "29:42|30:5": {
    "keep": false,
-   "why": "Shares only the names closing the ayah; the subjects differ."
+   "why": "Shares only the names closing the ayah; the subjects differ.",
+   "checked": true
   },
   "29:44|30:22": {
    "keep": true,
-   "why": "Same idea: the creation of the heavens and earth is a sign."
+   "why": "Same idea: the creation of the heavens and earth is a sign.",
+   "checked": true
   },
   "29:62|30:37": {
    "keep": true,
-   "why": "Same sentence: Allah extends provision for whom He wills and restricts it."
+   "why": "Same sentence: Allah extends provision for whom He wills and restricts it.",
+   "checked": true
   },
   "29:63|30:24": {
    "keep": true,
-   "why": "Same sentence: He sends water from the sky and revives the earth after its death."
+   "why": "Same sentence: He sends water from the sky and revives the earth after its death.",
+   "checked": true
   },
   "29:64|30:7": {
    "keep": true,
-   "why": "Same contrast: the life of this world against the Hereafter, and knowing."
+   "why": "Same contrast: the life of this world against the Hereafter, and knowing.",
+   "checked": true
   },
   "29:66|30:34": {
    "keep": true,
-   "why": "Nearly the same ayah: to deny what We gave them; enjoy, you will come to know."
+   "why": "Nearly the same ayah: to deny what We gave them; enjoy, you will come to know.",
+   "checked": true
   },
   "26:24|37:5": {
    "keep": false,
