@@ -2245,6 +2245,102 @@
   "5:120|9:116": {
    "keep": false,
    "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "10:6|16:12": {
+   "keep": true,
+   "why": "Same sign: the night and the day … in that are signs for a people."
+  },
+  "10:6|16:52": {
+   "keep": false,
+   "why": "Only 'what is in the heavens and the earth'."
+  },
+  "10:6|16:65": {
+   "keep": false,
+   "why": "Only the formula 'in that is a sign for a people …'."
+  },
+  "10:9|16:31": {
+   "keep": true,
+   "why": "Same reward: rivers flowing beneath them in gardens."
+  },
+  "10:17|16:105": {
+   "keep": true,
+   "why": "Same subject: inventing lies against Allah and denying His signs."
+  },
+  "10:19|16:124": {
+   "keep": true,
+   "why": "Same statement: your Lord will judge between them concerning what they differed over."
+  },
+  "10:25|16:121": {
+   "keep": false,
+   "why": "Only the formula 'guides to a straight path'."
+  },
+  "10:30|16:87": {
+   "keep": true,
+   "why": "Same ending: what they used to invent has left them."
+  },
+  "10:49|16:61": {
+   "keep": true,
+   "why": "Same sentence: when their term comes they cannot delay it an hour nor advance it."
+  },
+  "10:55|16:3": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and truth."
+  },
+  "10:55|16:38": {
+   "keep": true,
+   "why": "Same statement: Allah's promise is true, but most people do not know."
+  },
+  "10:59|16:116": {
+   "keep": true,
+   "why": "Same charge: making things lawful and unlawful, inventing lies against Allah."
+  },
+  "10:64|16:107": {
+   "keep": false,
+   "why": "Only 'this world and the Hereafter'; different points."
+  },
+  "10:66|16:73": {
+   "keep": false,
+   "why": "Only 'besides Allah' and 'the heavens and the earth'."
+  },
+  "10:67|16:12": {
+   "keep": true,
+   "why": "Same sign: He made the night and the day for you; in that are signs for a people."
+  },
+  "10:69|16:105": {
+   "keep": true,
+   "why": "Same subject: those who invent lies (against Allah)."
+  },
+  "10:69|16:116": {
+   "keep": true,
+   "why": "Identical sentence: those who invent lies against Allah will not succeed."
+  },
+  "10:93|16:124": {
+   "keep": true,
+   "why": "Same statement: your Lord will judge between them on the Day of Resurrection concerning what they differed over."
+  },
+  "10:97|16:104": {
+   "keep": false,
+   "why": "Only signs and 'painful punishment'."
+  },
+  "10:101|16:65": {
+   "keep": false,
+   "why": "Only signs, heaven and earth; different points."
+  },
+  "10:101|16:79": {
+   "keep": false,
+   "why": "Only signs and 'a people who believe'."
+  },
+  "10:105|16:120": {
+   "keep": true,
+   "why": "Same stance: upright, not of the associators."
+  },
+  "10:105|16:123": {
+   "keep": true,
+   "why": "Same stance: upright, not of the associators."
+  },
+  "10:106|16:20": {
+   "keep": false,
+   "why": "Only 'calling on others besides Allah'; different points."
   }
  }
 }
