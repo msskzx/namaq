@@ -32,7 +32,7 @@ function useNames(names: Names, ar: boolean) {
 }
 
 /** The surah pairs: hand-picked stories first, then every pair the engine links, in mushaf order or by how many ayat they share. */
-function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void }) {
+function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = false }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const { plain } = useNames(names, ar);
   const [byCount, setByCount] = useState(false);
@@ -63,7 +63,7 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
   const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   const row = (pair: { a: number; b: number }, label: React.ReactNode) => (
     <li key={`${pair.a}:${pair.b}`}>
-      <Link href={surahPairHref(pair.a, pair.b)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
+      <Link href={pairHref(pair.a, pair.b, review)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
         className="flex items-center gap-3 rounded-md border-s-2 border-transparent px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] aria-[current=page]:border-[var(--home-accent)] aria-[current=page]:bg-[var(--home-paper-deep)]">
         <span className="min-w-0 flex-1">{label}</span>
         <span className="text-sm tabular-nums text-[var(--home-accent)]">{ar ? num(count.get(`${pair.a}:${pair.b}`) ?? 0) : count.get(`${pair.a}:${pair.b}`) ?? 0}</span>
@@ -111,6 +111,9 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
   );
 }
 
+/** Review mode (verdicts on the cards) stays on while moving between pairs. */
+const pairHref = (a: number, b: number, review: boolean) => `${surahPairHref(a, b)}${review ? '&review=1' : ''}`;
+
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
 function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode): SpreadPage {
@@ -137,20 +140,24 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
-    <li className={card.verdict?.keep === false ? 'opacity-60' : undefined}>
+    <li className={card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : undefined}>
       <div onClick={event => pick(event.target)}>
         <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
           <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
         ) : undefined))} />
       </div>
-      {card.verdict && <p dir="ltr" className={`mt-1 text-sm ${card.verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
-        {card.verdict.keep ? '✓ Kept' : '✗ Left out'} · {card.id.replace('|', ' ~ ')} · {card.verdict.why}
-      </p>}
+      {card.verdict && <div dir="ltr" className="mt-1 text-sm">
+        {card.verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {card.verdict.ask}</p>}
+        <p className={card.verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}>
+          {card.verdict.keep ? '✓ Kept' : '✗ Left out'} · {card.id.replace('|', ' ~ ')} · {card.verdict.why}
+          <span className="text-[var(--home-muted)]"> · {card.verdict.checked ? 'checked by you' : 'drafted by Claude'}</span>
+        </p>
+      </div>}
     </li>
   );
 }
 
-export default function PairCompare({ a, b, cards, pairs, names }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names }) {
+export default function PairCompare({ a, b, cards, pairs, names, review = false }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const { title } = useNames(names, ar);
   const sheet = useRef<HTMLDialogElement>(null);
@@ -188,12 +195,12 @@ export default function PairCompare({ a, b, cards, pairs, names }: { a: number; 
         <div className="flex min-w-0 flex-col gap-4">
           {cards.length === 0 ? <p role="status" className={NOTE}>{ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{cards.map(card => <Card key={card.id} card={card} names={names} ar={ar} />)}</ol>}
-          {next && <Link href={surahPairHref(next.a, next.b)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
+          {next && <Link href={pairHref(next.a, next.b, review)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
-          <PairList pairs={pairs} names={names} a={a} b={b} />
+          <PairList pairs={pairs} names={names} a={a} b={b} review={review} />
         </aside>
       </div>
       <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
@@ -204,7 +211,7 @@ export default function PairCompare({ a, b, cards, pairs, names }: { a: number; 
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
             <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
           </div>
-          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} />}
+          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} />}
         </div>
       </dialog>
     </div>

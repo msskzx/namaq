@@ -74,6 +74,18 @@ describe('PairCompare', () => {
     expect(read[0].getAttribute('aria-label')).toMatch(/^اقرأ .+ ٤٠ في المصحف$/);
   });
 
+  it('in review, flags the cards that need the owner, says who checked each verdict and keeps review on in links', () => {
+    const reviewed: PairCard[] = [
+      { ...cards[0], id: 'y', verdict: { keep: true, why: 'same phrase', ask: 'Is this one parallel?' } },
+      { ...cards[0], id: 'z', verdict: { keep: false, why: 'formula only', checked: true } },
+    ];
+    const { container } = render(<PairCompare a={52} b={68} cards={reviewed} pairs={pairs} names={names} review />);
+    expect([...container.querySelectorAll('[data-ask]')].map(node => node.textContent)).toEqual(['? Needs your feedback: Is this one parallel?']);
+    expect(container.textContent).toContain('drafted by Claude');
+    expect(container.textContent).toContain('checked by you');
+    expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
+  });
+
   it('offers the next pair in mushaf order', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
     expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
