@@ -1530,6 +1530,114 @@
    "keep": true,
    "why": "Same statement: to Allah belongs what is in the heavens and the earth, ending with Allah over all things.",
    "ask": "Your earlier rule dropped the heavens-and-earth formula alone; here the whole sentence matches. Keep?"
+  },
+  "6:3|10:55": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula; different points."
+  },
+  "6:11|10:14": {
+   "keep": false,
+   "why": "'In the land' and 'how' only: travel and look at the end of deniers vs successors being tested."
+  },
+  "6:13|10:67": {
+   "keep": false,
+   "why": "Night, day and hearing appear in both, but the statements differ."
+  },
+  "6:17|10:107": {
+   "keep": true,
+   "why": "Same sentence: if Allah touches you with harm none removes it but Him, and if with good …"
+  },
+  "6:21|10:17": {
+   "keep": true,
+   "why": "Same question: who does more wrong than one who invents a lie against Allah or denies His signs; they will not succeed."
+  },
+  "6:21|10:69": {
+   "keep": true,
+   "why": "Same verdict: those who invent lies against Allah will not succeed."
+  },
+  "6:21|10:95": {
+   "keep": false,
+   "why": "Only 'denying the signs of Allah'."
+  },
+  "6:22|10:28": {
+   "keep": true,
+   "why": "Same scene: the Day We gather them all, then say to the associators, where are your partners."
+  },
+  "6:24|10:30": {
+   "keep": true,
+   "why": "Same ending: what they used to invent has left them."
+  },
+  "6:33|10:65": {
+   "keep": true,
+   "why": "Same consolation to the Prophet: their words grieve you / let their words not grieve you."
+  },
+  "6:33|10:95": {
+   "keep": false,
+   "why": "Only denying the signs of Allah."
+  },
+  "6:37|10:20": {
+   "keep": true,
+   "why": "Same demand: why has a sign not been sent down to him from his Lord? Say …"
+  },
+  "6:40|10:38": {
+   "keep": false,
+   "why": "Both end 'if you are truthful', otherwise different challenges."
+  },
+  "6:45|10:10": {
+   "keep": false,
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+  },
+  "6:47|10:50": {
+   "keep": true,
+   "why": "Same question: have you considered, if His punishment came to you …"
+  },
+  "6:47|10:85": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'."
+  },
+  "6:49|10:95": {
+   "keep": false,
+   "why": "Only 'those who deny the signs'."
+  },
+  "6:56|10:66": {
+   "keep": false,
+   "why": "Shares 'those you call besides Allah'; the points differ."
+  },
+  "6:62|10:30": {
+   "keep": true,
+   "why": "Same phrase: returned to Allah, their true Master."
+  },
+  "6:79|10:105": {
+   "keep": true,
+   "why": "Same stance: turning one's face, upright, not of the associators."
+  },
+  "6:87|10:25": {
+   "keep": false,
+   "why": "Only the formula 'to a straight path'."
+  },
+  "6:95|10:31": {
+   "keep": true,
+   "why": "Same sign: He brings the living out of the dead and the dead out of the living."
+  },
+  "6:106|10:109": {
+   "keep": true,
+   "why": "Same command: follow what is revealed to you."
+  },
+  "6:116|10:66": {
+   "keep": true,
+   "why": "Same verdict: they follow nothing but assumption, and they only guess."
+  },
+  "6:129|10:52": {
+   "keep": false,
+   "why": "Only 'for what they used to earn'."
+  },
+  "6:161|10:105": {
+   "keep": true,
+   "why": "Same creed: the religion, upright, not of the associators."
+  },
+  "6:162|10:10": {
+   "keep": false,
+   "why": "Only 'to Allah, Lord of the worlds'."
   }
  }
 }
