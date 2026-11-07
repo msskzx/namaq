@@ -3669,6 +3669,74 @@
   "3:189|9:116": {
    "keep": false,
    "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "5:9|22:50": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good have forgiveness and (a great reward / noble provision)."
+  },
+  "5:10|22:51": {
+   "keep": true,
+   "why": "Same verdict: those … Our signs, those are the companions of Hellfire."
+  },
+  "5:10|22:57": {
+   "keep": true,
+   "why": "Same sentence: those who disbelieve and deny Our signs, those …"
+  },
+  "5:37|22:22": {
+   "keep": true,
+   "why": "Same scene: they want to get out of the Fire but are returned / cannot."
+  },
+  "5:69|22:17": {
+   "keep": true,
+   "why": "Same list: those who believe, the Jews, the Sabians and the Christians."
+  },
+  "5:76|22:12": {
+   "keep": true,
+   "why": "Same charge: calling on besides Allah what neither harms nor benefits."
+  },
+  "5:85|22:14": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "5:86|22:51": {
+   "keep": true,
+   "why": "Same verdict: those … Our signs, those are the companions of Hellfire."
+  },
+  "5:86|22:57": {
+   "keep": true,
+   "why": "Same sentence: those who disbelieve and deny Our signs, those …"
+  },
+  "5:119|22:14": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "5:9|22:56": {
+   "keep": false,
+   "why": "Only the common formula 'those who believe and do righteous deeds'."
+  },
+  "5:40|22:70": {
+   "keep": false,
+   "why": "Only 'do you not know that Allah …' and the heavens and earth."
+  },
+  "5:50|22:69": {
+   "keep": false,
+   "why": "Only judging."
+  },
+  "5:76|22:71": {
+   "keep": false,
+   "why": "Only 'worship besides Allah'."
+  },
+  "5:76|22:75": {
+   "keep": false,
+   "why": "Only 'Hearing'."
+  },
+  "5:87|22:38": {
+   "keep": false,
+   "why": "Only the formula 'Allah does not love …'."
+  },
+  "5:120|22:6": {
+   "keep": false,
+   "why": "Only the closing 'He has power over all things'."
   }
  }
 }
