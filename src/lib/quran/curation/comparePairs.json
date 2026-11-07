@@ -2772,6 +2772,87 @@
   "7:182|27:84": {
    "keep": false,
    "why": "Only 'denied My signs'."
+  },
+  "27:1|28:2": {
+   "keep": true,
+   "why": "Same opening: these are the verses of the clear Book."
+  },
+  "27:7|28:29": {
+   "keep": true,
+   "why": "Same scene: Moses tells his family, I have seen a fire; I may bring you news from it or a brand so you may warm yourselves."
+  },
+  "27:8|28:30": {
+   "keep": true,
+   "why": "Same scene: when he came to it he was called … Allah, Lord of the worlds."
+  },
+  "27:10|28:31": {
+   "keep": true,
+   "why": "Same scene, almost word for word: throw your staff; when he saw it move like a snake he turned and fled; O Moses, do not fear."
+  },
+  "27:12|28:32": {
+   "keep": true,
+   "why": "Same sign: put your hand in your bosom, it will come out white without harm, to Pharaoh; they were a defiantly disobedient people."
+  },
+  "27:13|28:36": {
+   "keep": true,
+   "why": "Same reaction: when Our signs came to them they said, this is magic."
+  },
+  "27:74|28:69": {
+   "keep": true,
+   "why": "Same sentence: your Lord knows what their breasts conceal and what they reveal."
+  },
+  "27:86|28:72": {
+   "keep": true,
+   "why": "Same sign: the night for rest in it and the day for seeing."
+  },
+  "27:90|28:84": {
+   "keep": true,
+   "why": "Same verdict: whoever comes with an evil deed is recompensed only for what they did."
+  },
+  "27:14|28:40": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "27:15|28:80": {
+   "keep": false,
+   "why": "Only 'given knowledge' and 'said'."
+  },
+  "27:32|28:44": {
+   "keep": false,
+   "why": "Only 'I was not' and 'matter'; different points."
+  },
+  "27:36|28:49": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "27:36|28:80": {
+   "keep": false,
+   "why": "Only 'Allah … better'."
+  },
+  "27:38|28:53": {
+   "keep": false,
+   "why": "Only 'before' and 'Muslims'."
+  },
+  "27:51|28:40": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "27:69|28:17": {
+   "keep": false,
+   "why": "Only 'the criminals'."
+  },
+  "27:69|28:40": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "27:92|28:85": {
+   "keep": false,
+   "why": "Only the Quran, guidance and error; different points."
+  },
+  "27:11|28:16": {
+   "keep": true,
+   "why": "Same subject in Moses's story: one who wronged, then sought forgiveness; Allah is Forgiving, Merciful.",
+   "ask": "27:11 is often read as a hint at Moses's own slip, which 28:16 tells. The words overlap only a little. Keep?"
   }
  }
 }
