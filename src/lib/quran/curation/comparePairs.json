@@ -9253,6 +9253,202 @@
   "5:120|85:9": {
    "keep": true,
    "why": "His is the dominion of the heavens and the earth, over all things."
+  },
+  "6:3|9:78": {
+   "keep": true,
+   "why": "Allah knows their secret and what they disclose."
+  },
+  "6:97|9:11": {
+   "keep": true,
+   "why": "We detail the signs for a people who know."
+  },
+  "6:126|9:11": {
+   "keep": true,
+   "why": "We have detailed the signs for a people ..."
+  },
+  "6:135|9:105": {
+   "keep": true,
+   "why": "Work, and you will come to know."
+  },
+  "6:15|11:26": {
+   "keep": true,
+   "why": "I fear the punishment of a great / painful day."
+  },
+  "6:17|11:4": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "6:21|11:18": {
+   "keep": true,
+   "why": "Who is more unjust than one who invents a lie against Allah?"
+  },
+  "6:24|11:21": {
+   "keep": true,
+   "why": "What they used to invent has strayed from them."
+  },
+  "6:40|11:13": {
+   "keep": true,
+   "why": "Challenge: call upon other than Allah, if you are truthful."
+  },
+  "6:50|11:31": {
+   "keep": true,
+   "why": "Same words: I do not say I have the treasures of Allah, nor know the unseen, nor that I am an angel."
+  },
+  "6:78|11:54": {
+   "keep": true,
+   "why": "I am free of what you associate: a prophet to his people."
+  },
+  "6:131|11:102": {
+   "keep": true,
+   "why": "Your Lord's dealing with towns and their wrongdoing."
+  },
+  "6:131|11:117": {
+   "keep": true,
+   "why": "Your Lord would not destroy the towns unjustly while their people ..."
+  },
+  "6:132|11:111": {
+   "keep": true,
+   "why": "Each will be repaid for their deeds; your Lord knows what they do."
+  },
+  "6:135|11:93": {
+   "keep": true,
+   "why": "My people, work according to your position; I am working; you will come to know."
+  },
+  "6:40|12:107": {
+   "keep": true,
+   "why": "The punishment of Allah or the Hour coming upon them."
+  },
+  "6:47|12:107": {
+   "keep": true,
+   "why": "The punishment of Allah coming suddenly."
+  },
+  "6:53|12:90": {
+   "keep": false,
+   "why": "Shared 'Allah has favoured' only; different scenes."
+  },
+  "6:56|12:108": {
+   "keep": true,
+   "why": "The Prophet's declaration of his way, against shirk."
+  },
+  "6:74|12:8": {
+   "keep": false,
+   "why": "Shared 'in clear error' and father only; different scenes."
+  },
+  "6:74|12:78": {
+   "keep": false,
+   "why": "Shared father and 'we see you' only."
+  },
+  "6:90|12:104": {
+   "keep": true,
+   "why": "I do not ask you a reward for it; it is only a reminder to the worlds."
+  },
+  "6:147|12:110": {
+   "keep": true,
+   "why": "His might is not turned back from the criminal people."
+  },
+  "6:10|13:32": {
+   "keep": true,
+   "why": "Messengers before you were mocked."
+  },
+  "6:32|13:34": {
+   "keep": false,
+   "why": "Shared 'worldly life' and 'Hereafter' only; different subjects."
+  },
+  "6:37|13:7": {
+   "keep": true,
+   "why": "They say: why has a sign not been sent down to him from his Lord?"
+  },
+  "6:37|13:27": {
+   "keep": true,
+   "why": "They say: why has a sign not been sent down to him from his Lord?"
+  },
+  "6:56|13:27": {
+   "keep": false,
+   "why": "Shared 'say' and guidance only."
+  },
+  "6:62|13:41": {
+   "keep": true,
+   "why": "His is the judgement, and He is swift in account."
+  },
+  "6:149|13:27": {
+   "keep": true,
+   "why": "Had He willed, He would have guided you all / He guides whom He wills."
+  },
+  "6:1|14:2": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and disbelievers only."
+  },
+  "6:1|14:19": {
+   "keep": true,
+   "why": "Allah created the heavens and the earth."
+  },
+  "6:45|14:39": {
+   "keep": false,
+   "why": "Shared 'praise be to Allah' only; different scenes."
+  },
+  "6:62|14:51": {
+   "keep": true,
+   "why": "Allah is swift in account."
+  },
+  "6:4|15:81": {
+   "keep": true,
+   "why": "Signs came to them and they turned away from them."
+  },
+  "6:5|15:11": {
+   "keep": true,
+   "why": "They used to mock it."
+  },
+  "6:8|15:8": {
+   "keep": true,
+   "why": "Sending down the angel(s), and then they would not be reprieved."
+  },
+  "6:1|17:99": {
+   "keep": true,
+   "why": "Allah who created the heavens and the earth; yet the disbelievers refuse."
+  },
+  "6:20|17:2": {
+   "keep": false,
+   "why": "Shared 'We gave them the Book' only."
+  },
+  "6:24|17:48": {
+   "keep": true,
+   "why": "See how they ... and they strayed."
+  },
+  "6:25|17:46": {
+   "keep": true,
+   "why": "Same clause: We put coverings on their hearts lest they understand, and deafness in their ears."
+  },
+  "6:48|17:105": {
+   "keep": true,
+   "why": "Sent only as a bringer of good tidings and a warner."
+  },
+  "6:63|17:67": {
+   "keep": true,
+   "why": "Calling on Allah alone when in danger at sea, then turning away when saved."
+  },
+  "6:117|17:84": {
+   "keep": true,
+   "why": "Your Lord knows best who is guided."
+  },
+  "6:132|17:84": {
+   "keep": false,
+   "why": "Shared 'deeds' and 'your Lord' only."
+  },
+  "6:152|17:34": {
+   "keep": true,
+   "why": "Same clause: do not approach the orphan's wealth except in the best way."
+  },
+  "6:21|18:15": {
+   "keep": true,
+   "why": "Who is more unjust than one who invents a lie against Allah?"
+  },
+  "6:22|18:52": {
+   "keep": true,
+   "why": "Where are your partners whom you claimed?"
+  },
+  "6:149|18:60": {
+   "keep": false,
+   "why": "Shared root of reaching only; different scenes."
   }
  }
 }
