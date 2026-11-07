@@ -9449,6 +9449,226 @@
   "6:149|18:60": {
    "keep": false,
    "why": "Shared root of reaching only; different scenes."
+  },
+  "6:11|19:29": {
+   "keep": false,
+   "why": "Shared 'how' only."
+  },
+  "6:49|19:45": {
+   "keep": false,
+   "why": "Shared 'punishment touches' only; different scenes."
+  },
+  "6:127|19:47": {
+   "keep": false,
+   "why": "Shared root of peace only."
+  },
+  "6:4|20:133": {
+   "keep": true,
+   "why": "Signs came / did not come to them from their Lord, and they turned away."
+  },
+  "6:21|20:61": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "6:149|20:50": {
+   "keep": false,
+   "why": "Shared guidance root only."
+  },
+  "6:3|21:4": {
+   "keep": true,
+   "why": "Allah knows what is in the heavens and the earth, secret and spoken."
+  },
+  "6:3|21:110": {
+   "keep": true,
+   "why": "He knows what is spoken openly and what you hide."
+  },
+  "6:10|21:41": {
+   "keep": true,
+   "why": "Identical: messengers before you were mocked, and what they mocked encompassed them."
+  },
+  "6:49|21:46": {
+   "keep": true,
+   "why": "The punishment touches the deniers."
+  },
+  "6:56|21:66": {
+   "keep": true,
+   "why": "Worshipping besides Allah."
+  },
+  "6:74|21:54": {
+   "keep": true,
+   "why": "Ibrahim to his father and people: you are in clear error."
+  },
+  "6:101|21:30": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "6:101|21:81": {
+   "keep": false,
+   "why": "Shared 'all things' only."
+  },
+  "6:15|23:86": {
+   "keep": false,
+   "why": "Shared 'great' only."
+  },
+  "6:21|23:38": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "6:29|23:37": {
+   "keep": true,
+   "why": "Same words: it is only our worldly life, and we will not be resurrected."
+  },
+  "6:45|23:28": {
+   "keep": true,
+   "why": "Praise be to Allah for removing / saving from the wrongdoing people."
+  },
+  "6:45|23:94": {
+   "keep": false,
+   "why": "Shared 'wrongdoing people' only."
+  },
+  "6:47|23:28": {
+   "keep": false,
+   "why": "Shared 'wrongdoing people' only."
+  },
+  "6:64|23:28": {
+   "keep": true,
+   "why": "Allah saves you."
+  },
+  "6:77|23:106": {
+   "keep": true,
+   "why": "Among the people astray."
+  },
+  "6:3|24:41": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and knowledge only."
+  },
+  "6:39|24:46": {
+   "keep": true,
+   "why": "Whom Allah wills He guides to a straight path."
+  },
+  "6:75|24:42": {
+   "keep": true,
+   "why": "Dominion of the heavens and the earth."
+  },
+  "6:87|24:46": {
+   "keep": true,
+   "why": "Guided to a straight path."
+  },
+  "6:101|24:64": {
+   "keep": true,
+   "why": "Allah knows all things."
+  },
+  "6:105|24:46": {
+   "keep": false,
+   "why": "Shared 'signs' only."
+  },
+  "6:109|24:53": {
+   "keep": true,
+   "why": "Same oath: they swore by Allah their strongest oaths."
+  },
+  "6:24|25:9": {
+   "keep": true,
+   "why": "See how they ... and they strayed."
+  },
+  "6:33|25:36": {
+   "keep": true,
+   "why": "Denying the signs of Allah."
+  },
+  "6:48|25:56": {
+   "keep": true,
+   "why": "Sent only as a bringer of good tidings and a warner."
+  },
+  "6:56|25:17": {
+   "keep": true,
+   "why": "Those worshipped besides Allah, and straying."
+  },
+  "6:101|25:2": {
+   "keep": true,
+   "why": "No son, and He created all things."
+  },
+  "6:4|26:5": {
+   "keep": true,
+   "why": "Whatever comes to them they turn away from."
+  },
+  "6:5|26:6": {
+   "keep": true,
+   "why": "They denied, so the news of what they mocked will come to them."
+  },
+  "6:15|26:135": {
+   "keep": true,
+   "why": "I fear the punishment of a great day."
+  },
+  "6:15|26:156": {
+   "keep": true,
+   "why": "The punishment of a great day."
+  },
+  "6:27|26:139": {
+   "keep": false,
+   "why": "Shared deny and believers only."
+  },
+  "6:49|26:139": {
+   "keep": false,
+   "why": "Shared 'denied' only."
+  },
+  "6:75|26:24": {
+   "keep": true,
+   "why": "Lord of the heavens and the earth; certainty."
+  },
+  "6:21|29:68": {
+   "keep": true,
+   "why": "Who is more unjust than one who invents a lie against Allah or denies?"
+  },
+  "6:32|29:64": {
+   "keep": true,
+   "why": "The worldly life is only play and amusement; the Hereafter is better."
+  },
+  "6:37|29:50": {
+   "keep": true,
+   "why": "Why has a sign not been sent down to him from his Lord?"
+  },
+  "6:40|29:29": {
+   "keep": true,
+   "why": "Allah's punishment, if you are truthful."
+  },
+  "6:102|29:62": {
+   "keep": false,
+   "why": "Shared 'all things' only."
+  },
+  "6:105|29:35": {
+   "keep": false,
+   "why": "Shared 'signs / clear' only."
+  },
+  "6:105|29:49": {
+   "keep": false,
+   "why": "Shared 'signs / clear' only."
+  },
+  "6:109|29:50": {
+   "keep": true,
+   "why": "The signs are only with Allah."
+  },
+  "6:135|29:16": {
+   "keep": false,
+   "why": "Shared 'you know' only."
+  },
+  "6:11|30:42": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
+  },
+  "6:49|30:16": {
+   "keep": true,
+   "why": "Those who deny Our signs: punishment."
+  },
+  "6:72|30:31": {
+   "keep": true,
+   "why": "Establish prayer and fear Him."
+  },
+  "6:95|30:19": {
+   "keep": true,
+   "why": "He brings the living out of the dead and the dead out of the living."
+  },
+  "6:159|30:32": {
+   "keep": true,
+   "why": "Same clause: those who divided their religion and became sects."
   }
  }
 }
