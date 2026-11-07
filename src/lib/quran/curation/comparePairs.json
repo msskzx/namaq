@@ -4057,6 +4057,66 @@
   "16:107|30:7": {
    "keep": false,
    "why": "Only 'this world and the Hereafter'."
+  },
+  "2:23|10:38": {
+   "keep": true,
+   "why": "Same challenge: produce a surah like it and call on whom you can besides Allah, if you are truthful."
+  },
+  "2:25|10:9": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good, rivers flowing beneath them in gardens."
+  },
+  "2:64|10:58": {
+   "keep": true,
+   "why": "Same pair: Allah's favour and His mercy."
+  },
+  "2:80|10:68": {
+   "keep": true,
+   "why": "Same rebuke: do you say about Allah what you do not know?"
+  },
+  "2:97|10:37": {
+   "keep": true,
+   "why": "Same description: confirming what came before it."
+  },
+  "2:116|10:68": {
+   "keep": true,
+   "why": "Same sentence: they said Allah has taken a son; exalted is He; to Him belongs what is in the heavens and the earth."
+  },
+  "2:243|10:60": {
+   "keep": true,
+   "why": "Same closing: Allah is full of bounty to the people, but most of them are not grateful."
+  },
+  "2:23|10:37": {
+   "keep": false,
+   "why": "Only doubt and 'besides Allah'."
+  },
+  "2:64|10:95": {
+   "keep": false,
+   "why": "Only 'of the losers'."
+  },
+  "2:75|10:100": {
+   "keep": false,
+   "why": "Only belief and reason."
+  },
+  "2:80|10:18": {
+   "keep": false,
+   "why": "Only 'with Allah' and 'what (He) does not know'."
+  },
+  "2:94|10:38": {
+   "keep": false,
+   "why": "Only the closing 'if you are truthful'."
+  },
+  "2:107|10:66": {
+   "keep": false,
+   "why": "Only the heavens and earth and 'besides Allah'."
+  },
+  "2:142|10:25": {
+   "keep": false,
+   "why": "Only the formula 'He guides whom He wills to a straight path'."
+  },
+  "2:176|10:32": {
+   "keep": false,
+   "why": "Only 'the truth'."
   }
  }
 }
