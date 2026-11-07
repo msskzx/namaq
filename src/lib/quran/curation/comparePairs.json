@@ -942,6 +942,174 @@
   "3:200|5:35": {
    "keep": true,
    "why": "Same address and close: O you who believe … fear Allah, that you may succeed."
+  },
+  "2:4|5:59": {
+   "keep": true,
+   "why": "Same statement: believing in what was revealed to you/us and what was revealed before."
+  },
+  "2:39|5:10": {
+   "keep": true,
+   "why": "Same verdict: those who disbelieve and deny Our signs are the companions of the Fire / Hellfire."
+  },
+  "2:39|5:86": {
+   "keep": true,
+   "why": "Same verdict: those who disbelieve and deny Our signs are the companions of the Fire / Hellfire."
+  },
+  "2:43|5:55": {
+   "keep": true,
+   "why": "Same command and praise: establish prayer, give zakat, bow with those who bow."
+  },
+  "2:62|5:69": {
+   "keep": true,
+   "why": "Same ayah: the believers, Jews, Christians and Sabians who believe and do good; no fear upon them."
+  },
+  "2:64|5:43": {
+   "keep": true,
+   "why": "Same phrase: then they turned away after that.",
+   "ask": "Shares 'then you turned away after that' (the Children of Israel in both). Keep?"
+  },
+  "2:82|5:9": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good deeds."
+  },
+  "2:87|5:70": {
+   "keep": true,
+   "why": "Same charge: whenever a messenger came with what they did not desire, some they denied and some they killed."
+  },
+  "2:97|5:104": {
+   "keep": false,
+   "why": "Only 'what Allah sent down' and guidance as words."
+  },
+  "2:104|5:73": {
+   "keep": false,
+   "why": "Only 'painful punishment' for the disbelievers."
+  },
+  "2:106|5:40": {
+   "keep": true,
+   "why": "Same question: do you not know that Allah …, closing with 'power over all things'.",
+   "ask": "Shares 'do you not know that Allah' plus the closing formula. Keep?"
+  },
+  "2:107|5:40": {
+   "keep": true,
+   "why": "Same statement: do you not know that to Allah belongs the dominion of the heavens and earth."
+  },
+  "2:107|5:120": {
+   "keep": false,
+   "why": "Only the dominion formula."
+  },
+  "2:114|5:33": {
+   "keep": true,
+   "why": "Same verdict: for them disgrace in this world and a great punishment in the hereafter."
+  },
+  "2:116|5:120": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula."
+  },
+  "2:136|5:20": {
+   "keep": false,
+   "why": "Only Moses and 'given' as words; different statements."
+  },
+  "2:136|5:59": {
+   "keep": true,
+   "why": "Same declaration: we believe in Allah and what was revealed to us and before."
+  },
+  "2:148|5:40": {
+   "keep": false,
+   "why": "Only the closing 'power over all things'."
+  },
+  "2:160|5:39": {
+   "keep": true,
+   "why": "Same promise: whoever repents and reforms, Allah turns to him."
+  },
+  "2:170|5:104": {
+   "keep": true,
+   "why": "Same story: told to follow what Allah revealed, they say 'what we found our fathers on'; even if their fathers knew nothing?"
+  },
+  "2:172|5:88": {
+   "keep": true,
+   "why": "Same command: eat of what Allah provided you, lawful and good.",
+   "ask": "Both command eating the good provision, closing with gratitude / fear of Allah. Keep?"
+  },
+  "2:182|5:39": {
+   "keep": false,
+   "why": "Only reforming and the closing 'Forgiving, Merciful'."
+  },
+  "2:190|5:87": {
+   "keep": true,
+   "why": "Same phrase: do not transgress; Allah does not love the transgressors."
+  },
+  "2:192|5:34": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:192|5:74": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:192|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:199|5:39": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:199|5:74": {
+   "keep": false,
+   "why": "Only seeking forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "2:199|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:203|5:7": {
+   "keep": false,
+   "why": "Only 'remember Allah' and 'fear Allah'."
+  },
+  "2:218|5:39": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|5:74": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:239|5:61": {
+   "keep": false,
+   "why": "Only common words."
+  },
+  "2:277|5:55": {
+   "keep": true,
+   "why": "Same praise: those who believe, establish prayer and give zakat."
+  },
+  "2:277|5:69": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good; no fear upon them nor will they grieve."
+  },
+  "2:284|5:17": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'power over all things'."
+  },
+  "2:284|5:18": {
+   "keep": true,
+   "why": "Same statement: He forgives whom He wills and punishes whom He wills; to Allah belongs the heavens and earth."
+  },
+  "2:284|5:40": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs the heavens and earth; He forgives and punishes whom He wills; power over all things."
+  },
+  "2:284|5:97": {
+   "keep": false,
+   "why": "Only 'what is in the heavens and what is in the earth'.",
+   "ask": "Shares 'what is in the heavens and earth' with Allah's knowledge of what is hidden. Drop?"
+  },
+  "2:284|5:120": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'power over all things'."
   }
  }
 }
