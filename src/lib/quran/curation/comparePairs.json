@@ -1952,6 +1952,107 @@
    "keep": true,
    "why": "Same challenge: call those besides Allah, if you are truthful.",
    "ask": "Same challenge words, but one is about idols answering, the other about producing a surah. Keep?"
+  },
+  "4:13|5:85": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is …"
+  },
+  "4:13|5:119": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "4:16|5:39": {
+   "keep": true,
+   "why": "Same condition: if they repent and reform, Allah accepts their repentance."
+  },
+  "4:43|5:6": {
+   "keep": true,
+   "why": "Same ruling on dry ablution: if you are ill or travelling … and find no water, use clean earth and wipe your faces and hands."
+  },
+  "4:57|5:119": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them forever."
+  },
+  "4:61|5:104": {
+   "keep": true,
+   "why": "Same sentence: when it is said to them, come to what Allah has revealed and to the Messenger …"
+  },
+  "4:80|5:92": {
+   "keep": true,
+   "why": "Same idea: obey Allah and the Messenger; if they turn away, the Messenger is not answerable for them."
+  },
+  "4:96|5:34": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:96|5:74": {
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "4:96|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:106|5:34": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:106|5:39": {
+   "keep": false,
+   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+  },
+  "4:106|5:74": {
+   "keep": true,
+   "why": "Same idea: seek Allah's forgiveness, Allah is Forgiving, Merciful."
+  },
+  "4:106|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:110|5:39": {
+   "keep": true,
+   "why": "Same idea: whoever does wrong and then repents/seeks forgiveness finds Allah Forgiving, Merciful."
+  },
+  "4:110|5:74": {
+   "keep": true,
+   "why": "Same idea: seeking Allah's forgiveness, and Allah is Forgiving, Merciful."
+  },
+  "4:110|5:98": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:122|5:119": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them forever."
+  },
+  "4:126|5:40": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "4:126|5:120": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "4:131|5:57": {
+   "keep": false,
+   "why": "Only 'those given the Book before you' and 'fear Allah'; different points."
+  },
+  "4:135|5:8": {
+   "keep": true,
+   "why": "Same command: O you who believe, stand firm for Allah as witnesses in justice; Allah is aware of what you do."
+  },
+  "4:158|5:38": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:159|5:59": {
+   "keep": false,
+   "why": "Only 'the People of the Book' and belief; different points."
+  },
+  "4:160|5:87": {
+   "keep": true,
+   "why": "Same subject: forbidding good things that were made lawful.",
+   "ask": "One is Allah forbidding them as punishment, the other forbids believers from banning them. Keep as a contrast?"
   }
  }
 }
