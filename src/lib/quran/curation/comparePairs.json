@@ -5615,54 +5615,64 @@
    "checked": true
   },
   "26:24|37:5": {
-   "keep": false,
-   "why": "Shares only the title Lord of the heavens and earth and what is between them."
+   "keep": true,
+   "why": "Same title: Lord of the heavens and the earth and what is between them (owner kept).",
+   "checked": true
   },
   "26:26|37:126": {
    "keep": true,
-   "why": "Same words: your Lord and the Lord of your forefathers; Musa to Pharaoh and Ilyas to his people.",
-   "ask": "Different prophets say the same words: keep?"
+   "why": "Same words: your Lord and the Lord of your forefathers; Musa and Ilyas (owner kept).",
+   "checked": true
   },
   "26:28|37:5": {
-   "keep": false,
-   "why": "Shares only Lord of ... and what is between them."
+   "keep": true,
+   "why": "Same pattern: Lord of ... and what is between them, with the east (owner kept).",
+   "checked": true
   },
   "26:31|37:157": {
-   "keep": false,
-   "why": "Shares only the stock challenge bring it if you are truthful; the subjects differ."
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful (owner kept).",
+   "checked": true
   },
   "26:154|37:157": {
-   "keep": false,
-   "why": "Shares only the stock challenge bring it if you are truthful; the subjects differ."
+   "keep": true,
+   "why": "Same challenge: bring a sign/your book, if you are truthful (owner kept).",
+   "checked": true
   },
   "26:66|37:82": {
    "keep": true,
-   "why": "Same words: then We drowned the others; Pharaoh's people and Nuh's people.",
-   "ask": "Different stories end with the same words: keep?"
+   "why": "Same words: then We drowned the others; Pharaoh's people and Nuh's people (owner kept).",
+   "checked": true
   },
   "26:70|37:85": {
    "keep": true,
-   "why": "Same story: Ibrahim asks his father and people what they worship."
+   "why": "Same story: Ibrahim asks his father and people what they worship.",
+   "checked": true
   },
   "26:83|37:100": {
    "keep": true,
-   "why": "Same prayer of Ibrahim: my Lord, grant me ... the righteous."
+   "why": "Same prayer of Ibrahim: my Lord, grant me ... the righteous.",
+   "checked": true
   },
   "26:170|37:134": {
    "keep": true,
-   "why": "Same story: Lut and his family were saved."
+   "why": "Same story: Lut and his family were saved.",
+   "checked": true
   },
   "26:171|37:135": {
    "keep": true,
-   "why": "Same story, same words: except an old woman among those who stayed behind."
+   "why": "Same story, same words: except an old woman among those who stayed behind.",
+   "checked": true
   },
   "26:172|37:136": {
    "keep": true,
-   "why": "Same story, same words: then We destroyed the others."
+   "why": "Same story, same words: then We destroyed the others.",
+   "checked": true
   },
   "26:204|37:176": {
    "keep": true,
-   "why": "Same ayah: do they seek to hasten Our punishment?"
+   "why": "Same ayah: do they seek to hasten Our punishment?",
+   "checked": true
   }
  }
 }
