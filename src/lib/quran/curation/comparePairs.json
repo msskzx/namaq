@@ -3009,6 +3009,82 @@
   "2:284|24:64": {
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "3:23|24:48": {
+   "keep": true,
+   "why": "Same scene: they are called to Allah('s Book) to judge between them, and a party of them turns away."
+  },
+  "3:31|24:22": {
+   "keep": true,
+   "why": "Same link: love and Allah forgiving you; Allah is Forgiving, Merciful."
+  },
+  "3:32|24:54": {
+   "keep": true,
+   "why": "Same command: say, obey Allah and the Messenger; if you turn away …"
+  },
+  "3:89|24:5": {
+   "keep": true,
+   "why": "Identical: except those who repent after that and reform; Allah is Forgiving, Merciful."
+  },
+  "3:132|24:56": {
+   "keep": true,
+   "why": "Same command: obey the Messenger so that you may receive mercy."
+  },
+  "3:138|24:34": {
+   "keep": true,
+   "why": "Same phrase: an admonition for the righteous."
+  },
+  "3:6|24:10": {
+   "keep": false,
+   "why": "Only 'Wise'."
+  },
+  "3:29|24:41": {
+   "keep": false,
+   "why": "Only Allah's knowledge of the heavens and the earth."
+  },
+  "3:29|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "3:32|24:47": {
+   "keep": false,
+   "why": "Only obeying and turning away; different points."
+  },
+  "3:32|24:52": {
+   "keep": false,
+   "why": "Only the common 'obey Allah and His Messenger'."
+  },
+  "3:51|24:46": {
+   "keep": false,
+   "why": "Only 'a straight path'."
+  },
+  "3:100|24:47": {
+   "keep": false,
+   "why": "Only 'a party', obeying and belief; different points."
+  },
+  "3:101|24:46": {
+   "keep": false,
+   "why": "Only the formula 'guided to a straight path'."
+  },
+  "3:132|24:52": {
+   "keep": false,
+   "why": "Only the common 'obey Allah and His Messenger'."
+  },
+  "3:177|24:19": {
+   "keep": false,
+   "why": "Only 'those who … for them is a painful punishment'."
+  },
+  "3:189|24:41": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "3:189|24:42": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "3:189|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
   }
  }
 }
