@@ -33,6 +33,11 @@ export function withAliases(ayah: BranchAyah): BranchAyah {
   };
 }
 
+/** Rootless lemmas that are names of people, peoples, places and books, so they count as content words when crossing. */
+const NAMES = new Set(['<iboraAhiym', 'muwsaY`', 'firoEawon', 'jahan~am', '<isoraA}iyl', 'nuwH', 'maroyam', 'yuwsuf', 'luwT', 'vamuwd', 'A^dam', 'EiysaY', 'ha`ruwn', 't~aworaY`p', 'sulayoma`n', '<isoHaAq', 'yaEoquwb', 'daAwud', '<isomaAEiyl', '<injiyl', '<iboliys', 'masiyH', '$uEayob', 'Eadon', 'madoyan', 'zakariy~aA', 'ha`ma`n', 'yaHoyaY`', 'muHam~ad', '>ay~uwb', 'yuwnus', 'qa`ruwn', 'saqar', 'jiboriyl', 'jaAluwt', 'Eimora`n', '<iloyaAs', 'TaAluwt', 't~aAbuwt', '{loyasaEa', 'ya>ojuwj', 'ma>ojuwj', 'firodawos', '<idoriys', 'saba<', 'luqoma`n', 'tub~aE', 'miykaY`l', 'baAbil', 'ha`ruwt', 'ma`ruwt', 'S~afaA', 'marowap', 'ramaDaAn', 'Earafa`t', 'bak~ap', 'bador', 'A^zar', 'Hunayon', 'Euzayor', 'juwdiY~', 'sayonaA^\'', 'r~uwm', 'yavorib', 'zayod', 'mak~ap', '{ll~a`t', '{loEuz~aY`', 'manaw`p', '>aHomad', 'laZaY`', 'yaguwv', 'yaEuwq', '<iram', 'qurayo$', 'yahuwdiy~']);
+
+const isContent = (ayah: BranchAyah, i: number) => Boolean(ayah.roots?.[i] || NAMES.has(ayah.lemmas?.[i] ?? ''));
+
 /** Words with the same lemma that the in-order alignment left apart because they cross (هودا … إبراهيم / إبراهيم يهوديا). */
 export function crossingColumns(a: BranchAyah, b: BranchAyah, taken: CompactColumn[]): CompactColumn[] {
   const usedA = new Set(taken.map(column => column[0]));
@@ -40,8 +45,8 @@ export function crossingColumns(a: BranchAyah, b: BranchAyah, taken: CompactColu
   const columns: CompactColumn[] = [];
   a.words.forEach((_, i) => {
     const lemma = a.lemmas?.[i];
-    if (usedA.has(i) || !lemma || !a.roots?.[i]) return;
-    const j = b.words.findIndex((__, k) => !usedB.has(k) && b.lemmas?.[k] === lemma && b.roots?.[k]);
+    if (usedA.has(i) || !lemma || !isContent(a, i)) return;
+    const j = b.words.findIndex((__, k) => !usedB.has(k) && b.lemmas?.[k] === lemma);
     if (j < 0) return;
     usedA.add(i);
     usedB.add(j);

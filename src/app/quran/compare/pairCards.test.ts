@@ -48,5 +48,8 @@ describe('compare pair cards', () => {
     // هودا ↔ يهوديا and نصارى ↔ نصرانيا
     expect([a[2]?.link, a[4]?.link]).toEqual([b[3]?.link, b[5]?.link]);
     expect(a[2]?.kind).toBe('root');
+    // إبراهيم has no root but is a name: matched although it comes after هودا in one ayah and before يهوديا in the other
+    expect(a[9]?.link).toBeDefined();
+    expect(a[9]?.link).toBe(b[2]?.link);
   });
 });
