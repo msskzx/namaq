@@ -10233,6 +10233,190 @@
   "7:194|19:48": {
    "keep": true,
    "why": "Those you call upon besides Allah."
+  },
+  "7:11|20:116": {
+   "keep": true,
+   "why": "Angels prostrate to Adam except Iblis."
+  },
+  "7:20|20:120": {
+   "keep": true,
+   "why": "Satan whispers to Adam about the tree."
+  },
+  "7:22|20:121": {
+   "keep": true,
+   "why": "Their nakedness showed and they covered themselves with leaves of the Garden."
+  },
+  "7:24|20:123": {
+   "keep": true,
+   "why": "Go down, enemies to one another."
+  },
+  "7:60|20:92": {
+   "keep": false,
+   "why": "Only error words; different scenes."
+  },
+  "7:61|20:52": {
+   "keep": false,
+   "why": "Only error and Lord words; different scenes."
+  },
+  "7:115|20:65": {
+   "keep": true,
+   "why": "Sorcerers: Moses, will you throw or shall we."
+  },
+  "7:120|20:70": {
+   "keep": true,
+   "why": "The sorcerers fell in prostration."
+  },
+  "7:190|20:75": {
+   "keep": false,
+   "why": "Only 'righteous' words; different subjects."
+  },
+  "7:203|20:47": {
+   "keep": false,
+   "why": "Only sign and Lord words; different scenes."
+  },
+  "7:60|21:54": {
+   "keep": true,
+   "why": "Clear error: Noah's people say it of him, Abraham says it of his people."
+  },
+  "7:64|21:77": {
+   "keep": true,
+   "why": "Noah saved, the deniers of Our signs drowned."
+  },
+  "7:136|21:77": {
+   "keep": true,
+   "why": "Deniers of Our signs drowned."
+  },
+  "7:177|21:77": {
+   "keep": false,
+   "why": "Only 'people who denied Our signs'; different scenes."
+  },
+  "7:192|21:43": {
+   "keep": true,
+   "why": "False gods cannot help them nor help themselves."
+  },
+  "7:197|21:43": {
+   "keep": true,
+   "why": "Those called besides Him cannot help you nor themselves."
+  },
+  "7:206|21:19": {
+   "keep": true,
+   "why": "Those with Him are not too proud to worship Him."
+  },
+  "7:2|25:1": {
+   "keep": true,
+   "why": "The Book sent down to the Messenger to warn."
+  },
+  "7:57|25:48": {
+   "keep": true,
+   "why": "He sends the winds as glad tidings before His mercy."
+  },
+  "7:93|25:30": {
+   "keep": false,
+   "why": "Only 'my people' words; different scenes."
+  },
+  "7:177|25:36": {
+   "keep": false,
+   "why": "Only 'people who denied Our signs'; different scenes."
+  },
+  "7:177|25:37": {
+   "keep": false,
+   "why": "Only denial words; different scenes."
+  },
+  "7:185|25:2": {
+   "keep": false,
+   "why": "Only 'heavens and earth' and creation words."
+  },
+  "7:23|28:16": {
+   "keep": true,
+   "why": "We wronged ourselves, forgive us: Adam and Moses repenting."
+  },
+  "7:47|28:21": {
+   "keep": true,
+   "why": "Lord, keep us from the wrongdoing people."
+  },
+  "7:84|28:40": {
+   "keep": true,
+   "why": "See how was the end of them."
+  },
+  "7:103|28:40": {
+   "keep": true,
+   "why": "Pharaoh: see how was the end."
+  },
+  "7:106|28:49": {
+   "keep": true,
+   "why": "Challenge: bring it, if you are truthful."
+  },
+  "7:151|28:16": {
+   "keep": true,
+   "why": "Moses asks his Lord for forgiveness."
+  },
+  "7:194|28:64": {
+   "keep": true,
+   "why": "Call on those besides Allah; they do not answer."
+  },
+  "7:84|30:42": {
+   "keep": true,
+   "why": "See how was the end of them."
+  },
+  "7:103|30:42": {
+   "keep": true,
+   "why": "See how was the end."
+  },
+  "7:147|30:16": {
+   "keep": true,
+   "why": "Those who denied Our signs and the meeting of the Hereafter."
+  },
+  "7:190|30:40": {
+   "keep": false,
+   "why": "Only 'what they associate' closing."
+  },
+  "7:34|34:30": {
+   "keep": true,
+   "why": "Cannot delay it an hour nor advance it."
+  },
+  "7:75|34:31": {
+   "keep": true,
+   "why": "The arrogant and the weakened among the people."
+  },
+  "7:164|34:46": {
+   "keep": false,
+   "why": "Only admonish words; different scenes."
+  },
+  "7:84|37:73": {
+   "keep": true,
+   "why": "See how was the end."
+  },
+  "7:103|37:73": {
+   "keep": true,
+   "why": "See how was the end."
+  },
+  "7:106|37:157": {
+   "keep": true,
+   "why": "Challenge: bring it, if you are truthful."
+  },
+  "7:2|38:29": {
+   "keep": true,
+   "why": "A Book sent down to you, to warn and remind."
+  },
+  "7:12|38:75": {
+   "keep": true,
+   "why": "What prevented you from prostrating?"
+  },
+  "7:12|38:76": {
+   "keep": true,
+   "why": "I am better than him: You created me from fire and him from clay."
+  },
+  "7:14|38:79": {
+   "keep": true,
+   "why": "Iblis: give me respite until the day they are raised."
+  },
+  "7:18|38:85": {
+   "keep": true,
+   "why": "I will fill Hell with you and those who follow you, all together."
+  },
+  "7:66|38:4": {
+   "keep": true,
+   "why": "Disbelievers call the messenger a liar."
   }
  }
 }
