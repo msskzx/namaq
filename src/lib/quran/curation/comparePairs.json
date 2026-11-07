@@ -4763,6 +4763,62 @@
   "6:162|45:24": {
    "keep": false,
    "why": "Only 'living' and 'dying'; different subjects."
+  },
+  "6:11|27:69": {
+   "keep": true,
+   "why": "Same sentence: say, travel in the land and see how was the end of ..."
+  },
+  "6:3|27:25": {
+   "keep": true,
+   "why": "Same thought: Allah in the heavens and earth knows what you conceal and reveal."
+  },
+  "6:11|27:14": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of ...'."
+  },
+  "6:11|27:27": {
+   "keep": false,
+   "why": "Only 'look/see' and 'liars' words; different subjects."
+  },
+  "6:11|27:41": {
+   "keep": false,
+   "why": "Only 'look/see'; different subjects."
+  },
+  "6:11|27:51": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of ...'."
+  },
+  "6:24|27:14": {
+   "keep": false,
+   "why": "Only 'see how'; different subjects."
+  },
+  "6:24|27:51": {
+   "keep": false,
+   "why": "Only 'see how'; different subjects."
+  },
+  "6:24|27:69": {
+   "keep": false,
+   "why": "Only 'see how'; different subjects."
+  },
+  "6:27|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'."
+  },
+  "6:33|27:84": {
+   "keep": false,
+   "why": "Only 'deny' and 'signs'."
+  },
+  "6:40|27:64": {
+   "keep": false,
+   "why": "Only the formula 'if you are truthful'."
+  },
+  "6:49|27:84": {
+   "keep": false,
+   "why": "Only the formula 'denied Our signs'."
+  },
+  "6:105|27:52": {
+   "keep": false,
+   "why": "Only 'signs for a people who know'."
   }
  }
 }
