@@ -4117,6 +4117,66 @@
   "2:176|10:32": {
    "keep": false,
    "why": "Only 'the truth'."
+  },
+  "3:3|39:2": {
+   "keep": true,
+   "why": "Same phrase: He sent down to you the Book in truth."
+  },
+  "3:4|39:37": {
+   "keep": true,
+   "why": "Same attribute: Allah is Mighty, Owner of retribution."
+  },
+  "3:15|39:20": {
+   "keep": true,
+   "why": "Same promise: those who fear their Lord have (gardens / chambers) beneath which rivers flow."
+  },
+  "3:31|39:53": {
+   "keep": true,
+   "why": "Same promise: Allah forgives (your) sins; He is Forgiving, Merciful."
+  },
+  "3:55|39:46": {
+   "keep": true,
+   "why": "Same statement: (Allah) judges between (His servants) in what they used to differ over."
+  },
+  "3:83|39:44": {
+   "keep": true,
+   "why": "Same frame: the heavens and the earth are His, and to Him you return."
+  },
+  "3:135|39:53": {
+   "keep": true,
+   "why": "Same subject: those who wronged themselves, and none forgives sins but Allah / Allah forgives all sins."
+  },
+  "3:198|39:20": {
+   "keep": true,
+   "why": "Same opening: but those who fear their Lord, for them … beneath which rivers flow."
+  },
+  "3:6|39:1": {
+   "keep": false,
+   "why": "Only the name 'the Mighty, the Wise'."
+  },
+  "3:29|39:46": {
+   "keep": false,
+   "why": "Only the heavens and the earth."
+  },
+  "3:62|39:1": {
+   "keep": false,
+   "why": "Only the name 'the Mighty, the Wise'."
+  },
+  "3:109|39:44": {
+   "keep": false,
+   "why": "Only the heavens and earth and returning."
+  },
+  "3:129|39:53": {
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "3:129|39:68": {
+   "keep": false,
+   "why": "Only 'in the heavens and the earth … whom He wills'."
+  },
+  "3:189|39:44": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
   }
  }
 }
