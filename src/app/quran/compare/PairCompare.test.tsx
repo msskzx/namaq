@@ -25,7 +25,15 @@ const listed = () => within(within(pane()).getByRole('heading', { name: 'كل ا
 describe('PairCompare', () => {
   it('lists pairs in mushaf order, sorts by similarity on request and remembers it', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
-    expect(listed()).toEqual(['/quran/compare?a=2&b=7', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26', '/quran/compare?a=52&b=68']);
+    const groups = () => [...pane().querySelectorAll('details')].map(group => ({
+      surah: group.querySelector('summary span')!.textContent,
+      open: (group as HTMLDetailsElement).open,
+      links: [...group.querySelectorAll('ul a')].map(link => link.getAttribute('href')),
+    }));
+    expect(groups().map(group => group.surah)).toEqual(['البقرة', 'الاعراف', 'هود', 'الشعراء', 'الطور', 'القلم']);
+    expect(groups().filter(group => group.open).map(group => group.surah)).toEqual(['الطور']);
+    expect(groups()[1].links).toEqual(['/quran/compare?a=2&b=7', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
+    expect(groups()[5].links).toEqual(['/quran/compare?a=52&b=68']);
     fireEvent.click(within(pane()).getByRole('button', { name: /الأكثر تشابهًا/ }));
     expect(listed()).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=2&b=7', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
     cleanup();
