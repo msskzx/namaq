@@ -9669,6 +9669,222 @@
   "6:159|30:32": {
    "keep": true,
    "why": "Same clause: those who divided their religion and became sects."
+  },
+  "6:1|31:25": {
+   "keep": true,
+   "why": "Allah who created the heavens and the earth, and praise be to Allah."
+  },
+  "6:3|31:25": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "6:37|31:25": {
+   "keep": false,
+   "why": "Shared closing 'most of them do not know' only."
+  },
+  "6:74|31:11": {
+   "keep": false,
+   "why": "Shared 'in clear error' only; different subjects."
+  },
+  "6:17|33:27": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "6:48|33:45": {
+   "keep": true,
+   "why": "Messengers sent as bringers of good tidings and warners."
+  },
+  "6:81|33:73": {
+   "keep": false,
+   "why": "Shared root of shirk only."
+  },
+  "6:101|33:40": {
+   "keep": false,
+   "why": "Shared closing 'Knowing of all things' only."
+  },
+  "6:106|33:2": {
+   "keep": true,
+   "why": "Follow what is revealed to you from your Lord."
+  },
+  "6:117|33:67": {
+   "keep": false,
+   "why": "Shared 'way' and straying only."
+  },
+  "6:159|33:40": {
+   "keep": false,
+   "why": "Shared common words only."
+  },
+  "6:1|34:1": {
+   "keep": true,
+   "why": "Praise be to Allah, to whom belong the heavens and the earth."
+  },
+  "6:22|34:40": {
+   "keep": true,
+   "why": "The Day He gathers them all, then says ..."
+  },
+  "6:30|34:31": {
+   "keep": true,
+   "why": "If you could see when they are made to stand before their Lord."
+  },
+  "6:37|34:36": {
+   "keep": false,
+   "why": "Shared closing 'most do not know' only."
+  },
+  "6:48|34:28": {
+   "keep": true,
+   "why": "Sent as a bringer of good tidings and a warner."
+  },
+  "6:74|34:24": {
+   "keep": false,
+   "why": "Shared 'in clear error' only."
+  },
+  "6:90|34:47": {
+   "keep": true,
+   "why": "I ask you no reward for it."
+  },
+  "6:3|35:38": {
+   "keep": true,
+   "why": "Allah knows the unseen of the heavens and the earth and what is hidden."
+  },
+  "6:45|35:34": {
+   "keep": false,
+   "why": "Shared 'praise be to Allah' only."
+  },
+  "6:109|35:42": {
+   "keep": true,
+   "why": "Same oath: they swore by Allah their strongest oaths that if ... came to them."
+  },
+  "6:4|36:46": {
+   "keep": true,
+   "why": "Identical ayah: no sign comes to them but they turn away from it."
+  },
+  "6:5|36:30": {
+   "keep": true,
+   "why": "They used to mock what came to them."
+  },
+  "6:33|36:76": {
+   "keep": true,
+   "why": "Let not their words grieve you; We know."
+  },
+  "6:96|36:38": {
+   "keep": true,
+   "why": "That is the decree of the Mighty, the Knowing: sun and moon."
+  },
+  "6:162|36:79": {
+   "keep": false,
+   "why": "Shared 'say' and life root only."
+  },
+  "6:11|37:73": {
+   "keep": true,
+   "why": "See how was the end."
+  },
+  "6:24|37:73": {
+   "keep": false,
+   "why": "Shared 'see how' only."
+  },
+  "6:45|37:182": {
+   "keep": true,
+   "why": "And praise be to Allah, Lord of the worlds: closing a story of destroying wrongdoers."
+  },
+  "6:87|37:118": {
+   "keep": true,
+   "why": "We guided them to the straight path."
+  },
+  "6:1|38:27": {
+   "keep": true,
+   "why": "Creation of heavens and earth, and the disbelievers."
+  },
+  "6:75|38:10": {
+   "keep": false,
+   "why": "Shared dominion of heavens and earth only."
+  },
+  "6:155|38:29": {
+   "keep": true,
+   "why": "A blessed Book We have sent down."
+  },
+  "6:10|39:48": {
+   "keep": true,
+   "why": "What they used to mock encompassed them."
+  },
+  "6:14|39:46": {
+   "keep": true,
+   "why": "Creator of the heavens and the earth: addressed in a 'say' declaration."
+  },
+  "6:15|39:13": {
+   "keep": true,
+   "why": "Identical: say, I fear, if I disobey my Lord, the punishment of a great day."
+  },
+  "6:56|39:36": {
+   "keep": false,
+   "why": "Shared 'besides' and straying only."
+  },
+  "6:75|39:44": {
+   "keep": false,
+   "why": "Shared dominion of heavens and earth only."
+  },
+  "6:101|39:62": {
+   "keep": true,
+   "why": "Creator of all things."
+  },
+  "6:102|39:62": {
+   "keep": true,
+   "why": "Creator of all things, and over all things a Guardian."
+  },
+  "6:130|39:71": {
+   "keep": true,
+   "why": "Did messengers not come to you from among you reciting My signs and warning you of the meeting of this Day?"
+  },
+  "6:135|39:39": {
+   "keep": true,
+   "why": "My people, work according to your position; I am working; you will come to know."
+  },
+  "6:163|39:12": {
+   "keep": true,
+   "why": "I am commanded to be the first of the Muslims."
+  },
+  "6:164|39:7": {
+   "keep": true,
+   "why": "No bearer of burdens bears another's burden; then to your Lord is your return."
+  },
+  "6:10|40:83": {
+   "keep": true,
+   "why": "What they used to mock encompassed them."
+  },
+  "6:11|40:82": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
+  },
+  "6:15|40:30": {
+   "keep": false,
+   "why": "Shared 'I fear' only."
+  },
+  "6:23|40:84": {
+   "keep": true,
+   "why": "Denying their shirk when facing the truth."
+  },
+  "6:33|40:63": {
+   "keep": true,
+   "why": "Rejecting the signs of Allah."
+  },
+  "6:45|40:65": {
+   "keep": false,
+   "why": "Shared closing 'praise be to Allah, Lord of the worlds' only."
+  },
+  "6:56|40:66": {
+   "keep": true,
+   "why": "Same clause: say, I have been forbidden to worship those you call upon besides Allah."
+  },
+  "6:56|40:74": {
+   "keep": false,
+   "why": "Shared 'besides Allah' and straying only."
+  },
+  "6:102|40:62": {
+   "keep": true,
+   "why": "That is Allah your Lord, Creator of all things, no god but He."
+  },
+  "6:162|40:65": {
+   "keep": true,
+   "why": "Devotion to Allah, Lord of the worlds."
   }
  }
 }
