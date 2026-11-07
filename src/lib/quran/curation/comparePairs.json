@@ -8551,6 +8551,326 @@
   "4:122|98:8": {
    "keep": true,
    "why": "Gardens under which rivers flow, abiding forever."
+  },
+  "5:10|7:36": {
+   "keep": true,
+   "why": "Those who deny Our signs: companions of the Fire / Hellfire."
+  },
+  "5:20|7:80": {
+   "keep": true,
+   "why": "A prophet addressing his people: 'not given to anyone of the worlds' / 'none of the worlds preceded you'."
+  },
+  "5:39|7:153": {
+   "keep": true,
+   "why": "Repenting after wrongdoing: Allah is Forgiving, Merciful."
+  },
+  "5:40|7:185": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "5:61|7:131": {
+   "keep": false,
+   "why": "Shared 'came' and 'said' only; different scenes."
+  },
+  "5:68|7:93": {
+   "keep": true,
+   "why": "Grieve not over the disbelieving people."
+  },
+  "5:72|7:44": {
+   "keep": false,
+   "why": "Shared Paradise/Fire and wrongdoers only; different scenes."
+  },
+  "5:84|7:105": {
+   "keep": false,
+   "why": "Shared 'truth' and 'came' only; different scenes."
+  },
+  "5:86|7:36": {
+   "keep": true,
+   "why": "Those who deny Our signs: companions of the Fire / Hellfire."
+  },
+  "5:9|8:28": {
+   "keep": false,
+   "why": "Shared 'great reward' only; different subjects."
+  },
+  "5:35|8:45": {
+   "keep": true,
+   "why": "O you who believe ... that you may succeed."
+  },
+  "5:38|8:10": {
+   "keep": false,
+   "why": "Shared closing 'Mighty, Wise' only."
+  },
+  "5:38|8:49": {
+   "keep": false,
+   "why": "Shared closing 'Mighty, Wise' only."
+  },
+  "5:39|8:69": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:65|8:29": {
+   "keep": true,
+   "why": "Fearing Allah removes their misdeeds."
+  },
+  "5:71|8:39": {
+   "keep": false,
+   "why": "Shared 'fitna' and 'Seeing of what they do' only; different subjects."
+  },
+  "5:74|8:69": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:88|8:69": {
+   "keep": true,
+   "why": "Eat of what is lawful and good, and fear Allah."
+  },
+  "5:92|8:20": {
+   "keep": true,
+   "why": "Obey Allah and the Messenger, and do not turn away."
+  },
+  "5:98|8:25": {
+   "keep": true,
+   "why": "Know that Allah is severe in punishment."
+  },
+  "5:98|8:69": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:16|10:25": {
+   "keep": true,
+   "why": "Allah guides to the ways of peace / the home of peace, and to a straight path."
+  },
+  "5:76|10:18": {
+   "keep": true,
+   "why": "Worshipping besides Allah what neither harms nor benefits."
+  },
+  "5:85|10:9": {
+   "keep": true,
+   "why": "Gardens under which rivers flow."
+  },
+  "5:103|10:60": {
+   "keep": true,
+   "why": "Those who invent lies against Allah, but most of them ..."
+  },
+  "5:105|10:30": {
+   "keep": false,
+   "why": "Shared return to Allah and straying only; different subjects."
+  },
+  "5:111|10:84": {
+   "keep": true,
+   "why": "Believers declaring faith: we are Muslims."
+  },
+  "5:9|11:11": {
+   "keep": true,
+   "why": "Those who do righteous deeds: forgiveness and a great reward."
+  },
+  "5:9|11:23": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds."
+  },
+  "5:79|11:36": {
+   "keep": false,
+   "why": "Shared 'what they used to do' only."
+  },
+  "5:120|11:4": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:16|14:1": {
+   "keep": true,
+   "why": "Bringing out of darkness into light by His permission, to the path."
+  },
+  "5:38|14:51": {
+   "keep": false,
+   "why": "Shared 'what it earned' only; different subjects."
+  },
+  "5:85|14:23": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever."
+  },
+  "5:120|14:19": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:9|18:30": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:9|18:88": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds: the best reward."
+  },
+  "5:9|18:107": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:25|18:78": {
+   "keep": false,
+   "why": "Shared root of parting only; different scenes."
+  },
+  "5:120|18:84": {
+   "keep": false,
+   "why": "Shared 'all things' and earth only."
+  },
+  "5:9|19:60": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds: their reward."
+  },
+  "5:9|19:96": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds."
+  },
+  "5:120|19:93": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:9|20:75": {
+   "keep": true,
+   "why": "Righteous deeds of the believer: reward."
+  },
+  "5:9|20:82": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds: forgiveness."
+  },
+  "5:76|20:89": {
+   "keep": true,
+   "why": "What has no power to harm or benefit them."
+  },
+  "5:85|20:76": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever: that is the reward of ..."
+  },
+  "5:9|28:67": {
+   "keep": true,
+   "why": "Believing and doing righteous deeds, and its good end."
+  },
+  "5:9|28:80": {
+   "keep": true,
+   "why": "Allah's reward for whoever believes and does righteous deeds."
+  },
+  "5:111|28:53": {
+   "keep": true,
+   "why": "Believers declaring: we believe, we are Muslims."
+  },
+  "5:9|29:9": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:20|29:28": {
+   "keep": true,
+   "why": "A prophet addressing his people: 'none of the worlds'."
+  },
+  "5:35|29:69": {
+   "keep": true,
+   "why": "Striving in Allah's way."
+  },
+  "5:40|29:20": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:59|29:46": {
+   "keep": true,
+   "why": "People of the Book: we believe in what was sent down to us."
+  },
+  "5:76|29:16": {
+   "keep": false,
+   "why": "Shared 'worship' only; different scenes."
+  },
+  "5:85|29:58": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, as reward."
+  },
+  "5:116|29:10": {
+   "keep": false,
+   "why": "Shared 'what is in the self/breasts' and knowledge only; different scenes."
+  },
+  "5:9|30:15": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:9|30:45": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:10|30:16": {
+   "keep": true,
+   "why": "Those who disbelieve and deny Our signs: their punishment."
+  },
+  "5:40|30:50": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:86|30:16": {
+   "keep": true,
+   "why": "Those who disbelieve and deny Our signs: their punishment."
+  },
+  "5:120|30:26": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:120|30:50": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:9|31:8": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:55|31:4": {
+   "keep": true,
+   "why": "Those who establish prayer and give zakah."
+  },
+  "5:104|31:21": {
+   "keep": true,
+   "why": "When told to follow what Allah revealed, they say: what we found our fathers on."
+  },
+  "5:105|31:23": {
+   "keep": true,
+   "why": "To Allah/Us is your return, and He will inform you of what you did."
+  },
+  "5:9|33:31": {
+   "keep": true,
+   "why": "Righteous deeds and a reward."
+  },
+  "5:39|33:24": {
+   "keep": false,
+   "why": "Shared repentance and 'Forgiving, Merciful' only."
+  },
+  "5:39|33:73": {
+   "keep": false,
+   "why": "Shared repentance and 'Forgiving, Merciful' only."
+  },
+  "5:40|33:27": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:74|33:73": {
+   "keep": false,
+   "why": "Shared repentance and 'Forgiving, Merciful' only."
+  },
+  "5:92|33:66": {
+   "keep": true,
+   "why": "Obey Allah and obey the Messenger: command versus regret in the Fire."
+  },
+  "5:120|33:27": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:7|35:3": {
+   "keep": true,
+   "why": "Remember Allah's favour upon you."
+  },
+  "5:9|35:7": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: forgiveness and a great reward."
+  },
+  "5:17|35:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'creates what He wills' only."
+  },
+  "5:40|35:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only."
   }
  }
 }
