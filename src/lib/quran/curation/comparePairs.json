@@ -1901,8 +1901,8 @@
    "why": "Same sentence: they came with clear proofs, but would not believe in what they denied before; thus hearts are sealed."
   },
   "7:103|10:73": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:103|10:75": {
    "keep": true,
@@ -2440,12 +2440,12 @@
    "why": "Only 'came' and 'bring'; different points."
   },
   "6:11|7:84": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "6:11|7:103": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "6:15|7:59": {
    "keep": true,
@@ -2730,28 +2730,28 @@
    "why": "Only 'denied My signs'."
   },
   "7:84|27:14": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:84|27:51": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:84|27:69": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of the criminals'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:103|27:14": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of the corrupters'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:103|27:51": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:103|27:69": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "7:131|27:46": {
    "keep": false,
@@ -2810,8 +2810,8 @@
    "why": "Same verdict: whoever comes with an evil deed is recompensed only for what they did."
   },
   "27:14|28:40": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "27:15|28:80": {
    "keep": false,
@@ -2834,16 +2834,16 @@
    "why": "Only 'before' and 'Muslims'."
   },
   "27:51|28:40": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "27:69|28:17": {
    "keep": false,
    "why": "Only 'the criminals'."
   },
   "27:69|28:40": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of …'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "27:92|28:85": {
    "keep": false,
@@ -4346,64 +4346,78 @@
   },
   "6:22|28:62": {
    "keep": true,
-   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?",
+   "checked": true
   },
   "6:22|28:74": {
    "keep": true,
-   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?",
+   "checked": true
   },
   "6:32|28:60": {
    "keep": true,
-   "why": "Same teaching: worldly life is little, what is with Allah is better; do you not reason?"
+   "why": "Same teaching: worldly life is little, what is with Allah is better; do you not reason?",
+   "checked": true
   },
   "6:40|28:71": {
    "keep": true,
-   "why": "Same argument: 'Say, have you considered, if Allah ... who other than Allah'."
+   "why": "Same argument: 'Say, have you considered, if Allah ... who other than Allah'.",
+   "checked": true
   },
   "6:46|28:71": {
    "keep": true,
-   "why": "Same argument: which god other than Allah could bring it back to you."
+   "why": "Same argument: which god other than Allah could bring it back to you.",
+   "checked": true
   },
   "6:46|28:72": {
    "keep": true,
-   "why": "Same argument: which god other than Allah could bring it back to you."
+   "why": "Same argument: which god other than Allah could bring it back to you.",
+   "checked": true
   },
   "6:131|28:59": {
    "keep": true,
-   "why": "Same sentence: your Lord would not destroy the towns (unjustly)."
+   "why": "Same sentence: your Lord would not destroy the towns (unjustly).",
+   "checked": true
   },
   "6:135|28:37": {
    "keep": true,
-   "why": "Same ending: who will have the good end; the wrongdoers do not succeed."
+   "why": "Same ending: who will have the good end; the wrongdoers do not succeed.",
+   "checked": true
   },
   "6:160|28:84": {
    "keep": true,
-   "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed."
+   "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed.",
+   "checked": true
   },
   "6:11|28:40": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of ...'."
+   "keep": true,
+   "why": "Same warning: see how was the end of the deniers / wrongdoers.",
+   "checked": true
   },
   "6:23|28:87": {
    "keep": false,
-   "why": "Only scattered words around 'associators'."
+   "why": "Only scattered words around 'associators'.",
+   "checked": true
   },
   "6:30|28:63": {
    "keep": false,
-   "why": "Only scattered words; different scenes."
+   "why": "Only scattered words; different scenes.",
+   "checked": true
   },
   "6:40|28:49": {
    "keep": false,
-   "why": "Only the formula 'if you are truthful'."
+   "why": "Only the formula 'if you are truthful'.",
+   "checked": true
   },
   "6:45|28:21": {
    "keep": false,
-   "why": "Only 'the wrongdoing people'; different subjects."
+   "why": "Only 'the wrongdoing people'; different subjects.",
+   "checked": true
   },
   "6:20|28:52": {
    "keep": true,
    "why": "Same opening: those to whom We gave the Book; one side rejects, the other believes.",
-   "ask": "Opposite outcomes for the same opening (they do not believe / they believe). Keep as a contrast pair?"
+   "checked": true
   },
   "9:9|16:88": {
    "keep": true,
@@ -4819,8 +4833,8 @@
    "why": "Same thought: Allah in the heavens and earth knows what you conceal and reveal."
   },
   "6:11|27:14": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of ...'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "6:11|27:27": {
    "keep": false,
@@ -4831,8 +4845,8 @@
    "why": "Only 'look/see'; different subjects."
   },
   "6:11|27:51": {
-   "keep": false,
-   "why": "Only the formula 'see how was the end of ...'."
+   "keep": true,
+   "why": "Same warning: see how was the end of those who were destroyed."
   },
   "6:24|27:14": {
    "keep": false,
