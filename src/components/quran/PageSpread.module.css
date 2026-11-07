@@ -1,6 +1,6 @@
 .spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
 .page { display: grid; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); color: var(--home-ink); }
-.page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
+.page header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0.25rem 0.75rem; border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
 .withAction { position: relative; padding-inline: 2.75rem; }
 .action { position: absolute; top: 50%; inset-inline-end: 0.25rem; transform: translateY(-50%); }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }

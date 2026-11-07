@@ -8,10 +8,11 @@ Refine the existing `/quran/compare`; retain its matcher, precise-range URLs, Te
 
 - The default compare destination presents curated comparisons and opens a useful initial selection. The curated journey exposes a clear list of choices, not the general topic/range/pair-builder controls.
 - Start with Moses and Pharaoh 7:103–137 / 26:10–68; Noah 7:59–64 / 26:105–122; Hud 7:65–72 / 26:123–140; Salih 7:73–79 / 26:141–159; Lot 7:80–84 / 26:160–175; Shuayb 7:85–93 / 26:176–191; creation and Iblis 15:26–44 / 38:71–85. Boundaries were checked against the local Quran text and neighboring verses. Shuayb's passages name different audiences; no shared-audience claim is made.
+- The comparison picker sits centred in the top bar. Each choice reads «سُورَةُ الأَعۡرَافِ و سُورَةُ الشُّعَرَاءِ - موسى وفرعون» with «الأعراف ١٠٣–١٣٧ · الشعراء ١٠–٦٨» under it. Curated pages show no title block, legend or match chips.
 - Preset URLs contain the exact selected ranges, are shareable, and clear unrelated global filters. Invalid preset IDs recover to the list or a clear unavailable state.
-- Reuse the existing renderer with unmatched context open by default for curated selections. Every selected ayah remains visible initially and appears once per side, with correct reference numbers. Label mechanical word links as lexical matches, without asserting editorial narrative alignment.
+- Reuse the existing renderer. Ayat without a lexical match start hidden; one page button (desktop rail, phone top bar) shows or hides them all, and a hidden group leaves no empty card. Once shown, every selected ayah appears once per side, with correct reference numbers. Label mechanical word links as lexical matches, without asserting editorial narrative alignment.
 - The curated journey omits the custom PairForm and by-topic controls. Existing explicitly requested custom and topic modes retain their behavior.
-- Add an accessible link from branches to curated comparisons, optionally selecting a relevant preset when both sides fit its ranges.
+- Offer curated comparisons from the shared desktop side rail and mobile bottom bar. Keep the branches page free of a separate comparison button.
 - New controls and text support Arabic/English, both themes, keyboard navigation, shared Button and Lucide icons. Check desktop and phone layouts.
 
 ## Validation and review

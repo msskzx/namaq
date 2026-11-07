@@ -27,6 +27,17 @@ describe('experiments directory', () => {
     expect(hrefs).not.toContain('/experiments');
   });
 
+  it.each(['en', 'ar'] as const)('marks exactly the launched pages as live in %s', current => {
+    language.current = current;
+    render(<Experiments />);
+    const live = current === 'ar' ? 'متاح' : 'Live';
+    const marked = screen.getAllByText(live).map(chip => {
+      const item = chip.closest('li');
+      return (item ? item.querySelector('a') : chip.closest('section')!.querySelector('h2 a'))!.getAttribute('href');
+    });
+    expect(marked.sort()).toEqual(['/quizzes', '/quran/branches', '/quran/compare', '/quran/read']);
+  });
+
   it('requests exclusion from indexing and link following', () => {
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });

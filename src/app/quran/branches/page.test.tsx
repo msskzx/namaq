@@ -59,9 +59,9 @@ const shortTree = (id: string) => {
 const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
 
 describe('Quran branch trees', () => {
-  it('offers an accessible link from the tree to curated passage comparisons', async () => {
+  it('leaves passage comparison navigation to the shared rail', async () => {
     render(await open({ o: 'لا اثم عليه' }));
-    expect(screen.getByRole('link', { name: /مقار.*المقاطع/ }).getAttribute('href')).toBe('/quran/compare');
+    expect(screen.queryByRole('link', { name: /مقار.*المقاطع/ })).toBeNull();
   });
 
   it('keeps the tree continuation in the matrix for الم without enabling surrounding ayat', async () => {

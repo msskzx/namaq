@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import QuranComparePage from './page';
+import { NavSlotElement } from '@/components/common/NavBar';
 
 const locale = vi.hoisted(() => ({ language: 'ar' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => locale }));
@@ -28,14 +29,47 @@ afterEach(() => {
   locale.language = 'ar';
 });
 
-const page = async (query: Record<string, string>) => render(await QuranComparePage({ searchParams: Promise.resolve(query) }));
+const page = async (query: Record<string, string>) => {
+  const content = await QuranComparePage({ searchParams: Promise.resolve(query) });
+  function Chrome() {
+    const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+    return <><div ref={setSlot} data-testid="top-bar" /><NavSlotElement.Provider value={slot}>{content}</NavSlotElement.Provider></>;
+  }
+  return render(<Chrome />);
+};
+const openChoices = () => {
+  HTMLElement.prototype.showPopover = function () { this.dispatchEvent(Object.assign(new Event('toggle'), { newState: 'open' })); };
+  fireEvent.click(screen.getByRole('button', { name: locale.language === 'ar' ? 'اختر مقارنة' : 'Choose comparison' }));
+};
 
 describe('QuranComparePage', () => {
+  it.each(['ar', 'en'])('searches comparisons from the top bar and preserves their exact ranges in %s', async language => {
+    locale.language = language;
+    await page({ preset: 'salih' });
+    const trigger = screen.getByRole('button', { name: language === 'ar' ? 'اختر مقارنة' : 'Choose comparison' });
+    expect(screen.getByTestId('top-bar').contains(trigger)).toBe(true);
+    expect(trigger.textContent).toContain(language === 'ar' ? 'صَالِحٌ' : 'Salih');
+    expect(screen.queryByRole('dialog')).toBeNull();
+    openChoices();
+    const input = screen.getByRole('searchbox');
+    expect(document.activeElement).toBe(input);
+    fireEvent.change(input, { target: { value: language === 'ar' ? 'مُوسَى' : 'MOSES' } });
+    const link = screen.getByRole('link');
+    expect(new URL(link.getAttribute('href')!, 'https://namaq.test').searchParams.get('preset')).toBe('moses-pharaoh');
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(link);
+    fireEvent.change(input, { target: { value: 'unmatched' } });
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
+    expect(screen.getByRole('status').textContent).toContain(language === 'ar' ? 'لا توجد مقارنة' : 'No comparisons');
+    fireEvent.change(input, { target: { value: '١٥:٢٦' } });
+    expect(new URL(screen.getByRole('link').getAttribute('href')!, 'https://namaq.test').searchParams.get('preset')).toBe('creation-iblis');
+  });
 
   it.each(['ar', 'en'])('opens a useful curated comparison and offers seven links in %s', async language => {
     locale.language = language;
     await page({});
-    expect(screen.getByRole('heading', { name: language === 'ar' ? 'مقارنة المقاطع' : 'Passage comparisons' })).toBeTruthy();
+    openChoices();
+    expect(screen.queryByRole('heading', { name: language === 'ar' ? 'مقارنة المقاطع' : 'Passage comparisons' })).toBeNull();
     const links = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='));
     expect(links).toHaveLength(7);
     expect(new URL(links[0].getAttribute('href')!, 'https://namaq.test').searchParams.get('preset')).toBe('moses-pharaoh');
@@ -48,6 +82,7 @@ describe('QuranComparePage', () => {
   it('uses preset bounds and shares choices without retaining unrelated filters', async () => {
     await page({ preset: 'salih', a: '2', af: '1', at: '2', b: '3', bf: '1', bt: '2', juzFrom: '30', juzTo: '30', mode: 'themes' });
     expect(JSON.parse(screen.getByTestId('text').textContent!)).toMatchObject({ curated: true, query: { a: '7', af: '73', at: '79', b: '26', bf: '141', bt: '159' } });
+    openChoices();
     const links = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='));
     expect(links).toHaveLength(7);
     for (const link of links) {
@@ -59,6 +94,7 @@ describe('QuranComparePage', () => {
 
   it('recovers an unknown preset to the available comparisons', async () => {
     await page({ preset: 'does-not-exist' });
+    openChoices();
     expect(screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='))).toHaveLength(7);
     expect(screen.queryByTestId('controls')).toBeNull();
     expect(screen.getByTestId('text')).toBeTruthy();

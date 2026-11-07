@@ -13,13 +13,22 @@ vi.mock('next-themes', () => ({ useTheme: () => ({ theme: 'system', setTheme: st
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.loaded = true; vi.clearAllMocks(); });
 
 describe('TabBar', () => {
+  it.each(['ar', 'en'] as const)('marks the passage comparison tab as selected in %s', language => {
+    state.language = language;
+    state.path = '/quran/compare';
+    render(<TabBar />);
+    const link = screen.getByRole('link', { name: language === 'ar' ? 'مقارنة المقاطع' : 'Passage comparisons' });
+    expect(link.getAttribute('href')).toBe('/quran/compare');
+    expect(link.getAttribute('aria-current')).toBe('page');
+  });
+
   it.each(['ar', 'en'] as const)('shows icon-only section tabs with names for screen readers in %s', language => {
     state.language = language;
     state.path = '/quizzes/party';
     render(<TabBar />);
     const [logo, ...tabs] = within(screen.getByRole('navigation')).getAllByRole('link');
     expect(logo.getAttribute('href')).toBe('/');
-    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran/branches', '/quran/read', '/quizzes']);
+    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran/branches', '/quran/compare', '/quran/read', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
     expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('-rotate-90');
@@ -58,7 +67,7 @@ describe('TabBar', () => {
     state.loaded = false;
     render(<TabBar />);
     expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/read', '/quizzes']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/compare', '/quran/read', '/quizzes']);
   });
 
   it('closes the desktop settings panel on a press outside it, but not inside', () => {

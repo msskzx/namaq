@@ -54,6 +54,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 
 export const NAV_SECTIONS: NavSection[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
+  { href: '/quran/compare', label: { ar: 'مقارنة المقاطع', en: 'Passage comparisons' }, groups: [] },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];

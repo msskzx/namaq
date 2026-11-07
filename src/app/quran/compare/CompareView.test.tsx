@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { NavSlotElement } from '@/components/common/NavBar';
 import CompareView from './CompareView';
 import fixture from '@/lib/quran/compare.fixture.json';
 import { alignSurahs } from '@/lib/quran/compare';
@@ -15,6 +16,11 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: 'ar' }),
 }));
+
+function WithBar({ children }: { children: React.ReactNode }) {
+  const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+  return <><div ref={setSlot} /><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
+}
 
 const fx = fixture as Record<string, string[]>;
 const words = (n: number) => fx[n].map((t, i) => ayahWords(t, i === 0));
@@ -82,14 +88,18 @@ describe('curated passage context', () => {
     words: surah(number).map(ayah => ayah.words.join(' ')), range: { from, to },
   });
 
-  it.each(selections)('initially shows every ayah once with its original reference in %i:%i–%i / %i:%i–%i', (a, af, at, b, bf, bt) => {
+  it.each(selections)('hides ayat without matches until asked, then shows every ayah once with its original reference in %i:%i–%i / %i:%i–%i', (a, af, at, b, bf, bt) => {
     const selected = (number: number, from: number, to: number) => surah(number).filter(ayah => {
       const verse = Number(ayah.key.split(':')[1]);
       return verse >= from && verse <= to;
     });
     const left = selected(a, af, at), right = selected(b, bf, bt);
     const rows = alignSurahs(left.map(ayah => ayah.words.map(word => ayahWords(word, false).norm[0])), right.map(ayah => ayah.words.map(word => ayahWords(word, false).norm[0])), { a: af, b: bf });
-    const { container } = render(<CompareView a={passageSide(a, af, at)} b={passageSide(b, bf, bt)} rows={rows} curated />);
+    const { container } = render(<WithBar><CompareView a={passageSide(a, af, at)} b={passageSide(b, bf, bt)} rows={rows} curated /></WithBar>);
+    const gaps = rows.filter(row => row.type === 'gap').length;
+    expect(container.querySelectorAll('article')).toHaveLength(2 * (rows.length - gaps));
+    if (gaps > 0) fireEvent.click(screen.getByRole('button', { name: 'اعرض الآيات التي لا تطابق فيها' }));
+    expect(container.querySelectorAll('section h3')).toHaveLength(container.querySelectorAll('section article h3').length);
     for (const [number, ayat] of [[a, left], [b, right]] as const) {
       const articles = Array.from(container.querySelectorAll('article')).filter(article => article.querySelector('h3')?.textContent?.startsWith(`surah-${number}`));
       const seals = articles.flatMap(article => Array.from(article.querySelectorAll(`.${spread.verseSeal}`)).map(seal => seal.textContent));

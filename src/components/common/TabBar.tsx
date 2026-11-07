@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BookOpen, CircleHelp, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Columns2, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
@@ -17,6 +17,7 @@ import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/branches': TreeIcon,
+  '/quran/compare': Columns2,
   '/quran/read': BookOpen,
   '/quizzes': Feather,
 };

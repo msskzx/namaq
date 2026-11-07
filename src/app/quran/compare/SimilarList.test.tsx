@@ -21,7 +21,7 @@ describe('SimilarList', () => {
     expect(screen.getByRole('article', { name: 'المدثر ٥٤–٥٥' })).toBeTruthy();
     expect(screen.getByRole('article', { name: 'عبس ١١–١٢' })).toBeTruthy();
     const marks = [...document.querySelectorAll('article mark')];
-    expect(marks.find(m => m.textContent === 'تَذۡكِرَةࣱ')!.className).not.toContain(spread.root);
+    expect(marks.find(m => m.textContent === 'تَذۡكِرَةٞ')!.className).not.toContain(spread.root);
     expect(marks.find(m => m.textContent === 'إِنَّهَا')!.className).toContain(spread.root);
     expect(screen.getByRole('link', { name: /آية بآية/ }).getAttribute('href')).toBe('/quran/compare?a=74&af=54&at=55&b=80&bf=11&bt=12&view=ayat');
     expect(screen.queryByText(/^تقارب/)).toBeNull();
@@ -32,7 +32,7 @@ describe('SimilarList', () => {
     const linked: SimilarPair = { ...pair, marksA: [[54, 2, 0, 'ذكر']], marksB: [[11, 2, 0, 'ذكر'], [12, 2, 1, 'ذكر']] };
     show([linked]);
     const marks = [...document.querySelectorAll('mark')];
-    const a = marks.find(m => m.textContent === 'تَذۡكِرَةࣱ' && m.title.includes('عبس'))!;
+    const a = marks.find(m => m.textContent === 'تَذۡكِرَةٞ' && m.title.includes('عبس'))!;
     expect(a.title).toBe('يقابلها: تَذۡكِرَةࣱ (عبس ١١)، ذَكَرَهُۥ (عبس ١٢)');
   });
 

@@ -10,6 +10,11 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 
 afterEach(cleanup);
 
+it('renders comparison-source tanwin, ya and madda in the reader encoding', () => {
+  const { container } = render(<MushafText>وَیَضِیقُ صَدۡرِی ذَنۢبࣱ مُوسَىٰۤ فِرۡعَوۡنَۚ</MushafText>);
+  expect(container.textContent).toBe('وَيَضِيقُ صَدۡرِي ذَنۢبٞ مُوسَىٰٓ فِرۡعَوۡنَ');
+});
+
 it('keeps context highlighting on the word rendered in the mushaf encoding', () => {
   const { container } = render(<PageSpread pages={[{ title: 'البقرة', rows: [[{ number: 224, words: ['تَجْعَلُوا۟'], marks: { 0: { kind: 'exact', title: 'shared' } } }]] }]} />);
   expect(container.querySelector('mark')?.textContent).toBe('تَجۡعَلُواْ');
