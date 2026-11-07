@@ -6004,6 +6004,214 @@
   "2:115|20:98": {
    "keep": true,
    "why": "Same idea: Allah encompasses all things in knowledge."
+  },
+  "2:29|21:81": {
+   "keep": false,
+   "why": "Only the earth and 'all things' as words; creation vs Sulayman's wind."
+  },
+  "2:66|21:28": {
+   "keep": false,
+   "why": "Only 'what is before and behind'; a punishment as lesson vs Allah's knowledge."
+  },
+  "2:116|21:26": {
+   "keep": true,
+   "why": "Same claim and reply: they said Allah took a son; glory be to Him, rather ..."
+  },
+  "2:127|21:4": {
+   "keep": false,
+   "why": "Shares only the closing names Hearing, Knowing; different points."
+  },
+  "2:239|21:7": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "2:51|23:41": {
+   "keep": false,
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+  },
+  "2:53|23:49": {
+   "keep": true,
+   "why": "Same sentence: We gave Musa the Book so that they may be guided."
+  },
+  "2:92|23:41": {
+   "keep": false,
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+  },
+  "2:34|25:26": {
+   "keep": false,
+   "why": "Only 'was' and 'disbelievers' as words."
+  },
+  "2:59|25:6": {
+   "keep": false,
+   "why": "Only 'sent down' and the sky as words; different points."
+  },
+  "2:116|25:2": {
+   "keep": true,
+   "why": "Same subject: to Him belong the heavens and earth, and He has taken no son."
+  },
+  "2:119|25:56": {
+   "keep": true,
+   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+  },
+  "2:128|25:74": {
+   "keep": true,
+   "why": "Same style: a prayer, our Lord, make us and our offspring ..."
+  },
+  "2:160|25:71": {
+   "keep": true,
+   "why": "Same idea: whoever repents and reforms, Allah accepts the repentance."
+  },
+  "2:218|25:70": {
+   "keep": true,
+   "why": "Same idea: the believers who repent hope for Allah's mercy; Allah is Forgiving, Merciful."
+  },
+  "2:11|27:48": {
+   "keep": true,
+   "why": "Contrast: they claim to be reformers vs those who corrupt and do not reform."
+  },
+  "2:23|27:43": {
+   "keep": false,
+   "why": "Only 'besides Allah' as words; the challenge vs the Queen's former worship."
+  },
+  "2:43|27:3": {
+   "keep": true,
+   "why": "Same words: establish the prayer and give zakat."
+  },
+  "2:73|27:93": {
+   "keep": true,
+   "why": "Same promise: He will show you His signs."
+  },
+  "2:107|27:65": {
+   "keep": false,
+   "why": "Only heavens and earth as words; different points."
+  },
+  "2:111|27:64": {
+   "keep": true,
+   "why": "Same challenge: say, bring your proof if you are truthful."
+  },
+  "2:116|27:65": {
+   "keep": false,
+   "why": "Only heavens and earth as words; the claim of a son vs knowledge of the unseen."
+  },
+  "2:116|27:87": {
+   "keep": false,
+   "why": "Only heavens and earth and 'all' as words; different scenes."
+  },
+  "2:139|27:93": {
+   "keep": false,
+   "why": "Only 'Lord' and deeds as words; different points."
+  },
+  "2:209|27:9": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:280|27:27": {
+   "keep": false,
+   "why": "Only the roots of waiting and truth; different points."
+  },
+  "2:38|28:49": {
+   "keep": false,
+   "why": "Only guidance and following as words; the fall from the Garden vs the challenge to bring a book."
+  },
+  "2:82|28:67": {
+   "keep": true,
+   "why": "Same idea: whoever believes and does good has the good end."
+  },
+  "2:94|28:49": {
+   "keep": true,
+   "why": "Same style: 'Say ... from Allah ... if you are truthful', a challenge to the deniers."
+  },
+  "2:107|28:81": {
+   "keep": true,
+   "why": "Same idea: no helper besides Allah (Qarun had none)."
+  },
+  "2:117|28:44": {
+   "keep": false,
+   "why": "Only the root of decreeing a matter; creation vs Musa's commission."
+  },
+  "2:121|28:3": {
+   "keep": false,
+   "why": "Only reciting, truth and believing as words; different points."
+  },
+  "2:121|28:52": {
+   "keep": true,
+   "why": "Same phrase: those We gave the Book believe in it."
+  },
+  "2:129|28:59": {
+   "keep": true,
+   "why": "Same phrase: a messenger sent among them, reciting the signs to them."
+  },
+  "2:131|28:53": {
+   "keep": true,
+   "why": "Same idea: submitting to the Lord (Ibrahim, and the People of the Book who were Muslims before)."
+  },
+  "2:8|29:36": {
+   "keep": false,
+   "why": "Only Allah and the Last Day as words; false claim of belief vs Shu'ayb's call."
+  },
+  "2:25|29:58": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+  },
+  "2:59|29:34": {
+   "keep": true,
+   "why": "Same punishment: a scourge from the sky for what they used to defy."
+  },
+  "2:82|29:9": {
+   "keep": true,
+   "why": "Same idea: the reward of those who believe and do good."
+  },
+  "2:103|29:16": {
+   "keep": true,
+   "why": "Same idea: fearing Allah is better for you, if you only knew."
+  },
+  "2:107|29:22": {
+   "keep": true,
+   "why": "Same sentence: besides Allah you have no protector and no helper."
+  },
+  "2:121|29:51": {
+   "keep": false,
+   "why": "Only the Book, reciting and believing as words; different points."
+  },
+  "2:136|29:46": {
+   "keep": true,
+   "why": "Same statement: we believe in what was sent down to us ..., and to Him we submit."
+  },
+  "2:209|29:42": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:250|29:30": {
+   "keep": true,
+   "why": "Same prayer: our Lord, give us victory over the people."
+  },
+  "2:280|29:16": {
+   "keep": false,
+   "why": "Shares only 'better for you if you knew'; the subjects differ."
+  },
+  "2:284|29:20": {
+   "keep": false,
+   "why": "Shares only the earth and the closing 'able over all things'."
+  },
+  "2:39|30:16": {
+   "keep": true,
+   "why": "Same idea: those who disbelieve and deny Our signs, and their punishment."
+  },
+  "2:82|30:15": {
+   "keep": true,
+   "why": "Same idea: those who believe and do good are in the Garden."
+  },
+  "2:82|30:45": {
+   "keep": true,
+   "why": "Same idea: the reward of those who believe and do good."
+  },
+  "2:116|30:26": {
+   "keep": true,
+   "why": "Same sentence: His is all in the heavens and earth; all are devoutly obedient to Him."
+  },
+  "2:215|30:38": {
+   "keep": true,
+   "why": "Same command: give to relatives, the needy and the traveller."
   }
  }
 }
