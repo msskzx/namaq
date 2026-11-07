@@ -3601,6 +3601,74 @@
   "3:189|22:6": {
    "keep": false,
    "why": "Only the closing 'Allah has power over all things'."
+  },
+  "3:15|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, and pleasure from Allah."
+  },
+  "3:106|9:66": {
+   "keep": true,
+   "why": "Same charge: you disbelieved after your belief."
+  },
+  "3:122|9:51": {
+   "keep": true,
+   "why": "Same ending: Allah is their/our Protector, and upon Allah let the believers rely."
+  },
+  "3:136|9:89": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:198|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:198|9:89": {
+   "keep": true,
+   "why": "Same reward: for them are gardens beneath which rivers flow, abiding in them."
+  },
+  "3:28|9:16": {
+   "keep": false,
+   "why": "Only 'take (allies) besides …'."
+  },
+  "3:86|9:80": {
+   "keep": false,
+   "why": "Only disbelief and the closing 'Allah does not guide the … people'."
+  },
+  "3:89|9:27": {
+   "keep": false,
+   "why": "Only 'after that' and the closing 'Forgiving, Merciful'."
+  },
+  "3:99|9:105": {
+   "keep": false,
+   "why": "Only 'say' and 'what you do'."
+  },
+  "3:101|9:80": {
+   "keep": false,
+   "why": "Only disbelief in Allah and His Messenger."
+  },
+  "3:114|9:44": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "3:114|9:45": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "3:129|9:27": {
+   "keep": false,
+   "why": "Only 'whom He wills' and the closing 'Forgiving, Merciful'."
+  },
+  "3:160|9:51": {
+   "keep": false,
+   "why": "Only the common 'upon Allah let the believers rely'."
+  },
+  "3:177|9:79": {
+   "keep": false,
+   "why": "Only the closing 'for them is a painful punishment'."
+  },
+  "3:189|9:116": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
   }
  }
 }
