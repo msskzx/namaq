@@ -4177,6 +4177,66 @@
   "3:189|39:44": {
    "keep": false,
    "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "3:3|42:17": {
+   "keep": true,
+   "why": "Same phrase: He sent down the Book in truth."
+  },
+  "3:109|42:53": {
+   "keep": true,
+   "why": "Same sentence: to Allah belongs what is in the heavens and the earth, and to Allah all matters return."
+  },
+  "3:6|42:3": {
+   "keep": false,
+   "why": "Only the name 'the Mighty, the Wise'."
+  },
+  "3:21|42:42": {
+   "keep": false,
+   "why": "Only 'without right' and 'painful punishment'."
+  },
+  "3:57|42:40": {
+   "keep": false,
+   "why": "Only the closing 'Allah does not love the wrongdoers'."
+  },
+  "3:62|42:3": {
+   "keep": false,
+   "why": "Only the name 'the Mighty, the Wise'."
+  },
+  "3:122|42:6": {
+   "keep": false,
+   "why": "Only protector/allies."
+  },
+  "3:129|42:5": {
+   "keep": false,
+   "why": "Only forgiveness and 'Forgiving, Merciful'."
+  },
+  "3:129|42:12": {
+   "keep": false,
+   "why": "Only the heavens and earth and 'whom He wills'."
+  },
+  "3:129|42:49": {
+   "keep": false,
+   "why": "Only the heavens and earth and 'whom He wills'."
+  },
+  "3:150|42:31": {
+   "keep": false,
+   "why": "Only 'Allah … protector … helper'."
+  },
+  "3:189|42:9": {
+   "keep": false,
+   "why": "Only the closing 'He has power over all things'."
+  },
+  "3:189|42:12": {
+   "keep": false,
+   "why": "Only the heavens and earth and 'all things'."
+  },
+  "3:189|42:29": {
+   "keep": false,
+   "why": "Only the heavens and earth and 'able'."
+  },
+  "3:189|42:49": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
   }
  }
 }
