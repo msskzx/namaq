@@ -3161,6 +3161,82 @@
   "4:175|48:2": {
    "keep": false,
    "why": "Only the formula 'guide to a straight path'."
+  },
+  "4:107|8:58": {
+   "keep": true,
+   "why": "Same subject: treachery, and Allah does not love the treacherous."
+  },
+  "4:134|8:67": {
+   "keep": true,
+   "why": "Same contrast: wanting the reward of this world while Allah has / wants the Hereafter."
+  },
+  "4:26|8:71": {
+   "keep": false,
+   "why": "Only 'before' and the closing 'Knowing, Wise'."
+  },
+  "4:32|8:75": {
+   "keep": false,
+   "why": "Only 'some … over others' and the closing 'Allah knows all things'."
+  },
+  "4:48|8:29": {
+   "keep": false,
+   "why": "Only forgiveness and 'great'."
+  },
+  "4:59|8:1": {
+   "keep": false,
+   "why": "Only the common 'obey Allah and the Messenger, if you believe'."
+  },
+  "4:69|8:46": {
+   "keep": false,
+   "why": "Only the common 'obey Allah and the Messenger'."
+  },
+  "4:80|8:20": {
+   "keep": false,
+   "why": "Only obeying and turning away."
+  },
+  "4:106|8:69": {
+   "keep": false,
+   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+  },
+  "4:107|8:27": {
+   "keep": false,
+   "why": "Only treachery; different points."
+  },
+  "4:108|8:47": {
+   "keep": false,
+   "why": "Only the closing 'Allah encompasses what they do'."
+  },
+  "4:110|8:69": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:148|8:53": {
+   "keep": false,
+   "why": "Only the closing 'Hearing, Knowing'."
+  },
+  "4:150|8:1": {
+   "keep": false,
+   "why": "Only 'Allah and His messengers'."
+  },
+  "4:152|8:24": {
+   "keep": false,
+   "why": "Only 'those who believe … Allah and His Messenger'."
+  },
+  "4:158|8:10": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:158|8:49": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "4:165|8:10": {
+   "keep": false,
+   "why": "Only good news and the closing 'Mighty, Wise'."
+  },
+  "4:165|8:67": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
   }
  }
 }
