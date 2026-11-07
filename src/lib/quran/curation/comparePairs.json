@@ -607,6 +607,104 @@
   "7:194|11:13": {
    "keep": true,
    "why": "Same challenge: call on those besides Allah, if you are truthful."
+  },
+  "7:23|26:51": {
+   "keep": false,
+   "why": "Only forgiveness from our Lord as words; Adam's repentance vs the magicians' hope."
+  },
+  "7:61|26:16": {
+   "keep": true,
+   "why": "Same statement: a messenger of the Lord of the worlds (Noah / Moses and Aaron).",
+   "ask": "Noah says 'I am a messenger of the Lord of the worlds'; Moses and Aaron are told to say the same. Keep?"
+  },
+  "7:65|26:124": {
+   "keep": true,
+   "why": "Same story: Hud, their brother, asks Aad 'will you not fear Allah?'"
+  },
+  "7:67|26:16": {
+   "keep": true,
+   "why": "Same statement: a messenger of the Lord of the worlds (Hud / Moses and Aaron)."
+  },
+  "7:72|26:139": {
+   "keep": false,
+   "why": "Only denial and 'they were not believers'; Hud's people saved and destroyed in both, but the wording barely overlaps.",
+   "ask": "Both are the end of Aad: 'they denied … and were not believers'. Same story, little shared wording. Keep?"
+  },
+  "7:106|26:31": {
+   "keep": true,
+   "why": "Same story: Pharaoh says 'bring it, if you are truthful'."
+  },
+  "7:106|26:154": {
+   "keep": true,
+   "why": "Same demand: bring a sign, if you are truthful (Pharaoh / Thamud)."
+  },
+  "7:107|26:32": {
+   "keep": true,
+   "why": "Same ayah: he threw his staff and it was a clear serpent."
+  },
+  "7:108|26:33": {
+   "keep": true,
+   "why": "Same ayah: he drew out his hand and it was white for the onlookers."
+  },
+  "7:109|26:34": {
+   "keep": true,
+   "why": "Same story: this is a learned magician; said by the chiefs in Al-A'raf, by Pharaoh in Ash-Shu'ara."
+  },
+  "7:110|26:35": {
+   "keep": true,
+   "why": "Same story: he wants to drive you out of your land, so what do you advise?"
+  },
+  "7:111|26:36": {
+   "keep": true,
+   "why": "Same story: delay him and his brother and send gatherers to the cities (أرسل / ابعث)."
+  },
+  "7:111|26:53": {
+   "keep": true,
+   "why": "Same story: sending gatherers to the cities."
+  },
+  "7:112|26:37": {
+   "keep": true,
+   "why": "Same story: they will bring you every learned magician (ساحر / سحّار)."
+  },
+  "7:113|26:40": {
+   "keep": true,
+   "why": "Same story: the magicians and 'if we/they are the victors'."
+  },
+  "7:113|26:41": {
+   "keep": true,
+   "why": "Same story: the magicians ask Pharaoh for a reward if they win."
+  },
+  "7:117|26:45": {
+   "keep": true,
+   "why": "Same story: the staff swallows what they faked."
+  },
+  "7:120|26:46": {
+   "keep": true,
+   "why": "Same ayah: the magicians fell down in prostration."
+  },
+  "7:121|26:47": {
+   "keep": true,
+   "why": "Same ayah: we believe in the Lord of the worlds."
+  },
+  "7:123|26:49": {
+   "keep": true,
+   "why": "Same story: Pharaoh's threat 'you believed before I permitted you … you will know'."
+  },
+  "7:124|26:49": {
+   "keep": true,
+   "why": "Same threat: I will cut off your hands and feet on opposite sides and crucify you all."
+  },
+  "7:125|26:50": {
+   "keep": true,
+   "why": "Same answer: to our Lord we will return."
+  },
+  "7:177|26:139": {
+   "keep": false,
+   "why": "Only denial and signs as words."
+  },
+  "7:177|26:154": {
+   "keep": false,
+   "why": "Only 'sign' and the letters of مثل; different statements."
   }
  }
 }
