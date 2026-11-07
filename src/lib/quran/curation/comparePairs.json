@@ -2612,6 +2612,86 @@
   "2:284|9:39": {
    "keep": false,
    "why": "Only punishment and the closing 'Allah has power over all things'."
+  },
+  "2:3|22:35": {
+   "keep": true,
+   "why": "Same description: they establish prayer and spend from what We provided them."
+  },
+  "2:7|22:75": {
+   "keep": false,
+   "why": "Only hearing and sight; different points."
+  },
+  "2:25|22:14": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow."
+  },
+  "2:25|22:23": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow."
+  },
+  "2:39|22:57": {
+   "keep": true,
+   "why": "Same verdict: those who disbelieve and deny Our signs, those …"
+  },
+  "2:62|22:17": {
+   "keep": true,
+   "why": "Same list: those who believe, the Jews, the Christians and the Sabians."
+  },
+  "2:66|22:76": {
+   "keep": false,
+   "why": "Only 'what is before and behind'; different meanings."
+  },
+  "2:82|22:50": {
+   "keep": false,
+   "why": "Only the common formula 'those who believe and do righteous deeds'."
+  },
+  "2:95|22:10": {
+   "keep": false,
+   "why": "Only 'for what their hands sent ahead'."
+  },
+  "2:98|22:75": {
+   "keep": false,
+   "why": "Only angels and messengers."
+  },
+  "2:99|22:16": {
+   "keep": true,
+   "why": "Same phrase: We sent down clear signs."
+  },
+  "2:106|22:6": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
+  },
+  "2:107|22:70": {
+   "keep": false,
+   "why": "Only 'do you not know that Allah …' and the heavens and earth."
+  },
+  "2:110|22:41": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "2:125|22:26": {
+   "keep": true,
+   "why": "Same command: purify My House for those who circle it and those who bow and prostrate."
+  },
+  "2:161|22:75": {
+   "keep": false,
+   "why": "Only 'angels and people'."
+  },
+  "2:175|22:4": {
+   "keep": false,
+   "why": "Only misguidance, guidance and punishment."
+  },
+  "2:218|22:58": {
+   "keep": true,
+   "why": "Same subject: those who emigrated in the cause of Allah."
+  },
+  "2:270|22:71": {
+   "keep": false,
+   "why": "Only the closing 'the wrongdoers have no helpers'."
+  },
+  "2:276|22:38": {
+   "keep": false,
+   "why": "Only the closing 'Allah does not love every …'."
   }
  }
 }
