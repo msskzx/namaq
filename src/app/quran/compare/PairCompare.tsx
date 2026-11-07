@@ -107,11 +107,7 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
     <li className="relative">
-      <div onClick={event => pick(event.target)} onKeyDown={event => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        if ((event.target as HTMLElement).closest('mark[data-link]')) event.preventDefault();
-        pick(event.target);
-      }}>
+      <div onClick={event => pick(event.target)}>
         <PageSpread compact stackOnMobile pages={card.sides.map(side => sidePage(side, names, ar, lit))} />
       </div>
       <Link href={branchesHref(card.group)} aria-label={family} title={family}
@@ -137,11 +133,17 @@ export default function PairCompare({ a, b, cards, pairs, names }: { a: number; 
     else { sheet.current?.showModal(); setOpen(true); }
   };
   const close = () => sheet.current?.close();
+  useEffect(() => {
+    const wide = window.matchMedia?.('(min-width: 1024px)');
+    const change = () => { if (wide?.matches) sheet.current?.close(); };
+    wide?.addEventListener?.('change', change);
+    return () => wide?.removeEventListener?.('change', change);
+  }, []);
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-7xl p-4 text-[var(--home-ink)]">
       <NavActions>
         <span className="flex min-w-0 max-w-[calc(100%-8rem)] justify-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
-          <Button variant="neutral" onClick={choose} aria-haspopup="dialog" aria-expanded={open} aria-label={`${label}: ${title(a, b)}`} className="min-w-0 max-w-full">
+          <Button variant="neutral" onClick={choose} aria-expanded={open} aria-label={`${label}: ${title(a, b)}`} className="min-w-0 max-w-full">
             <ArrowLeftRight size={16} aria-hidden className="shrink-0" />
             <span className="truncate">{title(a, b)}</span>
             <span className="shrink-0 text-sm tabular-nums text-[var(--home-accent)]">{ar ? num(cards.length) : cards.length}</span>

@@ -14,7 +14,7 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;
   return ayah.words.map((word, index) => {
     const mark = ayah.marks?.[index];
-    const wordText = mark ? <mark className={markClass(mark)} title={mark.title} data-link={mark.link} tabIndex={mark.link ? 0 : undefined} aria-pressed={mark.link ? !!mark.lit : undefined} role={mark.link ? 'button' : undefined}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
+    const wordText = mark ? <mark className={markClass(mark)} title={mark.title} data-link={mark.link} data-lit={mark.lit || undefined}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
     const text = ayah.wordKey
       ? <span data-word-position={`${ayah.wordKey}:${index}`}>{wordText}</span>
       : wordText;

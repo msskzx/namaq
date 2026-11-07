@@ -55,7 +55,12 @@ export function ayahPairs(groups: Group[]): AyahPair[] {
       if (!existing || existing.columns.length < columns.length) found.set(id, pair);
     }));
   }
-  return [...found.values()].sort((p, q) => keyOrder(p.a.key) - keyOrder(q.a.key) || keyOrder(p.b.key) - keyOrder(q.b.key));
+  const ayat = (side: PairSide) => [side.key, ...(side.through ? [side.through] : [])];
+  const covers = (outer: PairSide, inner: PairSide) => ayat(inner).every(key => ayat(outer).includes(key));
+  const all = [...found.values()];
+  const kept = all.filter(pair => !all.some(other => other !== pair && covers(other.a, pair.a) && covers(other.b, pair.b)
+    && (ayat(other.a).length + ayat(other.b).length > ayat(pair.a).length + ayat(pair.b).length || other.columns.length > pair.columns.length)));
+  return kept.sort((p, q) => keyOrder(p.a.key) - keyOrder(q.a.key) || keyOrder(p.b.key) - keyOrder(q.b.key));
 }
 
 /** Ayah pairs grouped by surah pair, keyed "a:b" with a < b. */
@@ -78,4 +83,9 @@ export function surahPairs(bySurah: Map<string, AyahPair[]>, min = MIN_PAIRS): S
 
 export function pairsFor(bySurah: Map<string, AyahPair[]>, x: number, y: number) {
   return bySurah.get(pairId(Math.min(x, y), Math.max(x, y))) ?? [];
+}
+
+/** The listed pair that links a surah to the surah most similar to it. */
+export function closestPair(listed: SurahPair[], surah: number) {
+  return listed.filter(pair => pair.a === surah || pair.b === surah).sort((p, q) => q.count - p.count)[0];
 }

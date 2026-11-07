@@ -3,6 +3,7 @@ import { homeQuranSections } from './homeQuranSections';
 import treeData from '@/app/quran/branches/trees.json';
 import { buildPhraseGroups } from './quran/phraseTrees';
 import { groups } from './quran/mutashabih/data';
+import { listedPairs } from '@/app/quran/compare/pairCards';
 
 const phrases = buildPhraseGroups(treeData.ayat);
 
@@ -16,7 +17,7 @@ export async function getHomepageData() {
       ...treeData.subtrees.map(tree => [tree.id, tree.keys] as const),
       ...groups.map(group => [group.id, [...new Set(group.places.map(place => place.key))]] as const),
     ]),
-    sections: homeQuranSections(surahs),
+    sections: homeQuranSections(surahs, new Set(listedPairs.flatMap(pair => [pair.a, pair.b]))),
   };
 }
 

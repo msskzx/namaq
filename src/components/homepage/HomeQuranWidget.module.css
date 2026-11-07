@@ -26,5 +26,6 @@
   .list { grid-template-columns: minmax(0,1fr); }
   .footer { flex-direction: column; align-items: stretch; gap: 0.65rem; }
   .footer p { font-size: 0.9375rem; }
+  .actions { flex-wrap: wrap; }
   .actions > * { flex: 1; }
 }

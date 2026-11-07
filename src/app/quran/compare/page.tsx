@@ -18,6 +18,7 @@ import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
 import { curatedComparisons, surahPairHref } from '@/lib/quran/curatedComparisons';
 import PairCompare from './PairCompare';
 import { listedPairs, pairCards } from './pairCards';
+import { closestPair } from '@/lib/quran/mutashabih/pairs';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,6 +51,8 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const preset = curatedComparisons.find(story => story.id === query.preset);
     const [x, y] = [surahOf(query.a), surahOf(query.b)];
     if (preset) redirect(surahPairHref(preset.a, preset.b));
+    const closest = x !== null && y === null ? closestPair(listedPairs, x) : undefined;
+    if (closest) redirect(surahPairHref(closest.a, closest.b));
     if (x === null || y === null || x === y) {
       if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b));
       return pairPage(curatedComparisons[0].a, curatedComparisons[0].b);

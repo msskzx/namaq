@@ -15,7 +15,6 @@
 .spread mark.slot4 { color: var(--home-slot-4); }
 .spread mark.root, .legend mark.root { color: var(--home-root); }
 .spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }
-.spread mark.linkable:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
 .spread mark.lit { background: var(--home-highlight); color: var(--home-on-highlight); box-shadow: 0 0 0 1px var(--home-highlight-border); }
 /* compact: one card holding both ayat, a small label over each, as on the compare pair list */
 .compact { column-gap: 0; row-gap: 0; border: 1px solid var(--home-rule); border-radius: 0.5rem; background: var(--home-paper-deep); }

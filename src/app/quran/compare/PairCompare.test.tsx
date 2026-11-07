@@ -52,8 +52,10 @@ describe('PairCompare', () => {
     const { container } = render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     const [first] = container.querySelectorAll('mark[data-link="1"]');
     fireEvent.click(first);
-    expect([...container.querySelectorAll('mark[data-link="1"]')].map(mark => mark.getAttribute('aria-pressed'))).toEqual(['true', 'true']);
-    expect(container.querySelector('mark[data-link="0"]')!.getAttribute('aria-pressed')).toBe('false');
+    expect([...container.querySelectorAll('mark[data-link="1"]')].map(mark => mark.hasAttribute('data-lit'))).toEqual([true, true]);
+    expect(container.querySelector('mark[data-link="0"]')!.hasAttribute('data-lit')).toBe(false);
+    fireEvent.click(first);
+    expect(container.querySelector('mark[data-lit]')).toBeNull();
     expect(screen.getByRole('link', { name: 'افتح في متشابهات القرآن' }).getAttribute('href')).toBe('/quran/branches?o=cmp%3A1');
   });
 
