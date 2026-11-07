@@ -4539,6 +4539,62 @@
   "18:107|19:96": {
    "keep": false,
    "why": "Only the formula 'those who believe and do righteous deeds'."
+  },
+  "2:3|8:3": {
+   "keep": true,
+   "why": "Same sentence: those who establish prayer and spend from what We provided them."
+  },
+  "2:193|8:39": {
+   "keep": true,
+   "why": "Same sentence: fight them until there is no fitna and the religion is for Allah."
+  },
+  "2:210|8:44": {
+   "keep": true,
+   "why": "Same ending: the matter is decided; to Allah all matters return."
+  },
+  "2:211|8:52": {
+   "keep": true,
+   "why": "Same thought: rejecting Allah's signs/favour; Allah is severe in punishment."
+  },
+  "2:218|8:74": {
+   "keep": true,
+   "why": "Same sentence: those who believed, emigrated and strove in the way of Allah."
+  },
+  "2:218|8:75": {
+   "keep": true,
+   "why": "Same sentence: those who believed, emigrated and strove."
+  },
+  "2:7|8:68": {
+   "keep": false,
+   "why": "Only the formula 'a great punishment'."
+  },
+  "2:9|8:62": {
+   "keep": false,
+   "why": "Only a shared root (deceive); different subjects."
+  },
+  "2:95|8:51": {
+   "keep": false,
+   "why": "Only the formula 'for what their hands have sent forth'."
+  },
+  "2:107|8:40": {
+   "keep": false,
+   "why": "Only 'Allah' with 'protector' and 'helper'; different points."
+  },
+  "2:137|8:20": {
+   "keep": false,
+   "why": "Only 'believe' and 'turn away'; different subjects."
+  },
+  "2:199|8:69": {
+   "keep": false,
+   "why": "Only the formula 'fear/ask forgiveness of Allah; Forgiving, Merciful'."
+  },
+  "2:218|8:69": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "2:244|8:17": {
+   "keep": false,
+   "why": "Only 'fight' and the closing names Hearing, Knowing."
   }
  }
 }
