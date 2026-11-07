@@ -585,8 +585,9 @@
    "ask": "Pharaoh asks Moses for a sign; Noah's people ask for the punishment. Same words, different requests. Keep?"
   },
   "7:118|11:16": {
-   "keep": false,
-   "why": "Only 'what they used to do is void'; the magicians' defeat vs the reward of the worldly."
+   "keep": true,
+   "why": "Same rare clause: what they used to do became void (بطل / باطل).",
+   "ask": "Kept under your rare-words rule: keep?"
   },
   "7:139|11:16": {
    "keep": true,
@@ -2554,8 +2555,9 @@
    "why": "Only 'then … after that'."
   },
   "2:75|9:6": {
-   "keep": false,
-   "why": "Only 'hear the word of Allah'; different points."
+   "keep": true,
+   "why": "Same rare phrase: hearing the word of Allah, then ...",
+   "ask": "Kept under your rare-words rule: keep?"
   },
   "2:77|9:78": {
    "keep": true,
@@ -2686,8 +2688,9 @@
    "why": "Same subject: those who emigrated in the cause of Allah."
   },
   "2:270|22:71": {
-   "keep": false,
-   "why": "Only the closing 'the wrongdoers have no helpers'."
+   "keep": true,
+   "why": "Same rare closing: the wrongdoers have no helpers (أنصار / نصير).",
+   "ask": "Kept under your rare-words rule: keep?"
   },
   "2:276|22:38": {
    "keep": false,
