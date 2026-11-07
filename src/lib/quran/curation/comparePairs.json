@@ -3533,6 +3533,74 @@
   "5:120|24:64": {
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "3:27|22:61": {
+   "keep": true,
+   "why": "Same sign: He merges the night into the day and the day into the night."
+  },
+  "3:55|22:69": {
+   "keep": true,
+   "why": "Same sentence: (Allah) will judge between you on the Day of Resurrection concerning what you used to differ over."
+  },
+  "3:109|22:76": {
+   "keep": true,
+   "why": "Same ending: to Allah all matters are returned."
+  },
+  "3:157|22:58": {
+   "keep": true,
+   "why": "Same subject: those killed or who died in the cause of Allah, and what Allah gives them is better."
+  },
+  "3:169|22:58": {
+   "keep": true,
+   "why": "Same subject: those killed in the cause of Allah are provided for."
+  },
+  "3:182|22:10": {
+   "keep": true,
+   "why": "Same sentence: that is for what your hands sent ahead, and Allah is never unjust to His servants."
+  },
+  "3:198|22:14": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "3:9|22:69": {
+   "keep": false,
+   "why": "Only 'the Day … in it'."
+  },
+  "3:29|22:70": {
+   "keep": false,
+   "why": "Only 'Allah knows what is in the heavens and the earth'."
+  },
+  "3:32|22:38": {
+   "keep": false,
+   "why": "Only the formula 'Allah does not love …'."
+  },
+  "3:57|22:38": {
+   "keep": false,
+   "why": "Only believers and 'Allah does not love …'."
+  },
+  "3:57|22:50": {
+   "keep": false,
+   "why": "Only the common formula 'those who believe and do righteous deeds'."
+  },
+  "3:87|22:75": {
+   "keep": false,
+   "why": "Only 'angels and people'."
+  },
+  "3:102|22:6": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "3:108|22:16": {
+   "keep": false,
+   "why": "Only 'signs' and 'Allah wills'."
+  },
+  "3:142|22:59": {
+   "keep": false,
+   "why": "Only entering and knowing."
+  },
+  "3:189|22:6": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
   }
  }
 }
