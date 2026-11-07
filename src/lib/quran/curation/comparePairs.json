@@ -5970,27 +5970,33 @@
   },
   "2:21|19:9": {
    "keep": false,
-   "why": "Only creation 'before' as words; worship your Lord vs Zakariyya's son."
+   "why": "Only creation 'before' as words; worship your Lord vs Zakariyya's son.",
+   "checked": true
   },
   "2:82|19:60": {
    "keep": true,
-   "why": "Same idea: those who believe and do good enter Paradise."
+   "why": "Same idea: those who believe and do good enter Paradise.",
+   "checked": true
   },
   "2:82|19:96": {
    "keep": true,
-   "why": "Same idea: the reward of those who believe and do good."
+   "why": "Same idea: the reward of those who believe and do good.",
+   "checked": true
   },
   "2:117|19:35": {
    "keep": true,
-   "why": "Same sentence: when He decrees a matter He says to it Be, and it is."
+   "why": "Same sentence: when He decrees a matter He says to it Be, and it is.",
+   "checked": true
   },
   "2:131|19:47": {
    "keep": false,
-   "why": "Only 'said' and 'Lord' as words; Ibrahim's submission vs his farewell to his father."
+   "why": "Only 'said' and 'Lord' as words; Ibrahim's submission vs his farewell to his father.",
+   "checked": true
   },
   "2:154|19:66": {
    "keep": true,
-   "why": "Contrast: the martyrs are not dead but alive vs man doubting he will be brought out alive."
+   "why": "Contrast: the martyrs are not dead but alive vs man doubting he will be brought out alive.",
+   "checked": true
   },
   "2:8|20:59": {
    "keep": false,
@@ -8871,6 +8877,150 @@
   "5:40|35:1": {
    "keep": false,
    "why": "Shared heavens-and-earth and closing only."
+  },
+  "5:36|39:47": {
+   "keep": true,
+   "why": "If they had all that is on earth and as much again to ransom themselves from the punishment."
+  },
+  "5:47|39:1": {
+   "keep": false,
+   "why": "Shared 'sent down / revelation' only."
+  },
+  "5:76|39:36": {
+   "keep": false,
+   "why": "Shared 'besides Allah' only."
+  },
+  "5:76|39:43": {
+   "keep": true,
+   "why": "Taking besides Allah what has no power."
+  },
+  "5:120|39:44": {
+   "keep": true,
+   "why": "To Him belongs the dominion of the heavens and the earth."
+  },
+  "5:9|45:30": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: their reward."
+  },
+  "5:47|45:2": {
+   "keep": false,
+   "why": "Shared 'sent down / revelation' only."
+  },
+  "5:51|45:19": {
+   "keep": true,
+   "why": "Some of them are allies of others: the wrongdoers."
+  },
+  "5:120|45:22": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:120|45:27": {
+   "keep": true,
+   "why": "To Allah belongs the dominion of the heavens and the earth."
+  },
+  "5:18|48:14": {
+   "keep": true,
+   "why": "Dominion of the heavens and earth; He forgives whom He wills and punishes whom He wills."
+  },
+  "5:38|48:7": {
+   "keep": false,
+   "why": "Shared closing 'Mighty, Wise' only."
+  },
+  "5:40|48:14": {
+   "keep": true,
+   "why": "Dominion of the heavens and earth; He forgives whom He wills and punishes whom He wills."
+  },
+  "5:40|48:21": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:74|48:14": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:85|48:5": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever."
+  },
+  "5:119|48:5": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever: the great success."
+  },
+  "5:120|48:14": {
+   "keep": false,
+   "why": "Shared dominion clause only; different subjects."
+  },
+  "5:120|48:21": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:34|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:35|49:15": {
+   "keep": true,
+   "why": "Striving in the way of Allah."
+  },
+  "5:40|49:16": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:74|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:97|49:16": {
+   "keep": true,
+   "why": "Allah knows what is in the heavens and the earth, and He knows all things."
+  },
+  "5:98|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:120|49:16": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:10|57:19": {
+   "keep": true,
+   "why": "Same clause: those who disbelieve and deny Our signs are companions of Hellfire."
+  },
+  "5:40|57:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and earth; able over all things."
+  },
+  "5:86|57:19": {
+   "keep": true,
+   "why": "Same clause: those who disbelieve and deny Our signs are companions of Hellfire."
+  },
+  "5:119|57:12": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever: the great success."
+  },
+  "5:120|57:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and earth; able over all things."
+  },
+  "5:120|57:5": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and earth."
+  },
+  "5:8|59:18": {
+   "keep": true,
+   "why": "O you who believe, fear Allah; Allah is Aware of what you do."
+  },
+  "5:29|59:17": {
+   "keep": true,
+   "why": "In the Fire: that is the recompense of the wrongdoers."
+  },
+  "5:40|59:6": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:98|59:4": {
+   "keep": true,
+   "why": "Allah is severe in punishment."
   }
  }
 }
