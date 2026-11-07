@@ -2428,35 +2428,43 @@
   },
   "2:7|16:108": {
    "keep": true,
-   "why": "Same statement: Allah has sealed their hearts, hearing and sight."
+   "why": "Same statement: Allah has sealed their hearts, hearing and sight.",
+   "checked": true
   },
   "2:77|16:19": {
    "keep": true,
-   "why": "Same statement: Allah knows what they conceal and what they reveal."
+   "why": "Same statement: Allah knows what they conceal and what they reveal.",
+   "checked": true
   },
   "2:77|16:23": {
    "keep": true,
-   "why": "Same sentence: Allah knows what they conceal and what they reveal."
+   "why": "Same sentence: Allah knows what they conceal and what they reveal.",
+   "checked": true
   },
   "2:86|16:107": {
    "keep": true,
-   "why": "Same charge: preferring the life of this world over the Hereafter."
+   "why": "Same charge: preferring the life of this world over the Hereafter.",
+   "checked": true
   },
   "2:103|16:95": {
    "keep": true,
-   "why": "Same idea: what is with Allah is better, if they only knew."
+   "why": "Same idea: what is with Allah is better, if they only knew.",
+   "checked": true
   },
   "2:107|16:73": {
    "keep": false,
-   "why": "Only 'besides Allah' and 'the heavens and the earth'."
+   "why": "Only 'besides Allah' and 'the heavens and the earth'.",
+   "checked": true
   },
   "2:130|16:122": {
    "keep": true,
-   "why": "Same praise of Abraham: in this world …, and in the Hereafter he is among the righteous."
+   "why": "Same praise of Abraham: in this world …, and in the Hereafter he is among the righteous.",
+   "checked": true
   },
   "2:135|16:123": {
    "keep": true,
-   "why": "Same phrase: the religion of Abraham, upright, and he was not of the associators."
+   "why": "Same phrase: the religion of Abraham, upright, and he was not of the associators.",
+   "checked": true
   },
   "2:154|16:21": {
    "keep": true,
@@ -2465,55 +2473,68 @@
   },
   "2:162|16:85": {
    "keep": true,
-   "why": "Same sentence: the punishment will not be lightened for them, nor will they be reprieved."
+   "why": "Same sentence: the punishment will not be lightened for them, nor will they be reprieved.",
+   "checked": true
   },
   "2:172|16:114": {
    "keep": true,
-   "why": "Same command: eat of what We provided you and be grateful to Allah, if it is Him you worship."
+   "why": "Same command: eat of what We provided you and be grateful to Allah, if it is Him you worship.",
+   "checked": true
   },
   "2:173|16:115": {
    "keep": true,
-   "why": "Same ruling, almost word for word: He has only forbidden you carrion, blood, pork …"
+   "why": "Same ruling, almost word for word: He has only forbidden you carrion, blood, pork …",
+   "checked": true
   },
   "2:176|16:64": {
    "keep": true,
-   "why": "Same subject: the Book sent down, and those who differed over it."
+   "why": "Same subject: the Book sent down, and those who differed over it.",
+   "checked": true
   },
   "2:192|16:18": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:199|16:18": {
    "keep": false,
-   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+   "why": "Only the closing 'Allah is Forgiving, Merciful'.",
+   "checked": true
   },
   "2:201|16:30": {
    "keep": true,
-   "why": "Same idea: good in this world, and the Hereafter."
+   "why": "Same idea: good in this world, and the Hereafter.",
+   "checked": true
   },
   "2:201|16:122": {
    "keep": true,
-   "why": "Same phrase: given good in this world, and in the Hereafter."
+   "why": "Same phrase: given good in this world, and in the Hereafter.",
+   "checked": true
   },
   "2:210|16:33": {
    "keep": true,
-   "why": "Same question: are they waiting for nothing but that the angels come to them, or Allah's command?"
+   "why": "Same question: are they waiting for nothing but that the angels come to them, or Allah's command?",
+   "checked": true
   },
   "2:218|16:18": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:218|16:110": {
    "keep": true,
-   "why": "Same subject: those who emigrated and strove; Allah is Forgiving, Merciful."
+   "why": "Same subject: those who emigrated and strove; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "2:239|16:43": {
    "keep": false,
-   "why": "Only scattered words (men, remembrance, know)."
+   "why": "Only scattered words (men, remembrance, know).",
+   "checked": true
   },
   "2:281|16:111": {
    "keep": true,
-   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged."
+   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged.",
+   "checked": true
   },
   "2:284|16:77": {
    "keep": true,
