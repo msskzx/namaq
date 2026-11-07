@@ -59,6 +59,13 @@ describe('PairCompare', () => {
     expect(screen.getByRole('link', { name: 'افتح في متشابهات القرآن' }).getAttribute('href')).toBe('/quran/branches?o=cmp%3A1');
   });
 
+  it('opens each ayah of a card in the reader', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    const read = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.startsWith('/quran/read/'));
+    expect(read.map(link => link.getAttribute('href'))).toEqual(['/quran/read/ayah/52/40', '/quran/read/ayah/68/46']);
+    expect(read[0].getAttribute('aria-label')).toMatch(/^اقرأ .+ ٤٠ في المصحف$/);
+  });
+
   it('offers the next pair in mushaf order', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
     expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');

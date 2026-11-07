@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, ChevronDown, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, BookOpen, ChevronDown, Search, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -88,10 +88,19 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
   );
 }
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null): SpreadPage {
+const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
+
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
+  const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   return {
     title: `${name} ${ar ? num(side.ayah) : side.ayah}`,
+    action: <span className="flex">
+      {extra}
+      <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
+        <BookOpen size={16} aria-hidden />
+      </Link>
+    </span>,
     rows: [side.ayat.map(ayah => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) }))],
   };
 }
@@ -105,14 +114,12 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
-    <li className="relative">
+    <li>
       <div onClick={event => pick(event.target)}>
-        <PageSpread compact stackOnMobile pages={card.sides.map(side => sidePage(side, names, ar, lit))} />
+        <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
+          <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
+        ) : undefined))} />
       </div>
-      {card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family}
-        className="absolute end-1 top-1 flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]">
-        <TreeIcon size={16} aria-hidden />
-      </Link>}
     </li>
   );
 }
