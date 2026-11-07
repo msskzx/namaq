@@ -4996,6 +4996,114 @@
    "keep": true,
    "why": "Same ending: they lay fallen in their homes (Thamud / Madyan).",
    "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "10:32|40:62": {
+   "keep": true,
+   "why": "Same sentence: that is Allah your Lord ... so how are you turned away."
+  },
+  "10:33|40:6": {
+   "keep": true,
+   "why": "Same sentence: thus the word of your Lord came true against those who ..."
+  },
+  "10:96|40:6": {
+   "keep": true,
+   "why": "Same phrase: the word of your Lord came true against them."
+  },
+  "10:46|40:77": {
+   "keep": true,
+   "why": "Same sentence: whether We show you some of what We promise them or take you, to Us they return."
+  },
+  "10:60|40:61": {
+   "keep": true,
+   "why": "Same sentence: Allah is full of favour to people, but most do not give thanks."
+  },
+  "10:67|40:61": {
+   "keep": true,
+   "why": "Same sentence: He made the night for you to rest in and the day to see."
+  },
+  "22:8|31:20": {
+   "keep": true,
+   "why": "Same sentence: among people is one who disputes about Allah without knowledge, guidance or a book."
+  },
+  "22:41|31:17": {
+   "keep": true,
+   "why": "Same commands: establish prayer, enjoin good and forbid evil."
+  },
+  "22:56|31:8": {
+   "keep": true,
+   "why": "Same reward: those who believe and do good are in gardens of bliss."
+  },
+  "22:61|31:29": {
+   "keep": true,
+   "why": "Same sentence: Allah merges the night into the day and the day into the night."
+  },
+  "22:62|31:30": {
+   "keep": true,
+   "why": "Same sentence: Allah is the Truth, what they call besides Him is falsehood."
+  },
+  "22:64|31:26": {
+   "keep": true,
+   "why": "Same sentence: to Him belongs what is in the heavens and earth; He is the Rich, the Praised."
+  },
+  "10:10|40:65": {
+   "keep": false,
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+  },
+  "10:29|40:48": {
+   "keep": false,
+   "why": "Only 'between' and 'servants'; different scenes."
+  },
+  "10:32|40:69": {
+   "keep": false,
+   "why": "Only 'how are they turned away'."
+  },
+  "10:37|40:66": {
+   "keep": false,
+   "why": "Only 'besides Allah' and 'Lord of the worlds'."
+  },
+  "10:55|40:57": {
+   "keep": false,
+   "why": "Only the formula 'but most do not know'."
+  },
+  "10:66|40:20": {
+   "keep": false,
+   "why": "Only 'those they call besides Allah'; different points."
+  },
+  "10:66|40:74": {
+   "keep": false,
+   "why": "Only 'besides Allah'."
+  },
+  "10:89|40:38": {
+   "keep": false,
+   "why": "Only 'follow' and 'way'; different scenes."
+  },
+  "22:12|31:11": {
+   "keep": false,
+   "why": "Only 'besides Allah' and 'misguidance'."
+  },
+  "22:12|31:30": {
+   "keep": false,
+   "why": "Only 'those they call besides Him'."
+  },
+  "22:50|31:8": {
+   "keep": false,
+   "why": "Only the formula 'those who believe and do righteous deeds'."
+  },
+  "22:63|31:16": {
+   "keep": false,
+   "why": "Only the closing names Subtle, Aware."
+  },
+  "22:64|31:25": {
+   "keep": false,
+   "why": "Only heavens and earth and 'praise'."
+  },
+  "22:74|31:9": {
+   "keep": false,
+   "why": "Only 'Allah', 'truth' and 'Mighty'."
+  },
+  "22:75|31:28": {
+   "keep": false,
+   "why": "Only the closing names Hearing, Seeing."
   }
  }
 }
