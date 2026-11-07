@@ -38,10 +38,10 @@ const surahOf = (value: string | string[] | undefined) => {
   return Number.isInteger(n) && n >= 1 && n <= 114 ? n : null;
 };
 
-async function pairPage(a: number, b: number) {
+async function pairPage(a: number, b: number, review = false) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} cards={pairCards(a, b)} pairs={listedPairs} names={names} />;
+  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={listedPairs} names={names} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -57,8 +57,9 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
       if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b));
       return pairPage(curatedComparisons[0].a, curatedComparisons[0].b);
     }
-    if (x > y) redirect(surahPairHref(x, y));
-    return pairPage(x, y);
+    const review = query.review === '1';
+    if (x > y) redirect(`${surahPairHref(x, y)}${review ? '&review=1' : ''}`);
+    return pairPage(x, y, review);
   }
   const themes = query.mode === 'themes';
   const s = surahOf(query.s);

@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import source from '@/app/quran/branches/trees.json';
 import data from '@/app/quran/compare/pairs.json';
 import type { BranchAyah } from '../branches';
-import { rootWeights, similarAyahPair, type SimilarAyahPair } from './similar';
+import { crossingColumns, rootWeights, similarAyahPair, withAliases, type SimilarAyahPair } from './similar';
 
 const ayat = new Map((source.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]));
-const weights = rootWeights(source.ayat as BranchAyah[]);
+const weights = rootWeights((source.ayat as BranchAyah[]).map(withAliases));
 const stored = data.pairs as SimilarAyahPair[];
 const byKeys = new Map(stored.map(pair => [`${pair.a}|${pair.b}`, pair]));
 
@@ -31,5 +31,17 @@ describe('compare criteria on the engine', () => {
   it('pairs only ayat of different surahs, once each', () => {
     expect(byKeys.size).toBe(stored.length);
     for (const pair of stored) expect(pair.a.split(':')[0]).not.toBe(pair.b.split(':')[0]);
+  });
+
+  it('matches same-lemma words whose order crosses, after the in-order alignment, and only content words', () => {
+    const ayah = (key: string, lemmas: (string | null)[]) => ({ key, page: 1, words: lemmas.map(l => l ?? '-'), lemmas, roots: lemmas.map(l => (l ? `r${l}` : null)) });
+    const a = ayah('1:1', ['x', 'y', null, 'z']);
+    const b = ayah('2:1', ['z', null, 'x', 'y']);
+    expect(crossingColumns(a, b, [[0, 2, 'exact'], [1, 3, 'exact']])).toEqual([[3, 0, 'lemma']]);
+  });
+
+  it('gives يهوديا the lemma and root of هودا', () => {
+    const fixed = withAliases({ key: '3:67', page: 1, words: ['يهوديا'], lemmas: ['yahuwdiy~'], roots: [null] });
+    expect([fixed.lemmas?.[0], fixed.roots?.[0]]).toEqual(['huwd2', 'hwd']);
   });
 });

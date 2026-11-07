@@ -14,6 +14,8 @@
 .spread mark.slot3 { color: var(--home-slot-3); }
 .spread mark.slot4 { color: var(--home-slot-4); }
 .spread mark.root, .legend mark.root { color: var(--home-root); }
+/* related: same root, different word, so maybe a different meaning («بين» and «بيان»): a faint purple */
+.spread mark.related { color: color-mix(in srgb, var(--home-root) 45%, var(--home-muted)); }
 .spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }
 .spread mark.lit { background: var(--home-highlight); color: var(--home-on-highlight); box-shadow: 0 0 0 1px var(--home-highlight-border); }
 /* compact: one card holding both ayat, a small label over each, as on the compare pair list */

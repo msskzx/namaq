@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, ChevronDown, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, BookOpen, ChevronDown, Search, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -53,6 +53,14 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
   const stories = curatedComparisons.filter(matches);
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
   const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
+  // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
+  const grouped = !byCount && !terms.length;
+  const [open, setOpen] = useState(() => new Set([a]));
+  useEffect(() => setOpen(current => (current.has(a) ? current : new Set([...current, a]))), [a]);
+  const groups = new Map<number, SurahPair[]>();
+  if (grouped) for (const pair of pairs) for (const n of [pair.a, pair.b]) groups.set(n, [...(groups.get(n) ?? []), pair]);
+  const surahs = [...groups.keys()].sort((x, y) => x - y);
+  const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   const row = (pair: { a: number; b: number }, label: React.ReactNode) => (
     <li key={`${pair.a}:${pair.b}`}>
       <Link href={surahPairHref(pair.a, pair.b)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
@@ -81,17 +89,41 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {all.length ? <ul data-all>{all.map(pair => row(pair, sides(pair)))}</ul>
+        {grouped ? <ul data-all>{surahs.map(n => (
+          <li key={n}>
+            <details open={open.has(n)} onToggle={event => {
+              const shown = (event.currentTarget as HTMLDetailsElement).open;
+              setOpen(current => (shown === current.has(n) ? current : new Set(shown ? [...current, n] : [...current].filter(x => x !== n))));
+            }}>
+              <summary className="flex cursor-pointer list-none items-center gap-3 rounded-md px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] [&::-webkit-details-marker]:hidden">
+                <ChevronDown size={16} aria-hidden className={`shrink-0 text-[var(--home-muted)] transition-transform ${open.has(n) ? '' : 'ltr:-rotate-90 rtl:rotate-90'}`} />
+                <span className={`min-w-0 flex-1 ${n === a || n === b ? 'text-[var(--home-accent)]' : ''}`}>{plain(n)}</span>
+                <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
+              </summary>
+              <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n))))}</ul>
+            </details>
+          </li>
+        ))}</ul>
+          : all.length ? <ul data-all>{all.map(pair => row(pair, sides(pair)))}</ul>
           : <p role="status" className={`${NOTE} px-3`}>{ar ? 'لا سورة بهذا البحث.' : 'No surah matches this search.'}</p>}
       </div>
     </div>
   );
 }
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null): SpreadPage {
+const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
+
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
+  const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   return {
     title: `${name} ${ar ? num(side.ayah) : side.ayah}`,
+    action: <span className="flex">
+      {extra}
+      <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
+        <BookOpen size={16} aria-hidden />
+      </Link>
+    </span>,
     rows: [side.ayat.map(ayah => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) }))],
   };
 }
@@ -105,14 +137,15 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
-    <li className="relative">
+    <li className={card.verdict?.keep === false ? 'opacity-60' : undefined}>
       <div onClick={event => pick(event.target)}>
-        <PageSpread compact stackOnMobile pages={card.sides.map(side => sidePage(side, names, ar, lit))} />
+        <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
+          <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
+        ) : undefined))} />
       </div>
-      {card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family}
-        className="absolute end-1 top-1 flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]">
-        <TreeIcon size={16} aria-hidden />
-      </Link>}
+      {card.verdict && <p dir="ltr" className={`mt-1 text-sm ${card.verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
+        {card.verdict.keep ? '✓ Kept' : '✗ Left out'} · {card.id.replace('|', ' ~ ')} · {card.verdict.why}
+      </p>}
     </li>
   );
 }
