@@ -114,12 +114,15 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
-    <li>
+    <li className={card.verdict?.keep === false ? 'opacity-60' : undefined}>
       <div onClick={event => pick(event.target)}>
         <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
           <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
         ) : undefined))} />
       </div>
+      {card.verdict && <p dir="ltr" className={`mt-1 text-sm ${card.verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
+        {card.verdict.keep ? '✓ Kept' : '✗ Left out'} · {card.id.replace('|', ' ~ ')} · {card.verdict.why}
+      </p>}
     </li>
   );
 }

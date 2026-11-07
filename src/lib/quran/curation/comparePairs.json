@@ -1,0 +1,316 @@
+{
+ "pairs": {
+  "2:8|3:114": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'; one is the hypocrites, the other the righteous of the People of the Book."
+  },
+  "2:24|3:131": {
+   "keep": true,
+   "why": "Same warning: fear the Fire prepared for the disbelievers."
+  },
+  "2:39|3:116": {
+   "keep": true,
+   "why": "Same closing verdict: they are the companions of the Fire, abiding in it."
+  },
+  "2:42|3:71": {
+   "keep": true,
+   "why": "Same rebuke: mixing truth with falsehood and hiding the truth knowingly."
+  },
+  "2:61|3:112": {
+   "keep": true,
+   "why": "Same verdict on the Children of Israel: humiliation, wrath, killing the prophets."
+  },
+  "2:64|3:89": {
+   "keep": false,
+   "why": "Only 'after that' and a closing mercy formula."
+  },
+  "2:66|3:138": {
+   "keep": true,
+   "why": "Same phrase: an admonition for the righteous."
+  },
+  "2:80|3:78": {
+   "keep": true,
+   "why": "Same charge: saying about Allah what they know is false."
+  },
+  "2:82|3:57": {
+   "keep": false,
+   "why": "Only the common formula 'those who believe and do righteous deeds'."
+  },
+  "2:86|3:22": {
+   "keep": true,
+   "why": "Same structure: those whose deeds are lost in this world and the next, with no helpers."
+  },
+  "2:86|3:56": {
+   "keep": false,
+   "why": "Shares 'this world and the next' and 'helpers' but says different things."
+  },
+  "2:95|3:182": {
+   "keep": true,
+   "why": "Same phrase: because of what their hands sent forth."
+  },
+  "2:101|3:23": {
+   "keep": true,
+   "why": "Same theme: those given the Book turn away from the Book of Allah."
+  },
+  "2:105|3:74": {
+   "keep": true,
+   "why": "Same closing: He chooses for His mercy whom He wills; Allah has great bounty."
+  },
+  "2:106|3:29": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah has power over all things'."
+  },
+  "2:106|3:189": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah has power over all things'."
+  },
+  "2:107|3:29": {
+   "keep": false,
+   "why": "Shares the heavens-and-earth formula; each makes a different point."
+  },
+  "2:107|3:189": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "2:110|3:163": {
+   "keep": false,
+   "why": "Only 'with Allah' and the closing 'Allah sees what you do'."
+  },
+  "2:116|3:29": {
+   "keep": false,
+   "why": "Shares the heavens-and-earth formula; each makes a different point."
+  },
+  "2:116|3:189": {
+   "keep": false,
+   "why": "Shares the heavens-and-earth formula; each makes a different point."
+  },
+  "2:117|3:109": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and the root of 'matter'."
+  },
+  "2:121|3:100": {
+   "keep": false,
+   "why": "Both mention those given the Book but say opposite things."
+  },
+  "2:121|3:149": {
+   "keep": false,
+   "why": "Only belief, disbelief and loss as general words."
+  },
+  "2:127|3:35": {
+   "keep": true,
+   "why": "Same prayer for acceptance: 'accept from us/me, You are the Hearing, the Knowing'."
+  },
+  "2:129|3:164": {
+   "keep": true,
+   "why": "Same description of the Messenger: reciting the ayat, purifying, teaching the Book and wisdom."
+  },
+  "2:132|3:102": {
+   "keep": true,
+   "why": "Same command: do not die except as Muslims."
+  },
+  "2:135|3:67": {
+   "keep": true,
+   "why": "Same statement: Ibrahim was upright and not of the polytheists."
+  },
+  "2:135|3:95": {
+   "keep": true,
+   "why": "Same phrase: follow the way of Ibrahim, upright, not of the polytheists."
+  },
+  "2:136|3:84": {
+   "keep": true,
+   "why": "Same declaration of faith in all the prophets, with small wording differences."
+  },
+  "2:137|3:121": {
+   "keep": false,
+   "why": "Only the closing names 'Hearing, Knowing'."
+  },
+  "2:140|3:99": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah is not unaware of what you do'."
+  },
+  "2:142|3:40": {
+   "keep": false,
+   "why": "Only 'say' and 'whom He wills'."
+  },
+  "2:146|3:71": {
+   "keep": true,
+   "why": "Same rebuke: hiding the truth while they know."
+  },
+  "2:147|3:60": {
+   "keep": true,
+   "why": "Same ayah: the truth is from your Lord, so do not be of the doubters."
+  },
+  "2:148|3:29": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah has power over all things'."
+  },
+  "2:148|3:189": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah has power over all things'."
+  },
+  "2:151|3:164": {
+   "keep": true,
+   "why": "Same description of the Messenger: reciting, purifying, teaching the Book and wisdom."
+  },
+  "2:153|3:200": {
+   "keep": true,
+   "why": "Same call to the believers to be patient."
+  },
+  "2:154|3:157": {
+   "keep": false,
+   "why": "Both mention being killed in the path of Allah but make different points."
+  },
+  "2:154|3:169": {
+   "keep": true,
+   "why": "Same statement: those killed in the path of Allah are not dead but alive."
+  },
+  "2:160|3:89": {
+   "keep": true,
+   "why": "Same exception: except those who repent and reform."
+  },
+  "2:161|3:87": {
+   "keep": true,
+   "why": "Same verdict: upon them is the curse of Allah, the angels and all people."
+  },
+  "2:162|3:88": {
+   "keep": true,
+   "why": "Same ayah: abiding in it, the punishment will not be lightened."
+  },
+  "2:172|3:130": {
+   "keep": false,
+   "why": "Only the address to the believers and words about eating."
+  },
+  "2:174|3:77": {
+   "keep": true,
+   "why": "Same verdict on those who sell for a small price: Allah will not speak to them nor purify them."
+  },
+  "2:176|3:3": {
+   "keep": true,
+   "why": "Same phrase: He sent down the Book in truth."
+  },
+  "2:182|3:89": {
+   "keep": false,
+   "why": "Only reforming and the closing 'Forgiving, Merciful'."
+  },
+  "2:190|3:146": {
+   "keep": false,
+   "why": "Only fighting in the path of Allah and 'Allah loves'."
+  },
+  "2:190|3:157": {
+   "keep": false,
+   "why": "Only 'in the path of Allah'."
+  },
+  "2:192|3:89": {
+   "keep": false,
+   "why": "Only the closing formula 'Allah is Forgiving, Merciful'."
+  },
+  "2:195|3:134": {
+   "keep": true,
+   "why": "Both tie spending to ihsan and close with 'Allah loves the doers of good'."
+  },
+  "2:195|3:148": {
+   "keep": false,
+   "why": "Only the closing 'Allah loves the doers of good'."
+  },
+  "2:199|3:129": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:201|3:16": {
+   "keep": true,
+   "why": "Same prayer: 'Our Lord … and protect us from the punishment of the Fire'."
+  },
+  "2:201|3:148": {
+   "keep": false,
+   "why": "Shares 'this world' and 'the hereafter' and good; different statements."
+  },
+  "2:209|3:6": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "2:209|3:62": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "2:209|3:105": {
+   "keep": true,
+   "why": "Same phrase: after the clear proofs came to them."
+  },
+  "2:210|3:109": {
+   "keep": true,
+   "why": "Same phrase: to Allah all matters are returned."
+  },
+  "2:211|3:11": {
+   "keep": true,
+   "why": "Both about rejecting Allah's signs, closing with 'Allah is severe in punishment'."
+  },
+  "2:218|3:31": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|3:157": {
+   "keep": false,
+   "why": "Only 'in the path of Allah' and mercy."
+  },
+  "2:225|3:155": {
+   "keep": false,
+   "why": "Only 'what they earned' and the closing 'Forgiving, Forbearing'."
+  },
+  "2:244|3:121": {
+   "keep": false,
+   "why": "Only fighting and the closing 'Hearing, Knowing'."
+  },
+  "2:244|3:157": {
+   "keep": false,
+   "why": "Only 'in the path of Allah'."
+  },
+  "2:247|3:73": {
+   "keep": true,
+   "why": "Same statement: Allah gives His bounty to whom He wills; He is All-Encompassing, Knowing."
+  },
+  "2:250|3:147": {
+   "keep": true,
+   "why": "Same prayer: make our feet firm and give us victory over the disbelieving people."
+  },
+  "2:252|3:108": {
+   "keep": true,
+   "why": "Same phrase: these are the ayat of Allah We recite to you in truth."
+  },
+  "2:268|3:135": {
+   "keep": false,
+   "why": "Only indecency and forgiveness as general words."
+  },
+  "2:270|3:92": {
+   "keep": true,
+   "why": "Same statement: whatever you spend, Allah knows it."
+  },
+  "2:276|3:32": {
+   "keep": false,
+   "why": "Only the formula 'Allah does not love the disbelievers'."
+  },
+  "2:278|3:130": {
+   "keep": true,
+   "why": "Same command to the believers about riba: fear Allah and leave it."
+  },
+  "2:281|3:25": {
+   "keep": true,
+   "why": "Same phrase: every soul will be paid what it earned, and they will not be wronged."
+  },
+  "2:281|3:161": {
+   "keep": true,
+   "why": "Same phrase: then every soul will be paid what it earned, and they will not be wronged."
+  },
+  "2:284|3:29": {
+   "keep": true,
+   "why": "Same statement: whether you show or hide what is within you, Allah knows it."
+  },
+  "2:284|3:129": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs all; He forgives whom He wills and punishes whom He wills."
+  },
+  "2:284|3:189": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'power over all things'."
+  }
+ }
+}

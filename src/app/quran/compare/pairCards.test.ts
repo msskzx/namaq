@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { pairCards } from './pairCards';
+import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
+import data from './pairs.json';
+import { listedPairs, pairCards } from './pairCards';
 
 describe('compare pair cards', () => {
   it('shows At-Tur and Al-Qalam as six single-ayah cards with marks inside each ayah', () => {
@@ -14,5 +16,30 @@ describe('compare pair cards', () => {
       expect(links[0]).toEqual(links[1]);
       expect(links[0].length).toBeGreaterThan(0);
     }
+  });
+
+  it('leaves out pairs a reader judged to share only vocabulary, and shows them with their verdict in review', () => {
+    const ids = (cards: ReturnType<typeof pairCards>) => cards.map(card => card.id);
+    const dropped = ['2:107|3:29', '2:116|3:29', '2:116|3:189', '2:121|3:100'];
+    for (const id of dropped) expect(compareVerdicts[id]?.keep).toBe(false);
+    expect(ids(pairCards(2, 3))).not.toEqual(expect.arrayContaining([dropped[0]]));
+    expect(ids(pairCards(2, 3))).toEqual(expect.arrayContaining(['2:66|3:138', '2:127|3:35']));
+    const review = pairCards(2, 3, true);
+    expect(review.length).toBe(78);
+    expect(review.find(card => card.id === '2:107|3:29')?.verdict?.keep).toBe(false);
+    expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).length);
+  });
+
+  it('has a verdict only for pairs the engine finds', () => {
+    const found = new Set((data.pairs as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+    expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
+  });
+
+  it('does not mark words that share only a root', () => {
+    const card = pairCards(2, 3).find(card => card.id === '2:66|3:138')!;
+    const [a, b] = card.sides.map(side => Object.keys(side.ayat[0].marks ?? {}).map(Number).map(i => side.ayat[0].words[i]));
+    expect(a.some(word => word.includes('بَيْنَ'))).toBe(false);
+    expect(b.some(word => word.includes('بَيَانٌ'))).toBe(false);
+    expect(a.length).toBe(2);
   });
 });
