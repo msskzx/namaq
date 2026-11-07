@@ -3993,6 +3993,70 @@
   "7:106|23:68": {
    "keep": false,
    "why": "Only 'came' and 'bring'."
+  },
+  "16:1|30:40": {
+   "keep": true,
+   "why": "Same praise: exalted is He above what they associate."
+  },
+  "16:12|30:23": {
+   "keep": true,
+   "why": "Same sign: the night and the day; in that are signs for a people."
+  },
+  "16:13|30:22": {
+   "keep": true,
+   "why": "Same sign: varied colours; in that are signs."
+  },
+  "16:27|30:56": {
+   "keep": true,
+   "why": "Same scene: those given knowledge speak on the Day."
+  },
+  "16:37|30:29": {
+   "keep": true,
+   "why": "Same statement: none guides whom Allah sends astray, and they have no helpers."
+  },
+  "16:38|30:6": {
+   "keep": true,
+   "why": "Same statement: Allah's promise is true, but most people do not know."
+  },
+  "16:55|30:34": {
+   "keep": true,
+   "why": "Identical: so they deny what We gave them; enjoy, you will come to know."
+  },
+  "16:60|30:27": {
+   "keep": true,
+   "why": "Same sentence: His is the highest description, and He is the Mighty, the Wise."
+  },
+  "16:65|30:19": {
+   "keep": true,
+   "why": "Same sign: He gives life to the earth after its death."
+  },
+  "16:65|30:24": {
+   "keep": true,
+   "why": "Same sign: He sends down water from the sky and gives life to the earth after its death; in that are signs for a people."
+  },
+  "16:65|30:50": {
+   "keep": true,
+   "why": "Same sign: He gives life to the earth after its death."
+  },
+  "16:70|30:54": {
+   "keep": true,
+   "why": "Same subject: Allah created you, then the stages of life to weakness; He is Knowing, Able."
+  },
+  "16:79|30:37": {
+   "keep": true,
+   "why": "Same ending: do they not see …; in that are signs for a people who believe."
+  },
+  "16:108|30:59": {
+   "keep": true,
+   "why": "Same statement: Allah seals the hearts of …"
+  },
+  "16:77|30:50": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
+  },
+  "16:107|30:7": {
+   "keep": false,
+   "why": "Only 'this world and the Hereafter'."
   }
  }
 }
