@@ -1110,6 +1110,156 @@
   "2:284|5:120": {
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'power over all things'."
+  },
+  "3:3|4:105": {
+   "keep": true,
+   "why": "Same statement: He sent down to you the Book in truth (نزّل / أنزلنا)."
+  },
+  "3:6|4:158": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:9|4:87": {
+   "keep": true,
+   "why": "Same statement: Allah will gather people to a Day about which there is no doubt."
+  },
+  "3:15|4:57": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding, with purified spouses."
+  },
+  "3:15|4:122": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:18|4:158": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:21|4:155": {
+   "keep": true,
+   "why": "Same charge: disbelieving in Allah's signs and killing the prophets without right."
+  },
+  "3:28|4:139": {
+   "keep": true,
+   "why": "Same subject: taking the disbelievers as allies instead of the believers."
+  },
+  "3:28|4:144": {
+   "keep": true,
+   "why": "Same command: do not take the disbelievers as allies instead of the believers."
+  },
+  "3:29|4:126": {
+   "keep": false,
+   "why": "Only 'what is in the heavens and the earth' and 'all things'."
+  },
+  "3:32|4:69": {
+   "keep": true,
+   "why": "Same subject: obeying Allah and the Messenger.",
+   "ask": "Both are about obeying Allah and the Messenger: a command in Al Imran, the reward of the obedient in An-Nisa. Keep?"
+  },
+  "3:32|4:80": {
+   "keep": true,
+   "why": "Same subject: obeying the Messenger is obeying Allah; whoever turns away."
+  },
+  "3:57|4:173": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good, He will give them their rewards in full."
+  },
+  "3:62|4:158": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:84|4:152": {
+   "keep": true,
+   "why": "Same belief: believing in Allah and making no distinction between any of His messengers."
+  },
+  "3:89|4:96": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:89|4:106": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:90|4:137": {
+   "keep": true,
+   "why": "Same statement: those who disbelieve after believing, then increase in disbelief."
+  },
+  "3:91|4:18": {
+   "keep": true,
+   "why": "Same verdict: those who die as disbelievers have a painful punishment."
+  },
+  "3:94|4:50": {
+   "keep": true,
+   "why": "Same phrase: inventing a lie about Allah."
+  },
+  "3:97|4:170": {
+   "keep": false,
+   "why": "Only 'whoever disbelieves, Allah …'; Hajj vs belief in the Messenger."
+  },
+  "3:101|4:175": {
+   "keep": true,
+   "why": "Same promise: whoever holds fast to Allah is guided to a straight path."
+  },
+  "3:108|4:26": {
+   "keep": false,
+   "why": "Only 'Allah wants' as words."
+  },
+  "3:114|4:39": {
+   "keep": true,
+   "why": "Same phrase: believing in Allah and the Last Day.",
+   "ask": "Shares only 'believe in Allah and the Last Day'; in 2/3 you dropped a pair sharing just this phrase. Drop?"
+  },
+  "3:126|4:158": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "3:129|4:48": {
+   "keep": false,
+   "why": "Only 'He forgives whom He wills'; different points."
+  },
+  "3:129|4:96": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:129|4:106": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "3:129|4:116": {
+   "keep": false,
+   "why": "Only 'He forgives whom He wills'; different points."
+  },
+  "3:132|4:80": {
+   "keep": true,
+   "why": "Same subject: obeying Allah and the Messenger."
+  },
+  "3:136|4:13": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:148|4:134": {
+   "keep": true,
+   "why": "Same subject: the reward of this world and the hereafter is with Allah."
+  },
+  "3:157|4:110": {
+   "keep": false,
+   "why": "Only forgiveness and mercy as words."
+  },
+  "3:181|4:155": {
+   "keep": true,
+   "why": "Same charge: their killing of the prophets without right, and their saying."
+  },
+  "3:189|4:126": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula."
+  },
+  "3:198|4:13": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "3:198|4:122": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
   }
  }
 }
