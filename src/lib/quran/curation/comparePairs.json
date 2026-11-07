@@ -6664,6 +6664,210 @@
   "2:284|49:16": {
    "keep": false,
    "why": "Only heavens and earth as words."
+  },
+  "2:73|57:17": {
+   "keep": true,
+   "why": "Same idea: Allah gives life to the dead / the earth, and shows signs so that you may reason."
+  },
+  "2:105|57:29": {
+   "keep": true,
+   "why": "Same closing sentence: Allah gives His bounty to whom He wills; Allah is of great bounty (People of the Book in both)."
+  },
+  "2:107|57:5": {
+   "keep": false,
+   "why": "Shares only the dominion of the heavens and earth."
+  },
+  "2:117|57:5": {
+   "keep": false,
+   "why": "Only heavens and earth and 'matter' as words."
+  },
+  "2:210|57:5": {
+   "keep": true,
+   "why": "Same closing: to Allah all matters are returned."
+  },
+  "2:218|57:28": {
+   "keep": true,
+   "why": "Same idea: the believers and Allah's mercy; Forgiving, Merciful."
+  },
+  "2:245|57:11": {
+   "keep": true,
+   "why": "Same sentence: who will lend Allah a goodly loan so He multiplies it for him."
+  },
+  "2:245|57:18": {
+   "keep": true,
+   "why": "Same idea: lending Allah a goodly loan, multiplied."
+  },
+  "2:39|58:17": {
+   "keep": true,
+   "why": "Same sentence: they are the people of the Fire, abiding in it."
+  },
+  "2:81|58:17": {
+   "keep": true,
+   "why": "Same sentence: they are the people of the Fire, abiding in it."
+  },
+  "2:110|58:13": {
+   "keep": true,
+   "why": "Same command: establish the prayer and give zakat; Allah is aware of what you do."
+  },
+  "2:148|58:6": {
+   "keep": true,
+   "why": "Same idea: Allah brings you all together (raises them all)."
+  },
+  "2:203|58:9": {
+   "keep": true,
+   "why": "Same closing: fear Allah, to whom you will be gathered."
+  },
+  "2:86|59:3": {
+   "keep": true,
+   "why": "Same idea: punishment in this world and the Hereafter."
+  },
+  "2:116|59:24": {
+   "keep": false,
+   "why": "Only heavens and earth as words; different points."
+  },
+  "2:148|59:6": {
+   "keep": false,
+   "why": "Shares only the closing 'able over all things'."
+  },
+  "2:201|59:3": {
+   "keep": true,
+   "why": "Contrast: the believers ask for good in this world and the next and protection from the Fire; the deniers get punishment in both."
+  },
+  "2:284|59:6": {
+   "keep": false,
+   "why": "Shares only 'whom He wills' and 'able over all things'."
+  },
+  "2:75|61:11": {
+   "keep": false,
+   "why": "Only belief and knowing as words."
+  },
+  "2:103|61:11": {
+   "keep": true,
+   "why": "Same idea: belief is better for them, if they only knew."
+  },
+  "2:154|61:4": {
+   "keep": true,
+   "why": "Same subject: those who fight in the way of Allah."
+  },
+  "2:218|61:11": {
+   "keep": true,
+   "why": "Same subject: believing and striving in the way of Allah."
+  },
+  "2:239|61:11": {
+   "keep": false,
+   "why": "Only knowing as a word."
+  },
+  "2:94|62:6": {
+   "keep": true,
+   "why": "Nearly the same ayah: if you claim it is for you alone, then wish for death, if you are truthful."
+  },
+  "2:95|62:7": {
+   "keep": true,
+   "why": "Nearly the same ayah: they will never wish for it because of what their hands sent ahead."
+  },
+  "2:103|62:9": {
+   "keep": false,
+   "why": "Shares only 'better for you if you knew'; the subjects differ."
+  },
+  "2:129|62:2": {
+   "keep": true,
+   "why": "Same sentence: a messenger from among them reciting His signs, purifying them, teaching the Book and wisdom."
+  },
+  "2:151|62:2": {
+   "keep": true,
+   "why": "Same sentence: a messenger from among you reciting Our signs, purifying you, teaching the Book and wisdom."
+  },
+  "2:39|64:10": {
+   "keep": true,
+   "why": "Nearly the same ayah: those who disbelieve and deny Our signs are the people of the Fire."
+  },
+  "2:77|64:4": {
+   "keep": true,
+   "why": "Same sentence: Allah knows what they conceal and what they declare."
+  },
+  "2:107|64:4": {
+   "keep": false,
+   "why": "Only heavens and earth and knowing as words."
+  },
+  "2:116|64:1": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
+  },
+  "2:199|64:14": {
+   "keep": false,
+   "why": "Shares only forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "2:209|64:18": {
+   "keep": false,
+   "why": "Shares only the names Mighty, Wise."
+  },
+  "2:218|64:14": {
+   "keep": false,
+   "why": "Shares only 'O you who believe' and the closing 'Forgiving, Merciful'."
+  },
+  "2:245|64:17": {
+   "keep": true,
+   "why": "Same idea: lend Allah a goodly loan and He multiplies it for you."
+  },
+  "2:284|64:1": {
+   "keep": false,
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
+  },
+  "2:29|65:12": {
+   "keep": true,
+   "why": "Same subject: He created seven heavens and the earth, and knows all things."
+  },
+  "2:148|65:3": {
+   "keep": false,
+   "why": "Shares only 'all things' and Allah; different points."
+  },
+  "2:232|65:2": {
+   "keep": true,
+   "why": "Same rulings and sentence: when their term ends, ... this is an admonition for whoever believes in Allah and the Last Day."
+  },
+  "2:261|65:12": {
+   "keep": false,
+   "why": "Only 'seven' and Allah as words."
+  },
+  "2:284|65:3": {
+   "keep": false,
+   "why": "Only 'all things' as words."
+  },
+  "2:284|65:12": {
+   "keep": false,
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
+  },
+  "2:173|66:1": {
+   "keep": false,
+   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'."
+  },
+  "2:199|66:1": {
+   "keep": false,
+   "why": "Shares only the closing 'Forgiving, Merciful'."
+  },
+  "2:207|66:1": {
+   "keep": true,
+   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast."
+  },
+  "2:218|66:1": {
+   "keep": false,
+   "why": "Shares only the closing 'Forgiving, Merciful'."
+  },
+  "2:25|85:11": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good."
+  },
+  "2:82|85:11": {
+   "keep": true,
+   "why": "Same idea: those who believe and do good have the Gardens."
+  },
+  "2:107|85:9": {
+   "keep": false,
+   "why": "Shares only the dominion of the heavens and earth."
+  },
+  "2:116|85:9": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
   }
  }
 }
