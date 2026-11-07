@@ -2933,6 +2933,82 @@
   "16:107|39:26": {
    "keep": false,
    "why": "Only 'this world and the Hereafter'."
+  },
+  "2:64|24:10": {
+   "keep": true,
+   "why": "Same phrase: were it not for Allah's favour upon you and His mercy."
+  },
+  "2:64|24:20": {
+   "keep": true,
+   "why": "Same phrase: were it not for Allah's favour upon you and His mercy."
+  },
+  "2:66|24:34": {
+   "keep": true,
+   "why": "Same phrase: an admonition for the righteous."
+  },
+  "2:99|24:1": {
+   "keep": true,
+   "why": "Same phrase: We sent down clear signs."
+  },
+  "2:99|24:34": {
+   "keep": true,
+   "why": "Same phrase: We have sent down to you clear signs."
+  },
+  "2:99|24:46": {
+   "keep": true,
+   "why": "Same phrase: We have sent down clear signs."
+  },
+  "2:160|24:5": {
+   "keep": true,
+   "why": "Same exception: except those who repent and reform."
+  },
+  "2:268|24:32": {
+   "keep": true,
+   "why": "Same promise against poverty: Allah gives from His bounty; Allah is All-Encompassing, Knowing."
+  },
+  "2:20|24:45": {
+   "keep": false,
+   "why": "Only the closing 'Allah has power over all things'."
+  },
+  "2:43|24:56": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "2:64|24:5": {
+   "keep": false,
+   "why": "Only 'after that'."
+  },
+  "2:107|24:42": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "2:116|24:41": {
+   "keep": false,
+   "why": "Only 'His is what is in the heavens and the earth'; different points."
+  },
+  "2:142|24:46": {
+   "keep": false,
+   "why": "Only the formula 'He guides whom He wills to a straight path'."
+  },
+  "2:182|24:5": {
+   "keep": false,
+   "why": "Only reforming and the closing 'Forgiving, Merciful'."
+  },
+  "2:192|24:5": {
+   "keep": false,
+   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+  },
+  "2:209|24:18": {
+   "keep": false,
+   "why": "Only 'Allah … Wise'."
+  },
+  "2:218|24:22": {
+   "keep": false,
+   "why": "Only 'in the cause of Allah' and the closing 'Forgiving, Merciful'."
+  },
+  "2:284|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
   }
  }
 }
