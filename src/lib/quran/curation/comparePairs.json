@@ -4285,59 +4285,73 @@
   },
   "3:67|10:105": {
    "keep": true,
-   "why": "Same sentence: upright, and not of those who associate partners."
+   "why": "Same sentence: upright, and not of those who associate partners.",
+   "checked": true
   },
   "3:95|10:105": {
    "keep": true,
-   "why": "Same sentence: follow the upright way, not of the associators."
+   "why": "Same sentence: follow the upright way, not of the associators.",
+   "checked": true
   },
   "3:94|10:17": {
    "keep": true,
-   "why": "Same thought: inventing a lie against Allah."
+   "why": "Same thought: inventing a lie against Allah.",
+   "checked": true
   },
   "3:94|10:69": {
    "keep": true,
-   "why": "Same thought: inventing a lie against Allah."
+   "why": "Same thought: inventing a lie against Allah.",
+   "checked": true
   },
   "3:136|10:9": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath."
+   "why": "Same reward: gardens with rivers flowing beneath.",
+   "checked": true
   },
   "3:198|10:9": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath."
+   "why": "Same reward: gardens with rivers flowing beneath.",
+   "checked": true
   },
   "3:157|10:58": {
    "keep": true,
-   "why": "Same sentence: Allah's mercy/favour is better than what they amass."
+   "why": "Same sentence: Allah's mercy/favour is better than what they amass.",
+   "checked": true
   },
   "3:190|10:6": {
    "keep": true,
-   "why": "Same sign: the alternation of night and day and the heavens and earth are signs."
+   "why": "Same sign: the alternation of night and day and the heavens and earth are signs.",
+   "checked": true
   },
   "3:29|10:68": {
    "keep": false,
-   "why": "Only the formula about what is in the heavens and the earth."
+   "why": "Only the formula about what is in the heavens and the earth.",
+   "checked": true
   },
   "3:45|10:64": {
    "keep": false,
-   "why": "Only scattered words; different subjects."
+   "why": "Only scattered words; different subjects.",
+   "checked": true
   },
   "3:51|10:25": {
    "keep": false,
-   "why": "Only the formula 'straight path'."
+   "why": "Only the formula 'straight path'.",
+   "checked": true
   },
   "3:78|10:18": {
    "keep": false,
-   "why": "Only scattered words; different subjects."
+   "why": "Only scattered words; different subjects.",
+   "checked": true
   },
   "3:79|10:104": {
    "keep": false,
-   "why": "Only 'besides Allah'; different subjects."
+   "why": "Only 'besides Allah'; different subjects.",
+   "checked": true
   },
   "3:102|10:84": {
    "keep": false,
-   "why": "Only 'muslims' at the end; different contexts."
+   "why": "Only 'muslims' at the end; different contexts.",
+   "checked": true
   },
   "3:137|10:39": {
    "keep": true,
@@ -4346,39 +4360,48 @@
   },
   "6:22|28:62": {
    "keep": true,
-   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?",
+   "checked": true
   },
   "6:22|28:74": {
    "keep": true,
-   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?",
+   "checked": true
   },
   "6:32|28:60": {
    "keep": true,
-   "why": "Same teaching: worldly life is little, what is with Allah is better; do you not reason?"
+   "why": "Same teaching: worldly life is little, what is with Allah is better; do you not reason?",
+   "checked": true
   },
   "6:40|28:71": {
    "keep": true,
-   "why": "Same argument: 'Say, have you considered, if Allah ... who other than Allah'."
+   "why": "Same argument: 'Say, have you considered, if Allah ... who other than Allah'.",
+   "checked": true
   },
   "6:46|28:71": {
    "keep": true,
-   "why": "Same argument: which god other than Allah could bring it back to you."
+   "why": "Same argument: which god other than Allah could bring it back to you.",
+   "checked": true
   },
   "6:46|28:72": {
    "keep": true,
-   "why": "Same argument: which god other than Allah could bring it back to you."
+   "why": "Same argument: which god other than Allah could bring it back to you.",
+   "checked": true
   },
   "6:131|28:59": {
    "keep": true,
-   "why": "Same sentence: your Lord would not destroy the towns (unjustly)."
+   "why": "Same sentence: your Lord would not destroy the towns (unjustly).",
+   "checked": true
   },
   "6:135|28:37": {
    "keep": true,
-   "why": "Same ending: who will have the good end; the wrongdoers do not succeed."
+   "why": "Same ending: who will have the good end; the wrongdoers do not succeed.",
+   "checked": true
   },
   "6:160|28:84": {
    "keep": true,
-   "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed."
+   "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed.",
+   "checked": true
   },
   "6:11|28:40": {
    "keep": true,
@@ -4387,19 +4410,23 @@
   },
   "6:23|28:87": {
    "keep": false,
-   "why": "Only scattered words around 'associators'."
+   "why": "Only scattered words around 'associators'.",
+   "checked": true
   },
   "6:30|28:63": {
    "keep": false,
-   "why": "Only scattered words; different scenes."
+   "why": "Only scattered words; different scenes.",
+   "checked": true
   },
   "6:40|28:49": {
    "keep": false,
-   "why": "Only the formula 'if you are truthful'."
+   "why": "Only the formula 'if you are truthful'.",
+   "checked": true
   },
   "6:45|28:21": {
    "keep": false,
-   "why": "Only 'the wrongdoing people'; different subjects."
+   "why": "Only 'the wrongdoing people'; different subjects.",
+   "checked": true
   },
   "6:20|28:52": {
    "keep": true,
