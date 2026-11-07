@@ -2527,6 +2527,91 @@
   "6:162|7:25": {
    "keep": false,
    "why": "Only living and dying."
+  },
+  "2:8|9:44": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "2:8|9:45": {
+   "keep": true,
+   "why": "Same subject: hypocrites who do not truly believe in Allah and the Last Day.",
+   "ask": "2:8 says they claim belief but are not believers; 9:45 says the ones asking leave do not believe. Keep, or is this only the formula?"
+  },
+  "2:10|9:77": {
+   "keep": true,
+   "why": "Same subject: hypocrisy in their hearts, because they used to lie."
+  },
+  "2:41|9:9": {
+   "keep": true,
+   "why": "Same charge: selling Allah's signs for a small price."
+  },
+  "2:43|9:11": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "2:64|9:27": {
+   "keep": false,
+   "why": "Only 'then … after that'."
+  },
+  "2:75|9:6": {
+   "keep": false,
+   "why": "Only 'hear the word of Allah'; different points."
+  },
+  "2:77|9:78": {
+   "keep": true,
+   "why": "Same question: do they not know that Allah knows their secrets?"
+  },
+  "2:103|9:41": {
+   "keep": false,
+   "why": "Only 'better, if you knew'."
+  },
+  "2:103|9:119": {
+   "keep": false,
+   "why": "Only belief and piety."
+  },
+  "2:107|9:116": {
+   "keep": true,
+   "why": "Same sentence: Allah's is the dominion of the heavens and the earth, and besides Allah you have no protector or helper."
+  },
+  "2:110|9:18": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "2:148|9:115": {
+   "keep": false,
+   "why": "Only the closing about 'all things'."
+  },
+  "2:192|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:199|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:203|9:44": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "2:204|9:55": {
+   "keep": false,
+   "why": "Only 'impress you' and 'the life of this world'; different points."
+  },
+  "2:218|9:20": {
+   "keep": true,
+   "why": "Same description: those who believed, emigrated and strove in the cause of Allah."
+  },
+  "2:218|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:278|9:119": {
+   "keep": false,
+   "why": "Only the common opening 'O you who believe, fear Allah'."
+  },
+  "2:284|9:39": {
+   "keep": false,
+   "why": "Only punishment and the closing 'Allah has power over all things'."
   }
  }
 }
