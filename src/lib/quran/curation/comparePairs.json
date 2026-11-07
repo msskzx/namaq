@@ -1260,6 +1260,145 @@
   "3:198|4:122": {
    "keep": true,
    "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "4:9|33:70": {
+   "keep": true,
+   "why": "Same command: fear Allah and speak a word that is right (قولًا سديدًا)."
+  },
+  "4:13|33:71": {
+   "keep": true,
+   "why": "Same promise: whoever obeys Allah and His Messenger has the great success."
+  },
+  "4:14|33:57": {
+   "keep": true,
+   "why": "Same subject: those who disobey or harm Allah and His Messenger get a humiliating punishment.",
+   "ask": "Disobeying (An-Nisa) vs harming (Al-Ahzab) Allah and His Messenger, both with a humiliating punishment. Keep?"
+  },
+  "4:17|33:1": {
+   "keep": false,
+   "why": "Only the closing 'Knowing, Wise'."
+  },
+  "4:17|33:73": {
+   "keep": true,
+   "why": "Same phrase: Allah turns to them in repentance; and Allah is …",
+   "ask": "Shares 'Allah turns (in mercy) to …' with a closing name. Keep?"
+  },
+  "4:21|33:7": {
+   "keep": true,
+   "why": "Same phrase: a solemn covenant (ميثاقًا غليظًا)."
+  },
+  "4:30|33:43": {
+   "keep": false,
+   "why": "Only common words."
+  },
+  "4:39|33:1": {
+   "keep": false,
+   "why": "Only 'Allah is Knowing'."
+  },
+  "4:39|33:21": {
+   "keep": false,
+   "why": "Only 'Allah and the Last Day'."
+  },
+  "4:39|33:73": {
+   "keep": false,
+   "why": "Only common words."
+  },
+  "4:40|33:29": {
+   "keep": false,
+   "why": "Only 'a great reward'."
+  },
+  "4:81|33:48": {
+   "keep": true,
+   "why": "Same command: put your trust in Allah; Allah suffices as a guardian."
+  },
+  "4:86|33:27": {
+   "keep": false,
+   "why": "Only the closing 'Allah is over all things …'."
+  },
+  "4:86|33:54": {
+   "keep": false,
+   "why": "Only the closing 'Allah is … of all things'."
+  },
+  "4:93|33:57": {
+   "keep": true,
+   "why": "Same verdict: Allah has cursed him and prepared a punishment.",
+   "ask": "Killing a believer vs harming Allah and His Messenger: both cursed and given a prepared punishment. Keep?"
+  },
+  "4:104|33:1": {
+   "keep": false,
+   "why": "Only the closing 'Knowing, Wise'."
+  },
+  "4:104|33:21": {
+   "keep": false,
+   "why": "Only 'hoping for Allah'."
+  },
+  "4:106|33:24": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:106|33:73": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:111|33:1": {
+   "keep": false,
+   "why": "Only the closing 'Knowing, Wise'."
+  },
+  "4:112|33:58": {
+   "keep": true,
+   "why": "Same phrase: he has borne a slander and a clear sin."
+  },
+  "4:123|33:17": {
+   "keep": true,
+   "why": "Same phrase: they will find besides Allah no protector and no helper."
+  },
+  "4:126|33:27": {
+   "keep": false,
+   "why": "Only the closing about all things."
+  },
+  "4:126|33:54": {
+   "keep": false,
+   "why": "Only the closing about all things."
+  },
+  "4:132|33:3": {
+   "keep": true,
+   "why": "Same closing: Allah suffices as a guardian."
+  },
+  "4:132|33:48": {
+   "keep": true,
+   "why": "Same closing: Allah suffices as a guardian."
+  },
+  "4:134|33:29": {
+   "keep": false,
+   "why": "Only wanting and the hereafter as words."
+  },
+  "4:136|33:36": {
+   "keep": true,
+   "why": "Same verdict: whoever disbelieves in / disobeys Allah and His Messenger has strayed far."
+  },
+  "4:137|33:73": {
+   "keep": false,
+   "why": "Only common words."
+  },
+  "4:149|33:54": {
+   "keep": true,
+   "why": "Same phrase: if you show something or hide it, Allah …"
+  },
+  "4:152|33:9": {
+   "keep": false,
+   "why": "Only 'those who believe' and 'Allah is'."
+  },
+  "4:152|33:24": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:152|33:73": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "4:170|33:1": {
+   "keep": false,
+   "why": "Only the closing 'Knowing, Wise'."
   }
  }
 }
