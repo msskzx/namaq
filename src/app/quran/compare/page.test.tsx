@@ -54,8 +54,8 @@ describe('QuranComparePage', () => {
     const pane = screen.getByRole('complementary', { name: 'اختر سورتين' });
     expect(within(pane).getByRole('button', { name: /ترتيب المصحف/ }).getAttribute('aria-pressed')).toBe('true');
     const current = within(pane).getAllByRole('link', { current: 'page' });
-    expect(current.map(link => link.textContent)).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء٨', 'الاعراف · الشعرآء٨']);
-    expect(screen.getAllByRole('article').length).toBe(16);
+    expect(current.map(link => link.textContent)).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء٢٥', 'الاعراف · الشعرآء٢٥']);
+    expect(screen.getAllByRole('article').length).toBe(50);
   });
 
   it.each([

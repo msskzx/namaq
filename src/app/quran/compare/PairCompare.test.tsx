@@ -12,8 +12,8 @@ const pairs = [{ a: 2, b: 7, count: 24 }, { a: 7, b: 11, count: 22 }, { a: 7, b:
 const cards: PairCard[] = [{
   id: 'x', group: 'cmp:1',
   sides: [
-    { surah: 52, from: 40, to: 40, ayat: [{ number: 40, words: ['أم', 'تسألهم', 'أجرا'], marks: { 0: { kind: 'exact', link: '0' }, 1: { kind: 'exact', link: '1' } } }] },
-    { surah: 68, from: 46, to: 46, ayat: [{ number: 46, words: ['أم', 'تسألهم', 'أجرا'], marks: { 0: { kind: 'exact', link: '0' }, 1: { kind: 'exact', link: '1' } } }] },
+    { surah: 52, ayah: 40, ayat: [{ number: 40, words: ['أم', 'تسألهم', 'أجرا'], marks: { 0: { kind: 'exact', link: '0' }, 1: { kind: 'exact', link: '1' } } }] },
+    { surah: 68, ayah: 46, ayat: [{ number: 46, words: ['أم', 'تسألهم', 'أجرا'], marks: { 0: { kind: 'exact', link: '0' }, 1: { kind: 'exact', link: '1' } } }] },
   ],
 }];
 

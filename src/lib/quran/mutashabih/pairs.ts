@@ -1,73 +1,38 @@
-import type { Group, Kind, Level, Place, Position } from './types';
+import type { Group, Level, Position } from './types';
+import type { SimilarAyahPair } from './similar';
 
-/** One side of a similar ayah pair: the ayah (or two joined ayat) and the matched word span. */
-export type PairSide = { key: string; through?: string; start: number; end: number };
 export type PairColumn = { a: Position; b: Position; level: Level };
-/** Two similar ayat from different surahs, as the متشابه engine paired them. */
-export type AyahPair = { a: PairSide; b: PairSide; group: string; kind: Kind; columns: PairColumn[] };
+/** Two similar ayat from different surahs, lower surah first. `group` is the branches family both belong to, if any. */
+export type AyahPair = { a: string; b: string; group?: string; columns: PairColumn[] };
 export type SurahPair = { a: number; b: number; count: number };
 
 /** A surah pair is listed only when it has at least this many similar ayah pairs, so no page is one or two cards long. */
 export const MIN_PAIRS = 3;
 
-const RANK: Record<Level, number> = { exact: 0, letters: 1, lemma: 2, root: 3 };
-const weaker = (x: Level, y: Level) => (RANK[x] >= RANK[y] ? x : y);
-const at = (position: Position) => `${position.key}#${position.index}`;
 export const surahOf = (key: string) => Number(key.split(':')[0]);
 const ayahOf = (key: string) => Number(key.split(':')[1]);
 export const keyOrder = (key: string) => surahOf(key) * 1000 + ayahOf(key);
-const sideOf = (place: Place): PairSide => ({ key: place.key, ...(place.through ? { through: place.through } : {}), start: place.start, end: place.end });
-const sideId = (side: PairSide) => `${side.key}-${side.through ?? ''}`;
 const pairId = (a: number, b: number) => `${a}:${b}`;
 
-/** Word links from the group's first place to every place (the first place links to itself). */
-function links(group: Group) {
-  const first = new Map<string, { position: Position; level: Level }>();
-  const result = [first];
-  for (const entry of group.columns) {
-    const map = new Map<string, { position: Position; level: Level }>();
-    for (const column of entry.columns) if (column.a && column.b && column.level) {
-      map.set(at(column.a), { position: column.b, level: column.level });
-      first.set(at(column.a), { position: column.a, level: 'exact' });
-    }
-    result.push(map);
+/** The compare page's similar ayah pairs, with a link to the branches family that holds both ayat. */
+export function ayahPairs(similar: SimilarAyahPair[], groups: Group[]): AyahPair[] {
+  const families = new Map<string, string>();
+  for (const group of groups) for (const x of group.places) for (const y of group.places) {
+    if (x.key !== y.key) families.set(`${x.key}|${y.key}`, families.get(`${x.key}|${y.key}`) ?? group.id);
   }
-  return result;
-}
-
-/** Every cross-surah pair of places in the engine groups, lower surah first, one entry per ayah pair. */
-export function ayahPairs(groups: Group[]): AyahPair[] {
-  const found = new Map<string, AyahPair>();
-  for (const group of groups) {
-    const linked = links(group);
-    group.places.forEach((x, i) => group.places.forEach((y, j) => {
-      if (j <= i || surahOf(x.key) === surahOf(y.key) || !linked[i] || !linked[j]) return;
-      const [p, q, lp, lq] = keyOrder(x.key) < keyOrder(y.key) ? [x, y, linked[i], linked[j]] : [y, x, linked[j], linked[i]];
-      const columns: PairColumn[] = [];
-      for (const [word, left] of lp) {
-        const right = lq.get(word);
-        if (right) columns.push({ a: left.position, b: right.position, level: weaker(left.level, right.level) });
-      }
-      if (!columns.length) return;
-      const pair: AyahPair = { a: sideOf(p), b: sideOf(q), group: group.id, kind: group.kind, columns };
-      const id = `${sideId(pair.a)}|${sideId(pair.b)}`;
-      const existing = found.get(id);
-      if (!existing || existing.columns.length < columns.length) found.set(id, pair);
-    }));
-  }
-  const ayat = (side: PairSide) => [side.key, ...(side.through ? [side.through] : [])];
-  const covers = (outer: PairSide, inner: PairSide) => ayat(inner).every(key => ayat(outer).includes(key));
-  const all = [...found.values()];
-  const kept = all.filter(pair => !all.some(other => other !== pair && covers(other.a, pair.a) && covers(other.b, pair.b)
-    && (ayat(other.a).length + ayat(other.b).length > ayat(pair.a).length + ayat(pair.b).length || other.columns.length > pair.columns.length)));
-  return kept.sort((p, q) => keyOrder(p.a.key) - keyOrder(q.a.key) || keyOrder(p.b.key) - keyOrder(q.b.key));
+  return similar.map(pair => {
+    const flip = keyOrder(pair.a) > keyOrder(pair.b);
+    const [a, b] = flip ? [pair.b, pair.a] : [pair.a, pair.b];
+    const columns = pair.columns.map(([i, j, level]) => ({ a: { key: a, index: flip ? j : i }, b: { key: b, index: flip ? i : j }, level }));
+    return { a, b, group: families.get(`${a}|${b}`), columns };
+  }).sort((p, q) => keyOrder(p.a) - keyOrder(q.a) || keyOrder(p.b) - keyOrder(q.b));
 }
 
 /** Ayah pairs grouped by surah pair, keyed "a:b" with a < b. */
 export function pairsBySurah(pairs: AyahPair[]) {
   const bySurah = new Map<string, AyahPair[]>();
   for (const pair of pairs) {
-    const id = pairId(surahOf(pair.a.key), surahOf(pair.b.key));
+    const id = pairId(surahOf(pair.a), surahOf(pair.b));
     bySurah.set(id, [...(bySurah.get(id) ?? []), pair]);
   }
   return bySurah;
