@@ -4879,6 +4879,123 @@
    "keep": true,
    "why": "Same reply of the people: 'bring it, if you are truthful' (Hud / Lot).",
    "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "39:1|40:2": {
+   "keep": true,
+   "why": "Same sentence: the revelation of the Book is from Allah, the Mighty."
+  },
+  "39:2|40:14": {
+   "keep": true,
+   "why": "Same phrase: (worship / call on) Allah, sincere to Him in religion."
+  },
+  "39:11|40:14": {
+   "keep": true,
+   "why": "Same phrase: Allah, sincere to Him in religion."
+  },
+  "39:14|40:14": {
+   "keep": true,
+   "why": "Same phrase: Allah, sincere to Him in religion."
+  },
+  "39:4|40:16": {
+   "keep": true,
+   "why": "Same names: Allah, the One, the Prevailing."
+  },
+  "39:19|40:6": {
+   "keep": true,
+   "why": "Same thought: the word (of punishment) has come true; the people of the Fire."
+  },
+  "39:36|40:33": {
+   "keep": true,
+   "why": "Same sentence: whoever Allah sends astray has no guide."
+  },
+  "39:62|40:62": {
+   "keep": true,
+   "why": "Same sentence: Allah is the Creator of all things."
+  },
+  "39:72|40:76": {
+   "keep": true,
+   "why": "Same sentence: enter the gates of Hell to abide; evil is the abode of the arrogant."
+  },
+  "11:18|29:68": {
+   "keep": true,
+   "why": "Same sentence: who is more unjust than one who invents a lie against Allah."
+  },
+  "11:20|29:22": {
+   "keep": true,
+   "why": "Same sentence: not able to escape in the earth; no protector besides Allah."
+  },
+  "11:113|29:22": {
+   "keep": true,
+   "why": "Same sentence: you have no protector besides Allah, nor helper."
+  },
+  "11:69|29:31": {
+   "keep": true,
+   "why": "Same story (Abraham): Our messengers came to Abraham with good news."
+  },
+  "11:77|29:33": {
+   "keep": true,
+   "why": "Same story (Lot): when Our messengers came to Lot, he was distressed for them."
+  },
+  "11:85|29:36": {
+   "keep": true,
+   "why": "Same story (Shu'ayb): do not spread corruption in the land."
+  },
+  "11:94|29:37": {
+   "keep": true,
+   "why": "Same story (Madyan): they lay fallen in their homes."
+  },
+  "39:2|40:2": {
+   "keep": false,
+   "why": "Only 'sent down the Book'; covered by the closer card."
+  },
+  "39:13|40:30": {
+   "keep": false,
+   "why": "Only 'I fear ... a day'; different subjects."
+  },
+  "39:18|40:54": {
+   "keep": false,
+   "why": "Only 'people of understanding'."
+  },
+  "39:43|40:74": {
+   "keep": false,
+   "why": "Only 'besides Allah'; different points."
+  },
+  "39:46|40:48": {
+   "keep": false,
+   "why": "Only 'judge between the servants'; different scenes."
+  },
+  "11:6|29:60": {
+   "keep": true,
+   "why": "Same subject: Allah provides for every creature.",
+   "ask": "Same meaning with few shared words. Keep pairs that match in meaning more than wording?"
+  },
+  "11:23|29:9": {
+   "keep": false,
+   "why": "Only the formula 'those who believe and do righteous deeds'."
+  },
+  "11:26|29:23": {
+   "keep": false,
+   "why": "Only the formula 'a painful punishment'."
+  },
+  "11:50|29:16": {
+   "keep": true,
+   "why": "Same call: 'worship Allah' (Hud / Abraham).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "11:50|29:36": {
+   "keep": true,
+   "why": "Same call: 'to ... their brother ... O my people, worship Allah' (Hud / Shu'ayb).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "11:61|29:36": {
+   "keep": true,
+   "why": "Same call: 'to ... their brother ... O my people, worship Allah' (Salih / Shu'ayb).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "11:67|29:37": {
+   "keep": true,
+   "why": "Same ending: they lay fallen in their homes (Thamud / Madyan).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
   }
  }
 }
