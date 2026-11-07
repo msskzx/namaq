@@ -7,14 +7,14 @@ One engine, with criteria for each feature. The متشابه engine (`src/lib/qu
 - at least 3 matched content words (words with a root), covering at least 35% of the content words of the longer ayah, or every content word of both ayat when there are only two;
 - the matched roots are rare enough together: the sum of log(ayat / ayat with the root) is at least 7, so «قال … رب العالمين» alone does not link two ayat.
 
-`npm run quran:compare-pairs` writes the pairs to `src/app/quran/compare/pairs.json` (6,699 pairs, 771 surah pairs with 3 or more). At-Tur/Al-Qalam has 6 pairs, Al-A'raf/Ash-Shu'ara 25. Curation (pinned stories, later hand-made story ranges) is a separate step after the engine, and any of the three features can use it.
+`npm run quran:compare-pairs` writes the pairs to `src/app/quran/compare/pairs.json` (6,227 pairs, 738 surah pairs with 3 or more). At-Tur/Al-Qalam has 6 pairs, Al-A'raf/Ash-Shu'ara 24. Curation (pinned stories, later hand-made story ranges) is a separate step after the engine, and any of the three features can use it.
 
 `src/lib/quran/mutashabih/pairs.ts` orders the pairs, groups them by surah pair and links a pair to its branches family when one family holds both ayat.
 
 ## The page
 
 - The top bar holds the pair's title («سُورَةُ الطُّورِ وَسُورَةُ القَلَمِ») and its number of cards. On a phone it opens the list as a bottom sheet; on a desktop the list stays in a side pane and the button focuses its search.
-- The list pins hand-picked stories («مختارة»: Adam and the Children of Israel 2/7, Noah, Hud, Salih and Shuayb 7/11, Moses and Pharaoh 7/26, creation and Iblis 15/38), then every surah pair with at least three similar ayah pairs (771 pairs). It is in mushaf order by default; «الأكثر تشابهًا» sorts by count and is remembered on the device. Search takes a surah name, number or story name.
+- The list pins hand-picked stories («مختارة»: Adam and the Children of Israel 2/7, Noah, Hud, Salih and Shuayb 7/11, Moses and Pharaoh 7/26, creation and Iblis 15/38), then every surah pair with at least three similar ayah pairs (738 pairs). It is in mushaf order by default; «الأكثر تشابهًا» sorts by count and is remembered on the device. Search takes a surah name, number or story name.
 - Each card shows the two ayat with the engine's word marks: exact or same letters in the accent colour, same lemma or root in purple. Tapping a word lights its partner. A tree icon opens the pair in the branches page when the branches page has it. The page ends with a link to the next pair.
 - There are no ranges, juz' filters, topics or ayah-by-ayah blocks. `?preset=` and reversed or invalid pairs redirect to a valid `?a=&b=`.
 

@@ -17,8 +17,9 @@ const pairId = (a: number, b: number) => `${a}:${b}`;
 /** The compare page's similar ayah pairs, with a link to the branches family that holds both ayat. */
 export function ayahPairs(similar: SimilarAyahPair[], groups: Group[]): AyahPair[] {
   const families = new Map<string, string>();
-  for (const group of groups) for (const x of group.places) for (const y of group.places) {
-    if (x.key !== y.key) families.set(`${x.key}|${y.key}`, families.get(`${x.key}|${y.key}`) ?? group.id);
+  for (const group of groups) {
+    const keys = group.places.flatMap(place => [place.key, ...(place.through ? [place.through] : [])]);
+    for (const x of keys) for (const y of keys) if (x !== y && !families.has(`${x}|${y}`)) families.set(`${x}|${y}`, group.id);
   }
   return similar.map(pair => {
     const flip = keyOrder(pair.a) > keyOrder(pair.b);

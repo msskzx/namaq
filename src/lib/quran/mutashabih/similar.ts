@@ -7,7 +7,7 @@ import type { Level } from './types';
 export const COMPARE_CRITERIA = {
   minWords: 3,
   minCoverage: 0.35,
-  /** Sum of log(ayat / ayat with the root) over the matched roots, so «قال … رب العالمين» alone is not enough. */
+  /** Sum of log(ayat / ayat with the root) over the distinct matched roots, so «قال … رب العالمين» alone is not enough. */
   minWeight: 7,
   /** Two matched content words are enough when they are all the content words of both ayat («إلا عبادك منهم المخلصين»). */
   minWholeWords: 2,
@@ -36,7 +36,7 @@ export function similarAyahPair(a: BranchAyah, b: BranchAyah, weights: Map<strin
     return root && b.roots?.[column.b!.index] ? [root] : [];
   });
   const longest = Math.max(contentCount(a), contentCount(b));
-  const weight = content.reduce((sum, root) => sum + (weights.get(root) ?? 0), 0);
+  const weight = [...new Set(content)].reduce((sum, root) => sum + (weights.get(root) ?? 0), 0);
   const whole = content.length >= criteria.minWholeWords && content.length === longest;
   if (weight < criteria.minWeight || !whole && (content.length < criteria.minWords || content.length / longest < criteria.minCoverage)) return null;
   return { a: a.key, b: b.key, columns: matched.map(column => [column.a!.index, column.b!.index, column.level!]) };

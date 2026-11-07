@@ -21,7 +21,7 @@ describe('compare criteria on the engine', () => {
   });
 
   it('does not link ayat that share only common words such as «قال» and «رب العالمين»', () => {
-    for (const keys of ['7:61|26:23', '7:61|26:47', '7:61|26:188', '7:5|26:41']) expect(byKeys.has(keys)).toBe(false);
+    for (const keys of ['7:61|26:23', '7:61|26:47', '7:61|26:188', '7:5|26:41', '2:67|7:28', '2:8|24:47']) expect(byKeys.has(keys)).toBe(false);
   });
 
   it('stores exactly what the engine finds today', () => {

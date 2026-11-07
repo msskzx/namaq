@@ -21,11 +21,16 @@ describe('compare pairs', () => {
     }
   });
 
+  it('puts the lower surah first when the stored pair is the other way round', () => {
+    const [pair] = ayahPairs([{ a: '7:1', b: '2:1', columns: [[0, 5, 'exact']] }], []);
+    expect(pair).toEqual({ a: '2:1', b: '7:1', group: undefined, columns: [{ a: { key: '2:1', index: 5 }, b: { key: '7:1', index: 0 }, level: 'exact' }] });
+  });
+
   it('links a pair to a branches family only when the family holds both ayat', () => {
     const linked = pairs.filter(pair => pair.group);
     expect(linked.length).toBeGreaterThan(0);
     for (const pair of linked) {
-      const keys = byId.get(pair.group!)!.places.map(place => place.key);
+      const keys = byId.get(pair.group!)!.places.flatMap(place => [place.key, place.through]);
       expect(keys).toContain(pair.a);
       expect(keys).toContain(pair.b);
     }
