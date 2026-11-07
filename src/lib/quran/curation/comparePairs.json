@@ -626,9 +626,8 @@
    "why": "Same statement: a messenger of the Lord of the worlds (Hud / Moses and Aaron)."
   },
   "7:72|26:139": {
-   "keep": false,
-   "why": "Only denial and 'they were not believers'; Hud's people saved and destroyed in both, but the wording barely overlaps.",
-   "ask": "Both are the end of Aad: 'they denied … and were not believers'. Same story, little shared wording. Keep?"
+   "keep": true,
+   "why": "Same scene: Hud's people deny him and are destroyed."
   },
   "7:106|26:31": {
    "keep": true,
@@ -1913,8 +1912,8 @@
    "why": "Only 'has come to you … from your Lord'; Moses to Pharaoh vs a call to mankind."
   },
   "7:109|10:79": {
-   "keep": false,
-   "why": "Only 'a learned magician'; the parallel is 7:112."
+   "keep": true,
+   "why": "Same scene: Pharaoh's court calls for a learned magician."
   },
   "7:112|10:79": {
    "keep": true,
@@ -1929,8 +1928,8 @@
    "why": "Same scene: when they threw, (they came with / Moses spoke of) magic."
   },
   "7:132|10:79": {
-   "keep": false,
-   "why": "Only 'bring' and magic; different speakers and points."
+   "keep": true,
+   "why": "Same story: Pharaoh and his people answer Musa's signs as magic."
   },
   "7:133|10:75": {
    "keep": true,
@@ -4969,8 +4968,8 @@
    "why": "Same story (Lot): saved him and his family except his wife."
   },
   "7:5|29:31": {
-   "keep": false,
-   "why": "Only 'they said, we were wrongdoers'; different scenes."
+   "keep": true,
+   "why": "Same theme: a destroyed people named as wrongdoers."
   },
   "7:147|29:7": {
    "keep": false,
@@ -5186,8 +5185,8 @@
    "why": "Only 'besides Allah'."
   },
   "10:89|40:38": {
-   "keep": false,
-   "why": "Only 'follow' and 'way'; different scenes."
+   "keep": true,
+   "why": "Same story: following the right way against Pharaoh's way."
   },
   "22:12|31:11": {
    "keep": false,
