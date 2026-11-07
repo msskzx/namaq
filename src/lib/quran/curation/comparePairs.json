@@ -4707,6 +4707,62 @@
   "5:120|16:77": {
    "keep": false,
    "why": "Only the formula 'He has power over all things'."
+  },
+  "6:10|45:33": {
+   "keep": true,
+   "why": "Same sentence: what they used to mock surrounded them."
+  },
+  "6:12|45:26": {
+   "keep": true,
+   "why": "Same sentence: He will gather you to the Day of Resurrection, no doubt in it."
+  },
+  "6:16|45:30": {
+   "keep": true,
+   "why": "Same ending: His mercy; that is the clear triumph."
+  },
+  "6:46|45:23": {
+   "keep": true,
+   "why": "Same image: Allah seals the hearing and heart; who (other than Allah) could help."
+  },
+  "6:89|45:16": {
+   "keep": true,
+   "why": "Same phrase: We gave them the Book, judgement and prophethood."
+  },
+  "6:1|45:22": {
+   "keep": false,
+   "why": "Only 'created the heavens and the earth'; different points."
+  },
+  "6:1|45:36": {
+   "keep": false,
+   "why": "Only the formula 'praise be to Allah' with heavens and earth."
+  },
+  "6:3|45:22": {
+   "keep": false,
+   "why": "Only heavens and earth and 'earn'; different points."
+  },
+  "6:3|45:36": {
+   "keep": false,
+   "why": "Only the formula about the heavens and the earth."
+  },
+  "6:12|45:27": {
+   "keep": false,
+   "why": "Only heavens and earth and 'Day of Resurrection'; different points."
+  },
+  "6:37|45:26": {
+   "keep": false,
+   "why": "Only the formula 'but most of them do not know'."
+  },
+  "6:45|45:36": {
+   "keep": false,
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+  },
+  "6:118|45:3": {
+   "keep": false,
+   "why": "Only 'signs' and 'believers'; different subjects."
+  },
+  "6:162|45:24": {
+   "keep": false,
+   "why": "Only 'living' and 'dying'; different subjects."
   }
  }
 }
