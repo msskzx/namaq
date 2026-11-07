@@ -2434,6 +2434,99 @@
   "2:284|16:77": {
    "keep": false,
    "why": "Only the heavens-and-earth formula and 'Allah has power over all things'."
+  },
+  "6:5|7:106": {
+   "keep": false,
+   "why": "Only 'came' and 'bring'; different points."
+  },
+  "6:11|7:84": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "6:11|7:103": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "6:15|7:59": {
+   "keep": true,
+   "why": "Same phrase: I fear for (you / myself) the punishment of a tremendous Day."
+  },
+  "6:21|7:177": {
+   "keep": false,
+   "why": "Only 'denied His signs' and wrongdoing."
+  },
+  "6:24|7:84": {
+   "keep": false,
+   "why": "Only 'see how'."
+  },
+  "6:24|7:177": {
+   "keep": false,
+   "why": "Only 'lied/denied' and 'themselves'."
+  },
+  "6:27|7:72": {
+   "keep": false,
+   "why": "Only 'deny the signs' and 'believers'."
+  },
+  "6:27|7:149": {
+   "keep": false,
+   "why": "Both are regretful sayings, but the words differ."
+  },
+  "6:37|7:131": {
+   "keep": false,
+   "why": "Only the closing 'but most of them do not know'."
+  },
+  "6:40|7:70": {
+   "keep": false,
+   "why": "Only 'if you are truthful'."
+  },
+  "6:42|7:94": {
+   "keep": true,
+   "why": "Same sentence: We seized them with hardship and affliction so that they might humble themselves."
+  },
+  "6:48|7:35": {
+   "keep": true,
+   "why": "Same promise: whoever believes/fears and reforms, no fear upon them, nor will they grieve."
+  },
+  "6:49|7:72": {
+   "keep": false,
+   "why": "Only 'those who denied Our signs'."
+  },
+  "6:49|7:136": {
+   "keep": false,
+   "why": "Only 'denied Our signs'."
+  },
+  "6:49|7:177": {
+   "keep": false,
+   "why": "Only 'those who denied Our signs'."
+  },
+  "6:54|7:153": {
+   "keep": true,
+   "why": "Same promise: those who do evil, then repent after it, find Him Forgiving, Merciful."
+  },
+  "6:58|7:131": {
+   "keep": false,
+   "why": "Only 'with Allah' and knowing."
+  },
+  "6:74|7:60": {
+   "keep": true,
+   "why": "Same charge: I see you (and your people) in clear error.",
+   "ask": "The words match, but Abraham says it to his father, while Noah's people say it to Noah. Keep?"
+  },
+  "6:101|7:185": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'thing'."
+  },
+  "6:111|7:185": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "6:151|7:33": {
+   "keep": true,
+   "why": "Same list: what your Lord has forbidden, indecencies open and hidden, and associating partners."
+  },
+  "6:162|7:25": {
+   "keep": false,
+   "why": "Only living and dying."
   }
  }
 }
