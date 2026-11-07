@@ -7885,6 +7885,274 @@
   "3:198|98:8": {
    "keep": true,
    "why": "Gardens under which rivers flow, abiding forever, from their Lord."
+  },
+  "4:50|6:11": {
+   "keep": false,
+   "why": "Shared 'see how' only; different subjects."
+  },
+  "4:50|6:21": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "4:50|6:24": {
+   "keep": true,
+   "why": "See how they lie, and what they invented."
+  },
+  "4:68|6:87": {
+   "keep": true,
+   "why": "We guided them to a straight path."
+  },
+  "4:126|6:75": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "4:126|6:101": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'all things' only; different subjects."
+  },
+  "4:41|7:34": {
+   "keep": false,
+   "why": "Shared 'every nation' only; different subjects."
+  },
+  "4:96|7:23": {
+   "keep": false,
+   "why": "Shared forgiveness and mercy words only; different scenes."
+  },
+  "4:110|7:23": {
+   "keep": true,
+   "why": "Wronging oneself and asking Allah's forgiveness."
+  },
+  "4:110|7:153": {
+   "keep": true,
+   "why": "Doing evil, then repenting: Allah is Forgiving, Merciful."
+  },
+  "4:167|7:45": {
+   "keep": true,
+   "why": "Those who disbelieve and turn others from the way of Allah."
+  },
+  "4:49|10:44": {
+   "keep": true,
+   "why": "Allah does not wrong people."
+  },
+  "4:50|10:17": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "4:50|10:69": {
+   "keep": true,
+   "why": "Those who invent a lie against Allah."
+  },
+  "4:57|10:9": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: gardens under which rivers flow."
+  },
+  "4:68|10:25": {
+   "keep": true,
+   "why": "Guidance to a straight path."
+  },
+  "4:86|10:30": {
+   "keep": false,
+   "why": "Shared root words only; different subjects."
+  },
+  "4:122|10:9": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: gardens under which rivers flow."
+  },
+  "4:133|10:44": {
+   "keep": false,
+   "why": "Shared 'people' only; different subjects."
+  },
+  "4:148|10:65": {
+   "keep": false,
+   "why": "Shared 'Hearing, Knowing' and speech only; different subjects."
+  },
+  "4:175|10:25": {
+   "keep": true,
+   "why": "Allah guides to a straight path."
+  },
+  "4:30|11:113": {
+   "keep": false,
+   "why": "Shared wrongdoing and Fire words; different subjects."
+  },
+  "4:134|11:20": {
+   "keep": false,
+   "why": "Shared hearing and seeing roots only; different subjects."
+  },
+  "4:167|11:19": {
+   "keep": true,
+   "why": "Those who turn others from the way of Allah."
+  },
+  "4:96|12:92": {
+   "keep": false,
+   "why": "Shared forgiveness and mercy only; different scenes."
+  },
+  "4:106|12:92": {
+   "keep": false,
+   "why": "Shared forgiveness and mercy only; different scenes."
+  },
+  "4:107|12:52": {
+   "keep": true,
+   "why": "Allah and the treacherous: does not love / does not guide them."
+  },
+  "4:13|14:23": {
+   "keep": true,
+   "why": "Admitted into gardens under which rivers flow, abiding forever."
+  },
+  "4:57|14:23": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow, abiding forever."
+  },
+  "4:122|14:23": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow, abiding forever."
+  },
+  "4:126|14:19": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "4:133|14:19": {
+   "keep": true,
+   "why": "If He wills, He can remove you and bring others / a new creation."
+  },
+  "4:165|14:4": {
+   "keep": true,
+   "why": "Allah's sending of messengers; Mighty, Wise."
+  },
+  "4:167|14:3": {
+   "keep": true,
+   "why": "Turning people from the way of Allah: far astray."
+  },
+  "4:13|20:76": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, as the reward."
+  },
+  "4:50|20:61": {
+   "keep": true,
+   "why": "Inventing a lie against Allah."
+  },
+  "4:124|20:112": {
+   "keep": true,
+   "why": "Whoever does righteous deeds while a believer is not wronged."
+  },
+  "4:118|21:26": {
+   "keep": false,
+   "why": "Shared 'take' and 'servants' only; different subjects."
+  },
+  "4:126|21:30": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "4:126|21:81": {
+   "keep": false,
+   "why": "Shared 'all things' only; different subjects."
+  },
+  "4:13|22:14": {
+   "keep": true,
+   "why": "Admitted into gardens under which rivers flow."
+  },
+  "4:13|22:23": {
+   "keep": true,
+   "why": "Admitted into gardens under which rivers flow."
+  },
+  "4:57|22:14": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:57|22:23": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:99|22:60": {
+   "keep": false,
+   "why": "Shared closing 'Pardoning, Forgiving' only; different subjects."
+  },
+  "4:105|22:69": {
+   "keep": false,
+   "why": "Shared 'judge between' only; different subjects."
+  },
+  "4:107|22:38": {
+   "keep": true,
+   "why": "Allah does not love the treacherous."
+  },
+  "4:109|22:69": {
+   "keep": false,
+   "why": "Shared 'Day of Resurrection' only; different subjects."
+  },
+  "4:116|22:12": {
+   "keep": true,
+   "why": "Associating others with Allah: that is the far astray."
+  },
+  "4:122|22:14": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:122|22:23": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:167|22:12": {
+   "keep": true,
+   "why": "Far astray."
+  },
+  "4:16|25:70": {
+   "keep": true,
+   "why": "Repentance and reform, and Allah accepts it."
+  },
+  "4:16|25:71": {
+   "keep": true,
+   "why": "Repentance and reform."
+  },
+  "4:17|25:70": {
+   "keep": true,
+   "why": "Allah accepts the repentance of those who repent."
+  },
+  "4:106|25:70": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "4:110|25:70": {
+   "keep": true,
+   "why": "Doing evil, then turning back: Allah is Forgiving, Merciful."
+  },
+  "4:126|25:2": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'all things' only."
+  },
+  "4:152|25:70": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' and 'those' only."
+  },
+  "4:161|25:37": {
+   "keep": true,
+   "why": "And We prepared for the disbelievers / wrongdoers a painful punishment."
+  },
+  "4:72|27:32": {
+   "keep": false,
+   "why": "Shared root of witness only; different scenes."
+  },
+  "4:110|27:46": {
+   "keep": true,
+   "why": "Doing evil and asking Allah's forgiveness, to receive mercy."
+  },
+  "4:126|27:87": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "4:158|27:9": {
+   "keep": false,
+   "why": "Shared closing names only; different scenes."
+  },
+  "4:72|28:17": {
+   "keep": false,
+   "why": "Shared 'favoured me' only; different scenes."
+  },
+  "4:109|28:61": {
+   "keep": false,
+   "why": "Shared 'this world' and 'Day of Resurrection' only."
+  },
+  "4:110|28:16": {
+   "keep": true,
+   "why": "Wronging oneself and asking forgiveness: He is the Forgiving, the Merciful."
   }
  }
 }
