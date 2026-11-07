@@ -9021,6 +9021,238 @@
   "5:98|59:4": {
    "keep": true,
    "why": "Allah is severe in punishment."
+  },
+  "5:35|61:11": {
+   "keep": true,
+   "why": "Striving in the way of Allah."
+  },
+  "5:105|61:11": {
+   "keep": false,
+   "why": "Shared 'O you who believe' framing only."
+  },
+  "5:119|61:12": {
+   "keep": true,
+   "why": "Gardens under which rivers flow: that is the great success."
+  },
+  "5:9|64:15": {
+   "keep": false,
+   "why": "Shared 'great reward' only; different subjects."
+  },
+  "5:10|64:10": {
+   "keep": true,
+   "why": "Same clause: those who disbelieve and deny Our signs are companions of the Fire."
+  },
+  "5:36|64:5": {
+   "keep": false,
+   "why": "Shared 'disbelieved' and 'painful punishment' only."
+  },
+  "5:40|64:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only."
+  },
+  "5:74|64:14": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:86|64:10": {
+   "keep": true,
+   "why": "Same clause: those who disbelieve and deny Our signs are companions of the Fire."
+  },
+  "5:92|64:12": {
+   "keep": true,
+   "why": "Obey Allah and obey the Messenger; if you turn away, the Messenger's duty is only clear delivery."
+  },
+  "5:99|64:12": {
+   "keep": true,
+   "why": "The Messenger's duty is only to deliver."
+  },
+  "5:119|64:9": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever: the great success."
+  },
+  "5:120|64:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only."
+  },
+  "5:39|66:1": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:74|66:1": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:87|66:1": {
+   "keep": true,
+   "why": "Do not forbid what Allah has made lawful."
+  },
+  "5:98|66:1": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "5:9|98:7": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds."
+  },
+  "5:55|98:5": {
+   "keep": true,
+   "why": "Establishing prayer and giving zakah."
+  },
+  "5:85|98:8": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, as reward."
+  },
+  "5:119|98:8": {
+   "keep": true,
+   "why": "Gardens ... abiding forever; Allah is pleased with them and they with Him."
+  },
+  "5:76|6:56": {
+   "keep": true,
+   "why": "Worshipping what you call upon besides Allah."
+  },
+  "5:88|6:118": {
+   "keep": true,
+   "why": "Eat of what Allah has provided / what His name is mentioned on, if you are believers."
+  },
+  "5:105|6:88": {
+   "keep": false,
+   "why": "Shared guidance and 'what they used to do' only."
+  },
+  "5:115|6:37": {
+   "keep": false,
+   "why": "Shared root of sending down only; different scenes."
+  },
+  "5:117|6:80": {
+   "keep": false,
+   "why": "Shared 'my Lord' and 'all things' only; different prophets' scenes."
+  },
+  "5:120|6:17": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:120|6:75": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:39|25:70": {
+   "keep": true,
+   "why": "Whoever repents and reforms: Allah forgives."
+  },
+  "5:39|25:71": {
+   "keep": true,
+   "why": "Whoever repents and does good: Allah accepts repentance."
+  },
+  "5:40|25:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth."
+  },
+  "5:74|25:70": {
+   "keep": false,
+   "why": "Shared repentance and closing only."
+  },
+  "5:76|25:3": {
+   "keep": true,
+   "why": "Gods that have no power to harm or benefit."
+  },
+  "5:85|25:10": {
+   "keep": false,
+   "why": "Shared gardens phrase only; reward versus the disbelievers' demand."
+  },
+  "5:85|25:15": {
+   "keep": true,
+   "why": "Paradise as the reward."
+  },
+  "5:93|25:70": {
+   "keep": false,
+   "why": "Shared 'believe and do righteous deeds' only; different subjects."
+  },
+  "5:120|25:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth."
+  },
+  "5:40|27:87": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'whom He wills' only."
+  },
+  "5:55|27:3": {
+   "keep": true,
+   "why": "Those who establish prayer and give zakah."
+  },
+  "5:61|27:42": {
+   "keep": false,
+   "why": "Shared 'came' only."
+  },
+  "5:61|27:84": {
+   "keep": false,
+   "why": "Shared 'came' only."
+  },
+  "5:109|27:65": {
+   "keep": true,
+   "why": "Knowledge of the unseen belongs to Allah alone."
+  },
+  "5:120|27:23": {
+   "keep": false,
+   "why": "Shared 'all things' only."
+  },
+  "5:76|40:20": {
+   "keep": true,
+   "why": "Those they call upon besides Allah have no power; He is the Hearing."
+  },
+  "5:76|40:66": {
+   "keep": true,
+   "why": "Worshipping what you call upon besides Allah."
+  },
+  "5:111|40:51": {
+   "keep": false,
+   "why": "Shared 'believed' and 'messengers' only."
+  },
+  "5:40|42:12": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'whom He wills' only."
+  },
+  "5:40|42:49": {
+   "keep": true,
+   "why": "To Allah belongs the dominion of the heavens and earth; He does what He wills."
+  },
+  "5:120|42:9": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only."
+  },
+  "5:120|42:12": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "5:120|42:29": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'able' only."
+  },
+  "5:120|42:49": {
+   "keep": true,
+   "why": "To Allah belongs the dominion of the heavens and the earth."
+  },
+  "5:40|46:33": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only."
+  },
+  "5:47|46:2": {
+   "keep": false,
+   "why": "Shared 'sent down / revelation' only."
+  },
+  "5:120|46:33": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only."
+  },
+  "5:40|85:9": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth, over all things."
+  },
+  "5:85|85:11": {
+   "keep": true,
+   "why": "Gardens under which rivers flow as the reward."
+  },
+  "5:120|85:9": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth, over all things."
   }
  }
 }
