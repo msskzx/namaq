@@ -1,22 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import treeData from '@/app/quran/branches/trees.json';
 import { pairCards } from './pairCards';
 
-const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
-
 describe('compare pair cards', () => {
-  it('splits a two-ayah side into its ayat and puts each mark on its own ayah', () => {
-    const card = pairCards(7, 2).find(card => card.sides[0].from === 58)!;
-    const [baqara, araf] = card.sides;
-    expect([baqara.surah, baqara.from, baqara.to, araf.surah, araf.from, araf.to]).toEqual([2, 58, 59, 7, 161, 162]);
-    expect(baqara.ayat.map(ayah => ayah.words)).toEqual([words.get('2:58'), words.get('2:59')]);
-    for (const side of card.sides) for (const ayah of side.ayat) for (const index of Object.keys(ayah.marks ?? {})) expect(Number(index)).toBeLessThan(ayah.words.length);
-    expect(Object.keys(baqara.ayat[1].marks ?? {}).length).toBeGreaterThan(0);
+  it('shows At-Tur and Al-Qalam as six single-ayah cards with marks inside each ayah', () => {
+    const cards = pairCards(68, 52);
+    expect(cards.map(card => card.sides.map(side => `${side.surah}:${side.ayah}`).join('~'))).toEqual(['52:17~68:34', '52:25~68:30', '52:29~68:2', '52:34~68:41', '52:40~68:46', '52:41~68:47']);
+    for (const side of cards.flatMap(card => card.sides)) for (const index of Object.keys(side.ayat[0].marks ?? {})) expect(Number(index)).toBeLessThan(side.ayat[0].words.length);
   });
 
-  it('gives both words of a match the same link, and only matched words a mark', () => {
+  it('gives both words of a match the same link', () => {
     for (const card of pairCards(7, 26)) {
-      const links = card.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)).sort());
+      const links = card.sides.map(side => Object.values(side.ayat[0].marks ?? {}).map(mark => mark.link).sort());
       expect(links[0]).toEqual(links[1]);
       expect(links[0].length).toBeGreaterThan(0);
     }

@@ -90,9 +90,8 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick }: { pairs: Su
 
 function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
-  const range = side.from === side.to ? (ar ? num(side.from) : String(side.from)) : ar ? `${num(side.from)}–${num(side.to)}` : `${side.from}–${side.to}`;
   return {
-    title: `${name} ${range}`,
+    title: `${name} ${ar ? num(side.ayah) : side.ayah}`,
     rows: [side.ayat.map(ayah => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) }))],
   };
 }
@@ -110,10 +109,10 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
       <div onClick={event => pick(event.target)}>
         <PageSpread compact stackOnMobile pages={card.sides.map(side => sidePage(side, names, ar, lit))} />
       </div>
-      <Link href={branchesHref(card.group)} aria-label={family} title={family}
+      {card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family}
         className="absolute end-1 top-1 flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]">
         <TreeIcon size={16} aria-hidden />
-      </Link>
+      </Link>}
     </li>
   );
 }
