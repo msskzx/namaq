@@ -5940,27 +5940,33 @@
   },
   "2:70|18:24": {
    "keep": false,
-   "why": "Only 'if Allah wills' and guidance as words; the cow vs saying 'if Allah wills'."
+   "why": "Only 'if Allah wills' and guidance as words; the cow vs saying 'if Allah wills'.",
+   "checked": true
   },
   "2:82|18:30": {
    "keep": true,
-   "why": "Same idea: those who believe and do good, and their reward is not lost."
+   "why": "Same idea: those who believe and do good, and their reward is not lost.",
+   "checked": true
   },
   "2:82|18:88": {
    "keep": true,
-   "why": "Same idea: whoever believes and does good has the best reward."
+   "why": "Same idea: whoever believes and does good has the best reward.",
+   "checked": true
   },
   "2:82|18:107": {
    "keep": true,
-   "why": "Same idea: those who believe and do good have Paradise."
+   "why": "Same idea: those who believe and do good have Paradise.",
+   "checked": true
   },
   "2:107|18:26": {
    "keep": true,
-   "why": "Same idea: to Allah belong the heavens and the earth, and there is no protector besides Him."
+   "why": "Same idea: to Allah belong the heavens and the earth, and there is no protector besides Him.",
+   "checked": true
   },
   "2:116|18:4": {
    "keep": true,
-   "why": "Same claim: they said Allah has taken a son."
+   "why": "Same claim: they said Allah has taken a son.",
+   "checked": true
   },
   "2:21|19:9": {
    "keep": false,
@@ -8153,6 +8159,150 @@
   "4:110|28:16": {
    "keep": true,
    "why": "Wronging oneself and asking forgiveness: He is the Forgiving, the Merciful."
+  },
+  "4:13|29:58": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, as reward."
+  },
+  "4:57|29:58": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: gardens under which rivers flow, abiding forever."
+  },
+  "4:104|29:5": {
+   "keep": false,
+   "why": "Shared 'hope' root only; different subjects."
+  },
+  "4:122|29:58": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds: gardens under which rivers flow, abiding forever."
+  },
+  "4:132|29:52": {
+   "keep": false,
+   "why": "Shared 'Allah suffices' and heavens-and-earth only; different subjects."
+  },
+  "4:148|29:5": {
+   "keep": false,
+   "why": "Shared closing 'Hearing, Knowing' only."
+  },
+  "4:158|29:42": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:49|31:11": {
+   "keep": false,
+   "why": "Shared 'nay' and wrongdoers only; different subjects."
+  },
+  "4:125|31:22": {
+   "keep": true,
+   "why": "Whoever submits his face to Allah while doing good."
+  },
+  "4:131|31:12": {
+   "keep": true,
+   "why": "If you disbelieve, Allah is Free of need, Praiseworthy."
+  },
+  "4:131|31:26": {
+   "keep": true,
+   "why": "To Allah belongs what is in the heavens and earth; He is Free of need, Praiseworthy."
+  },
+  "4:158|31:9": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:105|35:31": {
+   "keep": true,
+   "why": "The Book revealed to you with the truth."
+  },
+  "4:133|35:16": {
+   "keep": true,
+   "why": "If He wills, He can remove you and bring others / a new creation."
+  },
+  "4:165|35:2": {
+   "keep": false,
+   "why": "Shared 'people' and closing names only."
+  },
+  "4:39|39:26": {
+   "keep": false,
+   "why": "Shared 'the Last Day / the Hereafter' only; different subjects."
+  },
+  "4:105|39:2": {
+   "keep": true,
+   "why": "We revealed to you the Book with the truth."
+  },
+  "4:109|39:26": {
+   "keep": false,
+   "why": "Shared 'worldly life' only."
+  },
+  "4:110|39:53": {
+   "keep": true,
+   "why": "Sinners who turn to Allah find Him Forgiving, Merciful."
+  },
+  "4:122|39:20": {
+   "keep": true,
+   "why": "Rivers flowing beneath, Allah's promise."
+  },
+  "4:147|39:26": {
+   "keep": false,
+   "why": "Shared punishment words only; different subjects."
+  },
+  "4:148|39:24": {
+   "keep": false,
+   "why": "Shared 'evil' only; different subjects."
+  },
+  "4:158|39:1": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:109|40:51": {
+   "keep": false,
+   "why": "Shared 'worldly life' only."
+  },
+  "4:116|40:74": {
+   "keep": false,
+   "why": "Shared 'astray' only; different scenes."
+  },
+  "4:124|40:40": {
+   "keep": true,
+   "why": "Whoever does righteous deeds, male or female, while a believer: they enter Paradise."
+  },
+  "4:159|40:51": {
+   "keep": false,
+   "why": "Shared witness root only."
+  },
+  "4:105|42:17": {
+   "keep": true,
+   "why": "Allah revealed the Book with the truth."
+  },
+  "4:126|42:12": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'all things' only."
+  },
+  "4:139|42:6": {
+   "keep": true,
+   "why": "Taking protectors other than Allah / the believers."
+  },
+  "4:139|42:9": {
+   "keep": true,
+   "why": "Taking protectors other than Allah / the believers."
+  },
+  "4:143|42:46": {
+   "keep": true,
+   "why": "Whom Allah sends astray, there is no way for him."
+  },
+  "4:144|42:6": {
+   "keep": true,
+   "why": "Taking protectors other than Allah / the believers."
+  },
+  "4:144|42:9": {
+   "keep": true,
+   "why": "Taking protectors other than Allah / the believers."
+  },
+  "4:158|42:3": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:167|42:46": {
+   "keep": false,
+   "why": "Shared 'way of Allah' and straying only; different subjects."
   }
  }
 }
