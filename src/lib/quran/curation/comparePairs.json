@@ -5850,39 +5850,48 @@
   },
   "2:27|13:25": {
    "keep": true,
-   "why": "Nearly the same ayah: those who break Allah's covenant and cut what He ordered joined."
+   "why": "Nearly the same ayah: those who break Allah's covenant and cut what He ordered joined.",
+   "checked": true
   },
   "2:70|13:27": {
    "keep": false,
-   "why": "Only 'if Allah wills' and guidance as words; the cow vs the deniers' demand for a sign."
+   "why": "Only 'if Allah wills' and guidance as words; the cow vs the deniers' demand for a sign.",
+   "checked": true
   },
   "2:82|13:29": {
    "keep": true,
-   "why": "Same idea: those who believe and do good, and their good end."
+   "why": "Same idea: those who believe and do good, and their good end.",
+   "checked": true
   },
   "2:86|13:34": {
    "keep": true,
-   "why": "Same idea: punishment in this world and the Hereafter for the deniers."
+   "why": "Same idea: punishment in this world and the Hereafter for the deniers.",
+   "checked": true
   },
   "2:120|13:37": {
    "keep": true,
-   "why": "Same warning: if you follow their desires after the knowledge came to you, you have no protector from Allah."
+   "why": "Same warning: if you follow their desires after the knowledge came to you, you have no protector from Allah.",
+   "checked": true
   },
   "2:121|13:1": {
    "keep": false,
-   "why": "Only 'the Book', truth and belief as words; different points."
+   "why": "Only 'the Book', truth and belief as words; different points.",
+   "checked": true
   },
   "2:142|13:27": {
    "keep": true,
-   "why": "Same pattern: what the deniers say, answered with 'Say: Allah guides whom He wills'."
+   "why": "Same pattern: what the deniers say, answered with 'Say: Allah guides whom He wills'.",
+   "checked": true
   },
   "2:170|13:27": {
    "keep": false,
-   "why": "Only 'sent down' and guidance as words; following the fathers vs demanding a sign."
+   "why": "Only 'sent down' and guidance as words; following the fathers vs demanding a sign.",
+   "checked": true
   },
   "2:201|13:34": {
-   "keep": true,
-   "why": "Contrast: the believers' prayer to be protected from the punishment vs the deniers who have no protector."
+   "keep": false,
+   "why": "Owner removed: shared wording only, different subjects.",
+   "checked": true
   },
   "2:22|14:32": {
    "keep": true,
@@ -7075,6 +7084,94 @@
   "3:194|7:77": {
    "keep": false,
    "why": "Only the root of promise; a prayer vs Thamud's challenge."
+  },
+  "3:16|12:97": {
+   "keep": true,
+   "why": "Asking forgiveness for sins: the same plea."
+  },
+  "3:44|12:102": {
+   "keep": true,
+   "why": "Same sentence: from the news of the unseen we reveal to you, and you were not with them."
+  },
+  "3:63|12:73": {
+   "keep": false,
+   "why": "Shared wording only; different subjects."
+  },
+  "3:95|12:108": {
+   "keep": true,
+   "why": "Following Allah's way, and I am not of the polytheists."
+  },
+  "3:137|12:109": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end of those before."
+  },
+  "3:171|12:90": {
+   "keep": true,
+   "why": "Allah does not let the reward of the doers of good be lost."
+  },
+  "3:29|18:26": {
+   "keep": false,
+   "why": "Shared divine-knowledge phrase only; different contexts."
+  },
+  "3:57|18:30": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:57|18:88": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:57|18:107": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:189|18:84": {
+   "keep": false,
+   "why": "Shared formula only; different subjects."
+  },
+  "3:10|19:77": {
+   "keep": true,
+   "why": "Wealth and children will not avail them; the denier boasts of them."
+  },
+  "3:40|19:8": {
+   "keep": true,
+   "why": "Zakariyya's question: how will I have a boy when I am old and my wife barren."
+  },
+  "3:41|19:10": {
+   "keep": true,
+   "why": "Zakariyya's sign: not speaking to people."
+  },
+  "3:41|19:21": {
+   "keep": false,
+   "why": "Shared wording only; different scene."
+  },
+  "3:47|19:20": {
+   "keep": true,
+   "why": "Maryam's question: how will I have a son when no man has touched me."
+  },
+  "3:47|19:35": {
+   "keep": true,
+   "why": "When He decrees a matter He only says to it Be, and it is."
+  },
+  "3:51|19:36": {
+   "keep": true,
+   "why": "Identical: Allah is my Lord and your Lord, so worship Him; this is a straight path."
+  },
+  "3:57|19:60": {
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
+  },
+  "3:57|19:96": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds."
+  },
+  "3:105|19:37": {
+   "keep": true,
+   "why": "They differed after clear proofs; a great punishment / a great day."
+  },
+  "3:189|19:93": {
+   "keep": false,
+   "why": "Shared heavens-and-earth phrase only; different subjects."
   }
  }
 }
