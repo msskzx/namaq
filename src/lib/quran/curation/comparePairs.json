@@ -2614,89 +2614,108 @@
   },
   "2:8|9:44": {
    "keep": false,
-   "why": "Only the common formula 'believe in Allah and the Last Day'."
+   "why": "Only the common formula 'believe in Allah and the Last Day'.",
+   "checked": true
   },
   "2:8|9:45": {
    "keep": true,
    "why": "Same subject: hypocrites who do not truly believe in Allah and the Last Day.",
-   "ask": "2:8 says they claim belief but are not believers; 9:45 says the ones asking leave do not believe. Keep, or is this only the formula?"
+   "checked": true
   },
   "2:10|9:77": {
    "keep": true,
-   "why": "Same subject: hypocrisy in their hearts, because they used to lie."
+   "why": "Same subject: hypocrisy in their hearts, because they used to lie.",
+   "checked": true
   },
   "2:41|9:9": {
    "keep": true,
-   "why": "Same charge: selling Allah's signs for a small price."
+   "why": "Same charge: selling Allah's signs for a small price.",
+   "checked": true
   },
   "2:43|9:11": {
    "keep": false,
-   "why": "Only the common 'establish prayer and give zakat'."
+   "why": "Only the common 'establish prayer and give zakat'.",
+   "checked": true
   },
   "2:64|9:27": {
    "keep": false,
-   "why": "Only 'then … after that'."
+   "why": "Only 'then … after that'.",
+   "checked": true
   },
   "2:75|9:6": {
-   "keep": true,
-   "why": "Same rare phrase: hearing the word of Allah, then ...",
-   "ask": "Kept under your rare-words rule: keep?"
+   "keep": false,
+   "why": "Shares only hearing the word of Allah; the subjects differ (owner removed).",
+   "checked": true
   },
   "2:77|9:78": {
    "keep": true,
-   "why": "Same question: do they not know that Allah knows their secrets?"
+   "why": "Same question: do they not know that Allah knows their secrets?",
+   "checked": true
   },
   "2:103|9:41": {
    "keep": false,
-   "why": "Only 'better, if you knew'."
+   "why": "Only 'better, if you knew'.",
+   "checked": true
   },
   "2:103|9:119": {
    "keep": false,
-   "why": "Only belief and piety."
+   "why": "Only belief and piety.",
+   "checked": true
   },
   "2:107|9:116": {
    "keep": true,
-   "why": "Same sentence: Allah's is the dominion of the heavens and the earth, and besides Allah you have no protector or helper."
+   "why": "Same sentence: Allah's is the dominion of the heavens and the earth, and besides Allah you have no protector or helper.",
+   "checked": true
   },
   "2:110|9:18": {
    "keep": false,
-   "why": "Only the common 'establish prayer and give zakat'."
+   "why": "Only the common 'establish prayer and give zakat'.",
+   "checked": true
   },
   "2:148|9:115": {
    "keep": false,
-   "why": "Only the closing about 'all things'."
+   "why": "Only the closing about 'all things'.",
+   "checked": true
   },
   "2:192|9:27": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:199|9:27": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:203|9:44": {
    "keep": false,
-   "why": "Only scattered words."
+   "why": "Only scattered words.",
+   "checked": true
   },
   "2:204|9:55": {
    "keep": false,
-   "why": "Only 'impress you' and 'the life of this world'; different points."
+   "why": "Only 'impress you' and 'the life of this world'; different points.",
+   "checked": true
   },
   "2:218|9:20": {
    "keep": true,
-   "why": "Same description: those who believed, emigrated and strove in the cause of Allah."
+   "why": "Same description: those who believed, emigrated and strove in the cause of Allah.",
+   "checked": true
   },
   "2:218|9:27": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:278|9:119": {
    "keep": false,
-   "why": "Only the common opening 'O you who believe, fear Allah'."
+   "why": "Only the common opening 'O you who believe, fear Allah'.",
+   "checked": true
   },
   "2:284|9:39": {
    "keep": false,
-   "why": "Only punishment and the closing 'Allah has power over all things'."
+   "why": "Only punishment and the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "2:3|22:35": {
    "keep": true,
