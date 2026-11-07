@@ -4585,63 +4585,78 @@
   },
   "18:4|19:88": {
    "keep": true,
-   "why": "Same claim refuted: they say (Allah / the Most Merciful) has taken a son."
+   "why": "Same claim refuted: they say (Allah / the Most Merciful) has taken a son.",
+   "checked": true
   },
   "18:15|19:81": {
    "keep": true,
-   "why": "Same sentence: they took gods besides Allah."
+   "why": "Same sentence: they took gods besides Allah.",
+   "checked": true
   },
   "18:46|19:76": {
    "keep": true,
-   "why": "Same sentence: the lasting good deeds are better with your Lord in reward."
+   "why": "Same sentence: the lasting good deeds are better with your Lord in reward.",
+   "checked": true
   },
   "18:107|19:60": {
    "keep": true,
-   "why": "Same reward: those who believe and do good enter the Garden."
+   "why": "Same reward: those who believe and do good enter the Garden.",
+   "checked": true
   },
   "18:1|19:30": {
    "keep": false,
-   "why": "Only 'servant', 'the Book' and 'made'; different subjects."
+   "why": "Only 'servant', 'the Book' and 'made'; different subjects.",
+   "checked": true
   },
   "18:10|19:21": {
    "keep": false,
-   "why": "Only 'mercy' and 'matter'; different scenes."
+   "why": "Only 'mercy' and 'matter'; different scenes.",
+   "checked": true
   },
   "18:24|19:48": {
    "keep": false,
-   "why": "Only 'my Lord' and 'perhaps'; different subjects."
+   "why": "Only 'my Lord' and 'perhaps'; different subjects.",
+   "checked": true
   },
   "18:30|19:60": {
    "keep": false,
-   "why": "Only the formula 'believe and do righteous deeds'."
+   "why": "Only the formula 'believe and do righteous deeds'.",
+   "checked": true
   },
   "18:30|19:96": {
    "keep": false,
-   "why": "Only the formula 'those who believe and do righteous deeds'."
+   "why": "Only the formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "18:35|19:60": {
    "keep": false,
-   "why": "Only 'enter', 'garden' and 'wrong'; opposite scenes, linked by word only."
+   "why": "Only 'enter', 'garden' and 'wrong'; opposite scenes, linked by word only.",
+   "checked": true
   },
   "18:64|19:20": {
    "keep": false,
-   "why": "Only a shared root (ب غ ي) with different meanings."
+   "why": "Only a shared root (ب غ ي) with different meanings.",
+   "checked": true
   },
   "18:84|19:93": {
    "keep": false,
-   "why": "Only 'earth', 'every' and 'gave'; different subjects."
+   "why": "Only 'earth', 'every' and 'gave'; different subjects.",
+   "checked": true
   },
   "18:88|19:60": {
    "keep": false,
-   "why": "Only the formula 'believes and does righteous deeds'."
+   "why": "Only the formula 'believes and does righteous deeds'.",
+   "checked": true
   },
   "18:88|19:96": {
    "keep": false,
-   "why": "Only the formula 'believe and do righteous deeds'."
+   "why": "Only the formula 'believe and do righteous deeds'.",
+   "checked": true
   },
   "18:107|19:96": {
    "keep": false,
-   "why": "Only the formula 'those who believe and do righteous deeds'."
+   "why": "Only the formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "2:3|8:3": {
    "keep": true,
