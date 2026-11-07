@@ -1,6 +1,6 @@
 .spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
 .page { display: grid; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); color: var(--home-ink); }
-.page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
+.page header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0.25rem 0.75rem; border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
 .withAction { position: relative; padding-inline: 2.75rem; }
 .action { position: absolute; top: 50%; inset-inline-end: 0.25rem; transform: translateY(-50%); }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
@@ -14,6 +14,15 @@
 .spread mark.slot3 { color: var(--home-slot-3); }
 .spread mark.slot4 { color: var(--home-slot-4); }
 .spread mark.root, .legend mark.root { color: var(--home-root); }
+.spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }
+.spread mark.lit { background: var(--home-highlight); color: var(--home-on-highlight); box-shadow: 0 0 0 1px var(--home-highlight-border); }
+/* compact: one card holding both ayat, a small label over each, as on the compare pair list */
+.compact { column-gap: 0; row-gap: 0; border: 1px solid var(--home-rule); border-radius: 0.5rem; background: var(--home-paper-deep); }
+.compact > .page { border: 0; background: transparent; padding: 0.75rem 1rem 1rem; }
+.compact > .page + .page { border-inline-start: 1px solid var(--home-rule); }
+.compact .page header { border: 0; padding: 0; margin-bottom: 0.25rem; }
+.compact .page h3 { font-family: inherit; font-size: 0.875rem; color: var(--home-muted); }
+.compact .lines { line-height: 2.2; }
 .verseEnd { white-space: nowrap; }
 .verseSeal { color: var(--home-muted); white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }
@@ -21,6 +30,8 @@
 @media (max-width: 600px) {
   .spread { column-gap: 0.5rem; }
   .stackOnMobile > .page { grid-column: 1 / -1; }
+  .compact.stackOnMobile > .page + .page { border-inline-start: 0; border-top: 1px dotted var(--home-rule); }
+  .compact > .page { padding: 0.5rem 0.75rem 0.75rem; }
   .page { padding: 0.5rem; }
   .page h3 { font-size: 1.125rem; }
   .lines { font-size: 1.125rem; line-height: 2.2; }

@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import QuranComparePage from './page';
+import { NavSlotElement } from '@/components/common/NavBar';
 
 const locale = vi.hoisted(() => ({ language: 'ar' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => locale }));
@@ -14,6 +15,7 @@ vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="simi
 vi.mock('@/lib/quran/topicEngine', () => ({ getTopicSurahPairs: async () => [[16, 43]] }));
 vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: async () => [{ number: 16, name: 'النحل' }, { number: 52, name: 'الطور' }, { number: 56, name: 'الواقعة' }, { number: 69, name: 'الحاقة' }, { number: 112, name: 'الإخلاص' }] } } }));
 vi.mock('./SurahPairs', () => ({ SurahPairs: ({ groups, ...p }: { groups: { surah: number }[] }) => <div data-testid="list">{JSON.stringify({ ...p, surahs: groups.map(g => g.surah) })}</div> }));
+vi.mock('@/lib/quran/surahList', () => ({ surahList: async () => [{ number: 2, name: 'الْبَقَرَةِ', nameTransliterated: 'Al-Baqarah' }, { number: 7, name: 'الْاَعْرَافِ', nameTransliterated: "Al-A'raf" }, { number: 26, name: 'الشُّعَرَآءِ', nameTransliterated: "Ash-Shu'ara" }] }));
 vi.mock('./ThemesCompare', () => ({ default: () => <div data-testid="themes" /> }));
 vi.mock('./CompareControls', () => ({ default: (p: object) => <div data-testid="controls">{JSON.stringify(p)}</div> }));
 vi.mock('./CompareLayout', () => ({ default: ({ pane, children, current }: { pane: React.ReactNode; children: React.ReactNode; current: string }) => <><p data-testid="current">{current}</p>{pane}{children}</> }));
@@ -28,40 +30,42 @@ afterEach(() => {
   locale.language = 'ar';
 });
 
-const page = async (query: Record<string, string>) => render(await QuranComparePage({ searchParams: Promise.resolve(query) }));
-
+const page = async (query: Record<string, string>) => {
+  const content = await QuranComparePage({ searchParams: Promise.resolve(query) });
+  function Chrome() {
+    const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+    return <><div ref={setSlot} data-testid="top-bar" /><NavSlotElement.Provider value={slot}>{content}</NavSlotElement.Provider></>;
+  }
+  return render(<Chrome />);
+};
 describe('QuranComparePage', () => {
-
-  it.each(['ar', 'en'])('opens a useful curated comparison and offers seven links in %s', async language => {
-    locale.language = language;
+  it('opens the first selected story when no surahs are chosen', async () => {
     await page({});
-    expect(screen.getByRole('heading', { name: language === 'ar' ? 'مقارنة المقاطع' : 'Passage comparisons' })).toBeTruthy();
-    const links = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='));
-    expect(links).toHaveLength(7);
-    expect(new URL(links[0].getAttribute('href')!, 'https://namaq.test').searchParams.get('preset')).toBe('moses-pharaoh');
-    expect(JSON.parse(screen.getByTestId('text').textContent!)).toMatchObject({ curated: true, query: { a: '7', af: '103', at: '137', b: '26', bf: '10', bt: '68' } });
+    const trigger = screen.getByRole('button', { name: /اختر سورتين/ });
+    expect(screen.getByTestId('top-bar').contains(trigger)).toBe(true);
+    expect(trigger.textContent).toContain('سُورَةُ الْبَقَرَةِ وَسُورَةُ الْاَعْرَافِ');
     expect(screen.queryByTestId('controls')).toBeNull();
-    expect(screen.queryByTestId('list')).toBeNull();
-    expect(screen.queryByTestId('themes')).toBeNull();
+    expect(screen.queryByTestId('text')).toBeNull();
   });
 
-  it('uses preset bounds and shares choices without retaining unrelated filters', async () => {
-    await page({ preset: 'salih', a: '2', af: '1', at: '2', b: '3', bf: '1', bt: '2', juzFrom: '30', juzTo: '30', mode: 'themes' });
-    expect(JSON.parse(screen.getByTestId('text').textContent!)).toMatchObject({ curated: true, query: { a: '7', af: '73', at: '79', b: '26', bf: '141', bt: '159' } });
-    const links = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='));
-    expect(links).toHaveLength(7);
-    for (const link of links) {
-      const params = new URL(link.getAttribute('href')!, 'https://namaq.test').searchParams;
-      expect([...params.keys()].sort()).toEqual(['a', 'af', 'at', 'b', 'bf', 'bt', 'preset', 'view']);
-    }
-    expect(screen.queryByTestId('themes')).toBeNull();
+  it('shows the similar ayat of the two surahs, with the stories pinned and mushaf order first', async () => {
+    await page({ a: '7', b: '26' });
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('مُوسَىٰ وَفِرۡعَوۡنُ');
+    const pane = screen.getByRole('complementary', { name: 'اختر سورتين' });
+    expect(within(pane).getByRole('button', { name: /ترتيب المصحف/ }).getAttribute('aria-pressed')).toBe('true');
+    const current = within(pane).getAllByRole('link', { current: 'page' });
+    expect(current.map(link => link.textContent)).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء٨', 'الاعراف · الشعرآء٨']);
+    expect(screen.getAllByRole('article').length).toBe(16);
   });
 
-  it('recovers an unknown preset to the available comparisons', async () => {
-    await page({ preset: 'does-not-exist' });
-    expect(screen.getAllByRole('link').filter(link => link.getAttribute('href')?.includes('preset='))).toHaveLength(7);
-    expect(screen.queryByTestId('controls')).toBeNull();
-    expect(screen.getByTestId('text')).toBeTruthy();
+  it.each([
+    [{ preset: 'moses-pharaoh' }, '/quran/compare?a=7&b=26'],
+    [{ a: '26', b: '7' }, '/quran/compare?a=7&b=26'],
+    [{ a: '26' }, '/quran/compare?a=7&b=26'],
+    [{ a: '1' }, '/quran/compare?a=2&b=7'],
+    [{ preset: 'does-not-exist' }, '/quran/compare?a=2&b=7'],
+  ])('sends %o to %s', async (query, target) => {
+    await expect(page(query)).rejects.toThrow(`redirect ${target}`);
   });
 
   it('sends an old pair link, s and t, to the comparison of that pair', async () => {
@@ -111,10 +115,7 @@ describe('QuranComparePage', () => {
     await page({ juzFrom: '27', juzTo: '29', a: '56' });
     expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 56, b: 69 });
     cleanup();
-    await page({ a: '69' });
-    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 69, b: 56 });
-    cleanup();
-    await page({ b: '56' });
+    await page({ view: 'similar', a: '69' });
     expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 69, b: 56 });
   });
 

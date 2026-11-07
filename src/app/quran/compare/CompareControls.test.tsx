@@ -26,7 +26,7 @@ describe('CompareControls', () => {
     render(<CompareControls tab="ayat" query={{ a: '56', b: '69', view: 'ayat', juzFrom: '25', juzTo: '30' }} range={{ unit: 'juz', range: { from: 25, to: 30 } }} summary="s" />);
     expect(screen.getByRole('link', { name: 'آية بآية' }).getAttribute('aria-current')).toBe('page');
     expect(href('آية بآية')).toBe('/quran/compare?a=56&b=69&view=ayat&juzFrom=25&juzTo=30');
-    expect(href('المتشابه')).toBe('/quran/compare?a=56&b=69&juzFrom=25&juzTo=30');
+    expect(href('المتشابه')).toBe('/quran/compare?a=56&b=69&juzFrom=25&juzTo=30&view=similar');
     expect(href('المواضيع')).toBe('/quran/compare?mode=themes&a=56&b=69&juzFrom=25&juzTo=30');
   });
 

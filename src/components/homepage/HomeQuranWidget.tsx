@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, Layers, List, Search } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Layers, List, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -56,6 +56,7 @@ export default function HomeQuranWidget({ sections }: { sections: HomeQuranSecti
       <div className={styles.actions}>
         <Button variant="primary" {...(selected ? { href: selected.readerHref } : { disabled: true })}><BookOpen size={18} aria-hidden />{ar ? 'اقرأ' : 'Read'}</Button>
         <Button {...(selected ? { href: selected.branchesHref } : { disabled: true })}><TreeIcon size={18} aria-hidden />{ar ? 'استكشف المتشابهات' : 'Explore shared wording'}</Button>
+        {unit === 'surah' && <Button {...(selected?.compareHref ? { href: selected.compareHref } : { disabled: true })}><ArrowLeftRight size={18} aria-hidden />{ar ? 'قارن' : 'Compare'}</Button>}
       </div>
     </footer>
   </section>;

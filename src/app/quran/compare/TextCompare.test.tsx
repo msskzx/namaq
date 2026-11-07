@@ -5,7 +5,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import TextCompare from './TextCompare';
 import quran from '../branches/trees.json';
 import spread from '@/components/quran/PageSpread.module.css';
-import { num } from '@/lib/quran/arabicNumber';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: () => {} }) }));
 vi.mock('@/lib/prisma', () => ({
@@ -36,18 +35,6 @@ describe('TextCompare', () => {
     }
     expect(screen.getByRole('combobox', { name: 'السورة الأولى' })).toBeTruthy();
     expect(screen.getByRole('combobox', { name: 'السورة الثانية' })).toBeTruthy();
-  });
-
-  it.each(['ar', 'en'])('renders the full Salih passages with lexical labels and no custom controls in %s', async language => {
-    locale.language = language;
-    const { container } = render(await TextCompare({ query: { view: 'ayat', a: '7', af: '73', at: '79', b: '26', bf: '141', bt: '159' }, range: { unit: 'juz', range: null }, curated: true }));
-    expect(screen.queryByRole('combobox')).toBeNull();
-    expect(screen.queryByRole('spinbutton')).toBeNull();
-    expect(screen.getAllByText(language === 'ar' ? 'مطابقات لفظية' : 'Lexical matches').length).toBeGreaterThan(0);
-    const seals = Array.from(container.querySelectorAll(`.${spread.verseSeal}`)).map(seal => seal.textContent);
-    expect(seals).toHaveLength(26);
-    for (let verse = 73; verse <= 79; verse++) expect(seals.filter(seal => seal === num(verse))).toHaveLength(1);
-    for (let verse = 141; verse <= 159; verse++) expect(seals.filter(seal => seal === num(verse))).toHaveLength(1);
   });
 
   it('shows the newly chosen surahs and ranges in its fields when the page moves to another comparison', async () => {

@@ -4,12 +4,14 @@ import { num } from './quran/arabicNumber';
 import type { SearchableSurah } from './quran/surahSearch';
 import { searchSurahs } from './quran/surahSearch';
 
-export function homeQuranSections(surahs: SearchableSurah[]) {
+/** `comparable` lists the surahs the compare page has a pair for. */
+export function homeQuranSections(surahs: SearchableSurah[], comparable: Set<number> = new Set()) {
   return {
     surah: surahs.map(surah => ({
       ...surah,
       readerHref: `/quran/read/ayah/${surah.number}/1`,
       branchesHref: branchesHref('', undefined, { surah: surah.number }),
+      compareHref: comparable.has(surah.number) ? `/quran/compare?a=${surah.number}` : undefined,
     })),
     juz: JUZ_INDEX.map(juz => ({
       number: juz.juz,
@@ -17,6 +19,7 @@ export function homeQuranSections(surahs: SearchableSurah[]) {
       nameTransliterated: `Juz ${juz.juz}`,
       readerHref: `/quran/read/ayah/${juz.surah}/${juz.ayah}`,
       branchesHref: branchesHref('', { from: juz.juz, to: juz.juz }),
+      compareHref: undefined,
     })),
   };
 }

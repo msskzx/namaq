@@ -1,25 +1,22 @@
-# Curated passage comparisons
+# Compare two surahs on the متشابه engine
 
 ## Decision
 
-Refine the existing `/quran/compare`; retain its matcher, precise-range URLs, TextCompare, CompareView and PageSpread. The primary journey offers curated comparisons rather than a custom pair builder. Existing custom and topic URLs remain usable, but this work adds no topic annotations or new comparison engine.
+`/quran/compare` shows two surahs side by side, one card per similar ayah pair, so a reader can ponder how the same story is told in different words. The pairs come from the متشابه engine (`src/lib/quran/mutashabih/engine.ts`, data in `src/app/quran/branches/mutashabih.json`), the same engine behind `/quran/branches`. Compare adds no matcher of its own, so the two pages always agree.
 
-## Acceptance
+`src/lib/quran/mutashabih/pairs.ts` turns the engine groups into cross-surah ayah pairs. A group stores word links from its first place to every other place; links between two other places are composed through the first one, and a word pair takes the weaker of the two levels. Pairs inside one surah stay on the branches page.
 
-- The default compare destination presents curated comparisons and opens a useful initial selection. The curated journey exposes a clear list of choices, not the general topic/range/pair-builder controls.
-- Start with Moses and Pharaoh 7:103–137 / 26:10–68; Noah 7:59–64 / 26:105–122; Hud 7:65–72 / 26:123–140; Salih 7:73–79 / 26:141–159; Lot 7:80–84 / 26:160–175; Shuayb 7:85–93 / 26:176–191; creation and Iblis 15:26–44 / 38:71–85. Boundaries were checked against the local Quran text and neighboring verses. Shuayb's passages name different audiences; no shared-audience claim is made.
-- Preset URLs contain the exact selected ranges, are shareable, and clear unrelated global filters. Invalid preset IDs recover to the list or a clear unavailable state.
-- Reuse the existing renderer with unmatched context open by default for curated selections. Every selected ayah remains visible initially and appears once per side, with correct reference numbers. Label mechanical word links as lexical matches, without asserting editorial narrative alignment.
-- The curated journey omits the custom PairForm and by-topic controls. Existing explicitly requested custom and topic modes retain their behavior.
-- Add an accessible link from branches to curated comparisons, optionally selecting a relevant preset when both sides fit its ranges.
-- New controls and text support Arabic/English, both themes, keyboard navigation, shared Button and Lucide icons. Check desktop and phone layouts.
+## The page
 
-## Validation and review
+- The top bar holds the pair's title («سُورَةُ الطُّورِ وَسُورَةُ القَلَمِ») and its number of cards. On a phone it opens the list as a bottom sheet; on a desktop the list stays in a side pane and the button focuses its search.
+- The list pins hand-picked stories («مختارة»: Adam and the Children of Israel 2/7, Noah, Hud, Salih and Shuayb 7/11, Moses and Pharaoh 7/26, creation and Iblis 15/38), then every surah pair with at least three similar ayah pairs (202 pairs). It is in mushaf order by default; «الأكثر تشابهًا» sorts by count and is remembered on the device. Search takes a surah name, number or story name.
+- Each card shows the two ayat with the engine's word marks: exact or same letters in the accent colour, same lemma or root in purple. Tapping a word lights its partner. A tree icon opens the pair in the branches page. The page ends with a link to the next pair.
+- There are no ranges, juz' filters, topics or ayah-by-ayah blocks. `?preset=` and reversed or invalid pairs redirect to a valid `?a=&b=`.
 
-Protect preset URLs, range bounds, legacy custom links, complete initially visible context, no duplicate ayat, and invalid preset recovery. Independent tests come from this spec. Run lint, TypeScript, all tests, and production build, then an independent code review under the two-cycle cap before opening the PR. Merge after green CI and verify production.
+The earlier comparison page, with ayah-by-ayah blocks, topics and ranges, stays reachable from the experiments page (`/quran/compare?view=similar`) and from any URL that carries its range or view parameters.
 
-## Evidence
+## Validation
 
-The read-only audit found all selected verses already represented in CompareView rows, but unmatched context starts collapsed. Salih initially showed only one of nineteen ayat on one side. The existing matcher also provides lexical matches between different narrative moments, so its links must remain distinguishable from the editorial selection of the two passages. Existing equal-length positional matching is retained for custom mode.
+Data-level tests check that every pair and matched word comes from an engine group, that a two-place group's pair matches the branches comparison word for word, that counts match and no listed pair is shorter than three cards, and that every pinned story is listed.
 
-Distillate namaq/0021 informs preserving old entry points when changing exploration defaults. Distillate namaq/0005 requires independently deriving expected passage coverage from Quran text, rather than checking counts produced by the aligner. Namaq/0018 requires checking the actual navigation destination when adding a link, including lists maintained separately from the shared navigation catalog.
+Distillate namaq/0021 informs keeping the old entry points reachable when changing exploration defaults.

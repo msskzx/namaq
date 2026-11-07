@@ -4,23 +4,26 @@ import TextCompare from './TextCompare';
 import ThemesCompare from './ThemesCompare';
 import CompareControls from './CompareControls';
 import CompareLayout from './CompareLayout';
-import { modeHref, type CompareTab } from './modeHref';
+import type { CompareTab } from './modeHref';
 import { RepetitionProvider } from './Repetition';
 import SimilarAyat, { similarSurahPairs } from './SimilarAyat';
 import { SurahPairs } from './SurahPairs';
 import { prisma } from '@/lib/prisma';
+import { surahList } from '@/lib/quran/surahList';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahInRange, parseCompareRange, surahInRange } from '@/lib/quran/compareRange';
 import { plainName } from '@/lib/quran/normalize';
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
-import { curatedComparisons } from '@/lib/quran/curatedComparisons';
-import CuratedCompare from './CuratedCompare';
+import { curatedComparisons, surahPairHref } from '@/lib/quran/curatedComparisons';
+import PairCompare from './PairCompare';
+import { listedPairs, pairCards } from './pairCards';
+import { closestPair } from '@/lib/quran/mutashabih/pairs';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'القرآن: مقارنة السور وتكرار العبارات',
+  title: 'القرآن: مقارنة السور',
 };
 
 function topPair(pairs: [number, number][]) {
@@ -35,21 +38,32 @@ const surahOf = (value: string | string[] | undefined) => {
   return Number.isInteger(n) && n >= 1 && n <= 114 ? n : null;
 };
 
+async function pairPage(a: number, b: number) {
+  const surahs = await surahList();
+  const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
+  return <PairCompare a={a} b={b} cards={pairCards(a, b)} pairs={listedPairs} names={names} />;
+}
+
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const query = await searchParams;
-  const legacyKeys = ['a', 'b', 'af', 'at', 'bf', 'bt', 's', 't', 'mode', 'view', 'by', 'juzFrom', 'juzTo', 'surahFrom', 'surahTo'];
-  if (query.preset !== undefined || !legacyKeys.some(key => query[key] !== undefined)) {
-    const selected = curatedComparisons.find(preset => preset.id === query.preset);
-    const preset = selected ?? curatedComparisons[0];
-    const shown = { a: String(preset.a.surah), af: String(preset.a.from), at: String(preset.a.to), b: String(preset.b.surah), bf: String(preset.b.from), bt: String(preset.b.to), view: 'ayat' };
-    return <CuratedCompare selectedId={preset.id} unavailable={query.preset !== undefined && !selected}>
-      <TextCompare key={preset.id} query={shown} range={parseCompareRange({})} curated />
-    </CuratedCompare>;
+  const fullKeys = ['af', 'at', 'bf', 'bt', 's', 't', 'mode', 'view', 'by', 'juzFrom', 'juzTo', 'surahFrom', 'surahTo'];
+  if (!fullKeys.some(key => query[key] !== undefined)) {
+    const preset = curatedComparisons.find(story => story.id === query.preset);
+    const [x, y] = [surahOf(query.a), surahOf(query.b)];
+    if (preset) redirect(surahPairHref(preset.a, preset.b));
+    const closest = x !== null && y === null ? closestPair(listedPairs, x) : undefined;
+    if (closest) redirect(surahPairHref(closest.a, closest.b));
+    if (x === null || y === null || x === y) {
+      if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b));
+      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b);
+    }
+    if (x > y) redirect(surahPairHref(x, y));
+    return pairPage(x, y);
   }
   const themes = query.mode === 'themes';
   const s = surahOf(query.s);
   const t = surahOf(query.t);
-  if (s !== null && t !== null && s !== t) redirect(modeHref('text', { a: String(s), b: String(t) }));
+  if (s !== null && t !== null && s !== t) redirect(surahPairHref(s, t));
   const range = parseCompareRange(query);
   const tab: CompareTab = themes && s === null ? 'themes' : query.view === 'ayat' && s === null ? 'ayat' : 'similar';
   const [surahs, pairs] = await Promise.all([

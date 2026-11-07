@@ -19,7 +19,7 @@ export function modeHref(mode: 'text' | 'themes', query: Query) {
 
 export function viewHref(ayat: boolean, query: Query) {
   const link = href({}, query, ['a', 'af', 'at', 'b', 'bf', 'bt']);
-  return ayat ? `${link}${link.includes('?') ? '&' : '?'}view=ayat` : link;
+  return `${link}${link.includes('?') ? '&' : '?'}view=${ayat ? 'ayat' : 'similar'}`;
 }
 
 export function tabHref(tab: CompareTab, query: Query) {

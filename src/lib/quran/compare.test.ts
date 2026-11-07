@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './compare.fixture.json';
 import wordKeys from '@/app/quran/compare/wordKeys.json';
-import { alignSurahs, clampRange, compareHref, groupPairs, wordSlots, wordTokens, type Block } from './compare';
+import { alignSurahs, clampRange, compareHref, groupPairs, strictRows, wordSlots, wordTokens, type Block } from './compare';
 import { ayahWords } from './normalize';
 
 const fx = fixture as Record<string, string[]>;
@@ -217,5 +217,24 @@ describe('matching words by root', () => {
     expect(wordTokens(['من', 'خلف'], ' r:xlf')).toEqual(['من', 'r:xlf']);
     expect(wordTokens(['من', 'خلف'], 'r:xlf')).toEqual(['من', 'خلف']);
     expect(wordTokens(['من'], undefined)).toEqual(['من']);
+  });
+});
+
+describe('strictRows', () => {
+  const pair = (a: number, b: number, run: number, shared = run > 0 ? ['x'] : []) => ({ a, b, run, shared, marksA: [], marksB: [], rootsA: [], rootsB: [] });
+  const covered = (rows: ReturnType<typeof strictRows>, side: 'a' | 'b') => rows.flatMap(row => row.type === 'gap'
+    ? (row[side] ? Array.from({ length: row[side]!.to - row[side]!.from + 1 }, (_, k) => row[side]!.from + k) : [])
+    : [...new Set(row.block.pairs.map(p => p[side]))]).sort((x, y) => x - y);
+
+  it('turns weak and filler pairs back into unmatched ayat, showing every ayah once', () => {
+    const rows = strictRows([
+      { type: 'block', block: { kind: 'words', anchors: 2, pairs: [pair(1, 1, 2), pair(2, 2, 0), pair(3, 3, 2)] } },
+      { type: 'gap', a: { from: 4, to: 4 }, b: null },
+      { type: 'block', block: { kind: 'words', anchors: 2, pairs: [pair(5, 4, 1), pair(6, 5, 6), pair(7, 6, 3)] } },
+    ]);
+    expect(rows.filter(row => row.type === 'block').map(row => row.type === 'block' && row.block.pairs.map(p => `${p.a}:${p.b}`))).toEqual([['6:5', '7:6']]);
+    expect(rows[0]).toEqual({ type: 'gap', a: { from: 1, to: 5 }, b: { from: 1, to: 4 } });
+    expect(covered(rows, 'a')).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(covered(rows, 'b')).toEqual([1, 2, 3, 4, 5, 6]);
   });
 });

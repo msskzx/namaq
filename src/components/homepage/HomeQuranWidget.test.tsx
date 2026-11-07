@@ -9,7 +9,7 @@ const sections = homeQuranSections([
   { number: 1, name: 'الفاتحة', nameTransliterated: 'Al-Fatihah' },
   { number: 2, name: 'البقرة', nameTransliterated: 'Al-Baqarah' },
   { number: 114, name: 'الناس', nameTransliterated: 'An-Nas' },
-]);
+], new Set([2]));
 
 afterEach(() => { cleanup(); state.language = 'ar'; });
 
@@ -20,6 +20,9 @@ describe('homepage Quran widget', () => {
     fireEvent.click(screen.getByRole('radio', { name: 'البقرة' }));
     expect(screen.getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/ayah/2/1');
     expect(screen.getByRole('link', { name: 'استكشف المتشابهات' }).getAttribute('href')).toBe('/quran/branches?s=2');
+    expect(screen.getByRole('link', { name: 'قارن' }).getAttribute('href')).toBe('/quran/compare?a=2');
+    fireEvent.click(screen.getByRole('radio', { name: 'الفاتحة' }));
+    expect(screen.getByRole('button', { name: 'قارن' }).hasAttribute('disabled')).toBe(true);
   });
 
   it('clears the previous selection when switching to juz and uses the exact juz start', () => {
@@ -30,6 +33,7 @@ describe('homepage Quran widget', () => {
     fireEvent.click(screen.getByRole('radio', { name: 'الجزء ٢' }));
     expect(screen.getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/ayah/2/142');
     expect(screen.getByRole('link', { name: 'استكشف المتشابهات' }).getAttribute('href')).toBe('/quran/branches?juzFrom=2&juzTo=2');
+    expect(screen.queryByRole('button', { name: 'قارن' })).toBeNull();
   });
 
   it('finds sections by Arabic numerals and recovers after an empty search', () => {

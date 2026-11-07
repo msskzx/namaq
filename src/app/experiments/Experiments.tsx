@@ -2,8 +2,17 @@
 
 import Link from 'next/link';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { EXPERIMENT_SECTIONS } from '@/lib/navigation';
+import { EXPERIMENT_SECTIONS, NAV_SECTIONS } from '@/lib/navigation';
 import styles from '@/components/common/PaperPage.module.css';
+
+const LAUNCHED = new Set(NAV_SECTIONS.map(section => section.href));
+
+/** Marks a page that is open to everyone in the main navigation. */
+function Live({ ar }: { ar: boolean }) {
+  return <span className="ms-2 inline-flex items-center gap-1 rounded-full border border-[var(--home-green)] px-2 align-middle text-xs leading-5 text-[var(--home-green)]">
+    <span aria-hidden className="size-1.5 rounded-full bg-[var(--home-green)]" />{ar ? 'متاح' : 'Live'}
+  </span>;
+}
 
 export default function Experiments() {
   const { language } = useLanguage();
@@ -17,9 +26,12 @@ export default function Experiments() {
       <div className="grid gap-x-8 gap-y-6 md:grid-cols-2 xl:grid-cols-4">
       {EXPERIMENT_SECTIONS.map(section => (
         <section key={section.href} className={`min-w-0 ${section.href === '/quran' ? 'md:col-span-2 xl:col-span-4' : 'border-t border-[var(--home-rule)] pt-3'}`} aria-labelledby={`experiment-${section.href.slice(1)}`}>
-          <h2 id={`experiment-${section.href.slice(1)}`} className="text-2xl text-[var(--home-accent)]">
-            <Link href={section.href} className="hover:underline">{section.label[language]}</Link>
-          </h2>
+          <div className="flex flex-wrap items-center">
+            <h2 id={`experiment-${section.href.slice(1)}`} className="text-2xl text-[var(--home-accent)]">
+              <Link href={section.href} className="hover:underline">{section.label[language]}</Link>
+            </h2>
+            {LAUNCHED.has(section.href) && <Live ar={ar} />}
+          </div>
           <div className={section.href === '/quran' ? 'grid gap-x-8 sm:grid-cols-2 xl:grid-cols-4' : ''}>
           {section.groups.map((group, index) => (
             <div key={index} className="mt-4">
@@ -27,7 +39,7 @@ export default function Experiments() {
               <ul>
                 {group.items.map(item => (
                   <li key={item.href} className="py-1.5">
-                    <Link href={item.href} className="text-base text-[var(--home-accent)] hover:underline">{item.label[language]}</Link>
+                    <Link href={item.href} className="text-base text-[var(--home-accent)] hover:underline">{item.label[language]}</Link>{LAUNCHED.has(item.href) && <Live ar={ar} />}
                     <p className="text-sm leading-relaxed text-[var(--home-muted)]">{item.purpose[language]}</p>
                   </li>
                 ))}

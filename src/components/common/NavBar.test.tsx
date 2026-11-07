@@ -12,7 +12,7 @@ vi.mock('@/components/language/LanguageContext', () => ({
 vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restoreAllMocks(); vi.clearAllMocks(); });
 
-const destinations = ['/quran/branches', '/quran/read', '/quizzes'];
+const destinations = ['/quran/branches', '/quran/compare', '/quran/read', '/quizzes'];
 
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
@@ -30,7 +30,7 @@ describe('launch navigation', () => {
     expect(activeSection('/quizzes/party/123456')).toBe('/quizzes');
     expect(activeSection('/quran/read/3')).toBe('/quran/read');
     expect(activeSection('/quran/branches?o=test')).toBe('/quran/branches');
-    expect(activeSection('/quran/compare')).toBeUndefined();
+    expect(activeSection('/quran/compare')).toBe('/quran/compare');
     expect(activeSection('/graphs')).toBeUndefined();
     expect(activeSection('/experiments')).toBeUndefined();
   });
