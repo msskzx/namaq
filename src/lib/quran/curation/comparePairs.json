@@ -8303,6 +8303,254 @@
   "4:167|42:46": {
    "keep": false,
    "why": "Shared 'way of Allah' and straying only; different subjects."
+  },
+  "4:39|45:14": {
+   "keep": false,
+   "why": "Shared common words only; different subjects."
+  },
+  "4:87|45:26": {
+   "keep": true,
+   "why": "He will gather you to the Day of Resurrection, in which there is no doubt."
+  },
+  "4:109|45:35": {
+   "keep": false,
+   "why": "Shared 'worldly life' only."
+  },
+  "4:126|45:22": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "4:139|45:10": {
+   "keep": true,
+   "why": "Taking protectors other than Allah, and it avails them nothing."
+  },
+  "4:144|45:10": {
+   "keep": true,
+   "why": "Taking protectors other than Allah."
+  },
+  "4:158|45:2": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:159|45:14": {
+   "keep": false,
+   "why": "Shared common words only."
+  },
+  "4:61|46:23": {
+   "keep": false,
+   "why": "Shared 'see' and 'sent down' only; different scenes."
+  },
+  "4:126|46:33": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "4:158|46:2": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:13|47:12": {
+   "keep": true,
+   "why": "Admitted into gardens under which rivers flow."
+  },
+  "4:57|47:12": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:80|47:33": {
+   "keep": true,
+   "why": "Obeying the Messenger is obeying Allah."
+  },
+  "4:115|47:32": {
+   "keep": true,
+   "why": "Opposing the Messenger after guidance became clear: same rare clause."
+  },
+  "4:122|47:12": {
+   "keep": true,
+   "why": "Believers admitted into gardens under which rivers flow."
+  },
+  "4:167|47:1": {
+   "keep": true,
+   "why": "Those who disbelieve and turn others from the way of Allah: astray."
+  },
+  "4:167|47:32": {
+   "keep": true,
+   "why": "Those who disbelieve and turn others from the way of Allah."
+  },
+  "4:167|47:34": {
+   "keep": true,
+   "why": "Those who disbelieve and turn others from the way of Allah."
+  },
+  "4:168|47:34": {
+   "keep": true,
+   "why": "Disbelievers whom Allah will not forgive."
+  },
+  "4:58|49:1": {
+   "keep": false,
+   "why": "Shared closing 'Hearing' only; different subjects."
+  },
+  "4:70|49:8": {
+   "keep": true,
+   "why": "Bounty from Allah; Knowing."
+  },
+  "4:96|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "4:106|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "4:126|49:16": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'all things' only."
+  },
+  "4:152|49:1": {
+   "keep": false,
+   "why": "Shared 'Allah and His messenger(s)' only."
+  },
+  "4:13|57:12": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever: that is the great success."
+  },
+  "4:37|57:24": {
+   "keep": true,
+   "why": "Same clause: those who are stingy and enjoin stinginess on people."
+  },
+  "4:40|57:11": {
+   "keep": true,
+   "why": "Allah multiplies the good deed and gives a great reward."
+  },
+  "4:40|57:18": {
+   "keep": true,
+   "why": "Allah multiplies the good deed and gives a great reward."
+  },
+  "4:95|57:10": {
+   "keep": true,
+   "why": "Not equal are ... and to each Allah has promised the best."
+  },
+  "4:113|57:29": {
+   "keep": true,
+   "why": "Allah's bounty is great."
+  },
+  "4:126|57:2": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "4:152|57:28": {
+   "keep": true,
+   "why": "Believing in Allah and His messenger(s): reward and forgiveness."
+  },
+  "4:158|57:1": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:13|61:12": {
+   "keep": true,
+   "why": "Gardens under which rivers flow: that is the great success."
+  },
+  "4:29|61:11": {
+   "keep": false,
+   "why": "Shared wealth and selves only; different subjects."
+  },
+  "4:39|61:11": {
+   "keep": true,
+   "why": "Believing in Allah and spending: what would be better for them."
+  },
+  "4:111|61:11": {
+   "keep": false,
+   "why": "Shared common words only."
+  },
+  "4:158|61:1": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:39|62:9": {
+   "keep": false,
+   "why": "Shared common words only; different subjects."
+  },
+  "4:48|62:4": {
+   "keep": false,
+   "why": "Shared 'whom He wills' and 'great' only."
+  },
+  "4:158|62:1": {
+   "keep": false,
+   "why": "Shared closing names only."
+  },
+  "4:13|64:9": {
+   "keep": true,
+   "why": "Admitted into gardens under which rivers flow, abiding forever: that is the great success."
+  },
+  "4:57|64:9": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, for those who believe and do good."
+  },
+  "4:80|64:12": {
+   "keep": true,
+   "why": "Obey the Messenger; if you turn away ..."
+  },
+  "4:96|64:14": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "4:106|64:14": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only."
+  },
+  "4:110|64:14": {
+   "keep": false,
+   "why": "Shared forgiveness words only; different subjects."
+  },
+  "4:122|64:9": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, for those who believe and do good."
+  },
+  "4:126|64:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only."
+  },
+  "4:131|64:6": {
+   "keep": true,
+   "why": "They disbelieve, and Allah is Free of need, Praiseworthy."
+  },
+  "4:17|76:30": {
+   "keep": false,
+   "why": "Shared closing 'Knowing, Wise' only."
+  },
+  "4:104|76:30": {
+   "keep": false,
+   "why": "Shared closing 'Knowing, Wise' only."
+  },
+  "4:111|76:30": {
+   "keep": false,
+   "why": "Shared closing 'Knowing, Wise' only."
+  },
+  "4:13|85:11": {
+   "keep": true,
+   "why": "Gardens under which rivers flow: that is the great success."
+  },
+  "4:57|85:11": {
+   "keep": true,
+   "why": "Believers who do righteous deeds: gardens under which rivers flow."
+  },
+  "4:122|85:11": {
+   "keep": true,
+   "why": "Believers who do righteous deeds: gardens under which rivers flow."
+  },
+  "4:126|85:9": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and 'all things' only."
+  },
+  "4:13|98:8": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever."
+  },
+  "4:57|98:8": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever."
+  },
+  "4:122|98:8": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever."
   }
  }
 }
