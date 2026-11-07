@@ -4819,6 +4819,66 @@
   "6:105|27:52": {
    "keep": false,
    "why": "Only 'signs for a people who know'."
+  },
+  "7:2|29:51": {
+   "keep": true,
+   "why": "Same thought: the Book sent down to you is a reminder for believers."
+  },
+  "7:52|29:51": {
+   "keep": true,
+   "why": "Same thought: the Book is mercy for a people who believe."
+  },
+  "7:78|29:37": {
+   "keep": true,
+   "why": "Same sentence: the earthquake seized them and they lay fallen in their homes."
+  },
+  "7:91|29:37": {
+   "keep": true,
+   "why": "Same sentence, same story (Madyan): the earthquake seized them."
+  },
+  "7:80|29:28": {
+   "keep": true,
+   "why": "Same story (Lot): same sentence about the immorality none did before."
+  },
+  "7:83|29:32": {
+   "keep": true,
+   "why": "Same story (Lot): saved him and his family except his wife."
+  },
+  "7:83|29:33": {
+   "keep": true,
+   "why": "Same story (Lot): saved him and his family except his wife."
+  },
+  "7:5|29:31": {
+   "keep": false,
+   "why": "Only 'they said, we were wrongdoers'; different scenes."
+  },
+  "7:147|29:7": {
+   "keep": false,
+   "why": "Only the formula 'what they used to do'."
+  },
+  "7:185|29:44": {
+   "keep": false,
+   "why": "Only 'Allah created the heavens and the earth'; different points."
+  },
+  "7:59|29:36": {
+   "keep": true,
+   "why": "Same call: 'O my people, worship Allah' (Noah / Shu'ayb).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "7:65|29:36": {
+   "keep": true,
+   "why": "Same call: 'to ... their brother ... O my people, worship Allah' (Hud / Shu'ayb).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "7:65|29:16": {
+   "keep": true,
+   "why": "Same call: 'worship Allah ... fear Him' (Hud / Abraham).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
+  },
+  "7:70|29:29": {
+   "keep": true,
+   "why": "Same reply of the people: 'bring it, if you are truthful' (Hud / Lot).",
+   "ask": "Different prophets with the same call. Keep cross-prophet pairs like this?"
   }
  }
 }
