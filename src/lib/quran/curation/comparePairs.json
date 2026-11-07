@@ -1847,6 +1847,111 @@
   "4:169|9:22": {
    "keep": false,
    "why": "Only 'abiding in it forever': Hell vs the Garden."
+  },
+  "7:34|10:49": {
+   "keep": true,
+   "why": "Same sentence: for every nation is a term; when it comes they cannot delay it an hour nor advance it."
+  },
+  "7:39|10:52": {
+   "keep": true,
+   "why": "Same sentence: taste the punishment for what you used to earn."
+  },
+  "7:47|10:85": {
+   "keep": true,
+   "why": "Same prayer form: our Lord, do not make us … the wrongdoing people."
+  },
+  "7:49|10:62": {
+   "keep": true,
+   "why": "Same phrase: no fear upon them, nor will they grieve."
+  },
+  "7:52|10:57": {
+   "keep": true,
+   "why": "Same description of revelation: guidance and mercy for those who believe."
+  },
+  "7:54|10:3": {
+   "keep": true,
+   "why": "Same sentence: your Lord is Allah who created the heavens and the earth in six days, then rose over the Throne."
+  },
+  "7:64|10:73": {
+   "keep": true,
+   "why": "Same story of Noah: they denied him, We saved him and those with him in the ark and drowned the deniers."
+  },
+  "7:71|10:20": {
+   "keep": true,
+   "why": "Same reply: so wait, I am with you among those who wait."
+  },
+  "7:72|10:95": {
+   "keep": false,
+   "why": "Only 'those who denied Our signs'."
+  },
+  "7:87|10:109": {
+   "keep": true,
+   "why": "Same command: be patient until Allah judges, and He is the best of judges."
+  },
+  "7:92|10:95": {
+   "keep": false,
+   "why": "Only 'those who denied' and 'the losers'."
+  },
+  "7:101|10:13": {
+   "keep": true,
+   "why": "Same pattern: their messengers came with clear proofs, but they would not believe; thus …"
+  },
+  "7:101|10:74": {
+   "keep": true,
+   "why": "Same sentence: they came with clear proofs, but would not believe in what they denied before; thus hearts are sealed."
+  },
+  "7:103|10:73": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "7:103|10:75": {
+   "keep": true,
+   "why": "Same sentence: then after them We sent Moses with Our signs to Pharaoh and his chiefs."
+  },
+  "7:105|10:108": {
+   "keep": false,
+   "why": "Only 'has come to you … from your Lord'; Moses to Pharaoh vs a call to mankind."
+  },
+  "7:109|10:79": {
+   "keep": false,
+   "why": "Only 'a learned magician'; the parallel is 7:112."
+  },
+  "7:112|10:79": {
+   "keep": true,
+   "why": "Same order: bring every learned magician."
+  },
+  "7:113|10:80": {
+   "keep": true,
+   "why": "Same scene: when the magicians came."
+  },
+  "7:116|10:81": {
+   "keep": true,
+   "why": "Same scene: when they threw, (they came with / Moses spoke of) magic."
+  },
+  "7:132|10:79": {
+   "keep": false,
+   "why": "Only 'bring' and magic; different speakers and points."
+  },
+  "7:133|10:75": {
+   "keep": true,
+   "why": "Same verdict on Pharaoh's people: they were arrogant and were a criminal people."
+  },
+  "7:136|10:95": {
+   "keep": false,
+   "why": "Only 'denied Our signs'."
+  },
+  "7:177|10:95": {
+   "keep": false,
+   "why": "Only 'those who denied Our signs'."
+  },
+  "7:188|10:49": {
+   "keep": true,
+   "why": "Same sentence: say, I have no power to benefit or harm myself except as Allah wills."
+  },
+  "7:194|10:38": {
+   "keep": true,
+   "why": "Same challenge: call those besides Allah, if you are truthful.",
+   "ask": "Same challenge words, but one is about idols answering, the other about producing a surah. Keep?"
   }
  }
 }
