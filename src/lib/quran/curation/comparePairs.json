@@ -2149,6 +2149,102 @@
   "3:198|16:31": {
    "keep": true,
    "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "5:9|9:22": {
+   "keep": false,
+   "why": "Only 'a great reward'."
+  },
+  "5:23|9:51": {
+   "keep": false,
+   "why": "Only the common 'upon Allah let the believers rely'."
+  },
+  "5:34|9:27": {
+   "keep": false,
+   "why": "Only repentance and the closing 'Forgiving, Merciful'."
+  },
+  "5:35|9:88": {
+   "keep": false,
+   "why": "Only 'those who believe … strive … succeed'; different points."
+  },
+  "5:39|9:27": {
+   "keep": true,
+   "why": "Same idea: after wrongdoing Allah turns to whoever repents; Allah is Forgiving, Merciful."
+  },
+  "5:39|9:102": {
+   "keep": true,
+   "why": "Same phrase: Allah turns to them; Allah is Forgiving, Merciful."
+  },
+  "5:39|9:104": {
+   "keep": false,
+   "why": "Only repentance and Allah's mercy."
+  },
+  "5:40|9:39": {
+   "keep": false,
+   "why": "Only punishment and the closing 'Allah has power over all things'."
+  },
+  "5:40|9:116": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "5:51|9:23": {
+   "keep": true,
+   "why": "Same command: O you who believe, do not take them as allies; whoever allies with them … wrongdoers."
+  },
+  "5:55|9:11": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "5:55|9:18": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "5:74|9:27": {
+   "keep": false,
+   "why": "Only repentance and the closing 'Forgiving, Merciful'."
+  },
+  "5:85|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "5:85|9:89": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "5:97|9:115": {
+   "keep": false,
+   "why": "Only the closing 'Allah knows all things'."
+  },
+  "5:98|9:27": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "5:104|9:86": {
+   "keep": false,
+   "why": "Only revelation, the Messenger and 'they said'; different scenes."
+  },
+  "5:105|9:105": {
+   "keep": true,
+   "why": "Same ending: you will be returned to Allah and He will inform you of what you used to do."
+  },
+  "5:109|9:78": {
+   "keep": false,
+   "why": "Only the name 'Knower of the unseen'."
+  },
+  "5:119|9:72": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding, Allah's pleasure; that is the great success."
+  },
+  "5:119|9:89": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding; that is the great success."
+  },
+  "5:119|9:100": {
+   "keep": true,
+   "why": "Same sentence: Allah is pleased with them and they with Him; gardens, abiding forever; that is the great success."
+  },
+  "5:120|9:116": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
   }
  }
 }
