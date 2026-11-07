@@ -2692,6 +2692,86 @@
   "2:276|22:38": {
    "keep": false,
    "why": "Only the closing 'Allah does not love every …'."
+  },
+  "7:52|27:77": {
+   "keep": true,
+   "why": "Same description of revelation: guidance and mercy for the believers."
+  },
+  "7:80|27:54": {
+   "keep": true,
+   "why": "Same story of Lot: when he said to his people, do you commit the immorality …"
+  },
+  "7:81|27:55": {
+   "keep": true,
+   "why": "Same sentence: you approach men with desire instead of women; rather you are a people …"
+  },
+  "7:82|27:56": {
+   "keep": true,
+   "why": "Same reply: the answer of his people was only to say, expel them from your town, they keep themselves pure."
+  },
+  "7:83|27:57": {
+   "keep": true,
+   "why": "Same sentence: We saved him and his family except his wife, who was of those who stayed behind."
+  },
+  "7:131|27:47": {
+   "keep": true,
+   "why": "Same reply to an evil omen: your omen is with Allah."
+  },
+  "7:23|27:11": {
+   "keep": false,
+   "why": "Only wronging and forgiveness; Adam's prayer vs a general promise."
+  },
+  "7:45|27:43": {
+   "keep": false,
+   "why": "Only 'turned away' and 'disbelievers'."
+  },
+  "7:72|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'."
+  },
+  "7:84|27:14": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "7:84|27:51": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "7:84|27:69": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of the criminals'."
+  },
+  "7:103|27:14": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of the corrupters'."
+  },
+  "7:103|27:51": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "7:103|27:69": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of …'."
+  },
+  "7:131|27:46": {
+   "keep": false,
+   "why": "Only good and evil, and Allah; different points."
+  },
+  "7:136|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'."
+  },
+  "7:147|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs' and 'what they used to do'."
+  },
+  "7:177|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'."
+  },
+  "7:182|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'."
   }
  }
 }
