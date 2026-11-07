@@ -4358,6 +4358,66 @@
    "keep": true,
    "why": "Same opening: those to whom We gave the Book; one side rejects, the other believes.",
    "ask": "Opposite outcomes for the same opening (they do not believe / they believe). Keep as a contrast pair?"
+  },
+  "9:9|16:88": {
+   "keep": true,
+   "why": "Same phrase: turned (people) away from the way of Allah."
+  },
+  "9:9|16:95": {
+   "keep": true,
+   "why": "Same image: selling Allah's signs/covenant for a small price."
+  },
+  "9:27|16:119": {
+   "keep": true,
+   "why": "Same thought: turning in repentance after that; Forgiving, Merciful."
+  },
+  "9:41|16:95": {
+   "keep": true,
+   "why": "Same ending: that is better for you, if you only knew."
+  },
+  "9:70|16:33": {
+   "keep": true,
+   "why": "Same sentence: Allah did not wrong them, but they wronged themselves."
+  },
+  "9:78|16:19": {
+   "keep": true,
+   "why": "Same thought: Allah knows what they conceal."
+  },
+  "9:78|16:23": {
+   "keep": true,
+   "why": "Same thought: Allah knows what they conceal."
+  },
+  "9:89|16:31": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath."
+  },
+  "9:102|16:119": {
+   "keep": true,
+   "why": "Same thought: those who did evil then repented; Forgiving, Merciful."
+  },
+  "9:27|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "9:55|16:107": {
+   "keep": false,
+   "why": "Only 'the worldly life' and 'disbelievers'; different points."
+  },
+  "9:79|16:104": {
+   "keep": false,
+   "why": "Only the formula 'and for them a painful punishment'."
+  },
+  "9:105|16:28": {
+   "keep": false,
+   "why": "Only the formula 'of what you used to do'."
+  },
+  "9:116|16:65": {
+   "keep": false,
+   "why": "Only words about heavens, earth, life and death; different points."
+  },
+  "9:116|16:73": {
+   "keep": false,
+   "why": "Only 'besides Allah' and heavens and earth; different points."
   }
  }
 }
