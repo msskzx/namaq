@@ -1399,6 +1399,137 @@
   "4:170|33:1": {
    "keep": false,
    "why": "Only the closing 'Knowing, Wise'."
+  },
+  "2:8|4:38": {
+   "keep": false,
+   "why": "Only the common formula 'Allah and the Last Day'; hypocrites who claim belief vs show-off spenders."
+  },
+  "2:8|4:39": {
+   "keep": false,
+   "why": "Only the common formula 'believe in Allah and the Last Day'."
+  },
+  "2:25|4:57": {
+   "keep": true,
+   "why": "Same promise: gardens with rivers beneath, abiding, with purified spouses."
+  },
+  "2:25|4:122": {
+   "keep": true,
+   "why": "Same promise: those who believe and do good get gardens with rivers beneath, abiding."
+  },
+  "2:75|4:39": {
+   "keep": false,
+   "why": "Only scattered common words (believe, Allah, knowing)."
+  },
+  "2:75|4:147": {
+   "keep": false,
+   "why": "Only scattered common words (believe, Allah, knowing)."
+  },
+  "2:88|4:155": {
+   "keep": true,
+   "why": "Same saying 'our hearts are wrapped', answered: rather Allah sealed/cursed them for their disbelief, so few believe."
+  },
+  "2:94|4:134": {
+   "keep": false,
+   "why": "Only 'with Allah' and 'the Hereafter'; different points."
+  },
+  "2:103|4:39": {
+   "keep": false,
+   "why": "Both say 'if only they had believed', but the rest differs."
+  },
+  "2:107|4:45": {
+   "keep": false,
+   "why": "Shares the protector-and-helper idea only; each makes a different point."
+  },
+  "2:116|4:126": {
+   "keep": false,
+   "why": "Shares the heavens-and-earth formula; each makes a different point."
+  },
+  "2:117|4:126": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'."
+  },
+  "2:136|4:152": {
+   "keep": true,
+   "why": "Same creed: believing in Allah and making no distinction between any of His messengers."
+  },
+  "2:148|4:33": {
+   "keep": false,
+   "why": "Both open 'and for each', with different meanings, and close with 'Allah over all things'."
+  },
+  "2:156|4:72": {
+   "keep": true,
+   "why": "Same situation, 'when a calamity strikes them they say', with opposite answers: the patient vs the one who stayed behind.",
+   "ask": "The words match but the two answers are opposites. Keep it as a contrast, or leave it out?"
+  },
+  "2:160|4:16": {
+   "keep": true,
+   "why": "Same condition: if they repent and reform, Allah is Relenting, Merciful."
+  },
+  "2:169|4:148": {
+   "keep": false,
+   "why": "Only 'evil' and scattered words."
+  },
+  "2:172|4:39": {
+   "keep": false,
+   "why": "Only scattered common words."
+  },
+  "2:176|4:105": {
+   "keep": true,
+   "why": "Same phrase: He sent down the Book in truth."
+  },
+  "2:192|4:96": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:192|4:106": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:199|4:96": {
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'."
+  },
+  "2:199|4:106": {
+   "keep": true,
+   "why": "Same command: ask Allah's forgiveness, Allah is Forgiving, Merciful."
+  },
+  "2:199|4:110": {
+   "keep": true,
+   "why": "Same idea: whoever asks Allah's forgiveness finds Him Forgiving, Merciful.",
+   "ask": "Close to the 4:106 pair, but phrased as a promise rather than a command. Keep both?"
+  },
+  "2:203|4:39": {
+   "keep": false,
+   "why": "Only scattered common words."
+  },
+  "2:209|4:158": {
+   "keep": false,
+   "why": "Only the closing 'Mighty, Wise'."
+  },
+  "2:218|4:96": {
+   "keep": false,
+   "why": "Only mercy and the closing 'Forgiving, Merciful'."
+  },
+  "2:218|4:106": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|4:110": {
+   "keep": false,
+   "why": "Only the closing 'Forgiving, Merciful'."
+  },
+  "2:218|4:152": {
+   "keep": false,
+   "why": "Only 'those who believe … those' and the closing 'Forgiving, Merciful'."
+  },
+  "2:239|4:39": {
+   "keep": false,
+   "why": "Only scattered common words."
+  },
+  "2:284|4:126": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs what is in the heavens and the earth, ending with Allah over all things.",
+   "ask": "Your earlier rule dropped the heavens-and-earth formula alone; here the whole sentence matches. Keep?"
   }
  }
 }
