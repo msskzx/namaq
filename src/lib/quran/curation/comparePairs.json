@@ -9885,6 +9885,170 @@
   "6:162|40:65": {
    "keep": true,
    "why": "Devotion to Allah, Lord of the worlds."
+  },
+  "6:1|41:9": {
+   "keep": true,
+   "why": "Creation of heavens and earth, yet they set up equals to their Lord."
+  },
+  "6:97|41:3": {
+   "keep": true,
+   "why": "Signs made distinct for a people who know."
+  },
+  "6:105|41:3": {
+   "keep": false,
+   "why": "Shares only distinct signs wording; different statements."
+  },
+  "6:126|41:3": {
+   "keep": true,
+   "why": "Signs made distinct for a people, same idea."
+  },
+  "6:17|42:9": {
+   "keep": false,
+   "why": "Shares only 'able over all things'."
+  },
+  "6:101|42:12": {
+   "keep": false,
+   "why": "Shares only 'Knower of all things' closing."
+  },
+  "6:101|42:49": {
+   "keep": false,
+   "why": "Shares only creation wording; different subjects."
+  },
+  "6:107|42:10": {
+   "keep": false,
+   "why": "Only shared common words; different subjects."
+  },
+  "6:3|43:9": {
+   "keep": false,
+   "why": "Only 'heavens and earth' and a divine name."
+  },
+  "6:3|43:84": {
+   "keep": true,
+   "why": "He is God in the heavens and on earth."
+  },
+  "6:5|43:7": {
+   "keep": true,
+   "why": "Every sign mocked: they used to mock what came to them."
+  },
+  "6:11|43:25": {
+   "keep": true,
+   "why": "See how was the end of the deniers."
+  },
+  "6:24|43:25": {
+   "keep": false,
+   "why": "Shares only 'see how'; different subjects."
+  },
+  "6:32|43:35": {
+   "keep": true,
+   "why": "Worldly life is play and enjoyment; the Hereafter is better for the God-fearing."
+  },
+  "6:75|44:7": {
+   "keep": true,
+   "why": "Lord of the heavens and earth, for those of certainty."
+  },
+  "6:75|44:29": {
+   "keep": false,
+   "why": "Only 'heavens and earth'; different subjects."
+  },
+  "6:162|44:8": {
+   "keep": false,
+   "why": "Only 'Lord of the worlds' / life and death wording; different statements."
+  },
+  "6:1|46:3": {
+   "keep": true,
+   "why": "Creation of heavens and earth, yet the disbelievers turn away."
+  },
+  "6:5|46:22": {
+   "keep": false,
+   "why": "Only shared common words; different subjects."
+  },
+  "6:7|46:7": {
+   "keep": true,
+   "why": "The disbelievers say: this is only clear magic."
+  },
+  "6:30|46:34": {
+   "keep": true,
+   "why": "Is this not the truth? Yes by our Lord. Taste the punishment for disbelieving."
+  },
+  "6:40|46:4": {
+   "keep": true,
+   "why": "Challenge: tell me ... if you are truthful."
+  },
+  "6:40|46:22": {
+   "keep": true,
+   "why": "Punishment coming upon them, if you are truthful."
+  },
+  "6:74|46:23": {
+   "keep": false,
+   "why": "Only shared common words; different scenes."
+  },
+  "6:101|46:33": {
+   "keep": false,
+   "why": "Only creation of heavens and earth and a closing name."
+  },
+  "6:132|46:19": {
+   "keep": true,
+   "why": "For each are degrees from what they did."
+  },
+  "6:11|47:10": {
+   "keep": true,
+   "why": "See how was the end of those before them."
+  },
+  "6:32|47:36": {
+   "keep": true,
+   "why": "Worldly life is only play and amusement."
+  },
+  "6:37|47:26": {
+   "keep": false,
+   "why": "Only shared common words; different subjects."
+  },
+  "6:17|48:21": {
+   "keep": false,
+   "why": "Shares only 'able over all things'."
+  },
+  "6:48|48:8": {
+   "keep": true,
+   "why": "Messengers sent as bringers of good news and warners."
+  },
+  "6:75|48:7": {
+   "keep": false,
+   "why": "Only 'heavens and earth'; different statements."
+  },
+  "6:13|57:6": {
+   "keep": false,
+   "why": "Only 'Hearing, Knowing' style closing; different subjects."
+  },
+  "6:75|57:2": {
+   "keep": false,
+   "why": "Only 'heavens and earth'; different statements."
+  },
+  "6:75|57:5": {
+   "keep": false,
+   "why": "Only 'heavens and earth'; different statements."
+  },
+  "6:1|64:1": {
+   "keep": false,
+   "why": "Only praise and heavens and earth openings; different statements."
+  },
+  "6:3|64:4": {
+   "keep": true,
+   "why": "He knows your secret and what you make public."
+  },
+  "6:17|64:1": {
+   "keep": false,
+   "why": "Shares only 'able over all things'."
+  },
+  "6:3|67:13": {
+   "keep": true,
+   "why": "He knows your secret and open speech."
+  },
+  "6:47|67:28": {
+   "keep": true,
+   "why": "Say, have you considered: punishment coming upon them."
+  },
+  "6:87|67:22": {
+   "keep": false,
+   "why": "Only 'straight path'; different subjects."
   }
  }
 }
