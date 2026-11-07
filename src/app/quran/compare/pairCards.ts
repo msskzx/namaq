@@ -20,9 +20,9 @@ export type PairCard = { id: string; group?: string; verdict?: Verdict; sides: [
 
 function side(key: string, pair: AyahPair, which: 'a' | 'b'): CardSide {
   const marks: SpreadAyah['marks'] = {};
-  // Root-only matches are not marked: words sharing a root can differ in meaning («بين» and «بيان»).
+  // Root-only matches are marked lightly: words sharing a root can differ in meaning («بين» and «بيان»).
   pair.columns.forEach((column, index) => {
-    if (column.level !== 'root') marks[column[which].index] = { kind: column.level === 'lemma' ? 'root' : 'exact', link: String(index) };
+    marks[column[which].index] = { kind: column.level === 'root' ? 'related' : column.level === 'lemma' ? 'root' : 'exact', link: String(index) };
   });
   const ayah = Number(key.split(':')[1]);
   return { surah: surahOf(key), ayah, ayat: [{ number: ayah, words: words.get(key) ?? [], marks }] };

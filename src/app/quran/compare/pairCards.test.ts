@@ -35,11 +35,18 @@ describe('compare pair cards', () => {
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
   });
 
-  it('does not mark words that share only a root', () => {
+  it('marks words that share only a root lightly, apart from same-word matches', () => {
     const card = pairCards(2, 3).find(card => card.id === '2:66|3:138')!;
-    const [a, b] = card.sides.map(side => Object.keys(side.ayat[0].marks ?? {}).map(Number).map(i => side.ayat[0].words[i]));
-    expect(a.some(word => word.includes('بَيْنَ'))).toBe(false);
-    expect(b.some(word => word.includes('بَيَانٌ'))).toBe(false);
-    expect(a.length).toBe(2);
+    const kinds = card.sides.map(side => Object.entries(side.ayat[0].marks ?? {}).map(([i, mark]) => `${side.ayat[0].words[Number(i)]}:${mark.kind}`));
+    expect(kinds[0]).toContain('بَيْنَ:related');
+    expect(kinds[1].filter(entry => entry.endsWith(':related'))).toHaveLength(1);
+  });
+
+  it('matches words whose order crosses, and words the corpus spells apart', () => {
+    const card = pairCards(2, 3).find(card => card.id === '2:135|3:67')!;
+    const [a, b] = card.sides.map(side => side.ayat[0].marks ?? {});
+    // هودا ↔ يهوديا and نصارى ↔ نصرانيا
+    expect([a[2]?.link, a[4]?.link]).toEqual([b[3]?.link, b[5]?.link]);
+    expect(a[2]?.kind).toBe('root');
   });
 });
