@@ -6022,47 +6022,58 @@
   },
   "2:8|20:59": {
    "keep": false,
-   "why": "Only 'people' and 'day' as words."
+   "why": "Only 'people' and 'day' as words.",
+   "checked": true
   },
   "2:14|20:70": {
    "keep": true,
-   "why": "Contrast: the hypocrites say 'we believe' falsely vs the magicians who truly believe."
+   "why": "Contrast: the hypocrites say 'we believe' falsely vs the magicians who truly believe.",
+   "checked": true
   },
   "2:22|20:53": {
    "keep": true,
-   "why": "Same sentence: He made the earth for you and sent down water from the sky to bring out growth."
+   "why": "Same sentence: He made the earth for you and sent down water from the sky to bring out growth.",
+   "checked": true
   },
   "2:34|20:116": {
    "keep": true,
-   "why": "Same scene: the angels bow to Adam except Iblis, who refused."
+   "why": "Same scene: the angels bow to Adam except Iblis, who refused.",
+   "checked": true
   },
   "2:36|20:123": {
    "keep": true,
-   "why": "Same scene: go down, some of you enemies of others."
+   "why": "Same scene: go down, some of you enemies of others.",
+   "checked": true
   },
   "2:38|20:123": {
    "keep": true,
-   "why": "Same scene: go down from it all together; whoever follows My guidance."
+   "why": "Same scene: go down from it all together; whoever follows My guidance.",
+   "checked": true
   },
   "2:66|20:110": {
    "keep": false,
-   "why": "Only 'what is before and behind'; the punishment as a lesson vs Allah's knowledge."
+   "why": "Only 'what is before and behind'; the punishment as a lesson vs Allah's knowledge.",
+   "checked": true
   },
   "2:70|20:50": {
    "keep": false,
-   "why": "Only 'our Lord' and guidance as words; different points."
+   "why": "Only 'our Lord' and guidance as words; different points.",
+   "checked": true
   },
   "2:82|20:75": {
    "keep": true,
-   "why": "Same idea: whoever comes as a believer having done good has the high ranks."
+   "why": "Same idea: whoever comes as a believer having done good has the high ranks.",
+   "checked": true
   },
   "2:82|20:82": {
    "keep": true,
-   "why": "Same idea: forgiveness and reward for whoever believes and does good."
+   "why": "Same idea: forgiveness and reward for whoever believes and does good.",
+   "checked": true
   },
   "2:115|20:98": {
    "keep": true,
-   "why": "Same idea: Allah encompasses all things in knowledge."
+   "why": "Same idea: Allah encompasses all things in knowledge.",
+   "checked": true
   },
   "2:29|21:81": {
    "keep": false,
