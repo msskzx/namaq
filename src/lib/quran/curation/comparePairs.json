@@ -7590,6 +7590,298 @@
   "3:189|46:33": {
    "keep": false,
    "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:31|47:19": {
+   "keep": true,
+   "why": "Seeking forgiveness of sins."
+  },
+  "3:32|47:11": {
+   "keep": false,
+   "why": "Shared 'disbelievers' only; different statements."
+  },
+  "3:32|47:33": {
+   "keep": true,
+   "why": "Obey Allah and the Messenger."
+  },
+  "3:86|47:32": {
+   "keep": true,
+   "why": "Disbelieving after the guidance and proofs became clear."
+  },
+  "3:95|47:21": {
+   "keep": false,
+   "why": "Shared root of truthfulness only; different subjects."
+  },
+  "3:99|47:32": {
+   "keep": true,
+   "why": "Turning people away from the way of Allah."
+  },
+  "3:132|47:33": {
+   "keep": true,
+   "why": "Obey Allah and the Messenger."
+  },
+  "3:135|47:19": {
+   "keep": true,
+   "why": "Asking forgiveness for sins."
+  },
+  "3:137|47:10": {
+   "keep": true,
+   "why": "Travel in the land and see how was the end of those before."
+  },
+  "3:142|47:31": {
+   "keep": true,
+   "why": "Allah tests to make evident those who strive and are patient."
+  },
+  "3:157|47:34": {
+   "keep": true,
+   "why": "Contrast: dying in Allah's way brings forgiveness; dying in disbelief, none."
+  },
+  "3:176|47:32": {
+   "keep": true,
+   "why": "The disbelievers will never harm Allah at all."
+  },
+  "3:29|49:16": {
+   "keep": true,
+   "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him."
+  },
+  "3:29|49:18": {
+   "keep": true,
+   "why": "Allah knows the unseen of the heavens and the earth."
+  },
+  "3:89|49:5": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
+  },
+  "3:89|49:10": {
+   "keep": false,
+   "why": "Shared root of reform only; different subjects."
+  },
+  "3:121|49:1": {
+   "keep": false,
+   "why": "Shared closing 'Hearing, Knowing' only; different subjects."
+  },
+  "3:163|49:18": {
+   "keep": false,
+   "why": "Shared closing 'Seeing of what you do' only; different subjects."
+  },
+  "3:189|49:16": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:27|57:6": {
+   "keep": true,
+   "why": "He merges the night into the day and the day into the night."
+  },
+  "3:29|57:2": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:83|57:5": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and return to Him only."
+  },
+  "3:109|57:5": {
+   "keep": true,
+   "why": "To Allah belongs the heavens and the earth, and to Him all matters return."
+  },
+  "3:133|57:21": {
+   "keep": true,
+   "why": "Race to forgiveness from your Lord and a garden as wide as the heavens and the earth."
+  },
+  "3:174|57:29": {
+   "keep": true,
+   "why": "Allah's bounty, and Allah is the possessor of great bounty."
+  },
+  "3:189|57:2": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth; able over all things."
+  },
+  "3:189|57:5": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth."
+  },
+  "3:10|58:17": {
+   "keep": true,
+   "why": "Their wealth and children will not avail them against Allah."
+  },
+  "3:28|58:10": {
+   "keep": false,
+   "why": "Shared words only; different subjects."
+  },
+  "3:116|58:17": {
+   "keep": true,
+   "why": "Identical: wealth and children will not avail them; companions of the Fire."
+  },
+  "3:176|58:10": {
+   "keep": false,
+   "why": "Shared grief / harm words only; different subjects."
+  },
+  "3:11|59:4": {
+   "keep": true,
+   "why": "They opposed / denied, and Allah is severe in punishment."
+  },
+  "3:29|59:6": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:56|59:3": {
+   "keep": true,
+   "why": "Punishment of the disbelievers in this world and the Hereafter."
+  },
+  "3:111|59:12": {
+   "keep": true,
+   "why": "They will turn their backs, then they will not be helped."
+  },
+  "3:189|59:6": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:94|61:7": {
+   "keep": true,
+   "why": "Inventing a lie against Allah: the wrongdoers."
+  },
+  "3:136|61:12": {
+   "keep": true,
+   "why": "Forgiveness and gardens under which rivers flow."
+  },
+  "3:177|61:10": {
+   "keep": false,
+   "why": "Shared 'painful punishment' only; different subjects."
+  },
+  "3:18|62:1": {
+   "keep": false,
+   "why": "Shared closing names only; different subjects."
+  },
+  "3:74|62:4": {
+   "keep": true,
+   "why": "Allah gives His favour to whom He wills; possessor of great bounty."
+  },
+  "3:164|62:2": {
+   "keep": true,
+   "why": "Same sentence: He sent among them a messenger reciting His verses, purifying them and teaching the Book and wisdom."
+  },
+  "3:168|62:6": {
+   "keep": true,
+   "why": "Challenge about death: if you are truthful."
+  },
+  "3:174|62:4": {
+   "keep": true,
+   "why": "Allah's bounty; possessor of great bounty."
+  },
+  "3:182|62:7": {
+   "keep": true,
+   "why": "Because of what their hands have put forth."
+  },
+  "3:10|63:9": {
+   "keep": true,
+   "why": "Wealth and children, and turning away from Allah."
+  },
+  "3:18|63:1": {
+   "keep": false,
+   "why": "Shared root of witness only; different subjects."
+  },
+  "3:149|63:3": {
+   "keep": false,
+   "why": "Shared 'disbelieved' only; different subjects."
+  },
+  "3:10|64:15": {
+   "keep": true,
+   "why": "Wealth and children: a trial that does not avail."
+  },
+  "3:29|64:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth and closing only; different subjects."
+  },
+  "3:32|64:12": {
+   "keep": true,
+   "why": "Obey Allah and the Messenger; if you turn away."
+  },
+  "3:122|64:13": {
+   "keep": true,
+   "why": "Upon Allah let the believers rely."
+  },
+  "3:129|64:1": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:129|64:14": {
+   "keep": false,
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
+  },
+  "3:132|64:12": {
+   "keep": true,
+   "why": "Obey Allah and the Messenger."
+  },
+  "3:160|64:13": {
+   "keep": true,
+   "why": "Upon Allah let the believers rely."
+  },
+  "3:163|64:2": {
+   "keep": false,
+   "why": "Shared closing 'Seeing of what they do' only; different subjects."
+  },
+  "3:165|64:11": {
+   "keep": true,
+   "why": "A calamity that strikes you, and where it comes from."
+  },
+  "3:189|64:1": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:4|65:10": {
+   "keep": false,
+   "why": "Shared 'severe punishment' only; different subjects."
+  },
+  "3:29|65:3": {
+   "keep": false,
+   "why": "Shared common words only; different subjects."
+  },
+  "3:29|65:12": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:189|65:3": {
+   "keep": false,
+   "why": "Shared common words only; different subjects."
+  },
+  "3:189|65:12": {
+   "keep": false,
+   "why": "Shared closing 'able over all things' only; different subjects."
+  },
+  "3:29|85:9": {
+   "keep": false,
+   "why": "Shared heavens-and-earth only; different subjects."
+  },
+  "3:136|85:11": {
+   "keep": true,
+   "why": "Gardens under which rivers flow as the reward."
+  },
+  "3:189|85:9": {
+   "keep": true,
+   "why": "His is the dominion of the heavens and the earth, and Allah over all things ..."
+  },
+  "3:15|98:8": {
+   "keep": true,
+   "why": "With their Lord: gardens under which rivers flow, abiding forever, and Allah's pleasure."
+  },
+  "3:57|98:7": {
+   "keep": true,
+   "why": "Those who believe and do righteous deeds."
+  },
+  "3:100|98:4": {
+   "keep": false,
+   "why": "Shared 'those given the Book' only; different subjects."
+  },
+  "3:105|98:4": {
+   "keep": true,
+   "why": "They divided only after the clear proof came to them."
+  },
+  "3:136|98:8": {
+   "keep": true,
+   "why": "Their reward: gardens under which rivers flow, abiding forever."
+  },
+  "3:198|98:8": {
+   "keep": true,
+   "why": "Gardens under which rivers flow, abiding forever, from their Lord."
   }
  }
 }
