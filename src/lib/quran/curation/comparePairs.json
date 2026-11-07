@@ -507,125 +507,153 @@
   },
   "7:9|11:21": {
    "keep": true,
-   "why": "Same verdict: those who lost themselves, because of what they used to do."
+   "why": "Same verdict: those who lost themselves, because of what they used to do.",
+   "checked": true
   },
   "7:23|11:41": {
    "keep": false,
-   "why": "Only 'Lord', forgiveness and mercy as words; Adam's prayer vs Noah boarding the ark."
+   "why": "Only 'Lord', forgiveness and mercy as words; Adam's prayer vs Noah boarding the ark.",
+   "checked": true
   },
   "7:23|11:47": {
    "keep": true,
-   "why": "Same plea: if You do not forgive me and have mercy on me, I will be among the losers (Adam and Eve; Noah)."
+   "why": "Same plea: if You do not forgive me and have mercy on me, I will be among the losers (Adam and Eve; Noah).",
+   "checked": true
   },
   "7:42|11:23": {
    "keep": true,
-   "why": "Same promise: those who believe and do good are the companions of the Garden."
+   "why": "Same promise: those who believe and do good are the companions of the Garden.",
+   "checked": true
   },
   "7:45|11:19": {
    "keep": true,
-   "why": "Same ayah: those who bar from Allah's path, seek to make it crooked, and deny the hereafter."
+   "why": "Same ayah: those who bar from Allah's path, seek to make it crooked, and deny the hereafter.",
+   "checked": true
   },
   "7:59|11:26": {
    "keep": true,
-   "why": "Same story: Noah warns 'I fear for you the punishment of a great/painful day'."
+   "why": "Same story: Noah warns 'I fear for you the punishment of a great/painful day'.",
+   "checked": true
   },
   "7:59|11:50": {
    "keep": true,
-   "why": "Same call 'O my people, worship Allah, you have no god but Him', from Noah in Al-A'raf and Hud in Hud."
+   "why": "Same call 'O my people, worship Allah, you have no god but Him', from Noah in Al-A'raf and Hud in Hud.",
+   "checked": true
   },
   "7:59|11:61": {
    "keep": true,
-   "why": "Same call 'O my people, worship Allah, you have no god but Him' (Noah / Salih)."
+   "why": "Same call 'O my people, worship Allah, you have no god but Him' (Noah / Salih).",
+   "checked": true
   },
   "7:59|11:84": {
    "keep": true,
-   "why": "Same call and the same warning 'I fear for you the punishment of a day' (Noah / Shuayb)."
+   "why": "Same call and the same warning 'I fear for you the punishment of a day' (Noah / Shuayb).",
+   "checked": true
   },
   "7:65|11:50": {
    "keep": true,
-   "why": "Same story: Hud sent to Aad with the same call; the endings differ."
+   "why": "Same story: Hud sent to Aad with the same call; the endings differ.",
+   "checked": true
   },
   "7:65|11:61": {
    "keep": true,
-   "why": "Same call 'O my people, worship Allah' (Hud / Salih)."
+   "why": "Same call 'O my people, worship Allah' (Hud / Salih).",
+   "checked": true
   },
   "7:65|11:84": {
    "keep": true,
-   "why": "Same call 'O my people, worship Allah' (Hud / Shuayb)."
+   "why": "Same call 'O my people, worship Allah' (Hud / Shuayb).",
+   "checked": true
   },
   "7:66|11:27": {
    "keep": true,
-   "why": "Same reply of the disbelieving chiefs: we see you … we think you liars (Hud's people / Noah's people)."
+   "why": "Same reply of the disbelieving chiefs: we see you … we think you liars (Hud's people / Noah's people).",
+   "checked": true
   },
   "7:70|11:32": {
    "keep": true,
-   "why": "Same challenge: bring us what you threaten us with, if you are truthful (Aad / Noah's people)."
+   "why": "Same challenge: bring us what you threaten us with, if you are truthful (Aad / Noah's people).",
+   "checked": true
   },
   "7:70|11:62": {
    "keep": true,
-   "why": "Same objection: do you forbid us to worship what our fathers worshipped (Aad / Thamud)."
+   "why": "Same objection: do you forbid us to worship what our fathers worshipped (Aad / Thamud).",
+   "checked": true
   },
   "7:73|11:61": {
    "keep": true,
-   "why": "Same story: Salih sent to Thamud with the same call."
+   "why": "Same story: Salih sent to Thamud with the same call.",
+   "checked": true
   },
   "7:73|11:64": {
    "keep": true,
-   "why": "Same story: this is the she-camel of Allah, a sign for you; leave her to eat."
+   "why": "Same story: this is the she-camel of Allah, a sign for you; leave her to eat.",
+   "checked": true
   },
   "7:77|11:32": {
    "keep": true,
-   "why": "Same challenge: bring us what you threaten us with (Thamud / Noah's people)."
+   "why": "Same challenge: bring us what you threaten us with (Thamud / Noah's people).",
+   "checked": true
   },
   "7:78|11:67": {
    "keep": true,
-   "why": "Same punishment: they lay lifeless in their homes (Thamud): الرجفة and الصيحة, دارهم and ديارهم."
+   "why": "Same punishment: they lay lifeless in their homes (Thamud): الرجفة and الصيحة, دارهم and ديارهم.",
+   "checked": true
   },
   "7:78|11:94": {
    "keep": true,
-   "why": "Same ending: they lay lifeless in their homes (Thamud / Madyan)."
+   "why": "Same ending: they lay lifeless in their homes (Thamud / Madyan).",
+   "checked": true
   },
   "7:85|11:84": {
    "keep": true,
-   "why": "Same story: Shuayb sent to Madyan with the call and the measure and scale."
+   "why": "Same story: Shuayb sent to Madyan with the call and the measure and scale.",
+   "checked": true
   },
   "7:91|11:67": {
    "keep": true,
-   "why": "Same ending: they lay lifeless in their homes (Madyan / Thamud)."
+   "why": "Same ending: they lay lifeless in their homes (Madyan / Thamud).",
+   "checked": true
   },
   "7:91|11:94": {
    "keep": true,
-   "why": "Same story: Madyan seized and left lifeless in their homes: الرجفة and الصيحة."
+   "why": "Same story: Madyan seized and left lifeless in their homes: الرجفة and الصيحة.",
+   "checked": true
   },
   "7:106|11:32": {
    "keep": true,
    "why": "Same challenge 'bring it, if you are truthful' (Pharaoh to Moses / Noah's people).",
-   "ask": "Pharaoh asks Moses for a sign; Noah's people ask for the punishment. Same words, different requests. Keep?"
+   "checked": true
   },
   "7:118|11:16": {
    "keep": true,
    "why": "Same rare clause: what they used to do became void (بطل / باطل).",
-   "ask": "Kept under your rare-words rule: keep?"
+   "checked": true
   },
   "7:139|11:16": {
    "keep": true,
-   "why": "Same phrase: void is what they used to do."
+   "why": "Same phrase: void is what they used to do.",
+   "checked": true
   },
   "7:149|11:47": {
    "keep": true,
-   "why": "Same plea: if He does not have mercy on us and forgive us, we will be among the losers."
+   "why": "Same plea: if He does not have mercy on us and forgive us, we will be among the losers.",
+   "checked": true
   },
   "7:151|11:41": {
    "keep": false,
-   "why": "Only 'Lord', forgiveness and mercy; Moses' prayer vs Noah boarding the ark."
+   "why": "Only 'Lord', forgiveness and mercy; Moses' prayer vs Noah boarding the ark.",
+   "checked": true
   },
   "7:151|11:47": {
    "keep": true,
-   "why": "Both are a prophet's prayer for forgiveness and mercy: 'My Lord, forgive me' (Moses / Noah)."
+   "why": "Both are a prophet's prayer for forgiveness and mercy: 'My Lord, forgive me' (Moses / Noah).",
+   "checked": true
   },
   "7:194|11:13": {
    "keep": true,
-   "why": "Same challenge: call on those besides Allah, if you are truthful."
+   "why": "Same challenge: call on those besides Allah, if you are truthful.",
+   "checked": true
   },
   "7:23|26:51": {
    "keep": false,
