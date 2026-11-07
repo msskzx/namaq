@@ -6875,6 +6875,206 @@
   "2:116|85:9": {
    "keep": false,
    "why": "Only heavens and earth as words."
+  },
+  "3:9|11:118": {
+   "keep": false,
+   "why": "Only 'people' and 'your Lord' as words."
+  },
+  "3:44|11:49": {
+   "keep": true,
+   "why": "Same sentence: that is from the news of the unseen which We reveal to you; you were not with them."
+  },
+  "3:51|11:56": {
+   "keep": true,
+   "why": "Same words: Allah is my Lord and your Lord ... a straight path (Isa and Hud)."
+  },
+  "3:57|11:11": {
+   "keep": true,
+   "why": "Same idea: those who do good deeds and their reward."
+  },
+  "3:57|11:23": {
+   "keep": true,
+   "why": "Same idea: those who believe and do good and their reward."
+  },
+  "3:99|11:19": {
+   "keep": true,
+   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked."
+  },
+  "3:109|11:123": {
+   "keep": true,
+   "why": "Same idea: to Allah belongs the heavens and earth, and to Him all matters return."
+  },
+  "3:129|11:41": {
+   "keep": false,
+   "why": "Shares only the closing 'Forgiving, Merciful'."
+  },
+  "3:150|11:113": {
+   "keep": false,
+   "why": "Only protector and help as roots; different points."
+  },
+  "3:171|11:115": {
+   "keep": true,
+   "why": "Same phrase: Allah does not let the reward of the ... be lost."
+  },
+  "3:177|11:26": {
+   "keep": false,
+   "why": "Shares only 'painful punishment'."
+  },
+  "3:189|11:4": {
+   "keep": false,
+   "why": "Shares only the closing 'able over all things'."
+  },
+  "3:29|13:8": {
+   "keep": false,
+   "why": "Only Allah's knowledge and 'all things'; different points."
+  },
+  "3:40|13:27": {
+   "keep": false,
+   "why": "Only 'Allah ... whom He wills'; Zakariyya's son vs the deniers' demand."
+  },
+  "3:56|13:34": {
+   "keep": true,
+   "why": "Same idea: punishment in this world and the Hereafter, and none to protect them."
+  },
+  "3:57|13:29": {
+   "keep": true,
+   "why": "Same idea: those who believe and do good and their good reward."
+  },
+  "3:76|13:20": {
+   "keep": true,
+   "why": "Same idea: those who fulfil their covenant."
+  },
+  "3:83|13:15": {
+   "keep": true,
+   "why": "Same phrase: all in the heavens and earth submit / bow to Him willingly or unwillingly."
+  },
+  "3:98|13:27": {
+   "keep": false,
+   "why": "Only disbelief and 'say' as words."
+  },
+  "3:98|13:43": {
+   "keep": true,
+   "why": "Same idea: Allah is witness, answering those who disbelieve."
+  },
+  "3:101|13:27": {
+   "keep": false,
+   "why": "Only disbelief and guidance as words."
+  },
+  "3:126|13:28": {
+   "keep": true,
+   "why": "Same phrase: hearts find rest."
+  },
+  "3:137|13:32": {
+   "keep": true,
+   "why": "Same warning: those before you, and how was the end / My penalty."
+  },
+  "3:5|14:38": {
+   "keep": true,
+   "why": "Same sentence: nothing on earth or in the heaven is hidden from Allah."
+  },
+  "3:56|14:7": {
+   "keep": false,
+   "why": "Only disbelief and severe punishment as words; different points."
+  },
+  "3:99|14:3": {
+   "keep": true,
+   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked."
+  },
+  "3:129|14:2": {
+   "keep": false,
+   "why": "Shares only 'what is in the heavens and earth'."
+  },
+  "3:129|14:19": {
+   "keep": false,
+   "why": "Only heavens and earth and 'wills' as words."
+  },
+  "3:136|14:23": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+  },
+  "3:189|14:19": {
+   "keep": false,
+   "why": "Only heavens and earth as words."
+  },
+  "3:198|14:23": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+  },
+  "3:16|6:27": {
+   "keep": true,
+   "why": "Contrast: the believers pray to be saved from the Fire; the deniers standing over the Fire wish they had believed."
+  },
+  "3:27|6:95": {
+   "keep": true,
+   "why": "Same phrase: He brings the living out of the dead and the dead out of the living."
+  },
+  "3:62|6:62": {
+   "keep": false,
+   "why": "Only 'the truth' and Allah as words."
+  },
+  "3:73|6:124": {
+   "keep": true,
+   "why": "Same phrase: given the like of what was given to ...; Allah decides whom He gives."
+  },
+  "3:94|6:21": {
+   "keep": true,
+   "why": "Same idea: whoever invents a lie against Allah is a wrongdoer."
+  },
+  "3:95|6:23": {
+   "keep": false,
+   "why": "Only 'polytheists' as a word."
+  },
+  "3:95|6:161": {
+   "keep": true,
+   "why": "Same phrase: the way of Ibrahim, upright, and he was not of the polytheists."
+  },
+  "3:137|6:11": {
+   "keep": true,
+   "why": "Same sentence: travel in the land and see how was the end of the deniers."
+  },
+  "3:189|6:17": {
+   "keep": false,
+   "why": "Shares only the closing 'able over all things'."
+  },
+  "3:189|6:75": {
+   "keep": false,
+   "why": "Only the dominion of the heavens and earth as words."
+  },
+  "3:29|7:128": {
+   "keep": false,
+   "why": "Only the earth and 'whom He wills' as words."
+  },
+  "3:89|7:153": {
+   "keep": true,
+   "why": "Same idea: those who repent afterwards; Allah is Forgiving, Merciful."
+  },
+  "3:99|7:45": {
+   "keep": true,
+   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked."
+  },
+  "3:135|7:28": {
+   "keep": true,
+   "why": "Contrast: when they commit an indecency the believers remember Allah, the deniers blame their fathers."
+  },
+  "3:137|7:84": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the ..."
+  },
+  "3:137|7:103": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the ..."
+  },
+  "3:142|7:49": {
+   "keep": false,
+   "why": "Only entering Paradise as words; different points."
+  },
+  "3:189|7:185": {
+   "keep": false,
+   "why": "Only the dominion of the heavens and earth as words."
+  },
+  "3:194|7:77": {
+   "keep": false,
+   "why": "Only the root of promise; a prayer vs Thamud's challenge."
   }
  }
 }
