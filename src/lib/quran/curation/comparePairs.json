@@ -5497,6 +5497,104 @@
   "29:68|39:32": {
    "keep": true,
    "why": "Nearly the same ayah: who does more wrong than one who lies about Allah; is not Hell a home for the disbelievers."
+  },
+  "29:7|30:45": {
+   "keep": true,
+   "why": "Same promise: Allah rewards those who believe and do righteous deeds."
+  },
+  "29:9|30:15": {
+   "keep": false,
+   "why": "Shares only the formula those who believe and do righteous deeds."
+  },
+  "29:9|30:45": {
+   "keep": false,
+   "why": "Shares only the formula those who believe and do righteous deeds."
+  },
+  "29:19|30:11": {
+   "keep": true,
+   "why": "Same sentence: Allah begins creation and then repeats it."
+  },
+  "29:20|30:50": {
+   "keep": true,
+   "why": "Same topic: look how Allah begins creation and brings life again, proof of the resurrection."
+  },
+  "29:23|30:16": {
+   "keep": true,
+   "why": "Same idea: those who disbelieve in Our signs and the meeting, and their punishment."
+  },
+  "29:42|30:5": {
+   "keep": false,
+   "why": "Shares only the names closing the ayah; the subjects differ."
+  },
+  "29:44|30:22": {
+   "keep": true,
+   "why": "Same idea: the creation of the heavens and earth is a sign."
+  },
+  "29:62|30:37": {
+   "keep": true,
+   "why": "Same sentence: Allah extends provision for whom He wills and restricts it."
+  },
+  "29:63|30:24": {
+   "keep": true,
+   "why": "Same sentence: He sends water from the sky and revives the earth after its death."
+  },
+  "29:64|30:7": {
+   "keep": true,
+   "why": "Same contrast: the life of this world against the Hereafter, and knowing."
+  },
+  "29:66|30:34": {
+   "keep": true,
+   "why": "Nearly the same ayah: to deny what We gave them; enjoy, you will come to know."
+  },
+  "26:24|37:5": {
+   "keep": false,
+   "why": "Shares only the title Lord of the heavens and earth and what is between them."
+  },
+  "26:26|37:126": {
+   "keep": true,
+   "why": "Same words: your Lord and the Lord of your forefathers; Musa to Pharaoh and Ilyas to his people.",
+   "ask": "Different prophets say the same words: keep?"
+  },
+  "26:28|37:5": {
+   "keep": false,
+   "why": "Shares only Lord of ... and what is between them."
+  },
+  "26:31|37:157": {
+   "keep": false,
+   "why": "Shares only the stock challenge bring it if you are truthful; the subjects differ."
+  },
+  "26:154|37:157": {
+   "keep": false,
+   "why": "Shares only the stock challenge bring it if you are truthful; the subjects differ."
+  },
+  "26:66|37:82": {
+   "keep": true,
+   "why": "Same words: then We drowned the others; Pharaoh's people and Nuh's people.",
+   "ask": "Different stories end with the same words: keep?"
+  },
+  "26:70|37:85": {
+   "keep": true,
+   "why": "Same story: Ibrahim asks his father and people what they worship."
+  },
+  "26:83|37:100": {
+   "keep": true,
+   "why": "Same prayer of Ibrahim: my Lord, grant me ... the righteous."
+  },
+  "26:170|37:134": {
+   "keep": true,
+   "why": "Same story: Lut and his family were saved."
+  },
+  "26:171|37:135": {
+   "keep": true,
+   "why": "Same story, same words: except an old woman among those who stayed behind."
+  },
+  "26:172|37:136": {
+   "keep": true,
+   "why": "Same story, same words: then We destroyed the others."
+  },
+  "26:204|37:176": {
+   "keep": true,
+   "why": "Same ayah: do they seek to hasten Our punishment?"
   }
  }
 }
