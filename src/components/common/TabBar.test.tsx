@@ -17,7 +17,7 @@ describe('TabBar', () => {
     state.language = language;
     state.path = '/quran/compare';
     render(<TabBar />);
-    const link = screen.getByRole('link', { name: language === 'ar' ? 'مقارنة المقاطع' : 'Passage comparisons' });
+    const link = screen.getByRole('link', { name: language === 'ar' ? 'مقارنة السور' : 'Compare surahs' });
     expect(link.getAttribute('href')).toBe('/quran/compare');
     expect(link.getAttribute('aria-current')).toBe('page');
   });

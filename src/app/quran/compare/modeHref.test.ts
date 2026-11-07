@@ -23,7 +23,7 @@ describe('modeHref', () => {
 describe('viewHref', () => {
   it('keeps the surahs and ayah ranges and switches the ayah-by-ayah view on or off', () => {
     expect(viewHref(true, { a: '56', af: '70', at: '80', b: '69' })).toBe('/quran/compare?a=56&af=70&at=80&b=69&view=ayat');
-    expect(viewHref(false, { a: '56', b: '69', view: 'ayat' })).toBe('/quran/compare?a=56&b=69');
+    expect(viewHref(false, { a: '56', b: '69', view: 'ayat' })).toBe('/quran/compare?a=56&b=69&view=similar');
     expect(viewHref(true, {})).toBe('/quran/compare?view=ayat');
   });
 });
@@ -31,7 +31,7 @@ describe('viewHref', () => {
 describe('tabHref and pairHref', () => {
   it('links each tab and keeps the range', () => {
     const query = { a: '56', b: '69', juzFrom: '27', juzTo: '29' };
-    expect(tabHref('similar', query)).toBe('/quran/compare?a=56&b=69&juzFrom=27&juzTo=29');
+    expect(tabHref('similar', query)).toBe('/quran/compare?a=56&b=69&juzFrom=27&juzTo=29&view=similar');
     expect(tabHref('ayat', query)).toBe('/quran/compare?a=56&b=69&juzFrom=27&juzTo=29&view=ayat');
     expect(tabHref('themes', query)).toBe('/quran/compare?mode=themes&a=56&b=69&juzFrom=27&juzTo=29');
   });

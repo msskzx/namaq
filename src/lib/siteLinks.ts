@@ -19,7 +19,7 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/hadith/fath-iman-50', label: language === 'ar' ? 'فتح الباري — الحديث ٥٠' : 'Fath al-Bari — hadith 50' },
   { href: '/quran/read', label: language === 'ar' ? 'قراءة القرآن' : 'Read the Quran' },
   { href: '/quran', label: language === 'ar' ? 'القرآن' : 'Quran' },
-  { href: '/quran/compare', label: language === 'ar' ? 'مقارنة السور وتكرار العبارات' : 'Compare surahs and repeated phrases' },
+  { href: '/quran/compare', label: language === 'ar' ? 'مقارنة السور' : 'Compare surahs' },
   { href: '/quran/words', label: language === 'ar' ? 'ألفاظ القرآن' : 'Words of the Quran' },
   { href: '/quran/branches', label: language === 'ar' ? 'متشابهات القرآن' : 'Shared phrase trees' },
   { href: '/quran/iltifat', label: language === 'ar' ? 'التفات: تحولات مختارة' : 'Iltifat: hand-picked shifts' },

@@ -1,32 +1,13 @@
-import { compareHref } from './compare';
-
+/** Surah pairs pinned at the top of the compare list: the same story told in both surahs. */
 export const curatedComparisons = [
-  { id: 'moses-pharaoh', name: { ar: 'موسى وفرعون', voweled: 'مُوسَىٰ وَفِرۡعَوۡنُ', en: 'Moses and Pharaoh' }, a: { surah: 7, from: 103, to: 137 }, b: { surah: 26, from: 10, to: 68 } },
-  { id: 'noah', name: { ar: 'نوح', voweled: 'نُوحٌ', en: 'Noah' }, a: { surah: 7, from: 59, to: 64 }, b: { surah: 26, from: 105, to: 122 } },
-  { id: 'hud', name: { ar: 'هود', voweled: 'هُودٌ', en: 'Hud' }, a: { surah: 7, from: 65, to: 72 }, b: { surah: 26, from: 123, to: 140 } },
-  { id: 'salih', name: { ar: 'صالح', voweled: 'صَالِحٌ', en: 'Salih' }, a: { surah: 7, from: 73, to: 79 }, b: { surah: 26, from: 141, to: 159 } },
-  { id: 'lot', name: { ar: 'لوط', voweled: 'لُوطٌ', en: 'Lot' }, a: { surah: 7, from: 80, to: 84 }, b: { surah: 26, from: 160, to: 175 } },
-  { id: 'shuayb', name: { ar: 'شعيب', voweled: 'شُعَيۡبٌ', en: 'Shuayb' }, a: { surah: 7, from: 85, to: 93 }, b: { surah: 26, from: 176, to: 191 } },
-  { id: 'creation-iblis', name: { ar: 'الخلق وإبليس', voweled: 'الخَلۡقُ وَإِبۡلِيسُ', en: 'Creation and Iblis' }, a: { surah: 15, from: 26, to: 44 }, b: { surah: 38, from: 71, to: 85 } },
-];
+  { id: 'adam-israel', a: 2, b: 7, name: { ar: 'آدم وبنو إسرائيل', voweled: 'آدَمُ وَبَنُو إِسۡرَٰٓءِيلَ', en: 'Adam and the Children of Israel' } },
+  { id: 'prophets', a: 7, b: 11, name: { ar: 'نوح وهود وصالح وشعيب', voweled: 'نُوحٌ وَهُودٌ وَصَٰلِحٌ وَشُعَيۡبٌ', en: 'Noah, Hud, Salih and Shuayb' } },
+  { id: 'moses-pharaoh', a: 7, b: 26, name: { ar: 'موسى وفرعون', voweled: 'مُوسَىٰ وَفِرۡعَوۡنُ', en: 'Moses and Pharaoh' } },
+  { id: 'creation-iblis', a: 15, b: 38, name: { ar: 'الخلق وإبليس', voweled: 'الخَلۡقُ وَإِبۡلِيسُ', en: 'Creation and Iblis' } },
+] as const;
 
-export const curatedSurahNames: Record<number, { ar: string; en: string; title: { ar: string; en: string } }> = {
-  7: { ar: 'الأعراف', en: "Al-A'raf", title: { ar: 'سُورَةُ الأَعۡرَافِ', en: "Surat Al-A'raf" } },
-  15: { ar: 'الحجر', en: 'Al-Hijr', title: { ar: 'سُورَةُ الحِجۡرِ', en: 'Surat Al-Hijr' } },
-  26: { ar: 'الشعراء', en: "Ash-Shu'ara", title: { ar: 'سُورَةُ الشُّعَرَاءِ', en: "Surat Ash-Shu'ara" } },
-  38: { ar: 'ص', en: 'Sad', title: { ar: 'سُورَةُ صٓ', en: 'Surat Sad' } },
-};
+export type CuratedComparison = typeof curatedComparisons[number];
 
-type Preset = typeof curatedComparisons[number];
+export const surahPairHref = (a: number, b: number) => `/quran/compare?a=${Math.min(a, b)}&b=${Math.max(a, b)}`;
 
-/** «سُورَةُ الأَعۡرَافِ وَسُورَةُ الشُّعَرَاءِ - مُوسَىٰ وَفِرۡعَوۡنُ» */
-export function curatedTitle(preset: Preset, language: 'ar' | 'en') {
-  const name = (surah: number) => curatedSurahNames[surah]?.title[language] ?? String(surah);
-  return language === 'ar'
-    ? `${name(preset.a.surah)} وَ${name(preset.b.surah)} - ${preset.name.voweled}`
-    : `${name(preset.a.surah)} and ${name(preset.b.surah)} - ${preset.name.en}`;
-}
-
-export function curatedComparisonHref(preset: typeof curatedComparisons[number]) {
-  return `${compareHref(preset.a.surah, preset.a, preset.b.surah, preset.b)}&view=ayat&preset=${preset.id}`;
-}
+export const curatedFor = (a: number, b: number) => curatedComparisons.find(story => story.a === Math.min(a, b) && story.b === Math.max(a, b));

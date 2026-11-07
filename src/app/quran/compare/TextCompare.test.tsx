@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { NavSlotElement } from '@/components/common/NavBar';
+import { cleanup, render, screen } from '@testing-library/react';
 import TextCompare from './TextCompare';
 import quran from '../branches/trees.json';
 import spread from '@/components/quran/PageSpread.module.css';
-import { num } from '@/lib/quran/arabicNumber';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: () => {} }) }));
 vi.mock('@/lib/prisma', () => ({
@@ -27,11 +25,6 @@ const value = (label: string) => label.startsWith('السورة')
   ? (screen.getByRole('combobox', { name: label }).parentElement!.querySelector('input[type=hidden]') as HTMLInputElement).value
   : (screen.getByRole('spinbutton', { name: label }) as HTMLInputElement).value;
 
-function WithBar({ children }: { children: React.ReactNode }) {
-  const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
-  return <><div ref={setSlot} /><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
-}
-
 describe('TextCompare', () => {
   it('keeps equal-length explicit custom ranges paired ayah by ayah', async () => {
     const { container } = render(await TextCompare({ query: { view: 'ayat', a: '112', af: '1', at: '2', b: '114', bf: '1', bt: '2' }, range: { unit: 'juz', range: null } }));
@@ -42,24 +35,6 @@ describe('TextCompare', () => {
     }
     expect(screen.getByRole('combobox', { name: 'السورة الأولى' })).toBeTruthy();
     expect(screen.getByRole('combobox', { name: 'السورة الثانية' })).toBeTruthy();
-  });
-
-  it.each(['ar', 'en'])('renders the full Salih passages without header, labels or custom controls in %s', async language => {
-    locale.language = language;
-    const content = await TextCompare({ query: { view: 'ayat', a: '7', af: '73', at: '79', b: '26', bf: '141', bt: '159' }, range: { unit: 'juz', range: null }, curated: true });
-    const { container } = render(<WithBar>{content}</WithBar>);
-    expect(container.querySelectorAll(`.${spread.verseSeal}`).length).toBeLessThan(26);
-    const show = language === 'ar' ? 'اعرض الآيات التي لا تطابق فيها' : 'Show ayat without matches';
-    fireEvent.click(screen.getByRole('button', { name: show }));
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'أخفِ الآيات التي لا تطابق فيها' : 'Hide ayat without matches' })).toBeTruthy();
-    expect(screen.queryByRole('combobox')).toBeNull();
-    expect(screen.queryByRole('spinbutton')).toBeNull();
-    expect(screen.queryByText(language === 'ar' ? 'مطابقات لفظية' : 'Lexical matches')).toBeNull();
-    expect(screen.queryByText(language === 'ar' ? 'كيف نقارن؟' : 'How are matches found?')).toBeNull();
-    const seals = Array.from(container.querySelectorAll(`.${spread.verseSeal}`)).map(seal => seal.textContent);
-    expect(seals).toHaveLength(26);
-    for (let verse = 73; verse <= 79; verse++) expect(seals.filter(seal => seal === num(verse))).toHaveLength(1);
-    for (let verse = 141; verse <= 159; verse++) expect(seals.filter(seal => seal === num(verse))).toHaveLength(1);
   });
 
   it('shows the newly chosen surahs and ranges in its fields when the page moves to another comparison', async () => {

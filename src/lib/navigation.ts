@@ -15,6 +15,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
     { title: { ar: 'الألفاظ', en: 'Words' }, items: [
       quran('/quran/branches', { ar: 'متشابهات القرآن', en: 'Shared phrase trees' }),
       quran('/quran/compare', { ar: 'مقارنة السور', en: 'Compare surahs' }),
+      { href: '/quran/compare?view=similar', label: { ar: 'مقارنة السور بأدواتها كاملة', en: 'Compare surahs with every tool' }, purpose: { ar: 'المقارنة السابقة بكل أدواتها: آية بآية، والمواضيع، ونطاق الأجزاء والسور', en: 'The earlier comparison with every tool: ayah by ayah, topics, and juz or surah ranges' } },
       quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
     ] },
     { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
@@ -54,7 +55,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 
 export const NAV_SECTIONS: NavSection[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
-  { href: '/quran/compare', label: { ar: 'مقارنة المقاطع', en: 'Passage comparisons' }, groups: [] },
+  { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, groups: [] },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];
