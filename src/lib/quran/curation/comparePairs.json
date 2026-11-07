@@ -4651,6 +4651,62 @@
   "3:189|48:21": {
    "keep": false,
    "why": "Only the formula 'Allah has power over all things'."
+  },
+  "5:39|16:119": {
+   "keep": true,
+   "why": "Same thought: whoever repents after (wrongdoing) and reforms; Forgiving, Merciful."
+  },
+  "5:73|16:51": {
+   "keep": true,
+   "why": "Same teaching: there is only One God, against those who take more than one."
+  },
+  "5:76|16:73": {
+   "keep": true,
+   "why": "Same sentence: worshipping besides Allah what has no power (to harm or provide)."
+  },
+  "5:85|16:31": {
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath; that is the reward."
+  },
+  "5:88|16:114": {
+   "keep": true,
+   "why": "Same sentence: eat of what Allah has provided you, lawful and good."
+  },
+  "5:34|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "5:39|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "5:40|16:73": {
+   "keep": false,
+   "why": "Only heavens and earth and 'own'; different points."
+  },
+  "5:40|16:77": {
+   "keep": false,
+   "why": "Only the formula 'Allah has power over all things'."
+  },
+  "5:74|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "5:81|16:101": {
+   "keep": false,
+   "why": "Only scattered words; different subjects."
+  },
+  "5:98|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "5:120|16:73": {
+   "keep": false,
+   "why": "Only heavens and earth and 'own'; different points."
+  },
+  "5:120|16:77": {
+   "keep": false,
+   "why": "Only the formula 'He has power over all things'."
   }
  }
 }
