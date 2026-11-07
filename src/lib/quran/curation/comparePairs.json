@@ -5208,6 +5208,110 @@
   "10:84|43:69": {
    "keep": false,
    "why": "Only 'believed' and 'muslims'."
+  },
+  "10:42|27:80": {
+   "keep": true,
+   "why": "Same thought: you cannot make the deaf hear."
+  },
+  "10:48|27:71": {
+   "keep": true,
+   "why": "Same sentence: they say, when is this promise, if you are truthful."
+  },
+  "10:60|27:73": {
+   "keep": true,
+   "why": "Same sentence: (your Lord) is full of favour to people, but most do not give thanks."
+  },
+  "10:63|27:53": {
+   "keep": true,
+   "why": "Same phrase: those who believed and used to fear (Allah)."
+  },
+  "10:67|27:86": {
+   "keep": true,
+   "why": "Same sentence: the night to rest in and the day to see; signs for a people."
+  },
+  "10:76|27:13": {
+   "keep": true,
+   "why": "Same sentence: when it came to them they said, this is clear magic."
+  },
+  "10:108|27:92": {
+   "keep": true,
+   "why": "Same sentence: whoever is guided is guided for himself; whoever strays ..."
+  },
+  "4:41|16:84": {
+   "keep": true,
+   "why": "Same scene: from every nation a witness."
+  },
+  "4:97|16:28": {
+   "keep": true,
+   "why": "Same sentence: those whom the angels take while wronging themselves."
+  },
+  "4:110|16:119": {
+   "keep": true,
+   "why": "Same thought: whoever does evil then turns back finds Allah Forgiving, Merciful."
+  },
+  "4:124|16:97": {
+   "keep": true,
+   "why": "Same sentence: whoever does good, male or female, while a believer."
+  },
+  "4:167|16:88": {
+   "keep": true,
+   "why": "Same sentence: those who disbelieve and turn others from the way of Allah."
+  },
+  "10:6|27:86": {
+   "keep": false,
+   "why": "Only night and day and the formula 'signs for a people'."
+  },
+  "10:10|27:8": {
+   "keep": false,
+   "why": "Only 'glory' and 'Lord of the worlds'."
+  },
+  "10:14|27:69": {
+   "keep": false,
+   "why": "Only 'in the land' and 'see how'."
+  },
+  "10:43|27:41": {
+   "keep": false,
+   "why": "Only 'see' and 'guide'; different scenes."
+  },
+  "10:55|27:25": {
+   "keep": false,
+   "why": "Only heavens and earth."
+  },
+  "10:95|27:84": {
+   "keep": false,
+   "why": "Only 'denied the signs'."
+  },
+  "4:50|16:105": {
+   "keep": false,
+   "why": "Only 'invent lies'; different points."
+  },
+  "4:68|16:121": {
+   "keep": false,
+   "why": "Only the formula 'straight path'."
+  },
+  "4:96|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "4:106|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "4:109|16:107": {
+   "keep": false,
+   "why": "Only 'worldly life'; different points."
+  },
+  "4:110|16:18": {
+   "keep": false,
+   "why": "Only the closing names Forgiving, Merciful."
+  },
+  "4:126|16:73": {
+   "keep": false,
+   "why": "Only heavens and earth."
+  },
+  "4:126|16:77": {
+   "keep": false,
+   "why": "Only heavens and earth and 'all things'."
   }
  }
 }
