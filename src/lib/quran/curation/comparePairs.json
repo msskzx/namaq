@@ -4297,6 +4297,67 @@
   "3:137|10:39": {
    "keep": false,
    "why": "Only the formula 'see how was the end of ...'."
+  },
+  "6:22|28:62": {
+   "keep": true,
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+  },
+  "6:22|28:74": {
+   "keep": true,
+   "why": "Same Day-of-Judgement question: where are the partners you used to claim?"
+  },
+  "6:32|28:60": {
+   "keep": true,
+   "why": "Same teaching: worldly life is little, what is with Allah is better; do you not reason?"
+  },
+  "6:40|28:71": {
+   "keep": true,
+   "why": "Same argument: 'Say, have you considered, if Allah ... who other than Allah'."
+  },
+  "6:46|28:71": {
+   "keep": true,
+   "why": "Same argument: which god other than Allah could bring it back to you."
+  },
+  "6:46|28:72": {
+   "keep": true,
+   "why": "Same argument: which god other than Allah could bring it back to you."
+  },
+  "6:131|28:59": {
+   "keep": true,
+   "why": "Same sentence: your Lord would not destroy the towns (unjustly)."
+  },
+  "6:135|28:37": {
+   "keep": true,
+   "why": "Same ending: who will have the good end; the wrongdoers do not succeed."
+  },
+  "6:160|28:84": {
+   "keep": true,
+   "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed."
+  },
+  "6:11|28:40": {
+   "keep": false,
+   "why": "Only the formula 'see how was the end of ...'."
+  },
+  "6:23|28:87": {
+   "keep": false,
+   "why": "Only scattered words around 'associators'."
+  },
+  "6:30|28:63": {
+   "keep": false,
+   "why": "Only scattered words; different scenes."
+  },
+  "6:40|28:49": {
+   "keep": false,
+   "why": "Only the formula 'if you are truthful'."
+  },
+  "6:45|28:21": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'; different subjects."
+  },
+  "6:20|28:52": {
+   "keep": true,
+   "why": "Same opening: those to whom We gave the Book; one side rejects, the other believes.",
+   "ask": "Opposite outcomes for the same opening (they do not believe / they believe). Keep as a contrast pair?"
   }
  }
 }
