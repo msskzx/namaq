@@ -5401,6 +5401,54 @@
   "4:126|16:77": {
    "keep": false,
    "why": "Only heavens and earth and 'all things'."
+  },
+  "33:24|48:14": {
+   "keep": true,
+   "why": "Same idea: Allah punishes or forgives as He wills, ending with forgiving and merciful."
+  },
+  "33:27|48:21": {
+   "keep": true,
+   "why": "Same topic: further gains the believers had not yet reached, and Allah is able over all things."
+  },
+  "33:38|48:23": {
+   "keep": true,
+   "why": "Same phrase: the way of Allah with those who passed before."
+  },
+  "33:40|48:21": {
+   "keep": false,
+   "why": "Shares only the closing about Allah's knowledge and power over all things; the subjects differ."
+  },
+  "33:42|48:9": {
+   "keep": true,
+   "why": "Same command: glorify Him morning and evening."
+  },
+  "33:45|48:8": {
+   "keep": true,
+   "why": "Same sentence: We sent you as witness, bringer of good news and warner."
+  },
+  "33:54|48:21": {
+   "keep": false,
+   "why": "Shares only the closing about all things; the subjects differ."
+  },
+  "33:62|48:23": {
+   "keep": true,
+   "why": "Nearly the same ayah: the way of Allah, and you will never find a change in it."
+  },
+  "33:64|48:13": {
+   "keep": true,
+   "why": "Same idea: a blazing fire prepared for the disbelievers."
+  },
+  "33:65|48:22": {
+   "keep": false,
+   "why": "Shares only the stock clause that they find no protector or helper; one is about the Fire, the other about fleeing in battle."
+  },
+  "33:73|48:6": {
+   "keep": true,
+   "why": "Same list: Allah punishes the hypocrite men and women and the polytheist men and women."
+  },
+  "33:73|48:14": {
+   "keep": true,
+   "why": "Same idea: Allah punishes and forgives, ending with forgiving and merciful."
   }
  }
 }
