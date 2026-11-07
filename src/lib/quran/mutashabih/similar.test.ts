@@ -40,6 +40,14 @@ describe('compare criteria on the engine', () => {
     expect(crossingColumns(a, b, [[0, 2, 'exact'], [1, 3, 'exact']])).toEqual([[3, 0, 'lemma']]);
   });
 
+  it('then matches crossing words that share only a root (الظالمون / أظلم in 3:94 and 10:17)', () => {
+    const pair = byKeys.get('3:94|10:17');
+    expect(pair?.columns).toContainEqual([10, 1, 'root']);
+    const a = { key: '1:1', page: 1, words: ['a', 'b'], lemmas: ['ZaAlim', 'x'], roots: ['Zlm', 'rx'] };
+    const b = { key: '2:1', page: 1, words: ['c', 'd'], lemmas: ['>aZolam', 'x'], roots: ['Zlm', 'rx'] };
+    expect(crossingColumns(a, b, [[1, 1, 'exact']])).toEqual([[0, 0, 'root']]);
+  });
+
   it('gives يهوديا the lemma and root of هودا', () => {
     const fixed = withAliases({ key: '3:67', page: 1, words: ['يهوديا'], lemmas: ['yahuwdiy~'], roots: [null] });
     expect([fixed.lemmas?.[0], fixed.roots?.[0]]).toEqual(['huwd2', 'hwd']);

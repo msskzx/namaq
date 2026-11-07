@@ -41,7 +41,7 @@ const surahOf = (value: string | string[] | undefined) => {
 async function pairPage(a: number, b: number, review = false) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={listedPairs} names={names} />;
+  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={listedPairs} names={names} review={review} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {

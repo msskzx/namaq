@@ -54,8 +54,14 @@ describe('QuranComparePage', () => {
     const pane = screen.getByRole('complementary', { name: 'اختر سورتين' });
     expect(within(pane).getByRole('button', { name: /ترتيب المصحف/ }).getAttribute('aria-pressed')).toBe('true');
     const current = within(pane).getAllByRole('link', { current: 'page' });
-    expect(current.map(link => link.textContent)).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء٢٤', 'الشعرآء٢٤', 'الاعراف٢٤']);
-    expect(screen.getAllByRole('article').length).toBe(48);
+    // The count follows the curated verdicts, which change as pairs are reviewed.
+    const texts = current.map(link => link.textContent ?? '');
+    expect(texts.map(text => text.replace(/[٠-٩]+$/, ''))).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء', 'الشعرآء', 'الاعراف']);
+    const counts = new Set(texts.map(text => text.match(/[٠-٩]+$/)?.[0]));
+    expect(counts.size).toBe(1);
+    const count = Number([...counts][0]!.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))));
+    expect(count).toBeGreaterThan(0);
+    expect(screen.getAllByRole('article').length).toBe(count * 2);
   });
 
   it.each([
