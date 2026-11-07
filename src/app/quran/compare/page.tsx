@@ -14,6 +14,8 @@ import { ayahInRange, parseCompareRange, surahInRange } from '@/lib/quran/compar
 import { plainName } from '@/lib/quran/normalize';
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
+import { curatedComparisons } from '@/lib/quran/curatedComparisons';
+import CuratedCompare from './CuratedCompare';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +37,15 @@ const surahOf = (value: string | string[] | undefined) => {
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const query = await searchParams;
+  const legacyKeys = ['a', 'b', 'af', 'at', 'bf', 'bt', 's', 't', 'mode', 'view', 'by', 'juzFrom', 'juzTo', 'surahFrom', 'surahTo'];
+  if (query.preset !== undefined || !legacyKeys.some(key => query[key] !== undefined)) {
+    const selected = curatedComparisons.find(preset => preset.id === query.preset);
+    const preset = selected ?? curatedComparisons[0];
+    const shown = { a: String(preset.a.surah), af: String(preset.a.from), at: String(preset.a.to), b: String(preset.b.surah), bf: String(preset.b.from), bt: String(preset.b.to), view: 'ayat' };
+    return <CuratedCompare selectedId={preset.id} unavailable={query.preset !== undefined && !selected}>
+      <TextCompare key={preset.id} query={shown} range={parseCompareRange({})} curated />
+    </CuratedCompare>;
+  }
   const themes = query.mode === 'themes';
   const s = surahOf(query.s);
   const t = surahOf(query.t);
