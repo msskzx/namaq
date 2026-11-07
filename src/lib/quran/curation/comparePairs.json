@@ -3461,6 +3461,78 @@
   "3:189|33:27": {
    "keep": false,
    "why": "Only the closing 'Allah has power over all things'."
+  },
+  "5:34|24:5": {
+   "keep": true,
+   "why": "Same exception: except those who repent …; Allah is Forgiving, Merciful."
+  },
+  "5:39|24:5": {
+   "keep": true,
+   "why": "Same exception: whoever repents after … and reforms, Allah is Forgiving, Merciful."
+  },
+  "5:43|24:47": {
+   "keep": true,
+   "why": "Same sentence: then they turn away after that; those are not believers."
+  },
+  "5:53|24:53": {
+   "keep": true,
+   "why": "Same phrase: they swore by Allah their strongest oaths."
+  },
+  "5:92|24:54": {
+   "keep": true,
+   "why": "Same command: obey Allah and obey the Messenger; if you turn away, the Messenger's duty is only clear delivery."
+  },
+  "5:99|24:29": {
+   "keep": true,
+   "why": "Same sentence: Allah knows what you reveal and what you conceal."
+  },
+  "5:9|24:5": {
+   "keep": false,
+   "why": "Only forgiveness for believers."
+  },
+  "5:40|24:41": {
+   "keep": false,
+   "why": "Only 'do you not know that Allah …' and the heavens and earth."
+  },
+  "5:40|24:42": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "5:40|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
+  },
+  "5:55|24:56": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'."
+  },
+  "5:61|24:29": {
+   "keep": false,
+   "why": "Only 'Allah knows what they conceal'."
+  },
+  "5:74|24:5": {
+   "keep": false,
+   "why": "Only repentance and the closing 'Forgiving, Merciful'."
+  },
+  "5:97|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'Allah knows all things'."
+  },
+  "5:98|24:5": {
+   "keep": false,
+   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+  },
+  "5:115|24:28": {
+   "keep": false,
+   "why": "Only scattered words."
+  },
+  "5:120|24:42": {
+   "keep": false,
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+  },
+  "5:120|24:64": {
+   "keep": false,
+   "why": "Only the heavens-and-earth formula and 'all things'."
   }
  }
 }
