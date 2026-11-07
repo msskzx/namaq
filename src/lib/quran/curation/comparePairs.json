@@ -4434,8 +4434,9 @@
    "checked": true
   },
   "9:9|16:88": {
-   "keep": true,
-   "why": "Same phrase: turned (people) away from the way of Allah."
+   "keep": false,
+   "why": "Shares only the phrase about turning people away from the way of Allah; the subjects and contexts differ (owner removed).",
+   "checked": true
   },
   "9:9|16:95": {
    "keep": true,
@@ -4446,8 +4447,9 @@
    "why": "Same thought: turning in repentance after that; Forgiving, Merciful."
   },
   "9:41|16:95": {
-   "keep": true,
-   "why": "Same ending: that is better for you, if you only knew."
+   "keep": false,
+   "why": "Shares only the ending that it is better for you if you knew; the subjects differ (owner removed).",
+   "checked": true
   },
   "9:70|16:33": {
    "keep": true,
