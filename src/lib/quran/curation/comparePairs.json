@@ -17523,15 +17523,18 @@
   },
   "16:3|42:4": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'; creation in truth vs ownership."
+   "why": "Only 'the heavens and the earth'; creation in truth vs ownership.",
+   "checked": true
   },
   "16:73|42:49": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion and gifts of children."
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion and gifts of children.",
+   "checked": true
   },
   "16:93|42:8": {
-   "keep": true,
-   "why": "Same words: had Allah willed He would have made you one nation, but He ..."
+   "keep": false,
+   "why": "Same words: had Allah willed He would have made you one nation, but He ... (owner removed)",
+   "checked": true
   },
   "16:3|43:9": {
    "keep": true,
