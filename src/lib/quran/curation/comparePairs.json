@@ -8185,31 +8185,38 @@
   },
   "3:3|41:42": {
    "keep": false,
-   "why": "Shared 'before it' only; different meaning."
+   "why": "Shared 'before it' only; different meaning.",
+   "checked": true
   },
   "3:12|41:26": {
    "keep": false,
-   "why": "Shared root of overcoming only; different subjects."
+   "why": "Shared root of overcoming only; different subjects.",
+   "checked": true
   },
   "3:56|41:27": {
-   "keep": true,
-   "why": "Severe punishment for those who disbelieve."
+   "keep": false,
+   "why": "Punishment formula only (owner removed).",
+   "checked": true
   },
   "3:57|41:8": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Reward formula only (owner removed).",
+   "checked": true
   },
   "3:57|41:46": {
    "keep": false,
-   "why": "Shared 'righteous deeds' only; different statements."
+   "why": "Shared 'righteous deeds' only; different statements.",
+   "checked": true
   },
   "3:83|41:11": {
    "keep": true,
-   "why": "Willingly or unwillingly: submission of heavens and earth."
+   "why": "Willingly or unwillingly: submission of heavens and earth.",
+   "checked": true
   },
   "3:165|41:21": {
    "keep": false,
-   "why": "Shared 'all things' only; different scenes."
+   "why": "Shared 'all things' only; different scenes.",
+   "checked": true
   },
   "3:50|43:63": {
    "keep": true,
