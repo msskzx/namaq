@@ -5186,59 +5186,73 @@
   },
   "3:15|48:5": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath, abiding forever."
+   "why": "Same reward: gardens with rivers flowing beneath, abiding forever.",
+   "checked": true
   },
   "3:198|48:5": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath, abiding forever."
+   "why": "Same reward: gardens with rivers flowing beneath, abiding forever.",
+   "checked": true
   },
   "3:111|48:22": {
    "keep": true,
-   "why": "Same image: if they fight you they will turn their backs, then no help."
+   "why": "Same image: if they fight you they will turn their backs, then no help.",
+   "checked": true
   },
   "3:129|48:14": {
    "keep": true,
-   "why": "Same sentence: He forgives whom He wills and punishes whom He wills; Forgiving, Merciful."
+   "why": "Same sentence: He forgives whom He wills and punishes whom He wills; Forgiving, Merciful.",
+   "checked": true
   },
   "3:6|48:7": {
    "keep": false,
-   "why": "Only the closing names Mighty, Wise."
+   "why": "Only the closing names Mighty, Wise.",
+   "checked": true
   },
   "3:6|48:19": {
    "keep": false,
-   "why": "Only the closing names Mighty, Wise."
+   "why": "Only the closing names Mighty, Wise.",
+   "checked": true
   },
   "3:29|48:21": {
    "keep": false,
-   "why": "Only the formula 'Allah has power over all things'."
+   "why": "Only the formula 'Allah has power over all things'.",
+   "checked": true
   },
   "3:31|48:14": {
    "keep": false,
-   "why": "Only 'forgive' and the closing names Forgiving, Merciful."
+   "why": "Only 'forgive' and the closing names Forgiving, Merciful.",
+   "checked": true
   },
   "3:62|48:7": {
    "keep": false,
-   "why": "Only the closing names Mighty, Wise."
+   "why": "Only the closing names Mighty, Wise.",
+   "checked": true
   },
   "3:62|48:19": {
    "keep": false,
-   "why": "Only the closing names Mighty, Wise."
+   "why": "Only the closing names Mighty, Wise.",
+   "checked": true
   },
   "3:101|48:2": {
    "keep": false,
-   "why": "Only the formula 'straight path'."
+   "why": "Only the formula 'straight path'.",
+   "checked": true
   },
   "3:126|48:7": {
    "keep": false,
-   "why": "Only the closing names Mighty, Wise."
+   "why": "Only the closing names Mighty, Wise.",
+   "checked": true
   },
   "3:189|48:14": {
    "keep": false,
-   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'.",
+   "checked": true
   },
   "3:189|48:21": {
    "keep": false,
-   "why": "Only the formula 'Allah has power over all things'."
+   "why": "Only the formula 'Allah has power over all things'.",
+   "checked": true
   },
   "5:39|16:119": {
    "keep": true,
