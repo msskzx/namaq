@@ -1,8 +1,10 @@
 import treeData from '@/app/quran/branches/trees.json';
-import type { Verdict } from '@/lib/quran/curation/comparePairs';
+import { compareVerdicts, type Verdict } from '@/lib/quran/curation/comparePairs';
+import { compareAnchor } from '@/lib/compareBookmarks';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 import generated from './compareCards';
+import { MARK_KINDS } from './markKinds';
 
 export type CardSide = { surah: number; ayah: number; ayat: SpreadAyah[] };
 /** One ayah against several far ones: `side` holds the partners. `shared` is the one ayah with the marks of that pairing. */
@@ -11,8 +13,9 @@ export type ManyOption = { id: string; ayah: SpreadAyah; shared: SpreadAyah };
 export type PairCard = { id: string; group?: string; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; sides: [CardSide, CardSide] };
 export type ReviewState = 'checked' | 'ask';
 
+type StoredCard = { p: string[]; g?: string; m?: number[][]; n?: 0 | 1; o?: number[][][] };
 /** `npm run quran:compare-cards` writes this from the pairs and verdicts (docs/plans/curated-passage-comparisons.md). */
-const stored = generated as unknown as { listed: SurahPair[]; review: SurahPair[]; states: Record<string, ReviewState>; cards: Record<string, PairCard[]>; links: [string, string, string][] };
+const stored = generated as unknown as { listed: SurahPair[]; review: SurahPair[]; states: Record<string, ReviewState>; cards: Record<string, StoredCard[]> };
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
 
@@ -21,33 +24,88 @@ export const listedPairs = stored.listed;
 export const reviewPairs = stored.review;
 export const reviewStates = () => stored.states;
 
-const withWords = (surah: number) => (ayah: SpreadAyah): SpreadAyah => ({ ...ayah, words: words.get(`${surah}:${ayah.number}`) ?? [] });
+const parts = (key: string) => key.split(':').map(Number);
 
-function withText(card: PairCard): PairCard {
-  const sides = card.sides.map(side => ({ ...side, ayat: side.ayat.map(withWords(side.surah)) })) as PairCard['sides'];
-  if (!card.many) return { ...card, sides };
-  const { side, options } = card.many;
-  const [partners, shared] = [sides[side].surah, sides[side === 0 ? 1 : 0].surah];
-  return { ...card, sides, many: { side, options: options.map(option => ({ ...option, ayah: withWords(partners)(option.ayah), shared: withWords(shared)(option.shared) })) } };
+function ayatOf(surah: number, numbers: number[], codes: number[]): SpreadAyah[] {
+  return numbers.map((number, offset) => ({
+    number,
+    words: words.get(`${surah}:${number}`) ?? [],
+    marks: Object.fromEntries(codes.flatMap(code => {
+      const rest = Math.floor(code / 1000);
+      const place = Math.floor(rest / 3);
+      return Math.floor(place / 200) === offset ? [[place % 200, { kind: MARK_KINDS[rest % 3], link: String(code % 1000) }]] : [];
+    })),
+  }));
 }
 
-function withoutVerdicts(card: PairCard): PairCard {
-  const plain = { ...card, ...(card.pairs ? { pairs: card.pairs.map(pair => ({ id: pair.id })) } : {}) };
-  delete plain.verdict;
-  return plain;
+const pairVerdict = (review: boolean) => (id: string) => {
+  const verdict = review ? compareVerdicts[id] : undefined;
+  return { id, ...(verdict ? { verdict } : {}) };
+};
+
+function rangeCard(item: StoredCard, review: boolean): PairCard {
+  const keys = item.p.map(id => id.split('|'));
+  const sides = [0, 1].map(side => {
+    const surah = parts(keys[0][side])[0];
+    const numbers = keys.map(key => parts(key[side])[1]);
+    const [from, to] = [Math.min(...numbers), Math.max(...numbers)];
+    return { surah, ayah: from, to, ayat: ayatOf(surah, Array.from({ length: to - from + 1 }, (_, i) => from + i), item.m![side]) };
+  });
+  const rangeId = (side: (typeof sides)[number]) => `${side.surah}:${side.ayah}${side.to > side.ayah ? `-${side.to}` : ''}`;
+  const verdict = review && item.p.length === 1 ? compareVerdicts[item.p[0]] : undefined;
+  return {
+    id: item.p.length === 1 ? item.p[0] : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
+    ...(item.g ? { group: item.g } : {}),
+    ...(verdict ? { verdict } : {}),
+    ...(item.p.length > 1 ? { pairs: item.p.map(pairVerdict(review)) } : {}),
+    sides: sides.map(({ surah, ayah, ayat }) => ({ surah, ayah, ayat })) as PairCard['sides'],
+  };
 }
+
+function manyCard(item: StoredCard, review: boolean): PairCard {
+  const side = item.n!;
+  const shared = side === 0 ? 1 : 0;
+  const keys = item.p.map(id => id.split('|'));
+  const surah = parts(keys[0][side])[0];
+  const sharedKey = keys[0][shared];
+  const [sharedSurah, sharedAyah] = parts(sharedKey);
+  const options = keys.map((key, i) => ({
+    id: item.p[i],
+    ayah: ayatOf(surah, [parts(key[side])[1]], item.o![i][1])[0],
+    shared: ayatOf(sharedSurah, [sharedAyah], item.o![i][0])[0],
+  }));
+  const partners = `${surah}:${options.map(option => option.ayah.number).join(',')}`;
+  const sides = [] as unknown as PairCard['sides'];
+  sides[side] = { surah, ayah: options[0].ayah.number, ayat: [options[0].ayah] };
+  sides[shared] = { surah: sharedSurah, ayah: sharedAyah, ayat: [options[0].shared] };
+  return {
+    id: side === 1 ? `${sharedKey}|${partners}` : `${partners}|${sharedKey}`,
+    ...(item.g ? { group: item.g } : {}),
+    pairs: item.p.map(pairVerdict(review)),
+    many: { side, options },
+    sides,
+  };
+}
+
+const cardsOf = (key: string, review: boolean) => (stored.cards[key] ?? [])
+  .filter(item => review || item.p.length > 1 || compareVerdicts[item.p[0]]?.keep !== false)
+  .map(item => (item.o ? manyCard(item, review) : rangeCard(item, review)));
 
 /** The cards of two surahs, lower surah first, in mushaf order. `review` also shows the pairs curation left out, each with its verdict. */
 export function pairCards(x: number, y: number, review = false): PairCard[] {
-  const cards = (stored.cards[`${Math.min(x, y)}:${Math.max(x, y)}`] ?? []).map(withText);
-  return review ? cards : cards.filter(card => card.verdict?.keep !== false).map(withoutVerdicts);
+  return cardsOf(`${Math.min(x, y)}:${Math.max(x, y)}`, review);
 }
 
-const linksByAyah = new Map<string, [string, string, string][]>();
-for (const link of stored.links) for (const key of [link[0], link[1]]) linksByAyah.set(key, [...(linksByAyah.get(key) ?? []), link]);
+const holders = new Map<string, string>();
+for (const { a, b } of listedPairs) for (const card of cardsOf(`${a}:${b}`, false)) {
+  for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) if (compareVerdicts[id]?.keep !== false) holders.set(id, `/quran/compare?a=${a}&b=${b}#${compareAnchor(card.sides[0], card.sides[1])}`);
+}
+const pairsByAyah = new Map<string, string[]>();
+for (const id of holders.keys()) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), id]);
 
 /** The compare card that holds two of these ayat as a kept pair, on a listed page. */
 export function compareLinkFor(keys: string[]): string | undefined {
   const shown = new Set(keys);
-  return keys.flatMap(key => linksByAyah.get(key) ?? []).find(([a, b]) => shown.has(a) && shown.has(b))?.[2];
+  const id = keys.flatMap(key => pairsByAyah.get(key) ?? []).find(pair => pair.split('|').every(key => shown.has(key)));
+  return id && holders.get(id);
 }

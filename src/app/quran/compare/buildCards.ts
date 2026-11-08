@@ -4,9 +4,8 @@ import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahP
 import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
-import { compareAnchor } from '@/lib/compareBookmarks';
-import { surahPairHref } from '@/lib/quran/curatedComparisons';
-import type { CardSide, ManyOption, PairCard, ReviewState } from './pairCards';
+import { MARK_KINDS } from './markKinds';
+import type { CardSide, PairCard, ReviewState } from './pairCards';
 import data from './pairs.json';
 import passage from './passagePairs.json';
 
@@ -135,27 +134,25 @@ function reviewStates(): Record<string, ReviewState> {
   return states;
 }
 
-function bare(ayah: SpreadAyah) {
-  const { number, marks } = ayah;
-  return { number, ...(marks && Object.keys(marks).length ? { marks } : {}) };
-}
-const bareOption = (option: ManyOption) => ({ ...option, ayah: bare(option.ayah), shared: bare(option.shared) });
-const bareSide = (side: CardSide) => ({ ...side, ayat: side.ayat.map(bare) });
+type Marks = SpreadAyah['marks'];
 
-/** Every card of every surah pair, with its verdicts and without the ayah text, which the page joins back in. */
+/** One mark as one number, so the file holds no text: which ayah of the card, which word, what kind, which link. */
+function encodeAyat(ayat: SpreadAyah[], links: Map<string, number>) {
+  return ayat.flatMap((ayah, offset) => Object.entries((ayah.marks ?? {}) as NonNullable<Marks>).map(([word, mark]) => {
+    if (!links.has(mark.link!)) links.set(mark.link!, links.size);
+    return links.get(mark.link!)! + 1000 * (MARK_KINDS.indexOf(mark.kind as (typeof MARK_KINDS)[number]) + 3 * (Number(word) + 200 * offset));
+  }));
+}
+
+function storedCard(card: PairCard) {
+  const links = new Map<string, number>();
+  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}) };
+  if (card.many) return { ...base, n: card.many.side, o: card.many.options.map(option => [encodeAyat([option.shared], links), encodeAyat([option.ayah], links)]) };
+  return { ...base, m: card.sides.map(side => encodeAyat(side.ayat, links)) };
+}
+
+/** Every card of every page: pair ids, tree link and word marks. The reader joins back the ayah text and the verdicts. */
 export function buildCompareCards() {
-  const cards: Record<string, unknown[]> = {};
-  const holders = new Map<string, string>();
-  for (const { a, b } of surahPairs(foundBySurah, 1)) {
-    const built = pairCards(a, b, true);
-    cards[`${a}:${b}`] = built.map(card => ({ ...card, sides: card.sides.map(bareSide), ...(card.many ? { many: { ...card.many, options: card.many.options.map(bareOption) } } : {}) }));
-    for (const card of built) for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) holders.set(id, compareAnchor(card.sides[0], card.sides[1]));
-  }
-  const listedIds = new Set(listedPairs.map(pair => `${pair.a}:${pair.b}`));
-  const links = found.filter(keptPair).flatMap(pair => {
-    const [a, b] = [surahOf(pair.a), surahOf(pair.b)];
-    const anchor = holders.get(`${pair.a}|${pair.b}`);
-    return listedIds.has(`${a}:${b}`) && anchor ? [[pair.a, pair.b, `${surahPairHref(a, b)}#${anchor}`]] : [];
-  });
-  return { listed: listedPairs, review: reviewPairs, states: reviewStates(), cards, links };
+  const cards = Object.fromEntries(reviewPairs.map(({ a, b }) => [`${a}:${b}`, pairCards(a, b, true).map(storedCard)]));
+  return { listed: listedPairs, review: reviewPairs, states: reviewStates(), cards };
 }
