@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import curatedLinks from '@/lib/quran/curation/compareLinks.json';
 import generated from './compareCards';
 import { buildCompareCards } from './buildCards';
 import treeData from '@/app/quran/branches/trees.json';
@@ -59,6 +60,25 @@ describe('compare pair cards', () => {
     const many = pairCards(10, 26, true).find(item => item.id === '10:72|26:109,127,145,164,180')!;
     expect(many.verdict).toBeUndefined();
     expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
+  });
+
+  it('adds a curated word link and the pair it needs, inside the range card', () => {
+    const card = pairCards(3, 19).find(item => item.id === '3:40-41|19:8-10')!;
+    expect(card.pairs?.map(pair => pair.id)).toContain('3:40|19:9');
+    const [a, b] = [card.sides[0].ayat[0], card.sides[1].ayat[1]];
+    expect(a.number).toBe(40);
+    expect(b.number).toBe(9);
+    expect(a.marks?.[12]?.link).toBeDefined();
+    expect(a.marks?.[12]?.link).toBe(b.marks?.[1]?.link);
+    expect(a.marks?.[12]?.kind).toBe('exact');
+  });
+
+  it('has curated links only on words that exist', () => {
+    const ayat = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
+    for (const item of curatedLinks.links) {
+      const [a, b] = item.pair.split('|').map(key => ayat.get(key)!);
+      for (const [i, j] of item.links as [number, number, string][]) expect(a[i] && b[j]).toBeTruthy();
+    }
   });
 
   it('keeps a pair marked alone on its own card', () => {
@@ -158,7 +178,7 @@ describe('compare pair cards', () => {
   });
 
   it('has a verdict only for known pairs, and one for every passage pair', () => {
-    const found = new Set(([...data.pairs, ...passage.pairs] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+    const found = new Set(([...data.pairs, ...passage.pairs, ...curatedLinks.links.map(item => ({ a: item.pair.split('|')[0], b: item.pair.split('|')[1] }))] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
     expect(passage.pairs.filter(pair => !compareVerdicts[`${pair.a}|${pair.b}`])).toEqual([]);
   });

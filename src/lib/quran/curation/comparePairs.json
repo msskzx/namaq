@@ -23568,6 +23568,11 @@
   "82:13|83:22": {
    "keep": true,
    "why": "Identical ayah: the righteous are in bliss."
+  },
+  "3:40|19:9": {
+   "keep": true,
+   "why": "The same answer to Zakariyya's question: قال كذلك (owner kept).",
+   "checked": true
   }
  }
 }

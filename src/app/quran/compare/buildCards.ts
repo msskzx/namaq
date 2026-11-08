@@ -6,11 +6,30 @@ import { keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 import { MARK_KINDS } from './markKinds';
 import type { CardSide, PairCard } from './pairCards';
+import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
-const found = ayahPairs([...data.pairs, ...passage.pairs] as SimilarAyahPair[], groups);
+type CuratedLinks = { pair: string; links: SimilarAyahPair['columns']; why: string; source: string };
+
+/** Word links added by hand or from a book: they win over the engine's on the same words, and add the pair if the engine has none. */
+function withCuratedLinks(pairs: SimilarAyahPair[]): SimilarAyahPair[] {
+  const curated = new Map((links.links as CuratedLinks[]).map(item => [item.pair, item.links]));
+  const merged = pairs.map(pair => {
+    const added = curated.get(`${pair.a}|${pair.b}`);
+    curated.delete(`${pair.a}|${pair.b}`);
+    if (!added) return pair;
+    const [takenA, takenB] = [new Set(added.map(column => column[0])), new Set(added.map(column => column[1]))];
+    return { ...pair, columns: [...added, ...pair.columns.filter(([i, j]) => !takenA.has(i) && !takenB.has(j))] };
+  });
+  return [...merged, ...[...curated].map(([pair, columns]) => {
+    const [a, b] = pair.split('|');
+    return { a, b, columns };
+  })];
+}
+
+const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs] as SimilarAyahPair[]), groups);
 /** Curation runs after the engine: pairs a reader judged to share only vocabulary are left out. */
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);

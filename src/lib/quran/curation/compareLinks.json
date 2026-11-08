@@ -1,0 +1,21 @@
+{
+ "links": [
+  {
+   "pair": "3:40|19:9",
+   "links": [
+    [
+     11,
+     0,
+     "exact"
+    ],
+    [
+     12,
+     1,
+     "exact"
+    ]
+   ],
+   "why": "The same answer to Zakariyya's question: قال كذلك.",
+   "source": "owner"
+  }
+ ]
+}
