@@ -8340,51 +8340,63 @@
   },
   "3:31|47:19": {
    "keep": true,
-   "why": "Seeking forgiveness of sins."
+   "why": "Seeking forgiveness of sins.",
+   "checked": true
   },
   "3:32|47:11": {
    "keep": false,
-   "why": "Shared 'disbelievers' only; different statements."
+   "why": "Shared 'disbelievers' only; different statements.",
+   "checked": true
   },
   "3:32|47:33": {
    "keep": true,
-   "why": "Obey Allah and the Messenger."
+   "why": "Obey Allah and the Messenger.",
+   "checked": true
   },
   "3:86|47:32": {
    "keep": true,
-   "why": "Disbelieving after the guidance and proofs became clear."
+   "why": "Disbelieving after the guidance and proofs became clear.",
+   "checked": true
   },
   "3:95|47:21": {
    "keep": false,
-   "why": "Shared root of truthfulness only; different subjects."
+   "why": "Shared root of truthfulness only; different subjects.",
+   "checked": true
   },
   "3:99|47:32": {
    "keep": true,
-   "why": "Turning people away from the way of Allah."
+   "why": "Turning people away from the way of Allah.",
+   "checked": true
   },
   "3:132|47:33": {
    "keep": true,
-   "why": "Obey Allah and the Messenger."
+   "why": "Obey Allah and the Messenger.",
+   "checked": true
   },
   "3:135|47:19": {
    "keep": true,
-   "why": "Asking forgiveness for sins."
+   "why": "Asking forgiveness for sins.",
+   "checked": true
   },
   "3:137|47:10": {
    "keep": true,
-   "why": "Travel in the land and see how was the end of those before."
+   "why": "Travel in the land and see how was the end of those before.",
+   "checked": true
   },
   "3:142|47:31": {
    "keep": true,
-   "why": "Allah tests to make evident those who strive and are patient."
+   "why": "Allah tests to make evident those who strive and are patient.",
+   "checked": true
   },
   "3:157|47:34": {
    "keep": true,
-   "why": "Contrast: dying in Allah's way brings forgiveness; dying in disbelief, none."
+   "why": "Contrast: dying in Allah's way brings forgiveness; dying in disbelief, none.",
+   "checked": true
   },
   "3:176|47:32": {
    "keep": true,
-   "why": "The disbelievers will never harm Allah at all."
+   "why": "The disbelievers will never harm Allah at all.",
+   "checked": true
   },
   "3:29|49:16": {
    "keep": true,
