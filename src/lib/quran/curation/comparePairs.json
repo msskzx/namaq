@@ -24035,19 +24035,39 @@
   },
   "55:2|96:1": {
    "keep": false,
-   "why": "Teaching the Qur'an versus the command to read; a shared root only."
+   "why": "Teaching the Qur'an versus the command to read; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Teaching the Qur'an versus the command to read; a shared root only."
+   }
   },
   "55:3|96:1": {
    "keep": false,
-   "why": "Only the verb 'created'."
+   "why": "Only the verb 'created'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the verb 'created'."
+   }
   },
   "55:3|96:2": {
-   "keep": true,
-   "why": "Same two-word clause: He created man."
+   "keep": false,
+   "why": "Same two-word clause: He created man. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same two-word clause: He created man."
+   }
   },
   "55:14|96:2": {
-   "keep": true,
-   "why": "Same construction: He created man from ... clay / a clinging clot."
+   "keep": false,
+   "why": "Same construction: He created man from ... clay / a clinging clot. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: He created man from ... clay / a clinging clot."
+   }
   },
   "56:12|68:2": {
    "keep": false,
