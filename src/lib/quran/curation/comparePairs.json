@@ -7376,60 +7376,74 @@
    "checked": true
   },
   "2:29|65:12": {
-   "keep": true,
-   "why": "Same subject: He created seven heavens and the earth, and knows all things."
+   "keep": false,
+   "why": "Same subject: He created seven heavens and the earth, and knows all things. (owner removed)",
+   "checked": true
   },
   "2:148|65:3": {
    "keep": false,
-   "why": "Shares only 'all things' and Allah; different points."
+   "why": "Shares only 'all things' and Allah; different points.",
+   "checked": true
   },
   "2:232|65:2": {
-   "keep": true,
-   "why": "Same rulings and sentence: when their term ends, ... this is an admonition for whoever believes in Allah and the Last Day."
+   "keep": false,
+   "why": "Same rulings and sentence: when their term ends, ... this is an admonition for whoever believes in Allah and the Last Day. (owner removed)",
+   "checked": true
   },
   "2:261|65:12": {
    "keep": false,
-   "why": "Only 'seven' and Allah as words."
+   "why": "Only 'seven' and Allah as words.",
+   "checked": true
   },
   "2:284|65:3": {
    "keep": false,
-   "why": "Only 'all things' as words."
+   "why": "Only 'all things' as words.",
+   "checked": true
   },
   "2:284|65:12": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Shares only heavens and earth and the closing 'able over all things'.",
+   "checked": true
   },
   "2:173|66:1": {
    "keep": false,
-   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'."
+   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:199|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Shares only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:207|66:1": {
-   "keep": true,
-   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast."
+   "keep": false,
+   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast. (owner removed)",
+   "checked": true
   },
   "2:218|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Shares only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:25|85:11": {
-   "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good."
+   "keep": false,
+   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good. (owner removed)",
+   "checked": true
   },
   "2:82|85:11": {
-   "keep": true,
-   "why": "Same idea: those who believe and do good have the Gardens."
+   "keep": false,
+   "why": "Same idea: those who believe and do good have the Gardens. (owner removed)",
+   "checked": true
   },
   "2:107|85:9": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth."
+   "why": "Shares only the dominion of the heavens and earth.",
+   "checked": true
   },
   "2:116|85:9": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "3:9|11:118": {
    "keep": false,
