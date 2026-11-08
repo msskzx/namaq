@@ -86,6 +86,17 @@ describe('PairCompare', () => {
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
   });
 
+  it('in review, marks the surah pairs the owner reviewed and those with a question', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review states={{ '52:68': 'checked', '7:11': 'ask' }} />);
+    expect(within(pane()).getAllByRole('img', { name: 'راجعتها' }).length).toBeGreaterThan(0);
+    expect(within(pane()).getAllByRole('img', { name: 'فيها سؤال لك' }).length).toBeGreaterThan(0);
+  });
+
+  it('shows no review marks outside review', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} states={{ '52:68': 'checked' }} />);
+    expect(within(pane()).queryByRole('img', { name: 'راجعتها' })).toBeNull();
+  });
+
   it('offers the next pair in mushaf order', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
     expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');

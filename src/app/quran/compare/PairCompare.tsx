@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, BookOpen, ChevronDown, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, BookOpen, Check, ChevronDown, CircleHelp, Search, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -16,7 +16,7 @@ import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { FIELD, NOTE } from '../panel';
-import type { CardSide, PairCard } from './pairCards';
+import type { CardSide, PairCard, ReviewState } from './pairCards';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -32,7 +32,14 @@ function useNames(names: Names, ar: boolean) {
 }
 
 /** The surah pairs: hand-picked stories first, then every pair the engine links, in mushaf order or by how many ayat they share. */
-function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = false }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean }) {
+/** In review, a check marks a surah pair whose verdicts the owner all checked; a question mark, one with a question for the owner. */
+function StateMark({ state, ar }: { state?: ReviewState; ar: boolean }) {
+  if (state === 'checked') return <Check size={16} role="img" aria-label={ar ? 'راجعتها' : 'Reviewed'} className="shrink-0 text-[var(--home-green)]" />;
+  if (state === 'ask') return <CircleHelp size={16} role="img" aria-label={ar ? 'فيها سؤال لك' : 'Has a question for you'} className="shrink-0 text-[var(--home-accent)]" />;
+  return null;
+}
+
+function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = false, states = {} }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState> }) {
   const ar = useLanguage().language === 'ar';
   const { plain } = useNames(names, ar);
   const [byCount, setByCount] = useState(false);
@@ -66,6 +73,7 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = fals
       <Link href={pairHref(pair.a, pair.b, review)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
         className="flex items-center gap-3 rounded-md border-s-2 border-transparent px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] aria-[current=page]:border-[var(--home-accent)] aria-[current=page]:bg-[var(--home-paper-deep)]">
         <span className="min-w-0 flex-1">{label}</span>
+        {review && <StateMark state={states[`${pair.a}:${pair.b}`]} ar={ar} />}
         <span className="text-sm tabular-nums text-[var(--home-accent)]">{ar ? num(count.get(`${pair.a}:${pair.b}`) ?? 0) : count.get(`${pair.a}:${pair.b}`) ?? 0}</span>
       </Link>
     </li>
@@ -98,6 +106,8 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = fals
               <summary className="flex cursor-pointer list-none items-center gap-3 rounded-md px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] [&::-webkit-details-marker]:hidden">
                 <ChevronDown size={16} aria-hidden className={`shrink-0 text-[var(--home-muted)] transition-transform ${open.has(n) ? '' : 'ltr:-rotate-90 rtl:rotate-90'}`} />
                 <span className={`min-w-0 flex-1 ${n === a || n === b ? 'text-[var(--home-accent)]' : ''}`}>{plain(n)}</span>
+                {review && <StateMark state={groups.get(n)!.some(pair => states[`${pair.a}:${pair.b}`] === 'ask') ? 'ask'
+                  : groups.get(n)!.every(pair => states[`${pair.a}:${pair.b}`] === 'checked') ? 'checked' : undefined} ar={ar} />}
                 <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
               </summary>
               <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n))))}</ul>
@@ -157,7 +167,7 @@ function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }
   );
 }
 
-export default function PairCompare({ a, b, cards, pairs, names, review = false }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean }) {
+export default function PairCompare({ a, b, cards, pairs, names, review = false, states }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState> }) {
   const ar = useLanguage().language === 'ar';
   const { title } = useNames(names, ar);
   const sheet = useRef<HTMLDialogElement>(null);
@@ -200,7 +210,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false 
           </Link>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
-          <PairList pairs={pairs} names={names} a={a} b={b} review={review} />
+          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} />
         </aside>
       </div>
       <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
@@ -211,7 +221,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false 
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
             <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
           </div>
-          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} />}
+          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} />}
         </div>
       </dialog>
     </div>

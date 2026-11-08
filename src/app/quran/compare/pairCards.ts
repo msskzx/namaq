@@ -41,3 +41,16 @@ export function pairCards(x: number, y: number, review = false): PairCard[] {
     };
   });
 }
+
+export type ReviewState = 'checked' | 'ask';
+
+/** Where the owner's review of each listed surah pair stands: every pair checked, or a question waiting. Pairs not yet fully checked are left out. */
+export function reviewStates(): Record<string, ReviewState> {
+  const states: Record<string, ReviewState> = {};
+  for (const { a, b } of listedPairs) {
+    const verdicts = pairsFor(foundBySurah, a, b).map(pair => verdictFor(pair.a, pair.b));
+    if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
+    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = 'checked';
+  }
+  return states;
+}
