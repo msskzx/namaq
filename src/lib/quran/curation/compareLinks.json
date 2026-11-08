@@ -16,6 +16,159 @@
    ],
    "why": "The same answer to Zakariyya's question: قال كذلك.",
    "source": "owner"
+  },
+  {
+   "pair": "7:106|26:31",
+   "links": [
+    [
+     6,
+     2,
+     "lemma"
+    ]
+   ],
+   "why": "The same demand: فأت بها / فأت به.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:111|26:36",
+   "links": [
+    [
+     3,
+     3,
+     "root"
+    ]
+   ],
+   "why": "Different verbs for the same order: وأرسل / وابعث.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:114|26:42",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     1,
+     "exact"
+    ],
+    [
+     2,
+     2,
+     "exact"
+    ],
+    [
+     3,
+     4,
+     "exact"
+    ],
+    [
+     4,
+     5,
+     "exact"
+    ]
+   ],
+   "why": "Pharaoh's same promise: قال نعم وإنكم لمن المقربين.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:115|26:43",
+   "links": [
+    [
+     0,
+     0,
+     "lemma"
+    ],
+    [
+     1,
+     2,
+     "lemma"
+    ],
+    [
+     9,
+     6,
+     "lemma"
+    ]
+   ],
+   "why": "The magicians and Moses on who throws first: الملقين / ملقون.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:116|26:43",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "Moses' same order: ألقوا.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:116|26:44",
+   "links": [
+    [
+     3,
+     0,
+     "lemma"
+    ]
+   ],
+   "why": "Then they threw: فلما ألقوا / فألقوا.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:119|26:44",
+   "links": [
+    [
+     0,
+     8,
+     "root"
+    ]
+   ],
+   "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:122|26:48",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     1,
+     "exact"
+    ],
+    [
+     2,
+     2,
+     "exact"
+    ]
+   ],
+   "why": "The same words: رب موسى وهارون.",
+   "source": "curated"
+  },
+  {
+   "pair": "7:123|26:49",
+   "links": [
+    [
+     3,
+     2,
+     "root"
+    ]
+   ],
+   "why": "Pharaoh's same accusation: آمنتم به / آمنتم له.",
+   "source": "curated"
   }
  ]
 }

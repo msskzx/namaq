@@ -23605,6 +23605,30 @@
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true
+  },
+  "7:114|26:42": {
+   "keep": true,
+   "why": "Pharaoh's same promise: قال نعم وإنكم لمن المقربين."
+  },
+  "7:115|26:43": {
+   "keep": true,
+   "why": "The magicians and Moses on who throws first: الملقين / ملقون."
+  },
+  "7:116|26:43": {
+   "keep": true,
+   "why": "Moses' same order: ألقوا."
+  },
+  "7:116|26:44": {
+   "keep": true,
+   "why": "Then they threw: فلما ألقوا / فألقوا."
+  },
+  "7:119|26:44": {
+   "keep": true,
+   "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا."
+  },
+  "7:122|26:48": {
+   "keep": true,
+   "why": "The same words: رب موسى وهارون."
   }
  }
 }
