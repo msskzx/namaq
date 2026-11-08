@@ -7972,23 +7972,28 @@
   },
   "3:6|31:9": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:57|31:8": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Reward formula only (owner removed the page).",
+   "checked": true
   },
   "3:62|31:9": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:104|31:17": {
-   "keep": true,
-   "why": "Enjoining good and forbidding evil."
+   "keep": false,
+   "why": "Only the recurring enjoin-good phrase; different contexts (owner removed the page).",
+   "checked": true
   },
   "3:114|31:17": {
-   "keep": true,
-   "why": "Enjoining good and forbidding evil."
+   "keep": false,
+   "why": "Only the recurring enjoin-good phrase; different contexts (owner removed the page).",
+   "checked": true
   },
   "3:57|34:4": {
    "keep": true,
@@ -8003,32 +8008,39 @@
    "why": "Inventing a lie against Allah."
   },
   "3:3|35:31": {
-   "keep": true,
-   "why": "The Book sent with the truth, confirming what came before it."
+   "keep": false,
+   "why": "Only 'the truth, confirming what came before it' (owner removed).",
+   "checked": true
   },
   "3:29|35:1": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:57|35:7": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Reward formula only (owner removed).",
+   "checked": true
   },
   "3:109|35:4": {
    "keep": false,
-   "why": "Shared closing 'to Allah all matters return' only; different subjects."
+   "why": "Shared closing 'to Allah all matters return' only; different subjects.",
+   "checked": true
   },
   "3:184|35:4": {
    "keep": true,
-   "why": "If they deny you, messengers before you were denied."
+   "why": "If they deny you, messengers before you were denied.",
+   "checked": true
   },
   "3:184|35:25": {
    "keep": true,
-   "why": "If they deny you: messengers before came with clear proofs, scriptures and the enlightening Book."
+   "why": "If they deny you: messengers before came with clear proofs, scriptures and the enlightening Book.",
+   "checked": true
   },
   "3:189|35:1": {
    "keep": false,
-   "why": "Shared heavens-and-earth and closing only; different subjects."
+   "why": "Shared heavens-and-earth and closing only; different subjects.",
+   "checked": true
   },
   "3:51|36:61": {
    "keep": true,
