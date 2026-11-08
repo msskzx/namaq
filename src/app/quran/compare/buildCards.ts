@@ -42,16 +42,16 @@ const reviewPairs = surahPairs(foundBySurah);
 const LEVELS = ['exact', 'letters', 'lemma', 'root'];
 const kindOf = (level: string) => (level === 'root' ? 'related' : level === 'lemma' ? 'root' : 'exact') as NonNullable<SpreadAyah['marks']>[number]['kind'];
 
-/** A word matched in two pairs of a range keeps one link, so tapping any of its partners lights them all. Strongest matches come first. */
+/** Each word lights one partner: strongest matches first, then the pair of ayat that share the most words (7:113 goes with 26:41, not 26:40). */
 function wordMarks(pairs: AyahPair[]) {
   const marks = new Map<string, { kind: ReturnType<typeof kindOf>; link: string }>();
-  const columns = pairs.flatMap((pair, p) => pair.columns.map((column, c) => ({ ...column, id: `${p}-${c}` })))
-    .sort((x, y) => LEVELS.indexOf(x.level ?? '') - LEVELS.indexOf(y.level ?? ''));
+  const columns = pairs.flatMap((pair, p) => pair.columns.map((column, c) => ({ ...column, id: `${p}-${c}`, shared: pair.columns.length })))
+    .sort((x, y) => LEVELS.indexOf(x.level ?? '') - LEVELS.indexOf(y.level ?? '') || y.shared - x.shared);
   for (const column of columns) {
     const [a, b] = [`${column.a.key}:${column.a.index}`, `${column.b.key}:${column.b.index}`];
-    const link = marks.get(a)?.link ?? marks.get(b)?.link ?? column.id;
+    if (marks.has(a) || marks.has(b)) continue;
     // Root-only matches are marked lightly: words sharing a root can differ in meaning («بين» and «بيان»).
-    for (const word of [a, b]) if (!marks.has(word)) marks.set(word, { kind: kindOf(column.level ?? ''), link });
+    for (const word of [a, b]) marks.set(word, { kind: kindOf(column.level ?? ''), link: column.id });
   }
   return marks;
 }
