@@ -13651,23 +13651,48 @@
   },
   "42:3|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:9|57:2": {
-   "keep": true,
-   "why": "Same statement: He gives life (and death) and is able over all things."
+   "keep": false,
+   "why": "Same statement: He gives life (and death) and is able over all things. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He gives life (and death) and is able over all things."
+   }
   },
   "42:12|57:2": {
    "keep": false,
-   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
+   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
+   }
   },
   "42:29|57:2": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing 'able'."
+   "why": "Only 'the heavens and the earth' and the closing 'able'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing 'able'."
+   }
   },
   "42:53|57:5": {
-   "keep": true,
-   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
+   "keep": false,
+   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
+   }
   },
   "42:9|64:1": {
    "keep": false,
