@@ -74,23 +74,6 @@
    "source": "claude-curated, owner to review"
   },
   {
-   "pair": "7:115|26:43",
-   "links": [
-    [
-     1,
-     2,
-     "lemma"
-    ],
-    [
-     9,
-     6,
-     "lemma"
-    ]
-   ],
-   "why": "The magicians and Moses on who throws first: الملقين / ملقون.",
-   "source": "claude-curated, owner to review"
-  },
-  {
    "pair": "7:116|26:43",
    "links": [
     [
