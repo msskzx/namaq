@@ -21874,15 +21874,30 @@
   },
   "51:12|56:56": {
    "keep": false,
-   "why": "Only Day of Judgement, a common name."
+   "why": "Only Day of Judgement, a common name.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only Day of Judgement, a common name."
+   }
   },
   "51:19|56:95": {
    "keep": false,
-   "why": "A single word with different meanings."
+   "why": "A single word with different meanings.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A single word with different meanings."
+   }
   },
   "51:20|56:95": {
    "keep": false,
-   "why": "Only the root of certainty."
+   "why": "Only the root of certainty.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of certainty."
+   }
   },
   "51:5|67:25": {
    "keep": false,
