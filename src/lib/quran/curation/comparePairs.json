@@ -21885,8 +21885,13 @@
    "why": "Only the root of certainty."
   },
   "51:5|67:25": {
-   "keep": true,
-   "why": "Same dispute: what you are promised is true / when is this promise, if you are truthful."
+   "keep": false,
+   "why": "Same dispute: what you are promised is true / when is this promise, if you are truthful. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same dispute: what you are promised is true / when is this promise, if you are truthful."
+   }
   },
   "51:15|68:34": {
    "keep": true,
@@ -24124,12 +24129,22 @@
    }
   },
   "51:50|67:26": {
-   "keep": true,
-   "why": "Same declaration of the Messenger's role: I am only a clear warner."
+   "keep": false,
+   "why": "Same declaration of the Messenger's role: I am only a clear warner. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same declaration of the Messenger's role: I am only a clear warner."
+   }
   },
   "51:51|67:26": {
-   "keep": true,
-   "why": "Same declaration of the Messenger's role: I am only a clear warner."
+   "keep": false,
+   "why": "Same declaration of the Messenger's role: I am only a clear warner. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same declaration of the Messenger's role: I am only a clear warner."
+   }
   },
   "51:52|54:9": {
    "keep": false,
