@@ -20925,7 +20925,8 @@
   },
   "43:12|78:8": {
    "keep": true,
-   "why": "Same idea in a list of favours: creating in pairs."
+   "why": "Same idea in a list of favours: creating in pairs.",
+   "checked": true
   },
   "43:70|89:30": {
    "keep": true,
@@ -23467,7 +23468,8 @@
   },
   "43:10|78:6": {
    "keep": true,
-   "why": "Same sign in the same words: He made the earth a cradle."
+   "why": "Same sign in the same words: He made the earth a cradle.",
+   "checked": true
   },
   "43:63|46:7": {
    "keep": false,
@@ -23491,7 +23493,8 @@
   },
   "43:82|78:37": {
    "keep": true,
-   "why": "Same title opening each ayah: Lord of the heavens and the earth, extended by a further description."
+   "why": "Same title opening each ayah: Lord of the heavens and the earth, extended by a further description.",
+   "checked": true
   },
   "43:83|52:45": {
    "keep": true,
@@ -23656,19 +23659,23 @@
   },
   "43:11|78:14": {
    "keep": true,
-   "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء."
+   "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء.",
+   "checked": true
   },
   "43:11|78:15": {
    "keep": true,
-   "why": "What the water brings out: به, and تخرجون / لنخرج."
+   "why": "What the water brings out: به, and تخرجون / لنخرج.",
+   "checked": true
   },
   "43:11|78:16": {
    "keep": true,
-   "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word."
+   "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word.",
+   "checked": true
   },
   "43:9|78:6": {
    "keep": true,
-   "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word."
+   "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word.",
+   "checked": true
   }
  }
 }
