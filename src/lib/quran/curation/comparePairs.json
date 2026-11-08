@@ -8295,39 +8295,48 @@
   },
   "3:3|46:30": {
    "keep": true,
-   "why": "A Book confirming what came before it."
+   "why": "A Book confirming what came before it.",
+   "checked": true
   },
   "3:6|46:2": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:16|46:31": {
    "keep": true,
-   "why": "Belief brings forgiveness of sins and protection from punishment."
+   "why": "Belief brings forgiveness of sins and protection from punishment.",
+   "checked": true
   },
   "3:29|46:33": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:57|46:19": {
    "keep": true,
-   "why": "Allah repays their deeds in full, and no wrong."
+   "why": "Allah repays their deeds in full, and no wrong.",
+   "checked": true
   },
   "3:62|46:2": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:86|46:10": {
    "keep": true,
-   "why": "Rejecting after witness; Allah does not guide the wrongdoing people."
+   "why": "Rejecting after witness; Allah does not guide the wrongdoing people.",
+   "checked": true
   },
   "3:106|46:34": {
    "keep": true,
-   "why": "Taste the punishment for what you used to disbelieve."
+   "why": "Taste the punishment for what you used to disbelieve.",
+   "checked": true
   },
   "3:189|46:33": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:31|47:19": {
    "keep": true,
