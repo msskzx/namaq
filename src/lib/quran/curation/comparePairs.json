@@ -24050,16 +24050,31 @@
    "why": "Same description of the Garden with rare words: its fruit clusters hanging near."
   },
   "69:3|77:14": {
-   "keep": true,
-   "why": "Same style on a name of the Hour: what will make you know what is ...?"
+   "keep": false,
+   "why": "Same style on a name of the Hour: what will make you know what is ...? (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style on a name of the Hour: what will make you know what is ...?"
+   }
   },
   "69:4|77:15": {
    "keep": false,
-   "why": "Only the root of denial."
+   "why": "Only the root of denial.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of denial."
+   }
   },
   "69:5|77:16": {
    "keep": false,
-   "why": "Only the root of destroying."
+   "why": "Only the root of destroying.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of destroying."
+   }
   },
   "69:13|78:18": {
    "keep": true,
@@ -24475,6 +24490,12 @@
    "draft": {}
   },
   "48:5|85:11": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "69:24|77:43": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
