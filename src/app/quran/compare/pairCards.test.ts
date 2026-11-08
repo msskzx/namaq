@@ -158,6 +158,15 @@ describe('compare pair cards', () => {
     expect(listedPairs.some(pair => pair.count < 3)).toBe(true);
   });
 
+  it('shows the whole range of a join, including ayat with no partner', () => {
+    const cards = pairCards(69, 84).filter(card => card.id.includes('-'));
+    expect(cards.map(card => card.id)).toEqual(['69:1-18|84:1-6', '69:19-24|84:7-9', '69:25-37|84:10-15', '69:38-48|84:16-21', '69:49-52|84:22-25']);
+    for (const [side, surahEnd] of [[0, 52], [1, 25]] as const) {
+      expect(cards.flatMap(card => card.sides[side].ayat.map(ayah => ayah.number))).toEqual(Array.from({ length: surahEnd }, (_, i) => i + 1));
+    }
+    expect(cards[0].sides[0].ayat[0].marks).toEqual({});
+  });
+
   it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
     expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
     expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();

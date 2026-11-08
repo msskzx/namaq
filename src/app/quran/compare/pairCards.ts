@@ -13,10 +13,10 @@ export type CardSide = { surah: number; ayah: number; ayat: SpreadAyah[] };
 /** One ayah against several far ones: `side` holds the partners. `shared` is the one ayah with the marks of that pairing. */
 export type ManyOption = { id: string; ayah: SpreadAyah; shared: SpreadAyah };
 /** `pairs` lists the ayah pairs of a range or one-to-many card; a single-pair card has `verdict` instead. */
-export type PairCard = { id: string; group?: string; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; sides: [CardSide, CardSide] };
+export type PairCard = { id: string; group?: string; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; span?: [number, number][]; sides: [CardSide, CardSide] };
 export type ReviewState = 'checked' | 'ask' | 'dropped';
 
-type StoredCard = { p: string[]; g?: string; m?: number[][]; n?: 0 | 1; o?: number[][][] };
+type StoredCard = { p: string[]; g?: string; s?: [number, number][]; m?: number[][]; n?: 0 | 1; o?: number[][][] };
 /** `npm run quran:compare-cards` writes this from the pairs and verdicts (docs/plans/curated-passage-comparisons.md). */
 const stored = generated as unknown as { listed: SurahPair[]; review: SurahPair[]; cards: Record<string, StoredCard[]> };
 
@@ -77,7 +77,7 @@ function rangeCard(item: StoredCard, review: ReviewVerdicts): PairCard {
   const sides = [0, 1].map(side => {
     const surah = parts(keys[0][side])[0];
     const numbers = keys.map(key => parts(key[side])[1]);
-    const [from, to] = [Math.min(...numbers), Math.max(...numbers)];
+    const [from, to] = item.s?.[side] ?? [Math.min(...numbers), Math.max(...numbers)];
     return { surah, ayah: from, to, ayat: ayatOf(surah, Array.from({ length: to - from + 1 }, (_, i) => from + i), item.m![side]) };
   });
   const rangeId = (side: (typeof sides)[number]) => `${side.surah}:${side.ayah}${side.to > side.ayah ? `-${side.to}` : ''}`;
