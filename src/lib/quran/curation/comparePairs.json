@@ -23759,11 +23759,21 @@
   },
   "53:21|92:3": {
    "keep": false,
-   "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words."
+   "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words."
+   }
   },
   "53:25|92:13": {
-   "keep": true,
-   "why": "Same statement: the Hereafter and the first life belong to Allah."
+   "keep": false,
+   "why": "Same statement: the Hereafter and the first life belong to Allah. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: the Hereafter and the first life belong to Allah."
+   }
   },
   "53:25|93:4": {
    "keep": false,
@@ -24906,8 +24916,13 @@
    "draft": {}
   },
   "53:45|92:3": {
-   "keep": true,
-   "why": "Same statement: He created the male and the female."
+   "keep": false,
+   "why": "Same statement: He created the male and the female. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He created the male and the female."
+   }
   },
   "55:50|88:12": {
    "keep": true,
