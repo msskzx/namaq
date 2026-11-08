@@ -23655,11 +23655,21 @@
   },
   "53:35|68:47": {
    "keep": true,
-   "why": "Same construction: does he / do they possess the unseen, so that he sees / they write it down."
+   "why": "Same construction: does he / do they possess the unseen, so that he sees / they write it down.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: does he / do they possess the unseen, so that he sees / they write it down."
+   }
   },
   "53:52|68:31": {
    "keep": false,
-   "why": "Nuh's people as transgressors versus the garden owners' confession; different scenes."
+   "why": "Nuh's people as transgressors versus the garden owners' confession; different scenes.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Nuh's people as transgressors versus the garden owners' confession; different scenes."
+   }
   },
   "53:21|75:39": {
    "keep": false,
@@ -24840,6 +24850,12 @@
   "48:21|64:1": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "53:30|68:7": {
+   "keep": true,
+   "why": "Agreed with the page",
    "checked": true,
    "draft": {}
   }
