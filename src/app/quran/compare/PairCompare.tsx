@@ -24,9 +24,9 @@ import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
 import ReviewButtons, { CardReview } from './ReviewButtons';
-import type { CardSide, ManyOption, PairCard, ReviewState } from './pairCards';
+import type { CardSide, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
-import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
+import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -262,9 +262,7 @@ function Card({ card, names, ar, savedIds, review }: { card: PairCard; names: Na
   const partners = (side: CardSide) => {
     const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
     const options = card.many!.options;
-    const text = (item: ManyOption) => item.ayah.words.map(normalizeWord).join(' ');
-    // The same words every time (a refrain): one ayah and the list of where it recurs says it all.
-    if (options.every(item => text(item) === text(options[0]))) return {
+    if (isRefrain(options)) return {
       numbers: [],
       ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined)(options[0].ayah)]],
       footer: <p className="mt-1 text-center text-sm text-[var(--home-muted)]">{name} {options.map((item, i) => <React.Fragment key={item.id}>{i > 0 && ' · '}<Link href={`/quran/read/ayah/${side.surah}/${item.ayah.number}`} className="underline-offset-2 hover:text-[var(--home-accent)] hover:underline">{ar ? num(item.ayah.number) : item.ayah.number}</Link></React.Fragment>)}</p>,

@@ -105,6 +105,13 @@ describe('the review log', () => {
       expect(onDisk()['2:2|3:2']).toEqual(drafted['2:2|3:2']);
     });
 
+    it('does not publish a pair with no verdict when asked about it', () => {
+      put('src/app/quran/compare/pairs.json', { pairs: [{ a: '2:9', b: '3:9' }] });
+      press('2/3', 'discuss', ['2:9|3:9']);
+      apply();
+      expect(onDisk()['2:9|3:9']).toMatchObject({ keep: false, ask: 'owner: discuss' });
+    });
+
     it('gives a pair with no verdict one, and undo removes it', () => {
       put('src/app/quran/compare/pairs.json', { pairs: [{ a: '2:9', b: '3:9' }] });
       press('2/3', 'keep', ['2:9|3:9']);
@@ -144,6 +151,13 @@ describe('the review log', () => {
     const once = onDisk();
     expect(apply()).toHaveLength(2);
     expect(onDisk()).toEqual(once);
+  });
+
+  it('skips a broken line and keeps the press after it', () => {
+    appendFileSync(join(root, '.review-log.jsonl'), '{"t":2,"page":"4/');
+    press('2/3', 'drop');
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(apply().map(item => item.page)).toEqual(['2/3']);
   });
 
   it('waits for the end of a half-written line', () => {

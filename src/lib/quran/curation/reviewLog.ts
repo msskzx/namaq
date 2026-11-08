@@ -26,19 +26,29 @@ function bytesOf(path: string): Buffer {
 
 /** One write per press, flushed to disk before the request answers. */
 export function appendReview(press: ReviewPress) {
+  const log = bytesOf(LOG);
   const file = openSync(inRoot(LOG), 'a');
   try {
-    writeSync(file, `${JSON.stringify(press)}\n`);
+    writeSync(file, `${log.length && log[log.length - 1] !== 0x0a ? '\n' : ''}${JSON.stringify(press)}\n`);
     fsyncSync(file);
   } finally {
     closeSync(file);
   }
 }
 
+function parsed(line: string): ReviewPress[] {
+  try {
+    return [JSON.parse(line)];
+  } catch {
+    console.error('compare-review: skipped a broken log line', line);
+    return [];
+  }
+}
+
 function unapplied() {
   const log = bytesOf(LOG);
   const end = log.lastIndexOf(0x0a) + 1;
-  const presses = log.subarray(Number(bytesOf(OFFSET).toString()) || 0, end).toString().split('\n').filter(Boolean).map(line => JSON.parse(line) as ReviewPress);
+  const presses = log.subarray(Number(bytesOf(OFFSET).toString()) || 0, end).toString().split('\n').filter(Boolean).flatMap(parsed);
   return { presses, end };
 }
 

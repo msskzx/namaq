@@ -47,6 +47,7 @@ describe('ReviewButtons', () => {
     expect(discuss.getAttribute('aria-pressed')).toBe('true');
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ a: 2, b: 3, action: 'discuss', card: ['2:1|3:1', '2:2|3:2'] });
+    await waitFor(() => expect(refresh).toHaveBeenCalled());
   });
 
   it('undoes a card choice when it is pressed again', async () => {
@@ -59,6 +60,18 @@ describe('ReviewButtons', () => {
     expect(keep.getAttribute('aria-pressed')).toBe('false');
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ a: 2, b: 3, action: 'undo', card: ['2:1|3:1'] });
+  });
+
+  it('shows the page choice from the pairs no card press decided', () => {
+    vi.stubGlobal('fetch', vi.fn());
+    render(<ReviewButtons a={2} b={3} cards={[card({ keep: true, why: '', checked: true, card: true }), card({ keep: false, why: '', checked: true })]} />);
+    expect(screen.getByRole('button', { name: 'حذف' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('disables the page choices when every card is decided on its own', () => {
+    render(<ReviewButtons a={2} b={3} cards={[card({ keep: true, why: '', checked: true, card: true })]} />);
+    expect((screen.getByRole('button', { name: 'موافق' }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: 'حذف' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('links to the next unreviewed page when there is one', () => {

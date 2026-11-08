@@ -30,6 +30,7 @@ function cardState(card: PairCard): CardAction | null {
 export function CardReview({ a, b, card }: { a: number; b: number; card: PairCard }) {
   const ar = useLanguage().language === 'ar';
   const [chosen, setChosen] = useState<CardAction | null | undefined>(undefined);
+  const router = useRouter();
   const [failed, setFailed] = useState(false);
   const current = chosen !== undefined ? chosen : cardState(card);
   const send = async (action: CardAction) => {
@@ -39,6 +40,7 @@ export function CardReview({ a, b, card }: { a: number; b: number; card: PairCar
     try {
       const response = await post(a, b, undo ? 'undo' : action, card.pairs?.map(pair => pair.id) ?? [card.id]);
       if (!response.ok) throw new Error(String(response.status));
+      router.refresh();
     } catch {
       setChosen(undefined);
       setFailed(true);
@@ -62,7 +64,8 @@ export default function ReviewButtons({ a, b, cards, nextHref }: { a: number; b:
   const [chosen, setChosen] = useState<ReviewAction | null | undefined>(undefined);
   const [failed, setFailed] = useState(false);
   useEffect(() => setChosen(undefined), [a, b]);
-  const current = chosen !== undefined ? chosen : reviewedAs(cards.flatMap(card => card.pairs?.map(pair => pair.verdict) ?? [card.verdict]));
+  const current = chosen !== undefined ? chosen : reviewedAs(cards.flatMap(card => card.pairs?.map(pair => pair.verdict) ?? [card.verdict]).filter(verdict => !verdict?.card));
+  const undecided = cards.some(card => (card.pairs?.map(pair => pair.verdict) ?? [card.verdict]).some(verdict => !verdict?.card));
   const send = async (action: ReviewAction) => {
     const undo = action === current;
     setChosen(undo ? null : action);
@@ -83,8 +86,8 @@ export default function ReviewButtons({ a, b, cards, nextHref }: { a: number; b:
   return (
     <div className="flex items-center justify-end gap-2">
       {failed && <p role="alert" className="text-sm text-[var(--home-accent)]">{ar ? 'تعذّر الحفظ.' : 'Could not save.'}</p>}
-      <Button size="lg" variant="neutral" active={current === 'agree'} aria-pressed={current === 'agree'} aria-label={agree} title={agree} onClick={() => send('agree')}><Check aria-hidden /></Button>
-      <Button size="lg" variant="neutral" active={current === 'drop'} aria-pressed={current === 'drop'} aria-label={drop} title={drop} onClick={() => send('drop')}><X aria-hidden /></Button>
+      <Button size="lg" variant="neutral" active={current === 'agree'} aria-pressed={current === 'agree'} aria-label={agree} title={agree} disabled={!undecided} onClick={() => send('agree')}><Check aria-hidden /></Button>
+      <Button size="lg" variant="neutral" active={current === 'drop'} aria-pressed={current === 'drop'} aria-label={drop} title={drop} disabled={!undecided} onClick={() => send('drop')}><X aria-hidden /></Button>
       {nextHref && <Button size="lg" variant="neutral" href={nextHref} aria-label={next} title={next}><Forward aria-hidden /></Button>}
     </div>
   );

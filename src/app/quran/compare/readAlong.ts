@@ -1,9 +1,16 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import type { PairCard } from './pairCards';
+import type { ManyOption, PairCard } from './pairCards';
+import { normalizeWord } from '@/lib/quran/normalize';
 
 /** One word the read-along stops on: `side` of the card, the ayah's place in that side, the word, and the partner it lights.
  *  `option` picks the partner of a one-to-many card while this word is read. */
 export type ReadStep = { side: 0 | 1; ayah: number; word: number; link?: string; option?: number; last: boolean };
+
+/** The same words every time: the card shows one ayah and lists where it recurs. */
+export function isRefrain(options: ManyOption[]) {
+  const text = (item: ManyOption) => item.ayah.words.map(normalizeWord).join(' ');
+  return options.every(item => text(item) === text(options[0]));
+}
 
 /** Both ayat stay on screen; the reading moves over one side word by word and each matched word lights its partner across.
  *  A range card reads its first side ayah by ayah. A one-to-many card reads the shared ayah once, then each partner in turn. */
@@ -15,7 +22,7 @@ export function readPlan(card: PairCard): ReadStep[] {
   const shared = (1 - many) as 0 | 1;
   return [
     ...words(shared, card.many.options[0].shared, 0),
-    ...card.many.options.flatMap((option, i) => words(many, option.ayah, i)),
+    ...(isRefrain(card.many.options) ? card.many.options.slice(0, 1) : card.many.options).flatMap((option, i) => words(many, option.ayah, i)),
   ];
 }
 
