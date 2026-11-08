@@ -21159,15 +21159,30 @@
   },
   "42:4|87:1": {
    "keep": false,
-   "why": "Only a divine name from the root of highness."
+   "why": "Only a divine name from the root of highness.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only a divine name from the root of highness."
+   }
   },
   "42:36|87:16": {
    "keep": false,
-   "why": "Only the life of this world."
+   "why": "Only the life of this world.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the life of this world."
+   }
   },
   "42:36|87:17": {
-   "keep": true,
-   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting."
+   "keep": false,
+   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting."
+   }
   },
   "42:49|92:3": {
    "keep": true,
