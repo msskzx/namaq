@@ -32,6 +32,17 @@ function inTurn<T>(task: () => Promise<T>): Promise<T> {
   return result;
 }
 
+/** Another git command, such as a status in a terminal, can hold the index lock for a moment. */
+async function withRetry<T>(task: () => Promise<T>, tries = 5): Promise<T> {
+  try {
+    return await task();
+  } catch (error) {
+    if (tries <= 1 || !String((error as { stderr?: string }).stderr ?? error).includes('index.lock')) throw error;
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return withRetry(task, tries - 1);
+  }
+}
+
 async function record(a: number, b: number, action: ReviewAction | 'undo') {
   const cwd = process.cwd();
   const path = join(cwd, VERDICTS);
@@ -54,8 +65,8 @@ async function record(a: number, b: number, action: ReviewAction | 'undo') {
   writeFileSync(path, after);
   try {
     await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd });
-    await run('git', ['add', VERDICTS, CARDS], { cwd });
-    await run('git', ['commit', '-q', '-m', `chore(compare): ${MESSAGES[action]} ${a}/${b}${action === 'undo' ? ' draft' : ''}`, '--', VERDICTS, CARDS], { cwd });
+    await withRetry(() => run('git', ['add', VERDICTS, CARDS], { cwd }));
+    await withRetry(() => run('git', ['commit', '-q', '-m', `chore(compare): ${MESSAGES[action]} ${a}/${b}${action === 'undo' ? ' draft' : ''}`, '--', VERDICTS, CARDS], { cwd }));
   } catch {
     await run('git', ['reset', '-q', '--', VERDICTS, CARDS], { cwd }).catch(() => undefined);
     writeFileSync(path, before);

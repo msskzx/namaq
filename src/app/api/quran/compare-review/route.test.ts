@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const files = vi.hoisted(() => new Map<string, string>());
-const shell = vi.hoisted(() => ({ fail: false, dirty: false, commitFails: false, commits: [] as string[], resets: 0 }));
+const shell = vi.hoisted(() => ({ fail: false, dirty: false, commitFails: false, lockFailures: 0, commits: [] as string[], resets: 0 }));
 
 vi.mock('node:fs', () => ({
   readFileSync: (path: string) => files.get(path.split('/src/')[1]) ?? '',
@@ -12,7 +12,8 @@ vi.mock('node:child_process', () => ({
     if (command === 'git' && _args[0] === 'diff' && shell.dirty) return done(new Error('dirty'));
     if (command === 'git' && _args[0] === 'reset') shell.resets++;
     if (command === 'git' && _args[0] === 'commit') {
-      if (shell.commitFails) return done(new Error('index.lock'));
+      if (shell.commitFails) return done(new Error('nothing to commit'));
+      if (shell.lockFailures > 0) { shell.lockFailures--; return done(new Error('Unable to create index.lock')); }
       shell.commits.push(_args[3]);
     }
     done(shell.fail && command !== 'git' ? new Error('build failed') : null, { stdout: '' });
@@ -33,6 +34,7 @@ beforeEach(() => {
   shell.commits = [];
   shell.dirty = false;
   shell.commitFails = false;
+  shell.lockFailures = 0;
   shell.resets = 0;
   files.clear();
   files.set(VERDICTS, `${JSON.stringify({ pairs: { ...drafted, '4:1|5:1': unsaved } }, null, 1)}\n`);
@@ -91,6 +93,12 @@ describe('the compare review route', () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(500);
     expect(files.get(VERDICTS)).toBe(before);
     expect(shell.resets).toBe(1);
+  });
+
+  it('tries again when another git command holds the index lock', async () => {
+    shell.lockFailures = 2;
+    expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(200);
+    expect(shell.commits).toHaveLength(1);
   });
 
   it('handles presses one at a time', async () => {
