@@ -60,7 +60,7 @@ describe('release homepage', () => {
     expect(screen.getByRole('link', { name: /الكتاب والحكمة/ })).toBeTruthy();
     act(() => { toggleBookmark(bookmark); });
     expect(screen.queryByRole('link', { name: /الكتاب والحكمة/ })).toBeNull();
-    expect(screen.getByText(/احفظ شجرة أو عائلة بزر/)).toBeTruthy();
+    expect(screen.getByText(/احفظ شجرة أو عائلة أو بطاقة مقارنة بزر/)).toBeTruthy();
   });
 
   it('keeps old bookmarks readable and navigable when their inventory entry is unknown', () => {

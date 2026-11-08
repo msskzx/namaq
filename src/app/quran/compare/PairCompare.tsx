@@ -1,20 +1,24 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, BookOpen, Check, ChevronDown, CircleHelp, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Search, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
+import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
 import { NavActions } from '@/components/common/NavBar';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
+import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
+import { compareBookmarkId, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref } from '@/lib/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@/lib/quran/curatedComparisons';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
+import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
 
@@ -39,8 +43,20 @@ function StateMark({ state, ar }: { state?: ReviewState; ar: boolean }) {
   return null;
 }
 
-function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = false, states = {} }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState> }) {
+const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+
+function SavedOnly({ checked, onChange, saved }: { checked: boolean; onChange: (checked: boolean) => void; saved: number }) {
   const ar = useLanguage().language === 'ar';
+  const id = useId();
+  const label = ar ? 'المحفوظة فقط' : 'Saved only';
+  const hint = !checked && saved === 0 ? (ar ? 'احفظ بطاقة بزر الحفظ تحتها أولًا' : 'Save a card with the bookmark under it first') : label;
+  return <span title={hint} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={checked} label={label} disabled={!checked && saved === 0} onIcon={<Bookmark className="size-3" aria-hidden />} onChange={onChange} /><label htmlFor={id}>{label}</label></span>;
+}
+
+function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, review = false, states = {}, savedOnly = false, onSavedOnly }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState>; savedOnly?: boolean; onSavedOnly?: (checked: boolean) => void }) {
+  const ar = useLanguage().language === 'ar';
+  const saved = savedSurahPairs(useBookmarks());
+  const pairs = savedOnly ? listed.filter(pair => saved.has(`${pair.a}:${pair.b}`)) : listed;
   const { plain } = useNames(names, ar);
   const [byCount, setByCount] = useState(false);
   const [query, setQuery] = useState('');
@@ -57,7 +73,7 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = fals
   const matches = (pair: { a: number; b: number }) => terms.every(term =>
     [pair.a, pair.b].some(n => matchesSurah({ number: n, name: names[n]?.ar ?? '', nameTransliterated: names[n]?.en }, term))
     || normalizeWord(`${story(pair)?.name.ar ?? ''} ${story(pair)?.name.en ?? ''}`.toLowerCase()).includes(normalizeWord(term.toLowerCase())));
-  const stories = curatedComparisons.filter(matches);
+  const stories = savedOnly ? [] : curatedComparisons.filter(matches);
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
   const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
   // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
@@ -91,6 +107,7 @@ function PairList({ pairs, names, a, b, autoFocus = false, onPick, review = fals
         { key: 'mushaf', label: ar ? 'ترتيب المصحف' : 'Mushaf order', icon: <ArrowDown01 size={16} aria-hidden />, current: !byCount, onClick: () => { setByCount(false); writeSort(false); } },
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
       ]} />
+      {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto">
         {stories.length > 0 && <>
           <h3 className={heading}>{ar ? 'مختارة' : 'Selected stories'}</h3>
@@ -142,19 +159,31 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 }
 
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
-function Card({ card, names, ar }: { card: PairCard; names: Names; ar: boolean }) {
+function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: boolean; saved: boolean }) {
   const [lit, setLit] = useState<string | null>(null);
+  const id = compareBookmarkId(card.id);
+  const anchor = `c-${card.id.replace(/[:|]/g, '-')}`;
+  const [a, b] = card.sides;
+  const bookmark = { id, text: `${a.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href: `${surahPairHref(a.surah, b.surah)}#${anchor}` };
+  const saveLabel = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
   const pick = (target: EventTarget) => {
     const id = (target as HTMLElement).closest?.('mark[data-link]')?.getAttribute('data-link');
     if (id) setLit(current => (current === id ? null : id));
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
-    <li className={card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : undefined}>
-      <div onClick={event => pick(event.target)}>
-        <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
-          <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-        ) : undefined))} />
+    <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
+      <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href}>
+        <div onClick={event => pick(event.target)}>
+          <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
+            <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
+          ) : undefined))} />
+        </div>
+      </DoubleTapSave>
+      <div className="flex justify-end">
+        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+          {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
+        </Button>
       </div>
       {card.verdict && <div dir="ltr" className="mt-1 text-sm">
         {card.verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {card.verdict.ask}</p>}
@@ -173,6 +202,10 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
   const sheet = useRef<HTMLDialogElement>(null);
   const pane = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
+  const [savedOnly, setSavedOnly] = useState(false);
+  const bookmarks = useBookmarks();
+  const isSaved = (card: PairCard) => bookmarks.some(item => item.id === compareBookmarkId(card.id));
+  const shown = savedOnly ? cards.filter(isSaved) : cards;
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);
   const index = pairs.findIndex(pair => pair.a === a && pair.b === b);
@@ -203,14 +236,14 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
       <h1 className="sr-only">{story ? `${title(a, b)} - ${ar ? story.name.voweled : story.name.en}` : title(a, b)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-4">
-          {cards.length === 0 ? <p role="status" className={NOTE}>{ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
-            : <ol className="flex flex-col gap-4">{cards.map(card => <Card key={card.id} card={card} names={names} ar={ar} />)}</ol>}
+          {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
+            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} saved={isSaved(card)} />)}</ol>}
           {next && <Link href={pairHref(next.a, next.b, review)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
-          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} />
+          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} />
         </aside>
       </div>
       <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
@@ -221,7 +254,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
             <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
           </div>
-          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} />}
+          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} />}
         </div>
       </dialog>
     </div>

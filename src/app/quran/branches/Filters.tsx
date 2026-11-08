@@ -151,7 +151,7 @@ const TAP_GAP = 300;
 const TAP_SLOP = 24;
 
 /** As on a post: a double tap on the tree or matrix saves it (never unsaves), with a bookmark popping up in the middle. */
-export function DoubleTapSave({ id, text, aliases = [], children }: { id: string; text: string; aliases?: string[]; children: React.ReactNode }) {
+export function DoubleTapSave({ id, text, href, aliases = [], children }: { id: string; text: string; href?: string; aliases?: string[]; children: React.ReactNode }) {
   const [pop, setPop] = useState(0);
   const down = useRef<{ x: number; y: number } | null>(null);
   const last = useRef<{ x: number; y: number; at: number } | null>(null);
@@ -167,7 +167,7 @@ export function DoubleTapSave({ id, text, aliases = [], children }: { id: string
     const previous = last.current;
     if (previous && tap.at - previous.at < TAP_GAP && Math.hypot(tap.x - previous.x, tap.y - previous.y) < TAP_SLOP * 2) {
       last.current = null;
-      if (!readBookmarks().some(item => item.id === id || aliases.includes(item.id))) toggleBookmark(bookmarkOf(id, text));
+      if (!readBookmarks().some(item => item.id === id || aliases.includes(item.id))) toggleBookmark(href ? { id, text, href } : bookmarkOf(id, text));
       setPop(count => count + 1);
       return;
     }

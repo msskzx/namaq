@@ -101,4 +101,27 @@ describe('PairCompare', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
     expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
   });
+
+  it('saves a card with its bookmark button and links back to it', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }));
+    expect(JSON.parse(localStorage.getItem('bookmarks')!)).toMatchObject([{ id: 'compare:x', text: 'أم تسألهم أجرا …', href: '/quran/compare?a=52&b=68#c-x' }]);
+    expect(document.getElementById('c-x')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'إزالة من المحفوظة' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'إزالة من المحفوظة' }));
+    expect(JSON.parse(localStorage.getItem('bookmarks')!)).toEqual([]);
+  });
+
+  it('shows only saved cards and the surah pairs that hold them when saved only is on', () => {
+    const pair = (id: string): PairCard => ({ ...cards[0], id, group: undefined });
+    render(<PairCompare a={52} b={68} cards={[pair('52:40|68:46'), pair('52:41|68:47')]} pairs={pairs} names={names} />);
+    const savedOnly = () => within(pane()).getByRole('switch', { name: 'المحفوظة فقط' }) as HTMLInputElement;
+    expect(savedOnly().disabled).toBe(true);
+    fireEvent.click(screen.getAllByRole('button', { name: 'حفظ' })[1]);
+    expect(savedOnly().disabled).toBe(false);
+    fireEvent.click(savedOnly());
+    expect(screen.getAllByRole('button', { name: 'إزالة من المحفوظة' })).toHaveLength(1);
+    expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
+    expect([...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'))).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=52&b=68']);
+  });
 });
