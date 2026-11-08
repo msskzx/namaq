@@ -23867,20 +23867,40 @@
    "why": "The deniers' objection to revelation versus an oath by angels; different statements."
   },
   "54:11|78:19": {
-   "keep": true,
-   "why": "Rare image in both: the sky opened into gates."
+   "keep": false,
+   "why": "Rare image in both: the sky opened into gates. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare image in both: the sky opened into gates."
+   }
   },
   "54:39|78:30": {
-   "keep": true,
-   "why": "Same address to the punished: so taste, and punishment."
+   "keep": false,
+   "why": "Same address to the punished: so taste, and punishment. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same address to the punished: so taste, and punishment."
+   }
   },
   "54:42|78:28": {
-   "keep": true,
-   "why": "Same phrase with an intensifier: they denied Our signs, all of them / with utter denial."
+   "keep": false,
+   "why": "Same phrase with an intensifier: they denied Our signs, all of them / with utter denial. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same phrase with an intensifier: they denied Our signs, all of them / with utter denial."
+   }
   },
   "54:42|78:29": {
    "keep": false,
-   "why": "Only the word 'all'; unrelated."
+   "why": "Only the word 'all'; unrelated.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the word 'all'; unrelated."
+   }
   },
   "54:4|79:13": {
    "keep": false,
