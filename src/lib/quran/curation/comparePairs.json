@@ -22027,11 +22027,21 @@
   },
   "51:48|78:6": {
    "keep": true,
-   "why": "Same image with a rare root: the earth spread as a cradle."
+   "why": "Same image with a rare root: the earth spread as a cradle.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same image with a rare root: the earth spread as a cradle."
+   }
   },
   "51:49|78:8": {
    "keep": true,
-   "why": "Same idea: creation in pairs."
+   "why": "Same idea: creation in pairs.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: creation in pairs."
+   }
   },
   "51:24|79:15": {
    "keep": true,
@@ -24177,7 +24187,12 @@
   },
   "51:23|78:37": {
    "keep": false,
-   "why": "Only the Lord of heaven and earth; an oath vs a title leading to no one daring to speak."
+   "why": "Only the Lord of heaven and earth; an oath vs a title leading to no one daring to speak.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the Lord of heaven and earth; an oath vs a title leading to no one daring to speak."
+   }
   },
   "51:49|54:49": {
    "keep": false,
