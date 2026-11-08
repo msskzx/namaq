@@ -91,6 +91,11 @@ describe('PairCompare', () => {
     } finally { vi.useRealTimers(); }
   });
 
+  it('says «سورة» once per surah when the names already start with it', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={{ ...names, 52: { ar: 'سُورَةُ الطُّورِ' } }} />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سُورَةُ الطُّورِ وَسُورَةُ الْقَلَمِ');
+  });
+
   it('opens each ayah of a card in the reader', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     const read = screen.getAllByRole('link').filter(link => link.getAttribute('href')?.startsWith('/quran/read/'));
