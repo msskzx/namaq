@@ -8,7 +8,16 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { OWNER_ASK, reviewedAs, type CardAction, type ReviewAction } from '@/lib/quran/curation/reviewPage';
 import type { PairCard } from './pairCards';
 
-const post = (a: number, b: number, action: ReviewAction | CardAction | 'undo', card?: string[]) => fetch('/api/quran/compare-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ a, b, action, card }) });
+async function post(a: number, b: number, action: ReviewAction | CardAction | 'undo', card?: string[]) {
+  const send = () => fetch('/api/quran/compare-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ a, b, action, card }) });
+  let response = await send();
+  // While the dev server recompiles, the route answers 404.
+  for (let tries = 0; response.status === 404 && tries < 6; tries++) {
+    await new Promise(resolve => setTimeout(resolve, 700));
+    response = await send();
+  }
+  return response;
+}
 
 function cardState(card: PairCard): CardAction | null {
   const verdicts = card.pairs?.map(pair => pair.verdict) ?? [card.verdict];

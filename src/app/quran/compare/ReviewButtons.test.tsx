@@ -66,6 +66,15 @@ describe('ReviewButtons', () => {
     expect(screen.getByRole('link', { name: 'التالية غير المراجَعة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=4&review=1');
   });
 
+  it('sends a press again while the server is recompiling', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: false, status: 404 }).mockResolvedValue({ ok: true, status: 200 });
+    vi.stubGlobal('fetch', fetchMock);
+    render(<CardReview a={2} b={3} card={card({ keep: true, why: '' })} />);
+    fireEvent.click(screen.getByRole('button', { name: 'إبقاء' }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2), { timeout: 2000 });
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
   it('says so when saving fails', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }));
     render(<ReviewButtons a={2} b={3} cards={[card({ keep: true, why: '' })]} />);
