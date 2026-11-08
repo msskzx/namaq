@@ -8508,60 +8508,74 @@
    "checked": true
   },
   "3:11|59:4": {
-   "keep": true,
-   "why": "They opposed / denied, and Allah is severe in punishment."
+   "keep": false,
+   "why": "They opposed / denied, and Allah is severe in punishment. (owner removed)",
+   "checked": true
   },
   "3:29|59:6": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:56|59:3": {
-   "keep": true,
-   "why": "Punishment of the disbelievers in this world and the Hereafter."
+   "keep": false,
+   "why": "Punishment of the disbelievers in this world and the Hereafter. (owner removed)",
+   "checked": true
   },
   "3:111|59:12": {
-   "keep": true,
-   "why": "They will turn their backs, then they will not be helped."
+   "keep": false,
+   "why": "They will turn their backs, then they will not be helped. (owner removed)",
+   "checked": true
   },
   "3:189|59:6": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:94|61:7": {
-   "keep": true,
-   "why": "Inventing a lie against Allah: the wrongdoers."
+   "keep": false,
+   "why": "Inventing a lie against Allah: the wrongdoers. (owner removed)",
+   "checked": true
   },
   "3:136|61:12": {
-   "keep": true,
-   "why": "Forgiveness and gardens under which rivers flow."
+   "keep": false,
+   "why": "Forgiveness and gardens under which rivers flow. (owner removed)",
+   "checked": true
   },
   "3:177|61:10": {
    "keep": false,
-   "why": "Shared 'painful punishment' only; different subjects."
+   "why": "Shared 'painful punishment' only; different subjects.",
+   "checked": true
   },
   "3:18|62:1": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:74|62:4": {
    "keep": true,
-   "why": "Allah gives His favour to whom He wills; possessor of great bounty."
+   "why": "Allah gives His favour to whom He wills; possessor of great bounty.",
+   "checked": true
   },
   "3:164|62:2": {
    "keep": true,
-   "why": "Same sentence: He sent among them a messenger reciting His verses, purifying them and teaching the Book and wisdom."
+   "why": "Same sentence: He sent among them a messenger reciting His verses, purifying them and teaching the Book and wisdom.",
+   "checked": true
   },
   "3:168|62:6": {
    "keep": true,
-   "why": "Challenge about death: if you are truthful."
+   "why": "Challenge about death: if you are truthful.",
+   "checked": true
   },
   "3:174|62:4": {
    "keep": true,
-   "why": "Allah's bounty; possessor of great bounty."
+   "why": "Allah's bounty; possessor of great bounty.",
+   "checked": true
   },
   "3:182|62:7": {
    "keep": true,
-   "why": "Because of what their hands have put forth."
+   "why": "Because of what their hands have put forth.",
+   "checked": true
   },
   "3:10|63:9": {
    "keep": true,
