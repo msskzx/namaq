@@ -23665,6 +23665,10 @@
   "43:11|78:16": {
    "keep": true,
    "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word."
+  },
+  "43:9|78:6": {
+   "keep": true,
+   "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word."
   }
  }
 }

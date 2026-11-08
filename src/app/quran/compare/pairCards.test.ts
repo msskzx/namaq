@@ -93,8 +93,8 @@ describe('compare pair cards', () => {
   });
 
   it('joins a curated passage that runs in a different order into one card', () => {
-    const card = pairCards(43, 78).find(item => item.id === '43:10-12|78:6-16')!;
-    expect(card.sides.map(side => side.ayat.length)).toEqual([3, 11]);
+    const card = pairCards(43, 78).find(item => item.id === '43:9-12|78:6-16')!;
+    expect(card.sides.map(side => side.ayat.length)).toEqual([4, 11]);
     const links = card.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)).sort());
     expect(links[0]).toEqual(links[1]);
     expect(new Set(links[0]).size).toBe(links[0].length);

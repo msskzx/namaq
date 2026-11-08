@@ -257,9 +257,15 @@
    "links": [],
    "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word.",
    "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "43:9|78:6",
+   "links": [],
+   "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word.",
+   "source": "claude-curated, owner to review"
   }
  ],
  "joins": [
-  "43:10-12|78:6-16"
+  "43:9-12|78:6-16"
  ]
 }
