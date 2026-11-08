@@ -13696,19 +13696,39 @@
   },
   "42:9|64:1": {
    "keep": false,
-   "why": "Only the closing 'able over all things'."
+   "why": "Only the closing 'able over all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'able over all things'."
+   }
   },
   "42:12|64:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and 'all things'."
+   "why": "Only 'the heavens and the earth' and 'all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and 'all things'."
+   }
   },
   "42:29|64:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing 'able'."
+   "why": "Only 'the heavens and the earth' and the closing 'able'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing 'able'."
+   }
   },
   "42:53|64:3": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and 'return'; different statements."
+   "why": "Only 'the heavens and the earth' and 'return'; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and 'return'; different statements."
+   }
   },
   "43:9|44:38": {
    "keep": false,
