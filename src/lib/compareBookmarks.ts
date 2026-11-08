@@ -5,6 +5,9 @@ const PREFIX = 'compare:';
 /** A saved compare card, keyed by its ayah pair ("2:154|16:21"), its two ranges ("7:106-125|26:31-50") or an ayah and its partners ("10:72|26:109,127"). */
 export const compareBookmarkId = (pair: string) => `${PREFIX}${pair}`;
 
+/** The page anchor of the card that opens on these two ayat. */
+export const compareAnchor = (a: { surah: number; ayah: number }, b: { surah: number; ayah: number }) => `c-${a.surah}-${a.ayah}-${b.surah}-${b.ayah}`;
+
 export const isCompareBookmark = (bookmark: Pick<Bookmark, 'id'>) => bookmark.id.startsWith(PREFIX);
 
 const parseSides = (pair: string) => {

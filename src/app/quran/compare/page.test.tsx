@@ -40,6 +40,15 @@ const page = async (query: Record<string, string>) => {
   return render(<Chrome />);
 };
 describe('QuranComparePage', () => {
+  it('lists a page whose cards were all left out only in review', async () => {
+    const link = () => within(screen.getByRole('complementary', { name: 'اختر سورتين' })).queryAllByRole('link').some(item => item.getAttribute('href')?.startsWith('/quran/compare?a=3&b=18'));
+    await page({ a: '2', b: '3' });
+    expect(link()).toBe(false);
+    cleanup();
+    await page({ a: '2', b: '3', review: '1' });
+    expect(link()).toBe(true);
+  });
+
   it('opens the first selected story when no surahs are chosen', async () => {
     await page({});
     const trigger = screen.getByRole('button', { name: /اختر سورتين/ });

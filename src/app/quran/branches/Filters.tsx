@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { isCompareBookmark } from '@/lib/compareBookmarks';
 import Button from '@/components/common/Button';
@@ -183,7 +183,7 @@ export function DoubleTapSave({ id, text, href, aliases = [], children }: { id: 
 }
 
 /** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text, href, aliases = [], details }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode }) {
+export function CardActions({ id, text, href, aliases = [], details, compareHref }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareHref?: string }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -191,11 +191,13 @@ export function CardActions({ id, text, href, aliases = [], details }: { id: str
   // In the growth studio its controls take the row; save and share come back when it closes.
   const studio = useGrowth().studio;
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
+  const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
   return <div className="flex flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
     {!studio && <>
       <span className="flex-1" />
+      {compareHref && <Button size="lg" variant="muted" href={compareHref} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}
       <ShareButton video href={href} />
       <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}

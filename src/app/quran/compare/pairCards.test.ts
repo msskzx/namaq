@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
-import { listedPairs, pairCards } from './pairCards';
+import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {
   it('shows At-Tur and Al-Qalam as five cards, the last two ayat merged, with marks inside each ayah', () => {
@@ -85,6 +85,19 @@ describe('compare pair cards', () => {
     expect(review.reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0)).toBe(78);
     expect(review.find(card => card.id === '2:107|3:29')?.verdict?.keep).toBe(false);
     expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0));
+  });
+
+  it('lists a page only with three kept pairs, but keeps every engine page in review', () => {
+    expect(listedPairs.some(pair => pair.a === 3 && pair.b === 18)).toBe(false);
+    expect(reviewPairs.find(pair => pair.a === 3 && pair.b === 18)?.count).toBe(5);
+    expect(reviewStates()['3:18']).toBe('checked');
+    for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(3);
+  });
+
+  it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
+    expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
+    expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();
+    expect(compareLinkFor(['2:23'])).toBeUndefined();
   });
 
   it('has a verdict only for pairs the engine finds', () => {

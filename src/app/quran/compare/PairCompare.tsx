@@ -11,7 +11,7 @@ import { NavActions } from '@/components/common/NavBar';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
-import { compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
+import { compareAnchor, compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref } from '@/lib/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@/lib/quran/curatedComparisons';
@@ -164,7 +164,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 }
 
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
-const anchorOf = (card: PairCard) => `c-${card.sides[0].surah}-${card.sides[0].ayah}-${card.sides[1].surah}-${card.sides[1].ayah}`;
+const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
 function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar: boolean; savedIds: string[] }) {
   const [lit, setLit] = useState<string | null>(null);
