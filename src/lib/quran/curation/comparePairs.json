@@ -13295,16 +13295,34 @@
    "why": "Same scene: messengers came with clear proofs and the disbelievers rejected them."
   },
   "41:8|45:30": {
-   "keep": true,
-   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
+   "keep": false,
+   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
+   }
   },
   "41:46|45:15": {
    "keep": true,
-   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
+   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
+   }
   },
   "41:46|45:30": {
    "keep": false,
-   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
+   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
+   }
   },
   "41:15|46:4": {
    "keep": false,
@@ -13533,23 +13551,48 @@
   },
   "42:3|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:9|57:2": {
-   "keep": true,
-   "why": "Same statement: He gives life (and death) and is able over all things."
+   "keep": false,
+   "why": "Same statement: He gives life (and death) and is able over all things. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He gives life (and death) and is able over all things."
+   }
   },
   "42:12|57:2": {
    "keep": false,
-   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
+   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
+   }
   },
   "42:29|57:2": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing 'able'."
+   "why": "Only 'the heavens and the earth' and the closing 'able'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing 'able'."
+   }
   },
   "42:53|57:5": {
-   "keep": true,
-   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
+   "keep": false,
+   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
+   }
   },
   "42:9|64:1": {
    "keep": false,
@@ -13639,15 +13682,33 @@
   },
   "43:25|47:10": {
    "keep": true,
-   "why": "Same warning: see how was the end of the deniers / those before them."
+   "why": "Same warning: see how was the end of the deniers / those before them. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same warning: see how was the end of the deniers / those before them."
+   }
   },
   "43:63|47:26": {
    "keep": false,
-   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise."
+   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise."
+   }
   },
   "43:66|47:18": {
    "keep": true,
-   "why": "Same words: are they waiting except for the Hour to come upon them suddenly?"
+   "why": "Same words: are they waiting except for the Hour to come upon them suddenly? (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: are they waiting except for the Hour to come upon them suddenly?"
+   }
   },
   "43:8|50:36": {
    "keep": true,
@@ -13676,19 +13737,43 @@
   },
   "43:9|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the name Almighty."
+   "why": "Only 'the heavens and the earth' and the name Almighty. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the name Almighty."
+   }
   },
   "43:82|57:1": {
-   "keep": false,
-   "why": "Only glorification and 'the heavens and the earth'; different statements."
+   "keep": true,
+   "why": "Only glorification and 'the heavens and the earth'; different statements. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only glorification and 'the heavens and the earth'; different statements."
+   }
   },
   "43:84|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the name Wise."
+   "why": "Only 'the heavens and the earth' and the name Wise. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the name Wise."
+   }
   },
   "43:85|57:5": {
    "keep": true,
-   "why": "Same full statement: His is the dominion of the heavens and the earth, and to Him is the return."
+   "why": "Same full statement: His is the dominion of the heavens and the earth, and to Him is the return. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same full statement: His is the dominion of the heavens and the earth, and to Him is the return."
+   }
   },
   "43:9|59:1": {
    "keep": false,
@@ -13878,16 +13963,34 @@
    }
   },
   "45:2|57:1": {
-   "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "keep": true,
+   "why": "Only the closing names Almighty, Wise. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "45:5|57:17": {
    "keep": true,
-   "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason."
+   "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason."
+   }
   },
   "45:37|57:1": {
-   "keep": false,
-   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   "keep": true,
+   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "45:2|59:1": {
    "keep": false,
@@ -21047,7 +21150,13 @@
   },
   "41:53|81:23": {
    "keep": false,
-   "why": "Only the horizon word; signs shown to people vs Jibril seen on the horizon."
+   "why": "Only the horizon word; signs shown to people vs Jibril seen on the horizon. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the horizon word; signs shown to people vs Jibril seen on the horizon."
+   }
   },
   "42:29|45:4": {
    "keep": true,
@@ -21069,39 +21178,76 @@
   },
   "42:37|53:32": {
    "keep": true,
-   "why": "Same description: those who avoid the major sins and indecencies."
+   "why": "Same description: those who avoid the major sins and indecencies. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description: those who avoid the major sins and indecencies."
+   }
   },
   "42:50|53:21": {
    "keep": false,
-   "why": "Only male and female; His giving of children vs the deniers' division."
+   "why": "Only male and female; His giving of children vs the deniers' division. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only male and female; His giving of children vs the deniers' division."
+   }
   },
   "42:17|69:1": {
    "keep": false,
-   "why": "Truth and al-Haqqah share a root only."
+   "why": "Truth and al-Haqqah share a root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Truth and al-Haqqah share a root only."
+   }
   },
   "42:17|69:3": {
    "keep": true,
-   "why": "Same style on the Hour: what will make you know, wa ma yudrika / wa ma adraka."
+   "why": "Same style on the Hour: what will make you know, wa ma yudrika / wa ma adraka. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style on the Hour: what will make you know, wa ma yudrika / wa ma adraka."
+   }
   },
   "42:9|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death; different subjects."
+   "why": "Only the roots of life and death; different subjects. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the roots of life and death; different subjects."
+   }
   },
   "42:4|87:1": {
    "keep": false,
-   "why": "Only a divine name from the root of highness."
+   "why": "Only a divine name from the root of highness.",
+   "checked": true
   },
   "42:36|87:16": {
-   "keep": false,
-   "why": "Only the life of this world."
+   "keep": true,
+   "why": "Only the life of this world. (owner kept)",
+   "checked": true
   },
   "42:36|87:17": {
    "keep": true,
-   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting."
+   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting.",
+   "checked": true
   },
   "42:49|92:3": {
-   "keep": true,
-   "why": "Same idea: Allah creating the male and the female."
+   "keep": false,
+   "why": "Same idea: Allah creating the male and the female. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: Allah creating the male and the female."
+   }
   },
   "43:2|44:2": {
    "keep": false,
@@ -21129,8 +21275,14 @@
    "checked": true
   },
   "43:70|47:6": {
-   "keep": false,
-   "why": "Only entering the Garden, a common reward statement."
+   "keep": true,
+   "why": "Only entering the Garden, a common reward statement. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only entering the Garden, a common reward statement."
+   }
   },
   "43:84|48:4": {
    "keep": false,
@@ -21139,7 +21291,13 @@
   },
   "43:84|49:16": {
    "keep": false,
-   "why": "Only heavens, earth and divine knowledge; different subjects."
+   "why": "Only heavens, earth and divine knowledge; different subjects. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only heavens, earth and divine knowledge; different subjects."
+   }
   },
   "43:83|52:12": {
    "keep": true,
@@ -21147,20 +21305,28 @@
    "checked": true
   },
   "43:34|56:15": {
-   "keep": false,
-   "why": "A single shared word, couches, one worldly and one in Paradise."
+   "keep": true,
+   "why": "A single shared word, couches, one worldly and one in Paradise. (owner kept)",
+   "checked": true
   },
   "43:34|56:16": {
    "keep": true,
-   "why": "Same image, reclining upon them: worldly luxury vs the reward of the foremost."
+   "why": "Same image, reclining upon them: worldly luxury vs the reward of the foremost.",
+   "checked": true
   },
   "43:73|56:32": {
    "keep": true,
-   "why": "Same description of the Garden: abundant fruit."
+   "why": "Same description of the Garden: abundant fruit.",
+   "checked": true
   },
   "43:31|76:23": {
-   "keep": true,
-   "why": "Contrast: why was this Qur'an not sent down on a great man / We sent the Qur'an down upon you."
+   "keep": false,
+   "why": "Contrast: why was this Qur'an not sent down on a great man / We sent the Qur'an down upon you. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast: why was this Qur'an not sent down on a great man / We sent the Qur'an down upon you."
+   }
   },
   "43:12|78:8": {
    "keep": true,
@@ -21169,7 +21335,12 @@
   },
   "43:70|89:30": {
    "keep": true,
-   "why": "Same scene: the blessed are addressed and told to enter the Garden."
+   "why": "Same scene: the blessed are addressed and told to enter the Garden.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: the blessed are addressed and told to enter the Garden."
+   }
   },
   "44:41|45:19": {
    "keep": true,
@@ -21233,15 +21404,30 @@
   },
   "44:51|54:54": {
    "keep": true,
-   "why": "Same frame: indeed the pious will be in..."
+   "why": "Same frame: indeed the pious will be in...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same frame: indeed the pious will be in..."
+   }
   },
   "44:52|54:54": {
    "keep": true,
-   "why": "Same statement on the pious: in gardens and..."
+   "why": "Same statement on the pious: in gardens and...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement on the pious: in gardens and..."
+   }
   },
   "44:55|55:52": {
-   "keep": true,
-   "why": "Same description of the Garden: every kind of fruit."
+   "keep": false,
+   "why": "Same description of the Garden: every kind of fruit. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of the Garden: every kind of fruit."
+   }
   },
   "44:8|56:48": {
    "keep": true,
@@ -21270,11 +21456,23 @@
   },
   "44:51|68:34": {
    "keep": true,
-   "why": "Same frame on the reward of the pious."
+   "why": "Same frame on the reward of the pious. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same frame on the reward of the pious."
+   }
   },
   "44:52|68:34": {
-   "keep": false,
-   "why": "Only the word gardens."
+   "keep": true,
+   "why": "Only the word gardens. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the word gardens."
+   }
   },
   "44:8|77:26": {
    "keep": false,
@@ -21298,63 +21496,154 @@
   },
   "44:35|80:21": {
    "keep": false,
-   "why": "Only the root of death."
+   "why": "Only the root of death.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of death."
+   }
   },
   "44:35|80:22": {
-   "keep": true,
-   "why": "Contrast with a rare root: we will not be raised / then He raises him."
+   "keep": false,
+   "why": "Contrast with a rare root: we will not be raised / then He raises him. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast with a rare root: we will not be raised / then He raises him."
+   }
   },
   "44:11|84:24": {
    "keep": false,
-   "why": "Only 'painful punishment', a stock phrase."
+   "why": "Only 'painful punishment', a stock phrase.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'painful punishment', a stock phrase."
+   }
   },
   "44:58|87:8": {
-   "keep": false,
-   "why": "Only the root of ease; the Qur'an made easy vs ease for the Prophet."
+   "keep": true,
+   "why": "Only the root of ease; the Qur'an made easy vs ease for the Prophet. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Only the root of ease; the Qur'an made easy vs ease for the Prophet. (owner kept)",
+    "checked": true
+   }
   },
   "44:58|87:9": {
-   "keep": false,
-   "why": "Only the root of remembrance."
+   "keep": true,
+   "why": "Only the root of remembrance. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Only the root of remembrance. (owner kept)",
+    "checked": true
+   }
   },
   "44:52|88:10": {
-   "keep": false,
-   "why": "Only 'in a garden', a stock reward word."
+   "keep": true,
+   "why": "Only 'in a garden', a stock reward word. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Only 'in a garden', a stock reward word. (owner kept)",
+    "checked": true
+   }
   },
   "44:52|88:12": {
-   "keep": false,
-   "why": "Only the word spring."
+   "keep": true,
+   "why": "Only the word spring. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Only the word spring. (owner kept)",
+    "checked": true
+   }
   },
   "44:23|89:4": {
-   "keep": false,
-   "why": "Night and travel by coincidence; Musa's journey vs an oath."
+   "keep": true,
+   "why": "Night and travel by coincidence; Musa's journey vs an oath. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Night and travel by coincidence; Musa's journey vs an oath."
+   }
   },
   "44:3|97:1": {
    "keep": true,
-   "why": "Same sentence: indeed We sent it down in a night."
+   "why": "Same sentence: indeed We sent it down in a night. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sentence: indeed We sent it down in a night."
+   }
   },
   "44:20|114:1": {
-   "keep": true,
-   "why": "Same construction: seeking refuge with the Lord."
+   "keep": false,
+   "why": "Same construction: seeking refuge with the Lord. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: seeking refuge with the Lord."
+   }
   },
   "45:3|51:20": {
    "keep": true,
-   "why": "Same construction: signs in the earth for a described people."
+   "why": "Same construction: signs in the earth for a described people. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: signs in the earth for a described people."
+   }
   },
   "45:4|51:20": {
    "keep": true,
-   "why": "Same construction: and in ... are signs for those certain."
+   "why": "Same construction: and in ... are signs for those certain. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: and in ... are signs for those certain."
+   }
   },
   "45:3|52:36": {
    "keep": false,
-   "why": "Only the heavens and the earth."
+   "why": "Only the heavens and the earth. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the heavens and the earth."
+   }
   },
   "45:4|52:36": {
    "keep": true,
-   "why": "Contrast on creation and certainty: signs for those certain / they have no certainty."
+   "why": "Contrast on creation and certainty: signs for those certain / they have no certainty. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast on creation and certainty: signs for those certain / they have no certainty."
+   }
   },
   "45:28|56:24": {
    "keep": false,
-   "why": "Only recompense for what they did, a stock closing."
+   "why": "Only recompense for what they did, a stock closing. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only recompense for what they did, a stock closing."
+   }
   },
   "45:8|84:24": {
    "keep": true,
@@ -24702,12 +24991,14 @@
    "checked": true
   },
   "43:82|56:74": {
-   "keep": false,
-   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
+   "keep": true,
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link. (owner kept)",
+   "checked": true
   },
   "43:82|56:96": {
-   "keep": false,
-   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
+   "keep": true,
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link. (owner kept)",
+   "checked": true
   },
   "43:82|78:37": {
    "keep": true,
@@ -24736,11 +25027,23 @@
   },
   "45:11|51:37": {
    "keep": false,
-   "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
+   "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
+   }
   },
   "45:36|51:23": {
    "keep": false,
-   "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
+   "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
+   }
   },
   "51:23|78:37": {
    "keep": false,
@@ -25009,8 +25312,14 @@
    "checked": true
   },
   "44:36|68:41": {
-   "keep": false,
-   "why": "Dropped with the page"
+   "keep": true,
+   "why": "Dropped with the page (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Dropped with the page"
+   }
   },
   "47:1|58:16": {
    "keep": false,
@@ -25243,6 +25552,413 @@
     "keep": true,
     "why": "Fire named for the wicked: سقر / جحيم. (owner added)"
    }
+  },
+  "41:39|42:9": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:45|42:14": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:33|47:35": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:27|52:16": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:31|53:29": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:16|54:19": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:27|56:24": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:39|57:2": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:27|58:15": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:14|63:1": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:27|66:7": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:8|68:3": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:43|71:1": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:38|71:5": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:42|72:27": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:8|84:25": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:8|95:6": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:8|103:3": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "41:8|98:7": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:36|43:35": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:26|47:2": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:46|47:1": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:12|49:16": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:50|53:45": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:32|55:24": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:19|58:21": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:3|59:1": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:3|61:1": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:3|62:1": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:12|65:12": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:31|71:25": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:31|72:12": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:50|75:39": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:8|76:31": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "42:12|85:9": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "43:54|51:46": {
+   "keep": true,
+   "why": "Not drafted yet (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "43:82|51:23": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "43:48|53:18": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "43:9|55:29": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "43:9|64:3": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "43:84|64:4": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "43:82|69:52": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "43:83|70:42": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "43:49|72:20": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "43:65|76:31": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "43:48|79:20": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "43:82|87:1": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "44:36|46:22": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "44:38|46:3": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "44:7|50:38": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "44:38|50:38": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "44:37|53:52": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "44:38|64:3": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "45:30|47:2": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "45:30|49:10": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "45:22|53:31": {
+   "keep": false,
+   "why": "Not drafted yet (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {}
+  },
+  "45:2|58:21": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "45:9|58:16": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "45:2|61:1": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "45:37|61:1": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "45:2|62:1": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "45:37|62:1": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
   }
  }
 }
