@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import QuranComparePage from './page';
 import { NavSlotElement } from '@/components/common/NavBar';
+import { pairCards } from './pairCards';
 
 const locale = vi.hoisted(() => ({ language: 'ar' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => locale }));
@@ -61,7 +62,8 @@ describe('QuranComparePage', () => {
     expect(counts.size).toBe(1);
     const count = Number([...counts][0]!.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))));
     expect(count).toBeGreaterThan(0);
-    expect(screen.getAllByRole('article').length).toBe(count * 2);
+    expect(screen.getAllByRole('article').length).toBe(pairCards(7, 26).length * 2);
+    expect(pairCards(7, 26).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0)).toBe(count);
   });
 
   it.each([

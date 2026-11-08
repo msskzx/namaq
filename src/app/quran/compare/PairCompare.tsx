@@ -146,8 +146,10 @@ const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--h
 function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
+  const show = (n: number) => (ar ? num(n) : n);
+  const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
   return {
-    title: `${name} ${ar ? num(side.ayah) : side.ayah}`,
+    title: `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
     action: <span className="flex">
       {extra}
       <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
@@ -163,6 +165,8 @@ function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: bo
   const [lit, setLit] = useState<string | null>(null);
   const id = compareBookmarkId(card.id);
   const anchor = `c-${card.id.replace(/[:|]/g, '-')}`;
+  const aliases = (card.pairs ?? []).map(pair => compareBookmarkId(pair.id));
+  const verdicts = card.pairs?.flatMap(pair => (pair.verdict ? [{ id: pair.id, verdict: pair.verdict }] : [])) ?? (card.verdict ? [{ id: card.id, verdict: card.verdict }] : []);
   const [a, b] = card.sides;
   const bookmark = { id, text: `${a.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href: `${surahPairHref(a.surah, b.surah)}#${anchor}` };
   const saveLabel = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -173,7 +177,7 @@ function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: bo
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
-      <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href}>
+      <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={aliases}>
         <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
@@ -181,17 +185,17 @@ function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: bo
         </div>
       </DoubleTapSave>
       <div className="flex justify-end">
-        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, aliases)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
       </div>
-      {card.verdict && <div dir="ltr" className="mt-1 text-sm">
-        {card.verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {card.verdict.ask}</p>}
-        <p className={card.verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}>
-          {card.verdict.keep ? '✓ Kept' : '✗ Left out'} · {card.id.replace('|', ' ~ ')} · {card.verdict.why}
-          <span className="text-[var(--home-muted)]"> · {card.verdict.checked ? 'checked by you' : 'drafted by Claude'}</span>
+      {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
+        {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
+        <p className={verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}>
+          {verdict.keep ? '✓ Kept' : '✗ Left out'} · {pair.replace('|', ' ~ ')} · {verdict.why}
+          <span className="text-[var(--home-muted)]"> · {verdict.checked ? 'checked by you' : 'drafted by Claude'}</span>
         </p>
-      </div>}
+      </div>)}
     </li>
   );
 }
@@ -204,7 +208,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
   const [open, setOpen] = useState(false);
   const [savedOnly, setSavedOnly] = useState(false);
   const bookmarks = useBookmarks();
-  const isSaved = (card: PairCard) => bookmarks.some(item => item.id === compareBookmarkId(card.id));
+  const isSaved = (card: PairCard) => bookmarks.some(item => [card.id, ...(card.pairs ?? []).map(pair => pair.id)].some(id => item.id === compareBookmarkId(id)));
   const shown = savedOnly ? cards.filter(isSaved) : cards;
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);

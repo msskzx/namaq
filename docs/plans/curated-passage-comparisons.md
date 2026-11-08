@@ -18,7 +18,8 @@ Rules cannot tell shared meaning from shared vocabulary, so curation runs after 
 - The top bar holds the pair's title («سُورَةُ الطُّورِ وَسُورَةُ القَلَمِ») and its number of cards. On a phone it opens the list as a bottom sheet; on a desktop the list stays in a side pane and the button focuses its search. In mushaf order the list groups pairs under each of their surahs, collapsed except the current one.
 - The list pins hand-picked stories («مختارة»: Adam and the Children of Israel 2/7, Noah, Hud, Salih and Shuayb 7/11, Moses and Pharaoh 7/26, creation and Iblis 15/38), then every surah pair with at least three similar ayah pairs (738 pairs). It is in mushaf order by default; «الأكثر تشابهًا» sorts by count and is remembered on the device. Search takes a surah name, number or story name.
 - Each card shows the two ayat with the engine's word marks: exact or same letters in the accent colour, same lemma in purple, same root only in a faint purple (the words may differ in meaning, «بين» and «بيان»). A book icon opens each ayah in the reader. Tapping a word lights its partner. A tree icon opens the pair in the branches page when the branches page has it. The page ends with a link to the next pair.
-- There are no ranges, juz' filters, topics or ayah-by-ayah blocks. `?preset=` and reversed or invalid pairs redirect to a valid `?a=&b=`.
+- Kept pairs that continue each other become one range card (7:106-125 with 26:31-50; `pairChains` in `src/lib/quran/mutashabih/pairs.ts`): both sides move forward by at most 4 ayat, and neither side runs more than 2 ayat ahead of the other. A pair sharing an ayah but sitting far away keeps its own card. The ayat between matches are shown unmarked, verdicts stay per ayah pair, and a saved range card also counts as saving its pairs.
+- There are no juz' filters, topics or ayah-by-ayah blocks. `?preset=` and reversed or invalid pairs redirect to a valid `?a=&b=`.
 
 The earlier comparison page, with ayah-by-ayah blocks, topics and ranges, stays reachable from the experiments page (`/quran/compare?view=similar`) and from any URL that carries its range or view parameters.
 
@@ -33,7 +34,6 @@ Distillate namaq/0021 informs keeping the old entry points reachable when changi
 In this order, agreed with the owner on 2026-11-07:
 
 1. Finish the verdict review of every pair in `src/lib/quran/curation/comparePairs.json`.
-2. Merge cards that share or continue ayat on both sides into range cards (for example 7:106-125 with 26:31-50), keeping verdicts per ayah pair.
 3. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
 4. Bookmarks on the compare page (what is bookmarked to be decided with the owner).
 5. Animation on the compare page (what animates to be decided with the owner).

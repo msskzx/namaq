@@ -12,6 +12,12 @@ describe('compare bookmarks', () => {
     expect(compareBookmarkAyat({ id: 'compare:junk' })).toEqual([]);
   });
 
+  it('reads a range card as the first and last ayah of each side', () => {
+    expect(compareBookmarkAyat({ id: compareBookmarkId('7:106-125|26:31-50') })).toEqual(['7:106', '7:125', '26:31', '26:50']);
+    expect([...savedSurahPairs([{ id: 'compare:7:106-125|26:31-50' }])]).toEqual(['7:26']);
+    expect(bookmarkReferences({ id: 'compare:7:106-125|26:31-50', href: '/quran/compare?a=7&b=26#c' }, {})).toEqual([{ surah: 7, ayat: [106, 125] }, { surah: 26, ayat: [31, 50] }]);
+  });
+
   it('lists the surah pairs that hold a saved card', () => {
     expect([...savedSurahPairs([{ id: 'compare:2:154|16:21' }, { id: 'compare:2:1|16:3' }, { id: 'compare:52:25|68:30' }, { id: 'tree-1' }])]).toEqual(['2:16', '52:68']);
   });
