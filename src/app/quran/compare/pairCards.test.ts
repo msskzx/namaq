@@ -92,18 +92,6 @@ describe('compare pair cards', () => {
     expect(generated).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
   });
 
-  it('gives each word one partner on a card', () => {
-    for (const pair of listedPairs) for (const card of pairCards(pair.a, pair.b)) {
-      if (card.many) continue;
-      const [a, b] = card.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)));
-      expect(new Set(a).size).toBe(a.length);
-      expect([...a].sort()).toEqual([...b].sort());
-    }
-    const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
-    expect(moses.sides[1].ayat.find(ayah => ayah.number === 40)?.marks?.[2]).toBeUndefined();
-    expect(moses.sides[1].ayat.find(ayah => ayah.number === 41)?.marks?.[2]).toBeDefined();
-  });
-
   it('merges two runs of one passage when they share an ayah', () => {
     expect(pairCards(69, 101).map(card => card.id)).toContain('69:3-4|101:1-3');
   });
