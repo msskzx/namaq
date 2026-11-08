@@ -14191,23 +14191,48 @@
   },
   "48:7|59:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "48:7|59:24": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "48:19|59:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "48:21|59:6": {
    "keep": false,
-   "why": "Only the closing 'able over all things'; different spoils."
+   "why": "Only the closing 'able over all things'; different spoils.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'able over all things'; different spoils."
+   }
   },
   "48:22|59:12": {
-   "keep": true,
-   "why": "Same description: the enemy would turn their backs, then would not be helped."
+   "keep": false,
+   "why": "Same description: the enemy would turn their backs, then would not be helped. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description: the enemy would turn their backs, then would not be helped."
+   }
   },
   "48:5|61:12": {
    "keep": true,
