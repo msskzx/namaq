@@ -22102,35 +22102,75 @@
   },
   "52:17|56:12": {
    "keep": true,
-   "why": "Same pairing: gardens and bliss."
+   "why": "Same pairing: gardens and bliss.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same pairing: gardens and bliss."
+   }
   },
   "52:17|56:89": {
    "keep": true,
-   "why": "Same pairing: gardens and bliss."
+   "why": "Same pairing: gardens and bliss.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same pairing: gardens and bliss."
+   }
   },
   "52:20|56:22": {
    "keep": true,
-   "why": "Same rare expression in the Garden: hur 'in."
+   "why": "Same rare expression in the Garden: hur 'in.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression in the Garden: hur 'in."
+   }
   },
   "52:22|56:20": {
    "keep": true,
-   "why": "Same scene: fruit of what they choose."
+   "why": "Same scene: fruit of what they choose.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: fruit of what they choose."
+   }
   },
   "52:22|56:21": {
    "keep": true,
-   "why": "Same scene: meat of what they desire."
+   "why": "Same scene: meat of what they desire.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: meat of what they desire."
+   }
   },
   "52:23|56:25": {
    "keep": true,
-   "why": "Same words on the Garden: no idle talk and no sin."
+   "why": "Same words on the Garden: no idle talk and no sin.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words on the Garden: no idle talk and no sin."
+   }
   },
   "52:24|56:23": {
    "keep": true,
-   "why": "Same rare simile: like hidden pearls."
+   "why": "Same rare simile: like hidden pearls.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare simile: like hidden pearls."
+   }
   },
   "52:40|56:66": {
    "keep": false,
-   "why": "A rare root but no shared idea."
+   "why": "A rare root but no shared idea.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A rare root but no shared idea."
+   }
   },
   "52:9|67:16": {
    "keep": true,
@@ -24325,7 +24365,12 @@
   },
   "52:16|56:24": {
    "keep": true,
-   "why": "Contrast in one frame: recompense for what they did, for the Fire and for the Garden."
+   "why": "Contrast in one frame: recompense for what they did, for the Fire and for the Garden.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast in one frame: recompense for what they did, for the Fire and for the Garden."
+   }
   },
   "52:19|77:43": {
    "keep": true,
