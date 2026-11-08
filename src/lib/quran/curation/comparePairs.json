@@ -23628,15 +23628,30 @@
   },
   "53:25|56:49": {
    "keep": false,
-   "why": "The Hereafter and this life versus earlier and later peoples; only related roots."
+   "why": "The Hereafter and this life versus earlier and later peoples; only related roots.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "The Hereafter and this life versus earlier and later peoples; only related roots."
+   }
   },
   "53:31|56:24": {
    "keep": false,
-   "why": "Only the general idea of recompense for deeds."
+   "why": "Only the general idea of recompense for deeds.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the general idea of recompense for deeds."
+   }
   },
   "53:59|56:81": {
-   "keep": true,
-   "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive?"
+   "keep": false,
+   "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive? (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive?"
+   }
   },
   "53:35|68:47": {
    "keep": true,
