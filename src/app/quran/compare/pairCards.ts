@@ -133,12 +133,15 @@ function manyGroups(singles: AyahPair[]) {
  *  `review` also shows the pairs curation left out, each with its verdict. */
 export function pairCards(x: number, y: number, review = false): PairCard[] {
   const pairs = pairsFor(review ? foundBySurah : bySurah, x, y);
-  const chains = pairChains(pairs.filter(keptPair));
+  const alone = (pair: AyahPair) => !!verdictFor(pair.a, pair.b)?.alone;
+  const kept = pairs.filter(keptPair);
+  const chains = pairChains(kept.filter(pair => !alone(pair)));
   const groups = manyGroups(chains.filter(chain => chain.length === 1).map(chain => chain[0]));
   const grouped = new Set(groups.flatMap(group => group.pairs));
   const order = (pair: AyahPair) => [keyOrder(pair.a), keyOrder(pair.b)];
   return [
     ...chains.filter(chain => !grouped.has(chain[0])).map(chain => ({ at: chain[0], build: () => card(chain, review) })),
+    ...kept.filter(alone).map(pair => ({ at: pair, build: () => card([pair], review) })),
     ...pairs.filter(pair => !keptPair(pair)).map(pair => ({ at: pair, build: () => card([pair], review) })),
     ...groups.map(group => ({ at: group.pairs[0], build: () => manyCard(group.pairs, group.shared, review) })),
   ].sort((p, q) => order(p.at)[0] - order(q.at)[0] || order(p.at)[1] - order(q.at)[1]).map(entry => entry.build());

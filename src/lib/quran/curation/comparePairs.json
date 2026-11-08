@@ -577,8 +577,9 @@
   },
   "7:70|11:62": {
    "keep": true,
-   "why": "Same objection: do you forbid us to worship what our fathers worshipped (Aad / Thamud).",
-   "checked": true
+   "why": "Same objection from 'Ad and Thamud, different stories.",
+   "checked": true,
+   "alone": true
   },
   "7:73|11:61": {
    "keep": true,

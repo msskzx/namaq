@@ -59,6 +59,13 @@ describe('compare pair cards', () => {
     expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
   });
 
+  it('keeps a pair marked alone on its own card', () => {
+    const ids = pairCards(7, 11).map(card => card.id);
+    expect(ids).toContain('7:70|11:62');
+    expect(ids.some(id => id.startsWith('7:70-'))).toBe(false);
+    expect(pairCards(7, 11).find(card => card.id === '7:70|11:62')?.pairs).toBeUndefined();
+  });
+
   it('merges two runs of one passage when they share an ayah', () => {
     expect(pairCards(69, 101).map(card => card.id)).toContain('69:3-4|101:1-3');
   });
