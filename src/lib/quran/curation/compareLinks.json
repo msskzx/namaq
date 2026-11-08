@@ -233,7 +233,7 @@
     ]
    ],
    "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء.",
-   "source": "claude-curated, owner to review"
+   "source": "owner-approved"
   },
   {
    "pair": "43:11|78:15",
@@ -250,19 +250,19 @@
     ]
    ],
    "why": "What the water brings out: به, and تخرجون / لنخرج.",
-   "source": "claude-curated, owner to review"
+   "source": "owner-approved"
   },
   {
    "pair": "43:11|78:16",
    "links": [],
    "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word.",
-   "source": "claude-curated, owner to review"
+   "source": "owner-approved"
   },
   {
    "pair": "43:9|78:6",
    "links": [],
    "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word.",
-   "source": "claude-curated, owner to review"
+   "source": "owner-approved"
   }
  ],
  "joins": [
