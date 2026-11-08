@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
-import { listedPairs, pairCards } from './pairCards';
+import passage from './passagePairs.json';
+import treeData from '@/app/quran/branches/trees.json';
+import { normalizeWord } from '@/lib/quran/normalize';
+import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {
   it('shows At-Tur and Al-Qalam as five cards, the last two ayat merged, with marks inside each ayah', () => {
@@ -87,9 +90,54 @@ describe('compare pair cards', () => {
     expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0));
   });
 
-  it('has a verdict only for pairs the engine finds', () => {
-    const found = new Set((data.pairs as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+  it('lists a page only with three kept pairs, but keeps every engine page in review', () => {
+    expect(listedPairs.some(pair => pair.a === 3 && pair.b === 18)).toBe(false);
+    expect(reviewPairs.find(pair => pair.a === 3 && pair.b === 18)?.count).toBe(5);
+    expect(reviewStates()['3:18']).toBe('checked');
+    for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(3);
+  });
+
+  it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
+    expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
+    expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();
+    expect(compareLinkFor(['2:23'])).toBeUndefined();
+  });
+
+  it('links a pair inside a range card to the card that holds it', () => {
+    expect(compareLinkFor(['7:113', '26:40'])).toBe('/quran/compare?a=7&b=26#c-7-106-26-31');
+  });
+
+  describe('passage pairs', () => {
+    const ayat = new Map((treeData.ayat as { key: string; words: string[]; lemmas?: (string | null)[]; roots?: (string | null)[] }[]).map(ayah => [ayah.key, ayah]));
+    const pairs = passage.pairs as { a: string; b: string; columns: [number, number, string][] }[];
+
+    it('put the lower surah first, and repeat no engine pair', () => {
+      const engine = new Set((data.pairs as { a: string; b: string }[]).flatMap(pair => [`${pair.a}|${pair.b}`, `${pair.b}|${pair.a}`]));
+      for (const pair of pairs) {
+        expect(Number(pair.a.split(':')[0])).toBeLessThan(Number(pair.b.split(':')[0]));
+        expect(engine.has(`${pair.a}|${pair.b}`)).toBe(false);
+      }
+    });
+
+    it('give each matched word the level its lemma and root support', () => {
+      for (const pair of pairs) for (const [i, j, level] of pair.columns) {
+        const [a, b] = [ayat.get(pair.a)!, ayat.get(pair.b)!];
+        const same = normalizeWord(a.words[i]) === normalizeWord(b.words[j]);
+        if (level === 'exact') expect(same).toBe(true);
+        else if (level === 'lemma') expect(a.lemmas![i]).toBe(b.lemmas![j]);
+        else expect(a.roots![i]).toBe(b.roots![j]);
+      }
+    });
+
+    it('recover the Al-Waqi\'ah and Al-Haqqah passage across ayah boundaries', () => {
+      expect(pairCards(56, 69).map(card => card.id)).toEqual(expect.arrayContaining(['56:1|69:15', '56:75-80|69:38-43', '56:94|69:31']));
+    });
+  });
+
+  it('has a verdict only for known pairs, and one for every passage pair', () => {
+    const found = new Set(([...data.pairs, ...passage.pairs] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
+    expect(passage.pairs.filter(pair => !compareVerdicts[`${pair.a}|${pair.b}`])).toEqual([]);
   });
 
   it('marks words that share only a root lightly, apart from same-word matches', () => {

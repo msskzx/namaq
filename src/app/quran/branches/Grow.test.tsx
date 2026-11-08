@@ -369,6 +369,14 @@ describe('growing a tree', () => {
     vi.unstubAllGlobals();
   });
 
+  it('links to the compare card only when the tree has one', () => {
+    render(<CardActions id="t" text="إن المتقين في" compareHref="/quran/compare?a=2&b=7#c-2-23-7-194" />);
+    expect(screen.getByRole('link', { name: 'في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
+    cleanup();
+    render(<CardActions id="t" text="إن المتقين في" />);
+    expect(screen.queryByRole('link', { name: 'في المقارنة' })).toBeNull();
+  });
+
   it('shares the link straight away when no tree is open (the ayah cards)', () => {
     render(<CardActions id="t" text="إن المتقين في" />);
     expect(screen.getByRole('button', { name: 'مشاركة' }).hasAttribute('aria-expanded')).toBe(false);

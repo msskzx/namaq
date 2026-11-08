@@ -35,5 +35,8 @@ Distillate namaq/0021 informs keeping the old entry points reachable when changi
 In this order, agreed with the owner on 2026-11-07:
 
 1. Finish the verdict review of every pair in `src/lib/quran/curation/comparePairs.json`.
-2. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
-3. Animation on the compare page (what animates to be decided with the owner).
+2. After the review, a surah pair gets its own compare page only with 3 or more kept ayah pairs, counted after review rather than from the engine's pairs. A merged card counts each of its pairs. Pairs on the pages below that belong to `/branches`.
+3. `/branches` and `/compare` stay separate. Branches answers where else this wording occurs, for memorization. Compare answers how two surahs tell the same thing, for tadabbur. Link both ways: compare cards already link to their tree; trees gain an "also in compare" link.
+4. Curate the `/branches` trees with an agent pass, then the owner's review. Compare verdicts are a hint, not the rule: formula endings dropped in compare (عزيز حكيم against عليم حكيم) are often the hard part for memorizers.
+5. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat, judged by meaning, then reviewed by the owner. Juz 25-30 with both sides in range is drafted (`npm run quran:passage-pairs` writes `src/app/quran/compare/passagePairs.json`, 657 ayah pairs); the 1,001 old pairs with only one side in juz 25-30, and the earlier juz, wait until the owner has seen samples.
+6. Animation on the compare page (what animates to be decided with the owner).

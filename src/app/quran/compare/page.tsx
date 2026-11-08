@@ -17,7 +17,7 @@ import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
 import { curatedComparisons, surahPairHref } from '@/lib/quran/curatedComparisons';
 import PairCompare from './PairCompare';
-import { listedPairs, pairCards, reviewStates } from './pairCards';
+import { listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 import { closestPair } from '@/lib/quran/mutashabih/pairs';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +41,7 @@ const surahOf = (value: string | string[] | undefined) => {
 async function pairPage(a: number, b: number, review = false) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={listedPairs} names={names} review={review} {...(review ? { states: reviewStates() } : {})} />;
+  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} review={review} {...(review ? { states: reviewStates() } : {})} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -51,13 +51,14 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const preset = curatedComparisons.find(story => story.id === query.preset);
     const [x, y] = [surahOf(query.a), surahOf(query.b)];
     if (preset) redirect(surahPairHref(preset.a, preset.b));
-    const closest = x !== null && y === null ? closestPair(listedPairs, x) : undefined;
-    if (closest) redirect(surahPairHref(closest.a, closest.b));
-    if (x === null || y === null || x === y) {
-      if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b));
-      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b);
-    }
     const review = query.review === '1';
+    const keepReview = review ? '&review=1' : '';
+    const closest = x !== null && y === null ? closestPair(review ? reviewPairs : listedPairs, x) : undefined;
+    if (closest) redirect(`${surahPairHref(closest.a, closest.b)}${keepReview}`);
+    if (x === null || y === null || x === y) {
+      if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(`${surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b)}${keepReview}`);
+      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review);
+    }
     if (x > y) redirect(`${surahPairHref(x, y)}${review ? '&review=1' : ''}`);
     return pairPage(x, y, review);
   }
