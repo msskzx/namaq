@@ -21733,11 +21733,21 @@
   },
   "48:14|85:9": {
    "keep": false,
-   "why": "Only the dominion of the heavens and the earth."
+   "why": "Only the dominion of the heavens and the earth.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the dominion of the heavens and the earth."
+   }
   },
   "48:17|85:11": {
    "keep": false,
-   "why": "Only the gardens with rivers clause."
+   "why": "Only the gardens with rivers clause.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens with rivers clause."
+   }
   },
   "49:9|60:8": {
    "keep": true,
@@ -24291,6 +24301,12 @@
    "draft": {}
   },
   "48:21|65:3": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "48:5|85:11": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
