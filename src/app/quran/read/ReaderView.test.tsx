@@ -311,6 +311,7 @@ describe('Recite mode', () => {
     fireEvent.click(actions.getByRole('button', { name: 'نسيتها' }));
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:2'].forgot).toBe(1);
     expect(container.querySelector('[data-ayah="2:2"]')?.className).toMatch(/forgot/);
+    expect(container.querySelector('[data-ayah="2:1"]')?.className ?? '').not.toMatch(/forgot/);
     longPress(container.querySelector('[data-ayah="2:2"]')!);
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'احفظ الآية' }));
     expect(JSON.parse(localStorage.getItem('bookmarks')!)[0]).toMatchObject({ id: 'ayah:2:2', href: '/quran/read/ayah/2/2', text: 'ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ' });

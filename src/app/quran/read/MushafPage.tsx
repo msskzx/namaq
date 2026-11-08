@@ -59,7 +59,7 @@ export default function MushafPage({
   hidden?: (key: string, word: number) => boolean;
   /** Recite mode: the ayah the next reveal shows. */
   next?: string | null;
-  /** Ayat the reader forgot (wavy underline) and saved (ring on the ayah number). */
+  /** Ayat the reader forgot (highlighted) and saved (purple ring on the ayah number). */
   forgot?: Readonly<Record<string, unknown>>;
   saved?: ReadonlySet<string>;
 }) {
@@ -116,7 +116,7 @@ export default function MushafPage({
                         className={[on ? styles.marked : '', veiled ? styles.veiled : '', veiled && next === key ? styles.upcoming : '', !veiled && forgot?.[key] ? styles.forgot : ''].join(' ').trim() || undefined}>
                         {group.word}
                         {group.marks.map(end => (
-                          <span key={end} data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? styles.veiled : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ')}>
+                          <span key={end} data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? styles.veiled : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : '', ].join(' ')}>
                             {group.word ? ' ' : ''}
                             {num(end)}
                           </span>
