@@ -13925,15 +13925,30 @@
   },
   "46:22|67:25": {
    "keep": true,
-   "why": "Same challenge: bring what you promise / when is this promise, if you are truthful."
+   "why": "Same challenge: bring what you promise / when is this promise, if you are truthful.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same challenge: bring what you promise / when is this promise, if you are truthful."
+   }
   },
   "46:23|67:26": {
    "keep": true,
-   "why": "Same answer: knowledge is only with Allah; I am only a messenger / warner."
+   "why": "Same answer: knowledge is only with Allah; I am only a messenger / warner.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same answer: knowledge is only with Allah; I am only a messenger / warner."
+   }
   },
   "46:31|67:28": {
    "keep": true,
-   "why": "Same idea: protection from a painful punishment; who gives it to those who believe and to disbelievers."
+   "why": "Same idea: protection from a painful punishment; who gives it to those who believe and to disbelievers.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: protection from a painful punishment; who gives it to those who believe and to disbelievers."
+   }
   },
   "47:9|64:8": {
    "keep": false,
@@ -21237,7 +21252,12 @@
   },
   "46:26|67:23": {
    "keep": true,
-   "why": "Same list: He gave them hearing, sight and hearts."
+   "why": "Same list: He gave them hearing, sight and hearts.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same list: He gave them hearing, sight and hearts."
+   }
   },
   "46:14|81:22": {
    "keep": false,
