@@ -86,6 +86,11 @@ describe('PairCompare', () => {
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
   });
 
+  it('in review, marks a page the owner dropped with a cross', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review states={{ '7:26': 'dropped' }} />);
+    expect(within(pane()).getByRole('img', { name: 'حُذفت من القائمة' })).toBeTruthy();
+  });
+
   it('in review, marks the surah pairs the owner reviewed and those with a question', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review states={{ '52:68': 'checked', '7:11': 'ask' }} />);
     expect(within(pane()).getAllByRole('img', { name: 'راجعتها' }).length).toBeGreaterThan(0);

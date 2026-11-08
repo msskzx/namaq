@@ -11,7 +11,7 @@ export type CardSide = { surah: number; ayah: number; ayat: SpreadAyah[] };
 export type ManyOption = { id: string; ayah: SpreadAyah; shared: SpreadAyah };
 /** `pairs` lists the ayah pairs of a range or one-to-many card; a single-pair card has `verdict` instead. */
 export type PairCard = { id: string; group?: string; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; sides: [CardSide, CardSide] };
-export type ReviewState = 'checked' | 'ask';
+export type ReviewState = 'checked' | 'ask' | 'dropped';
 
 type StoredCard = { p: string[]; g?: string; m?: number[][]; n?: 0 | 1; o?: number[][][] };
 /** `npm run quran:compare-cards` writes this from the pairs and verdicts (docs/plans/curated-passage-comparisons.md). */
@@ -23,13 +23,14 @@ export const listedPairs = stored.listed;
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = stored.review;
 
-/** Where the owner's review of each page stands: every pair checked, or a question waiting. */
+/** Where the owner's review of each page stands: a question waiting, every pair checked, or checked and too few kept to be listed. */
 export function reviewStates(): Record<string, ReviewState> {
   const states: Record<string, ReviewState> = {};
+  const listed = new Set(listedPairs.map(pair => `${pair.a}:${pair.b}`));
   for (const { a, b } of reviewPairs) {
     const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => compareVerdicts[id]);
     if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
-    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = 'checked';
+    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = listed.has(`${a}:${b}`) ? 'checked' : 'dropped';
   }
   return states;
 }

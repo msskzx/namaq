@@ -39,6 +39,7 @@ function useNames(names: Names, ar: boolean) {
 /** In review, a check marks a surah pair whose verdicts the owner all checked; a question mark, one with a question for the owner. */
 function StateMark({ state, ar }: { state?: ReviewState; ar: boolean }) {
   if (state === 'checked') return <Check size={16} role="img" aria-label={ar ? 'راجعتها' : 'Reviewed'} className="shrink-0 text-[var(--home-green)]" />;
+  if (state === 'dropped') return <X size={16} role="img" aria-label={ar ? 'حُذفت من القائمة' : 'Dropped from the list'} className="shrink-0 text-[var(--home-muted)]" />;
   if (state === 'ask') return <CircleHelp size={16} role="img" aria-label={ar ? 'فيها سؤال لك' : 'Has a question for you'} className="shrink-0 text-[var(--home-accent)]" />;
   return null;
 }
@@ -124,7 +125,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
                 <ChevronDown size={16} aria-hidden className={`shrink-0 text-[var(--home-muted)] transition-transform ${open.has(n) ? '' : 'ltr:-rotate-90 rtl:rotate-90'}`} />
                 <span className={`min-w-0 flex-1 ${n === a || n === b ? 'text-[var(--home-accent)]' : ''}`}>{plain(n)}</span>
                 {review && <StateMark state={groups.get(n)!.some(pair => states[`${pair.a}:${pair.b}`] === 'ask') ? 'ask'
-                  : groups.get(n)!.every(pair => states[`${pair.a}:${pair.b}`] === 'checked') ? 'checked' : undefined} ar={ar} />}
+                  : groups.get(n)!.every(pair => ['checked', 'dropped'].includes(states[`${pair.a}:${pair.b}`])) ? 'checked' : undefined} ar={ar} />}
                 <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
               </summary>
               <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n))))}</ul>

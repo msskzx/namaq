@@ -147,7 +147,7 @@ describe('compare pair cards', () => {
   it('lists a page only with three kept pairs, but keeps every engine page in review', () => {
     expect(listedPairs.some(pair => pair.a === 3 && pair.b === 18)).toBe(false);
     expect(reviewPairs.find(pair => pair.a === 3 && pair.b === 18)?.count).toBe(5);
-    expect(reviewStates()['3:18']).toBe('checked');
+    expect(reviewStates()['3:18']).toBe('dropped');
     for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(3);
   });
 
