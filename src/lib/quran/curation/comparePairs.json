@@ -14371,27 +14371,57 @@
   },
   "52:17|68:34": {
    "keep": true,
-   "why": "Same reward: the righteous have gardens of bliss."
+   "why": "Same reward: the righteous have gardens of bliss.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: the righteous have gardens of bliss."
+   }
   },
   "52:25|68:30": {
    "keep": true,
-   "why": "Same construction with a contrast: they turned to one another asking (people of Paradise) / blaming (owners of the garden)."
+   "why": "Same construction with a contrast: they turned to one another asking (people of Paradise) / blaming (owners of the garden).",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction with a contrast: they turned to one another asking (people of Paradise) / blaming (owners of the garden)."
+   }
   },
   "52:29|68:2": {
    "keep": true,
-   "why": "Same reply: by your Lord's favour you are not mad."
+   "why": "Same reply: by your Lord's favour you are not mad.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reply: by your Lord's favour you are not mad."
+   }
   },
   "52:34|68:41": {
    "keep": true,
-   "why": "Same challenge: let them bring ... if they are truthful."
+   "why": "Same challenge: let them bring ... if they are truthful.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same challenge: let them bring ... if they are truthful."
+   }
   },
   "52:40|68:46": {
    "keep": true,
-   "why": "Same words: or do you ask them a payment, so they are burdened with debt?"
+   "why": "Same words: or do you ask them a payment, so they are burdened with debt?",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: or do you ask them a payment, so they are burdened with debt?"
+   }
   },
   "52:41|68:47": {
    "keep": true,
-   "why": "Same words: or have they the unseen, so they write it down?"
+   "why": "Same words: or have they the unseen, so they write it down?",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: or have they the unseen, so they write it down?"
+   }
   },
   "56:74|69:52": {
    "keep": true,
@@ -22178,7 +22208,12 @@
   },
   "52:17|68:2": {
    "keep": false,
-   "why": "Only roots; gardens vs madness."
+   "why": "Only roots; gardens vs madness.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only roots; gardens vs madness."
+   }
   },
   "52:29|69:42": {
    "keep": true,
