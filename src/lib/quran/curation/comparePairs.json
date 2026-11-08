@@ -13398,16 +13398,31 @@
    "why": "Same scene: messengers came with clear proofs and the disbelievers rejected them."
   },
   "41:8|45:30": {
-   "keep": true,
-   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
+   "keep": false,
+   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
+   }
   },
   "41:46|45:15": {
-   "keep": true,
-   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
+   "keep": false,
+   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
+   }
   },
   "41:46|45:30": {
    "keep": false,
-   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
+   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
+   }
   },
   "41:15|46:4": {
    "keep": false,
