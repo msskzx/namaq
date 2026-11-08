@@ -14252,15 +14252,30 @@
   },
   "49:1|58:12": {
    "keep": false,
-   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
+   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
+   }
   },
   "49:1|58:13": {
    "keep": false,
-   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
+   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
+   }
   },
   "49:16|58:7": {
-   "keep": true,
-   "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things."
+   "keep": false,
+   "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things."
+   }
   },
   "49:16|64:1": {
    "keep": false,
