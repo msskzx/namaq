@@ -23673,15 +23673,30 @@
   },
   "53:21|75:39": {
    "keep": false,
-   "why": "A rebuke over attributing daughters versus creation of the two sexes; only male and female shared."
+   "why": "A rebuke over attributing daughters versus creation of the two sexes; only male and female shared.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A rebuke over attributing daughters versus creation of the two sexes; only male and female shared."
+   }
   },
   "53:38|75:11": {
-   "keep": false,
-   "why": "Bearing another's burden versus no refuge on the Day; a shared root only."
+   "keep": true,
+   "why": "Bearing another's burden versus no refuge on the Day; a shared root only. (owner kept)",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Bearing another's burden versus no refuge on the Day; a shared root only."
+   }
   },
   "53:46|75:37": {
    "keep": true,
-   "why": "Same origin of man: a sperm-drop that is emitted."
+   "why": "Same origin of man: a sperm-drop that is emitted.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same origin of man: a sperm-drop that is emitted."
+   }
   },
   "53:1|77:8": {
    "keep": false,
@@ -24854,6 +24869,12 @@
    "draft": {}
   },
   "53:30|68:7": {
+   "keep": true,
+   "why": "Agreed with the page",
+   "checked": true,
+   "draft": {}
+  },
+  "53:45|75:39": {
    "keep": true,
    "why": "Agreed with the page",
    "checked": true,
