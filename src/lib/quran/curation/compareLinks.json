@@ -77,11 +77,6 @@
    "pair": "7:115|26:43",
    "links": [
     [
-     0,
-     0,
-     "lemma"
-    ],
-    [
      1,
      2,
      "lemma"
@@ -210,6 +205,30 @@
    ],
    "why": "The same word قالوا, which the engine marked as a form change.",
    "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:113|26:40",
+   "links": [],
+   "remove": [
+    [
+     1,
+     2
+    ],
+    [
+     7,
+     3
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     10,
+     6
+    ]
+   ],
+   "why": "These words of 7:113 belong with 26:41, the aligned ayah.",
+   "source": "owner"
   }
  ]
 }
