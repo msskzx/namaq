@@ -24,7 +24,7 @@ import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
 import ReviewButtons from './ReviewButtons';
-import type { CardSide, PairCard, ReviewState } from './pairCards';
+import type { CardSide, ManyOption, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
 import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
@@ -262,6 +262,9 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
   const partners = (side: CardSide) => {
     const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
     const options = card.many!.options;
+    const text = (item: ManyOption) => item.ayah.words.join(' ');
+    // The same words every time (a refrain): one ayah and the list of where it recurs says it all.
+    if (options.every(item => text(item) === text(options[0]))) return { numbers: options.map(item => item.ayah.number), ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined)(options[0].ayah)]] };
     return {
       numbers: options.map(item => item.ayah.number),
       ayat: options.map((item, i) => [i === selected ? lightMarks(lit, step?.side === card.many!.side ? step : undefined)(item.ayah) : { ...item.ayah, marks: undefined }]),
