@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
+import { pageInScope, scopeParam, SCOPE_MAX, type CompareScope, type SurahSpans } from '@/lib/quran/compareScope';
+import { FilterSheet, isRangeUnit, ScopeFields, scopeRange, type ScopeDraft } from '@/components/quran/ScopeFilter';
 import { compareAnchor, compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref } from '@/lib/quran/branches';
@@ -60,12 +62,41 @@ function SavedOnly({ checked, onChange, saved }: { checked: boolean; onChange: (
   return <span title={hint} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={checked} label={label} disabled={!checked && saved === 0} onIcon={<Bookmark className="size-3" aria-hidden />} onChange={onChange} /><label htmlFor={id}>{label}</label></span>;
 }
 
-function TodoOnly({ a, b, todo }: { a: number; b: number; todo: boolean }) {
+const draftOf = (scope?: CompareScope): ScopeDraft => {
+  if (!scope) return { unit: 'juz', values: ['1', '30'] };
+  if ('list' in scope) return { unit: scope.unit, values: ['1', '30'], [scope.unit === 'surahs' ? 'surahs' : 'juz']: scope.list.join(',') };
+  return { unit: scope.unit, values: [String(scope.from), String(scope.to)] };
+};
+
+function scopeOf(draft: ScopeDraft): CompareScope | undefined {
+  if (isRangeUnit(draft.unit)) {
+    const range = scopeRange(draft.unit, draft.values);
+    const unit = draft.unit as 'juz' | 'surah' | 'page';
+    return range && (range.from !== 1 || range.to !== SCOPE_MAX[unit]) ? { unit, ...range } : undefined;
+  }
+  const unit = draft.unit as 'surahs' | 'juzs';
+  const list = ((unit === 'surahs' ? draft.surahs : draft.juz) ?? '').split(',').filter(Boolean).map(Number);
+  return list.length ? { unit, list } : undefined;
+}
+
+/** The same funnel as the phrase trees, narrowing the surah pairs in the list. */
+function CompareFilter({ a, b, review, todo, scope, names }: { a: number; b: number; review: boolean; todo: boolean; scope?: CompareScope; names: Names }) {
+  const router = useRouter();
+  const [draft, setDraft] = useState(() => draftOf(scope));
+  const invalid = isRangeUnit(draft.unit) && !scopeRange(draft.unit, draft.values);
+  const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: plainName(name.ar), nameEn: name.en }));
+  return <FilterSheet active={!!scope} onOpen={() => setDraft(draftOf(scope))} submitDisabled={invalid} onReset={() => setDraft(draftOf())}
+    onSubmit={() => { if (invalid) return false; router.push(pairHref(a, b, review, todo, scopeOf(draft))); }}>
+    <ScopeFields draft={draft} onChange={setDraft} range={scope?.unit === 'juz' ? scope : null} allSurahs={allSurahs} />
+  </FilterSheet>;
+}
+
+function TodoOnly({ a, b, todo, juz }: { a: number; b: number; todo: boolean; juz?: CompareScope }) {
   const ar = useLanguage().language === 'ar';
   const router = useRouter();
   const id = useId();
   const label = ar ? 'غير المراجَعة فقط' : 'Unreviewed only';
-  return <span title={label} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={todo} label={label} onIcon={<CircleHelp className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, true, checked))} /><label htmlFor={id}>{label}</label></span>;
+  return <span title={label} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={todo} label={label} onIcon={<CircleHelp className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, true, checked, juz))} /><label htmlFor={id}>{label}</label></span>;
 }
 
 const unreviewed = (states: Record<string, ReviewState>, pair: { a: number; b: number }) => {
@@ -73,7 +104,7 @@ const unreviewed = (states: Record<string, ReviewState>, pair: { a: number; b: n
   return state !== 'checked' && state !== 'dropped';
 };
 
-function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, review = false, states = {}, savedOnly = false, onSavedOnly, todo = false }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState>; savedOnly?: boolean; onSavedOnly?: (checked: boolean) => void; todo?: boolean }) {
+function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, review = false, states = {}, savedOnly = false, onSavedOnly, todo = false, juz }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState>; savedOnly?: boolean; onSavedOnly?: (checked: boolean) => void; todo?: boolean; juz?: CompareScope }) {
   const ar = useLanguage().language === 'ar';
   const saved = savedSurahPairs(useBookmarks());
   const pairs = (savedOnly ? listed.filter(pair => saved.has(`${pair.a}:${pair.b}`)) : listed).filter(pair => !todo || unreviewed(states, pair));
@@ -93,7 +124,8 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
   const matches = (pair: { a: number; b: number }) => terms.every(term =>
     [pair.a, pair.b].some(n => matchesSurah({ number: n, name: names[n]?.ar ?? '', nameTransliterated: names[n]?.en }, term))
     || normalizeWord(`${story(pair)?.name.ar ?? ''} ${story(pair)?.name.en ?? ''}`.toLowerCase()).includes(normalizeWord(term.toLowerCase())));
-  const stories = savedOnly ? [] : curatedComparisons.filter(pair => matches(pair) && (!todo || unreviewed(states, pair)));
+  const inList = new Set(listed.map(pair => `${pair.a}:${pair.b}`));
+  const stories = savedOnly ? [] : curatedComparisons.filter(pair => matches(pair) && inList.has(`${pair.a}:${pair.b}`) && (!todo || unreviewed(states, pair)));
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
   const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
   // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
@@ -106,7 +138,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
   const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   const row = (pair: { a: number; b: number }, label: React.ReactNode) => (
     <li key={`${pair.a}:${pair.b}`}>
-      <Link href={pairHref(pair.a, pair.b, review, todo)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
+      <Link href={pairHref(pair.a, pair.b, review, todo, juz)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
         className="flex items-center gap-3 rounded-md border-s-2 border-transparent px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] aria-[current=page]:border-[var(--home-accent)] aria-[current=page]:bg-[var(--home-paper-deep)]">
         <span className="min-w-0 flex-1">{label}</span>
         {review && <StateMark state={states[`${pair.a}:${pair.b}`]} ar={ar} />}
@@ -128,14 +160,15 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
       ]} />
       {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
-      {review && <TodoOnly a={a} b={b} todo={todo} />}
+      {review && <TodoOnly a={a} b={b} todo={todo} juz={juz} />}
+      <div className="flex justify-end"><CompareFilter a={a} b={b} review={review} todo={todo} scope={juz} names={names} /></div>
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto">
         {stories.length > 0 && <>
           <h3 className={heading}>{ar ? 'مختارة' : 'Selected stories'}</h3>
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {todo && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{ar ? 'راجعت كل الصفحات.' : 'Every page is reviewed.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
+        {(todo || juz) && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{todo ? (ar ? 'راجعت كل الصفحات هنا.' : 'Every page here is reviewed.') : ar ? 'لا صفحات بهذه التصفية.' : 'No pages match this filter.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
@@ -161,7 +194,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
 }
 
 /** Review mode (verdicts on the cards) stays on while moving between pairs. */
-const pairHref = (a: number, b: number, review: boolean, todo = false) => `${surahPairHref(a, b)}${review ? '&review=1' : ''}${review && todo ? '&todo=1' : ''}`;
+const pairHref = (a: number, b: number, review: boolean, todo = false, scope?: CompareScope) => `${surahPairHref(a, b)}${review ? '&review=1' : ''}${review && todo ? '&todo=1' : ''}${scopeParam(scope)}`;
 
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
@@ -292,7 +325,8 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
   </div>;
 }
 
-export default function PairCompare({ a, b, cards, pairs, names, review = false, states, editable = false, todo = false }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean }) {
+export default function PairCompare({ a, b, cards, pairs: allPairs, names, review = false, states, editable = false, todo = false, scope: juz, spans = { juz: {}, page: {} } }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean; scope?: CompareScope; spans?: SurahSpans }) {
+  const pairs = juz ? allPairs.filter(pair => pageInScope(pair, spans, juz)) : allPairs;
   const ar = useLanguage().language === 'ar';
   const { title } = useNames(names, ar);
   const sheet = useRef<HTMLDialogElement>(null);
@@ -342,15 +376,15 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
       <h1 className="sr-only">{story ? `${title(a, b)} - ${ar ? story.name.voweled : story.name.en}` : title(a, b)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-4">
-          {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.a, nextTodo.b, true, todo)} />}
+          {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.a, nextTodo.b, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}</ol>}
-          {next && <Link href={pairHref(next.a, next.b, review, todo)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
+          {next && <Link href={pairHref(next.a, next.b, review, todo, juz)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
-          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} />
+          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
         </aside>
       </div>
       <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
@@ -361,7 +395,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
             <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
           </div>
-          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} />}
+          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />}
         </div>
       </dialog>
     </div>

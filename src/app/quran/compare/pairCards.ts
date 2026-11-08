@@ -1,6 +1,8 @@
 import treeData from '@/app/quran/branches/trees.json';
 import { compareVerdicts, type Verdict } from '@/lib/quran/curation/comparePairs';
 import { compareAnchor } from '@/lib/compareBookmarks';
+import { juzOf } from '@/lib/quran/juz';
+import type { SurahSpans } from '@/lib/quran/compareScope';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 import generated from './compareCards';
@@ -33,6 +35,18 @@ export function reviewStates(): Record<string, ReviewState> {
     else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = listed.has(`${a}:${b}`) ? 'checked' : 'dropped';
   }
   return states;
+}
+
+/** The first and last juz and mushaf page each surah reaches, for the side pane's filter. */
+export const surahSpans: SurahSpans = { juz: {}, page: {} };
+const widen = (spans: Record<number, [number, number]>, surah: number, value: number) => {
+  const span = spans[surah];
+  spans[surah] = span ? [Math.min(span[0], value), Math.max(span[1], value)] : [value, value];
+};
+for (const ayah of treeData.ayat as { key: string; page: number }[]) {
+  const surah = Number(ayah.key.split(':')[0]);
+  widen(surahSpans.juz, surah, juzOf(ayah.key));
+  widen(surahSpans.page, surah, ayah.page);
 }
 
 const parts = (key: string) => key.split(':').map(Number);

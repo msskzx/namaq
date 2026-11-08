@@ -117,6 +117,14 @@ describe('PairCompare', () => {
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
   });
 
+  it('filters the pages by scope and keeps it in its links', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} scope={{ unit: 'juz', from: 27, to: 29 }} spans={{ page: {}, juz: { 2: [1, 3], 7: [8, 9], 11: [11, 12], 26: [19, 19], 52: [27, 27], 68: [29, 29] } }} />);
+    const rows = [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every(href => href === '/quran/compare?a=52&b=68&juz=27-29')).toBe(true);
+    expect(within(pane()).getByRole('button', { name: 'تصفية' })).toBeTruthy();
+  });
+
   it('in review, the unreviewed-only switch hides finished pages and keeps those with a question', () => {
     const allRows = () => [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review todo states={{ '52:68': 'checked', '7:11': 'ask', '2:7': 'dropped' }} />);
