@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
@@ -23,6 +23,8 @@ import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
 import ReviewButtons from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
+import ReadVideo, { canRecord } from './ReadVideo';
+import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -33,7 +35,9 @@ const writeSort = (count: boolean) => { try { localStorage.setItem(SORT_KEY, cou
 
 function useNames(names: Names, ar: boolean) {
   const plain = (n: number) => (ar ? plainName(names[n]?.ar ?? '') : names[n]?.en ?? String(n));
-  const title = (a: number, b: number) => ar ? `سُورَةُ ${names[a]?.ar} وَسُورَةُ ${names[b]?.ar}` : `${plain(a)} and ${plain(b)}`;
+  // Names from the database already start with «سُورَةُ»; say it once either way.
+  const surah = (n: number) => { const name = names[n]?.ar ?? ''; return plainName(name).startsWith('سورة ') ? name : `سُورَةُ ${name}`; };
+  const title = (a: number, b: number) => ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
   return { plain, title };
 }
 
@@ -161,9 +165,14 @@ const pairHref = (a: number, b: number, review: boolean, todo = false) => `${sur
 
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
-const lightMarks = (lit: string | null) => (ayah: SpreadAyah) => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) });
+/** `reading` is the read-along's word when it is on this side. */
+const lightMarks = (lit: string | null, reading?: ReadStep) => (ayah: SpreadAyah): SpreadAyah => ({
+  ...ayah,
+  marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: !!lit && mark.link === lit }])),
+  ...(reading && reading.ayah === ayah.number ? { reading: reading.word } : {}),
+});
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick'> & { numbers: number[]; ayat: SpreadAyah[][] }): SpreadPage {
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   const show = (n: number) => (ar ? num(n) : n);
@@ -176,7 +185,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
         <BookOpen size={16} aria-hidden />
       </Link>
     </span>,
-    rows: partners?.ayat ?? [side.ayat.map(lightMarks(lit))],
+    rows: partners?.ayat ?? [side.ayat.map(lightMarks(lit, reading))],
     ...(partners ? { pick: partners.pick } : {}),
   };
 }
@@ -185,7 +194,11 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
 function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar: boolean; savedIds: string[] }) {
-  const [lit, setLit] = useState<string | null>(null);
+  const [tapped, setLit] = useState<string | null>(null);
+  const read = useReadAlong(card);
+  const step = read.step;
+  // While reading, the word read lights its partner; a tap lights one otherwise.
+  const lit = step ? step.link ?? null : tapped;
   const id = compareBookmarkId(card.id);
   const anchor = anchorOf(card);
   const saved = savedIds.length > 0;
@@ -198,7 +211,9 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
     if (id) setLit(current => (current === id ? null : id));
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
-  const [selected, setSelected] = useState(0);
+  const studioLabel = ar ? 'استوديو القراءة' : 'Read-along studio';
+  const [picked, setSelected] = useState(0);
+  const selected = step?.option ?? picked;
   const option = card.many?.options[selected];
   const shownSides = card.sides.map((side, i) => !option ? side : i === card.many!.side ? { ...side, ayah: option.ayah.number, ayat: [option.ayah] } : { ...side, ayat: [option.shared] });
   const partners = (side: CardSide) => {
@@ -206,8 +221,8 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
     const options = card.many!.options;
     return {
       numbers: options.map(item => item.ayah.number),
-      ayat: options.map((item, i) => [i === selected ? lightMarks(lit)(item.ayah) : { ...item.ayah, marks: undefined }]),
-      pick: { selected, labels: options.map(item => `${name} ${ar ? num(item.ayah.number) : item.ayah.number}`), onPick: (row: number) => { if (row !== selected) { setSelected(row); setLit(null); } } },
+      ayat: options.map((item, i) => [i === selected ? lightMarks(lit, step?.side === card.many!.side ? step : undefined)(item.ayah) : { ...item.ayah, marks: undefined }]),
+      pick: { selected, labels: options.map(item => `${name} ${ar ? num(item.ayah.number) : item.ayah.number}`), onPick: (row: number) => { if (step) return; if (row !== selected) { setSelected(row); setLit(null); } } },
     };
   };
   return (
@@ -216,14 +231,15 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
         <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined))} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined))} />
         </div>
       </DoubleTapSave>
-      <div className="flex justify-end">
+      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-end">
+        <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
-      </div>
+      </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
         <p className={verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}>
@@ -233,6 +249,47 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
       </div>)}
     </li>
   );
+}
+
+/** In place of save under a card: close, a bar per ayah read (a tap reads from there), speed, play or pause, and reset. */
+function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useReadAlong>; ar: boolean; card: PairCard; names: Names }) {
+  const [video, setVideo] = useState(false);
+  const { plain, title } = useNames(names, ar);
+  const sideLabel = (side: CardSide) => {
+    const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
+    const show = (n: number) => (ar ? num(n) : n);
+    return `${plain(side.surah)} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`;
+  };
+  const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
+  const starts = ayahStarts(read.plan);
+  const playing = read.status === 'playing';
+  const active = playing || read.status === 'paused';
+  const reached = read.status === 'done' ? starts.length : active ? starts.filter(start => start <= read.at).length : 0;
+  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : read.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : read.status === 'done' ? (ar ? 'إعادة' : 'Replay') : (ar ? 'اقرأ مع التظليل' : 'Read along');
+  const close = ar ? 'إغلاق الاستوديو' : 'Close the studio';
+  const resetLabel = ar ? 'إعادة ضبط' : 'Reset';
+  const next = READ_SPEEDS[(READ_SPEEDS.indexOf(read.speed) + 1) % READ_SPEEDS.length];
+  return <div className="flex flex-col gap-1">
+    {starts.length > 1 && <div role="group" aria-label={ar ? 'تقدّم القراءة' : 'Reading progress'} className="flex gap-1">
+      {starts.map((start, i) => {
+        const from = ar ? `من الآية ${num(i + 1)}` : `From ayah ${i + 1}`;
+        return <button key={start} type="button" onClick={() => read.play(start)} aria-label={from} title={from} aria-current={(active && i === reached - 1) || undefined} className="group flex h-6 flex-1 items-center">
+          <span className={`block h-1 w-full rounded-full transition-colors ${i < reached ? 'bg-[var(--home-green)]' : 'bg-[var(--home-rule)] group-hover:bg-[var(--home-muted)]'}`} />
+        </button>;
+      })}
+    </div>}
+    <div className="flex items-center">
+      <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
+      <span className="flex-1" />
+      <Button size="sm" variant="muted" className="min-w-9 tabular-nums" onClick={() => setReadSpeed(next)} aria-label={`${ar ? 'السرعة' : 'Speed'} ${read.speed}×`} title={ar ? 'السرعة' : 'Speed'}><span dir="ltr">{read.speed}×</span></Button>
+      {canRecord() && <Button size="icon" variant="muted" onClick={() => { read.reset(); setVideo(true); }} aria-label={videoLabel} title={videoLabel}><Send size={18} aria-hidden /></Button>}
+      <Button size="icon" variant="muted" onClick={() => (playing ? read.pause() : read.play())} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
+        {playing ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
+      </Button>
+      <Button size="icon" variant="muted" onClick={read.reset} aria-label={resetLabel} title={resetLabel}><RotateCcw size={18} aria-hidden /></Button>
+    </div>
+    {video && <ReadVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
+  </div>;
 }
 
 export default function PairCompare({ a, b, cards, pairs, names, review = false, states, editable = false, todo = false }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean }) {
