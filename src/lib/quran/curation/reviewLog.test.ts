@@ -13,7 +13,7 @@ const put = (path: string, value: unknown) => {
   writeFileSync(join(root, path), `${JSON.stringify(value, null, 1)}\n`);
 };
 const onDisk = () => JSON.parse(readFileSync(join(root, VERDICTS), 'utf8')).pairs;
-const press = (page: string, action: ReviewPress['action']) => appendReview({ t: 1, page, action });
+const press = (page: string, action: ReviewPress['action'], card?: string[]) => appendReview({ t: 1, page, action, ...(card ? { card } : {}) });
 const apply = (rebuild = vi.fn()) => applyReviewLog(rebuild);
 
 beforeEach(() => {
@@ -61,6 +61,68 @@ describe('the review log', () => {
     apply();
     expect(onDisk()['2:1|3:1']).toEqual(drafted['2:1|3:1']);
     expect(onDisk()['2:9|3:9']).toBeUndefined();
+  });
+
+  describe('a card press', () => {
+    const card = ['2:1|3:1', '2:2|3:2'];
+
+    it('decides every pair of the card and no other', () => {
+      press('2/3', 'keep', card);
+      apply();
+      expect(onDisk()['2:2|3:2']).toEqual({ keep: true, why: 'Formula. (owner kept)', checked: true, card: true, draft: { keep: false, why: 'Formula.' } });
+      expect(onDisk()['2:1|3:1'].keep).toBe(true);
+      expect(onDisk()['4:1|5:1']).toEqual(drafted['4:1|5:1']);
+    });
+
+    it('drops, and undo returns the draft', () => {
+      press('2/3', 'drop', card);
+      apply();
+      expect(onDisk()['2:1|3:1']).toMatchObject({ keep: false, why: 'Same. (owner removed)', checked: true });
+      press('2/3', 'undo', card);
+      apply();
+      expect(onDisk()['2:1|3:1']).toEqual(drafted['2:1|3:1']);
+    });
+
+    it('raises a question without changing keep, and undo takes it back', () => {
+      press('2/3', 'discuss', ['2:2|3:2']);
+      apply();
+      expect(onDisk()['2:2|3:2']).toMatchObject({ keep: false, why: 'Formula.', ask: 'owner: discuss' });
+      press('2/3', 'undo', ['2:2|3:2']);
+      apply();
+      expect(onDisk()['2:2|3:2']).toEqual(drafted['2:2|3:2']);
+    });
+
+    it('wins over a page press before or after it, and only a card undo clears it', () => {
+      press('2/3', 'drop');
+      press('2/3', 'keep', ['2:1|3:1']);
+      press('2/3', 'agree');
+      apply();
+      expect(onDisk()['2:1|3:1']).toMatchObject({ keep: true, why: 'Same. (owner kept)', card: true });
+      expect(onDisk()['2:2|3:2']).toMatchObject({ keep: false, why: 'Formula.', checked: true });
+      press('2/3', 'undo');
+      apply();
+      expect(onDisk()['2:1|3:1']).toMatchObject({ keep: true, card: true });
+      expect(onDisk()['2:2|3:2']).toEqual(drafted['2:2|3:2']);
+    });
+
+    it('gives a pair with no verdict one, and undo removes it', () => {
+      put('src/app/quran/compare/pairs.json', { pairs: [{ a: '2:9', b: '3:9' }] });
+      press('2/3', 'keep', ['2:9|3:9']);
+      apply();
+      expect(onDisk()['2:9|3:9']).toMatchObject({ keep: true, why: 'Not drafted yet (owner kept)', checked: true, draft: {} });
+      press('2/3', 'undo', ['2:9|3:9']);
+      apply();
+      expect(onDisk()['2:9|3:9']).toBeUndefined();
+    });
+
+    it('replays to the same verdicts after a crash', () => {
+      press('2/3', 'discuss', card);
+      press('2/3', 'drop', ['2:1|3:1']);
+      expect(() => apply(vi.fn(() => { throw new Error('crash'); }))).toThrow('crash');
+      const once = onDisk();
+      apply();
+      expect(onDisk()).toEqual(once);
+    });
   });
 
   it('applies a press only once, and picks up the ones after it', () => {

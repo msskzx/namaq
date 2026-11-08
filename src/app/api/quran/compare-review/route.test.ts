@@ -36,7 +36,16 @@ describe('the compare review route', () => {
     expect((await post({ a: 2, b: 3, action: 'agree' }, { origin: 'https://evil.example', host: 'localhost:3002' })).status).toBe(403);
     expect((await post({ a: 3, b: 2, action: 'agree' })).status).toBe(400);
     expect((await post({ a: 2, b: 3, action: 'other' })).status).toBe(400);
+    expect((await post({ a: 2, b: 3, action: 'keep' })).status).toBe(400);
+    expect((await post({ a: 2, b: 3, card: [], action: 'keep' })).status).toBe(400);
+    expect((await post({ a: 2, b: 3, card: ['4:1|5:1'], action: 'keep' })).status).toBe(400);
+    expect((await post({ a: 2, b: 3, card: ['2:1|3:1'], action: 'agree' })).status).toBe(400);
     expect(log()).toEqual([]);
+  });
+
+  it('logs a card press with its pairs', async () => {
+    expect((await post({ a: 2, b: 3, card: ['2:1|3:1', '2:2|3:2'], action: 'discuss' })).status).toBe(200);
+    expect(log()).toMatchObject([{ page: '2/3', card: ['2:1|3:1', '2:2|3:2'], action: 'discuss' }]);
   });
 
   it('appends each press to the log in order and touches nothing else', async () => {

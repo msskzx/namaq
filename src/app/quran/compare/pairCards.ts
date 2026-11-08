@@ -119,7 +119,7 @@ function manyCard(item: StoredCard, review: ReviewVerdicts): PairCard {
 function cardsOf(key: string, review: boolean) {
   const verdicts = review ? withUnappliedReviews(compareVerdicts) : undefined;
   return (stored.cards[key] ?? [])
-    .filter(item => review || item.p.length > 1 || compareVerdicts[item.p[0]]?.keep !== false)
+    .filter(item => review || item.p.length > 1 || compareVerdicts[item.p[0]]?.keep)
     .map(item => (item.o ? manyCard(item, verdicts) : rangeCard(item, verdicts)));
 }
 

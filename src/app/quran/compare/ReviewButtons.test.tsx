@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import ReviewButtons from './ReviewButtons';
+import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { PairCard } from './pairCards';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
@@ -36,6 +36,29 @@ describe('ReviewButtons', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).action).toBe('undo');
     expect(drop.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('sends a card press with every pair of the card and shows it at once', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal('fetch', fetchMock);
+    render(<CardReview a={2} b={3} card={{ id: 'r', pairs: [{ id: '2:1|3:1' }, { id: '2:2|3:2' }], sides: [side, side] }} />);
+    const discuss = screen.getByRole('button', { name: 'للنقاش' });
+    fireEvent.click(discuss);
+    expect(discuss.getAttribute('aria-pressed')).toBe('true');
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ a: 2, b: 3, action: 'discuss', card: ['2:1|3:1', '2:2|3:2'] });
+  });
+
+  it('undoes a card choice when it is pressed again', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal('fetch', fetchMock);
+    render(<CardReview a={2} b={3} card={{ ...card({ keep: true, why: '', checked: true }), id: '2:1|3:1' }} />);
+    const keep = screen.getByRole('button', { name: 'إبقاء' });
+    expect(keep.getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(keep);
+    expect(keep.getAttribute('aria-pressed')).toBe('false');
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ a: 2, b: 3, action: 'undo', card: ['2:1|3:1'] });
   });
 
   it('links to the next unreviewed page when there is one', () => {

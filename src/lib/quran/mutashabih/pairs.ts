@@ -7,7 +7,7 @@ export type AyahPair = { a: string; b: string; group?: string; columns: PairColu
 export type SurahPair = { a: number; b: number; count: number };
 
 /** A surah pair is listed only when it has at least this many similar ayah pairs. */
-export const MIN_PAIRS = 3;
+export const MIN_PAIRS = 1;
 
 export const surahOf = (key: string) => Number(key.split(':')[0]);
 export const ayahOf = (key: string) => Number(key.split(':')[1]);

@@ -2,10 +2,11 @@
 import { closeSync, fsyncSync, openSync, readFileSync, renameSync, writeFileSync, writeSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Verdict } from './comparePairs';
-import { restoredVerdicts, reviewedVerdicts, type ReviewAction } from './reviewPage';
+import { cardVerdicts, restoredVerdicts, reviewedVerdicts, type CardAction, type ReviewAction } from './reviewPage';
 
 type Verdicts = Record<string, Verdict>;
-export type ReviewPress = { t: number; page: string; action: ReviewAction | 'undo' };
+/** With `card`, the press covers those pairs; without it, every pair of the page that no card press has decided. */
+export type ReviewPress = { t: number; page: string; card?: string[]; action: ReviewAction | CardAction | 'undo' };
 
 const LOG = '.review-log.jsonl';
 const OFFSET = '.review-log.offset';
@@ -55,8 +56,8 @@ function pagesOfPairs(): Map<string, string[]> {
 function replayed(verdicts: Verdicts, presses: ReviewPress[]): Verdicts {
   const pages = pagesOfPairs();
   const next = { ...verdicts };
-  for (const { page, action } of presses) {
-    const keys = pages.get(page) ?? [];
+  for (const { page, card, action } of presses) {
+    const keys = card ?? (pages.get(page) ?? []).filter(key => !next[key]?.card);
     if (action === 'undo') {
       const restored = restoredVerdicts(next, keys);
       for (const key of keys) {
@@ -64,7 +65,7 @@ function replayed(verdicts: Verdicts, presses: ReviewPress[]): Verdicts {
         else delete next[key];
       }
     } else {
-      Object.assign(next, reviewedVerdicts(next, keys, action));
+      Object.assign(next, card ? cardVerdicts(next, keys, action as CardAction) : reviewedVerdicts(next, keys, action as ReviewAction));
     }
   }
   return next;

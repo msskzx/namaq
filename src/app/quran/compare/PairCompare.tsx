@@ -23,7 +23,7 @@ import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
-import ReviewButtons from './ReviewButtons';
+import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { CardSide, ManyOption, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
 import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
@@ -236,7 +236,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
 const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
-function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar: boolean; savedIds: string[] }) {
+function Card({ card, names, ar, savedIds, review }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number } }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -285,6 +285,7 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
         </div>
       </DoubleTapSave>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-end">
+        {review && <CardReview a={review.a} b={review.b} card={card} />}
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
@@ -395,7 +396,7 @@ export default function PairCompare({ a, b, cards, pairs: allPairs, names, revie
         <div className="flex min-w-0 flex-col gap-4">
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.a, nextTodo.b, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
-            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}</ol>}
+            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} />)}</ol>}
           {next && <Link href={pairHref(next.a, next.b, review, todo, juz)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}
