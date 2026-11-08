@@ -6781,24 +6781,29 @@
    "checked": true
   },
   "2:6|36:10": {
-   "keep": true,
-   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe."
+   "keep": false,
+   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe. (owner removed)",
+   "checked": true
   },
   "2:66|36:9": {
    "keep": false,
-   "why": "Only 'before them and behind them'; different points."
+   "why": "Only 'before them and behind them'; different points.",
+   "checked": true
   },
   "2:66|36:45": {
    "keep": false,
-   "why": "Only 'before you and behind you'; different points."
+   "why": "Only 'before you and behind you'; different points.",
+   "checked": true
   },
   "2:77|36:76": {
-   "keep": true,
-   "why": "Same sentence: Allah knows what they conceal and what they declare."
+   "keep": false,
+   "why": "Same sentence: Allah knows what they conceal and what they declare. (owner removed)",
+   "checked": true
   },
   "2:131|36:58": {
    "keep": false,
-   "why": "Only 'Lord' and the root of peace/submission; different scenes."
+   "why": "Only 'Lord' and the root of peace/submission; different scenes.",
+   "checked": true
   },
   "2:34|39:59": {
    "keep": true,
@@ -6907,15 +6912,18 @@
   },
   "2:66|41:42": {
    "keep": false,
-   "why": "Only 'before it and behind it'; different points."
+   "why": "Only 'before it and behind it'; different points.",
+   "checked": true
   },
   "2:82|41:8": {
-   "keep": true,
-   "why": "Same idea: those who believe and do good have an unfailing reward."
+   "keep": false,
+   "why": "Same idea: those who believe and do good have an unfailing reward. (owner removed)",
+   "checked": true
   },
   "2:86|41:31": {
-   "keep": true,
-   "why": "Same contrast: this world and the Hereafter, for the deniers and for the believers."
+   "keep": false,
+   "why": "Same contrast: this world and the Hereafter, for the deniers and for the believers. (owner removed)",
+   "checked": true
   },
   "2:3|42:38": {
    "keep": true,
@@ -6958,32 +6966,39 @@
    "checked": true
   },
   "2:70|43:49": {
-   "keep": true,
-   "why": "Same request: call on your Lord for us, we will be guided (the Israelites and Pharaoh's people)."
+   "keep": false,
+   "why": "Same request: call on your Lord for us, we will be guided (the Israelites and Pharaoh's people). (owner removed)",
+   "checked": true
   },
   "2:92|43:38": {
    "keep": false,
-   "why": "Only scattered words."
+   "why": "Only scattered words.",
+   "checked": true
   },
   "2:117|43:9": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only heavens and earth as words; different points.",
+   "checked": true
   },
   "2:131|43:89": {
    "keep": false,
-   "why": "Only 'say' and the root of peace; different points."
+   "why": "Only 'say' and the root of peace; different points.",
+   "checked": true
   },
   "2:117|44:7": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:117|44:29": {
    "keep": false,
-   "why": "Only the sky and earth as words."
+   "why": "Only the sky and earth as words.",
+   "checked": true
   },
   "2:127|44:6": {
    "keep": false,
-   "why": "Shares only the closing names Hearing, Knowing."
+   "why": "Shares only the closing names Hearing, Knowing.",
+   "checked": true
   },
   "2:8|45:26": {
    "keep": false,
