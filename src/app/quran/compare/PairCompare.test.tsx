@@ -88,7 +88,9 @@ describe('PairCompare', () => {
 
   it('in review, marks a page the owner dropped with a cross', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review states={{ '7:26': 'dropped' }} />);
-    expect(within(pane()).getByRole('img', { name: 'حُذفت من القائمة' })).toBeTruthy();
+    const row = pane().querySelector('[href="/quran/compare?a=7&b=26&review=1"]') as HTMLElement;
+    expect(within(row).getByRole('img', { name: 'حُذفت' })).toBeTruthy();
+    expect(within(row).queryByRole('img', { name: 'راجعتها' })).toBeNull();
   });
 
   it('in review, marks the surah pairs the owner reviewed and those with a question', () => {
