@@ -4226,67 +4226,83 @@
   },
   "3:84|29:46": {
    "keep": true,
-   "why": "Same creed: we believe in what was sent down to us and (to others), and we submit to Him."
+   "why": "Same creed: we believe in what was sent down to us and (to others), and we submit to Him.",
+   "checked": true
   },
   "3:136|29:58": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow, abiding in them; excellent is the reward of the workers."
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them; excellent is the reward of the workers.",
+   "checked": true
   },
   "3:184|29:18": {
    "keep": true,
-   "why": "Same consolation: if they deny you, (messengers / nations) before you were denied."
+   "why": "Same consolation: if they deny you, (messengers / nations) before you were denied.",
+   "checked": true
   },
   "3:198|29:58": {
-   "keep": true,
-   "why": "Same reward: (gardens) beneath which rivers flow, abiding in them."
+   "keep": false,
+   "why": "Only the gardens clause; a common reward formula (owner removed).",
+   "checked": true
   },
   "3:199|29:46": {
    "keep": true,
-   "why": "Same subject: the People of the Book and belief in what was sent down to you and to them."
+   "why": "Same subject: the People of the Book and belief in what was sent down to you and to them.",
+   "checked": true
   },
   "3:6|29:42": {
    "keep": false,
-   "why": "Only the closing 'Mighty, Wise'."
+   "why": "Only the closing 'Mighty, Wise'.",
+   "checked": true
   },
   "3:18|29:42": {
    "keep": false,
-   "why": "Only the closing 'Mighty, Wise'."
+   "why": "Only the closing 'Mighty, Wise'.",
+   "checked": true
   },
   "3:21|29:23": {
    "keep": false,
-   "why": "Only 'disbelieve in Allah's signs' and 'painful punishment'."
+   "why": "Only 'disbelieve in Allah's signs' and 'painful punishment'.",
+   "checked": true
   },
   "3:29|29:20": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'."
+   "why": "Only the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "3:29|29:52": {
    "keep": false,
-   "why": "Only 'He knows what is in the heavens and the earth'."
+   "why": "Only 'He knows what is in the heavens and the earth'.",
+   "checked": true
   },
   "3:57|29:9": {
    "keep": false,
-   "why": "Only the common formula 'those who believe and do righteous deeds'."
+   "why": "Only the common formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "3:100|29:47": {
    "keep": false,
-   "why": "Only 'those given the Book' and belief."
+   "why": "Only 'those given the Book' and belief.",
+   "checked": true
   },
   "3:115|29:16": {
    "keep": false,
-   "why": "Only good and piety."
+   "why": "Only good and piety.",
+   "checked": true
   },
   "3:150|29:22": {
    "keep": false,
-   "why": "Only 'Allah … protector … helper'."
+   "why": "Only 'Allah … protector … helper'.",
+   "checked": true
   },
   "3:177|29:23": {
    "keep": false,
-   "why": "Only the closing 'for them is a painful punishment'."
+   "why": "Only the closing 'for them is a painful punishment'.",
+   "checked": true
   },
   "3:190|29:44": {
    "keep": false,
-   "why": "Only the formula 'in the creation of the heavens and the earth are signs'."
+   "why": "Only the formula 'in the creation of the heavens and the earth are signs'.",
+   "checked": true
   },
   "4:13|24:52": {
    "keep": true,
@@ -7910,40 +7926,49 @@
    "checked": true
   },
   "3:9|30:6": {
-   "keep": true,
-   "why": "Allah does not break His promise."
+   "keep": false,
+   "why": "Shares only that Allah does not break His promise; different subjects (owner removed).",
+   "checked": true
   },
   "3:27|30:19": {
    "keep": true,
-   "why": "He brings the living out of the dead and the dead out of the living."
+   "why": "He brings the living out of the dead and the dead out of the living.",
+   "checked": true
   },
   "3:29|30:50": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:57|30:15": {
    "keep": true,
-   "why": "As for those who believe and do righteous deeds: their reward."
+   "why": "As for those who believe and do righteous deeds: their reward.",
+   "checked": true
   },
   "3:57|30:45": {
    "keep": true,
-   "why": "Reward of the believers; and He does not love the wrongdoers / disbelievers."
+   "why": "Reward of the believers; and He does not love the wrongdoers / disbelievers.",
+   "checked": true
   },
   "3:137|30:42": {
    "keep": true,
-   "why": "Travel in the land and see how was the end."
+   "why": "Travel in the land and see how was the end.",
+   "checked": true
   },
   "3:189|30:26": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:189|30:50": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:190|30:22": {
    "keep": true,
-   "why": "Creation of the heavens and the earth and the alternation ... are signs."
+   "why": "Creation of the heavens and the earth and the alternation ... are signs.",
+   "checked": true
   },
   "3:6|31:9": {
    "keep": false,
