@@ -14163,16 +14163,31 @@
    }
   },
   "48:5|57:12": {
-   "keep": true,
-   "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success."
+   "keep": false,
+   "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success."
+   }
   },
   "48:7|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "48:19|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "48:7|59:1": {
    "keep": false,
@@ -21554,7 +21569,12 @@
   },
   "48:17|57:12": {
    "keep": false,
-   "why": "Only the gardens with rivers clause."
+   "why": "Only the gardens with rivers clause.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens with rivers clause."
+   }
   },
   "48:5|58:22": {
    "keep": false,
