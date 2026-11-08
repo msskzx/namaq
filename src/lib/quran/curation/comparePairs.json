@@ -13547,15 +13547,18 @@
   },
   "43:9|44:38": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; their admission vs not created in play."
+   "why": "Only creation of the heavens and the earth; their admission vs not created in play.",
+   "checked": true
   },
   "43:29|44:13": {
    "keep": true,
-   "why": "Same idea: a clear messenger came to them, yet they did not heed."
+   "why": "Same idea: a clear messenger came to them, yet they did not heed.",
+   "checked": true
   },
   "43:82|44:7": {
    "keep": true,
-   "why": "Same title: Lord of the heavens and the earth."
+   "why": "Same title: Lord of the heavens and the earth.",
+   "checked": true
   },
   "43:9|45:36": {
    "keep": false,
@@ -20830,15 +20833,18 @@
   },
   "43:2|44:2": {
    "keep": true,
-   "why": "Identical oath: by the clear Book."
+   "why": "Identical oath: by the clear Book.",
+   "checked": true
   },
   "43:50|44:12": {
    "keep": true,
-   "why": "Same scene: removal of the punishment, the plea and the broken promise."
+   "why": "Same scene: removal of the punishment, the plea and the broken promise.",
+   "checked": true
   },
   "43:78|44:39": {
    "keep": false,
-   "why": "Only 'with the truth, but most of them'; different subjects."
+   "why": "Only 'with the truth, but most of them'; different subjects.",
+   "checked": true
   },
   "43:30|46:7": {
    "keep": true,
