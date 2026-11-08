@@ -20873,7 +20873,8 @@
   },
   "43:84|48:4": {
    "keep": false,
-   "why": "Only heavens, earth and divine names; different subjects."
+   "why": "Only heavens, earth and divine names; different subjects.",
+   "checked": true
   },
   "43:84|49:16": {
    "keep": false,
@@ -23593,6 +23594,16 @@
   "3:40|19:9": {
    "keep": true,
    "why": "The same answer to Zakariyya's question: قال كذلك (owner kept).",
+   "checked": true
+  },
+  "43:9|48:7": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true
+  },
+  "43:84|48:7": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
    "checked": true
   }
  }
