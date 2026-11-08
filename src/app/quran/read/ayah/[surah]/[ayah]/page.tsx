@@ -6,12 +6,17 @@ export const dynamic = 'force-dynamic';
 
 const load = async (page: number): Promise<MushafPage> => (await import(`../../../mushaf/${page}.json`)).default;
 
-export default async function AyahRedirect({ params }: { params: Promise<{ surah: string; ayah: string }> }) {
+/** Recite and review links keep their own query; plain links mark the ayah. */
+const KEEP = ['recite', 'upto', 'w', 'review'];
+
+export default async function AyahRedirect({ params, searchParams }: { params: Promise<{ surah: string; ayah: string }>; searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
   const { surah, ayah } = await params;
+  const query = (await searchParams) ?? {};
   const [s, a] = [Number(surah), Number(ayah)];
   if (!Number.isInteger(s) || !Number.isInteger(a) || s < 1 || s > 114 || a < 1) notFound();
   const row = (await surahList()).find(entry => entry.number === s);
   const page = await pageOfAyah(s, a, row?.page ?? 1, load);
   if (!page) notFound();
-  redirect(`/quran/read/${page}?a=${s}:${a}`);
+  const kept = new URLSearchParams(KEEP.flatMap(name => (typeof query[name] === 'string' ? [[name, query[name] as string]] : [])));
+  redirect(`/quran/read/${page}?${kept.has('recite') ? kept.toString() : `a=${s}:${a}`}`);
 }

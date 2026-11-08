@@ -1,8 +1,8 @@
-/** Ayat a reader marked while reading or reciting: how often they forgot each one, and which they saved. Kept in this browser for now. */
-export type AyahMark = { forgot?: number; saved?: boolean; at: number };
+/** Ayat a reader forgot while reading or reciting, with how often, kept in this browser for now. Saved ayat go to the shared bookmarks. */
+export type AyahMark = { forgot: number; at: number };
 export type AyahMarks = Record<string, AyahMark>;
 
-const KEY = 'ayah-marks';
+const KEY = 'ayah-forgot';
 const listeners = new Set<() => void>();
 let cache: { raw: string | null; marks: AyahMarks } = { raw: null, marks: {} };
 
@@ -10,10 +10,15 @@ export function readAyahMarks(): AyahMarks {
   let raw: string | null = null;
   try { raw = localStorage.getItem(KEY); } catch {}
   if (raw === cache.raw) return cache.marks;
-  let marks: AyahMarks = {};
+  const marks: AyahMarks = {};
   try {
     const parsed = raw ? JSON.parse(raw) : {};
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) marks = parsed;
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      for (const [key, value] of Object.entries(parsed)) {
+        const mark = value as Partial<AyahMark> | null;
+        if (/^\d+:\d+$/.test(key) && mark && Number(mark.forgot) > 0) marks[key] = { forgot: Number(mark.forgot), at: Number(mark.at) || 0 };
+      }
+    }
   } catch {}
   cache = { raw, marks };
   return marks;
@@ -24,17 +29,18 @@ function write(marks: AyahMarks) {
   listeners.forEach(listener => listener());
 }
 
-function update(key: string, change: (mark: AyahMark) => AyahMark) {
-  const marks = { ...readAyahMarks() };
-  const next = change({ ...(marks[key] ?? { at: 0 }), at: Date.now() });
-  if (!next.forgot && !next.saved) delete marks[key];
-  else marks[key] = next;
-  write(marks);
+/** Counts one more time this ayah was forgotten. */
+export function markForgotten(key: string) {
+  const marks = readAyahMarks();
+  write({ ...marks, [key]: { forgot: (marks[key]?.forgot ?? 0) + 1, at: Date.now() } });
 }
 
-export const markForgotten = (key: string) => update(key, mark => ({ ...mark, forgot: (mark.forgot ?? 0) + 1 }));
-export const clearForgotten = (key: string) => update(key, mark => ({ ...mark, forgot: undefined }));
-export const toggleSavedAyah = (key: string) => update(key, mark => ({ ...mark, saved: !mark.saved }));
+/** The reader knows it now: the ayah leaves the list to review. */
+export function clearForgotten(key: string) {
+  const rest = { ...readAyahMarks() };
+  delete rest[key];
+  write(rest);
+}
 
 export function subscribeAyahMarks(listener: () => void) {
   listeners.add(listener);
@@ -44,3 +50,7 @@ export function subscribeAyahMarks(listener: () => void) {
 
 const NONE: AyahMarks = {};
 export const serverAyahMarks = () => NONE;
+
+/** Bookmark id and link for one saved ayah. */
+export const ayahBookmarkId = (key: string) => `ayah:${key}`;
+export const ayahHref = (key: string) => `/quran/read/ayah/${key.replace(':', '/')}`;
