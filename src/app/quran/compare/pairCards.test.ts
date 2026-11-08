@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import treeData from '@/app/quran/branches/trees.json';
+import { normalizeWord } from '@/lib/quran/normalize';
 import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {
@@ -101,9 +103,41 @@ describe('compare pair cards', () => {
     expect(compareLinkFor(['2:23'])).toBeUndefined();
   });
 
-  it('has a verdict only for pairs the engine finds', () => {
+  it('links a pair inside a range card to the card that holds it', () => {
+    expect(compareLinkFor(['7:113', '26:40'])).toBe('/quran/compare?a=7&b=26#c-7-106-26-31');
+  });
+
+  describe('passage pairs', () => {
+    const ayat = new Map((treeData.ayat as { key: string; words: string[]; lemmas?: (string | null)[]; roots?: (string | null)[] }[]).map(ayah => [ayah.key, ayah]));
+    const pairs = passage.pairs as { a: string; b: string; columns: [number, number, string][] }[];
+
+    it('put the lower surah first, and repeat no engine pair', () => {
+      const engine = new Set((data.pairs as { a: string; b: string }[]).flatMap(pair => [`${pair.a}|${pair.b}`, `${pair.b}|${pair.a}`]));
+      for (const pair of pairs) {
+        expect(Number(pair.a.split(':')[0])).toBeLessThan(Number(pair.b.split(':')[0]));
+        expect(engine.has(`${pair.a}|${pair.b}`)).toBe(false);
+      }
+    });
+
+    it('give each matched word the level its lemma and root support', () => {
+      for (const pair of pairs) for (const [i, j, level] of pair.columns) {
+        const [a, b] = [ayat.get(pair.a)!, ayat.get(pair.b)!];
+        const same = normalizeWord(a.words[i]) === normalizeWord(b.words[j]);
+        if (level === 'exact') expect(same).toBe(true);
+        else if (level === 'lemma') expect(a.lemmas![i]).toBe(b.lemmas![j]);
+        else expect(a.roots![i]).toBe(b.roots![j]);
+      }
+    });
+
+    it('recover the Al-Waqi\'ah and Al-Haqqah passage across ayah boundaries', () => {
+      expect(pairCards(56, 69).map(card => card.id)).toEqual(expect.arrayContaining(['56:1|69:15', '56:75-80|69:38-43', '56:94|69:31']));
+    });
+  });
+
+  it('has a verdict only for known pairs, and one for every passage pair', () => {
     const found = new Set(([...data.pairs, ...passage.pairs] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
+    expect(passage.pairs.filter(pair => !compareVerdicts[`${pair.a}|${pair.b}`])).toEqual([]);
   });
 
   it('marks words that share only a root lightly, apart from same-word matches', () => {

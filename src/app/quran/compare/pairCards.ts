@@ -15,7 +15,7 @@ const found = ayahPairs([...data.pairs, ...passage.pairs] as SimilarAyahPair[], 
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);
 
-/** Every surah pair the engine links, by the compare criteria, often enough to get its own page. */
+/** Every surah pair with enough kept ayah pairs to get its own page. */
 export const listedPairs = surahPairs(bySurah);
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = surahPairs(foundBySurah);
@@ -27,13 +27,15 @@ for (const pair of found.filter(keptPair)) {
   for (const key of [pair.a, pair.b]) listedByAyah.set(key, [...(listedByAyah.get(key) ?? []), pair]);
 }
 
-/** The compare card for two of these ayat, when a listed page holds them as a kept pair. */
+/** The compare card that holds two of these ayat as a kept pair, on a listed page. */
 export function compareLinkFor(keys: string[]): string | undefined {
   const shown = new Set(keys);
   const pair = keys.flatMap(key => listedByAyah.get(key) ?? []).find(item => shown.has(item.a) && shown.has(item.b));
   if (!pair) return undefined;
-  const [a, b] = [pair.a, pair.b].map(key => ({ surah: surahOf(key), ayah: ayahOf(key) }));
-  return `${surahPairHref(a.surah, b.surah)}#${compareAnchor(a, b)}`;
+  const [x, y] = [surahOf(pair.a), surahOf(pair.b)];
+  const id = `${pair.a}|${pair.b}`;
+  const holder = pairCards(x, y).find(item => item.id === id || item.pairs?.some(member => member.id === id));
+  return holder && `${surahPairHref(x, y)}#${compareAnchor(holder.sides[0], holder.sides[1])}`;
 }
 
 export type CardSide = { surah: number; ayah: number; ayat: SpreadAyah[] };
