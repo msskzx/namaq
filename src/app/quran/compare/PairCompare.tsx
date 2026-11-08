@@ -215,13 +215,13 @@ const lightMarks = (lit: string | null, reading?: ReadStep) => (ayah: SpreadAyah
   ...(reading && reading.ayah === ayah.number ? { reading: reading.word } : {}),
 });
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep): SpreadPage {
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick' | 'footer'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   const show = (n: number) => (ar ? num(n) : n);
   const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
   return {
-    title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}` : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
+    title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}`.trim() : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
     action: <span className="flex">
       {extra}
       <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
@@ -229,7 +229,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
       </Link>
     </span>,
     rows: partners?.ayat ?? [side.ayat.map(lightMarks(lit, reading))],
-    ...(partners ? { pick: partners.pick } : {}),
+    ...(partners ? { pick: partners.pick, footer: partners.footer } : {}),
   };
 }
 
@@ -262,9 +262,13 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
   const partners = (side: CardSide) => {
     const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
     const options = card.many!.options;
-    const text = (item: ManyOption) => item.ayah.words.join(' ');
+    const text = (item: ManyOption) => item.ayah.words.map(normalizeWord).join(' ');
     // The same words every time (a refrain): one ayah and the list of where it recurs says it all.
-    if (options.every(item => text(item) === text(options[0]))) return { numbers: options.map(item => item.ayah.number), ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined)(options[0].ayah)]] };
+    if (options.every(item => text(item) === text(options[0]))) return {
+      numbers: [],
+      ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined)(options[0].ayah)]],
+      footer: <p className="mt-1 text-center text-sm text-[var(--home-muted)]">{name} {options.map((item, i) => <React.Fragment key={item.id}>{i > 0 && ' · '}<Link href={`/quran/read/ayah/${side.surah}/${item.ayah.number}`} className="underline-offset-2 hover:text-[var(--home-accent)] hover:underline">{ar ? num(item.ayah.number) : item.ayah.number}</Link></React.Fragment>)}</p>,
+    };
     return {
       numbers: options.map(item => item.ayah.number),
       ayat: options.map((item, i) => [i === selected ? lightMarks(lit, step?.side === card.many!.side ? step : undefined)(item.ayah) : { ...item.ayah, marks: undefined }]),

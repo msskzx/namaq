@@ -279,7 +279,8 @@ describe('PairCompare', () => {
       const refrain = (n: number) => ({ id: `10:72|26:${n}`, ayah: { number: n, words: ['ويل', 'يومئذ'], marks: { 0: { kind: 'exact' as const, link: 'a' } } }, shared: options[0].shared });
       const same = [refrain(109), refrain(127)];
       render(<PairCompare a={10} b={26} cards={[{ ...many, many: { side: 1, options: same }, sides: [many.sides[0], { surah: 26, ayah: 109, ayat: [same[0].ayah] }] }]} pairs={pairs} names={names2} />);
-      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء ١٠٩ · ١٢٧' })).toBeTruthy();
+      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء' })).toBeTruthy();
+      expect(screen.getByRole('link', { name: '١٢٧' }).getAttribute('href')).toBe('/quran/read/ayah/26/127');
       expect(screen.queryByRole('button', { name: /^الشعراء ١٢٧: / })).toBeNull();
       expect(screen.getAllByText('ويل')).toHaveLength(1);
     });
