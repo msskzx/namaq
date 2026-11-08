@@ -22358,15 +22358,30 @@
   },
   "52:10|78:20": {
    "keep": true,
-   "why": "Same scene of the Hour: the mountains set in motion."
+   "why": "Same scene of the Hour: the mountains set in motion.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene of the Hour: the mountains set in motion."
+   }
   },
   "52:23|78:35": {
    "keep": true,
-   "why": "Same words on the Garden: no idle talk there."
+   "why": "Same words on the Garden: no idle talk there.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words on the Garden: no idle talk there."
+   }
   },
   "52:23|78:34": {
    "keep": true,
-   "why": "Same scene: the cup given in the Garden."
+   "why": "Same scene: the cup given in the Garden.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: the cup given in the Garden."
+   }
   },
   "52:34|79:15": {
    "keep": false,
