@@ -3764,94 +3764,76 @@
    "why": "Only 'Lord' and 'what they describe'."
   },
   "3:172|33:29": {
-   "keep": false,
-   "why": "Same promise: for those of them who do good is a great reward. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same promise: for those of them who do good is a great reward."
   },
   "3:29|33:27": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'.",
-   "checked": true
+   "why": "Only the closing 'Allah has power over all things'."
   },
   "3:31|33:73": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Only the closing 'Forgiving, Merciful'."
   },
   "3:32|33:48": {
    "keep": false,
-   "why": "Only obeying and 'the disbelievers'.",
-   "checked": true
+   "why": "Only obeying and 'the disbelievers'."
   },
   "3:32|33:66": {
    "keep": false,
-   "why": "Only obeying Allah and the Messenger: a command vs a regret in the Fire.",
-   "checked": true
+   "why": "Only obeying Allah and the Messenger: a command vs a regret in the Fire."
   },
   "3:52|33:22": {
    "keep": false,
-   "why": "Only 'when … said' and belief.",
-   "checked": true
+   "why": "Only 'when … said' and belief."
   },
   "3:59|33:69": {
    "keep": false,
-   "why": "Only 'with Allah'.",
-   "checked": true
+   "why": "Only 'with Allah'."
   },
   "3:68|33:56": {
    "keep": false,
-   "why": "Only 'the Prophet' and 'those who believe'.",
-   "checked": true
+   "why": "Only 'the Prophet' and 'those who believe'."
   },
   "3:97|33:1": {
    "keep": false,
-   "why": "Only scattered words.",
-   "checked": true
+   "why": "Only scattered words."
   },
   "3:101|33:34": {
    "keep": false,
-   "why": "Only 'recited … the verses of Allah'.",
-   "checked": true
+   "why": "Only 'recited … the verses of Allah'."
   },
   "3:102|33:56": {
    "keep": false,
-   "why": "Only the opening 'O you who believe'.",
-   "checked": true
+   "why": "Only the opening 'O you who believe'."
   },
   "3:129|33:24": {
    "keep": false,
-   "why": "Only punishing and the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Only punishing and the closing 'Forgiving, Merciful'."
   },
   "3:148|33:29": {
    "keep": false,
-   "why": "Only the Hereafter and doers of good.",
-   "checked": true
+   "why": "Only the Hereafter and doers of good."
   },
   "3:148|33:57": {
    "keep": false,
-   "why": "Only 'this world and the Hereafter'.",
-   "checked": true
+   "why": "Only 'this world and the Hereafter'."
   },
   "3:171|33:47": {
    "keep": false,
-   "why": "Only 'bounty from Allah' and believers.",
-   "checked": true
+   "why": "Only 'bounty from Allah' and believers."
   },
   "3:176|33:29": {
    "keep": false,
-   "why": "Only 'Allah wills' and the Hereafter.",
-   "checked": true
+   "why": "Only 'Allah wills' and the Hereafter."
   },
   "3:177|33:8": {
    "keep": false,
-   "why": "Only 'painful punishment' for disbelief.",
-   "checked": true
+   "why": "Only 'painful punishment' for disbelief."
   },
   "3:189|33:27": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'.",
-   "checked": true
+   "why": "Only the closing 'Allah has power over all things'."
   },
   "5:34|24:5": {
    "keep": true,
@@ -6443,18 +6425,15 @@
   },
   "2:51|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud.",
-   "checked": true
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
   },
   "2:53|23:49": {
-   "keep": false,
-   "why": "Same sentence: We gave Musa the Book so that they may be guided. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: We gave Musa the Book so that they may be guided."
   },
   "2:92|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud.",
-   "checked": true
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
   },
   "2:34|25:26": {
    "keep": false,
@@ -6812,44 +6791,36 @@
    "checked": true
   },
   "2:119|35:24": {
-   "keep": false,
-   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner."
   },
   "2:204|35:5": {
-   "keep": false,
-   "why": "Same theme: the life of this world deceives; people and Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same theme: the life of this world deceives; people and Allah."
   },
   "2:284|35:1": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'.",
-   "checked": true
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
   },
   "2:6|36:10": {
-   "keep": false,
-   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe."
   },
   "2:66|36:9": {
    "keep": false,
-   "why": "Only 'before them and behind them'; different points.",
-   "checked": true
+   "why": "Only 'before them and behind them'; different points."
   },
   "2:66|36:45": {
    "keep": false,
-   "why": "Only 'before you and behind you'; different points.",
-   "checked": true
+   "why": "Only 'before you and behind you'; different points."
   },
   "2:77|36:76": {
-   "keep": false,
-   "why": "Same sentence: Allah knows what they conceal and what they declare. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: Allah knows what they conceal and what they declare."
   },
   "2:131|36:58": {
    "keep": false,
-   "why": "Only 'Lord' and the root of peace/submission; different scenes.",
-   "checked": true
+   "why": "Only 'Lord' and the root of peace/submission; different scenes."
   },
   "2:34|39:59": {
    "keep": true,
@@ -6958,18 +6929,15 @@
   },
   "2:66|41:42": {
    "keep": false,
-   "why": "Only 'before it and behind it'; different points.",
-   "checked": true
+   "why": "Only 'before it and behind it'; different points."
   },
   "2:82|41:8": {
-   "keep": false,
-   "why": "Same idea: those who believe and do good have an unfailing reward. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same idea: those who believe and do good have an unfailing reward."
   },
   "2:86|41:31": {
-   "keep": false,
-   "why": "Same contrast: this world and the Hereafter, for the deniers and for the believers. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same contrast: this world and the Hereafter, for the deniers and for the believers."
   },
   "2:3|42:38": {
    "keep": true,
@@ -7012,24 +6980,20 @@
    "checked": true
   },
   "2:70|43:49": {
-   "keep": false,
-   "why": "Same request: call on your Lord for us, we will be guided (the Israelites and Pharaoh's people). (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same request: call on your Lord for us, we will be guided (the Israelites and Pharaoh's people)."
   },
   "2:92|43:38": {
    "keep": false,
-   "why": "Only scattered words.",
-   "checked": true
+   "why": "Only scattered words."
   },
   "2:117|43:9": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points.",
-   "checked": true
+   "why": "Only heavens and earth as words; different points."
   },
   "2:131|43:89": {
    "keep": false,
-   "why": "Only 'say' and the root of peace; different points.",
-   "checked": true
+   "why": "Only 'say' and the root of peace; different points."
   },
   "2:117|44:7": {
    "keep": false,
@@ -7092,34 +7056,28 @@
    "checked": true
   },
   "2:97|46:30": {
-   "keep": false,
-   "why": "Same phrase: the revelation confirms what came before it and guides. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same phrase: the revelation confirms what came before it and guides."
   },
   "2:98|46:6": {
    "keep": false,
-   "why": "Only enmity and disbelief as roots; different points.",
-   "checked": true
+   "why": "Only enmity and disbelief as roots; different points."
   },
   "2:107|46:32": {
-   "keep": false,
-   "why": "Same idea: no protector besides Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same idea: no protector besides Allah."
   },
   "2:176|46:2": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words.",
-   "checked": true
+   "why": "Only the Book sent down by Allah as words."
   },
   "2:209|46:2": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise.",
-   "checked": true
+   "why": "Shares only the names Mighty, Wise."
   },
   "2:284|46:33": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'.",
-   "checked": true
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
   },
   "2:25|47:12": {
    "keep": true,
@@ -7143,103 +7101,83 @@
   },
   "2:106|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'.",
-   "checked": true
+   "why": "Shares only the closing 'able over all things'."
   },
   "2:107|48:14": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth.",
-   "checked": true
+   "why": "Shares only the dominion of the heavens and earth."
   },
   "2:117|48:7": {
    "keep": false,
-   "why": "Only heavens and earth as words.",
-   "checked": true
+   "why": "Only heavens and earth as words."
   },
   "2:119|48:8": {
-   "keep": false,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: We sent you as a bringer of good news and a warner."
   },
   "2:148|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'.",
-   "checked": true
+   "why": "Shares only the closing 'able over all things'."
   },
   "2:209|48:7": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise.",
-   "checked": true
+   "why": "Shares only the names Mighty, Wise."
   },
   "2:209|48:19": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise.",
-   "checked": true
+   "why": "Shares only the names Mighty, Wise."
   },
   "2:284|48:14": {
-   "keep": false,
-   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills."
   },
   "2:95|49:1": {
    "keep": false,
-   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing.",
-   "checked": true
+   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing."
   },
   "2:103|49:1": {
    "keep": false,
-   "why": "Only belief and fearing Allah as words.",
-   "checked": true
+   "why": "Only belief and fearing Allah as words."
   },
   "2:107|49:16": {
    "keep": false,
-   "why": "Only heavens and earth and knowing as words.",
-   "checked": true
+   "why": "Only heavens and earth and knowing as words."
   },
   "2:116|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words.",
-   "checked": true
+   "why": "Only heavens and earth as words."
   },
   "2:137|49:1": {
    "keep": false,
-   "why": "Shares only the names Hearing, Knowing.",
-   "checked": true
+   "why": "Shares only the names Hearing, Knowing."
   },
   "2:160|49:10": {
    "keep": false,
-   "why": "Only reconciling and mercy roots; repentance vs brotherhood.",
-   "checked": true
+   "why": "Only reconciling and mercy roots; repentance vs brotherhood."
   },
   "2:182|49:10": {
-   "keep": false,
-   "why": "Same idea: making peace between people, and mercy. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same idea: making peace between people, and mercy."
   },
   "2:192|49:5": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Shares only the closing 'Forgiving, Merciful'."
   },
   "2:218|49:15": {
-   "keep": false,
-   "why": "Same description: those who believe and strive in the way of Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same description: those who believe and strive in the way of Allah."
   },
   "2:224|49:1": {
    "keep": false,
-   "why": "Only fearing Allah and the names Hearing, Knowing.",
-   "checked": true
+   "why": "Only fearing Allah and the names Hearing, Knowing."
   },
   "2:224|49:13": {
    "keep": false,
-   "why": "Only fearing Allah and 'Knowing' as words.",
-   "checked": true
+   "why": "Only fearing Allah and 'Knowing' as words."
   },
   "2:284|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words.",
-   "checked": true
+   "why": "Only heavens and earth as words."
   },
   "2:73|57:17": {
    "keep": true,
@@ -7422,74 +7360,60 @@
    "checked": true
   },
   "2:29|65:12": {
-   "keep": false,
-   "why": "Same subject: He created seven heavens and the earth, and knows all things. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same subject: He created seven heavens and the earth, and knows all things."
   },
   "2:148|65:3": {
    "keep": false,
-   "why": "Shares only 'all things' and Allah; different points.",
-   "checked": true
+   "why": "Shares only 'all things' and Allah; different points."
   },
   "2:232|65:2": {
-   "keep": false,
-   "why": "Same rulings and sentence: when their term ends, ... this is an admonition for whoever believes in Allah and the Last Day. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same rulings and sentence: when their term ends, ... this is an admonition for whoever believes in Allah and the Last Day."
   },
   "2:261|65:12": {
    "keep": false,
-   "why": "Only 'seven' and Allah as words.",
-   "checked": true
+   "why": "Only 'seven' and Allah as words."
   },
   "2:284|65:3": {
    "keep": false,
-   "why": "Only 'all things' as words.",
-   "checked": true
+   "why": "Only 'all things' as words."
   },
   "2:284|65:12": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'.",
-   "checked": true
+   "why": "Shares only heavens and earth and the closing 'able over all things'."
   },
   "2:173|66:1": {
    "keep": false,
-   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'."
   },
   "2:199|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Shares only the closing 'Forgiving, Merciful'."
   },
   "2:207|66:1": {
-   "keep": false,
-   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast."
   },
   "2:218|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'.",
-   "checked": true
+   "why": "Shares only the closing 'Forgiving, Merciful'."
   },
   "2:25|85:11": {
-   "keep": false,
-   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good."
   },
   "2:82|85:11": {
-   "keep": false,
-   "why": "Same idea: those who believe and do good have the Gardens. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same idea: those who believe and do good have the Gardens."
   },
   "2:107|85:9": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth.",
-   "checked": true
+   "why": "Shares only the dominion of the heavens and earth."
   },
   "2:116|85:9": {
    "keep": false,
-   "why": "Only heavens and earth as words.",
-   "checked": true
+   "why": "Only heavens and earth as words."
   },
   "3:9|11:118": {
    "keep": false,
@@ -7882,24 +7806,20 @@
    "checked": true
   },
   "3:16|23:109": {
-   "keep": false,
-   "why": "Only the believers' prayer 'our Lord, we have believed, forgive us' (owner removed).",
-   "checked": true
+   "keep": true,
+   "why": "Believers' prayer: our Lord, we have believed, so forgive us."
   },
   "3:94|23:38": {
-   "keep": false,
-   "why": "Only inventing a lie against Allah (owner removed).",
-   "checked": true
+   "keep": true,
+   "why": "Inventing a lie against Allah."
   },
   "3:169|23:117": {
    "keep": false,
-   "why": "Shared 'with their Lord' only; different subjects.",
-   "checked": true
+   "why": "Shared 'with their Lord' only; different subjects."
   },
   "3:189|23:18": {
    "keep": false,
-   "why": "Shared common words only; different subjects.",
-   "checked": true
+   "why": "Shared common words only; different subjects."
   },
   "3:29|25:2": {
    "keep": false,
@@ -8112,19 +8032,16 @@
    "checked": true
   },
   "3:57|34:4": {
-   "keep": false,
-   "why": "Reward of those who believe and do righteous deeds. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Reward of those who believe and do righteous deeds."
   },
   "3:62|34:27": {
    "keep": false,
-   "why": "Shared closing names only; different subjects.",
-   "checked": true
+   "why": "Shared closing names only; different subjects."
   },
   "3:94|34:8": {
-   "keep": false,
-   "why": "Inventing a lie against Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Inventing a lie against Allah."
   },
   "3:3|35:31": {
    "keep": false,
@@ -8162,19 +8079,16 @@
    "checked": true
   },
   "3:51|36:61": {
-   "keep": false,
-   "why": "Worship Me / Him: this is a straight path. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Worship Me / Him: this is a straight path."
   },
   "3:142|36:26": {
    "keep": false,
-   "why": "Shared 'enter Paradise' only; different scenes.",
-   "checked": true
+   "why": "Shared 'enter Paradise' only; different scenes."
   },
   "3:189|36:83": {
-   "keep": false,
-   "why": "Dominion over all things belongs to Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Dominion over all things belongs to Allah."
   },
   "3:11|40:22": {
    "keep": true,
@@ -8427,39 +8341,32 @@
    "checked": true
   },
   "3:29|49:16": {
-   "keep": false,
-   "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him."
   },
   "3:29|49:18": {
-   "keep": false,
-   "why": "Allah knows the unseen of the heavens and the earth. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Allah knows the unseen of the heavens and the earth."
   },
   "3:89|49:5": {
    "keep": false,
-   "why": "Shared closing 'Forgiving, Merciful' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
   },
   "3:89|49:10": {
    "keep": false,
-   "why": "Shared root of reform only; different subjects.",
-   "checked": true
+   "why": "Shared root of reform only; different subjects."
   },
   "3:121|49:1": {
    "keep": false,
-   "why": "Shared closing 'Hearing, Knowing' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'Hearing, Knowing' only; different subjects."
   },
   "3:163|49:18": {
    "keep": false,
-   "why": "Shared closing 'Seeing of what you do' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'Seeing of what you do' only; different subjects."
   },
   "3:189|49:16": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects.",
-   "checked": true
+   "why": "Shared heavens-and-earth only; different subjects."
   },
   "3:27|57:6": {
    "keep": true,
@@ -8502,24 +8409,20 @@
    "checked": true
   },
   "3:10|58:17": {
-   "keep": false,
-   "why": "Their wealth and children will not avail them against Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Their wealth and children will not avail them against Allah."
   },
   "3:28|58:10": {
    "keep": false,
-   "why": "Shared words only; different subjects.",
-   "checked": true
+   "why": "Shared words only; different subjects."
   },
   "3:116|58:17": {
-   "keep": false,
-   "why": "Identical: wealth and children will not avail them; companions of the Fire. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Identical: wealth and children will not avail them; companions of the Fire."
   },
   "3:176|58:10": {
    "keep": false,
-   "why": "Shared grief / harm words only; different subjects.",
-   "checked": true
+   "why": "Shared grief / harm words only; different subjects."
   },
   "3:11|59:4": {
    "keep": false,
@@ -8547,19 +8450,16 @@
    "checked": true
   },
   "3:94|61:7": {
-   "keep": false,
-   "why": "Inventing a lie against Allah: the wrongdoers. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Inventing a lie against Allah: the wrongdoers."
   },
   "3:136|61:12": {
-   "keep": false,
-   "why": "Forgiveness and gardens under which rivers flow. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Forgiveness and gardens under which rivers flow."
   },
   "3:177|61:10": {
    "keep": false,
-   "why": "Shared 'painful punishment' only; different subjects.",
-   "checked": true
+   "why": "Shared 'painful punishment' only; different subjects."
   },
   "3:18|62:1": {
    "keep": false,
@@ -8592,19 +8492,16 @@
    "checked": true
   },
   "3:10|63:9": {
-   "keep": false,
-   "why": "Wealth and children, and turning away from Allah. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Wealth and children, and turning away from Allah."
   },
   "3:18|63:1": {
    "keep": false,
-   "why": "Shared root of witness only; different subjects.",
-   "checked": true
+   "why": "Shared root of witness only; different subjects."
   },
   "3:149|63:3": {
    "keep": false,
-   "why": "Shared 'disbelieved' only; different subjects.",
-   "checked": true
+   "why": "Shared 'disbelieved' only; different subjects."
   },
   "3:10|64:15": {
    "keep": true,
@@ -13398,31 +13295,16 @@
    "why": "Same scene: messengers came with clear proofs and the disbelievers rejected them."
   },
   "41:8|45:30": {
-   "keep": false,
-   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
-   }
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds, an unfailing reward / His mercy."
   },
   "41:46|45:15": {
-   "keep": false,
-   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
-   }
+   "keep": true,
+   "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him."
   },
   "41:46|45:30": {
    "keep": false,
-   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
-   }
+   "why": "Only 'did righteous deeds' and 'Lord'; individual accountability vs the believers' reward."
   },
   "41:15|46:4": {
    "keep": false,
@@ -13651,48 +13533,23 @@
   },
   "42:3|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing names Almighty, Wise."
-   }
+   "why": "Only the closing names Almighty, Wise."
   },
   "42:9|57:2": {
-   "keep": false,
-   "why": "Same statement: He gives life (and death) and is able over all things. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: He gives life (and death) and is able over all things."
-   }
+   "keep": true,
+   "why": "Same statement: He gives life (and death) and is able over all things."
   },
   "42:12|57:2": {
    "keep": false,
-   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
-   }
+   "why": "Only 'His is ... the heavens and the earth' and 'all things'; provision vs life and death."
   },
   "42:29|57:2": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing 'able'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth' and the closing 'able'."
-   }
+   "why": "Only 'the heavens and the earth' and the closing 'able'."
   },
   "42:53|57:5": {
-   "keep": false,
-   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
-   }
+   "keep": true,
+   "why": "Same full statement: His is what is in the heavens and the earth, and to Allah all matters return."
   },
   "42:9|64:1": {
    "keep": false,
@@ -13781,19 +13638,16 @@
    "checked": true
   },
   "43:25|47:10": {
-   "keep": false,
-   "why": "Same warning: see how was the end of the deniers / those before them. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same warning: see how was the end of the deniers / those before them."
   },
   "43:63|47:26": {
    "keep": false,
-   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise.",
-   "checked": true
+   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise."
   },
   "43:66|47:18": {
-   "keep": false,
-   "why": "Same words: are they waiting except for the Hour to come upon them suddenly? (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same words: are they waiting except for the Hour to come upon them suddenly?"
   },
   "43:8|50:36": {
    "keep": true,
@@ -13822,23 +13676,19 @@
   },
   "43:9|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the name Almighty.",
-   "checked": true
+   "why": "Only 'the heavens and the earth' and the name Almighty."
   },
   "43:82|57:1": {
    "keep": false,
-   "why": "Only glorification and 'the heavens and the earth'; different statements.",
-   "checked": true
+   "why": "Only glorification and 'the heavens and the earth'; different statements."
   },
   "43:84|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the name Wise.",
-   "checked": true
+   "why": "Only 'the heavens and the earth' and the name Wise."
   },
   "43:85|57:5": {
-   "keep": false,
-   "why": "Same full statement: His is the dominion of the heavens and the earth, and to Him is the return. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same full statement: His is the dominion of the heavens and the earth, and to Him is the return."
   },
   "43:9|59:1": {
    "keep": false,
@@ -14029,30 +13879,15 @@
   },
   "45:2|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing names Almighty, Wise."
-   }
+   "why": "Only the closing names Almighty, Wise."
   },
   "45:5|57:17": {
-   "keep": false,
-   "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason."
-   }
+   "keep": true,
+   "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason."
   },
   "45:37|57:1": {
    "keep": false,
-   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
-   }
+   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
   },
   "45:2|59:1": {
    "keep": false,
@@ -14083,30 +13918,15 @@
   },
   "45:22|64:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth'."
-   }
+   "why": "Only 'the heavens and the earth'."
   },
   "45:22|64:3": {
-   "keep": false,
-   "why": "Same statement: He created the heavens and the earth in truth. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: He created the heavens and the earth in truth."
-   }
+   "keep": true,
+   "why": "Same statement: He created the heavens and the earth in truth."
   },
   "45:36|64:1": {
    "keep": false,
-   "why": "Only 'praise' and 'the heavens and the earth'; different statements.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'praise' and 'the heavens and the earth'; different statements."
-   }
+   "why": "Only 'praise' and 'the heavens and the earth'; different statements."
   },
   "46:22|67:25": {
    "keep": true,
@@ -14137,237 +13957,107 @@
   },
   "47:9|64:8": {
    "keep": false,
-   "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe."
-   }
+   "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe."
   },
   "47:33|64:8": {
    "keep": false,
-   "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'."
-   }
+   "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'."
   },
   "47:33|64:12": {
-   "keep": false,
-   "why": "Same command: obey Allah and obey the Messenger. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same command: obey Allah and obey the Messenger."
-   }
+   "keep": true,
+   "why": "Same command: obey Allah and obey the Messenger."
   },
   "48:5|57:12": {
-   "keep": false,
-   "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success."
-   }
+   "keep": true,
+   "why": "Same reward: believing men and women in gardens beneath which rivers flow, the great success."
   },
   "48:7|57:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
-   }
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
   },
   "48:19|57:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing names Almighty, Wise."
-   }
+   "why": "Only the closing names Almighty, Wise."
   },
   "48:7|59:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
-   }
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
   },
   "48:7|59:24": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
-   }
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
   },
   "48:19|59:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing names Almighty, Wise."
-   }
+   "why": "Only the closing names Almighty, Wise."
   },
   "48:21|59:6": {
    "keep": false,
-   "why": "Only the closing 'able over all things'; different spoils.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing 'able over all things'; different spoils."
-   }
+   "why": "Only the closing 'able over all things'; different spoils."
   },
   "48:22|59:12": {
-   "keep": false,
-   "why": "Same description: the enemy would turn their backs, then would not be helped. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same description: the enemy would turn their backs, then would not be helped."
-   }
+   "keep": true,
+   "why": "Same description: the enemy would turn their backs, then would not be helped."
   },
   "48:5|61:12": {
-   "keep": false,
-   "why": "Same reward: admitted into gardens beneath which rivers flow, the great success. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same reward: admitted into gardens beneath which rivers flow, the great success."
-   }
+   "keep": true,
+   "why": "Same reward: admitted into gardens beneath which rivers flow, the great success."
   },
   "48:7|61:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
-   }
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
   },
   "48:19|61:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing names Almighty, Wise."
-   }
+   "why": "Only the closing names Almighty, Wise."
   },
   "48:28|61:9": {
-   "keep": false,
-   "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion."
-   }
+   "keep": true,
+   "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion."
   },
   "49:1|58:12": {
    "keep": false,
-   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
-   }
+   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
   },
   "49:1|58:13": {
    "keep": false,
-   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
-   }
+   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
   },
   "49:16|58:7": {
-   "keep": false,
-   "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things."
-   }
+   "keep": true,
+   "why": "Same full statement: Allah knows what is in the heavens and the earth and knows all things."
   },
   "49:16|64:1": {
    "keep": false,
-   "why": "Only 'what is in the heavens and the earth' and 'all things'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'what is in the heavens and the earth' and 'all things'."
-   }
+   "why": "Only 'what is in the heavens and the earth' and 'all things'."
   },
   "49:16|64:4": {
-   "keep": false,
-   "why": "Same statement: He knows what is in the heavens and the earth. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: He knows what is in the heavens and the earth."
-   }
+   "keep": true,
+   "why": "Same statement: He knows what is in the heavens and the earth."
   },
   "49:16|64:11": {
    "keep": false,
-   "why": "Only the closing 'Allah knows all things'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing 'Allah knows all things'."
-   }
+   "why": "Only the closing 'Allah knows all things'."
   },
   "49:18|64:2": {
    "keep": false,
-   "why": "Only the closing 'Allah sees what you do'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing 'Allah sees what you do'."
-   }
+   "why": "Only the closing 'Allah sees what you do'."
   },
   "49:18|64:4": {
-   "keep": false,
-   "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do."
-   }
+   "keep": true,
+   "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do."
   },
   "50:38|52:36": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; six days vs did they create them.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only creation of the heavens and the earth; six days vs did they create them."
-   }
+   "why": "Only creation of the heavens and the earth; six days vs did they create them."
   },
   "50:39|52:48": {
-   "keep": false,
-   "why": "Same command: be patient and glorify the praise of your Lord. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same command: be patient and glorify the praise of your Lord."
-   }
+   "keep": true,
+   "why": "Same command: be patient and glorify the praise of your Lord."
   },
   "50:40|52:49": {
-   "keep": false,
-   "why": "Same command: glorify Him in the night and at its endings. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same command: glorify Him in the night and at its endings."
-   }
+   "keep": true,
+   "why": "Same command: glorify Him in the night and at its endings."
   },
   "52:17|68:34": {
    "keep": true,
@@ -18115,18 +17805,15 @@
   },
   "16:3|42:4": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'; creation in truth vs ownership.",
-   "checked": true
+   "why": "Only 'the heavens and the earth'; creation in truth vs ownership."
   },
   "16:73|42:49": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion and gifts of children.",
-   "checked": true
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion and gifts of children."
   },
   "16:93|42:8": {
-   "keep": false,
-   "why": "Same words: had Allah willed He would have made you one nation, but He ... (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same words: had Allah willed He would have made you one nation, but He ..."
   },
   "16:3|43:9": {
    "keep": true,
@@ -21381,22 +21068,12 @@
    }
   },
   "42:37|53:32": {
-   "keep": false,
-   "why": "Same description: those who avoid the major sins and indecencies. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same description: those who avoid the major sins and indecencies."
-   }
+   "keep": true,
+   "why": "Same description: those who avoid the major sins and indecencies."
   },
   "42:50|53:21": {
    "keep": false,
-   "why": "Only male and female; His giving of children vs the deniers' division.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only male and female; His giving of children vs the deniers' division."
-   }
+   "why": "Only male and female; His giving of children vs the deniers' division."
   },
   "42:17|69:1": {
    "keep": false,
@@ -21412,30 +21089,15 @@
   },
   "42:4|87:1": {
    "keep": false,
-   "why": "Only a divine name from the root of highness.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only a divine name from the root of highness."
-   }
+   "why": "Only a divine name from the root of highness."
   },
   "42:36|87:16": {
    "keep": false,
-   "why": "Only the life of this world.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the life of this world."
-   }
+   "why": "Only the life of this world."
   },
   "42:36|87:17": {
-   "keep": false,
-   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting."
-   }
+   "keep": true,
+   "why": "Same comparison and words: what is with Allah / the Hereafter is better and more lasting."
   },
   "42:49|92:3": {
    "keep": true,
@@ -21468,8 +21130,7 @@
   },
   "43:70|47:6": {
    "keep": false,
-   "why": "Only entering the Garden, a common reward statement.",
-   "checked": true
+   "why": "Only entering the Garden, a common reward statement."
   },
   "43:84|48:4": {
    "keep": false,
@@ -21487,18 +21148,15 @@
   },
   "43:34|56:15": {
    "keep": false,
-   "why": "A single shared word, couches, one worldly and one in Paradise.",
-   "checked": true
+   "why": "A single shared word, couches, one worldly and one in Paradise."
   },
   "43:34|56:16": {
-   "keep": false,
-   "why": "Same image, reclining upon them: worldly luxury vs the reward of the foremost. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same image, reclining upon them: worldly luxury vs the reward of the foremost."
   },
   "43:73|56:32": {
-   "keep": false,
-   "why": "Same description of the Garden: abundant fruit. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same description of the Garden: abundant fruit."
   },
   "43:31|76:23": {
    "keep": true,
@@ -21611,14 +21269,12 @@
    "checked": true
   },
   "44:51|68:34": {
-   "keep": false,
-   "why": "Same frame on the reward of the pious. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Same frame on the reward of the pious."
   },
   "44:52|68:34": {
    "keep": false,
-   "why": "Only the word gardens.",
-   "checked": true
+   "why": "Only the word gardens."
   },
   "44:8|77:26": {
    "keep": false,
@@ -21681,22 +21337,12 @@
    "why": "Same construction: seeking refuge with the Lord."
   },
   "45:3|51:20": {
-   "keep": false,
-   "why": "Same construction: signs in the earth for a described people. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same construction: signs in the earth for a described people."
-   }
+   "keep": true,
+   "why": "Same construction: signs in the earth for a described people."
   },
   "45:4|51:20": {
-   "keep": false,
-   "why": "Same construction: and in ... are signs for those certain. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same construction: and in ... are signs for those certain."
-   }
+   "keep": true,
+   "why": "Same construction: and in ... are signs for those certain."
   },
   "45:3|52:36": {
    "keep": false,
@@ -21758,12 +21404,7 @@
   },
   "47:12|64:9": {
    "keep": false,
-   "why": "Only the believe-and-do-righteous and gardens formulas.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the believe-and-do-righteous and gardens formulas."
-   }
+   "why": "Only the believe-and-do-righteous and gardens formulas."
   },
   "47:12|65:11": {
    "keep": false,
@@ -21787,12 +21428,7 @@
   },
   "48:17|57:12": {
    "keep": false,
-   "why": "Only the gardens with rivers clause.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the gardens with rivers clause."
-   }
+   "why": "Only the gardens with rivers clause."
   },
   "48:5|58:22": {
    "keep": false,
@@ -21804,12 +21440,7 @@
   },
   "48:17|61:12": {
    "keep": false,
-   "why": "Only the gardens with rivers clause.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the gardens with rivers clause."
-   }
+   "why": "Only the gardens with rivers clause."
   },
   "48:17|64:9": {
    "keep": false,
@@ -21897,31 +21528,16 @@
    "why": "Same command: and in the night glorify Him."
   },
   "50:6|77:9": {
-   "keep": false,
-   "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open."
-   }
+   "keep": true,
+   "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open."
   },
   "50:11|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the roots of life and death."
-   }
+   "why": "Only the roots of life and death."
   },
   "50:43|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the roots of life and death."
-   }
+   "why": "Only the roots of life and death."
   },
   "50:40|79:3": {
    "keep": false,
@@ -21945,30 +21561,15 @@
   },
   "50:1|85:15": {
    "keep": false,
-   "why": "A single shared word; the Qur'an vs the Throne.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "A single shared word; the Qur'an vs the Throne."
-   }
+   "why": "A single shared word; the Qur'an vs the Throne."
   },
   "50:17|85:6": {
    "keep": false,
-   "why": "Same root only; recording angels vs the people of the ditch.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Same root only; recording angels vs the people of the ditch."
-   }
+   "why": "Same root only; recording angels vs the people of the ditch."
   },
   "50:20|85:2": {
-   "keep": false,
-   "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day."
-   }
+   "keep": true,
+   "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day."
   },
   "50:43|87:13": {
    "keep": false,
@@ -22045,84 +21646,39 @@
   },
   "51:5|70:26": {
    "keep": false,
-   "why": "Only the root of truth.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of truth."
-   }
+   "why": "Only the root of truth."
   },
   "51:6|70:26": {
    "keep": false,
-   "why": "Only the word for Judgement.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the word for Judgement."
-   }
+   "why": "Only the word for Judgement."
   },
   "51:12|70:25": {
    "keep": false,
-   "why": "Only the root of asking; deniers vs the beggar.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of asking; deniers vs the beggar."
-   }
+   "why": "Only the root of asking; deniers vs the beggar."
   },
   "51:12|70:26": {
    "keep": false,
-   "why": "Only Day of Judgement, a common name.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only Day of Judgement, a common name."
-   }
+   "why": "Only Day of Judgement, a common name."
   },
   "51:19|70:24": {
-   "keep": false,
-   "why": "Same clause: in their wealth is a due. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same clause: in their wealth is a due."
-   }
+   "keep": true,
+   "why": "Same clause: in their wealth is a due."
   },
   "51:19|70:25": {
-   "keep": false,
-   "why": "Same words: for the beggar and the deprived. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words: for the beggar and the deprived."
-   }
+   "keep": true,
+   "why": "Same words: for the beggar and the deprived."
   },
   "51:2|71:13": {
    "keep": false,
-   "why": "Same root only; burden vs reverence.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Same root only; burden vs reverence."
-   }
+   "why": "Same root only; burden vs reverence."
   },
   "51:50|71:2": {
-   "keep": false,
-   "why": "Same words of the warner: I am to you a clear warner. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words of the warner: I am to you a clear warner."
-   }
+   "keep": true,
+   "why": "Same words of the warner: I am to you a clear warner."
   },
   "51:51|71:2": {
-   "keep": false,
-   "why": "Same words of the warner: I am to you a clear warner. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words of the warner: I am to you a clear warner."
-   }
+   "keep": true,
+   "why": "Same words of the warner: I am to you a clear warner."
   },
   "51:12|74:46": {
    "keep": false,
@@ -22503,40 +22059,20 @@
    "why": "Only the root of favour."
   },
   "52:11|83:10": {
-   "keep": false,
-   "why": "Same refrain: woe that Day to the deniers. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same refrain: woe that Day to the deniers."
-   }
+   "keep": true,
+   "why": "Same refrain: woe that Day to the deniers."
   },
   "52:14|83:17": {
-   "keep": false,
-   "why": "Same words said to the deniers: this is what you used to deny. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same words said to the deniers: this is what you used to deny."
-   }
+   "keep": true,
+   "why": "Same words said to the deniers: this is what you used to deny."
   },
   "52:28|83:22": {
    "keep": false,
-   "why": "Only the root of righteousness; a divine name vs the righteous.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of righteousness; a divine name vs the righteous."
-   }
+   "why": "Only the root of righteousness; a divine name vs the righteous."
   },
   "52:29|83:22": {
    "keep": false,
-   "why": "Only the root of favour.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of favour."
-   }
+   "why": "Only the root of favour."
   },
   "52:42|86:17": {
    "keep": false,
@@ -23882,30 +23418,15 @@
   },
   "53:25|56:49": {
    "keep": false,
-   "why": "The Hereafter and this life versus earlier and later peoples; only related roots.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "The Hereafter and this life versus earlier and later peoples; only related roots."
-   }
+   "why": "The Hereafter and this life versus earlier and later peoples; only related roots."
   },
   "53:31|56:24": {
    "keep": false,
-   "why": "Only the general idea of recompense for deeds.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the general idea of recompense for deeds."
-   }
+   "why": "Only the general idea of recompense for deeds."
   },
   "53:59|56:81": {
-   "keep": false,
-   "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive? (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive?"
-   }
+   "keep": true,
+   "why": "Same rebuke with the same frame: is it at this discourse that you marvel / are dismissive?"
   },
   "53:35|68:47": {
    "keep": true,
@@ -23954,39 +23475,19 @@
   },
   "53:1|77:8": {
    "keep": false,
-   "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements."
-   }
+   "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements."
   },
   "53:31|77:44": {
    "keep": false,
-   "why": "Only the general wording of rewarding those who do good.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the general wording of rewarding those who do good."
-   }
+   "why": "Only the general wording of rewarding those who do good."
   },
   "53:44|77:26": {
    "keep": false,
-   "why": "Causing death and life versus the earth holding the living and dead; different points.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Causing death and life versus the earth holding the living and dead; different points."
-   }
+   "why": "Causing death and life versus the earth holding the living and dead; different points."
   },
   "53:50|77:16": {
-   "keep": false,
-   "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'."
-   }
+   "keep": true,
+   "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'."
   },
   "53:45|78:8": {
    "keep": true,
@@ -24033,21 +23534,11 @@
   },
   "53:21|92:3": {
    "keep": false,
-   "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words."
-   }
+   "why": "A rebuke over daughters versus an oath by creation of the sexes; only the pair of words."
   },
   "53:25|92:13": {
-   "keep": false,
-   "why": "Same statement: the Hereafter and the first life belong to Allah. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: the Hereafter and the first life belong to Allah."
-   }
+   "keep": true,
+   "why": "Same statement: the Hereafter and the first life belong to Allah."
   },
   "53:25|93:4": {
    "keep": false,
@@ -24055,39 +23546,19 @@
   },
   "53:13|96:9": {
    "keep": false,
-   "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated."
-   }
+   "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated."
   },
   "53:14|96:9": {
    "keep": false,
-   "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning."
-   }
+   "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning."
   },
   "53:42|96:8": {
-   "keep": false,
-   "why": "Same frame and idea: to your Lord is the final end / the return. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same frame and idea: to your Lord is the final end / the return."
-   }
+   "keep": true,
+   "why": "Same frame and idea: to your Lord is the final end / the return."
   },
   "53:42|96:9": {
    "keep": false,
-   "why": "The final end versus forbidding; a shared root and unrelated meaning.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "The final end versus forbidding; a shared root and unrelated meaning."
-   }
+   "why": "The final end versus forbidding; a shared root and unrelated meaning."
   },
   "54:14|55:50": {
    "keep": false,
@@ -24285,30 +23756,15 @@
   },
   "55:7|88:13": {
    "keep": false,
-   "why": "The raised sky versus raised couches; a shared root only.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "The raised sky versus raised couches; a shared root only."
-   }
+   "why": "The raised sky versus raised couches; a shared root only."
   },
   "55:7|88:14": {
    "keep": false,
-   "why": "Setting the balance versus cups set out; a shared root only.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Setting the balance versus cups set out; a shared root only."
-   }
+   "why": "Setting the balance versus cups set out; a shared root only."
   },
   "55:7|88:18": {
-   "keep": false,
-   "why": "Same image: the sky, and how it was raised. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same image: the sky, and how it was raised."
-   }
+   "keep": true,
+   "why": "Same image: the sky, and how it was raised."
   },
   "55:3|90:4": {
    "keep": true,
@@ -24364,39 +23820,19 @@
   },
   "55:2|96:1": {
    "keep": false,
-   "why": "Teaching the Qur'an versus the command to read; a shared root only.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Teaching the Qur'an versus the command to read; a shared root only."
-   }
+   "why": "Teaching the Qur'an versus the command to read; a shared root only."
   },
   "55:3|96:1": {
    "keep": false,
-   "why": "Only the verb 'created'.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the verb 'created'."
-   }
+   "why": "Only the verb 'created'."
   },
   "55:3|96:2": {
-   "keep": false,
-   "why": "Same two-word clause: He created man. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same two-word clause: He created man."
-   }
+   "keep": true,
+   "why": "Same two-word clause: He created man."
   },
   "55:14|96:2": {
-   "keep": false,
-   "why": "Same construction: He created man from ... clay / a clinging clot. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same construction: He created man from ... clay / a clinging clot."
-   }
+   "keep": true,
+   "why": "Same construction: He created man from ... clay / a clinging clot."
   },
   "56:12|68:2": {
    "keep": false,
@@ -24701,57 +24137,27 @@
   },
   "56:56|82:17": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the Day of Judgement' in different statements."
-   }
+   "why": "Only 'the Day of Judgement' in different statements."
   },
   "56:56|82:18": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only 'the Day of Judgement' in different statements."
-   }
+   "why": "Only 'the Day of Judgement' in different statements."
   },
   "56:77|82:11": {
    "keep": false,
-   "why": "A noble Qur'an versus noble scribes; a single common root.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "A noble Qur'an versus noble scribes; a single common root."
-   }
+   "why": "A noble Qur'an versus noble scribes; a single common root."
   },
   "56:78|82:11": {
    "keep": false,
-   "why": "A hidden book versus scribes; a shared root only.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "A hidden book versus scribes; a shared root only."
-   }
+   "why": "A hidden book versus scribes; a shared root only."
   },
   "56:94|82:15": {
-   "keep": false,
-   "why": "Same style: the burning of Hell, with the same rare verb. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same style: the burning of Hell, with the same rare verb."
-   }
+   "keep": true,
+   "why": "Same style: the burning of Hell, with the same rare verb."
   },
   "56:94|82:14": {
    "keep": false,
-   "why": "Only the word Hell.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the word Hell."
-   }
+   "why": "Only the word Hell."
   },
   "56:11|83:21": {
    "keep": true,
@@ -24886,12 +24292,7 @@
   },
   "57:12|61:12": {
    "keep": false,
-   "why": "Only the gardens formula and the great triumph; reward formula.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the gardens formula and the great triumph; reward formula."
-   }
+   "why": "Only the gardens formula and the great triumph; reward formula."
   },
   "57:12|65:11": {
    "keep": false,
@@ -25012,13 +24413,8 @@
    "why": "Common words on witness and messenger in unrelated statements."
   },
   "64:9|66:8": {
-   "keep": false,
-   "why": "Same promise with the same words: expiating misdeeds and admitting to gardens. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same promise with the same words: expiating misdeeds and admitting to gardens."
-   }
+   "keep": true,
+   "why": "Same promise with the same words: expiating misdeeds and admitting to gardens."
   },
   "64:4|67:13": {
    "keep": false,
@@ -25130,31 +24526,16 @@
    "why": "Same description of the Garden with rare words: its fruit clusters hanging near."
   },
   "69:3|77:14": {
-   "keep": false,
-   "why": "Same style on a name of the Hour: what will make you know what is ...? (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same style on a name of the Hour: what will make you know what is ...?"
-   }
+   "keep": true,
+   "why": "Same style on a name of the Hour: what will make you know what is ...?"
   },
   "69:4|77:15": {
    "keep": false,
-   "why": "Only the root of denial.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of denial."
-   }
+   "why": "Only the root of denial."
   },
   "69:5|77:16": {
    "keep": false,
-   "why": "Only the root of destroying.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the root of destroying."
-   }
+   "why": "Only the root of destroying."
   },
   "69:13|78:18": {
    "keep": true,
@@ -25322,13 +24703,11 @@
   },
   "43:82|56:74": {
    "keep": false,
-   "why": "Only general glorification of the Lord; the heavens-name match is a false root link.",
-   "checked": true
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
   },
   "43:82|56:96": {
    "keep": false,
-   "why": "Only general glorification of the Lord; the heavens-name match is a false root link.",
-   "checked": true
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
   },
   "43:82|78:37": {
    "keep": true,
@@ -25357,21 +24736,11 @@
   },
   "45:11|51:37": {
    "keep": false,
-   "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
-   }
+   "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
   },
   "45:36|51:23": {
    "keep": false,
-   "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
-   }
+   "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
   },
   "51:23|78:37": {
    "keep": false,
@@ -25501,12 +24870,7 @@
   },
   "64:10|66:9": {
    "keep": false,
-   "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive."
-   }
+   "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive."
   },
   "64:10|67:6": {
    "keep": false,
@@ -25519,12 +24883,7 @@
   },
   "64:14|66:1": {
    "keep": false,
-   "why": "Only spouses and the closing divine names; different subjects.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only spouses and the closing divine names; different subjects."
-   }
+   "why": "Only spouses and the closing divine names; different subjects."
   },
   "68:15|83:13": {
    "keep": true,
@@ -25651,8 +25010,7 @@
   },
   "44:36|68:41": {
    "keep": false,
-   "why": "Dropped with the page (owner removed)",
-   "checked": true
+   "why": "Dropped with the page"
   },
   "47:1|58:16": {
    "keep": false,
@@ -25666,18 +25024,6 @@
    "checked": true,
    "draft": {}
   },
-  "42:50|53:45": {
-   "keep": false,
-   "why": "Dropped with the page (owner removed)",
-   "checked": true,
-   "draft": {}
-  },
-  "50:1|85:21": {
-   "keep": false,
-   "why": "Dropped with the page (owner removed)",
-   "checked": true,
-   "draft": {}
-  },
   "48:21|65:3": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
@@ -25685,12 +25031,6 @@
    "draft": {}
   },
   "48:5|85:11": {
-   "keep": false,
-   "why": "Dropped with the page (owner removed)",
-   "checked": true,
-   "draft": {}
-  },
-  "69:24|77:43": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
@@ -25721,40 +25061,20 @@
    "draft": {}
   },
   "53:45|92:3": {
-   "keep": false,
-   "why": "Same statement: He created the male and the female. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same statement: He created the male and the female."
-   }
+   "keep": true,
+   "why": "Same statement: He created the male and the female."
   },
   "55:50|88:12": {
-   "keep": false,
-   "why": "Same description of Paradise: a flowing spring in it. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Same description of Paradise: a flowing spring in it."
-   }
+   "keep": true,
+   "why": "Same description of Paradise: a flowing spring in it."
   },
   "57:1|61:1": {
-   "keep": false,
-   "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise. (owner removed)",
-   "checked": true,
-   "draft": {
-    "keep": true,
-    "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise."
-   }
+   "keep": true,
+   "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise."
   },
   "57:8|61:11": {
    "keep": false,
-   "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves.",
-   "checked": true,
-   "draft": {
-    "keep": false,
-    "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves."
-   }
+   "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves."
   },
   "57:2|85:9": {
    "keep": false,
