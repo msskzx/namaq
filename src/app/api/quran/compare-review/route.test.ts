@@ -19,6 +19,7 @@ import { POST } from './route';
 const VERDICTS = 'lib/quran/curation/comparePairs.json';
 const post = (body: unknown, headers: Record<string, string> = {}) => POST(new Request('http://localhost/api', { method: 'POST', headers, body: JSON.stringify(body) }));
 const verdicts = () => JSON.parse(files.get(VERDICTS)!).pairs;
+const unsaved = { keep: false, why: 'Another page the owner has changed.', checked: true };
 const drafted = { '2:1|3:1': { keep: true, why: 'Same.' }, '2:2|3:2': { keep: false, why: 'Formula.' }, '4:1|5:1': { keep: true, why: 'Other page.' } };
 
 beforeEach(() => {
@@ -26,7 +27,7 @@ beforeEach(() => {
   shell.fail = false;
   shell.committed = JSON.stringify({ pairs: drafted });
   files.clear();
-  files.set(VERDICTS, `${JSON.stringify({ pairs: drafted }, null, 1)}\n`);
+  files.set(VERDICTS, `${JSON.stringify({ pairs: { ...drafted, '4:1|5:1': unsaved } }, null, 1)}\n`);
   files.set('app/quran/compare/pairs.json', JSON.stringify({ pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }] }));
   files.set('app/quran/compare/passagePairs.json', JSON.stringify({ pairs: [] }));
   files.set('lib/quran/curation/compareLinks.json', JSON.stringify({ links: [] }));
@@ -47,7 +48,7 @@ describe('the compare review route', () => {
   it('changes only the pairs of that page, keeping the file format', async () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(200);
     expect(verdicts()['2:1|3:1']).toEqual({ keep: false, why: 'Same. (owner removed)', checked: true });
-    expect(verdicts()['4:1|5:1']).toEqual(drafted['4:1|5:1']);
+    expect(verdicts()['4:1|5:1']).toEqual(unsaved);
     expect(files.get(VERDICTS)!.endsWith('}\n')).toBe(true);
   });
 
@@ -56,7 +57,7 @@ describe('the compare review route', () => {
     await post({ a: 2, b: 3, action: 'agree' });
     expect(verdicts()['2:1|3:1']).toEqual({ keep: true, why: 'Same.', checked: true });
     await post({ a: 2, b: 3, action: 'undo' });
-    expect(verdicts()).toEqual(drafted);
+    expect(verdicts()).toEqual({ ...drafted, '4:1|5:1': unsaved });
   });
 
   it('restores the file when the cards cannot be rebuilt', async () => {

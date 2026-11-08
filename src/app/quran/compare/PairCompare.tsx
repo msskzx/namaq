@@ -131,7 +131,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {todo && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{ar ? 'راجعت كل الصفحات.' : 'Every page is reviewed.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
+        {todo && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{ar ? 'راجعت كل الصفحات.' : 'Every page is reviewed.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
