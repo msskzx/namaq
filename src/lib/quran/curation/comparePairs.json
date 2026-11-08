@@ -8240,47 +8240,58 @@
   },
   "3:6|45:2": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:9|45:26": {
    "keep": true,
-   "why": "Gathering people to a Day in which there is no doubt."
+   "why": "Gathering people to a Day in which there is no doubt.",
+   "checked": true
   },
   "3:21|45:8": {
    "keep": true,
-   "why": "Those who reject Allah's signs: give them tidings of a painful punishment."
+   "why": "Those who reject Allah's signs: give them tidings of a painful punishment.",
+   "checked": true
   },
   "3:25|45:22": {
    "keep": true,
-   "why": "Every soul repaid for what it earned, and they are not wronged."
+   "why": "Every soul repaid for what it earned, and they are not wronged.",
+   "checked": true
   },
   "3:57|45:30": {
-   "keep": true,
-   "why": "As for those who believe and do righteous deeds: their reward."
+   "keep": false,
+   "why": "Reward formula only (owner removed).",
+   "checked": true
   },
   "3:62|45:2": {
    "keep": false,
-   "why": "Shared closing names only; different subjects."
+   "why": "Shared closing names only; different subjects.",
+   "checked": true
   },
   "3:93|45:25": {
    "keep": true,
-   "why": "Challenge: bring ... if you are truthful."
+   "why": "Contrast: the Prophet's challenge and the disbelievers' challenge, both with 'if you are truthful' (owner kept).",
+   "checked": true
   },
   "3:108|45:6": {
    "keep": true,
-   "why": "These are the verses of Allah We recite to you in truth."
+   "why": "These are the verses of Allah We recite to you in truth.",
+   "checked": true
   },
   "3:177|45:11": {
-   "keep": true,
-   "why": "Those who disbelieve: a painful punishment."
+   "keep": false,
+   "why": "Painful punishment formula only (owner removed).",
+   "checked": true
   },
   "3:189|45:22": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:189|45:27": {
-   "keep": true,
-   "why": "To Allah belongs the dominion of the heavens and the earth."
+   "keep": false,
+   "why": "Dominion of the heavens and the earth formula only (owner removed).",
+   "checked": true
   },
   "3:3|46:30": {
    "keep": true,
