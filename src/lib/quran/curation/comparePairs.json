@@ -8449,35 +8449,43 @@
   },
   "3:27|57:6": {
    "keep": true,
-   "why": "He merges the night into the day and the day into the night."
+   "why": "He merges the night into the day and the day into the night.",
+   "checked": true
   },
   "3:29|57:2": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:83|57:5": {
    "keep": false,
-   "why": "Shared heavens-and-earth and return to Him only."
+   "why": "Shared heavens-and-earth and return to Him only.",
+   "checked": true
   },
   "3:109|57:5": {
    "keep": true,
-   "why": "To Allah belongs the heavens and the earth, and to Him all matters return."
+   "why": "To Allah belongs the heavens and the earth, and to Him all matters return.",
+   "checked": true
   },
   "3:133|57:21": {
    "keep": true,
-   "why": "Race to forgiveness from your Lord and a garden as wide as the heavens and the earth."
+   "why": "Race to forgiveness from your Lord and a garden as wide as the heavens and the earth.",
+   "checked": true
   },
   "3:174|57:29": {
    "keep": true,
-   "why": "Allah's bounty, and Allah is the possessor of great bounty."
+   "why": "Allah's bounty, and Allah is the possessor of great bounty.",
+   "checked": true
   },
   "3:189|57:2": {
    "keep": true,
-   "why": "His is the dominion of the heavens and the earth; able over all things."
+   "why": "His is the dominion of the heavens and the earth; able over all things.",
+   "checked": true
   },
   "3:189|57:5": {
-   "keep": true,
-   "why": "His is the dominion of the heavens and the earth."
+   "keep": false,
+   "why": "Only the dominion of the heavens and the earth (owner removed).",
+   "checked": true
   },
   "3:10|58:17": {
    "keep": true,
