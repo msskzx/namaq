@@ -18,6 +18,8 @@
 .spread mark.related { color: color-mix(in srgb, var(--home-root) 45%, var(--home-muted)); }
 .spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }
 .spread mark.lit { background: var(--home-highlight); color: var(--home-on-highlight); box-shadow: 0 0 0 1px var(--home-highlight-border); }
+/* the word a read-along is on: a line under it, over any highlight */
+.spread mark.reading, .spread span.reading { border-radius: 0.25rem; background-image: linear-gradient(var(--home-accent), var(--home-accent)); background-size: 100% 2px; background-position: bottom; background-repeat: no-repeat; }
 /* compact: one card holding both ayat, a small label over each, as on the compare pair list */
 .compact { column-gap: 0; row-gap: 0; border: 1px solid var(--home-rule); border-radius: 0.5rem; background: var(--home-paper-deep); }
 .compact > .page { border: 0; background: transparent; padding: 0.75rem 1rem 1rem; }
