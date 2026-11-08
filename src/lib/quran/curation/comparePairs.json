@@ -22221,15 +22221,30 @@
   },
   "52:7|70:1": {
    "keep": true,
-   "why": "Same idea and words: the punishment that will occur."
+   "why": "Same idea and words: the punishment that will occur.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea and words: the punishment that will occur."
+   }
   },
   "52:8|70:2": {
    "keep": true,
-   "why": "Same clause: nothing can avert it."
+   "why": "Same clause: nothing can avert it.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause: nothing can avert it."
+   }
   },
   "52:12|70:42": {
    "keep": true,
-   "why": "Rare pairing on the same deniers: plunging and playing."
+   "why": "Rare pairing on the same deniers: plunging and playing.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare pairing on the same deniers: plunging and playing."
+   }
   },
   "52:12|74:45": {
    "keep": true,
@@ -24418,7 +24433,12 @@
   },
   "52:45|70:42": {
    "keep": true,
-   "why": "Same command in near-identical words: leave them until they meet their Day."
+   "why": "Same command in near-identical words: leave them until they meet their Day.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same command in near-identical words: leave them until they meet their Day."
+   }
   },
   "53:18|79:20": {
    "keep": true,
