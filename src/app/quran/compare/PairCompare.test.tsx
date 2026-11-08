@@ -230,7 +230,7 @@ describe('PairCompare', () => {
         act(() => { vi.advanceTimersByTime(2600); });
         expect(reading().closest('button')!.textContent).toContain('109');
         act(() => { vi.advanceTimersByTime(1300); });
-        act(() => { vi.advanceTimersByTime(1300); });
+        act(() => { vi.advanceTimersByTime(2600); });
         expect(screen.getByRole('button', { name: /^الشعراء ١٢٧: / }).getAttribute('aria-pressed')).toBe('true');
         expect(reading().textContent).toBe('إن');
         expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);

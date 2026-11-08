@@ -22,7 +22,8 @@ export function readPlan(card: PairCard): ReadStep[] {
 /** Where each ayah read starts, for the progress bars. */
 export const ayahStarts = (plan: ReadStep[]) => plan.flatMap((step, i) => (i === 0 || plan[i - 1].last ? [i] : []));
 
-export const READ_SPEEDS = [1, 1.5, 2, 0.5];
+// No 0.5×: 1× is already the slow pace.
+export const READ_SPEEDS = [1, 1.5, 2, 3];
 // Milliseconds at 1×: a word, the longer stay on a word with a partner, the pause at an ayah's end. 1× is a calm reading pace.
 const WORD = 760;
 const MATCH = 1300;
