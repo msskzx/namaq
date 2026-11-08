@@ -13480,27 +13480,57 @@
   },
   "42:3|45:2": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:6|45:10": {
    "keep": true,
-   "why": "Same subject: those who took protectors besides Allah."
+   "why": "Same subject: those who took protectors besides Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same subject: those who took protectors besides Allah."
+   }
   },
   "42:8|45:19": {
    "keep": false,
-   "why": "Only 'wrongdoers' and 'protector'; Allah's will to make one nation vs wrongdoers allying each other."
+   "why": "Only 'wrongdoers' and 'protector'; Allah's will to make one nation vs wrongdoers allying each other.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'wrongdoers' and 'protector'; Allah's will to make one nation vs wrongdoers allying each other."
+   }
   },
   "42:9|45:10": {
    "keep": true,
-   "why": "Same subject: those who took protectors besides Allah."
+   "why": "Same subject: those who took protectors besides Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same subject: those who took protectors besides Allah."
+   }
   },
   "42:14|45:17": {
    "keep": true,
-   "why": "Same words: they differed only after knowledge came to them, out of rivalry; their Lord judges between them."
+   "why": "Same words: they differed only after knowledge came to them, out of rivalry; their Lord judges between them.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: they differed only after knowledge came to them, out of rivalry; their Lord judges between them."
+   }
   },
   "42:17|45:2": {
    "keep": true,
-   "why": "Same idea: the Book sent down from Allah."
+   "why": "Same idea: the Book sent down from Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: the Book sent down from Allah."
+   }
   },
   "42:3|46:2": {
    "keep": false,
@@ -20976,11 +21006,21 @@
   },
   "42:29|45:4": {
    "keep": true,
-   "why": "Same sign in the same words: what He has dispersed of moving creatures."
+   "why": "Same sign in the same words: what He has dispersed of moving creatures.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sign in the same words: what He has dispersed of moving creatures."
+   }
   },
   "42:29|45:3": {
    "keep": false,
-   "why": "Only signs in the heavens and the earth, a stock phrase."
+   "why": "Only signs in the heavens and the earth, a stock phrase.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only signs in the heavens and the earth, a stock phrase."
+   }
   },
   "42:37|53:32": {
    "keep": true,
