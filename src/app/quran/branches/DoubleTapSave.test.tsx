@@ -36,6 +36,13 @@ describe('DoubleTapSave', () => {
     expect(readBookmarks().map(item => item.id)).toEqual(['t1']);
   });
 
+  it('saves the given link as it is when one is passed', () => {
+    render(<DoubleTapSave id="compare:2:154|16:21" text="ولا تقولوا" href="/quran/compare?a=2&b=16#c-2-154-16-21"><div data-testid="card" /></DoubleTapSave>);
+    tap(screen.getByTestId('card'), 0);
+    tap(screen.getByTestId('card'), 100);
+    expect(readBookmarks()).toMatchObject([{ id: 'compare:2:154|16:21', href: '/quran/compare?a=2&b=16#c-2-154-16-21' }]);
+  });
+
   it('ignores taps on buttons and drags', () => {
     render(<DoubleTapSave id="t1" text="x"><div data-testid="tree" /><button type="button">b</button></DoubleTapSave>);
     const button = screen.getByRole('button', { name: 'b' });

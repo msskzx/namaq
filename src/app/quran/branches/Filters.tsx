@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 
 import Link from 'next/link';
 import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
+import { isCompareBookmark } from '@/lib/compareBookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
@@ -89,7 +90,7 @@ export function FilterButton({ range, view, allSurahs = [] }: { range: JuzRange 
     }
     const juz = draft.unit === 'juz' && next && (next.from !== 1 || next.to !== 30) ? next : undefined;
     router.replace(branchesHref('', juz, { ...view, surah: undefined, occurrences: undefined, page: undefined, card: undefined, filters,
-      saved: draft.saved ? view.saved?.length ? view.saved : readBookmarks().map(item => item.id) : undefined }), { scroll: false });
+      saved: draft.saved ? view.saved?.length ? view.saved : readBookmarks().filter(item => !isCompareBookmark(item)).map(item => item.id) : undefined }), { scroll: false });
     closePanel();
   };
   const fromLabel = draft.unit === 'surah' ? (ar ? 'من السورة' : 'From chapter') : draft.unit === 'page' ? (ar ? 'من الصفحة' : 'From page') : (ar ? 'من الجزء' : 'From juz');
@@ -133,7 +134,7 @@ const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmark
 
 function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
   const ar = useLanguage().language === 'ar';
-  const saved = useBookmarks();
+  const saved = useBookmarks().filter(item => !isCompareBookmark(item));
   const id = useId();
   const label = ar ? 'المحفوظة فقط' : 'Saved only';
   const hint = !checked && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
