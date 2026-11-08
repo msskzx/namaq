@@ -131,7 +131,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {grouped ? <ul data-all>{surahs.map(n => (
+        {todo && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{ar ? 'راجعت كل الصفحات.' : 'Every page is reviewed.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
@@ -256,8 +256,9 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);
   const index = pairs.findIndex(pair => pair.a === a && pair.b === b);
-  const next = index >= 0 ? pairs[index + 1] : undefined;
+  const after = index >= 0 ? pairs[index + 1] : undefined;
   const nextTodo = states && [...pairs.slice(index + 1), ...pairs.slice(0, Math.max(index, 0))].find(pair => unreviewed(states, pair));
+  const next = todo ? nextTodo : after;
   const choose = () => {
     if (window.matchMedia?.('(min-width: 1024px)').matches) pane.current?.querySelector('input')?.focus();
     else { sheet.current?.showModal(); setOpen(true); }

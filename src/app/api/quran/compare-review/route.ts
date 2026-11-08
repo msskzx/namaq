@@ -8,13 +8,9 @@ import type { Verdict } from '@/lib/quran/curation/comparePairs';
 import { reviewedVerdicts, type ReviewAction } from '@/lib/quran/curation/reviewPage';
 
 type Verdicts = Record<string, Verdict>;
-const ROOT = process.cwd();
-const VERDICTS = join(ROOT, 'src/lib/quran/curation/comparePairs.json');
-const read = (path: string) => JSON.parse(readFileSync(join(ROOT, path), 'utf8'));
-
-// On globalThis because a verdict write hot-reloads this module.
-const store = globalThis as unknown as { compareReviewDrafts?: Map<string, Verdicts> };
-const drafts = (store.compareReviewDrafts ??= new Map<string, Verdicts>());
+const VERDICTS = 'src/lib/quran/curation/comparePairs.json';
+const run = promisify(execFile);
+const read = (path: string) => JSON.parse(readFileSync(join(process.cwd(), path), 'utf8'));
 
 function pageKeys(a: number, b: number): string[] {
   const pairs: { a: string; b: string }[] = [...read('src/app/quran/compare/pairs.json').pairs, ...read('src/app/quran/compare/passagePairs.json').pairs];
@@ -25,7 +21,7 @@ function pageKeys(a: number, b: number): string[] {
   });
 }
 
-/** Records the owner's choice for a whole page on their own machine. The file changes stay uncommitted until reviewed. */
+/** Records the owner's choice for a whole page on their own machine, working from the last commit so a choice can be switched or undone. */
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
   const origin = request.headers.get('origin');
@@ -33,22 +29,26 @@ export async function POST(request: Request) {
   const { a, b, action } = await request.json() as { a: number; b: number; action: ReviewAction | 'undo' };
   if (!Number.isInteger(a) || !Number.isInteger(b) || a < 1 || b > 114 || a >= b || !['agree', 'drop', 'undo'].includes(action)) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
 
-  const data = JSON.parse(readFileSync(VERDICTS, 'utf8')) as { pairs: Verdicts };
+  const cwd = process.cwd();
+  const path = join(cwd, VERDICTS);
+  const committed = JSON.parse((await run('git', ['show', `HEAD:${VERDICTS}`], { cwd, maxBuffer: 1 << 26 })).stdout).pairs as Verdicts;
+  const before = readFileSync(path, 'utf8');
+  const data = JSON.parse(before) as { pairs: Verdicts };
   const keys = pageKeys(a, b);
-  const page = `${a}:${b}`;
   if (action === 'undo') {
-    const drafted = drafts.get(page);
-    if (!drafted) return NextResponse.json({ ok: false });
     for (const key of keys) {
-      if (drafted[key]) data.pairs[key] = drafted[key];
+      if (committed[key]) data.pairs[key] = committed[key];
       else delete data.pairs[key];
     }
-    drafts.delete(page);
   } else {
-    if (!drafts.has(page)) drafts.set(page, Object.fromEntries(keys.flatMap(key => (data.pairs[key] ? [[key, data.pairs[key]]] : []))));
-    Object.assign(data.pairs, reviewedVerdicts(drafts.get(page)!, keys, action));
+    Object.assign(data.pairs, reviewedVerdicts(committed, keys, action));
   }
-  writeFileSync(VERDICTS, `${JSON.stringify(data, null, 1)}\n`);
-  await promisify(execFile)('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd: ROOT });
+  writeFileSync(path, `${JSON.stringify(data, null, 1)}\n`);
+  try {
+    await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd });
+  } catch {
+    writeFileSync(path, before);
+    return NextResponse.json({ error: 'Could not rebuild the cards' }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }
