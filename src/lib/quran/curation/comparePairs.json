@@ -13596,16 +13596,19 @@
    "checked": true
   },
   "43:25|47:10": {
-   "keep": true,
-   "why": "Same warning: see how was the end of the deniers / those before them."
+   "keep": false,
+   "why": "Same warning: see how was the end of the deniers / those before them. (owner removed)",
+   "checked": true
   },
   "43:63|47:26": {
    "keep": false,
-   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise."
+   "why": "Only 'obey' and 'some'; Isa's call vs hypocrites' secret promise.",
+   "checked": true
   },
   "43:66|47:18": {
-   "keep": true,
-   "why": "Same words: are they waiting except for the Hour to come upon them suddenly?"
+   "keep": false,
+   "why": "Same words: are they waiting except for the Hour to come upon them suddenly? (owner removed)",
+   "checked": true
   },
   "43:8|50:36": {
    "keep": true,
@@ -20863,7 +20866,8 @@
   },
   "43:70|47:6": {
    "keep": false,
-   "why": "Only entering the Garden, a common reward statement."
+   "why": "Only entering the Garden, a common reward statement.",
+   "checked": true
   },
   "43:84|48:4": {
    "keep": false,
