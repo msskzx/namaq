@@ -27,6 +27,14 @@ describe('compare bookmarks', () => {
     expect(savedAs('x', saved('x'))).toEqual(['compare:x']);
   });
 
+  it('reads an ayah with several partners, and matches only the ayat it holds', () => {
+    expect(compareBookmarkAyat({ id: 'compare:10:72|26:109,127' })).toEqual(['10:72', '26:109', '26:127']);
+    const saved = [{ id: 'compare:10:72|26:109,127,145' }];
+    expect(savedAs('10:72|26:127', saved)).toEqual(['compare:10:72|26:109,127,145']);
+    expect(savedAs('10:72|26:120', saved)).toEqual([]);
+    expect(bookmarkReferences({ id: saved[0].id, href: '/quran/compare?a=10&b=26#c' }, {})).toEqual([{ surah: 10, ayat: [72] }, { surah: 26, ayat: [109, 127, 145] }]);
+  });
+
   it('lists the surah pairs that hold a saved card', () => {
     expect([...savedSurahPairs([{ id: 'compare:2:154|16:21' }, { id: 'compare:2:1|16:3' }, { id: 'compare:52:25|68:30' }, { id: 'tree-1' }])]).toEqual(['2:16', '52:68']);
   });

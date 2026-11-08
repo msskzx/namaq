@@ -23,6 +23,39 @@ describe('compare pair cards', () => {
     expect(block.group).toBeDefined();
   });
 
+  it('shows an ayah paired with several far ones as one card, opening on the first', () => {
+    const card = pairCards(10, 26).find(item => item.id === '10:72|26:109,127,145,164,180')!;
+    expect(card.many?.side).toBe(1);
+    expect(card.many?.options.map(option => option.ayah.number)).toEqual([109, 127, 145, 164, 180]);
+    expect(card.sides.map(side => side.ayah)).toEqual([72, 109]);
+    expect(card.pairs).toHaveLength(5);
+    expect(pairCards(10, 26).filter(item => item.id.startsWith('10:72|'))).toHaveLength(1);
+    for (const option of card.many!.options) {
+      const links = [option.shared, option.ayah].map(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link).sort());
+      expect(links[0].length).toBeGreaterThan(0);
+      expect(links[0]).toEqual(links[1]);
+    }
+  });
+
+  it('works in both directions and leaves pairs inside a range alone', () => {
+    const reversed = pairCards(26, 34).find(item => item.id === '26:109,127,145,164,180|34:47')!;
+    expect(reversed.many?.side).toBe(0);
+    expect(reversed.sides.map(side => side.ayah)).toEqual([109, 47]);
+    const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
+    expect(moses.many).toBeUndefined();
+    expect(pairCards(7, 26).some(card => card.many?.options.some(option => moses.pairs!.some(pair => pair.id === option.id)))).toBe(false);
+  });
+
+  it('puts every pair on exactly one card, with verdicts per pair in review', () => {
+    const count = new Map<string, number>();
+    for (const card of pairCards(2, 3, true)) for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) count.set(id, (count.get(id) ?? 0) + 1);
+    expect(count.size).toBe(78);
+    expect([...count.values()].every(n => n === 1)).toBe(true);
+    const many = pairCards(10, 26, true).find(item => item.id === '10:72|26:109,127,145,164,180')!;
+    expect(many.verdict).toBeUndefined();
+    expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
+  });
+
   it('keeps every word link on both sides of a range card', () => {
     for (const card of pairCards(7, 26)) {
       const [a, b] = card.sides.map(side => new Set(side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link))));
@@ -67,8 +100,8 @@ describe('compare pair cards', () => {
   });
 
   it('matches words whose order crosses, and words the corpus spells apart', () => {
-    const card = pairCards(2, 3).find(card => card.id === '2:135|3:67')!;
-    const [a, b] = card.sides.map(side => side.ayat[0].marks ?? {});
+    const option = pairCards(2, 3).flatMap(card => card.many?.options ?? []).find(item => item.id === '2:135|3:67')!;
+    const [a, b] = [option.shared.marks ?? {}, option.ayah.marks ?? {}];
     // هودا ↔ يهوديا and نصارى ↔ نصرانيا
     expect([a[2]?.link, a[4]?.link]).toEqual([b[3]?.link, b[5]?.link]);
     expect(a[2]?.kind).toBe('root');

@@ -7811,51 +7811,63 @@
   },
   "3:6|27:9": {
    "keep": false,
-   "why": "Shared closing names only; different scenes."
+   "why": "Shared closing names only; different scenes.",
+   "checked": true
   },
   "3:29|27:65": {
    "keep": false,
-   "why": "Shared knowledge-of-heavens-and-earth wording; different subjects."
+   "why": "Shared knowledge-of-heavens-and-earth wording; different subjects.",
+   "checked": true
   },
   "3:56|27:21": {
    "keep": false,
-   "why": "Shared 'punish with a severe punishment' only; Allah's punishment of disbelievers versus Sulayman and the hoopoe."
+   "why": "Shared 'punish with a severe punishment' only; Allah's punishment of disbelievers versus Sulayman and the hoopoe.",
+   "checked": true
   },
   "3:62|27:9": {
    "keep": false,
-   "why": "Shared closing names only; different scenes."
+   "why": "Shared closing names only; different scenes.",
+   "checked": true
   },
   "3:80|27:91": {
    "keep": false,
-   "why": "Shared 'muslims' only; different subjects."
+   "why": "Shared 'muslims' only; different subjects.",
+   "checked": true
   },
   "3:89|27:11": {
-   "keep": true,
-   "why": "Except one who repents or replaces evil with good; Forgiving, Merciful."
+   "keep": false,
+   "why": "Only the general repentance clause and 'Forgiving, Merciful'; different subjects (owner removed).",
+   "checked": true
   },
   "3:129|27:87": {
    "keep": false,
-   "why": "Shared heavens-and-earth and 'whom He wills' only; different subjects."
+   "why": "Shared heavens-and-earth and 'whom He wills' only; different subjects.",
+   "checked": true
   },
   "3:137|27:14": {
-   "keep": true,
-   "why": "See how was the end of the deniers / corrupters."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:137|27:51": {
-   "keep": true,
-   "why": "See how was the end."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:137|27:69": {
-   "keep": true,
-   "why": "Travel in the land and see how was the end."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:189|27:23": {
    "keep": false,
-   "why": "Shared 'all things' only; different subjects."
+   "why": "Shared 'all things' only; different subjects.",
+   "checked": true
   },
   "3:189|27:87": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:18|28:70": {
    "keep": true,

@@ -157,4 +157,40 @@ describe('PairCompare', () => {
       window.location.hash = '';
     });
   });
+
+  describe('one ayah against several', () => {
+    const option = (n: number, link: string) => ({
+      id: `10:72|26:${n}`,
+      ayah: { number: n, words: ['إن', String(n)], marks: { 0: { kind: 'exact' as const, link } } },
+      shared: { number: 72, words: ['إن', 'أجري'], marks: { [n === 109 ? 0 : 1]: { kind: 'exact' as const, link } } },
+    });
+    const options = [option(109, 'a'), option(127, 'b')];
+    const many: PairCard = {
+      id: '10:72|26:109,127',
+      pairs: [{ id: '10:72|26:109', verdict: { keep: true, why: 'one' } }, { id: '10:72|26:127', verdict: { keep: true, why: 'two' } }],
+      many: { side: 1, options },
+      sides: [{ surah: 10, ayah: 72, ayat: [options[0].shared] }, { surah: 26, ayah: 109, ayat: [options[0].ayah] }],
+    };
+    const names2 = { ...names, 10: { ar: 'يُونُسَ', en: 'Yunus' } };
+
+    it('opens on the first partner and moves the marks when another is picked', () => {
+      const { container } = render(<PairCompare a={10} b={26} cards={[many]} pairs={pairs} names={names2} review />);
+      const first = screen.getByRole('button', { name: 'الشعراء ١٠٩' });
+      const second = screen.getByRole('button', { name: 'الشعراء ١٢٧' });
+      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء ١٠٩ · ١٢٧' })).toBeTruthy();
+      expect(first.getAttribute('aria-pressed')).toBe('true');
+      expect(second.getAttribute('aria-pressed')).toBe('false');
+      expect(first.querySelector('mark')).toBeTruthy();
+      expect(second.querySelector('mark')).toBeNull();
+      expect(container.querySelector('mark[data-link="a"]')).toBeTruthy();
+      fireEvent.click(second);
+      expect(second.getAttribute('aria-pressed')).toBe('true');
+      expect(first.querySelector('mark')).toBeNull();
+      expect(second.querySelector('mark')).toBeTruthy();
+      expect(container.querySelector('mark[data-link="a"]')).toBeNull();
+      expect(container.querySelectorAll('mark[data-link="b"]')).toHaveLength(2);
+      expect(screen.getByText(/10:72 ~ 26:127/).textContent).toContain('two');
+    });
+  });
 });
+

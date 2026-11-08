@@ -9,7 +9,7 @@ import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
 import { NavActions } from '@/components/common/NavBar';
 import { useLanguage } from '@/components/language/LanguageContext';
-import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
+import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
@@ -143,20 +143,23 @@ const pairHref = (a: number, b: number, review: boolean) => `${surahPairHref(a, 
 
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode): SpreadPage {
+const lightMarks = (lit: string | null) => (ayah: SpreadAyah) => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) });
+
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick'> & { numbers: number[]; ayat: SpreadAyah[][] }): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   const show = (n: number) => (ar ? num(n) : n);
   const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
   return {
-    title: `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
+    title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}` : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
     action: <span className="flex">
       {extra}
       <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
         <BookOpen size={16} aria-hidden />
       </Link>
     </span>,
-    rows: [side.ayat.map(ayah => ({ ...ayah, marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: mark.link === lit }])) }))],
+    rows: partners?.ayat ?? [side.ayat.map(lightMarks(lit))],
+    ...(partners ? { pick: partners.pick } : {}),
   };
 }
 
@@ -177,13 +180,25 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
     if (id) setLit(current => (current === id ? null : id));
   };
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
+  const [selected, setSelected] = useState(0);
+  const option = card.many?.options[selected];
+  const shownSides = card.sides.map((side, i) => !option ? side : i === card.many!.side ? { ...side, ayah: option.ayah.number, ayat: [option.ayah] } : { ...side, ayat: [option.shared] });
+  const partners = (side: CardSide) => {
+    const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
+    const options = card.many!.options;
+    return {
+      numbers: options.map(item => item.ayah.number),
+      ayat: options.map((item, i) => [i === selected ? lightMarks(lit)(item.ayah) : { ...item.ayah, marks: undefined }]),
+      pick: { selected, labels: options.map(item => `${name} ${ar ? num(item.ayah.number) : item.ayah.number}`), onPick: (row: number) => { if (row !== selected) { setSelected(row); setLit(null); } } },
+    };
+  };
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
         <div onClick={event => pick(event.target)}>
-          <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
+          <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined))} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined))} />
         </div>
       </DoubleTapSave>
       <div className="flex justify-end">
@@ -216,7 +231,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
     const [surahA, ayahA, surahB, ayahB] = window.location.hash.match(/^#c-(\d+)-(\d+)-(\d+)-(\d+)$/)?.slice(1).map(Number) ?? [];
     if (!surahA || document.getElementById(window.location.hash.slice(1))) return;
     const holds = (side: CardSide, surah: number, ayah: number) => side.surah === surah && side.ayat.some(item => item.number === ayah);
-    const found = cards.find(card => holds(card.sides[0], surahA, ayahA) && holds(card.sides[1], surahB, ayahB));
+    const found = cards.find(card => card.pairs?.some(pair => pair.id === `${surahA}:${ayahA}|${surahB}:${ayahB}`) || (holds(card.sides[0], surahA, ayahA) && holds(card.sides[1], surahB, ayahB)));
     if (found) document.getElementById(anchorOf(found))?.scrollIntoView?.();
   }, [cards]);
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
