@@ -163,7 +163,7 @@ export function DoubleTapSave({ id, text, href, aliases = [], children }: { id: 
     if (!id) return;
     // Taps only: not a drag or a swipe, and not on a button, link or field.
     if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > TAP_SLOP) return;
-    if ((event.target as Element).closest('button, a, input, summary, [role="button"]')) { last.current = null; return; }
+    if ((event.target as Element).closest('button:not([data-tap-through]), a, input, summary, [role="button"]')) { last.current = null; return; }
     const tap = { x: event.clientX, y: event.clientY, at: Date.now() };
     const previous = last.current;
     if (previous && tap.at - previous.at < TAP_GAP && Math.hypot(tap.x - previous.x, tap.y - previous.y) < TAP_SLOP * 2) {

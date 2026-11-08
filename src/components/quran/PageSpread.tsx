@@ -37,16 +37,18 @@ export function MatchLegend({ exact, root }: { exact?: string; root?: string }) 
 
 export default function PageSpread({ pages, ruled = false, stackOnMobile = false, compact = false }: { pages: (SpreadPage | null)[]; ruled?: boolean; stackOnMobile?: boolean; compact?: boolean }) {
   const rows = Math.max(...pages.map(page => page?.rows.length ?? 0));
+  // Beside a stack of rows to pick from, the other side is one cell, so a long ayah does not push the stack's rows apart.
+  const stacked = pages.some(page => page?.pick);
   return (
     <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''} ${compact ? styles.compact : ''}`} dir="rtl">
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + (page.footer ? 2 : 1)}` }} aria-label={page.label ?? page.title}>
           <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}{page.action && <span className={styles.action}>{page.action}</span>}</header>
           <div className={styles.lines} lang="ar">
-            {Array.from({ length: rows }, (_, row) => (
-              <p key={row} className={page.pick && row > 0 && page.rows[row] ? styles.pickDivider : undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
+            {Array.from({ length: stacked && !page.pick ? 1 : rows }, (_, row) => (
+              <p key={row} style={stacked && !page.pick ? { gridRow: `span ${rows}` } : undefined} className={page.pick && row > 0 && page.rows[row] ? styles.pickDivider : undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
                 {page.pick && page.rows[row]
-                  ? <button type="button" className={styles.pick} aria-pressed={page.pick.selected === row} aria-label={page.pick.labels[row]} onClick={() => page.pick!.onPick(row)}><RowAyat ayat={page.rows[row]} /></button>
+                  ? <button type="button" data-tap-through className={styles.pick} aria-pressed={page.pick.selected === row} onClick={() => page.pick!.onPick(row)}><span className="sr-only">{page.pick.labels[row]}: </span><RowAyat ayat={page.rows[row]} /></button>
                   : <RowAyat ayat={page.rows[row] ?? []} />}
               </p>
             ))}

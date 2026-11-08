@@ -175,8 +175,8 @@ describe('PairCompare', () => {
 
     it('opens on the first partner and moves the marks when another is picked', () => {
       const { container } = render(<PairCompare a={10} b={26} cards={[many]} pairs={pairs} names={names2} review />);
-      const first = screen.getByRole('button', { name: 'الشعراء ١٠٩' });
-      const second = screen.getByRole('button', { name: 'الشعراء ١٢٧' });
+      const first = screen.getByRole('button', { name: /^الشعراء ١٠٩: / });
+      const second = screen.getByRole('button', { name: /^الشعراء ١٢٧: / });
       expect(screen.getByRole('heading', { level: 3, name: 'الشعراء ١٠٩ · ١٢٧' })).toBeTruthy();
       expect(first.getAttribute('aria-pressed')).toBe('true');
       expect(second.getAttribute('aria-pressed')).toBe('false');
@@ -190,6 +190,20 @@ describe('PairCompare', () => {
       expect(container.querySelector('mark[data-link="a"]')).toBeNull();
       expect(container.querySelectorAll('mark[data-link="b"]')).toHaveLength(2);
       expect(screen.getByText(/10:72 ~ 26:127/).textContent).toContain('two');
+    });
+
+    it('gives each partner its ayah text as well as its reference', () => {
+      render(<PairCompare a={10} b={26} cards={[many]} pairs={pairs} names={names2} />);
+      expect(screen.getByRole('button', { name: /^الشعراء ١٢٧: / }).textContent).toContain('127');
+    });
+
+    it('still scrolls a saved link to the card when its first partner has been removed', () => {
+      window.location.hash = '#c-10-72-26-100';
+      const scroll = vi.fn();
+      Element.prototype.scrollIntoView = scroll;
+      render(<PairCompare a={10} b={26} cards={[many]} pairs={pairs} names={names2} />);
+      expect((scroll.mock.contexts[0] as Element).id).toBe('c-10-72-26-109');
+      window.location.hash = '';
     });
   });
 });

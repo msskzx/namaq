@@ -231,7 +231,8 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
     const [surahA, ayahA, surahB, ayahB] = window.location.hash.match(/^#c-(\d+)-(\d+)-(\d+)-(\d+)$/)?.slice(1).map(Number) ?? [];
     if (!surahA || document.getElementById(window.location.hash.slice(1))) return;
     const holds = (side: CardSide, surah: number, ayah: number) => side.surah === surah && side.ayat.some(item => item.number === ayah);
-    const found = cards.find(card => card.pairs?.some(pair => pair.id === `${surahA}:${ayahA}|${surahB}:${ayahB}`) || (holds(card.sides[0], surahA, ayahA) && holds(card.sides[1], surahB, ayahB)));
+    const found = cards.find(card => card.pairs?.some(pair => pair.id === `${surahA}:${ayahA}|${surahB}:${ayahB}`) || (holds(card.sides[0], surahA, ayahA) && holds(card.sides[1], surahB, ayahB)))
+      ?? cards.find(card => card.many && (card.many.side === 1 ? holds(card.sides[0], surahA, ayahA) : holds(card.sides[1], surahB, ayahB)));
     if (found) document.getElementById(anchorOf(found))?.scrollIntoView?.();
   }, [cards]);
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';

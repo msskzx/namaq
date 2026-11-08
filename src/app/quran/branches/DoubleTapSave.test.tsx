@@ -43,6 +43,14 @@ describe('DoubleTapSave', () => {
     expect(readBookmarks()).toMatchObject([{ id: 'compare:2:154|16:21', href: '/quran/compare?a=2&b=16#c-2-154-16-21' }]);
   });
 
+  it('saves on a double tap over a row marked to let taps through', () => {
+    render(<DoubleTapSave id="t1" text="x"><button type="button" data-tap-through>row</button></DoubleTapSave>);
+    const row = screen.getByRole('button', { name: 'row' });
+    tap(row, 0);
+    tap(row, 100);
+    expect(readBookmarks().map(item => item.id)).toEqual(['t1']);
+  });
+
   it('ignores taps on buttons and drags', () => {
     render(<DoubleTapSave id="t1" text="x"><div data-testid="tree" /><button type="button">b</button></DoubleTapSave>);
     const button = screen.getByRole('button', { name: 'b' });
