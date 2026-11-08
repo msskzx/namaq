@@ -45,12 +45,22 @@ export default function MushafPage({
   names,
   top,
   mark,
+  hidden,
+  next,
+  flags,
+  onAyah,
 }: {
   page: number;
   data: MushafPageData;
   names: Record<number, string>;
   top?: number;
   mark?: { surah: number; ayah: number };
+  /** Recite mode: ayat not yet revealed keep their place on the page but show no words. */
+  hidden?: (surah: number, ayah: number) => boolean;
+  /** Recite mode: the ayah the next tap reveals. */
+  next?: { surah: number; ayah: number };
+  flags?: Record<string, { forgot?: number; saved?: boolean }>;
+  onAyah?: (surah: number, ayah: number, element: HTMLElement) => void;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -95,11 +105,18 @@ export default function MushafPage({
                 <p data-line className={styles.line}>
                   {lines[index]?.map((group, at) => {
                     const on = marked(group.surah, group.ayah);
+                    const surah = group.surah ?? 0;
+                    const ayah = group.ayah ?? 0;
+                    const veiled = !!hidden?.(surah, ayah);
+                    const flag = flags?.[`${surah}:${ayah}`];
+                    const upcoming = veiled && next?.surah === surah && next.ayah === ayah;
                     return (
-                      <span key={at} data-marked={on || undefined} className={on ? styles.marked : undefined}>
+                      <span key={at} data-marked={on || undefined} data-ayah={`${surah}:${ayah}`} data-veiled={veiled || undefined}
+                        className={[on ? styles.marked : '', veiled ? styles.veiled : '', upcoming ? styles.upcoming : '', flag?.forgot && !veiled ? styles.forgot : '', onAyah && !veiled ? styles.tappable : ''].join(' ')}
+                        onClick={onAyah && !veiled ? event => { event.stopPropagation(); onAyah(surah, ayah, event.currentTarget); } : undefined}>
                         {group.word}
                         {group.marks.map(end => (
-                          <span key={end} className={`${styles.end} ${marked(group.surah, end) ? styles.endMarked : ''}`}>
+                          <span key={end} data-veiled={hidden?.(surah, end) || undefined} className={`${styles.end} ${marked(group.surah, end) ? styles.endMarked : ''} ${hidden?.(surah, end) ? styles.veiled : ''} ${flags?.[`${surah}:${end}`]?.saved && !hidden?.(surah, end) ? styles.saved : ''}`}>
                             {group.word ? ' ' : ''}
                             {num(end)}
                           </span>

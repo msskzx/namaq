@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, File, List, Search } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Bookmark, BookOpen, ChevronDown, ChevronUp, Eye, EyeOff, File, List, Search, Undo2, X, CircleHelp } from 'lucide-react';
+import { markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks, toggleSavedAyah, clearForgotten } from '@/lib/ayahMarks';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Button from '@/components/common/Button';
@@ -49,6 +50,7 @@ export default function ReaderView({
   surahs = [],
   mark,
   fontClass,
+  recite: reciteFrom,
 }: {
   page: number;
   pages: ReaderPage[];
@@ -56,6 +58,8 @@ export default function ReaderView({
   surahs?: IndexSurah[];
   mark?: { surah: number; ayah: number };
   fontClass?: string;
+  /** Recite mode: start hiding from this ayah ("57:1"). */
+  recite?: string;
 }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
@@ -72,6 +76,20 @@ export default function ReaderView({
   const [hidden, setHidden] = useState(false);
   const two = spread && !phone;
   const shown = two ? pages.filter(entry => spreadOf(page).includes(entry.page)) : pages.filter(entry => entry.page === page);
+  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
+  const order = useMemo(() => [...new Set(shown.flatMap(entry => pageGroups(entry.data.items, entry.top).flatMap(line => line?.map(group => `${group.surah}:${group.ayah}`) ?? [])))], [shown]);
+  const [reciting, setReciting] = useState(!!reciteFrom);
+  const [revealed, setRevealed] = useState(0);
+  const start = reciting ? Math.max(0, order.indexOf(reciteFrom ?? '')) : 0;
+  const hiddenAt = start + revealed;
+  const veiled = reciting ? (surah: number, ayah: number) => order.indexOf(`${surah}:${ayah}`) >= hiddenAt : undefined;
+  const nextKey = reciting ? order[hiddenAt] : undefined;
+  const upcoming = nextKey ? { surah: Number(nextKey.split(':')[0]), ayah: Number(nextKey.split(':')[1]) } : undefined;
+  const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
+  const openActions = (surah: number, ayah: number, element: HTMLElement) => {
+    const box = element.getBoundingClientRect();
+    setActions({ key: `${surah}:${ayah}`, x: box.left + box.width / 2, y: box.top });
+  };
   const go = useCallback(
     (step: 1 | -1) => {
       const target = turn(page, two, step);
@@ -182,6 +200,7 @@ export default function ReaderView({
         <Button size="lg" variant="muted" onClick={() => go(1)} disabled={last} aria-label={next} title={next}><NextIcon aria-hidden /></Button>
         {indexAndSearch}
         <Button size="lg" variant="muted" onClick={() => chooseSpread(!spread)} aria-label={layout} title={layout}><LayoutIcon aria-hidden /></Button>
+        <Button size="lg" variant={reciting ? 'primary' : 'muted'} onClick={() => { setReciting(on => !on); setRevealed(0); }} aria-label="تسميع" title="تسميع: أخفِ الآيات وأظهرها واحدة واحدة"><EyeOff aria-hidden /></Button>
       </>, rail)}
       {phone && phoneTools && <NavActions>
         {indexAndSearch}
@@ -221,7 +240,7 @@ export default function ReaderView({
           </div>
         </nav>
       ))}
-      <article ref={stage} dir="rtl" lang="ar" className={`${mushaf.stage} ${two ? mushaf.spread : ''}`} onClick={phone ? event => {
+      <article ref={stage} dir="rtl" lang="ar" className={`${mushaf.stage} ${two ? mushaf.spread : ''}`} onClick={reciting ? () => { setActions(null); setRevealed(count => Math.min(order.length - start, count + 1)); } : phone ? event => {
         if (!(event.target as Element).closest('button, a') && !justSwiped() && !window.getSelection()?.toString()) {
           setPhoneTools(shown => !shown);
         }
@@ -231,9 +250,22 @@ export default function ReaderView({
           {toggleTools}
         </Button>}
         {shown.map(entry => (
-          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} />
+          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={veiled} next={upcoming} flags={marks} onAyah={openActions} />
         ))}
       </article>
+      {actions && <div role="dialog" aria-label={`الآية ${actions.key}`} className={mushaf.ayahActions} style={{ left: actions.x, top: actions.y }}>
+        <Button size="lg" variant={marks[actions.key]?.forgot ? 'primary' : 'muted'} title={marks[actions.key]?.forgot ? `نسيتها ${num(marks[actions.key].forgot!)} مرات، اضغط لمسحها` : 'نسيتها'} aria-label="نسيتها" onClick={() => { (marks[actions.key]?.forgot ? clearForgotten : markForgotten)(actions.key); setActions(null); }}>
+          <CircleHelp aria-hidden />{marks[actions.key]?.forgot ? <span className="text-sm">{num(marks[actions.key].forgot!)}</span> : null}
+        </Button>
+        <Button size="lg" variant={marks[actions.key]?.saved ? 'primary' : 'muted'} title={marks[actions.key]?.saved ? 'إزالة من المحفوظات' : 'احفظ الآية'} aria-label="احفظ الآية" onClick={() => { toggleSavedAyah(actions.key); setActions(null); }}>
+          <Bookmark aria-hidden fill={marks[actions.key]?.saved ? 'currentColor' : 'none'} />
+        </Button>
+      </div>}
+      {reciting && <div className={mushaf.reciteBar} dir="rtl">
+        <Button size="lg" variant="muted" title="ارجع آية" aria-label="ارجع آية" disabled={revealed === 0} onClick={() => setRevealed(count => Math.max(0, count - 1))}><Undo2 aria-hidden /></Button>
+        <Button size="lg" title="أظهر الآية التالية" aria-label="أظهر الآية التالية" disabled={!upcoming} onClick={() => setRevealed(count => count + 1)}><Eye aria-hidden /></Button>
+        <Button size="lg" variant="muted" title="إنهاء التسميع" aria-label="إنهاء التسميع" onClick={() => { setReciting(false); setRevealed(0); }}><X aria-hidden /></Button>
+      </div>}
     </div>
   );
 }
@@ -249,5 +281,6 @@ export function MarkedReaderView(props: ReaderProps) {
   useEffect(() => {
     if (asked && !holds) router.replace(`/quran/read/ayah/${surah}/${ayah}`);
   }, [asked, holds, surah, ayah, router]);
-  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} />;
+  const recite = useSearchParams().get('recite') ?? undefined;
+  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} recite={recite} />;
 }
