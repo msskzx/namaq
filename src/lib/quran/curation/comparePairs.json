@@ -657,144 +657,178 @@
   },
   "7:23|26:51": {
    "keep": false,
-   "why": "Only forgiveness from our Lord as words; Adam's repentance vs the magicians' hope."
+   "why": "Only forgiveness from our Lord as words; Adam's repentance vs the magicians' hope.",
+   "checked": true
   },
   "7:61|26:16": {
    "keep": true,
    "why": "Same statement: a messenger of the Lord of the worlds (Noah / Moses and Aaron).",
-   "ask": "Noah says 'I am a messenger of the Lord of the worlds'; Moses and Aaron are told to say the same. Keep?"
+   "checked": true
   },
   "7:65|26:124": {
    "keep": true,
-   "why": "Same story: Hud, their brother, asks Aad 'will you not fear Allah?'"
+   "why": "Same story: Hud, their brother, asks Aad 'will you not fear Allah?'",
+   "checked": true
   },
   "7:67|26:16": {
    "keep": true,
-   "why": "Same statement: a messenger of the Lord of the worlds (Hud / Moses and Aaron)."
+   "why": "Same statement: a messenger of the Lord of the worlds (Hud / Moses and Aaron).",
+   "checked": true
   },
   "7:72|26:139": {
    "keep": true,
-   "why": "Same scene: Hud's people deny him and are destroyed."
+   "why": "Same scene: Hud's people deny him and are destroyed.",
+   "checked": true
   },
   "7:106|26:31": {
    "keep": true,
-   "why": "Same story: Pharaoh says 'bring it, if you are truthful'."
+   "why": "Same story: Pharaoh says 'bring it, if you are truthful'.",
+   "checked": true
   },
   "7:106|26:154": {
    "keep": true,
-   "why": "Same demand: bring a sign, if you are truthful (Pharaoh / Thamud)."
+   "why": "Same demand: bring a sign, if you are truthful (Pharaoh / Thamud).",
+   "checked": true
   },
   "7:107|26:32": {
    "keep": true,
-   "why": "Same ayah: he threw his staff and it was a clear serpent."
+   "why": "Same ayah: he threw his staff and it was a clear serpent.",
+   "checked": true
   },
   "7:108|26:33": {
    "keep": true,
-   "why": "Same ayah: he drew out his hand and it was white for the onlookers."
+   "why": "Same ayah: he drew out his hand and it was white for the onlookers.",
+   "checked": true
   },
   "7:109|26:34": {
    "keep": true,
-   "why": "Same story: this is a learned magician; said by the chiefs in Al-A'raf, by Pharaoh in Ash-Shu'ara."
+   "why": "Same story: this is a learned magician; said by the chiefs in Al-A'raf, by Pharaoh in Ash-Shu'ara.",
+   "checked": true
   },
   "7:110|26:35": {
    "keep": true,
-   "why": "Same story: he wants to drive you out of your land, so what do you advise?"
+   "why": "Same story: he wants to drive you out of your land, so what do you advise?",
+   "checked": true
   },
   "7:111|26:36": {
    "keep": true,
-   "why": "Same story: delay him and his brother and send gatherers to the cities (أرسل / ابعث)."
+   "why": "Same story: delay him and his brother and send gatherers to the cities (أرسل / ابعث).",
+   "checked": true
   },
   "7:111|26:53": {
    "keep": true,
-   "why": "Same story: sending gatherers to the cities."
+   "why": "Same story: sending gatherers to the cities.",
+   "checked": true
   },
   "7:112|26:37": {
    "keep": true,
-   "why": "Same story: they will bring you every learned magician (ساحر / سحّار)."
+   "why": "Same story: they will bring you every learned magician (ساحر / سحّار).",
+   "checked": true
   },
   "7:113|26:40": {
    "keep": true,
-   "why": "Same story: the magicians and 'if we/they are the victors'."
+   "why": "Same story: the magicians and 'if we/they are the victors'.",
+   "checked": true
   },
   "7:113|26:41": {
    "keep": true,
-   "why": "Same story: the magicians ask Pharaoh for a reward if they win."
+   "why": "Same story: the magicians ask Pharaoh for a reward if they win.",
+   "checked": true
   },
   "7:117|26:45": {
    "keep": true,
-   "why": "Same story: the staff swallows what they faked."
+   "why": "Same story: the staff swallows what they faked.",
+   "checked": true
   },
   "7:120|26:46": {
    "keep": true,
-   "why": "Same ayah: the magicians fell down in prostration."
+   "why": "Same ayah: the magicians fell down in prostration.",
+   "checked": true
   },
   "7:121|26:47": {
    "keep": true,
-   "why": "Same ayah: we believe in the Lord of the worlds."
+   "why": "Same ayah: we believe in the Lord of the worlds.",
+   "checked": true
   },
   "7:123|26:49": {
    "keep": true,
-   "why": "Same story: Pharaoh's threat 'you believed before I permitted you … you will know'."
+   "why": "Same story: Pharaoh's threat 'you believed before I permitted you … you will know'.",
+   "checked": true
   },
   "7:124|26:49": {
    "keep": true,
-   "why": "Same threat: I will cut off your hands and feet on opposite sides and crucify you all."
+   "why": "Same threat: I will cut off your hands and feet on opposite sides and crucify you all.",
+   "checked": true
   },
   "7:125|26:50": {
    "keep": true,
-   "why": "Same answer: to our Lord we will return."
+   "why": "Same answer: to our Lord we will return.",
+   "checked": true
   },
   "7:177|26:139": {
    "keep": false,
-   "why": "Only denial and signs as words."
+   "why": "Only denial and signs as words.",
+   "checked": true
   },
   "7:177|26:154": {
    "keep": false,
-   "why": "Only 'sign' and the letters of مثل; different statements."
+   "why": "Only 'sign' and the letters of مثل; different statements.",
+   "checked": true
   },
   "15:28|38:71": {
    "keep": true,
-   "why": "Same story: I am creating a human being; from clay of altered mud in Al-Hijr, from clay in Sad."
+   "why": "Same story: I am creating a human being; from clay of altered mud in Al-Hijr, from clay in Sad.",
+   "checked": true
   },
   "15:29|38:72": {
    "keep": true,
-   "why": "Same ayah: when I have proportioned him and breathed into him of My spirit, fall in prostration."
+   "why": "Same ayah: when I have proportioned him and breathed into him of My spirit, fall in prostration.",
+   "checked": true
   },
   "15:30|38:73": {
    "keep": true,
-   "why": "Same ayah: the angels prostrated, all of them together."
+   "why": "Same ayah: the angels prostrated, all of them together.",
+   "checked": true
   },
   "15:33|38:75": {
    "keep": true,
-   "why": "Same story: Iblis refuses to prostrate to the one Allah created."
+   "why": "Same story: Iblis refuses to prostrate to the one Allah created.",
+   "checked": true
   },
   "15:34|38:77": {
    "keep": true,
-   "why": "Same ayah: get out of it, you are expelled."
+   "why": "Same ayah: get out of it, you are expelled.",
+   "checked": true
   },
   "15:35|38:78": {
    "keep": true,
-   "why": "Same ayah: the curse is upon you until the Day of Judgement (اللعنة / لعنتي)."
+   "why": "Same ayah: the curse is upon you until the Day of Judgement (اللعنة / لعنتي).",
+   "checked": true
   },
   "15:36|38:79": {
    "keep": true,
-   "why": "Same ayah: My Lord, reprieve me until the Day they are raised."
+   "why": "Same ayah: My Lord, reprieve me until the Day they are raised.",
+   "checked": true
   },
   "15:38|38:81": {
    "keep": true,
-   "why": "Same ayah: until the day of the known time."
+   "why": "Same ayah: until the day of the known time.",
+   "checked": true
   },
   "15:39|38:82": {
    "keep": true,
-   "why": "Same story: I will surely mislead them all (بما أغويتني / فبعزتك)."
+   "why": "Same story: I will surely mislead them all (بما أغويتني / فبعزتك).",
+   "checked": true
   },
   "15:40|38:83": {
    "keep": true,
-   "why": "Same ayah: except Your sincere servants among them."
+   "why": "Same ayah: except Your sincere servants among them.",
+   "checked": true
   },
   "15:85|38:27": {
    "keep": true,
-   "why": "Same statement: We did not create the heavens and earth and what is between them (in truth / in vain)."
+   "why": "Same statement: We did not create the heavens and earth and what is between them (in truth / in vain).",
+   "checked": true
   },
   "3:11|5:98": {
    "keep": false,
@@ -2769,84 +2803,103 @@
   },
   "2:3|22:35": {
    "keep": true,
-   "why": "Same description: they establish prayer and spend from what We provided them."
+   "why": "Same description: they establish prayer and spend from what We provided them.",
+   "checked": true
   },
   "2:7|22:75": {
    "keep": false,
-   "why": "Only hearing and sight; different points."
+   "why": "Only hearing and sight; different points.",
+   "checked": true
   },
   "2:25|22:14": {
    "keep": true,
-   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow."
+   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow.",
+   "checked": true
   },
   "2:25|22:23": {
    "keep": true,
-   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow."
+   "why": "Same promise: those who believe and do good get gardens beneath which rivers flow.",
+   "checked": true
   },
   "2:39|22:57": {
    "keep": true,
-   "why": "Same verdict: those who disbelieve and deny Our signs, those …"
+   "why": "Same verdict: those who disbelieve and deny Our signs, those …",
+   "checked": true
   },
   "2:62|22:17": {
    "keep": true,
-   "why": "Same list: those who believe, the Jews, the Christians and the Sabians."
+   "why": "Same list: those who believe, the Jews, the Christians and the Sabians.",
+   "checked": true
   },
   "2:66|22:76": {
    "keep": false,
-   "why": "Only 'what is before and behind'; different meanings."
+   "why": "Only 'what is before and behind'; different meanings.",
+   "checked": true
   },
   "2:82|22:50": {
-   "keep": false,
-   "why": "Only the common formula 'those who believe and do righteous deeds'."
+   "keep": true,
+   "why": "Believers who do righteous deeds and their reward.",
+   "checked": true
   },
   "2:95|22:10": {
    "keep": false,
-   "why": "Only 'for what their hands sent ahead'."
+   "why": "Only 'for what their hands sent ahead'.",
+   "checked": true
   },
   "2:98|22:75": {
    "keep": false,
-   "why": "Only angels and messengers."
+   "why": "Only angels and messengers.",
+   "checked": true
   },
   "2:99|22:16": {
    "keep": true,
-   "why": "Same phrase: We sent down clear signs."
+   "why": "Same phrase: We sent down clear signs.",
+   "checked": true
   },
   "2:106|22:6": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'."
+   "why": "Only the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "2:107|22:70": {
    "keep": false,
-   "why": "Only 'do you not know that Allah …' and the heavens and earth."
+   "why": "Only 'do you not know that Allah …' and the heavens and earth.",
+   "checked": true
   },
   "2:110|22:41": {
    "keep": false,
-   "why": "Only the common 'establish prayer and give zakat'."
+   "why": "Only the common 'establish prayer and give zakat'.",
+   "checked": true
   },
   "2:125|22:26": {
    "keep": true,
-   "why": "Same command: purify My House for those who circle it and those who bow and prostrate."
+   "why": "Same command: purify My House for those who circle it and those who bow and prostrate.",
+   "checked": true
   },
   "2:161|22:75": {
    "keep": false,
-   "why": "Only 'angels and people'."
+   "why": "Only 'angels and people'.",
+   "checked": true
   },
   "2:175|22:4": {
    "keep": false,
-   "why": "Only misguidance, guidance and punishment."
+   "why": "Only misguidance, guidance and punishment.",
+   "checked": true
   },
   "2:218|22:58": {
    "keep": true,
-   "why": "Same subject: those who emigrated in the cause of Allah."
+   "why": "Same subject: those who emigrated in the cause of Allah.",
+   "checked": true
   },
   "2:270|22:71": {
    "keep": true,
-   "why": "Same rare closing: the wrongdoers have no helpers (أنصار / نصير).",
-   "ask": "Kept under your rare-words rule: keep?"
+   "why": "The wrongdoers have no helper.",
+   "checked": true
   },
   "2:276|22:38": {
    "keep": false,
-   "why": "Only the closing 'Allah does not love every …'."
+   "why": "Only the closing 'Allah does not love every …'.",
+   "checked": true
   },
   "7:52|27:77": {
    "keep": true,
@@ -3091,79 +3144,98 @@
   },
   "2:64|24:10": {
    "keep": true,
-   "why": "Same phrase: were it not for Allah's favour upon you and His mercy."
+   "why": "Same phrase: were it not for Allah's favour upon you and His mercy.",
+   "checked": true
   },
   "2:64|24:20": {
    "keep": true,
-   "why": "Same phrase: were it not for Allah's favour upon you and His mercy."
+   "why": "Same phrase: were it not for Allah's favour upon you and His mercy.",
+   "checked": true
   },
   "2:66|24:34": {
    "keep": true,
-   "why": "Same phrase: an admonition for the righteous."
+   "why": "Same phrase: an admonition for the righteous.",
+   "checked": true
   },
   "2:99|24:1": {
    "keep": true,
-   "why": "Same phrase: We sent down clear signs."
+   "why": "Same phrase: We sent down clear signs.",
+   "checked": true
   },
   "2:99|24:34": {
    "keep": true,
-   "why": "Same phrase: We have sent down to you clear signs."
+   "why": "Same phrase: We have sent down to you clear signs.",
+   "checked": true
   },
   "2:99|24:46": {
    "keep": true,
-   "why": "Same phrase: We have sent down clear signs."
+   "why": "Same phrase: We have sent down clear signs.",
+   "checked": true
   },
   "2:160|24:5": {
    "keep": true,
-   "why": "Same exception: except those who repent and reform."
+   "why": "Same exception: except those who repent and reform.",
+   "checked": true
   },
   "2:268|24:32": {
    "keep": true,
-   "why": "Same promise against poverty: Allah gives from His bounty; Allah is All-Encompassing, Knowing."
+   "why": "Same promise against poverty: Allah gives from His bounty; Allah is All-Encompassing, Knowing.",
+   "checked": true
   },
   "2:20|24:45": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'."
+   "why": "Only the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "2:43|24:56": {
    "keep": false,
-   "why": "Only the common 'establish prayer and give zakat'."
+   "why": "Only the common 'establish prayer and give zakat'.",
+   "checked": true
   },
   "2:64|24:5": {
    "keep": false,
-   "why": "Only 'after that'."
+   "why": "Only 'after that'.",
+   "checked": true
   },
   "2:107|24:42": {
    "keep": false,
-   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'.",
+   "checked": true
   },
   "2:116|24:41": {
    "keep": false,
-   "why": "Only 'His is what is in the heavens and the earth'; different points."
+   "why": "Only 'His is what is in the heavens and the earth'; different points.",
+   "checked": true
   },
   "2:142|24:46": {
    "keep": false,
-   "why": "Only the formula 'He guides whom He wills to a straight path'."
+   "why": "Only the formula 'He guides whom He wills to a straight path'.",
+   "checked": true
   },
   "2:182|24:5": {
    "keep": false,
-   "why": "Only reforming and the closing 'Forgiving, Merciful'."
+   "why": "Only reforming and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:192|24:5": {
    "keep": false,
-   "why": "Only the closing 'Allah is Forgiving, Merciful'."
+   "why": "Only the closing 'Allah is Forgiving, Merciful'.",
+   "checked": true
   },
   "2:209|24:18": {
    "keep": false,
-   "why": "Only 'Allah … Wise'."
+   "why": "Only 'Allah … Wise'.",
+   "checked": true
   },
   "2:218|24:22": {
    "keep": false,
-   "why": "Only 'in the cause of Allah' and the closing 'Forgiving, Merciful'."
+   "why": "Only 'in the cause of Allah' and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:284|24:64": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'all things'."
+   "why": "Only the heavens-and-earth formula and 'all things'.",
+   "checked": true
   },
   "3:23|24:48": {
    "keep": true,
@@ -6137,287 +6209,358 @@
   },
   "2:34|25:26": {
    "keep": false,
-   "why": "Only 'was' and 'disbelievers' as words."
+   "why": "Only 'was' and 'disbelievers' as words.",
+   "checked": true
   },
   "2:59|25:6": {
    "keep": false,
-   "why": "Only 'sent down' and the sky as words; different points."
+   "why": "Only 'sent down' and the sky as words; different points.",
+   "checked": true
   },
   "2:116|25:2": {
    "keep": true,
-   "why": "Same subject: to Him belong the heavens and earth, and He has taken no son."
+   "why": "Same subject: to Him belong the heavens and earth, and He has taken no son.",
+   "checked": true
   },
   "2:119|25:56": {
    "keep": true,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you as a bringer of good news and a warner.",
+   "checked": true
   },
   "2:128|25:74": {
    "keep": true,
-   "why": "Same style: a prayer, our Lord, make us and our offspring ..."
+   "why": "Same style: a prayer, our Lord, make us and our offspring ...",
+   "checked": true
   },
   "2:160|25:71": {
    "keep": true,
-   "why": "Same idea: whoever repents and reforms, Allah accepts the repentance."
+   "why": "Same idea: whoever repents and reforms, Allah accepts the repentance.",
+   "checked": true
   },
   "2:218|25:70": {
    "keep": true,
-   "why": "Same idea: the believers who repent hope for Allah's mercy; Allah is Forgiving, Merciful."
+   "why": "Same idea: the believers who repent hope for Allah's mercy; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "2:11|27:48": {
    "keep": true,
-   "why": "Contrast: they claim to be reformers vs those who corrupt and do not reform."
+   "why": "Contrast: they claim to be reformers vs those who corrupt and do not reform.",
+   "checked": true
   },
   "2:23|27:43": {
    "keep": false,
-   "why": "Only 'besides Allah' as words; the challenge vs the Queen's former worship."
+   "why": "Only 'besides Allah' as words; the challenge vs the Queen's former worship.",
+   "checked": true
   },
   "2:43|27:3": {
    "keep": true,
-   "why": "Same words: establish the prayer and give zakat."
+   "why": "Same words: establish the prayer and give zakat.",
+   "checked": true
   },
   "2:73|27:93": {
    "keep": true,
-   "why": "Same promise: He will show you His signs."
+   "why": "Same promise: He will show you His signs.",
+   "checked": true
   },
   "2:107|27:65": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only heavens and earth as words; different points.",
+   "checked": true
   },
   "2:111|27:64": {
    "keep": true,
-   "why": "Same challenge: say, bring your proof if you are truthful."
+   "why": "Same challenge: say, bring your proof if you are truthful.",
+   "checked": true
   },
   "2:116|27:65": {
    "keep": false,
-   "why": "Only heavens and earth as words; the claim of a son vs knowledge of the unseen."
+   "why": "Only heavens and earth as words; the claim of a son vs knowledge of the unseen.",
+   "checked": true
   },
   "2:116|27:87": {
    "keep": false,
-   "why": "Only heavens and earth and 'all' as words; different scenes."
+   "why": "Only heavens and earth and 'all' as words; different scenes.",
+   "checked": true
   },
   "2:139|27:93": {
    "keep": false,
-   "why": "Only 'Lord' and deeds as words; different points."
+   "why": "Only 'Lord' and deeds as words; different points.",
+   "checked": true
   },
   "2:209|27:9": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:280|27:27": {
    "keep": false,
-   "why": "Only the roots of waiting and truth; different points."
+   "why": "Only the roots of waiting and truth; different points.",
+   "checked": true
   },
   "2:38|28:49": {
    "keep": false,
-   "why": "Only guidance and following as words; the fall from the Garden vs the challenge to bring a book."
+   "why": "Only guidance and following as words; the fall from the Garden vs the challenge to bring a book.",
+   "checked": true
   },
   "2:82|28:67": {
    "keep": true,
-   "why": "Same idea: whoever believes and does good has the good end."
+   "why": "Same idea: whoever believes and does good has the good end.",
+   "checked": true
   },
   "2:94|28:49": {
    "keep": true,
-   "why": "Same style: 'Say ... from Allah ... if you are truthful', a challenge to the deniers."
+   "why": "Same style: 'Say ... from Allah ... if you are truthful', a challenge to the deniers.",
+   "checked": true
   },
   "2:107|28:81": {
    "keep": true,
-   "why": "Same idea: no helper besides Allah (Qarun had none)."
+   "why": "Same idea: no helper besides Allah (Qarun had none).",
+   "checked": true
   },
   "2:117|28:44": {
    "keep": false,
-   "why": "Only the root of decreeing a matter; creation vs Musa's commission."
+   "why": "Only the root of decreeing a matter; creation vs Musa's commission.",
+   "checked": true
   },
   "2:121|28:3": {
    "keep": false,
-   "why": "Only reciting, truth and believing as words; different points."
+   "why": "Only reciting, truth and believing as words; different points.",
+   "checked": true
   },
   "2:121|28:52": {
    "keep": true,
-   "why": "Same phrase: those We gave the Book believe in it."
+   "why": "Same phrase: those We gave the Book believe in it.",
+   "checked": true
   },
   "2:129|28:59": {
    "keep": true,
-   "why": "Same phrase: a messenger sent among them, reciting the signs to them."
+   "why": "Same phrase: a messenger sent among them, reciting the signs to them.",
+   "checked": true
   },
   "2:131|28:53": {
    "keep": true,
-   "why": "Same idea: submitting to the Lord (Ibrahim, and the People of the Book who were Muslims before)."
+   "why": "Same idea: submitting to the Lord (Ibrahim, and the People of the Book who were Muslims before).",
+   "checked": true
   },
   "2:8|29:36": {
    "keep": false,
-   "why": "Only Allah and the Last Day as words; false claim of belief vs Shu'ayb's call."
+   "why": "Only Allah and the Last Day as words; false claim of belief vs Shu'ayb's call.",
+   "checked": true
   },
   "2:25|29:58": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there.",
+   "checked": true
   },
   "2:59|29:34": {
    "keep": true,
-   "why": "Same punishment: a scourge from the sky for what they used to defy."
+   "why": "Same punishment: a scourge from the sky for what they used to defy.",
+   "checked": true
   },
   "2:82|29:9": {
    "keep": true,
-   "why": "Same idea: the reward of those who believe and do good."
+   "why": "Same idea: the reward of those who believe and do good.",
+   "checked": true
   },
   "2:103|29:16": {
    "keep": true,
-   "why": "Same idea: fearing Allah is better for you, if you only knew."
+   "why": "Same idea: fearing Allah is better for you, if you only knew.",
+   "checked": true
   },
   "2:107|29:22": {
    "keep": true,
-   "why": "Same sentence: besides Allah you have no protector and no helper."
+   "why": "Same sentence: besides Allah you have no protector and no helper.",
+   "checked": true
   },
   "2:121|29:51": {
    "keep": false,
-   "why": "Only the Book, reciting and believing as words; different points."
+   "why": "Only the Book, reciting and believing as words; different points.",
+   "checked": true
   },
   "2:136|29:46": {
    "keep": true,
-   "why": "Same statement: we believe in what was sent down to us ..., and to Him we submit."
+   "why": "Same statement: we believe in what was sent down to us ..., and to Him we submit.",
+   "checked": true
   },
   "2:209|29:42": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:250|29:30": {
    "keep": true,
-   "why": "Same prayer: our Lord, give us victory over the people."
+   "why": "Same prayer: our Lord, give us victory over the people.",
+   "checked": true
   },
   "2:280|29:16": {
    "keep": false,
-   "why": "Shares only 'better for you if you knew'; the subjects differ."
+   "why": "Shares only 'better for you if you knew'; the subjects differ.",
+   "checked": true
   },
   "2:284|29:20": {
    "keep": false,
-   "why": "Shares only the earth and the closing 'able over all things'."
+   "why": "Shares only the earth and the closing 'able over all things'.",
+   "checked": true
   },
   "2:39|30:16": {
    "keep": true,
-   "why": "Same idea: those who disbelieve and deny Our signs, and their punishment."
+   "why": "Same idea: those who disbelieve and deny Our signs, and their punishment.",
+   "checked": true
   },
   "2:82|30:15": {
    "keep": true,
-   "why": "Same idea: those who believe and do good are in the Garden."
+   "why": "Same idea: those who believe and do good are in the Garden.",
+   "checked": true
   },
   "2:82|30:45": {
    "keep": true,
-   "why": "Same idea: the reward of those who believe and do good."
+   "why": "Same idea: the reward of those who believe and do good.",
+   "checked": true
   },
   "2:116|30:26": {
    "keep": true,
-   "why": "Same sentence: His is all in the heavens and earth; all are devoutly obedient to Him."
+   "why": "Same sentence: His is all in the heavens and earth; all are devoutly obedient to Him.",
+   "checked": true
   },
   "2:215|30:38": {
    "keep": true,
-   "why": "Same command: give to relatives, the needy and the traveller."
+   "why": "Same command: give to relatives, the needy and the traveller.",
+   "checked": true
   },
   "2:5|31:5": {
    "keep": true,
-   "why": "Same ayah: those are on guidance from their Lord, and they are the successful."
+   "why": "Same ayah: those are on guidance from their Lord, and they are the successful.",
+   "checked": true
   },
   "2:7|31:28": {
    "keep": false,
-   "why": "Only hearing and sight as roots; different points."
+   "why": "Only hearing and sight as roots; different points.",
+   "checked": true
   },
   "2:43|31:4": {
    "keep": true,
-   "why": "Same words: establish the prayer and give zakat."
+   "why": "Same words: establish the prayer and give zakat.",
+   "checked": true
   },
   "2:82|31:8": {
    "keep": true,
-   "why": "Same idea: those who believe and do good have the Garden."
+   "why": "Same idea: those who believe and do good have the Garden.",
+   "checked": true
   },
   "2:112|31:22": {
    "keep": true,
-   "why": "Same sentence: whoever submits his face to Allah while doing good."
+   "why": "Same sentence: whoever submits his face to Allah while doing good.",
+   "checked": true
   },
   "2:116|31:25": {
    "keep": false,
-   "why": "Only heavens and earth and 'rather' as words; different points."
+   "why": "Only heavens and earth and 'rather' as words; different points.",
+   "checked": true
   },
   "2:170|31:21": {
    "keep": true,
-   "why": "Nearly the same ayah: when told to follow what Allah sent down, they follow their fathers."
+   "why": "Nearly the same ayah: when told to follow what Allah sent down, they follow their fathers.",
+   "checked": true
   },
   "2:209|31:9": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:53|32:23": {
    "keep": true,
-   "why": "Same sentence: We gave Musa the Book."
+   "why": "Same sentence: We gave Musa the Book.",
+   "checked": true
   },
   "2:55|32:29": {
    "keep": false,
-   "why": "Only belief and 'look' as roots; different scenes."
+   "why": "Only belief and 'look' as roots; different scenes.",
+   "checked": true
   },
   "2:82|32:19": {
    "keep": true,
-   "why": "Same idea: those who believe and do good have the Gardens."
+   "why": "Same idea: those who believe and do good have the Gardens.",
+   "checked": true
   },
   "2:107|32:4": {
    "keep": true,
-   "why": "Same idea: besides Allah you have no protector."
+   "why": "Same idea: besides Allah you have no protector.",
+   "checked": true
   },
   "2:94|33:63": {
    "keep": false,
-   "why": "Only 'with Allah' and 'say'; the Hereafter claim vs the timing of the Hour."
+   "why": "Only 'with Allah' and 'say'; the Hereafter claim vs the timing of the Hour.",
+   "checked": true
   },
   "2:103|33:1": {
    "keep": false,
-   "why": "Only fearing Allah as a word; different points."
+   "why": "Only fearing Allah as a word; different points.",
+   "checked": true
   },
   "2:106|33:27": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:107|33:17": {
    "keep": true,
-   "why": "Same idea: besides Allah there is no protector and no helper."
+   "why": "Same idea: besides Allah there is no protector and no helper.",
+   "checked": true
   },
   "2:119|33:45": {
    "keep": true,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you as a bringer of good news and a warner.",
+   "checked": true
   },
   "2:148|33:27": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:148|33:40": {
    "keep": false,
-   "why": "Shares only 'all things'; different points."
+   "why": "Shares only 'all things'; different points.",
+   "checked": true
   },
   "2:153|33:56": {
    "keep": false,
-   "why": "Only 'O you who believe' and the root of prayer; different commands."
+   "why": "Only 'O you who believe' and the root of prayer; different commands.",
+   "checked": true
   },
   "2:218|33:73": {
-   "keep": true,
-   "why": "Same idea: Allah's mercy and acceptance for the believers; Forgiving, Merciful."
+   "keep": false,
+   "why": "Only 'Forgiving, Merciful' closing; different subjects.",
+   "checked": true
   },
   "2:8|34:30": {
    "keep": false,
-   "why": "Only 'day' as a word."
+   "why": "Only 'day' as a word.",
+   "checked": true
   },
   "2:82|34:4": {
    "keep": true,
-   "why": "Same idea: reward for those who believe and do good."
+   "why": "Same idea: reward for those who believe and do good.",
+   "checked": true
   },
   "2:107|34:22": {
    "keep": true,
-   "why": "Same idea: those besides Allah own nothing in the heavens and earth and are no help."
+   "why": "Same idea: those besides Allah own nothing in the heavens and earth and are no help.",
+   "checked": true
   },
   "2:116|34:24": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only heavens and earth as words; different points.",
+   "checked": true
   },
   "2:119|34:28": {
    "keep": true,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you as a bringer of good news and a warner.",
+   "checked": true
   },
   "2:209|34:27": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:119|35:24": {
    "keep": true,
@@ -6453,87 +6596,108 @@
   },
   "2:34|39:59": {
    "keep": true,
-   "why": "Same pattern: arrogance and being among the disbelievers (Iblis, and the one who denied the signs)."
+   "why": "Same pattern: arrogance and being among the disbelievers (Iblis, and the one who denied the signs).",
+   "checked": true
   },
   "2:106|39:52": {
    "keep": false,
-   "why": "Only 'do you not know that Allah' and the root of power; different points."
+   "why": "Only 'do you not know that Allah' and the root of power; different points.",
+   "checked": true
   },
   "2:107|39:44": {
-   "keep": true,
-   "why": "Same phrase: His is the dominion of the heavens and earth, against other protectors and intercessors."
+   "keep": false,
+   "why": "Only dominion of heavens and earth; different subjects.",
+   "checked": true
   },
   "2:116|39:44": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only heavens and earth as words; different points.",
+   "checked": true
   },
   "2:170|39:43": {
    "keep": true,
-   "why": "Same style: 'even if they have no understanding?' answering those who follow others than Allah."
+   "why": "Same style: 'even if they have no understanding?' answering those who follow others than Allah.",
+   "checked": true
   },
   "2:176|39:1": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words; different points."
+   "why": "Only the Book sent down by Allah as words; different points.",
+   "checked": true
   },
   "2:176|39:2": {
    "keep": true,
-   "why": "Same phrase: Allah sent down the Book with the truth."
+   "why": "Same phrase: Allah sent down the Book with the truth.",
+   "checked": true
   },
   "2:209|39:1": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:212|39:10": {
    "keep": true,
-   "why": "Same idea: the believers who fear Allah are rewarded without account."
+   "why": "Same idea: the believers who fear Allah are rewarded without account.",
+   "checked": true
   },
   "2:218|39:53": {
-   "keep": true,
-   "why": "Same idea: hope in Allah's mercy; He is Forgiving, Merciful."
+   "keep": false,
+   "why": "Only Allah's mercy and forgiveness words; different subjects.",
+   "checked": true
   },
   "2:22|40:64": {
    "keep": true,
-   "why": "Same sentence: He made the earth for you and the sky a structure, and provided for you."
+   "why": "Same sentence: He made the earth for you and the sky a structure, and provided for you.",
+   "checked": true
   },
   "2:39|40:6": {
    "keep": true,
-   "why": "Same idea: those who disbelieve are the people of the Fire."
+   "why": "Same idea: those who disbelieve are the people of the Fire.",
+   "checked": true
   },
   "2:70|40:74": {
    "keep": false,
-   "why": "Only 'call' and guidance roots; different scenes."
+   "why": "Only 'call' and guidance roots; different scenes.",
+   "checked": true
   },
   "2:86|40:39": {
    "keep": true,
-   "why": "Same contrast: the life of this world against the Hereafter."
+   "why": "Same contrast: the life of this world against the Hereafter.",
+   "checked": true
   },
   "2:117|40:68": {
    "keep": true,
-   "why": "Same sentence: when He decrees a matter He says to it Be, and it is."
+   "why": "Same sentence: when He decrees a matter He says to it Be, and it is.",
+   "checked": true
   },
   "2:131|40:66": {
    "keep": true,
-   "why": "Same words: submit to the Lord of the worlds."
+   "why": "Same words: submit to the Lord of the worlds.",
+   "checked": true
   },
   "2:176|40:2": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words; different points."
+   "why": "Only the Book sent down by Allah as words; different points.",
+   "checked": true
   },
   "2:202|40:17": {
    "keep": true,
-   "why": "Same idea: each gets what it earned; Allah is swift in account."
+   "why": "Same idea: each gets what it earned; Allah is swift in account.",
+   "checked": true
   },
   "2:211|40:22": {
    "keep": true,
-   "why": "Same idea: clear signs came, they rejected, and Allah is severe in penalty."
+   "why": "Same idea: clear signs came, they rejected, and Allah is severe in penalty.",
+   "checked": true
   },
   "2:243|40:61": {
    "keep": true,
-   "why": "Same closing sentence: Allah is full of bounty to people, but most do not give thanks."
+   "why": "Same closing sentence: Allah is full of bounty to people, but most do not give thanks.",
+   "checked": true
   },
   "2:281|40:17": {
    "keep": true,
-   "why": "Same idea: every soul is paid what it earned, without injustice."
+   "why": "Same idea: every soul is paid what it earned, without injustice.",
+   "checked": true
   },
   "2:66|41:42": {
    "keep": false,
