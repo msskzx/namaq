@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import PairCompare from './PairCompare';
 import type { PairCard } from './pairCards';
 
@@ -65,6 +65,35 @@ describe('PairCompare', () => {
     fireEvent.click(first);
     expect(container.querySelector('mark[data-lit]')).toBeNull();
     expect(screen.getByRole('link', { name: 'افتح في متشابهات القرآن' }).getAttribute('href')).toBe('/quran/branches?o=cmp%3A1');
+  });
+
+  it('reads one side word by word in the studio, lighting each word with its partner', () => {
+    vi.useFakeTimers();
+    try {
+      const { container } = render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+      fireEvent.click(screen.getByRole('button', { name: 'استوديو القراءة' }));
+      expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'اقرأ مع التظليل' }));
+      const reading = () => container.querySelector('[data-reading]');
+      expect(reading()!.textContent).toBe('أم');
+      expect([...container.querySelectorAll('mark[data-link="0"]')].map(mark => mark.hasAttribute('data-lit'))).toEqual([true, true]);
+      act(() => { vi.advanceTimersByTime(1400); });
+      expect(reading()!.textContent).toBe('تسألهم');
+      expect(container.querySelectorAll('mark[data-lit][data-link="1"]')).toHaveLength(2);
+      act(() => { vi.advanceTimersByTime(1400); });
+      expect(reading()!.textContent).toBe('أجرا');
+      expect(container.querySelector('mark[data-lit]')).toBeNull();
+      act(() => { vi.advanceTimersByTime(4000); });
+      expect(reading()).toBeNull();
+      expect(screen.getByRole('button', { name: 'إعادة' })).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'إغلاق الاستوديو' }));
+      expect(screen.getByRole('button', { name: 'حفظ' })).toBeTruthy();
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('says «سورة» once per surah when the names already start with it', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={{ ...names, 52: { ar: 'سُورَةُ الطُّورِ' } }} />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سُورَةُ الطُّورِ وَسُورَةُ الْقَلَمِ');
   });
 
   it('opens each ayah of a card in the reader', () => {
@@ -190,6 +219,27 @@ describe('PairCompare', () => {
       expect(container.querySelector('mark[data-link="a"]')).toBeNull();
       expect(container.querySelectorAll('mark[data-link="b"]')).toHaveLength(2);
       expect(screen.getByText(/10:72 ~ 26:127/).textContent).toContain('two');
+    });
+
+    it('reads the shared ayah once, then each partner in turn', () => {
+      vi.useFakeTimers();
+      try {
+        const { container } = render(<PairCompare a={10} b={26} cards={[many]} pairs={pairs} names={names2} />);
+        fireEvent.click(screen.getByRole('button', { name: 'استوديو القراءة' }));
+        fireEvent.click(screen.getByRole('button', { name: 'اقرأ مع التظليل' }));
+        const reading = () => container.querySelector('[data-reading]')!;
+        expect(reading().closest('article')!.getAttribute('aria-label')).toContain('يونس');
+        expect(reading().textContent).toBe('إن');
+        act(() => { vi.advanceTimersByTime(1300); });
+        expect(reading().textContent).toBe('أجري');
+        act(() => { vi.advanceTimersByTime(2600); });
+        expect(reading().closest('button')!.textContent).toContain('109');
+        act(() => { vi.advanceTimersByTime(1300); });
+        act(() => { vi.advanceTimersByTime(2600); });
+        expect(screen.getByRole('button', { name: /^الشعراء ١٢٧: / }).getAttribute('aria-pressed')).toBe('true');
+        expect(reading().textContent).toBe('إن');
+        expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);
+      } finally { vi.useRealTimers(); }
     });
 
     it('gives each partner its ayah text as well as its reference', () => {

@@ -6,7 +6,9 @@ const spaced = Object.keys(display).filter(word => /\s/.test(word)).map(word => 
 const tokens = new RegExp(`(${spaced.join('|')}|\\s+)`);
 const marks: Record<string, string> = { 'ًۭ': 'ٗ', 'ٌۭ': 'ٞ', 'ٍۢ': 'ٖ', 'ْ': 'ۡ', '۟': 'ْ', 'ی': 'ي', 'ک': 'ك', 'ࣰ': 'ٗ', 'ࣱ': 'ٞ', 'ࣲ': 'ٖ', 'ۤ': 'ٓ' };
 
+/** The text as the mushaf font shows it, for places that draw text themselves (a video's canvas). */
+export const mushafText = (text: string) => text.split(tokens).map(word => display[word] ?? word.replace(/ًۭ|ٌۭ|ٍۢ|[ْ۟یکࣰࣱࣲۤ]/g, mark => marks[mark]).replace(/[\u06D6-\u06DC\u06DE\u06E9]/g, '')).join('');
+
 export default function MushafText({ children }: { children: string }) {
-  const parts = children.split(tokens);
-  return <>{parts.map(word => display[word] ?? word.replace(/ًۭ|ٌۭ|ٍۢ|[ْ۟یکࣰࣱࣲۤ]/g, mark => marks[mark]).replace(/[\u06D6-\u06DC\u06DE\u06E9]/g, '')).join('')}</>;
+  return <>{mushafText(children)}</>;
 }
