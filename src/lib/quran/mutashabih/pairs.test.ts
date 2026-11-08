@@ -64,6 +64,8 @@ describe('compare pairs', () => {
     it('splits at a wider gap', () => expect(chain([1, 1], [6, 6])).toEqual([['1~1'], ['6~6']]));
     it('splits when one side runs on too far ahead of the other', () => expect(chain([1, 1], [2, 5])).toEqual([['1~1'], ['2~5']]));
     it('joins runs that share an ayah and sit side by side, whatever their order', () => expect(chain([3, 3], [4, 1], [4, 2], [4, 3])).toEqual([['3~3', '4~1', '4~2', '4~3']]));
+    it('keeps joining until no two runs overlap', () => expect(chain([4, 14], [5, 13], [6, 10], [8, 13], [10, 14]).flat()).toHaveLength(5));
+    it('reaches every run a grown run overlaps', () => expect(chain([4, 14], [5, 13], [6, 10], [8, 13], [10, 14])).toHaveLength(1));
     it('splits when the order crosses', () => expect(chain([1, 5], [2, 4])).toEqual([['1~5'], ['2~4']]));
     it('leaves a far pair sharing an ayah apart, and continues the run it belongs to', () => expect(chain([106, 31], [106, 154], [107, 32])).toEqual([['106~31', '107~32'], ['106~154']]));
   });

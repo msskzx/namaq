@@ -58,7 +58,7 @@ const spanOf = (chain: AyahPair[], side: 'a' | 'b') => {
 };
 const overlap = ([a, b]: number[], [c, d]: number[], gap = 0) => a <= d + gap && c <= b + gap;
 
-/** Two runs that share an ayah on one side and sit next to each other on the other are one passage (69:3-4~101:3 with 69:4~101:1-2). */
+/** Two runs whose ayah ranges overlap on one side and overlap or touch on the other are one passage (69:3-4~101:3 with 69:4~101:1-2). */
 function joinOverlapping(chains: AyahPair[][]) {
   const joined = [...chains];
   for (let i = 0; i < joined.length; i++) for (let j = i + 1; j < joined.length; j++) {
@@ -66,7 +66,9 @@ function joinOverlapping(chains: AyahPair[][]) {
     if (!(overlap(ax, ay) && overlap(bx, by, 1)) && !(overlap(bx, by) && overlap(ax, ay, 1))) continue;
     joined[i] = [...joined[i], ...joined[j]].sort((p, q) => keyOrder(p.a) - keyOrder(q.a) || keyOrder(p.b) - keyOrder(q.b));
     joined.splice(j, 1);
-    j = i;
+    // The grown run may now reach one already passed.
+    i = -1;
+    break;
   }
   return joined;
 }
