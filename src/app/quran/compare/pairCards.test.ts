@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import generated from './compareCards';
+import { buildCompareCards } from './buildCards';
 import treeData from '@/app/quran/branches/trees.json';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
@@ -64,6 +66,10 @@ describe('compare pair cards', () => {
     expect(ids).toContain('7:70|11:62');
     expect(ids.some(id => id.startsWith('7:70-'))).toBe(false);
     expect(pairCards(7, 11).find(card => card.id === '7:70|11:62')?.pairs).toBeUndefined();
+  });
+
+  it('is built from the current pairs and verdicts: run npm run quran:compare-cards after changing them', () => {
+    expect(generated).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
   });
 
   it('merges two runs of one passage when they share an ayah', () => {
