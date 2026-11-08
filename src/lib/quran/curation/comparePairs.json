@@ -24035,19 +24035,39 @@
   },
   "55:59|92:9": {
    "keep": false,
-   "why": "Only the common root of denial."
+   "why": "Only the common root of denial.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the common root of denial."
+   }
   },
   "55:60|92:9": {
    "keep": false,
-   "why": "Excellence versus denying the best reward; a shared root only."
+   "why": "Excellence versus denying the best reward; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Excellence versus denying the best reward; a shared root only."
+   }
   },
   "55:69|92:9": {
    "keep": false,
-   "why": "Only the common root of denial."
+   "why": "Only the common root of denial.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the common root of denial."
+   }
   },
   "55:70|92:9": {
    "keep": false,
-   "why": "Beautiful maidens versus denying the best reward; a shared root only."
+   "why": "Beautiful maidens versus denying the best reward; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Beautiful maidens versus denying the best reward; a shared root only."
+   }
   },
   "55:3|95:4": {
    "keep": true,
