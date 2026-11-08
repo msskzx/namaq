@@ -2304,99 +2304,123 @@
   },
   "3:3|16:64": {
    "keep": true,
-   "why": "Same phrase: He sent down the Book to you."
+   "why": "Same phrase: He sent down the Book to you.",
+   "checked": true
   },
   "3:25|16:111": {
    "keep": true,
-   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged."
+   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged.",
+   "checked": true
   },
   "3:29|16:77": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and the closing 'Allah has power over all things'."
+   "why": "Only the heavens-and-earth formula and the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "3:67|16:120": {
    "keep": true,
-   "why": "Same description of Abraham: upright, and not of the associators."
+   "why": "Same description of Abraham: upright, and not of the associators.",
+   "checked": true
   },
   "3:67|16:123": {
    "keep": true,
-   "why": "Same description of Abraham: upright, and he was not of the associators."
+   "why": "Same description of Abraham: upright, and he was not of the associators.",
+   "checked": true
   },
   "3:77|16:95": {
    "keep": true,
-   "why": "Same warning: selling Allah's covenant for a small price."
+   "why": "Same warning: selling Allah's covenant for a small price.",
+   "checked": true
   },
   "3:83|16:52": {
    "keep": true,
-   "why": "Same argument: all in the heavens and earth belong to Him and the religion is His; do they seek other than Allah?"
+   "why": "Same argument: all in the heavens and earth belong to Him and the religion is His; do they seek other than Allah?",
+   "checked": true
   },
   "3:83|16:73": {
    "keep": false,
-   "why": "Only 'Allah' and 'the heavens and the earth'."
+   "why": "Only 'Allah' and 'the heavens and the earth'.",
+   "checked": true
   },
   "3:88|16:85": {
    "keep": true,
-   "why": "Same sentence: the punishment will not be lightened for them, nor will they be reprieved."
+   "why": "Same sentence: the punishment will not be lightened for them, nor will they be reprieved.",
+   "checked": true
   },
   "3:89|16:18": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "3:89|16:119": {
    "keep": true,
-   "why": "Same exception: those who repent after that and reform; Allah is Forgiving, Merciful."
+   "why": "Same exception: those who repent after that and reform; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "3:94|16:105": {
    "keep": true,
-   "why": "Same verdict: whoever invents lies (against Allah), those are the wrongdoers/liars."
+   "why": "Same verdict: whoever invents lies (against Allah), those are the wrongdoers/liars.",
+   "checked": true
   },
   "3:95|16:120": {
    "keep": true,
-   "why": "Same description of Abraham: upright, and not of the associators."
+   "why": "Same description of Abraham: upright, and not of the associators.",
+   "checked": true
   },
   "3:95|16:123": {
    "keep": true,
-   "why": "Same command: follow the religion of Abraham, upright, and he was not of the associators."
+   "why": "Same command: follow the religion of Abraham, upright, and he was not of the associators.",
+   "checked": true
   },
   "3:129|16:18": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "3:129|16:73": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true
   },
   "3:136|16:31": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow."
+   "why": "Same reward: gardens beneath which rivers flow.",
+   "checked": true
   },
   "3:137|16:36": {
    "keep": true,
-   "why": "Same command: travel through the land and see the end of the deniers."
+   "why": "Same command: travel through the land and see the end of the deniers.",
+   "checked": true
   },
   "3:148|16:122": {
-   "keep": true,
-   "why": "Same reward: good in this world and in the Hereafter."
+   "keep": false,
+   "why": "Only good in this world and the Hereafter; different subjects (owner removed).",
+   "checked": true
   },
   "3:161|16:111": {
    "keep": true,
-   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged."
+   "why": "Same sentence: every soul will be paid in full for what it did, and they will not be wronged.",
+   "checked": true
   },
   "3:177|16:104": {
    "keep": false,
-   "why": "Only 'those who …' and the closing 'painful punishment'."
+   "why": "Only 'those who …' and the closing 'painful punishment'.",
+   "checked": true
   },
   "3:189|16:73": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true
   },
   "3:189|16:77": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'Allah has power over all things'."
+   "why": "Only the heavens-and-earth formula and 'Allah has power over all things'.",
+   "checked": true
   },
   "3:198|16:31": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow."
+   "why": "Same reward: gardens beneath which rivers flow.",
+   "checked": true
   },
   "5:9|9:22": {
    "keep": false,
@@ -3341,79 +3365,98 @@
   },
   "3:23|24:48": {
    "keep": true,
-   "why": "Same scene: they are called to Allah('s Book) to judge between them, and a party of them turns away."
+   "why": "Same scene: they are called to Allah('s Book) to judge between them, and a party of them turns away.",
+   "checked": true
   },
   "3:31|24:22": {
-   "keep": true,
-   "why": "Same link: love and Allah forgiving you; Allah is Forgiving, Merciful."
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'; different subjects (owner removed).",
+   "checked": true
   },
   "3:32|24:54": {
    "keep": true,
-   "why": "Same command: say, obey Allah and the Messenger; if you turn away …"
+   "why": "Same command: say, obey Allah and the Messenger; if you turn away …",
+   "checked": true
   },
   "3:89|24:5": {
    "keep": true,
-   "why": "Identical: except those who repent after that and reform; Allah is Forgiving, Merciful."
+   "why": "Identical: except those who repent after that and reform; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "3:132|24:56": {
-   "keep": true,
-   "why": "Same command: obey the Messenger so that you may receive mercy."
+   "keep": false,
+   "why": "Only 'obey ... the Messenger, that you may receive mercy'; a common command (owner removed).",
+   "checked": true
   },
   "3:138|24:34": {
    "keep": true,
-   "why": "Same phrase: an admonition for the righteous."
+   "why": "Same phrase: an admonition for the righteous.",
+   "checked": true
   },
   "3:6|24:10": {
    "keep": false,
-   "why": "Only 'Wise'."
+   "why": "Only 'Wise'.",
+   "checked": true
   },
   "3:29|24:41": {
    "keep": false,
-   "why": "Only Allah's knowledge of the heavens and the earth."
+   "why": "Only Allah's knowledge of the heavens and the earth.",
+   "checked": true
   },
   "3:29|24:64": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'all things'."
+   "why": "Only the heavens-and-earth formula and 'all things'.",
+   "checked": true
   },
   "3:32|24:47": {
    "keep": false,
-   "why": "Only obeying and turning away; different points."
+   "why": "Only obeying and turning away; different points.",
+   "checked": true
   },
   "3:32|24:52": {
    "keep": false,
-   "why": "Only the common 'obey Allah and His Messenger'."
+   "why": "Only the common 'obey Allah and His Messenger'.",
+   "checked": true
   },
   "3:51|24:46": {
    "keep": false,
-   "why": "Only 'a straight path'."
+   "why": "Only 'a straight path'.",
+   "checked": true
   },
   "3:100|24:47": {
    "keep": false,
-   "why": "Only 'a party', obeying and belief; different points."
+   "why": "Only 'a party', obeying and belief; different points.",
+   "checked": true
   },
   "3:101|24:46": {
    "keep": false,
-   "why": "Only the formula 'guided to a straight path'."
+   "why": "Only the formula 'guided to a straight path'.",
+   "checked": true
   },
   "3:132|24:52": {
    "keep": false,
-   "why": "Only the common 'obey Allah and His Messenger'."
+   "why": "Only the common 'obey Allah and His Messenger'.",
+   "checked": true
   },
   "3:177|24:19": {
    "keep": false,
-   "why": "Only 'those who … for them is a painful punishment'."
+   "why": "Only 'those who … for them is a painful punishment'.",
+   "checked": true
   },
   "3:189|24:41": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true
   },
   "3:189|24:42": {
    "keep": false,
-   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'.",
+   "checked": true
   },
   "3:189|24:64": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'all things'."
+   "why": "Only the heavens-and-earth formula and 'all things'.",
+   "checked": true
   },
   "4:13|48:5": {
    "keep": true,
@@ -3865,139 +3908,173 @@
   },
   "3:27|22:61": {
    "keep": true,
-   "why": "Same sign: He merges the night into the day and the day into the night."
+   "why": "Same sign: He merges the night into the day and the day into the night.",
+   "checked": true
   },
   "3:55|22:69": {
    "keep": true,
-   "why": "Same sentence: (Allah) will judge between you on the Day of Resurrection concerning what you used to differ over."
+   "why": "Same sentence: (Allah) will judge between you on the Day of Resurrection concerning what you used to differ over.",
+   "checked": true
   },
   "3:109|22:76": {
    "keep": true,
-   "why": "Same ending: to Allah all matters are returned."
+   "why": "Same ending: to Allah all matters are returned.",
+   "checked": true
   },
   "3:157|22:58": {
    "keep": true,
-   "why": "Same subject: those killed or who died in the cause of Allah, and what Allah gives them is better."
+   "why": "Same subject: those killed or who died in the cause of Allah, and what Allah gives them is better.",
+   "checked": true
   },
   "3:169|22:58": {
-   "keep": true,
-   "why": "Same subject: those killed in the cause of Allah are provided for."
+   "keep": false,
+   "why": "Only those killed in the way of Allah and provision; different statements (owner removed).",
+   "checked": true
   },
   "3:182|22:10": {
    "keep": true,
-   "why": "Same sentence: that is for what your hands sent ahead, and Allah is never unjust to His servants."
+   "why": "Same sentence: that is for what your hands sent ahead, and Allah is never unjust to His servants.",
+   "checked": true
   },
   "3:198|22:14": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow."
+   "why": "Same reward: gardens beneath which rivers flow.",
+   "checked": true
   },
   "3:9|22:69": {
    "keep": false,
-   "why": "Only 'the Day … in it'."
+   "why": "Only 'the Day … in it'.",
+   "checked": true
   },
   "3:29|22:70": {
    "keep": false,
-   "why": "Only 'Allah knows what is in the heavens and the earth'."
+   "why": "Only 'Allah knows what is in the heavens and the earth'.",
+   "checked": true
   },
   "3:32|22:38": {
    "keep": false,
-   "why": "Only the formula 'Allah does not love …'."
+   "why": "Only the formula 'Allah does not love …'.",
+   "checked": true
   },
   "3:57|22:38": {
    "keep": false,
-   "why": "Only believers and 'Allah does not love …'."
+   "why": "Only believers and 'Allah does not love …'.",
+   "checked": true
   },
   "3:57|22:50": {
    "keep": false,
-   "why": "Only the common formula 'those who believe and do righteous deeds'."
+   "why": "Only the common formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "3:87|22:75": {
    "keep": false,
-   "why": "Only 'angels and people'."
+   "why": "Only 'angels and people'.",
+   "checked": true
   },
   "3:102|22:6": {
    "keep": false,
-   "why": "Only scattered words."
+   "why": "Only scattered words.",
+   "checked": true
   },
   "3:108|22:16": {
    "keep": false,
-   "why": "Only 'signs' and 'Allah wills'."
+   "why": "Only 'signs' and 'Allah wills'.",
+   "checked": true
   },
   "3:142|22:59": {
    "keep": false,
-   "why": "Only entering and knowing."
+   "why": "Only entering and knowing.",
+   "checked": true
   },
   "3:189|22:6": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'."
+   "why": "Only the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "3:15|9:72": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow, abiding in them, and pleasure from Allah."
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, and pleasure from Allah.",
+   "checked": true
   },
   "3:106|9:66": {
    "keep": true,
-   "why": "Same charge: you disbelieved after your belief."
+   "why": "Same charge: you disbelieved after your belief.",
+   "checked": true
   },
   "3:122|9:51": {
    "keep": true,
-   "why": "Same ending: Allah is their/our Protector, and upon Allah let the believers rely."
+   "why": "Same ending: Allah is their/our Protector, and upon Allah let the believers rely.",
+   "checked": true
   },
   "3:136|9:89": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them.",
+   "checked": true
   },
   "3:198|9:72": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them.",
+   "checked": true
   },
   "3:198|9:89": {
    "keep": true,
-   "why": "Same reward: for them are gardens beneath which rivers flow, abiding in them."
+   "why": "Same reward: for them are gardens beneath which rivers flow, abiding in them.",
+   "checked": true
   },
   "3:28|9:16": {
-   "keep": false,
-   "why": "Only 'take (allies) besides …'."
+   "keep": true,
+   "why": "Same subject: not taking allies besides Allah and the believers, a prohibition / a test of those who strive (owner kept).",
+   "checked": true
   },
   "3:86|9:80": {
-   "keep": false,
-   "why": "Only disbelief and the closing 'Allah does not guide the … people'."
+   "keep": true,
+   "why": "Same verdict on those who disbelieved: Allah will not guide / forgive them, closing with 'Allah does not guide the … people' (owner kept).",
+   "checked": true
   },
   "3:89|9:27": {
    "keep": false,
-   "why": "Only 'after that' and the closing 'Forgiving, Merciful'."
+   "why": "Only 'after that' and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "3:99|9:105": {
    "keep": false,
-   "why": "Only 'say' and 'what you do'."
+   "why": "Only 'say' and 'what you do'.",
+   "checked": true
   },
   "3:101|9:80": {
    "keep": false,
-   "why": "Only disbelief in Allah and His Messenger."
+   "why": "Only disbelief in Allah and His Messenger.",
+   "checked": true
   },
   "3:114|9:44": {
    "keep": false,
-   "why": "Only the common formula 'believe in Allah and the Last Day'."
+   "why": "Only the common formula 'believe in Allah and the Last Day'.",
+   "checked": true
   },
   "3:114|9:45": {
    "keep": false,
-   "why": "Only the common formula 'believe in Allah and the Last Day'."
+   "why": "Only the common formula 'believe in Allah and the Last Day'.",
+   "checked": true
   },
   "3:129|9:27": {
    "keep": false,
-   "why": "Only 'whom He wills' and the closing 'Forgiving, Merciful'."
+   "why": "Only 'whom He wills' and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "3:160|9:51": {
    "keep": false,
-   "why": "Only the common 'upon Allah let the believers rely'."
+   "why": "Only the common 'upon Allah let the believers rely'.",
+   "checked": true
   },
   "3:177|9:79": {
    "keep": false,
-   "why": "Only the closing 'for them is a painful punishment'."
+   "why": "Only the closing 'for them is a painful punishment'.",
+   "checked": true
   },
   "3:189|9:116": {
    "keep": false,
-   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'.",
+   "checked": true
   },
   "5:9|22:50": {
    "keep": true,
@@ -7288,127 +7365,158 @@
   },
   "3:9|11:118": {
    "keep": false,
-   "why": "Only 'people' and 'your Lord' as words."
+   "why": "Only 'people' and 'your Lord' as words.",
+   "checked": true
   },
   "3:44|11:49": {
    "keep": true,
-   "why": "Same sentence: that is from the news of the unseen which We reveal to you; you were not with them."
+   "why": "Same sentence: that is from the news of the unseen which We reveal to you; you were not with them.",
+   "checked": true
   },
   "3:51|11:56": {
    "keep": true,
-   "why": "Same words: Allah is my Lord and your Lord ... a straight path (Isa and Hud)."
+   "why": "Same words: Allah is my Lord and your Lord ... a straight path (Isa and Hud).",
+   "checked": true
   },
   "3:57|11:11": {
    "keep": true,
-   "why": "Same idea: those who do good deeds and their reward."
+   "why": "Same idea: those who do good deeds and their reward.",
+   "checked": true
   },
   "3:57|11:23": {
    "keep": true,
-   "why": "Same idea: those who believe and do good and their reward."
+   "why": "Same idea: those who believe and do good and their reward.",
+   "checked": true
   },
   "3:99|11:19": {
    "keep": true,
-   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked."
+   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked.",
+   "checked": true
   },
   "3:109|11:123": {
    "keep": true,
-   "why": "Same idea: to Allah belongs the heavens and earth, and to Him all matters return."
+   "why": "Same idea: to Allah belongs the heavens and earth, and to Him all matters return.",
+   "checked": true
   },
   "3:129|11:41": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Shares only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "3:150|11:113": {
    "keep": false,
-   "why": "Only protector and help as roots; different points."
+   "why": "Only protector and help as roots; different points.",
+   "checked": true
   },
   "3:171|11:115": {
    "keep": true,
-   "why": "Same phrase: Allah does not let the reward of the ... be lost."
+   "why": "Same phrase: Allah does not let the reward of the ... be lost.",
+   "checked": true
   },
   "3:177|11:26": {
    "keep": false,
-   "why": "Shares only 'painful punishment'."
+   "why": "Shares only 'painful punishment'.",
+   "checked": true
   },
   "3:189|11:4": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "3:29|13:8": {
    "keep": false,
-   "why": "Only Allah's knowledge and 'all things'; different points."
+   "why": "Only Allah's knowledge and 'all things'; different points.",
+   "checked": true
   },
   "3:40|13:27": {
    "keep": false,
-   "why": "Only 'Allah ... whom He wills'; Zakariyya's son vs the deniers' demand."
+   "why": "Only 'Allah ... whom He wills'; Zakariyya's son vs the deniers' demand.",
+   "checked": true
   },
   "3:56|13:34": {
    "keep": true,
-   "why": "Same idea: punishment in this world and the Hereafter, and none to protect them."
+   "why": "Same idea: punishment in this world and the Hereafter, and none to protect them.",
+   "checked": true
   },
   "3:57|13:29": {
    "keep": true,
-   "why": "Same idea: those who believe and do good and their good reward."
+   "why": "Same idea: those who believe and do good and their good reward.",
+   "checked": true
   },
   "3:76|13:20": {
    "keep": true,
-   "why": "Same idea: those who fulfil their covenant."
+   "why": "Same idea: those who fulfil their covenant.",
+   "checked": true
   },
   "3:83|13:15": {
    "keep": true,
-   "why": "Same phrase: all in the heavens and earth submit / bow to Him willingly or unwillingly."
+   "why": "Same phrase: all in the heavens and earth submit / bow to Him willingly or unwillingly.",
+   "checked": true
   },
   "3:98|13:27": {
    "keep": false,
-   "why": "Only disbelief and 'say' as words."
+   "why": "Only disbelief and 'say' as words.",
+   "checked": true
   },
   "3:98|13:43": {
    "keep": true,
-   "why": "Same idea: Allah is witness, answering those who disbelieve."
+   "why": "Same idea: Allah is witness, answering those who disbelieve.",
+   "checked": true
   },
   "3:101|13:27": {
    "keep": false,
-   "why": "Only disbelief and guidance as words."
+   "why": "Only disbelief and guidance as words.",
+   "checked": true
   },
   "3:126|13:28": {
    "keep": true,
-   "why": "Same phrase: hearts find rest."
+   "why": "Same phrase: hearts find rest.",
+   "checked": true
   },
   "3:137|13:32": {
    "keep": true,
-   "why": "Same warning: those before you, and how was the end / My penalty."
+   "why": "Same warning: those before you, and how was the end / My penalty.",
+   "checked": true
   },
   "3:5|14:38": {
    "keep": true,
-   "why": "Same sentence: nothing on earth or in the heaven is hidden from Allah."
+   "why": "Same sentence: nothing on earth or in the heaven is hidden from Allah.",
+   "checked": true
   },
   "3:56|14:7": {
    "keep": false,
-   "why": "Only disbelief and severe punishment as words; different points."
+   "why": "Only disbelief and severe punishment as words; different points.",
+   "checked": true
   },
   "3:99|14:3": {
    "keep": true,
-   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked."
+   "why": "Same sentence: they turn people from the way of Allah, seeking to make it crooked.",
+   "checked": true
   },
   "3:129|14:2": {
    "keep": false,
-   "why": "Shares only 'what is in the heavens and earth'."
+   "why": "Shares only 'what is in the heavens and earth'.",
+   "checked": true
   },
   "3:129|14:19": {
    "keep": false,
-   "why": "Only heavens and earth and 'wills' as words."
+   "why": "Only heavens and earth and 'wills' as words.",
+   "checked": true
   },
   "3:136|14:23": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there.",
+   "checked": true
   },
   "3:189|14:19": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "3:198|14:23": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath, abiding there."
+   "why": "Same reward: gardens with rivers flowing beneath, abiding there.",
+   "checked": true
   },
   "3:16|6:27": {
    "keep": true,
@@ -7507,115 +7615,143 @@
   },
   "3:16|12:97": {
    "keep": true,
-   "why": "Asking forgiveness for sins: the same plea."
+   "why": "Asking forgiveness for sins: the same plea.",
+   "checked": true
   },
   "3:44|12:102": {
    "keep": true,
-   "why": "Same sentence: from the news of the unseen we reveal to you, and you were not with them."
+   "why": "Same sentence: from the news of the unseen we reveal to you, and you were not with them.",
+   "checked": true
   },
   "3:63|12:73": {
    "keep": false,
-   "why": "Shared wording only; different subjects."
+   "why": "Shared wording only; different subjects.",
+   "checked": true
   },
   "3:95|12:108": {
    "keep": true,
-   "why": "Following Allah's way, and I am not of the polytheists."
+   "why": "Following Allah's way, and I am not of the polytheists.",
+   "checked": true
   },
   "3:137|12:109": {
    "keep": true,
-   "why": "Travel in the land and see how was the end of those before."
+   "why": "Travel in the land and see how was the end of those before.",
+   "checked": true
   },
   "3:171|12:90": {
    "keep": true,
-   "why": "Allah does not let the reward of the doers of good be lost."
+   "why": "Allah does not let the reward of the doers of good be lost.",
+   "checked": true
   },
   "3:29|18:26": {
    "keep": false,
-   "why": "Shared divine-knowledge phrase only; different contexts."
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:30": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:88": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:107": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:189|18:84": {
    "keep": false,
-   "why": "Shared formula only; different subjects."
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:10|19:77": {
    "keep": true,
-   "why": "Wealth and children will not avail them; the denier boasts of them."
+   "why": "Wealth and children will not avail them; the denier boasts of them.",
+   "checked": true
   },
   "3:40|19:8": {
    "keep": true,
-   "why": "Zakariyya's question: how will I have a boy when I am old and my wife barren."
+   "why": "Zakariyya's question: how will I have a boy when I am old and my wife barren.",
+   "checked": true
   },
   "3:41|19:10": {
    "keep": true,
-   "why": "Zakariyya's sign: not speaking to people."
+   "why": "Zakariyya's sign: not speaking to people.",
+   "checked": true
   },
   "3:41|19:21": {
    "keep": false,
-   "why": "Shared wording only; different scene."
+   "why": "Shared wording only; different scene.",
+   "checked": true
   },
   "3:47|19:20": {
    "keep": true,
-   "why": "Maryam's question: how will I have a son when no man has touched me."
+   "why": "Maryam's question: how will I have a son when no man has touched me.",
+   "checked": true
   },
   "3:47|19:35": {
    "keep": true,
-   "why": "When He decrees a matter He only says to it Be, and it is."
+   "why": "When He decrees a matter He only says to it Be, and it is.",
+   "checked": true
   },
   "3:51|19:36": {
    "keep": true,
-   "why": "Identical: Allah is my Lord and your Lord, so worship Him; this is a straight path."
+   "why": "Identical: Allah is my Lord and your Lord, so worship Him; this is a straight path.",
+   "checked": true
   },
   "3:57|19:60": {
    "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "why": "Reward of those who believe and do righteous deeds.",
+   "checked": true
   },
   "3:57|19:96": {
    "keep": true,
-   "why": "Those who believe and do righteous deeds."
+   "why": "Those who believe and do righteous deeds.",
+   "checked": true
   },
   "3:105|19:37": {
    "keep": true,
-   "why": "They differed after clear proofs; a great punishment / a great day."
+   "why": "They differed after clear proofs; a great punishment / a great day.",
+   "checked": true
   },
   "3:189|19:93": {
    "keep": false,
-   "why": "Shared heavens-and-earth phrase only; different subjects."
+   "why": "Shared heavens-and-earth phrase only; different subjects.",
+   "checked": true
   },
   "3:57|20:75": {
-   "keep": true,
-   "why": "Reward of the believer who does righteous deeds."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:57|20:82": {
-   "keep": true,
-   "why": "Believing and doing righteous deeds, and Allah's reward or forgiveness."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:57|20:112": {
-   "keep": true,
-   "why": "The believer doing righteous deeds is rewarded and not wronged."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:94|20:61": {
-   "keep": true,
-   "why": "Inventing lies against Allah, and the one who does so loses."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:136|20:76": {
-   "keep": true,
-   "why": "Gardens under which rivers flow, abiding forever, as a reward."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:198|20:76": {
-   "keep": true,
-   "why": "Gardens under which rivers flow, abiding forever, for the pious."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:16|23:109": {
    "keep": true,
@@ -7635,115 +7771,143 @@
   },
   "3:29|25:2": {
    "keep": false,
-   "why": "Shared heavens-and-earth phrase only; different subjects."
+   "why": "Shared heavens-and-earth phrase only; different subjects.",
+   "checked": true
   },
   "3:38|25:74": {
    "keep": true,
-   "why": "Prayer for good offspring: grant us from ... offspring."
+   "why": "Prayer for good offspring: grant us from ... offspring.",
+   "checked": true
   },
   "3:57|25:71": {
    "keep": false,
-   "why": "Shared 'did righteous deeds' only; one is reward, the other repentance."
+   "why": "Shared 'did righteous deeds' only; one is reward, the other repentance.",
+   "checked": true
   },
   "3:89|25:70": {
    "keep": true,
-   "why": "Except those who repent and reform; Allah is Forgiving, Merciful."
+   "why": "Except those who repent and reform; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "3:89|25:71": {
    "keep": true,
-   "why": "Repentance and reform after sin."
+   "why": "Repentance and reform after sin.",
+   "checked": true
   },
   "3:129|25:6": {
    "keep": false,
-   "why": "Shared heavens-and-earth and closing names only; different subjects."
+   "why": "Shared heavens-and-earth and closing names only; different subjects.",
+   "checked": true
   },
   "3:136|25:10": {
    "keep": false,
-   "why": "Shared gardens phrase only; reward of believers versus the disbelievers' demand."
+   "why": "Shared gardens phrase only; reward of believers versus the disbelievers' demand.",
+   "checked": true
   },
   "3:189|25:2": {
-   "keep": true,
-   "why": "His is the dominion of the heavens and the earth."
+   "keep": false,
+   "why": "Only the dominion of the heavens and the earth; different points (owner removed).",
+   "checked": true
   },
   "3:6|27:9": {
    "keep": false,
-   "why": "Shared closing names only; different scenes."
+   "why": "Shared closing names only; different scenes.",
+   "checked": true
   },
   "3:29|27:65": {
    "keep": false,
-   "why": "Shared knowledge-of-heavens-and-earth wording; different subjects."
+   "why": "Shared knowledge-of-heavens-and-earth wording; different subjects.",
+   "checked": true
   },
   "3:56|27:21": {
    "keep": false,
-   "why": "Shared 'punish with a severe punishment' only; Allah's punishment of disbelievers versus Sulayman and the hoopoe."
+   "why": "Shared 'punish with a severe punishment' only; Allah's punishment of disbelievers versus Sulayman and the hoopoe.",
+   "checked": true
   },
   "3:62|27:9": {
    "keep": false,
-   "why": "Shared closing names only; different scenes."
+   "why": "Shared closing names only; different scenes.",
+   "checked": true
   },
   "3:80|27:91": {
    "keep": false,
-   "why": "Shared 'muslims' only; different subjects."
+   "why": "Shared 'muslims' only; different subjects.",
+   "checked": true
   },
   "3:89|27:11": {
-   "keep": true,
-   "why": "Except one who repents or replaces evil with good; Forgiving, Merciful."
+   "keep": false,
+   "why": "Only the general repentance clause and 'Forgiving, Merciful'; different subjects (owner removed).",
+   "checked": true
   },
   "3:129|27:87": {
    "keep": false,
-   "why": "Shared heavens-and-earth and 'whom He wills' only; different subjects."
+   "why": "Shared heavens-and-earth and 'whom He wills' only; different subjects.",
+   "checked": true
   },
   "3:137|27:14": {
-   "keep": true,
-   "why": "See how was the end of the deniers / corrupters."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:137|27:51": {
-   "keep": true,
-   "why": "See how was the end."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:137|27:69": {
-   "keep": true,
-   "why": "Travel in the land and see how was the end."
+   "keep": false,
+   "why": "Only the repeated 'see how was the end' warning (owner removed).",
+   "checked": true
   },
   "3:189|27:23": {
    "keep": false,
-   "why": "Shared 'all things' only; different subjects."
+   "why": "Shared 'all things' only; different subjects.",
+   "checked": true
   },
   "3:189|27:87": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:18|28:70": {
-   "keep": true,
-   "why": "There is no god but He: tawhid declaration."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:57|28:67": {
-   "keep": true,
-   "why": "Believing and doing righteous deeds, and its good end."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:57|28:80": {
-   "keep": true,
-   "why": "Allah's reward for whoever believes and does righteous deeds."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:86|28:50": {
-   "keep": true,
-   "why": "Allah does not guide the wrongdoing people: those who turn away from guidance."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:95|28:49": {
    "keep": false,
-   "why": "Shared 'say' and 'follow' only; different subjects."
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:102|28:53": {
    "keep": false,
-   "why": "Shared 'muslims' only; different subjects."
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:137|28:40": {
-   "keep": true,
-   "why": "See how was the end of the deniers / wrongdoers."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:148|28:77": {
-   "keep": true,
-   "why": "This world and the Hereafter, and doing good: same idea."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:9|30:6": {
    "keep": true,

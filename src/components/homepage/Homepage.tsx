@@ -11,6 +11,7 @@ import OpeningSearch from '@/app/quran/branches/OpeningSearch';
 import { FilterButton } from '@/app/quran/branches/Filters';
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@/lib/bookmarks';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
+import { isCompareBookmark } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
 import type { HomepageData } from '@/lib/homepageData';
@@ -20,6 +21,7 @@ import HomeQuranWidget from './HomeQuranWidget';
 export default function Homepage({ data }: { data: HomepageData }) {
   const ar = useLanguage().language === 'ar';
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  const trees = saved.filter(item => !isCompareBookmark(item));
   const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
   return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
     <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
@@ -35,7 +37,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
     <section aria-labelledby="saved-title">
       <div className={styles.sectionHeading}>
         <h2 id="saved-title"><Bookmark size={18} aria-hidden />{ar ? 'المحفوظات' : 'Saved'}</h2>
-        {saved.length > 0 && <Button size="lg" href={`/quran/branches?b=${encodeURIComponent(saved.map(item => item.id).join('|'))}`} aria-label={ar ? 'افتح المحفوظات' : 'Open saved'} title={ar ? 'افتح المحفوظات' : 'Open saved'}><Library aria-hidden /></Button>}
+        {trees.length > 0 && <Button size="lg" href={`/quran/branches?b=${encodeURIComponent(trees.map(item => item.id).join('|'))}`} aria-label={ar ? 'افتح المحفوظات' : 'Open saved'} title={ar ? 'افتح المحفوظات' : 'Open saved'}><Library aria-hidden /></Button>}
       </div>
       {saved.length ? <div className={styles.shelf}>
         {saved.map(item => {
@@ -43,13 +45,13 @@ export default function Homepage({ data }: { data: HomepageData }) {
           return <Link key={item.id} href={item.href} className={styles.book}>
             {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
               {references.map(reference => <span key={reference.surah}>
-                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('، ')}</bdi>
+                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('range' in reference ? '–' : '، ')}</bdi>
               </span>)}
             </span>}
             <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
           </Link>;
         })}
-      </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو عائلة بزر' : 'Save a tree or family with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
+      </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو عائلة أو بطاقة مقارنة بزر' : 'Save a tree, family or compare card with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
     </section>
     <section className={styles.quiz} aria-labelledby="quiz-title">
       <Feather size={26} aria-hidden />

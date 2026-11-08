@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/compare/pairs.json';
 import { groups } from './data';
-import { ayahPairs, closestPair, MIN_PAIRS, pairsBySurah, pairsFor, surahOf, surahPairs } from './pairs';
+import { ayahPairs, closestPair, MIN_PAIRS, pairChains, pairsBySurah, pairsFor, surahOf, surahPairs } from './pairs';
 import type { SimilarAyahPair } from './similar';
 import { curatedComparisons } from '../curatedComparisons';
 
@@ -53,5 +53,17 @@ describe('compare pairs', () => {
 
   it.each(curatedComparisons.map(story => [story.id, story] as const))('lists the %s story pair', (_, story) => {
     expect(listed.find(pair => pair.a === story.a && pair.b === story.b)?.count).toBeGreaterThanOrEqual(MIN_PAIRS);
+  });
+
+  describe('pairChains', () => {
+    const chain = (...list: [number, number][]) => pairChains(list.map(([a, b]) => ({ a: `7:${a}`, b: `26:${b}`, columns: [] }))).map(run => run.map(pair => `${pair.a.slice(2)}~${pair.b.slice(3)}`));
+
+    it('runs consecutive ayat together on both sides', () => expect(chain([1, 1], [2, 2])).toEqual([['1~1', '2~2']]));
+    it('runs one ayah against two neighbours together', () => expect(chain([1, 1], [1, 2])).toEqual([['1~1', '1~2']]));
+    it('bridges a gap of up to three ayat', () => expect(chain([1, 1], [5, 5])).toEqual([['1~1', '5~5']]));
+    it('splits at a wider gap', () => expect(chain([1, 1], [6, 6])).toEqual([['1~1'], ['6~6']]));
+    it('splits when one side runs on too far ahead of the other', () => expect(chain([1, 1], [2, 5])).toEqual([['1~1'], ['2~5']]));
+    it('splits when the order crosses', () => expect(chain([1, 5], [2, 4])).toEqual([['1~5'], ['2~4']]));
+    it('leaves a far pair sharing an ayah apart, and continues the run it belongs to', () => expect(chain([106, 31], [106, 154], [107, 32])).toEqual([['106~31', '107~32'], ['106~154']]));
   });
 });

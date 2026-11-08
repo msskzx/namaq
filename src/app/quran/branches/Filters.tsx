@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 
 import Link from 'next/link';
 import { Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
+import { isCompareBookmark } from '@/lib/compareBookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
@@ -89,7 +90,7 @@ export function FilterButton({ range, view, allSurahs = [] }: { range: JuzRange 
     }
     const juz = draft.unit === 'juz' && next && (next.from !== 1 || next.to !== 30) ? next : undefined;
     router.replace(branchesHref('', juz, { ...view, surah: undefined, occurrences: undefined, page: undefined, card: undefined, filters,
-      saved: draft.saved ? view.saved?.length ? view.saved : readBookmarks().map(item => item.id) : undefined }), { scroll: false });
+      saved: draft.saved ? view.saved?.length ? view.saved : readBookmarks().filter(item => !isCompareBookmark(item)).map(item => item.id) : undefined }), { scroll: false });
     closePanel();
   };
   const fromLabel = draft.unit === 'surah' ? (ar ? 'من السورة' : 'From chapter') : draft.unit === 'page' ? (ar ? 'من الصفحة' : 'From page') : (ar ? 'من الجزء' : 'From juz');
@@ -133,7 +134,7 @@ const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmark
 
 function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
   const ar = useLanguage().language === 'ar';
-  const saved = useBookmarks();
+  const saved = useBookmarks().filter(item => !isCompareBookmark(item));
   const id = useId();
   const label = ar ? 'المحفوظة فقط' : 'Saved only';
   const hint = !checked && saved.length === 0 ? (ar ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'Save a tree with the bookmark under it first') : label;
@@ -151,7 +152,7 @@ const TAP_GAP = 300;
 const TAP_SLOP = 24;
 
 /** As on a post: a double tap on the tree or matrix saves it (never unsaves), with a bookmark popping up in the middle. */
-export function DoubleTapSave({ id, text, aliases = [], children }: { id: string; text: string; aliases?: string[]; children: React.ReactNode }) {
+export function DoubleTapSave({ id, text, href, aliases = [], children }: { id: string; text: string; href?: string; aliases?: string[]; children: React.ReactNode }) {
   const [pop, setPop] = useState(0);
   const down = useRef<{ x: number; y: number } | null>(null);
   const last = useRef<{ x: number; y: number; at: number } | null>(null);
@@ -162,12 +163,12 @@ export function DoubleTapSave({ id, text, aliases = [], children }: { id: string
     if (!id) return;
     // Taps only: not a drag or a swipe, and not on a button, link or field.
     if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > TAP_SLOP) return;
-    if ((event.target as Element).closest('button, a, input, summary, [role="button"]')) { last.current = null; return; }
+    if ((event.target as Element).closest('button:not([data-tap-through]), a, input, summary, [role="button"]')) { last.current = null; return; }
     const tap = { x: event.clientX, y: event.clientY, at: Date.now() };
     const previous = last.current;
     if (previous && tap.at - previous.at < TAP_GAP && Math.hypot(tap.x - previous.x, tap.y - previous.y) < TAP_SLOP * 2) {
       last.current = null;
-      if (!readBookmarks().some(item => item.id === id || aliases.includes(item.id))) toggleBookmark(bookmarkOf(id, text));
+      if (!readBookmarks().some(item => item.id === id || aliases.includes(item.id))) toggleBookmark(href ? { id, text, href } : bookmarkOf(id, text));
       setPop(count => count + 1);
       return;
     }

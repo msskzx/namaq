@@ -121,6 +121,21 @@ it('keeps saved-only pending until Apply', () => {
   expect(new URL(router.replace.mock.calls[0][0], 'http://localhost').searchParams.get('b')).toBe('saved');
 });
 
+it('leaves saved compare cards out of the saved-only trees', () => {
+  const compare = { id: 'compare:2:154|16:21', text: 'ولا تقولوا', href: '/quran/compare?a=2&b=16#c-2-154-16-21', savedAt: 2 };
+  localStorage.setItem('bookmarks', JSON.stringify([compare]));
+  render(<FilterButton range={null} view={{}} />);
+  fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
+  expect((screen.getByRole('switch', { name: 'المحفوظة فقط' }) as HTMLInputElement).disabled).toBe(true);
+  cleanup();
+  localStorage.setItem('bookmarks', JSON.stringify([compare, { id: 'saved', text: 'محفوظ', href: '/quran/branches?o=saved', savedAt: 1 }]));
+  render(<FilterButton range={null} view={{}} />);
+  fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'المحفوظة فقط' }));
+  fireEvent.click(screen.getByRole('button', { name: 'تطبيق' }));
+  expect(new URL(router.replace.mock.calls[0][0], 'http://localhost').searchParams.get('b')).toBe('saved');
+});
+
 it('places bookmarks first, removes the heading and resets every pending filter before Apply', () => {
   render(<FilterButton range={{ from: 25, to: 30 }} view={{ mode: 'cards', query: 'قال', saved: ['saved'], filters: { differences: 'order', sort: 'places' } }} />);
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));

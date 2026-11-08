@@ -25,6 +25,11 @@
 .compact .page header { border: 0; padding: 0; margin-bottom: 0.25rem; }
 .compact .page h3 { font-family: inherit; font-size: 0.875rem; color: var(--home-muted); }
 .compact .lines { line-height: 2.2; }
+/* a row a reader can select: one ayah among several partners of the same ayah */
+.pick { display: block; width: 100%; font: inherit; color: inherit; text-align: inherit; cursor: pointer; border-radius: 0.25rem; }
+.pick[aria-pressed="false"] { opacity: 0.5; }
+.pick:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
+.pickDivider { border-top: 1px dotted var(--home-rule); }
 .verseEnd { white-space: nowrap; }
 .verseSeal { color: var(--home-muted); white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }
