@@ -21103,12 +21103,22 @@
    }
   },
   "42:37|53:32": {
-   "keep": true,
-   "why": "Same description: those who avoid the major sins and indecencies."
+   "keep": false,
+   "why": "Same description: those who avoid the major sins and indecencies. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description: those who avoid the major sins and indecencies."
+   }
   },
   "42:50|53:21": {
    "keep": false,
-   "why": "Only male and female; His giving of children vs the deniers' division."
+   "why": "Only male and female; His giving of children vs the deniers' division.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only male and female; His giving of children vs the deniers' division."
+   }
   },
   "42:17|69:1": {
    "keep": false,
@@ -24038,6 +24048,12 @@
    "draft": {}
   },
   "47:34|58:16": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "42:50|53:45": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
