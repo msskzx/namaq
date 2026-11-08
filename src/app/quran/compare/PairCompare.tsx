@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
@@ -21,6 +21,7 @@ import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
+import ReadVideo, { canRecord } from './ReadVideo';
 import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
 export type SurahName = { ar: string; en?: string };
@@ -213,7 +214,7 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
           ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined))} />
         </div>
       </DoubleTapSave>
-      {read.studio ? <ReadStudio read={read} ar={ar} /> : <div className="flex justify-end">
+      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-end">
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
@@ -231,7 +232,15 @@ function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar:
 }
 
 /** In place of save under a card: close, a bar per ayah read (a tap reads from there), speed, play or pause, and reset. */
-function ReadStudio({ read, ar }: { read: ReturnType<typeof useReadAlong>; ar: boolean }) {
+function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useReadAlong>; ar: boolean; card: PairCard; names: Names }) {
+  const [video, setVideo] = useState(false);
+  const { plain, title } = useNames(names, ar);
+  const sideLabel = (side: CardSide) => {
+    const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
+    const show = (n: number) => (ar ? num(n) : n);
+    return `${plain(side.surah)} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`;
+  };
+  const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
   const active = playing || read.status === 'paused';
@@ -253,11 +262,13 @@ function ReadStudio({ read, ar }: { read: ReturnType<typeof useReadAlong>; ar: b
       <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
       <span className="flex-1" />
       <Button size="sm" variant="muted" className="min-w-9 tabular-nums" onClick={() => setReadSpeed(next)} aria-label={`${ar ? 'السرعة' : 'Speed'} ${read.speed}×`} title={ar ? 'السرعة' : 'Speed'}><span dir="ltr">{read.speed}×</span></Button>
+      {canRecord() && <Button size="icon" variant="muted" onClick={() => { read.reset(); setVideo(true); }} aria-label={videoLabel} title={videoLabel}><Send size={18} aria-hidden /></Button>}
       <Button size="icon" variant="muted" onClick={() => (playing ? read.pause() : read.play())} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
         {playing ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
       </Button>
       <Button size="icon" variant="muted" onClick={read.reset} aria-label={resetLabel} title={resetLabel}><RotateCcw size={18} aria-hidden /></Button>
     </div>
+    {video && <ReadVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
   </div>;
 }
 
