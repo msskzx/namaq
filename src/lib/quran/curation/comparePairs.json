@@ -21777,15 +21777,30 @@
   },
   "50:1|85:15": {
    "keep": false,
-   "why": "A single shared word; the Qur'an vs the Throne."
+   "why": "A single shared word; the Qur'an vs the Throne.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A single shared word; the Qur'an vs the Throne."
+   }
   },
   "50:17|85:6": {
    "keep": false,
-   "why": "Same root only; recording angels vs the people of the ditch."
+   "why": "Same root only; recording angels vs the people of the ditch.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Same root only; recording angels vs the people of the ditch."
+   }
   },
   "50:20|85:2": {
-   "keep": true,
-   "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day."
+   "keep": false,
+   "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style naming the Hour by promise: the Day of the Threat / the Promised Day."
+   }
   },
   "50:43|87:13": {
    "keep": false,
@@ -24229,6 +24244,12 @@
    "draft": {}
   },
   "42:50|53:45": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "50:1|85:21": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
