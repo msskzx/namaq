@@ -23720,15 +23720,30 @@
   },
   "53:15|79:41": {
    "keep": true,
-   "why": "Same rare description of the Garden as al-Ma'wa, the refuge."
+   "why": "Same rare description of the Garden as al-Ma'wa, the refuge.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare description of the Garden as al-Ma'wa, the refuge."
+   }
   },
   "53:39|79:35": {
    "keep": true,
-   "why": "Same phrase on man and what he strove for, weighed at the reckoning."
+   "why": "Same phrase on man and what he strove for, weighed at the reckoning.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same phrase on man and what he strove for, weighed at the reckoning."
+   }
   },
   "53:42|79:44": {
    "keep": true,
-   "why": "Same rare clause: to your Lord is the final end."
+   "why": "Same rare clause: to your Lord is the final end.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare clause: to your Lord is the final end."
+   }
   },
   "53:36|80:13": {
    "keep": false,
@@ -24677,11 +24692,21 @@
   },
   "53:18|79:20": {
    "keep": true,
-   "why": "Rare pairing on a prophet shown the greatest sign: Muhammad and Musa."
+   "why": "Rare pairing on a prophet shown the greatest sign: Muhammad and Musa.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare pairing on a prophet shown the greatest sign: Muhammad and Musa."
+   }
   },
   "53:25|79:25": {
    "keep": true,
-   "why": "Rare pairing, the last and the first, both under Allah's authority."
+   "why": "Rare pairing, the last and the first, both under Allah's authority.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare pairing, the last and the first, both under Allah's authority."
+   }
   },
   "56:38|74:39": {
    "keep": true,
