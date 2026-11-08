@@ -13722,31 +13722,38 @@
   },
   "44:7|52:36": {
    "keep": true,
-   "why": "Contrast: Lord of the heavens and the earth if you are certain vs did they create them? no, they lack certainty."
+   "why": "Contrast: Lord of the heavens and the earth if you are certain vs did they create them? no, they lack certainty.",
+   "checked": true
   },
   "44:19|52:38": {
-   "keep": false,
-   "why": "Only 'clear authority'; Musa's proof vs a challenge to eavesdroppers."
+   "keep": true,
+   "why": "Clear authority against those who deny (owner kept).",
+   "checked": true
   },
   "44:36|52:34": {
    "keep": true,
-   "why": "Same challenge: bring ... if you are truthful."
+   "why": "Same challenge: bring ... if you are truthful.",
+   "checked": true
   },
   "44:38|52:36": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; not created in play vs did they create them."
+   "why": "Only creation of the heavens and the earth; not created in play vs did they create them.",
+   "checked": true
   },
   "44:41|52:46": {
    "keep": true,
-   "why": "Same clause: a Day when nothing will avail them, nor will they be helped."
+   "why": "Same clause: a Day when nothing will avail them, nor will they be helped.",
+   "checked": true
   },
   "44:54|52:20": {
    "keep": true,
-   "why": "Same reward: We will marry them to fair maidens with large eyes."
+   "why": "Same reward: We will marry them to fair maidens with large eyes.",
+   "checked": true
   },
   "44:56|52:18": {
-   "keep": true,
-   "why": "Same reward: He protected them from the punishment of Hellfire."
+   "keep": false,
+   "why": "Only protection from the punishment of Hell; different statements (owner removed).",
+   "checked": true
   },
   "44:7|78:37": {
    "keep": true,
@@ -20977,19 +20984,23 @@
   },
   "44:27|52:17": {
    "keep": false,
-   "why": "Only the root of bliss; different subjects."
+   "why": "Only the root of bliss; different subjects.",
+   "checked": true
   },
   "44:27|52:18": {
-   "keep": true,
-   "why": "Contrast with a rare word: fakihin of Pharaoh's people and of the pious."
+   "keep": false,
+   "why": "Only delighted enjoyment; different people (owner removed).",
+   "checked": true
   },
   "44:51|52:17": {
    "keep": true,
-   "why": "Same frame: indeed the pious will be in..."
+   "why": "Same frame: indeed the pious will be in...",
+   "checked": true
   },
   "44:52|52:17": {
    "keep": true,
-   "why": "Same statement on the pious: in gardens and..."
+   "why": "Same statement on the pious: in gardens and...",
+   "checked": true
   },
   "44:51|54:54": {
    "keep": true,
