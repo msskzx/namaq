@@ -20858,11 +20858,13 @@
   },
   "43:30|46:7": {
    "keep": true,
-   "why": "Same reply of the deniers when the truth came: this is magic."
+   "why": "Same reply of the deniers when the truth came: this is magic.",
+   "checked": true
   },
   "43:68|46:13": {
-   "keep": true,
-   "why": "Same promise to Allah's servants: no fear upon them, nor will they grieve."
+   "keep": false,
+   "why": "Only the formula 'no fear nor grieve'; different contexts (owner removed).",
+   "checked": true
   },
   "43:70|47:6": {
    "keep": false,
@@ -23444,11 +23446,13 @@
   },
   "43:63|46:7": {
    "keep": false,
-   "why": "Only clear proofs and coming; Isa's teaching vs deniers calling the truth magic."
+   "why": "Only clear proofs and coming; Isa's teaching vs deniers calling the truth magic.",
+   "checked": true
   },
   "43:72|46:14": {
    "keep": true,
-   "why": "Same description of the Garden: earned as recompense for what they used to do."
+   "why": "Same description of the Garden: earned as recompense for what they used to do.",
+   "checked": true
   },
   "43:82|56:74": {
    "keep": false,
