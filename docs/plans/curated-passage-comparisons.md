@@ -11,7 +11,7 @@ One engine, with criteria for each feature. The متشابه engine (`src/lib/qu
 
 Rules cannot tell shared meaning from shared vocabulary, so curation runs after the engine. `src/lib/quran/curation/comparePairs.json` holds a reader's verdict on each pair (keep, or only shared vocabulary) with a one-line reason; the page leaves out dropped pairs, and `?review=1` shows every pair with its verdict. The first pass covers Al-Baqara/Al Imran (40 of 78 kept). Pinned stories, and later hand-made story ranges, are curation too, and any of the three features can use it.
 
-In local development, `?review=1` adds agree and drop buttons that write `comparePairs.json` and rebuild the cards, working from the last commit: a choice can be switched or undone until it is committed, and after that only by editing the file.
+In local development, `?review=1` adds agree and drop buttons that write `comparePairs.json`, rebuild the cards and commit both locally. Each verdict a press changes keeps its `draft`, so the press can be undone or switched from the file, including after it is committed.
 
 `npm run quran:compare-cards` builds every card once into `src/app/quran/compare/compareCards.js`: pair ids, tree links and word marks, with no ayah text or verdicts, which the page joins back in. Re-run it when a verdict's `keep` or `alone` changes; a test fails when the file is stale. Checking a card or editing its reason needs no re-run. It is a `.js` file of `JSON.parse` because TypeScript runs out of memory inferring a type from JSON this large.
 

@@ -5,10 +5,11 @@ import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { NextResponse } from 'next/server';
 import type { Verdict } from '@/lib/quran/curation/comparePairs';
-import { reviewedVerdicts, type ReviewAction } from '@/lib/quran/curation/reviewPage';
+import { restoredVerdicts, reviewedVerdicts, type ReviewAction } from '@/lib/quran/curation/reviewPage';
 
 type Verdicts = Record<string, Verdict>;
 const VERDICTS = 'src/lib/quran/curation/comparePairs.json';
+const CARDS = 'src/app/quran/compare/compareCards.js';
 const run = promisify(execFile);
 const read = (path: string) => JSON.parse(readFileSync(join(process.cwd(), path), 'utf8'));
 
@@ -21,7 +22,9 @@ function pageKeys(a: number, b: number): string[] {
   });
 }
 
-/** Records the owner's choice for a whole page on their own machine, working from the last commit so a choice can be switched or undone. */
+const MESSAGES = { agree: 'owner agreed', drop: 'owner dropped', undo: 'owner restored' };
+
+/** Records the owner's choice for a whole page on their own machine and commits it locally. The previous verdicts stay in the file, so a choice can be undone. */
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
   const origin = request.headers.get('origin');
@@ -31,24 +34,29 @@ export async function POST(request: Request) {
 
   const cwd = process.cwd();
   const path = join(cwd, VERDICTS);
-  const committed = JSON.parse((await run('git', ['show', `HEAD:${VERDICTS}`], { cwd, maxBuffer: 1 << 26 })).stdout).pairs as Verdicts;
   const before = readFileSync(path, 'utf8');
   const data = JSON.parse(before) as { pairs: Verdicts };
   const keys = pageKeys(a, b);
   if (action === 'undo') {
+    const restored = restoredVerdicts(data.pairs, keys);
     for (const key of keys) {
-      if (committed[key]) data.pairs[key] = committed[key];
+      if (restored[key]) data.pairs[key] = restored[key];
       else delete data.pairs[key];
     }
   } else {
-    Object.assign(data.pairs, reviewedVerdicts(committed, keys, action));
+    Object.assign(data.pairs, reviewedVerdicts(data.pairs, keys, action));
   }
-  writeFileSync(path, `${JSON.stringify(data, null, 1)}\n`);
+  const after = `${JSON.stringify(data, null, 1)}\n`;
+  if (after === before) return NextResponse.json({ ok: true });
+  writeFileSync(path, after);
   try {
     await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd });
+    await run('git', ['add', VERDICTS, CARDS], { cwd });
+    await run('git', ['commit', '-q', '-m', `Compare verdicts: ${MESSAGES[action]} ${a}/${b}${action === 'undo' ? ' draft' : ''}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`, '--', VERDICTS, CARDS], { cwd });
   } catch {
     writeFileSync(path, before);
-    return NextResponse.json({ error: 'Could not rebuild the cards' }, { status: 500 });
+    await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd }).catch(() => undefined);
+    return NextResponse.json({ error: 'Could not save the review' }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }

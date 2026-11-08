@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const files = vi.hoisted(() => new Map<string, string>());
-const shell = vi.hoisted(() => ({ fail: false, committed: '' }));
+const shell = vi.hoisted(() => ({ fail: false, commits: [] as string[] }));
 
 vi.mock('node:fs', () => ({
   readFileSync: (path: string) => files.get(path.split('/src/')[1]) ?? '',
@@ -9,8 +9,8 @@ vi.mock('node:fs', () => ({
 }));
 vi.mock('node:child_process', () => ({
   execFile: (command: string, _args: string[], _options: unknown, done: (error: Error | null, out?: { stdout: string }) => void) => {
-    if (command === 'git') return done(null, { stdout: shell.committed });
-    done(shell.fail ? new Error('build failed') : null, { stdout: '' });
+    if (command === 'git' && _args[0] === 'commit') shell.commits.push(_args[3].split('\n')[0]);
+    done(shell.fail && command !== 'git' ? new Error('build failed') : null, { stdout: '' });
   },
 }));
 
@@ -25,7 +25,7 @@ const drafted = { '2:1|3:1': { keep: true, why: 'Same.' }, '2:2|3:2': { keep: fa
 beforeEach(() => {
   vi.stubEnv('NODE_ENV', 'development');
   shell.fail = false;
-  shell.committed = JSON.stringify({ pairs: drafted });
+  shell.commits = [];
   files.clear();
   files.set(VERDICTS, `${JSON.stringify({ pairs: { ...drafted, '4:1|5:1': unsaved } }, null, 1)}\n`);
   files.set('app/quran/compare/pairs.json', JSON.stringify({ pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }] }));
@@ -47,17 +47,19 @@ describe('the compare review route', () => {
 
   it('changes only the pairs of that page, keeping the file format', async () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(200);
-    expect(verdicts()['2:1|3:1']).toEqual({ keep: false, why: 'Same. (owner removed)', checked: true });
+    expect(verdicts()['2:1|3:1']).toEqual({ keep: false, why: 'Same. (owner removed)', checked: true, draft: { keep: true, why: 'Same.' } });
+    expect(shell.commits).toEqual(['Compare verdicts: owner dropped 2/3']);
     expect(verdicts()['4:1|5:1']).toEqual(unsaved);
     expect(files.get(VERDICTS)!.endsWith('}\n')).toBe(true);
   });
 
-  it('switches a choice from the committed draft, and undoes back to it', async () => {
+  it('switches a choice from the stored draft, and undoes back to it', async () => {
     await post({ a: 2, b: 3, action: 'drop' });
     await post({ a: 2, b: 3, action: 'agree' });
-    expect(verdicts()['2:1|3:1']).toEqual({ keep: true, why: 'Same.', checked: true });
+    expect(verdicts()['2:1|3:1']).toMatchObject({ keep: true, why: 'Same.', checked: true });
     await post({ a: 2, b: 3, action: 'undo' });
     expect(verdicts()).toEqual({ ...drafted, '4:1|5:1': unsaved });
+    expect(shell.commits[2]).toBe('Compare verdicts: owner restored 2/3 draft');
   });
 
   it('restores the file when the cards cannot be rebuilt', async () => {
@@ -65,5 +67,11 @@ describe('the compare review route', () => {
     const before = files.get(VERDICTS);
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(500);
     expect(files.get(VERDICTS)).toBe(before);
+    expect(shell.commits).toEqual([]);
+  });
+
+  it('commits nothing when a page is already in that state', async () => {
+    await post({ a: 2, b: 3, action: 'undo' });
+    expect(shell.commits).toEqual([]);
   });
 });
