@@ -7046,28 +7046,34 @@
    "checked": true
   },
   "2:97|46:30": {
-   "keep": true,
-   "why": "Same phrase: the revelation confirms what came before it and guides."
+   "keep": false,
+   "why": "Same phrase: the revelation confirms what came before it and guides. (owner removed)",
+   "checked": true
   },
   "2:98|46:6": {
    "keep": false,
-   "why": "Only enmity and disbelief as roots; different points."
+   "why": "Only enmity and disbelief as roots; different points.",
+   "checked": true
   },
   "2:107|46:32": {
-   "keep": true,
-   "why": "Same idea: no protector besides Allah."
+   "keep": false,
+   "why": "Same idea: no protector besides Allah. (owner removed)",
+   "checked": true
   },
   "2:176|46:2": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words."
+   "why": "Only the Book sent down by Allah as words.",
+   "checked": true
   },
   "2:209|46:2": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:284|46:33": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Shares only heavens and earth and the closing 'able over all things'.",
+   "checked": true
   },
   "2:25|47:12": {
    "keep": true,
@@ -7091,83 +7097,103 @@
   },
   "2:106|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:107|48:14": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth."
+   "why": "Shares only the dominion of the heavens and earth.",
+   "checked": true
   },
   "2:117|48:7": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:119|48:8": {
-   "keep": true,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+   "keep": false,
+   "why": "Same sentence: We sent you as a bringer of good news and a warner. (owner removed)",
+   "checked": true
   },
   "2:148|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:209|48:7": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:209|48:19": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:284|48:14": {
-   "keep": true,
-   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills."
+   "keep": false,
+   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills. (owner removed)",
+   "checked": true
   },
   "2:95|49:1": {
    "keep": false,
-   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing."
+   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing.",
+   "checked": true
   },
   "2:103|49:1": {
    "keep": false,
-   "why": "Only belief and fearing Allah as words."
+   "why": "Only belief and fearing Allah as words.",
+   "checked": true
   },
   "2:107|49:16": {
    "keep": false,
-   "why": "Only heavens and earth and knowing as words."
+   "why": "Only heavens and earth and knowing as words.",
+   "checked": true
   },
   "2:116|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:137|49:1": {
    "keep": false,
-   "why": "Shares only the names Hearing, Knowing."
+   "why": "Shares only the names Hearing, Knowing.",
+   "checked": true
   },
   "2:160|49:10": {
    "keep": false,
-   "why": "Only reconciling and mercy roots; repentance vs brotherhood."
+   "why": "Only reconciling and mercy roots; repentance vs brotherhood.",
+   "checked": true
   },
   "2:182|49:10": {
-   "keep": true,
-   "why": "Same idea: making peace between people, and mercy."
+   "keep": false,
+   "why": "Same idea: making peace between people, and mercy. (owner removed)",
+   "checked": true
   },
   "2:192|49:5": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Shares only the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:218|49:15": {
-   "keep": true,
-   "why": "Same description: those who believe and strive in the way of Allah."
+   "keep": false,
+   "why": "Same description: those who believe and strive in the way of Allah. (owner removed)",
+   "checked": true
   },
   "2:224|49:1": {
    "keep": false,
-   "why": "Only fearing Allah and the names Hearing, Knowing."
+   "why": "Only fearing Allah and the names Hearing, Knowing.",
+   "checked": true
   },
   "2:224|49:13": {
    "keep": false,
-   "why": "Only fearing Allah and 'Knowing' as words."
+   "why": "Only fearing Allah and 'Knowing' as words.",
+   "checked": true
   },
   "2:284|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:73|57:17": {
    "keep": true,
