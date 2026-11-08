@@ -27,7 +27,7 @@
     ]
    ],
    "why": "The same demand: فأت بها / فأت به.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:111|26:36",
@@ -39,7 +39,7 @@
     ]
    ],
    "why": "Different verbs for the same order: وأرسل / وابعث.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:114|26:42",
@@ -71,7 +71,7 @@
     ]
    ],
    "why": "Pharaoh's same promise: قال نعم وإنكم لمن المقربين.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:115|26:43",
@@ -93,7 +93,7 @@
     ]
    ],
    "why": "The magicians and Moses on who throws first: الملقين / ملقون.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:116|26:43",
@@ -110,7 +110,7 @@
     ]
    ],
    "why": "Moses' same order: ألقوا.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:116|26:44",
@@ -122,7 +122,7 @@
     ]
    ],
    "why": "Then they threw: فلما ألقوا / فألقوا.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:119|26:44",
@@ -134,7 +134,7 @@
     ]
    ],
    "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:122|26:48",
@@ -156,7 +156,7 @@
     ]
    ],
    "why": "The same words: رب موسى وهارون.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
   },
   {
    "pair": "7:123|26:49",
@@ -165,10 +165,51 @@
      3,
      2,
      "root"
+    ],
+    [
+     2,
+     1,
+     "exact"
     ]
    ],
    "why": "Pharaoh's same accusation: آمنتم به / آمنتم له.",
-   "source": "curated"
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:113|26:41",
+   "links": [
+    [
+     3,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "The same word قالوا, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:110|26:35",
+   "links": [
+    [
+     4,
+     4,
+     "exact"
+    ]
+   ],
+   "why": "The same word أرضكم, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:125|26:50",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ]
+   ],
+   "why": "The same word قالوا, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
   }
  ]
 }

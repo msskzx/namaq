@@ -23624,7 +23624,8 @@
   },
   "7:119|26:44": {
    "keep": true,
-   "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا."
+   "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا. The order crosses the passage, so it has its own card.",
+   "alone": true
   },
   "7:122|26:48": {
    "keep": true,
