@@ -7609,91 +7609,113 @@
   },
   "3:29|18:26": {
    "keep": false,
-   "why": "Shared divine-knowledge phrase only; different contexts."
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:30": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:88": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:57|18:107": {
-   "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "keep": false,
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:189|18:84": {
    "keep": false,
-   "why": "Shared formula only; different subjects."
+   "why": "Owner removed the whole page.",
+   "checked": true
   },
   "3:10|19:77": {
    "keep": true,
-   "why": "Wealth and children will not avail them; the denier boasts of them."
+   "why": "Wealth and children will not avail them; the denier boasts of them.",
+   "checked": true
   },
   "3:40|19:8": {
    "keep": true,
-   "why": "Zakariyya's question: how will I have a boy when I am old and my wife barren."
+   "why": "Zakariyya's question: how will I have a boy when I am old and my wife barren.",
+   "checked": true
   },
   "3:41|19:10": {
    "keep": true,
-   "why": "Zakariyya's sign: not speaking to people."
+   "why": "Zakariyya's sign: not speaking to people.",
+   "checked": true
   },
   "3:41|19:21": {
    "keep": false,
-   "why": "Shared wording only; different scene."
+   "why": "Shared wording only; different scene.",
+   "checked": true
   },
   "3:47|19:20": {
    "keep": true,
-   "why": "Maryam's question: how will I have a son when no man has touched me."
+   "why": "Maryam's question: how will I have a son when no man has touched me.",
+   "checked": true
   },
   "3:47|19:35": {
    "keep": true,
-   "why": "When He decrees a matter He only says to it Be, and it is."
+   "why": "When He decrees a matter He only says to it Be, and it is.",
+   "checked": true
   },
   "3:51|19:36": {
    "keep": true,
-   "why": "Identical: Allah is my Lord and your Lord, so worship Him; this is a straight path."
+   "why": "Identical: Allah is my Lord and your Lord, so worship Him; this is a straight path.",
+   "checked": true
   },
   "3:57|19:60": {
    "keep": true,
-   "why": "Reward of those who believe and do righteous deeds."
+   "why": "Reward of those who believe and do righteous deeds.",
+   "checked": true
   },
   "3:57|19:96": {
    "keep": true,
-   "why": "Those who believe and do righteous deeds."
+   "why": "Those who believe and do righteous deeds.",
+   "checked": true
   },
   "3:105|19:37": {
    "keep": true,
-   "why": "They differed after clear proofs; a great punishment / a great day."
+   "why": "They differed after clear proofs; a great punishment / a great day.",
+   "checked": true
   },
   "3:189|19:93": {
    "keep": false,
-   "why": "Shared heavens-and-earth phrase only; different subjects."
+   "why": "Shared heavens-and-earth phrase only; different subjects.",
+   "checked": true
   },
   "3:57|20:75": {
-   "keep": true,
-   "why": "Reward of the believer who does righteous deeds."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:57|20:82": {
-   "keep": true,
-   "why": "Believing and doing righteous deeds, and Allah's reward or forgiveness."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:57|20:112": {
-   "keep": true,
-   "why": "The believer doing righteous deeds is rewarded and not wronged."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:94|20:61": {
-   "keep": true,
-   "why": "Inventing lies against Allah, and the one who does so loses."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:136|20:76": {
-   "keep": true,
-   "why": "Gardens under which rivers flow, abiding forever, as a reward."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:198|20:76": {
-   "keep": true,
-   "why": "Gardens under which rivers flow, abiding forever, for the pious."
+   "keep": false,
+   "why": "Shared formulas only; owner removed the page.",
+   "checked": true
   },
   "3:16|23:109": {
    "keep": true,
