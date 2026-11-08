@@ -73,6 +73,12 @@ describe('compare pair cards', () => {
     expect(a.marks?.[12]?.kind).toBe('exact');
   });
 
+  it('keys curated links with the lower surah first, once each', () => {
+    const pairs = curatedLinks.links.map(item => item.pair);
+    expect(new Set(pairs).size).toBe(pairs.length);
+    for (const pair of pairs) expect(Number(pair.split(':')[0])).toBeLessThan(Number(pair.split('|')[1].split(':')[0]));
+  });
+
   it('has curated links only on words that exist', () => {
     const ayat = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
     for (const item of curatedLinks.links) {
