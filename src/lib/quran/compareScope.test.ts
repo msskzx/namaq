@@ -8,21 +8,22 @@ const spans = {
 const inScope = (a: number, b: number, scope: CompareScope) => pageInScope({ a, b }, spans, scope);
 
 describe('the compare filter', () => {
-  it('keeps a page when either surah has ayat in a juz range', () => {
-    expect(inScope(2, 69, { unit: 'juz', from: 26, to: 30 })).toBe(true);
-    expect(inScope(56, 69, { unit: 'juz', from: 28, to: 28 })).toBe(false);
-    expect(inScope(2, 3, { unit: 'juz', from: 4, to: 10 })).toBe(true);
+  it('keeps a page only when both surahs have ayat in a juz range', () => {
+    expect(inScope(56, 69, { unit: 'juz', from: 26, to: 30 })).toBe(true);
+    expect(inScope(2, 69, { unit: 'juz', from: 26, to: 30 })).toBe(false);
+    expect(inScope(56, 69, { unit: 'juz', from: 28, to: 29 })).toBe(false);
+    expect(inScope(2, 3, { unit: 'juz', from: 3, to: 3 })).toBe(true);
   });
 
-  it('filters by chapter range, page range and picked chapters or juz', () => {
-    expect(inScope(2, 69, { unit: 'surah', from: 60, to: 70 })).toBe(true);
-    expect(inScope(2, 3, { unit: 'surah', from: 60, to: 70 })).toBe(false);
-    expect(inScope(2, 3, { unit: 'page', from: 60, to: 60 })).toBe(true);
-    expect(inScope(56, 69, { unit: 'page', from: 1, to: 100 })).toBe(false);
-    expect(inScope(2, 56, { unit: 'surahs', list: [56, 90] })).toBe(true);
-    expect(inScope(2, 3, { unit: 'surahs', list: [56] })).toBe(false);
-    expect(inScope(2, 3, { unit: 'juzs', list: [4, 30] })).toBe(true);
-    expect(inScope(56, 69, { unit: 'juzs', list: [28] })).toBe(false);
+  it('needs both surahs in a chapter range, page range or picked list', () => {
+    expect(inScope(56, 69, { unit: 'surah', from: 50, to: 70 })).toBe(true);
+    expect(inScope(2, 69, { unit: 'surah', from: 60, to: 70 })).toBe(false);
+    expect(inScope(2, 3, { unit: 'page', from: 40, to: 60 })).toBe(true);
+    expect(inScope(2, 56, { unit: 'page', from: 1, to: 100 })).toBe(false);
+    expect(inScope(2, 56, { unit: 'surahs', list: [2, 56] })).toBe(true);
+    expect(inScope(2, 56, { unit: 'surahs', list: [56, 90] })).toBe(false);
+    expect(inScope(56, 69, { unit: 'juzs', list: [27, 29] })).toBe(true);
+    expect(inScope(56, 69, { unit: 'juzs', list: [27] })).toBe(false);
   });
 
   it('reads and writes the address', () => {

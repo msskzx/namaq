@@ -33,9 +33,9 @@ export function scopeParam(scope: CompareScope | undefined) {
 
 const overlaps = (span: [number, number] | undefined, from: number, to: number) => !!span && span[0] <= to && from <= span[1];
 
-/** A page belongs to the filter when either of its two surahs falls inside it. */
+/** A page belongs to the filter when both of its surahs fall inside it. */
 export function pageInScope(page: { a: number; b: number }, spans: SurahSpans, scope: CompareScope) {
-  return [page.a, page.b].some(surah => {
+  return [page.a, page.b].every(surah => {
     switch (scope.unit) {
       case 'surah': return surah >= scope.from && surah <= scope.to;
       case 'surahs': return scope.list.includes(surah);
