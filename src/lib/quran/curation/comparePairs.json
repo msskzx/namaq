@@ -13551,13 +13551,13 @@
    "checked": true
   },
   "43:29|44:13": {
-   "keep": true,
-   "why": "Same idea: a clear messenger came to them, yet they did not heed.",
+   "keep": false,
+   "why": "Same idea: a clear messenger came to them, yet they did not heed. (owner removed)",
    "checked": true
   },
   "43:82|44:7": {
-   "keep": true,
-   "why": "Same title: Lord of the heavens and the earth.",
+   "keep": false,
+   "why": "Same title: Lord of the heavens and the earth. (owner removed)",
    "checked": true
   },
   "43:9|45:36": {
@@ -20832,13 +20832,13 @@
    "why": "Same idea: Allah creating the male and the female."
   },
   "43:2|44:2": {
-   "keep": true,
-   "why": "Identical oath: by the clear Book.",
+   "keep": false,
+   "why": "Identical oath: by the clear Book. (owner removed)",
    "checked": true
   },
   "43:50|44:12": {
-   "keep": true,
-   "why": "Same scene: removal of the punishment, the plea and the broken promise.",
+   "keep": false,
+   "why": "Same scene: removal of the punishment, the plea and the broken promise. (owner removed)",
    "checked": true
   },
   "43:78|44:39": {
