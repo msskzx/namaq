@@ -22223,30 +22223,33 @@
    }
   },
   "52:11|77:45": {
-   "keep": true,
-   "why": "Same refrain: woe that Day to the deniers.",
+   "keep": false,
+   "why": "Same refrain: woe that Day to the deniers. (owner removed)",
    "checked": true,
    "draft": {
     "keep": true,
-    "why": "Same refrain: woe that Day to the deniers."
+    "why": "Same refrain: woe that Day to the deniers.",
+    "checked": true
    }
   },
   "52:11|77:47": {
-   "keep": true,
-   "why": "Same refrain: woe that Day to the deniers.",
+   "keep": false,
+   "why": "Same refrain: woe that Day to the deniers. (owner removed)",
    "checked": true,
    "draft": {
     "keep": true,
-    "why": "Same refrain: woe that Day to the deniers."
+    "why": "Same refrain: woe that Day to the deniers.",
+    "checked": true
    }
   },
   "52:11|77:49": {
-   "keep": true,
-   "why": "Same refrain: woe that Day to the deniers.",
+   "keep": false,
+   "why": "Same refrain: woe that Day to the deniers. (owner removed)",
    "checked": true,
    "draft": {
     "keep": true,
-    "why": "Same refrain: woe that Day to the deniers."
+    "why": "Same refrain: woe that Day to the deniers.",
+    "checked": true
    }
   },
   "52:22|77:42": {
