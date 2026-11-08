@@ -7870,36 +7870,44 @@
    "checked": true
   },
   "3:18|28:70": {
-   "keep": true,
-   "why": "There is no god but He: tawhid declaration."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:57|28:67": {
-   "keep": true,
-   "why": "Believing and doing righteous deeds, and its good end."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:57|28:80": {
-   "keep": true,
-   "why": "Allah's reward for whoever believes and does righteous deeds."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:86|28:50": {
-   "keep": true,
-   "why": "Allah does not guide the wrongdoing people: those who turn away from guidance."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:95|28:49": {
    "keep": false,
-   "why": "Shared 'say' and 'follow' only; different subjects."
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:102|28:53": {
    "keep": false,
-   "why": "Shared 'muslims' only; different subjects."
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:137|28:40": {
-   "keep": true,
-   "why": "See how was the end of the deniers / wrongdoers."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:148|28:77": {
-   "keep": true,
-   "why": "This world and the Hereafter, and doing good: same idea."
+   "keep": false,
+   "why": "Shared formulas only; owner dropped the page.",
+   "checked": true
   },
   "3:9|30:6": {
    "keep": true,
