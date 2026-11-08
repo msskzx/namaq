@@ -22791,15 +22791,30 @@
   },
   "77:13|78:17": {
    "keep": true,
-   "why": "Same rare name: the Day of Decision."
+   "why": "Same rare name: the Day of Decision.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare name: the Day of Decision."
+   }
   },
   "77:14|78:17": {
    "keep": true,
-   "why": "Same rare name: the Day of Decision."
+   "why": "Same rare name: the Day of Decision.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare name: the Day of Decision."
+   }
   },
   "77:25|78:6": {
    "keep": true,
-   "why": "Same construction: have We not made the earth ..."
+   "why": "Same construction: have We not made the earth ...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: have We not made the earth ..."
+   }
   },
   "77:8|81:2": {
    "keep": true,
