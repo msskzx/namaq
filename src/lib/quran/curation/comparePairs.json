@@ -13772,77 +13772,156 @@
   },
   "45:2|46:2": {
    "keep": true,
-   "why": "Same words: the revelation of the Book is from Allah, the Almighty, the Wise."
+   "why": "Same words: the revelation of the Book is from Allah, the Almighty, the Wise.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: the revelation of the Book is from Allah, the Almighty, the Wise."
+   }
   },
   "45:22|46:3": {
    "keep": true,
-   "why": "Same statement: the heavens and the earth were created in truth."
+   "why": "Same statement: the heavens and the earth were created in truth.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: the heavens and the earth were created in truth."
+   }
   },
   "45:22|46:33": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; recompense vs reviving the dead."
+   "why": "Only creation of the heavens and the earth; recompense vs reviving the dead.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only creation of the heavens and the earth; recompense vs reviving the dead."
+   }
   },
   "45:25|46:7": {
    "keep": true,
-   "why": "Same scene: when Our clear verses are recited to them, the disbelievers' answer."
+   "why": "Same scene: when Our clear verses are recited to them, the disbelievers' answer.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: when Our clear verses are recited to them, the disbelievers' answer."
+   }
   },
   "45:25|46:22": {
    "keep": true,
-   "why": "Same challenge: bring it, if you are truthful."
+   "why": "Same challenge: bring it, if you are truthful.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same challenge: bring it, if you are truthful."
+   }
   },
   "45:2|48:7": {
    "keep": false,
    "why": "Only the closing names Almighty, Wise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "45:2|48:19": {
    "keep": false,
    "why": "Only the closing names Almighty, Wise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "45:37|48:7": {
    "keep": false,
    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "45:2|57:1": {
    "keep": false,
    "why": "Only the closing names Almighty, Wise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "45:5|57:17": {
    "keep": false,
    "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason. (owner removed)",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sign: Allah gives life to the earth after its death, signs for those who reason."
+   }
   },
   "45:37|57:1": {
    "keep": false,
    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "45:2|59:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "45:37|59:1": {
    "keep": false,
-   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "45:37|59:24": {
    "keep": false,
-   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'in the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "45:22|64:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth'."
+   }
   },
   "45:22|64:3": {
-   "keep": true,
-   "why": "Same statement: He created the heavens and the earth in truth."
+   "keep": false,
+   "why": "Same statement: He created the heavens and the earth in truth. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He created the heavens and the earth in truth."
+   }
   },
   "45:36|64:1": {
    "keep": false,
-   "why": "Only 'praise' and 'the heavens and the earth'; different statements."
+   "why": "Only 'praise' and 'the heavens and the earth'; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'praise' and 'the heavens and the earth'; different statements."
+   }
   },
   "46:22|67:25": {
    "keep": true,
@@ -21121,12 +21200,20 @@
   "45:3|51:20": {
    "keep": false,
    "why": "Same construction: signs in the earth for a described people. (owner removed)",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: signs in the earth for a described people."
+   }
   },
   "45:4|51:20": {
    "keep": false,
    "why": "Same construction: and in ... are signs for those certain. (owner removed)",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction: and in ... are signs for those certain."
+   }
   },
   "45:3|52:36": {
    "keep": false,
@@ -23563,12 +23650,20 @@
   "45:11|51:37": {
    "keep": false,
    "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
+   }
   },
   "45:36|51:23": {
    "keep": false,
    "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise.",
-   "checked": true
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
+   }
   },
   "51:23|78:37": {
    "keep": false,
