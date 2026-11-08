@@ -6397,15 +6397,18 @@
   },
   "2:51|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud.",
+   "checked": true
   },
   "2:53|23:49": {
-   "keep": true,
-   "why": "Same sentence: We gave Musa the Book so that they may be guided."
+   "keep": false,
+   "why": "Same sentence: We gave Musa the Book so that they may be guided. (owner removed)",
+   "checked": true
   },
   "2:92|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud.",
+   "checked": true
   },
   "2:34|25:26": {
    "keep": false,
