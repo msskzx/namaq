@@ -38,10 +38,10 @@ const surahOf = (value: string | string[] | undefined) => {
   return Number.isInteger(n) && n >= 1 && n <= 114 ? n : null;
 };
 
-async function pairPage(a: number, b: number, review = false) {
+async function pairPage(a: number, b: number, review = false, todo = false) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} review={review} {...(review ? { states: reviewStates() } : {})} />;
+  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -52,15 +52,16 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const [x, y] = [surahOf(query.a), surahOf(query.b)];
     if (preset) redirect(surahPairHref(preset.a, preset.b));
     const review = query.review === '1';
-    const keepReview = review ? '&review=1' : '';
+    const todo = review && query.todo === '1';
+    const keepReview = `${review ? '&review=1' : ''}${todo ? '&todo=1' : ''}`;
     const closest = x !== null && y === null ? closestPair(review ? reviewPairs : listedPairs, x) : undefined;
     if (closest) redirect(`${surahPairHref(closest.a, closest.b)}${keepReview}`);
     if (x === null || y === null || x === y) {
       if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(`${surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b)}${keepReview}`);
-      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review);
+      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review, todo);
     }
-    if (x > y) redirect(`${surahPairHref(x, y)}${review ? '&review=1' : ''}`);
-    return pairPage(x, y, review);
+    if (x > y) redirect(`${surahPairHref(x, y)}${keepReview}`);
+    return pairPage(x, y, review, todo);
   }
   const themes = query.mode === 'themes';
   const s = surahOf(query.s);

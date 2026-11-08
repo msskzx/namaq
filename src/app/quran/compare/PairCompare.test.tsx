@@ -5,6 +5,8 @@ import { act, cleanup, fireEvent, render, screen, within } from '@testing-librar
 import PairCompare from './PairCompare';
 import type { PairCard } from './pairCards';
 
+const router = vi.hoisted(() => ({ push: vi.fn() }));
+vi.mock('next/navigation', () => ({ useRouter: () => router }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 const names = { 2: { ar: 'الْبَقَرَةِ', en: 'Al-Baqarah' }, 7: { ar: 'الْاَعْرَافِ', en: "Al-A'raf" }, 11: { ar: 'هُوْدٍ', en: 'Hud' }, 26: { ar: 'الشُّعَرَاءِ', en: "Ash-Shu'ara" }, 52: { ar: 'الطُّوْرِ', en: 'At-Tur' }, 68: { ar: 'الْقَلَمِ', en: 'Al-Qalam' } };
@@ -113,6 +115,26 @@ describe('PairCompare', () => {
     expect(container.textContent).toContain('drafted by Claude');
     expect(container.textContent).toContain('checked by you');
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
+  });
+
+  it('in review, the unreviewed-only switch hides finished pages and keeps those with a question', () => {
+    const allRows = () => [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review todo states={{ '52:68': 'checked', '7:11': 'ask', '2:7': 'dropped' }} />);
+    const rows = allRows();
+    expect(rows.some(href => href?.includes('a=7&b=11'))).toBe(true);
+    expect(rows.some(href => href?.includes('a=7&b=26'))).toBe(true);
+    expect(rows.some(href => href?.includes('a=52&b=68'))).toBe(false);
+    expect(rows.some(href => href?.includes('a=2&b=7'))).toBe(false);
+    expect(rows.every(href => href?.includes('&todo=1'))).toBe(true);
+    fireEvent.click(within(pane()).getByRole('switch', { name: 'غير المراجَعة فقط' }));
+    expect(router.push).toHaveBeenCalledWith('/quran/compare?a=52&b=68&review=1');
+  });
+
+  it('in review, marks a page the owner dropped with a cross', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review states={{ '7:26': 'dropped' }} />);
+    const row = pane().querySelector('[href="/quran/compare?a=7&b=26&review=1"]') as HTMLElement;
+    expect(within(row).getByRole('img', { name: 'حُذفت' })).toBeTruthy();
+    expect(within(row).queryByRole('img', { name: 'راجعتها' })).toBeNull();
   });
 
   it('in review, marks the surah pairs the owner reviewed and those with a question', () => {

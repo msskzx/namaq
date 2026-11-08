@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import curatedLinks from '@/lib/quran/curation/compareLinks.json';
+import generated from './compareCards';
+import { buildCompareCards } from './buildCards';
 import treeData from '@/app/quran/branches/trees.json';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
@@ -22,7 +25,7 @@ describe('compare pair cards', () => {
   });
 
   it('gives a range card the tree link of its first pair that has one', () => {
-    const block = pairCards(2, 7).find(card => card.id === '2:57-59|7:160-162')!;
+    const block = pairCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
     expect(block.group).toBeDefined();
   });
 
@@ -59,6 +62,63 @@ describe('compare pair cards', () => {
     expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
   });
 
+  it('adds a curated word link and the pair it needs, inside the range card', () => {
+    const card = pairCards(3, 19).find(item => item.id === '3:40-41|19:8-10')!;
+    expect(card.pairs?.map(pair => pair.id)).toContain('3:40|19:9');
+    const [a, b] = [card.sides[0].ayat[0], card.sides[1].ayat[1]];
+    expect(a.number).toBe(40);
+    expect(b.number).toBe(9);
+    expect(a.marks?.[12]?.link).toBeDefined();
+    expect(a.marks?.[12]?.link).toBe(b.marks?.[1]?.link);
+    expect(a.marks?.[12]?.kind).toBe('exact');
+  });
+
+  it('keys curated links with the lower surah first, once each', () => {
+    const pairs = curatedLinks.links.map(item => item.pair);
+    expect(new Set(pairs).size).toBe(pairs.length);
+    for (const pair of pairs) expect(Number(pair.split(':')[0])).toBeLessThan(Number(pair.split('|')[1].split(':')[0]));
+  });
+
+  it('has curated links only on words that exist', () => {
+    const ayat = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
+    for (const item of curatedLinks.links) {
+      const [a, b] = item.pair.split('|').map(key => ayat.get(key)!);
+      for (const [i, j] of item.links as [number, number, string][]) expect(a[i] && b[j]).toBeTruthy();
+    }
+  });
+
+  it('keeps a pair marked alone on its own card', () => {
+    const ids = pairCards(7, 11).map(card => card.id);
+    expect(ids).toContain('7:70|11:62');
+    expect(ids.some(id => id.startsWith('7:70-'))).toBe(false);
+    expect(pairCards(7, 11).find(card => card.id === '7:70|11:62')?.pairs).toBeUndefined();
+  });
+
+  it('is built from the current pairs and verdicts: run npm run quran:compare-cards after changing them', () => {
+    expect(generated).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
+  });
+
+  it('joins a curated passage that runs in a different order into one card', () => {
+    const card = pairCards(43, 78).find(item => item.id === '43:9-12|78:6-16')!;
+    expect(card.sides.map(side => side.ayat.length)).toEqual([4, 11]);
+    const links = card.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)).sort());
+    expect(links[0]).toEqual(links[1]);
+    expect(new Set(links[0]).size).toBe(links[0].length);
+  });
+
+  it('gives each word one partner on the curated Moses card', () => {
+    const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
+    const [a, b] = moses.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)));
+    expect(new Set(a).size).toBe(a.length);
+    expect(new Set(b).size).toBe(b.length);
+    expect(moses.sides[1].ayat.find(ayah => ayah.number === 40)?.marks).toEqual({});
+    expect(moses.sides[1].ayat.find(ayah => ayah.number === 41)?.marks?.[2]).toBeDefined();
+  });
+
+  it('merges two runs of one passage when they share an ayah', () => {
+    expect(pairCards(69, 101).map(card => card.id)).toContain('69:3-4|101:1-3');
+  });
+
   it('keeps every word link on both sides of a range card', () => {
     for (const card of pairCards(7, 26)) {
       const [a, b] = card.sides.map(side => new Set(side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link))));
@@ -93,7 +153,7 @@ describe('compare pair cards', () => {
   it('lists a page only with three kept pairs, but keeps every engine page in review', () => {
     expect(listedPairs.some(pair => pair.a === 3 && pair.b === 18)).toBe(false);
     expect(reviewPairs.find(pair => pair.a === 3 && pair.b === 18)?.count).toBe(5);
-    expect(reviewStates()['3:18']).toBe('checked');
+    expect(reviewStates()['3:18']).toBe('dropped');
     for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(3);
   });
 
@@ -129,13 +189,19 @@ describe('compare pair cards', () => {
       }
     });
 
+    it('pair a word that recurs in an ayah with the occurrence at the same place', () => {
+      const columns = (id: string) => pairs.find(pair => `${pair.a}|${pair.b}` === id)!.columns.map(([i, j]) => [i, j]);
+      expect(columns('77:14|82:18')).toEqual(expect.arrayContaining([[2, 3], [0, 1]]));
+      expect(columns('56:8|90:18')).toEqual(expect.arrayContaining([[3, 1], [4, 2]]));
+    });
+
     it('recover the Al-Waqi\'ah and Al-Haqqah passage across ayah boundaries', () => {
       expect(pairCards(56, 69).map(card => card.id)).toEqual(expect.arrayContaining(['56:1|69:15', '56:75-80|69:38-43', '56:94|69:31']));
     });
   });
 
   it('has a verdict only for known pairs, and one for every passage pair', () => {
-    const found = new Set(([...data.pairs, ...passage.pairs] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+    const found = new Set(([...data.pairs, ...passage.pairs, ...curatedLinks.links.map(item => ({ a: item.pair.split('|')[0], b: item.pair.split('|')[1] }))] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
     expect(passage.pairs.filter(pair => !compareVerdicts[`${pair.a}|${pair.b}`])).toEqual([]);
   });

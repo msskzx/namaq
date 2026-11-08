@@ -8,6 +8,7 @@ import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
 import { NavActions } from '@/components/common/NavBar';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
@@ -20,6 +21,7 @@ import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
+import ReviewButtons from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
 import { ayahStarts, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
@@ -43,6 +45,7 @@ function useNames(names: Names, ar: boolean) {
 /** In review, a check marks a surah pair whose verdicts the owner all checked; a question mark, one with a question for the owner. */
 function StateMark({ state, ar }: { state?: ReviewState; ar: boolean }) {
   if (state === 'checked') return <Check size={16} role="img" aria-label={ar ? 'راجعتها' : 'Reviewed'} className="shrink-0 text-[var(--home-green)]" />;
+  if (state === 'dropped') return <span title={ar ? 'حُذفت' : 'Dropped'} className="shrink-0"><X size={16} role="img" aria-label={ar ? 'حُذفت' : 'Dropped'} className="text-[var(--home-accent)]" /></span>;
   if (state === 'ask') return <CircleHelp size={16} role="img" aria-label={ar ? 'فيها سؤال لك' : 'Has a question for you'} className="shrink-0 text-[var(--home-accent)]" />;
   return null;
 }
@@ -57,10 +60,23 @@ function SavedOnly({ checked, onChange, saved }: { checked: boolean; onChange: (
   return <span title={hint} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={checked} label={label} disabled={!checked && saved === 0} onIcon={<Bookmark className="size-3" aria-hidden />} onChange={onChange} /><label htmlFor={id}>{label}</label></span>;
 }
 
-function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, review = false, states = {}, savedOnly = false, onSavedOnly }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState>; savedOnly?: boolean; onSavedOnly?: (checked: boolean) => void }) {
+function TodoOnly({ a, b, todo }: { a: number; b: number; todo: boolean }) {
+  const ar = useLanguage().language === 'ar';
+  const router = useRouter();
+  const id = useId();
+  const label = ar ? 'غير المراجَعة فقط' : 'Unreviewed only';
+  return <span title={label} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={todo} label={label} onIcon={<CircleHelp className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, true, checked))} /><label htmlFor={id}>{label}</label></span>;
+}
+
+const unreviewed = (states: Record<string, ReviewState>, pair: { a: number; b: number }) => {
+  const state = states[`${pair.a}:${pair.b}`];
+  return state !== 'checked' && state !== 'dropped';
+};
+
+function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, review = false, states = {}, savedOnly = false, onSavedOnly, todo = false }: { pairs: SurahPair[]; names: Names; a: number; b: number; autoFocus?: boolean; onPick?: () => void; review?: boolean; states?: Record<string, ReviewState>; savedOnly?: boolean; onSavedOnly?: (checked: boolean) => void; todo?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const saved = savedSurahPairs(useBookmarks());
-  const pairs = savedOnly ? listed.filter(pair => saved.has(`${pair.a}:${pair.b}`)) : listed;
+  const pairs = (savedOnly ? listed.filter(pair => saved.has(`${pair.a}:${pair.b}`)) : listed).filter(pair => !todo || unreviewed(states, pair));
   const { plain } = useNames(names, ar);
   const [byCount, setByCount] = useState(false);
   const [query, setQuery] = useState('');
@@ -77,7 +93,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
   const matches = (pair: { a: number; b: number }) => terms.every(term =>
     [pair.a, pair.b].some(n => matchesSurah({ number: n, name: names[n]?.ar ?? '', nameTransliterated: names[n]?.en }, term))
     || normalizeWord(`${story(pair)?.name.ar ?? ''} ${story(pair)?.name.en ?? ''}`.toLowerCase()).includes(normalizeWord(term.toLowerCase())));
-  const stories = savedOnly ? [] : curatedComparisons.filter(matches);
+  const stories = savedOnly ? [] : curatedComparisons.filter(pair => matches(pair) && (!todo || unreviewed(states, pair)));
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
   const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
   // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
@@ -90,7 +106,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
   const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   const row = (pair: { a: number; b: number }, label: React.ReactNode) => (
     <li key={`${pair.a}:${pair.b}`}>
-      <Link href={pairHref(pair.a, pair.b, review)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
+      <Link href={pairHref(pair.a, pair.b, review, todo)} scroll onClick={onPick} aria-current={pair.a === a && pair.b === b ? 'page' : undefined}
         className="flex items-center gap-3 rounded-md border-s-2 border-transparent px-3 py-2 hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)] aria-[current=page]:border-[var(--home-accent)] aria-[current=page]:bg-[var(--home-paper-deep)]">
         <span className="min-w-0 flex-1">{label}</span>
         {review && <StateMark state={states[`${pair.a}:${pair.b}`]} ar={ar} />}
@@ -112,13 +128,14 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
       ]} />
       {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
+      {review && <TodoOnly a={a} b={b} todo={todo} />}
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto">
         {stories.length > 0 && <>
           <h3 className={heading}>{ar ? 'مختارة' : 'Selected stories'}</h3>
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {grouped ? <ul data-all>{surahs.map(n => (
+        {todo && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{ar ? 'راجعت كل الصفحات.' : 'Every page is reviewed.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
@@ -128,7 +145,8 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
                 <ChevronDown size={16} aria-hidden className={`shrink-0 text-[var(--home-muted)] transition-transform ${open.has(n) ? '' : 'ltr:-rotate-90 rtl:rotate-90'}`} />
                 <span className={`min-w-0 flex-1 ${n === a || n === b ? 'text-[var(--home-accent)]' : ''}`}>{plain(n)}</span>
                 {review && <StateMark state={groups.get(n)!.some(pair => states[`${pair.a}:${pair.b}`] === 'ask') ? 'ask'
-                  : groups.get(n)!.every(pair => states[`${pair.a}:${pair.b}`] === 'checked') ? 'checked' : undefined} ar={ar} />}
+                  : groups.get(n)!.every(pair => states[`${pair.a}:${pair.b}`] === 'dropped') ? 'dropped'
+                  : groups.get(n)!.every(pair => ['checked', 'dropped'].includes(states[`${pair.a}:${pair.b}`])) ? 'checked' : undefined} ar={ar} />}
                 <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
               </summary>
               <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n))))}</ul>
@@ -143,7 +161,7 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
 }
 
 /** Review mode (verdicts on the cards) stays on while moving between pairs. */
-const pairHref = (a: number, b: number, review: boolean) => `${surahPairHref(a, b)}${review ? '&review=1' : ''}`;
+const pairHref = (a: number, b: number, review: boolean, todo = false) => `${surahPairHref(a, b)}${review ? '&review=1' : ''}${review && todo ? '&todo=1' : ''}`;
 
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
@@ -274,7 +292,7 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
   </div>;
 }
 
-export default function PairCompare({ a, b, cards, pairs, names, review = false, states }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState> }) {
+export default function PairCompare({ a, b, cards, pairs, names, review = false, states, editable = false, todo = false }: { a: number; b: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const { title } = useNames(names, ar);
   const sheet = useRef<HTMLDialogElement>(null);
@@ -295,7 +313,9 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);
   const index = pairs.findIndex(pair => pair.a === a && pair.b === b);
-  const next = index >= 0 ? pairs[index + 1] : undefined;
+  const after = index >= 0 ? pairs[index + 1] : undefined;
+  const nextTodo = states && [...pairs.slice(index + 1), ...pairs.slice(0, Math.max(index, 0))].find(pair => unreviewed(states, pair));
+  const next = todo ? nextTodo : after;
   const choose = () => {
     if (window.matchMedia?.('(min-width: 1024px)').matches) pane.current?.querySelector('input')?.focus();
     else { sheet.current?.showModal(); setOpen(true); }
@@ -322,14 +342,15 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
       <h1 className="sr-only">{story ? `${title(a, b)} - ${ar ? story.name.voweled : story.name.en}` : title(a, b)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-4">
+          {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.a, nextTodo.b, true, todo)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}</ol>}
-          {next && <Link href={pairHref(next.a, next.b, review)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
+          {next && <Link href={pairHref(next.a, next.b, review, todo)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
-          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} />
+          <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} />
         </aside>
       </div>
       <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
@@ -340,7 +361,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
             <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
           </div>
-          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} />}
+          {open && <PairList pairs={pairs} names={names} a={a} b={b} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} />}
         </div>
       </dialog>
     </div>

@@ -49,7 +49,28 @@ export function pairChains(pairs: AyahPair[]): AyahPair[][] {
     if (best) best.push(pair);
     else chains.push([pair]);
   }
-  return chains;
+  return joinOverlapping(chains);
+}
+
+const spanOf = (chain: AyahPair[], side: 'a' | 'b') => {
+  const ayat = chain.map(pair => ayahOf(pair[side]));
+  return [Math.min(...ayat), Math.max(...ayat)];
+};
+const overlap = ([a, b]: number[], [c, d]: number[], gap = 0) => a <= d + gap && c <= b + gap;
+
+/** Two runs whose ayah ranges overlap on one side and overlap or touch on the other are one passage (69:3-4~101:3 with 69:4~101:1-2). */
+function joinOverlapping(chains: AyahPair[][]) {
+  const joined = [...chains];
+  for (let i = 0; i < joined.length; i++) for (let j = i + 1; j < joined.length; j++) {
+    const [ax, ay, bx, by] = [spanOf(joined[i], 'a'), spanOf(joined[j], 'a'), spanOf(joined[i], 'b'), spanOf(joined[j], 'b')];
+    if (!(overlap(ax, ay) && overlap(bx, by, 1)) && !(overlap(bx, by) && overlap(ax, ay, 1))) continue;
+    joined[i] = [...joined[i], ...joined[j]].sort((p, q) => keyOrder(p.a) - keyOrder(q.a) || keyOrder(p.b) - keyOrder(q.b));
+    joined.splice(j, 1);
+    // The grown run may now reach one already passed.
+    i = -1;
+    break;
+  }
+  return joined;
 }
 
 /** Ayah pairs grouped by surah pair, keyed "a:b" with a < b. */

@@ -1,0 +1,271 @@
+{
+ "links": [
+  {
+   "pair": "3:40|19:9",
+   "links": [
+    [
+     11,
+     0,
+     "exact"
+    ],
+    [
+     12,
+     1,
+     "exact"
+    ]
+   ],
+   "why": "The same answer to Zakariyya's question: قال كذلك.",
+   "source": "owner"
+  },
+  {
+   "pair": "7:106|26:31",
+   "links": [
+    [
+     6,
+     2,
+     "lemma"
+    ]
+   ],
+   "why": "The same demand: فأت بها / فأت به.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:111|26:36",
+   "links": [
+    [
+     3,
+     3,
+     "root"
+    ]
+   ],
+   "why": "Different verbs for the same order: وأرسل / وابعث.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:114|26:42",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     1,
+     "exact"
+    ],
+    [
+     2,
+     2,
+     "exact"
+    ],
+    [
+     3,
+     4,
+     "exact"
+    ],
+    [
+     4,
+     5,
+     "exact"
+    ]
+   ],
+   "why": "Pharaoh's same promise: قال نعم وإنكم لمن المقربين.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:116|26:43",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "Moses' same order: ألقوا.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:116|26:44",
+   "links": [
+    [
+     3,
+     0,
+     "lemma"
+    ]
+   ],
+   "why": "Then they threw: فلما ألقوا / فألقوا.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:119|26:44",
+   "links": [
+    [
+     0,
+     8,
+     "root"
+    ]
+   ],
+   "why": "Contrast: they boast لنحن الغالبون, and they are فغلبوا.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:122|26:48",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ],
+    [
+     1,
+     1,
+     "exact"
+    ],
+    [
+     2,
+     2,
+     "exact"
+    ]
+   ],
+   "why": "The same words: رب موسى وهارون.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:123|26:49",
+   "links": [
+    [
+     3,
+     2,
+     "root"
+    ],
+    [
+     2,
+     1,
+     "exact"
+    ]
+   ],
+   "why": "Pharaoh's same accusation: آمنتم به / آمنتم له.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:113|26:41",
+   "links": [
+    [
+     3,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "The same word قالوا, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:110|26:35",
+   "links": [
+    [
+     4,
+     4,
+     "exact"
+    ]
+   ],
+   "why": "The same word أرضكم, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:125|26:50",
+   "links": [
+    [
+     0,
+     0,
+     "exact"
+    ]
+   ],
+   "why": "The same word قالوا, which the engine marked as a form change.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "7:113|26:40",
+   "links": [],
+   "remove": [
+    [
+     1,
+     2
+    ],
+    [
+     7,
+     3
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     10,
+     6
+    ]
+   ],
+   "why": "These words of 7:113 belong with 26:41, the aligned ayah.",
+   "source": "owner"
+  },
+  {
+   "pair": "43:11|78:14",
+   "links": [
+    [
+     1,
+     0,
+     "root"
+    ],
+    [
+     2,
+     1,
+     "exact"
+    ],
+    [
+     4,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء.",
+   "source": "owner-approved"
+  },
+  {
+   "pair": "43:11|78:15",
+   "links": [
+    [
+     7,
+     1,
+     "exact"
+    ],
+    [
+     11,
+     0,
+     "root"
+    ]
+   ],
+   "why": "What the water brings out: به, and تخرجون / لنخرج.",
+   "source": "owner-approved"
+  },
+  {
+   "pair": "43:11|78:16",
+   "links": [],
+   "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word.",
+   "source": "owner-approved"
+  },
+  {
+   "pair": "43:9|78:6",
+   "links": [],
+   "why": "43:10 continues the sentence of 43:9, so the passage starts there; no shared word.",
+   "source": "owner-approved"
+  }
+ ],
+ "joins": [
+  "43:9-12|78:6-16"
+ ]
+}
