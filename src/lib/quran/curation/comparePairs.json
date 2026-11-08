@@ -6781,39 +6781,48 @@
   },
   "2:8|45:26": {
    "keep": false,
-   "why": "Only 'people' and 'day' as words."
+   "why": "Only 'people' and 'day' as words.",
+   "checked": true
   },
   "2:82|45:30": {
    "keep": true,
-   "why": "Same idea: those who believe and do good enter His mercy."
+   "why": "Same idea: those who believe and do good enter His mercy.",
+   "checked": true
   },
   "2:107|45:27": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth; different points."
+   "why": "Shares only the dominion of the heavens and earth; different points.",
+   "checked": true
   },
   "2:116|45:22": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:164|45:5": {
    "keep": true,
-   "why": "Same signs: alternation of night and day, rain reviving the earth, the winds, for people who reason."
+   "why": "Same signs: alternation of night and day, rain reviving the earth, the winds, for people who reason.",
+   "checked": true
   },
   "2:176|45:2": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words."
+   "why": "Only the Book sent down by Allah as words.",
+   "checked": true
   },
   "2:209|45:2": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:252|45:6": {
    "keep": true,
-   "why": "Same sentence: these are the signs of Allah We recite to you in truth."
+   "why": "Same sentence: these are the signs of Allah We recite to you in truth.",
+   "checked": true
   },
   "2:281|45:22": {
    "keep": true,
-   "why": "Same idea: every soul is paid what it earned, and they are not wronged."
+   "why": "Same idea: every soul is paid what it earned, and they are not wronged.",
+   "checked": true
   },
   "2:97|46:30": {
    "keep": true,
@@ -6841,19 +6850,23 @@
   },
   "2:25|47:12": {
    "keep": true,
-   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good."
+   "why": "Same reward: gardens with rivers flowing beneath for those who believe and do good.",
+   "checked": true
   },
   "2:154|47:34": {
    "keep": false,
-   "why": "Only 'the way of Allah' and death as words; martyrs vs deniers."
+   "why": "Only 'the way of Allah' and death as words; martyrs vs deniers.",
+   "checked": true
   },
   "2:161|47:34": {
    "keep": true,
-   "why": "Same sentence: those who disbelieve and die as disbelievers."
+   "why": "Same sentence: those who disbelieve and die as disbelievers.",
+   "checked": true
   },
   "2:263|47:21": {
    "keep": true,
-   "why": "Same phrase: a kind word is better."
+   "why": "Same phrase: a kind word is better.",
+   "checked": true
   },
   "2:106|48:21": {
    "keep": false,
@@ -6937,55 +6950,68 @@
   },
   "2:73|57:17": {
    "keep": true,
-   "why": "Same idea: Allah gives life to the dead / the earth, and shows signs so that you may reason."
+   "why": "Same idea: Allah gives life to the dead / the earth, and shows signs so that you may reason.",
+   "checked": true
   },
   "2:105|57:29": {
    "keep": true,
-   "why": "Same closing sentence: Allah gives His bounty to whom He wills; Allah is of great bounty (People of the Book in both)."
+   "why": "Same closing sentence: Allah gives His bounty to whom He wills; Allah is of great bounty (People of the Book in both).",
+   "checked": true
   },
   "2:107|57:5": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth."
+   "why": "Shares only the dominion of the heavens and earth.",
+   "checked": true
   },
   "2:117|57:5": {
    "keep": false,
-   "why": "Only heavens and earth and 'matter' as words."
+   "why": "Only heavens and earth and 'matter' as words.",
+   "checked": true
   },
   "2:210|57:5": {
-   "keep": true,
-   "why": "Same closing: to Allah all matters are returned."
+   "keep": false,
+   "why": "Only the closing that all matters return to Allah; different subjects (owner removed).",
+   "checked": true
   },
   "2:218|57:28": {
    "keep": true,
-   "why": "Same idea: the believers and Allah's mercy; Forgiving, Merciful."
+   "why": "Same idea: the believers and Allah's mercy; Forgiving, Merciful.",
+   "checked": true
   },
   "2:245|57:11": {
    "keep": true,
-   "why": "Same sentence: who will lend Allah a goodly loan so He multiplies it for him."
+   "why": "Same sentence: who will lend Allah a goodly loan so He multiplies it for him.",
+   "checked": true
   },
   "2:245|57:18": {
    "keep": true,
-   "why": "Same idea: lending Allah a goodly loan, multiplied."
+   "why": "Same idea: lending Allah a goodly loan, multiplied.",
+   "checked": true
   },
   "2:39|58:17": {
    "keep": true,
-   "why": "Same sentence: they are the people of the Fire, abiding in it."
+   "why": "Same sentence: they are the people of the Fire, abiding in it.",
+   "checked": true
   },
   "2:81|58:17": {
    "keep": true,
-   "why": "Same sentence: they are the people of the Fire, abiding in it."
+   "why": "Same sentence: they are the people of the Fire, abiding in it.",
+   "checked": true
   },
   "2:110|58:13": {
    "keep": true,
-   "why": "Same command: establish the prayer and give zakat; Allah is aware of what you do."
+   "why": "Same command: establish the prayer and give zakat; Allah is aware of what you do.",
+   "checked": true
   },
   "2:148|58:6": {
    "keep": true,
-   "why": "Same idea: Allah brings you all together (raises them all)."
+   "why": "Same idea: Allah brings you all together (raises them all).",
+   "checked": true
   },
   "2:203|58:9": {
    "keep": true,
-   "why": "Same closing: fear Allah, to whom you will be gathered."
+   "why": "Same closing: fear Allah, to whom you will be gathered.",
+   "checked": true
   },
   "2:86|59:3": {
    "keep": true,
@@ -7009,79 +7035,98 @@
   },
   "2:75|61:11": {
    "keep": false,
-   "why": "Only belief and knowing as words."
+   "why": "Only belief and knowing as words.",
+   "checked": true
   },
   "2:103|61:11": {
-   "keep": true,
-   "why": "Same idea: belief is better for them, if they only knew."
+   "keep": false,
+   "why": "Only believing and 'if you knew'; different subjects (owner removed).",
+   "checked": true
   },
   "2:154|61:4": {
-   "keep": true,
-   "why": "Same subject: those who fight in the way of Allah."
+   "keep": false,
+   "why": "Only fighting in the way of Allah; different subjects (owner removed).",
+   "checked": true
   },
   "2:218|61:11": {
    "keep": true,
-   "why": "Same subject: believing and striving in the way of Allah."
+   "why": "Same subject: believing and striving in the way of Allah.",
+   "checked": true
   },
   "2:239|61:11": {
    "keep": false,
-   "why": "Only knowing as a word."
+   "why": "Only knowing as a word.",
+   "checked": true
   },
   "2:94|62:6": {
    "keep": true,
-   "why": "Nearly the same ayah: if you claim it is for you alone, then wish for death, if you are truthful."
+   "why": "Nearly the same ayah: if you claim it is for you alone, then wish for death, if you are truthful.",
+   "checked": true
   },
   "2:95|62:7": {
    "keep": true,
-   "why": "Nearly the same ayah: they will never wish for it because of what their hands sent ahead."
+   "why": "Nearly the same ayah: they will never wish for it because of what their hands sent ahead.",
+   "checked": true
   },
   "2:103|62:9": {
    "keep": false,
-   "why": "Shares only 'better for you if you knew'; the subjects differ."
+   "why": "Shares only 'better for you if you knew'; the subjects differ.",
+   "checked": true
   },
   "2:129|62:2": {
    "keep": true,
-   "why": "Same sentence: a messenger from among them reciting His signs, purifying them, teaching the Book and wisdom."
+   "why": "Same sentence: a messenger from among them reciting His signs, purifying them, teaching the Book and wisdom.",
+   "checked": true
   },
   "2:151|62:2": {
    "keep": true,
-   "why": "Same sentence: a messenger from among you reciting Our signs, purifying you, teaching the Book and wisdom."
+   "why": "Same sentence: a messenger from among you reciting Our signs, purifying you, teaching the Book and wisdom.",
+   "checked": true
   },
   "2:39|64:10": {
    "keep": true,
-   "why": "Nearly the same ayah: those who disbelieve and deny Our signs are the people of the Fire."
+   "why": "Nearly the same ayah: those who disbelieve and deny Our signs are the people of the Fire.",
+   "checked": true
   },
   "2:77|64:4": {
    "keep": true,
-   "why": "Same sentence: Allah knows what they conceal and what they declare."
+   "why": "Same sentence: Allah knows what they conceal and what they declare.",
+   "checked": true
   },
   "2:107|64:4": {
    "keep": false,
-   "why": "Only heavens and earth and knowing as words."
+   "why": "Only heavens and earth and knowing as words.",
+   "checked": true
   },
   "2:116|64:1": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only heavens and earth as words.",
+   "checked": true
   },
   "2:199|64:14": {
    "keep": false,
-   "why": "Shares only forgiveness and the closing 'Forgiving, Merciful'."
+   "why": "Shares only forgiveness and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:209|64:18": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:218|64:14": {
    "keep": false,
-   "why": "Shares only 'O you who believe' and the closing 'Forgiving, Merciful'."
+   "why": "Shares only 'O you who believe' and the closing 'Forgiving, Merciful'.",
+   "checked": true
   },
   "2:245|64:17": {
    "keep": true,
-   "why": "Same idea: lend Allah a goodly loan and He multiplies it for you."
+   "why": "Same idea: lend Allah a goodly loan and He multiplies it for you.",
+   "checked": true
   },
   "2:284|64:1": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Shares only heavens and earth and the closing 'able over all things'.",
+   "checked": true
   },
   "2:29|65:12": {
    "keep": true,
