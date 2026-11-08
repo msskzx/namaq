@@ -24,16 +24,19 @@ function pageKeys(a: number, b: number): string[] {
 
 const MESSAGES = { agree: 'owner agreed', drop: 'owner dropped', undo: 'owner restored' };
 
-/** Records the owner's choice for a whole page on their own machine and commits it locally. The previous verdicts stay in the file, so a choice can be undone. */
-export async function POST(request: Request) {
-  if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
-  const origin = request.headers.get('origin');
-  if (origin && new URL(origin).host !== request.headers.get('host')) return new NextResponse(null, { status: 403 });
-  const { a, b, action } = await request.json() as { a: number; b: number; action: ReviewAction | 'undo' };
-  if (!Number.isInteger(a) || !Number.isInteger(b) || a < 1 || b > 114 || a >= b || !['agree', 'drop', 'undo'].includes(action)) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+// On globalThis because a verdict write hot-reloads this module. Presses run one at a time: each one reads, rebuilds and commits the same files.
+const queue = globalThis as unknown as { compareReviewQueue?: Promise<unknown> };
+function inTurn<T>(task: () => Promise<T>): Promise<T> {
+  const result = (queue.compareReviewQueue ?? Promise.resolve()).then(task, task);
+  queue.compareReviewQueue = result.catch(() => undefined);
+  return result;
+}
 
+async function record(a: number, b: number, action: ReviewAction | 'undo') {
   const cwd = process.cwd();
   const path = join(cwd, VERDICTS);
+  // A press commits the whole file, so it must hold nothing but this press.
+  if (await run('git', ['diff', '--quiet', 'HEAD', '--', VERDICTS], { cwd }).then(() => false, () => true)) return NextResponse.json({ error: 'The verdict file has uncommitted changes' }, { status: 409 });
   const before = readFileSync(path, 'utf8');
   const data = JSON.parse(before) as { pairs: Verdicts };
   const keys = pageKeys(a, b);
@@ -52,11 +55,22 @@ export async function POST(request: Request) {
   try {
     await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd });
     await run('git', ['add', VERDICTS, CARDS], { cwd });
-    await run('git', ['commit', '-q', '-m', `Compare verdicts: ${MESSAGES[action]} ${a}/${b}${action === 'undo' ? ' draft' : ''}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`, '--', VERDICTS, CARDS], { cwd });
+    await run('git', ['commit', '-q', '-m', `chore(compare): ${MESSAGES[action]} ${a}/${b}${action === 'undo' ? ' draft' : ''}`, '--', VERDICTS, CARDS], { cwd });
   } catch {
+    await run('git', ['reset', '-q', '--', VERDICTS, CARDS], { cwd }).catch(() => undefined);
     writeFileSync(path, before);
     await run('npx', ['tsx', 'scripts/quran/buildCompareCards.ts'], { cwd }).catch(() => undefined);
     return NextResponse.json({ error: 'Could not save the review' }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
+}
+
+/** Records the owner's choice for a whole page on their own machine and commits it locally. The previous verdicts stay in the file, so a choice can be undone. */
+export async function POST(request: Request) {
+  if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
+  const origin = request.headers.get('origin');
+  if (origin && new URL(origin).host !== request.headers.get('host')) return new NextResponse(null, { status: 403 });
+  const { a, b, action } = await request.json() as { a: number; b: number; action: ReviewAction | 'undo' };
+  if (!Number.isInteger(a) || !Number.isInteger(b) || a < 1 || b > 114 || a >= b || !['agree', 'drop', 'undo'].includes(action)) return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+  return inTurn(() => record(a, b, action));
 }

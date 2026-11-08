@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const files = vi.hoisted(() => new Map<string, string>());
-const shell = vi.hoisted(() => ({ fail: false, commits: [] as string[] }));
+const shell = vi.hoisted(() => ({ fail: false, dirty: false, commitFails: false, commits: [] as string[], resets: 0 }));
 
 vi.mock('node:fs', () => ({
   readFileSync: (path: string) => files.get(path.split('/src/')[1]) ?? '',
@@ -9,7 +9,12 @@ vi.mock('node:fs', () => ({
 }));
 vi.mock('node:child_process', () => ({
   execFile: (command: string, _args: string[], _options: unknown, done: (error: Error | null, out?: { stdout: string }) => void) => {
-    if (command === 'git' && _args[0] === 'commit') shell.commits.push(_args[3].split('\n')[0]);
+    if (command === 'git' && _args[0] === 'diff' && shell.dirty) return done(new Error('dirty'));
+    if (command === 'git' && _args[0] === 'reset') shell.resets++;
+    if (command === 'git' && _args[0] === 'commit') {
+      if (shell.commitFails) return done(new Error('index.lock'));
+      shell.commits.push(_args[3]);
+    }
     done(shell.fail && command !== 'git' ? new Error('build failed') : null, { stdout: '' });
   },
 }));
@@ -26,6 +31,9 @@ beforeEach(() => {
   vi.stubEnv('NODE_ENV', 'development');
   shell.fail = false;
   shell.commits = [];
+  shell.dirty = false;
+  shell.commitFails = false;
+  shell.resets = 0;
   files.clear();
   files.set(VERDICTS, `${JSON.stringify({ pairs: { ...drafted, '4:1|5:1': unsaved } }, null, 1)}\n`);
   files.set('app/quran/compare/pairs.json', JSON.stringify({ pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }] }));
@@ -48,7 +56,7 @@ describe('the compare review route', () => {
   it('changes only the pairs of that page, keeping the file format', async () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(200);
     expect(verdicts()['2:1|3:1']).toEqual({ keep: false, why: 'Same. (owner removed)', checked: true, draft: { keep: true, why: 'Same.' } });
-    expect(shell.commits).toEqual(['Compare verdicts: owner dropped 2/3']);
+    expect(shell.commits).toEqual(['chore(compare): owner dropped 2/3']);
     expect(verdicts()['4:1|5:1']).toEqual(unsaved);
     expect(files.get(VERDICTS)!.endsWith('}\n')).toBe(true);
   });
@@ -59,7 +67,7 @@ describe('the compare review route', () => {
     expect(verdicts()['2:1|3:1']).toMatchObject({ keep: true, why: 'Same.', checked: true });
     await post({ a: 2, b: 3, action: 'undo' });
     expect(verdicts()).toEqual({ ...drafted, '4:1|5:1': unsaved });
-    expect(shell.commits[2]).toBe('Compare verdicts: owner restored 2/3 draft');
+    expect(shell.commits[2]).toBe('chore(compare): owner restored 2/3 draft');
   });
 
   it('restores the file when the cards cannot be rebuilt', async () => {
@@ -68,6 +76,28 @@ describe('the compare review route', () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(500);
     expect(files.get(VERDICTS)).toBe(before);
     expect(shell.commits).toEqual([]);
+  });
+
+  it('refuses a press while the file has other uncommitted changes', async () => {
+    shell.dirty = true;
+    const before = files.get(VERDICTS);
+    expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(409);
+    expect(files.get(VERDICTS)).toBe(before);
+  });
+
+  it('unstages and restores the file when the commit fails', async () => {
+    shell.commitFails = true;
+    const before = files.get(VERDICTS);
+    expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(500);
+    expect(files.get(VERDICTS)).toBe(before);
+    expect(shell.resets).toBe(1);
+  });
+
+  it('handles presses one at a time', async () => {
+    await Promise.all([post({ a: 2, b: 3, action: 'agree' }), post({ a: 4, b: 5, action: 'drop' })]);
+    expect(verdicts()['2:1|3:1'].checked).toBe(true);
+    expect(verdicts()['4:1|5:1'].checked).toBe(true);
+    expect(shell.commits).toHaveLength(2);
   });
 
   it('commits nothing when a page is already in that state', async () => {
