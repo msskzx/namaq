@@ -80,7 +80,7 @@ function scopeOf(draft: ScopeDraft): CompareScope | undefined {
 }
 
 /** The phrase trees' filter fields, narrowing the surah pairs in the list. */
-function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnly }: { a: number; b: number; review: boolean; todo: boolean; scope?: CompareScope; names: Names; savedOnly: boolean; onSavedOnly?: (checked: boolean) => void }) {
+function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnly, children }: { a: number; b: number; review: boolean; todo: boolean; scope?: CompareScope; names: Names; savedOnly: boolean; onSavedOnly?: (checked: boolean) => void; children: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const router = useRouter();
   const [draft, setDraft] = useState(() => draftOf(scope));
@@ -92,6 +92,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
   const reset = ar ? 'إعادة ضبط' : 'Reset';
   return <form aria-label={ar ? 'تصفية' : 'Filter'} className="flex flex-col gap-2" onSubmit={event => { event.preventDefault(); if (!invalid) router.push(pairHref(a, b, review, todo, scopeOf(draft))); }}>
     <ScopeFields draft={draft} onChange={setDraft} range={scope?.unit === 'juz' ? scope : null} allSurahs={allSurahs} />
+    {children}
     <div className="flex gap-2">
       <Button type="submit" size="sm" variant="primary" className="flex-1" disabled={invalid}><Check size={16} aria-hidden />{apply}</Button>
       {(scope || todo || savedOnly) && <Button size="sm" variant="neutral" onClick={clear}><RotateCcw size={16} aria-hidden />{reset}</Button>}
@@ -163,9 +164,10 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
         <input type="search" autoFocus={autoFocus} aria-label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChange={event => setQuery(event.target.value)}
           className={`${FIELD} w-full ps-8 text-base`} />
       </label>
-      <CompareFilter a={a} b={b} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly} />
-      {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
-      {review && <TodoOnly a={a} b={b} todo={todo} juz={juz} />}
+      <CompareFilter a={a} b={b} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly}>
+        {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
+        {review && <TodoOnly a={a} b={b} todo={todo} juz={juz} />}
+      </CompareFilter>
       <Segmented label={ar ? 'ترتيب القائمة' : 'Sort the list'} className="w-full [&>*]:flex-1" options={[
         { key: 'mushaf', label: ar ? 'ترتيب المصحف' : 'Mushaf order', icon: <ArrowDown01 size={16} aria-hidden />, current: !byCount, onClick: () => { setByCount(false); writeSort(false); } },
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
