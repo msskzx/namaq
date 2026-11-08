@@ -8,6 +8,8 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { reviewedAs, type ReviewAction } from '@/lib/quran/curation/reviewPage';
 import type { PairCard } from './pairCards';
 
+const post = (a: number, b: number, action: ReviewAction | 'undo') => fetch('/api/quran/compare-review', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ a, b, action }) });
+
 /** The owner's two choices for a whole page, on their own machine. Pressing the current choice again restores the draft. */
 export default function ReviewButtons({ a, b, cards, nextHref }: { a: number; b: number; cards: PairCard[]; nextHref?: string }) {
   const ar = useLanguage().language === 'ar';
@@ -19,7 +21,12 @@ export default function ReviewButtons({ a, b, cards, nextHref }: { a: number; b:
     setBusy(true);
     setFailed(false);
     try {
-      const response = await fetch('/api/quran/compare-review', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ a, b, action: action === current ? 'undo' : action }) });
+      let response = await post(a, b, action === current ? 'undo' : action);
+      // Each save makes the dev server recompile, and until it finishes the route answers 404.
+      for (let tries = 0; response.status === 404 && tries < 6; tries++) {
+        await new Promise(resolve => setTimeout(resolve, 700));
+        response = await post(a, b, action === current ? 'undo' : action);
+      }
       if (!response.ok) throw new Error(String(response.status));
       router.refresh();
     } catch {
