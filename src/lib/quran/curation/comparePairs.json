@@ -14067,15 +14067,30 @@
   },
   "47:9|64:8": {
    "keep": false,
-   "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe."
+   "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'sent down' and 'deeds'; hating revelation vs a call to believe."
+   }
   },
   "47:33|64:8": {
    "keep": false,
-   "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'."
+   "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'believe', 'Allah and His Messenger' and 'deeds'."
+   }
   },
   "47:33|64:12": {
-   "keep": true,
-   "why": "Same command: obey Allah and obey the Messenger."
+   "keep": false,
+   "why": "Same command: obey Allah and obey the Messenger. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same command: obey Allah and obey the Messenger."
+   }
   },
   "48:5|57:12": {
    "keep": true,
@@ -21415,7 +21430,12 @@
   },
   "47:12|64:9": {
    "keep": false,
-   "why": "Only the believe-and-do-righteous and gardens formulas."
+   "why": "Only the believe-and-do-righteous and gardens formulas.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the believe-and-do-righteous and gardens formulas."
+   }
   },
   "47:12|65:11": {
    "keep": false,
