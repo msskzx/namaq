@@ -13,6 +13,7 @@ import { RailSlotContext } from './NavBar';
 import TreeIcon from './TreeIcon';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
+import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
@@ -35,7 +36,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose(); return; }
       if (event.key !== 'Tab' || !element) { event.stopPropagation(); return; }
-      const items = [...element.querySelectorAll<HTMLElement>('button, a')];
+      const items = [...element.querySelectorAll<HTMLElement>('button, a, select')];
       const first = items[0], last = items[items.length - 1];
       if (!element.contains(document.activeElement)) { event.preventDefault(); first?.focus(); }
       else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
@@ -90,6 +91,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         </div>
         <BranchViewSetting />
         <BranchConnectorSetting />
+        <ReaderGestureSetting />
         <div className={styles.sheetLinks}>
           {help && <details className="group">
             <summary className={`${styles.sheetLink} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>

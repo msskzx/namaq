@@ -21,7 +21,8 @@ const MUTED = 'text-[var(--home-muted)]';
 const AROUND = 6;
 const DELAY = 100;
 
-export default function SurahIndex({ surahs, fontClass, onNavigate }: { surahs: IndexSurah[]; fontClass?: string; onNavigate?: () => void }) {
+/** With `recite`, every link opens the reader in recite mode from that place, and `children` sits above the index. */
+export default function SurahIndex({ surahs, fontClass, onNavigate, recite = false, children }: { surahs: IndexSurah[]; fontClass?: string; onNavigate?: () => void; recite?: boolean; children?: React.ReactNode }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
   const n = (value: number) => (ar ? num(value) : String(value));
@@ -29,7 +30,8 @@ export default function SurahIndex({ surahs, fontClass, onNavigate }: { surahs: 
   const [query, setQuery] = useState('');
   const groups = useMemo(() => juzGroups(surahs), [surahs]);
   const reference = parseReference(query, surahs);
-  const referenceHref = reference && `/quran/read/ayah/${reference.surah.number}/${reference.ayah}`;
+  const from = (surah: number, ayah: number) => (recite ? `?recite=${surah}:${ayah}` : '');
+  const referenceHref = reference && `/quran/read/ayah/${reference.surah.number}/${reference.ayah}${from(reference.surah.number, reference.ayah)}`;
   const keep = (surah: IndexSurah) => (reference ? surah.number === reference.surah.number : matchesSurah(surah, query));
   const shown = groups
     .map(group => ({ ...group, entries: group.entries.filter(entry => keep(entry.surah)) }))
@@ -61,12 +63,15 @@ export default function SurahIndex({ surahs, fontClass, onNavigate }: { surahs: 
       <header className={onNavigate ? 'mb-3' : 'mb-6 border-b border-[var(--home-rule)] pb-6'}>
         {!onNavigate && <>
           <p className="text-sm text-[var(--home-accent)]">{ar ? 'القرآن' : 'Quran'}</p>
-          <h1 className="text-3xl sm:text-4xl leading-normal">{ar ? 'فهرس السور' : 'Index of surahs'}</h1>
+          <h1 className="text-3xl sm:text-4xl leading-normal">{recite ? (ar ? 'التسميع' : 'Recite') : ar ? 'فهرس السور' : 'Index of surahs'}</h1>
           <p className={`${MUTED} mb-5`}>
-            {ar
+            {recite ? (ar
+              ? 'اختر سورة أو جزءًا أو آية. تُخفى الآيات في مواضعها من الصفحة، وتُظهر كل لمسة الآية التالية.'
+              : 'Pick a surah, a juz\' or an ayah. The ayat are hidden in their places on the page, and each tap reveals the next one.') : ar
               ? `السور الـ${num(surahs.length)} مرتبة في أجزائها الثلاثين. تظهر السورة في كل جزء لها فيه آيات. النص برواية حفص.`
               : `The ${surahs.length} surahs in their thirty juz'. A surah is listed under every juz' it has ayat in. The text is in Hafs.`}
           </p>
+          {children}
         </>}
         <form
           role="search"
@@ -132,7 +137,7 @@ export default function SurahIndex({ surahs, fontClass, onNavigate }: { surahs: 
               const owner = byNumber.get(surah);
               return (
                 <li key={hit.key}>
-                  <Link onClick={onNavigate} href={`/quran/read/ayah/${surah}/${ayah}`} className="group flex flex-wrap items-baseline gap-x-4 py-2">
+                  <Link onClick={onNavigate} href={`/quran/read/ayah/${surah}/${ayah}${from(surah, ayah)}`} className="group flex flex-wrap items-baseline gap-x-4 py-2">
                     <span className="w-28 shrink-0 text-sm text-[var(--home-accent)]">
                       {owner ? (ar ? name(owner) : owner.nameTransliterated || name(owner)) : n(surah)} {n(ayah)}
                     </span>
@@ -160,22 +165,22 @@ export default function SurahIndex({ surahs, fontClass, onNavigate }: { surahs: 
         {shown.map(group => (
           <section key={group.juz} aria-label={ar ? `الجزء ${num(group.juz)}` : `Juz' ${group.juz}`} className="mb-6 break-inside-avoid">
             <h2 className="flex items-baseline justify-between border-b border-[var(--home-rule)] pb-1">
-              <Link onClick={onNavigate} href={`/quran/read/${group.page}`} className="text-xl text-[var(--home-accent)] hover:underline underline-offset-4">
+              <Link onClick={onNavigate} href={`/quran/read/${group.page}${from(group.surah, group.ayah)}`} className="text-xl text-[var(--home-accent)] hover:underline underline-offset-4">
                 {ar ? `الجزء ${num(group.juz)}` : `Juz' ${group.juz}`}
               </Link>
               <span className={`${MUTED} text-sm`}>{ar ? `ص ${num(group.page)}` : `p. ${group.page}`}</span>
             </h2>
             <ol className="mt-1">
-              {group.entries.map(({ surah, from, page }) => (
+              {group.entries.map(({ surah, from: first, page }) => (
                 <li key={surah.number}>
-                  <Link onClick={onNavigate} href={`/quran/read/${page}`} className="group flex items-baseline gap-2 py-1">
+                  <Link onClick={onNavigate} href={`/quran/read/${page}${from(surah.number, first)}`} className="group flex items-baseline gap-2 py-1">
                     <span className="w-8 shrink-0 text-sm text-[var(--home-accent)] tabular-nums">{n(surah.number)}</span>
                     <span className="text-lg group-hover:text-[var(--home-accent)] group-hover:underline underline-offset-4">
                       {ar ? name(surah) : surah.nameTransliterated || name(surah)}
                     </span>
                     {!ar && surah.nameTransliterated && <span className={`${MUTED} text-sm`} lang="ar">{name(surah)}</span>}
-                    {from > 1 && (
-                      <span className={`${MUTED} text-sm`}>{ar ? `من الآية ${num(from)}` : `from ayah ${from}`}</span>
+                    {first > 1 && (
+                      <span className={`${MUTED} text-sm`}>{ar ? `من الآية ${num(first)}` : `from ayah ${first}`}</span>
                     )}
                     <span className="min-w-4 flex-1 border-b border-dotted border-[var(--home-rule)]" aria-hidden />
                     <span className={`${MUTED} text-sm tabular-nums`}>{n(page)}</span>

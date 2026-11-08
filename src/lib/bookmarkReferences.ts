@@ -4,6 +4,10 @@ import { inJuzRange, parseJuzRange } from './quran/juz';
 import { parseOccurrences } from './quran/branchTreeLinks';
 
 export function bookmarkReferences(bookmark: Pick<Bookmark, 'id' | 'href'>, ayatById: Readonly<Record<string, readonly string[]>>) {
+  if (bookmark.id.startsWith('ayah:')) {
+    const [surah, ayah] = bookmark.id.slice(5).split(':').map(Number);
+    return surah && ayah ? [{ surah, ayat: [ayah] }] : [];
+  }
   let params: URLSearchParams;
   try {
     params = new URL(bookmark.href, 'http://localhost').searchParams;

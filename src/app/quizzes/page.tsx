@@ -40,7 +40,7 @@ import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@/lib/quiz/
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
-import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
+import { Eye, EyeOff, LogOut, RotateCcw, User, Users } from "lucide-react";
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings. */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -49,10 +49,12 @@ function QuizModes({ ar }: { ar: boolean }) {
       text: ar ? "أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها." : "Answer questions on the ayat of the Quran, then review the answer and its ayat." },
     { href: "/quizzes/party", Icon: Users, title: ar ? "اختبار جماعي" : "Party quiz",
       text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
+    { href: "/quran/read/recite", Icon: EyeOff, title: ar ? "تسميع" : "Recite",
+      text: ar ? "تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه." : "The ayat are hidden in the mushaf; reveal them one by one as you recite, and mark what you forgot to review it." },
   ];
   return (
     <div className={styles.page}>
-      <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
+      <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2 lg:max-w-5xl lg:grid-cols-3" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
         {modes.map(({ href, Icon, title, text }) => (
           <Link key={href} href={href}
             className={`${styles.panel} flex flex-col items-start gap-2 text-[var(--home-ink)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>

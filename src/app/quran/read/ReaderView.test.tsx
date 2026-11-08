@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render as rtlRender, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render as rtlRender, screen, within } from '@testing-library/react';
 import { NavSlotElement, RailSlotElement } from '@/components/common/NavBar';
 import { usePageHelp } from '@/components/common/SettingsHelp';
 import { LanguageProvider } from '@/components/language/LanguageContext';
@@ -37,6 +37,18 @@ const data = (...items: MushafPage['items']): MushafPage => ({ juz: 1, items });
 const one = (page: number, page_data: MushafPage, top?: number) => [{ page, data: page_data, top }];
 
 const opening = data({ surah: 2 }, { basmala: true }, { line: ['الٓمٓ', 1, 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ'], quarter: 2 }, { line: ['لَا', 'رَيۡبَۛ', 2] });
+
+/** A finger tap on the page: a press and release, then the wait for a possible second tap. */
+const tap = (element: Element) => {
+  fireEvent.pointerDown(element);
+  fireEvent.pointerUp(element);
+  act(() => { vi.advanceTimersByTime(300); });
+};
+const longPress = (element: Element) => {
+  fireEvent.pointerDown(element);
+  act(() => { vi.advanceTimersByTime(600); });
+  fireEvent.pointerUp(element);
+};
 
 const media = (wide: boolean, phone = false) =>
   vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('max-width') ? phone : wide, addEventListener() {}, removeEventListener() {} }));
@@ -223,6 +235,7 @@ describe('ReaderView', () => {
   });
 
   it('reveals the surah index and search in the phone top bar and turns pages by swipe', () => {
+    vi.useFakeTimers();
     media(false, true);
     const top = document.createElement('div');
     const surahs = [{ number: 2, name: names[2], nameTransliterated: 'Al-Baqarah', numberOfAyat: 286, page: 2 }];
@@ -233,7 +246,7 @@ describe('ReaderView', () => {
     const stage = screen.getByRole('article');
     expect(reader.getAttribute('data-reader-immersive')).toBe('true');
     expect(top.childElementCount).toBe(0);
-    fireEvent.click(stage);
+    tap(stage);
     expect(reader.getAttribute('data-reader-immersive')).toBe('false');
     const index = within(top).getByRole('button', { name: 'فهرس السور' });
     const dropdown = top.querySelector('[popover="auto"]')!;
@@ -246,7 +259,7 @@ describe('ReaderView', () => {
     expect(within(panel as HTMLElement).getByRole('link', { name: /افتح/ }).getAttribute('href')).toBe('/quran/read/ayah/2/255');
     expect(push).not.toHaveBeenCalled();
     expect(screen.queryByRole('button', { name: 'الصفحة التالية' })).toBeNull();
-    fireEvent.click(stage);
+    tap(stage);
     expect(top.childElementCount).toBe(0);
     fireEvent.touchStart(stage, { touches: [{ clientX: 30, clientY: 100 }] });
     fireEvent.touchMove(stage, { touches: [{ clientX: 120, clientY: 100 }] });
@@ -255,9 +268,96 @@ describe('ReaderView', () => {
     fireEvent.touchStart(stage, { touches: [{ clientX: 30, clientY: 100 }] });
     fireEvent.touchMove(stage, { touches: [{ clientX: 120, clientY: 100 }] });
     fireEvent.touchEnd(stage);
-    fireEvent.click(stage);
+    tap(stage);
     expect(push).toHaveBeenLastCalledWith('/quran/read/4');
     expect(top.childElementCount).toBe(0);
+    vi.useRealTimers();
+  });
+});
+
+describe('Recite mode', () => {
+  const surahs = [{ number: 2, name: names[2], nameTransliterated: 'Al-Baqarah', numberOfAyat: 286, page: 2 }];
+  const veiled = (container: HTMLElement) => [...container.querySelectorAll('[data-ayah][data-veiled]')].map(word => word.textContent?.trim());
+  afterEach(() => { localStorage.clear(); vi.useRealTimers(); });
+
+  it('hides the ayat from the start, reveals them by ayah and by word, steps back, and turns the page at the end', () => {
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} recite={{ start: '2:1', shown: null, words: 0 }} />);
+    expect(veiled(container)).toEqual(['الٓمٓ ١', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    const bar = within(screen.getByRole('toolbar', { name: 'أدوات التسميع' }));
+    expect(bar.getByRole('button', { name: 'ارجع خطوة' }).hasAttribute('disabled')).toBe(true);
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الكلمة التالية' }));
+    expect(veiled(container)).toEqual(['ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    fireEvent.click(bar.getByRole('button', { name: 'ارجع خطوة' }));
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(veiled(container)).toEqual([]);
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(push).toHaveBeenLastCalledWith('/quran/read/4?recite=2%3A1&upto=2%3A2');
+    fireEvent.click(bar.getByRole('button', { name: 'إنهاء التسميع' }));
+    expect(screen.queryByRole('toolbar', { name: 'أدوات التسميع' })).toBeNull();
+    expect(veiled(container)).toEqual([]);
+  });
+
+  it('taps to reveal while reciting, and a long press opens the ayah buttons to mark it forgotten or save it', () => {
+    vi.useFakeTimers();
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
+    const stage = screen.getByRole('article');
+    tap(stage);
+    expect(veiled(container)).toEqual([]);
+    longPress(container.querySelector('[data-ayah="2:2"]')!);
+    const actions = within(screen.getByRole('dialog'));
+    fireEvent.click(actions.getByRole('button', { name: 'نسيتها' }));
+    expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:2'].forgot).toBe(1);
+    expect(container.querySelector('[data-ayah="2:2"]')?.className).toMatch(/forgot/);
+    expect(container.querySelector('[data-ayah="2:1"]')?.className ?? '').not.toMatch(/forgot/);
+    longPress(container.querySelector('[data-ayah="2:2"]')!);
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'احفظ الآية' }));
+    expect(JSON.parse(localStorage.getItem('bookmarks')!)[0]).toMatchObject({ id: 'ayah:2:2', href: '/quran/read/ayah/2/2', text: 'ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ' });
+  });
+
+  it('follows the gestures chosen in the settings for each mode', () => {
+    vi.useFakeTimers();
+    localStorage.setItem('reader-gestures', JSON.stringify({ read: { tap: 'forgot', double: 'none' } }));
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
+    tap(container.querySelector('[data-ayah="2:1"]')!);
+    expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:1'].forgot).toBe(1);
+  });
+
+  it('starts reciting from the marked ayah with the recite button', () => {
+    media(true);
+    const rail = document.createElement('div');
+    const { container } = render(<RailSlotElement.Provider value={rail}>
+      <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} mark={{ surah: 2, ayah: 2 }} />
+    </RailSlotElement.Provider>);
+    fireEvent.click(within(rail).getByRole('button', { name: /^تسميع/ }));
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+  });
+
+  it('keeps the rest of an ayah that runs onto the next page hidden there', () => {
+    const runOn = data({ surah: 2 }, { line: ['الٓمٓ', 1, 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ'] });
+    render(<ReaderView page={3} pages={one(3, runOn)} names={names} surahs={surahs} recite={{ start: '2:1', shown: '2:2', words: 0 }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(push).toHaveBeenLastCalledWith('/quran/read/4?recite=2%3A1&upto=2%3A1');
+  });
+
+  it('leaves mouse clicks in reading mode for selecting text', () => {
+    vi.useFakeTimers();
+    localStorage.setItem('reader-gestures', JSON.stringify({ read: { tap: 'forgot' } }));
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
+    const word = container.querySelector('[data-ayah="2:1"]')!;
+    const mouse = (type: string) => Object.defineProperty(new MouseEvent(type, { bubbles: true }), 'pointerType', { value: 'mouse' });
+    fireEvent(word, mouse('pointerdown'));
+    fireEvent(word, mouse('pointerup'));
+    act(() => { vi.advanceTimersByTime(300); });
+    expect(localStorage.getItem('ayah-forgot')).toBeNull();
+  });
+
+  it('opens the recite position from the URL', () => {
+    search = new URLSearchParams('recite=2:1&upto=2:1');
+    const { container } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
   });
 });
 
@@ -268,6 +368,12 @@ describe('SurahIndex', () => {
     { number: 3, name: 'سُورَةُ آلِ عِمۡرَانَ', nameTransliterated: 'Aal-i-Imraan', numberOfAyat: 200, page: 50 },
   ];
   const hrefs = (root: ParentNode) => [...root.querySelectorAll('li a')].map(a => a.getAttribute('href'));
+
+  it('links every place into recite mode on the recite page', () => {
+    render(<SurahIndex surahs={surahs} recite />);
+    expect(hrefs(screen.getByRole('region', { name: 'الجزء ١' }))).toEqual(['/quran/read/1?recite=1:1', '/quran/read/2?recite=2:1']);
+    expect(hrefs(screen.getByRole('region', { name: 'الجزء ٢' }))).toEqual(['/quran/read/22?recite=2:142']);
+  });
 
   it('lists each surah under every juz it has ayat in, linking to where it opens there', () => {
     render(<SurahIndex surahs={surahs} />);

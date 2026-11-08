@@ -45,18 +45,30 @@ export default function MushafPage({
   names,
   top,
   mark,
+  hidden,
+  next,
+  forgot,
+  saved,
 }: {
   page: number;
   data: MushafPageData;
   names: Record<number, string>;
   top?: number;
   mark?: { surah: number; ayah: number };
+  /** Recite mode: whether a word is still hidden; `word` counts that ayah's words on this page from 0. */
+  hidden?: (key: string, word: number) => boolean;
+  /** Recite mode: the ayah the next reveal shows. */
+  next?: string | null;
+  /** Ayat the reader forgot (highlighted) and saved (ayah number in purple). */
+  forgot?: Readonly<Record<string, unknown>>;
+  saved?: ReadonlySet<string>;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
   const first = data.items[0];
   const current = first && 'surah' in first ? first.surah : top;
   const marked = (surah?: number, ayah?: number) => !!mark && surah === mark.surah && ayah === mark.ayah;
+  const counts: Record<string, number> = {};
   const badges = data.items.map(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
   useLayoutEffect(() => {
     const element = body.current;
@@ -70,17 +82,17 @@ export default function MushafPage({
   }, [page, data]);
   return (
     <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} className={styles.page}>
-      {badges.some(list => list.length > 0) && (
-        <div className={styles.strip}>
-          {badges.flat().map(label => (
-            <span key={label.join()} className={`${styles.badge} ${label[0] === 'سجدة' ? styles.sajda : ''}`}>
-              {label.join(' ')}
-            </span>
-          ))}
-        </div>
-      )}
       <div className={styles.head}>
         <span>الجزء {juzName(data.juz)}</span>
+        {badges.some(list => list.length > 0) && (
+          <div className={styles.strip}>
+            {badges.flat().map(label => (
+              <span key={label.join()} className={`${styles.badge} ${label[0] === 'سجدة' ? styles.sajda : ''}`}>
+                {label.join(' ')}
+              </span>
+            ))}
+          </div>
+        )}
         <span>{current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
@@ -95,11 +107,16 @@ export default function MushafPage({
                 <p data-line className={styles.line}>
                   {lines[index]?.map((group, at) => {
                     const on = marked(group.surah, group.ayah);
+                    const key = `${group.surah}:${group.ayah}`;
+                    const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
+                    const veiled = !!hidden?.(key, word);
+                    const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                     return (
-                      <span key={at} data-marked={on || undefined} className={on ? styles.marked : undefined}>
+                      <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
+                        className={[on ? styles.marked : '', veiled ? styles.veiled : '', veiled && next === key ? styles.upcoming : '', !veiled && forgot?.[key] ? styles.forgot : ''].join(' ').trim() || undefined}>
                         {group.word}
                         {group.marks.map(end => (
-                          <span key={end} className={`${styles.end} ${marked(group.surah, end) ? styles.endMarked : ''}`}>
+                          <span key={end} data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? styles.veiled : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : '', ].join(' ')}>
                             {group.word ? ' ' : ''}
                             {num(end)}
                           </span>
