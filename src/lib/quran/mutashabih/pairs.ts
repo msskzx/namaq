@@ -6,7 +6,7 @@ export type PairColumn = { a: Position; b: Position; level: Level };
 export type AyahPair = { a: string; b: string; group?: string; columns: PairColumn[] };
 export type SurahPair = { a: number; b: number; count: number };
 
-/** A surah pair is listed only when it has at least this many similar ayah pairs, so no page is one or two cards long. */
+/** A surah pair is listed only when it has at least this many similar ayah pairs. */
 export const MIN_PAIRS = 3;
 
 export const surahOf = (key: string) => Number(key.split(':')[0]);

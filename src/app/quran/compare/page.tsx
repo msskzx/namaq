@@ -51,13 +51,14 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const preset = curatedComparisons.find(story => story.id === query.preset);
     const [x, y] = [surahOf(query.a), surahOf(query.b)];
     if (preset) redirect(surahPairHref(preset.a, preset.b));
-    const closest = x !== null && y === null ? closestPair(listedPairs, x) : undefined;
-    if (closest) redirect(surahPairHref(closest.a, closest.b));
-    if (x === null || y === null || x === y) {
-      if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b));
-      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b);
-    }
     const review = query.review === '1';
+    const keepReview = review ? '&review=1' : '';
+    const closest = x !== null && y === null ? closestPair(review ? reviewPairs : listedPairs, x) : undefined;
+    if (closest) redirect(`${surahPairHref(closest.a, closest.b)}${keepReview}`);
+    if (x === null || y === null || x === y) {
+      if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(`${surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b)}${keepReview}`);
+      return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review);
+    }
     if (x > y) redirect(`${surahPairHref(x, y)}${review ? '&review=1' : ''}`);
     return pairPage(x, y, review);
   }

@@ -40,6 +40,10 @@ const page = async (query: Record<string, string>) => {
   return render(<Chrome />);
 };
 describe('QuranComparePage', () => {
+  it('keeps review on when it redirects from one surah or opens the default page', async () => {
+    await expect(page({ a: '3', review: '1' })).rejects.toThrow(/review=1/);
+  });
+
   it('lists a page whose cards were all left out only in review', async () => {
     const link = () => within(screen.getByRole('complementary', { name: 'اختر سورتين' })).queryAllByRole('link').some(item => item.getAttribute('href')?.startsWith('/quran/compare?a=3&b=18'));
     await page({ a: '2', b: '3' });
