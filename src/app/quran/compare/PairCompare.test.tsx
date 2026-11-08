@@ -122,7 +122,10 @@ describe('PairCompare', () => {
     const rows = [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.every(href => href === '/quran/compare?a=52&b=68&juz=27-29')).toBe(true);
-    expect(within(pane()).getByRole('button', { name: 'تصفية' })).toBeTruthy();
+    const filter = within(pane()).getByRole('form', { name: 'تصفية' });
+    expect((within(filter).getByRole('combobox', { name: 'التصفية حسب' }) as HTMLSelectElement).value).toBe('juz');
+    fireEvent.click(within(filter).getByRole('button', { name: /إعادة ضبط/ }));
+    expect(router.push).toHaveBeenCalledWith('/quran/compare?a=52&b=68');
   });
 
   it('in review, the unreviewed-only switch hides finished pages and keeps those with a question', () => {

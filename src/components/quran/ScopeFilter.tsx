@@ -38,7 +38,7 @@ export function ScopeFields({ draft, onChange, range, allSurahs }: { draft: Scop
       className="h-10 max-w-[45%] shrink-0 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base">
       {units.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
     </select>
-    {isRangeUnit(unit) ? <RangeFields range={unit === 'juz' ? range : null} max={max} names={[`${unit}From`, `${unit}To`]} draft={draft.values} onChange={values => onChange({ ...draft, values })} iconOnly arabicDigits hideFromLabel
+    {isRangeUnit(unit) ? <RangeFields range={unit === 'juz' ? range : null} max={max} names={[`${unit}From`, `${unit}To`]} draft={draft.values} onChange={values => onChange({ ...draft, values })} iconOnly arabicDigits hideFromLabel hideReset
       labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to', form: label, all: ar ? 'الكل' : 'All', invalid: () => ar ? `أدخل رقمين من ١ إلى ${num(max)}، على أن تكون البداية قبل النهاية أو مساوية لها.` : `Enter whole numbers from 1 to ${max}, with From no greater than To.` }} />
       : <ScopePicker key={unit} name={unit === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a chapter') : (ar ? 'ابحث عن جزء' : 'Find a juz')}
         value={unit === 'surahs' ? draft.surahs : draft.juz} onChange={value => onChange({ ...draft, [unit === 'surahs' ? 'surahs' : 'juz']: value })}

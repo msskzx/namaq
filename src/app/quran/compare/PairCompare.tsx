@@ -13,7 +13,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { pageInScope, scopeParam, SCOPE_MAX, type CompareScope, type SurahSpans } from '@/lib/quran/compareScope';
-import { FilterSheet, isRangeUnit, ScopeFields, scopeRange, type ScopeDraft } from '@/components/quran/ScopeFilter';
+import { isRangeUnit, ScopeFields, scopeRange, type ScopeDraft } from '@/components/quran/ScopeFilter';
 import { compareAnchor, compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref } from '@/lib/quran/branches';
@@ -79,16 +79,24 @@ function scopeOf(draft: ScopeDraft): CompareScope | undefined {
   return list.length ? { unit, list } : undefined;
 }
 
-/** The same funnel as the phrase trees, narrowing the surah pairs in the list. */
-function CompareFilter({ a, b, review, todo, scope, names }: { a: number; b: number; review: boolean; todo: boolean; scope?: CompareScope; names: Names }) {
+/** The phrase trees' filter fields, narrowing the surah pairs in the list. */
+function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnly }: { a: number; b: number; review: boolean; todo: boolean; scope?: CompareScope; names: Names; savedOnly: boolean; onSavedOnly?: (checked: boolean) => void }) {
+  const ar = useLanguage().language === 'ar';
   const router = useRouter();
   const [draft, setDraft] = useState(() => draftOf(scope));
+  useEffect(() => setDraft(draftOf(scope)), [scope]);
   const invalid = isRangeUnit(draft.unit) && !scopeRange(draft.unit, draft.values);
   const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: plainName(name.ar), nameEn: name.en }));
-  return <FilterSheet active={!!scope} onOpen={() => setDraft(draftOf(scope))} submitDisabled={invalid} onReset={() => setDraft(draftOf())}
-    onSubmit={() => { if (invalid) return false; router.push(pairHref(a, b, review, todo, scopeOf(draft))); }}>
+  const clear = () => { onSavedOnly?.(false); setDraft(draftOf()); router.push(pairHref(a, b, review)); };
+  const apply = ar ? 'تطبيق' : 'Apply';
+  const reset = ar ? 'إعادة ضبط' : 'Reset';
+  return <form aria-label={ar ? 'تصفية' : 'Filter'} className="flex flex-col gap-2" onSubmit={event => { event.preventDefault(); if (!invalid) router.push(pairHref(a, b, review, todo, scopeOf(draft))); }}>
     <ScopeFields draft={draft} onChange={setDraft} range={scope?.unit === 'juz' ? scope : null} allSurahs={allSurahs} />
-  </FilterSheet>;
+    <div className="flex gap-2">
+      <Button type="submit" size="sm" variant="primary" className="flex-1" disabled={invalid}><Check size={16} aria-hidden />{apply}</Button>
+      {(scope || todo || savedOnly) && <Button size="sm" variant="neutral" onClick={clear}><RotateCcw size={16} aria-hidden />{reset}</Button>}
+    </div>
+  </form>;
 }
 
 function TodoOnly({ a, b, todo, juz }: { a: number; b: number; todo: boolean; juz?: CompareScope }) {
@@ -155,13 +163,13 @@ function PairList({ pairs: listed, names, a, b, autoFocus = false, onPick, revie
         <input type="search" autoFocus={autoFocus} aria-label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChange={event => setQuery(event.target.value)}
           className={`${FIELD} w-full ps-8 text-base`} />
       </label>
+      <CompareFilter a={a} b={b} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly} />
+      {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
+      {review && <TodoOnly a={a} b={b} todo={todo} juz={juz} />}
       <Segmented label={ar ? 'ترتيب القائمة' : 'Sort the list'} className="w-full [&>*]:flex-1" options={[
         { key: 'mushaf', label: ar ? 'ترتيب المصحف' : 'Mushaf order', icon: <ArrowDown01 size={16} aria-hidden />, current: !byCount, onClick: () => { setByCount(false); writeSort(false); } },
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
       ]} />
-      {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
-      {review && <TodoOnly a={a} b={b} todo={todo} juz={juz} />}
-      <div className="flex justify-end"><CompareFilter a={a} b={b} review={review} todo={todo} scope={juz} names={names} /></div>
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto">
         {stories.length > 0 && <>
           <h3 className={heading}>{ar ? 'مختارة' : 'Selected stories'}</h3>
