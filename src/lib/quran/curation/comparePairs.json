@@ -14324,15 +14324,30 @@
   },
   "50:38|52:36": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; six days vs did they create them."
+   "why": "Only creation of the heavens and the earth; six days vs did they create them.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only creation of the heavens and the earth; six days vs did they create them."
+   }
   },
   "50:39|52:48": {
-   "keep": true,
-   "why": "Same command: be patient and glorify the praise of your Lord."
+   "keep": false,
+   "why": "Same command: be patient and glorify the praise of your Lord. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same command: be patient and glorify the praise of your Lord."
+   }
   },
   "50:40|52:49": {
-   "keep": true,
-   "why": "Same command: glorify Him in the night and at its endings."
+   "keep": false,
+   "why": "Same command: glorify Him in the night and at its endings. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same command: glorify Him in the night and at its endings."
+   }
   },
   "52:17|68:34": {
    "keep": true,
