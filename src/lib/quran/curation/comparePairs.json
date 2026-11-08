@@ -24111,35 +24111,75 @@
   },
   "56:12|68:2": {
    "keep": false,
-   "why": "Roots coincide only: gardens and madness, bliss and favour."
+   "why": "Roots coincide only: gardens and madness, bliss and favour.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Roots coincide only: gardens and madness, bliss and favour."
+   }
   },
   "56:12|68:34": {
-   "keep": true,
-   "why": "Same description of the reward: Gardens of Bliss."
+   "keep": false,
+   "why": "Same description of the reward: Gardens of Bliss. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of the reward: Gardens of Bliss."
+   }
   },
   "56:66|68:46": {
    "keep": false,
-   "why": "The farmers' loss versus a debt for payment; a shared root only."
+   "why": "The farmers' loss versus a debt for payment; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "The farmers' loss versus a debt for payment; a shared root only."
+   }
   },
   "56:67|68:27": {
-   "keep": true,
-   "why": "Identical rare clause: nay, we are deprived, said over a ruined harvest."
+   "keep": false,
+   "why": "Identical rare clause: nay, we are deprived, said over a ruined harvest. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Identical rare clause: nay, we are deprived, said over a ruined harvest."
+   }
   },
   "56:81|68:9": {
-   "keep": true,
-   "why": "Rare verb in a related setting: being soft and compromising about the message."
+   "keep": false,
+   "why": "Rare verb in a related setting: being soft and compromising about the message. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare verb in a related setting: being soft and compromising about the message."
+   }
   },
   "56:87|68:41": {
-   "keep": true,
-   "why": "Same challenge to the deniers: do it if you are truthful."
+   "keep": false,
+   "why": "Same challenge to the deniers: do it if you are truthful. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same challenge to the deniers: do it if you are truthful."
+   }
   },
   "56:89|68:2": {
    "keep": false,
-   "why": "Roots coincide only: garden and madness, bliss and favour."
+   "why": "Roots coincide only: garden and madness, bliss and favour.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Roots coincide only: garden and madness, bliss and favour."
+   }
   },
   "56:89|68:34": {
-   "keep": true,
-   "why": "Same description of the reward: Gardens of Bliss."
+   "keep": false,
+   "why": "Same description of the reward: Gardens of Bliss. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of the reward: Gardens of Bliss."
+   }
   },
   "56:1|69:15": {
    "keep": true,
