@@ -6713,35 +6713,43 @@
   },
   "2:3|42:38": {
    "keep": true,
-   "why": "Same description: they establish the prayer and spend from what We provided them."
+   "why": "Same description: they establish the prayer and spend from what We provided them.",
+   "checked": true
   },
   "2:29|42:12": {
    "keep": false,
-   "why": "Shares only heavens and earth and 'knowing all things'."
+   "why": "Shares only heavens and earth and 'knowing all things'.",
+   "checked": true
   },
   "2:106|42:9": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:107|42:31": {
    "keep": true,
-   "why": "Same sentence: besides Allah you have no protector and no helper."
+   "why": "Same sentence: besides Allah you have no protector and no helper.",
+   "checked": true
   },
   "2:117|42:53": {
    "keep": false,
-   "why": "Only heavens and earth and 'matters' as words."
+   "why": "Only heavens and earth and 'matters' as words.",
+   "checked": true
   },
   "2:148|42:9": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Shares only the closing 'able over all things'.",
+   "checked": true
   },
   "2:176|42:17": {
    "keep": true,
-   "why": "Same phrase: Allah sent down the Book with the truth."
+   "why": "Same phrase: Allah sent down the Book with the truth.",
+   "checked": true
   },
   "2:209|42:3": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Shares only the names Mighty, Wise.",
+   "checked": true
   },
   "2:70|43:49": {
    "keep": true,
@@ -16344,6 +16352,3847 @@
   "38:66|44:38": {
    "keep": false,
    "why": "Only 'the heavens and the earth and what is between them'; His lordship vs not creating them in play."
+  },
+  "14:1|57:9": {
+   "keep": true,
+   "why": "Same purpose of revelation: to bring people out of the darkness into the light."
+  },
+  "14:5|57:9": {
+   "keep": true,
+   "why": "Same idea: bringing people out of the darkness into the light (Musa sent / the Book sent down)."
+  },
+  "14:8|57:24": {
+   "keep": true,
+   "why": "Same idea: whoever disbelieves or turns away, Allah is Free of need, Praiseworthy."
+  },
+  "14:8|64:6": {
+   "keep": true,
+   "why": "Same idea: they disbelieved, and Allah is Free of need, Praiseworthy."
+  },
+  "14:19|64:1": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; creation and replacement vs glorification."
+  },
+  "14:19|64:3": {
+   "keep": true,
+   "why": "Same statement: He created the heavens and the earth in truth."
+  },
+  "14:23|64:9": {
+   "keep": true,
+   "why": "Same reward: believers who do good admitted to gardens beneath which rivers flow, abiding there."
+  },
+  "15:19|16:15": {
+   "keep": true,
+   "why": "Same sign: firm mountains cast upon the earth."
+  },
+  "15:22|16:10": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky for you to drink."
+  },
+  "15:85|16:3": {
+   "keep": true,
+   "why": "Same statement: the heavens and the earth created in truth."
+  },
+  "15:28|17:61": {
+   "keep": true,
+   "why": "Same story: the angels told to prostrate to the man created of clay."
+  },
+  "15:33|17:61": {
+   "keep": true,
+   "why": "Same story: Iblis refuses to prostrate to one created from clay."
+  },
+  "15:42|17:65": {
+   "keep": true,
+   "why": "Same words: over My servants you have no authority."
+  },
+  "15:71|17:108": {
+   "keep": false,
+   "why": "Only 'if ... done'; Lut's daughters vs the believers glorifying their Lord."
+  },
+  "15:96|17:22": {
+   "keep": true,
+   "why": "Same phrase and warning: setting up another god with Allah."
+  },
+  "15:96|17:39": {
+   "keep": true,
+   "why": "Same phrase and warning: setting up another god with Allah."
+  },
+  "15:98|17:108": {
+   "keep": false,
+   "why": "Only glorifying the Lord; a command to the Prophet vs the knowers' words on hearing the Qur'an."
+  },
+  "15:5|23:43": {
+   "keep": true,
+   "why": "Identical: no nation can hasten its term nor delay it."
+  },
+  "15:22|23:18": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky, held in the earth by Allah not by you."
+  },
+  "15:36|23:100": {
+   "keep": false,
+   "why": "Only 'until the Day they are resurrected'; Iblis's respite vs the barrier after death."
+  },
+  "15:56|23:106": {
+   "keep": false,
+   "why": "Only 'astray'; Ibrahim on despair vs the damned confessing."
+  },
+  "15:8|25:26": {
+   "keep": false,
+   "why": "Only 'the truth'; sending angels vs the dominion on that Day."
+  },
+  "15:16|25:61": {
+   "keep": true,
+   "why": "Same sign: constellations placed in the sky."
+  },
+  "15:22|25:48": {
+   "keep": true,
+   "why": "Same sign: winds sent and water sent down from the sky."
+  },
+  "15:85|25:59": {
+   "keep": true,
+   "why": "Same statement: He created the heavens, the earth and what is between them."
+  },
+  "15:1|26:2": {
+   "keep": true,
+   "why": "Same opening: these are the verses of the clear Book."
+  },
+  "15:7|26:31": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful."
+  },
+  "15:7|26:154": {
+   "keep": true,
+   "why": "Same demand to a messenger: bring (angels / a sign) if you are truthful."
+  },
+  "15:12|26:200": {
+   "keep": true,
+   "why": "Same words: thus We insert it into the hearts of the criminals."
+  },
+  "15:19|26:7": {
+   "keep": true,
+   "why": "Same sign: We caused to grow in the earth of every kind."
+  },
+  "15:80|26:176": {
+   "keep": true,
+   "why": "Same pattern: the people of al-Hijr / al-Aykah denied the messengers."
+  },
+  "15:81|26:5": {
+   "keep": true,
+   "why": "Same description: they were turning away from it."
+  },
+  "15:81|26:154": {
+   "keep": false,
+   "why": "Only 'sign'; Thamud turning away vs demanding a sign."
+  },
+  "15:82|26:149": {
+   "keep": true,
+   "why": "Same story: Thamud carving homes from the mountains."
+  },
+  "15:88|26:215": {
+   "keep": true,
+   "why": "Same command: lower your wing to the believers."
+  },
+  "15:11|43:7": {
+   "keep": true,
+   "why": "Same words: no messenger / prophet came to them but they mocked him."
+  },
+  "15:22|43:11": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky."
+  },
+  "15:85|43:85": {
+   "keep": true,
+   "why": "Same pairing: the heavens, the earth and what is between them, and the Hour."
+  },
+  "15:19|50:7": {
+   "keep": true,
+   "why": "Same words: We spread the earth, cast mountains and caused to grow in it of every kind."
+  },
+  "15:22|50:9": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky."
+  },
+  "15:56|50:27": {
+   "keep": false,
+   "why": "Only the root of straying; Ibrahim on despair vs the companion disowning in Hell."
+  },
+  "15:80|50:14": {
+   "keep": true,
+   "why": "Same pattern: peoples (al-Hijr, al-Aykah) denied the messengers."
+  },
+  "15:85|50:38": {
+   "keep": true,
+   "why": "Same statement: We created the heavens, the earth and what is between them."
+  },
+  "15:96|50:26": {
+   "keep": true,
+   "why": "Same phrase: whoever sets up another god with Allah, with his punishment."
+  },
+  "15:25|51:30": {
+   "keep": false,
+   "why": "Only the closing Wise, Knowing; gathering vs the angels' news to Ibrahim's wife."
+  },
+  "15:45|51:15": {
+   "keep": true,
+   "why": "Identical: the righteous are among gardens and springs."
+  },
+  "15:52|51:25": {
+   "keep": true,
+   "why": "Same story: the guests enter upon Ibrahim saying peace."
+  },
+  "15:53|51:28": {
+   "keep": true,
+   "why": "Same story: do not fear, glad tidings of a knowing boy."
+  },
+  "15:57|51:31": {
+   "keep": true,
+   "why": "Identical: what is your errand, O messengers?"
+  },
+  "15:58|51:32": {
+   "keep": true,
+   "why": "Identical: we have been sent to a criminal people."
+  },
+  "15:62|51:25": {
+   "keep": true,
+   "why": "Same story: the messengers called 'an unfamiliar people' (Lut / Ibrahim)."
+  },
+  "15:96|51:51": {
+   "keep": true,
+   "why": "Same phrase: setting up another god with Allah, with a warning."
+  },
+  "16:78|17:36": {
+   "keep": true,
+   "why": "Same faculties named: hearing, sight and hearts, given to you / to be questioned."
+  },
+  "16:99|17:65": {
+   "keep": true,
+   "why": "Same idea: Satan has no authority over the believers who rely on their Lord."
+  },
+  "16:104|17:10": {
+   "keep": true,
+   "why": "Same punishment: those who do not believe have a painful punishment."
+  },
+  "16:3|20:4": {
+   "keep": true,
+   "why": "Same statement: He who created the heavens and the earth."
+  },
+  "16:24|20:133": {
+   "keep": false,
+   "why": "Only 'their Lord' and the earlier peoples; 'legends of the ancients' vs demand for a sign."
+  },
+  "16:25|20:100": {
+   "keep": true,
+   "why": "Same punishment: bearing burdens on the Day of Resurrection."
+  },
+  "16:31|20:76": {
+   "keep": true,
+   "why": "Same reward: gardens of Eden beneath which rivers flow."
+  },
+  "16:3|21:16": {
+   "keep": true,
+   "why": "Same idea: the heavens and the earth created in truth, not in play."
+  },
+  "16:12|21:33": {
+   "keep": true,
+   "why": "Same sign: night, day, sun and moon."
+  },
+  "16:15|21:31": {
+   "keep": true,
+   "why": "Same sign: mountains lest it shake with you, and paths that you may be guided."
+  },
+  "16:20|21:66": {
+   "keep": true,
+   "why": "Same argument: what they worship besides Allah has no power (creates nothing / cannot benefit)."
+  },
+  "16:34|21:41": {
+   "keep": true,
+   "why": "Same punishment: what they used to mock encompassed them."
+  },
+  "16:43|21:7": {
+   "keep": true,
+   "why": "Near-identical: We sent only men before you; ask the people of the reminder."
+  },
+  "16:49|21:19": {
+   "keep": true,
+   "why": "Same idea: all in the heavens and the earth worship Him and are not arrogant."
+  },
+  "16:51|21:108": {
+   "keep": true,
+   "why": "Same statement: your god is one God."
+  },
+  "16:73|21:66": {
+   "keep": true,
+   "why": "Same argument: they worship besides Allah what has no power to benefit them."
+  },
+  "16:20|22:12": {
+   "keep": true,
+   "why": "Same argument: what they call on besides Allah creates nothing / neither harms nor benefits."
+  },
+  "16:20|22:62": {
+   "keep": true,
+   "why": "Same subject: what they call on besides Allah is false and powerless."
+  },
+  "16:31|22:14": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "16:64|22:16": {
+   "keep": false,
+   "why": "Only sending down the Book and guidance; the Book's purpose vs Allah guiding whom He wills."
+  },
+  "16:65|22:63": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky reviving the earth."
+  },
+  "16:104|22:16": {
+   "keep": false,
+   "why": "Only 'signs' and guiding; deniers not guided vs clear signs sent down."
+  },
+  "16:108|22:75": {
+   "keep": false,
+   "why": "Only hearing and sight; sealed hearts vs Allah choosing messengers, Hearing, Seeing."
+  },
+  "16:124|22:69": {
+   "keep": true,
+   "why": "Same statement: Allah will judge between them on the Day of Resurrection in what they differed."
+  },
+  "16:5|23:21": {
+   "keep": true,
+   "why": "Same sign: livestock with benefits, and from them you eat."
+  },
+  "16:10|23:18": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky."
+  },
+  "16:21|23:37": {
+   "keep": false,
+   "why": "Only death, life and resurrection; idols are dead vs deniers rejecting resurrection."
+  },
+  "16:65|23:18": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky to the earth."
+  },
+  "16:66|23:21": {
+   "keep": true,
+   "why": "Near-identical: in livestock is a lesson; We give you drink from their bellies."
+  },
+  "16:78|23:78": {
+   "keep": true,
+   "why": "Same favour: hearing, sight and hearts given to you, that you may be grateful."
+  },
+  "16:105|23:38": {
+   "keep": false,
+   "why": "Only inventing a lie; who truly lies vs deniers accusing their prophet."
+  },
+  "16:18|24:5": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; counting favours vs repentance of accusers."
+  },
+  "16:38|24:53": {
+   "keep": true,
+   "why": "Same frame: they swore by Allah their strongest oaths, then refuted."
+  },
+  "16:64|24:46": {
+   "keep": false,
+   "why": "Only sending down and guidance; different subjects (the Book's purpose / Allah guides whom He wills)."
+  },
+  "16:65|24:46": {
+   "keep": false,
+   "why": "Only 'sent down'; rain reviving the earth vs clear verses."
+  },
+  "16:73|24:42": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion."
+  },
+  "16:77|24:41": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; the unseen and the Hour vs creatures glorifying."
+  },
+  "16:77|24:64": {
+   "keep": false,
+   "why": "Only 'to Allah belongs ... the heavens and the earth' and a stock closing; the Hour vs knowing your state."
+  },
+  "16:104|24:46": {
+   "keep": false,
+   "why": "Only signs and guidance; deniers not guided vs clear verses sent down."
+  },
+  "16:107|24:19": {
+   "keep": false,
+   "why": "Only this world and the Hereafter; preferring this life vs spreading indecency."
+  },
+  "16:119|24:5": {
+   "keep": true,
+   "why": "Same structure: those who repent after that and reform, Allah is Forgiving, Merciful."
+  },
+  "16:121|24:46": {
+   "keep": false,
+   "why": "Only 'a straight path'; Ibrahim chosen and guided vs Allah guiding whom He wills."
+  },
+  "16:20|25:3": {
+   "keep": true,
+   "why": "Same words: they create nothing while they are created."
+  },
+  "16:24|25:5": {
+   "keep": true,
+   "why": "Same accusation: legends of the ancients."
+  },
+  "16:31|25:10": {
+   "keep": true,
+   "why": "Same description: gardens beneath which rivers flow."
+  },
+  "16:44|25:50": {
+   "keep": false,
+   "why": "Only reminding root; explaining the revelation vs most people refusing."
+  },
+  "16:77|25:2": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'all things'; the Hour vs no son or partner."
+  },
+  "16:12|27:86": {
+   "keep": true,
+   "why": "Same sign: night and day, in that are signs for a people."
+  },
+  "16:64|27:77": {
+   "keep": true,
+   "why": "Same description of the Book: guidance and mercy for believers."
+  },
+  "16:65|27:60": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky to grow vegetation."
+  },
+  "16:73|27:87": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs the trumpet."
+  },
+  "16:79|27:86": {
+   "keep": true,
+   "why": "Same frame: do they not see ... in that are signs for a people who believe."
+  },
+  "16:84|27:83": {
+   "keep": true,
+   "why": "Same scene: the Day We raise / gather from every nation."
+  },
+  "16:127|27:70": {
+   "keep": true,
+   "why": "Same words: do not grieve over them nor be distressed by what they plot."
+  },
+  "16:3|29:44": {
+   "keep": true,
+   "why": "Same statement: the heavens and the earth created in truth."
+  },
+  "16:20|29:42": {
+   "keep": true,
+   "why": "Same subject: what they call on besides Allah."
+  },
+  "16:42|29:59": {
+   "keep": true,
+   "why": "Identical: those who were patient and rely upon their Lord."
+  },
+  "16:55|29:66": {
+   "keep": true,
+   "why": "Near-identical: so they deny what We gave them and enjoy; they will come to know."
+  },
+  "16:64|29:51": {
+   "keep": true,
+   "why": "Same subject: We sent down the Book to you, a mercy for a people who believe."
+  },
+  "16:65|29:44": {
+   "keep": false,
+   "why": "Only 'in that is a sign'; rain reviving the earth vs creation of the heavens."
+  },
+  "16:65|29:63": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky reviving the earth after its death."
+  },
+  "16:72|29:67": {
+   "keep": true,
+   "why": "Same rebuke word for word: do they believe in falsehood and deny Allah's favour?"
+  },
+  "16:95|29:16": {
+   "keep": false,
+   "why": "Only the ending 'better for you if you knew'; different subjects (owner removed a like pair)."
+  },
+  "16:97|29:7": {
+   "keep": true,
+   "why": "Same reward: We will reward them by the best of what they used to do."
+  },
+  "16:104|29:23": {
+   "keep": true,
+   "why": "Same punishment: those who deny Allah's signs have a painful punishment."
+  },
+  "16:122|29:27": {
+   "keep": true,
+   "why": "Same praise of Ibrahim: good in this world and among the righteous in the Hereafter."
+  },
+  "16:20|31:30": {
+   "keep": true,
+   "why": "Same subject: what they call on besides Allah is false."
+  },
+  "16:101|31:25": {
+   "keep": false,
+   "why": "Only 'most of them do not know'; abrogation vs who created the heavens."
+  },
+  "16:108|31:28": {
+   "keep": false,
+   "why": "Only hearing and sight; sealed hearts vs creation like one soul, Hearing, Seeing."
+  },
+  "16:117|31:24": {
+   "keep": true,
+   "why": "Same punishment: brief enjoyment, then a severe punishment."
+  },
+  "16:39|32:25": {
+   "keep": true,
+   "why": "Same idea: what they differed over will be made clear / judged."
+  },
+  "16:78|32:9": {
+   "keep": true,
+   "why": "Same favour: He made for you hearing, sight and hearts, and gratitude."
+  },
+  "16:124|32:25": {
+   "keep": true,
+   "why": "Same statement: your Lord will judge between them on the Day of Resurrection in what they differed."
+  },
+  "16:73|34:22": {
+   "keep": true,
+   "why": "Same argument: those besides Allah own nothing in the heavens and the earth."
+  },
+  "16:73|34:24": {
+   "keep": true,
+   "why": "Contrast: idols cannot provide from the heavens and the earth; Allah provides."
+  },
+  "16:102|34:6": {
+   "keep": true,
+   "why": "Same idea: what is sent down from your Lord is the truth and guidance."
+  },
+  "16:104|34:5": {
+   "keep": true,
+   "why": "Same punishment: deniers of the signs have a painful punishment."
+  },
+  "16:105|34:8": {
+   "keep": false,
+   "why": "Only inventing a lie; who truly lies vs deniers accusing the Prophet."
+  },
+  "16:14|35:12": {
+   "keep": true,
+   "why": "Near-identical: fresh meat and ornaments from the sea, ships ploughing through it, seeking His bounty."
+  },
+  "16:61|35:45": {
+   "keep": true,
+   "why": "Near-identical: if Allah took people to task, He would not leave a creature; He defers them to a term."
+  },
+  "16:65|35:9": {
+   "keep": true,
+   "why": "Same sign: the earth revived after its death."
+  },
+  "16:77|35:1": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'over all things able'; the Hour vs the angels' wings."
+  },
+  "16:4|36:77": {
+   "keep": true,
+   "why": "Same words: man created from a sperm-drop, then he is a clear adversary."
+  },
+  "16:12|36:40": {
+   "keep": true,
+   "why": "Same sign: sun, moon, night and day in their courses."
+  },
+  "16:19|36:76": {
+   "keep": true,
+   "why": "Same statement: Allah knows what they conceal and what they declare."
+  },
+  "16:23|36:76": {
+   "keep": true,
+   "why": "Same statement: Allah knows what they conceal and what they declare."
+  },
+  "16:40|36:82": {
+   "keep": true,
+   "why": "Same statement: when He wills a thing He says to it 'Be' and it is."
+  },
+  "16:64|36:45": {
+   "keep": false,
+   "why": "Only mercy root; the Book's purpose vs deniers told to fear."
+  },
+  "16:2|40:15": {
+   "keep": true,
+   "why": "Same idea: He sends the Spirit of His command on whom He wills of His servants, to warn."
+  },
+  "16:22|40:12": {
+   "keep": true,
+   "why": "Same idea: disbelievers reject Allah alone as God."
+  },
+  "16:29|40:76": {
+   "keep": true,
+   "why": "Identical: enter the gates of Hell, evil is the abode of the arrogant."
+  },
+  "16:36|40:5": {
+   "keep": true,
+   "why": "Same warning: every nation had a messenger and denied; see how was the end / My penalty."
+  },
+  "16:45|40:45": {
+   "keep": true,
+   "why": "Same idea: the evil plotters seized by punishment (warning / Pharaoh's people)."
+  },
+  "16:72|40:64": {
+   "keep": true,
+   "why": "Same favour: He made for you ... and provided you with good things."
+  },
+  "16:78|40:20": {
+   "keep": false,
+   "why": "Only hearing and seeing; man's faculties vs Allah judging in truth, Hearing, Seeing."
+  },
+  "16:97|40:40": {
+   "keep": true,
+   "why": "Same words: whoever does good, male or female, while a believer, is rewarded."
+  },
+  "16:107|40:39": {
+   "keep": false,
+   "why": "Only this world and the Hereafter; preferring this life vs this life is brief enjoyment."
+  },
+  "16:107|40:51": {
+   "keep": false,
+   "why": "Only 'the life of this world'; preferring this life vs helping the messengers."
+  },
+  "16:111|40:17": {
+   "keep": true,
+   "why": "Same scene: every soul repaid for what it did, without injustice."
+  },
+  "16:3|42:4": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; creation in truth vs ownership."
+  },
+  "16:73|42:49": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion and gifts of children."
+  },
+  "16:93|42:8": {
+   "keep": true,
+   "why": "Same words: had Allah willed He would have made you one nation, but He ..."
+  },
+  "16:3|43:9": {
+   "keep": true,
+   "why": "Same subject: the creation of the heavens and the earth attributed to Allah."
+  },
+  "16:10|43:11": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky."
+  },
+  "16:15|43:10": {
+   "keep": true,
+   "why": "Same sign: He made paths in the earth that you may be guided."
+  },
+  "16:58|43:17": {
+   "keep": true,
+   "why": "Same words: when given news of a daughter, his face darkens and he suppresses grief."
+  },
+  "16:65|43:11": {
+   "keep": true,
+   "why": "Same sign: water from the sky reviving dead land."
+  },
+  "16:3|46:3": {
+   "keep": true,
+   "why": "Same statement: the heavens and the earth created in truth."
+  },
+  "16:77|46:33": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'over all things able'; the Hour vs reviving the dead."
+  },
+  "16:87|46:28": {
+   "keep": true,
+   "why": "Same idea: what they invented as gods abandons them."
+  },
+  "16:111|46:19": {
+   "keep": true,
+   "why": "Same idea: each repaid fully for their deeds and not wronged."
+  },
+  "16:73|48:14": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's forgiveness."
+  },
+  "16:77|48:21": {
+   "keep": false,
+   "why": "Only 'over all things able'; the Hour vs future spoils."
+  },
+  "16:121|48:2": {
+   "keep": true,
+   "why": "Same phrase: Allah completes His favour and guides to a straight path (Ibrahim / the Prophet)."
+  },
+  "16:18|49:5": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; counting favours vs waiting for the Prophet."
+  },
+  "16:77|49:16": {
+   "keep": false,
+   "why": "Only the heavens and the earth and a stock closing; the Hour vs teaching Allah your religion."
+  },
+  "16:77|49:18": {
+   "keep": true,
+   "why": "Same statement: Allah has the unseen of the heavens and the earth."
+  },
+  "16:3|50:38": {
+   "keep": true,
+   "why": "Same subject: the creation of the heavens and the earth."
+  },
+  "16:10|50:9": {
+   "keep": true,
+   "why": "Same sign: water sent down from the sky producing vegetation."
+  },
+  "16:15|50:7": {
+   "keep": true,
+   "why": "Same sign: mountains cast on the earth."
+  },
+  "16:73|53:26": {
+   "keep": false,
+   "why": "Only heavens and 'anything'; idols' powerlessness vs angels' intercession."
+  },
+  "16:118|53:52": {
+   "keep": false,
+   "why": "Only wrongdoing and 'before'; prohibitions on the Jews vs Nuh's people."
+  },
+  "16:125|53:30": {
+   "keep": true,
+   "why": "Same words: your Lord knows best who strays from His way and who is guided."
+  },
+  "16:65|57:17": {
+   "keep": true,
+   "why": "Same sign: Allah revives the earth after its death."
+  },
+  "16:73|57:2": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion."
+  },
+  "16:73|57:5": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion."
+  },
+  "16:77|57:2": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'over all things able'; the Hour vs giving life and death."
+  },
+  "16:3|64:3": {
+   "keep": true,
+   "why": "Same statement: He created the heavens and the earth in truth."
+  },
+  "16:19|64:4": {
+   "keep": true,
+   "why": "Same statement: He knows what you conceal and what you declare."
+  },
+  "16:23|64:4": {
+   "keep": true,
+   "why": "Same statement: Allah knows what they conceal and what they declare."
+  },
+  "16:49|64:1": {
+   "keep": true,
+   "why": "Same idea: all in the heavens and the earth prostrate to / glorify Allah."
+  },
+  "16:73|64:1": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs glorification."
+  },
+  "16:77|64:1": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'over all things able'."
+  },
+  "16:82|64:12": {
+   "keep": true,
+   "why": "Same words: if they turn away, your duty is only clear delivery."
+  },
+  "16:31|85:11": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "16:73|85:9": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; idols' powerlessness vs Allah's dominion."
+  },
+  "16:77|85:9": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'all things'."
+  },
+  "17:9|18:2": {
+   "keep": true,
+   "why": "Same words: gives good tidings to the believers who do righteous deeds that they have a great reward."
+  },
+  "17:89|18:54": {
+   "keep": true,
+   "why": "Same words: We have diversified in this Qur'an for people every kind of example."
+  },
+  "17:94|18:55": {
+   "keep": true,
+   "why": "Same words: nothing prevented people from believing when guidance came to them except ..."
+  },
+  "17:102|18:26": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; Musa to Pharaoh vs the youths' sleep."
+  },
+  "17:108|18:98": {
+   "keep": true,
+   "why": "Same phrase: the promise of my Lord is fulfilled / true."
+  },
+  "17:56|20:89": {
+   "keep": true,
+   "why": "Same argument: false gods have no power to harm or help."
+  },
+  "17:61|20:116": {
+   "keep": true,
+   "why": "Same story: the angels prostrate to Adam except Iblis."
+  },
+  "17:84|20:50": {
+   "keep": false,
+   "why": "Only 'every' and guidance; each acts by his way vs the Lord who gave each thing its form."
+  },
+  "17:84|20:135": {
+   "keep": true,
+   "why": "Same structure: Say, each acts / waits; you will know who is better guided."
+  },
+  "17:55|21:4": {
+   "keep": true,
+   "why": "Same idea: your Lord knows who / what is in the heavens and the earth."
+  },
+  "17:81|21:18": {
+   "keep": true,
+   "why": "Same idea: truth comes and falsehood vanishes."
+  },
+  "17:81|21:55": {
+   "keep": false,
+   "why": "Only 'the truth' came; truth defeating falsehood vs Ibrahim's people asking if he is serious."
+  },
+  "17:102|21:4": {
+   "keep": false,
+   "why": "Only heavens and earth; Musa to Pharaoh vs the Prophet's Lord knowing speech."
+  },
+  "17:102|21:56": {
+   "keep": true,
+   "why": "Same reply of a prophet: the Lord of the heavens and the earth (Musa to Pharaoh, Ibrahim to his people)."
+  },
+  "17:108|21:68": {
+   "keep": false,
+   "why": "Only the root of doing; believers glorifying vs burning Ibrahim."
+  },
+  "17:2|23:49": {
+   "keep": true,
+   "why": "Same statement: We gave Musa the Book for guidance."
+  },
+  "17:6|23:55": {
+   "keep": false,
+   "why": "Only 'wealth and sons'; Israel's restoration vs deniers deceived by provision."
+  },
+  "17:49|23:82": {
+   "keep": true,
+   "why": "Same denial: when we are bones and dust, will we be resurrected?"
+  },
+  "17:81|23:70": {
+   "keep": false,
+   "why": "Only 'the truth came'; truth defeating falsehood vs the people hating the truth."
+  },
+  "17:91|23:19": {
+   "keep": false,
+   "why": "Only gardens of palms and grapes; a mocking demand vs a favour of rain."
+  },
+  "17:98|23:82": {
+   "keep": true,
+   "why": "Same denial: when we are bones, will we be resurrected?"
+  },
+  "17:108|23:93": {
+   "keep": false,
+   "why": "Only 'promise' and Lord; believers glorifying vs the Prophet's prayer."
+  },
+  "17:2|25:35": {
+   "keep": true,
+   "why": "Same statement: We gave Musa the Book."
+  },
+  "17:17|25:58": {
+   "keep": true,
+   "why": "Same rare clause: sufficient is your Lord as Aware of the sins of His servants."
+  },
+  "17:33|25:68": {
+   "keep": true,
+   "why": "Same words: do not kill the soul Allah has forbidden except by right."
+  },
+  "17:47|25:8": {
+   "keep": true,
+   "why": "Same accusation: the wrongdoers say you follow only a man bewitched."
+  },
+  "17:48|25:9": {
+   "keep": true,
+   "why": "Identical: see how they strike examples for you, so they stray."
+  },
+  "17:72|25:34": {
+   "keep": true,
+   "why": "Same fate in the Hereafter: worse, and further astray from the way."
+  },
+  "17:89|25:50": {
+   "keep": true,
+   "why": "Same words: We diversified it, but most people refuse except disbelief."
+  },
+  "17:102|25:6": {
+   "keep": false,
+   "why": "Only the heavens and the earth and sending down; Musa to Pharaoh vs who sent the Qur'an."
+  },
+  "17:105|25:56": {
+   "keep": true,
+   "why": "Same words: We sent you only as a bringer of good tidings and a warner."
+  },
+  "17:111|25:2": {
+   "keep": true,
+   "why": "Same words: He has not taken a son nor has He a partner in dominion."
+  },
+  "17:10|26:201": {
+   "keep": true,
+   "why": "Same punishment: deniers face a painful punishment."
+  },
+  "17:92|26:187": {
+   "keep": true,
+   "why": "Same demand: cause fragments of the sky to fall upon us."
+  },
+  "17:102|26:24": {
+   "keep": true,
+   "why": "Same scene: Musa tells Pharaoh of the Lord of the heavens and the earth."
+  },
+  "17:17|28:43": {
+   "keep": false,
+   "why": "Only destroying past generations; Allah's awareness of sins vs the Book given to Musa."
+  },
+  "17:25|28:16": {
+   "keep": false,
+   "why": "Only forgiveness and the soul; general forgiveness vs Musa's prayer."
+  },
+  "17:84|28:22": {
+   "keep": false,
+   "why": "Only guidance and 'the way'; each acts by his way vs Musa heading to Madyan."
+  },
+  "17:84|28:37": {
+   "keep": true,
+   "why": "Same idea: my / your Lord knows best who is rightly guided."
+  },
+  "17:101|28:36": {
+   "keep": true,
+   "why": "Same story: Musa came with clear signs and was called a sorcerer."
+  },
+  "17:107|28:53": {
+   "keep": true,
+   "why": "Same scene: those given earlier scripture, when it is recited to them, believe."
+  },
+  "17:30|29:62": {
+   "keep": true,
+   "why": "Same statement: He extends provision for whom He wills and restricts it."
+  },
+  "17:82|29:51": {
+   "keep": true,
+   "why": "Same description: the Qur'an is a mercy for the believers."
+  },
+  "17:96|29:52": {
+   "keep": true,
+   "why": "Same words: say, Allah suffices as witness between me and you."
+  },
+  "17:26|30:38": {
+   "keep": true,
+   "why": "Same command: give the relative his right, and the needy and the traveller."
+  },
+  "17:30|30:37": {
+   "keep": true,
+   "why": "Same statement: He extends provision for whom He wills and restricts it."
+  },
+  "17:89|30:58": {
+   "keep": true,
+   "why": "Same words: We have set forth for people in this Qur'an every kind of example."
+  },
+  "17:77|33:62": {
+   "keep": true,
+   "why": "Same idea: the way of Allah with those before, and you will find no change in it."
+  },
+  "17:84|33:67": {
+   "keep": false,
+   "why": "Only 'the way'; each acts by his way vs followers misled by leaders."
+  },
+  "17:105|33:45": {
+   "keep": true,
+   "why": "Same words: We sent you as a bringer of good tidings and a warner."
+  },
+  "22:6|64:1": {
+   "keep": false,
+   "why": "Only the closing 'He is over all things able'; Allah reviving the dead vs glorification and dominion."
+  },
+  "22:57|64:10": {
+   "keep": true,
+   "why": "Same punishment: those who disbelieve and deny Our signs, a humiliating punishment / the Fire."
+  },
+  "22:63|64:8": {
+   "keep": false,
+   "why": "Only 'sent down' and 'Acquainted'; rain greening the earth vs believing in the light sent down."
+  },
+  "22:70|64:4": {
+   "keep": true,
+   "why": "Same statement: Allah knows what is in the heaven(s) and the earth."
+  },
+  "22:6|67:1": {
+   "keep": false,
+   "why": "Only the closing 'He is over all things able'; reviving the dead vs blessed is He in whose hand is dominion."
+  },
+  "22:44|67:18": {
+   "keep": true,
+   "why": "Same warning: those before denied, then how was My reproach."
+  },
+  "22:49|67:26": {
+   "keep": true,
+   "why": "Same statement: I am only a clear warner."
+  },
+  "22:14|85:11": {
+   "keep": true,
+   "why": "Same reward: those who believe and do good deeds have gardens beneath which rivers flow."
+  },
+  "22:23|85:11": {
+   "keep": true,
+   "why": "Same reward: those who believe and do good deeds have gardens beneath which rivers flow."
+  },
+  "22:56|85:11": {
+   "keep": true,
+   "why": "Same reward: those who believe and do good deeds are in gardens."
+  },
+  "22:14|98:8": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "22:41|98:5": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'; the empowered believers vs what the People of the Book were commanded."
+  },
+  "22:50|98:7": {
+   "keep": true,
+   "why": "Same reward framing for those who believe and do good deeds."
+  },
+  "23:47|26:70": {
+   "keep": false,
+   "why": "Only 'people' and 'worship'; Pharaoh's people rejecting two messengers vs Ibrahim questioning his father."
+  },
+  "23:68|26:26": {
+   "keep": false,
+   "why": "Only 'their forefathers of old'; disbelievers not reflecting vs Musa naming the Lord of their fathers."
+  },
+  "23:94|26:10": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'; a prayer not to be among them vs Musa sent to them."
+  },
+  "23:112|26:18": {
+   "keep": false,
+   "why": "Only 'lingered ... years'; questioning on the Day vs Pharaoh reminding Musa of his upbringing."
+  },
+  "23:117|26:213": {
+   "keep": true,
+   "why": "Same prohibition: do not call upon another god with Allah."
+  },
+  "23:32|27:45": {
+   "keep": true,
+   "why": "Same call of a messenger to his people: worship Allah."
+  },
+  "23:35|27:67": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we are dust, shall we be brought out."
+  },
+  "23:82|27:67": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we are dust, shall we indeed be raised / brought out."
+  },
+  "23:83|27:68": {
+   "keep": true,
+   "why": "Same words: we and our fathers were promised this before; only legends of the ancients."
+  },
+  "23:86|27:26": {
+   "keep": true,
+   "why": "Same title: Lord of the Great Throne."
+  },
+  "23:116|27:26": {
+   "keep": true,
+   "why": "Same statement: there is no god but He, Lord of the Throne."
+  },
+  "23:28|28:21": {
+   "keep": true,
+   "why": "Same idea: deliverance from the wrongdoing people; Nuh's praise and Musa's prayer."
+  },
+  "23:29|28:24": {
+   "keep": false,
+   "why": "Only 'my Lord', 'send down' and 'good'; Nuh's prayer for a blessed landing vs Musa's need."
+  },
+  "23:94|28:21": {
+   "keep": true,
+   "why": "Same prayer: my Lord, keep me from / save me from the wrongdoing people."
+  },
+  "23:109|28:16": {
+   "keep": true,
+   "why": "Same supplication: (our) Lord, forgive (us/me)."
+  },
+  "23:117|28:88": {
+   "keep": true,
+   "why": "Same prohibition: do not call upon another god with Allah."
+  },
+  "23:118|28:16": {
+   "keep": true,
+   "why": "Same supplication: my Lord, forgive."
+  },
+  "23:118|28:24": {
+   "keep": false,
+   "why": "Only 'my Lord' and 'good'; prayer for mercy vs Musa's need after watering the flocks."
+  },
+  "23:23|29:16": {
+   "keep": true,
+   "why": "Same call of a prophet to his people: worship Allah and fear Him."
+  },
+  "23:23|29:36": {
+   "keep": true,
+   "why": "Same call of a prophet to his people: O my people, worship Allah."
+  },
+  "23:26|29:30": {
+   "keep": true,
+   "why": "Same prayer word for word: my Lord, help me (Nuh / Lut)."
+  },
+  "23:39|29:30": {
+   "keep": true,
+   "why": "Same prayer word for word: my Lord, help me."
+  },
+  "23:47|29:16": {
+   "keep": false,
+   "why": "Only 'people' and 'worship'; Pharaoh's people vs Ibrahim's call."
+  },
+  "23:12|32:7": {
+   "keep": true,
+   "why": "Same idea: Allah created man from clay."
+  },
+  "23:49|32:23": {
+   "keep": true,
+   "why": "Same statement: We gave Musa the Book, for guidance."
+  },
+  "23:50|32:24": {
+   "keep": false,
+   "why": "Only 'We made' and 'sign'; Maryam's son as a sign vs leaders from the Children of Israel."
+  },
+  "23:78|32:9": {
+   "keep": true,
+   "why": "Same statement: He made for you hearing, sight and hearts; little do you give thanks."
+  },
+  "23:92|32:6": {
+   "keep": true,
+   "why": "Same title: Knower of the unseen and the witnessed."
+  },
+  "23:99|32:11": {
+   "keep": false,
+   "why": "Only 'death', 'Lord' and 'return'; the dying man begging to be sent back vs the angel of death taking you."
+  },
+  "23:19|36:34": {
+   "keep": true,
+   "why": "Same sign: gardens of palm trees and grapevines."
+  },
+  "23:47|36:15": {
+   "keep": true,
+   "why": "Same refusal of the messengers: you are only human like us."
+  },
+  "23:88|36:83": {
+   "keep": true,
+   "why": "Same statement: in whose hand is the dominion of all things."
+  },
+  "23:35|37:16": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we have died and become dust and bones."
+  },
+  "23:35|37:53": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we have died and become dust and bones."
+  },
+  "23:47|37:85": {
+   "keep": false,
+   "why": "Only 'people' and 'worship'; Pharaoh's people vs Ibrahim questioning his father."
+  },
+  "23:82|37:16": {
+   "keep": true,
+   "why": "Same words: when we have died and become dust and bones, shall we be raised."
+  },
+  "23:82|37:53": {
+   "keep": true,
+   "why": "Same words: when we have died and become dust and bones, shall we be (raised / recompensed)."
+  },
+  "23:18|43:11": {
+   "keep": true,
+   "why": "Same sign: He sent down water from the sky in measure."
+  },
+  "23:19|43:73": {
+   "keep": true,
+   "why": "Same phrase in contrast: for you in it are many fruits from which you eat; worldly gardens vs Paradise."
+  },
+  "23:47|43:26": {
+   "keep": false,
+   "why": "Only 'people' and 'worship'; Pharaoh's people vs Ibrahim disowning his people's gods."
+  },
+  "23:68|43:24": {
+   "keep": false,
+   "why": "Only 'came' and 'forefathers'; not pondering the word vs clinging to the fathers' way."
+  },
+  "23:70|43:78": {
+   "keep": true,
+   "why": "Same statement: he brought them the truth, but most of them are averse to the truth."
+  },
+  "23:86|43:82": {
+   "keep": true,
+   "why": "Same title: Lord of the heavens, Lord of the Throne."
+  },
+  "23:89|43:87": {
+   "keep": true,
+   "why": "Same frame: they will say 'Allah'; then how are you deluded."
+  },
+  "23:37|45:24": {
+   "keep": true,
+   "why": "Same words of the deniers: there is only our worldly life; we die and we live."
+  },
+  "23:46|45:31": {
+   "keep": true,
+   "why": "Same description: they were arrogant and were a (haughty / criminal) people."
+  },
+  "23:62|45:29": {
+   "keep": true,
+   "why": "Same idea: a record that speaks with the truth about deeds."
+  },
+  "23:66|45:31": {
+   "keep": true,
+   "why": "Same rebuke in the Hereafter: were My verses not recited to you."
+  },
+  "23:105|45:31": {
+   "keep": true,
+   "why": "Same rebuke in the Hereafter: were My verses not recited to you."
+  },
+  "23:18|50:9": {
+   "keep": true,
+   "why": "Same sign: We sent down water from the sky."
+  },
+  "23:35|50:3": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we have died and become dust."
+  },
+  "23:82|50:3": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we have died and become dust."
+  },
+  "23:106|50:27": {
+   "keep": false,
+   "why": "Only 'Our Lord' and 'astray'; the damned confessing vs the companion disowning blame."
+  },
+  "23:35|56:47": {
+   "keep": true,
+   "why": "Same denial of resurrection: when we have died and become dust and bones."
+  },
+  "23:82|56:47": {
+   "keep": true,
+   "why": "Same words: when we have died and become dust and bones, shall we be raised."
+  },
+  "23:86|56:74": {
+   "keep": false,
+   "why": "Only 'Lord' and 'Great'; who is Lord of the Throne vs glorify the name of your Lord."
+  },
+  "23:86|56:96": {
+   "keep": false,
+   "why": "Only 'Lord' and 'Great'; who is Lord of the Throne vs glorify the name of your Lord."
+  },
+  "23:78|67:23": {
+   "keep": true,
+   "why": "Same statement: He made for you hearing, sight and hearts; little do you give thanks."
+  },
+  "23:79|67:24": {
+   "keep": true,
+   "why": "Same words: He multiplied you on the earth and to Him you will be gathered."
+  },
+  "23:88|67:1": {
+   "keep": true,
+   "why": "Same idea: in His hand is the dominion over all things."
+  },
+  "23:5|70:29": {
+   "keep": true,
+   "why": "Same words: those who guard their private parts."
+  },
+  "23:6|70:30": {
+   "keep": true,
+   "why": "Same words: except from their wives or those their right hands possess."
+  },
+  "23:7|70:31": {
+   "keep": true,
+   "why": "Same words: whoever seeks beyond that, they are the transgressors."
+  },
+  "23:8|70:32": {
+   "keep": true,
+   "why": "Same words: those who keep their trusts and promises."
+  },
+  "23:9|70:34": {
+   "keep": true,
+   "why": "Same words: those who guard their prayers."
+  },
+  "24:5|27:11": {
+   "keep": true,
+   "why": "Same style: except whoever repents / changes after wrong, (I am) Forgiving, Merciful."
+  },
+  "24:56|27:3": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'; a command vs describing the believers."
+  },
+  "24:64|27:87": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'the Day'; Allah's ownership and knowledge vs the terror at the Trumpet."
+  },
+  "24:24|29:55": {
+   "keep": false,
+   "why": "Only 'the Day' and 'what they did'; limbs testifying vs punishment covering them."
+  },
+  "24:46|29:35": {
+   "keep": false,
+   "why": "Only 'clear signs'; revealed verses guiding vs the ruins of Lut's town left as a sign."
+  },
+  "24:64|29:52": {
+   "keep": true,
+   "why": "Same idea: Allah knows what is in the heavens and the earth and witnesses what people do."
+  },
+  "24:28|31:23": {
+   "keep": false,
+   "why": "Only 'what you do' and 'Knowing'; etiquette of entering houses vs grief over the disbelievers."
+  },
+  "24:41|31:20": {
+   "keep": false,
+   "why": "Only 'do you not see that Allah' and 'the heavens and the earth'; glorification vs subjugated blessings."
+  },
+  "24:56|31:4": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakat'; a command vs describing the doers of good."
+  },
+  "24:64|31:25": {
+   "keep": false,
+   "why": "Only 'Allah' and 'the heavens and the earth'; ownership and knowledge vs who created them."
+  },
+  "24:14|33:57": {
+   "keep": false,
+   "why": "Only 'in this world and the Hereafter' and 'punishment'; grace sparing the slanderers vs cursing those who harm Allah."
+  },
+  "24:15|33:63": {
+   "keep": false,
+   "why": "Only 'with Allah' and 'knowledge'; the slander thought trivial vs knowledge of the Hour."
+  },
+  "24:23|33:57": {
+   "keep": true,
+   "why": "Same punishment: cursed in this world and the Hereafter, with a great / humiliating punishment."
+  },
+  "24:50|33:12": {
+   "keep": true,
+   "why": "Same subject: those with disease in their hearts distrusting Allah and His Messenger."
+  },
+  "24:52|33:71": {
+   "keep": true,
+   "why": "Same promise: whoever obeys Allah and His Messenger has triumphed."
+  },
+  "24:54|33:66": {
+   "keep": true,
+   "why": "Contrast: the command to obey Allah and the Messenger vs the damned wishing they had obeyed."
+  },
+  "24:64|33:40": {
+   "keep": false,
+   "why": "Only the closing 'Allah knows all things'; Allah's ownership vs Muhammad as the seal of the prophets."
+  },
+  "24:12|46:11": {
+   "keep": false,
+   "why": "Only 'this is a lie'; believers rejecting slander vs disbelievers calling the Qur'an an old lie."
+  },
+  "24:15|46:23": {
+   "keep": false,
+   "why": "Only 'knowledge' and 'with Allah'; the slander vs Hud saying knowledge is with Allah."
+  },
+  "24:19|46:31": {
+   "keep": false,
+   "why": "Only 'painful punishment'; spreading indecency vs the jinn's call to faith."
+  },
+  "24:41|46:33": {
+   "keep": false,
+   "why": "Only 'do you not see that Allah' and 'the heavens and the earth'; glorification vs power to revive the dead."
+  },
+  "24:64|46:33": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'all things'; Allah's knowledge vs His power to revive the dead."
+  },
+  "24:5|49:5": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; repentance of slanderers vs waiting for the Prophet to come out."
+  },
+  "24:5|49:10": {
+   "keep": false,
+   "why": "Only 'reconcile' and mercy; repentance of slanderers vs reconciling believing brothers."
+  },
+  "24:10|49:8": {
+   "keep": false,
+   "why": "Only 'the bounty of Allah' and 'Wise'; different subjects (slander ruling / faith made beloved)."
+  },
+  "24:41|49:16": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'Knowing'; glorification vs teaching Allah your religion."
+  },
+  "24:64|49:16": {
+   "keep": true,
+   "why": "Same statement: Allah knows what is in the heavens and the earth, and Allah knows all things."
+  },
+  "24:64|49:18": {
+   "keep": true,
+   "why": "Same idea: Allah knows (the unseen of) the heavens and the earth and what you do."
+  },
+  "24:42|57:2": {
+   "keep": true,
+   "why": "Same statement: His is the dominion of the heavens and the earth."
+  },
+  "24:42|57:5": {
+   "keep": true,
+   "why": "Same statement: His is the dominion of the heavens and the earth, and to Allah is the return."
+  },
+  "24:46|57:9": {
+   "keep": true,
+   "why": "Same idea: He sends down clear verses to guide (to a straight path / to the light)."
+  },
+  "24:57|57:15": {
+   "keep": true,
+   "why": "Same punishment for the disbelievers: their refuge is the Fire, a wretched destination."
+  },
+  "24:14|59:3": {
+   "keep": true,
+   "why": "Same frame: were it not for Allah's grace / decree, punishment would have struck them in this world, with the Hereafter's."
+  },
+  "24:19|59:3": {
+   "keep": false,
+   "why": "Only punishment 'in this world and the Hereafter'; spreaders of indecency vs the exiled Banu Nadir."
+  },
+  "24:45|59:6": {
+   "keep": false,
+   "why": "Only the closing 'over all things able'; creation of creatures vs spoils without battle."
+  },
+  "24:41|64:4": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'Knowing'; glorification vs knowing secrets."
+  },
+  "24:42|64:3": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and 'to Him is the destination'; dominion vs creation and forming you."
+  },
+  "24:52|64:12": {
+   "keep": false,
+   "why": "Only 'obey Allah and His Messenger'; the reward of obedience vs the Messenger's duty to convey."
+  },
+  "24:54|64:12": {
+   "keep": true,
+   "why": "Same words: obey Allah and the Messenger; if you turn away, the Messenger's duty is only clear conveyance."
+  },
+  "24:57|64:10": {
+   "keep": true,
+   "why": "Same punishment for the disbelievers: the Fire, a wretched destination."
+  },
+  "24:64|64:1": {
+   "keep": false,
+   "why": "Only 'what is in the heavens and the earth'; ownership and knowledge vs glorification."
+  },
+  "24:64|64:4": {
+   "keep": true,
+   "why": "Same statement: Allah knows what is in the heavens and the earth and all that you do."
+  },
+  "25:6|26:24": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; He who knows the secret sent it down vs Musa naming the Lord."
+  },
+  "25:36|26:15": {
+   "keep": true,
+   "why": "Same scene: Musa and Harun told 'go, both of you' with Our signs."
+  },
+  "25:36|26:117": {
+   "keep": false,
+   "why": "Only 'people' and 'denied'; Musa and Harun sent vs Nuh complaining."
+  },
+  "25:57|26:109": {
+   "keep": true,
+   "why": "Same statement of the messengers: I ask you no reward for it."
+  },
+  "25:57|26:127": {
+   "keep": true,
+   "why": "Same statement of the messengers: I ask you no reward for it."
+  },
+  "25:57|26:145": {
+   "keep": true,
+   "why": "Same statement of the messengers: I ask you no reward for it."
+  },
+  "25:57|26:164": {
+   "keep": true,
+   "why": "Same statement of the messengers: I ask you no reward for it."
+  },
+  "25:57|26:180": {
+   "keep": true,
+   "why": "Same statement of the messengers: I ask you no reward for it."
+  },
+  "25:6|27:65": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and knowing; who sent down the Qur'an vs none knows the unseen or the time of resurrection."
+  },
+  "25:36|27:84": {
+   "keep": false,
+   "why": "Only 'denied My signs'; Musa and Harun sent vs the deniers questioned on the Day."
+  },
+  "25:48|27:63": {
+   "keep": true,
+   "why": "Same words: He sends the winds as glad tidings before His mercy."
+  },
+  "25:55|27:43": {
+   "keep": false,
+   "why": "Only 'worship besides Allah'; idols that neither help nor harm vs what kept the queen of Sheba back."
+  },
+  "25:47|28:73": {
+   "keep": true,
+   "why": "Same sign: He made the night and the day for you, for rest and for seeking."
+  },
+  "25:62|28:73": {
+   "keep": true,
+   "why": "Same sign: He made the night and the day, for those who would be grateful."
+  },
+  "25:68|28:88": {
+   "keep": true,
+   "why": "Same prohibition: not calling upon another god with Allah."
+  },
+  "25:70|28:67": {
+   "keep": true,
+   "why": "Same style: whoever repents, believes and does righteous work, then a good outcome."
+  },
+  "25:71|28:67": {
+   "keep": true,
+   "why": "Same style: whoever repents and does righteous work."
+  },
+  "25:35|32:23": {
+   "keep": true,
+   "why": "Same statement: We gave Musa the Book."
+  },
+  "25:59|32:4": {
+   "keep": true,
+   "why": "Same statement: He created the heavens and the earth and what is between them in six days, then rose over the Throne."
+  },
+  "25:73|32:22": {
+   "keep": true,
+   "why": "Contrast: reminded of the verses of their Lord; they do not fall deaf and blind vs he turns away."
+  },
+  "25:2|33:27": {
+   "keep": false,
+   "why": "Only the closing 'all things' and 'the earth'; dominion and creation vs inheriting the enemy's land."
+  },
+  "25:56|33:45": {
+   "keep": true,
+   "why": "Same statement: We sent you only as a bearer of good tidings and a warner."
+  },
+  "25:57|33:67": {
+   "keep": false,
+   "why": "Only 'the way'; no reward asked vs followers blaming their leaders."
+  },
+  "25:70|33:24": {
+   "keep": false,
+   "why": "Only repentance and the closing Forgiving, Merciful; the repentant's reward vs the hypocrites' fate."
+  },
+  "25:70|33:73": {
+   "keep": false,
+   "why": "Only repentance and the closing Forgiving, Merciful; the repentant's reward vs punishing the hypocrites."
+  },
+  "25:17|34:40": {
+   "keep": true,
+   "why": "Same scene: on the Day He gathers them and asks the worshipped ones about those who worshipped them."
+  },
+  "25:43|34:51": {
+   "keep": false,
+   "why": "Shared words only; following one's desire as a god vs terror with no escape."
+  },
+  "25:56|34:28": {
+   "keep": true,
+   "why": "Same statement: We sent you only as a bearer of good tidings and a warner."
+  },
+  "25:57|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is with Allah."
+  },
+  "25:17|40:74": {
+   "keep": true,
+   "why": "Same scene: in the Hereafter the gods besides Allah have strayed from their worshippers."
+  },
+  "25:55|40:74": {
+   "keep": false,
+   "why": "Only 'besides Allah'; idols that neither help nor harm vs the idols lost in the Hereafter."
+  },
+  "25:77|40:60": {
+   "keep": true,
+   "why": "Same idea: the worth of supplication to the Lord, and punishment for those who refuse."
+  },
+  "25:2|42:49": {
+   "keep": true,
+   "why": "Same statement: His is the dominion of the heavens and the earth, and He creates."
+  },
+  "25:17|42:46": {
+   "keep": false,
+   "why": "Only 'besides Allah' and 'way'; gods questioned on the Day vs no helpers for whom Allah leaves astray."
+  },
+  "25:34|42:46": {
+   "keep": false,
+   "why": "Only 'astray' and 'way'; dragged on their faces vs no way for whom Allah leaves astray."
+  },
+  "25:42|42:44": {
+   "keep": false,
+   "why": "Only seeing the punishment and 'way'; the idolaters' boast vs the wrongdoers asking for a return."
+  },
+  "25:43|42:6": {
+   "keep": true,
+   "why": "Same statement to the Prophet: you are not a guardian over them."
+  },
+  "25:47|71:12": {
+   "keep": false,
+   "why": "Only 'made for you'; night and sleep vs wealth, sons and gardens."
+  },
+  "25:61|71:16": {
+   "keep": true,
+   "why": "Same sign: the sun a lamp and the moon a light."
+  },
+  "25:77|71:5": {
+   "keep": false,
+   "why": "Only 'call' and 'my Lord'; the worth of supplication vs Nuh calling his people night and day."
+  },
+  "25:47|78:9": {
+   "keep": true,
+   "why": "Same words: sleep made for rest."
+  },
+  "25:47|78:10": {
+   "keep": true,
+   "why": "Same words: the night made a covering."
+  },
+  "25:57|78:39": {
+   "keep": true,
+   "why": "Same rare clause: whoever wills takes a way / return to his Lord."
+  },
+  "25:59|78:37": {
+   "keep": true,
+   "why": "Same title: the heavens and the earth and what is between them, the Most Merciful."
+  },
+  "26:2|27:1": {
+   "keep": true,
+   "why": "Same opening: these are the verses of the clear Book."
+  },
+  "26:24|27:65": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; Musa naming the Lord vs none knows the unseen."
+  },
+  "26:24|27:75": {
+   "keep": false,
+   "why": "Only 'the heaven and the earth'; Musa naming the Lord vs nothing hidden but in a Book."
+  },
+  "26:24|27:82": {
+   "keep": false,
+   "why": "Only 'the earth' and 'certain'; Musa naming the Lord vs the beast emerging."
+  },
+  "26:112|27:84": {
+   "keep": false,
+   "why": "Only 'knowledge' and 'what they did'; Nuh disclaiming knowledge vs the deniers questioned."
+  },
+  "26:139|27:84": {
+   "keep": false,
+   "why": "Only 'denied' and 'signs'; 'Ad destroyed vs the deniers questioned on the Day."
+  },
+  "26:152|27:48": {
+   "keep": true,
+   "why": "Same description of Thamud's ringleaders: they cause corruption in the land and do not reform."
+  },
+  "26:173|27:58": {
+   "keep": true,
+   "why": "Same words: We rained upon them a rain; evil was the rain of the warned (Lut's people)."
+  },
+  "26:2|28:2": {
+   "keep": true,
+   "why": "Same opening word for word: these are the verses of the clear Book."
+  },
+  "26:10|28:21": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'; Musa sent to them vs Musa fleeing from them."
+  },
+  "26:12|28:33": {
+   "keep": true,
+   "why": "Same scene: Musa's fear at his commission, my Lord, I fear they will deny / kill me."
+  },
+  "26:31|28:49": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful."
+  },
+  "26:213|28:88": {
+   "keep": true,
+   "why": "Same prohibition: do not call upon another god with Allah."
+  },
+  "26:24|34:24": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; Musa naming the Lord vs who provides for you."
+  },
+  "26:109|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is only with (the Lord of the worlds / Allah)."
+  },
+  "26:127|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is only with (the Lord of the worlds / Allah)."
+  },
+  "26:145|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is only with (the Lord of the worlds / Allah)."
+  },
+  "26:164|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is only with (the Lord of the worlds / Allah)."
+  },
+  "26:180|34:47": {
+   "keep": true,
+   "why": "Same statement: I ask you no reward; my reward is only with (the Lord of the worlds / Allah)."
+  },
+  "26:5|36:46": {
+   "keep": true,
+   "why": "Same idea: no reminder / sign comes to them but they turn away from it."
+  },
+  "26:93|36:74": {
+   "keep": true,
+   "why": "Same idea: gods besides Allah taken for help that cannot help."
+  },
+  "26:186|36:15": {
+   "keep": true,
+   "why": "Same refusal of the messengers: you are only human like us, and liars."
+  },
+  "26:24|39:44": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth'; Musa naming the Lord vs intercession belongs to Allah."
+  },
+  "26:135|39:13": {
+   "keep": true,
+   "why": "Same warning: I fear the punishment of a great day."
+  },
+  "26:156|39:13": {
+   "keep": true,
+   "why": "Same warning: the punishment of a great day."
+  },
+  "26:16|43:46": {
+   "keep": true,
+   "why": "Same scene: Musa to Pharaoh, I am the messenger of the Lord of the worlds."
+  },
+  "26:24|43:82": {
+   "keep": true,
+   "why": "Same title: Lord of the heavens and the earth."
+  },
+  "26:70|43:26": {
+   "keep": true,
+   "why": "Same scene: Ibrahim to his father and his people about what they worship."
+  },
+  "26:74|43:22": {
+   "keep": true,
+   "why": "Same excuse of the idolaters: we found our fathers doing so."
+  },
+  "26:74|43:24": {
+   "keep": true,
+   "why": "Same excuse of the idolaters: what we found our fathers upon."
+  },
+  "26:97|43:40": {
+   "keep": false,
+   "why": "Only 'in clear error'; the damned confessing vs the Prophet unable to guide the blind."
+  },
+  "26:202|43:66": {
+   "keep": true,
+   "why": "Same words: it comes upon them suddenly while they do not perceive."
+  },
+  "26:24|44:7": {
+   "keep": true,
+   "why": "Same words: Lord of the heavens and the earth and what is between them, if you are certain."
+  },
+  "26:24|44:29": {
+   "keep": false,
+   "why": "Only 'the heaven and the earth'; Musa naming the Lord vs the sky not weeping for Pharaoh's people."
+  },
+  "26:24|44:38": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth and what is between them'; Musa naming the Lord vs creation not in play."
+  },
+  "26:26|44:8": {
+   "keep": true,
+   "why": "Same words: your Lord and the Lord of your forefathers."
+  },
+  "26:31|44:36": {
+   "keep": true,
+   "why": "Same challenge: bring ... if you are truthful."
+  },
+  "26:52|44:23": {
+   "keep": true,
+   "why": "Same command to Musa: travel by night with My servants; you will be pursued."
+  },
+  "26:134|44:52": {
+   "keep": true,
+   "why": "Same phrase in contrast: gardens and springs; 'Ad's worldly gifts vs Paradise."
+  },
+  "26:147|44:52": {
+   "keep": true,
+   "why": "Same phrase in contrast: in gardens and springs; Thamud's worldly comfort vs Paradise."
+  },
+  "26:154|44:36": {
+   "keep": true,
+   "why": "Same challenge: bring ... if you are truthful."
+  },
+  "26:24|45:36": {
+   "keep": true,
+   "why": "Same title: Lord of the heavens and the earth."
+  },
+  "26:31|45:25": {
+   "keep": true,
+   "why": "Same challenge: bring ... if you are truthful."
+  },
+  "26:222|45:7": {
+   "keep": true,
+   "why": "Same rare phrase: every sinful liar."
+  },
+  "26:12|46:13": {
+   "keep": false,
+   "why": "Only fear and 'Lord'; Musa's fear vs no fear for the steadfast."
+  },
+  "26:31|46:22": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful."
+  },
+  "26:154|46:22": {
+   "keep": true,
+   "why": "Same challenge to a prophet: bring it, if you are truthful."
+  },
+  "26:7|50:7": {
+   "keep": true,
+   "why": "Same sign: We caused to grow in the earth every noble / beautiful kind."
+  },
+  "26:24|50:38": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth and what is between them'; Musa naming the Lord vs creation in six days without fatigue."
+  },
+  "26:90|50:31": {
+   "keep": true,
+   "why": "Same words: Paradise is brought near to the righteous."
+  },
+  "26:176|50:14": {
+   "keep": true,
+   "why": "Same subject: the companions of the thicket denied the messengers."
+  },
+  "26:213|50:26": {
+   "keep": true,
+   "why": "Same warning: setting up another god with Allah leads to punishment."
+  },
+  "26:5|52:34": {
+   "keep": false,
+   "why": "Only 'come' and 'new speech'; turning from the reminder vs the challenge to produce a like."
+  },
+  "26:24|52:36": {
+   "keep": false,
+   "why": "Only 'the heavens and the earth' and certainty; Musa naming the Lord vs did they create them."
+  },
+  "26:31|52:34": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful."
+  },
+  "26:154|52:34": {
+   "keep": true,
+   "why": "Same challenge: bring ... if you are truthful."
+  },
+  "27:9|29:42": {
+   "keep": false,
+   "why": "Only the closing names Mighty, Wise; Allah addressing Musa vs knowing what they invoke."
+  },
+  "27:24|29:38": {
+   "keep": true,
+   "why": "Same clause: Satan made their deeds fair-seeming to them and turned them from the way."
+  },
+  "27:54|29:28": {
+   "keep": true,
+   "why": "Same story: Lut tells his people they commit the indecency."
+  },
+  "27:57|29:32": {
+   "keep": true,
+   "why": "Same story: Lut and his family saved except his wife, who stayed behind."
+  },
+  "27:59|29:16": {
+   "keep": false,
+   "why": "Only 'Allah' and 'better'; praise and peace on the chosen vs Ibrahim's call."
+  },
+  "27:64|29:20": {
+   "keep": true,
+   "why": "Same idea: He begins creation and then repeats it."
+  },
+  "27:65|29:52": {
+   "keep": false,
+   "why": "Only knowing and 'the heavens and the earth'; none knows the unseen vs Allah as witness."
+  },
+  "27:90|29:7": {
+   "keep": false,
+   "why": "Only 'what they used to do' and 'evil deeds'; faces cast in the Fire vs evil deeds expiated."
+  },
+  "27:14|30:42": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the corrupters / those before."
+  },
+  "27:51|30:42": {
+   "keep": true,
+   "why": "Same warning: see how was the end of those before."
+  },
+  "27:64|30:27": {
+   "keep": true,
+   "why": "Same statement: He begins creation and then repeats it."
+  },
+  "27:69|30:42": {
+   "keep": true,
+   "why": "Same warning word for word: travel in the land and see how was the end of the criminals / those before."
+  },
+  "27:80|30:52": {
+   "keep": true,
+   "why": "Same words: you cannot make the dead hear, nor the deaf hear the call when they turn their backs."
+  },
+  "27:81|30:53": {
+   "keep": true,
+   "why": "Same words: you cannot guide the blind from their error."
+  },
+  "27:86|30:23": {
+   "keep": true,
+   "why": "Same sign: the night for rest and the day; in that are signs for a people."
+  },
+  "27:86|30:37": {
+   "keep": true,
+   "why": "Same frame: do they not see that ...; in that are signs for a people who believe."
+  },
+  "27:3|31:4": {
+   "keep": true,
+   "why": "Same words: those who establish prayer, give zakat and are certain of the Hereafter."
+  },
+  "27:9|31:9": {
+   "keep": false,
+   "why": "Only the closing names Mighty, Wise; Allah addressing Musa vs the promise of Paradise."
+  },
+  "27:15|31:25": {
+   "keep": false,
+   "why": "Only 'praise be to Allah'; Dawud and Sulayman's thanks vs who created the heavens and the earth."
+  },
+  "27:25|31:25": {
+   "keep": false,
+   "why": "Only 'Allah' and 'the heavens and the earth'; prostrating to Him vs who created them."
+  },
+  "27:60|31:10": {
+   "keep": true,
+   "why": "Same sign: He created the heavens and sent down water from the sky, and by it caused growth."
+  },
+  "27:65|31:25": {
+   "keep": false,
+   "why": "Only 'Allah' and 'the heavens and the earth'; knowledge of the unseen vs who created them."
+  },
+  "10:9|11:23": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds are given Paradise."
+  },
+  "10:17|11:18": {
+   "keep": true,
+   "why": "Same question: who is more unjust than one who invents a lie against Allah."
+  },
+  "10:19|11:110": {
+   "keep": true,
+   "why": "Same clause: had a word not preceded from your Lord, it would have been judged between them over their differing."
+  },
+  "10:19|11:118": {
+   "keep": true,
+   "why": "Same idea: mankind as one community that keeps differing."
+  },
+  "10:30|11:21": {
+   "keep": true,
+   "why": "Same rare clause about the Hereafter: what they used to invent has strayed from them."
+  },
+  "10:38|11:13": {
+   "keep": true,
+   "why": "Same challenge: they say he invented it; bring a surah / ten surahs like it and call whom you can, if you are truthful."
+  },
+  "10:48|11:32": {
+   "keep": true,
+   "why": "Same challenge from deniers: bring the promised punishment, if you are truthful."
+  },
+  "10:72|11:51": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah."
+  },
+  "10:60|12:38": {
+   "keep": true,
+   "why": "Same statement: Allah's bounty on mankind, but most of them do not give thanks."
+  },
+  "10:63|12:57": {
+   "keep": true,
+   "why": "Same description of the righteous: those who believed and were God-fearing."
+  },
+  "10:104|12:40": {
+   "keep": true,
+   "why": "Same idea: rejecting what they worship besides Allah and holding to worship of Him alone as the true religion."
+  },
+  "10:20|13:7": {
+   "keep": true,
+   "why": "Same demand: why has no sign been sent down to him from his Lord."
+  },
+  "10:20|13:27": {
+   "keep": true,
+   "why": "Same demand: why has no sign been sent down to him from his Lord, with the answer."
+  },
+  "10:29|13:43": {
+   "keep": true,
+   "why": "Same clause: Allah suffices as a witness between us and you."
+  },
+  "10:46|13:40": {
+   "keep": true,
+   "why": "Same clause: whether We show you some of what We promise them or take you in death."
+  },
+  "10:64|13:34": {
+   "keep": true,
+   "why": "Contrast: good tidings for them in this life and the Hereafter vs punishment for them in this life and the Hereafter."
+  },
+  "10:101|13:7": {
+   "keep": false,
+   "why": "Only 'signs' and 'warning'; different subjects (signs useless to deniers / demand for a sign)."
+  },
+  "10:6|14:19": {
+   "keep": false,
+   "why": "Only the heavens and the earth; signs in creation vs Allah able to replace you."
+  },
+  "10:9|14:23": {
+   "keep": true,
+   "why": "Same reward: believers who do righteous deeds in gardens beneath which rivers flow."
+  },
+  "10:55|14:19": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:64|14:3": {
+   "keep": false,
+   "why": "Only 'this life and the Hereafter'; glad tidings for the friends of Allah vs those who prefer this life."
+  },
+  "10:85|14:40": {
+   "keep": false,
+   "why": "Only 'our Lord' and 'make'; Musa's people's prayer vs Ibrahim's prayer about prayer."
+  },
+  "10:9|18:107": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds have gardens."
+  },
+  "10:14|18:7": {
+   "keep": true,
+   "why": "Same idea: placed on the earth to be tested on how you act."
+  },
+  "10:17|18:15": {
+   "keep": true,
+   "why": "Same question: who is more unjust than one who invents a lie against Allah."
+  },
+  "10:52|18:87": {
+   "keep": false,
+   "why": "Only wrongdoing and punishment; Hereafter address vs Dhu al-Qarnayn's ruling."
+  },
+  "10:66|18:14": {
+   "keep": false,
+   "why": "Only calling on others besides Him and the heavens and the earth; different subjects (polytheists' conjecture / the youths' declaration)."
+  },
+  "10:66|18:26": {
+   "keep": false,
+   "why": "Only 'besides Him' and the heavens and the earth; different subjects."
+  },
+  "10:89|18:66": {
+   "keep": false,
+   "why": "Only the verb 'follow'; Musa and Harun's answered prayer vs Musa and al-Khidr."
+  },
+  "10:9|19:60": {
+   "keep": true,
+   "why": "Same reward: whoever believes and does righteous deeds enters Paradise."
+  },
+  "10:19|19:21": {
+   "keep": false,
+   "why": "Only 'mankind', 'Lord' and 'decreed'; different subjects."
+  },
+  "10:19|19:64": {
+   "keep": false,
+   "why": "Only 'your Lord'; different subjects."
+  },
+  "10:25|19:36": {
+   "keep": false,
+   "why": "Only 'straight path'; Allah guiding whom He wills vs Isa's call to worship."
+  },
+  "10:9|20:76": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow for the believers."
+  },
+  "10:9|20:82": {
+   "keep": false,
+   "why": "Only belief, righteous deeds and guidance; reward of Paradise vs forgiveness for the repentant."
+  },
+  "10:17|20:61": {
+   "keep": true,
+   "why": "Same warning: one who invents a lie against Allah fails."
+  },
+  "10:43|20:125": {
+   "keep": false,
+   "why": "Only blindness and sight; guiding the blind in this life vs one raised blind."
+  },
+  "10:69|20:61": {
+   "keep": true,
+   "why": "Same warning: those who invent a lie against Allah will not succeed / have failed."
+  },
+  "10:77|20:57": {
+   "keep": true,
+   "why": "Same story: Musa accused of sorcery by Pharaoh and his people."
+  },
+  "10:85|20:85": {
+   "keep": false,
+   "why": "Only 'trial' and 'people'; different subjects."
+  },
+  "10:48|21:38": {
+   "keep": true,
+   "why": "Same words: when is this promise, if you are truthful."
+  },
+  "10:55|21:4": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'knowing'; different statements."
+  },
+  "10:65|21:4": {
+   "keep": false,
+   "why": "Only the closing Hearing, Knowing and 'speech'."
+  },
+  "10:76|21:55": {
+   "keep": true,
+   "why": "Same refusal: the truth comes to a people and they dismiss it (sorcery / jesting)."
+  },
+  "10:106|21:66": {
+   "keep": true,
+   "why": "Same idea: invoking besides Allah what neither benefits nor harms."
+  },
+  "10:9|22:14": {
+   "keep": true,
+   "why": "Same reward: believers who do righteous deeds in gardens beneath which rivers flow."
+  },
+  "10:9|22:23": {
+   "keep": true,
+   "why": "Same reward: believers who do righteous deeds in gardens beneath which rivers flow."
+  },
+  "10:9|22:56": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds in the gardens of bliss."
+  },
+  "10:66|22:62": {
+   "keep": true,
+   "why": "Same idea: what they call on besides Allah is conjecture / falsehood."
+  },
+  "10:106|22:12": {
+   "keep": true,
+   "why": "Same idea: invoking besides Allah what neither harms nor benefits."
+  },
+  "10:106|22:62": {
+   "keep": true,
+   "why": "Same idea: what is invoked besides Allah is useless / falsehood."
+  },
+  "10:17|23:38": {
+   "keep": false,
+   "why": "Only 'invented a lie against Allah'; different subjects (warning vs the people's accusation of their prophet)."
+  },
+  "10:25|23:73": {
+   "keep": true,
+   "why": "Same idea: calling to the straight path."
+  },
+  "10:58|23:118": {
+   "keep": false,
+   "why": "Only mercy and 'better'; different subjects."
+  },
+  "10:69|23:38": {
+   "keep": false,
+   "why": "Only 'invent a lie against Allah'; different subjects (warning vs the people's accusation of their prophet)."
+  },
+  "10:75|23:46": {
+   "keep": true,
+   "why": "Same story: Musa and Harun sent to Pharaoh and his chiefs, and they were arrogant."
+  },
+  "10:82|23:70": {
+   "keep": true,
+   "why": "Same idea: the truth prevails though the guilty / most of them hate it."
+  },
+  "10:85|23:41": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'; a prayer vs a destruction."
+  },
+  "10:85|23:94": {
+   "keep": true,
+   "why": "Same supplication: our Lord, do not place us among / as a trial for the wrongdoing people."
+  },
+  "10:25|24:46": {
+   "keep": true,
+   "why": "Same clause: Allah guides whom He wills to a straight path."
+  },
+  "10:55|24:41": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:55|24:64": {
+   "keep": true,
+   "why": "Same statement: indeed to Allah belongs what is in the heavens and the earth, and He knows."
+  },
+  "10:58|24:10": {
+   "keep": false,
+   "why": "Only Allah's bounty and mercy; different subjects."
+  },
+  "10:58|24:20": {
+   "keep": false,
+   "why": "Only Allah's bounty and mercy; different subjects."
+  },
+  "10:64|24:14": {
+   "keep": false,
+   "why": "Only 'this world and the Hereafter' and 'great'; glad tidings for the righteous vs the slander."
+  },
+  "10:68|24:41": {
+   "keep": false,
+   "why": "Only the heavens and the earth; refuting a son vs creation glorifying Him."
+  },
+  "10:68|24:64": {
+   "keep": false,
+   "why": "Only 'to Him belongs what is in the heavens and the earth'; the claim of a son vs His knowledge of deeds."
+  },
+  "10:102|24:34": {
+   "keep": true,
+   "why": "Same idea: the example of those who passed away before them."
+  },
+  "10:3|25:59": {
+   "keep": true,
+   "why": "Same statement: created the heavens and the earth in six days, then rose over the Throne."
+  },
+  "10:9|25:10": {
+   "keep": false,
+   "why": "Only 'gardens beneath which rivers flow'; reward of believers vs what Allah could give the Prophet in this world."
+  },
+  "10:52|25:19": {
+   "keep": true,
+   "why": "Same punishment: the wrongdoers are made to taste the punishment."
+  },
+  "10:67|25:47": {
+   "keep": true,
+   "why": "Same sign: He made the night for you for rest and the day."
+  },
+  "10:67|25:62": {
+   "keep": true,
+   "why": "Same sign: He made the night and the day for you."
+  },
+  "10:106|25:55": {
+   "keep": true,
+   "why": "Same idea: worshipping besides Allah what neither benefits nor harms."
+  },
+  "10:41|26:216": {
+   "keep": true,
+   "why": "Same instruction: if they deny / disobey you, say I am free of what you do."
+  },
+  "10:72|26:109": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah / the Lord of the worlds."
+  },
+  "10:72|26:127": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah / the Lord of the worlds."
+  },
+  "10:72|26:145": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah / the Lord of the worlds."
+  },
+  "10:72|26:164": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah / the Lord of the worlds."
+  },
+  "10:72|26:180": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from Allah / the Lord of the worlds."
+  },
+  "10:79|26:34": {
+   "keep": true,
+   "why": "Same story: Pharaoh and the learned sorcerer(s) against Musa."
+  },
+  "10:79|26:37": {
+   "keep": true,
+   "why": "Same story: bring every learned sorcerer."
+  },
+  "10:80|26:41": {
+   "keep": true,
+   "why": "Same scene: when the sorcerers came."
+  },
+  "10:85|26:10": {
+   "keep": false,
+   "why": "Only 'the wrongdoing people'; a prayer vs Musa's commission."
+  },
+  "10:95|26:139": {
+   "keep": false,
+   "why": "Only 'denied'; a warning to the Prophet vs the destruction of 'Ad."
+  },
+  "10:97|26:201": {
+   "keep": true,
+   "why": "Same clause about deniers: they will not believe until they see the painful punishment."
+  },
+  "10:30|28:75": {
+   "keep": true,
+   "why": "Same rare clause about the Day of Judgment: what they used to invent has strayed from them."
+  },
+  "10:38|28:49": {
+   "keep": true,
+   "why": "Same challenge: bring a surah / a book, if you are truthful."
+  },
+  "10:39|28:40": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the wrongdoers."
+  },
+  "10:55|28:13": {
+   "keep": true,
+   "why": "Same statement: the promise of Allah is true, but most of them do not know."
+  },
+  "10:59|28:71": {
+   "keep": false,
+   "why": "Only 'say, have you considered'; lawful and unlawful vs endless night."
+  },
+  "10:67|28:73": {
+   "keep": true,
+   "why": "Same sign: He made the night and the day for you to rest in."
+  },
+  "10:84|28:53": {
+   "keep": false,
+   "why": "Only 'believed' and 'Muslims'; Musa's call to trust vs People of the Book believing."
+  },
+  "10:85|28:21": {
+   "keep": true,
+   "why": "Same supplication by Musa's side: Lord, protect us from the wrongdoing people."
+  },
+  "10:108|28:85": {
+   "keep": false,
+   "why": "Only guidance and error; different statements."
+  },
+  "10:6|29:44": {
+   "keep": true,
+   "why": "Same idea: in the creation of the heavens and the earth are signs for a believing / God-fearing people."
+  },
+  "10:6|29:61": {
+   "keep": false,
+   "why": "Only creation of the heavens and the earth; signs vs the polytheists' admission."
+  },
+  "10:9|29:58": {
+   "keep": true,
+   "why": "Same reward: believers who do righteous deeds in gardens beneath which rivers flow."
+  },
+  "10:17|29:68": {
+   "keep": true,
+   "why": "Same question: who is more unjust than one who invents a lie against Allah or denies."
+  },
+  "10:20|29:50": {
+   "keep": true,
+   "why": "Same demand: why has no sign been sent down to him from his Lord."
+  },
+  "10:25|29:42": {
+   "keep": false,
+   "why": "Only 'call'; Allah calling to peace vs what they call besides Him."
+  },
+  "10:29|29:52": {
+   "keep": true,
+   "why": "Same clause: Allah suffices as a witness between me and you."
+  },
+  "10:34|29:61": {
+   "keep": true,
+   "why": "Same argument: who creates, with the rebuke 'how are you deluded'."
+  },
+  "10:68|29:52": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different subjects."
+  },
+  "10:97|29:23": {
+   "keep": false,
+   "why": "Only 'painful punishment'; different subjects."
+  },
+  "10:101|29:44": {
+   "keep": false,
+   "why": "Only signs and the heavens and the earth; signs useless to deniers vs a sign for believers."
+  },
+  "10:106|29:42": {
+   "keep": false,
+   "why": "Only 'call besides Him'; a prohibition vs Allah's knowledge."
+  },
+  "10:6|30:22": {
+   "keep": true,
+   "why": "Same style: creation and variation as signs, 'in that are signs for a people'."
+  },
+  "10:6|30:23": {
+   "keep": true,
+   "why": "Same sign: night and day, 'in that are signs for a people'."
+  },
+  "10:7|30:7": {
+   "keep": true,
+   "why": "Same description: content with this world and heedless of the Hereafter / Our signs."
+  },
+  "10:13|30:47": {
+   "keep": true,
+   "why": "Same warning: messengers came with clear proofs and the guilty were punished."
+  },
+  "10:31|30:19": {
+   "keep": true,
+   "why": "Same statement: He brings the living out of the dead and the dead out of the living."
+  },
+  "10:42|30:52": {
+   "keep": true,
+   "why": "Same idea: you cannot make the deaf hear."
+  },
+  "10:55|30:6": {
+   "keep": true,
+   "why": "Same statement: the promise of Allah, but most of them do not know."
+  },
+  "10:55|30:60": {
+   "keep": false,
+   "why": "Only 'the promise of Allah is true'; different settings."
+  },
+  "10:60|30:6": {
+   "keep": false,
+   "why": "Only 'but most people do not'; different statements."
+  },
+  "10:67|30:23": {
+   "keep": true,
+   "why": "Same sign: night and day for rest, signs for a people who hear."
+  },
+  "10:95|30:10": {
+   "keep": true,
+   "why": "Same warning: the end of those who deny the signs of Allah."
+  },
+  "10:105|30:31": {
+   "keep": true,
+   "why": "Same command: set your face to the upright religion and do not be among the polytheists."
+  },
+  "10:1|31:2": {
+   "keep": true,
+   "why": "Same opening: these are the verses of the wise Book."
+  },
+  "10:6|31:25": {
+   "keep": false,
+   "why": "Only creation of the heavens and the earth; different statements."
+  },
+  "10:9|31:8": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds have the gardens of bliss."
+  },
+  "10:10|31:25": {
+   "keep": false,
+   "why": "Only 'praise be to Allah'; the people of Paradise vs the polytheists' admission."
+  },
+  "10:18|31:25": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'do not know'; intercessors vs the polytheists' admission."
+  },
+  "10:55|31:9": {
+   "keep": false,
+   "why": "Only 'the promise of Allah is true'; different settings."
+  },
+  "10:55|31:25": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'most of them do not know'; different statements."
+  },
+  "10:66|31:30": {
+   "keep": true,
+   "why": "Same idea: what they call on besides Allah is conjecture / falsehood."
+  },
+  "10:68|31:25": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:68|31:26": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs what is in the heavens and the earth, and He is the Free of need."
+  },
+  "10:106|31:30": {
+   "keep": true,
+   "why": "Same idea: what is invoked besides Allah is useless / falsehood."
+  },
+  "10:3|32:4": {
+   "keep": true,
+   "why": "Same statement: created the heavens and the earth in six days, rose over the Throne, no intercessor; will you not remember."
+  },
+  "10:9|32:19": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds have gardens."
+  },
+  "10:17|32:22": {
+   "keep": true,
+   "why": "Same question: who is more unjust than one who turns from his Lord's signs; the criminals."
+  },
+  "10:52|32:14": {
+   "keep": true,
+   "why": "Same punishment: taste the eternal punishment for what you used to do."
+  },
+  "10:85|32:11": {
+   "keep": false,
+   "why": "Only a root shared by trust and 'entrusted'; different subjects."
+  },
+  "10:93|32:25": {
+   "keep": true,
+   "why": "Same clause: your Lord will judge between them on the Day of Resurrection in what they differed."
+  },
+  "10:102|32:29": {
+   "keep": false,
+   "why": "Only waiting / respite; different statements."
+  },
+  "10:28|34:40": {
+   "keep": true,
+   "why": "Same scene: the Day He gathers them all and the worshipped are confronted with their worshippers."
+  },
+  "10:39|34:45": {
+   "keep": true,
+   "why": "Same warning: those before them denied, and see how was the end / My reproach."
+  },
+  "10:48|34:29": {
+   "keep": true,
+   "why": "Same words: when is this promise, if you are truthful."
+  },
+  "10:52|34:42": {
+   "keep": true,
+   "why": "Same punishment: it is said to the wrongdoers, taste the punishment."
+  },
+  "10:61|34:3": {
+   "keep": true,
+   "why": "Same statement: not an atom's weight in the earth or heaven escapes Him, nor smaller nor greater, but is in a clear Book."
+  },
+  "10:66|34:22": {
+   "keep": true,
+   "why": "Same idea: the partners they call besides Allah have no share / are only conjecture."
+  },
+  "10:68|34:24": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:72|34:47": {
+   "keep": true,
+   "why": "Same call: I asked you no reward; my reward is only from Allah."
+  },
+  "10:97|34:5": {
+   "keep": false,
+   "why": "Only 'painful punishment' and signs; different subjects."
+  },
+  "10:48|36:48": {
+   "keep": true,
+   "why": "Same words: when is this promise, if you are truthful."
+  },
+  "10:48|36:52": {
+   "keep": true,
+   "why": "Contrast: they mock 'when is this promise' and on resurrection admit 'this is what the Merciful promised'."
+  },
+  "10:52|36:54": {
+   "keep": true,
+   "why": "Same clause: you are recompensed only for what you used to do."
+  },
+  "10:65|36:76": {
+   "keep": true,
+   "why": "Same consolation: let not their speech grieve you."
+  },
+  "10:10|37:182": {
+   "keep": false,
+   "why": "Only the stock 'praise be to Allah, Lord of the worlds'."
+  },
+  "10:25|37:23": {
+   "keep": true,
+   "why": "Contrast: Allah guides to a straight path vs guide them to the path of Hellfire."
+  },
+  "10:25|37:118": {
+   "keep": false,
+   "why": "Only 'straight path'; Allah guiding whom He wills vs Musa and Harun guided."
+  },
+  "10:73|37:73": {
+   "keep": true,
+   "why": "Same story and warning: Nuh's people drowned, see how was the end of those warned."
+  },
+  "10:76|37:15": {
+   "keep": true,
+   "why": "Same refusal: this is plain sorcery."
+  },
+  "10:85|37:63": {
+   "keep": false,
+   "why": "Only 'a trial for the wrongdoers'; a prayer vs the tree of Zaqqum."
+  },
+  "10:6|39:63": {
+   "keep": false,
+   "why": "Only the heavens and the earth and signs; different statements."
+  },
+  "10:6|39:68": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:50|39:58": {
+   "keep": false,
+   "why": "Only 'punishment'; different subjects."
+  },
+  "10:52|39:24": {
+   "keep": true,
+   "why": "Same punishment: it is said to the wrongdoers, taste what you used to earn."
+  },
+  "10:52|39:50": {
+   "keep": false,
+   "why": "Only 'what they used to earn'; different subjects."
+  },
+  "10:64|39:26": {
+   "keep": true,
+   "why": "Contrast: glad tidings in this life and the Hereafter vs disgrace in this life and punishment in the Hereafter."
+  },
+  "10:72|39:12": {
+   "keep": true,
+   "why": "Same clause: I have been commanded to be (the first) of the Muslims."
+  },
+  "10:75|39:59": {
+   "keep": false,
+   "why": "Only signs and arrogance; Pharaoh's chiefs vs a soul on Judgment Day."
+  },
+  "10:95|39:63": {
+   "keep": true,
+   "why": "Same statement: those who deny / disbelieve in Allah's signs are the losers."
+  },
+  "10:108|39:41": {
+   "keep": true,
+   "why": "Same statement: whoever is guided is guided for himself, whoever strays strays against himself, and you are no guardian."
+  },
+  "10:19|41:45": {
+   "keep": true,
+   "why": "Same clause: had a word not preceded from your Lord, it would have been judged between them."
+  },
+  "10:52|41:27": {
+   "keep": true,
+   "why": "Same punishment: the disbelievers are made to taste a punishment as recompense for their deeds."
+  },
+  "10:63|41:18": {
+   "keep": true,
+   "why": "Same description: those who believed and were God-fearing."
+  },
+  "10:70|41:27": {
+   "keep": true,
+   "why": "Same punishment: We will make the disbelievers taste a severe punishment."
+  },
+  "10:30|46:28": {
+   "keep": true,
+   "why": "Same clause: their false gods strayed from them, and what they used to invent."
+  },
+  "10:38|46:4": {
+   "keep": true,
+   "why": "Same challenge: what you call besides Allah, bring proof if you are truthful."
+  },
+  "10:48|46:22": {
+   "keep": true,
+   "why": "Same challenge from deniers: bring what you promise us, if you are truthful."
+  },
+  "10:52|46:14": {
+   "keep": true,
+   "why": "Contrast: eternal punishment vs eternal Paradise, each a recompense for what they did."
+  },
+  "10:62|46:13": {
+   "keep": true,
+   "why": "Same reward: no fear upon them, nor will they grieve."
+  },
+  "10:66|46:4": {
+   "keep": true,
+   "why": "Same idea: the partners they call besides Allah have no share in creation."
+  },
+  "10:77|46:7": {
+   "keep": true,
+   "why": "Same refusal: they call the truth sorcery when it comes to them."
+  },
+  "10:9|47:2": {
+   "keep": true,
+   "why": "Same subject: the reward of those who believe and do righteous deeds."
+  },
+  "10:9|47:12": {
+   "keep": true,
+   "why": "Same reward: believers who do righteous deeds in gardens beneath which rivers flow."
+  },
+  "10:25|47:35": {
+   "keep": false,
+   "why": "Only 'call to' and peace; different subjects."
+  },
+  "10:39|47:10": {
+   "keep": true,
+   "why": "Same warning: see how was the end of those before them."
+  },
+  "10:18|49:16": {
+   "keep": true,
+   "why": "Same rebuke: would you inform / teach Allah, while He knows what is in the heavens and the earth."
+  },
+  "10:55|49:16": {
+   "keep": false,
+   "why": "Only the heavens and the earth; different statements."
+  },
+  "10:68|49:16": {
+   "keep": false,
+   "why": "Only the heavens and the earth and 'know'; different statements."
+  },
+  "10:17|61:7": {
+   "keep": true,
+   "why": "Same question: who is more unjust than one who invents a lie against Allah."
+  },
+  "10:25|61:7": {
+   "keep": false,
+   "why": "Only 'call' and 'guide'; different statements."
+  },
+  "10:60|61:7": {
+   "keep": true,
+   "why": "Same subject: the fate of those who invent a lie against Allah."
+  },
+  "10:48|67:25": {
+   "keep": true,
+   "why": "Same words: when is this promise, if you are truthful."
+  },
+  "10:50|67:30": {
+   "keep": false,
+   "why": "Only 'say, have you considered'; punishment coming vs water sinking away."
+  },
+  "10:84|67:29": {
+   "keep": true,
+   "why": "Same idea: believing in Allah and putting trust in Him."
+  },
+  "11:41|12:98": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful."
+  },
+  "11:47|12:98": {
+   "keep": false,
+   "why": "Only forgiveness words; Nuh's plea vs Ya'qub's promise."
+  },
+  "11:49|12:102": {
+   "keep": true,
+   "why": "Same statement: that is from the news of the unseen which We reveal to you; you did not know / were not there."
+  },
+  "11:69|12:96": {
+   "keep": false,
+   "why": "Only 'came' and good tidings; Ibrahim's guests vs Yusuf's shirt."
+  },
+  "11:90|12:98": {
+   "keep": false,
+   "why": "Only forgiveness and the closing names; Shu'ayb's call vs Ya'qub's promise."
+  },
+  "11:115|12:90": {
+   "keep": true,
+   "why": "Same statement: be patient, Allah does not let the reward of the good-doers be lost."
+  },
+  "11:21|16:87": {
+   "keep": true,
+   "why": "Same rare clause about the Hereafter: what they used to invent has strayed from them."
+  },
+  "11:22|16:109": {
+   "keep": true,
+   "why": "Same words: assuredly in the Hereafter they are the losers."
+  },
+  "11:26|16:104": {
+   "keep": false,
+   "why": "Only 'painful punishment'; Nuh's warning vs those who reject the signs."
+  },
+  "11:90|16:119": {
+   "keep": true,
+   "why": "Same idea: those who repent find their Lord Merciful."
+  },
+  "11:123|16:77": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs the unseen of the heavens and the earth."
+  },
+  "11:11|18:30": {
+   "keep": true,
+   "why": "Same reward: those who do righteous deeds have their reward kept."
+  },
+  "11:23|18:30": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds."
+  },
+  "11:23|18:88": {
+   "keep": true,
+   "why": "Same reward: whoever believes and does righteous deeds has the best reward."
+  },
+  "11:23|18:107": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds have Paradise."
+  },
+  "11:50|18:15": {
+   "keep": true,
+   "why": "Same idea: taking gods besides Allah is a fabrication."
+  },
+  "11:60|18:105": {
+   "keep": false,
+   "why": "Only 'disbelieved their Lord' and the Day of Resurrection; 'Ad cursed vs deeds made void."
+  },
+  "11:113|18:43": {
+   "keep": true,
+   "why": "Same idea: no one besides Allah to help you."
+  },
+  "11:115|18:30": {
+   "keep": true,
+   "why": "Same statement: Allah does not let the reward of the good-doers be lost."
+  },
+  "11:120|18:13": {
+   "keep": true,
+   "why": "Same idea: We relate to you their news in truth."
+  },
+  "11:23|19:60": {
+   "keep": true,
+   "why": "Same reward: whoever believes and does righteous deeds enters Paradise."
+  },
+  "11:23|19:96": {
+   "keep": true,
+   "why": "Same subject: the reward of those who believe and do righteous deeds."
+  },
+  "11:56|19:36": {
+   "keep": true,
+   "why": "Same statement: Allah is my Lord and your Lord, and a straight path."
+  },
+  "11:4|22:6": {
+   "keep": false,
+   "why": "Only the closing 'over all things able'."
+  },
+  "11:11|22:50": {
+   "keep": true,
+   "why": "Same reward: those who do righteous deeds have forgiveness and a great reward / noble provision."
+  },
+  "11:23|22:50": {
+   "keep": true,
+   "why": "Same reward: those who believe and do righteous deeds."
+  },
+  "11:102|22:48": {
+   "keep": true,
+   "why": "Same warning: Allah seizes the towns while they are wrongdoing."
+  },
+  "11:113|22:39": {
+   "keep": false,
+   "why": "Only wrongdoing and help; different subjects."
+  },
+  "11:27|23:24": {
+   "keep": true,
+   "why": "Same story: the disbelieving chiefs say he is only a man like us."
+  },
+  "11:27|23:33": {
+   "keep": true,
+   "why": "Same story: the disbelieving chiefs say he is only a man like you."
+  },
+  "11:37|23:27": {
+   "keep": true,
+   "why": "Same story: build the ark under Our eyes, and do not address Me about the wrongdoers; they will be drowned."
+  },
+  "11:40|23:27": {
+   "keep": true,
+   "why": "Same story: when Our command came and the oven boiled, load a pair of every kind and your family."
+  },
+  "11:41|23:118": {
+   "keep": false,
+   "why": "Only mercy and forgiveness words; different subjects."
+  },
+  "11:47|23:109": {
+   "keep": true,
+   "why": "Same supplication: forgive and have mercy on me / us."
+  },
+  "11:47|23:118": {
+   "keep": true,
+   "why": "Same supplication: forgive and have mercy."
+  },
+  "11:50|23:23": {
+   "keep": true,
+   "why": "Same call of the prophets: my people, worship Allah, you have no god other than Him."
+  },
+  "11:50|23:32": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, you have no god other than Him."
+  },
+  "11:61|23:23": {
+   "keep": true,
+   "why": "Same call of the prophets: my people, worship Allah, you have no god other than Him."
+  },
+  "11:84|23:23": {
+   "keep": true,
+   "why": "Same call of the prophets: my people, worship Allah, you have no god other than Him."
+  },
+  "11:96|23:45": {
+   "keep": true,
+   "why": "Same story: We sent Musa with Our signs and a clear authority."
+  },
+  "11:26|26:135": {
+   "keep": true,
+   "why": "Same warning: I fear for you the punishment of a painful / great day."
+  },
+  "11:32|26:31": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful."
+  },
+  "11:51|26:109": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from my Lord."
+  },
+  "11:51|26:127": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from my Lord."
+  },
+  "11:51|26:145": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from my Lord."
+  },
+  "11:51|26:164": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from my Lord."
+  },
+  "11:51|26:180": {
+   "keep": true,
+   "why": "Same call of the prophets: I ask you no reward; my reward is only from my Lord."
+  },
+  "11:53|26:30": {
+   "keep": true,
+   "why": "Same refusal: the prophet's clear proof is denied."
+  },
+  "11:85|26:183": {
+   "keep": true,
+   "why": "Same call of Shu'ayb: do not deprive people of their things or spread corruption in the land."
+  },
+  "11:113|26:93": {
+   "keep": false,
+   "why": "Only 'besides Allah' and help; relying on wrongdoers vs idols questioned in Hell."
+  },
+  "7:39|39:24": {
+   "keep": true,
+   "why": "Same punishment: taste the punishment for what you used to earn, said to the people of the Fire."
+  },
+  "7:59|39:13": {
+   "keep": true,
+   "why": "Same warning in a messenger's mouth: I fear the punishment of a tremendous day."
+  },
+  "7:106|39:59": {
+   "keep": false,
+   "why": "Only 'came with a sign' and 'you were among'; Pharaoh's challenge vs the regretful soul answered."
+  },
+  "7:147|39:35": {
+   "keep": false,
+   "why": "Only 'recompensed for what they used to do'; deniers' void deeds vs the pious rewarded."
+  },
+  "7:178|39:37": {
+   "keep": true,
+   "why": "Same statement: whom Allah guides is guided, and none can mislead him."
+  },
+  "7:180|39:35": {
+   "keep": false,
+   "why": "Only 'recompensed for what they used to do'; the beautiful names vs the pious rewarded."
+  },
+  "7:196|39:1": {
+   "keep": true,
+   "why": "Same idea: Allah is the one who sent down the Book.",
+   "ask": "Does the surah-opening formula 'revelation of the Book from Allah' count like the kept 2:176|7:196 'Allah sent down the Book'?"
+  },
+  "7:196|39:2": {
+   "keep": true,
+   "why": "Same idea: Allah sent down the Book."
+  },
+  "7:90|40:38": {
+   "keep": false,
+   "why": "Only 'follow' and 'said'; chiefs warning against Shu'ayb vs Pharaoh's believer calling his people."
+  },
+  "7:151|40:60": {
+   "keep": false,
+   "why": "Only 'Lord' and 'enter'; Moses's prayer for forgiveness vs the command to call on Allah."
+  },
+  "7:196|40:2": {
+   "keep": true,
+   "why": "Same idea: Allah sent down the Book."
+  },
+  "7:17|41:42": {
+   "keep": false,
+   "why": "Only 'from before them and behind them'; Satan's ambush vs falsehood not reaching the Book."
+  },
+  "7:52|41:3": {
+   "keep": true,
+   "why": "Same idea: a Book made detailed, for a people who believe / know."
+  },
+  "7:101|41:14": {
+   "keep": true,
+   "why": "Same story pattern: messengers came to the destroyed nations and they disbelieved."
+  },
+  "7:105|41:14": {
+   "keep": false,
+   "why": "Only 'came' and clear proofs; Moses to Pharaoh vs the messengers to 'Ad and Thamud refused."
+  },
+  "7:200|41:36": {
+   "keep": true,
+   "why": "Same verse: if an incitement from Satan incites you, seek refuge in Allah; He is Hearing, Knowing."
+  },
+  "7:206|41:38": {
+   "keep": true,
+   "why": "Same statement: those with your Lord are not too proud and glorify Him."
+  },
+  "7:61|43:46": {
+   "keep": true,
+   "why": "Same call: I am a messenger from the Lord of the worlds (Nuh / Moses)."
+  },
+  "7:67|43:46": {
+   "keep": true,
+   "why": "Same call: I am a messenger from the Lord of the worlds (Hud / Moses)."
+  },
+  "7:84|43:25": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the criminals / deniers."
+  },
+  "7:103|43:25": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the corrupters / deniers."
+  },
+  "7:104|43:46": {
+   "keep": true,
+   "why": "Same scene: Moses tells Pharaoh, I am a messenger of the Lord of the worlds."
+  },
+  "7:105|43:63": {
+   "keep": true,
+   "why": "Same messenger's words: I have come to you with a clear proof / wisdom (Moses / Jesus)."
+  },
+  "7:134|43:49": {
+   "keep": true,
+   "why": "Same scene: Pharaoh's people ask Moses to call on his Lord by His covenant with him."
+  },
+  "7:52|45:20": {
+   "keep": true,
+   "why": "Same description of revelation: guidance and mercy for a people who believe / are certain."
+  },
+  "7:70|45:25": {
+   "keep": true,
+   "why": "Same challenge by deniers: bring ... if you are truthful."
+  },
+  "7:106|45:25": {
+   "keep": true,
+   "why": "Same challenge: bring it / our forefathers, if you are truthful."
+  },
+  "7:118|45:29": {
+   "keep": false,
+   "why": "Only 'truth' and 'what they used to do'; the magicians defeated vs the record of deeds."
+  },
+  "7:131|45:26": {
+   "keep": false,
+   "why": "Only the stock 'but most of them do not know'; Pharaoh's people's omens vs resurrection."
+  },
+  "7:133|45:31": {
+   "keep": true,
+   "why": "Same description: they were arrogant and were a criminal people."
+  },
+  "7:153|45:30": {
+   "keep": false,
+   "why": "Only 'did' deeds and 'Lord'; repentance forgiven vs believers admitted to mercy."
+  },
+  "7:196|45:2": {
+   "keep": true,
+   "why": "Same idea: Allah sent down the Book."
+  },
+  "7:49|46:13": {
+   "keep": true,
+   "why": "Same reward for believers: no fear upon them, nor will they grieve."
+  },
+  "7:59|46:21": {
+   "keep": true,
+   "why": "Same call by Nuh and Hud: worship only Allah, I fear for you the punishment of a tremendous day."
+  },
+  "7:70|46:22": {
+   "keep": true,
+   "why": "Same scene, 'Ad to Hud: have you come to turn us from our gods? Bring what you promise us if you are truthful."
+  },
+  "7:77|46:22": {
+   "keep": true,
+   "why": "Same challenge by Thamud and 'Ad: bring us what you promise us."
+  },
+  "7:93|46:23": {
+   "keep": true,
+   "why": "Same messenger's words: I convey to you the message of my Lord (Shu'ayb / Hud)."
+  },
+  "7:105|46:7": {
+   "keep": false,
+   "why": "Only 'truth' and clear proofs; Moses's claim vs deniers calling the Qur'an magic."
+  },
+  "7:106|46:22": {
+   "keep": true,
+   "why": "Same challenge: bring it, if you are truthful (Pharaoh / 'Ad)."
+  },
+  "7:185|46:33": {
+   "keep": false,
+   "why": "Only 'have they not looked' and heavens and earth; approaching term vs power to revive the dead."
+  },
+  "7:194|46:5": {
+   "keep": true,
+   "why": "Same idea: those invoked besides Allah do not respond to their callers."
+  },
+  "7:196|46:2": {
+   "keep": true,
+   "why": "Same idea: Allah sent down the Book."
+  },
+  "7:28|47:26": {
+   "keep": false,
+   "why": "Only 'they said' and 'Allah knows'; claim Allah commanded indecency vs hypocrites' secret pact."
+  },
+  "7:45|47:1": {
+   "keep": false,
+   "why": "Only 'avert from the way of Allah'; different predicates (owner removed a similar pair)."
+  },
+  "7:45|47:34": {
+   "keep": false,
+   "why": "Only 'avert from the way of Allah' and disbelief; crooked path vs never forgiven."
+  },
+  "7:84|47:10": {
+   "keep": true,
+   "why": "Same warning: see how was the end of those before them."
+  },
+  "7:103|47:10": {
+   "keep": true,
+   "why": "Same warning: see how was the end of the corrupters / those before them."
+  },
+  "7:71|53:23": {
+   "keep": true,
+   "why": "Same words: names you have named, you and your fathers, for which Allah sent down no authority."
+  },
+  "7:177|53:52": {
+   "keep": false,
+   "why": "Only 'people' and wrongdoing; deniers' parable vs Nuh's people destroyed."
+  },
+  "7:180|53:31": {
+   "keep": false,
+   "why": "Only 'to Allah belong' and 'recompense'; the beautiful names vs reward of good-doers."
+  },
+  "7:106|68:41": {
+   "keep": true,
+   "why": "Same challenge: let them bring ... if they are truthful."
+  },
+  "7:182|68:44": {
+   "keep": true,
+   "why": "Same clause: We will lead them on step by step from where they do not know."
+  },
+  "7:183|68:45": {
+   "keep": true,
+   "why": "Same verse: I give them respite; My plan is firm."
+  },
+  "8:10|9:15": {
+   "keep": false,
+   "why": "Only 'hearts' and the closing Knowing/Mighty, Wise; angels as glad tidings vs healing believers' anger."
+  },
+  "8:28|9:22": {
+   "keep": true,
+   "why": "Same promise: with Allah is a great reward."
+  },
+  "8:28|9:63": {
+   "keep": false,
+   "why": "Only 'know' and 'great'; wealth as trial vs Hell for opposing Allah."
+  },
+  "8:49|9:15": {
+   "keep": false,
+   "why": "Only 'hearts' and the closing Wise; hypocrites' taunt vs believers' anger removed."
+  },
+  "8:69|9:27": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; eating war spoils vs repentance after Hunayn."
+  },
+  "8:74|9:20": {
+   "keep": true,
+   "why": "Same praise: those who believed, emigrated and strove in the way of Allah are the true believers / winners."
+  },
+  "8:75|9:115": {
+   "keep": false,
+   "why": "Only the closing 'Knowing of all things'; kinship inheritance vs not misleading a guided people."
+  },
+  "8:8|10:82": {
+   "keep": true,
+   "why": "Same statement: to establish the truth, even if the criminals dislike it."
+  },
+  "8:35|10:70": {
+   "keep": true,
+   "why": "Same punishment: taste the punishment for what you used to disbelieve."
+  },
+  "8:54|10:39": {
+   "keep": true,
+   "why": "Same warning: those before them denied and were wrongdoers, see their end."
+  },
+  "8:31|16:24": {
+   "keep": true,
+   "why": "Same reaction of deniers to revelation: legends of the former peoples."
+  },
+  "8:36|16:88": {
+   "keep": false,
+   "why": "Only 'disbelieved and averted from the way of Allah'; spending to obstruct vs extra punishment (owner removed 9:9|16:88)."
+  },
+  "8:69|16:18": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; spoils of war vs countless favours."
+  },
+  "8:69|16:114": {
+   "keep": true,
+   "why": "Same command: eat of what you were given, lawful and good."
+  },
+  "8:2|22:35": {
+   "keep": true,
+   "why": "Same description of believers: when Allah is mentioned their hearts tremble."
+  },
+  "8:3|22:35": {
+   "keep": true,
+   "why": "Same description of believers: they establish prayer and spend from what We provided them."
+  },
+  "8:4|22:50": {
+   "keep": true,
+   "why": "Same reward for believers: forgiveness and noble provision."
+  },
+  "8:17|22:58": {
+   "keep": false,
+   "why": "Only 'kill' and 'good'; Allah threw at Badr vs provision for emigrants who die."
+  },
+  "8:20|22:75": {
+   "keep": false,
+   "why": "Only 'messenger' and 'hearing'; obey and do not turn away vs Allah chooses messengers."
+  },
+  "8:27|22:38": {
+   "keep": false,
+   "why": "Only betrayal words; do not betray Allah vs Allah defends believers."
+  },
+  "8:51|22:10": {
+   "keep": true,
+   "why": "Same clause: that is for what your hands put forth, and Allah is not unjust to His servants."
+  },
+  "8:58|22:38": {
+   "keep": true,
+   "why": "Same statement: Allah does not love the treacherous."
+  },
+  "8:20|24:47": {
+   "keep": true,
+   "why": "Contrast: believers told to obey Allah and the Messenger and not turn away; hypocrites claim obedience then turn away."
+  },
+  "8:20|24:52": {
+   "keep": false,
+   "why": "Only 'obey Allah and His Messenger', a common phrase; command vs the reward of the obedient."
+  },
+  "8:46|24:52": {
+   "keep": false,
+   "why": "Only 'obey Allah and His Messenger'; do not dispute in battle vs the obedient succeed."
+  },
+  "8:59|24:57": {
+   "keep": true,
+   "why": "Same warning: let not the disbelievers think they can escape Allah."
+  },
+  "8:68|24:14": {
+   "keep": true,
+   "why": "Same structure: were it not for Allah's decree / grace, a great punishment would have touched you for what you did."
+  },
+  "8:71|24:59": {
+   "keep": false,
+   "why": "Only 'before' and the closing Knowing, Wise; captives' betrayal vs children asking permission."
+  },
+  "8:4|28:53": {
+   "keep": false,
+   "why": "Only 'Lord' and 'truth'; true believers' reward vs People of the Book accepting the Qur'an."
+  },
+  "8:31|28:36": {
+   "keep": true,
+   "why": "Same reaction of deniers to the signs: dismissing them by appeal to the former peoples."
+  },
+  "8:53|28:71": {
+   "keep": false,
+   "why": "Only 'Allah' and hearing; Allah not changing a favour vs endless night."
+  },
+  "8:1|33:22": {
+   "keep": false,
+   "why": "Only 'Allah and His Messenger' and believers; spoils of war vs the believers at the Trench."
+  },
+  "8:29|33:1": {
+   "keep": false,
+   "why": "Only 'fear Allah'; criterion for the pious vs not obeying disbelievers."
+  },
+  "8:45|33:41": {
+   "keep": true,
+   "why": "Same command to believers: remember Allah much."
+  },
+  "8:49|33:12": {
+   "keep": true,
+   "why": "Same scene: the hypocrites and those with disease in their hearts call the believers' trust a delusion."
+  },
+  "8:49|33:48": {
+   "keep": false,
+   "why": "Only hypocrites and 'rely on Allah'; their taunt vs command to ignore their harm."
+  },
+  "8:52|33:25": {
+   "keep": false,
+   "why": "Only 'disbelieved' and 'Strong'; Pharaoh's people seized vs confederates turned back."
+  },
+  "8:64|33:56": {
+   "keep": false,
+   "why": "Only 'O Prophet' and believers; Allah suffices you vs blessings on the Prophet."
+  },
+  "8:75|33:6": {
+   "keep": true,
+   "why": "Same ruling: blood relatives are closer to one another in the Book of Allah."
+  },
+  "8:15|47:11": {
+   "keep": false,
+   "why": "Only believers / disbelievers words; do not flee in battle vs Allah the protector of believers."
+  },
+  "8:20|47:33": {
+   "keep": true,
+   "why": "Same command: O you who believe, obey Allah and the Messenger, and do not (turn away / void your deeds)."
+  },
+  "8:29|47:34": {
+   "keep": false,
+   "why": "Only 'forgive'; reward of piety vs no forgiveness for those who die disbelieving."
+  },
+  "8:36|47:34": {
+   "keep": false,
+   "why": "Only 'disbelieved ... avert from the way of Allah'; different predicates."
+  },
+  "8:47|47:32": {
+   "keep": false,
+   "why": "Only 'avert from the way of Allah'; boastful army at Badr vs opposing the Messenger."
+  },
+  "8:50|47:27": {
+   "keep": true,
+   "why": "Same scene: angels take the disbelievers' souls striking their faces and backs."
+  },
+  "8:10|48:7": {
+   "keep": false,
+   "why": "Only the closing Mighty, Wise; victory from Allah vs soldiers of the heavens."
+  },
+  "8:15|48:22": {
+   "keep": true,
+   "why": "Contrast: believers told not to turn their backs to disbelievers; disbelievers would turn their backs."
+  },
+  "8:33|48:14": {
+   "keep": false,
+   "why": "Only 'punish' and 'forgive'; Allah not punishing Makkah vs He forgives whom He wills."
+  },
+  "8:39|48:24": {
+   "keep": false,
+   "why": "Only the closing 'Seeing of what you do'; fight until no fitnah vs hands restrained at Makkah."
+  },
+  "8:40|48:22": {
+   "keep": true,
+   "why": "Contrast: Allah is your protector and best helper; the disbelievers find no protector or helper."
+  },
+  "8:49|48:7": {
+   "keep": false,
+   "why": "Only the closing Mighty, Wise; hypocrites' taunt vs soldiers of the heavens."
+  },
+  "8:20|49:1": {
+   "keep": false,
+   "why": "Only 'O you who believe' and Allah and His Messenger; obey vs do not put yourselves forward."
+  },
+  "8:24|49:1": {
+   "keep": false,
+   "why": "Only 'O you who believe' and Allah and the Messenger; respond to the call vs do not go ahead of them."
+  },
+  "8:27|49:1": {
+   "keep": false,
+   "why": "Only 'O you who believe' and Allah and the Messenger; do not betray vs do not go ahead of them."
+  },
+  "8:53|49:8": {
+   "keep": false,
+   "why": "Only 'favour' and divine names; changing a favour vs faith as Allah's favour."
+  },
+  "8:74|49:15": {
+   "keep": true,
+   "why": "Same definition of the true believers: they believed and strove in the way of Allah."
+  },
+  "8:13|59:4": {
+   "keep": true,
+   "why": "Same verse: that is because they opposed Allah and His Messenger; Allah is severe in punishment."
+  },
+  "8:52|59:4": {
+   "keep": false,
+   "why": "Only the closing 'severe in punishment'; Pharaoh's people vs Banu al-Nadir's opposition."
+  },
+  "8:68|59:3": {
+   "keep": true,
+   "why": "Same structure: were it not for what Allah had written, He would have punished them."
+  },
+  "8:29|62:4": {
+   "keep": false,
+   "why": "Only the closing 'possessor of great bounty'; reward of piety vs the Messenger as Allah's favour."
+  },
+  "8:45|62:10": {
+   "keep": true,
+   "why": "Same command: remember Allah much that you may succeed."
+  },
+  "8:51|62:7": {
+   "keep": false,
+   "why": "Only 'what their hands put forth'; punishment of disbelievers vs Jews not wishing for death."
+  },
+  "9:51|10:84": {
+   "keep": true,
+   "why": "Same idea: upon Allah let the believers rely."
+  },
+  "9:51|10:85": {
+   "keep": true,
+   "why": "Same statement of trust: upon Allah we rely."
+  },
+  "9:72|10:9": {
+   "keep": true,
+   "why": "Same reward for believers: gardens beneath which rivers flow."
+  },
+  "9:82|10:52": {
+   "keep": true,
+   "why": "Same punishment: a recompense for what they used to earn."
+  },
+  "9:89|10:9": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "9:116|10:66": {
+   "keep": false,
+   "why": "Only 'besides Allah' and the heavens and earth; no protector but Allah vs idolaters follow conjecture."
+  },
+  "9:129|10:85": {
+   "keep": true,
+   "why": "Same statement of trust: upon Him I rely / upon Allah we rely."
+  },
+  "9:70|14:9": {
+   "keep": true,
+   "why": "Same warning: has the news not come of those before, Nuh, 'Ad and Thamud, whose messengers came with clear proofs?"
+  },
+  "9:72|14:23": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "9:89|14:23": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "9:72|22:14": {
+   "keep": true,
+   "why": "Same reward for believers: gardens beneath which rivers flow."
+  },
+  "9:72|22:23": {
+   "keep": true,
+   "why": "Same reward for believers: gardens beneath which rivers flow."
+  },
+  "9:88|22:77": {
+   "keep": false,
+   "why": "Only 'believe', 'good' and success; the Messenger's company who strove vs command to bow and prostrate."
+  },
+  "9:89|22:14": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow."
+  },
+  "9:11|24:56": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakah'; repentant enemies as brothers vs a general command."
+  },
+  "9:16|24:53": {
+   "keep": false,
+   "why": "Only the closing 'Acquainted with what you do'; testing the strivers vs hypocrites' oaths."
+  },
+  "9:27|24:5": {
+   "keep": true,
+   "why": "Same style: those who repent after that, Allah is Forgiving, Merciful."
+  },
+  "9:44|24:19": {
+   "keep": false,
+   "why": "Only 'believe' and 'Allah knows'; not asking leave from jihad vs spreading indecency."
+  },
+  "9:73|24:57": {
+   "keep": true,
+   "why": "Same punishment for disbelievers: their refuge is the Fire, and wretched is the destination."
+  },
+  "9:116|24:42": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs the dominion of the heavens and the earth."
+  },
+  "9:129|24:15": {
+   "keep": false,
+   "why": "Only 'say' and 'great'; reliance on Allah vs the slander."
+  },
+  "9:27|25:70": {
+   "keep": true,
+   "why": "Same style: Allah accepts the repentance of whoever repents; Allah is Forgiving, Merciful."
+  },
+  "9:53|25:67": {
+   "keep": false,
+   "why": "Only 'spend'; hypocrites' rejected spending vs moderate spending of the servants."
+  },
+  "9:89|25:10": {
+   "keep": false,
+   "why": "Only 'gardens beneath which rivers flow'; reward of strivers vs what Allah could give the Prophet in this world."
+  },
+  "9:91|25:70": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; the excused from battle vs the repentant."
+  },
+  "9:102|25:70": {
+   "keep": true,
+   "why": "Same idea: those who mixed deeds / repent and do righteous deeds, Allah turns to them; Forgiving, Merciful."
+  },
+  "9:11|27:3": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakah'; repentant enemies vs description of believers."
+  },
+  "9:27|27:11": {
+   "keep": true,
+   "why": "Same style: whoever does wrong then turns to good after evil, Allah is Forgiving, Merciful."
+  },
+  "9:129|27:26": {
+   "keep": true,
+   "why": "Same statement: Allah, there is no god but He, Lord of the Great Throne."
+  },
+  "9:41|29:6": {
+   "keep": false,
+   "why": "Only 'strive'; command to march out vs whoever strives does so for himself."
+  },
+  "9:41|29:16": {
+   "keep": false,
+   "why": "Only 'that is better for you if you knew'; owner removed the same ending (9:41|16:95)."
+  },
+  "9:43|29:3": {
+   "keep": true,
+   "why": "Same idea: testing so that the truthful are known and the liars known."
+  },
+  "9:44|29:6": {
+   "keep": false,
+   "why": "Only 'strive'; believers not asking leave vs striving for oneself."
+  },
+  "9:70|29:40": {
+   "keep": true,
+   "why": "Same statement about the destroyed nations: Allah did not wrong them, but they wronged themselves."
+  },
+  "9:72|29:58": {
+   "keep": true,
+   "why": "Same reward: in Paradise beneath which rivers flow, abiding in it."
+  },
+  "9:89|29:58": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "9:106|29:5": {
+   "keep": false,
+   "why": "Only the root of 'hope/defer' and divine names; those deferred vs hoping to meet Allah."
+  },
+  "9:115|29:62": {
+   "keep": false,
+   "why": "Only the closing 'Knowing of all things'; not misleading the guided vs provision."
+  },
+  "9:116|29:22": {
+   "keep": true,
+   "why": "Same clause: you have besides Allah no protector or helper."
+  },
+  "9:65|30:10": {
+   "keep": true,
+   "why": "Same sin: mocking the signs of Allah."
+  },
+  "9:70|30:9": {
+   "keep": true,
+   "why": "Same warning: their messengers came with clear proofs; Allah did not wrong them, they wronged themselves."
+  },
+  "9:93|30:59": {
+   "keep": true,
+   "why": "Same statement: Allah seals the hearts of those who do not know."
+  },
+  "9:27|33:24": {
+   "keep": true,
+   "why": "Same idea: Allah turns in repentance to whom He wills; Forgiving, Merciful."
+  },
+  "9:27|33:73": {
+   "keep": false,
+   "why": "Only 'Allah turns to' and the closing Forgiving, Merciful; Hunayn vs the purpose of the trust."
+  },
+  "9:65|33:63": {
+   "keep": false,
+   "why": "Only 'ask' and 'say'; mockers' excuse vs the Hour's timing."
+  },
+  "9:71|33:33": {
+   "keep": true,
+   "why": "Same list of duties: establish prayer, give zakah, obey Allah and His Messenger."
+  },
+  "9:77|33:12": {
+   "keep": false,
+   "why": "Only hypocrisy and 'promised'; breaking a promise to Allah vs calling Allah's promise a delusion."
+  },
+  "9:91|33:73": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; the excused vs the purpose of the trust."
+  },
+  "9:102|33:24": {
+   "keep": true,
+   "why": "Same idea: Allah may turn to the wavering in repentance; Forgiving, Merciful."
+  },
+  "9:102|33:73": {
+   "keep": false,
+   "why": "Only 'Allah turns to' and the closing; those who mixed deeds vs the purpose of the trust."
+  },
+  "9:115|33:40": {
+   "keep": false,
+   "why": "Only the closing 'Knowing of all things'; guidance vs the Seal of the Prophets."
+  },
+  "9:115|33:52": {
+   "keep": false,
+   "why": "Only 'all things'; guidance vs the Prophet's marriages."
+  },
+  "9:115|33:54": {
+   "keep": false,
+   "why": "Only the closing 'Knowing of all things'; guidance vs revealing or hiding."
+  },
+  "9:116|33:17": {
+   "keep": true,
+   "why": "Same clause: besides Allah they find no protector or helper."
+  },
+  "9:9|39:35": {
+   "keep": false,
+   "why": "Only 'what they used to do'; selling Allah's verses vs the pious rewarded."
+  },
+  "9:105|39:46": {
+   "keep": false,
+   "why": "Only the name 'Knower of the unseen and the witnessed'; deeds seen vs a prayer for judgment."
+  },
+  "9:116|39:44": {
+   "keep": true,
+   "why": "Same statement: to Him belongs the dominion of the heavens and the earth."
+  },
+  "9:109|46:10": {
+   "keep": false,
+   "why": "Only the stock closing 'Allah does not guide the wrongdoing people'; the mosque of harm vs the witness from Bani Isra'il."
+  },
+  "9:116|46:32": {
+   "keep": true,
+   "why": "Same idea: there are no protectors besides Allah."
+  },
+  "9:116|46:33": {
+   "keep": false,
+   "why": "Only heavens and earth and giving life; no protector besides Allah vs power to revive the dead."
+  },
+  "9:9|47:1": {
+   "keep": false,
+   "why": "Only 'averted from His way'; owner removed the same phrase pair (9:9|16:88)."
+  },
+  "9:72|47:12": {
+   "keep": true,
+   "why": "Same reward for believers: gardens beneath which rivers flow."
+  },
+  "9:115|47:32": {
+   "keep": false,
+   "why": "Only guidance made clear; Allah not misleading vs disbelievers opposing the Messenger."
+  },
+  "9:27|48:14": {
+   "keep": false,
+   "why": "Only 'whom He wills' and the closing Forgiving, Merciful; Hunayn vs Allah's dominion."
+  },
+  "9:33|48:28": {
+   "keep": true,
+   "why": "Same verse: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion."
+  },
+  "9:72|48:5": {
+   "keep": true,
+   "why": "Same reward: believing men and women in gardens beneath which rivers flow, a great success."
+  },
+  "9:89|48:5": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:100|48:5": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:115|48:21": {
+   "keep": false,
+   "why": "Only 'all things' in the closing; guidance vs spoils not yet taken."
+  },
+  "9:116|48:14": {
+   "keep": true,
+   "why": "Same statement: to Allah belongs the dominion of the heavens and the earth."
+  },
+  "9:20|49:15": {
+   "keep": true,
+   "why": "Same description: those who believed and strove in the way of Allah with their wealth and lives."
+  },
+  "9:27|49:5": {
+   "keep": false,
+   "why": "Only the closing Forgiving, Merciful; repentance after Hunayn vs waiting for the Prophet."
+  },
+  "9:41|49:15": {
+   "keep": true,
+   "why": "Same call: strive with your wealth and your lives in the way of Allah."
+  },
+  "9:44|49:15": {
+   "keep": true,
+   "why": "Same idea: true believers strive with their wealth and lives."
+  },
+  "9:88|49:15": {
+   "keep": true,
+   "why": "Same description: the believers strove with their wealth and lives."
+  },
+  "9:99|49:14": {
+   "keep": true,
+   "why": "Same subject, contrasting: the Bedouins who truly believe vs the Bedouins who only claim belief; Forgiving, Merciful."
+  },
+  "9:115|49:16": {
+   "keep": false,
+   "why": "Only the closing 'Knowing of all things'; guidance vs teaching Allah your religion."
+  },
+  "9:62|57:8": {
+   "keep": false,
+   "why": "Only 'Allah', 'the Messenger' and 'if you are believers'; hypocrites' oaths vs the call to believe."
+  },
+  "9:72|57:12": {
+   "keep": true,
+   "why": "Same reward: believing men and women, gardens beneath which rivers flow, the great success."
+  },
+  "9:73|57:15": {
+   "keep": true,
+   "why": "Same punishment: their refuge is the Fire, and wretched is the destination."
+  },
+  "9:89|57:12": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:99|57:28": {
+   "keep": false,
+   "why": "Only mercy and the closing Forgiving, Merciful; Bedouins' spending vs double mercy for believers."
+  },
+  "9:100|57:12": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:116|57:2": {
+   "keep": true,
+   "why": "Same statement: to Him belongs the dominion of the heavens and the earth; He gives life and causes death."
+  },
+  "9:116|57:5": {
+   "keep": true,
+   "why": "Same statement: to Him belongs the dominion of the heavens and the earth."
+  },
+  "9:116|57:17": {
+   "keep": false,
+   "why": "Only 'gives life'; Allah's dominion vs reviving the earth as a sign."
+  },
+  "9:9|58:15": {
+   "keep": true,
+   "why": "Same clause on those who avert from Allah's way: evil is what they used to do."
+  },
+  "9:63|58:20": {
+   "keep": true,
+   "why": "Same subject: those who oppose Allah and His Messenger and their disgrace."
+  },
+  "9:71|58:13": {
+   "keep": true,
+   "why": "Same list of duties: establish prayer, give zakah, obey Allah and His Messenger."
+  },
+  "9:16|59:18": {
+   "keep": false,
+   "why": "Only the closing 'Acquainted with what you do'; testing the strivers vs looking to tomorrow."
+  },
+  "9:39|59:6": {
+   "keep": false,
+   "why": "Only the closing 'able over all things'; refusing to march vs fay' spoils."
+  },
+  "9:78|59:22": {
+   "keep": false,
+   "why": "Only the name 'Knower of the unseen'; hypocrites' secrets vs the divine names."
+  },
+  "9:20|61:11": {
+   "keep": true,
+   "why": "Same call: believe in Allah and strive in His way with wealth and lives."
+  },
+  "9:32|61:8": {
+   "keep": true,
+   "why": "Same verse: they want to extinguish Allah's light with their mouths, but Allah perfects His light."
+  },
+  "9:33|61:9": {
+   "keep": true,
+   "why": "Same verse: He sent His Messenger with guidance and the religion of truth, though the polytheists dislike it."
+  },
+  "9:41|61:11": {
+   "keep": true,
+   "why": "Same call: strive with your wealth and lives in the way of Allah; that is better for you if you knew."
+  },
+  "9:44|61:11": {
+   "keep": true,
+   "why": "Same idea: believing in Allah and striving with wealth and lives."
+  },
+  "9:72|61:12": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow and pleasant dwellings in gardens of Eden, the great success."
+  },
+  "9:80|61:5": {
+   "keep": false,
+   "why": "Only the stock closing 'Allah does not guide the defiantly disobedient'; hypocrites vs Moses's people."
+  },
+  "9:88|61:11": {
+   "keep": true,
+   "why": "Same idea: striving with wealth and lives."
+  },
+  "9:89|61:12": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great success."
+  },
+  "9:9|63:2": {
+   "keep": true,
+   "why": "Same clauses: they averted from the way of Allah; evil is what they used to do."
+  },
+  "9:80|63:6": {
+   "keep": true,
+   "why": "Same ruling on the hypocrites: whether you ask forgiveness for them or not, Allah will not forgive them."
+  },
+  "9:87|63:3": {
+   "keep": true,
+   "why": "Same statement: their hearts were sealed, so they do not understand."
+  },
+  "9:105|63:8": {
+   "keep": false,
+   "why": "Only Allah, His Messenger and the believers; deeds seen vs honour belongs to them."
+  },
+  "9:16|64:8": {
+   "keep": false,
+   "why": "Only Allah and His Messenger and the closing 'Acquainted'; testing vs the call to believe."
+  },
+  "9:22|64:15": {
+   "keep": true,
+   "why": "Same promise: with Allah is a great reward."
+  },
+  "9:44|64:11": {
+   "keep": false,
+   "why": "Only 'believes in Allah' and 'Knowing'; not asking leave vs calamity by Allah's permission."
+  },
+  "9:51|64:13": {
+   "keep": true,
+   "why": "Same statement: upon Allah let the believers rely."
+  },
+  "9:59|64:6": {
+   "keep": false,
+   "why": "Only Allah's giving / sufficiency words; contentment vs messengers rejected as mere humans."
+  },
+  "9:63|64:8": {
+   "keep": false,
+   "why": "Only 'Allah and His Messenger'; opposing them vs the call to believe."
+  },
+  "9:72|64:9": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:73|64:10": {
+   "keep": true,
+   "why": "Same punishment for disbelievers: the Fire, and wretched is the destination."
+  },
+  "9:78|64:4": {
+   "keep": true,
+   "why": "Same idea: Allah knows what they conceal and their secret talk."
+  },
+  "9:89|64:9": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them, the great success."
+  },
+  "9:100|64:9": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them forever, the great success."
+  },
+  "9:115|64:11": {
+   "keep": false,
+   "why": "Only guidance words and the closing 'Knowing of all things'; different subjects."
+  },
+  "9:72|85:11": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great success."
+  },
+  "9:89|85:11": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great success."
+  },
+  "9:116|85:9": {
+   "keep": true,
+   "why": "Same statement: to Him belongs the dominion of the heavens and the earth."
+  },
+  "9:11|98:5": {
+   "keep": false,
+   "why": "Only the common 'establish prayer and give zakah'; repentant enemies vs what the People of the Book were commanded."
+  },
+  "9:72|98:8": {
+   "keep": true,
+   "why": "Same reward: gardens of Eden beneath which rivers flow, abiding in them."
+  },
+  "9:89|98:8": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding in them."
+  },
+  "9:100|98:8": {
+   "keep": true,
+   "why": "Same reward: Allah is pleased with them and they with Him, gardens beneath which rivers flow, forever."
   }
  }
 }
