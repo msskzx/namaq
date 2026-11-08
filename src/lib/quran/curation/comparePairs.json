@@ -5702,27 +5702,33 @@
   },
   "16:3|45:22": {
    "keep": true,
-   "why": "Same sentence: (Allah) created the heavens and the earth in truth."
+   "why": "Same sentence: (Allah) created the heavens and the earth in truth.",
+   "checked": true
   },
   "16:14|45:12": {
    "keep": true,
-   "why": "Same sentence: He subjected the sea, ships sail in it, that you seek His bounty and give thanks."
+   "why": "Same sentence: He subjected the sea, ships sail in it, that you seek His bounty and give thanks.",
+   "checked": true
   },
   "16:34|45:33": {
    "keep": true,
-   "why": "Same sentence: the evils of what they did; what they mocked surrounded them."
+   "why": "Same sentence: the evils of what they did; what they mocked surrounded them.",
+   "checked": true
   },
   "16:64|45:20": {
    "keep": true,
-   "why": "Same phrase: guidance and mercy for a people who believe / are certain."
+   "why": "Same phrase: guidance and mercy for a people who believe / are certain.",
+   "checked": true
   },
   "16:65|45:5": {
    "keep": true,
-   "why": "Same sentence: Allah sent down from the sky and revived the earth after its death."
+   "why": "Same sentence: Allah sent down from the sky and revived the earth after its death.",
+   "checked": true
   },
   "16:124|45:17": {
    "keep": true,
-   "why": "Same sentence: your Lord will judge between them on the Day of Resurrection in what they differed."
+   "why": "Same sentence: your Lord will judge between them on the Day of Resurrection in what they differed.",
+   "checked": true
   },
   "10:34|43:87": {
    "keep": true,
@@ -5746,31 +5752,38 @@
   },
   "16:13|45:13": {
    "keep": false,
-   "why": "Only the formula 'in that is a sign for a people ...'."
+   "why": "Only the formula 'in that is a sign for a people ...'.",
+   "checked": true
   },
   "16:65|45:13": {
    "keep": false,
-   "why": "Only the formula 'in that is a sign for a people ...'."
+   "why": "Only the formula 'in that is a sign for a people ...'.",
+   "checked": true
   },
   "16:65|45:27": {
    "keep": false,
-   "why": "Only heavens and earth words."
+   "why": "Only heavens and earth words.",
+   "checked": true
   },
   "16:73|45:27": {
    "keep": false,
-   "why": "Only heavens and earth and 'dominion'."
+   "why": "Only heavens and earth and 'dominion'.",
+   "checked": true
   },
   "16:79|45:13": {
    "keep": false,
-   "why": "Only 'subjected' and the formula 'signs for a people'."
+   "why": "Only 'subjected' and the formula 'signs for a people'.",
+   "checked": true
   },
   "16:104|45:8": {
    "keep": false,
-   "why": "Only 'signs of Allah' and 'painful punishment'."
+   "why": "Only 'signs of Allah' and 'painful punishment'.",
+   "checked": true
   },
   "16:104|45:11": {
    "keep": false,
-   "why": "Only the formula 'for them a painful punishment'."
+   "why": "Only the formula 'for them a painful punishment'.",
+   "checked": true
   },
   "10:25|43:64": {
    "keep": false,
