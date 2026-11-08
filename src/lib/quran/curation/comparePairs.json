@@ -20887,7 +20887,8 @@
   },
   "43:83|52:12": {
    "keep": true,
-   "why": "Rare pairing on the same deniers: plunging in vain talk and playing."
+   "why": "Rare pairing on the same deniers: plunging in vain talk and playing.",
+   "checked": true
   },
   "43:34|56:15": {
    "keep": false,
@@ -23444,7 +23445,8 @@
   },
   "43:9|52:36": {
    "keep": true,
-   "why": "Same question of who created the heavens and the earth: the deniers answer Allah; did they create them?"
+   "why": "Same question of who created the heavens and the earth: the deniers answer Allah; did they create them?",
+   "checked": true
   },
   "43:10|78:6": {
    "keep": true,
@@ -23474,7 +23476,8 @@
   },
   "43:83|52:45": {
    "keep": true,
-   "why": "Same command in near-identical words: leave them until they meet their Day."
+   "why": "Same command in near-identical words: leave them until they meet their Day.",
+   "checked": true
   },
   "44:7|45:36": {
    "keep": true,
