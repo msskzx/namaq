@@ -23403,6 +23403,158 @@
    "keep": true,
    "why": "Identical clause: he will be in a pleasant life.",
    "checked": true
+  },
+  "43:9|52:36": {
+   "keep": true,
+   "why": "Same question of who created the heavens and the earth: the deniers answer Allah; did they create them?"
+  },
+  "43:10|78:6": {
+   "keep": true,
+   "why": "Same sign in the same words: He made the earth a cradle."
+  },
+  "43:63|46:7": {
+   "keep": false,
+   "why": "Only clear proofs and coming; Isa's teaching vs deniers calling the truth magic."
+  },
+  "43:72|46:14": {
+   "keep": true,
+   "why": "Same description of the Garden: earned as recompense for what they used to do."
+  },
+  "43:82|56:74": {
+   "keep": false,
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
+  },
+  "43:82|56:96": {
+   "keep": false,
+   "why": "Only general glorification of the Lord; the heavens-name match is a false root link."
+  },
+  "43:82|78:37": {
+   "keep": true,
+   "why": "Same title opening each ayah: Lord of the heavens and the earth, extended by a further description."
+  },
+  "43:83|52:45": {
+   "keep": true,
+   "why": "Same command in near-identical words: leave them until they meet their Day."
+  },
+  "44:7|45:36": {
+   "keep": true,
+   "why": "Same title in apposition: Lord of the heavens and the earth, then a further description."
+  },
+  "44:36|45:25": {
+   "keep": true,
+   "why": "Same reply of the deniers: bring back our fathers, if you are truthful."
+  },
+  "44:40|77:38": {
+   "keep": true,
+   "why": "Same scene: the Day of Decision on which all are gathered."
+  },
+  "45:11|51:37": {
+   "keep": false,
+   "why": "Only signs and painful punishment; deniers' penalty vs a sign left for those who fear."
+  },
+  "45:36|51:23": {
+   "keep": false,
+   "why": "Only the Lord of heaven and earth; a closing praise vs an oath on the truth of the promise."
+  },
+  "51:23|78:37": {
+   "keep": false,
+   "why": "Only the Lord of heaven and earth; an oath vs a title leading to no one daring to speak."
+  },
+  "51:49|54:49": {
+   "keep": true,
+   "why": "Same construction on creation: every thing We created, in pairs / by measure."
+  },
+  "51:50|67:26": {
+   "keep": true,
+   "why": "Same declaration of the Messenger's role: I am only a clear warner."
+  },
+  "51:51|67:26": {
+   "keep": true,
+   "why": "Same declaration of the Messenger's role: I am only a clear warner."
+  },
+  "51:52|54:9": {
+   "keep": true,
+   "why": "Same reply of the deniers to earlier messengers: they called him mad."
+  },
+  "52:16|56:24": {
+   "keep": true,
+   "why": "Contrast in one frame: recompense for what they did, for the Fire and for the Garden."
+  },
+  "52:19|77:43": {
+   "keep": true,
+   "why": "Identical ayah: eat and drink with enjoyment for what you used to do."
+  },
+  "52:45|70:42": {
+   "keep": true,
+   "why": "Same command in near-identical words: leave them until they meet their Day."
+  },
+  "53:18|79:20": {
+   "keep": true,
+   "why": "Rare pairing on a prophet shown the greatest sign: Muhammad and Musa."
+  },
+  "53:25|79:25": {
+   "keep": true,
+   "why": "Rare pairing, the last and the first, both under Allah's authority."
+  },
+  "56:38|74:39": {
+   "keep": true,
+   "why": "Same rare group named in the same words: the companions of the right."
+  },
+  "56:38|90:18": {
+   "keep": true,
+   "why": "Same group of the saved, named from one root: companions of the right."
+  },
+  "56:94|83:16": {
+   "keep": true,
+   "why": "Same rare construction on burning in Hellfire: tasliyatu jahim / salu al-jahim."
+  },
+  "64:1|67:1": {
+   "keep": true,
+   "why": "Same style of surah opening: glorifying Allah, His the dominion, and He has power over all things."
+  },
+  "64:10|66:9": {
+   "keep": false,
+   "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive."
+  },
+  "64:10|67:6": {
+   "keep": true,
+   "why": "Same statement: those who disbelieve have the Fire, and wretched is the destination."
+  },
+  "64:14|66:1": {
+   "keep": false,
+   "why": "Only spouses and the closing divine names; different subjects."
+  },
+  "68:15|83:13": {
+   "keep": true,
+   "why": "Identical ayah: the denier's reply, legends of the ancients."
+  },
+  "68:26|83:32": {
+   "keep": true,
+   "why": "Same construction on seeing: they said we are astray / these are astray, turned on themselves and on the believers."
+  },
+  "69:19|84:7": {
+   "keep": true,
+   "why": "Same scene in the same words: as for him given his book in his right hand."
+  },
+  "73:8|76:25": {
+   "keep": true,
+   "why": "Same command in the same words: remember the name of your Lord."
+  },
+  "73:19|76:29": {
+   "keep": true,
+   "why": "Identical ayah: this is a reminder, so whoever wills takes a way to his Lord."
+  },
+  "79:38|87:16": {
+   "keep": true,
+   "why": "Same rare clause: preferring the life of this world."
+  },
+  "80:4|87:9": {
+   "keep": true,
+   "why": "Same idea in rare wording: the reminder benefiting the one reminded."
+  },
+  "82:13|83:22": {
+   "keep": true,
+   "why": "Identical ayah: the righteous are in bliss."
   }
  }
 }
