@@ -23816,19 +23816,39 @@
   },
   "53:13|96:9": {
    "keep": false,
-   "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated."
+   "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Seeing Jibril versus 'have you seen'; common verb, unrelated."
+   }
   },
   "53:14|96:9": {
    "keep": false,
-   "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning."
+   "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "The Lote Tree's name versus forbidding; a shared root and unrelated meaning."
+   }
   },
   "53:42|96:8": {
-   "keep": true,
-   "why": "Same frame and idea: to your Lord is the final end / the return."
+   "keep": false,
+   "why": "Same frame and idea: to your Lord is the final end / the return. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same frame and idea: to your Lord is the final end / the return."
+   }
   },
   "53:42|96:9": {
    "keep": false,
-   "why": "The final end versus forbidding; a shared root and unrelated meaning."
+   "why": "The final end versus forbidding; a shared root and unrelated meaning.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "The final end versus forbidding; a shared root and unrelated meaning."
+   }
   },
   "54:14|55:50": {
    "keep": false,
