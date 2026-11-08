@@ -21699,11 +21699,21 @@
   },
   "48:5|65:11": {
    "keep": false,
-   "why": "Only the gardens with rivers clause."
+   "why": "Only the gardens with rivers clause.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens with rivers clause."
+   }
   },
   "48:17|65:11": {
    "keep": false,
-   "why": "Only the gardens with rivers clause."
+   "why": "Only the gardens with rivers clause.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens with rivers clause."
+   }
   },
   "48:5|66:8": {
    "keep": false,
@@ -24275,6 +24285,12 @@
    "draft": {}
   },
   "50:1|85:21": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true,
+   "draft": {}
+  },
+  "48:21|65:3": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true,
