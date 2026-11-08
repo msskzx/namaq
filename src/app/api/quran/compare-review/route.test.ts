@@ -25,7 +25,7 @@ const VERDICTS = 'lib/quran/curation/comparePairs.json';
 const post = (body: unknown, headers: Record<string, string> = {}) => POST(new Request('http://localhost/api', { method: 'POST', headers, body: JSON.stringify(body) }));
 const verdicts = () => JSON.parse(files.get(VERDICTS)!).pairs;
 const unsaved = { keep: false, why: 'Another page the owner has changed.', checked: true };
-const drafted = { '2:1|3:1': { keep: true, why: 'Same.' }, '2:2|3:2': { keep: false, why: 'Formula.' }, '4:1|5:1': { keep: true, why: 'Other page.' } };
+const drafted = { '2:1|3:1': { keep: true, why: 'Same.' }, '2:2|3:2': { keep: false, why: 'Formula.' }, '4:1|5:1': { keep: true, why: 'Other page.' }, '6:1|7:1': { keep: true, why: 'Third page.' } };
 
 beforeEach(() => {
   vi.stubEnv('NODE_ENV', 'development');
@@ -36,7 +36,7 @@ beforeEach(() => {
   shell.resets = 0;
   files.clear();
   files.set(VERDICTS, `${JSON.stringify({ pairs: { ...drafted, '4:1|5:1': unsaved } }, null, 1)}\n`);
-  files.set('app/quran/compare/pairs.json', JSON.stringify({ pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }] }));
+  files.set('app/quran/compare/pairs.json', JSON.stringify({ pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }, { a: '6:1', b: '7:1' }] }));
   files.set('app/quran/compare/passagePairs.json', JSON.stringify({ pairs: [] }));
   files.set('lib/quran/curation/compareLinks.json', JSON.stringify({ links: [] }));
 });
@@ -94,9 +94,9 @@ describe('the compare review route', () => {
   });
 
   it('handles presses one at a time', async () => {
-    await Promise.all([post({ a: 2, b: 3, action: 'agree' }), post({ a: 4, b: 5, action: 'drop' })]);
+    await Promise.all([post({ a: 2, b: 3, action: 'agree' }), post({ a: 6, b: 7, action: 'drop' })]);
     expect(verdicts()['2:1|3:1'].checked).toBe(true);
-    expect(verdicts()['4:1|5:1'].checked).toBe(true);
+    expect(verdicts()['6:1|7:1'].keep).toBe(false);
     expect(shell.commits).toHaveLength(2);
   });
 
