@@ -92,6 +92,14 @@ describe('compare pair cards', () => {
     expect(generated).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
   });
 
+  it('joins a curated passage that runs in a different order into one card', () => {
+    const card = pairCards(43, 78).find(item => item.id === '43:10-12|78:6-16')!;
+    expect(card.sides.map(side => side.ayat.length)).toEqual([3, 11]);
+    const links = card.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)).sort());
+    expect(links[0]).toEqual(links[1]);
+    expect(new Set(links[0]).size).toBe(links[0].length);
+  });
+
   it('gives each word one partner on the curated Moses card', () => {
     const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
     const [a, b] = moses.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)));

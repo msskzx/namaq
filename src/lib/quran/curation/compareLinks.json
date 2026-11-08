@@ -212,6 +212,54 @@
    ],
    "why": "These words of 7:113 belong with 26:41, the aligned ayah.",
    "source": "owner"
+  },
+  {
+   "pair": "43:11|78:14",
+   "links": [
+    [
+     1,
+     0,
+     "root"
+    ],
+    [
+     2,
+     1,
+     "exact"
+    ],
+    [
+     4,
+     3,
+     "exact"
+    ]
+   ],
+   "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "43:11|78:15",
+   "links": [
+    [
+     7,
+     1,
+     "exact"
+    ],
+    [
+     11,
+     0,
+     "root"
+    ]
+   ],
+   "why": "What the water brings out: به, and تخرجون / لنخرج.",
+   "source": "claude-curated, owner to review"
+  },
+  {
+   "pair": "43:11|78:16",
+   "links": [],
+   "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word.",
+   "source": "claude-curated, owner to review"
   }
+ ],
+ "joins": [
+  "43:10-12|78:6-16"
  ]
 }

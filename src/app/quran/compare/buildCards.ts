@@ -31,6 +31,21 @@ function withCuratedLinks(pairs: SimilarAyahPair[]): SimilarAyahPair[] {
   })];
 }
 
+/** A curated join ("43:10-12|78:6-16") puts every kept pair inside both ranges on one card, for passages that run in a different order. */
+function joinCurated(chains: AyahPair[][]) {
+  return ((links as { joins?: string[] }).joins ?? []).reduce((current, join) => {
+    const [a, b] = join.split('|').map(side => {
+      const [surah, range] = side.split(':');
+      const [from, to = from] = range.split('-').map(Number);
+      return { surah: Number(surah), from, to };
+    });
+    const inside = (key: string, side: typeof a) => surahOf(key) === side.surah && ayahOf(key) >= side.from && ayahOf(key) <= side.to;
+    const within = (chain: AyahPair[]) => chain.every(pair => inside(pair.a, a) && inside(pair.b, b));
+    const joined = current.filter(within).flat().sort((p, q) => keyOrder(p.a) - keyOrder(q.a) || keyOrder(p.b) - keyOrder(q.b));
+    return joined.length ? [...current.filter(chain => !within(chain)), joined] : current;
+  }, chains);
+}
+
 const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs] as SimilarAyahPair[]), groups);
 /** Curation runs after the engine: pairs a reader judged to share only vocabulary are left out. */
 const bySurah = pairsBySurah(found.filter(keptPair));
@@ -132,7 +147,7 @@ function pairCards(x: number, y: number, review = false): PairCard[] {
   const pairs = pairsFor(review ? foundBySurah : bySurah, x, y);
   const alone = (pair: AyahPair) => !!verdictFor(pair.a, pair.b)?.alone;
   const kept = pairs.filter(keptPair);
-  const chains = pairChains(kept.filter(pair => !alone(pair)));
+  const chains = joinCurated(pairChains(kept.filter(pair => !alone(pair))));
   const groups = manyGroups(chains.filter(chain => chain.length === 1).map(chain => chain[0]));
   const grouped = new Set(groups.flatMap(group => group.pairs));
   const order = (pair: AyahPair) => [keyOrder(pair.a), keyOrder(pair.b)];

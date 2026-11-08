@@ -23653,6 +23653,18 @@
   "7:122|26:48": {
    "keep": true,
    "why": "The same words: رب موسى وهارون."
+  },
+  "43:11|78:14": {
+   "keep": true,
+   "why": "The same sign: water sent down, نزل من السماء ماء / أنزلنا من المعصرات ماء."
+  },
+  "43:11|78:15": {
+   "keep": true,
+   "why": "What the water brings out: به, and تخرجون / لنخرج."
+  },
+  "43:11|78:16": {
+   "keep": true,
+   "why": "Continues 78:15, so the passage reaches وجنات ألفافا; no shared word."
   }
  }
 }
