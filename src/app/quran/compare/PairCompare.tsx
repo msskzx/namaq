@@ -11,7 +11,7 @@ import { NavActions } from '@/components/common/NavBar';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
-import { compareBookmarkId, savedSurahPairs } from '@/lib/compareBookmarks';
+import { compareBookmarkId, savedAs, savedSurahPairs } from '@/lib/compareBookmarks';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref } from '@/lib/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@/lib/quran/curatedComparisons';
@@ -161,11 +161,13 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 }
 
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
-function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: boolean; saved: boolean }) {
+const anchorOf = (card: PairCard) => `c-${card.sides[0].surah}-${card.sides[0].ayah}-${card.sides[1].surah}-${card.sides[1].ayah}`;
+
+function Card({ card, names, ar, savedIds }: { card: PairCard; names: Names; ar: boolean; savedIds: string[] }) {
   const [lit, setLit] = useState<string | null>(null);
   const id = compareBookmarkId(card.id);
-  const anchor = `c-${card.id.replace(/[:|]/g, '-')}`;
-  const aliases = (card.pairs ?? []).map(pair => compareBookmarkId(pair.id));
+  const anchor = anchorOf(card);
+  const saved = savedIds.length > 0;
   const verdicts = card.pairs?.flatMap(pair => (pair.verdict ? [{ id: pair.id, verdict: pair.verdict }] : [])) ?? (card.verdict ? [{ id: card.id, verdict: card.verdict }] : []);
   const [a, b] = card.sides;
   const bookmark = { id, text: `${a.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href: `${surahPairHref(a.surah, b.surah)}#${anchor}` };
@@ -177,7 +179,7 @@ function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: bo
   const family = ar ? 'افتح في متشابهات القرآن' : 'Open in the phrase trees';
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
-      <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={aliases}>
+      <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
         <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile pages={card.sides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
@@ -185,7 +187,7 @@ function Card({ card, names, ar, saved }: { card: PairCard; names: Names; ar: bo
         </div>
       </DoubleTapSave>
       <div className="flex justify-end">
-        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, aliases)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
       </div>
@@ -208,8 +210,15 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
   const [open, setOpen] = useState(false);
   const [savedOnly, setSavedOnly] = useState(false);
   const bookmarks = useBookmarks();
-  const isSaved = (card: PairCard) => bookmarks.some(item => [card.id, ...(card.pairs ?? []).map(pair => pair.id)].some(id => item.id === compareBookmarkId(id)));
-  const shown = savedOnly ? cards.filter(isSaved) : cards;
+  const shown = savedOnly ? cards.filter(card => savedAs(card.id, bookmarks).length > 0) : cards;
+  // A saved link names the card's first ayat when it was saved; verdicts or merging may have moved that ayah inside another card.
+  useEffect(() => {
+    const [surahA, ayahA, surahB, ayahB] = window.location.hash.match(/^#c-(\d+)-(\d+)-(\d+)-(\d+)$/)?.slice(1).map(Number) ?? [];
+    if (!surahA || document.getElementById(window.location.hash.slice(1))) return;
+    const holds = (side: CardSide, surah: number, ayah: number) => side.surah === surah && side.ayat.some(item => item.number === ayah);
+    const found = cards.find(card => holds(card.sides[0], surahA, ayahA) && holds(card.sides[1], surahB, ayahB));
+    if (found) document.getElementById(anchorOf(found))?.scrollIntoView?.();
+  }, [cards]);
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);
   const index = pairs.findIndex(pair => pair.a === a && pair.b === b);
@@ -241,7 +250,7 @@ export default function PairCompare({ a, b, cards, pairs, names, review = false,
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-4">
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
-            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} saved={isSaved(card)} />)}</ol>}
+            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}</ol>}
           {next && <Link href={pairHref(next.a, next.b, review)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
             {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
           </Link>}

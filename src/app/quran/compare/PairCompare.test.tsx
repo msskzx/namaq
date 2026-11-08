@@ -105,8 +105,8 @@ describe('PairCompare', () => {
   it('saves a card with its bookmark button and links back to it', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }));
-    expect(JSON.parse(localStorage.getItem('bookmarks')!)).toMatchObject([{ id: 'compare:x', text: 'أم تسألهم أجرا …', href: '/quran/compare?a=52&b=68#c-x' }]);
-    expect(document.getElementById('c-x')).toBeTruthy();
+    expect(JSON.parse(localStorage.getItem('bookmarks')!)).toMatchObject([{ id: 'compare:x', text: 'أم تسألهم أجرا …', href: '/quran/compare?a=52&b=68#c-52-40-68-46' }]);
+    expect(document.getElementById('c-52-40-68-46')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'إزالة من المحفوظة' }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'إزالة من المحفوظة' }));
     expect(JSON.parse(localStorage.getItem('bookmarks')!)).toEqual([]);
@@ -123,5 +123,38 @@ describe('PairCompare', () => {
     expect(screen.getAllByRole('button', { name: 'إزالة من المحفوظة' })).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
     expect([...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'))).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=52&b=68']);
+  });
+
+  describe('range cards', () => {
+    const ayat = (from: number, link: string) => [{ number: from, words: ['قال', 'موسى'], marks: { 0: { kind: 'exact' as const, link } } }, { number: from + 1, words: ['ثم', 'جاء'] }];
+    const range: PairCard = {
+      id: '7:106-107|26:31-32',
+      pairs: [{ id: '7:106|26:31', verdict: { keep: true, why: 'first pair' } }, { id: '7:107|26:32', verdict: { keep: true, why: 'second pair', checked: true } }],
+      sides: [{ surah: 7, ayah: 106, ayat: ayat(106, 'l') }, { surah: 26, ayah: 31, ayat: ayat(31, 'l') }],
+    };
+
+    it('titles the card with its ayah range and lists a verdict per pair', () => {
+      render(<PairCompare a={7} b={26} cards={[range]} pairs={pairs} names={names} review />);
+      expect(screen.getByRole('heading', { level: 3, name: 'الاعراف ١٠٦–١٠٧' })).toBeTruthy();
+      expect(screen.getByText(/7:106 ~ 26:31/).textContent).toContain('first pair');
+      expect(screen.getByText(/7:107 ~ 26:32/).textContent).toContain('checked by you');
+    });
+
+    it('counts a pair saved earlier as saving the range, and removes both together', () => {
+      localStorage.setItem('bookmarks', JSON.stringify([{ id: 'compare:7:106|26:31', text: 'x', href: '/quran/compare?a=7&b=26#c-7-106-26-31', savedAt: 1 }]));
+      render(<PairCompare a={7} b={26} cards={[range]} pairs={pairs} names={names} />);
+      fireEvent.click(screen.getByRole('button', { name: 'إزالة من المحفوظة' }));
+      expect(JSON.parse(localStorage.getItem('bookmarks')!)).toEqual([]);
+    });
+
+    it('scrolls a saved link to the card that now holds its ayah', () => {
+      window.location.hash = '#c-7-107-26-32';
+      const scroll = vi.fn();
+      Element.prototype.scrollIntoView = scroll;
+      render(<PairCompare a={7} b={26} cards={[range]} pairs={pairs} names={names} />);
+      expect(scroll).toHaveBeenCalledTimes(1);
+      expect((scroll.mock.contexts[0] as Element).id).toBe('c-7-106-26-31');
+      window.location.hash = '';
+    });
   });
 });

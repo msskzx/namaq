@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bookmarkReferences } from './bookmarkReferences';
-import { compareBookmarkAyat, compareBookmarkId, isCompareBookmark, savedSurahPairs } from './compareBookmarks';
+import { compareBookmarkAyat, compareBookmarkId, isCompareBookmark, savedAs, savedSurahPairs } from './compareBookmarks';
 
 describe('compare bookmarks', () => {
   it('keys a card by its ayah pair and reads the pair back', () => {
@@ -15,7 +15,16 @@ describe('compare bookmarks', () => {
   it('reads a range card as the first and last ayah of each side', () => {
     expect(compareBookmarkAyat({ id: compareBookmarkId('7:106-125|26:31-50') })).toEqual(['7:106', '7:125', '26:31', '26:50']);
     expect([...savedSurahPairs([{ id: 'compare:7:106-125|26:31-50' }])]).toEqual(['7:26']);
-    expect(bookmarkReferences({ id: 'compare:7:106-125|26:31-50', href: '/quran/compare?a=7&b=26#c' }, {})).toEqual([{ surah: 7, ayat: [106, 125] }, { surah: 26, ayat: [31, 50] }]);
+    expect(bookmarkReferences({ id: 'compare:7:106-125|26:31-50', href: '/quran/compare?a=7&b=26#c' }, {})).toEqual([{ surah: 7, ayat: [106, 125], range: true }, { surah: 26, ayat: [31, 50], range: true }]);
+  });
+
+  it('recognises a saved card after verdicts or merging change its range', () => {
+    const saved = (...ids: string[]) => ids.map(id => ({ id: compareBookmarkId(id) }));
+    expect(savedAs('7:106-125|26:31-50', saved('7:106|26:31'))).toEqual(['compare:7:106|26:31']);
+    expect(savedAs('7:106-124|26:31-49', saved('7:106-125|26:31-50'))).toEqual(['compare:7:106-125|26:31-50']);
+    expect(savedAs('7:106|26:154', saved('7:106-125|26:31-50'))).toEqual([]);
+    expect(savedAs('7:106|26:31', [{ id: 'tree-1' }])).toEqual([]);
+    expect(savedAs('x', saved('x'))).toEqual(['compare:x']);
   });
 
   it('lists the surah pairs that hold a saved card', () => {

@@ -18,6 +18,11 @@ describe('compare pair cards', () => {
     expect(cards.map(card => card.id)).toEqual(expect.arrayContaining(['7:106|26:154', '7:111|26:53']));
   });
 
+  it('gives a range card the tree link of its first pair that has one', () => {
+    const block = pairCards(2, 7).find(card => card.id === '2:57-59|7:160-162')!;
+    expect(block.group).toBeDefined();
+  });
+
   it('keeps every word link on both sides of a range card', () => {
     for (const card of pairCards(7, 26)) {
       const [a, b] = card.sides.map(side => new Set(side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link))));

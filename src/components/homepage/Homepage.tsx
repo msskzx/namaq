@@ -45,7 +45,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
           return <Link key={item.id} href={item.href} className={styles.book}>
             {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
               {references.map(reference => <span key={reference.surah}>
-                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('، ')}</bdi>
+                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('range' in reference ? '–' : '، ')}</bdi>
               </span>)}
             </span>}
             <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>

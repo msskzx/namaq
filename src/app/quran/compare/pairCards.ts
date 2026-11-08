@@ -57,7 +57,7 @@ const rangeId = (cardSide: CardSide) => `${cardSide.surah}:${cardSide.ayah}${car
 function card(pairs: AyahPair[], review: boolean): PairCard {
   const marks = wordMarks(pairs);
   const sides: PairCard['sides'] = [side(pairs, 'a', marks), side(pairs, 'b', marks)];
-  const group = pairs.every(pair => pair.group === pairs[0].group) ? pairs[0].group : undefined;
+  const group = pairs.find(pair => pair.group)?.group;
   const verdict = review && pairs.length === 1 ? verdictFor(pairs[0].a, pairs[0].b) : undefined;
   return {
     id: pairs.length === 1 ? `${pairs[0].a}|${pairs[0].b}` : `${rangeId(sides[0])}|${rangeId(sides[1])}`,

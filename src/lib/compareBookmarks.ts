@@ -15,6 +15,21 @@ export function compareBookmarkAyat(bookmark: Pick<Bookmark, 'id'>): string[] {
   return sides.flatMap(side => [`${side![1]}:${side![2]}`, ...(side![3] ? [`${side![1]}:${side![3]}`] : [])]);
 }
 
+const spans = (pair: string) => {
+  const sides = pair.split('|').map(side => side.match(/^(\d+):(\d+)(?:-(\d+))?$/));
+  return sides.length === 2 && sides.every(Boolean) ? sides.map(side => ({ surah: side![1], from: Number(side![2]), to: Number(side![3] ?? side![2]) })) : null;
+};
+
+/** The saved bookmarks that are this card: the same ayat on both sides, even if verdicts have since grown, trimmed or split its range. */
+export function savedAs(card: string, bookmarks: readonly Pick<Bookmark, 'id'>[]): string[] {
+  const own = spans(card);
+  return bookmarks.filter(bookmark => {
+    if (bookmark.id === compareBookmarkId(card)) return true;
+    const saved = isCompareBookmark(bookmark) ? spans(bookmark.id.slice(PREFIX.length)) : null;
+    return !!own && !!saved && own.every((side, i) => side.surah === saved[i].surah && side.from <= saved[i].to && saved[i].from <= side.to);
+  }).map(bookmark => bookmark.id);
+}
+
 /** The surah pairs ("2:16") that hold at least one saved card. */
 export function savedSurahPairs(bookmarks: readonly Pick<Bookmark, 'id'>[]): Set<string> {
   return new Set(bookmarks.flatMap(bookmark => {
