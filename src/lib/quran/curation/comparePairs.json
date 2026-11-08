@@ -8413,32 +8413,39 @@
    "checked": true
   },
   "3:29|49:16": {
-   "keep": true,
-   "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him."
+   "keep": false,
+   "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him. (owner removed)",
+   "checked": true
   },
   "3:29|49:18": {
-   "keep": true,
-   "why": "Allah knows the unseen of the heavens and the earth."
+   "keep": false,
+   "why": "Allah knows the unseen of the heavens and the earth. (owner removed)",
+   "checked": true
   },
   "3:89|49:5": {
    "keep": false,
-   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects.",
+   "checked": true
   },
   "3:89|49:10": {
    "keep": false,
-   "why": "Shared root of reform only; different subjects."
+   "why": "Shared root of reform only; different subjects.",
+   "checked": true
   },
   "3:121|49:1": {
    "keep": false,
-   "why": "Shared closing 'Hearing, Knowing' only; different subjects."
+   "why": "Shared closing 'Hearing, Knowing' only; different subjects.",
+   "checked": true
   },
   "3:163|49:18": {
    "keep": false,
-   "why": "Shared closing 'Seeing of what you do' only; different subjects."
+   "why": "Shared closing 'Seeing of what you do' only; different subjects.",
+   "checked": true
   },
   "3:189|49:16": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:27|57:6": {
    "keep": true,
