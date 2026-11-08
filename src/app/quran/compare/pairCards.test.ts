@@ -22,7 +22,7 @@ describe('compare pair cards', () => {
   });
 
   it('gives a range card the tree link of its first pair that has one', () => {
-    const block = pairCards(2, 7).find(card => card.id === '2:57-59|7:160-162')!;
+    const block = pairCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
     expect(block.group).toBeDefined();
   });
 
@@ -57,6 +57,10 @@ describe('compare pair cards', () => {
     const many = pairCards(10, 26, true).find(item => item.id === '10:72|26:109,127,145,164,180')!;
     expect(many.verdict).toBeUndefined();
     expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
+  });
+
+  it('merges two runs of one passage when they share an ayah', () => {
+    expect(pairCards(69, 101).map(card => card.id)).toContain('69:3-4|101:1-3');
   });
 
   it('keeps every word link on both sides of a range card', () => {
