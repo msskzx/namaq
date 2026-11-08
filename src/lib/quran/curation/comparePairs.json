@@ -13562,31 +13562,38 @@
   },
   "43:9|45:36": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true
   },
   "43:9|45:37": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the name Almighty."
+   "why": "Only 'the heavens and the earth' and the name Almighty.",
+   "checked": true
   },
   "43:48|45:9": {
    "keep": false,
-   "why": "Only 'signs' and 'punishment'; different subjects."
+   "why": "Only 'signs' and 'punishment'; different subjects.",
+   "checked": true
   },
   "43:82|45:36": {
    "keep": true,
-   "why": "Same title in praise: Lord of the heavens and the earth."
+   "why": "Same title in praise: Lord of the heavens and the earth.",
+   "checked": true
   },
   "43:84|45:36": {
    "keep": false,
-   "why": "Only 'heaven and earth'; different statements."
+   "why": "Only 'heaven and earth'; different statements.",
+   "checked": true
   },
   "43:84|45:37": {
    "keep": false,
-   "why": "Only 'in the heavens and the earth' and the name Wise."
+   "why": "Only 'in the heavens and the earth' and the name Wise.",
+   "checked": true
   },
   "43:85|45:27": {
    "keep": true,
-   "why": "Same pairing: His is the dominion of the heavens and the earth, and the Hour."
+   "why": "Same pairing: His is the dominion of the heavens and the earth, and the Hour.",
+   "checked": true
   },
   "43:25|47:10": {
    "keep": true,
