@@ -14425,83 +14425,171 @@
   },
   "56:74|69:52": {
    "keep": true,
-   "why": "Same words: so glorify the name of your Lord, the Most Great."
+   "why": "Same words: so glorify the name of your Lord, the Most Great.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: so glorify the name of your Lord, the Most Great."
+   }
   },
   "56:80|69:43": {
    "keep": true,
-   "why": "Same words: a revelation from the Lord of the worlds."
+   "why": "Same words: a revelation from the Lord of the worlds.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: a revelation from the Lord of the worlds."
+   }
   },
   "56:95|69:51": {
    "keep": true,
-   "why": "Same statement: this is the certain truth."
+   "why": "Same statement: this is the certain truth.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: this is the certain truth."
+   }
   },
   "56:96|69:52": {
    "keep": true,
-   "why": "Same words: so glorify the name of your Lord, the Most Great."
+   "why": "Same words: so glorify the name of your Lord, the Most Great.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: so glorify the name of your Lord, the Most Great."
+   }
   },
   "57:1|62:1": {
-   "keep": true,
-   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah, the Almighty, the Wise."
+   "keep": false,
+   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah, the Almighty, the Wise. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same opening: whatever is in the heavens and the earth glorifies Allah, the Almighty, the Wise."
+   }
   },
   "57:21|62:4": {
-   "keep": true,
-   "why": "Same words: that is the bounty of Allah, He gives it to whom He wills."
+   "keep": false,
+   "why": "Same words: that is the bounty of Allah, He gives it to whom He wills. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: that is the bounty of Allah, He gives it to whom He wills."
+   }
   },
   "57:29|62:4": {
-   "keep": true,
-   "why": "Same statement: the bounty is Allah's, He gives it to whom He wills; Allah is of great bounty."
+   "keep": false,
+   "why": "Same statement: the bounty is Allah's, He gives it to whom He wills; Allah is of great bounty. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: the bounty is Allah's, He gives it to whom He wills; Allah is of great bounty."
+   }
   },
   "57:1|64:1": {
    "keep": true,
-   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah."
+   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same opening: whatever is in the heavens and the earth glorifies Allah."
+   }
   },
   "57:2|64:1": {
    "keep": true,
-   "why": "Same full statement: His is the dominion and He is able over all things."
+   "why": "Same full statement: His is the dominion and He is able over all things.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same full statement: His is the dominion and He is able over all things."
+   }
   },
   "57:11|64:17": {
    "keep": true,
-   "why": "Same idea: lend Allah a goodly loan and He will multiply it."
+   "why": "Same idea: lend Allah a goodly loan and He will multiply it.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: lend Allah a goodly loan and He will multiply it."
+   }
   },
   "57:12|64:9": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow, abiding there, the great success."
+   "why": "Same reward: gardens beneath which rivers flow, abiding there, the great success.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: gardens beneath which rivers flow, abiding there, the great success."
+   }
   },
   "57:15|64:10": {
    "keep": true,
-   "why": "Same punishment: the disbelievers' abode is the Fire, a wretched destination."
+   "why": "Same punishment: the disbelievers' abode is the Fire, a wretched destination.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same punishment: the disbelievers' abode is the Fire, a wretched destination."
+   }
   },
   "57:18|64:17": {
    "keep": true,
-   "why": "Same idea: lend Allah a goodly loan and it will be multiplied."
+   "why": "Same idea: lend Allah a goodly loan and it will be multiplied.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: lend Allah a goodly loan and it will be multiplied."
+   }
   },
   "58:15|63:2": {
    "keep": true,
-   "why": "Same verdict on the hypocrites: evil is what they used to do."
+   "why": "Same verdict on the hypocrites: evil is what they used to do.",
+   "checked": true
   },
   "58:16|63:2": {
    "keep": true,
-   "why": "Same words: they took their oaths as a shield and turned from the way of Allah."
+   "why": "Same words: they took their oaths as a shield and turned from the way of Allah.",
+   "checked": true
   },
   "58:17|63:9": {
-   "keep": false,
-   "why": "Only 'wealth and children'; they will not avail the disbelievers vs a warning to believers not to be distracted."
+   "keep": true,
+   "why": "Only 'wealth and children'; they will not avail the disbelievers vs a warning to believers not to be distracted. (owner kept)",
+   "checked": true
   },
   "59:1|64:1": {
    "keep": true,
-   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah."
+   "why": "Same opening: whatever is in the heavens and the earth glorifies Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same opening: whatever is in the heavens and the earth glorifies Allah."
+   }
   },
   "59:15|64:5": {
    "keep": true,
-   "why": "Same words: those before them tasted the bad result of their affair and have a painful punishment."
+   "why": "Same words: those before them tasted the bad result of their affair and have a painful punishment.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: those before them tasted the bad result of their affair and have a painful punishment."
+   }
   },
   "59:18|64:8": {
    "keep": false,
-   "why": "Only the closing 'Allah is aware of what you do'."
+   "why": "Only the closing 'Allah is aware of what you do'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'Allah is aware of what you do'."
+   }
   },
   "59:22|64:18": {
    "keep": true,
-   "why": "Same title: Knower of the unseen and the witnessed."
+   "why": "Same title: Knower of the unseen and the witnessed.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same title: Knower of the unseen and the witnessed."
+   }
   },
   "11:16|27:90": {
    "keep": false,
@@ -22671,7 +22759,12 @@
   },
   "70:35|82:11": {
    "keep": false,
-   "why": "Only the root k-r-m: the honoured in Gardens vs noble recording angels."
+   "why": "Only the root k-r-m: the honoured in Gardens vs noble recording angels.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root k-r-m: the honoured in Gardens vs noble recording angels."
+   }
   },
   "70:26|83:11": {
    "keep": true,
@@ -22727,7 +22820,12 @@
   },
   "73:7|76:26": {
    "keep": true,
-   "why": "Rare pairing of glorifying and long (sabḥan ṭawīlan / sabbiḥhu laylan ṭawīlan) in commands on the Prophet's day and night worship."
+   "why": "Rare pairing of glorifying and long (sabḥan ṭawīlan / sabbiḥhu laylan ṭawīlan) in commands on the Prophet's day and night worship.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare pairing of glorifying and long (sabḥan ṭawīlan / sabbiḥhu laylan ṭawīlan) in commands on the Prophet's day and night worship."
+   }
   },
   "73:14|79:6": {
    "keep": true,
@@ -22747,35 +22845,75 @@
   },
   "74:21|75:23": {
    "keep": false,
-   "why": "Common root: he looked vs faces looking to their Lord."
+   "why": "Common root: he looked vs faces looking to their Lord.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root: he looked vs faces looking to their Lord."
+   }
   },
   "74:22|75:24": {
    "keep": true,
-   "why": "Rare root b-s-r: the denier's scowl and the scowling faces of that Day."
+   "why": "Rare root b-s-r: the denier's scowl and the scowling faces of that Day.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare root b-s-r: the denier's scowl and the scowling faces of that Day."
+   }
   },
   "74:37|75:13": {
    "keep": true,
-   "why": "Same rare pairing of advancing and holding back (q-d-m with a-kh-r) in passages on each soul's account."
+   "why": "Same rare pairing of advancing and holding back (q-d-m with a-kh-r) in passages on each soul's account.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare pairing of advancing and holding back (q-d-m with a-kh-r) in passages on each soul's account."
+   }
   },
   "74:53|75:20": {
    "keep": true,
-   "why": "Same rebuke (kallā bal) on the same fault: no fear of the Hereafter / love of the fleeting."
+   "why": "Same rebuke (kallā bal) on the same fault: no fear of the Hereafter / love of the fleeting.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rebuke (kallā bal) on the same fault: no fear of the Hereafter / love of the fleeting."
+   }
   },
   "74:53|75:21": {
    "keep": true,
-   "why": "Same charge: they disregard the Hereafter."
+   "why": "Same charge: they disregard the Hereafter.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same charge: they disregard the Hereafter."
+   }
   },
   "74:44|76:8": {
    "keep": true,
-   "why": "Contrast: we did not feed the poor vs they feed the poor."
+   "why": "Contrast: we did not feed the poor vs they feed the poor.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast: we did not feed the poor vs they feed the poor."
+   }
   },
   "74:54|76:29": {
    "keep": true,
-   "why": "Same declaration: this is a reminder."
+   "why": "Same declaration: this is a reminder.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same declaration: this is a reminder."
+   }
   },
   "74:55|76:29": {
    "keep": true,
-   "why": "Same close to the reminder: so whoever wills."
+   "why": "Same close to the reminder: so whoever wills.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same close to the reminder: so whoever wills."
+   }
   },
   "74:40|79:41": {
    "keep": false,
@@ -22786,68 +22924,149 @@
    "why": "Common root: people of the Garden asking vs asking about the Hour."
   },
   "74:22|80:1": {
-   "keep": true,
-   "why": "Same rare verb in the same form: ʿabasa followed by a second verb."
+   "keep": false,
+   "why": "Same rare verb in the same form: ʿabasa followed by a second verb. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare verb in the same form: ʿabasa followed by a second verb."
+   }
   },
   "74:48|80:4": {
    "keep": false,
-   "why": "Only the verb benefit: intercession vs a reminder."
+   "why": "Only the verb benefit: intercession vs a reminder.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the verb benefit: intercession vs a reminder."
+   }
   },
   "74:49|80:4": {
    "keep": false,
-   "why": "Common root dh-k-r in different statements."
+   "why": "Common root dh-k-r in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root dh-k-r in different statements."
+   }
   },
   "74:54|80:11": {
    "keep": true,
-   "why": "Same words: no indeed, it is a reminder."
+   "why": "Same words: no indeed, it is a reminder.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: no indeed, it is a reminder."
+   }
   },
   "74:55|80:12": {
    "keep": true,
-   "why": "Identical ayah: so whoever wills will remember it."
+   "why": "Identical ayah: so whoever wills will remember it.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Identical ayah: so whoever wills will remember it."
+   }
   },
   "74:39|81:22": {
    "keep": false,
-   "why": "Common root: companions of the right vs your companion."
+   "why": "Common root: companions of the right vs your companion.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root: companions of the right vs your companion."
+   }
   },
   "74:40|81:22": {
    "keep": false,
-   "why": "Accidental root: Gardens vs madness."
+   "why": "Accidental root: Gardens vs madness.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Accidental root: Gardens vs madness."
+   }
   },
   "74:52|81:10": {
    "keep": true,
-   "why": "Rare pairing: pages spread open (ṣuḥuf, n-sh-r)."
+   "why": "Rare pairing: pages spread open (ṣuḥuf, n-sh-r).",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare pairing: pages spread open (ṣuḥuf, n-sh-r)."
+   }
   },
   "74:55|81:28": {
    "keep": true,
-   "why": "Same construction after the reminder: for whoever wills."
+   "why": "Same construction after the reminder: for whoever wills.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction after the reminder: for whoever wills."
+   }
   },
   "74:56|81:29": {
    "keep": true,
-   "why": "Same clause: only if Allah wills, limiting human will."
+   "why": "Same clause: only if Allah wills, limiting human will.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause: only if Allah wills, limiting human will."
+   }
   },
   "74:26|82:15": {
    "keep": true,
-   "why": "Same image of burning in Hell (ṣ-l-y), the owner's named style."
+   "why": "Same image of burning in Hell (ṣ-l-y), the owner's named style.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same image of burning in Hell (ṣ-l-y), the owner's named style."
+   }
   },
   "74:27|82:17": {
    "keep": true,
-   "why": "Same awe construction: what will make you know what is ..."
+   "why": "Same awe construction: what will make you know what is ...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same awe construction: what will make you know what is ..."
+   }
   },
   "74:37|82:5": {
    "keep": true,
-   "why": "Same rare pairing of advancing and holding back in the setting of each soul's deeds."
+   "why": "Same rare pairing of advancing and holding back in the setting of each soul's deeds.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare pairing of advancing and holding back in the setting of each soul's deeds."
+   }
   },
   "74:46|82:9": {
    "keep": true,
-   "why": "Same charge: denying the Judgment."
+   "why": "Same charge: denying the Judgment.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same charge: denying the Judgment."
+   }
   },
   "74:46|82:17": {
    "keep": false,
-   "why": "Only the name Day of Judgment; denial vs an awe question."
+   "why": "Only the name Day of Judgment; denial vs an awe question.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the name Day of Judgment; denial vs an awe question."
+   }
   },
   "74:46|82:18": {
    "keep": false,
-   "why": "Only the name Day of Judgment; denial vs an awe question."
+   "why": "Only the name Day of Judgment; denial vs an awe question.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the name Day of Judgment; denial vs an awe question."
+   }
   },
   "74:29|85:22": {
    "keep": false,
@@ -22875,19 +23094,39 @@
   },
   "74:9|94:5": {
    "keep": false,
-   "why": "Common root: a hard Day vs ease after hardship."
+   "why": "Common root: a hard Day vs ease after hardship.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root: a hard Day vs ease after hardship."
+   }
   },
   "74:9|94:6": {
    "keep": false,
-   "why": "Common root: a hard Day vs ease after hardship."
+   "why": "Common root: a hard Day vs ease after hardship.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root: a hard Day vs ease after hardship."
+   }
   },
   "74:10|94:5": {
    "keep": false,
-   "why": "Common root y-s-r: a Day not easy vs ease after hardship."
+   "why": "Common root y-s-r: a Day not easy vs ease after hardship.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root y-s-r: a Day not easy vs ease after hardship."
+   }
   },
   "74:10|94:6": {
    "keep": false,
-   "why": "Common root y-s-r: a Day not easy vs ease after hardship."
+   "why": "Common root y-s-r: a Day not easy vs ease after hardship.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Common root y-s-r: a Day not easy vs ease after hardship."
+   }
   },
   "74:46|95:7": {
    "keep": true,
@@ -24169,8 +24408,8 @@
    }
   },
   "56:12|68:34": {
-   "keep": false,
-   "why": "Same description of the reward: Gardens of Bliss. (owner removed)",
+   "keep": true,
+   "why": "Same description of the reward: Gardens of Bliss.",
    "checked": true,
    "draft": {
     "keep": true,
@@ -24187,8 +24426,8 @@
    }
   },
   "56:67|68:27": {
-   "keep": false,
-   "why": "Identical rare clause: nay, we are deprived, said over a ruined harvest. (owner removed)",
+   "keep": true,
+   "why": "Identical rare clause: nay, we are deprived, said over a ruined harvest.",
    "checked": true,
    "draft": {
     "keep": true,
@@ -24196,8 +24435,8 @@
    }
   },
   "56:81|68:9": {
-   "keep": false,
-   "why": "Rare verb in a related setting: being soft and compromising about the message. (owner removed)",
+   "keep": true,
+   "why": "Rare verb in a related setting: being soft and compromising about the message.",
    "checked": true,
    "draft": {
     "keep": true,
@@ -24223,8 +24462,8 @@
    }
   },
   "56:89|68:34": {
-   "keep": false,
-   "why": "Same description of the reward: Gardens of Bliss. (owner removed)",
+   "keep": true,
+   "why": "Same description of the reward: Gardens of Bliss.",
    "checked": true,
    "draft": {
     "keep": true,
@@ -24233,103 +24472,228 @@
   },
   "56:1|69:15": {
    "keep": true,
-   "why": "Same clause and scene: the Event comes to pass."
+   "why": "Same clause and scene: the Event comes to pass.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause and scene: the Event comes to pass."
+   }
   },
   "56:75|69:38": {
    "keep": true,
-   "why": "Same oath form: I do swear by ..."
+   "why": "Same oath form: I do swear by ...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same oath form: I do swear by ..."
+   }
   },
   "56:77|69:40": {
    "keep": true,
-   "why": "Same oath answer: indeed it is a noble Qur'an / the word of a noble messenger."
+   "why": "Same oath answer: indeed it is a noble Qur'an / the word of a noble messenger.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same oath answer: indeed it is a noble Qur'an / the word of a noble messenger."
+   }
   },
   "56:94|69:31": {
    "keep": true,
-   "why": "Same style: burning in Hell (taṣliyatu jaḥīm / al-jaḥīma ṣallūh)."
+   "why": "Same style: burning in Hell (taṣliyatu jaḥīm / al-jaḥīma ṣallūh).",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style: burning in Hell (taṣliyatu jaḥīm / al-jaḥīma ṣallūh)."
+   }
   },
   "56:1|70:1": {
-   "keep": true,
-   "why": "Same theme, opening each surah: the inevitable event that befalls."
+   "keep": false,
+   "why": "Same theme, opening each surah: the inevitable event that befalls. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same theme, opening each surah: the inevitable event that befalls."
+   }
   },
   "56:2|70:2": {
-   "keep": true,
-   "why": "Same construction on that event: nothing can deny it / nothing can avert it."
+   "keep": false,
+   "why": "Same construction on that event: nothing can deny it / nothing can avert it. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction on that event: nothing can deny it / nothing can avert it."
+   }
   },
   "56:12|70:38": {
-   "keep": true,
-   "why": "Same expression: Garden of Bliss, promised and vainly hoped for."
+   "keep": false,
+   "why": "Same expression: Garden of Bliss, promised and vainly hoped for. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same expression: Garden of Bliss, promised and vainly hoped for."
+   }
   },
   "56:56|70:26": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "56:8|74:39": {
-   "keep": true,
-   "why": "Same group in the judgement scene: the companions of the right."
+   "keep": false,
+   "why": "Same group in the judgement scene: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same group in the judgement scene: the companions of the right."
+   }
   },
   "56:27|74:39": {
-   "keep": true,
-   "why": "Same rare expression: the companions of the right."
+   "keep": false,
+   "why": "Same rare expression: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression: the companions of the right."
+   }
   },
   "56:56|74:46": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "56:90|74:39": {
-   "keep": true,
-   "why": "Same rare expression: the companions of the right."
+   "keep": false,
+   "why": "Same rare expression: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression: the companions of the right."
+   }
   },
   "56:91|74:39": {
-   "keep": true,
-   "why": "Same rare expression: the companions of the right."
+   "keep": false,
+   "why": "Same rare expression: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression: the companions of the right."
+   }
   },
   "56:20|77:42": {
-   "keep": true,
-   "why": "Same description of Garden food: fruit, as they choose / desire."
+   "keep": false,
+   "why": "Same description of Garden food: fruit, as they choose / desire. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of Garden food: fruit, as they choose / desire."
+   }
   },
   "56:21|77:42": {
-   "keep": true,
-   "why": "Same description of Garden food: whatever they desire."
+   "keep": false,
+   "why": "Same description of Garden food: whatever they desire. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of Garden food: whatever they desire."
+   }
   },
   "56:49|77:16": {
    "keep": false,
-   "why": "Earlier peoples gathered versus destroyed; different statements."
+   "why": "Earlier peoples gathered versus destroyed; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Earlier peoples gathered versus destroyed; different statements."
+   }
   },
   "56:49|77:17": {
    "keep": false,
-   "why": "Later peoples gathered versus destroyed; different statements."
+   "why": "Later peoples gathered versus destroyed; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Later peoples gathered versus destroyed; different statements."
+   }
   },
   "56:50|77:11": {
-   "keep": true,
-   "why": "Rare root of appointed time in the same Hour setting."
+   "keep": false,
+   "why": "Rare root of appointed time in the same Hour setting. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Rare root of appointed time in the same Hour setting."
+   }
   },
   "56:50|77:12": {
    "keep": false,
-   "why": "Only the word 'day'."
+   "why": "Only the word 'day'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the word 'day'."
+   }
   },
   "56:75|77:7": {
    "keep": false,
-   "why": "Positions of the stars versus the promise occurring; roots coincide only."
+   "why": "Positions of the stars versus the promise occurring; roots coincide only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Positions of the stars versus the promise occurring; roots coincide only."
+   }
   },
   "56:75|77:8": {
    "keep": false,
-   "why": "An oath by the stars versus the stars extinguished; different statements."
+   "why": "An oath by the stars versus the stars extinguished; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "An oath by the stars versus the stars extinguished; different statements."
+   }
   },
   "56:25|78:35": {
    "keep": true,
-   "why": "Same clause about the Garden: they hear no idle talk there, nor ..."
+   "why": "Same clause about the Garden: they hear no idle talk there, nor ...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause about the Garden: they hear no idle talk there, nor ..."
+   }
   },
   "56:44|78:24": {
    "keep": true,
-   "why": "Same description of the Fire: neither cool nor ..., in the same negative pattern."
+   "why": "Same description of the Fire: neither cool nor ..., in the same negative pattern.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of the Fire: neither cool nor ..., in the same negative pattern."
+   }
   },
   "56:54|78:24": {
    "keep": false,
-   "why": "Only the root of drinking; the boiling water falls in the next ayah."
+   "why": "Only the root of drinking; the boiling water falls in the next ayah.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of drinking; the boiling water falls in the next ayah."
+   }
   },
   "56:54|78:25": {
    "keep": true,
-   "why": "Same drink of the people of the Fire: boiling water."
+   "why": "Same drink of the people of the Fire: boiling water.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same drink of the people of the Fire: boiling water."
+   }
   },
   "56:10|79:4": {
    "keep": false,
@@ -24337,39 +24701,84 @@
   },
   "56:56|82:17": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "56:56|82:18": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "56:77|82:11": {
    "keep": false,
-   "why": "A noble Qur'an versus noble scribes; a single common root."
+   "why": "A noble Qur'an versus noble scribes; a single common root.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A noble Qur'an versus noble scribes; a single common root."
+   }
   },
   "56:78|82:11": {
    "keep": false,
-   "why": "A hidden book versus scribes; a shared root only."
+   "why": "A hidden book versus scribes; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A hidden book versus scribes; a shared root only."
+   }
   },
   "56:94|82:15": {
-   "keep": true,
-   "why": "Same style: the burning of Hell, with the same rare verb."
+   "keep": false,
+   "why": "Same style: the burning of Hell, with the same rare verb. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style: the burning of Hell, with the same rare verb."
+   }
   },
   "56:94|82:14": {
    "keep": false,
-   "why": "Only the word Hell."
+   "why": "Only the word Hell.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the word Hell."
+   }
   },
   "56:11|83:21": {
    "keep": true,
-   "why": "Same rare title: al-Muqarrabun, those brought near."
+   "why": "Same rare title: al-Muqarrabun, those brought near.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare title: al-Muqarrabun, those brought near."
+   }
   },
   "56:12|83:22": {
    "keep": true,
-   "why": "Same description of the reward: the righteous in bliss."
+   "why": "Same description of the reward: the righteous in bliss.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of the reward: the righteous in bliss."
+   }
   },
   "56:56|83:11": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "56:90|84:7": {
    "keep": true,
@@ -24384,36 +24793,76 @@
    "why": "Same clause about the Garden: no idle talk is heard there."
   },
   "56:8|90:18": {
-   "keep": true,
-   "why": "Same rare expression: the companions of the right, Ashab al-Maymanah."
+   "keep": false,
+   "why": "Same rare expression: the companions of the right, Ashab al-Maymanah. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression: the companions of the right, Ashab al-Maymanah."
+   }
   },
   "56:9|90:19": {
-   "keep": true,
-   "why": "Same rare expression: the companions of the left, Ashab al-Mash'amah."
+   "keep": false,
+   "why": "Same rare expression: the companions of the left, Ashab al-Mash'amah. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare expression: the companions of the left, Ashab al-Mash'amah."
+   }
   },
   "56:27|90:18": {
-   "keep": true,
-   "why": "Same group: the companions of the right."
+   "keep": false,
+   "why": "Same group: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same group: the companions of the right."
+   }
   },
   "56:90|90:18": {
-   "keep": true,
-   "why": "Same group: the companions of the right."
+   "keep": false,
+   "why": "Same group: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same group: the companions of the right."
+   }
   },
   "56:91|90:18": {
-   "keep": true,
-   "why": "Same group: the companions of the right."
+   "keep": false,
+   "why": "Same group: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same group: the companions of the right."
+   }
   },
   "56:39|92:13": {
    "keep": false,
-   "why": "A company of the earlier peoples versus this life; a shared root only."
+   "why": "A company of the earlier peoples versus this life; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A company of the earlier peoples versus this life; a shared root only."
+   }
   },
   "56:40|92:13": {
    "keep": false,
-   "why": "A company of the later peoples versus the Hereafter; a shared root only."
+   "why": "A company of the later peoples versus the Hereafter; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "A company of the later peoples versus the Hereafter; a shared root only."
+   }
   },
   "56:49|92:13": {
    "keep": false,
-   "why": "Earlier and later peoples versus the two lives; roots coincide only."
+   "why": "Earlier and later peoples versus the two lives; roots coincide only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Earlier and later peoples versus the two lives; roots coincide only."
+   }
   },
   "56:49|93:4": {
    "keep": false,
@@ -24437,7 +24886,12 @@
   },
   "57:12|61:12": {
    "keep": false,
-   "why": "Only the gardens formula and the great triumph; reward formula."
+   "why": "Only the gardens formula and the great triumph; reward formula.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens formula and the great triumph; reward formula."
+   }
   },
   "57:12|65:11": {
    "keep": false,
@@ -24461,7 +24915,12 @@
   },
   "57:12|85:11": {
    "keep": false,
-   "why": "Only the gardens formula and the triumph; reward formula."
+   "why": "Only the gardens formula and the triumph; reward formula.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens formula and the triumph; reward formula."
+   }
   },
   "57:5|86:11": {
    "keep": false,
@@ -24517,7 +24976,12 @@
   },
   "59:9|64:16": {
    "keep": true,
-   "why": "Same clause: whoever is saved from the greed of his soul, those are the successful."
+   "why": "Same clause: whoever is saved from the greed of his soul, those are the successful.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause: whoever is saved from the greed of his soul, those are the successful."
+   }
   },
   "59:20|81:22": {
    "keep": false,
@@ -24548,12 +25012,22 @@
    "why": "Common words on witness and messenger in unrelated statements."
   },
   "64:9|66:8": {
-   "keep": true,
-   "why": "Same promise with the same words: expiating misdeeds and admitting to gardens."
+   "keep": false,
+   "why": "Same promise with the same words: expiating misdeeds and admitting to gardens. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same promise with the same words: expiating misdeeds and admitting to gardens."
+   }
   },
   "64:4|67:13": {
-   "keep": true,
-   "why": "Same idea and closing: Allah knows the secret and the open, Knower of what is in the breasts."
+   "keep": false,
+   "why": "Same idea and closing: Allah knows the secret and the open, Knower of what is in the breasts. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea and closing: Allah knows the secret and the open, Knower of what is in the breasts."
+   }
   },
   "64:17|73:20": {
    "keep": true,
@@ -24597,7 +25071,12 @@
   },
   "68:12|83:12": {
    "keep": true,
-   "why": "Same rare pairing describing the denier: transgressing, sinful."
+   "why": "Same rare pairing describing the denier: transgressing, sinful.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare pairing describing the denier: transgressing, sinful."
+   }
   },
   "68:33|88:24": {
    "keep": true,
@@ -24625,15 +25104,26 @@
   },
   "69:34|74:44": {
    "keep": true,
-   "why": "Same sin of the people of the Fire: not feeding the needy."
+   "why": "Same sin of the people of the Fire: not feeding the needy.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sin of the people of the Fire: not feeding the needy."
+   }
   },
   "69:48|74:54": {
    "keep": true,
-   "why": "Same statement: indeed it is a reminder."
+   "why": "Same statement: indeed it is a reminder.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: indeed it is a reminder."
+   }
   },
   "69:48|74:56": {
-   "keep": false,
-   "why": "Common roots of reminder and piety in different statements."
+   "keep": true,
+   "why": "Common roots of reminder and piety in different statements. (owner kept)",
+   "checked": true
   },
   "69:23|76:14": {
    "keep": true,
@@ -24692,19 +25182,39 @@
   },
   "69:12|84:23": {
    "keep": false,
-   "why": "An ear that retains versus what they conceal; roots coincide only."
+   "why": "An ear that retains versus what they conceal; roots coincide only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "An ear that retains versus what they conceal; roots coincide only."
+   }
   },
   "69:16|84:1": {
    "keep": true,
-   "why": "Same scene: the sky splits apart."
+   "why": "Same scene: the sky splits apart.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: the sky splits apart."
+   }
   },
   "69:25|84:7": {
-   "keep": true,
-   "why": "Contrast in the same frame: given his book in his left hand / right hand."
+   "keep": false,
+   "why": "Contrast in the same frame: given his book in his left hand / right hand. (curated: left hand pairs with 84:10)",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Contrast in the same frame: given his book in his left hand / right hand. (curated: left hand pairs with 84:10)"
+   }
   },
   "69:38|84:16": {
    "keep": true,
-   "why": "Same oath form: I do swear by ..."
+   "why": "Same oath form: I do swear by ...",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same oath form: I do swear by ..."
+   }
   },
   "69:38|90:1": {
    "keep": true,
@@ -24760,15 +25270,30 @@
   },
   "70:26|82:17": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "70:26|82:18": {
    "keep": false,
-   "why": "Only 'the Day of Judgement' in different statements."
+   "why": "Only 'the Day of Judgement' in different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the Day of Judgement' in different statements."
+   }
   },
   "70:34|82:10": {
    "keep": false,
-   "why": "Guarding prayers versus guardian angels; a shared root only."
+   "why": "Guarding prayers versus guardian angels; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Guarding prayers versus guardian angels; a shared root only."
+   }
   },
   "69:21|101:7": {
    "keep": true,
@@ -24939,52 +25464,112 @@
    }
   },
   "56:38|74:39": {
-   "keep": true,
-   "why": "Same rare group named in the same words: the companions of the right."
+   "keep": false,
+   "why": "Same rare group named in the same words: the companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare group named in the same words: the companions of the right."
+   }
   },
   "56:38|90:18": {
-   "keep": true,
-   "why": "Same group of the saved, named from one root: companions of the right."
+   "keep": false,
+   "why": "Same group of the saved, named from one root: companions of the right. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same group of the saved, named from one root: companions of the right."
+   }
   },
   "56:94|83:16": {
    "keep": true,
-   "why": "Same rare construction on burning in Hellfire: tasliyatu jahim / salu al-jahim."
+   "why": "Same rare construction on burning in Hellfire: tasliyatu jahim / salu al-jahim.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same rare construction on burning in Hellfire: tasliyatu jahim / salu al-jahim."
+   }
   },
   "64:1|67:1": {
-   "keep": true,
-   "why": "Same style of surah opening: glorifying Allah, His the dominion, and He has power over all things."
+   "keep": false,
+   "why": "Same style of surah opening: glorifying Allah, His the dominion, and He has power over all things. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same style of surah opening: glorifying Allah, His the dominion, and He has power over all things."
+   }
   },
   "64:10|66:9": {
    "keep": false,
-   "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive."
+   "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'wretched is the destination'; a statement on deniers vs a command to strive."
+   }
   },
   "64:10|67:6": {
-   "keep": true,
-   "why": "Same statement: those who disbelieve have the Fire, and wretched is the destination."
+   "keep": false,
+   "why": "Same statement: those who disbelieve have the Fire, and wretched is the destination. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: those who disbelieve have the Fire, and wretched is the destination."
+   }
   },
   "64:14|66:1": {
    "keep": false,
-   "why": "Only spouses and the closing divine names; different subjects."
+   "why": "Only spouses and the closing divine names; different subjects.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only spouses and the closing divine names; different subjects."
+   }
   },
   "68:15|83:13": {
    "keep": true,
-   "why": "Identical ayah: the denier's reply, legends of the ancients."
+   "why": "Identical ayah: the denier's reply, legends of the ancients.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Identical ayah: the denier's reply, legends of the ancients."
+   }
   },
   "68:26|83:32": {
    "keep": true,
-   "why": "Same construction on seeing: they said we are astray / these are astray, turned on themselves and on the believers."
+   "why": "Same construction on seeing: they said we are astray / these are astray, turned on themselves and on the believers.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction on seeing: they said we are astray / these are astray, turned on themselves and on the believers."
+   }
   },
   "69:19|84:7": {
    "keep": true,
-   "why": "Same scene in the same words: as for him given his book in his right hand."
+   "why": "Same scene in the same words: as for him given his book in his right hand.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene in the same words: as for him given his book in his right hand."
+   }
   },
   "73:8|76:25": {
    "keep": true,
-   "why": "Same command in the same words: remember the name of your Lord."
+   "why": "Same command in the same words: remember the name of your Lord.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same command in the same words: remember the name of your Lord."
+   }
   },
   "73:19|76:29": {
    "keep": true,
-   "why": "Identical ayah: this is a reminder, so whoever wills takes a way to his Lord."
+   "why": "Identical ayah: this is a reminder, so whoever wills takes a way to his Lord.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Identical ayah: this is a reminder, so whoever wills takes a way to his Lord."
+   }
   },
   "79:38|87:16": {
    "keep": true,
@@ -25154,24 +25739,190 @@
    }
   },
   "57:1|61:1": {
-   "keep": true,
-   "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise."
+   "keep": false,
+   "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Near-identical opening: all in the heavens and earth glorify Allah, the Mighty, the Wise."
+   }
   },
   "57:8|61:11": {
    "keep": false,
-   "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves."
+   "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only believing in Allah and His Messenger; a rebuke for not believing vs the trade that saves."
+   }
   },
   "57:2|85:9": {
    "keep": false,
-   "why": "Only the formula of His dominion of the heavens and earth and 'over all things'."
+   "why": "Only the formula of His dominion of the heavens and earth and 'over all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the formula of His dominion of the heavens and earth and 'over all things'."
+   }
   },
   "57:5|85:9": {
    "keep": false,
-   "why": "Only the formula of His dominion of the heavens and earth."
+   "why": "Only the formula of His dominion of the heavens and earth.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the formula of His dominion of the heavens and earth."
+   }
   },
   "82:6|89:15": {
    "keep": true,
    "why": "Same subject: man and his Lord's generosity, deceived by it or misreading it."
+  },
+  "69:13|74:8": {
+   "keep": true,
+   "why": "Same frame for the Trumpet: فإذا + passive verb + في + the instrument. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same frame for the Trumpet: فإذا + passive verb + في + the instrument. (curated)"
+   }
+  },
+  "69:15|74:9": {
+   "keep": true,
+   "why": "The same word follows the blast: يومئذ. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The same word follows the blast: يومئذ. (curated)"
+   }
+  },
+  "69:40|74:24": {
+   "keep": true,
+   "why": "What the Quran is, against what the denier said it is: إنه / إن هذا. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "What the Quran is, against what the denier said it is: إنه / إن هذا. (curated)"
+   }
+  },
+  "69:40|74:25": {
+   "keep": true,
+   "why": "Whose word it is: لقول رسول كريم / قول البشر. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Whose word it is: لقول رسول كريم / قول البشر. (curated)"
+   }
+  },
+  "69:41|74:25": {
+   "keep": true,
+   "why": "Whose word it is not: بقول شاعر / قول البشر. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Whose word it is not: بقول شاعر / قول البشر. (curated)"
+   }
+  },
+  "69:14|84:3": {
+   "keep": true,
+   "why": "The earth on the Day. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The earth on the Day. (curated)"
+   }
+  },
+  "69:20|84:6": {
+   "keep": true,
+   "why": "Meeting the reckoning, meeting one's Lord: ملاق / فملاقيه. (curated)",
+   "alone": true,
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Meeting the reckoning, meeting one's Lord: ملاق / فملاقيه. (curated)"
+   }
+  },
+  "69:20|84:8": {
+   "keep": true,
+   "why": "The reckoning: حسابيه / يحاسب حسابا. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The reckoning: حسابيه / يحاسب حسابا. (curated)"
+   }
+  },
+  "69:25|84:10": {
+   "keep": true,
+   "why": "The book given in the other hand: وأما من أوتي كتابه. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The book given in the other hand: وأما من أوتي كتابه. (curated)"
+   }
+  },
+  "69:31|84:12": {
+   "keep": true,
+   "why": "Burning in the Fire: صلوه / يصلى. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Burning in the Fire: صلوه / يصلى. (curated)"
+   }
+  },
+  "69:33|84:13": {
+   "keep": true,
+   "why": "The reason given for the punishment: إنه كان. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The reason given for the punishment: إنه كان. (curated)"
+   }
+  },
+  "69:41|84:20": {
+   "keep": true,
+   "why": "Those who do not believe: تؤمنون / يؤمنون. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Those who do not believe: تؤمنون / يؤمنون. (curated)"
+   }
+  },
+  "69:49|84:22": {
+   "keep": true,
+   "why": "The deniers: مكذبين / يكذبون. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "The deniers: مكذبين / يكذبون. (curated)"
+   }
+  },
+  "69:49|84:23": {
+   "keep": true,
+   "why": "God's knowledge of them: نعلم / أعلم. (curated)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "God's knowledge of them: نعلم / أعلم. (curated)"
+   }
+  },
+  "69:20|84:14": {
+   "keep": true,
+   "why": "Contrast: the believer thought he would meet his reckoning, the denier thought he would not return: ظننت / ظن. (curated)",
+   "alone": true,
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast: the believer thought he would meet his reckoning, the denier thought he would not return: ظننت / ظن. (curated)"
+   }
+  },
+  "74:26|82:14": {
+   "keep": true,
+   "why": "Fire named for the wicked: سقر / جحيم. (owner added)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Fire named for the wicked: سقر / جحيم. (owner added)"
+   }
   }
  }
 }
