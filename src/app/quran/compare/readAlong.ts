@@ -23,13 +23,14 @@ export function readPlan(card: PairCard): ReadStep[] {
 export const ayahStarts = (plan: ReadStep[]) => plan.flatMap((step, i) => (i === 0 || plan[i - 1].last ? [i] : []));
 
 export const READ_SPEEDS = [1, 1.5, 2, 0.5];
-// Milliseconds at 1×: a word, the longer stay on a word with a partner, the pause at an ayah's end.
-const WORD = 380;
-const MATCH = 650;
-const AYAH_END = 900;
+// Milliseconds at 1×: a word, the longer stay on a word with a partner, the pause at an ayah's end. 1× is a calm reading pace.
+const WORD = 760;
+const MATCH = 1300;
+const AYAH_END = 1800;
 export const stepTime = (step: ReadStep, speed: number) => ((step.link ? MATCH : WORD) + (step.last ? AYAH_END : 0)) / speed;
 
-const SPEED_KEY = 'compare-read-speed';
+// Renamed when 1× was slowed to half, so a speed saved before reads at the new pace.
+const SPEED_KEY = 'compare-read-pace';
 type Shared = { active: string | null; speed: number };
 let shared: Shared = { active: null, speed: 1 };
 const listeners = new Set<() => void>();
