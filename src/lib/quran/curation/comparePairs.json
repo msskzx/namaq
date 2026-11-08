@@ -21922,27 +21922,57 @@
   },
   "51:5|70:26": {
    "keep": false,
-   "why": "Only the root of truth."
+   "why": "Only the root of truth.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of truth."
+   }
   },
   "51:6|70:26": {
    "keep": false,
-   "why": "Only the word for Judgement."
+   "why": "Only the word for Judgement.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the word for Judgement."
+   }
   },
   "51:12|70:25": {
    "keep": false,
-   "why": "Only the root of asking; deniers vs the beggar."
+   "why": "Only the root of asking; deniers vs the beggar.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of asking; deniers vs the beggar."
+   }
   },
   "51:12|70:26": {
    "keep": false,
-   "why": "Only Day of Judgement, a common name."
+   "why": "Only Day of Judgement, a common name.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only Day of Judgement, a common name."
+   }
   },
   "51:19|70:24": {
-   "keep": true,
-   "why": "Same clause: in their wealth is a due."
+   "keep": false,
+   "why": "Same clause: in their wealth is a due. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause: in their wealth is a due."
+   }
   },
   "51:19|70:25": {
-   "keep": true,
-   "why": "Same words: for the beggar and the deprived."
+   "keep": false,
+   "why": "Same words: for the beggar and the deprived. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: for the beggar and the deprived."
+   }
   },
   "51:2|71:13": {
    "keep": false,
