@@ -23715,19 +23715,39 @@
   },
   "53:1|77:8": {
    "keep": false,
-   "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements."
+   "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "An oath by the setting star versus the stars extinguished at the Hour; different statements."
+   }
   },
   "53:31|77:44": {
    "keep": false,
-   "why": "Only the general wording of rewarding those who do good."
+   "why": "Only the general wording of rewarding those who do good.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the general wording of rewarding those who do good."
+   }
   },
   "53:44|77:26": {
    "keep": false,
-   "why": "Causing death and life versus the earth holding the living and dead; different points."
+   "why": "Causing death and life versus the earth holding the living and dead; different points.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Causing death and life versus the earth holding the living and dead; different points."
+   }
   },
   "53:50|77:16": {
-   "keep": true,
-   "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'."
+   "keep": false,
+   "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: Allah destroyed the former peoples, with the same word for 'former'."
+   }
   },
   "53:45|78:8": {
    "keep": true,
