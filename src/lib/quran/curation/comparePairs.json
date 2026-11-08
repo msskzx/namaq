@@ -8150,31 +8150,38 @@
   },
   "3:11|40:22": {
    "keep": true,
-   "why": "Peoples who denied, so Allah seized them; severe in punishment."
+   "why": "Peoples who denied, so Allah seized them; severe in punishment.",
+   "checked": true
   },
   "3:16|40:49": {
    "keep": false,
-   "why": "Shared plea wording only; believers' prayer versus the people of the Fire."
+   "why": "Shared plea wording only; believers' prayer versus the people of the Fire.",
+   "checked": true
   },
   "3:25|40:17": {
    "keep": true,
-   "why": "Every soul repaid for what it earned, and no wrong that Day."
+   "why": "Every soul repaid for what it earned, and no wrong that Day.",
+   "checked": true
   },
   "3:95|40:84": {
    "keep": false,
-   "why": "Shared 'polytheists' only; different scenes."
+   "why": "Shared 'polytheists' only; different scenes.",
+   "checked": true
   },
   "3:137|40:82": {
    "keep": true,
-   "why": "Travel in the land and see how was the end."
+   "why": "Travel in the land and see how was the end.",
+   "checked": true
   },
   "3:161|40:17": {
    "keep": true,
-   "why": "Every soul repaid for what it earned, without wrong."
+   "why": "Every soul repaid for what it earned, without wrong.",
+   "checked": true
   },
   "3:196|40:4": {
    "keep": true,
-   "why": "Do not be deceived by the disbelievers' movement in the lands."
+   "why": "Do not be deceived by the disbelievers' movement in the lands.",
+   "checked": true
   },
   "3:3|41:42": {
    "keep": false,
