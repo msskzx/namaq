@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Funnel, Link2, RotateCcw, Send, X } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Link2, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { isCompareBookmark } from '@/lib/compareBookmarks';
 import Button from '@/components/common/Button';
