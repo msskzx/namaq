@@ -22385,20 +22385,40 @@
    "why": "Only the root of favour."
   },
   "52:11|83:10": {
-   "keep": true,
-   "why": "Same refrain: woe that Day to the deniers."
+   "keep": false,
+   "why": "Same refrain: woe that Day to the deniers. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same refrain: woe that Day to the deniers."
+   }
   },
   "52:14|83:17": {
-   "keep": true,
-   "why": "Same words said to the deniers: this is what you used to deny."
+   "keep": false,
+   "why": "Same words said to the deniers: this is what you used to deny. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words said to the deniers: this is what you used to deny."
+   }
   },
   "52:28|83:22": {
    "keep": false,
-   "why": "Only the root of righteousness; a divine name vs the righteous."
+   "why": "Only the root of righteousness; a divine name vs the righteous.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of righteousness; a divine name vs the righteous."
+   }
   },
   "52:29|83:22": {
    "keep": false,
-   "why": "Only the root of favour."
+   "why": "Only the root of favour.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the root of favour."
+   }
   },
   "52:42|86:17": {
    "keep": false,
