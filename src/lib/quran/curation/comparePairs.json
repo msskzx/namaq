@@ -13534,35 +13534,75 @@
   },
   "42:3|46:2": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:9|46:33": {
    "keep": true,
-   "why": "Same idea: He gives life to the dead and is able over all things."
+   "why": "Same idea: He gives life to the dead and is able over all things.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: He gives life to the dead and is able over all things."
+   }
   },
   "42:12|46:33": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and 'all things'; provision vs reviving the dead."
+   "why": "Only 'the heavens and the earth' and 'all things'; provision vs reviving the dead.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and 'all things'; provision vs reviving the dead."
+   }
   },
   "42:17|46:2": {
    "keep": true,
-   "why": "Same idea: the Book sent down from Allah."
+   "why": "Same idea: the Book sent down from Allah.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: the Book sent down from Allah."
+   }
   },
   "42:29|46:33": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth and 'able'; gathering creatures vs reviving the dead."
+   "why": "Only creation of the heavens and the earth and 'able'; gathering creatures vs reviving the dead.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only creation of the heavens and the earth and 'able'; gathering creatures vs reviving the dead."
+   }
   },
   "42:31|46:32": {
    "keep": true,
-   "why": "Same clause: you cannot escape in the earth and have no protector besides Him."
+   "why": "Same clause: you cannot escape in the earth and have no protector besides Him.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same clause: you cannot escape in the earth and have no protector besides Him."
+   }
   },
   "42:46|46:28": {
    "keep": true,
-   "why": "Same idea: they had no protectors besides Allah to help them."
+   "why": "Same idea: they had no protectors besides Allah to help them.",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same idea: they had no protectors besides Allah to help them."
+   }
   },
   "42:49|46:33": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and creation; giving children vs reviving the dead."
+   "why": "Only 'the heavens and the earth' and creation; giving children vs reviving the dead.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and creation; giving children vs reviving the dead."
+   }
   },
   "42:3|48:7": {
    "keep": false,
