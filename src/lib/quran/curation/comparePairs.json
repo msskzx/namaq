@@ -23976,15 +23976,30 @@
   },
   "55:7|88:13": {
    "keep": false,
-   "why": "The raised sky versus raised couches; a shared root only."
+   "why": "The raised sky versus raised couches; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "The raised sky versus raised couches; a shared root only."
+   }
   },
   "55:7|88:14": {
    "keep": false,
-   "why": "Setting the balance versus cups set out; a shared root only."
+   "why": "Setting the balance versus cups set out; a shared root only.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Setting the balance versus cups set out; a shared root only."
+   }
   },
   "55:7|88:18": {
-   "keep": true,
-   "why": "Same image: the sky, and how it was raised."
+   "keep": false,
+   "why": "Same image: the sky, and how it was raised. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same image: the sky, and how it was raised."
+   }
   },
   "55:3|90:4": {
    "keep": true,
@@ -24980,8 +24995,13 @@
    }
   },
   "55:50|88:12": {
-   "keep": true,
-   "why": "Same description of Paradise: a flowing spring in it."
+   "keep": false,
+   "why": "Same description of Paradise: a flowing spring in it. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same description of Paradise: a flowing spring in it."
+   }
   },
   "57:1|61:1": {
    "keep": true,
