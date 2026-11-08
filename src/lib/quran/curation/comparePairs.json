@@ -7770,20 +7770,24 @@
    "checked": true
   },
   "3:16|23:109": {
-   "keep": true,
-   "why": "Believers' prayer: our Lord, we have believed, so forgive us."
+   "keep": false,
+   "why": "Only the believers' prayer 'our Lord, we have believed, forgive us' (owner removed).",
+   "checked": true
   },
   "3:94|23:38": {
-   "keep": true,
-   "why": "Inventing a lie against Allah."
+   "keep": false,
+   "why": "Only inventing a lie against Allah (owner removed).",
+   "checked": true
   },
   "3:169|23:117": {
    "keep": false,
-   "why": "Shared 'with their Lord' only; different subjects."
+   "why": "Shared 'with their Lord' only; different subjects.",
+   "checked": true
   },
   "3:189|23:18": {
    "keep": false,
-   "why": "Shared common words only; different subjects."
+   "why": "Shared common words only; different subjects.",
+   "checked": true
   },
   "3:29|25:2": {
    "keep": false,
