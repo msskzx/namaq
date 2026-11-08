@@ -21860,8 +21860,13 @@
    "why": "Contrast: signs in the earth for those certain / they have no certainty about the earth."
   },
   "51:15|54:54": {
-   "keep": true,
-   "why": "Same frame: indeed the pious are in gardens and..."
+   "keep": false,
+   "why": "Same frame: indeed the pious are in gardens and... (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same frame: indeed the pious are in gardens and..."
+   }
   },
   "51:56|55:3": {
    "keep": false,
@@ -24110,8 +24115,13 @@
    "why": "Only the Lord of heaven and earth; an oath vs a title leading to no one daring to speak."
   },
   "51:49|54:49": {
-   "keep": true,
-   "why": "Same construction on creation: every thing We created, in pairs / by measure."
+   "keep": false,
+   "why": "Same construction on creation: every thing We created, in pairs / by measure. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same construction on creation: every thing We created, in pairs / by measure."
+   }
   },
   "51:50|67:26": {
    "keep": true,
@@ -24122,8 +24132,13 @@
    "why": "Same declaration of the Messenger's role: I am only a clear warner."
   },
   "51:52|54:9": {
-   "keep": true,
-   "why": "Same reply of the deniers to earlier messengers: they called him mad."
+   "keep": false,
+   "why": "Same reply of the deniers to earlier messengers: they called him mad. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reply of the deniers to earlier messengers: they called him mad."
+   }
   },
   "52:16|56:24": {
    "keep": true,
