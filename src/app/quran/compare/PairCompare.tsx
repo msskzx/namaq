@@ -92,7 +92,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
   const reset = ar ? 'إعادة ضبط' : 'Reset';
   return <form aria-label={ar ? 'تصفية' : 'Filter'} className="flex flex-col gap-2" onSubmit={event => { event.preventDefault(); if (!invalid) router.push(pairHref(a, b, review, todo, scopeOf(draft))); }}>
     <ScopeFields draft={draft} onChange={setDraft} range={scope?.unit === 'juz' ? scope : null} allSurahs={allSurahs} />
-    {children}
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">{children}</div>
     <div className="flex gap-2">
       <Button type="submit" size="sm" variant="primary" className="flex-1" disabled={invalid}><Check size={16} aria-hidden />{apply}</Button>
       {(scope || todo || savedOnly) && <Button size="sm" variant="neutral" onClick={clear}><RotateCcw size={16} aria-hidden />{reset}</Button>}
