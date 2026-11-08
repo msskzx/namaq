@@ -259,7 +259,7 @@ export default function ReadVideo({ card, plan, speed, title, label, ar, onClose
   const share = async () => {
     if (!video) return;
     if (navigator.canShare?.({ files: [video] })) {
-      try { await navigator.share({ files: [video], title: document.title }); } catch {}
+      try { await navigator.share({ files: [video], title }); } catch {}
       return;
     }
     save();
