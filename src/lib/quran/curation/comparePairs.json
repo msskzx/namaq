@@ -21040,12 +21040,14 @@
    "checked": true
   },
   "44:51|68:34": {
-   "keep": true,
-   "why": "Same frame on the reward of the pious."
+   "keep": false,
+   "why": "Same frame on the reward of the pious. (owner removed)",
+   "checked": true
   },
   "44:52|68:34": {
    "keep": false,
-   "why": "Only the word gardens."
+   "why": "Only the word gardens.",
+   "checked": true
   },
   "44:8|77:26": {
    "keep": false,
@@ -23712,6 +23714,11 @@
    "checked": true
   },
   "44:29|48:7": {
+   "keep": false,
+   "why": "Dropped with the page (owner removed)",
+   "checked": true
+  },
+  "44:36|68:41": {
    "keep": false,
    "why": "Dropped with the page (owner removed)",
    "checked": true
