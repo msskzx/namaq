@@ -13757,15 +13757,18 @@
   },
   "44:7|78:37": {
    "keep": true,
-   "why": "Same title: Lord of the heavens and the earth and what is between them."
+   "why": "Same title: Lord of the heavens and the earth and what is between them.",
+   "checked": true
   },
   "44:38|78:37": {
    "keep": false,
-   "why": "Only 'the heavens and the earth and what is between them'; not created in play vs a divine title."
+   "why": "Only 'the heavens and the earth and what is between them'; not created in play vs a divine title.",
+   "checked": true
   },
   "44:40|78:17": {
    "keep": true,
-   "why": "Same statement: the Day of Decision is an appointed time."
+   "why": "Same statement: the Day of Decision is an appointed time.",
+   "checked": true
   },
   "45:2|46:2": {
    "keep": true,
@@ -21051,19 +21054,23 @@
   },
   "44:8|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death."
+   "why": "Only the roots of life and death.",
+   "checked": true
   },
   "44:40|77:13": {
    "keep": true,
-   "why": "Same name of the Hour: the Day of Sorting."
+   "why": "Same name of the Hour: the Day of Sorting.",
+   "checked": true
   },
   "44:51|77:41": {
    "keep": true,
-   "why": "Same frame: indeed the pious will be in..."
+   "why": "Same frame: indeed the pious will be in...",
+   "checked": true
   },
   "44:52|77:41": {
    "keep": true,
-   "why": "Same description of the pious: in ... and springs."
+   "why": "Same description of the pious: in ... and springs.",
+   "checked": true
   },
   "44:35|80:21": {
    "keep": false,
@@ -23542,7 +23549,8 @@
   },
   "44:40|77:38": {
    "keep": true,
-   "why": "Same scene: the Day of Decision on which all are gathered."
+   "why": "Same scene: the Day of Decision on which all are gathered.",
+   "checked": true
   },
   "45:11|51:37": {
    "keep": false,
