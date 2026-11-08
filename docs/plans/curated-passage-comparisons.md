@@ -34,5 +34,6 @@ Distillate namaq/0021 informs keeping the old entry points reachable when changi
 In this order, agreed with the owner on 2026-11-07:
 
 1. Finish the verdict review of every pair in `src/lib/quran/curation/comparePairs.json`.
-2. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
-3. Animation on the compare page (what animates to be decided with the owner).
+2. One ayah against several far ones (10:72 with 26:109, 127, 145, 164, 180) becomes one card. The many side stacks all its ayat, muted except the selected one, which starts as the first. Selecting another ayah moves the word marks to that pairing. One level only, range cards take their pairs first, verdicts stay per ayah pair.
+3. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
+4. Animation on the compare page (what animates to be decided with the owner).

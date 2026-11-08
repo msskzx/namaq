@@ -3365,79 +3365,98 @@
   },
   "3:23|24:48": {
    "keep": true,
-   "why": "Same scene: they are called to Allah('s Book) to judge between them, and a party of them turns away."
+   "why": "Same scene: they are called to Allah('s Book) to judge between them, and a party of them turns away.",
+   "checked": true
   },
   "3:31|24:22": {
-   "keep": true,
-   "why": "Same link: love and Allah forgiving you; Allah is Forgiving, Merciful."
+   "keep": false,
+   "why": "Only forgiveness and the closing 'Forgiving, Merciful'; different subjects (owner removed).",
+   "checked": true
   },
   "3:32|24:54": {
    "keep": true,
-   "why": "Same command: say, obey Allah and the Messenger; if you turn away …"
+   "why": "Same command: say, obey Allah and the Messenger; if you turn away …",
+   "checked": true
   },
   "3:89|24:5": {
    "keep": true,
-   "why": "Identical: except those who repent after that and reform; Allah is Forgiving, Merciful."
+   "why": "Identical: except those who repent after that and reform; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "3:132|24:56": {
-   "keep": true,
-   "why": "Same command: obey the Messenger so that you may receive mercy."
+   "keep": false,
+   "why": "Only 'obey ... the Messenger, that you may receive mercy'; a common command (owner removed).",
+   "checked": true
   },
   "3:138|24:34": {
    "keep": true,
-   "why": "Same phrase: an admonition for the righteous."
+   "why": "Same phrase: an admonition for the righteous.",
+   "checked": true
   },
   "3:6|24:10": {
    "keep": false,
-   "why": "Only 'Wise'."
+   "why": "Only 'Wise'.",
+   "checked": true
   },
   "3:29|24:41": {
    "keep": false,
-   "why": "Only Allah's knowledge of the heavens and the earth."
+   "why": "Only Allah's knowledge of the heavens and the earth.",
+   "checked": true
   },
   "3:29|24:64": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'all things'."
+   "why": "Only the heavens-and-earth formula and 'all things'.",
+   "checked": true
   },
   "3:32|24:47": {
    "keep": false,
-   "why": "Only obeying and turning away; different points."
+   "why": "Only obeying and turning away; different points.",
+   "checked": true
   },
   "3:32|24:52": {
    "keep": false,
-   "why": "Only the common 'obey Allah and His Messenger'."
+   "why": "Only the common 'obey Allah and His Messenger'.",
+   "checked": true
   },
   "3:51|24:46": {
    "keep": false,
-   "why": "Only 'a straight path'."
+   "why": "Only 'a straight path'.",
+   "checked": true
   },
   "3:100|24:47": {
    "keep": false,
-   "why": "Only 'a party', obeying and belief; different points."
+   "why": "Only 'a party', obeying and belief; different points.",
+   "checked": true
   },
   "3:101|24:46": {
    "keep": false,
-   "why": "Only the formula 'guided to a straight path'."
+   "why": "Only the formula 'guided to a straight path'.",
+   "checked": true
   },
   "3:132|24:52": {
    "keep": false,
-   "why": "Only the common 'obey Allah and His Messenger'."
+   "why": "Only the common 'obey Allah and His Messenger'.",
+   "checked": true
   },
   "3:177|24:19": {
    "keep": false,
-   "why": "Only 'those who … for them is a painful punishment'."
+   "why": "Only 'those who … for them is a painful punishment'.",
+   "checked": true
   },
   "3:189|24:41": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'.",
+   "checked": true
   },
   "3:189|24:42": {
    "keep": false,
-   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'."
+   "why": "Only the formula 'to Allah belongs the dominion of the heavens and the earth'.",
+   "checked": true
   },
   "3:189|24:64": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and 'all things'."
+   "why": "Only the heavens-and-earth formula and 'all things'.",
+   "checked": true
   },
   "4:13|48:5": {
    "keep": true,
@@ -3889,71 +3908,88 @@
   },
   "3:27|22:61": {
    "keep": true,
-   "why": "Same sign: He merges the night into the day and the day into the night."
+   "why": "Same sign: He merges the night into the day and the day into the night.",
+   "checked": true
   },
   "3:55|22:69": {
    "keep": true,
-   "why": "Same sentence: (Allah) will judge between you on the Day of Resurrection concerning what you used to differ over."
+   "why": "Same sentence: (Allah) will judge between you on the Day of Resurrection concerning what you used to differ over.",
+   "checked": true
   },
   "3:109|22:76": {
    "keep": true,
-   "why": "Same ending: to Allah all matters are returned."
+   "why": "Same ending: to Allah all matters are returned.",
+   "checked": true
   },
   "3:157|22:58": {
    "keep": true,
-   "why": "Same subject: those killed or who died in the cause of Allah, and what Allah gives them is better."
+   "why": "Same subject: those killed or who died in the cause of Allah, and what Allah gives them is better.",
+   "checked": true
   },
   "3:169|22:58": {
-   "keep": true,
-   "why": "Same subject: those killed in the cause of Allah are provided for."
+   "keep": false,
+   "why": "Only those killed in the way of Allah and provision; different statements (owner removed).",
+   "checked": true
   },
   "3:182|22:10": {
    "keep": true,
-   "why": "Same sentence: that is for what your hands sent ahead, and Allah is never unjust to His servants."
+   "why": "Same sentence: that is for what your hands sent ahead, and Allah is never unjust to His servants.",
+   "checked": true
   },
   "3:198|22:14": {
    "keep": true,
-   "why": "Same reward: gardens beneath which rivers flow."
+   "why": "Same reward: gardens beneath which rivers flow.",
+   "checked": true
   },
   "3:9|22:69": {
    "keep": false,
-   "why": "Only 'the Day … in it'."
+   "why": "Only 'the Day … in it'.",
+   "checked": true
   },
   "3:29|22:70": {
    "keep": false,
-   "why": "Only 'Allah knows what is in the heavens and the earth'."
+   "why": "Only 'Allah knows what is in the heavens and the earth'.",
+   "checked": true
   },
   "3:32|22:38": {
    "keep": false,
-   "why": "Only the formula 'Allah does not love …'."
+   "why": "Only the formula 'Allah does not love …'.",
+   "checked": true
   },
   "3:57|22:38": {
    "keep": false,
-   "why": "Only believers and 'Allah does not love …'."
+   "why": "Only believers and 'Allah does not love …'.",
+   "checked": true
   },
   "3:57|22:50": {
    "keep": false,
-   "why": "Only the common formula 'those who believe and do righteous deeds'."
+   "why": "Only the common formula 'those who believe and do righteous deeds'.",
+   "checked": true
   },
   "3:87|22:75": {
    "keep": false,
-   "why": "Only 'angels and people'."
+   "why": "Only 'angels and people'.",
+   "checked": true
   },
   "3:102|22:6": {
    "keep": false,
-   "why": "Only scattered words."
+   "why": "Only scattered words.",
+   "checked": true
   },
   "3:108|22:16": {
    "keep": false,
-   "why": "Only 'signs' and 'Allah wills'."
+   "why": "Only 'signs' and 'Allah wills'.",
+   "checked": true
   },
   "3:142|22:59": {
    "keep": false,
-   "why": "Only entering and knowing."
+   "why": "Only entering and knowing.",
+   "checked": true
   },
   "3:189|22:6": {
    "keep": false,
-   "why": "Only the closing 'Allah has power over all things'."
+   "why": "Only the closing 'Allah has power over all things'.",
+   "checked": true
   },
   "3:15|9:72": {
    "keep": true,
@@ -7735,35 +7771,43 @@
   },
   "3:29|25:2": {
    "keep": false,
-   "why": "Shared heavens-and-earth phrase only; different subjects."
+   "why": "Shared heavens-and-earth phrase only; different subjects.",
+   "checked": true
   },
   "3:38|25:74": {
    "keep": true,
-   "why": "Prayer for good offspring: grant us from ... offspring."
+   "why": "Prayer for good offspring: grant us from ... offspring.",
+   "checked": true
   },
   "3:57|25:71": {
    "keep": false,
-   "why": "Shared 'did righteous deeds' only; one is reward, the other repentance."
+   "why": "Shared 'did righteous deeds' only; one is reward, the other repentance.",
+   "checked": true
   },
   "3:89|25:70": {
    "keep": true,
-   "why": "Except those who repent and reform; Allah is Forgiving, Merciful."
+   "why": "Except those who repent and reform; Allah is Forgiving, Merciful.",
+   "checked": true
   },
   "3:89|25:71": {
    "keep": true,
-   "why": "Repentance and reform after sin."
+   "why": "Repentance and reform after sin.",
+   "checked": true
   },
   "3:129|25:6": {
    "keep": false,
-   "why": "Shared heavens-and-earth and closing names only; different subjects."
+   "why": "Shared heavens-and-earth and closing names only; different subjects.",
+   "checked": true
   },
   "3:136|25:10": {
    "keep": false,
-   "why": "Shared gardens phrase only; reward of believers versus the disbelievers' demand."
+   "why": "Shared gardens phrase only; reward of believers versus the disbelievers' demand.",
+   "checked": true
   },
   "3:189|25:2": {
-   "keep": true,
-   "why": "His is the dominion of the heavens and the earth."
+   "keep": false,
+   "why": "Only the dominion of the heavens and the earth; different points (owner removed).",
+   "checked": true
   },
   "3:6|27:9": {
    "keep": false,
