@@ -14279,23 +14279,48 @@
   },
   "49:16|64:1": {
    "keep": false,
-   "why": "Only 'what is in the heavens and the earth' and 'all things'."
+   "why": "Only 'what is in the heavens and the earth' and 'all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'what is in the heavens and the earth' and 'all things'."
+   }
   },
   "49:16|64:4": {
-   "keep": true,
-   "why": "Same statement: He knows what is in the heavens and the earth."
+   "keep": false,
+   "why": "Same statement: He knows what is in the heavens and the earth. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He knows what is in the heavens and the earth."
+   }
   },
   "49:16|64:11": {
    "keep": false,
-   "why": "Only the closing 'Allah knows all things'."
+   "why": "Only the closing 'Allah knows all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'Allah knows all things'."
+   }
   },
   "49:18|64:2": {
    "keep": false,
-   "why": "Only the closing 'Allah sees what you do'."
+   "why": "Only the closing 'Allah sees what you do'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'Allah sees what you do'."
+   }
   },
   "49:18|64:4": {
-   "keep": true,
-   "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do."
+   "keep": false,
+   "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same statement: He knows (the unseen of) the heavens and the earth and what you do."
+   }
   },
   "50:38|52:36": {
    "keep": false,
