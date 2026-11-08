@@ -15,14 +15,24 @@ export type ReviewState = 'checked' | 'ask';
 
 type StoredCard = { p: string[]; g?: string; m?: number[][]; n?: 0 | 1; o?: number[][][] };
 /** `npm run quran:compare-cards` writes this from the pairs and verdicts (docs/plans/curated-passage-comparisons.md). */
-const stored = generated as unknown as { listed: SurahPair[]; review: SurahPair[]; states: Record<string, ReviewState>; cards: Record<string, StoredCard[]> };
+const stored = generated as unknown as { listed: SurahPair[]; review: SurahPair[]; cards: Record<string, StoredCard[]> };
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
 
 export const listedPairs = stored.listed;
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = stored.review;
-export const reviewStates = () => stored.states;
+
+/** Where the owner's review of each page stands: every pair checked, or a question waiting. */
+export function reviewStates(): Record<string, ReviewState> {
+  const states: Record<string, ReviewState> = {};
+  for (const { a, b } of reviewPairs) {
+    const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => compareVerdicts[id]);
+    if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
+    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = 'checked';
+  }
+  return states;
+}
 
 const parts = (key: string) => key.split(':').map(Number);
 

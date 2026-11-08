@@ -5,7 +5,7 @@ import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 import { MARK_KINDS } from './markKinds';
-import type { CardSide, PairCard, ReviewState } from './pairCards';
+import type { CardSide, PairCard } from './pairCards';
 import data from './pairs.json';
 import passage from './passagePairs.json';
 
@@ -123,17 +123,6 @@ function pairCards(x: number, y: number, review = false): PairCard[] {
   ].sort((p, q) => order(p.at)[0] - order(q.at)[0] || order(p.at)[1] - order(q.at)[1]).map(entry => entry.build());
 }
 
-/** Where the owner's review of each surah pair stands: every pair checked, or a question waiting. */
-function reviewStates(): Record<string, ReviewState> {
-  const states: Record<string, ReviewState> = {};
-  for (const { a, b } of reviewPairs) {
-    const verdicts = pairsFor(foundBySurah, a, b).map(pair => verdictFor(pair.a, pair.b));
-    if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
-    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = 'checked';
-  }
-  return states;
-}
-
 type Marks = SpreadAyah['marks'];
 
 /** One mark as one number, so the file holds no text: which ayah of the card, which word, what kind, which link. */
@@ -154,5 +143,5 @@ function storedCard(card: PairCard) {
 /** Every card of every page: pair ids, tree link and word marks. The reader joins back the ayah text and the verdicts. */
 export function buildCompareCards() {
   const cards = Object.fromEntries(reviewPairs.map(({ a, b }) => [`${a}:${b}`, pairCards(a, b, true).map(storedCard)]));
-  return { listed: listedPairs, review: reviewPairs, states: reviewStates(), cards };
+  return { listed: listedPairs, review: reviewPairs, cards };
 }
