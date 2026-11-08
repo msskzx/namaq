@@ -7,9 +7,10 @@ import type { SpreadAyah } from '@/components/quran/PageSpread';
 import { compareAnchor } from '@/lib/compareBookmarks';
 import { surahPairHref } from '@/lib/quran/curatedComparisons';
 import data from './pairs.json';
+import passage from './passagePairs.json';
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
-const found = ayahPairs(data.pairs as SimilarAyahPair[], groups);
+const found = ayahPairs([...data.pairs, ...passage.pairs] as SimilarAyahPair[], groups);
 /** Curation runs after the engine: pairs a reader judged to share only vocabulary are left out. */
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);

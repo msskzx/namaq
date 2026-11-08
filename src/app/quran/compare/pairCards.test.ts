@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
+import passage from './passagePairs.json';
 import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {
@@ -101,7 +102,7 @@ describe('compare pair cards', () => {
   });
 
   it('has a verdict only for pairs the engine finds', () => {
-    const found = new Set((data.pairs as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+    const found = new Set(([...data.pairs, ...passage.pairs] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
   });
 
