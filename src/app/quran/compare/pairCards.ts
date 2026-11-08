@@ -26,15 +26,14 @@ export const listedPairs = stored.listed;
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = stored.review;
 
-/** Where the owner's review of each page stands: a question waiting, every pair checked, or checked and too few kept to be listed. */
+/** Where the owner's review of each page stands: a question waiting, every pair checked, or checked with none kept. */
 export function reviewStates(): Record<string, ReviewState> {
   const states: Record<string, ReviewState> = {};
-  const listed = new Set(listedPairs.map(pair => `${pair.a}:${pair.b}`));
   const current = withUnappliedReviews(compareVerdicts);
   for (const { a, b } of reviewPairs) {
     const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => current[id]);
     if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
-    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = listed.has(`${a}:${b}`) && verdicts.some(verdict => verdict?.keep !== false) ? 'checked' : 'dropped';
+    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = verdicts.some(verdict => verdict?.keep !== false) ? 'checked' : 'dropped';
   }
   return states;
 }

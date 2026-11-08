@@ -21,7 +21,7 @@
   aspect-ratio: 0.66;
   padding: calc(var(--width) * 0.03) calc(var(--width) * 0.05) calc(var(--width) * 0.04);
   border: 1px solid var(--home-rule);
-  background: var(--home-paper-deep);
+  background: var(--home-card);
   color: var(--home-ink);
 }
 

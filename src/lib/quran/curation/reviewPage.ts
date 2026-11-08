@@ -49,7 +49,7 @@ export function reviewedVerdicts(current: Verdicts, keys: string[], action: Revi
 export function cardVerdicts(current: Verdicts, keys: string[], action: CardAction): Verdicts {
   return Object.fromEntries(keys.map(key => {
     const verdict = current[key];
-    if (action === 'discuss') return [key, { ...(verdict ?? { keep: true, why: UNDRAFTED }), ask: OWNER_ASK, card: true, draft: verdict?.draft ?? remembered(verdict) }];
+    if (action === 'discuss') return [key, { ...(verdict ?? { keep: false, why: UNDRAFTED }), ask: OWNER_ASK, card: true, draft: verdict?.draft ?? remembered(verdict) }];
     const before = draftOf(verdict);
     const why = before?.why ?? UNDRAFTED;
     const note = action === 'keep' ? KEPT : REMOVED;

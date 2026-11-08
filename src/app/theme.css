@@ -4,6 +4,7 @@
   --home-gutter: clamp(1.25rem, 4vw, 4rem);
   --home-paper: #f4ecdb;
   --home-paper-deep: #ebe0c8;
+  --home-card: var(--home-paper-deep);
   --home-ink: #2e2219;
   --home-muted: #6b5a4a;
   --home-rule: #c9b796;
@@ -50,6 +51,7 @@
 :root:has([data-feature-theme]) {
   --home-paper: #f8f6f0;
   --home-paper-deep: #eee8da;
+  --home-card: #f4ecdb;
   --home-ink: #202c35;
   --home-muted: #62645e;
   --home-rule: #b9a386;
@@ -73,6 +75,7 @@
 }
 
 :root.dark:has([data-feature-theme]) {
+  --home-card: var(--home-paper-deep);
   --home-paper: #15191b;
   --home-paper-deep: #242727;
   --home-ink: #edeae2;
