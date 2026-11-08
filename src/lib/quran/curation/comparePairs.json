@@ -13612,23 +13612,28 @@
   },
   "43:8|50:36": {
    "keep": true,
-   "why": "Same warning: We destroyed those stronger in might than them."
+   "why": "Same warning: We destroyed those stronger in might than them.",
+   "checked": true
   },
   "43:9|50:38": {
    "keep": false,
-   "why": "Only creation of the heavens and the earth; their admission vs creation in six days."
+   "why": "Only creation of the heavens and the earth; their admission vs creation in six days.",
+   "checked": true
   },
   "43:11|50:9": {
    "keep": true,
-   "why": "Same sign: water sent down from the sky that brings forth life."
+   "why": "Same sign: water sent down from the sky that brings forth life.",
+   "checked": true
   },
   "43:11|50:11": {
    "keep": true,
-   "why": "Same argument: a dead land revived by rain; so will be the resurrection."
+   "why": "Same argument: a dead land revived by rain; so will be the resurrection.",
+   "checked": true
   },
   "43:24|50:2": {
    "keep": false,
-   "why": "Only 'came' and 'disbelievers said'; following forefathers vs wonder at a warner."
+   "why": "Only 'came' and 'disbelievers said'; following forefathers vs wonder at a warner.",
+   "checked": true
   },
   "43:9|57:1": {
    "keep": false,
