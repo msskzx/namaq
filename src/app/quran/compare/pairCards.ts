@@ -1,5 +1,6 @@
 import treeData from '@/app/quran/branches/trees.json';
 import { compareVerdicts, type Verdict } from '@/lib/quran/curation/comparePairs';
+import { withUnappliedReviews } from '@/lib/quran/curation/reviewLog';
 import { compareAnchor } from '@/lib/compareBookmarks';
 import { juzOf } from '@/lib/quran/juz';
 import type { SurahSpans } from '@/lib/quran/compareScope';
@@ -29,10 +30,11 @@ export const reviewPairs = stored.review;
 export function reviewStates(): Record<string, ReviewState> {
   const states: Record<string, ReviewState> = {};
   const listed = new Set(listedPairs.map(pair => `${pair.a}:${pair.b}`));
+  const current = withUnappliedReviews(compareVerdicts);
   for (const { a, b } of reviewPairs) {
-    const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => compareVerdicts[id]);
+    const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => current[id]);
     if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
-    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = listed.has(`${a}:${b}`) ? 'checked' : 'dropped';
+    else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = listed.has(`${a}:${b}`) && verdicts.some(verdict => verdict?.keep !== false) ? 'checked' : 'dropped';
   }
   return states;
 }
@@ -63,12 +65,14 @@ function ayatOf(surah: number, numbers: number[], codes: number[]): SpreadAyah[]
   }));
 }
 
-const pairVerdict = (review: boolean) => (id: string) => {
-  const verdict = review ? compareVerdicts[id] : undefined;
+type ReviewVerdicts = Record<string, Verdict> | undefined;
+
+const pairVerdict = (review: ReviewVerdicts) => (id: string) => {
+  const verdict = review?.[id];
   return { id, ...(verdict ? { verdict } : {}) };
 };
 
-function rangeCard(item: StoredCard, review: boolean): PairCard {
+function rangeCard(item: StoredCard, review: ReviewVerdicts): PairCard {
   const keys = item.p.map(id => id.split('|'));
   const sides = [0, 1].map(side => {
     const surah = parts(keys[0][side])[0];
@@ -77,7 +81,7 @@ function rangeCard(item: StoredCard, review: boolean): PairCard {
     return { surah, ayah: from, to, ayat: ayatOf(surah, Array.from({ length: to - from + 1 }, (_, i) => from + i), item.m![side]) };
   });
   const rangeId = (side: (typeof sides)[number]) => `${side.surah}:${side.ayah}${side.to > side.ayah ? `-${side.to}` : ''}`;
-  const verdict = review && item.p.length === 1 ? compareVerdicts[item.p[0]] : undefined;
+  const verdict = item.p.length === 1 ? review?.[item.p[0]] : undefined;
   return {
     id: item.p.length === 1 ? item.p[0] : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
     ...(item.g ? { group: item.g } : {}),
@@ -87,7 +91,7 @@ function rangeCard(item: StoredCard, review: boolean): PairCard {
   };
 }
 
-function manyCard(item: StoredCard, review: boolean): PairCard {
+function manyCard(item: StoredCard, review: ReviewVerdicts): PairCard {
   const side = item.n!;
   const shared = side === 0 ? 1 : 0;
   const keys = item.p.map(id => id.split('|'));
@@ -112,9 +116,12 @@ function manyCard(item: StoredCard, review: boolean): PairCard {
   };
 }
 
-const cardsOf = (key: string, review: boolean) => (stored.cards[key] ?? [])
-  .filter(item => review || item.p.length > 1 || compareVerdicts[item.p[0]]?.keep !== false)
-  .map(item => (item.o ? manyCard(item, review) : rangeCard(item, review)));
+function cardsOf(key: string, review: boolean) {
+  const verdicts = review ? withUnappliedReviews(compareVerdicts) : undefined;
+  return (stored.cards[key] ?? [])
+    .filter(item => review || item.p.length > 1 || compareVerdicts[item.p[0]]?.keep !== false)
+    .map(item => (item.o ? manyCard(item, verdicts) : rangeCard(item, verdicts)));
+}
 
 /** The cards of two surahs, lower surah first, in mushaf order. `review` also shows the pairs curation left out, each with its verdict. */
 export function pairCards(x: number, y: number, review = false): PairCard[] {

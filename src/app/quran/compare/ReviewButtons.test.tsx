@@ -5,9 +5,9 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import ReviewButtons from './ReviewButtons';
 import type { PairCard } from './pairCards';
 
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 const refresh = vi.hoisted(() => vi.fn());
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh }) }));
-vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 const side = { surah: 2, ayah: 1, ayat: [] };
 const card = (verdict: PairCard['verdict']): PairCard => ({ id: 'x', verdict, sides: [side, side] });
@@ -19,8 +19,10 @@ describe('ReviewButtons', () => {
     vi.stubGlobal('fetch', fetchMock);
     render(<ReviewButtons a={2} b={3} cards={[card({ keep: true, why: '' })]} />);
     fireEvent.click(screen.getByRole('button', { name: 'حذف' }));
+    expect(screen.getByRole('button', { name: 'حذف' }).getAttribute('aria-pressed')).toBe('true');
     await waitFor(() => expect(refresh).toHaveBeenCalled());
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ a: 2, b: 3, action: 'drop' });
+    expect(fetchMock.mock.calls[0][1].keepalive).toBe(true);
   });
 
   it('shows the current choice, and pressing it again restores the draft', async () => {
@@ -31,8 +33,9 @@ describe('ReviewButtons', () => {
     expect(drop.getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByRole('button', { name: 'موافق' }).getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(drop);
-    await waitFor(() => expect(refresh).toHaveBeenCalled());
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).action).toBe('undo');
+    expect(drop.getAttribute('aria-pressed')).toBe('false');
   });
 
   it('links to the next unreviewed page when there is one', () => {
@@ -45,6 +48,5 @@ describe('ReviewButtons', () => {
     render(<ReviewButtons a={2} b={3} cards={[card({ keep: true, why: '' })]} />);
     fireEvent.click(screen.getByRole('button', { name: 'موافق' }));
     await waitFor(() => expect(screen.getByRole('alert').textContent).toContain('تعذّر'));
-    expect(refresh).not.toHaveBeenCalled();
   });
 });

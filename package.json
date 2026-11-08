@@ -30,6 +30,7 @@
     "quran:compare-pairs": "tsx scripts/quran/buildComparePairs.ts",
     "quran:passage-pairs": "tsx scripts/quran/buildPassagePairs.ts",
     "quran:compare-cards": "tsx scripts/quran/buildCompareCards.ts",
+    "quran:compare-apply": "tsx scripts/quran/applyCompareReviewLog.ts",
     "quran:branches": "tsx scripts/quran/buildBranches.ts",
     "quran:similar": "tsx scripts/quran/buildSimilar.ts",
     "people:sync":"tsx scripts/people/syncCanonicalPeople.ts",
