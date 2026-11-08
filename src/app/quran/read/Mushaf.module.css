@@ -202,7 +202,7 @@
 /* A forgotten ayah is highlighted as one band: each word after the first fills the gap back to the word before it. */
 .forgot { position: relative; background: color-mix(in srgb, var(--home-accent) 16%, var(--home-card)); }
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
-.saved { border-radius: 999px; outline: 0.06em solid var(--home-root); outline-offset: 0.02em; color: var(--home-root); }
+.saved { color: var(--home-root); }
 
 .ayahActions { position: fixed; z-index: 30; display: flex; gap: 0.5rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
 .reciteBar { position: fixed; z-index: 20; inset-inline: 0; bottom: calc(var(--app-tabbar, 0px) + 1rem); margin-inline: auto; width: max-content; display: flex; gap: 0.75rem; padding: 0.5rem; border: 1px solid var(--home-rule); border-radius: 999px; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }

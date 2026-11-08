@@ -59,7 +59,7 @@ export default function MushafPage({
   hidden?: (key: string, word: number) => boolean;
   /** Recite mode: the ayah the next reveal shows. */
   next?: string | null;
-  /** Ayat the reader forgot (highlighted) and saved (purple ring on the ayah number). */
+  /** Ayat the reader forgot (highlighted) and saved (ayah number in purple). */
   forgot?: Readonly<Record<string, unknown>>;
   saved?: ReadonlySet<string>;
 }) {
