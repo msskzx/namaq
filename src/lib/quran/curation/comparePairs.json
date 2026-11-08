@@ -23676,8 +23676,13 @@
    "why": "A rebuke over attributing daughters versus creation of the two sexes; only male and female shared."
   },
   "53:38|75:11": {
-   "keep": false,
-   "why": "Bearing another's burden versus no refuge on the Day; a shared root only."
+   "keep": true,
+   "why": "Bearing another's burden versus no refuge on the Day; a shared root only. (owner kept)",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Bearing another's burden versus no refuge on the Day; a shared root only."
+   }
   },
   "53:46|75:37": {
    "keep": true,
