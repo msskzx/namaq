@@ -4,7 +4,7 @@ Namaq gives the source text the most space and contrast. Warm paper, ink, fine r
 
 `src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors.
 
-- Paper and deeper paper distinguish reading surfaces. Ink is primary text, muted ink is secondary text, and rules separate content.
+- Paper and deeper paper distinguish reading surfaces. `--home-card` is the surface of Quran text cards: in the light feature theme it is a lighter warm paper, for contrast, and elsewhere deeper paper. Ink is primary text, muted ink is secondary text, and rules separate content.
 - Terracotta identifies headings, actions and exact word matches. Quiz feedback uses palette green for correct answers and terracotta red for incorrect answers, alongside text and icons. Purple identifies root matches. In branches, joined ف is purple and joined و is green. Keep the text or symbol that explains each distinction.
 - Amber highlights differing marks that need inspection. It is not the default button color. Slot and bubble colors distinguish content groups, without assigning new meanings to those colors.
 - `globals.css` gives the page and every scroll area one thin scrollbar. Its thumb is the rule colour and turns muted ink on hover, and it has no track. It replaces the macOS overlay scrollbars in Chrome and Safari, so each scroll area keeps a 10px bar. Do not restyle scrollbars per component. Chromium ignores `::-webkit-scrollbar` on an element that sets `scrollbar-width` or `scrollbar-color`, and Safari supports only the WebKit pseudo-elements, so the standard properties apply only in Firefox.
