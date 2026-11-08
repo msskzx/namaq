@@ -8488,20 +8488,24 @@
    "checked": true
   },
   "3:10|58:17": {
-   "keep": true,
-   "why": "Their wealth and children will not avail them against Allah."
+   "keep": false,
+   "why": "Their wealth and children will not avail them against Allah. (owner removed)",
+   "checked": true
   },
   "3:28|58:10": {
    "keep": false,
-   "why": "Shared words only; different subjects."
+   "why": "Shared words only; different subjects.",
+   "checked": true
   },
   "3:116|58:17": {
-   "keep": true,
-   "why": "Identical: wealth and children will not avail them; companions of the Fire."
+   "keep": false,
+   "why": "Identical: wealth and children will not avail them; companions of the Fire. (owner removed)",
+   "checked": true
   },
   "3:176|58:10": {
    "keep": false,
-   "why": "Shared grief / harm words only; different subjects."
+   "why": "Shared grief / harm words only; different subjects.",
+   "checked": true
   },
   "3:11|59:4": {
    "keep": true,
