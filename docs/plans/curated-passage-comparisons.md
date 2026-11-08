@@ -34,6 +34,5 @@ Distillate namaq/0021 informs keeping the old entry points reachable when changi
 In this order, agreed with the owner on 2026-11-07:
 
 1. Finish the verdict review of every pair in `src/lib/quran/curation/comparePairs.json`.
-3. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
-4. Bookmarks on the compare page (what is bookmarked to be decided with the owner).
-5. Animation on the compare page (what animates to be decided with the owner).
+2. Passage pass: recover matches the old matcher found across ayah boundaries or in short ayat (for example 56/69), judged by meaning, then reviewed by the owner.
+3. Animation on the compare page (what animates to be decided with the owner).
