@@ -19,16 +19,16 @@ export function rangeFromDraft(draft: RangeDraft, max: number): JuzRange | null 
   return draft.every(value => value.trim() !== '' && Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= max) && from <= to ? { from, to } : null;
 }
 
-type FieldProps = { range: JuzRange | null; max: number; names: [string, string]; labels: RangeLabels; iconOnly?: boolean; arabicDigits?: boolean; hideFromLabel?: boolean; draft: RangeDraft; onChange: (draft: RangeDraft) => void };
+type FieldProps = { range: JuzRange | null; max: number; names: [string, string]; labels: RangeLabels; iconOnly?: boolean; arabicDigits?: boolean; hideFromLabel?: boolean; hideReset?: boolean; draft: RangeDraft; onChange: (draft: RangeDraft) => void };
 
-export function RangeFields({ range, max, names, labels, iconOnly = false, arabicDigits = false, hideFromLabel = false, draft, onChange }: FieldProps) {
+export function RangeFields({ range, max, names, labels, iconOnly = false, arabicDigits = false, hideFromLabel = false, hideReset = false, draft, onChange }: FieldProps) {
   const valid = rangeFromDraft(draft, max);
   return <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-sm">
     {[0, 1].map(index => <span key={index} className="flex items-center gap-2">
       {index === 1 ? labels.toText ?? labels.to : !hideFromLabel && labels.from}
       <NumberInput className="[&_input]:h-10" name={names[index]} label={index === 0 ? labels.from : labels.to} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => onChange(index === 0 ? [value, draft[1]] : [draft[0], value])} min={1} max={max} steppers={false} arabicDigits={arabicDigits} />
     </span>)}
-    {(draft[0] !== '1' || draft[1] !== String(max)) && <Button variant="muted" size={iconOnly ? 'icon' : 'sm'} onClick={() => onChange(['1', String(max)])} aria-label={labels.all} title={labels.all}>
+    {!hideReset && (draft[0] !== '1' || draft[1] !== String(max)) && <Button variant="muted" size={iconOnly ? 'icon' : 'sm'} onClick={() => onChange(['1', String(max)])} aria-label={labels.all} title={labels.all}>
       <RotateCcw size={16} aria-hidden />{!iconOnly && labels.all}
     </Button>}
     {!valid && <p role="status" className="w-full text-sm text-[var(--home-muted)]">{labels.invalid(range ?? { from: 1, to: max })}</p>}

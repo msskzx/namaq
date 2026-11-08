@@ -150,11 +150,21 @@ describe('compare pair cards', () => {
     expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0));
   });
 
-  it('lists a page only with three kept pairs, but keeps every engine page in review', () => {
+  it('lists a page with at least one kept pair, but keeps every engine page in review', () => {
     expect(listedPairs.some(pair => pair.a === 3 && pair.b === 18)).toBe(false);
     expect(reviewPairs.find(pair => pair.a === 3 && pair.b === 18)?.count).toBe(5);
     expect(reviewStates()['3:18']).toBe('dropped');
-    for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(3);
+    for (const pair of listedPairs) expect(pair.count).toBeGreaterThanOrEqual(1);
+    expect(listedPairs.some(pair => pair.count < 3)).toBe(true);
+  });
+
+  it('shows the whole range of a join, including ayat with no partner', () => {
+    const cards = pairCards(69, 84).filter(card => card.id.includes('-'));
+    expect(cards.map(card => card.id)).toEqual(['69:1-18|84:1-6', '69:19-24|84:7-9', '69:25-37|84:10-15', '69:38-48|84:16-21', '69:49-52|84:22-25']);
+    for (const [side, surahEnd] of [[0, 52], [1, 25]] as const) {
+      expect(cards.flatMap(card => card.sides[side].ayat.map(ayah => ayah.number))).toEqual(Array.from({ length: surahEnd }, (_, i) => i + 1));
+    }
+    expect(cards[0].sides[0].ayat[0].marks).toEqual({});
   });
 
   it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {

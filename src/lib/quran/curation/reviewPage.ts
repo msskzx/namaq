@@ -1,9 +1,13 @@
 import type { Verdict } from './comparePairs';
 
 export type ReviewAction = 'agree' | 'drop';
+export type CardAction = 'keep' | 'drop' | 'discuss';
 type Verdicts = Record<string, Verdict>;
 
 const REMOVED = '(owner removed)';
+const KEPT = '(owner kept)';
+const UNDRAFTED = 'Not drafted yet';
+export const OWNER_ASK = 'owner: discuss';
 
 const draftOf = (verdict: Verdict | undefined): Verdict | undefined => {
   if (!verdict) return undefined;
@@ -28,6 +32,7 @@ function remembered(verdict: Verdict | undefined): Verdict['draft'] {
   const draft: NonNullable<Verdict['draft']> = { ...verdict };
   delete draft.alone;
   delete draft.draft;
+  delete draft.card;
   return draft;
 }
 
@@ -37,6 +42,18 @@ export function reviewedVerdicts(current: Verdicts, keys: string[], action: Revi
     const before = draftOf(current[key]);
     const after = action === 'drop' ? dropped(before) : agreed(before);
     return [key, JSON.stringify(after) === JSON.stringify(before) ? after : { ...after, draft: remembered(before) }];
+  }));
+}
+
+/** The verdicts of one card's pairs after the owner's choice. Discuss only raises a question; keep and drop decide every pair in the card. */
+export function cardVerdicts(current: Verdicts, keys: string[], action: CardAction): Verdicts {
+  return Object.fromEntries(keys.map(key => {
+    const verdict = current[key];
+    if (action === 'discuss') return [key, { ...(verdict ?? { keep: true, why: UNDRAFTED }), ask: OWNER_ASK, card: true, draft: verdict?.draft ?? remembered(verdict) }];
+    const before = draftOf(verdict);
+    const why = before?.why ?? UNDRAFTED;
+    const note = action === 'keep' ? KEPT : REMOVED;
+    return [key, { keep: action === 'keep', why: why.endsWith(note) ? why : `${why} ${note}`, checked: true, card: true, ...(verdict?.alone ? { alone: true } : {}), draft: remembered(before) }];
   }));
 }
 

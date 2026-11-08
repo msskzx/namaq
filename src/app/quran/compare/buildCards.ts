@@ -31,7 +31,9 @@ function withCuratedLinks(pairs: SimilarAyahPair[]): SimilarAyahPair[] {
   })];
 }
 
-/** A curated join ("43:10-12|78:6-16") puts every kept pair inside both ranges on one card, for passages that run in a different order. */
+const joinSpans = new WeakMap<AyahPair[], [number, number][]>();
+
+/** A curated join ("43:10-12|78:6-16") puts every kept pair inside both ranges on one card, for passages that run in a different order. The card shows each range whole, including ayat with no partner. */
 function joinCurated(chains: AyahPair[][]) {
   return ((links as { joins?: string[] }).joins ?? []).reduce((current, join) => {
     const [a, b] = join.split('|').map(side => {
@@ -42,6 +44,7 @@ function joinCurated(chains: AyahPair[][]) {
     const inside = (key: string, side: typeof a) => surahOf(key) === side.surah && ayahOf(key) >= side.from && ayahOf(key) <= side.to;
     const within = (chain: AyahPair[]) => chain.every(pair => inside(pair.a, a) && inside(pair.b, b));
     const joined = current.filter(within).flat().sort((p, q) => keyOrder(p.a) - keyOrder(q.a) || keyOrder(p.b) - keyOrder(q.b));
+    if (joined.length) joinSpans.set(joined, [[a.from, a.to], [b.from, b.to]]);
     return joined.length ? [...current.filter(chain => !within(chain)), joined] : current;
   }, chains);
 }
@@ -73,10 +76,10 @@ function wordMarks(pairs: AyahPair[]) {
   return marks;
 }
 
-function side(pairs: AyahPair[], which: 'a' | 'b', marks: ReturnType<typeof wordMarks>): CardSide {
+function side(pairs: AyahPair[], which: 'a' | 'b', marks: ReturnType<typeof wordMarks>, span?: [number, number]): CardSide {
   const surah = surahOf(pairs[0][which]);
   const numbers = pairs.map(pair => ayahOf(pair[which]));
-  const [from, to] = [Math.min(...numbers), Math.max(...numbers)];
+  const [from, to] = span ?? [Math.min(...numbers), Math.max(...numbers)];
   const ayat = Array.from({ length: to - from + 1 }, (_, i) => {
     const number = from + i;
     const key = `${surah}:${number}`;
@@ -93,12 +96,14 @@ const rangeId = (cardSide: CardSide) => `${cardSide.surah}:${cardSide.ayah}${car
 
 function card(pairs: AyahPair[], review: boolean): PairCard {
   const marks = wordMarks(pairs);
-  const sides: PairCard['sides'] = [side(pairs, 'a', marks), side(pairs, 'b', marks)];
+  const span = joinSpans.get(pairs);
+  const sides: PairCard['sides'] = [side(pairs, 'a', marks, span?.[0]), side(pairs, 'b', marks, span?.[1])];
   const group = pairs.find(pair => pair.group)?.group;
   const verdict = review && pairs.length === 1 ? verdictFor(pairs[0].a, pairs[0].b) : undefined;
   return {
     id: pairs.length === 1 ? `${pairs[0].a}|${pairs[0].b}` : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
     ...(group ? { group } : {}),
+    ...(span ? { span } : {}),
     ...(verdict ? { verdict } : {}),
     ...(pairs.length > 1 ? { pairs: pairs.map(pair => ({ id: `${pair.a}|${pair.b}`, ...(review && verdictFor(pair.a, pair.b) ? { verdict: verdictFor(pair.a, pair.b) } : {}) })) } : {}),
     sides,
@@ -171,7 +176,7 @@ function encodeAyat(ayat: SpreadAyah[], links: Map<string, number>) {
 
 function storedCard(card: PairCard) {
   const links = new Map<string, number>();
-  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}) };
+  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.span ? { s: card.span } : {}) };
   if (card.many) return { ...base, n: card.many.side, o: card.many.options.map(option => [encodeAyat([option.shared], links), encodeAyat([option.ayah], links)]) };
   return { ...base, m: card.sides.map(side => encodeAyat(side.ayat, links)) };
 }

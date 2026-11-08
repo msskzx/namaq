@@ -117,6 +117,17 @@ describe('PairCompare', () => {
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
   });
 
+  it('filters the pages by scope and keeps it in its links', () => {
+    render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} scope={{ unit: 'juz', from: 27, to: 29 }} spans={{ page: {}, juz: { 2: [1, 3], 7: [8, 9], 11: [11, 12], 26: [19, 19], 52: [27, 27], 68: [29, 29] } }} />);
+    const rows = [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every(href => href === '/quran/compare?a=52&b=68&juz=27-29')).toBe(true);
+    const filter = within(pane()).getByRole('form', { name: 'تصفية' });
+    expect((within(filter).getByRole('combobox', { name: 'التصفية حسب' }) as HTMLSelectElement).value).toBe('juz');
+    fireEvent.click(within(filter).getByRole('button', { name: /إعادة ضبط/ }));
+    expect(router.push).toHaveBeenCalledWith('/quran/compare?a=52&b=68');
+  });
+
   it('in review, the unreviewed-only switch hides finished pages and keeps those with a question', () => {
     const allRows = () => [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} review todo states={{ '52:68': 'checked', '7:11': 'ask', '2:7': 'dropped' }} />);
@@ -262,6 +273,16 @@ describe('PairCompare', () => {
         expect(reading().textContent).toBe('إن');
         expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);
       } finally { vi.useRealTimers(); }
+    });
+
+    it('shows a refrain once and lists where it recurs', () => {
+      const refrain = (n: number) => ({ id: `10:72|26:${n}`, ayah: { number: n, words: ['ويل', 'يومئذ'], marks: { 0: { kind: 'exact' as const, link: 'a' } } }, shared: options[0].shared });
+      const same = [refrain(109), refrain(127)];
+      render(<PairCompare a={10} b={26} cards={[{ ...many, many: { side: 1, options: same }, sides: [many.sides[0], { surah: 26, ayah: 109, ayat: [same[0].ayah] }] }]} pairs={pairs} names={names2} />);
+      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء' })).toBeTruthy();
+      expect(screen.getByRole('link', { name: '١٢٧' }).getAttribute('href')).toBe('/quran/read/ayah/26/127');
+      expect(screen.queryByRole('button', { name: /^الشعراء ١٢٧: / })).toBeNull();
+      expect(screen.getAllByText('ويل')).toHaveLength(1);
     });
 
     it('gives each partner its ayah text as well as its reference', () => {

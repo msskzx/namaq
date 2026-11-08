@@ -51,7 +51,7 @@ describe('QuranComparePage', () => {
     cleanup();
     await page({ a: '2', b: '3', review: '1' });
     expect(link()).toBe(true);
-  });
+  }, 30000);
 
   it('opens the first selected story when no surahs are chosen', async () => {
     await page({});

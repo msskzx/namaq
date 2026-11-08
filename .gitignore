@@ -47,3 +47,6 @@ next-env.d.ts
 /.claude/worktrees
 /.codex/worktrees
 /.opencode
+
+# Review button presses not yet folded into the verdicts
+/.review-log.*
