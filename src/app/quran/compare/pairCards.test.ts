@@ -129,6 +129,12 @@ describe('compare pair cards', () => {
       }
     });
 
+    it('pair a word that recurs in an ayah with the occurrence at the same place', () => {
+      const columns = (id: string) => pairs.find(pair => `${pair.a}|${pair.b}` === id)!.columns.map(([i, j]) => [i, j]);
+      expect(columns('77:14|82:18')).toEqual(expect.arrayContaining([[2, 3], [0, 1]]));
+      expect(columns('56:8|90:18')).toEqual(expect.arrayContaining([[3, 1], [4, 2]]));
+    });
+
     it('recover the Al-Waqi\'ah and Al-Haqqah passage across ayah boundaries', () => {
       expect(pairCards(56, 69).map(card => card.id)).toEqual(expect.arrayContaining(['56:1|69:15', '56:75-80|69:38-43', '56:94|69:31']));
     });
