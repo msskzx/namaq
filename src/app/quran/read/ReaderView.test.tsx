@@ -334,6 +334,25 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
   });
 
+  it('keeps the rest of an ayah that runs onto the next page hidden there', () => {
+    const runOn = data({ surah: 2 }, { line: ['الٓمٓ', 1, 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ'] });
+    render(<ReaderView page={3} pages={one(3, runOn)} names={names} surahs={surahs} recite={{ start: '2:1', shown: '2:2', words: 0 }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(push).toHaveBeenLastCalledWith('/quran/read/4?recite=2%3A1&upto=2%3A1');
+  });
+
+  it('leaves mouse clicks in reading mode for selecting text', () => {
+    vi.useFakeTimers();
+    localStorage.setItem('reader-gestures', JSON.stringify({ read: { tap: 'forgot' } }));
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
+    const word = container.querySelector('[data-ayah="2:1"]')!;
+    const mouse = (type: string) => Object.defineProperty(new MouseEvent(type, { bubbles: true }), 'pointerType', { value: 'mouse' });
+    fireEvent(word, mouse('pointerdown'));
+    fireEvent(word, mouse('pointerup'));
+    act(() => { vi.advanceTimersByTime(300); });
+    expect(localStorage.getItem('ayah-forgot')).toBeNull();
+  });
+
   it('opens the recite position from the URL', () => {
     search = new URLSearchParams('recite=2:1&upto=2:1');
     const { container } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);

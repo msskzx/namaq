@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, Eye, EyeOff, F
 import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@/lib/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@/lib/readerGestures';
-import { atStart, forgottenOrder, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@/lib/quran/recite';
+import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@/lib/quran/recite';
 import AyahActions from './AyahActions';
 import { usePageGestures } from './usePageGestures';
 import { createPortal } from 'react-dom';
@@ -97,6 +97,11 @@ export default function ReaderView({
     lines.forEach(line => line?.forEach(group => { if (group.word) counts[`${group.surah}:${group.ayah}`] = (counts[`${group.surah}:${group.ayah}`] ?? 0) + 1; }));
     return counts;
   }), [groups]);
+  /** Whether an ayah's end (its number) is on the shown pages. */
+  const endsOn = (key: string) => {
+    const [surah, ayah] = key.split(':').map(Number);
+    return groups.some(lines => lines.some(line => line?.some(group => group.surah === surah && group.marks.includes(ayah))));
+  };
   const ayahCounts = useMemo(() => new Map(surahs.map(surah => [surah.number, surah.numberOfAyat])), [surahs]);
   const [position, setPosition] = useState<RecitePosition | null>(recite ?? null);
   const [reviewing, setReviewing] = useState(review && !!recite);
@@ -115,15 +120,26 @@ export default function ReaderView({
     : undefined;
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
   const reviewDone = reviewing && !!position?.shown;
+  // The ayah under review counts even after it is cleared from the list.
+  const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
+  const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const closeActions = useCallback(() => setActions(null), []);
+  /** When the ayah buttons were last closed by a press elsewhere: that press only closes them. */
+  const dismissed = useRef(-Infinity);
+  const dismissActions = useCallback(() => { dismissed.current = performance.now(); setActions(null); }, []);
   const go = useCallback(
     (step: 1 | -1) => {
       const target = turn(page, two, step);
-      if (two ? spreadOf(target)[0] !== spreadOf(page)[0] : target !== page) router.push(`/quran/read/${target}${position ? `?${positionQuery(position, reviewing ? { review: '1' } : {})}` : ''}`);
+      if (!(two ? spreadOf(target)[0] !== spreadOf(page)[0] : target !== page)) return;
+      // An ayah that runs on past these pages stays hidden on the next one, where its rest is recited.
+      const carried = position && step === 1 && position.shown && !endsOn(position.shown) ? { ...position, shown: previousKey(position.shown, ayahCounts), words: 0 } : position;
+      const kept = carried && carried.shown && compareKeys(carried.shown, carried.start) < 0 ? { ...carried, shown: null } : carried;
+      router.push(`/quran/read/${target}${kept ? `?${positionQuery(kept, reviewing ? { review: '1' } : {})}` : ''}`);
     },
-    [page, two, router, position, reviewing],
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- endsOn and ayahCounts follow `groups` and `surahs`
+    [page, two, router, position, reviewing, groups, ayahCounts],
   );
   useEffect(() => {
     for (const step of [1, -1] as const) {
@@ -145,7 +161,10 @@ export default function ReaderView({
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
-    const url = `${window.location.pathname}${query ? `?${query}` : ''}`;
+    const params = new URLSearchParams(window.location.search);
+    for (const name of ['recite', 'upto', 'w', 'review']) params.delete(name);
+    new URLSearchParams(query ?? '').forEach((value, name) => params.set(name, value));
+    const url = `${window.location.pathname}${params.size ? `?${params}` : ''}`;
     if (url !== `${window.location.pathname}${window.location.search}`) window.history.replaceState(window.history.state, '', url);
     if (query && !reviewing) write(LAST_RECITE_KEY, url);
   }, [query, reviewing]);
@@ -172,8 +191,7 @@ export default function ReaderView({
   const stepBackOne = () => { if (position) setPosition(stepBack(position, ayahCounts)); };
   const ayahText = (key: string) => {
     const words = groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []));
-    const ends = groups.some(lines => lines.some(line => line?.some(group => group.surah === Number(key.split(':')[0]) && group.marks.includes(Number(key.split(':')[1])))));
-    return `${words.join(' ')}${ends ? '' : ' …'}`;
+    return `${words.join(' ')}${endsOn(key) ? '' : ' …'}`;
   };
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
   const openActions = (key: string, element: Element) => {
@@ -217,6 +235,8 @@ export default function ReaderView({
     return () => window.removeEventListener('resize', size);
   }, []);
 
+  /** The ayah the F and B keys act on: the last one revealed while reciting, or the marked one. */
+  const keyAyah = position?.shown ?? (mark ? `${mark.surah}:${mark.ayah}` : null);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.defaultPrevented) return;
@@ -228,6 +248,8 @@ export default function ReaderView({
       else if (reciting && (event.key === ' ' || event.key === 'Enter') && !(event.target instanceof Element && event.target.closest('button, a'))) revealNextAyah();
       else if (reciting && event.key.toLowerCase() === 'w') revealNextWord();
       else if (reciting && event.key === 'Backspace') stepBackOne();
+      else if (event.key.toLowerCase() === 'f' && keyAyah) markForgotten(keyAyah);
+      else if (event.key.toLowerCase() === 'b' && keyAyah) toggleSaved(keyAyah);
       else return;
       event.preventDefault();
     };
@@ -254,9 +276,14 @@ export default function ReaderView({
     cancel: () => {},
   });
   usePageGestures(stage, {
-    onGesture: (gesture, target) => { setActions(null); runGesture(gestures[mode][gesture], target); },
+    onGesture: (gesture, target, mouse) => {
+      // With a mouse, reading keeps clicks and double clicks for selecting text; only reciting takes them.
+      if (mouse && !reciting && gesture !== 'long') return;
+      setActions(null);
+      runGesture(gestures[mode][gesture], target);
+    },
     waitForDouble: () => gestures[mode].double !== 'none',
-    ignore: justSwiped,
+    ignore: () => justSwiped() || performance.now() - dismissed.current < 800,
   });
   const reciteLabel = reciting ? (ar ? 'إنهاء التسميع' : 'Stop reciting') : (ar ? 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' : 'Recite: hide the ayat and reveal them one by one');
   const reciteToggle = <Button size="lg" variant={reciting ? 'primary' : 'muted'} aria-pressed={reciting} onClick={() => (reciting ? stopRecite() : startRecite())} aria-label={reciteLabel} title={reciteLabel}><EyeOff aria-hidden /></Button>;
@@ -286,6 +313,7 @@ export default function ReaderView({
           <li><kbd>←</kbd> <kbd>→</kbd> {ar ? 'لتقليب الصفحات' : 'Turn pages'}</li>
           <li><kbd>D</kbd> {ar ? 'للتبديل بين صفحة وصفحتين' : 'Switch between one and two pages'}</li>
           <li><kbd>Space</kbd> {ar ? 'في التسميع: الآية التالية' : 'Reciting: next ayah'}، <kbd>W</kbd> {ar ? 'الكلمة التالية' : 'next word'}، <kbd>⌫</kbd> {ar ? 'خطوة للخلف' : 'step back'}</li>
+          <li><kbd>F</kbd> {ar ? 'نسيتُ آخر آية ظهرت' : 'Forgot the last revealed ayah'}، <kbd>B</kbd> {ar ? 'احفظها' : 'save it'}</li>
         </ul>
       </SettingsHelp>}
       {rail && createPortal(<>
@@ -345,11 +373,11 @@ export default function ReaderView({
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)}
-        onForgot={() => markForgotten(actions.key)} onClear={() => clearForgotten(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} />}
+        onForgot={() => markForgotten(actions.key)} onClear={() => clearForgotten(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
       {position && <div className={mushaf.reciteBar} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
-          ? `مراجعة ${num(Math.max(1, forgotten.indexOf(position.start) + 1))} من ${num(Math.max(forgotten.length, 1))}`
-          : `Review ${Math.max(1, forgotten.indexOf(position.start) + 1)} of ${Math.max(forgotten.length, 1)}`}</span>}
+          ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`
+          : `Review ${reviewAt} of ${reviewTotal}`}</span>}
         <Button size="lg" variant="muted" aria-label={ar ? 'ارجع خطوة' : 'Step back'} title={ar ? 'ارجع خطوة' : 'Step back'} disabled={atStart(position)} onClick={stepBackOne}><Undo2 aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} title={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} disabled={reviewDone} onClick={revealNextWord}><WholeWord aria-hidden /></Button>
         <Button size="lg" aria-label={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}

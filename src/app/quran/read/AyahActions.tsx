@@ -7,7 +7,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import styles from './Mushaf.module.css';
 
 /** The two icons for one ayah: forgot (with how often, and a check to clear it) and save. */
-export default function AyahActions({ ayah, x, y, forgot, saved, ar, onForgot, onClear, onSave, onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, ar, onForgot, onClear, onSave, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
@@ -18,11 +18,13 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, onForgot, o
   onClear: () => void;
   onSave: () => void;
   onClose: () => void;
+  /** A press outside closes the buttons; the page then ignores that press. */
+  onDismiss?: () => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
     box.current?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
-    const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) onClose(); };
+    const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) onDismiss(); };
     const key = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); onClose(); } };
     document.addEventListener('pointerdown', outside, true);
     window.addEventListener('keydown', key);
@@ -34,7 +36,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, onForgot, o
       window.removeEventListener('resize', onClose);
       window.removeEventListener('scroll', onClose, true);
     };
-  }, [onClose]);
+  }, [onClose, onDismiss]);
   const [surah, number] = ayah.split(':').map(Number);
   const label = ar ? `الآية ${num(number)} من السورة ${num(surah)}` : `Ayah ${surah}:${number}`;
   const forgotLabel = forgot ? (ar ? `نسيتها مرة أخرى (نسيتها ${num(forgot)} من قبل)` : `Forgot again (${forgot} before)`) : (ar ? 'نسيتها' : 'I forgot it');

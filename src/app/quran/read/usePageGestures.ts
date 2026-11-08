@@ -17,7 +17,7 @@ const SLOP = 10;
  */
 export function usePageGestures(
   ref: RefObject<HTMLElement | null>,
-  handlers: { onGesture: (gesture: Gesture, target: Element) => void; waitForDouble: () => boolean; ignore?: () => boolean },
+  handlers: { onGesture: (gesture: Gesture, target: Element, mouse: boolean) => void; waitForDouble: () => boolean; ignore?: () => boolean },
 ) {
   const latest = useRef(handlers);
   latest.current = handlers;
@@ -25,10 +25,10 @@ export function usePageGestures(
     const element = ref.current;
     if (!element) return;
     let press: { x: number; y: number; id: number; target: Element; timer: ReturnType<typeof setTimeout>; long: boolean } | null = null;
-    let pending: { timer: ReturnType<typeof setTimeout>; target: Element } | null = null;
-    const fire = (gesture: Gesture, target: Element) => latest.current.onGesture(gesture, target);
-    const skip = (target: EventTarget | null) => target instanceof Element && !!target.closest('button, a, input, select, textarea, [role="dialog"]');
     let touch = false;
+    let pending: { timer: ReturnType<typeof setTimeout>; target: Element } | null = null;
+    const fire = (gesture: Gesture, target: Element) => latest.current.onGesture(gesture, target, !touch);
+    const skip = (target: EventTarget | null) => target instanceof Element && !!target.closest('button, a, input, select, textarea, [role="dialog"]');
     const down = (event: PointerEvent) => {
       touch = event.pointerType !== 'mouse';
       if (event.isPrimary === false || event.button > 0 || skip(event.target)) return;
