@@ -174,15 +174,16 @@ export default function ReadVideo({ card, plan, speed, title, label, ar, onClose
     if (!type || !element || !context) return;
     const css = getComputedStyle(document.documentElement);
     const token = (name: string) => css.getPropertyValue(name).trim();
+    const body = getComputedStyle(document.body);
     context.fillStyle = token('--home-paper');
     const dark = parseInt(String(context.fillStyle).slice(1, 3), 16) < 128;
     const logo = new Image();
     logo.src = `/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`;
-    const arabic = document.querySelector('[lang="ar"]');
     const look: Look = {
       paper: token('--home-paper'), deep: token('--home-paper-deep'), ink: token('--home-ink'), muted: token('--home-muted'), rule: token('--home-rule'),
       accent: token('--home-accent'), root: token('--home-root'), highlight: token('--home-highlight'), onHighlight: token('--home-on-highlight'),
-      quran: (arabic && getComputedStyle(arabic).fontFamily) || 'serif', title: getComputedStyle(document.body).fontFamily || 'serif', logo,
+      // The mushaf font, as the cards show the ayat (the page itself is lang="ar", so it can't be found by language).
+      quran: body.getPropertyValue('--font-quran').trim() || 'serif', title: body.fontFamily || 'serif', logo,
     };
     const layouts = new Map<number, Layout>();
     const frameFor = (option: number) => {
