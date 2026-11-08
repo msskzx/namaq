@@ -8578,60 +8578,74 @@
    "checked": true
   },
   "3:10|63:9": {
-   "keep": true,
-   "why": "Wealth and children, and turning away from Allah."
+   "keep": false,
+   "why": "Wealth and children, and turning away from Allah. (owner removed)",
+   "checked": true
   },
   "3:18|63:1": {
    "keep": false,
-   "why": "Shared root of witness only; different subjects."
+   "why": "Shared root of witness only; different subjects.",
+   "checked": true
   },
   "3:149|63:3": {
    "keep": false,
-   "why": "Shared 'disbelieved' only; different subjects."
+   "why": "Shared 'disbelieved' only; different subjects.",
+   "checked": true
   },
   "3:10|64:15": {
-   "keep": true,
-   "why": "Wealth and children: a trial that does not avail."
+   "keep": false,
+   "why": "Wealth and children: a trial that does not avail. (owner removed)",
+   "checked": true
   },
   "3:29|64:1": {
    "keep": false,
-   "why": "Shared heavens-and-earth and closing only; different subjects."
+   "why": "Shared heavens-and-earth and closing only; different subjects.",
+   "checked": true
   },
   "3:32|64:12": {
-   "keep": true,
-   "why": "Obey Allah and the Messenger; if you turn away."
+   "keep": false,
+   "why": "Obey Allah and the Messenger; if you turn away. (owner removed)",
+   "checked": true
   },
   "3:122|64:13": {
-   "keep": true,
-   "why": "Upon Allah let the believers rely."
+   "keep": false,
+   "why": "Upon Allah let the believers rely. (owner removed)",
+   "checked": true
   },
   "3:129|64:1": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects."
+   "why": "Shared heavens-and-earth only; different subjects.",
+   "checked": true
   },
   "3:129|64:14": {
    "keep": false,
-   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects.",
+   "checked": true
   },
   "3:132|64:12": {
-   "keep": true,
-   "why": "Obey Allah and the Messenger."
+   "keep": false,
+   "why": "Obey Allah and the Messenger. (owner removed)",
+   "checked": true
   },
   "3:160|64:13": {
-   "keep": true,
-   "why": "Upon Allah let the believers rely."
+   "keep": false,
+   "why": "Upon Allah let the believers rely. (owner removed)",
+   "checked": true
   },
   "3:163|64:2": {
    "keep": false,
-   "why": "Shared closing 'Seeing of what they do' only; different subjects."
+   "why": "Shared closing 'Seeing of what they do' only; different subjects.",
+   "checked": true
   },
   "3:165|64:11": {
-   "keep": true,
-   "why": "A calamity that strikes you, and where it comes from."
+   "keep": false,
+   "why": "A calamity that strikes you, and where it comes from. (owner removed)",
+   "checked": true
   },
   "3:189|64:1": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects."
+   "why": "Shared closing 'able over all things' only; different subjects.",
+   "checked": true
   },
   "3:4|65:10": {
    "keep": false,
