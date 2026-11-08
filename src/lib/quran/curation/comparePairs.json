@@ -14235,20 +14235,40 @@
    }
   },
   "48:5|61:12": {
-   "keep": true,
-   "why": "Same reward: admitted into gardens beneath which rivers flow, the great success."
+   "keep": false,
+   "why": "Same reward: admitted into gardens beneath which rivers flow, the great success. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same reward: admitted into gardens beneath which rivers flow, the great success."
+   }
   },
   "48:7|61:1": {
    "keep": false,
-   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth' and the closing names Almighty, Wise."
+   }
   },
   "48:19|61:1": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "48:28|61:9": {
-   "keep": true,
-   "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion."
+   "keep": false,
+   "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Same words: He sent His Messenger with guidance and the religion of truth to make it prevail over all religion."
+   }
   },
   "49:1|58:12": {
    "keep": false,
@@ -21666,7 +21686,12 @@
   },
   "48:17|61:12": {
    "keep": false,
-   "why": "Only the gardens with rivers clause."
+   "why": "Only the gardens with rivers clause.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the gardens with rivers clause."
+   }
   },
   "48:17|64:9": {
    "keep": false,
