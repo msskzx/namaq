@@ -23352,19 +23352,23 @@
   },
   "69:3|101:3": {
    "keep": true,
-   "why": "Same style on a name of the Hour: what will make you know what is ...?"
+   "why": "Same style on a name of the Hour: what will make you know what is ...?",
+   "checked": true
   },
   "69:4|101:3": {
    "keep": true,
-   "why": "Same rare name of the Hour: al-Qari'ah."
+   "why": "Same rare name of the Hour: al-Qari'ah.",
+   "checked": true
   },
   "69:4|101:1": {
    "keep": true,
-   "why": "Same rare name of the Hour: al-Qari'ah."
+   "why": "Same rare name of the Hour: al-Qari'ah.",
+   "checked": true
   },
   "69:4|101:2": {
    "keep": true,
-   "why": "Same rare name of the Hour: al-Qari'ah."
+   "why": "Same rare name of the Hour: al-Qari'ah.",
+   "checked": true
   },
   "69:28|111:2": {
    "keep": true,
@@ -23393,6 +23397,11 @@
   "70:34|82:10": {
    "keep": false,
    "why": "Guarding prayers versus guardian angels; a shared root only."
+  },
+  "69:21|101:7": {
+   "keep": true,
+   "why": "Identical clause: he will be in a pleasant life.",
+   "checked": true
   }
  }
 }
