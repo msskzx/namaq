@@ -13606,23 +13606,48 @@
   },
   "42:3|48:7": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:3|48:19": {
    "keep": false,
-   "why": "Only the closing names Almighty, Wise."
+   "why": "Only the closing names Almighty, Wise.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing names Almighty, Wise."
+   }
   },
   "42:5|48:14": {
    "keep": false,
-   "why": "Only 'forgive' and the closing names Forgiving, Merciful; angels seeking forgiveness vs His will."
+   "why": "Only 'forgive' and the closing names Forgiving, Merciful; angels seeking forgiveness vs His will.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'forgive' and the closing names Forgiving, Merciful; angels seeking forgiveness vs His will."
+   }
   },
   "42:9|48:21": {
    "keep": false,
-   "why": "Only the closing 'able over all things'."
+   "why": "Only the closing 'able over all things'.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the closing 'able over all things'."
+   }
   },
   "42:49|48:14": {
    "keep": false,
-   "why": "Only 'to Allah belongs the dominion ... for whom He wills'; giving children vs forgiving and punishing."
+   "why": "Only 'to Allah belongs the dominion ... for whom He wills'; giving children vs forgiving and punishing.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'to Allah belongs the dominion ... for whom He wills'; giving children vs forgiving and punishing."
+   }
   },
   "42:3|57:1": {
    "keep": false,
