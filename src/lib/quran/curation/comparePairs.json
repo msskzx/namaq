@@ -8149,39 +8149,32 @@
    "checked": true
   },
   "3:11|40:22": {
-   "keep": false,
-   "why": "Peoples who denied, so Allah seized them; severe in punishment. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Peoples who denied, so Allah seized them; severe in punishment."
   },
   "3:16|40:49": {
    "keep": false,
-   "why": "Shared plea wording only; believers' prayer versus the people of the Fire.",
-   "checked": true
+   "why": "Shared plea wording only; believers' prayer versus the people of the Fire."
   },
   "3:25|40:17": {
-   "keep": false,
-   "why": "Every soul repaid for what it earned, and no wrong that Day. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Every soul repaid for what it earned, and no wrong that Day."
   },
   "3:95|40:84": {
    "keep": false,
-   "why": "Shared 'polytheists' only; different scenes.",
-   "checked": true
+   "why": "Shared 'polytheists' only; different scenes."
   },
   "3:137|40:82": {
-   "keep": false,
-   "why": "Travel in the land and see how was the end. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Travel in the land and see how was the end."
   },
   "3:161|40:17": {
-   "keep": false,
-   "why": "Every soul repaid for what it earned, without wrong. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Every soul repaid for what it earned, without wrong."
   },
   "3:196|40:4": {
-   "keep": false,
-   "why": "Do not be deceived by the disbelievers' movement in the lands. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Do not be deceived by the disbelievers' movement in the lands."
   },
   "3:3|41:42": {
    "keep": false,
