@@ -21729,16 +21729,31 @@
    "why": "Same command: and in the night glorify Him."
   },
   "50:6|77:9": {
-   "keep": true,
-   "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open."
+   "keep": false,
+   "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open. (owner removed)",
+   "checked": true,
+   "draft": {
+    "keep": true,
+    "why": "Contrast with a rare root: the sky has no rifts / when the sky is split open."
+   }
   },
   "50:11|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death."
+   "why": "Only the roots of life and death.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the roots of life and death."
+   }
   },
   "50:43|77:26": {
    "keep": false,
-   "why": "Only the roots of life and death."
+   "why": "Only the roots of life and death.",
+   "checked": true,
+   "draft": {
+    "keep": false,
+    "why": "Only the roots of life and death."
+   }
   },
   "50:40|79:3": {
    "keep": false,
