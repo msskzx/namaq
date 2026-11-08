@@ -8593,59 +8593,48 @@
    "checked": true
   },
   "3:10|64:15": {
-   "keep": false,
-   "why": "Wealth and children: a trial that does not avail. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Wealth and children: a trial that does not avail."
   },
   "3:29|64:1": {
    "keep": false,
-   "why": "Shared heavens-and-earth and closing only; different subjects.",
-   "checked": true
+   "why": "Shared heavens-and-earth and closing only; different subjects."
   },
   "3:32|64:12": {
-   "keep": false,
-   "why": "Obey Allah and the Messenger; if you turn away. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Obey Allah and the Messenger; if you turn away."
   },
   "3:122|64:13": {
-   "keep": false,
-   "why": "Upon Allah let the believers rely. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Upon Allah let the believers rely."
   },
   "3:129|64:1": {
    "keep": false,
-   "why": "Shared heavens-and-earth only; different subjects.",
-   "checked": true
+   "why": "Shared heavens-and-earth only; different subjects."
   },
   "3:129|64:14": {
    "keep": false,
-   "why": "Shared closing 'Forgiving, Merciful' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'Forgiving, Merciful' only; different subjects."
   },
   "3:132|64:12": {
-   "keep": false,
-   "why": "Obey Allah and the Messenger. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Obey Allah and the Messenger."
   },
   "3:160|64:13": {
-   "keep": false,
-   "why": "Upon Allah let the believers rely. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "Upon Allah let the believers rely."
   },
   "3:163|64:2": {
    "keep": false,
-   "why": "Shared closing 'Seeing of what they do' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'Seeing of what they do' only; different subjects."
   },
   "3:165|64:11": {
-   "keep": false,
-   "why": "A calamity that strikes you, and where it comes from. (owner removed)",
-   "checked": true
+   "keep": true,
+   "why": "A calamity that strikes you, and where it comes from."
   },
   "3:189|64:1": {
    "keep": false,
-   "why": "Shared closing 'able over all things' only; different subjects.",
-   "checked": true
+   "why": "Shared closing 'able over all things' only; different subjects."
   },
   "3:4|65:10": {
    "keep": false,
