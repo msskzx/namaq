@@ -24,7 +24,7 @@ import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
-import { usePreload } from '../branches/TreeSteps';
+import { TreeProgress, usePreload } from '../branches/TreeSteps';
 import { FIELD, NOTE } from '../panel';
 import PairSwipe from './PairSwipe';
 import { surahOrder, type Visit } from './pairOrder';
@@ -122,6 +122,19 @@ function TodoOnly({ a, b, todo, juz }: { a: number; b: number; todo: boolean; ju
   const id = useId();
   const label = ar ? 'غير المراجَعة فقط' : 'Unreviewed only';
   return <span title={label} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={todo} label={label} onIcon={<CircleHelp className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, true, checked, juz))} /><label htmlFor={id}>{label}</label></span>;
+}
+
+/** A neighbouring page's cards, fetched once it is a swipe away. */
+function usePairCards(pair: { a: number; b: number } | undefined, review: boolean) {
+  const key = pair && `a=${pair.a}&b=${pair.b}${review ? '&review=1' : ''}`;
+  const [loaded, setLoaded] = useState<{ key: string; cards: PairCard[] }>();
+  useEffect(() => {
+    if (!key || typeof fetch === 'undefined') return;
+    let live = true;
+    fetch(`/api/quran/compare-cards?${key}`).then(response => (response.ok ? response.json() : undefined)).then(cards => { if (live && cards) setLoaded({ key, cards }); }).catch(() => {});
+    return () => { live = false; };
+  }, [key]);
+  return loaded && loaded.key === key ? loaded.cards : undefined;
 }
 
 const unreviewed = (states: Record<string, ReviewState>, pair: { a: number; b: number }) => {
@@ -396,8 +409,14 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
   const previousTodo = states && [...rest].reverse().find(visit => unreviewed(states, visit.pair));
   const previous = todo ? previousTodo : before;
   const stepTo = (visit: Visit | undefined) => visit && { href: pairHref(visit.lead, visit.other, review, todo, juz), label: title(visit.lead, visit.other) };
-  const nextStep = stepTo(next);
-  const previousStep = stepTo(previous);
+  const nextCards = usePairCards(next?.pair, review);
+  const previousCards = usePairCards(previous?.pair, review);
+  // While swiping, the neighbouring page itself comes in beside this one: its first cards, as it opens.
+  const preview = (list: PairCard[] | undefined) => list && <ol className="flex flex-col gap-4">
+    {list.slice(0, 6).map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}
+  </ol>;
+  const nextStep = next && { ...stepTo(next)!, preview: preview(nextCards) };
+  const previousStep = previous && { ...stepTo(previous)!, preview: preview(previousCards) };
   // Load a batch of neighbours ahead (more forward than back), so swiping through pairs doesn't wait on the server.
   const near = index >= 0 && !todo ? [index + 1, index + 2, index + 3, index - 1, index - 2].flatMap(i => (order[i] ? [stepTo(order[i])!.href] : [])) : [];
   usePreload(nextStep?.href, previousStep?.href, ...near);
@@ -444,11 +463,15 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
       </NavActions>
       <h1 className="sr-only">{story ? `${title(lead, other)} - ${ar ? story.name.voweled : story.name.en}` : title(lead, other)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+        <div className="flex min-w-0 flex-col gap-3">
+        {/* Where this page sits in the list swiping walks, as on the branches trees. */}
+        {index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} />)}</ol>}
         </PairSwipe>
+        </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
           <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
         </aside>

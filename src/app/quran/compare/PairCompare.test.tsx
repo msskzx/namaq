@@ -180,6 +180,12 @@ describe('PairCompare', () => {
     expect(loaded).toEqual(expect.arrayContaining(['/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26', '/quran/compare?a=11&b=7']));
   });
 
+  it('shows where the page sits in the list swiping walks', () => {
+    render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
+    const bar = screen.getByRole('progressbar', { name: 'التقدم بين الصفحات' }) as HTMLProgressElement;
+    expect([bar.value, bar.max]).toEqual([3, 7]);
+  });
+
   it('greys out the previous chevron on the first pair', () => {
     function Chrome({ children }: { children: React.ReactNode }) {
       const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
