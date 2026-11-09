@@ -1,0 +1,227 @@
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useIsFocused } from 'expo-router';
+import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Hand, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { num } from '@shared/quran/arabicNumber';
+import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { readGestures, type GestureAction } from '@shared/readerGestures';
+import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type RecitePosition } from '@shared/quran/recite';
+import TopBar from './TopBar';
+import ReaderPager from './ReaderPager';
+import MushafPageView, { type Touch } from './MushafPageView';
+import { GestureSheet, IndexSheet, type Jump } from './ReaderSheets';
+import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { pageModel, reciteView } from '@/lib/recitePage';
+import { readJson, writeJson } from '@/lib/storage';
+import { setImmersive } from '@/lib/chrome';
+import { usePalette, type Palette } from '@/lib/theme';
+
+/** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
+const PLACE = 'reader-place';
+/** Where the last recitation (not a review) stopped, to continue it later. */
+const LAST_RECITE = 'reader-recite-last';
+type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean };
+
+/** How long (ms) a first tap waits for a second one, when a double tap does something. */
+const DOUBLE_TAP = 260;
+
+const models = new Map<number, ReturnType<typeof pageModel>>();
+const modelOf = (page: number) => {
+  let model = models.get(page);
+  if (!model) models.set(page, (model = pageModel(pageData(page), surahBefore(page))));
+  return model;
+};
+
+function IconButton({ Icon, label, onPress, palette, on = false, disabled = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; onPress: () => void; palette: Palette; on?: boolean; disabled?: boolean }) {
+  return (
+    <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled, selected: on }} hitSlop={6}
+      style={{ padding: 9, borderRadius: 999, backgroundColor: on ? palette.accent : 'transparent', opacity: disabled ? 0.35 : 1 }}>
+      <Icon size={24} color={on ? palette.onAccent : palette.ink} />
+    </Pressable>
+  );
+}
+
+/** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
+export default function Reader() {
+  const palette = usePalette();
+  const insets = useSafeAreaInsets();
+  const focused = useIsFocused();
+  const place = useMemo(() => readJson<Place>(PLACE), []);
+  const [page, setPage] = useState(() => Math.min(PAGES, Math.max(1, place?.page ?? 1)));
+  const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
+  const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
+  const [mark, setMark] = useState<{ key: string; page: number } | null>(null);
+  const [tools, setTools] = useState(false);
+  const [sheet, setSheet] = useState<'index' | 'gestures' | null>(null);
+  const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  const forgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
+  const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
+  const last = useMemo(() => (focused ? readJson<Place>(LAST_RECITE) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const reciting = !!position;
+  const mode = reciting ? 'recite' : 'read';
+  const model = modelOf(page);
+  const view = position ? reciteView(model, position) : null;
+
+  // The app's bars step aside while reading; a tap brings them back.
+  useEffect(() => {
+    setImmersive(focused && !tools);
+    return () => setImmersive(false);
+  }, [focused, tools]);
+
+  useEffect(() => {
+    writeJson(PLACE, { page, position, reviewing } satisfies Place);
+    if (position && !reviewing) writeJson(LAST_RECITE, { page, position } satisfies Place);
+  }, [page, position, reviewing]);
+
+  const turnTo = useCallback((next: number) => {
+    setPage(next);
+    setActions(null);
+  }, []);
+  const jump = useCallback((to: Jump, recite?: 'review') => {
+    setPage(to.page);
+    setActions(null);
+    setTools(false);
+    setMark(to.mark && !position ? { key: to.key, page: to.page } : null);
+    if (recite === 'review') {
+      setReviewing(true);
+      setPosition({ start: to.key, shown: null, words: 0 });
+    } else if (position) {
+      // While reciting, a link starts the recitation again from where it leads.
+      setReviewing(false);
+      setPosition({ start: to.key, shown: null, words: 0 });
+    }
+  }, [position]);
+
+  const startRecite = () => {
+    setActions(null);
+    setTools(false);
+    setReviewing(false);
+    setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
+  };
+  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); };
+  const reviewDone = reviewing && !!position?.shown;
+  const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
+  const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
+  const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
+
+  const revealNextAyah = () => {
+    if (!position || !view) return;
+    if (reviewDone) {
+      if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review');
+      return;
+    }
+    const next = view.nextAyah();
+    if (next) setPosition(next);
+    else if (page < PAGES) turnTo(page + 1);
+  };
+  const revealNextWord = () => {
+    if (!position || !view) return;
+    const next = !reviewDone && view.nextWord();
+    if (next) setPosition(next);
+    else revealNextAyah();
+  };
+  const stepBackOne = () => { if (position) setPosition(stepBack(position, ayahCounts)); };
+
+  const ayahText = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []).join(' ');
+  const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
+
+  const run = (action: GestureAction, key: string | null, x: number, y: number) => {
+    if (action === 'tools') setTools(on => !on);
+    else if (action === 'next-ayah') revealNextAyah();
+    else if (action === 'next-word') revealNextWord();
+    else if (action === 'back') stepBackOne();
+    else if (key && action === 'actions') setActions({ key, x, y });
+    else if (key && action === 'forgot') markForgotten(key);
+    else if (key && action === 'save') toggleSaved(key);
+  };
+
+  // A tap waits for a second one only when a double tap does something, so a plain tap stays instant otherwise.
+  const pending = useRef<{ timer: ReturnType<typeof setTimeout> } | null>(null);
+  const moved = useRef(0);
+  const latest = useRef(run);
+  latest.current = run;
+  const onMove = useCallback(() => {
+    moved.current = Date.now();
+    if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
+  }, []);
+  useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
+  const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number) => {
+    if (Date.now() - moved.current < 350) return;
+    const set = readGestures()[mode];
+    setActions(null);
+    if (touch === 'long') { latest.current(set.long, key, x, y); return; }
+    if (pending.current) {
+      clearTimeout(pending.current.timer);
+      pending.current = null;
+      latest.current(set.double, key, x, y);
+      return;
+    }
+    if (set.double === 'none') { latest.current(set.tap, key, x, y); return; }
+    pending.current = { timer: setTimeout(() => { pending.current = null; latest.current(set.tap, key, x, y); }, DOUBLE_TAP) };
+  }, [mode]);
+
+  const pageInsets = { top: insets.top, bottom: insets.bottom + (reciting ? 56 : 0) };
+  const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
+  const render = (at: number) => {
+    const atModel = modelOf(at);
+    return (
+      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size!.width} height={height}
+        top={surahBefore(at)} names={surahNames} mark={mark?.page === at ? mark.key : null}
+        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch} />
+    );
+  };
+
+  const actionKey = actions?.key;
+  const forgotCount = actionKey ? (forgot[actionKey]?.forgot ?? 0) : 0;
+  return (
+    <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      <View style={{ paddingTop: pageInsets.top, paddingBottom: pageInsets.bottom }}>
+        {size && height > 0 && (
+          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} />
+        )}
+      </View>
+      {tools && (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+          <TopBar>
+            <IconButton Icon={List} label="فهرس السور والبحث" palette={palette} onPress={() => setSheet('index')} />
+            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} palette={palette} on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
+            <IconButton Icon={Hand} label="اللمسات في المصحف" palette={palette} onPress={() => setSheet('gestures')} />
+          </TopBar>
+        </View>
+      )}
+      {actions && (
+        <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
+          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - 170, Math.max(8, actions.x - 80)), flexDirection: 'row', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={forgotCount ? `نسيتها مرة أخرى (نسيتها ${num(forgotCount)} من قبل)` : 'نسيتها'}
+            onPress={() => { markForgotten(actions.key); setActions(null); }}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>
+            <LightbulbOff size={24} color={forgotCount ? palette.onAccent : palette.ink} />
+            {forgotCount > 0 && <Text style={{ color: palette.onAccent, fontSize: 14 }}>{num(forgotCount)}</Text>}
+          </Pressable>
+          {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها، أزلها من المراجعة" palette={palette} onPress={() => { clearForgotten(actions.key); setActions(null); }} />}
+          <IconButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
+        </View>
+      )}
+      {position && (
+        <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
+          style={{ position: 'absolute', bottom: insets.bottom + 6, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
+          {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
+          <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
+          <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
+          <IconButton Icon={reviewDone ? ArrowLeft : ChevronsLeft} label={reviewDone ? 'الآية المنسية التالية' : 'أظهر الآية التالية'} palette={palette}
+            disabled={reviewDone ? !reviewNext : !view?.upcoming && page === PAGES} onPress={revealNextAyah} />
+          <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
+        </View>
+      )}
+      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} forgotten={forgotten}
+        last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
+      <GestureSheet open={sheet === 'gestures'} onClose={() => setSheet(null)} palette={palette} mode={mode} />
+    </View>
+  );
+}

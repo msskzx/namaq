@@ -4,8 +4,9 @@ The phone app is an Expo (React Native) app in this folder. The website stays in
 
 ## Layout
 
-- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. Only the branches tab (`index.tsx`) works so far; the others link to the website.
+- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. The branches tab (`index.tsx`) and the mushaf tab (`read.tsx`) work; the others link to the website until their threads land.
 - `src/components/` holds the app's own views. `BranchTree.tsx` draws a tree with plain views. `TreeCard.tsx` handles pinch zoom and one-finger moves. `TreePager.tsx` holds the row of cards, the saved place and the bookmark row.
+- `Reader.tsx` is the mushaf tab: `ReaderPager.tsx` swipes the 604 pages, `MushafPageView.tsx` draws one page and fits its lines (measured once per page at a base size), `ReaderSheets.tsx` has the index/search sheet and the touch settings. The pages come from `shared/data/quran/mushaf/` through `require.context` in `src/lib/mushaf.ts`; recite steps for one page are in `src/lib/recitePage.ts`.
 - `src/lib/` holds app logic. `camera.ts` and `branches.ts` have tests, which the website's `npm test` runs.
 - `metro.config.js` lets the bundler read `../shared`. Code there imports no packages.
 - The folder is `mobile/` and not `app/`, because Next.js would take a root `app/` folder as the website's routes.

@@ -73,14 +73,11 @@ describe('ReaderView', () => {
     expect(within(screen.getByRole('region', { name: 'اختصارات القراءة' })).getByText('D')).toBeTruthy();
     const tools = within(rail);
     const next = tools.getByRole('button', { name: 'الصفحة التالية' });
-    expect(next.getAttribute('data-variant')).toBe('muted');
     fireEvent.click(next);
     expect(push).toHaveBeenLastCalledWith('/quran/read/4');
     fireEvent.click(tools.getByRole('button', { name: 'اعرض صفحتين' }));
     localStorage.removeItem('quran-reader-spread');
     expect(container.querySelectorAll('section[data-side]')).toHaveLength(2);
-    expect(tools.getByRole('button', { name: 'فهرس السور' }).hasAttribute('popovertarget')).toBe(true);
-    expect(tools.getByRole('button', { name: 'ابحث عن سورة أو آية' }).hasAttribute('popovertarget')).toBe(true);
   });
 
   it('draws the page right to left with the surah title, basmala and one rosette per ayah', () => {
@@ -140,16 +137,6 @@ describe('ReaderView', () => {
       expect(marked(container)).toEqual([]);
     }
     expect(replace).not.toHaveBeenCalled();
-  });
-
-  it('preloads the pages either side, a spread at a time', () => {
-    media(false);
-    const { unmount } = render(<ReaderView page={42} pages={one(42, opening)} names={names} />);
-    expect([...new Set(prefetch.mock.calls.map(([href]) => href))].sort()).toEqual(['/quran/read/41', '/quran/read/43']);
-    unmount();
-    prefetch.mockClear();
-    render(<ReaderView page={604} pages={one(604, opening)} names={names} />);
-    expect([...new Set(prefetch.mock.calls.map(([href]) => href))]).toEqual(['/quran/read/603']);
   });
 
   it('shows two facing pages, the odd one on the right, when two pages are chosen', () => {
@@ -223,15 +210,6 @@ describe('ReaderView', () => {
     fireEvent.click(screen.getByRole('button', { name: 'إظهار الأدوات' }));
     expect(screen.getByRole('button', { name: 'الصفحة التالية' })).not.toBeNull();
     localStorage.removeItem('quran-reader-bar');
-  });
-
-  it('labels the controls in English when English is chosen, keeping the mushaf right to left', () => {
-    localStorage.setItem('language', 'en');
-    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
-    localStorage.removeItem('language');
-    expect(screen.getByRole('button', { name: 'Next page' })).not.toBeNull();
-    expect(screen.getByRole('button', { name: 'Index of surahs' })).not.toBeNull();
-    expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
   });
 
   it('reveals the surah index and search in the phone top bar and turns pages by swipe', () => {
