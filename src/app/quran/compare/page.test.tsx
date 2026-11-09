@@ -10,7 +10,7 @@ const locale = vi.hoisted(() => ({ language: 'ar' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => locale }));
 
 const redirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`redirect ${url}`); }));
-vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {} }) }));
+vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {}, prefetch: () => {} }) }));
 vi.mock('./TextCompare', () => ({ default: (props: object) => <div data-testid="text">{JSON.stringify(props)}</div> }));
 vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="similar">{JSON.stringify(p)}</div>, similarSurahPairs: (range: { range: unknown }) => (range.range ? [[52, 56], [56, 69], [56, 52]] : [[56, 69], [56, 56]]) }));
 vi.mock('@/lib/quran/topicEngine', () => ({ getTopicSurahPairs: async () => [[16, 43]] }));
@@ -70,7 +70,7 @@ describe('QuranComparePage', () => {
     const current = within(pane).getAllByRole('link', { current: 'page' });
     // The count follows the curated verdicts, which change as pairs are reviewed.
     const texts = current.map(link => link.textContent ?? '');
-    expect(texts.map(text => text.replace(/[٠-٩]+$/, ''))).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء', 'الشعرآء', 'الاعراف']);
+    expect(texts.map(text => text.replace(/[٠-٩]+$/, ''))).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالاعراف · الشعرآء', 'الشعرآء']);
     const counts = new Set(texts.map(text => text.match(/[٠-٩]+$/)?.[0]));
     expect(counts.size).toBe(1);
     const count = Number([...counts][0]!.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))));
@@ -81,12 +81,20 @@ describe('QuranComparePage', () => {
 
   it.each([
     [{ preset: 'moses-pharaoh' }, '/quran/compare?a=7&b=26'],
-    [{ a: '26', b: '7' }, '/quran/compare?a=7&b=26'],
-    [{ a: '26' }, '/quran/compare?a=7&b=26'],
+    [{ a: '26' }, '/quran/compare?a=26&b=7'],
     [{ a: '1' }, '/quran/compare?a=2&b=7'],
     [{ preset: 'does-not-exist' }, '/quran/compare?a=2&b=7'],
   ])('sends %o to %s', async (query, target) => {
     await expect(page(query)).rejects.toThrow(`redirect ${target}`);
+  });
+
+  it('opens 26·7 as the 7·26 page seen from surah 26', async () => {
+    await page({ a: '26', b: '7' });
+    expect(redirect).not.toHaveBeenCalled();
+    const pane = screen.getByRole('complementary', { name: 'اختر سورتين' });
+    const current = within(pane).getAllByRole('link', { current: 'page' }).map(link => link.getAttribute('href'));
+    expect(current).toContain('/quran/compare?a=26&b=7');
+    expect(current).not.toContain('/quran/compare?a=7&b=26');
   });
 
   it('sends an old pair link, s and t, to the comparison of that pair', async () => {

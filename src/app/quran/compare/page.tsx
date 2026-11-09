@@ -39,10 +39,11 @@ const surahOf = (value: string | string[] | undefined) => {
   return Number.isInteger(n) && n >= 1 && n <= 114 ? n : null;
 };
 
-async function pairPage(a: number, b: number, review = false, todo = false, scope?: CompareScope) {
+/** `lead` is the surah being browsed (first in the address), when it is the larger one. */
+async function pairPage(a: number, b: number, review = false, todo = false, scope?: CompareScope, lead = a) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} scope={scope} spans={surahSpans} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;
+  return <PairCompare a={a} b={b} lead={lead} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} scope={scope} spans={surahSpans} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -57,12 +58,14 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const scope = parseScope(query);
     const keepReview = `${review ? '&review=1' : ''}${todo ? '&todo=1' : ''}${scopeParam(scope)}`;
     const closest = x !== null && y === null ? closestPair(review ? reviewPairs : listedPairs, x) : undefined;
-    if (closest) redirect(`${surahPairHref(closest.a, closest.b)}${keepReview}`);
+    // A link to one surah opens its closest pair seen from that surah.
+    if (closest) redirect(`/quran/compare?a=${x}&b=${closest.a === x ? closest.b : closest.a}${keepReview}`);
     if (x === null || y === null || x === y) {
       if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(`${surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b)}${keepReview}`);
       return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review, todo, scope);
     }
-    if (x > y) redirect(`${surahPairHref(x, y)}${keepReview}`);
+    // 3·2 opens the 2·3 page seen from surah 3, so moving on walks surah 3's pairs.
+    if (x > y) return pairPage(y, x, review, todo, scope, x);
     return pairPage(x, y, review, todo, scope);
   }
   const themes = query.mode === 'themes';
