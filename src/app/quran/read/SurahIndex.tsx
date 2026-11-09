@@ -10,7 +10,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { juzGroups, parseReference, type IndexSurah } from '@/lib/quran/juzIndex';
-import { matchesSurah } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@shared/quran/surahSearch';
 import { searchable, type AyahSearch } from '@/lib/quran/ayahSearch';
 import { preloadQuranSearch, searchQuran } from '@/lib/quran/quranText';
 import styles from '@/components/homepage/Home.module.css';

@@ -9,10 +9,10 @@ import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { branchesHref, type BranchesView, type Opening } from '@shared/quran/branches';
-import { searchSharedPhrases } from '@/lib/quran/branchSearch';
+import { searchSharedPhrases } from '@shared/quran/branchSearch';
 import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import { matchesSurah } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@shared/quran/surahSearch';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 h-11 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 

@@ -20,7 +20,7 @@ import type { Group } from '@shared/quran/mutashabih/types';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import { groups } from '@shared/quran/mutashabih/data';
 import { phraseTreeId, groupHasId } from '@shared/quran/mutashabih/identity';
-import { searchSharedPhrases } from '@/lib/quran/branchSearch';
+import { searchSharedPhrases } from '@shared/quran/branchSearch';
 import { branchInventory, distinctBranchPieces } from '@shared/quran/branchInventory';
 import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';

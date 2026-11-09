@@ -1,5 +1,5 @@
 import { JUZ_STARTS } from '@shared/quran/juz';
-import { sameSurahName, searchSurahs } from './surahSearch';
+import { sameSurahName, searchSurahs } from '@shared/quran/surahSearch';
 
 export type JuzStart = { juz: number; surah: number; ayah: number; page: number };
 
@@ -32,7 +32,7 @@ export function juzGroups(surahs: IndexSurah[]): JuzGroup[] {
 
 const westernDigits = (text: string) => text.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660));
 
-export { matchesSurah } from './surahSearch';
+export { matchesSurah } from '@shared/quran/surahSearch';
 
 export type AyahReference = { surah: IndexSurah; ayah: number };
 
