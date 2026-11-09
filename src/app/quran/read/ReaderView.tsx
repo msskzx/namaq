@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, Eye, EyeOff, File, List, Search, Undo2, WholeWord, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, Search, Undo2, X } from 'lucide-react';
 import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@/lib/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@/lib/readerGestures';
@@ -97,6 +97,8 @@ export default function ReaderView({
     lines.forEach(line => line?.forEach(group => { if (group.word) counts[`${group.surah}:${group.ayah}`] = (counts[`${group.surah}:${group.ayah}`] ?? 0) + 1; }));
     return counts;
   }), [groups]);
+  /** Surah titles on each shown page, with 2 steps when a basmala follows the title, else 1. */
+  const titles = useMemo(() => shown.map(entry => entry.data.items.flatMap((item, at) => ('surah' in item ? [[item.surah, entry.data.items[at + 1] && 'basmala' in entry.data.items[at + 1] ? 2 : 1] as const] : []))), [shown]);
   /** Whether an ayah's end (its number) is on the shown pages. */
   const endsOn = (key: string) => {
     const [surah, ayah] = key.split(':').map(Number);
@@ -114,10 +116,20 @@ export default function ReaderView({
   const reciting = !!position;
   const mode = reciting ? 'recite' : 'read';
   const upcoming = position ? nextAyah(position, order) : null;
-  const upcomingLength = upcoming ? wordCounts.reduce((sum, counts) => sum + (counts[upcoming] ?? 0), 0) : 0;
+  /** While reciting, a surah's title and then its basmala are steps of their own before its first ayah (counted as its first words), unless recitation starts at that surah. */
+  const titledOn = (index: number): ReadonlyMap<number, number> => new Map(position ? titles[index].filter(([surah]) => `${surah}:1` !== position.start) : []);
+  const countsOn = (index: number) => {
+    const titled = titledOn(index);
+    if (titled.size === 0) return wordCounts[index];
+    const counts = { ...wordCounts[index] };
+    titled.forEach((steps, surah) => { counts[`${surah}:1`] = (counts[`${surah}:1`] ?? 0) + steps; });
+    return counts;
+  };
+  const upcomingLength = upcoming ? shown.reduce((sum, _, index) => sum + (countsOn(index)[upcoming] ?? 0), 0) : 0;
   const hiddenOn = (index: number) => position
-    ? (key: string, word: number) => isHidden(position, key, word + wordCounts.slice(0, index).reduce((sum, counts) => sum + (counts[key] ?? 0), 0), upcoming)
+    ? (key: string, word: number) => isHidden(position, key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (countsOn(at)[key] ?? 0), 0), upcoming)
     : undefined;
+  const titleSteps = upcoming && upcoming.endsWith(':1') ? Math.max(0, ...shown.map((_, index) => titledOn(index).get(Number(upcoming.split(':')[0])) ?? 0)) : 0;
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
   const reviewDone = reviewing && !!position?.shown;
   // The ayah under review counts even after it is cleared from the list.
@@ -170,6 +182,8 @@ export default function ReaderView({
   }, [query, reviewing]);
   const startRecite = () => {
     setActions(null);
+    // Reciting starts full screen on phones: the app bars and reading tools step aside, as after a page swipe.
+    setPhoneTools(false);
     setReviewing(false);
     setPosition({ start: mark ? `${mark.surah}:${mark.ayah}` : order[0], shown: null, words: 0 });
   };
@@ -180,7 +194,8 @@ export default function ReaderView({
       if (reviewNext) router.push(`${ayahHref(reviewNext)}?recite=${reviewNext}&review=1`);
       return;
     }
-    if (upcoming) setPosition(revealAyah(position, upcoming));
+    if (upcoming && position.words < titleSteps) setPosition({ ...position, words: position.words + 1 });
+    else if (upcoming) setPosition(revealAyah(position, upcoming));
     else if ((two ? spreadOf(page)[1] : page) < 604) go(1);
   };
   const revealNextWord = () => {
@@ -369,7 +384,7 @@ export default function ReaderView({
           {toggleTools}
         </Button>}
         {shown.map((entry, at) => (
-          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} next={upcoming} forgot={forgot} saved={saved} />
+          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)}
@@ -379,10 +394,10 @@ export default function ReaderView({
           ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`
           : `Review ${reviewAt} of ${reviewTotal}`}</span>}
         <Button size="lg" variant="muted" aria-label={ar ? 'ارجع خطوة' : 'Step back'} title={ar ? 'ارجع خطوة' : 'Step back'} disabled={atStart(position)} onClick={stepBackOne}><Undo2 aria-hidden /></Button>
-        <Button size="lg" variant="muted" aria-label={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} title={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} disabled={reviewDone} onClick={revealNextWord}><WholeWord aria-hidden /></Button>
+        <Button size="lg" variant="muted" aria-label={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} title={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} disabled={reviewDone} onClick={revealNextWord}>{ar ? <ChevronLeft aria-hidden /> : <ChevronRight aria-hidden />}</Button>
         <Button size="lg" aria-label={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
           title={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
-          disabled={reviewDone ? !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : <Eye aria-hidden />}</Button>
+          disabled={reviewDone ? !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : ar ? <ChevronsLeft aria-hidden /> : <ChevronsRight aria-hidden />}</Button>
         <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
       </div>}
     </div>

@@ -300,6 +300,44 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual([]);
   });
 
+  it('starts reciting full screen on a phone, hiding the app bars and tools', () => {
+    vi.useFakeTimers();
+    media(false, true);
+    const top = document.createElement('div');
+    const { container } = render(<NavSlotElement.Provider value={top}>
+      <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />
+    </NavSlotElement.Provider>);
+    const reader = container.querySelector('[data-reader-immersive]')!;
+    tap(screen.getByRole('article'));
+    expect(reader.getAttribute('data-reader-immersive')).toBe('false');
+    fireEvent.click(within(top).getByRole('button', { name: /^تسميع/ }));
+    expect(reader.getAttribute('data-reader-immersive')).toBe('true');
+    expect(screen.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeTruthy();
+  });
+
+  it('hides the next surah\'s title and basmala until taps reveal them, before its first ayah', () => {
+    const turn = data({ line: ['ٱلضَّآلِّينَ', 7] }, { surah: 2 }, { basmala: true }, { line: ['الٓمٓ', 1] });
+    const { container } = render(<ReaderView page={1} pages={one(1, turn, 1)} names={names} surahs={surahs} recite={{ start: '1:7', shown: null, words: 0 }} />);
+    const title = () => screen.getByRole('heading', { name: names[2] });
+    const bar = within(screen.getByRole('toolbar', { name: 'أدوات التسميع' }));
+    const next = () => fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(title().className).toMatch(/veiled/);
+    next();
+    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    expect(title().className).toMatch(/veiled/);
+    const basmala = () => screen.getByText(/^بِسۡمِ|^بِسْمِ|^بسم/).className;
+    expect(basmala()).toMatch(/veiled/);
+    next();
+    expect(title().className).not.toMatch(/veiled/);
+    expect(basmala()).toMatch(/veiled/);
+    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    next();
+    expect(basmala()).not.toMatch(/veiled/);
+    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    next();
+    expect(veiled(container)).toEqual([]);
+  });
+
   it('taps to reveal while reciting, and a long press opens the ayah buttons to mark it forgotten or save it', () => {
     vi.useFakeTimers();
     const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
