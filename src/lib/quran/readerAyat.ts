@@ -1,6 +1,6 @@
-import { readerAyat, type BranchAyah } from './branches';
-import { mushafPages } from './readerPage';
-import treeData from '@/app/quran/branches/trees.json';
+import { readerAyat, type BranchAyah } from '@shared/quran/branches';
+import { mushafPages } from '@shared/quran/readerPage';
+import treeData from '@shared/data/quran/trees.json';
 
 let source: Promise<BranchAyah[]> | undefined;
 

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { BranchAyah } from '@/lib/quran/branches';
+import type { BranchAyah } from '@shared/quran/branches';
 
 const { loadReaderAyat } = vi.hoisted(() => ({ loadReaderAyat: vi.fn() }));
 vi.mock('@/lib/quran/readerAyat', () => ({ loadReaderAyat }));

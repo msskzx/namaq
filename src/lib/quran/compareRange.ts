@@ -1,4 +1,4 @@
-import { JUZ_STARTS, juzOf, parseJuzRange, type JuzRange } from './juz';
+import { JUZ_STARTS, juzOf, parseJuzRange, type JuzRange } from '@shared/quran/juz';
 
 export type RangeUnit = 'juz' | 'surah';
 export type CompareRange = { unit: RangeUnit; range: JuzRange | null };

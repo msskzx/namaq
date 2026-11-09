@@ -1,10 +1,10 @@
 'use client';
 
 import React, { Fragment, useLayoutEffect, useMemo, useRef } from 'react';
-import { pageGroups, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
-import { isSajda, juzName, quarterLabel } from '@/lib/quran/mushafMarks';
-import { num } from '@/lib/quran/arabicNumber';
-import { plainName } from '@/lib/quran/normalize';
+import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/readerPage';
+import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
+import { num } from '@shared/quran/arabicNumber';
+import { plainName } from '@shared/quran/normalize';
 import styles from './Mushaf.module.css';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';

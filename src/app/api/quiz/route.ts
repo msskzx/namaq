@@ -4,7 +4,7 @@ import { assembleQuiz, availableQuestionCount } from '@/lib/quiz/assemble';
 import { askedAyah, ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
-import { parseJuzRange } from '@/lib/quran/juz';
+import { parseJuzRange } from '@shared/quran/juz';
 import { parseLeaves, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
 
 async function referenceClaims(claimKeys: string[]) {

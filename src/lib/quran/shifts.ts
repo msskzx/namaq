@@ -1,5 +1,5 @@
 // docs/plans/quran-within-surah.md
-import type { AyahWords } from './normalize';
+import type { AyahWords } from '@shared/quran/normalize';
 
 export type Occ = { ayah: number; word: number };
 export type Arc = { a: Occ; b: Occ; len: number };

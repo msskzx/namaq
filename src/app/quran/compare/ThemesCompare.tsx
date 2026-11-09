@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { rangeParams, type CompareRange } from '@/lib/quran/compareRange';
-import { ayahWords, plainName } from '@/lib/quran/normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 import { getSharedTopics } from '@/lib/quran/topicEngine';
 import ThemesView from '../themes/ThemesView';
 import PairForm from './PairForm';

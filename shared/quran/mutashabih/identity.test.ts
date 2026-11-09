@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import artifact from '@/app/quran/branches/mutashabih.json';
+import artifact from '../../data/quran/mutashabih.json';
 import { canonicalGroups, comparisonId, groupHasId } from './identity';
 import type { Group } from './types';
 

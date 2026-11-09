@@ -8,7 +8,7 @@ import { faChevronDown, faMagnifyingGlass } from '@fortawesome/free-solid-svg-ic
 import { ArrowDown01, ArrowDownWideNarrow } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import { announceNavigation } from '@/components/quran/RangeFilter';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { FIELD, NOTE } from '../panel';

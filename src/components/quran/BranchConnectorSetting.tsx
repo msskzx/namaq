@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { BRANCH_CONNECTORS_COOKIE } from '@/lib/quran/branchView';
+import { BRANCH_CONNECTORS_COOKIE } from '@shared/quran/branchView';
 
 export default function BranchConnectorSetting() {
   const id = useId();

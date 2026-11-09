@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { branchInventory } from '@/lib/quran/branchInventory';
+import { branchInventory } from '@shared/quran/branchInventory';
 import { searchSharedPhrases } from '@/lib/quran/branchSearch';
-import { groupFilters } from '@/lib/quran/mutashabih/browse';
-import { parseJuzRange } from '@/lib/quran/juz';
+import { groupFilters } from '@shared/quran/mutashabih/browse';
+import { parseJuzRange } from '@shared/quran/juz';
 
 export function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;

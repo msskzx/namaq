@@ -8,10 +8,10 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
-import { ayahWords, plainName } from '@/lib/quran/normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
-import { num } from '@/lib/quran/arabicNumber';
-import { wordDiff } from '@/lib/quran/wordDiff';
+import { num } from '@shared/quran/arabicNumber';
+import { wordDiff } from '@shared/quran/wordDiff';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 

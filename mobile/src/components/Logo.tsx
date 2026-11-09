@@ -1,0 +1,21 @@
+import Svg, { Circle, G, Line, Path } from 'react-native-svg';
+import { usePalette } from '@/lib/theme';
+
+// The website's small logo (src/components/common/Logo.tsx): the calligraphic tree with three joined dots.
+const INK = 'M495 -230Q559 -221 583 -104Q616 -104 619 -103Q635 -96 641 -70Q647 -44 640 -15Q633 15 608 15H576Q574 22 570.0 36.0Q566 50 561 70Q551 108 528 139Q445 249 290 270Q209 281 146 243Q93 212 72 150Q33 34 139 -115Q150 -129 160.5 -121.5Q171 -114 160 -97Q78 19 134 99Q163 139 246 150Q287 155 328.0 149.5Q369 144 411 128Q493 97 525 37Q527 28 524 14Q480 12 449.5 4.5Q419 -3 402 -19Q364 -55 422 -155Q436 -180 447.0 -196.0Q458 -212 467 -219Q481 -232 495 -230ZM498 -103Q487 -128 466 -128Q445 -128 451 -115Q462 -92 494 -95Q501 -96 498 -103Z M730 -320Q747 -322 745 -282Q743 -242 765 -209Q788 -174 811 -161Q816 -159 826.0 -155.5Q836 -152 852 -147Q887 -137 910 -126Q934 -114 934 -88Q931 -12 920 8Q910 27 887 15Q843 -9 814.5 -21.5Q786 -34 772 -34Q746 -34 693 -10Q667 2 645.5 8.5Q624 15 607 15Q584 15 575 -15Q565 -46 571 -73Q577 -102 606 -105Q678 -111 713 -129Q677 -208 705 -283Q718 -320 730 -320Z M824 -359Q765 -326 757 -297Q749 -268 758 -236Q767 -204 731 -189Q689 -172 686 -233Q684 -270 699 -311Q756 -472 869 -490Q926 -499 972 -453Q990 -433 986 -415Q965 -340 941 -331Q932 -328 920 -338Q868 -383 824 -359Z';
+const DOTS = [[843, -590], [367, -343], [553, -390]] as const;
+
+export default function Logo({ size = 32 }: { size?: number }) {
+  const palette = usePalette();
+  return (
+    <Svg width={size} height={size} viewBox="20 -665 980 960">
+      <Path d={INK} fill={palette.ink} />
+      <G stroke={palette.accent} strokeWidth={22} strokeLinecap="round">
+        <Line x1={843} y1={-590} x2={553} y2={-390} />
+        <Line x1={553} y1={-390} x2={367} y2={-343} />
+        <Line x1={843} y1={-590} x2={367} y2={-343} />
+      </G>
+      {DOTS.map(([cx, cy]) => <Circle key={cx} cx={cx} cy={cy} r={56} fill={palette.accent} />)}
+    </Svg>
+  );
+}

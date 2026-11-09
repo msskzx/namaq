@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
-import { pageOfAyah, type MushafPage } from '@/lib/quran/readerPage';
+import { pageOfAyah, type MushafPage } from '@shared/quran/readerPage';
 
 export const dynamic = 'force-dynamic';
 

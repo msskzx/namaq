@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { LemmaCounts } from '@/lib/quran/lemmas';
-import { normalizeWord } from '@/lib/quran/normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 import { NOTE, PANEL } from '../panel';
 
 export const CHART_TOP = 10;

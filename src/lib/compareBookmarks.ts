@@ -1,4 +1,4 @@
-import type { Bookmark } from './bookmarks';
+import type { Bookmark } from '@shared/bookmarks';
 
 const PREFIX = 'compare:';
 

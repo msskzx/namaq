@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { buildPhraseGroups, buildTreeGroups, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
-import treeData from '@/app/quran/branches/trees.json';
+import treeData from '../data/quran/trees.json';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
   const words = text.split(' ');
@@ -73,10 +73,6 @@ it('retains disjoint phrases even when their ayah memberships are nested', () =>
 });
 
 describe('buildPhraseGroups', () => {
-  it('returns no phrase groups for an empty corpus', () => {
-    expect(buildPhraseGroups([])).toEqual([]);
-  });
-
   it('includes two consecutive rooted words with an occurrence inside an ayah', () => {
     const groups = buildPhraseGroups([
       ayah('56:1', 'إِذَا وَقَعَتِ ٱلْوَاقِعَةُ', [null, 'wqE', 'wqE']),

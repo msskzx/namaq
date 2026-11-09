@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
-import words from './mushafWords.json';
+import data from '../data/quran/trees.json';
+import words from '../data/quran/mushafWords.json';
 
 it('covers every source word without the font-incompatible circle character', () => {
   const display: Record<string, string> = words;

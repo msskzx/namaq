@@ -3,9 +3,9 @@ import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import QuranBranchesPage from './page';
-import { groups } from '@/lib/quran/mutashabih/data';
-import { readBookmarks } from '@/lib/bookmarks';
-import { textHolds } from '@/lib/quran/branches';
+import { groups } from '@shared/quran/mutashabih/data';
+import { readBookmarks } from '@shared/bookmarks';
+import { textHolds } from '@shared/quran/branches';
 
 const navigation = vi.hoisted(() => ({ search: '', push: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), params: new Map<string, URLSearchParams>() }));
 vi.mock('next/navigation', () => ({

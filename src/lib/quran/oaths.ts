@@ -1,5 +1,5 @@
 import type { Range } from './curatedShifts';
-import { ayahWords, plainName } from './normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 
 // docs/plans/quran-oaths-and-order-juz-26.md
 export type Oath = { surah: number; range: Range; by: string[] };

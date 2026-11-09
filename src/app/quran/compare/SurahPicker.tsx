@@ -3,7 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { searchSurahs } from '@/lib/quran/surahSearch';
 import { FIELD } from '../panel';
 

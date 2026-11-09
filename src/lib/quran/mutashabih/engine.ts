@@ -1,12 +1,12 @@
 // docs/plans/quran-mutashabih.md
-import { spell, type BranchAyah } from '../branches';
-import { normalizeWord, plainName } from '../normalize';
-import { buildPhraseGroups, type PhraseOccurrence } from '../phraseTrees';
-import rawEvidence from './evidence.json';
+import { spell, type BranchAyah } from '@shared/quran/branches';
+import { normalizeWord, plainName } from '@shared/quran/normalize';
+import { buildPhraseGroups, type PhraseOccurrence } from '@shared/quran/phraseTrees';
+import rawEvidence from '@shared/quran/mutashabih/evidence.json';
 
-import { type Column, type Group, type Tag, type Kind, type Comparison, type Citation, type Word, type Level, type Position, type Place } from './types';
-export { TAGS, KINDS } from './types';
-export type { Group } from './types';
+import { type Column, type Group, type Tag, type Kind, type Comparison, type Citation, type Word, type Level, type Position, type Place } from '@shared/quran/mutashabih/types';
+export { TAGS, KINDS } from '@shared/quran/mutashabih/types';
+export type { Group } from '@shared/quran/mutashabih/types';
 
 export const MATCH_CONFIG = {
   minMatchedWords: 6,

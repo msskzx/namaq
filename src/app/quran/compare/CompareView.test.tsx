@@ -3,9 +3,9 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import CompareView from './CompareView';
-import fixture from '@/lib/quran/compare.fixture.json';
-import { alignSurahs } from '@/lib/quran/compare';
-import { ayahWords } from '@/lib/quran/normalize';
+import fixture from '@shared/quran/compare.fixture.json';
+import { alignSurahs } from '@shared/quran/compare';
+import { ayahWords } from '@shared/quran/normalize';
 import spread from '@/components/quran/PageSpread.module.css';
 
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: string }) => children }));

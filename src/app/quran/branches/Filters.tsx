@@ -3,19 +3,19 @@
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Link2, Send, X } from 'lucide-react';
-import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
+import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { isCompareBookmark } from '@/lib/compareBookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { branchesHref, type BranchesView } from '@/lib/quran/branches';
+import { branchesHref, type BranchesView } from '@shared/quran/branches';
 import Toggle from '@/components/common/Toggle';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import type { JuzRange } from '@/lib/quran/juz';
+import type { JuzRange } from '@shared/quran/juz';
 import type { RangeDraft } from '@/components/quran/RangeFilter';
 import type { ScopeOption } from '@/components/quran/ScopePicker';
 import { FilterSheet, isRangeUnit, ScopeFields, scopeRange, type FilterUnit } from '@/components/quran/ScopeFilter';
 import GroupFilterControls from './GroupFilters';
-import { hasGroupFilters, type GroupFilters } from '@/lib/quran/mutashabih/browse';
+import { hasGroupFilters, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 

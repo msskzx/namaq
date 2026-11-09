@@ -7,7 +7,7 @@ import { GalleryHorizontal } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@/lib/quran/branchView';
+import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/quran/branchView';
 
 export default function BranchViewSetting() {
   const router = useRouter();

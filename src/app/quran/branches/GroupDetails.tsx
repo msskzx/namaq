@@ -3,8 +3,8 @@
 import { Tags } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { TAGS, type Group } from '@/lib/quran/mutashabih/types';
-import { evidenceGroup } from '@/lib/quran/mutashabih/evidence';
+import { TAGS, type Group } from '@shared/quran/mutashabih/types';
+import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
 import { connectionColor, useGroupConnections } from './GroupConnections';
 
 export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: string[] }) {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
-import { type BranchAyah } from '@/lib/quran/branches';
-import { type TreeGroup } from '@/lib/quran/phraseTrees';
+import data from '@shared/data/quran/trees.json';
+import { type BranchAyah } from '@shared/quran/branches';
+import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchQuestions } from './branchQuestions';
 import { checkRebuilt, rebuildTreeAnswers, rebuildTreeAyat } from './integrity';
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/compare/pairs.json';
-import { groups } from './data';
+import { groups } from '@shared/quran/mutashabih/data';
 import { ayahPairs, closestPair, MIN_PAIRS, pairChains, pairsBySurah, pairsFor, surahOf, surahPairs } from './pairs';
 import type { SimilarAyahPair } from './similar';
 import { curatedComparisons } from '../curatedComparisons';

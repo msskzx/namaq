@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
-import { spreadOf, type MushafPage } from '@/lib/quran/readerPage';
+import { spreadOf, type MushafPage } from '@shared/quran/readerPage';
 import ReaderView, { MarkedReaderView } from '../ReaderView';
 import { garamond } from '../font';
 

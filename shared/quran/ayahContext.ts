@@ -1,5 +1,5 @@
 // docs/plans/quran-shared-openings.md
-import wordKeys from '@/app/quran/compare/wordKeys.json';
+import wordKeys from '../data/quran/wordKeys.json';
 import { spell, type BranchAyah } from './branches';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';

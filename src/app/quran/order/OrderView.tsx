@@ -6,7 +6,7 @@ import { faArrowDown, faLayerGroup, faRoute, faTableColumns, faXmark } from '@fo
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { OPENING_GROUPS, TASBIH_SURAHS } from '@/lib/quran/openings';
 import { THEMES, TOPICS_SRC, type ChipView, type HopView, type TopicView } from '@/lib/quran/surahOrder';
 import { RAIL_COLORS, RailCell, type RailColor, type RailSpan } from '@/components/quran/Rail';

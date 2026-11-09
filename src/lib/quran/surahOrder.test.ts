@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/order/ayat.json';
 import type { TopicInstance, TopicRecord } from './topicTypes';
 import { resolve } from './curatedShifts';
-import { ayahWords } from './normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { buildOrder, HOPS, sharedThemes, THEMES, TOPICS, TOPICS_SRC, type SurahTopics } from './surahOrder';
 
 const count = (n: number) => data.counts[String(n) as keyof typeof data.counts];

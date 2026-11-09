@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Cookies from 'js-cookie';
 import BranchViewSetting from './BranchViewSetting';
-import { BRANCH_VIEW_COOKIE } from '@/lib/quran/branchView';
+import { BRANCH_VIEW_COOKIE } from '@shared/quran/branchView';
 
 const refresh = vi.hoisted(() => vi.fn());
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh }) }));

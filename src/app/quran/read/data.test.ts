@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { MushafPage, ReaderPageData } from '@/lib/quran/readerPage';
+import type { MushafPage, ReaderPageData } from '@shared/quran/readerPage';
 
 const load = (page: number): ReaderPageData => JSON.parse(readFileSync(join(__dirname, 'data', `${page}.json`), 'utf8'));
 const pages = Array.from({ length: 604 }, (_, i) => load(i + 1));

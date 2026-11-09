@@ -2,7 +2,7 @@ import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { prisma } from '../../src/lib/prisma';
 import { CURATED } from '../../src/lib/quran/curatedShifts';
-import { ayahWords } from '../../src/lib/quran/normalize';
+import { ayahWords } from '../../shared/quran/normalize';
 
 // docs/plans/quran-within-surah.md
 const OUT = join(__dirname, '../../src/app/quran/iltifat/ayat.json');

@@ -5,8 +5,8 @@ import passage from './passagePairs.json';
 import curatedLinks from '@/lib/quran/curation/compareLinks.json';
 import generated from './compareCards';
 import { buildCompareCards } from './buildCards';
-import treeData from '@/app/quran/branches/trees.json';
-import { normalizeWord } from '@/lib/quran/normalize';
+import treeData from '@shared/data/quran/trees.json';
+import { normalizeWord } from '@shared/quran/normalize';
 import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {

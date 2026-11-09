@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import AyahContextButton from './AyahContext';
-import type { AyahContext } from '@/lib/quran/ayahContext';
+import type { AyahContext } from '@shared/quran/ayahContext';
 
 const quranContexts = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/quran/quranText', () => ({ quranContexts }));

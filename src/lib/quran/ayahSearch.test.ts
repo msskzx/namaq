@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { readerAyat } from './branches';
-import { normalizeWord } from './normalize';
-import { mushafPages, type MushafPage, type ReaderPageData } from './readerPage';
+import { readerAyat } from '@shared/quran/branches';
+import { normalizeWord } from '@shared/quran/normalize';
+import { mushafPages, type MushafPage, type ReaderPageData } from '@shared/quran/readerPage';
 import { indexAyat, searchAyat, searchable } from './ayahSearch';
 
 const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>

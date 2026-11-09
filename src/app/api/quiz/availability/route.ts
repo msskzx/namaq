@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { availableQuestionCount } from '@/lib/quiz/assemble';
 import { parseQuizTopics } from '@/lib/quiz/topics';
-import { parseJuzRange } from '@/lib/quran/juz';
+import { parseJuzRange } from '@shared/quran/juz';
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '@/lib/quiz/types';
 
 export async function GET(request: Request) {

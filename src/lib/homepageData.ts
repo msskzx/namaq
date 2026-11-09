@@ -1,8 +1,8 @@
 import { surahList } from './quran/surahList';
 import { homeQuranSections } from './homeQuranSections';
-import treeData from '@/app/quran/branches/trees.json';
-import { buildPhraseGroups } from './quran/phraseTrees';
-import { groups } from './quran/mutashabih/data';
+import treeData from '@shared/data/quran/trees.json';
+import { buildPhraseGroups } from '@shared/quran/phraseTrees';
+import { groups } from '@shared/quran/mutashabih/data';
 import { listedPairs } from '@/app/quran/compare/pairCards';
 
 const phrases = buildPhraseGroups(treeData.ayat);

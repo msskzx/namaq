@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { branchesHref, TOP } from '@/lib/quran/branches';
+import { branchesHref, TOP } from '@shared/quran/branches';
 import OpeningSearch from './OpeningSearch';
 
 const language = vi.hoisted(() => ({ value: 'ar' }));

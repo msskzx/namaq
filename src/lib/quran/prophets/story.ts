@@ -1,5 +1,5 @@
 import type { Range } from '../curatedShifts';
-import { ayahWords, plainName } from '../normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 
 // docs/plans/quran-prophet-timelines.md
 export type Segment = { surah: number; range: Range };

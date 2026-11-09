@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { MushafItem, MushafPage } from '../../src/lib/quran/readerPage';
+import type { MushafItem, MushafPage } from '../../shared/quran/readerPage';
 
 // docs/data-pipelines.md
 const OUT = join(__dirname, '../../src/app/quran/read/mushaf');

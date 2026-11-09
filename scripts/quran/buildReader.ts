@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { prisma } from '../../src/lib/prisma';
-import type { ReaderItem, ReaderPageData } from '../../src/lib/quran/readerPage';
+import type { ReaderItem, ReaderPageData } from '../../shared/quran/readerPage';
 
 // docs/data-pipelines.md
 const OUT = join(__dirname, '../../src/app/quran/read/data');

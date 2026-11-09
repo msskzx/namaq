@@ -1,8 +1,8 @@
-import treeData from '@/app/quran/branches/trees.json';
+import treeData from '@shared/data/quran/trees.json';
 import { compareVerdicts, type Verdict } from '@/lib/quran/curation/comparePairs';
 import { withUnappliedReviews } from '@/lib/quran/curation/reviewLog';
 import { compareAnchor } from '@/lib/compareBookmarks';
-import { juzOf } from '@/lib/quran/juz';
+import { juzOf } from '@shared/quran/juz';
 import type { SurahSpans } from '@/lib/quran/compareScope';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';

@@ -4,7 +4,7 @@ The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآ
 
 ## Questions (`branchQuestions` in `src/lib/quiz/branchQuestions.ts`)
 
-- The questions come from `src/app/quran/branches/trees.json` through `buildTreeGroups`, so the explorer and quiz use the same tree inventory. Nothing is stored separately for the quiz.
+- The questions come from `shared/data/quran/trees.json` through `buildTreeGroups`, so the explorer and quiz use the same tree inventory. Nothing is stored separately for the quiz.
 - A question accepts 2–10 distinct ayat and 2–10 branches at the first split. It carries the complete tree after the shared phrase and the words preceding that phrase in each ayah. Empty prefixes are omitted; they do not request a previous ayah. A tree is left out when an ayah ends at the shared phrase or when it does not split. The explorer's separate `PIECE_MAX` limit does not constrain quizzes.
 - Where the ayat of a piece open with different first words, with or without a leading و or ف or with a different lemma, the prompt names each spelling, such as «يَطُوفُ عَلَيْهِمْ» أو «وَيَطُوفُ عَلَيْهِمْ» or «وَإِنَّ» أو «وَإِن», and the tree draws each spelling as its own node before the shared words, as `/quran/branches` does. In the quiz these nodes carry no link, since the spelling's own tree would show the answers. After checking, each ayah carries its spelling beside its reference.
 - The setup takes a juz' range (`juzFrom` and `juzTo`, 1 to 30, default all). The ayat outside it are dropped before the tree is built, so the reader answers only the branches inside the range. In juz' 29 to 30, فلا أقسم has four branches (69:38, 70:40, 81:15, 84:16), and 56:75 in juz' 27 is not asked for. The range applies to this topic only.

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Bookmark, Check, LightbulbOff } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
 
 /** The two icons for one ayah: forgot (with how often, and a check to clear it) and save. */

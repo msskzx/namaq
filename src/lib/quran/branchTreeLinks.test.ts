@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
-import { keys, searchPhrases, type Branch, type BranchAyah } from './branches';
+import data from '@shared/data/quran/trees.json';
+import { keys, searchPhrases, type Branch, type BranchAyah } from '@shared/quran/branches';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks } from './branchTreeLinks';
-import { buildPhraseGroups, createPhrasePresenter, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from './phraseTrees';
-import { keySet, subtreeIndex, type Subtree } from './subtrees';
+import { buildPhraseGroups, createPhrasePresenter, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@shared/quran/phraseTrees';
+import { keySet, subtreeIndex, type Subtree } from '@shared/quran/subtrees';
 
 const source = data as { ayat: BranchAyah[]; trees: TreeGroup[]; subtrees: Subtree[] };
 const index = subtreeIndex(source.trees, source.subtrees);

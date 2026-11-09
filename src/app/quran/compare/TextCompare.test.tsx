@@ -3,7 +3,7 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import TextCompare from './TextCompare';
-import quran from '../branches/trees.json';
+import quran from '@shared/data/quran/trees.json';
 import spread from '@/components/quran/PageSpread.module.css';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: () => {} }) }));

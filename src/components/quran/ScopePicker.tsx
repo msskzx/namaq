@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { normalizeWord } from '@/lib/quran/normalize';
-import { toggleFilter } from '@/lib/quran/mutashabih/browse';
+import { normalizeWord } from '@shared/quran/normalize';
+import { toggleFilter } from '@shared/quran/mutashabih/browse';
 
 export type ScopeOption = { number: number; name: string; nameEn?: string };
 

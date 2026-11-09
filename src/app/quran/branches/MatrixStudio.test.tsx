@@ -2,7 +2,7 @@
 import { useRef } from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { groups } from '@/lib/quran/mutashabih/data';
+import { groups } from '@shared/quran/mutashabih/data';
 import { ConnectionLines, GroupConnections } from './GroupConnections';
 import { GroupDetails } from './GroupDetails';
 import { CardActions } from './Filters';

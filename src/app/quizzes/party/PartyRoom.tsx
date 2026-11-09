@@ -11,7 +11,7 @@ import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { useHideFooter } from "@/components/common/AppChrome";
 import { useLanguage } from "@/components/language/LanguageContext";
-import { num } from "@/lib/quran/arabicNumber";
+import { num } from "@shared/quran/arabicNumber";
 import { emptyBranchAnswers } from "@/lib/quiz/score";
 import type { QuestionChoice } from "@/lib/quiz/types";
 import { leaderboard, NAME_MAX, type ActionError, type PartyQuestion, type PartyView, type PlayerView } from "@/lib/party/rules";

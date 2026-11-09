@@ -5,7 +5,7 @@ import { LightbulbOff, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@/lib/ayahMarks';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { forgottenOrder } from '@/lib/quran/recite';
 import { LAST_RECITE_KEY } from '../ReaderView';
 

@@ -18,6 +18,7 @@ const eslintConfig = [
       ".next/**/*",
       "party/node_modules/**/*",
       "party/.wrangler/**/*",
+      "mobile/**/*",
     ],
   },
 ];

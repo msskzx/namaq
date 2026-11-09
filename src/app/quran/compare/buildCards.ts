@@ -1,5 +1,5 @@
-import treeData from '@/app/quran/branches/trees.json';
-import { groups } from '@/lib/quran/mutashabih/data';
+import treeData from '@shared/data/quran/trees.json';
+import { groups } from '@shared/quran/mutashabih/data';
 import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahPairs, surahOf, type AyahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';

@@ -10,12 +10,12 @@ import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } f
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
-import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@/lib/quran/branches';
-import type { JuzRange } from '@/lib/quran/juz';
+import { num } from '@shared/quran/arabicNumber';
+import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import type { JuzRange } from '@shared/quran/juz';
 import AyahContextButton, { GroupLinks } from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
-import { treeContexts, type AyahContext, type Surrounding } from '@/lib/quran/ayahContext';
+import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@/lib/quran/growth';

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, render, screen, within } from '@testing-library/react';
-import { toggleBookmark } from '@/lib/bookmarks';
+import { toggleBookmark } from '@shared/bookmarks';
 import { homeQuranSections } from '@/lib/homeQuranSections';
 import Homepage from './Homepage';
 

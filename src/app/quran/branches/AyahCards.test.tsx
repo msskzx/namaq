@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import AyahCards from './AyahCards';
-import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
+import type { AyahContext, Surrounding } from '@shared/quran/ayahContext';
 
 const router = { push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() };
 let params = new URLSearchParams();

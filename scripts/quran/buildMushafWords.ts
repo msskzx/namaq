@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { BranchAyah } from '../../src/lib/quran/branches';
-import type { MushafPage } from '../../src/lib/quran/readerPage';
+import type { BranchAyah } from '../../shared/quran/branches';
+import type { MushafPage } from '../../shared/quran/readerPage';
 
 const root = join(__dirname, '../..');
-const ayat: BranchAyah[] = JSON.parse(readFileSync(join(root, 'src/app/quran/branches/trees.json'), 'utf8')).ayat;
+const ayat: BranchAyah[] = JSON.parse(readFileSync(join(root, 'shared/data/quran/trees.json'), 'utf8')).ayat;
 const reader = new Map<string, string[]>();
 let surah = 0;
 let ayah = 1;
@@ -35,5 +35,5 @@ for (const entry of ayat) {
     words.set(word, display);
   });
 }
-writeFileSync(join(root, 'src/lib/quran/mushafWords.json'), `${JSON.stringify(Object.fromEntries([...words].sort(([a], [b]) => a.localeCompare(b))))}\n`);
+writeFileSync(join(root, 'shared/data/quran/mushafWords.json'), `${JSON.stringify(Object.fromEntries([...words].sort(([a], [b]) => a.localeCompare(b))))}\n`);
 console.log(`Matched ${words.size} word forms across ${ayat.length} ayat.`);

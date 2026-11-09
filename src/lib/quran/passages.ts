@@ -1,6 +1,6 @@
 // docs/plans/quran-relations-page.md
-import { ayahWords } from './normalize';
-import { wordDiff } from './wordDiff';
+import { ayahWords } from '@shared/quran/normalize';
+import { wordDiff } from '@shared/quran/wordDiff';
 
 export type AyahInput = { surah: number; ayah: number; text: string };
 export type Pos = { surah: number; ayah: number; word: number };

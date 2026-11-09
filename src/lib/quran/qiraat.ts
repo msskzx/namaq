@@ -1,5 +1,5 @@
 // docs/plans/quran-qiraat.md
-import { normalizeWord } from './normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 
 export const READERS = [
   { id: 'nafi', name: 'نافع' },

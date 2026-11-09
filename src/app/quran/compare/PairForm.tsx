@@ -6,7 +6,7 @@ import { ChevronDown, Expand } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import { announceNavigation } from '@/components/quran/RangeFilter';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { NOTE } from '../panel';
 import SurahPicker from './SurahPicker';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { branchesHref } from '@/lib/quran/branches';
+import { branchesHref } from '@shared/quran/branches';
 import JuzFilter from './JuzFilter';
 
 const params = new URLSearchParams();

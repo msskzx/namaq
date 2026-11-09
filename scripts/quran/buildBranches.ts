@@ -1,16 +1,16 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { readerAyat, sharedOpenings, withConjunctions, withNext, withRoots } from '../../src/lib/quran/branches';
-import { chapterFamilies } from '../../src/lib/quran/chapterFamilies';
-import { mushafPages, type MushafPage, type ReaderPageData } from '../../src/lib/quran/readerPage';
-import { buildTreeGroups, phrasePieces } from '../../src/lib/quran/phraseTrees';
-import { buildSubtrees } from '../../src/lib/quran/subtrees';
+import { readerAyat, sharedOpenings, withConjunctions, withNext, withRoots } from '../../shared/quran/branches';
+import { chapterFamilies } from '../../shared/quran/chapterFamilies';
+import { mushafPages, type MushafPage, type ReaderPageData } from '../../shared/quran/readerPage';
+import { buildTreeGroups, phrasePieces } from '../../shared/quran/phraseTrees';
+import { buildSubtrees } from '../../shared/quran/subtrees';
 
 // docs/plans/quran-shared-openings.md
 const READER = join(__dirname, '../../src/app/quran/read/data');
 const MUSHAF = join(__dirname, '../../src/app/quran/read/mushaf');
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
-const OUT = join(__dirname, '../../src/app/quran/branches/trees.json');
+const OUT = join(__dirname, '../../shared/data/quran/trees.json');
 
 const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(READER, `${i + 1}.json`), 'utf8')));
 const mushaf: MushafPage[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(MUSHAF, `${i + 1}.json`), 'utf8')));

@@ -6,7 +6,7 @@ import Button from '@/components/common/Button';
 import LoadingDots from '@/components/common/LoadingDots';
 import { mushafText } from '@/components/common/MushafText';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { CardSide, PairCard } from './pairCards';
 import { ayahStarts, stepTime, type ReadStep } from './readAlong';
 

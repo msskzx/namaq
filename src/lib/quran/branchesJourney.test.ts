@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
-import { branchesHref, listOpenings, listPhrases, phraseTree, sharedOpenings, startingWith, withRoots, type BranchAyah } from './branches';
-import { normalizeWord } from './normalize';
+import data from '@shared/data/quran/trees.json';
+import { branchesHref, listOpenings, listPhrases, phraseTree, sharedOpenings, startingWith, withRoots, type BranchAyah } from '@shared/quran/branches';
+import { normalizeWord } from '@shared/quran/normalize';
 
 const all = data.ayat as BranchAyah[];
 const phraseId = (words: string[]) => words.map(normalizeWord).join(' ');
