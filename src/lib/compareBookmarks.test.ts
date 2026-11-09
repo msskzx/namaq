@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bookmarkReferences } from './bookmarkReferences';
-import { compareBookmarkAyat, compareBookmarkId, isCompareBookmark, savedAs, savedSurahPairs } from './compareBookmarks';
+import { compareBookmarkAyat, compareBookmarkId, isCompareBookmark, savedAs, savedSurahPairs } from '@shared/compareBookmarks';
 
 describe('compare bookmarks', () => {
   it('keys a card by its ayah pair and reads the pair back', () => {

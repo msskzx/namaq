@@ -4,7 +4,9 @@ import type { SimilarAyahPair } from './similar';
 export type PairColumn = { a: Position; b: Position; level: Level };
 /** Two similar ayat from different surahs, lower surah first. `group` is the branches family both belong to, if any. */
 export type AyahPair = { a: string; b: string; group?: string; columns: PairColumn[] };
-export type SurahPair = { a: number; b: number; count: number };
+import type { SurahPair } from '@shared/quran/compareCards';
+
+export { closestPair, type SurahPair } from '@shared/quran/compareCards';
 
 /** A surah pair is listed only when it has at least this many similar ayah pairs. */
 export const MIN_PAIRS = 1;
@@ -93,9 +95,4 @@ export function surahPairs(bySurah: Map<string, AyahPair[]>, min = MIN_PAIRS): S
 
 export function pairsFor(bySurah: Map<string, AyahPair[]>, x: number, y: number) {
   return bySurah.get(pairId(Math.min(x, y), Math.max(x, y))) ?? [];
-}
-
-/** The listed pair that links a surah to the surah most similar to it. */
-export function closestPair(listed: SurahPair[], surah: number) {
-  return listed.filter(pair => pair.a === surah || pair.b === surah).sort((p, q) => q.count - p.count)[0];
 }
