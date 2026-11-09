@@ -15,6 +15,7 @@ import Link from 'next/link';
 import Button from '@/components/common/Button';
 import { NavActions, useDesktopRail } from '@/components/common/NavBar';
 import { useSwipe } from '@/components/common/useSwipe';
+import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
 import Segmented from '@/components/common/Segmented';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -49,6 +50,13 @@ const write = (key: string, value: string) => {
   } catch {}
 };
 
+/** The index and search panels: they hang from the top bar, so swiping up closes them. */
+function SwipePanel({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const panel = useRef<HTMLDivElement>(null);
+  useSwipeClose(panel, true, { direction: 'up', onClose: () => panel.current?.hidePopover?.() });
+  return <div ref={panel} popover="auto" className={mushaf.index} {...props}>{children}</div>;
+}
+
 export default function ReaderView({
   page,
   pages,
@@ -77,7 +85,6 @@ export default function ReaderView({
   const stage = useRef<HTMLElement>(null);
   const indexId = useId();
   const searchId = useId();
-  const searchPanel = useRef<HTMLDivElement>(null);
   const [phoneTools, setPhoneTools] = useState(false);
   const rail = useDesktopRail();
   const [spread, setSpread] = useState(false);
@@ -304,7 +311,7 @@ export default function ReaderView({
   const reciteToggle = <Button size="lg" variant={reciting ? 'primary' : 'muted'} aria-pressed={reciting} onClick={() => (reciting ? stopRecite() : startRecite())} aria-label={reciteLabel} title={reciteLabel}><EyeOff aria-hidden /></Button>;
   const indexAndSearch = <>
     <Button size="lg" variant="muted" popoverTarget={indexId} aria-label={index} title={index}><List aria-hidden /></Button>
-    <div id={indexId} popover="auto" dir={ar ? 'rtl' : 'ltr'} className={mushaf.index}>
+    <SwipePanel id={indexId} dir={ar ? 'rtl' : 'ltr'}>
       <nav aria-label={index}>
         <ol>
           {surahs.map(surah => surah.page && <li key={surah.number}>
@@ -315,11 +322,11 @@ export default function ReaderView({
           </li>)}
         </ol>
       </nav>
-    </div>
+    </SwipePanel>
     <Button size="lg" variant="muted" popoverTarget={searchId} aria-label={search} title={search}><Search aria-hidden /></Button>
-    <div ref={searchPanel} id={searchId} popover="auto" className={mushaf.index} aria-label={search}>
-      <SurahIndex surahs={surahs} fontClass={fontClass} onNavigate={() => searchPanel.current?.hidePopover?.()} />
-    </div>
+    <SwipePanel id={searchId} aria-label={search}>
+      <SurahIndex surahs={surahs} fontClass={fontClass} onNavigate={() => document.getElementById(searchId)?.hidePopover?.()} />
+    </SwipePanel>
   </>;
   return (
     <div ref={frame} data-reader-immersive={!phoneTools} data-reciting={reciting || undefined} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} ${mushaf.reader} flex flex-col`}>

@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { Check, Funnel, RotateCcw, X } from 'lucide-react';
 import Button from '@/components/common/Button';
+import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import type { JuzRange } from '@/lib/quran/juz';
@@ -67,6 +68,8 @@ export function FilterSheet({ active, onOpen, onSubmit, onReset, submitDisabled,
     panel.style.left = `${Math.max(8, Math.min(center - panel.offsetWidth / 2, window.innerWidth - panel.offsetWidth - 8))}px`;
     panel.style.maxHeight = `${Math.max(0, window.innerHeight - position - 8)}px`;
   };
+  // The panel hangs below its button, so swiping it up closes it.
+  useSwipeClose(sheet, expanded, { direction: 'up', onClose: () => closePanel() });
   useEffect(() => {
     if (!expanded) return;
     const onScroll = (event: Event) => { if (!sheet.current?.contains(event.target as Node)) place(); };

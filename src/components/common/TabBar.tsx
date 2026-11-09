@@ -14,6 +14,7 @@ import TreeIcon from './TreeIcon';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
+import { useSwipeClose } from './useSwipeClose';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
@@ -28,6 +29,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
   const { theme, setTheme } = useTheme();
   const ar = language === 'ar';
   const sheet = useRef<HTMLDivElement>(null);
+  useSwipeClose(sheet, true, { direction: 'down', onClose });
   useEffect(() => {
     const element = sheet.current;
     element?.querySelector<HTMLElement>('button, a')?.focus();

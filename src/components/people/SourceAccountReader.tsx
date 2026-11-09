@@ -10,6 +10,7 @@ import { faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, f
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Button from '@/components/common/Button';
+import { useSwipeClose } from '@/components/common/useSwipeClose';
 import NumberInput from '@/components/common/NumberInput';
 import LanguageSwitcher from '@/components/language/LanguageSwitcher';
 import ThemeSwitcher from '@/components/theme/ThemeSwitcher';
@@ -96,6 +97,7 @@ export default function SourceAccountReader({
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
+  useSwipeClose(menuPanelRef, menuOpen, { direction: 'up', onClose: () => setMenuOpen(false) });
 
   const [shellPage, setShellPage] = useState(page);
   // router.replace() updates the URL, but a search-params-only navigation
