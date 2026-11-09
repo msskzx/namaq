@@ -6,7 +6,7 @@ import { BookOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingDots from '@/components/common/LoadingDots';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { loadQuranText } from '@/lib/quran/quranText';
 import { NOTE } from '../panel';
 
