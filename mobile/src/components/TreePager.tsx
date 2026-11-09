@@ -10,12 +10,14 @@ import { branchesHref } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import TreeCard, { type Lane } from './TreeCard';
 import MatrixCard from './MatrixCard';
+import VideoSheet from './VideoSheet';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
 import { aroundOf, cardOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { growthBeats } from '@/lib/growth';
-import { answer, growthState, setTarget, useGrowth } from '@/lib/growPlayer';
+import { answer, growthState, setTarget, stop, useGrowth } from '@/lib/growPlayer';
+import { VIDEO_TYPES, type TreeScene, type VideoInput } from '@/lib/scene';
 import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
@@ -59,10 +61,10 @@ function Actions({ piece, palette, position, total, pop, onVideo }: { piece: Bra
 
 type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean; rotated: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
-  start?: number; onIndex?: (index: number) => void; onVideo?: () => void };
+  start?: number; onIndex?: (index: number) => void };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onVideo }: Props) {
+export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex }: Props) {
   const place = useMemo(() => readJson<Place>(PLACE), []);
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
@@ -80,18 +82,28 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
   const width = view?.width ?? 0;
   const growth = useGrowth();
+  const sceneRef = useRef<(() => Promise<TreeScene | null>) | null>(null);
+  const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
+  const [video, setVideo] = useState<VideoInput | null>(null);
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { onIndex?.(index); }, [index, onIndex]);
+  // A saved-only list shrinks when the open tree is unsaved: stay where it was, or on the new last tree.
+  useEffect(() => {
+    if (index < pieces.length || !pieces.length) return;
+    setIndex(pieces.length - 1);
+    if (width) offset.value = (pieces.length - 1) * width;
+  }, [pieces.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The open tree is the one the studio grows; a matrix has nothing to grow.
-  const piece = pieces[index];
+  const piece = pieces[Math.min(index, pieces.length - 1)];
   useEffect(() => {
     if (mode !== 'tree' || !piece) { setTarget(null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
     const options = { ...parts, prefixes: presentation.prefixes };
-    setTarget({ watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) });
+    beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
+    setTarget(beatsRef.current);
     return () => setTarget(null);
   }, [piece, list, mode, around]);
 
@@ -134,6 +146,16 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
     if (ayahKeys?.length) pending.current = setTimeout(() => router.push({ pathname: '/ayah', params: { keys: ayahKeys.join(',') } }), DOUBLE_TAP);
   }, [pieces, index]);
 
+  const openVideo = async () => {
+    stop();
+    const scene = await sceneRef.current?.();
+    const beats = beatsRef.current;
+    if (!scene || !beats) return;
+    const state = growthState();
+    setVideo({ scene, beats: state.mode === 'ask' ? beats.ask : beats.watch, speed: state.speed, ask: state.mode === 'ask', timer: state.timer, types: VIDEO_TYPES,
+      look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, font: '"KFGQPC Hafs"', title: piece.text, brand: 'نمق · namaq.vercel.app' } });
+  };
+
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [index - 1, index, index + 1].filter(at => at >= 0 && at < count);
   const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;
@@ -145,9 +167,9 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
           {shown.map(at => (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {mode === 'matrix'
-                ? <MatrixCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} />
+                ? <MatrixCard key={String(around)} piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
-                  rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined}
+                  rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
                   onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} />}
             </View>
@@ -157,8 +179,9 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: palette.paper }}><StudioProgress palette={palette} /></View>
       </View>
       <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
-        {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={onVideo} />}
+        {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={mode === 'tree' ? () => void openVideo() : undefined} />}
       </View>
+      <VideoSheet input={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
 }

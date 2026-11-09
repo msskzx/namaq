@@ -3,19 +3,20 @@ import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
+import type { Bookmark } from '@shared/bookmarks';
 import { mushafText } from '@shared/quran/mushafText';
 import { suggestions, type ListState } from '@/lib/branchList';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
-type Props = { state: ListState; palette: Palette; onClose: () => void;
+type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** A phrase picked from the list: its trees open there. Enter searches the typed text. */
   onPhrase: (text: string, id: string) => void; onSearch: (query: string) => void; onSurah: (surah: number) => void };
 
 /** The website's phone search: the box takes the whole top bar, surahs and phrases are suggested below while typing. */
-export default function BranchSearch({ state, palette, onClose, onPhrase, onSearch, onSurah }: Props) {
+export default function BranchSearch({ state, bookmarks, palette, onClose, onPhrase, onSearch, onSurah }: Props) {
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState(state.query);
-  const found = useMemo(() => suggestions(state, query), [state, query]);
+  const found = useMemo(() => suggestions(state, query, bookmarks), [state, query, bookmarks]);
   const typed = !!query.trim();
   const row = { flexDirection: 'row' as const, alignItems: 'baseline' as const, gap: 10, paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderColor: palette.rule };
   return (

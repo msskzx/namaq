@@ -27,7 +27,9 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-sharing",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": false

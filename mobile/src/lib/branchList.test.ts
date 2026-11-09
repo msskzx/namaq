@@ -42,9 +42,13 @@ describe('the trees the branches tab swipes through', () => {
 });
 
 describe('the filter sheet', () => {
-  it('turns a surah range into the website filters and clears the search', () => {
+  it('turns a surah range into the website filters and keeps the search', () => {
     const draft = { ...draftOf({ ...EMPTY_LIST, query: 'x' }), unit: 'surah' as const, from: '٢', to: '3' };
-    expect(applyDraft(draft)).toEqual({ filters: { surahFrom: '2', surahTo: '3' }, range: null, query: '', saved: false });
+    expect(applyDraft(draft)).toEqual({ filters: { surahFrom: '2', surahTo: '3' }, range: null, query: 'x', saved: false });
+  });
+
+  it('keeps a surah picked from the search as the surah range', () => {
+    expect(applyDraft(draftOf({ ...EMPTY_LIST, surah: 7 }))).toEqual({ filters: { surahFrom: '7', surahTo: '7' }, range: null, query: '', saved: false });
   });
 
   it('refuses a range that runs backwards or past the end', () => {

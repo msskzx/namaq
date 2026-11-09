@@ -5,6 +5,7 @@ import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming
 import { scheduleOnRN } from 'react-native-worklets';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import BranchTree, { type Direction, type TreeGrowth } from './BranchTree';
+import type { TreeScene } from '@/lib/scene';
 import { aroundOf, cardOf, surahNames } from '@/lib/branches';
 import type { ListState } from '@/lib/branchList';
 import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
@@ -30,6 +31,7 @@ type Props = {
   /** The rotate button: the open tree drawn the other way from the one it picked. */
   rotated?: boolean;
   growth?: TreeGrowth;
+  sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
   initialCamera?: Camera;
   onCamera?: (camera: Camera) => void;
   onTap: (ayahKeys: string[] | null) => void;
@@ -42,10 +44,10 @@ const SETTLE = { duration: 220 };
 /** The direction each tree picked for itself, so it is measured once. */
 const picked = new Map<string, Direction>();
 
-export default function TreeCard({ piece, list, palette, view, lane, around, rotated = false, growth, initialCamera, onCamera, onTap, onMove }: Props) {
+export default function TreeCard({ piece, list, palette, view, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove }: Props) {
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
-  const pickKey = `${piece.id}:${around}:${Math.round(view.width)}x${Math.round(view.height)}`;
+  const pickKey = `${piece.id}:${piece.keys.length}:${JSON.stringify([list.filters, list.range])}:${around}:${Math.round(view.width)}x${Math.round(view.height)}`;
   // Each tree is drawn both ways once (unseen), and opens the way it fits bigger, as on the website.
   const [trial, setTrial] = useState<Direction | null>(picked.has(pickKey) ? null : 'side');
   const sides = useRef<Partial<Record<Direction, Size>>>({});
@@ -152,7 +154,7 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content && !trial ? 1 : 0 }, style]}>
           <BranchTree key={trial ? `trial-${trial}` : direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured}
-            direction={direction} around={surrounding} growth={growth} />
+            direction={direction} around={surrounding} growth={growth} sceneRef={trial ? undefined : sceneRef} />
         </Animated.View>
       </View>
     </GestureDetector>

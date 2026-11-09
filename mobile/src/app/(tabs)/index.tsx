@@ -51,8 +51,9 @@ export default function BranchesScreen() {
   // The list is built from the bundled data after the first frame, so the tab opens at once.
   const savedKey = list.saved ? bookmarks : null;
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setTimeout(() => setPieces(branchList(list, bookmarks)), 0));
-    return () => cancelAnimationFrame(frame);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const frame = requestAnimationFrame(() => { timer = setTimeout(() => setPieces(branchList(list, bookmarks)), 0); });
+    return () => { cancelAnimationFrame(frame); clearTimeout(timer); };
   }, [list, savedKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const change = useCallback((next: ListState, opening?: { id?: string; query?: string }) => {
@@ -67,7 +68,7 @@ export default function BranchesScreen() {
     return openingIndex(pieces, start.query ?? '');
   }, [pieces, start]);
   const onIndex = useCallback(() => setRotated(false), []);
-  const listKey = JSON.stringify([list, start, list.saved ? pieces?.length : 0]);
+  const listKey = JSON.stringify([list, start]);
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -87,9 +88,9 @@ export default function BranchesScreen() {
           {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}
       <FilterSheet open={filtering} onClose={() => setFiltering(false)} state={list} onApply={next => change(next)} palette={palette} />
-      {searching && <BranchSearch state={list} palette={palette} onClose={() => setSearching(false)}
-        onPhrase={(text, id) => { setSearching(false); change({ ...list, query: text, surah: undefined }, { id, query: text }); }}
-        onSearch={query => { setSearching(false); change({ ...list, query, surah: undefined }, { query }); }}
+      {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
+        onPhrase={(text, id) => { setSearching(false); change({ ...list, query: text }, { id, query: text }); }}
+        onSearch={query => { setSearching(false); change({ ...list, query }, { query }); }}
         onSurah={surah => { setSearching(false); change({ ...list, query: '', surah }); }} />}
     </View>
   );

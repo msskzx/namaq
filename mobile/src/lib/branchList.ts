@@ -51,10 +51,11 @@ const SURAH_HITS = 3;
 export const SUGGESTIONS = 10;
 
 /** What the search box suggests while typing: surahs that have trees, then phrases (as on the website). */
-export function suggestions(state: ListState, query: string): { surahs: SurahHit[]; phrases: BranchPiece[] } {
+export function suggestions(state: ListState, query: string, bookmarks: Bookmark[] = []): { surahs: SurahHit[]; phrases: BranchPiece[] } {
   const typed = query.trim();
   if (!typed) return { surahs: [], phrases: [] };
-  const inventory = branchInventory(state.filters, state.range);
+  // Within what the filters, saved-only and the picked surah already show, as the website's suggestions are.
+  const inventory = branchList({ ...state, query: '' }, bookmarks);
   const counts: Record<number, number> = {};
   inventory.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(number => { counts[number] = (counts[number] ?? 0) + 1; }));
   const surahs = surahRows.filter(row => counts[row.number] && matchesSurah(row, typed)).slice(0, SURAH_HITS).map(row => ({ number: row.number, name: row.name, count: counts[row.number] }));
@@ -64,7 +65,7 @@ export function suggestions(state: ListState, query: string): { surahs: SurahHit
 /** The filter sheet's draft: a range of juz, surahs or pages, or picked surahs or juz, with the website's group filters. */
 export type FilterUnit = 'juz' | 'surah' | 'page' | 'surahs' | 'juzs';
 export const UNIT_MAX: Record<FilterUnit, number> = { juz: 30, surah: 114, page: 604, surahs: 114, juzs: 30 };
-export type FilterDraft = { unit: FilterUnit; from: string; to: string; picked: number[]; filters: GroupFilters; saved: boolean };
+export type FilterDraft = { unit: FilterUnit; from: string; to: string; picked: number[]; filters: GroupFilters; saved: boolean; query?: string };
 
 const SCOPE_KEYS = ['surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo'] as const;
 const listOf = (value: string | undefined) => (value ?? '').split(',').map(Number).filter(n => Number.isInteger(n) && n > 0);
@@ -73,7 +74,9 @@ export function draftOf(state: ListState): FilterDraft {
   const { filters, range } = state;
   const rest = { ...filters };
   SCOPE_KEYS.forEach(key => delete rest[key]);
-  const base = { filters: rest, saved: state.saved, picked: [] as number[] };
+  const base = { filters: rest, saved: state.saved, picked: [] as number[], query: state.query };
+  // A surah picked from the search becomes the sheet's surah range, as on the website.
+  if (state.surah && !filters.surahFrom && !filters.surahTo && !filters.pageFrom && !filters.surahs && !filters.juz) return { ...base, unit: 'surah', from: String(state.surah), to: String(state.surah) };
   if (filters.surahFrom || filters.surahTo) return { ...base, unit: 'surah', from: filters.surahFrom ?? '1', to: filters.surahTo ?? '114' };
   if (filters.pageFrom || filters.pageTo) return { ...base, unit: 'page', from: filters.pageFrom ?? '1', to: filters.pageTo ?? '604' };
   if (filters.surahs) return { ...base, unit: 'surahs', from: '1', to: '114', picked: listOf(filters.surahs) };
@@ -91,7 +94,7 @@ export function draftRange(draft: FilterDraft): JuzRange | null {
   return ok ? { from, to } : null;
 }
 
-/** The list state a submitted sheet gives; the search and picked surah are cleared, as on the website. Null while the range is invalid. */
+/** The list state a submitted sheet gives: the search stays, the picked surah becomes part of the range, as on the website. Null while the range is invalid. */
 export function applyDraft(draft: FilterDraft): ListState | null {
   const filters: GroupFilters = { ...draft.filters };
   SCOPE_KEYS.forEach(key => delete filters[key]);
@@ -107,5 +110,5 @@ export function applyDraft(draft: FilterDraft): ListState | null {
       filters[draft.unit === 'surah' ? 'surahTo' : 'pageTo'] = String(picked.to);
     }
   }
-  return { filters, range, query: '', saved: draft.saved };
+  return { filters, range, query: draft.query ?? '', saved: draft.saved };
 }
