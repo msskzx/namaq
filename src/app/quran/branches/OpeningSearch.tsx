@@ -9,7 +9,7 @@ import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { branchesHref, type BranchesView, type Opening } from '@shared/quran/branches';
-import { searchSharedPhrases } from '@/lib/quran/branchSearch';
+import { searchSharedPhrases } from '@shared/quran/branchSearch';
 import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { matchesSurah } from '@shared/quran/surahSearch';

@@ -6,7 +6,7 @@ import { cleanup, fireEvent, render as renderUI, screen, waitFor, within } from 
 import { NavSlotElement } from '@/components/common/NavBar';
 import { branch, variants, type BranchAyah } from '@shared/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
-import { branchesCorrect, emptyBranchAnswers } from '@/lib/quiz/score';
+import { branchesCorrect, emptyBranchAnswers } from '@shared/quiz/score';
 import { readBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
 import { SWRConfig } from 'swr';

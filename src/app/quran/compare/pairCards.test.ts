@@ -3,7 +3,7 @@ import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
 import curatedLinks from '@/lib/quran/curation/compareLinks.json';
-import generated from './compareCards';
+import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
 import treeData from '@shared/data/quran/trees.json';
 import { normalizeWord } from '@shared/quran/normalize';

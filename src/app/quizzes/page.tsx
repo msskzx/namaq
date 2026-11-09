@@ -29,14 +29,14 @@ import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/li
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { DEFAULT_LEAVES, parseLeaves, QUIZ_LEAVES } from "@/lib/quiz/types";
 import { num } from "@shared/quran/arabicNumber";
-import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
+import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions";
 import { parseJuzRange } from "@shared/quran/juz";
 import type { Branch, Variant } from "@shared/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
 import PersonPicker from "./PersonPicker";
 import QuestionReview from "./QuestionReview";
-import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@/lib/quiz/score";
+import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";

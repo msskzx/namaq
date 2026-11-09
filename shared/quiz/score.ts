@@ -1,6 +1,6 @@
 import { branchNodes, givenAnswer, matchTreeAnswers } from './branchAnswers';
 import type { BranchAnswer } from './branchQuestions';
-import type { Branch, Variant } from '@shared/quran/branches';
+import type { Branch, Variant } from '../quran/branches';
 
 export type ScoredQuestion = { correctAnswer?: string; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[] };
 export type QuestionAnswer = string | string[];

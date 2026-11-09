@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { branchInventory } from '@shared/quran/branchInventory';
-import { searchSharedPhrases } from '@/lib/quran/branchSearch';
+import { searchSharedPhrases } from '@shared/quran/branchSearch';
 import { groupFilters } from '@shared/quran/mutashabih/browse';
 import { parseJuzRange } from '@shared/quran/juz';
 

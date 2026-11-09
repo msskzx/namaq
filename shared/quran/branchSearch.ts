@@ -1,4 +1,4 @@
-import { searchPhrases, textHolds, type Opening } from '@shared/quran/branches';
+import { searchPhrases, textHolds, type Opening } from './branches';
 
 export function searchSharedPhrases<T extends Opening>(phrases: T[], query: string): T[] {
   const byId = new Map(phrases.map(phrase => [phrase.id, phrase]));

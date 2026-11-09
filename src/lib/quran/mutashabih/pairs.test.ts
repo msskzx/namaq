@@ -3,7 +3,7 @@ import data from '@/app/quran/compare/pairs.json';
 import { groups } from '@shared/quran/mutashabih/data';
 import { ayahPairs, closestPair, MIN_PAIRS, pairChains, pairsBySurah, pairsFor, surahOf, surahPairs } from './pairs';
 import type { SimilarAyahPair } from './similar';
-import { curatedComparisons } from '../curatedComparisons';
+import { curatedComparisons } from '@shared/quran/curatedComparisons';
 
 const pairs = ayahPairs(data.pairs as SimilarAyahPair[], groups);
 const bySurah = pairsBySurah(pairs);

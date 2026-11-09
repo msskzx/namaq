@@ -13,7 +13,7 @@ import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@shared/book
 import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
 import { forgottenOrder } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
-import { isCompareBookmark } from '@/lib/compareBookmarks';
+import { isCompareBookmark } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import type { HomepageData } from '@/lib/homepageData';

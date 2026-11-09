@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { surahOrder } from './pairOrder';
+import { surahOrder } from './compareCards';
 
 describe('surahOrder', () => {
   it('lists each surah\'s pairs under it, in the side pane\'s order', () => {

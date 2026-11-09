@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { DEFAULT_LEAVES, parseLeaves } from './types';
+import { DEFAULT_LEAVES, parseLeaves } from './settings';
 
 it('accepts difficulty one through ten and defaults invalid values', () => {
   for (let value = 1; value <= 10; value++) expect(parseLeaves(String(value))).toBe(value);

@@ -1,5 +1,5 @@
 import type { Bookmark } from '@shared/bookmarks';
-import { compareBookmarkAyat } from './compareBookmarks';
+import { compareBookmarkAyat } from '@shared/compareBookmarks';
 import { inJuzRange, parseJuzRange } from '@shared/quran/juz';
 import { parseOccurrences } from './quran/branchTreeLinks';
 
