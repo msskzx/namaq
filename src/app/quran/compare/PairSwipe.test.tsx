@@ -31,6 +31,14 @@ describe('PairSwipe', () => {
     expect(router.push).toHaveBeenCalledWith(href);
   });
 
+  it('draws the neighbouring page itself beside this one while dragging', () => {
+    render(<PairSwipe next={{ ...steps.next, preview: <p>first card of the next page</p> }} ar><p>cards</p></PairSwipe>);
+    expect(screen.queryByText('first card of the next page')).toBeNull();
+    swipe(80);
+    expect(screen.getByText('first card of the next page')).toBeTruthy();
+    expect(screen.queryByText('التالية')).toBeNull();
+  });
+
   it('slides back when there is no pair that way', () => {
     vi.useFakeTimers();
     render(<PairSwipe next={steps.next} ar><p>cards</p></PairSwipe>);

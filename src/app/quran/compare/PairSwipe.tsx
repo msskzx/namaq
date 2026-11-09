@@ -5,7 +5,8 @@ import { ArrowLeftRight } from 'lucide-react';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
-export type PairStep = { href: string; label: string };
+/** `preview` is the neighbouring page itself (its first cards), drawn beside this one while swiping. */
+export type PairStep = { href: string; label: string; preview?: React.ReactNode };
 
 /** Room between the page and the neighbouring pair's card that comes in beside it. */
 const GAP = 16;
@@ -21,6 +22,10 @@ export default function PairSwipe({ previous, next, ar, children }: { previous?:
   const lane = useRef<HTMLDivElement>(null);
   const [x, setX] = useState(0);
   const [settling, setSettling] = useState(false);
+  // How far down the page the screen is, so the neighbouring page shows its top where the reader is looking.
+  const [top, setTop] = useState(0);
+  // The side being dragged toward (1 = the page moves right), kept while it slides back; only that neighbour is drawn.
+  const [toward, setToward] = useState(0);
   const leaving = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const router = useNavigatingRouter();
@@ -32,7 +37,14 @@ export default function PairSwipe({ previous, next, ar, children }: { previous?:
     forward: dx => (ar ? dx > 0 : dx < 0),
     canStep: forward => !!target(forward),
     start: () => { clearTimeout(timer.current); setSettling(false); },
-    drag: setX,
+    drag: dx => {
+      // Measured once a sideways drag begins, not on every touch.
+      if (Math.sign(dx) !== toward) {
+        setToward(Math.sign(dx));
+        setTop(Math.max(0, -(lane.current?.getBoundingClientRect().top ?? 0) + 64));
+      }
+      setX(dx);
+    },
     step: forward => {
       const to = target(forward);
       if (!to || leaving.current) return;
@@ -42,26 +54,32 @@ export default function PairSwipe({ previous, next, ar, children }: { previous?:
       if (reducedMotion()) { leave(); return; }
       setSettling(true);
       // Move by exactly the distance to the neighbour's card, so it ends where this page was.
+      setToward(sign(forward));
       setX(sign(forward) * ((lane.current?.clientWidth ?? window.innerWidth) + GAP));
       timer.current = setTimeout(leave, SLIDE);
     },
-    cancel: () => { setSettling(true); setX(0); },
+    cancel: () => {
+      setSettling(true);
+      setX(0);
+      timer.current = setTimeout(() => { setSettling(false); setToward(0); }, SLIDE);
+    },
   });
   // The next pair's card sits on the side the page moves away from: left in Arabic, right in English.
   const side = (forward: boolean): React.CSSProperties => (sign(forward) > 0 ? { right: `calc(100% + ${GAP}px)` } : { left: `calc(100% + ${GAP}px)` });
   const neighbour = (forward: boolean) => {
     const step = target(forward);
     // Kept while sliding back, so the page doesn't return beside an empty gap.
-    if (!step || (!x && !settling)) return null;
-    return <div aria-hidden data-pair-neighbour={forward ? 'next' : 'previous'} className="absolute inset-y-0 w-full" style={side(forward)}>
-      <div className="sticky top-1/3 flex flex-col items-center gap-2 rounded-lg border border-[var(--home-rule)] bg-[var(--home-card,var(--home-paper))] px-4 py-6 text-center">
+    if (!step || sign(forward) !== toward || (!x && !settling)) return null;
+    // Bounded to the page's height, so a long neighbour never adds scroll below this page.
+    return <div aria-hidden inert data-pair-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 w-full overflow-hidden" style={{ ...side(forward), paddingTop: top }}>
+      {step.preview ?? <div className="flex flex-col items-center gap-2 rounded-lg border border-[var(--home-rule)] bg-[var(--home-card,var(--home-paper))] px-4 py-6 text-center">
         <ArrowLeftRight size={20} aria-hidden className="text-[var(--home-muted)]" />
         <span className="text-lg text-[var(--home-accent)]">{step.label}</span>
-      </div>
+      </div>}
     </div>;
   };
-  return <div ref={box} data-pair-swipe className="min-h-[60dvh] overflow-x-clip" onClickCapture={event => { if (justSwiped()) { event.preventDefault(); event.stopPropagation(); } }}>
-    <div ref={lane} className="relative flex min-w-0 flex-col gap-4" style={{ transform: x ? `translate3d(${x}px, 0, 0)` : undefined, transition: settling ? `transform ${SLIDE}ms ease-out` : undefined }}>
+  return <div ref={box} data-pair-swipe className="overflow-x-clip" onClickCapture={event => { if (justSwiped()) { event.preventDefault(); event.stopPropagation(); } }}>
+    <div ref={lane} className="relative flex min-h-[60dvh] min-w-0 flex-col gap-4" style={{ transform: x ? `translate3d(${x}px, 0, 0)` : undefined, transition: settling ? `transform ${SLIDE}ms ease-out` : undefined }}>
       {neighbour(true)}
       {neighbour(false)}
       {children}
