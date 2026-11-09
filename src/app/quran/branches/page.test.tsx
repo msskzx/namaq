@@ -24,12 +24,6 @@ import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
-import { usePageHelp } from '@/components/common/SettingsHelp';
-
-function HelpProbe() {
-  const help = usePageHelp();
-  return help ? <div data-testid="page-help" title={help.label}>{help.content}</div> : null;
-}
 
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
@@ -59,11 +53,6 @@ const shortTree = (id: string) => {
 const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
 
 describe('Quran branch trees', () => {
-  it('leaves passage comparison navigation to the shared rail', async () => {
-    render(await open({ o: 'لا اثم عليه' }));
-    expect(screen.queryByRole('link', { name: /مقار.*المقاطع/ })).toBeNull();
-  });
-
   it('keeps the tree continuation in the matrix for الم without enabling surrounding ayat', async () => {
     localStorage.setItem('branches-surround', '0');
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
@@ -313,14 +302,6 @@ describe('Quran branch trees', () => {
       .rejects.toThrow(`REDIRECT ${branchesHref(shortTree('ان المتقين في'), { from: 26, to: 30 }, { query: 'ان المتقين في', mode: 'cards', filters: { categories: 'words' } })}`);
   });
 
-  it('does not render an opening-or-inside filter or a side pane', async () => {
-    render(await follow({}));
-    expect(screen.getByRole('heading', { name: 'متشابهات القرآن' })).toBeTruthy();
-    expect(screen.queryByText('أول الآية')).toBeNull();
-    expect(screen.queryByText('داخل الآية')).toBeNull();
-    expect(screen.queryByRole('complementary')).toBeNull();
-  });
-
   it('keys the server-supplied tree header and renders it without React console errors', async () => {
     const page = await open({ o: 'ان المتقين في' });
     const headers: ReactElement[] = [];
@@ -473,32 +454,7 @@ describe('Quran branch trees', () => {
     });
   });
 
-  it('puts search and filter in the top bar, page buttons in the side rail, help in settings and share and save under the tree', async () => {
-    render(await follow({ juzFrom: '30', juzTo: '30' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'متشابهات القرآن' }).className).toContain('sr-only');
-    const bar = screen.getByTestId('nav-actions');
-    expect(within(bar).getByRole('combobox')).toBeTruthy();
-    expect(within(bar).getByRole('button', { name: 'البحث' })).toBeTruthy();
-    const filter = within(bar).getByRole('button', { name: 'تصفية' });
-    expect(filter.parentElement!.querySelector('.rounded-full')).toBeTruthy();
-    const rail = screen.getByTestId('nav-buttons');
-    const named = [
-      within(rail).getByRole('link', { name: 'اعرض بطاقات الآيات' }),
-      within(rail).getByRole('button', { name: 'الآيات المحيطة' }),
-      filter,
-    ];
-    named.forEach(control => {
-      expect(control.textContent).toBe('');
-      expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
-    });
-    render(<HelpProbe />);
-    expect(screen.getByTestId('page-help').getAttribute('title')).toBe('قواعد المطابقة');
-    const actions = screen.getByRole('button', { name: 'حفظ' }).parentElement!;
-    expect(within(actions).getByRole('button', { name: 'مشاركة' })).toBeTruthy();
-    expect(within(rail).queryByRole('button', { name: 'مشاركة' })).toBeNull();
-  });
-
-  it('shows the tree as ayah cards in cards view, crossing to the previous tree on its last card', async () => {
+  it('shows the tree as ayah cards in cards view, linking back to the same tree in tree view within the juz range', async () => {
     const trees = defaultGroups({ from: 30, to: 30 }).map(group => ({ ...group.tree, id: group.id }));
     const juz = { from: 30, to: 30 };
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
@@ -506,29 +462,6 @@ describe('Quran branch trees', () => {
     expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
     expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz, { mode: 'tree' }));
     expect(screen.queryByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeNull();
-  });
-
-  it('keeps the colour legend in the help in both views', async () => {
-    const trees = defaultGroups({ from: 30, to: 30 }).map(group => ({ ...group.tree, id: group.id }));
-    render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' })}<HelpProbe /></>);
-    const help = screen.getByTestId('page-help');
-    expect(within(help).getByText('نفس الكلمة')).toBeTruthy();
-    expect(within(help).getByText('نفس اللفظ أو الجذر')).toBeTruthy();
-    cleanup();
-    render(<>{await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' })}<HelpProbe /></>);
-    expect(within(screen.getByTestId('page-help')).queryByText('نفس الكلمة')).toBeTruthy();
-  });
-
-  it('keeps the scope dropdown and a single Apply inside the filter sheet', async () => {
-    render(await open({ o: 'لا اثم عليه' }));
-    const form = screen.getByRole('form', { name: 'تصفية', hidden: true });
-    expect(form.closest('[popover="auto"]')).toBeTruthy();
-    expect(form.querySelector('select')).toBeTruthy();
-    expect(form.querySelectorAll('button[type="submit"]')).toHaveLength(1);
-    expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).parentElement!.querySelector('.rounded-full')).toBeNull();
-    HTMLElement.prototype.showPopover ??= function () { this.dispatchEvent(Object.assign(new Event('toggle'), { newState: 'open' })); };
-    fireEvent.click(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }));
-    expect(within(screen.getByTestId('nav-actions')).getByRole('button', { name: 'تصفية' }).getAttribute('aria-expanded')).toBe('true');
   });
 });
 

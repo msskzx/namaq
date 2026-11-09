@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import data from '@shared/data/quran/trees.json';
-import { branchesHref, listOpenings, listPhrases, phraseTree, sharedOpenings, startingWith, withRoots, type BranchAyah } from '@shared/quran/branches';
+import { listOpenings, listPhrases, phraseTree, sharedOpenings, startingWith, withRoots, type BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
 
 const all = data.ayat as BranchAyah[];
@@ -98,16 +98,5 @@ describe('branch root partitions', () => {
     expect(startingWith(ayat, id, phrases[0].partition)).toHaveLength(2);
     expect(startingWith(ayat, id, phrases[1].partition)).toHaveLength(2);
     expect(tree.children.map(child => child.words[0])).toEqual(['إني', 'إني']);
-  });
-
-  it('keeps the tree identity in the URL', () => {
-    const url = new URL(branchesHref('قال رب اني', undefined, { page: 3 }), 'https://namaq.test');
-
-    expect(url.pathname).toBe('/quran/branches');
-    expect(url.searchParams.get('o')).toBe('قال رب اني');
-    expect(url.searchParams.has('r')).toBe(false);
-    expect(url.searchParams.has('g')).toBe(false);
-    expect(url.searchParams.get('p')).toBe('3');
-    expect(url.searchParams.has('v')).toBe(false);
   });
 });

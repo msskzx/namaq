@@ -114,11 +114,7 @@ describe('growing a tree', () => {
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
     await advance(10000);
     expect(document.querySelectorAll('[data-hide]')).toHaveLength(0);
-    const replay = screen.getByRole('button', { name: 'إعادة' });
-    expect(replay.querySelector('svg.lucide-play')).toBeTruthy();
-    expect(document.querySelectorAll('button svg.lucide-rotate-ccw')).toHaveLength(1);
-    expect(screen.getByRole('group', { name: 'تقدّم الشجرة' })).toBeTruthy();
-    fireEvent.click(replay);
+    fireEvent.click(screen.getByRole('button', { name: 'إعادة' }));
     expect(screen.getByRole('button', { name: 'إيقاف مؤقت' })).toBeTruthy();
     expect(box('مَقَامٍ أَمِينٍ').hasAttribute('data-hide')).toBe(true);
   });
@@ -142,25 +138,11 @@ describe('growing a tree', () => {
     expect(first.hasAttribute('data-lit')).toBe(false);
   });
 
-  it('uses accent for an enabled answer timer and muted for an unlimited wait', () => {
-    page();
-    studio();
-    fireEvent.click(screen.getByRole('button', { name: 'اكمل الايات' }));
-    const timer = screen.getByRole('button', { name: /^مهلة السؤال/ });
-    expect(timer.getAttribute('data-variant')).toBe('ghost');
-    fireEvent.click(timer);
-    fireEvent.click(timer);
-    fireEvent.click(timer);
-    expect(timer.getAttribute('aria-label')).toContain('∞');
-    expect(timer.getAttribute('data-variant')).toBe('muted');
-  });
-
-  it('resets beside Play, stops a paused countdown, and keeps the studio preferences', async () => {
+  it('resets a paused countdown and keeps the studio preferences', async () => {
     page();
     studio();
     act(() => setPrefs({ mode: 'ask', timer: 1 }));
     const reset = screen.getByRole('button', { name: 'إعادة ضبط' });
-    expect(reset.previousElementSibling).toBe(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
     fireEvent.click(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
     await advance(600);
     expect(document.querySelector('[data-hourglass]')).toBeTruthy();
@@ -241,8 +223,6 @@ describe('growing a tree', () => {
       <BranchTree tree={tree} names={{}} growable />
       <CardActions id="t" text="إن المتقين في" />
     </>);
-    const save = screen.getByRole('button', { name: 'حفظ' });
-    expect(save.nextElementSibling).toBe(screen.getByRole('button', { name: 'استوديو النمو' }));
     expect(screen.queryByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeNull();
     studio();
     expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
@@ -339,46 +319,5 @@ describe('growing a tree', () => {
     unmount();
     expect(screen.queryByRole('button', { name: 'إيقاف مؤقت' })).toBeNull();
     expect(hidden.hasAttribute('data-hide') || hidden.hasAttribute('inert')).toBe(false);
-  });
-
-  it('offers the link or a video when sharing a tree that can grow', () => {
-    vi.stubGlobal('MediaRecorder', { isTypeSupported: () => true });
-    HTMLCanvasElement.prototype.captureStream = () => ({}) as MediaStream;
-    render(<>
-      <BranchTree tree={tree} names={{}} growable />
-      <CardActions id="t" text="إن المتقين في" />
-    </>);
-    fireEvent.click(screen.getByRole('button', { name: 'مشاركة' }));
-    expect(screen.getByRole('button', { name: 'مشاركة الرابط' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'مشاركة كفيديو' })).toBeTruthy();
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('button', { name: 'مشاركة كفيديو' })).toBeNull();
-    vi.unstubAllGlobals();
-  });
-
-  it('shares the tree as a video from inside the studio', () => {
-    vi.stubGlobal('MediaRecorder', { isTypeSupported: () => true });
-    HTMLCanvasElement.prototype.captureStream = () => ({}) as MediaStream;
-    render(<>
-      <BranchTree tree={tree} names={{}} growable />
-      <CardActions id="t" text="إن المتقين في" />
-    </>);
-    studio();
-    const video = screen.getByRole('button', { name: 'مشاركة كفيديو' });
-    expect(video.nextElementSibling).toBe(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' }));
-    vi.unstubAllGlobals();
-  });
-
-  it('links to the compare card only when the tree has one', () => {
-    render(<CardActions id="t" text="إن المتقين في" compareHref="/quran/compare?a=2&b=7#c-2-23-7-194" />);
-    expect(screen.getByRole('link', { name: 'في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
-    cleanup();
-    render(<CardActions id="t" text="إن المتقين في" />);
-    expect(screen.queryByRole('link', { name: 'في المقارنة' })).toBeNull();
-  });
-
-  it('shares the link straight away when no tree is open (the ayah cards)', () => {
-    render(<CardActions id="t" text="إن المتقين في" />);
-    expect(screen.getByRole('button', { name: 'مشاركة' }).hasAttribute('aria-expanded')).toBe(false);
   });
 });

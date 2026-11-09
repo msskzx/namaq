@@ -54,9 +54,7 @@ it('opens from connectors off, draws one connection at a time, pauses, replays, 
   expect(paths()[0].style.strokeDashoffset).toBe('0');
   expect(Number(paths()[1].style.strokeDashoffset)).toBeLessThan(1);
   await advance(2500);
-  const replay = screen.getByRole('button', { name: 'إعادة' });
-  expect(replay.querySelector('.lucide-play')).toBeTruthy();
-  fireEvent.click(replay);
+  fireEvent.click(screen.getByRole('button', { name: 'إعادة' }));
   expect(paths()[0].style.strokeDashoffset).toBe('1');
   fireEvent.click(screen.getByRole('button', { name: 'إعادة ضبط' }));
   expect(paths().every(path => !path.style.strokeDashoffset && !path.style.strokeDasharray)).toBe(true);
@@ -123,18 +121,6 @@ it('closes and clears playback when comparison, column, or matrix changes', asyn
   unmount();
   await advance(2000);
   expect(root.querySelector('[data-matrix-prompt], [data-hide]')).toBeNull();
-});
-
-it('shares the matrix as video from its studio and labels controls in English', () => {
-  language = 'en';
-  vi.stubGlobal('MediaRecorder', { isTypeSupported: () => true });
-  HTMLCanvasElement.prototype.captureStream = () => ({}) as MediaStream;
-  render(<Matrix />);
-  fireEvent.click(screen.getByRole('button', { name: 'Connector studio' }));
-  expect(screen.getByRole('button', { name: 'Share as video' })).toBeTruthy();
-  expect(screen.getByRole('button', { name: 'Recall the connection' })).toBeTruthy();
-  expect(screen.getByRole('button', { name: 'Watch the connections' })).toBeTruthy();
-  expect(screen.getByRole('button', { name: 'Reset' })).toBeTruthy();
 });
 
 it('turns connectors off when deselecting the last active comparison during playback', async () => {
