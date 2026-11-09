@@ -110,7 +110,8 @@ export default function NasabView() {
             </Button>
           ))}
         </div>
-        <div className="mt-3 flex items-center gap-2 text-sm">
+        {/* Left to right like every switch: off (fathers only) on the left, on (with descendants) on the right. */}
+        <div dir="ltr" className="mt-3 flex items-center gap-2 text-sm">
           <button type="button" tabIndex={-1} aria-hidden className={sideLabel(!descendants)} onClick={() => setDescendants(false)}>
             {isArabic ? 'الآباء فقط' : 'Fathers only'}
           </button>
