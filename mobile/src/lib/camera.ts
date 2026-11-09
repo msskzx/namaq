@@ -43,3 +43,10 @@ export const isZoomed = (camera: Camera, content: Size, view: Size) => {
   'worklet';
   return camera.s > fitCamera(content, view).s * 1.02;
 };
+
+/** Top down only when it is clearly bigger: right to left stays the usual way to read a tree (the website's rule). */
+export const DOWN_GAIN = 1.15;
+export function pickDirection(side: Size, down: Size, view: Size): 'side' | 'down' {
+  const fit = (size: Size) => Math.min(MAX_FIT, view.width / size.width, view.height / size.height);
+  return fit(down) > fit(side) * DOWN_GAIN ? 'down' : 'side';
+}
