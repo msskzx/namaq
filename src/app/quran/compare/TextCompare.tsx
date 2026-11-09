@@ -1,11 +1,11 @@
 import { prisma } from '@/lib/prisma';
-import { alignSurahs, clampRange, wordTokens } from '@/lib/quran/compare';
+import { alignSurahs, clampRange, wordTokens } from '@shared/quran/compare';
 import { rangeParams, type CompareRange } from '@/lib/quran/compareRange';
-import { ayahWords } from '@/lib/quran/normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import CompareView from './CompareView';
 import PairForm from './PairForm';
 import SimilarAyat from './SimilarAyat';
-import wordKeys from './wordKeys.json';
+import wordKeys from '@shared/data/quran/wordKeys.json';
 import { NOTE } from '../panel';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');

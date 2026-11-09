@@ -1,8 +1,8 @@
 // Subtree buttons on /quran/branches: the link each node opens, and how the page reads ?o= and ?at= back.
-import { branchesHref, keys, searchKey, type Branch, type BranchesView } from './branches';
-import type { JuzRange } from './juz';
-import type { PhraseGroup } from './phraseTrees';
-import { keySet } from './subtrees';
+import { branchesHref, keys, searchKey, type Branch, type BranchesView } from '@shared/quran/branches';
+import type { JuzRange } from '@shared/quran/juz';
+import type { PhraseGroup } from '@shared/quran/phraseTrees';
+import { keySet } from '@shared/quran/subtrees';
 
 const memberCount = (group: PhraseGroup) => new Set(group.occurrences.map(occurrence => occurrence.key)).size;
 

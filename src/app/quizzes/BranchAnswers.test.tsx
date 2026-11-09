@@ -4,11 +4,11 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render as renderUI, screen, waitFor, within } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
-import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
+import { branch, variants, type BranchAyah } from '@shared/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
 import { branchesCorrect, emptyBranchAnswers } from '@/lib/quiz/score';
-import { readBookmarks } from '@/lib/bookmarks';
-import { branchesHref } from '@/lib/quran/branches';
+import { readBookmarks } from '@shared/bookmarks';
+import { branchesHref } from '@shared/quran/branches';
 import { SWRConfig } from 'swr';
 
 const quranSurrounding = vi.hoisted(() => vi.fn());

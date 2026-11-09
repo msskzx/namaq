@@ -1,7 +1,7 @@
 // docs/plans/quran-similar-ayat.md
 import type { ReactNode } from 'react';
 import { prisma } from '@/lib/prisma';
-import { ayahWords } from '@/lib/quran/normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { ayahInRange, type CompareRange } from '@/lib/quran/compareRange';
 import type { SimilarPair, Span } from '@/lib/quran/similar';
 import similar from './similar.json';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { RepetitionProvider, RepetitionStats } from './Repetition';
 import { buildRepetition, type Repetition, type RepetitionInput } from '@/lib/quran/repetition';
 

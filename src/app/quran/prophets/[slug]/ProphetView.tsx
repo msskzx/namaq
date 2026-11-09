@@ -6,7 +6,7 @@ import { faArrowLeft, faArrowRight, faBookQuran } from '@fortawesome/free-solid-
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import AyatDisclosure from '@/components/quran/AyatDisclosure';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { EventView, SegmentView } from '@/lib/quran/prophets/story';
 
 // docs/plans/quran-prophet-timelines.md

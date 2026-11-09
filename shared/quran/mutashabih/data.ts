@@ -1,4 +1,4 @@
-import artifact from '@/app/quran/branches/mutashabih.json';
+import artifact from '../../data/quran/mutashabih.json';
 import type { Group } from './types';
 import { canonicalGroups } from './identity';
 import { categorizedGroups } from './categories';

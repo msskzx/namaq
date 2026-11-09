@@ -1,4 +1,4 @@
-import { compactKeys, compactQuery } from './searchText';
+import { compactKeys, compactQuery } from '@shared/quran/searchText';
 
 /** One surah search for the reader index, the branches pane and the compare pickers. */
 export type SearchableSurah = { number: number; name: string; nameTransliterated?: string | null };

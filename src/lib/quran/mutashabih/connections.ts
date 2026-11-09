@@ -1,4 +1,4 @@
-import type { Group, Position, Tag } from './types';
+import type { Group, Position, Tag } from '@shared/quran/mutashabih/types';
 
 export type ConnectionEnd = { words: Position[] } | { gap: Position; edge: 'before' | 'after' };
 export type WordConnection = { from: ConnectionEnd; to: ConnectionEnd };

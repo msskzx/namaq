@@ -3,8 +3,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode, type RefObject } from 'react';
 import { closeStudio, growthState, useGrowth, useMatrixGrowTarget } from './Grow';
 import { wordConnections, type ConnectionEnd } from '@/lib/quran/mutashabih/connections';
-import type { Group, Tag } from '@/lib/quran/mutashabih/types';
-import { evidenceGroup } from '@/lib/quran/mutashabih/evidence';
+import type { Group, Tag } from '@shared/quran/mutashabih/types';
+import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
 
 const Connections = createContext<{ group?: Group; selected: Tag[]; select: (tag: Tag) => void; enable: () => void } | null>(null);
 export const useGroupConnections = () => useContext(Connections);

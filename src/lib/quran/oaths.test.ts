@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/oaths/ayat.json';
-import { normalizeWord } from './normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 import { buildOaths, OATHS } from './oaths';
 
 const { oaths, lines } = buildOaths(data);

@@ -1,6 +1,6 @@
-import type { BranchAyah } from '../branches';
+import type { BranchAyah } from '@shared/quran/branches';
 import { compareAyat } from './engine';
-import type { Level } from './types';
+import type { Level } from '@shared/quran/mutashabih/types';
 
 /** Compare page criteria on the متشابه engine's word alignment: shorter ayat that share a few words, lemmas or roots
  *  count, unlike the long near-identical ayat the branches page asks for. Only content words (words with a root) count. */

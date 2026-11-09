@@ -6,7 +6,7 @@ import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { searchHomeQuranSections, type HomeQuranSections } from '@/lib/homeQuranSections';
 import styles from './HomeQuranWidget.module.css';
 

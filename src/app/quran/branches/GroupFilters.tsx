@@ -3,8 +3,8 @@
 import { ArrowDownWideNarrow, BookOpen, Check, Link2, Tags } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { SORTS, groupFilters, toggleFilter, type GroupFilters } from '@/lib/quran/mutashabih/browse';
-import { SUPPORTED_TAGS } from '@/lib/quran/mutashabih/evidence';
+import { SORTS, groupFilters, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
+import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
 
 const categories = {
   mutashabeh: { ar: 'متشابهات', en: 'Mutashabeh' },

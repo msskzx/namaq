@@ -6,8 +6,8 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import PageSpread, { MatchLegend, type SpreadAyah, type SpreadMark } from '@/components/quran/PageSpread';
-import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
-import { num } from '@/lib/quran/arabicNumber';
+import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@shared/quran/compare';
+import { num } from '@shared/quran/arabicNumber';
 import { NOTE, PANEL } from '../panel';
 import ViewHeader from './ViewHeader';
 

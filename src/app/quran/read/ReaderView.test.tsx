@@ -5,7 +5,7 @@ import { act, cleanup, fireEvent, render as rtlRender, screen, within } from '@t
 import { NavSlotElement, RailSlotElement } from '@/components/common/NavBar';
 import { usePageHelp } from '@/components/common/SettingsHelp';
 import { LanguageProvider } from '@/components/language/LanguageContext';
-import type { MushafPage } from '@/lib/quran/readerPage';
+import type { MushafPage } from '@shared/quran/readerPage';
 import ReaderView, { MarkedReaderView } from './ReaderView';
 import SurahIndex from './SurahIndex';
 

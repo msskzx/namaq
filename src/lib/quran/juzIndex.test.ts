@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { ReaderPageData } from './readerPage';
+import type { ReaderPageData } from '@shared/quran/readerPage';
 import { JUZ_INDEX, juzGroups, matchesSurah, parseReference, type IndexSurah } from './juzIndex';
 
 const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>

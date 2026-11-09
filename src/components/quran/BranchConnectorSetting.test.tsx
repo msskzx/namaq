@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Cookies from 'js-cookie';
 import BranchConnectorSetting from './BranchConnectorSetting';
-import { BRANCH_CONNECTORS_COOKIE } from '@/lib/quran/branchView';
+import { BRANCH_CONNECTORS_COOKIE } from '@shared/quran/branchView';
 
 const refresh = vi.hoisted(() => vi.fn());
 const language = vi.hoisted(() => ({ value: 'en' }));

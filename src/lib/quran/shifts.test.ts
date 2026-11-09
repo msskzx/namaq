@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import compare from './compare.fixture.json';
+import compare from '@shared/quran/compare.fixture.json';
 import own from './shifts.fixture.json';
-import { ayahWords } from './normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { ARC_MIN, findShifts, REFRAIN_MANY } from './shifts';
 
 const fx = { ...compare, ...own } as Record<string, string[]>;

@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { BranchAyah, WordFeatures } from '../../src/lib/quran/branches';
+import type { BranchAyah, WordFeatures } from '../../shared/quran/branches';
 import { buildGroups, KINDS, TAGS } from '../../src/lib/quran/mutashabih/engine';
-import source from '../../src/app/quran/branches/trees.json';
+import source from '../../shared/data/quran/trees.json';
 
 const features = new Map<string, WordFeatures[]>();
 const corpus = readFileSync(join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
@@ -25,7 +25,7 @@ for (const line of corpus.split('\n')) {
 }
 const ayat: BranchAyah[] = source.ayat.map(ayah => ({ ...ayah, features: features.get(ayah.key) }));
 const groups = buildGroups(ayat);
-const out = join(__dirname, '../../src/app/quran/branches/mutashabih.json');
+const out = join(__dirname, '../../shared/data/quran/mutashabih.json');
 writeFileSync(out, `${JSON.stringify(groups)}\n`);
 for (const kind of Object.keys(KINDS)) console.log(kind, groups.filter(group => group.kind === kind).length);
 for (const tag of Object.keys(TAGS)) console.log(tag, groups.filter(group => group.tags.some(value => value === tag)).length);

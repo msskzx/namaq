@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Layers3, ListOrdered, Waves } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import RangeFilter from '@/components/quran/RangeFilter';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { RANGE_KEYS, RANGE_MAX, rangeParams, type CompareRange, type RangeUnit } from '@/lib/quran/compareRange';
-import type { JuzRange } from '@/lib/quran/juz';
+import type { JuzRange } from '@shared/quran/juz';
 import { tabHref, type CompareTab } from './modeHref';
 
 type Query = Record<string, string>;

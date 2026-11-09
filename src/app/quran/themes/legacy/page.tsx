@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
-import { ayahWords } from '@/lib/quran/normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import ThemesView from '../ThemesView';
 import pairs from './data/index';
 

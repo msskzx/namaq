@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { GroupDetails } from './GroupDetails';
 import { GroupConnections } from './GroupConnections';
 import BranchTree from './BranchTree';
-import { groups } from '@/lib/quran/mutashabih/data';
+import { groups } from '@shared/quran/mutashabih/data';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace: vi.fn() }) }));

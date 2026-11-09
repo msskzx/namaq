@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
-import { ayahEnds, branch, branchesHref, conjunctions, linkable, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from './branches';
-import { inJuzRange } from './juz';
-import { normalizeWord } from './normalize';
+import data from '@shared/data/quran/trees.json';
+import { ayahEnds, branch, branchesHref, conjunctions, linkable, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from '@shared/quran/branches';
+import { inJuzRange } from '@shared/quran/juz';
+import { normalizeWord } from '@shared/quran/normalize';
 
 const all = data.ayat as BranchAyah[];
 const groups = sharedOpenings(all);

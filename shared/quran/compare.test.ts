@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './compare.fixture.json';
-import wordKeys from '@/app/quran/compare/wordKeys.json';
+import wordKeys from '../data/quran/wordKeys.json';
 import { alignSurahs, clampRange, compareHref, groupPairs, strictRows, wordSlots, wordTokens, type Block } from './compare';
 import { ayahWords } from './normalize';
 

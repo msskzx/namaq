@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { mushafPages, pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from './readerPage';
+import { mushafPages, pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from '@shared/quran/readerPage';
 
 const load = async (page: number): Promise<ReaderPageData> =>
   JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${page}.json`), 'utf8'));

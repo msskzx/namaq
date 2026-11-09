@@ -1,5 +1,5 @@
 // docs/plans/quran-within-surah.md
-import { ayahWords, plainName } from './normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 import { findShifts } from './shifts';
 
 export type Range = [number, number];

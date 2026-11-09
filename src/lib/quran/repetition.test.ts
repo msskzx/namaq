@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import compare from './compare.fixture.json';
+import compare from '@shared/quran/compare.fixture.json';
 import { buildRepetition, type RepetitionInput } from './repetition';
 import { findPassages, type AyahInput } from './passages';
 

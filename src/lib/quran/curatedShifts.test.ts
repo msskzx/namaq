@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/iltifat/ayat.json';
 import { buildCurated, CURATED, MODES, resolve, USED_MODES } from './curatedShifts';
-import { ayahWords } from './normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { ARC_MIN } from './shifts';
 
 const words = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false);

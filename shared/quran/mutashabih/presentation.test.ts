@@ -5,7 +5,7 @@ import { ayahEnds, type BranchAyah } from '../branches';
 import { groups } from './data';
 import { groupHasId } from './identity';
 import { num } from '../arabicNumber';
-import data from '@/app/quran/branches/trees.json';
+import data from '../../data/quran/trees.json';
 
 const ayat = new Map<string, BranchAyah>(data.ayat.map(ayah => [ayah.key, ayah]));
 

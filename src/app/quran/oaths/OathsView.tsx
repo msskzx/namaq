@@ -6,7 +6,7 @@ import { faRoute } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { RAIL_COLORS, RailCell } from '@/components/quran/Rail';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { OathView, WordLine } from '@/lib/quran/oaths';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';

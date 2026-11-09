@@ -2,7 +2,7 @@ import React from 'react';
 import { SLOT_COLORS } from '@/components/quran/slotColors';
 import { MODES, type CuratedView, type Mode } from '@/lib/quran/curatedShifts';
 import { Card } from '../Card';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';

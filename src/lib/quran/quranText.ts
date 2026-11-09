@@ -1,6 +1,6 @@
 import { indexAyat, searchAyat, type AyahSearch, type IndexedAyah } from './ayahSearch';
-import type { AyahContext, Surrounding } from './ayahContext';
-import type { BranchAyah } from './branches';
+import type { AyahContext, Surrounding } from '@shared/quran/ayahContext';
+import type { BranchAyah } from '@shared/quran/branches';
 
 let text: Promise<BranchAyah[]> | undefined;
 let textReady = false;
@@ -51,7 +51,7 @@ async function ask<T>(url: string): Promise<T> {
 /** Each ayah with its neighbours, marking the words every one of them shares. */
 export async function quranContexts(wanted: string[]): Promise<AyahContext[]> {
   if (!textReady) return ask(`/api/quran/context?${new URLSearchParams({ q: wanted.join(',') })}`);
-  const [ayat, { ayahContexts, sharedByAll }] = await Promise.all([loadQuranText(), import('./ayahContext')]);
+  const [ayat, { ayahContexts, sharedByAll }] = await Promise.all([loadQuranText(), import('@shared/quran/ayahContext')]);
   const contexts = ayahContexts(ayat, wanted);
   if (contexts.length !== new Set(wanted).size) throw new Error('Ayah not found');
   return sharedByAll(contexts);
@@ -59,6 +59,6 @@ export async function quranContexts(wanted: string[]): Promise<AyahContext[]> {
 
 export async function quranSurrounding(before: string[], after: string[]): Promise<Surrounding> {
   if (!textReady) return ask(`/api/quran/surrounding?${new URLSearchParams({ before: before.join(','), after: after.join(',') })}`);
-  const [ayat, { surrounding }] = await Promise.all([loadQuranText(), import('./ayahContext')]);
+  const [ayat, { surrounding }] = await Promise.all([loadQuranText(), import('@shared/quran/ayahContext')]);
   return surrounding(ayat, before, after);
 }

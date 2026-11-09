@@ -6,7 +6,7 @@ import { Check, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import { useLanguage } from '@/components/language/LanguageContext';
-import type { JuzRange } from '@/lib/quran/juz';
+import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 export const NAVIGATING = 'range-filter:navigating';

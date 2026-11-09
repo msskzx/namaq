@@ -3,7 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { NOTE } from '../panel';
 
 type Span = { from: number; to: number };

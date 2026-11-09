@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/branches/trees.json';
+import data from '../data/quran/trees.json';
 import { branch, grown, keys, linkable, listPhrases, sharedOpenings, startingWith, searchPhrases, type Branch, type BranchAyah } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';

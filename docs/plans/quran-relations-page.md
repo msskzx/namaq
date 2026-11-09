@@ -48,7 +48,7 @@ as a count and nothing else.
 miss; the page fetches it once. There is no build step, no generated file and no
 migration. The old `npm run quran:demo` and its `runs.json` are gone.
 
-1. `src/lib/quran/normalize.ts` drops tashkeel and Quranic marks, folds
+1. `shared/quran/normalize.ts` drops tashkeel and Quranic marks, folds
    alef forms to alef, alef maqsura and Persian yeh to yeh, teh marbuta to heh,
    drops standalone waqf marks, joins a split superscript alef, and strips the
    prepended basmala. Matching uses the normalized word, display keeps the
@@ -59,7 +59,7 @@ migration. The old `npm run quran:demo` and its `runs.json` are gone.
    mismatch the extension resumes if three words match within four words on
    either side. A seed already inside a passage found for the same two places
    is skipped.
-3. `src/lib/quran/wordDiff.ts` aligns the two passages (longest common
+3. `shared/quran/wordDiff.ts` aligns the two passages (longest common
    subsequence) and returns the words that differ on each side.
 
 The ten-word minimum is the first thing a reviewer should challenge. Per-ayah

@@ -8,8 +8,8 @@ import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
-import { sharedByAll, type Neighbour, type Surrounding } from '@/lib/quran/ayahContext';
+import { num } from '@shared/quran/arabicNumber';
+import { sharedByAll, type Neighbour, type Surrounding } from '@shared/quran/ayahContext';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
 

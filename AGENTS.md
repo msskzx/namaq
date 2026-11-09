@@ -17,6 +17,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   doesn't already have it loaded. Its `ponytail:` shortcut-marker comments
   don't apply here — this repo's no-comment rule above still governs.
 
+## Website, phone app and shared code
+
+- The website is in `src/`. The phone app (Expo) is in `mobile/`; see `mobile/README.md`.
+- Pure logic and data that both use live in `shared/` and are imported as `@shared/...`.
+  Code in `shared/` imports no packages, no React and no database, and uses relative
+  imports, so the app's bundler can read it.
+- Move code into `shared/` when the app needs it, and keep the website's tests passing.
+
 ## Testing
 
 - New functionality must be covered by automated tests. **Search and graph

@@ -1,5 +1,5 @@
 // docs/plans/quran-repetition-merge.md
-import { ayahWords } from './normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { findPassages, type Passage } from './passages';
 import { groupPassages, type PassageGroup } from './passageGroups';
 import { findPhrases, type Occ } from './shifts';

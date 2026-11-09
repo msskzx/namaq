@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCodeCompare } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { Repetition } from '@/lib/quran/repetition';
 import { NOTE, PANEL } from '../panel';
 import LoadingSpinner from '@/components/common/LoadingSpinner';

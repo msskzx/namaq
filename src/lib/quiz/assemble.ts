@@ -1,11 +1,11 @@
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import treeData from '@/app/quran/branches/trees.json';
-import type { Branch, BranchAyah, Variant } from '@/lib/quran/branches';
-import type { JuzRange } from '@/lib/quran/juz';
+import treeData from '@shared/data/quran/trees.json';
+import type { Branch, BranchAyah, Variant } from '@shared/quran/branches';
+import type { JuzRange } from '@shared/quran/juz';
 import { askedNodes } from './branchAnswers';
 import { branchQuestions, type BranchAnswer, type BranchQuestion } from './branchQuestions';
-import type { TreeGroup } from '@/lib/quran/phraseTrees';
+import type { TreeGroup } from '@shared/quran/phraseTrees';
 import { shuffle, type Random } from './random';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';

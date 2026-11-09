@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { findPassages } from './passages';
 import { sideCards } from './cards';
-import { normalizeWord } from './normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 import runs from './passages.fixture.json';
 import ayat from './ayat.fixture.json';
 

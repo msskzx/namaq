@@ -1,13 +1,37 @@
-/** Saved trees, kept in this browser for now. Accounts can later sync this list behind the same functions. */
+/** Saved trees, kept on this device for now. Accounts can later sync this list behind the same functions. */
 export type Bookmark = { id: string; text: string; href: string; savedAt: number };
+
+/** Where the list is kept: localStorage on the website, the app's own key-value store on the phone. */
+export type BookmarkStorage = {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+  /** Changes made elsewhere (another browser tab). */
+  subscribe?(listener: () => void): () => void;
+};
+
+const browserStorage: BookmarkStorage = {
+  getItem: key => localStorage.getItem(key),
+  setItem: (key, value) => localStorage.setItem(key, value),
+  subscribe: listener => {
+    window.addEventListener('storage', listener);
+    return () => window.removeEventListener('storage', listener);
+  },
+};
 
 const KEY = 'bookmarks';
 const listeners = new Set<() => void>();
+let storage = browserStorage;
 let cache: { raw: string | null; list: Bookmark[] } = { raw: null, list: [] };
+
+export function setBookmarkStorage(next: BookmarkStorage) {
+  storage = next;
+  cache = { raw: null, list: [] };
+  listeners.forEach(listener => listener());
+}
 
 export function readBookmarks(): Bookmark[] {
   let raw: string | null = null;
-  try { raw = localStorage.getItem(KEY); } catch {}
+  try { raw = storage.getItem(KEY); } catch {}
   if (raw === cache.raw) return cache.list;
   let list: Bookmark[] = [];
   try {
@@ -19,7 +43,7 @@ export function readBookmarks(): Bookmark[] {
 }
 
 function write(list: Bookmark[]) {
-  try { localStorage.setItem(KEY, JSON.stringify(list)); } catch {}
+  try { storage.setItem(KEY, JSON.stringify(list)); } catch {}
   listeners.forEach(listener => listener());
 }
 
@@ -39,8 +63,8 @@ export function toggleBookmark(item: Omit<Bookmark, 'savedAt'>, aliases: string[
 
 export function subscribeBookmarks(listener: () => void) {
   listeners.add(listener);
-  window.addEventListener('storage', listener);
-  return () => { listeners.delete(listener); window.removeEventListener('storage', listener); };
+  const external = storage.subscribe?.(listener);
+  return () => { listeners.delete(listener); external?.(); };
 }
 
 const NONE: Bookmark[] = [];

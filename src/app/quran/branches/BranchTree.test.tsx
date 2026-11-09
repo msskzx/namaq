@@ -3,14 +3,14 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
+import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@shared/quran/branches';
 import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
-import data from './trees.json';
-import { phrasePresentation } from '@/lib/quran/phraseTrees';
-import { ayahContexts, sharedByAll, surrounding } from '@/lib/quran/ayahContext';
-import { inJuzRange } from '@/lib/quran/juz';
+import data from '@shared/data/quran/trees.json';
+import { phrasePresentation } from '@shared/quran/phraseTrees';
+import { ayahContexts, sharedByAll, surrounding } from '@shared/quran/ayahContext';
+import { inJuzRange } from '@shared/quran/juz';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));

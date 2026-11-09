@@ -1,7 +1,7 @@
 // docs/quiz-ayah-branches.md
-import { keys, type Branch, type BranchAyah, type Variant } from '@/lib/quran/branches';
-import { inJuzRange, type JuzRange } from '@/lib/quran/juz';
-import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '@/lib/quran/phraseTrees';
+import { keys, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { inJuzRange, type JuzRange } from '@shared/quran/juz';
+import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '@shared/quran/phraseTrees';
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
 const MAX_BRANCHES = 10;

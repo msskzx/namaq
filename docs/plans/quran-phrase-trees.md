@@ -18,7 +18,7 @@ Extend `/quran/branches` with shared wording at any word position. Reuse the cur
 
 ## Work areas
 
-Data and matching live in src/lib/quran/phraseTrees.ts and the branches build script. Page integration lives in the existing branches route and controls. Preserve the existing opening path and its tests.
+Data and matching live in shared/quran/phraseTrees.ts and the branches build script. Page integration lives in the existing branches route and controls. Preserve the existing opening path and its tests.
 
 ## Generated inventory
 

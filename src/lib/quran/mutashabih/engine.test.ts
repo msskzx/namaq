@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '@/app/quran/branches/trees.json';
-import { groups as artifact } from './data';
-import type { BranchAyah } from '@/lib/quran/branches';
-import { normalizeWord } from '@/lib/quran/normalize';
+import corpus from '@shared/data/quran/trees.json';
+import { groups as artifact } from '@shared/quran/mutashabih/data';
+import type { BranchAyah } from '@shared/quran/branches';
+import { normalizeWord } from '@shared/quran/normalize';
 import { buildGroups, compareAyat } from './engine';
 
 const byKey = new Map(corpus.ayat.map(ayah => [ayah.key, ayah]));

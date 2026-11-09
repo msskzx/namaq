@@ -1,5 +1,5 @@
 import { resolve, type Data, type Range, type Surah } from './curatedShifts';
-import { ayahWords, plainName } from './normalize';
+import { ayahWords, plainName } from '@shared/quran/normalize';
 import type { TopicInstance } from './topicTypes';
 
 export type Source = { title: string; url: string };

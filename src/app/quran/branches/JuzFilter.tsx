@@ -2,8 +2,8 @@
 
 import { useLanguage } from '@/components/language/LanguageContext';
 import RangeFilter from '@/components/quran/RangeFilter';
-import { branchesHref, type BranchesView } from '@/lib/quran/branches';
-import { JUZ_STARTS, type JuzRange } from '@/lib/quran/juz';
+import { branchesHref, type BranchesView } from '@shared/quran/branches';
+import { JUZ_STARTS, type JuzRange } from '@shared/quran/juz';
 
 export default function JuzFilter({ range, view }: { range: JuzRange | null; view: BranchesView }) {
   const { language } = useLanguage();

@@ -6,7 +6,7 @@ import Button from "@/components/common/Button";
 import NumberInput from "@/components/common/NumberInput";
 import styles from "@/components/common/PaperPage.module.css";
 import { fetcher } from "@/lib/swr";
-import { num } from "@/lib/quran/arabicNumber";
+import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@/lib/party/rules";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";

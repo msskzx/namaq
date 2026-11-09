@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import MushafText from '@/components/common/MushafText';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */

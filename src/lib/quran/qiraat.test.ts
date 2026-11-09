@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayahWords, normalizeWord } from './normalize';
+import { ayahWords, normalizeWord } from '@shared/quran/normalize';
 import { RIWAYAT, chipStates, neighbors, riwayatOf, riwayatOfReading } from './qiraat';
 import { variants } from '@/app/quran/qiraat/data/variants';
 import hafs from '@/app/quran/qiraat/data/hafs.fixture.json';

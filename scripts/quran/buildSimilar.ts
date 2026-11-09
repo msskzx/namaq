@@ -4,7 +4,7 @@ import { findSimilar, readAyat, wordKey } from '../../src/lib/quran/similar';
 
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
 const OUT = join(__dirname, '../../src/app/quran/compare/similar.json');
-const KEYS = join(__dirname, '../../src/app/quran/compare/wordKeys.json');
+const KEYS = join(__dirname, '../../shared/data/quran/wordKeys.json');
 
 const ayat = readAyat(readFileSync(MORPHOLOGY, 'utf8'));
 const pairs = findSimilar(ayat);

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import styles from './TreeSteps.module.css';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };

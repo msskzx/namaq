@@ -15,8 +15,8 @@ import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, branchNodes, givenAnswer, LEAF_WORDS, matchTreeAnswers, rightWords, spoken } from "@/lib/quiz/branchAnswers";
 import { emptyBranchAnswers, givenNodes, isAsked, type ScoredQuestion } from "@/lib/quiz/score";
-import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
-import { num } from "@/lib/quran/arabicNumber";
+import { branchesHref, keys, type Branch, type Variant } from "@shared/quran/branches";
+import { num } from "@shared/quran/arabicNumber";
 import example from "./example.json";
 
 type Question = ScoredQuestion;

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
+import { branchesHref, type BranchAyah } from '../branches';
 import { browseGroups, deduplicateGroups, filteredAyat, groupFilters, toggleFilter, type GroupFilters } from './browse';
 import type { Group } from './types';
-import artifact from '@/app/quran/branches/mutashabih.json';
-import treeData from '@/app/quran/branches/trees.json';
+import artifact from '../../data/quran/mutashabih.json';
+import treeData from '../../data/quran/trees.json';
 import { canonicalGroups, groupHasId } from './identity';
 
 function group(id: string, keys: string[], options: Partial<Pick<Group, 'kind' | 'score' | 'tags' | 'citations' | 'differences'>> = {}): Group {

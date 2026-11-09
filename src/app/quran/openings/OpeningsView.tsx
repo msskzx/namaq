@@ -1,5 +1,5 @@
 import React from 'react';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { ANSWER_SRC, DISPUTE, NOTES, TASBIH_NOTES, TASBIH_SRC, type OpeningView, type Role, type TasbihRole, type TasbihView } from '@/lib/quran/openings';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';

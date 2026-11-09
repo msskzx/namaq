@@ -5,8 +5,8 @@ import { RotateCcw, SkipForward } from 'lucide-react';
 import Button from '../common/Button';
 import MushafText from '../common/MushafText';
 import { MARK } from '../common/Emblem';
-import { num } from '@/lib/quran/arabicNumber';
-import type { AyahContext } from '@/lib/quran/ayahContext';
+import { num } from '@shared/quran/arabicNumber';
+import type { AyahContext } from '@shared/quran/ayahContext';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';

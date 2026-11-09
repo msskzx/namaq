@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { MUSA } from '@/lib/quran/prophets/musa';
 import { buildStory } from '@/lib/quran/prophets/story';
 import { AYAT } from '../ayat';

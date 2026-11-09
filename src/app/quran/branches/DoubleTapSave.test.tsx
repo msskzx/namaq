@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { readBookmarks } from '@/lib/bookmarks';
+import { readBookmarks } from '@shared/bookmarks';
 import { DoubleTapSave } from './Filters';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));

@@ -1,4 +1,4 @@
-import { JUZ_STARTS } from './juz';
+import { JUZ_STARTS } from '@shared/quran/juz';
 import { sameSurahName, searchSurahs } from './surahSearch';
 
 export type JuzStart = { juz: number; surah: number; ayah: number; page: number };

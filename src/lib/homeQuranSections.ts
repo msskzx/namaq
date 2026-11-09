@@ -1,6 +1,6 @@
-import { branchesHref } from './quran/branches';
+import { branchesHref } from '@shared/quran/branches';
 import { JUZ_INDEX } from './quran/juzIndex';
-import { num } from './quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import type { SearchableSurah } from './quran/surahSearch';
 import { searchSurahs } from './quran/surahSearch';
 

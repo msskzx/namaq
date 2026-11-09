@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { prisma } from '../../src/lib/prisma';
 import { OATHS } from '../../src/lib/quran/oaths';
-import { ayahWords } from '../../src/lib/quran/normalize';
+import { ayahWords } from '../../shared/quran/normalize';
 
 const OUT = join(__dirname, '../../src/app/quran/oaths/ayat.json');
 

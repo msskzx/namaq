@@ -402,8 +402,8 @@ explains why the reader does not use the page fonts that copy the print exactly.
 
 `npm run quran:mutashabih` reads the existing Quran branch words and morphology
 corpus, combines them with the thirty cited cases in
-`src/lib/quran/mutashabih/evidence.json`, and writes
-`src/app/quran/branches/mutashabih.json`. Run it after changing those inputs.
+`shared/quran/mutashabih/evidence.json`, and writes
+`shared/data/quran/mutashabih.json`. Run it after changing those inputs.
 The branches page uses this artifact for its default swipe sequence.
 [Matching and browsing decisions](plans/quran-mutashabih.md) record the
 owner's grouping and evidence rules.

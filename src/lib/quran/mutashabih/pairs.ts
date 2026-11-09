@@ -1,4 +1,4 @@
-import type { Group, Level, Position } from './types';
+import type { Group, Level, Position } from '@shared/quran/mutashabih/types';
 import type { SimilarAyahPair } from './similar';
 
 export type PairColumn = { a: Position; b: Position; level: Level };

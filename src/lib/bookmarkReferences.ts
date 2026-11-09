@@ -1,6 +1,6 @@
-import type { Bookmark } from './bookmarks';
+import type { Bookmark } from '@shared/bookmarks';
 import { compareBookmarkAyat } from './compareBookmarks';
-import { inJuzRange, parseJuzRange } from './quran/juz';
+import { inJuzRange, parseJuzRange } from '@shared/quran/juz';
 import { parseOccurrences } from './quran/branchTreeLinks';
 
 export function bookmarkReferences(bookmark: Pick<Bookmark, 'id' | 'href'>, ayatById: Readonly<Record<string, readonly string[]>>) {

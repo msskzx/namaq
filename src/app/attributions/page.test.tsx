@@ -3,7 +3,7 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import lemmas from '@/app/quran/words/lemmas.json';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import AttributionsPage from './page';
 
 const lang = vi.hoisted(() => ({ language: 'en' as 'en' | 'ar' }));

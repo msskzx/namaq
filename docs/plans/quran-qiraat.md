@@ -15,12 +15,12 @@ only, light and dark, usable at phone width, styled like `/quran` and
 
 - The `Ayah` table holds 6,236 Hafs ayat. `RecitationType` has `HAFS` and
   `WARSH`, but only `HAFS` rows exist.
-- `src/lib/quran/normalize.ts` (`normalizeWord`, `ayahWords`) splits an ayah
+- `shared/quran/normalize.ts` (`normalizeWord`, `ayahWords`) splits an ayah
   into display and normalized words.
-- `src/lib/quran/wordDiff.ts` (`wordDiff`, `sharedSlots`) finds differing word
+- `shared/quran/wordDiff.ts` (`wordDiff`, `sharedSlots`) finds differing word
   positions and assigns color slots. `src/components/quran/AyahCard.tsx` takes a
   `slots` map and colors those words with `SLOT_COLORS`.
-- `src/lib/quran/compare.ts` aligns two surahs; `/quran/compare` shows them.
+- `shared/quran/compare.ts` aligns two surahs; `/quran/compare` shows them.
 - `docs/plans/quran-as-a-source.md` already says a page belongs to a
   recitation (riwaya).
 

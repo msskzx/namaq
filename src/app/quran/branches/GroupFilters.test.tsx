@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import GroupFilterControls from './GroupFilters';
-import type { GroupFilters } from '@/lib/quran/mutashabih/browse';
+import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);

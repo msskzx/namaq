@@ -1,5 +1,5 @@
 // docs/plans/quran-repetition-merge.md
-import { num } from './arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 
 const ARABIC: Record<string, string> = {
   "'": 'ء', '>': 'أ', '&': 'ؤ', '<': 'إ', '}': 'ئ', A: 'ا', b: 'ب', p: 'ة', t: 'ت', v: 'ث', j: 'ج', H: 'ح', x: 'خ', d: 'د', '*': 'ذ',

@@ -1,6 +1,6 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { ManyOption, PairCard } from './pairCards';
-import { normalizeWord } from '@/lib/quran/normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 
 /** One word the read-along stops on: `side` of the card, the ayah's place in that side, the word, and the partner it lights.
  *  `option` picks the partner of a one-to-many card while this word is read. */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import paper from '@/components/common/PaperPage.module.css';
 import { numberVerses, type Poem } from '@/lib/tajwid/poem';
 import styles from './Poem.module.css';

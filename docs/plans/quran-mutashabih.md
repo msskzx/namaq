@@ -1,12 +1,12 @@
 # Mutashabih groups on branches
 
-The branch page opens on reviewed mutashabeh and pondering comparisons in mushaf order. Word trees remain available through the purpose filter. Editorial category membership is independent of book evidence; the explicit review manifest is `src/lib/quran/mutashabih/categories.json`. Each group uses the existing tree and matrix views, swipe gestures, bookmark and share row. The selected default view still comes from the saved preference. Phrase trees remain available through search and existing links.
+The branch page opens on reviewed mutashabeh and pondering comparisons in mushaf order. Word trees remain available through the purpose filter. Editorial category membership is independent of book evidence; the explicit review manifest is `shared/quran/mutashabih/categories.json`. Each group uses the existing tree and matrix views, swipe gestures, bookmark and share row. The selected default view still comes from the saved preference. Phrase trees remain available through search and existing links.
 
 ## Matching and evidence
 
 The engine compares ayat and selected spans, retaining the original word indices. An explicitly cited passage can continue into the next ayah. Automatic groups require every pair to satisfy the same matching policy. Exact repeats remain accessible. Broad phrase groups are restricted to search.
 
-The thirty cases supplied in the owner's book-rules report are recorded in `src/lib/quran/mutashabih/evidence.json`. Their quotations, edition locators and selected passages retain the report's attribution and verification limits. A section link stands in for pagination only where the report provides no printed page. The four messenger passages are held together as the requested regression example. Only the cited places inherit the citation.
+The thirty cases supplied in the owner's book-rules report are recorded in `shared/quran/mutashabih/evidence.json`. Their quotations, edition locators and selected passages retain the report's attribution and verification limits. A section link stands in for pagination only where the report provides no printed page. The four messenger passages are held together as the requested regression example. Only the cited places inherit the citation.
 
 `MATCH_CONFIG` in the engine holds Namaq's retrieval choices. The books provide no numeric thresholds. Initial settings require six strongly matching words and 72% coverage for a complete ayah comparison. A local span needs eight matches, with at most three intervening words. Unattributed shared phrases need six words and at most thirty-six places. The labelled set includes fifteen common-formula negatives. These values passed that bounded set and require further corpus review.
 

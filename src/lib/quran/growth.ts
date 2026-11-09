@@ -1,4 +1,4 @@
-import { keys, type Branch } from './branches';
+import { keys, type Branch } from '@shared/quran/branches';
 
 /** One ayah of a growing tree: the nodes from the root to where the ayah ends, and the first one not drawn yet. */
 export type GrowthStep = { key: string; nodes: number[]; fresh: number };

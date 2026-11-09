@@ -1,7 +1,7 @@
 // Every quiz question must give back the exact Quran text: what is shown plus what is asked,
 // put together in order, has to equal the stored mushaf words, with nothing missing or changed.
-import { num } from '@/lib/quran/arabicNumber';
-import { type Branch, type BranchAyah } from '@/lib/quran/branches';
+import { num } from '@shared/quran/arabicNumber';
+import { type Branch, type BranchAyah } from '@shared/quran/branches';
 import { type BranchQuestion } from './branchQuestions';
 
 /** Marks the end of an ayah when a branch runs on into the next one: ﴿٤٣﴾, or ۝ in a merged display. */
