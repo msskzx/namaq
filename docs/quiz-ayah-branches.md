@@ -2,7 +2,7 @@
 
 The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآن) asks about the word trees on `/quran/branches`. A question shows wording shared by several ayat, wherever it occurs, and asks what follows in each branch. The quiz uses the same tree inventory and formation rules as the explorer, then applies quiz-suitability rules before asking for selected leaves.
 
-## Questions (`branchQuestions` in `src/lib/quiz/branchQuestions.ts`)
+## Questions (`branchQuestions` in `shared/quiz/branchQuestions.ts`)
 
 - The questions come from `shared/data/quran/trees.json` through `buildTreeGroups`, so the explorer and quiz use the same tree inventory. Nothing is stored separately for the quiz.
 - A question accepts 2–10 distinct ayat and 2–10 branches at the first split. It carries the complete tree after the shared phrase and the words preceding that phrase in each ayah. Empty prefixes are omitted; they do not request a previous ayah. A tree is left out when an ayah ends at the shared phrase or when it does not split. The explorer's separate `PIECE_MAX` limit does not constrain quizzes.
@@ -14,7 +14,7 @@ The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآ
 - Solo and party setup take the number of answers per tree (`leaves`, 1 to 10, default 3; 1 is labelled easy and 10 hard). `askedNodes` picks that many leaves at random for each question, and every other node is shown already filled in. A tree with fewer leaves asks for all of them. A question without `asked` asks every node, as before.
 - The setup draws a real tree from the pool (`src/app/quizzes/example.json`, the قال piece, checked against the pool by a test) with the asked leaves as empty boxes, and states the grading rule and the meaning of the amber button and the green and purple first words.
 
-## Grading (`matchTreeAnswers` in `src/lib/quiz/branchAnswers.ts`)
+## Grading (`matchTreeAnswers` in `shared/quiz/branchAnswers.ts`)
 
 - Each non-root node has one slot, in the tree's depth-first order. A given node's slot holds its own words and is fixed to that node, so only asked leaves can swap with each other. Checking is available after typing in any field and shows corrections for blank nodes. A question counts as correct only when every field is correct, but the score gives one point for each correct asked leaf (other question kinds score one point each). A node that splits again needs all its words. A leaf needs at least its first two words, or all of them if it has fewer, because siblings always differ at their first word and the full ayah is a typing test on a phone. Every word typed must still be right and in order, so a skipped or misspelled word fails the leaf wherever it falls (جاهد الكفار واغلظ skips والمنافقين). Filling only the first split or leaving a leaf blank does not complete the tree.
 - Sibling branches with the same shape can be entered in either order. Grading pairs whole subtrees, so a leaf must remain under its parent. Each expected subtree is used once. Feedback uses the pairing with the most correct nodes and, among those, the one whose answers get the most words right from the start, so a wrong answer is shown beside the leaf it starts like. It displays the correct text at every node, and links terminal ayat to their reader pages.

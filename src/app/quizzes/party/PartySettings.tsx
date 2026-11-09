@@ -8,7 +8,7 @@ import styles from "@/components/common/PaperPage.module.css";
 import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
-import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@/lib/party/rules";
+import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@shared/party/rules";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";

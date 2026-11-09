@@ -6,7 +6,7 @@ import Button from "@/components/common/Button";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import type { QuestionChoice } from "@/lib/quiz/types";
-import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@/lib/quiz/score";
+import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@shared/quiz/score";
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 

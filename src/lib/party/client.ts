@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ActionError, PartyView, PlayerAction } from "./rules";
+import type { ActionError, PartyView, PlayerAction } from "@shared/party/rules";
 
 const PLAYER_KEY = "namaq-party-player";
 const NAME_KEY = "namaq-party-name";
