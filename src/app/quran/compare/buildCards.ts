@@ -2,10 +2,9 @@ import treeData from '@shared/data/quran/trees.json';
 import { groups } from '@shared/quran/mutashabih/data';
 import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahPairs, surahOf, type AyahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
-import { keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
+import { compareVerdicts, keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
-import { MARK_KINDS } from './markKinds';
-import type { CardSide, PairCard } from './pairCards';
+import { encodeMark, type CardSide, type MarkKind, type PairCard } from '@shared/quran/compareCards';
 import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
@@ -170,13 +169,15 @@ type Marks = SpreadAyah['marks'];
 function encodeAyat(ayat: SpreadAyah[], links: Map<string, number>) {
   return ayat.flatMap((ayah, offset) => Object.entries((ayah.marks ?? {}) as NonNullable<Marks>).map(([word, mark]) => {
     if (!links.has(mark.link!)) links.set(mark.link!, links.size);
-    return links.get(mark.link!)! + 1000 * (MARK_KINDS.indexOf(mark.kind as (typeof MARK_KINDS)[number]) + 3 * (Number(word) + 200 * offset));
+    return encodeMark(offset, Number(word), mark.kind as MarkKind, links.get(mark.link!)!);
   }));
 }
 
 function storedCard(card: PairCard) {
   const links = new Map<string, number>();
-  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.span ? { s: card.span } : {}) };
+  // A single pair a reader left out shows only in review (`x`); range and one-to-many cards hold kept pairs only.
+  const hidden = !card.pairs && !compareVerdicts[card.id]?.keep;
+  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.span ? { s: card.span } : {}), ...(hidden ? { x: 1 } : {}) };
   if (card.many) return { ...base, n: card.many.side, o: card.many.options.map(option => [encodeAyat([option.shared], links), encodeAyat([option.ayah], links)]) };
   return { ...base, m: card.sides.map(side => encodeAyat(side.ayat, links)) };
 }

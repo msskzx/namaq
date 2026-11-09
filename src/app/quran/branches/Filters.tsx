@@ -4,7 +4,7 @@ import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 
 import Link from 'next/link';
 import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Link2, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { isCompareBookmark } from '@/lib/compareBookmarks';
+import { isCompareBookmark } from '@shared/compareBookmarks';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@shared/quran/branches';

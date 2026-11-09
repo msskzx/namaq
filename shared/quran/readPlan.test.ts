@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { PairCard } from './pairCards';
-import { readPlan } from './readAlong';
+import type { PairCard } from './compareCards';
+import { readPlan } from './readPlan';
 
 const ayah = (number: number, words: string[]) => ({ number, words });
 const shared = { surah: 2, ayah: 1, ayat: [ayah(1, ['a'])] };
