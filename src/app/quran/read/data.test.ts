@@ -30,7 +30,7 @@ describe('reader page data', () => {
   });
 });
 
-const mushaf = Array.from({ length: 604 }, (_, i): MushafPage => JSON.parse(readFileSync(join(__dirname, 'mushaf', `${i + 1}.json`), 'utf8')));
+const mushaf = Array.from({ length: 604 }, (_, i): MushafPage => JSON.parse(readFileSync(join(__dirname, '../../../../shared/data/quran/mushaf', `${i + 1}.json`), 'utf8')));
 const lineTokens = (data: MushafPage) => data.items.flatMap(item => ('line' in item ? item.line : []));
 
 describe('mushaf page data', () => {

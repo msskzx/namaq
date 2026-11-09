@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type RefObject } from 'react';
-import type { Gesture } from '@/lib/readerGestures';
+import type { Gesture } from '@shared/readerGestures';
 
 /** How long (ms) a press must last to count as a long press. */
 export const LONG_PRESS = 500;

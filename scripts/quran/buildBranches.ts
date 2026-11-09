@@ -8,7 +8,7 @@ import { buildSubtrees } from '../../shared/quran/subtrees';
 
 // docs/plans/quran-shared-openings.md
 const READER = join(__dirname, '../../src/app/quran/read/data');
-const MUSHAF = join(__dirname, '../../src/app/quran/read/mushaf');
+const MUSHAF = join(__dirname, '../../shared/data/quran/mushaf');
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
 const OUT = join(__dirname, '../../shared/data/quran/trees.json');
 

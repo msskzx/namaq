@@ -21,7 +21,7 @@ export default async function QuranReadPage({ params }: { params: Promise<{ page
   const number = Number(page);
   if (String(number) !== page || number < 1 || number > 604) notFound();
   const spread = [...new Set(spreadOf(number))];
-  const [datas, surahs] = await Promise.all([Promise.all(spread.map(async at => (await import(`../mushaf/${at}.json`)).default as MushafPage)), surahList()]);
+  const [datas, surahs] = await Promise.all([Promise.all(spread.map(async at => (await import(`../../../../../shared/data/quran/mushaf/${at}.json`)).default as MushafPage)), surahList()]);
   const before = (at: number) => surahs.findLast(surah => surah.page != null && surah.page < at);
   const shown = new Set([...datas.flatMap(data => data.items.flatMap(item => ('surah' in item ? [item.surah] : []))), ...spread.flatMap(at => before(at)?.number ?? [])]);
   const names = Object.fromEntries(surahs.filter(surah => shown.has(surah.number)).map(surah => [surah.number, surah.name]));

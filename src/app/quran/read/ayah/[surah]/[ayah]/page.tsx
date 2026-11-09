@@ -4,7 +4,7 @@ import { pageOfAyah, type MushafPage } from '@shared/quran/readerPage';
 
 export const dynamic = 'force-dynamic';
 
-const load = async (page: number): Promise<MushafPage> => (await import(`../../../mushaf/${page}.json`)).default;
+const load = async (page: number): Promise<MushafPage> => (await import(`../../../../../../../shared/data/quran/mushaf/${page}.json`)).default;
 
 /** Recite and review links keep their own query; plain links mark the ayah. */
 const KEEP = ['recite', 'upto', 'w', 'review'];

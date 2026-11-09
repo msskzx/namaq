@@ -10,7 +10,7 @@ let surah = 0;
 let ayah = 1;
 const separated: Record<string, string> = { 'لَّوۡمَا': 'لَّوۡ مَا', 'وَمَالِيَ': 'وَمَا لِيَ', 'مَالِيَ': 'مَا لِيَ' };
 for (let page = 1; page <= 604; page++) {
-  const data: MushafPage = JSON.parse(readFileSync(join(root, `src/app/quran/read/mushaf/${page}.json`), 'utf8'));
+  const data: MushafPage = JSON.parse(readFileSync(join(root, `shared/data/quran/mushaf/${page}.json`), 'utf8'));
   for (const item of data.items) {
     if ('surah' in item) [surah, ayah] = [item.surah, 1];
     if (!('line' in item)) continue;

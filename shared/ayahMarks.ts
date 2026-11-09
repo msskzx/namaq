@@ -1,15 +1,12 @@
-/** Ayat a reader forgot while reading or reciting, with how often, kept in this browser for now. Saved ayat go to the shared bookmarks. */
+import { keyStore } from './storage';
+
+/** Ayat a reader forgot while reading or reciting, with how often, kept on this device for now. Saved ayat go to the shared bookmarks. */
 export type AyahMark = { forgot: number; at: number };
 export type AyahMarks = Record<string, AyahMark>;
 
-const KEY = 'ayah-forgot';
-const listeners = new Set<() => void>();
-let cache: { raw: string | null; marks: AyahMarks } = { raw: null, marks: {} };
+const NONE: AyahMarks = {};
 
-export function readAyahMarks(): AyahMarks {
-  let raw: string | null = null;
-  try { raw = localStorage.getItem(KEY); } catch {}
-  if (raw === cache.raw) return cache.marks;
+function parse(raw: string | null): AyahMarks {
   const marks: AyahMarks = {};
   try {
     const parsed = raw ? JSON.parse(raw) : {};
@@ -20,14 +17,13 @@ export function readAyahMarks(): AyahMarks {
       }
     }
   } catch {}
-  cache = { raw, marks };
-  return marks;
+  return Object.keys(marks).length ? marks : NONE;
 }
 
-function write(marks: AyahMarks) {
-  try { localStorage.setItem(KEY, JSON.stringify(marks)); } catch {}
-  listeners.forEach(listener => listener());
-}
+const store = keyStore('ayah-forgot', parse);
+
+export const readAyahMarks = store.read;
+const write = (marks: AyahMarks) => store.write(JSON.stringify(marks));
 
 /** Counts one more time this ayah was forgotten. */
 export function markForgotten(key: string) {
@@ -42,13 +38,7 @@ export function clearForgotten(key: string) {
   write(rest);
 }
 
-export function subscribeAyahMarks(listener: () => void) {
-  listeners.add(listener);
-  window.addEventListener('storage', listener);
-  return () => { listeners.delete(listener); window.removeEventListener('storage', listener); };
-}
-
-const NONE: AyahMarks = {};
+export const subscribeAyahMarks = store.subscribe;
 export const serverAyahMarks = () => NONE;
 
 /** Bookmark id and link for one saved ayah. */
