@@ -6,6 +6,7 @@ import type { LemmaCount } from '@/lib/quran/lemmas';
 import WordCounts, { CHART_TOP } from './WordCounts';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran/words', useSearchParams: () => new URLSearchParams() }));
+vi.mock('./WordPlaces', () => ({ default: ({ word }: { word: string }) => <p>{`places of ${word}`}</p> }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 afterEach(cleanup);
@@ -66,5 +67,32 @@ describe('WordCounts chart', () => {
     fireEvent.click(within(section()).getByRole('button', { name: 'أزل «مِن» من الرسم' }));
     expect(bars()).toHaveLength(CHART_TOP - 1);
     expect(bars()).not.toContain('مِن: ٤');
+  });
+
+  it('opens a word\'s places from its bar, and closes them on a second tap', () => {
+    show();
+    expect(within(section()).queryByText(/places of/)).toBeNull();
+    const word = within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' });
+    fireEvent.click(word);
+    expect(within(section()).getByText('places of رَحْمَة')).toBeTruthy();
+    expect(word.getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(word);
+    expect(within(section()).queryByText(/places of/)).toBeNull();
+  });
+
+  it('opens the places of a word added from search', () => {
+    show();
+    fireEvent.change(adder(), { target: { value: 'م15' } });
+    fireEvent.keyDown(adder(), { key: 'Enter' });
+    expect(within(section()).getByText('places of م15')).toBeTruthy();
+  });
+
+  it('closes the places when their word leaves the chart, so they stay closed when it comes back', () => {
+    show();
+    fireEvent.click(within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' }));
+    fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
+    fireEvent.click(within(section()).getByRole('button', { name: /أكثر ١٠ كلمات/ }));
+    expect(within(section()).queryByText(/places of/)).toBeNull();
+    expect(within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' }).getAttribute('aria-pressed')).toBe('false');
   });
 });

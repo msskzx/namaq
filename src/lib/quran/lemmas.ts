@@ -62,6 +62,19 @@ export function countLemmas(morphology: string): LemmaCounts {
   return { lemmas, unlemmatized: [...words.values()].filter(has => !has).length };
 }
 
+/** Every word that holds each lemma, in mushaf order, as "surah:ayah:word" joined by spaces. */
+export function lemmaPlaces(morphology: string): Record<string, string> {
+  const places = new Map<string, string[]>();
+  for (const { word, lemma } of segments(morphology)) {
+    if (!lemma) continue;
+    const list = places.get(lemma) ?? [];
+    if (list[list.length - 1] !== word) list.push(word);
+    places.set(lemma, list);
+  }
+  const names = lemmaNames(places.keys());
+  return Object.fromEntries([...places].map(([lemma, words]) => [names.get(lemma)!, words.join(' ')]));
+}
+
 export function countPairs(morphology: string, pairs: [Side, Side][]): [CountedSide, CountedSide][] {
   const counts = new Map<string, number>();
   const lemmas = new Set<string>();

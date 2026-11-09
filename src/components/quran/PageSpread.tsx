@@ -38,12 +38,12 @@ export function MatchLegend({ exact, root }: { exact?: string; root?: string }) 
   );
 }
 
-export default function PageSpread({ pages, ruled = false, stackOnMobile = false, compact = false }: { pages: (SpreadPage | null)[]; ruled?: boolean; stackOnMobile?: boolean; compact?: boolean }) {
+export default function PageSpread({ pages, ruled = false, stackOnMobile = false, compact = false, single = false }: { pages: (SpreadPage | null)[]; ruled?: boolean; stackOnMobile?: boolean; compact?: boolean; single?: boolean }) {
   const rows = Math.max(...pages.map(page => page?.rows.length ?? 0));
   // Beside a stack of rows to pick from, the other side is one cell, so a long ayah does not push the stack's rows apart.
   const stacked = pages.some(page => page?.pick);
   return (
-    <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''} ${compact ? styles.compact : ''}`} dir="rtl">
+    <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''} ${compact ? styles.compact : ''} ${single ? styles.single : ''}`} dir="rtl">
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + (page.footer ? 2 : 1)}` }} aria-label={page.label ?? page.title}>
           <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}{page.action && <span className={styles.action}>{page.action}</span>}</header>

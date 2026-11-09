@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import built from '@/app/quran/words/lemmas.json';
-import { countLemmas, countPairs, fromBuckwalter } from './lemmas';
+import builtPlaces from '@/app/quran/words/places.json';
+import { countLemmas, countPairs, fromBuckwalter, lemmaPlaces } from './lemmas';
 import { OPPOSITES } from './opposites';
 
 const MORPHOLOGY = join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt');
@@ -70,6 +71,18 @@ describe('countLemmas', () => {
     expect(fromFile.lemmas.find(([lemma]) => lemma === 'ٱللَّه')?.[1]).toBe(2699);
     expect(new Set(fromFile.lemmas.map(([lemma]) => lemma)).size).toBe(fromFile.lemmas.length);
     expect(built.notice).toMatch(/Quranic Arabic Corpus \(morphology, version 0\.4\)/);
+  });
+
+  it('lists every word holding a lemma once, in mushaf order', () => {
+    expect(lemmaPlaces(lines.join('\n'))).toEqual({ 'ٱسْم': '1:1:1', 'ٱللَّه': '1:1:2 1:2:2', 'مِن': '2:23:5', 'مَا': '2:23:5', 'مَع': '2:61:3' });
+  });
+
+  it('has places for every counted lemma in the committed JSON', () => {
+    const places = lemmaPlaces(readFileSync(MORPHOLOGY, 'utf8'));
+    expect(places).toEqual(builtPlaces.places);
+    expect(Object.keys(places).sort()).toEqual(built.lemmas.map(([lemma]) => lemma).sort());
+    expect(places['أَرْض'].split(' ')).toHaveLength(461);
+    expect(builtPlaces.notice).toBe(built.notice);
   });
 
   it('counts a pair side by lemma, or by one form of it', () => {

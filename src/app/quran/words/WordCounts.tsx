@@ -10,6 +10,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import type { LemmaCounts } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { NOTE, PANEL } from '../panel';
+import WordPlaces from './WordPlaces';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
@@ -24,11 +25,14 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
   const top = () => ranked.slice(0, CHART_TOP).map(r => r.rank);
   const [chosen, setChosen] = useState<number[]>(top);
   const [query, setQuery] = useState('');
+  const [open, setOpen] = useState<number | null>(null);
   const bars = ranked.filter(r => chosen.includes(r.rank));
   const max = Math.max(1, ...bars.map(b => b.count));
   const needle = normalizeWord(query.trim());
   const suggestions = needle ? ranked.filter(r => r.key.includes(needle) && !chosen.includes(r.rank)).slice(0, SUGGESTIONS) : [];
-  const add = (rank: number) => { setChosen([...chosen, rank]); setQuery(''); };
+  const add = (rank: number) => { setChosen([...chosen, rank]); setQuery(''); setOpen(rank); };
+  const choose = (ranks: number[]) => { setChosen(ranks); if (open !== null && !ranks.includes(open)) setOpen(null); };
+  const opened = bars.find(b => b.rank === open);
 
   return (
     <section className={PANEL}>
@@ -37,11 +41,11 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
         تُعدّ الكلمة بمدخلها المعجمي من المدوّنة القرآنية العربية، فـ«والله» و«لله» تحت «ٱللَّه». <Link href="/attributions#quranic-arabic-corpus" className={LINK}>طريقة العدّ ومصدره في صفحة العزو</Link>.
       </p>
       <div className="flex flex-wrap gap-2 mb-3">
-        <Button size="sm" onClick={() => setChosen([])} disabled={chosen.length === 0}>
+        <Button size="sm" onClick={() => choose([])} disabled={chosen.length === 0}>
           <FontAwesomeIcon icon={faXmark} />
           إفراغ الرسم
         </Button>
-        <Button size="sm" onClick={() => setChosen(top())}>
+        <Button size="sm" onClick={() => choose(top())}>
           <FontAwesomeIcon icon={faRotateLeft} />
           {`أكثر ${num(CHART_TOP)} كلمات ورودًا`}
         </Button>
@@ -69,16 +73,19 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
         <ol aria-label="عدد مرات ورود الكلمات المختارة" className="mt-3 flex flex-col gap-0.5">
           {bars.map(b => (
             <li key={b.rank} className="grid grid-cols-[6rem_1fr_3.5rem_auto] sm:grid-cols-[8rem_1fr_4rem_auto] items-center gap-2" title={`${b.word}: ${num(b.count)}`}>
-              <span className="text-lg font-arabic truncate">{b.word}</span>
+              <button type="button" aria-pressed={open === b.rank} aria-label={`مواضع «${b.word}»`} onClick={() => setOpen(open === b.rank ? null : b.rank)}
+                className={`text-lg font-arabic truncate text-start underline-offset-4 hover:underline ${open === b.rank ? 'text-[var(--home-accent)] underline' : ''}`}>{b.word}</button>
               <span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} />
               <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
-              <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => setChosen(chosen.filter(rank => rank !== b.rank))}>
+              <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => choose(chosen.filter(rank => rank !== b.rank))}>
                 <FontAwesomeIcon icon={faXmark} />
               </Button>
             </li>
           ))}
         </ol>
       )}
+      {bars.length > 0 && !opened && <p className={`${NOTE} mt-2`}>اضغط كلمة لترى مواضعها في القرآن.</p>}
+      {opened && <WordPlaces key={opened.rank} word={opened.word} count={opened.count} />}
     </section>
   );
 }
