@@ -58,13 +58,19 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
   const offset = useSharedValue(0);
   const lastTap = useRef(0);
   const moved = useRef(0);
-  const move = useCallback(() => { moved.current = Date.now(); }, []);
   const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const move = useCallback(() => {
+    moved.current = Date.now();
+    clearTimeout(pending.current);
+  }, []);
+  useEffect(() => () => clearTimeout(pending.current), []);
+  const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
   const width = view?.width ?? 0;
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const arrive = useCallback((next: number) => {
+    restore.current = undefined;
     setIndex(next);
     writeJson(PLACE, { id: pieces[next].id });
   }, [pieces]);
@@ -72,16 +78,16 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
   const remember = useCallback((camera: Camera) => writeJson(PLACE, { id: pieces[index].id, camera }), [pieces, index]);
 
   const count = pieces.length;
-  const settle = (dx: number, velocity: number) => {
+  const settle = (from: number, dx: number, velocity: number) => {
     'worklet';
     const far = Math.abs(dx) > width * SWIPE || Math.abs(velocity) > FLICK;
     const forward = dx > 0;
-    const target = far && (forward ? index + 1 < count : index > 0) ? index + (forward ? 1 : -1) : index;
-    offset.value = withTiming(target * width, { duration: 250 }, done => {
-      if (done && target !== index) scheduleOnRN(arrive, target);
-    });
+    const target = far && (forward ? from + 1 < count : from > 0) ? from + (forward ? 1 : -1) : from;
+    offset.value = withTiming(target * width, { duration: 250 });
+    // The neighbours of the new card mount while the row is still sliding.
+    if (target !== index) scheduleOnRN(arrive, target);
   };
-  const lane: Lane = { offset, width, index, count, settle };
+  const lane: Lane = { offset, width, count, settle };
 
   const tap = useCallback((ayahKeys: string[] | null) => {
     const now = Date.now();
@@ -107,7 +113,7 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
           {shown.map(at => (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               <TreeCard piece={pieces[at]} palette={palette} view={view} lane={lane}
-                initialCamera={at === first && pieces[at].id === place?.id ? place?.camera : undefined}
+                initialCamera={at === index ? restore.current : undefined}
                 onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} />
             </View>
           ))}

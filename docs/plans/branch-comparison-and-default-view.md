@@ -15,7 +15,7 @@ The discussion about merging identical preceding ayat and shared prefix endings 
 
 ## Affected paths
 
-Comparison and reader metadata live in `src/lib/quran/ayahContext.ts`, `readerAyat.ts`, `phraseTrees.ts` and `branches.ts`. Branch rendering and navigation live in `src/app/quran/branches/`. The setting lives in `src/components/quran/BranchViewSetting.tsx`, mounted in `src/components/common/TabBar.tsx`, with its cookie name and allowed values in `src/lib/quran/branchView.ts`.
+Comparison and reader metadata live in `shared/quran/ayahContext.ts`, `readerAyat.ts`, `phraseTrees.ts` and `branches.ts`. Branch rendering and navigation live in `src/app/quran/branches/`. The setting lives in `src/components/quran/BranchViewSetting.tsx`, mounted in `src/components/common/TabBar.tsx`, with its cookie name and allowed values in `shared/quran/branchView.ts`.
 
 ## Validation
 

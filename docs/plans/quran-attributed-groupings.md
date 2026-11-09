@@ -91,7 +91,7 @@ Every link passes two checks, each with its own normalization:
    `scripts/history/verifyExcerpts.ts`, which `matchSpan` is meant to replace.
    The pilot does not loosen either.
 2. **The fragment names one ayah.** The Qur'an normalizer in
-   [normalize.ts](../../src/lib/quran/normalize.ts), extended with a documented
+   [normalize.ts](../../shared/quran/normalize.ts), extended with a documented
    and versioned mapping from imla'i to Uthmani spelling, finds the fragment in
    the Ayah text of the surah. The surah is the one the author names in the
    entry. If the entry names none, it is the surah heading the work prints

@@ -34,7 +34,7 @@ them.
 
 ## Paths
 
-- `src/lib/quran/branches.ts`: `branchesHref` keeps `q` and `s` beside a tree id.
+- `shared/quran/branches.ts`: `branchesHref` keeps `q` and `s` beside a tree id.
 - `src/app/quran/branches/page.tsx`: read the list filter with a tree open, work
   out the neighbours and pass them on.
 - `src/app/quran/branches/TreeSteps.tsx`: the switch and the step buttons.

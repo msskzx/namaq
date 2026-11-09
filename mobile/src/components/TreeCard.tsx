@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
+import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import BranchTree from './BranchTree';
@@ -13,10 +13,9 @@ import type { Palette } from '@/lib/theme';
 export type Lane = {
   offset: SharedValue<number>;
   width: number;
-  index: number;
   count: number;
-  /** Called on the UI thread when a sideways swipe ends. */
-  settle: (dx: number, velocity: number) => void;
+  /** Called on the UI thread when a sideways swipe ends, with where the row stood when the finger came down. */
+  settle: (from: number, dx: number, velocity: number) => void;
 };
 
 type Props = {
@@ -43,9 +42,13 @@ export default function TreeCard({ piece, palette, view, lane, initialCamera, on
   const start = useSharedValue<Camera>({ s: 1, x: 0, y: 0 });
   const focal = useSharedValue({ x: 0, y: 0 });
   const mode = useSharedValue<'idle' | 'move' | 'swipe' | 'none'>('idle');
+  const from = useSharedValue(0);
   const restored = useRef(initialCamera);
 
-  useEffect(() => { viewSize.value = view; }, [view, viewSize]);
+  useEffect(() => {
+    viewSize.value = view;
+    if (content) camera.value = settleCamera(camera.value, content, view);
+  }, [view]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const measured = useCallback((event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -54,7 +57,7 @@ export default function TreeCard({ piece, palette, view, lane, initialCamera, on
     contentSize.value = size;
     const saved = restored.current;
     restored.current = undefined;
-    camera.value = saved ? clampCamera(saved, size, view) : fitCamera(size, view);
+    camera.value = saved ? settleCamera(saved, size, view) : fitCamera(size, view);
     setContent(size);
   }, [camera, contentSize, view]);
 
@@ -83,6 +86,11 @@ export default function TreeCard({ piece, palette, view, lane, initialCamera, on
       start.value = camera.value;
       mode.value = isZoomed(camera.value, contentSize.value, viewSize.value) ? 'move'
         : Math.abs(event.translationX) >= Math.abs(event.translationY) ? 'swipe' : 'none';
+      if (mode.value === 'swipe' && lane) {
+        // A swipe that starts while the row is still settling carries on from where it is.
+        cancelAnimation(lane.offset);
+        from.value = Math.round(lane.offset.value / lane.width);
+      }
       scheduleOnRN(onMove);
     })
     .onUpdate(event => {
@@ -91,8 +99,8 @@ export default function TreeCard({ piece, palette, view, lane, initialCamera, on
       } else if (mode.value === 'swipe' && lane) {
         // Arabic order: the next tree waits on the left, so a drag to the right brings it in.
         const forward = event.translationX > 0;
-        const open = forward ? lane.index + 1 < lane.count : lane.index > 0;
-        lane.offset.value = lane.index * lane.width + (open ? event.translationX : event.translationX / 4);
+        const open = forward ? from.value + 1 < lane.count : from.value > 0;
+        lane.offset.value = from.value * lane.width + (open ? event.translationX : event.translationX / 4);
       }
     })
     .onEnd(event => {
@@ -100,7 +108,7 @@ export default function TreeCard({ piece, palette, view, lane, initialCamera, on
       if (mode.value === 'move') {
         if (report) scheduleOnRN(report, camera.value);
       } else if (mode.value === 'swipe' && lane) {
-        lane.settle(event.translationX, event.velocityX);
+        lane.settle(from.value, event.translationX, event.velocityX);
       }
       mode.value = 'idle';
     });

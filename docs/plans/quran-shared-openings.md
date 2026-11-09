@@ -110,7 +110,7 @@ both references. Ordinary أَلَمْ verses keep the usual two-word rule.
 
 Named families are available through navigation, search suggestions, search
 results and the opening list. Their membership is explicit in
-`src/lib/quran/chapterFamilies.ts`: الحواميم، الطواسين، الميمات، الراءات،
+`shared/quran/chapterFamilies.ts`: الحواميم، الطواسين، الميمات، الراءات،
 الحامدات and المسبحات. A separate broader الم prefix group includes الأعراف
 and الرعد; it does not redefine membership of الميمات or الراءات.
 الحامدات starts الفاتحة at 1:2, after its basmala. Membership is filtered
@@ -133,9 +133,9 @@ existing matching rules.
 
 ### Affected components and dependencies
 
-- `src/lib/quran/branches.ts` retains complete original node phrases and their
+- `shared/quran/branches.ts` retains complete original node phrases and their
   ayah membership separately from the shared display.
-- `src/lib/quran/ayahContext.ts` loads and caches the 604 source reader pages
+- `shared/quran/ayahContext.ts` loads and caches the 604 source reader pages
   and selects immediate same-surah neighbors. `/api/quran/context` validates
   requested keys and returns the context, independently of database text.
 - `src/app/quran/branches/BranchTree.tsx` computes node offsets and button
@@ -182,7 +182,7 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 - A و or ف joined to an ayah's first word does not separate its opening from the same opening without it, so يَطُوفُ عَلَيْهِمْ (56:17) and وَيَطُوفُ عَلَيْهِمْ (52:24, 76:19) form one group. The Quranic Arabic Corpus morphology (`data/quran/quranic-corpus-morphology-0.4.txt`) decides which letter is a prefix: the build marks an ayah `conj` when the corpus splits a `w:` or `f:` prefix off its first word, and stops if the reader's word does not start with that letter. The و of an oath (`w:P`, as in وَٱلْفَجْرِ) stays part of the word, and so does a letter that belongs to the word, as in وُجُوهٌ.
 - Openings only. A shared phrase that starts inside an ayah is out of scope for now.
 
-## Tree (`branch` in `src/lib/quran/branches.ts`)
+## Tree (`branch` in `shared/quran/branches.ts`)
 
 - A node holds the words that every ayah under it shares from where its parent stopped. It stops at the first word where the ayat differ or where one of them ends.
 - Two words are the same word, and share a node, when they have the same letters after `normalizeWord`, the same root, and either the same corpus lemma (`LEM`) or the same spelling. Their marks do not decide it: رَبِّ and رَبُّ, ٱللَّهُ and ٱللَّهَ, لَهُم and لَهُمُ, إِنِّى and إِنِّىٓ, مُوسَى and مُوسَىٰ, مَا and مَآ, كَذَٰلِكَ and كَذَٰلِكِ, and تَتَّخِذُوا۟ and تَتَّخِذُوٓا۟ each share a node. Words with the same letters and root but different lemmas stay apart: إِن and إِنَّ, أَن and إِن, مَن and مِن, خَلَقَ and خَـٰلِقُ, صَدَّقَ and صَدَقَ. Identical spellings never split, even where the corpus gives them different lemmas (إِذَا and إِذَا الفجائية). The aim is memorisation: a reader never types the same letters into two sibling branches unless the words differ. The build stores each word's lemma in `ayat.json` beside its root. The shared display keeps marks common to every spelling at each letter and omits differing marks, so قَالَ رَبِّ and قَالَ رَبُّ show as قَالَ رَبّ. Each leaf combines a TextSearch icon on the right with its references in one borderless context button. Its reference labels have no separate reader links. Nodes with multiple original spellings, including opening boxes, use amber on the context icon. Inner nodes use a filled amber button. The modal shows each represented ayah with its preceding and following ayat from the same surah. It preserves original marks, highlights differing words, orders cards by surah and ayah, and locks background scrolling. Quiz feedback uses the same overlay; quiz inputs keep it hidden. The tree, the phrases, the pieces and the quiz all use this rule, so a piece is cut where the page draws a split. A phrase id is letters only, so two pieces that part by lemma at their last word, such as يا أيها الذين آمنوا إِن and إِنَّ, share one id and its link opens both; the quiz keeps their keys apart by adding the first ayah.

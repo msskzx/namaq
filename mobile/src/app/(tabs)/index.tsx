@@ -18,8 +18,8 @@ export default function BranchesScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar />
-      {pieces ? <TreePager pieces={pieces} palette={palette} />
-        : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><LoadingDots /></View>}
+      {pieces?.length ? <TreePager pieces={pieces} palette={palette} />
+        : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>{pieces ? null : <LoadingDots />}</View>}
     </View>
   );
 }
