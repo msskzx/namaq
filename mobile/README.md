@@ -7,7 +7,8 @@ The phone app is an Expo (React Native) app in this folder. The website stays in
 - `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. The branches (`index.tsx`) and compare (`compare.tsx`) tabs work; the others link to the website.
 - `src/components/` holds the app's own views. `BranchTree.tsx` draws a tree with plain views. `TreeCard.tsx` handles pinch zoom and one-finger moves. `TreePager.tsx` holds the row of cards, the saved place and the bookmark row.
 - `src/components/ComparePager.tsx` holds the surah pairs side by side (a paged list), `CompareCard.tsx` one card with its read-along studio, `CompareSheet.tsx` the pair list as a bottom sheet. The cards come from `shared/data/quran/compareCards.js`, built by the website's `npm run quran:compare-cards`.
-- `src/lib/` holds app logic. `camera.ts`, `branches.ts` and `compare.ts` have tests, which the website's `npm test` runs.
+- `src/app/prophets/[slug].tsx` is the website's prophets story page (`/quran/prophets/[slug]`): intro, index of stations by phase, then the stations one card at a time (`StationPager.tsx`, `StationCard.tsx`). The ayat come from the bundled Quran (`src/lib/prophets.ts`), the stories from `shared/quran/prophets`. It opens from the scroll icon beside the logo.
+- `src/lib/` holds app logic. `camera.ts`, `branches.ts`, `compare.ts` and `prophets.ts` have tests, which the website's `npm test` runs.
 - `metro.config.js` lets the bundler read `../shared`. Code there imports no packages.
 - The folder is `mobile/` and not `app/`, because Next.js would take a root `app/` folder as the website's routes.
 

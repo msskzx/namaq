@@ -16,6 +16,8 @@ export const light = {
   // A lit word and its partner on the compare cards.
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
+  /** The prophets timeline's five phase colours, in the website's order (blue, amber, rose, green, violet), muted to this palette. */
+  phases: ['#426578', '#8a6420', '#783d49', '#506449', '#665177'],
 };
 
 export type Palette = typeof light;
@@ -34,6 +36,7 @@ export const dark: Palette = {
   path: '#a9c4d1',
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
+  phases: ['#a9c4d1', '#dcb46e', '#d9a6b0', '#b1c59f', '#c3afd5'],
 };
 
 export const QURAN_FONT = 'KFGQPC Hafs';
