@@ -22,7 +22,7 @@ import { branchesHref } from '@shared/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@/lib/quran/curatedComparisons';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
-import { matchesSurah } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
 import { FIELD, NOTE } from '../panel';

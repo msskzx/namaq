@@ -10,7 +10,7 @@ import Segmented from '@/components/common/Segmented';
 import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@shared/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
-import { matchesSurah } from '@/lib/quran/surahSearch';
+import { matchesSurah } from '@shared/quran/surahSearch';
 import { FIELD, NOTE } from '../panel';
 import { pairHref, surahHref, type CompareTab } from './modeHref';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
