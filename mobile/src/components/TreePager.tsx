@@ -9,8 +9,14 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import TreeCard, { type Lane } from './TreeCard';
-import { isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
+import MatrixCard from './MatrixCard';
+import { StudioButton, StudioControls, StudioProgress } from './Studio';
+import { aroundOf, cardOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
+import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
+import { growthBeats } from '@/lib/growth';
+import { answer, growthState, setTarget, useGrowth } from '@/lib/growPlayer';
+import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 
@@ -26,13 +32,15 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, position, total, pop }: { piece: BranchPiece; palette: Palette; position: number; total: number; pop: number }) {
+function Actions({ piece, palette, position, total, pop, onVideo }: { piece: BranchPiece; palette: Palette; position: number; total: number; pop: number; onVideo?: () => void }) {
   const saved = useSaved(piece);
+  const studio = useGrowth().studio;
   const scale = useSharedValue(1);
   useEffect(() => {
     if (pop) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
   }, [pop, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  if (studio) return <StudioControls palette={palette} onVideo={onVideo} />;
   const save = () => toggleSaved(piece);
   const share = () => void Share.share({ message: `${piece.text}\n${WEBSITE}${branchesHref(piece.id)}` });
   return (
@@ -43,15 +51,20 @@ function Actions({ piece, palette, position, total, pop }: { piece: BranchPiece;
       <Pressable onPress={share} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
         <Share2 size={24} color={palette.ink} />
       </Pressable>
+      <StudioButton palette={palette} />
       <Text style={{ marginStart: 'auto', color: palette.muted, fontSize: 13 }}>{num(position)} / {num(total)}</Text>
     </View>
   );
 }
 
+type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean; rotated: boolean;
+  /** The tree a search opens on; otherwise the one left open last time. */
+  start?: number; onIndex?: (index: number) => void; onVideo?: () => void };
+
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; palette: Palette }) {
+export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onVideo }: Props) {
   const place = useMemo(() => readJson<Place>(PLACE), []);
-  const first = Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
+  const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
@@ -66,8 +79,21 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
   useEffect(() => () => clearTimeout(pending.current), []);
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
   const width = view?.width ?? 0;
+  const growth = useGrowth();
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { onIndex?.(index); }, [index, onIndex]);
+
+  // The open tree is the one the studio grows; a matrix has nothing to grow.
+  const piece = pieces[index];
+  useEffect(() => {
+    if (mode !== 'tree' || !piece) { setTarget(null); return; }
+    const { presentation } = cardOf(piece, list);
+    const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
+    const options = { ...parts, prefixes: presentation.prefixes };
+    setTarget({ watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) });
+    return () => setTarget(null);
+  }, [piece, list, mode, around]);
 
   const arrive = useCallback((next: number) => {
     restore.current = undefined;
@@ -87,12 +113,17 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
     // The neighbours of the new card mount while the row is still sliding.
     if (target !== index) scheduleOnRN(arrive, target);
   };
-  const lane: Lane = { offset, width, count, settle };
+  // While the tree grows the studio holds the card: no swiping away mid-growth.
+  const growing = growth.status === 'playing' || growth.status === 'paused';
+  const lane: Lane | undefined = growing ? undefined : { offset, width, count, settle };
 
   const tap = useCallback((ayahKeys: string[] | null) => {
     const now = Date.now();
     if (now - moved.current < 350) return;
     clearTimeout(pending.current);
+    const state = growthState();
+    if (state.ask) { answer(); return; }
+    if (state.studio && ayahKeys) return;
     if (now - lastTap.current < DOUBLE_TAP) {
       lastTap.current = 0;
       if (!isSaved(pieces[index])) toggleSaved(pieces[index]);
@@ -100,11 +131,12 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
       return;
     }
     lastTap.current = now;
-    if (ayahKeys) pending.current = setTimeout(() => router.push({ pathname: '/ayah', params: { keys: ayahKeys.join(',') } }), DOUBLE_TAP);
+    if (ayahKeys?.length) pending.current = setTimeout(() => router.push({ pathname: '/ayah', params: { keys: ayahKeys.join(',') } }), DOUBLE_TAP);
   }, [pieces, index]);
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [index - 1, index, index + 1].filter(at => at >= 0 && at < count);
+  const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;
 
   return (
     <View style={{ flex: 1 }}>
@@ -112,15 +144,20 @@ export default function TreePager({ pieces, palette }: { pieces: BranchPiece[]; 
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
           {shown.map(at => (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
-              <TreeCard piece={pieces[at]} palette={palette} view={view} lane={lane}
-                initialCamera={at === index ? restore.current : undefined}
-                onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} />
+              {mode === 'matrix'
+                ? <MatrixCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} />
+                : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
+                  rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined}
+                  initialCamera={at === index ? restore.current : undefined}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} />}
             </View>
           ))}
         </Animated.View>}
+        {/* Over the card's foot, so opening the studio does not resize the card. */}
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: palette.paper }}><StudioProgress palette={palette} /></View>
       </View>
       <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
-        <Actions piece={pieces[index]} palette={palette} position={index + 1} total={count} pop={pop} />
+        {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={onVideo} />}
       </View>
     </View>
   );

@@ -1,18 +1,36 @@
-import { memo } from 'react';
+import { createContext, memo, useContext, useEffect } from 'react';
 import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { keys, type Branch } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import type { Matches, Presentation } from '@/lib/branches';
+import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
+import { aroundOf, mixedBefore } from '@/lib/branches';
+import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import Hourglass from './Hourglass';
 
 type Tap = (ayahKeys: string[]) => void;
-type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap };
+export type Direction = 'side' | 'down';
+/** What a growing tree hides and lights; empty when nothing grows. */
+export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null };
+const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
+
+type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around };
+const Growth = createContext<TreeGrowth>(NO_GROWTH);
 
 const LINE = 2;
 const CURVE = 10;
-
 const isMark = (word: string) => word === '۝' || word.startsWith('﴿');
+
+/** Fades a box or connector in and out as the tree grows. */
+function Fade({ id, children, style }: { id: string; children: React.ReactNode; style?: object }) {
+  const hidden = useContext(Growth).hidden.has(id);
+  const opacity = useSharedValue(hidden ? 0 : 1);
+  useEffect(() => { opacity.value = hidden ? 0 : withTiming(1, { duration: 250 }); }, [hidden, opacity]);
+  const faded = useAnimatedStyle(() => ({ opacity: opacity.value }));
+  return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
+}
 
 function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: Shared; center?: boolean }) {
   const text = ayahKeys.map(key => {
@@ -22,51 +40,73 @@ function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: 
   return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
+type Marks = { exact: Set<number>; rooted: Set<number> };
+
 /** A word is coloured when it is the same (accent) or shares its root (purple) in every ayah through this node. */
-function Words({ words, ayahKeys, at, shared, size }: { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number }) {
+function Words({ words, ayahKeys, at, shared, size, marks, color }: { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string }) {
   const { palette, matches, offsets } = shared;
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
       {words.map((word, i) => {
-        const kinds = ayahKeys.map(key => {
+        const kinds = marks ? [marks.rooted.has(i) ? 'root' : marks.exact.has(i) ? 'exact' : undefined] : ayahKeys.map(key => {
           const index = (offsets[key] ?? 0) + at + i;
           const match = matches[key];
           return match?.rooted.has(index) ? 'root' : match?.exact.has(index) ? 'exact' : undefined;
         });
         const kind = !isMark(word) && kinds.length > 0 && kinds.every(Boolean) ? (kinds.includes('root') ? 'root' : 'exact') : undefined;
-        const color = kind === 'root' ? palette.root : kind === 'exact' ? palette.accent : undefined;
-        return <Text key={i} style={color ? { color } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
+        const tone = kind === 'root' ? palette.root : kind === 'exact' ? palette.accent : undefined;
+        return <Text key={i} style={tone ? { color: tone } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
       })}
     </Text>
   );
 }
 
-function Box({ ayahKeys, leaf, shared, children }: { ayahKeys: string[]; leaf: boolean; shared: Shared; children: React.ReactNode }) {
-  const { palette } = shared;
+function Box({ id, ayahKeys, leaf, shared, muted, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; children: React.ReactNode }) {
+  const { palette, down } = shared;
+  const growth = useContext(Growth);
+  const asked = growth.ask?.id === id ? growth.ask : undefined;
+  const lit = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit));
   return (
-    <Pressable
-      onPress={() => shared.onTap(ayahKeys)}
-      accessibilityRole="button"
-      style={({ pressed }) => ({
-        maxWidth: leaf ? 208 : 192,
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        borderWidth: 1,
-        borderColor: pressed ? palette.accent : palette.rule,
-        backgroundColor: palette.paperDeep,
-        borderTopStartRadius: 14,
-        borderBottomEndRadius: 14,
-        borderTopEndRadius: 4,
-        borderBottomStartRadius: 4,
-      })}>
-      {children}
-    </Pressable>
+    <Fade id={id}>
+      <Pressable
+        onPress={() => shared.onTap(ayahKeys)}
+        accessibilityRole="button"
+        accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}
+        style={({ pressed }) => ({
+          maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
+          paddingHorizontal: 12,
+          paddingVertical: 4,
+          borderWidth: 1,
+          borderStyle: muted ? 'dashed' : 'solid',
+          borderColor: pressed || lit ? (growth.now.has(id) ? palette.path : palette.accent) : muted ? palette.muted : palette.rule,
+          backgroundColor: muted ? 'transparent' : palette.paperDeep,
+          borderTopStartRadius: 14,
+          borderBottomEndRadius: 14,
+          borderTopEndRadius: 4,
+          borderBottomStartRadius: 4,
+        })}>
+        <View style={{ opacity: asked ? 0 : 1 }}>{children}</View>
+        {asked && <View style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
+          {asked.seconds ? <Hourglass left={asked.left} seconds={asked.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
+        </View>}
+      </Pressable>
+    </Fade>
   );
 }
 
-/** One child's elbow: the vertical spine from its siblings and the line into it, curved at the two ends. */
-function Elbow({ first, last, color }: { first: boolean; last: boolean; color: string }) {
+/** One child's elbow: the spine from its siblings and the line into it, curved at the two ends. */
+function Elbow({ first, last, color, down }: { first: boolean; last: boolean; color: string; down: boolean }) {
   const only = first && last;
+  if (down) {
+    // Children sit in a row under the parent: a bus along the top, a drop into each child.
+    return (
+      <View style={{ height: 16, alignSelf: 'stretch', flexDirection: 'row' }}>
+        <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderTopWidth: LINE }), ...(last && !only ? { borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE } : {}) }} />
+        <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderTopWidth: LINE }), ...(first && !only ? { borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE } : {}) }} />
+        {(only || (!first && !last)) && <View style={{ position: 'absolute', left: '50%', marginLeft: -LINE / 2, top: 0, bottom: 0, borderStartWidth: LINE, borderColor: color }} />}
+      </View>
+    );
+  }
   return (
     <View style={{ width: 16, alignSelf: 'stretch' }}>
       <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : last ? { borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
@@ -76,69 +116,138 @@ function Elbow({ first, last, color }: { first: boolean; last: boolean; color: s
   );
 }
 
-function Fan({ items, color }: { items: React.ReactNode[]; color: string }) {
+type Entry = { id: string; item: React.ReactNode };
+
+function Fan({ entries, color, down }: { entries: Entry[]; color: string; down: boolean }) {
   return (
-    <View style={{ alignItems: 'flex-start' }}>
-      {items.map((item, i) => (
-        <View key={i} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Elbow first={i === 0} last={i === items.length - 1} color={color} />
-          <View style={{ paddingVertical: 5 }}>{item}</View>
+    <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }}>
+      {entries.map((entry, i) => (
+        <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}>
+          <Fade id={lineId(entry.id)} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
+            <Elbow first={i === 0} last={i === entries.length - 1} color={color} down={down} />
+          </Fade>
+          <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
         </View>
       ))}
     </View>
   );
 }
 
-const Stub = ({ color }: { color: string }) => <View style={{ width: 14, borderTopWidth: LINE, borderColor: color }} />;
+/** The connector between a box and its fan; shown once anything in the fan is. */
+function Stub({ color, down, ids }: { color: string; down: boolean; ids: string[] }) {
+  const { hidden } = useContext(Growth);
+  const visible = ids.some(id => !hidden.has(lineId(id)));
+  return <View style={[down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
+}
+
+/** Fans drawn before the root (words before the phrase, the ayat before) open the other way: mirrored, then each item mirrored back. */
+function BackFan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
+  const flip = shared.down ? { transform: [{ scaleY: -1 }] } : { transform: [{ scaleX: -1 }] };
+  return (
+    <View style={flip}>
+      <Fan color={shared.palette.rule} down={shared.down} entries={entries.map(entry => ({ id: entry.id, item: <View style={flip}>{entry.item}</View> }))} />
+    </View>
+  );
+}
+
+function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; of: string; shared: Shared }) {
+  const [surah, ayah] = beside.key.split(':').map(Number);
+  const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
+  return (
+    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted>
+      {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
+      <Words words={beside.words} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
+      {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
+      <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{ref}</Text>
+    </Box>
+  );
+}
+
+/** The ayat before the given ones, opening to the right of what they lead into (or above it, top down). */
+function befores(ayahKeys: string[], shared: Shared): Entry[] {
+  const around = shared.around;
+  if (!around) return [];
+  return ayahKeys.flatMap(key => around.before[key] ? [{ id: `b${key}`, item: <NeighbourBox id={`b${key}`} beside={around.before[key]!} of={key} shared={shared} /> }] : []);
+}
 
 function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Shared }) {
   const root = path.length === 0;
   const all = keys(node);
   const words = node.words;
+  const id = nodeId(shared.indices.get(node)!);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
+  const { around } = shared;
+  const afters: Entry[] = !around ? [] : node.ayat.flatMap(key => {
+    const beside = around.after[around.ends[key]];
+    return beside ? [{ id: `a${key}`, item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} /> }] : [];
+  });
+  const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      {boundary && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, color: shared.palette.muted, paddingHorizontal: 4 }}>{mushafText(words.join(' '))}</Text>}
+    <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
+      {boundary && <Fade id={id}><Text style={{ fontFamily: QURAN_FONT, fontSize: 18, color: shared.palette.muted, paddingHorizontal: 4 }}>{mushafText(words.join(' '))}</Text></Fade>}
       {shown && (
-        <Box ayahKeys={all} leaf={node.children.length === 0} shared={shared}>
+        <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared}>
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
           <Words words={words} ayahKeys={all} at={path.length} shared={shared} size={root ? 22 : 20} />
           {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
         </Box>
       )}
-      {node.children.length > 0 && <>
-        <Stub color={shared.palette.rule} />
-        <Fan color={shared.palette.rule} items={node.children.map((child, i) => <Node key={i} node={child} path={[...path, ...words]} shared={shared} />)} />
+      {entries.length > 0 && <>
+        <Stub color={shared.palette.rule} down={shared.down} ids={entries.map(entry => entry.id)} />
+        <Fan color={shared.palette.rule} down={shared.down} entries={entries} />
       </>}
     </View>
   );
 }
 
-type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void };
+type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void;
+  direction?: Direction; around?: Around; growth?: TreeGrowth };
 
-/** The website's phrase tree, root on the right and branches growing left; words before the phrase fan out on the right. */
-function BranchTree({ presentation, matches, names, palette, onTap, onLayout }: Props) {
-  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap };
-  const before = presentation.prefixes.filter(prefix => prefix.word);
+/**
+ * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
+ * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
+ */
+function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH }: Props) {
+  const down = direction === 'down';
+  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around };
+  const all = keys(presentation.tree);
+  const mixed = mixedBefore(presentation);
+  // Words before the phrase, each with the ayat before it; ayat that open with the phrase show the ayah before when the switch is on,
+  // or always when other ayat have words before the phrase (with the switch, one more before that).
+  const before: Entry[] = presentation.prefixes.length === 0 ? befores(all, shared) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
+    if (prefix.word) {
+      const lead = befores(prefix.keys, shared);
+      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared}>
+        <Words words={prefix.words ?? prefix.word.split(' ')} ayahKeys={prefix.keys} at={0} shared={{ ...shared, offsets: {} }} size={20} />
+      </Box>;
+      return [{ id: `p${i}`, item: lead.length ? <View style={{ flexDirection: down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub color={palette.rule} down={down} ids={lead.map(entry => entry.id)} /><BackFan entries={lead} shared={shared} /></View> : box }];
+    }
+    return mixed ? required(prefix.keys, shared, around ?? aroundOf(presentation)) : befores(prefix.keys, shared);
+  });
   return (
-    <View onLayout={onLayout} style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
-      {before.length > 0 && <>
-        <View style={{ transform: [{ scaleX: -1 }] }}>
-          <Fan color={palette.rule} items={before.map((prefix, i) => (
-            <View key={i} style={{ transform: [{ scaleX: -1 }] }}>
-              <Box ayahKeys={prefix.keys} leaf shared={shared}>
-                <Words words={prefix.words ?? prefix.word.split(' ')} ayahKeys={prefix.keys} at={0} shared={{ ...shared, offsets: {} }} size={20} />
-              </Box>
-            </View>
-          ))} />
-        </View>
-        <Stub color={palette.rule} />
-      </>}
-      <Node node={presentation.tree} path={[]} shared={shared} />
-    </View>
+    <Growth.Provider value={growth}>
+      <View onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
+        {before.length > 0 && <>
+          <BackFan entries={before} shared={shared} />
+          <Stub color={palette.rule} down={down} ids={before.map(entry => entry.id)} />
+        </>}
+        <Node node={presentation.tree} path={[]} shared={shared} />
+      </View>
+    </Growth.Provider>
   );
+}
+
+/** The ayah before each ayah that opens with the phrase, always drawn in a mixed tree; the switch adds the one before that. */
+function required(ayahKeys: string[], shared: Shared, context: Around): Entry[] {
+  return ayahKeys.flatMap(key => {
+    const beside = context.before[key];
+    if (!beside) return [];
+    const earlier = shared.around?.earlier[key];
+    const box = <NeighbourBox id={`b${key}`} beside={beside} of={key} shared={shared} />;
+    return [{ id: `b${key}`, item: earlier ? <View style={{ flexDirection: shared.down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub color={shared.palette.rule} down={shared.down} ids={[`e${key}`]} /><NeighbourBox id={`e${key}`} beside={earlier} of={key} shared={shared} /></View> : box }];
+  });
 }
 
 export default memo(BranchTree);
