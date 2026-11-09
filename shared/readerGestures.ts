@@ -1,4 +1,6 @@
-/** What a tap, double tap and long press do on the Quran reader's page, chosen per mode in the settings sheet. Kept in this browser. */
+import { keyStore } from './storage';
+
+/** What a tap, double tap and long press do on the Quran reader's page, chosen per mode in the settings sheet. Kept on this device. */
 export type ReaderMode = 'read' | 'recite';
 export type Gesture = 'tap' | 'double' | 'long';
 export type GestureAction = 'tools' | 'next-ayah' | 'next-word' | 'back' | 'actions' | 'forgot' | 'save' | 'none';
@@ -20,10 +22,6 @@ export const DEFAULT_GESTURES: ReaderGestures = {
 /** Actions that work on the ayah under the finger; the rest act on the page. */
 export const AYAH_ACTIONS: ReadonlySet<GestureAction> = new Set(['actions', 'forgot', 'save']);
 
-const KEY = 'reader-gestures';
-const listeners = new Set<() => void>();
-let cache: { raw: string | null; gestures: ReaderGestures } = { raw: null, gestures: DEFAULT_GESTURES };
-
 export function parseGestures(raw: string | null): ReaderGestures {
   let parsed: unknown = null;
   try { parsed = raw ? JSON.parse(raw) : null; } catch {}
@@ -38,29 +36,17 @@ export function parseGestures(raw: string | null): ReaderGestures {
   };
 }
 
-export function readGestures(): ReaderGestures {
-  let raw: string | null = null;
-  try { raw = localStorage.getItem(KEY); } catch {}
-  if (raw !== cache.raw) cache = { raw, gestures: parseGestures(raw) };
-  return cache.gestures;
-}
+const store = keyStore('reader-gestures', parseGestures);
+
+export const readGestures = store.read;
 
 export function setGesture(mode: ReaderMode, gesture: Gesture, action: GestureAction) {
   const next = readGestures();
-  const updated = { ...next, [mode]: { ...next[mode], [gesture]: action } };
-  try { localStorage.setItem(KEY, JSON.stringify(updated)); } catch {}
-  listeners.forEach(listener => listener());
+  store.write(JSON.stringify({ ...next, [mode]: { ...next[mode], [gesture]: action } }));
 }
 
-export function resetGestures() {
-  try { localStorage.removeItem(KEY); } catch {}
-  listeners.forEach(listener => listener());
-}
+export const resetGestures = () => store.write('');
 
-export function subscribeGestures(listener: () => void) {
-  listeners.add(listener);
-  window.addEventListener('storage', listener);
-  return () => { listeners.delete(listener); window.removeEventListener('storage', listener); };
-}
+export const subscribeGestures = store.subscribe;
 
 export const serverGestures = () => DEFAULT_GESTURES;

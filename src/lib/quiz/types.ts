@@ -15,21 +15,10 @@ export const QUESTION_FAMILIES = [
 
 export type QuestionFamily = (typeof QUESTION_FAMILIES)[number];
 
-export const QUIZ_TOPICS = ['PEOPLE', 'BATTLES', 'RELATIONSHIPS', 'AYAT', 'EVENTS', 'PERSON_CIRCLE', 'BRANCHES'] as const;
-export type QuizTopic = (typeof QUIZ_TOPICS)[number];
-export type QuizTopics = readonly QuizTopic[];
+export { QUIZ_TOPICS, QUIZ_LENGTHS, QUIZ_LEAVES, DEFAULT_LEAVES, parseLeaves } from '@shared/quiz/settings';
+export type { QuizTopic, QuizTopics, QuizLength } from '@shared/quiz/settings';
+import type { QuizTopic } from '@shared/quiz/settings';
 export type QuestionTopic = Exclude<QuizTopic, 'PERSON_CIRCLE' | 'BRANCHES'>;
-
-export const QUIZ_LENGTHS = [5, 10, 15] as const;
-export type QuizLength = (typeof QUIZ_LENGTHS)[number];
-
-// docs/quiz-ayah-branches.md
-export const QUIZ_LEAVES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
-export const DEFAULT_LEAVES = 3;
-export const parseLeaves = (value: string | null) => {
-  const n = Number(value);
-  return (QUIZ_LEAVES as readonly number[]).includes(n) ? n : DEFAULT_LEAVES;
-};
 
 export const QUESTION_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'RETIRED'] as const;
 export type QuestionStatus = (typeof QUESTION_STATUSES)[number];

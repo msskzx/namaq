@@ -1,0 +1,37 @@
+import type { ManyOption, PairCard } from './compareCards';
+import { normalizeWord } from './normalize';
+
+/** One word the read-along stops on: `side` of the card, the ayah's place in that side, the word, and the partner it lights.
+ *  `option` picks the partner of a one-to-many card while this word is read. */
+export type ReadStep = { side: 0 | 1; ayah: number; word: number; link?: string; option?: number; last: boolean };
+
+/** The same words every time: the card shows one ayah and lists where it recurs. */
+export function isRefrain(options: ManyOption[]) {
+  const text = (item: ManyOption) => item.ayah.words.map(normalizeWord).join(' ');
+  return options.every(item => text(item) === text(options[0]));
+}
+
+/** Both ayat stay on screen; the reading moves over one side word by word and each matched word lights its partner across.
+ *  A range card reads its first side ayah by ayah. A one-to-many card reads the shared ayah once, then each partner in turn. */
+export function readPlan(card: PairCard): ReadStep[] {
+  const words = (side: 0 | 1, ayah: { number: number; words: string[]; marks?: Record<number, { link?: string }> }, option?: number) =>
+    ayah.words.map((_, word): ReadStep => ({ side, ayah: ayah.number, word, link: ayah.marks?.[word]?.link, ...(option === undefined ? {} : { option }), last: word === ayah.words.length - 1 }));
+  if (!card.many) return card.sides[0].ayat.flatMap(ayah => words(0, ayah));
+  const many = card.many.side;
+  const shared = (1 - many) as 0 | 1;
+  return [
+    ...words(shared, card.many.options[0].shared, 0),
+    ...(isRefrain(card.many.options) ? card.many.options.slice(0, 1) : card.many.options).flatMap((option, i) => words(many, option.ayah, i)),
+  ];
+}
+
+/** Where each ayah read starts, for the progress bars. */
+export const ayahStarts = (plan: ReadStep[]) => plan.flatMap((step, i) => (i === 0 || plan[i - 1].last ? [i] : []));
+
+// Every speed reads at half its first pace: 1× is the old 0.5×, 0.5× slower still.
+export const READ_SPEEDS = [1, 1.5, 2, 0.5];
+// Milliseconds at 1×: a word, the longer stay on a word with a partner, the pause at an ayah's end. 1× is a calm reading pace.
+const WORD = 760;
+const MATCH = 1300;
+const AYAH_END = 1800;
+export const stepTime = (step: ReadStep, speed: number) => ((step.link ? MATCH : WORD) + (step.last ? AYAH_END : 0)) / speed;

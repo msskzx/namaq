@@ -1,6 +1,6 @@
 // docs/quiz-ayah-branches.md
-import type { Branch } from '@shared/quran/branches';
-import { normalizeWord } from '@shared/quran/normalize';
+import type { Branch } from '../quran/branches';
+import { normalizeWord } from '../quran/normalize';
 import { shuffle, type Random } from './random';
 
 const DAGGER = 'ٰ';

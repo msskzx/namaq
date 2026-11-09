@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pageInScope, parseScope, scopeParam, type CompareScope } from './compareScope';
+import { pageInScope, parseScope, scopeParam, type CompareScope } from '@shared/quran/compareScope';
 
 const spans = {
   juz: { 2: [1, 3], 3: [3, 4], 56: [27, 27], 69: [29, 29] },

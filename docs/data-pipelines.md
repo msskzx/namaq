@@ -374,7 +374,7 @@ gives it, at all 15 places. Branches, ayah search and the surrounding-ayat cards
 the stored ayat. Their page numbers come from the 1441 pages below (`mushafPages`, the page each ayah's first word is on), so their links open the page the reader shows. Nothing syncs to Neo4j. `npm test` checks the files.
 
 The reader at `/quran/read` draws the 1441 Madinah mushaf instead, the edition
-in print today, from `src/app/quran/read/mushaf/`. `npm run quran:mushaf --
+in print today, from `shared/data/quran/mushaf/`. `npm run quran:mushaf --
 <pages dir> <hafsData_v18.json>` builds those files from two downloads:
 
 - the `pages/` folder of the npm package `quran-qcf4` (MIT data), which gives

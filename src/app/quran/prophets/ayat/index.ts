@@ -1,4 +1,4 @@
-import type { StoryData } from '@/lib/quran/prophets/story';
+import type { StoryData } from '@shared/quran/prophets/story';
 import musa from './musa.json';
 
 export const AYAT: Record<string, StoryData> = { musa };

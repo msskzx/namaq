@@ -13,11 +13,12 @@ import Button from "@/components/common/Button";
 import MushafText from "@/components/common/MushafText";
 import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
-import { askedNodes, branchNodes, givenAnswer, LEAF_WORDS, matchTreeAnswers, rightWords, spoken } from "@/lib/quiz/branchAnswers";
-import { emptyBranchAnswers, givenNodes, isAsked, type ScoredQuestion } from "@/lib/quiz/score";
+import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers";
+import { gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
+import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
 import { branchesHref, keys, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
-import example from "./example.json";
+import example from "@shared/data/quiz/example.json";
 
 type Question = ScoredQuestion;
 type Names = Record<number, string>;
@@ -36,30 +37,13 @@ function nodeOffsets(tree: Branch) {
   return { offsets, parents };
 }
 
-const ORDINALS = ["الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة"];
-const ordinal = (n: number, ar: boolean) => ar ? (ORDINALS[n - 1] ?? num(n)) : String(n);
-
-type Correction = { index: number; number: number; node: Branch; typed: string; correct: boolean; right: number; needed: number };
-
-/** One row per asked node: what was typed, word by word, against the node it was graded with. */
-function corrections(question: Question, typed: string[], matches: ReturnType<typeof matchTreeAnswers>): Correction[] {
-  const nodes = branchNodes(question.tree!);
-  return nodes.flatMap((node, index) => isAsked(question, index) ? [index] : []).map((index, at) => {
-    const answer = matches[index]?.node ?? nodes[index];
-    const words = spoken(answer.words);
-    const text = typed[index]?.trim() ?? "";
-    return { index, number: at + 1, node: answer, typed: text, correct: Boolean(matches[index]?.correct), right: rightWords(text, words), needed: answer.children.length === 0 ? Math.min(LEAF_WORDS, words.length) : words.length };
-  });
-}
-
 function Badge({ row, ar }: { row: Correction; ar: boolean }) {
   return <span aria-hidden className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold ${row.correct ? "bg-[color-mix(in_srgb,var(--home-green)_15%,var(--home-paper))] text-[var(--home-green)]" : "bg-[var(--home-action,var(--home-accent))] text-[var(--home-on-action,var(--home-paper))]"}`}>{ar ? num(row.number) : row.number}</span>;
 }
 
 /** The node's words with the ones that are enough to type underlined. */
 function NeededWords({ words, needed }: { words: string[]; needed: number }) {
-  let seen = 0;
-  const cut = words.findIndex(word => spoken([word]).length > 0 && ++seen === needed) + 1;
+  const cut = neededCut(words, needed);
   return <span className="font-quran text-lg leading-loose text-[var(--home-ink)]">
     <span className="underline decoration-2 underline-offset-8"><MushafText>{words.slice(0, cut).join(" ")}</MushafText></span>
     {cut < words.length && <MushafText>{` ${words.slice(cut).join(" ")}`}</MushafText>}
@@ -74,31 +58,19 @@ function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   </React.Fragment>)}</span>;
 }
 
-const verdict = (row: Correction, ar: boolean) => {
-  if (row.correct) return ar ? "صحيح" : "Correct";
-  if (!row.typed) return ar ? "بدون إجابة" : "No answer";
-  if (row.right < row.typed.split(/\s+/).length) return ar ? `خطأ في الكلمة ${ordinal(row.right + 1, ar)}` : `Wrong at word ${row.right + 1}`;
-  return row.needed === 1 || row.node.children.length > 0
-    ? (ar ? "ناقص: اكتب كل كلماتها" : "Incomplete: type all its words")
-    : (ar ? `ناقص: اكتب كلماته الـ${num(row.needed)} الأولى` : `Incomplete: type its first ${row.needed} words`);
-};
-
 export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean }) {
   const [matrix, setMatrix] = React.useState(false);
   const snapshot = JSON.stringify({ question: givenQuestion, typed: givenTyped });
   const feedback = React.useMemo(() => {
     const { question, typed } = JSON.parse(snapshot) as { question: Question; typed: string[] };
     if (!question.tree) return null;
-    const matches = matchTreeAnswers(question.tree, typed, givenNodes(question));
-    let slot = 0;
-    const align = (node: Branch): Branch => ({ ...(matches[slot++]?.node ?? node), children: node.children.map(align) });
-    return { question, typed, matches, solutionTree: { ...question.tree, children: question.tree.children.map(align) } };
+    const graded = gradedTree(question, typed);
+    return { question, typed, matches: graded.matches, rows: graded.rows, solutionTree: graded.tree };
   }, [snapshot]);
   if (!feedback) return null;
-  const { question, typed, matches, solutionTree } = feedback;
+  const { question, matches, rows, solutionTree } = feedback;
   if (!question.tree) return null;
   const { offsets, parents } = nodeOffsets(question.tree);
-  const rows = corrections(question, typed, matches);
   const byIndex = new Map(rows.map(row => [row.index, row]));
   const id = question.phrase ?? question.tree.words.join(' ');
   const label = matrix ? (ar ? 'اعرض الشجرة' : 'Show tree') : (ar ? 'اعرض بطاقات الآيات' : 'Show ayah cards');

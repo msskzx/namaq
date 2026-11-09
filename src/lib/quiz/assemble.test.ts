@@ -4,7 +4,7 @@ const { count, findMany } = vi.hoisted(() => ({ count: vi.fn(), findMany: vi.fn(
 vi.mock('@/lib/prisma', () => ({ prisma: { quizQuestion: { count, findMany } } }));
 
 import { assembleQuiz, availableQuestionCount } from './assemble';
-import { branchNodes } from './branchAnswers';
+import { branchNodes } from '@shared/quiz/branchAnswers';
 
 const rows = [{
   key: 'one',

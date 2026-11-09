@@ -1,16 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { readerAyat } from '@shared/quran/branches';
-import { normalizeWord } from '@shared/quran/normalize';
-import { mushafPages, type MushafPage, type ReaderPageData } from '@shared/quran/readerPage';
+import { readerAyat } from './branches';
+import { normalizeWord } from './normalize';
+import { mushafPages, type MushafPage, type ReaderPageData } from './readerPage';
 import { indexAyat, searchAyat, searchable } from './ayahSearch';
 
 const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>
-  JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')),
+  JSON.parse(readFileSync(join(__dirname, '../../src/app/quran/read/data', `${i + 1}.json`), 'utf8')),
 );
 const mushaf: MushafPage[] = Array.from({ length: 604 }, (_, i) =>
-  JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${i + 1}.json`), 'utf8')),
+  JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${i + 1}.json`), 'utf8')),
 );
 const ayat = indexAyat(readerAyat(pages, mushafPages(mushaf)));
 const covered = (query: string, key: string) => {

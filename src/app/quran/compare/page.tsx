@@ -15,10 +15,10 @@ import { ayahInRange, parseCompareRange, surahInRange } from '@/lib/quran/compar
 import { plainName } from '@shared/quran/normalize';
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
-import { curatedComparisons, surahPairHref } from '@/lib/quran/curatedComparisons';
+import { curatedComparisons, surahPairHref } from '@shared/quran/curatedComparisons';
 import PairCompare from './PairCompare';
 import { listedPairs, pairCards, reviewPairs, reviewStates, surahSpans } from './pairCards';
-import { parseScope, scopeParam, type CompareScope } from '@/lib/quran/compareScope';
+import { parseScope, scopeParam, type CompareScope } from '@shared/quran/compareScope';
 import { closestPair } from '@/lib/quran/mutashabih/pairs';
 
 export const dynamic = 'force-dynamic';
