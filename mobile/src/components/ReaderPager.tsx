@@ -64,8 +64,10 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     .onEnd(event => {
       scheduleOnRN(onMove);
       const at = Math.round(from.value / width);
-      const far = Math.abs(event.translationX) > width * SWIPE || Math.abs(event.velocityX) > FLICK;
-      const forward = event.translationX > 0;
+      // A flick turns the way it was flicked; a slow drag turns the way it went far enough.
+      const flick = Math.abs(event.velocityX) > FLICK;
+      const far = flick || Math.abs(event.translationX) > width * SWIPE;
+      const forward = flick ? event.velocityX > 0 : event.translationX > 0;
       const target = far && (forward ? at + 1 < count : at > 0) ? at + (forward ? 1 : -1) : at;
       offset.value = withTiming(target * width, { duration: 220 });
       if (target !== at) scheduleOnRN(arrive, target + 1);

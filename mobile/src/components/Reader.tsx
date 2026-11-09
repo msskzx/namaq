@@ -144,6 +144,8 @@ export default function Reader() {
   // A tap waits for a second one only when a double tap does something, so a plain tap stays instant otherwise.
   const pending = useRef<{ timer: ReturnType<typeof setTimeout> } | null>(null);
   const moved = useRef(0);
+  const actionsOpen = useRef(false);
+  actionsOpen.current = !!actions;
   const latest = useRef(run);
   latest.current = run;
   const onMove = useCallback(() => {
@@ -153,8 +155,9 @@ export default function Reader() {
   useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number) => {
     if (Date.now() - moved.current < 350) return;
+    // A touch that closes the ayah buttons only closes them, as on the website.
+    if (actionsOpen.current) { setActions(null); return; }
     const set = readGestures()[mode];
-    setActions(null);
     if (touch === 'long') { latest.current(set.long, key, x, y); return; }
     if (pending.current) {
       clearTimeout(pending.current.timer);
@@ -210,7 +213,7 @@ export default function Reader() {
       )}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
-          style={{ position: 'absolute', bottom: insets.bottom + 6, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
+          style={{ position: 'absolute', bottom: insets.bottom + 6 + (tools ? 55 : 0), alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
           {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
           <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
           <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
