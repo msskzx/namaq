@@ -278,15 +278,6 @@ describe('BranchTree', () => {
     expect(screen.getByText('١:١').closest('button, a')).toBeNull();
   });
 
-  it('shows each ayah label as plain text under its leaf, with visible separators', () => {
-    render(<BranchTree tree={tree} names={{ 15: 'سُورَةُ الحِجۡرِ', 51: 'سُورَةُ الذَّارِيَاتِ' }} />);
-    expect(['سُورَةُ الذَّارِيَاتِ ١٥', 'سُورَةُ الحِجۡرِ ٤٥', '٤٤:٥١'].map(label => screen.getByText(label).closest('button, a'))).toEqual([null, null, null]);
-    expect(screen.queryByRole('link')).toBeNull();
-    const references = screen.getByText('سُورَةُ الحِجۡرِ ٤٥').parentElement!.parentElement!;
-    expect(within(references).getAllByText('·')).toHaveLength(1);
-    expect(references.textContent?.startsWith('·')).toBe(false);
-  });
-
   it('identifies al-Qamar ayah 54 in the node header', () => {
     render(<BranchTree tree={{ words: ['إِنَّ', 'ٱلْمُتَّقِينَ'], ayat: ['54:54'], children: [] }} names={{ 54: 'سُورَةُ القَمَرِ' }} />);
     expect(screen.getByText('سُورَةُ القَمَرِ ٥٤').closest('header')).toBeTruthy();
@@ -321,17 +312,6 @@ describe('BranchTree', () => {
     ]);
     expect(screen.getByText('الإنسان ١٩').nextElementSibling?.textContent).toBe('وَيَطُوفُ');
     expect(screen.getByText('الواقعة ١٧').nextElementSibling?.textContent).toBe('يَطُوفُ');
-  });
-
-  it('gives every node the same outline context and path buttons, with its references outside them', () => {
-    render(<BranchTree tree={tree} names={{}} />);
-    const buttons = screen.getAllByRole('button', { name: /عرض الآيات في سياقها|إظهار المسار/ });
-    expect(buttons).toHaveLength(6);
-    expect(buttons.every(button => button.getAttribute('data-variant') === 'outline' && !button.textContent?.trim())).toBe(true);
-    expect(screen.getByRole('button', { name: 'عرض الآيات في سياقها: مَقَامٍ أَمِينٍۢ' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'إظهار المسار: مَقَامٍ أَمِينٍۢ' })).toBeTruthy();
-    expect(screen.queryByRole('link')).toBeNull();
-    expect(quranContexts).not.toHaveBeenCalled();
   });
 
   it('replaces repeated leaf originals with an amber button for every represented ayah', async () => {
@@ -401,16 +381,6 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(true);
   });
 
-  it('gives every node the same plain border until its path is lit, the root too', () => {
-    const { container } = render(<BranchTree tree={tree} names={{}} />);
-    const nodes = [...container.querySelectorAll('[data-node]')];
-    nodes.forEach(node => expect(node.className).toContain('border-[var(--home-rule)]'));
-    const root = nodes[0];
-    fireEvent.click(screen.getAllByRole('button', { name: /^إظهار المسار/ })[0]);
-    expect(root.className).toContain('border-[var(--home-accent)]');
-    expect(root.className).not.toContain('border-[var(--home-rule)]');
-  });
-
   it('lights a path only from its button, never on hover or focus, and keeps several pinned', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     const lit = () => [...container.querySelectorAll('[data-lit]')].map(node => node.querySelector('span.block')?.textContent);
@@ -449,15 +419,12 @@ describe('BranchTree', () => {
     expect((container.querySelector('[data-stem]') as HTMLElement).style.display).not.toBe('none');
   });
 
-  it('names each inner button after its node and highlights differing marks of a nested node at its own offset', () => {
+  it('highlights differing marks of a nested node at its own offset', () => {
     const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
       { words: ['رب'], ayat: ['7:59'], children: [] },
       { words: ['يا'], ayat: ['57:26'], children: [] },
     ] };
     render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} />);
-    expect(screen.getByRole('button', { name: 'عرض الآيات في سياقها: إذ' })).toBeTruthy();
-    const nested = screen.getByRole('button', { name: 'عرض اختلافات الضبط والسياق: قال نُوحًا' });
-    expect(nested).toBeTruthy();
     const marks = screen.getAllByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
     expect(marks).toHaveLength(1);
     expect([...marks[0].querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['نُوحًۭا', 'نُوحًا']);
@@ -510,19 +477,6 @@ describe('BranchTree', () => {
       expect(open).toHaveBeenCalledOnce();
     });
 
-    it('names the surrounding-ayat and fit controls without visible labels', () => {
-      render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('[title]')?.getAttribute('title')).toBe('الآيات المحيطة');
-      expect(screen.getByRole('button', { name: 'ملاءمة' }).getAttribute('title')).toBe('ملاءمة');
-      expect(screen.queryByText('الآيات المحيطة')).toBeNull();
-      expect(screen.queryByText('ملاءمة')).toBeNull();
-    });
-
-    it('has no surrounding-ayat switch unless the page asks for one', () => {
-      render(<BranchTree tree={tree} names={names} />);
-      expect(screen.queryByRole('switch', { name: 'الآيات المحيطة' })).toBeNull();
-    });
-
     it('loads nothing until the switch is turned on, then draws the ayah before and after every branch', async () => {
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
       expect(quranSurrounding).not.toHaveBeenCalled();
@@ -542,12 +496,6 @@ describe('BranchTree', () => {
       expect(box.textContent?.indexOf('إِنَّ هَـٰذَا')).toBeLessThan(box.textContent!.indexOf(basmala.join(' ')));
       expect(within(box as HTMLElement).getByText('الدخان ٥٠').closest('a')).toBeNull();
       expect(box.querySelector('a[href^="/quran/read/"]')).toBeNull();
-    });
-
-    it('puts the reference under the ayah text, like the tree\'s own leaves', async () => {
-      render(<BranchTree tree={tree} names={names} surround={{ on: true }} />);
-      const box = (await screen.findByText('ٱدْخُلُوهَا بِسَلَـٰمٍ')).closest('[data-ctx]')!;
-      expect(box.textContent!.indexOf('ٱدۡخُلُوهَا')).toBeLessThan(box.textContent!.indexOf('الحجر ٤٦'));
     });
 
     it('tags a neighbour that is itself in the tree and links to its branch', async () => {

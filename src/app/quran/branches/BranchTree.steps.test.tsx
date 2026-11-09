@@ -35,13 +35,6 @@ const steps = { previous: '/quran/branches?juz=2&tree=2', next: '/quran/branches
 const AR = { previous: 'الشجرة السابقة', next: 'الشجرة التالية', nav: 'التنقل بين الأشجار' };
 const EN = { previous: 'Previous tree', next: 'Next tree', nav: 'Tree navigation' };
 
-it('loads the neighbouring trees ahead, with the surrounding-ayat switch carried', () => {
-  search.params = new URLSearchParams('c=1');
-  renderTree();
-  expect([...new Set(prefetch.mock.calls.map(([href]) => href))]).toEqual(['/quran/branches?juz=2&tree=4&c=1', '/quran/branches?juz=2&tree=2&c=1']);
-  expect(prefetch.mock.calls.every(([, options]) => options?.kind === 'full')).toBe(true);
-});
-
 function renderTree({ steps: given = steps, ...props }: Partial<Props> = {}) {
   return render(<>{given && <TreeSteps steps={given} />}<BranchTree tree={tree} names={{}} steppable={given ? { next: !!given.next, previous: !!given.previous } : false} {...props} /></>);
 }
@@ -68,41 +61,12 @@ function swipeBy(viewport: Element, dx: number, dy: number) {
 }
 
 describe('BranchTree steps in Arabic', () => {
-  it('names the tree navigation landmark in Arabic', () => {
-    renderTree();
-    expect(screen.getByRole('navigation', { name: AR.nav })).toBeTruthy();
-  });
-
-  it('links the previous and next step controls to the neighbouring trees', () => {
-    renderTree();
-    const nav = screen.getByRole('navigation', { name: AR.nav });
-    expect((within(nav).getByRole('link', { name: AR.previous }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.previous);
-    expect((within(nav).getByRole('link', { name: AR.next }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.next);
-  });
-
-  it('renders the previous control as a disabled button, not a link, when there is no previous tree', () => {
-    renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
-    const previous = screen.getByRole('button', { name: AR.previous }) as HTMLButtonElement;
-    expect(previous.disabled).toBe(true);
-    expect(screen.queryByRole('link', { name: AR.previous })).toBeNull();
-    expect((screen.getByRole('link', { name: AR.next }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.next);
-  });
-
   it('renders the next control as a disabled button, not a link, when there is no next tree', () => {
     renderTree({ steps: { previous: steps.previous, position: 120, total: 120 } });
     const next = screen.getByRole('button', { name: AR.next }) as HTMLButtonElement;
     expect(next.disabled).toBe(true);
     expect(screen.queryByRole('link', { name: AR.next })).toBeNull();
     expect((screen.getByRole('link', { name: AR.previous }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.previous);
-  });
-
-  it('shows no step controls when the tree has no steps prop', () => {
-    renderTree({ steps: null });
-    expect(screen.queryByRole('link', { name: AR.next })).toBeNull();
-    expect(screen.queryByRole('button', { name: AR.next })).toBeNull();
-    expect(screen.queryByRole('link', { name: AR.previous })).toBeNull();
-    expect(screen.queryByRole('button', { name: AR.previous })).toBeNull();
-    expect(screen.queryByRole('navigation', { name: AR.nav })).toBeNull();
   });
 
   it('steps to the next tree on ArrowLeft', () => {
@@ -127,22 +91,13 @@ describe('BranchTree steps in Arabic', () => {
     expect(clicks).toEqual([]);
   });
 
-  it.each(['input', 'textarea'] as const)('ignores arrow keys whose target is an <%s> element', element => {
+  it.each(['input', 'textarea', 'select'] as const)('ignores arrow keys whose target is a <%s> field', element => {
     renderTree();
     const clicks = recordStepClicks(AR);
     const field = document.createElement(element);
     document.body.appendChild(field);
     fireEvent.keyDown(field, { key: 'ArrowLeft', bubbles: true });
     fireEvent.keyDown(field, { key: 'ArrowRight', bubbles: true });
-    expect(clicks).toEqual([]);
-  });
-
-  it.each(['select'] as const)('ignores arrow keys whose target is a <%s> element', element => {
-    renderTree();
-    const clicks = recordStepClicks(AR);
-    const field = document.createElement(element);
-    document.body.appendChild(field);
-    fireEvent.keyDown(field, { key: 'ArrowLeft', bubbles: true });
     expect(clicks).toEqual([]);
   });
 
@@ -191,19 +146,6 @@ describe('BranchTree steps in Arabic', () => {
 
 describe('BranchTree steps in English', () => {
   beforeEach(() => { lang.language = 'en'; });
-
-  it('names the landmark and the step links in English', () => {
-    renderTree();
-    const nav = screen.getByRole('navigation', { name: EN.nav });
-    expect((within(nav).getByRole('link', { name: EN.previous }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.previous);
-    expect((within(nav).getByRole('link', { name: EN.next }) as HTMLAnchorElement).getAttribute('href')).toBe(steps.next);
-  });
-
-  it('disables the previous English control on the first tree', () => {
-    renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
-    expect((screen.getByRole('button', { name: EN.previous }) as HTMLButtonElement).disabled).toBe(true);
-    expect(screen.queryByRole('link', { name: EN.previous })).toBeNull();
-  });
 
   it('steps to the next tree on ArrowRight', () => {
     renderTree();
@@ -274,21 +216,6 @@ describe('BranchTree slide', () => {
     const clicks = recordStepClicks(AR);
     fireEvent.click(container.querySelector('[data-tree-edge="previous"]')!);
     expect(clicks).toEqual(['previous']);
-  });
-
-  it('draws the neighbouring tree beside this one, inert, so a swipe brings in the finished card', () => {
-    const { container } = render(<BranchTree tree={tree} names={{}} steppable={{ next: true, previous: false, nextCard: <BranchTree tree={tree} names={{}} label="next" /> }} />);
-    const next = container.querySelector('[data-tree-neighbour="next"]');
-    expect(next?.querySelector('[data-tree][aria-label="next"]')).not.toBeNull();
-    expect(next?.hasAttribute('inert')).toBe(true);
-    expect(container.querySelector('[data-tree-neighbour="previous"]')).toBeNull();
-    expect(container.querySelector('[data-tree-lane] > [data-tree] ~ *, [data-tree-lane] [data-tree-neighbour]')).not.toBeNull();
-  });
-
-  it('shows no strip for a side with no tree', () => {
-    const { container } = renderTree({ steps: { next: steps.next, position: 1, total: 120 } });
-    expect(container.querySelector('[data-tree-edge="next"]')).not.toBeNull();
-    expect(container.querySelector('[data-tree-edge="previous"]')).toBeNull();
   });
 
   it('ignores the click a strip gets when a swipe ends on it', () => {

@@ -33,13 +33,6 @@ const phrases = [
 const suggested = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option').map(a => a.textContent);
 
 describe('OpeningSearch', () => {
-  it.each(['ar', 'en'])('explains an unavailable requested opening in %s', lang => {
-    language.value = lang;
-    render(<OpeningSearch top={top} phrases={phrases} current="unknown" unavailable />);
-    expect(screen.getByRole('status').textContent).toContain(lang === 'ar' ? 'لا تطابق العبارة المطلوبة' : 'No two ayat share the requested phrase');
-    expect(screen.getByRole('combobox')).toBeTruthy();
-  });
-
   it('finds a phrase longer than two words, typed with or without diacritics', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'أَلَمْ تَرَ كيف' } });

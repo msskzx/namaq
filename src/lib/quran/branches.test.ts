@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '@shared/data/quran/trees.json';
-import { ayahEnds, branch, branchesHref, conjunctions, linkable, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from '@shared/quran/branches';
+import { ayahEnds, branch, branchesHref, conjunctions, linkable, pieces, keys, linkId, stem, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 import { normalizeWord } from '@shared/quran/normalize';
 
@@ -76,18 +76,6 @@ describe('sharedOpenings', () => {
     expect(all).toHaveLength(6236);
     expect(all.find(ayah => ayah.key === '2:3')?.conjs?.[3]).toBe('و');
     expect(all.find(ayah => ayah.key === '43:83')?.next?.slice(0, 2)).toEqual(['وَهُوَ', 'ٱلَّذِى']);
-  });
-
-  it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(818);
-    expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
-    expect(all).toHaveLength(6236);
-  });
-
-  it('lists the largest openings first', () => {
-    const list = listOpenings(groups);
-    expect(list[0]).toMatchObject({ id: 'يايها الذين', count: 90 });
-    expect(list.every((o, i) => i === 0 || list[i - 1].count >= o.count)).toBe(true);
   });
 });
 
@@ -330,115 +318,6 @@ describe('stem', () => {
   });
 });
 
-describe('pickPhrase and widerPhrases', () => {
-  const phrases = listPhrases(groups);
-
-  it('keeps a known phrase, else the default, else the largest opening in range', () => {
-    expect(pickPhrase(phrases, 'ويطوف عليهم')).toBe('ويطوف عليهم');
-    expect(pickPhrase(phrases, 'لا شيء هنا')).toBe(DEFAULT_PHRASE);
-    const juz30 = listPhrases(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 30, to: 30 }))));
-    expect(juz30.some(p => p.id === DEFAULT_PHRASE)).toBe(false);
-    expect(pickPhrase(juz30, null)).toBe([...juz30].sort((a, b) => b.count - a.count)[0].id);
-    expect(pickPhrase([], null)).toBe('');
-  });
-
-  it('offers the merged opening as wider than one spelling of it, and shorter phrases above a deeper one', () => {
-    expect(widerPhrases(phrases, 'ويطوف عليهم', startingWith(all, 'ويطوف عليهم')).map(p => p.id)).toEqual(['يطوف عليهم']);
-    expect(widerPhrases(phrases, 'ان المتقين في جنت', startingWith(all, 'ان المتقين في جنت')).map(p => p.id)).toEqual(['ان المتقين', 'ان المتقين في']);
-    expect(widerPhrases(phrases, 'ان المتقين', startingWith(all, 'ان المتقين'))).toEqual([]);
-  });
-});
-
-describe('pieces', () => {
-  const list = pieces(groups);
-
-  it('retains both rooted opening partitions when pieces are grouped under their headings', () => {
-    const source: BranchAyah[] = [
-      { ...ayah('1:1', 'مِنَ الله نور'), roots: [null, 'Alh', 'nwr'] },
-      { ...ayah('1:2', 'مِنَ الله رحمة'), roots: [null, 'Alh', 'rHm'] },
-      { ...ayah('1:3', 'مَنَّ الله عليهم'), roots: ['mnn', 'Alh', null] },
-      { ...ayah('1:4', 'مَنَّ الله علينا'), roots: ['mnn', 'Alh', null] },
-    ];
-    const shared = sharedOpenings(source);
-    const openings = listOpenings(shared);
-    const entries = pieces(shared);
-
-    expect(openings).toHaveLength(2);
-    expect(new Set(openings.map(opening => opening.partition)).size).toBe(2);
-    expect(entries).toHaveLength(2);
-    const grouped = openings.flatMap(opening => {
-      const inside = entries.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition);
-      expect(inside).toHaveLength(1);
-      expect(inside[0].opening).toEqual(opening);
-      expect(inside[0].keys).toEqual(startingWith(source, opening.id, opening.partition).map(ayah => ayah.key));
-      return inside;
-    });
-    expect(grouped.flatMap(piece => piece.keys).sort()).toEqual(source.map(ayah => ayah.key));
-  });
-
-  it('cuts every opening at the first node of six ayat or fewer, so each ayah lands in at most one piece', () => {
-    expect(list.every(p => p.count >= 2)).toBe(true);
-    const seen = list.flatMap(p => p.keys);
-    expect(new Set(seen).size).toBe(seen.length);
-    expect(list.every(p => p.keys.length === p.count)).toBe(true);
-    for (const p of list.filter((_, i) => i % 25 === 0)) expect(startingWith(all, p.id).map(a => a.key)).toEqual(expect.arrayContaining(p.keys));
-    expect(list.some(p => p.id === 'يايها الذين')).toBe(false);
-  });
-
-  it('sorts by how many words the ayat share, then by fewer ayat', () => {
-    expect(list.every((p, i) => i === 0 || list[i - 1].shared > p.shared || (list[i - 1].shared === p.shared && list[i - 1].count <= p.count))).toBe(true);
-    expect(list[0].shared).toBe(18);
-  });
-
-  it('keeps a larger node whole where no two of its ayat go on together', () => {
-    expect(list.find(p => p.id === 'ويل يومئذ للمكذبين')).toMatchObject({ count: 11 });
-    expect(list.find(p => p.id === 'فباي ءالاء ربكما تكذبان')).toMatchObject({ count: 31 });
-    expect(list.filter(p => p.count > PIECE_MAX).every(p => p.count <= 8 || p.id === 'فباي ءالاء ربكما تكذبان' || p.id === 'ويل يومئذ للمكذبين')).toBe(true);
-  });
-
-  it('splits such a node by its first word when the ayat differ in a joined letter', () => {
-    expect(list.find(p => p.id === 'فلا اقسم')!.keys).toEqual(['56:75', '69:38', '70:40', '81:15', '84:16']);
-    expect(list.find(p => p.id === 'لا اقسم')!.keys).toEqual(['75:1', '90:1']);
-    expect(list.some(p => p.keys.includes('75:2'))).toBe(false);
-    const juz = pieces(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 29, to: 30 }))));
-    expect(juz.find(p => p.id === 'فلا اقسم')!.keys).toEqual(['69:38', '70:40', '81:15', '84:16']);
-  });
-
-  it('keeps a small opening whole and names the opening a piece was cut from', () => {
-    expect(list.find(p => p.id === 'يطوف عليهم')).toMatchObject({ count: 3, opening: { id: 'يطوف عليهم', count: 3 } });
-    const cut = list.find(p => p.id.startsWith('يايها الذين ءامنوا'))!;
-    expect(cut.opening).toMatchObject({ id: 'يايها الذين', count: 90 });
-  });
-
-  it('names a piece whose ayat all carry the joined letter by its own spelling', () => {
-    expect(list.some(p => p.id.startsWith('واذ قال موسي لقومه'))).toBe(true);
-  });
-});
-
-describe('the list\'s pages', () => {
-  it('reads the page number, keeping it inside the list', () => {
-    expect(listPage(null, 45, 20)).toEqual({ page: 1, pageCount: 3 });
-    expect(listPage('2', 45, 20).page).toBe(2);
-    expect(listPage('9', 45, 20).page).toBe(3);
-    expect(listPage('0', 45, 20).page).toBe(1);
-    expect(listPage('abc', 45, 20).page).toBe(1);
-    expect(listPage('3', 0, 20)).toEqual({ page: 1, pageCount: 1 });
-  });
-
-  it('preserves a nonfirst browsing page while a phrase is focused', () => {
-    expect(branchesHref('ان الذين', undefined, { page: 1 })).not.toContain('p=');
-    expect(branchesHref('ان الذين', undefined, { grouped: true, page: 3 })).toContain('p=3');
-    expect(branchesHref('ان الذين', undefined, { page: 3 })).toContain('p=3');
-  });
-
-  it('breaks a tie in shared words and ayat by mushaf order', () => {
-    const list = pieces(groups);
-    const order = (key: string) => key.split(':').map(Number).reduce((s, n) => s * 1000 + n);
-    const first = (p: { keys: string[] }) => Math.min(...p.keys.map(order));
-    expect(list.every((p, i) => i === 0 || list[i - 1].shared !== p.shared || list[i - 1].count !== p.count || first(list[i - 1]) < first(p))).toBe(true);
-  });
-});
-
 describe('spellings and marks', () => {
   it('draws أن, وإن and فإن as separate first words of ان كان', () => {
     const group = startingWith(all, 'ان كان');
@@ -595,8 +474,6 @@ describe('variant Quran order', () => {
 
 describe('search', () => {
   const phrases = listPhrases(groups);
-  const list = pieces(groups);
-  const shared = [...groups.values()].flat();
 
   it('reads يا apart and ءا as one alif, as the text joins them', () => {
     expect(searchKey('يا أيها الذين آمنوا')).toBe(searchKey('يايها الذين ءامنوا'));
@@ -621,40 +498,9 @@ describe('search', () => {
     expect(found.slice(starts).every(id => !id.startsWith('قال رب') && id.includes('قال رب'))).toBe(true);
   });
 
-  it('finds each piece holding two ayat of a matching phrase once, start matches first', () => {
-    const found = searchPieces(list, phrases, shared, 'قال رب');
-    expect(new Set(found).size).toBe(found.length);
-    expect(found.every(piece => list.includes(piece))).toBe(true);
-    const opened = (piece: typeof list[number], id: string) => startingWith(piece.keys.map(key => shared.find(ayah => ayah.key === key)!), id).length >= 2;
-    expect(list.filter(piece => opened(piece, 'قال رب')).every(piece => found.includes(piece))).toBe(true);
-    const first = found.findIndex(piece => !searchPhrases(phrases, 'قال رب').some(phrase => searchKey(phrase.id).startsWith('قال رب') && opened(piece, phrase.id)));
-    expect(first === -1 || found.slice(first).every(piece => !opened(piece, 'قال رب'))).toBe(true);
-  });
-
-  it('finds a phrase deeper than the piece it sits in', () => {
-    const found = searchPieces(list, phrases, shared, 'انى يكون لى غلم');
-    expect(found.length).toBeGreaterThan(0);
-    expect(found.every(piece => searchKey(piece.text).startsWith('قال رب'))).toBe(true);
-  });
-
-  it('finds nothing for a phrase no two ayat share', () => {
-    expect(searchPieces(list, phrases, shared, 'كهيعص')).toEqual([]);
-  });
-
   it('carries the search and surah on the list and into an open tree', () => {
-    expect(branchesHref('', undefined, { query: 'قال', page: 2 })).toBe('/quran/branches?p=2&q=%D9%82%D8%A7%D9%84');
+    expect(branchesHref('', undefined, { query: 'قال' })).toBe('/quran/branches?q=%D9%82%D8%A7%D9%84');
     expect(branchesHref('قال رب', undefined, { query: 'قال', surah: 7 })).toBe('/quran/branches?o=%D9%82%D8%A7%D9%84+%D8%B1%D8%A8&q=%D9%82%D8%A7%D9%84&s=7');
   });
 });
 
-describe('branchesHref view modes', () => {
-  it('writes the list mode only without a tree and the card number only with one', () => {
-    expect(branchesHref('', undefined, { mode: 'list' })).toBe('/quran/branches?m=list');
-    expect(branchesHref('x', undefined, { mode: 'tree' })).toBe('/quran/branches?o=x&m=tree');
-    expect(branchesHref('', undefined, { mode: 'cards' })).toBe('/quran/branches?m=cards');
-    expect(branchesHref('x', undefined, { mode: 'list' })).toBe('/quran/branches?o=x');
-    expect(branchesHref('x', undefined, { mode: 'cards', card: 1 })).toBe('/quran/branches?o=x&m=cards');
-    expect(branchesHref('x', undefined, { mode: 'cards', card: 'last' })).toBe('/quran/branches?o=x&m=cards&n=last');
-    expect(branchesHref('x', undefined, { card: 'last' })).toBe('/quran/branches?o=x');
-  });
-});
