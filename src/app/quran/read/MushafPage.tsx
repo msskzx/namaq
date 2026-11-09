@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { Fragment, useLayoutEffect, useMemo, useRef } from 'react';
 import { pageGroups, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@/lib/quran/mushafMarks';
 import { num } from '@/lib/quran/arabicNumber';
@@ -49,6 +49,7 @@ export default function MushafPage({
   next,
   forgot,
   saved,
+  titled,
 }: {
   page: number;
   data: MushafPageData;
@@ -62,6 +63,8 @@ export default function MushafPage({
   /** Ayat the reader forgot (highlighted) and saved (ayah number in purple). */
   forgot?: Readonly<Record<string, unknown>>;
   saved?: ReadonlySet<string>;
+  /** Surahs whose title (and basmala, 2 steps) are recite steps of their own: they count as the first words of the surah's first ayah. */
+  titled?: ReadonlyMap<number, number>;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -69,6 +72,14 @@ export default function MushafPage({
   const current = first && 'surah' in first ? first.surah : top;
   const marked = (surah?: number, ayah?: number) => !!mark && surah === mark.surah && ayah === mark.ayah;
   const counts: Record<string, number> = {};
+  /** While reciting, a surah's name stays hidden until its first ayah shows, so the reader recalls which surah comes next. */
+  // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
+  titled?.forEach((steps, surah) => { counts[`${surah}:1`] = steps - 1; });
+  const surahHidden = (surah: number) => !!titled?.has(surah) && !!hidden?.(`${surah}:1`, 0);
+  const basmalaHidden = (surah: number) => titled?.get(surah) === 2 && !!hidden?.(`${surah}:1`, 1);
+  /** The surah whose title comes before each item, for its basmala. */
+  const surahOf = data.items.map((_, at) => data.items.slice(0, at + 1).reduceRight<number | undefined>((found, item) => found ?? ('surah' in item ? item.surah : undefined), undefined));
+  const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const badges = data.items.map(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
   useLayoutEffect(() => {
     const element = body.current;
@@ -93,16 +104,20 @@ export default function MushafPage({
             ))}
           </div>
         )}
-        <span>{current && names[current] ? plainName(names[current]) : ''}</span>
+        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
         <div ref={body} className={styles.body} style={{ gridTemplateRows: `repeat(${data.items.length}, minmax(0, 1fr))` }}>
           {data.items.map((item, index) => (
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
-                <h2 className={styles.title}>{names[item.surah]}</h2>
+                <h2 className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
               ) : 'basmala' in item ? (
-                <p className={styles.basmala}>{BASMALA}</p>
+                (() => {
+                  const surah = surahOf[index];
+                  const veil = surah !== undefined && basmalaHidden(surah);
+                  return <p className={styles.basmala}><span className={veil ? [styles.veiled, !surahHidden(surah) && next === `${surah}:1` ? styles.upcoming : ''].join(' ').trim() : undefined}>{BASMALA}</span></p>;
+                })()
               ) : (
                 <p data-line className={styles.line}>
                   {lines[index]?.map((group, at) => {
@@ -113,13 +128,16 @@ export default function MushafPage({
                     const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
-                        className={[on ? styles.marked : '', veiled ? styles.veiled : '', veiled && next === key ? styles.upcoming : '', !veiled && forgot?.[key] ? styles.forgot : ''].join(' ').trim() || undefined}>
-                        {group.word}
+                        className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : ''].join(' ').trim() || undefined}>
+                        {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
+                        {veiled ? <span className={[styles.veiled, next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span> : group.word}
                         {group.marks.map(end => (
-                          <span key={end} data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? styles.veiled : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : '', ].join(' ')}>
+                          <Fragment key={end}>
                             {group.word ? ' ' : ''}
-                            {num(end)}
-                          </span>
+                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? `${styles.veiled} ${styles.veiledEnd}` : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
+                              {num(end)}
+                            </span>
+                          </Fragment>
                         ))}
                       </span>
                     );
