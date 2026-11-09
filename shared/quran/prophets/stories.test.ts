@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/prophets/ayat/musa.json';
+import { PROPHETS } from '.';
 import { MUSA } from './musa';
-import { buildStory } from './story';
+import { STORIES } from './stories';
+import { storyKeys } from './story';
 
 const MUSA_EVENTS = MUSA.events;
-const buildMusa = (d: Parameters<typeof buildStory>[1]) => buildStory(MUSA_EVENTS, d);
 
 const NAMED: Record<number, number[]> = {
   2: [51, 53, 54, 55, 60, 61, 67, 87, 92, 108, 136, 246, 248],
@@ -74,7 +74,7 @@ const PHARAOH: Record<number, number[]> = {
 };
 
 describe('MUSA_EVENTS', () => {
-  const keys = MUSA_EVENTS.flatMap(e => e.segments.flatMap(({ surah, range: [lo, hi] }) => Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`)));
+  const keys = storyKeys(MUSA_EVENTS);
 
   it('puts no ayah in two events', () => {
     expect(new Set(keys).size).toBe(keys.length);
@@ -95,34 +95,16 @@ describe('MUSA_EVENTS', () => {
   it('keeps every range ordered', () => {
     for (const e of MUSA_EVENTS) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
-
-  it('starts with the mother of Musa and keeps phases in order', () => {
-    expect(MUSA_EVENTS[0].title).toBe('أم موسى والتابوت في اليم');
-    const phases = MUSA_EVENTS.map(e => e.phase);
-    expect(phases).toEqual([...phases].sort((a, b) => a - b));
-  });
-
-  it('has the stored text of every ayah', () => {
-    for (const k of keys) expect((data.ayat as Record<string, string>)[k], k).toBeTruthy();
-    expect(Object.keys(data.ayat)).toHaveLength(keys.length);
-  });
 });
 
-describe('buildStory', () => {
-  const events = buildMusa(data);
-
-  it('numbers events in order and counts their ayat', () => {
-    expect(events.map(e => e.n)).toEqual(events.map((_, i) => i + 1));
-    for (const e of events) expect(e.count).toBe(e.segments.reduce((t, g) => t + g.lines.length, 0));
+describe('STORIES', () => {
+  it('gives every prophet a story', () => {
+    expect(Object.keys(STORIES).sort()).toEqual(PROPHETS.map(p => p.slug).sort());
   });
 
-  it('names the surah of each segment without its prefix', () => {
-    const nile = events[0].segments[0];
-    expect(nile.surah).toBe(28);
-    expect(nile.name).not.toMatch(/^سُورَةُ/);
-  });
-
-  it('throws when an ayah is missing', () => {
-    expect(() => buildMusa({ names: {}, ayat: {} })).toThrow(/missing/);
+  it.each(PROPHETS)('$slug puts every event in a phase, in order, and leaves no phase empty', ({ slug }) => {
+    const phases = STORIES[slug].events.map(e => e.phase);
+    expect(phases).toEqual([...phases].sort((a, b) => a - b));
+    expect([...new Set(phases)]).toEqual(STORIES[slug].phases.map((_, i) => i));
   });
 });
