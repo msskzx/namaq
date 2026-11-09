@@ -3,7 +3,7 @@ import data from '@shared/data/quran/trees.json';
 import { type BranchAyah } from '@shared/quran/branches';
 import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
-import { branchQuestions } from './branchQuestions';
+import { branchQuestionPool, branchQuestions, branchQuiz } from './branchQuestions';
 
 const all = data.ayat as BranchAyah[];
 const trees = data.trees as TreeGroup[];
@@ -56,5 +56,28 @@ describe('branchQuestions', () => {
     const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'يقيمون الصلوه'))[0];
     const answers = branchNodes(question.tree).map(node => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every(answer => answer?.correct)).toBe(true);
+  });
+});
+
+describe('branchQuiz (the phone app builds its quiz on the device)', () => {
+  const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const late = { from: 29, to: 30 };
+  const valid = new Map(branchQuestions(all, late, trees).map(question => [question.key, question]));
+
+  it('asks only trees the website could ask for the same juz, each once, with the chosen number of leaves to type', () => {
+    const quiz = branchQuiz(branchQuestionPool(all, late, trees), 10, 3, seeded(7));
+    expect(quiz).toHaveLength(10);
+    expect(new Set(quiz.map(question => question.key)).size).toBe(10);
+    for (const question of quiz) {
+      expect(question).toMatchObject({ ...valid.get(question.key), asked: question.asked });
+      const leaves = branchNodes(question.tree).filter(node => node.children.length === 0).length;
+      expect(question.asked).toHaveLength(Math.min(3, leaves));
+      expect(question.asked.every(index => branchNodes(question.tree)[index].children.length === 0)).toBe(true);
+    }
+  });
+
+  it('stops at the trees there are when the juz range has fewer than asked', () => {
+    const tiny: BranchAyah[] = [1, 2, 3].map(n => ({ key: `1:${n}`, page: 1, words: ['قال', 'رب', ['اغفر', 'ارحم', 'اهد'][n - 1]] }));
+    expect(branchQuiz(branchQuestionPool(tiny), 5, 3, seeded(1))).toHaveLength(1);
   });
 });

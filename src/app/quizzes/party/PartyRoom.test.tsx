@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { act as reduce, createParty, viewFor, type Action, type ActionError, type PartyState } from '@/lib/party/rules';
+import { act as reduce, createParty, viewFor, type Action, type ActionError, type PartyState } from '@shared/party/rules';
 import PartyRoom, { NameForm } from './PartyRoom';
 
 const socket = vi.hoisted(() => ({ view: null as unknown, error: null as ActionError | null, send: vi.fn() }));

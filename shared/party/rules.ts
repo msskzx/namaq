@@ -1,6 +1,6 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
-import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '@/lib/quiz/score';
-import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '@/lib/quiz/types';
+import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
+import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '../quiz/settings';
 
 export const QUESTION_SECONDS = [15, 30, 60, 90] as const;
 export const TREE_SECONDS = [60, 120, 180, 300] as const;

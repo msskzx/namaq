@@ -1,6 +1,6 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { DurableObject } from 'cloudflare:workers';
-import { act, createParty, expired, nextWake, quizQuery, viewFor, type Action, type PartyQuestion, type PartyState, type PlayerAction } from '../../src/lib/party/rules';
+import { act, createParty, expired, nextWake, quizQuery, viewFor, type Action, type PartyQuestion, type PartyState, type PlayerAction } from '../../shared/party/rules';
 
 interface Env {
   PARTY: DurableObjectNamespace<Party>;
