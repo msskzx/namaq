@@ -6,7 +6,7 @@ import { NavSlotElement } from '@/components/common/NavBar';
 import PairCompare from './PairCompare';
 import type { PairCard } from './pairCards';
 
-const router = vi.hoisted(() => ({ push: vi.fn() }));
+const router = vi.hoisted(() => ({ push: vi.fn(), prefetch: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => router }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
@@ -35,8 +35,8 @@ describe('PairCompare', () => {
     }));
     expect(groups().map(group => group.surah)).toEqual(['البقرة', 'الاعراف', 'هود', 'الشعراء', 'الطور', 'القلم']);
     expect(groups().filter(group => group.open).map(group => group.surah)).toEqual(['الطور']);
-    expect(groups()[1].links).toEqual(['/quran/compare?a=2&b=7', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
-    expect(groups()[5].links).toEqual(['/quran/compare?a=52&b=68']);
+    expect(groups()[1].links).toEqual(['/quran/compare?a=7&b=2', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
+    expect(groups()[5].links).toEqual(['/quran/compare?a=68&b=52']);
     fireEvent.click(within(pane()).getByRole('button', { name: /الأكثر تشابهًا/ }));
     expect(listed()).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=2&b=7', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
     cleanup();
@@ -122,7 +122,8 @@ describe('PairCompare', () => {
     render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} scope={{ unit: 'juz', from: 27, to: 29 }} spans={{ page: {}, juz: { 2: [1, 3], 7: [8, 9], 11: [11, 12], 26: [19, 19], 52: [27, 27], 68: [29, 29] } }} />);
     const rows = [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));
     expect(rows.length).toBeGreaterThan(0);
-    expect(rows.every(href => href === '/quran/compare?a=52&b=68&juz=27-29')).toBe(true);
+    // Under each surah's heading, the row opens the page with that surah first.
+    expect(rows).toEqual(['/quran/compare?a=52&b=68&juz=27-29', '/quran/compare?a=68&b=52&juz=27-29']);
     const filter = within(pane()).getByRole('form', { name: 'تصفية' });
     expect((within(filter).getByRole('combobox', { name: 'التصفية حسب' }) as HTMLSelectElement).value).toBe('juz');
     fireEvent.click(within(filter).getByRole('button', { name: /إعادة ضبط/ }));
@@ -168,7 +169,15 @@ describe('PairCompare', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />, { wrapper: Chrome });
     const bar = screen.getByRole('banner', { name: 'top bar' });
     expect(within(bar).getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
-    expect(within(bar).getByRole('link', { name: /السابق/ }).getAttribute('href')).toBe('/quran/compare?a=2&b=7');
+    // Opened under surah 7, the steps walk surah 7's pairs: 7·2, 7·11, 7·26.
+    expect(within(bar).getByRole('link', { name: /السابق/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=2');
+  });
+
+  it('loads a batch of neighbouring pairs so swiping does not wait', () => {
+    router.prefetch.mockClear();
+    render(<PairCompare a={2} b={7} cards={cards} pairs={pairs} names={names} />);
+    const loaded = router.prefetch.mock.calls.map(call => call[0]);
+    expect(loaded).toEqual(expect.arrayContaining(['/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26', '/quran/compare?a=11&b=7']));
   });
 
   it('greys out the previous chevron on the first pair', () => {
@@ -203,7 +212,7 @@ describe('PairCompare', () => {
     fireEvent.click(savedOnly());
     expect(screen.getAllByRole('button', { name: 'إزالة من المحفوظة' })).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'حفظ' })).toBeNull();
-    expect([...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'))).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=52&b=68']);
+    expect([...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'))).toEqual(['/quran/compare?a=52&b=68', '/quran/compare?a=68&b=52']);
   });
 
   describe('range cards', () => {
