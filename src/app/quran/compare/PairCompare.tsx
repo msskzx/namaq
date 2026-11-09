@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import Segmented from '@/components/common/Segmented';
@@ -10,6 +10,7 @@ import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
 import { NavActions } from '@/components/common/NavBar';
 import { useRouter } from 'next/navigation';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@/lib/bookmarks';
@@ -24,6 +25,7 @@ import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { FIELD, NOTE } from '../panel';
+import PairSwipe from './PairSwipe';
 import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
@@ -95,10 +97,21 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
     <ScopeFields draft={draft} onChange={setDraft} range={scope?.unit === 'juz' ? scope : null} allSurahs={allSurahs} />
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">{children}</div>
     <div className="flex gap-2">
-      <Button type="submit" size="sm" variant="primary" className="flex-1" disabled={invalid}><Check size={16} aria-hidden />{apply}</Button>
-      {(scope || todo || savedOnly) && <Button size="sm" variant="neutral" onClick={clear}><RotateCcw size={16} aria-hidden />{reset}</Button>}
+      <Button type="submit" variant="primary" className="h-11 flex-1 text-base" disabled={invalid}><Check size={16} aria-hidden />{apply}</Button>
+      {(scope || todo || savedOnly) && <Button variant="neutral" className="h-11 text-base" onClick={clear}><RotateCcw size={16} aria-hidden />{reset}</Button>}
     </div>
   </form>;
+}
+
+/** A chevron beside the pair title: previous on the reading side's start, next on its end. Greyed out at either end of the list. */
+function StepLink({ step, forward, ar }: { step?: { href: string; label: string }; forward: boolean; ar: boolean }) {
+  const label = `${forward ? (ar ? 'التالي' : 'Next') : (ar ? 'السابق' : 'Previous')}${step ? `: ${step.label}` : ''}`;
+  const Icon = forward ? ChevronRight : ChevronLeft;
+  const icon = <Icon size={20} aria-hidden className="rtl:rotate-180" />;
+  const box = 'flex size-9 shrink-0 items-center justify-center rounded-full';
+  return step
+    ? <Link href={step.href} aria-label={label} title={label} className={`${box} text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]`}>{icon}</Link>
+    : <span role="link" aria-disabled="true" aria-label={label} title={label} className={`${box} text-[var(--home-muted)] opacity-40`}>{icon}</span>;
 }
 
 function TodoOnly({ a, b, todo, juz }: { a: number; b: number; todo: boolean; juz?: CompareScope }) {
@@ -367,6 +380,28 @@ export default function PairCompare({ a, b, cards, pairs: allPairs, names, revie
   const after = index >= 0 ? pairs[index + 1] : undefined;
   const nextTodo = states && [...pairs.slice(index + 1), ...pairs.slice(0, Math.max(index, 0))].find(pair => unreviewed(states, pair));
   const next = todo ? nextTodo : after;
+  const before = index > 0 ? pairs[index - 1] : undefined;
+  // Like next, previous wraps around the list to the last unreviewed pair.
+  const previousTodo = states && [...pairs.slice(index + 1), ...pairs.slice(0, Math.max(index, 0))].reverse().find(pair => unreviewed(states, pair));
+  const previous = todo ? previousTodo : before;
+  const stepTo = (pair: { a: number; b: number } | undefined) => pair && { href: pairHref(pair.a, pair.b, review, todo, juz), label: title(pair.a, pair.b) };
+  const nextStep = stepTo(next);
+  const previousStep = stepTo(previous);
+  const router = useNavigatingRouter();
+  // Arrow keys step like a swipe, the same keys as the branches cards.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
+      const to = event.key === 'ArrowLeft' ? nextStep : previousStep;
+      if (!to) return;
+      event.preventDefault();
+      router.push(to.href);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [nextStep?.href, previousStep?.href]); // eslint-disable-line react-hooks/exhaustive-deps
   const choose = () => {
     if (window.matchMedia?.('(min-width: 1024px)').matches) pane.current?.querySelector('input')?.focus();
     else { sheet.current?.showModal(); setOpen(true); }
@@ -382,25 +417,24 @@ export default function PairCompare({ a, b, cards, pairs: allPairs, names, revie
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-7xl p-4 text-[var(--home-ink)]">
       <NavActions>
-        <span className="flex min-w-0 max-w-[calc(100%-8rem)] justify-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
+        <span className="flex min-w-0 max-w-[calc(100%-6rem)] items-center justify-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
+          <StepLink step={previousStep} forward={false} ar={ar} />
           <Button variant="neutral" onClick={choose} aria-expanded={open} aria-label={`${label}: ${title(a, b)}`} className="min-w-0 max-w-full">
             <ArrowLeftRight size={16} aria-hidden className="shrink-0" />
             <span className="truncate">{title(a, b)}</span>
             <span className="shrink-0 text-sm tabular-nums text-[var(--home-accent)]">{ar ? num(cards.length) : cards.length}</span>
             <ChevronDown size={14} aria-hidden className="shrink-0" />
           </Button>
+          <StepLink step={nextStep} forward ar={ar} />
         </span>
       </NavActions>
       <h1 className="sr-only">{story ? `${title(a, b)} - ${ar ? story.name.voweled : story.name.en}` : title(a, b)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-        <div className="flex min-w-0 flex-col gap-4">
+        <PairSwipe key={`${a}-${b}`} previous={previousStep} next={nextStep}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.a, nextTodo.b, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} />)}</ol>}
-          {next && <Link href={pairHref(next.a, next.b, review, todo, juz)} className="self-center rounded-lg border border-[var(--home-rule)] px-4 py-2 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]">
-            {ar ? `التالي: ${title(next.a, next.b)}` : `Next: ${title(next.a, next.b)}`}
-          </Link>}
-        </div>
+        </PairSwipe>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
           <PairList pairs={pairs} names={names} a={a} b={b} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
         </aside>

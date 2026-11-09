@@ -6,8 +6,10 @@ import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import type { JuzRange } from '@/lib/quran/juz';
+import { plainName } from '@/lib/quran/normalize';
+import { JUZ_STARTS, type JuzRange } from '@/lib/quran/juz';
 import { RangeFields, rangeFromDraft, type RangeDraft } from './RangeFilter';
+import RangeSelects, { type RangeOption } from './RangeSelects';
 import ScopePicker, { type ScopeOption } from './ScopePicker';
 
 export type FilterUnit = 'juz' | 'surah' | 'page' | 'surahs' | 'juzs';
@@ -34,12 +36,21 @@ export function ScopeFields({ draft, onChange, range, allSurahs }: { draft: Scop
   const fromLabel = unit === 'surah' ? (ar ? 'من السورة' : 'From chapter') : unit === 'page' ? (ar ? 'من الصفحة' : 'From page') : (ar ? 'من الجزء' : 'From juz');
   const toLabel = unit === 'surah' ? (ar ? 'إلى السورة' : 'To chapter') : unit === 'page' ? (ar ? 'إلى الصفحة' : 'To page') : (ar ? 'إلى الجزء' : 'To juz');
   const label = ar ? 'تصفية' : 'Filter';
-  return <div className="flex items-start gap-2">
+  const show = (n: number) => (ar ? num(n) : String(n));
+  const surahName = (n: number) => { const option = allSurahs.find(item => item.number === n); return (!ar && option?.nameEn) || plainName(option?.name ?? '').replace(/^سورة\s*/, ''); };
+  // Surahs and juz are picked from lists that say which surah each number is; pages stay typed numbers.
+  const listed: RangeOption[] | null = unit === 'surah' && allSurahs.length
+    ? Array.from({ length: 114 }, (_, i) => ({ value: i + 1, label: `${show(i + 1)} ${surahName(i + 1)}`.trim() }))
+    : unit === 'juz' && allSurahs.length
+      ? JUZ_STARTS.map((start, i) => { const [surah, ayah] = start.split(':').map(Number); return { value: i + 1, label: `${show(i + 1)} · ${surahName(surah)} ${show(ayah)}` }; })
+      : null;
+  return <div className="flex flex-wrap items-start gap-2">
     <select aria-label={ar ? 'التصفية حسب' : 'Filter by'} value={unit} onChange={event => { const next = event.target.value as FilterUnit; onChange({ ...draft, unit: next, values: ['1', String(scopeMax(next))] }); }}
       className="h-10 max-w-[45%] shrink-0 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base">
       {units.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
     </select>
-    {isRangeUnit(unit) ? <RangeFields range={unit === 'juz' ? range : null} max={max} names={[`${unit}From`, `${unit}To`]} draft={draft.values} onChange={values => onChange({ ...draft, values })} iconOnly arabicDigits hideFromLabel hideReset
+    {listed ? <div className="basis-full"><RangeSelects options={listed} draft={draft.values} onChange={values => onChange({ ...draft, values })} labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to' }} /></div>
+      : isRangeUnit(unit) ? <RangeFields range={unit === 'juz' ? range : null} max={max} names={[`${unit}From`, `${unit}To`]} draft={draft.values} onChange={values => onChange({ ...draft, values })} iconOnly arabicDigits hideFromLabel hideReset
       labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to', form: label, all: ar ? 'الكل' : 'All', invalid: () => ar ? `أدخل رقمين من ١ إلى ${num(max)}، على أن تكون البداية قبل النهاية أو مساوية لها.` : `Enter whole numbers from 1 to ${max}, with From no greater than To.` }} />
       : <ScopePicker key={unit} name={unit === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a chapter') : (ar ? 'ابحث عن جزء' : 'Find a juz')}
         value={unit === 'surahs' ? draft.surahs : draft.juz} onChange={value => onChange({ ...draft, [unit === 'surahs' ? 'surahs' : 'juz']: value })}

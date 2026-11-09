@@ -2,6 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { NavSlotElement } from '@/components/common/NavBar';
 import PairCompare from './PairCompare';
 import type { PairCard } from './pairCards';
 
@@ -159,9 +160,27 @@ describe('PairCompare', () => {
     expect(within(pane()).queryByRole('img', { name: 'راجعتها' })).toBeNull();
   });
 
-  it('offers the next pair in mushaf order', () => {
-    render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
-    expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
+  it('offers the next and previous pairs in mushaf order beside the title', () => {
+    function Chrome({ children }: { children: React.ReactNode }) {
+      const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+      return <><header aria-label="top bar"><div ref={setSlot} /></header><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
+    }
+    render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />, { wrapper: Chrome });
+    const bar = screen.getByRole('banner', { name: 'top bar' });
+    expect(within(bar).getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
+    expect(within(bar).getByRole('link', { name: /السابق/ }).getAttribute('href')).toBe('/quran/compare?a=2&b=7');
+  });
+
+  it('greys out the previous chevron on the first pair', () => {
+    function Chrome({ children }: { children: React.ReactNode }) {
+      const [slot, setSlot] = React.useState<HTMLDivElement | null>(null);
+      return <><header aria-label="top bar"><div ref={setSlot} /></header><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
+    }
+    render(<PairCompare a={2} b={7} cards={cards} pairs={pairs} names={names} />, { wrapper: Chrome });
+    const previous = screen.getByRole('link', { name: /السابق/ });
+    expect(previous.getAttribute('aria-disabled')).toBe('true');
+    expect(previous.getAttribute('href')).toBeNull();
+    expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=11');
   });
 
   it('saves a card with its bookmark button and links back to it', () => {
