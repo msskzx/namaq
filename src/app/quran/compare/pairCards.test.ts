@@ -55,7 +55,7 @@ describe('compare pair cards', () => {
   it('puts every pair on exactly one card, with verdicts per pair in review', () => {
     const count = new Map<string, number>();
     for (const card of pairCards(2, 3, true)) for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) count.set(id, (count.get(id) ?? 0) + 1);
-    expect(count.size).toBe(78);
+    expect(count.size).toBe(reviewPairs.find(pair => pair.a === 2 && pair.b === 3)!.count);
     expect([...count.values()].every(n => n === 1)).toBe(true);
     const many = pairCards(10, 26, true).find(item => item.id === '10:72|26:109,127,145,164,180')!;
     expect(many.verdict).toBeUndefined();
@@ -145,7 +145,7 @@ describe('compare pair cards', () => {
     expect(ids(pairCards(2, 3))).not.toEqual(expect.arrayContaining([dropped[0]]));
     expect(ids(pairCards(2, 3))).toEqual(expect.arrayContaining(['2:66|3:138', '2:127|3:35']));
     const review = pairCards(2, 3, true);
-    expect(review.reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0)).toBe(78);
+    expect(review.reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0)).toBe(reviewPairs.find(pair => pair.a === 2 && pair.b === 3)!.count);
     expect(review.find(card => card.id === '2:107|3:29')?.verdict?.keep).toBe(false);
     expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0));
   });

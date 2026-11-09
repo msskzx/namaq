@@ -13,6 +13,9 @@ export const light = {
   root: '#665177',
   green: '#506449',
   path: '#426578',
+  // A lit word and its partner on the compare cards.
+  highlight: '#dcc5a0',
+  onHighlight: '#202c35',
 };
 
 export type Palette = typeof light;
@@ -29,6 +32,8 @@ export const dark: Palette = {
   root: '#c3afd5',
   green: '#b1c59f',
   path: '#a9c4d1',
+  highlight: '#dcc5a0',
+  onHighlight: '#202c35',
 };
 
 export const QURAN_FONT = 'KFGQPC Hafs';

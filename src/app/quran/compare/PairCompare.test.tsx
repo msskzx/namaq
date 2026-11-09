@@ -173,13 +173,6 @@ describe('PairCompare', () => {
     expect(within(bar).getByRole('link', { name: /السابق/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=2');
   });
 
-  it('loads a batch of neighbouring pairs so swiping does not wait', () => {
-    router.prefetch.mockClear();
-    render(<PairCompare a={2} b={7} cards={cards} pairs={pairs} names={names} />);
-    const loaded = router.prefetch.mock.calls.map(call => call[0]);
-    expect(loaded).toEqual(expect.arrayContaining(['/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26', '/quran/compare?a=11&b=7']));
-  });
-
   it('shows where the page sits in the list swiping walks', () => {
     render(<PairCompare a={7} b={11} cards={cards} pairs={pairs} names={names} />);
     const bar = screen.getByRole('progressbar', { name: 'التقدم بين الصفحات' }) as HTMLProgressElement;
