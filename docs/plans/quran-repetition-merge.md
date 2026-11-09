@@ -268,6 +268,14 @@ matches with or without vowels and hamza (`normalizeWord`) and suggests matches
 by count. A table of every lemma came first and was removed at the owner's
 request.
 
+Tapping a word in the chart, or adding one through the search, opens its
+places under the chart: every ayah holding the lemma, in mushaf order, with the
+word marked and a link to the reader, twenty at a time. `npm run quran:lemmas`
+also writes `places.json` (lemma name to "surah:ayah:word" list, about 700 KB,
+256 KB gzipped); the page loads it, and the Quran text, only on the first tap.
+A fuller dictionary-style list, browsed by letter or root like «غريب ألفاظ
+القرآن», is a later idea.
+
 The counting rule, the corpus credit and the Tanzil credit are on
 `/attributions` (العزو), in the section `#quranic-arabic-corpus`, and the chart
 links there. `/attributions` credits the works and data the site relies on,
