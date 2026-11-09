@@ -18,7 +18,7 @@ import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths,
 import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
-import { growthPlan } from '@/lib/quran/growth';
+import { growthPlan } from '@shared/quran/growth';
 import { useGrowTarget } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 

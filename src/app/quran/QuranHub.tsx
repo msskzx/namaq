@@ -6,7 +6,7 @@ import cards from '@/components/common/ExplorationCard.module.css';
 import styles from '@/components/common/PaperPage.module.css';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { getAllNavLinks } from '@/lib/siteLinks';
-import { PROPHETS } from '@/lib/quran/prophets';
+import { PROPHETS } from '@shared/quran/prophets';
 
 type Language = 'en' | 'ar';
 

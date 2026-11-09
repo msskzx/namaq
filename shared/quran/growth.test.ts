@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Branch } from '@shared/quran/branches';
+import type { Branch } from './branches';
 import { byMushaf, growthPlan } from './growth';
 
 const leaf = (words: string[], ayat: string[]): Branch => ({ words, ayat, children: [] });

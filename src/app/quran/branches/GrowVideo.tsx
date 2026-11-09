@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Download, Pause, Play, RotateCcw, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { HOURGLASS_FRAME, hourglassSand } from '@/lib/quran/hourglass';
+import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { askLeft, growRoot, growthState, openStudio, pause, play, stop, useGrowth } from './Grow';

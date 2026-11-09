@@ -4,8 +4,8 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Clapperboard, Pause, Play, RotateCcw, Timer, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { HOURGLASS_FRAME, hourglassSand } from '@/lib/quran/hourglass';
-import type { GrowthStep } from '@/lib/quran/growth';
+import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
+import type { GrowthStep } from '@shared/quran/growth';
 import styles from './Grow.module.css';
 import { reducedMotion } from '@/components/common/useSwipe';
 

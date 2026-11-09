@@ -7,7 +7,7 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import AyatDisclosure from '@/components/quran/AyatDisclosure';
 import { num } from '@shared/quran/arabicNumber';
-import type { EventView, SegmentView } from '@/lib/quran/prophets/story';
+import { storySummary, type EventView, type SegmentView } from '@shared/quran/prophets/story';
 
 // docs/plans/quran-prophet-timelines.md
 const STEP = 400;
@@ -33,8 +33,7 @@ export default function ProphetView({ name, phases, events }: { name: string; ph
     setActive(n);
     track.current?.querySelector(`[data-event="${n}"]`)?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
   };
-  const ayat = events.reduce((t, e) => t + e.count, 0);
-  const surahs = new Set(events.flatMap(e => e.segments.map(g => g.surah))).size;
+  const { ayat, surahs } = storySummary(events);
   return (
     <div className="flex flex-col gap-6">
       <ul className="flex flex-wrap gap-2" aria-label="ملخص">
