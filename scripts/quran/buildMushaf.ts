@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import type { MushafItem, MushafPage } from '../../shared/quran/readerPage';
 
 // docs/data-pipelines.md
-const OUT = join(__dirname, '../../src/app/quran/read/mushaf');
+const OUT = join(__dirname, '../../shared/data/quran/mushaf');
 const SURAHS_OPENING_A_QUARTER = [1, 4, 5, 7, 8, 9, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 33, 40, 46, 49, 55, 56, 58, 62, 65, 66, 67, 68, 69, 72, 75, 78, 80, 82, 84, 87, 90, 94];
 
 type LayoutWord = { type: string; verse_key?: string; position?: number | null; text: string; sura?: number };

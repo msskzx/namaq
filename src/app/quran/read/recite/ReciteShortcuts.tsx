@@ -4,9 +4,9 @@ import { useMemo, useSyncExternalStore } from 'react';
 import { LightbulbOff, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@/lib/ayahMarks';
+import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { forgottenOrder } from '@/lib/quran/recite';
+import { forgottenOrder } from '@shared/quran/recite';
 import { LAST_RECITE_KEY } from '../ReaderView';
 
 const readLast = () => { try { return localStorage.getItem(LAST_RECITE_KEY); } catch { return null; } };

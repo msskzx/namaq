@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, Search, Undo2, X } from 'lucide-react';
-import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@/lib/ayahMarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@/lib/readerGestures';
-import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@/lib/quran/recite';
+import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
+import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import { usePageGestures } from './usePageGestures';
 import { createPortal } from 'react-dom';
@@ -25,7 +25,7 @@ import { pageGroups, spreadOf, turn, type MushafPage as MushafPageData } from '@
 import { useLanguage } from '@/components/language/LanguageContext';
 import styles from '@/components/homepage/Home.module.css';
 import mushaf from './Mushaf.module.css';
-import type { IndexSurah } from '@/lib/quran/juzIndex';
+import type { IndexSurah } from '@shared/quran/juzIndex';
 import SurahIndex from './SurahIndex';
 import MushafPage from './MushafPage';
 

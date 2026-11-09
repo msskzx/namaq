@@ -1,7 +1,7 @@
-import type { BranchAyah } from '@shared/quran/branches';
-import { findText, firstLevel, searchQuery, wordKeys, type WordKeys } from '@shared/quran/searchText';
+import type { BranchAyah } from './branches';
+import { findText, firstLevel, searchQuery, wordKeys, type WordKeys } from './searchText';
 
-export { searchable } from '@shared/quran/searchText';
+export { searchable } from './searchText';
 
 export type AyahHit = { key: string; page: number; words: string[]; from: number; to: number };
 export type AyahSearch = { total: number; hits: AyahHit[] };
