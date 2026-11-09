@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 
 import Link from 'next/link';
 import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
+import { useSwipeClose } from '@/components/common/useSwipeClose';
 import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -371,6 +372,7 @@ export default function PairCompare({ a, b, cards, pairs: allPairs, names, revie
     else { sheet.current?.showModal(); setOpen(true); }
   };
   const close = () => sheet.current?.close();
+  useSwipeClose(sheet, open, { direction: 'down', onClose: close });
   useEffect(() => {
     const wide = window.matchMedia?.('(min-width: 1024px)');
     const change = () => { if (wide?.matches) sheet.current?.close(); };
