@@ -1,0 +1,5 @@
+{
+  "//": "The app's pure logic is also tested by the website's vitest run, which must not need mobile/node_modules (mobile/tsconfig.json extends expo/tsconfig.base).",
+  "extends": "../../../tsconfig.json",
+  "include": ["*.ts"]
+}
