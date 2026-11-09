@@ -1,13 +1,16 @@
 import { memo } from 'react';
 import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
 import { keys, type Branch } from '@shared/quran/branches';
+import { branchNodes } from '@shared/quiz/branchAnswers';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { Matches, Presentation } from '@/lib/branches';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
 type Tap = (ayahKeys: string[]) => void;
-type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap };
+/** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
+export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
+type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; render?: { draw: RenderNode; index: Map<Branch, number> } };
 
 const LINE = 2;
 const CURVE = 10;
@@ -98,14 +101,17 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
+  const own = root ? undefined : shared.render?.draw(node, shared.render.index.get(node) ?? -1);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {boundary && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, color: shared.palette.muted, paddingHorizontal: 4 }}>{mushafText(words.join(' '))}</Text>}
       {shown && (
         <Box ayahKeys={all} leaf={node.children.length === 0} shared={shared}>
+          {own !== undefined ? own : <>
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
           <Words words={words} ayahKeys={all} at={path.length} shared={shared} size={root ? 22 : 20} />
           {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
+          </>}
         </Box>
       )}
       {node.children.length > 0 && <>
@@ -116,11 +122,12 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   );
 }
 
-type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void };
+type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void; renderNode?: RenderNode };
 
 /** The website's phrase tree, root on the right and branches growing left; words before the phrase fan out on the right. */
-function BranchTree({ presentation, matches, names, palette, onTap, onLayout }: Props) {
-  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap };
+function BranchTree({ presentation, matches, names, palette, onTap, onLayout, renderNode }: Props) {
+  const render = renderNode && { draw: renderNode, index: new Map(branchNodes(presentation.tree).map((node, i) => [node, i])) };
+  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, render };
   const before = presentation.prefixes.filter(prefix => prefix.word);
   return (
     <View onLayout={onLayout} style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>

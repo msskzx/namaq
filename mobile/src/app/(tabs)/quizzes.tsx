@@ -1,5 +1,31 @@
-import Soon from '@/components/Soon';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { router, type Href } from 'expo-router';
+import { EyeOff, User, Users, type LucideProps } from 'lucide-react-native';
+import TopBar from '@/components/TopBar';
+import { usePalette } from '@/lib/theme';
 
-export default function Screen() {
-  return <Soon path="/quizzes" />;
+// The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes).
+const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title: string; text: string }[] = [
+  { href: '/quiz/solo', Icon: User, title: 'اختبار فردي', text: 'أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها.' },
+  { href: '/quiz/party', Icon: Users, title: 'اختبار جماعي', text: 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' },
+  { href: '/read', Icon: EyeOff, title: 'تسميع', text: 'تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه.' },
+];
+
+export default function QuizzesScreen() {
+  const palette = usePalette();
+  return (
+    <View style={{ flex: 1, backgroundColor: palette.paper }}>
+      <TopBar />
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 14 }}>
+        {MODES.map(({ href, Icon, title, text }) => (
+          <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
+            style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 14, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
+            <Icon size={44} color={palette.accent} strokeWidth={1.5} />
+            <Text style={{ color: palette.ink, fontSize: 20, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+            <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 24, textAlign: 'right' }}>{text}</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+    </View>
+  );
 }

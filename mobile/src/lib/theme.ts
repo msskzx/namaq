@@ -13,6 +13,7 @@ export const light = {
   root: '#665177',
   green: '#506449',
   path: '#426578',
+  amber: '#806239',
 };
 
 export type Palette = typeof light;
@@ -29,6 +30,7 @@ export const dark: Palette = {
   root: '#c3afd5',
   green: '#b1c59f',
   path: '#a9c4d1',
+  amber: '#dcc5a0',
 };
 
 export const QURAN_FONT = 'KFGQPC Hafs';

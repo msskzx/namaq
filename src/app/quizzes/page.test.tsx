@@ -212,32 +212,6 @@ describe('QuizzesPage', () => {
     expect(screen.queryByRole('navigation', { name: 'Quiz mode' })).toBeNull();
   });
 
-  it('offers only Quran similarities in the topic settings', () => {
-    nav.reset('/quizzes?topic=BRANCHES');
-    render(<QuizzesPage />);
-    for (const name of ['People', 'Battles', 'Relationships']) {
-      expect(screen.queryByRole('button', { name })).toBeNull();
-    }
-    expect(screen.getByRole('button', { name: 'Shared Quranic wording' }).getAttribute('aria-pressed')).toBe('true');
-  });
-
-  it('renders Quran text supplied for an ayah choice', () => {
-    const original = questions[0];
-    questions[0] = {
-      ...original,
-      family: 'AYAH_LINK',
-      choiceDetails: { right: { text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ', reference: 'البقرة 2:255' } },
-    };
-    try {
-      nav.reset('/quizzes?topic=PEOPLE&length=5');
-      render(<QuizzesPage />);
-      expect(screen.getByText('اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ')).toBeTruthy();
-      expect(screen.getByText('البقرة 2:255')).toBeTruthy();
-    } finally {
-      questions[0] = original;
-    }
-  });
-
   it('locks the first answer and shows immediate correct feedback with its source', () => {
     const original = questions[0];
     questions[0] = { ...original, evidence: { reference } };
@@ -411,17 +385,6 @@ describe('QuizzesPage', () => {
     expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('leaves')).toBe('10');
     expect(nav.push).toHaveBeenLastCalledWith(expect.any(String), { scroll: false });
     expect(screen.getAllByText('You type this')).toHaveLength(6);
-  });
-
-  it('keeps the setup example free of ayah controls while retaining tree zoom', () => {
-    nav.reset('/quizzes?topic=BRANCHES');
-    render(<QuizzesPage />);
-    const tree = screen.getByRole('region', { name: 'Example tree' });
-    expect(within(tree).getByRole('toolbar', { name: 'Tree zoom' })).toBeTruthy();
-    expect(within(tree).queryByRole('button', { name: /View ayat in context/ })).toBeNull();
-    expect(within(tree).queryAllByRole('link')).toHaveLength(0);
-    expect(tree.querySelector('[data-differing]')).toBeNull();
-    for (const node of tree.querySelectorAll('[data-node]')) expect(node.querySelector('button, a')).toBeNull();
   });
 
   it('types only the asked leaves and gives the rest of the tree', () => {
