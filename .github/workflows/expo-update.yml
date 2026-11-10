@@ -1,0 +1,39 @@
+# Publishes the phone app to Expo Go's `trial` branch after every merge to main that changes it.
+# Needs the repository secret EXPO_TOKEN (an Expo access token for the brilliant-star account).
+name: expo update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - 'shared/**'
+  workflow_dispatch:
+
+concurrency:
+  group: expo-update
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - run: npm ci
+        working-directory: mobile
+      - run: npm run typecheck
+        working-directory: mobile
+
+      - name: Publish to the trial branch
+        working-directory: mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: npx -y eas-cli@latest update --branch trial --environment preview --non-interactive --message "$(printf '%s' "${MESSAGE:-manual publish}" | head -n 1)"
