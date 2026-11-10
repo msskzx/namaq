@@ -50,6 +50,22 @@ describe('a tree growing in the studio', () => {
   });
 });
 
+describe('where a growing tree starts', () => {
+  it('opens on a box, never on a connector, with or without the surrounding ayat', () => {
+    for (const piece of list) {
+      const presentation = cardOf(piece).presentation;
+      for (const around of [undefined, aroundOf(presentation)]) {
+        const parts = growthParts(presentation, around);
+        const beats = growthBeats(presentation.tree, { ...parts, prefixes: presentation.prefixes });
+        const first = beats.find(beat => beat.reveal.length)!;
+        expect(first.reveal[0].startsWith('l:'), piece.id).toBe(false);
+        const revealed = beats.flatMap(beat => beat.reveal);
+        for (const start of parts.starts) expect(revealed.indexOf(start.id), start.id).toBeLessThan(revealed.indexOf(lineId(start.id)));
+      }
+    }
+  }, 60_000);
+});
+
 describe('ayat around a tree', () => {
   it('always draws the ayah before ayat that open with the phrase when other ayat have words before it', () => {
     let mixed = presentationOf(0);
