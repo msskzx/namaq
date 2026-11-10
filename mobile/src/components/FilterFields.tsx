@@ -1,5 +1,5 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useSyncExternalStore } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';
@@ -7,13 +7,12 @@ import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
-import Sheet from './Sheet';
 import Toggle from './Toggle';
 import NumberPicker from './NumberPicker';
 import { IconButton } from './Studio';
 import surahRows from '@shared/data/quran/surahs.json';
 import { surahNames } from '@/lib/branches';
-import { applyDraft, draftOf, draftRange, EMPTY_LIST, UNIT_MAX, type FilterDraft, type FilterUnit, type ListState } from '@/lib/branchList';
+import { draftRange, UNIT_MAX, type FilterDraft, type FilterUnit } from '@/lib/branchList';
 import type { Palette } from '@/lib/theme';
 
 const UNITS: { value: FilterUnit; label: string }[] = [
@@ -108,30 +107,18 @@ export function FilterFields({ draft, setDraft, palette, compare = false }: { dr
   );
 }
 
-/** The website's filter sheet for the branches tab: saved only, the part of the Quran, the comparison kinds and differences, then the sort. */
-export default function FilterSheet({ open, onClose, state, onApply, palette }: { open: boolean; onClose: () => void; state: ListState; onApply: (state: ListState) => void; palette: Palette }) {
-  const [draft, setDraft] = useState<FilterDraft>(() => draftOf(state));
-  useEffect(() => { if (open) setDraft(draftOf(state)); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-  const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
-  const valid = !ranged || !!draftRange(draft);
-  const submit = () => {
-    const next = applyDraft(draft);
-    if (!next) return;
-    onApply(next);
-    onClose();
-  };
+/** Whether the draft's range can be applied (a range needs both ends in order). */
+export const draftValid = (draft: FilterDraft) => !['juz', 'surah', 'page'].includes(draft.unit) || !!draftRange(draft);
+
+/** Reset on one side, apply on the other: under the filters in the branches search screen. */
+export function FilterActions({ onReset, onApply, valid, palette }: { onReset: () => void; onApply: () => void; valid: boolean; palette: Palette }) {
   return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 12, gap: 18 }} keyboardShouldPersistTaps="handled">
-        <FilterFields draft={draft} setDraft={setDraft} palette={palette} />
-      </ScrollView>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>
-        <IconButton label="إعادة ضبط" onPress={() => setDraft(draftOf(EMPTY_LIST))} Icon={RotateCcw} color={palette.ink} />
-        <Pressable onPress={submit} disabled={!valid} accessibilityRole="button" accessibilityLabel="تطبيق"
-          style={{ width: 52, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: valid ? palette.accent : palette.rule }}>
-          <Check size={24} color={palette.onAccent} />
-        </Pressable>
-      </View>
-    </Sheet>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>
+      <IconButton label="إعادة ضبط" onPress={onReset} Icon={RotateCcw} color={palette.ink} />
+      <Pressable onPress={onApply} disabled={!valid} accessibilityRole="button" accessibilityLabel="تطبيق"
+        style={{ width: 52, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: valid ? palette.accent : palette.rule }}>
+        <Check size={24} color={palette.onAccent} />
+      </Pressable>
+    </View>
   );
 }

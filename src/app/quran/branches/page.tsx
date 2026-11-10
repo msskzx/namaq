@@ -199,12 +199,17 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
       <PreloadQuranText />
       <BranchHeading />
-      {/* The search box and the filter live in the site's top bar; the page's buttons in the side rail (the top bar on phones). */}
+      {/* Search and filter are one control in the site's top bar: the filter button sits inside the search box
+          (on phones, inside the search bar the search icon opens). The page's buttons are in the side rail (the top bar on phones). */}
       <NavActions>
-        <NavSearch active={!!query}>
-          <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah, saved: state.saved }} />
+        <NavSearch active={!!query || !!(range || state.saved?.length || hasGroupFilters(state.filters ?? {}) || state.filters?.sort)}>
+          <div className="flex items-center gap-1">
+            <div className="min-w-0 flex-1">
+              <OpeningSearch key={query} query={query} surahs={surahs} top={[]} current={id} juz={range} view={{ ...treeView, mode: state.mode, query: state.query, surah, saved: state.saved }} />
+            </div>
+            <FilterButton range={range} view={state} allSurahs={allSurahs.map(surah => ({ ...surah, nameEn: surah.nameTransliterated ?? undefined }))} />
+          </div>
         </NavSearch>
-        <FilterButton range={range} view={state} allSurahs={allSurahs.map(surah => ({ ...surah, nameEn: surah.nameTransliterated ?? undefined }))} />
       </NavActions>
       <NavButtons>
         {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}

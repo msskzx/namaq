@@ -9,7 +9,7 @@ import type { SurahPair } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
 import { applyDraft, draftOf, type FilterDraft } from '@/lib/branchList';
-import { FilterFields } from './FilterSheet';
+import { FilterFields } from './FilterFields';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 
