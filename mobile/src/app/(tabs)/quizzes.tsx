@@ -3,6 +3,7 @@ import { router, type Href } from 'expo-router';
 import { EyeOff, User, Users, type LucideProps } from 'lucide-react-native';
 import TopBar from '@/components/TopBar';
 import { usePalette } from '@/lib/theme';
+import { useShrinkOnScroll } from '@/lib/chrome';
 
 // The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes).
 const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title: string; text: string }[] = [
@@ -13,10 +14,11 @@ const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title:
 
 export default function QuizzesScreen() {
   const palette = usePalette();
+  const onScroll = useShrinkOnScroll();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar />
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 14 }}>
+      <TopBar hideOnScroll />
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, gap: 14 }}>
         {MODES.map(({ href, Icon, title, text }) => (
           <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
             style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 14, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>

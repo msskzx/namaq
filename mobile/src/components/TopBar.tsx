@@ -1,30 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Settings } from 'lucide-react-native';
 import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
+import { useCompact } from '@/lib/chrome';
 
-/** The website's phone top bar: the logo (home) on the right, the page's own buttons, then the settings gear on the left. */
-export default function TopBar({ children }: { children?: React.ReactNode }) {
+const HEIGHT = 53; // 52 and the rule under it
+
+/**
+ * The website's phone top bar: the logo (home) on the right, the page's own buttons, then the settings gear on the left.
+ * The gear shows only on the homepage (owner, 2026-11-10); the logo shows everywhere and opens home.
+ * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
+ * together with the bottom bar shrinking (owner, 2026-11-10).
+ */
+export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
+  const hidden = useCompact() && hideOnScroll;
+  const away = useSharedValue(0);
+  useEffect(() => { away.value = withTiming(hidden ? 1 : 0, { duration: 180 }); }, [hidden, away]);
+  const row = useAnimatedStyle(() => ({ height: interpolate(away.value, [0, 1], [HEIGHT, 0]), opacity: interpolate(away.value, [0, 0.6], [1, 0], 'clamp'), borderBottomWidth: away.value > 0.95 ? 0 : 1 }));
   return (
-    <View style={{ paddingTop: insets.top, backgroundColor: palette.paper, borderBottomWidth: 1, borderColor: palette.rule }}>
-      <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }}>
+    <View style={{ paddingTop: insets.top, backgroundColor: palette.paper }}>
+      <Animated.View style={[{ overflow: 'hidden', borderBottomWidth: 1, borderColor: palette.rule, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
         <Pressable onPress={() => router.navigate('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
           <Logo size={34} />
         </Pressable>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>
-        <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
+        {withSettings && <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <Settings size={22} color={palette.muted} />
-        </Pressable>
-      </View>
-      <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />
+        </Pressable>}
+      </Animated.View>
+      {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}
     </View>
   );
 }
