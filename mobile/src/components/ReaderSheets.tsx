@@ -17,6 +17,8 @@ export type Jump = { page: number; key: string; mark: boolean };
 
 const name = (surah: { name: string }) => plainName(surah.name).replace(/^سورة\s*/, '');
 const AROUND = 6;
+const JUZ_ROW = 48;
+const SURAH_ROW = 40;
 
 let indexed: IndexedAyah[] | undefined;
 /** The ayah word search runs on the bundled text, indexed the first time it is used. */
@@ -28,8 +30,10 @@ type Row =
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
 /** The index of surahs and juz', the search for a surah, an ayah number or words, and the recite shortcuts. */
-export function IndexSheet({ open, onClose, onJump, palette, last, forgotten }: {
+export function IndexSheet({ open, onClose, onJump, palette, page, last, forgotten }: {
   open: boolean;
+  /** The page open in the reader: the index opens at its surah. */
+  page: number;
   onClose: () => void;
   onJump: (jump: Jump, recite?: 'review') => void;
   palette: Palette;
@@ -64,10 +68,23 @@ export function IndexSheet({ open, onClose, onJump, palette, last, forgotten }: 
     return [...ayat, ...list];
   }, [groups, query, reference, found]);
 
+  // With no search, the list is only juz' and surah rows of fixed heights, so it can open scrolled to the surah on the open page.
+  const plain = !rows.some(row => row.kind === 'ayah');
+  const here = useMemo(() => {
+    let at = -1;
+    rows.forEach((row, index) => { if (row.kind === 'surah' && row.page <= page) at = index; });
+    return at;
+  }, [rows, page]);
+  const offsets = useMemo(() => {
+    let y = 0;
+    return rows.map(row => { const at = y; y += row.kind === 'juz' ? JUZ_ROW : SURAH_ROW; return at; });
+  }, [rows]);
+  const start = plain && !query.trim() && here > 0 ? Math.max(0, here - 2) : 0;
+
   const go = (jump: Jump, recite?: 'review') => { onJump(jump, recite); onClose(); };
   const button = { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 } as const;
   return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
+    <Sheet open={open} onClose={onClose} palette={palette} tall>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         {(last || forgotten.length > 0) && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -97,18 +114,20 @@ export function IndexSheet({ open, onClose, onJump, palette, last, forgotten }: 
         {found && found.total > found.hits.length && rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{num(found.total)} آية، أول {num(found.hits.length)} منها</Text>}
       </View>
       <FlatList data={rows} keyExtractor={row => (row.kind === 'juz' ? `j${row.juz}` : row.kind === 'surah' ? `s${row.number}-${row.from}` : `a${row.key}`)}
-        keyboardShouldPersistTaps="handled" initialNumToRender={30}
-        renderItem={({ item: row }) => {
+        keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" initialNumToRender={30} style={{ flex: 1 }}
+        initialScrollIndex={start || undefined}
+        getItemLayout={plain ? (_, index) => ({ length: rows[index]?.kind === 'juz' ? JUZ_ROW : SURAH_ROW, offset: offsets[index] ?? 0, index }) : undefined}
+        renderItem={({ item: row, index }) => {
           if (row.kind === 'juz') return (
             <Pressable onPress={() => go({ page: row.page, key: row.key, mark: false })} accessibilityRole="link"
-              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', borderBottomWidth: 1, borderColor: palette.rule, paddingHorizontal: 16, paddingTop: 14, paddingBottom: 4 }}>
+              style={{ height: JUZ_ROW, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', borderBottomWidth: 1, borderColor: palette.rule, paddingHorizontal: 16, paddingBottom: 4 }}>
               <Text style={{ color: palette.accent, fontSize: 19 }}>الجزء {num(row.juz)}</Text>
               <Text style={{ color: palette.muted, fontSize: 13 }}>ص {num(row.page)}</Text>
             </Pressable>
           );
           if (row.kind === 'surah') return (
             <Pressable onPress={() => go({ page: row.page, key: `${row.number}:${row.from}`, mark: false })} accessibilityRole="link"
-              style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8, paddingHorizontal: 16, paddingVertical: 7 }}>
+              style={[{ height: SURAH_ROW, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16 }, index === here && !query.trim() ? { backgroundColor: palette.paperDeep } : null]}>
               <Text style={{ width: 30, color: palette.accent, fontSize: 13 }}>{num(row.number)}</Text>
               <Text style={{ color: palette.ink, fontSize: 17 }}>{row.name}</Text>
               {row.from > 1 && <Text style={{ color: palette.muted, fontSize: 13 }}>من الآية {num(row.from)}</Text>}

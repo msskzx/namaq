@@ -15,7 +15,8 @@ export function pageData(page: number): MushafPage {
 }
 
 export const surahs = surahRows;
-export const surahNames: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.name]));
+/** Surah names as the mushaf writes them in the title boxes, with tashkeel (the website reads them from the database). */
+export const surahNames: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.title]));
 export const ayahCounts: ReadonlyMap<number, number> = new Map(surahs.map(row => [row.number, row.numberOfAyat]));
 
 /** The surah running at the top of a page that opens mid-surah. */

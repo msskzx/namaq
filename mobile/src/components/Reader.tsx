@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Hand, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
@@ -11,7 +11,7 @@ import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type Rec
 import TopBar from './TopBar';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch } from './MushafPageView';
-import { GestureSheet, IndexSheet, type Jump } from './ReaderSheets';
+import { IndexSheet, type Jump } from './ReaderSheets';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@/lib/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
@@ -55,7 +55,7 @@ export default function Reader() {
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
   const [mark, setMark] = useState<{ key: string; page: number } | null>(null);
   const [tools, setTools] = useState(false);
-  const [sheet, setSheet] = useState<'index' | 'gestures' | null>(null);
+  const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const forgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
@@ -74,6 +74,11 @@ export default function Reader() {
     setImmersive(focused && !tools);
     return () => setImmersive(false);
   }, [focused, tools]);
+
+  // However a recitation starts (the eye button, the index's continue or review, the homepage), the bars step aside for it.
+  useEffect(() => {
+    if (reciting) { setTools(false); setActions(null); }
+  }, [reciting]);
 
   useEffect(() => {
     writeJson(PLACE, { page, position, reviewing } satisfies Place);
@@ -206,7 +211,6 @@ export default function Reader() {
           <TopBar>
             <IconButton Icon={List} label="فهرس السور والبحث" palette={palette} onPress={() => setSheet('index')} />
             <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} palette={palette} on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
-            <IconButton Icon={Hand} label="اللمسات في المصحف" palette={palette} onPress={() => setSheet('gestures')} />
           </TopBar>
         </View>
       )}
@@ -234,9 +238,8 @@ export default function Reader() {
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
       )}
-      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} forgotten={forgotten}
+      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten}
         last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
-      <GestureSheet open={sheet === 'gestures'} onClose={() => setSheet(null)} palette={palette} mode={mode} />
     </View>
   );
 }

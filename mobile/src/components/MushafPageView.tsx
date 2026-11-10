@@ -42,9 +42,12 @@ type Props = {
 
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
-function Word({ press, style, children }: { press?: object; style: object; children: React.ReactNode }) {
-  return press ? <Pressable {...press} style={style}>{children}</Pressable> : <View style={style}>{children}</View>;
+function Word({ press, onLayout, children }: { press?: object; onLayout?: (event: LayoutChangeEvent) => void; children: React.ReactNode }) {
+  return press ? <Pressable {...press} onLayout={onLayout}>{children}</Pressable> : <View onLayout={onLayout}>{children}</View>;
 }
+
+type Box = { x: number; y: number; w: number; h: number };
+type Cell = { lit: boolean };
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
@@ -89,6 +92,34 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     delayLongPress: 500,
   });
 
+  // A highlighted ayah is one band behind its words on each line (the gaps between words included), not a box per word.
+  const [boxes, setBoxes] = useState<Record<string, Box>>({});
+  const place = (id: string) => (event: LayoutChangeEvent) => {
+    const { x, y, width: w, height: h } = event.nativeEvent.layout;
+    setBoxes(prev => {
+      const old = prev[id];
+      return old && old.x === x && old.y === y && old.w === w && old.h === h ? prev : { ...prev, [id]: { x, y, w, h } };
+    });
+  };
+  const bands = (line: number, cells: Cell[]) => {
+    const runs: number[][] = [];
+    cells.forEach((cell, at) => {
+      if (!cell.lit) return;
+      const run = runs[runs.length - 1];
+      if (run && run[run.length - 1] === at - 1) run.push(at);
+      else runs.push([at]);
+    });
+    return runs.map(run => {
+      const found = run.map(at => boxes[`${line}:${at}`]).filter(Boolean);
+      if (!found.length) return null;
+      const left = Math.min(...found.map(box => box.x));
+      const right = Math.max(...found.map(box => box.x + box.w));
+      const top = Math.min(...found.map(box => box.y));
+      const bottom = Math.max(...found.map(box => box.y + box.h));
+      return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: tint(palette.accent, 0.16) }} />;
+    });
+  };
+
   // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
   const counts: Record<string, number> = {};
   titled?.forEach((steps, surah) => { counts[`${surah}:1`] = steps - 1; });
@@ -96,9 +127,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
 
   return (
     <View style={{ width, height, backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
+      {/* One height on every page, chip or not, so facing pages' frames line up. */}
+      <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: small }}>الجزء {juzName(data.juz)}</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
           {badges.map(label => (
             <Text key={label} style={{ borderWidth: 1, borderColor: label === 'سجدة' ? palette.accent : palette.rule, color: label === 'سجدة' ? palette.accent : palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>{label}</Text>
           ))}
@@ -148,20 +180,24 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               const width = body!.width;
               const centred = page <= 2 || drawn < width * 0.7;
               const scale = centred ? 1 : Math.min(STRETCH, Math.max(SQUEEZE, width / drawn));
+              const cells = (model.lines[index] ?? []).map(group => {
+                const key = `${group.surah}:${group.ayah}`;
+                const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
+                const wordHidden = !!hidden?.(key, word);
+                return { group, key, wordHidden, lit: !wordHidden && !!forgot[key] };
+              });
               return (
                 <View key={index} style={{ height: rowHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred ? 'center' : 'flex-start' }}>
                   <View style={centred
                     ? { flexDirection: 'row', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: 'right' }}>
-                    {model.lines[index]?.map((group, at) => {
-                      const key = `${group.surah}:${group.ayah}`;
-                      const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
-                      const wordHidden = !!hidden?.(key, word);
+                    {bands(index, cells)}
+                    {cells.map(({ group, key, wordHidden, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                       const marked = mark === key;
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
-                        <Word key={at} press={wordHidden ? undefined : press(key)} style={{ backgroundColor: !wordHidden && forgot[key] ? tint(palette.accent, 0.16) : undefined }}>
+                        <Word key={at} press={wordHidden ? undefined : press(key)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: marked ? palette.accent : palette.ink }}>
                           {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                           {wordHidden
@@ -186,7 +222,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               );
             })}
           </Pressable>
-          <View style={{ borderTopWidth: 1, borderColor: palette.rule, paddingVertical: 2 }}>
+          <View style={{ paddingVertical: 2 }}>
             <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{num(page)}</Text>
           </View>
         </View>
