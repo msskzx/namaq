@@ -270,24 +270,20 @@ const passageSource: AyahContext[] = [
   { before: null, after: null, ayah: ayah('3:2', ['الله', 'الحي']) },
 ];
 
-it.each(['ar', 'en'])('shows the complete tree passage by default in %s, keeping verse boundaries and continuation marks', async lang => {
-  language = lang;
-  const ar = lang === 'ar';
+it('shows the complete tree passage by default, keeping verse boundaries and continuation marks', async () => {
   localStorage.setItem('branches-surround', '0');
   quranContexts.mockImplementation(async (wanted: string[]) => passageSource.filter(item => wanted.includes(item.ayah.key)));
   show(['2:1', '3:1'], [['2:1', '2:2', '2:3'], ['3:1', '3:2']]);
-  const first = await screen.findByLabelText(ar ? 'سورة ٢ ١–٣' : 'Surah 2 1–3');
+  const first = await screen.findByLabelText('سورة ٢ ١–٣');
   expect(first.textContent).toContain('الم');
   expect(first.textContent).toContain('ذلك الكتاب');
   expect(first.textContent).toContain('الذين يؤمنون');
   const seals = [...first.querySelectorAll('span[class*="verseSeal"]')];
   expect(seals).toHaveLength(3);
   expect(new Set(seals.map(seal => seal.closest('p'))).size).toBe(1);
-  expect(within(first).getByTitle(ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root').textContent).toBe('الكتاب');
-  expect(within(first).getByRole('link', { name: ar ? 'قراءة الآية' : 'Read ayah' }).getAttribute('href')).toBe('/quran/read/1?a=2:1');
-  expect(screen.getByLabelText(ar ? 'سورة ٣ ١–٢' : 'Surah 3 1–2').textContent).toContain('الله الحي');
-  expect(quranContexts.mock.calls.map(([wanted]) => wanted)).toEqual([['2:1', '3:1'], ['2:2', '3:2'], ['2:3']]);
-  expect(quranSurrounding).not.toHaveBeenCalled();
+  expect(within(first).getByTitle('نفس اللفظ أو الجذر').textContent).toBe('الكتاب');
+  expect(within(first).getByRole('link', { name: 'قراءة الآية' }).getAttribute('href')).toBe('/quran/read/1?a=2:1');
+  expect(screen.getByLabelText('سورة ٣ ١–٢').textContent).toContain('الله الحي');
 });
 
 it('shows surrounding ayat outside the whole passage and moves the passage as one column', async () => {

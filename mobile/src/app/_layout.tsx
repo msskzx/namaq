@@ -26,6 +26,7 @@ export default function RootLayout() {
             <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.paper } }}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="ayah" />
+              <Stack.Screen name="prophets/[slug]" />
             </Stack>
           </View>
           <StatusBar style={palette === dark ? 'light' : 'dark'} />

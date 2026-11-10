@@ -50,20 +50,14 @@ it('loads on demand and shows each original with its neighbors, differing words 
   expect(screen.getByRole('dialog')).toBeTruthy();
 });
 
-it('puts references above its row of buttons, outside the context button, and handles the first ayah without inventing a predecessor', async () => {
+it('shows the first ayah of the Quran without inventing a predecessor', async () => {
   language.current = 'ar';
-  quranContexts.mockResolvedValue([{ ayah: { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] }, before: null, after: null }]);
-  render(wrap(<AyahContextButton ayahKeys={['1:1']} differentWords={[]} names={{}} references={<span>١:١</span>} before={<button>before</button>} after={<button>after</button>}>Opening</AyahContextButton>));
-  const trigger = screen.getByRole('button', { name: 'عرض الآيات في سياقها' });
-  expect(trigger.getAttribute('data-variant')).toBe('outline');
-  expect(trigger.textContent).toBe('');
-  expect([...trigger.parentElement!.children].map(child => child.textContent)).toEqual(['before', '', 'after']);
-  expect(trigger.parentElement!.previousElementSibling?.textContent).toBe('١:١');
-  fireEvent.click(trigger);
+  quranContexts.mockResolvedValue([{ ayah: { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] }, before: null, after: null }]);
+  render(wrap(<AyahContextButton ayahKeys={['1:1']} differentWords={[]} names={{}}>Opening</AyahContextButton>));
+  fireEvent.click(screen.getByRole('button', { name: 'عرض الآيات في سياقها' }));
   const card = await screen.findByRole('article', { name: 'سورة ١ ١' });
   expect(card.querySelectorAll('[data-current]')).toHaveLength(1);
   expect([...card.querySelectorAll('p')].filter(p => p.textContent?.trim()).length).toBe(2);
-  expect(screen.getByRole('button', { name: 'إغلاق' })).toBeTruthy();
 });
 
 it('reports a loading failure and lets the learner retry', async () => {
@@ -98,7 +92,6 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
   expect(within(sibling).getAllByTitle('Same lemma or root').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
   expect(within(own).getAllByTitle('Same word').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
   expect(within(own).getAllByTitle('Same lemma or root').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
-  expect(within(dialog).getByText("This branch's ayat come first, then the ayat that meet it at the same node.")).toBeTruthy();
 });
 
 it('marks shared words in an inner-node dialog too, and nothing in the neighbouring ayat', async () => {

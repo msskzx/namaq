@@ -67,7 +67,7 @@ export function IndexSheet({ open, onClose, onJump, palette, last, forgotten }: 
   const go = (jump: Jump, recite?: 'review') => { onJump(jump, recite); onClose(); };
   const button = { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 } as const;
   return (
-    <Sheet open={open} onClose={onClose}>
+    <Sheet open={open} onClose={onClose} palette={palette}>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         {(last || forgotten.length > 0) && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -157,7 +157,7 @@ export function GestureSheet({ open, onClose, palette, mode: shownMode }: { open
   useEffect(() => { if (open) setMode(shownMode); }, [open, shownMode]);
   const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
-    <Sheet open={open} onClose={onClose}>
+    <Sheet open={open} onClose={onClose} palette={palette}>
       <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
         <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">

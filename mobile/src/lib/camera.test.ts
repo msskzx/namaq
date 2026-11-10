@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clampCamera, fitCamera, settleCamera, zoomAt } from './camera';
+import { clampCamera, fitCamera, pickDirection, settleCamera, zoomAt } from './camera';
 
 const view = { width: 400, height: 600 };
 const wide = { width: 1600, height: 600 };
@@ -31,5 +31,13 @@ describe('tree camera', () => {
     const camera = clampCamera({ s: 1, x: 200, y: -5000 }, wide, view);
     expect(camera).toEqual({ s: 1, x: 0, y: 0 });
     expect(clampCamera({ s: 1, x: -5000, y: 0 }, wide, view).x).toBe(400 - 1600);
+  });
+});
+
+describe('tree direction', () => {
+  it('draws a tall narrow tree top down only when that shows it clearly bigger', () => {
+    const phone = { width: 390, height: 600 };
+    expect(pickDirection({ width: 1600, height: 300 }, { width: 500, height: 700 }, phone)).toBe('down');
+    expect(pickDirection({ width: 400, height: 300 }, { width: 380, height: 320 }, phone)).toBe('side');
   });
 });
