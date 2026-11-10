@@ -189,7 +189,7 @@ export function GestureSheet({ open, onClose, palette, mode }: { open: boolean; 
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
       <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-        {open && <GestureSettings palette={palette} mode={mode} />}
+        <GestureSettings key={String(open)} palette={palette} mode={mode} />
       </View>
     </Sheet>
   );

@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { router, type Href } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, EyeOff, Feather, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -150,11 +150,12 @@ export default function HomeScreen() {
             {hasTrees && <Button Icon={Library} accessibilityLabel="افتح المحفوظات" onPress={() => go({ tab: 'branches', saved: true })} />}
           </Heading>
           {cards.length ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingVertical: 4 }} style={{ marginHorizontal: -16 }}>
-              <View style={{ width: 4 }} />
-              {cards.map(card => <ShelfCard key={card.id} card={card} palette={palette} />)}
-              <View style={{ width: 4 }} />
-            </ScrollView>
+            // Inverted in a left-to-right box, as the compare pager does, so the newest card starts on the right on every platform.
+            <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
+              <FlatList data={cards} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={card => card.id}
+                contentContainerStyle={{ gap: 12, paddingVertical: 4, paddingHorizontal: 16 }}
+                renderItem={({ item }) => <View style={{ direction: 'rtl' }}><ShelfCard card={item} palette={palette} /></View>} />
+            </View>
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
               <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو عائلة أو بطاقة مقارنة أو آية بزر</Text>
