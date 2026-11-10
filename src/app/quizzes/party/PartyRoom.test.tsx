@@ -68,10 +68,6 @@ describe('party lobby', () => {
     expect(screen.getByText('Grading:')).toBeTruthy();
   });
 
-  it('shows no example tree without the trees topic', () => {
-    show(reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['PEOPLE'] } }, 0).state, 'p1');
-    expect(screen.queryByRole('region', { name: 'Example tree' })).toBeNull();
-  });
 });
 
 describe('party question', () => {

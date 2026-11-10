@@ -17,7 +17,9 @@ export type Direction = 'side' | 'down';
 export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null };
 const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
-type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[] };
+/** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
+export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
+type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode };
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
 /** Where each box registers itself, so a video of the tree can be drawn from where the boxes sit. */
 type Host = ComponentRef<typeof View>;
@@ -207,6 +209,7 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   const all = keys(node);
   const words = node.words;
   const id = nodeId(shared.indices.get(node)!);
+  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
@@ -224,9 +227,11 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
       {boundary && <Fade id={id}><Mark id={id} text={mushafText(words.join(' '))} shared={shared} /></Fade>}
       {shown && (
         <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}>
+          {own !== undefined ? own : <>
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
           <Words words={words} ayahKeys={all} at={path.length} shared={shared} size={root ? 22 : 20} />
           {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
+          </>}
         </Box>
       )}
       {entries.length > 0 && <>
@@ -240,15 +245,17 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
 type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void;
   direction?: Direction; around?: Around; growth?: TreeGrowth;
   /** Filled with a function that measures the drawn tree for the video. */
-  sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null> };
+  sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
+  /** Draws a node's own content, e.g. a quiz input or a graded answer. */
+  renderNode?: RenderNode };
 
 /**
  * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
  * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
  */
-function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef }: Props) {
+function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode }: Props) {
   const down = direction === 'down';
-  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [] };
+  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode };
   const registry = useRef<Registry>(new Map()).current;
   const rootView = useRef<Host>(null);
   const rootId = nodeId(-1);

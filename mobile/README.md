@@ -4,7 +4,8 @@ The phone app is an Expo (React Native) app in this folder. The website stays in
 
 ## Layout
 
-- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. The branches (`index.tsx`), compare (`compare.tsx`) and mushaf (`read.tsx`) tabs work; the others link to the website.
+- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. The branches (`index.tsx`), compare (`compare.tsx`), mushaf (`read.tsx`) and quizzes (`quizzes.tsx`) tabs work.
+- `src/app/quiz/` holds the quizzes: `solo.tsx` (setup), `play.tsx` (a solo quiz, built on the device from the bundled trees and kept in storage until it ends) and `party/` (start or join, then the room). The quizzes tab opens them.
 - `src/components/` holds the app's own views. `BranchTree.tsx` draws a tree with plain views, side or top down, and takes `around` for the surrounding ayat. `TreeCard.tsx` handles pinch zoom and one-finger moves and picks the direction. `MatrixCard.tsx` draws the matrix view. `TreePager.tsx` holds the row of cards, the saved place, the bookmark row and the growth studio. `FilterSheet.tsx` and `BranchSearch.tsx` are the branches tab's filter sheet and search.
 - `Studio.tsx` has the growth studio's controls. `VideoSheet.tsx` records a growing tree in a web view (`VideoFrame.tsx`) and shares the video. The recorder page and its drawing code are in `src/lib/scene.ts`.
 - `src/components/ComparePager.tsx` holds the surah pairs side by side (a paged list), `CompareCard.tsx` one card with its read-along studio, `CompareSheet.tsx` the pair list as a bottom sheet. The cards come from `shared/data/quran/compareCards.js`, built by the website's `npm run quran:compare-cards`.
@@ -23,6 +24,8 @@ npx expo start        # open in Expo Go on a phone on the same network
 npm run typecheck
 npx expo export --platform web   # a web build of the app, used to check screens in a browser
 ```
+
+The party quiz talks to the same Cloudflare worker as the website. Set its address when building or publishing: `EXPO_PUBLIC_PARTY_URL=https://<worker address>` (the website's `NEXT_PUBLIC_PARTY_URL`). Without it the app looks for a local worker on `http://localhost:8787` (`npm run dev` in `party/`).
 
 The phone keeps its state (bookmarks, the open tree and its zoom) in `expo-sqlite/kv-store`. The web build keeps it in localStorage.
 
