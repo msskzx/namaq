@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Share2, UserCheck, X } from 'lucide-react-native';
+import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
@@ -118,7 +118,7 @@ function Invite({ code, palette }: { code: string; palette: Palette }) {
     <Section title="رقم الاختبار" palette={palette}>
       <Text style={{ color: palette.ink, fontSize: 40, fontWeight: '700', letterSpacing: 8, textAlign: 'center', writingDirection: 'ltr' }}>{code}</Text>
       <View style={{ alignItems: 'flex-start' }}>
-        <Button Icon={Share2} label="شارك الرابط" onPress={() => void Share.share({ message: `اختبار جماعي في نمق: ${code}\n${link}` })} />
+        <Button Icon={Send} label="شارك الرابط" onPress={() => void Share.share({ message: `اختبار جماعي في نمق: ${code}\n${link}` })} />
       </View>
     </Section>
   );

@@ -78,6 +78,7 @@ export default function BranchesScreen() {
     else if (intent.juz) change({ ...EMPTY_LIST, range: { from: intent.juz, to: intent.juz } });
   });
   const onIndex = useCallback(() => setRotated(false), []);
+  const openSearch = useCallback(() => setSearching(true), []);
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
   const { tree } = useLocalSearchParams<{ tree?: string }>();
   useEffect(() => {
@@ -101,7 +102,7 @@ export default function BranchesScreen() {
         {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
         {list.surah ? <Chip text={`سورة ${surahNames[list.surah]}`} onClear={() => change({ ...list, surah: undefined })} palette={palette} /> : null}
       </View> : null}
-      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} />
+      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} onPull={openSearch} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}

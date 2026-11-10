@@ -37,14 +37,18 @@ type Props = {
   onTap: (ayahKeys: string[] | null) => void;
   /** Told when a finger starts and stops moving the tree or the cards, so the lifted finger is not read as a tap. */
   onMove: () => void;
+  /** A downward swipe on a tree that is not zoomed in: the page's main action (search). */
+  onPull?: () => void;
 };
 
 const BIG = 20000;
+const PULL = 70;
+const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 /** The direction each tree picked for itself, so it is measured once. */
 const picked = new Map<string, Direction>();
 
-export default function TreeCard({ piece, list, palette, view, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove }: Props) {
+export default function TreeCard({ piece, list, palette, view, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull }: Props) {
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   const pickKey = `${piece.id}:${piece.keys.length}:${JSON.stringify([list.filters, list.range])}:${around}:${Math.round(view.width)}x${Math.round(view.height)}`;
@@ -59,7 +63,7 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
   const viewSize = useSharedValue<Size>(view);
   const start = useSharedValue<Camera>({ s: 1, x: 0, y: 0 });
   const focal = useSharedValue({ x: 0, y: 0 });
-  const mode = useSharedValue<'idle' | 'move' | 'swipe' | 'none'>('idle');
+  const mode = useSharedValue<'idle' | 'pending' | 'move' | 'swipe' | 'none'>('idle');
   const from = useSharedValue(0);
   const restored = useRef(initialCamera);
 
@@ -116,18 +120,22 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
   const pan = Gesture.Pan()
     .maxPointers(1)
     .minDistance(8)
-    .onStart(event => {
+    .onStart(() => {
       start.value = camera.value;
-      mode.value = isZoomed(camera.value, contentSize.value, viewSize.value) ? 'move'
-        : Math.abs(event.translationX) >= Math.abs(event.translationY) ? 'swipe' : 'none';
-      if (mode.value === 'swipe' && lane) {
-        // A swipe that starts while the row is still settling carries on from where it is.
-        cancelAnimation(lane.offset);
-        from.value = Math.round(lane.offset.value / lane.width);
-      }
+      mode.value = isZoomed(camera.value, contentSize.value, viewSize.value) ? 'move' : 'pending';
       scheduleOnRN(onMove);
     })
     .onUpdate(event => {
+      // The web build starts the pan before the finger has moved, so the way it goes is read from the first move.
+      if (mode.value === 'pending') {
+        if (Math.max(Math.abs(event.translationX), Math.abs(event.translationY)) < 8) return;
+        mode.value = Math.abs(event.translationX) >= Math.abs(event.translationY) ? 'swipe' : 'none';
+        if (mode.value === 'swipe' && lane) {
+          // A swipe that starts while the row is still settling carries on from where it is.
+          cancelAnimation(lane.offset);
+          from.value = Math.round(lane.offset.value / lane.width);
+        }
+      }
       if (mode.value === 'move') {
         camera.value = clampCamera({ s: start.value.s, x: start.value.x + event.translationX, y: start.value.y + event.translationY }, contentSize.value, viewSize.value);
       } else if (mode.value === 'swipe' && lane) {
@@ -143,6 +151,9 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
         if (report) scheduleOnRN(report, camera.value);
       } else if (mode.value === 'swipe' && lane) {
         lane.settle(from.value, event.translationX, event.velocityX);
+      } else if (mode.value === 'none' && onPull && event.translationY > Math.abs(event.translationX)
+        && (event.translationY > PULL || event.velocityY > PULL_FLICK)) {
+        scheduleOnRN(onPull);
       }
       mode.value = 'idle';
     });
