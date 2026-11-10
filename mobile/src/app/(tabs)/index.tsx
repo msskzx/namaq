@@ -10,7 +10,8 @@ import LoadingDots from '@/components/LoadingDots';
 import FilterSheet from '@/components/FilterSheet';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
-import { branchList, isFiltered, openingIndex, type ListState } from '@/lib/branchList';
+import { branchList, isFiltered, listShowing, openingIndex, type ListState } from '@/lib/branchList';
+import { router, useLocalSearchParams } from 'expo-router';
 import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
 import { around as aroundSetting, branchView, listState } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
@@ -68,6 +69,14 @@ export default function BranchesScreen() {
     return openingIndex(pieces, start.query ?? '');
   }, [pieces, start]);
   const onIndex = useCallback(() => setRotated(false), []);
+  // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
+  const { tree } = useLocalSearchParams<{ tree?: string }>();
+  useEffect(() => {
+    if (!tree) return;
+    const found = listShowing(list, tree, bookmarks);
+    if (found) change(found.list, { id: found.piece.id });
+    router.setParams({ tree: undefined });
+  }, [tree]); // eslint-disable-line react-hooks/exhaustive-deps
   const listKey = JSON.stringify([list, start]);
 
   return (

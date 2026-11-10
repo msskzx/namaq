@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
-import { applyDraft, draftOf } from './branchList';
+import { applyDraft, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { cardsFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
@@ -88,5 +88,22 @@ describe('the filter sheet shared with the branches tab', () => {
   it('narrows the pages to pairs whose two surahs are among the picked surahs', () => {
     const pairs = filteredPairs(filterOfList(applyDraft({ ...draftOf(listOfFilter({})), unit: 'surahs', picked: [7, 26, 11] })!));
     expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
+  });
+});
+
+describe('the tree icon on a compare card', () => {
+  it('opens a tree on the branches tab for every card that names one', () => {
+    for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
+      if (card.group) expect(listShowing(EMPTY_LIST, card.group), card.id).not.toBeNull();
+    }
+  });
+
+  it('keeps the branches filter when the tree is in it, and drops it when not', () => {
+    const card = listedPairs.flatMap(pair => cardsFor(pair.a, pair.b)).find(item => item.group && listShowing(EMPTY_LIST, item.group)?.list === EMPTY_LIST)!;
+    const surahs = listShowing(EMPTY_LIST, card.group!)!.piece.keys.map(key => Number(key.split(':')[0]));
+    const narrowed = { ...EMPTY_LIST, filters: { surahFrom: String(Math.min(...surahs)), surahTo: String(Math.max(...surahs)) } };
+    expect(listShowing(narrowed, card.group!)?.list).toBe(narrowed);
+    const elsewhere = { ...EMPTY_LIST, filters: { surahs: '1' } };
+    expect(listShowing(elsewhere, card.group!)?.list).not.toBe(elsewhere);
   });
 });

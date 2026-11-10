@@ -11,19 +11,21 @@ import type { Palette } from '@/lib/theme';
 
 type Video = { data: string; mime: string };
 
-/** Share as video: the tree grows in a story frame while it is recorded, then goes to the phone's share sheet. */
-export default function VideoSheet({ input, onClose, palette }: { input: VideoInput | null; onClose: () => void; palette: Palette }) {
+/** Share as video: the tree grows (or a compare card is read along) in a story frame while it is recorded, then goes to the phone's share sheet.
+ *  `page` builds another recorder page from the font, in place of the tree's. */
+export default function VideoSheet({ input, page, onClose, palette }: { input?: VideoInput | null; page?: ((font: string) => string) | null; onClose: () => void; palette: Palette }) {
+  const open = !!input || !!page;
   const insets = useSafeAreaInsets();
   const [font, setFont] = useState<string | null>(null);
   const [run, setRun] = useState(0);
   const [video, setVideo] = useState<Video | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
-    if (!input) return;
+    if (!open) return;
     setVideo(null);
     setFailed(false);
     fontFace().then(setFont, () => setFont(''));
-  }, [input]);
+  }, [input, page]); // eslint-disable-line react-hooks/exhaustive-deps
   const message = useCallback((data: string) => {
     try {
       const parsed = JSON.parse(data);
@@ -33,14 +35,14 @@ export default function VideoSheet({ input, onClose, palette }: { input: VideoIn
   }, []);
   const again = () => { setVideo(null); setFailed(false); setRun(value => value + 1); };
   return (
-    <Modal visible={!!input} animationType="slide" onRequestClose={onClose} statusBarTranslucent>
+    <Modal visible={open} animationType="slide" onRequestClose={onClose} statusBarTranslucent>
       <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52 }}>
           <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>مشاركة كفيديو</Text>
           <IconButton label="إغلاق" onPress={onClose} Icon={X} color={palette.ink} />
         </View>
         <View style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule }}>
-          {input && font !== null && <VideoFrame key={run} html={recorderPage(input, font)} onMessage={message} />}
+          {open && font !== null && <VideoFrame key={run} html={page ? page(font) : recorderPage(input!, font)} onMessage={message} />}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 64 }}>
           {failed ? <Text style={{ color: palette.accent }}>لا يمكن تسجيل الفيديو على هذا الجهاز.</Text>

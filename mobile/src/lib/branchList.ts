@@ -112,3 +112,18 @@ export function applyDraft(draft: FilterDraft): ListState | null {
   }
   return { filters, range, query: draft.query ?? '', saved: draft.saved };
 }
+
+/** The tree a link names: by its id, the id it had on the website, or its comparison family (a compare card's tree link). */
+export const findPiece = (pieces: BranchPiece[], id: string) =>
+  pieces.find(piece => piece.id === id || piece.group?.id === id || aliasesOf(piece).includes(id));
+
+const ALL_KINDS: ListState = { ...EMPTY_LIST, filters: { categories: 'mutashabeh,pondering,words' } };
+
+/** The list to open a linked tree in: the one shown when it holds the tree, else no filters, else every kind of tree. Null when no list holds it. */
+export function listShowing(state: ListState, id: string, bookmarks: Bookmark[] = []): { list: ListState; piece: BranchPiece } | null {
+  for (const list of [state, EMPTY_LIST, ALL_KINDS]) {
+    const piece = findPiece(branchList(list, bookmarks), id);
+    if (piece) return { list, piece };
+  }
+  return null;
+}
