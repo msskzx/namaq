@@ -25,7 +25,7 @@ npm run typecheck
 npx expo export --platform web   # a web build of the app, used to check screens in a browser
 ```
 
-The party quiz talks to the same Cloudflare worker as the website. Set its address when building or publishing: `EXPO_PUBLIC_PARTY_URL=https://<worker address>` (the website's `NEXT_PUBLIC_PARTY_URL`). Without it the app looks for a local worker on `http://localhost:8787` (`npm run dev` in `party/`).
+The party quiz talks to the same Cloudflare worker as the website, `https://namaq.msskzx.workers.dev`. Its address is the EAS environment variable `EXPO_PUBLIC_PARTY_URL`, set in the **production** environment on expo.dev, so builds and updates must use `--environment production`. Without it the app looks for a local worker on `http://localhost:8787` (`npm run dev` in `party/`).
 
 The phone keeps its state (bookmarks, the open tree and its zoom) in `expo-sqlite/kv-store`. The web build keeps it in localStorage.
 
@@ -34,7 +34,7 @@ The phone keeps its state (bookmarks, the open tree and its zoom) in `expo-sqlit
 Needs `EXPO_TOKEN` in the environment. The first time, `npx eas-cli@latest init` links the project and writes its id into `app.json`. Then:
 
 ```bash
-npx eas-cli@latest update --branch trial --message "..."
+npx eas-cli@latest update --branch trial --environment production --message "..."
 ```
 
 The command prints a link and QR code that Expo Go opens.
