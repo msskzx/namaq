@@ -3,7 +3,7 @@ import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { keys, type Branch } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
+import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, mixedBefore } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
@@ -71,7 +71,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) 
   const tones = tonesOf(words, ayahKeys, at, shared, marks);
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? shared.palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
-      {words.map((word, i) => <Text key={i} style={tones[i] ? { color: tones[i] } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>)}
+      {words.map((word, i) => <Text key={i} style={tones[i] ? { color: tones[i] } : undefined}>{i > 0 ? ' ' : ''}{quranText(word)}</Text>)}
     </Text>
   );
 }
@@ -79,7 +79,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) 
 /** The same words as data, for the video. */
 const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) => {
   const tones = tonesOf(words, ayahKeys, at, shared, marks);
-  return { size, words: words.map((word, i) => ({ text: mushafText(word), color: tones[i] ?? color ?? shared.palette.ink })) };
+  return { size, words: words.map((word, i) => ({ text: quranText(word), color: tones[i] ?? color ?? shared.palette.ink })) };
 };
 
 function Box({ id, ayahKeys, leaf, shared, muted, text, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; children: React.ReactNode }) {
@@ -224,7 +224,7 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   const text: SceneText = { ...sceneWords({ words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20 }), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}) };
   return (
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
-      {boundary && <Fade id={id}><Mark id={id} text={mushafText(words.join(' '))} shared={shared} /></Fade>}
+      {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {shown && (
         <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}>
           {own !== undefined ? own : <>

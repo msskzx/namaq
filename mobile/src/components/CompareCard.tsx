@@ -44,7 +44,7 @@ function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; pal
           </Text>
         );
       })}
-      <Text style={{ color: palette.accent }}> ﴿{num(ayah.number)}﴾</Text>
+      <Text style={{ color: palette.accent }}> {num(ayah.number)}</Text>
     </Text>
   );
 }

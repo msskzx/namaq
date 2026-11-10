@@ -63,6 +63,8 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
   const from = useSharedValue(0);
   const restored = useRef(initialCamera);
 
+  // A new size or filter measures again. The trial tree is keyed by pickKey, so it is drawn afresh and reports its
+  // size even when it was already measuring the 'side' way (otherwise the card stayed hidden until it was remounted).
   useEffect(() => {
     if (picked.has(pickKey)) return;
     sides.current = {};
@@ -81,6 +83,7 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
     if (trial) {
       sides.current[trial] = size;
       if (trial === 'side') { setTrial('down'); return; }
+      if (!sides.current.side) { setTrial('side'); return; }
       picked.set(pickKey, pickDirection(sides.current.side!, size, view));
       setTrial(null);
       return;
@@ -153,7 +156,7 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
     <GestureDetector gesture={gesture}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content && !trial ? 1 : 0 }, style]}>
-          <BranchTree key={trial ? `trial-${trial}` : direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured}
+          <BranchTree key={trial ? `trial-${trial}-${pickKey}` : direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured}
             direction={direction} around={surrounding} growth={growth} sceneRef={trial ? undefined : sceneRef} />
         </Animated.View>
       </View>

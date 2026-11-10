@@ -27,7 +27,7 @@ function Ayah({ ayah, palette, muted }: { ayah: MatrixAyah; palette: Palette; mu
       const tone = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
       return <Text key={i} style={tone ? { color: tone } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
     })}
-    <Text style={{ color: muted ? palette.muted : palette.accent }}> ﴿{num(number)}﴾ </Text>
+    <Text style={{ color: muted ? palette.muted : palette.accent }}> {num(number)} </Text>
   </>;
 }
 
