@@ -4,10 +4,13 @@ The phone app is an Expo (React Native) app in this folder. The website stays in
 
 ## Layout
 
-- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. Only the branches tab (`index.tsx`) works so far; the others link to the website.
+- `src/app/` holds the screens (Expo Router). `(tabs)/` has the four phone tabs, the same as the website's bottom bar. The branches (`index.tsx`), compare (`compare.tsx`) and quizzes (`quizzes.tsx`) tabs work; the others link to the website.
 - `src/app/quiz/` holds the quizzes: `solo.tsx` (setup), `play.tsx` (a solo quiz, built on the device from the bundled trees and kept in storage until it ends) and `party/` (start or join, then the room). The quizzes tab opens them.
-- `src/components/` holds the app's own views. `BranchTree.tsx` draws a tree with plain views. `TreeCard.tsx` handles pinch zoom and one-finger moves. `TreePager.tsx` holds the row of cards, the saved place and the bookmark row.
-- `src/lib/` holds app logic. `camera.ts` and `branches.ts` have tests, which the website's `npm test` runs.
+- `src/components/` holds the app's own views. `BranchTree.tsx` draws a tree with plain views, side or top down, and takes `around` for the surrounding ayat. `TreeCard.tsx` handles pinch zoom and one-finger moves and picks the direction. `MatrixCard.tsx` draws the matrix view. `TreePager.tsx` holds the row of cards, the saved place, the bookmark row and the growth studio. `FilterSheet.tsx` and `BranchSearch.tsx` are the branches tab's filter sheet and search.
+- `Studio.tsx` has the growth studio's controls. `VideoSheet.tsx` records a growing tree in a web view (`VideoFrame.tsx`) and shares the video. The recorder page and its drawing code are in `src/lib/scene.ts`.
+- `src/components/ComparePager.tsx` holds the surah pairs side by side (a paged list), `CompareCard.tsx` one card with its read-along studio, `CompareSheet.tsx` the pair list as a bottom sheet. The cards come from `shared/data/quran/compareCards.js`, built by the website's `npm run quran:compare-cards`.
+- `src/app/prophets/[slug].tsx` is the website's prophets story page (`/quran/prophets/[slug]`): intro, index of stations by phase, then the stations one card at a time (`StationPager.tsx`, `StationCard.tsx`). The ayat come from the bundled Quran (`src/lib/prophets.ts`), the stories from `shared/quran/prophets`. It opens from the scroll icon beside the logo.
+- `src/lib/` holds app logic. `branchList.ts` builds the list of trees from the filters, search and saved trees. `growth.ts` and `growPlayer.ts` plan and play the growth. `settings.ts` keeps the tab's switches. The tests next to them run in the website's `npm test`, so files in `src/lib/` import each other with relative paths (`@/` points to the website there).
 - `metro.config.js` lets the bundler read `../shared`. Code there imports no packages.
 - The folder is `mobile/` and not `app/`, because Next.js would take a root `app/` folder as the website's routes.
 

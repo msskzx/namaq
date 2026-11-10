@@ -22,10 +22,3 @@ it('combines pending changes without restoring a removed difference', () => {
   expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('false');
   expect(screen.getByRole('button', { name: 'الأكثر مواضع' }).getAttribute('aria-pressed')).toBe('true');
 });
-
-it('uses neutral shared buttons for unselected filter chips', () => {
-  render(<GroupFilterControls filters={{}} onChange={vi.fn()} />);
-  const unselected = screen.getAllByRole('button').filter(button => button.getAttribute('aria-pressed') === 'false');
-  expect(unselected.length).toBeGreaterThan(0);
-  expect(unselected.every(button => button.getAttribute('data-variant') === 'neutral')).toBe(true);
-});

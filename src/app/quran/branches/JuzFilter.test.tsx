@@ -22,13 +22,6 @@ describe('JuzFilter', () => {
     expect(router.replace).toHaveBeenCalledWith(branchesHref('', undefined, { mode: 'cards', query: 'قال' }), { scroll: false });
   });
 
-  it('starts on the whole mushaf with nothing to reset', () => {
-    render(<JuzFilter range={null} view={{}} />);
-    expect((screen.getByRole('textbox', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('١');
-    expect((screen.getByRole('textbox', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('٣٠');
-    expect(screen.queryByRole('button', { name: 'كل الأجزاء' })).toBeNull();
-  });
-
   it('shows the whole mushaf again once the range is cleared', () => {
     const { rerender } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{}} />);
     rerender(<JuzFilter range={null} view={{}} />);

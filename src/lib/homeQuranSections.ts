@@ -1,5 +1,5 @@
 import { branchesHref } from '@shared/quran/branches';
-import { JUZ_INDEX } from './quran/juzIndex';
+import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import type { SearchableSurah } from '@shared/quran/surahSearch';
 import { searchSurahs } from '@shared/quran/surahSearch';

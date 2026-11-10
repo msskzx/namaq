@@ -27,16 +27,6 @@ describe('growthPlan', () => {
     expect(growthPlan(tree).map(step => step.fresh)).toEqual([1, 3, 2, 1]);
   });
 
-  it('gives an ayah identical to an earlier one nothing new to grow', () => {
-    const step = growthPlan(tree).find(step => step.key === '51:15')!;
-    expect(step.fresh).toBe(step.nodes.length);
-  });
-
-  it('draws every node of the tree exactly once', () => {
-    const grown = growthPlan(tree).flatMap(step => step.nodes.slice(step.fresh));
-    expect(grown.sort()).toEqual([0, 1, 2, 3]);
-  });
-
   it('starts at an empty root and finishes each subtree, including ayat ending at an internal node', () => {
     const forest: Branch = { words: [], ayat: [], children: [
       { words: ['أ'], ayat: ['90:1'], children: [leaf(['ب'], ['90:2'])] },

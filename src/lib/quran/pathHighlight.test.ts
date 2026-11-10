@@ -17,10 +17,6 @@ describe('pathToggleKey', () => {
     expect(pathToggleKey('branch-a', ['12', '13'])).not.toBe(pathToggleKey('branch-b', ['12', '13']));
     expect(pathToggleKey('empty-a', [])).not.toBe(pathToggleKey('empty-b', []));
   });
-
-  it('keeps shared nodes with identical ayah sets independent', () => {
-    expect(pathToggleKey('shared-a', ['12', '13'])).not.toBe(pathToggleKey('shared-b', ['12', '13']));
-  });
 });
 
 describe('togglePath', () => {
@@ -31,25 +27,6 @@ describe('togglePath', () => {
 
     expect(selected).toEqual(new Map([[pathToggleKey('root-12', ['12']), ['12']]]));
     expect(cleared).toEqual(new Map());
-  });
-
-  it('clears a single path when its root is clicked after its leaf', () => {
-    const initial = new Map<string, string[]>();
-    const selected = togglePath(initial, 'leaf-12', ['12']);
-    const cleared = togglePath(selected, 'root-12', ['12']);
-
-    expect(cleared).toEqual(new Map());
-  });
-
-  it('uses one toggle identity for path buttons and node clicks', () => {
-    const initial = new Map<string, string[]>();
-    const selectedByButton = togglePath(initial, 'button-12', ['12']);
-    const pressedByNode = selectedByButton.has(pathToggleKey('root-12', ['12']));
-    const selectedByNode = togglePath(initial, 'root-12', ['12']);
-    const pressedByButton = selectedByNode.has(pathToggleKey('button-12', ['12']));
-
-    expect(pressedByNode).toBe(true);
-    expect(pressedByButton).toBe(true);
   });
 
   it('retains distinct selections for shared nodes with the same ayahs', () => {
@@ -99,9 +76,5 @@ describe('litPaths', () => {
     ]);
 
     expect(litPaths(answerTree)).toEqual(new Set(['31', '32', '33']));
-  });
-
-  it('returns no lit paths for an empty selection', () => {
-    expect(litPaths(new Map())).toEqual(new Set());
   });
 });

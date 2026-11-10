@@ -1,4 +1,4 @@
-import { indexAyat, searchAyat, type AyahSearch, type IndexedAyah } from './ayahSearch';
+import { indexAyat, searchAyat, type AyahSearch, type IndexedAyah } from '@shared/quran/ayahSearch';
 import type { AyahContext, Surrounding } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
 

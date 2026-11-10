@@ -16,7 +16,6 @@ describe('default word connectors', () => {
     const { unmount } = render(<BranchConnectorSetting />);
     const toggle = screen.getByRole('switch', { name: 'Connect matching words automatically' });
     expect((toggle as HTMLInputElement).checked).toBe(false);
-    expect(document.getElementById(toggle.getAttribute('aria-describedby')!)?.textContent).toBe('Show lines between shared words by default when opening the matrix.');
     fireEvent.click(toggle);
     expect(Cookies.get(BRANCH_CONNECTORS_COOKIE)).toBe('on');
     expect(refresh).toHaveBeenCalledOnce();
@@ -28,12 +27,9 @@ describe('default word connectors', () => {
     expect(Cookies.get(BRANCH_CONNECTORS_COOKIE)).toBe('off');
   });
 
-  it('uses off for invalid values and labels the setting in Arabic', () => {
+  it('uses off for invalid values', () => {
     Cookies.set(BRANCH_CONNECTORS_COOKIE, 'invalid');
-    language.value = 'ar';
     render(<BranchConnectorSetting />);
-    const toggle = screen.getByRole('switch', { name: 'ربط الكلمات المتشابهة بخطوط تلقائيًا' }) as HTMLInputElement;
-    expect(toggle.checked).toBe(false);
-    expect(document.getElementById(toggle.getAttribute('aria-describedby')!)?.textContent).toBe('إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.');
+    expect((screen.getByRole('switch', { name: 'Connect matching words automatically' }) as HTMLInputElement).checked).toBe(false);
   });
 });

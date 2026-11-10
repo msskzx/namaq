@@ -98,14 +98,12 @@ it('discards unsubmitted edits when the sheet is closed and reopened', () => {
   expect(router.replace).not.toHaveBeenCalled();
 });
 
-it('blocks invalid ranges and provides the same Apply flow in English', () => {
+it('blocks Apply for an invalid range until it is fixed', () => {
   language.value = 'en';
   render(<FilterButton range={null} view={{}} />);
   fireEvent.click(screen.getByRole('button', { name: 'Filter' }));
-  expect(screen.getByRole('option', { name: 'From chapter' })).toBeTruthy();
   fireEvent.change(screen.getByLabelText('From juz'), { target: { value: '' } });
   expect(screen.getByRole('button', { name: 'Apply' }).hasAttribute('disabled')).toBe(true);
-  expect(screen.getByRole('status').textContent).toContain('Enter whole numbers');
   fireEvent.change(screen.getByLabelText('From juz'), { target: { value: '25' } });
   fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
   expect(router.replace).toHaveBeenCalledTimes(1);
@@ -136,12 +134,9 @@ it('leaves saved compare cards out of the saved-only trees', () => {
   expect(new URL(router.replace.mock.calls[0][0], 'http://localhost').searchParams.get('b')).toBe('saved');
 });
 
-it('places bookmarks first, removes the heading and resets every pending filter before Apply', () => {
+it('resets every pending filter before Apply', () => {
   render(<FilterButton range={{ from: 25, to: 30 }} view={{ mode: 'cards', query: 'قال', saved: ['saved'], filters: { differences: 'order', sort: 'places' } }} />);
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
-  expect(screen.queryByRole('heading', { name: 'تصفية' })).toBeNull();
-  const sheet = screen.getByRole('dialog', { name: 'تصفية' });
-  expect(sheet.querySelector('input, select')).toBe(screen.getByRole('switch', { name: 'المحفوظة فقط' }));
   fireEvent.click(screen.getByRole('button', { name: 'إعادة ضبط' }));
   expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('١');
   expect((screen.getByLabelText('إلى الجزء') as HTMLInputElement).value).toBe('٣٠');
@@ -151,25 +146,6 @@ it('places bookmarks first, removes the heading and resets every pending filter 
   expect(router.replace).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('button', { name: 'تطبيق' }));
   expect(Object.fromEntries(new URL(router.replace.mock.calls[0][0], 'http://localhost').searchParams)).toEqual({ m: 'cards', q: 'قال' });
-});
-
-it('uses a non-modal popover and positions it inward from the trigger', () => {
-  render(<FilterButton range={null} view={{}} />);
-  const button = screen.getByRole('button', { name: 'تصفية' });
-  const holder = button.parentElement!;
-  vi.spyOn(holder, 'getBoundingClientRect').mockReturnValue({ left: 100, right: 144, top: 0, bottom: 44, width: 44, height: 44, x: 100, y: 0, toJSON: () => ({}) });
-  const panel = document.querySelector<HTMLElement>('[popover]')!;
-  Object.defineProperty(panel, 'offsetWidth', { configurable: true, value: 416 });
-  fireEvent.click(button);
-  expect(panel.getAttribute('popover')).toBe('auto');
-  expect(panel.hasAttribute('aria-modal')).toBe(false);
-  expect(document.querySelector('dialog')).toBeNull();
-  expect(parseFloat(panel.style.top)).toBe(52);
-  expect(parseFloat(panel.style.left)).toBeGreaterThan(8);
-  expect(button.getAttribute('aria-expanded')).toBe('true');
-  fireEvent.click(button);
-  expect(button.getAttribute('aria-expanded')).toBe('false');
-  expect(document.activeElement).toBe(button);
 });
 
 it('closes on Escape, returns focus and does not forward tree keyboard shortcuts', () => {

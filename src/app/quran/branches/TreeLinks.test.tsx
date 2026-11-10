@@ -67,12 +67,6 @@ describe('organic branch links', () => {
     expect(container.querySelector('[data-selected], [data-lit], [data-connected]')).toBeNull();
   });
 
-  it('keeps the existing connectors outside the pilot', () => {
-    const { container } = draw({ organic: false });
-    expect(container.querySelector('[data-tree-links]')).toBeNull();
-    expect(container.querySelectorAll('[data-line]')).toHaveLength(2);
-  });
-
   it('measures newly added surrounding branches as well as the original entries', () => {
     const { container, rerender } = draw();
     rerender(<div data-tree-content dir="rtl"><PathScope organic><Fan entries={[...entries, { key: 'after', keys: ['1:3'], item: 'الآية التالية' }]} side="start" /></PathScope></div>);

@@ -17,7 +17,7 @@ describe('pageOfAyah', () => {
   });
 
   it('finds pages in the mushaf layout, stepping over basmala rows', async () => {
-    const mushaf = async (page: number): Promise<MushafPage> => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${page}.json`), 'utf8'));
+    const mushaf = async (page: number): Promise<MushafPage> => JSON.parse(readFileSync(join(__dirname, '../../../shared/data/quran/mushaf', `${page}.json`), 'utf8'));
     await expect(pageOfAyah(23, 1, 342, mushaf)).resolves.toBe(342);
     await expect(pageOfAyah(43, 59, 489, mushaf)).resolves.toBe(493);
     await expect(pageOfAyah(5, 78, 106, mushaf)).resolves.toBe(121);
@@ -69,7 +69,7 @@ describe('spreadOf and turn', () => {
 });
 
 describe('mushafPages', () => {
-  const pages: MushafPage[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${i + 1}.json`), 'utf8')));
+  const pages: MushafPage[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../../shared/data/quran/mushaf', `${i + 1}.json`), 'utf8')));
   const starts = mushafPages(pages);
 
   it('gives every ayah the 1441 page its first word is on', () => {

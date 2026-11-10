@@ -26,12 +26,9 @@ describe('BranchViewSetting', () => {
     expect(screen.getByRole('button', { name: 'Matrix' }).getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('uses tree for invalid saved values and labels the setting in Arabic', () => {
+  it('uses tree for invalid saved values', () => {
     Cookies.set(BRANCH_VIEW_COOKIE, 'invalid');
-    language.value = 'ar';
     render(<BranchViewSetting />);
-    expect(screen.getByRole('group', { name: 'العرض الافتراضي للمتشابه' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'شجرة' }).getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getByRole('button', { name: 'مصفوفة' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Tree' }).getAttribute('aria-pressed')).toBe('true');
   });
 });

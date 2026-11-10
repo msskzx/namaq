@@ -4,7 +4,7 @@ import { useState, useSyncExternalStore } from 'react';
 import { Hand } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@/lib/readerGestures';
+import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
 
 const GESTURE_NAMES: Record<Gesture, [string, string]> = {
   tap: ['لمسة', 'Tap'],
