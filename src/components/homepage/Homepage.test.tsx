@@ -41,7 +41,7 @@ describe('release homepage', () => {
     expect(screen.getByRole('heading', { level: 1 }).querySelector('svg')).toBeNull();
   });
 
-  it('shows grouped references and saved text as one link without card icons or action labels', () => {
+  it('shows the kind, grouped references and saved text as one link without action labels', () => {
     localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
     render(<Homepage data={data} />);
     const card = screen.getByRole('link', { name: /الكتاب والحكمة/ });
@@ -49,8 +49,23 @@ describe('release homepage', () => {
     expect(card.textContent).toContain('البقرة ١٢٩، ١٥١');
     expect(card.textContent).toContain('آل عمران ١٦٤');
     expect(card.textContent).toContain('الجمعة ٢');
-    expect(card.querySelector('svg')).toBeNull();
+    expect(card.getAttribute('data-kind')).toBe('tree');
+    expect(card.textContent).toMatch(/^شجرة/);
     expect(card.textContent).not.toMatch(/عائلة|فتح للمقارنة|فتح للاستكشاف/);
+  });
+
+  it('labels compare cards and mushaf ayat with their own kind', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([
+      { id: 'compare:2:154|16:21', text: 'ولا تقولوا', href: '/quran/compare?a=2&b=16', savedAt: 2 },
+      { id: 'ayah:2:255', text: 'الله لا إله إلا هو', href: '/quran/read/42', savedAt: 3 },
+    ]));
+    render(<Homepage data={data} />);
+    const compare = screen.getByRole('link', { name: /ولا تقولوا/ });
+    const ayah = screen.getByRole('link', { name: /الله لا إله إلا هو/ });
+    expect(compare.getAttribute('data-kind')).toBe('compare');
+    expect(compare.textContent).toMatch(/^مقارنة/);
+    expect(ayah.getAttribute('data-kind')).toBe('ayah');
+    expect(ayah.textContent).toMatch(/^آية/);
   });
 
   it('reacts to saves and removals made through the existing bookmark API', () => {
@@ -66,7 +81,7 @@ describe('release homepage', () => {
   it('keeps old bookmarks readable and navigable when their inventory entry is unknown', () => {
     localStorage.setItem('bookmarks', JSON.stringify([{ ...bookmark, id: 'old-tree', text: 'عبارة محفوظة' }]));
     render(<Homepage data={data} />);
-    const card = screen.getByRole('link', { name: 'عبارة محفوظة' });
+    const card = screen.getByRole('link', { name: /عبارة محفوظة/ });
     expect(card.getAttribute('href')).toBe(bookmark.href);
   });
 });
