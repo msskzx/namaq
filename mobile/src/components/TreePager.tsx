@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, Text, View } from 'react-native';
+import { Pressable, Share, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Bookmark, Send } from 'lucide-react-native';
@@ -7,10 +7,10 @@ import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
-import { num } from '@shared/quran/arabicNumber';
 import TreeCard, { type Lane } from './TreeCard';
 import MatrixCard from './MatrixCard';
 import VideoSheet from './VideoSheet';
+import PageProgress from './PageProgress';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
 import { aroundOf, cardOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
 import type { ListState } from '@/lib/branchList';
@@ -36,7 +36,7 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, position, total, pop, current, onVideo }: { piece: BranchPiece; palette: Palette; position: number; total: number; pop: number; current: boolean; onVideo?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void }) {
   const saved = useSaved(piece);
   const studio = useGrowth().studio;
   const scale = useSharedValue(1);
@@ -59,7 +59,6 @@ function Actions({ piece, palette, position, total, pop, current, onVideo }: { p
         <Send size={24} color={palette.ink} />
       </Pressable>
       <StudioButton palette={palette} />
-      <Text style={{ marginStart: 'auto', color: palette.muted, fontSize: 13 }}>{num(position)} / {num(total)}</Text>
     </View>
   );
 }
@@ -169,6 +168,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
 
   return (
     <View style={{ flex: 1 }}>
+      <PageProgress at={index + 1} count={count} label="الشجرة" palette={palette} />
       <View style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setView({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
           {shown.map(at => {
@@ -177,7 +177,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
               // Taps between the buttons stay here, so they are not read as taps on the tree.
               <View style={{ height: FOOT, direction: 'rtl' }} onStartShouldSetResponder={() => true}>
                 {current && <StudioProgress palette={palette} />}
-                <Actions piece={pieces[at]} palette={palette} position={at + 1} total={count} pop={pop} current={current}
+                <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                   onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} />
               </View>
             );
