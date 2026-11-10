@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, Text, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import { Pressable, Share, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Bookmark, Send } from 'lucide-react-native';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
-import { num } from '@shared/quran/arabicNumber';
 import TreeCard, { type Lane } from './TreeCard';
 import MatrixCard from './MatrixCard';
 import VideoSheet from './VideoSheet';
+import PageProgress from './PageProgress';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
 import { aroundOf, cardOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
 import type { ListState } from '@/lib/branchList';
@@ -30,20 +29,25 @@ type Place = { id: string; camera?: Camera };
 const DOUBLE_TAP = 280;
 const SWIPE = 0.2;
 const FLICK = 500;
+/** Room under each tree for the studio's ayah bar and the bookmark row, kept the same so opening the studio does not refit the tree. */
+const FOOT = 78;
 
 function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, position, total, pop, onVideo }: { piece: BranchPiece; palette: Palette; position: number; total: number; pop: number; onVideo?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void }) {
   const saved = useSaved(piece);
   const studio = useGrowth().studio;
   const scale = useSharedValue(1);
+  const seen = useRef(pop);
   useEffect(() => {
-    if (pop) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
-  }, [pop, scale]);
+    if (pop === seen.current) return;
+    seen.current = pop;
+    if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
+  }, [pop, current, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  if (studio) return <StudioControls palette={palette} onVideo={onVideo} />;
+  if (studio && current) return <StudioControls palette={palette} onVideo={onVideo} />;
   const save = () => toggleSaved(piece);
   const share = () => void Share.share({ message: `${piece.text}\n${WEBSITE}${branchesHref(piece.id)}` });
   return (
@@ -55,7 +59,6 @@ function Actions({ piece, palette, position, total, pop, onVideo }: { piece: Bra
         <Send size={24} color={palette.ink} />
       </Pressable>
       <StudioButton palette={palette} />
-      <Text style={{ marginStart: 'auto', color: palette.muted, fontSize: 13 }}>{num(position)} / {num(total)}</Text>
     </View>
   );
 }
@@ -132,27 +135,6 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const growing = growth.status === 'playing' || growth.status === 'paused';
   const lane: Lane | undefined = growing ? undefined : { offset, width, count, settle };
 
-  // The row under the card swipes the cards too, so a thumb near the bottom of the screen still turns the tree.
-  const footFrom = useSharedValue(0);
-  const footSwipe = Gesture.Pan()
-    .enabled(!growing && width > 0)
-    .activeOffsetX([-12, 12])
-    .failOffsetY([-12, 12])
-    .onStart(() => {
-      cancelAnimation(offset);
-      footFrom.value = Math.round(offset.value / width);
-      scheduleOnRN(move);
-    })
-    .onUpdate(event => {
-      const forward = event.translationX > 0;
-      const open = forward ? footFrom.value + 1 < count : footFrom.value > 0;
-      offset.value = footFrom.value * width + (open ? event.translationX : event.translationX / 4);
-    })
-    .onEnd(event => {
-      scheduleOnRN(move);
-      settle(footFrom.value, event.translationX, event.velocityX);
-    });
-
   const tap = useCallback((ayahKeys: string[] | null) => {
     const now = Date.now();
     if (now - moved.current < 350) return;
@@ -186,27 +168,32 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
 
   return (
     <View style={{ flex: 1 }}>
+      <PageProgress at={index + 1} count={count} label="الشجرة" palette={palette} />
       <View style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setView({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
-          {shown.map(at => (
+          {shown.map(at => {
+            const current = at === index;
+            const footer = (
+              // Taps between the buttons stay here, so they are not read as taps on the tree.
+              <View style={{ height: FOOT, direction: 'rtl' }} onStartShouldSetResponder={() => true}>
+                {current && <StudioProgress palette={palette} />}
+                <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
+                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} />
+              </View>
+            );
+            return (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {mode === 'matrix'
-                ? <MatrixCard key={String(around)} piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} />
+                ? <MatrixCard key={String(around)} piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} />}
             </View>
-          ))}
+            );
+          })}
         </Animated.View>}
-        {/* Over the card's foot, so opening the studio does not resize the card. */}
-        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: palette.paper }}><StudioProgress palette={palette} /></View>
       </View>
-      <GestureDetector gesture={footSwipe}>
-        <View collapsable={false} style={{ borderTopWidth: 1, borderColor: palette.rule }}>
-          {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={mode === 'tree' ? () => void openVideo() : undefined} />}
-        </View>
-      </GestureDetector>
       <VideoSheet input={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );

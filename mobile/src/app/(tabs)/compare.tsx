@@ -6,6 +6,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import PageProgress from '@/components/PageProgress';
 import ComparePager, { type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
 import FilterSheet from '@/components/FilterSheet';
@@ -89,9 +90,7 @@ export default function CompareScreen() {
           {(filter.scope || filter.savedOnly) && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
         </Pressable>
       </TopBar>
-      {visits.length > 1 && <View style={{ height: 3, backgroundColor: palette.paperDeep }} accessibilityLabel={`الصفحة ${num(index + 1)} من ${num(visits.length)}`}>
-        <View style={{ height: 3, width: `${((index + 1) / visits.length) * 100}%`, alignSelf: 'flex-start', backgroundColor: palette.accent }} />
-      </View>}
+      <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
       {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16 }}>لا صفحات بهذه التصفية.</Text></View>}
       <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter}
