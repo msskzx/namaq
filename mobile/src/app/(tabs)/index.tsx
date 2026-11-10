@@ -17,6 +17,7 @@ import { surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
 import { savedCard, type SavedCard } from '@/lib/home';
 import { setIntent, type Intent } from '@/lib/intent';
+import { useShrinkOnScroll } from '@/lib/chrome';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
@@ -139,10 +140,11 @@ export default function HomeScreen() {
   const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   const push = (href: Href) => router.push(href);
+  const onScroll = useShrinkOnScroll();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar />
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 28 }}>
+      <TopBar settings />
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 28 }}>
         <QuranPicker palette={palette} />
 
         <View style={{ gap: 10 }}>

@@ -7,8 +7,11 @@ import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
 
-/** The website's phone top bar: the logo (home) on the right, the page's own buttons, then the settings gear on the left. */
-export default function TopBar({ children }: { children?: React.ReactNode }) {
+/**
+ * The website's phone top bar: the logo (home) on the right, the page's own buttons, then the settings gear on the left.
+ * The gear shows only on the homepage (owner, 2026-11-10); the logo shows everywhere and opens home.
+ */
+export default function TopBar({ children, settings: withSettings = false }: { children?: React.ReactNode; settings?: boolean }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
@@ -19,12 +22,12 @@ export default function TopBar({ children }: { children?: React.ReactNode }) {
           <Logo size={34} />
         </Pressable>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>
-        <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
+        {withSettings && <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <Settings size={22} color={palette.muted} />
-        </Pressable>
+        </Pressable>}
       </View>
-      <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />
+      {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}
     </View>
   );
 }

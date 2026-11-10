@@ -10,6 +10,7 @@ import { phaseColor } from '@/components/StationCard';
 import { prophetStory, stationIndex } from '@/lib/prophets';
 import { readJson, writeJson } from '@/lib/storage';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useShrinkOnScroll } from '@/lib/chrome';
 
 const PLACE = 'prophets-place';
 type Places = Record<string, number>;
@@ -46,6 +47,7 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const pager = useRef<StationPagerHandle>(null);
   const trackY = useRef(0);
+  const onScroll = useShrinkOnScroll();
 
   const arrive = useCallback((next: number) => {
     setIndex(next);
@@ -72,7 +74,7 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {header}
-      <ScrollView ref={scroll} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 24 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 24 }}>
         <View style={{ gap: 10, paddingHorizontal: 16 }}>
           <Text style={{ color: palette.accent, fontSize: 14, fontWeight: '600' }}>قصص الأنبياء في القرآن</Text>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, fontWeight: '700', lineHeight: 38 }}>{title(name)}</Text>
