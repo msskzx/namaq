@@ -16,6 +16,10 @@ The phone app is an Expo (React Native) app in this folder. The website stays in
 - `metro.config.js` lets the bundler read `../shared`. Code there imports no packages.
 - The folder is `mobile/` and not `app/`, because Next.js would take a root `app/` folder as the website's routes.
 
+## Tree sizes
+
+A tree opens sideways or top down, whichever fits the screen bigger. The app reads each tree's size both ways from `src/lib/treeSizes.json`, so it never has to draw a tree twice before showing it. A tree a filter cuts down is shown sideways at once, measured both ways out of sight, and its size kept on the phone. After changing how trees are drawn or which trees exist, run `npm run tree-sizes` (needs Playwright); a test fails when a tree has no size.
+
 ## Run
 
 ```bash

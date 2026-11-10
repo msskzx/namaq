@@ -38,7 +38,8 @@
     "ios": "expo start --ios",
     "typecheck": "tsc --noEmit",
     "update": "eas update --auto",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "tree-sizes": "expo export --platform web && node scripts/tree-sizes.mjs"
   },
   "private": true
 }
