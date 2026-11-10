@@ -8,6 +8,8 @@ import { plainName } from '@shared/quran/normalize';
 import styles from './Mushaf.module.css';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
+/** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
+const EMPTY_END = '\u06DD';
 const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
@@ -134,8 +136,9 @@ export default function MushafPage({
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
-                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', endHidden(end) ? `${styles.veiled} ${styles.veiledEnd}` : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
-                              {num(end)}
+                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
+                              {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
+                              {endHidden(end) ? EMPTY_END : num(end)}
                             </span>
                           </Fragment>
                         ))}
