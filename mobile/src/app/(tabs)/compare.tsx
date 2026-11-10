@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { ArrowLeftRight, ChevronDown, Funnel } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronDown } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
@@ -9,8 +9,7 @@ import TopBar from '@/components/TopBar';
 import PageProgress from '@/components/PageProgress';
 import ComparePager, { type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
-import FilterSheet from '@/components/FilterSheet';
-import { cardsFor, filteredPairs, filterOfList, landingIndex, listOfFilter, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
+import { cardsFor, filteredPairs, landingIndex, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
 import { readJson, writeJson } from '@/lib/storage';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
@@ -31,7 +30,6 @@ export default function CompareScreen() {
   const visit = visits[index];
   const pager = useRef<PagerHandle>(null);
   const [sheet, setSheet] = useState(false);
-  const [filtering, setFiltering] = useState(false);
 
   const arrive = useCallback((at: number) => {
     setIndex(at);
@@ -77,25 +75,20 @@ export default function CompareScreen() {
   const count = visit ? (filter.savedOnly ? cardsFor(visit.lead, visit.other).filter(card => savedIds(card.id)).length : cardsFor(visit.lead, visit.other).length) : 0;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar>
+      <TopBar center>
         <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
-          style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
+          style={{ maxWidth: '100%', flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
           <ArrowLeftRight size={16} color={palette.ink} />
           <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 15 }}>{visit ? pairTitle(visit.lead, visit.other) : 'اختر سورتين'}</Text>
           <Text style={{ color: palette.accent, fontSize: 14 }}>{num(count)}</Text>
           <ChevronDown size={14} color={palette.ink} />
         </Pressable>
-        <Pressable onPress={() => setFiltering(true)} hitSlop={4} accessibilityRole="button" accessibilityLabel="تصفية" style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <Funnel size={22} color={palette.muted} />
-          {(filter.scope || filter.savedOnly) && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-        </Pressable>
       </TopBar>
       <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
       {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16 }}>لا صفحات بهذه التصفية.</Text></View>}
-      <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter}
+      <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter} onFilter={changeFilter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />
-      <FilterSheet compare open={filtering} onClose={() => setFiltering(false)} state={listOfFilter(filter)} onApply={next => changeFilter(filterOfList(next))} palette={palette} />
     </View>
   );
 }
