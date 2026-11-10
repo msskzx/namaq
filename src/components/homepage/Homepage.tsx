@@ -2,7 +2,8 @@
 
 import { useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { Bookmark, EyeOff, Feather, Library, LightbulbOff, Users } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, EyeOff, Feather, Library, LightbulbOff, Users } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { NavActions } from '@/components/common/NavBar';
 import MushafText from '@/components/common/MushafText';
@@ -14,11 +15,15 @@ import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@s
 import { forgottenOrder } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
 import { isCompareBookmark } from '@shared/compareBookmarks';
+import { BOOKMARK_KIND_LABEL, bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import type { HomepageData } from '@/lib/homepageData';
 import styles from './Homepage.module.css';
 import HomeQuranWidget from './HomeQuranWidget';
+
+/** The same icons as the tab bar, so a saved card says which feature it opens in. */
+const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
 
 export default function Homepage({ data }: { data: HomepageData }) {
   const ar = useLanguage().language === 'ar';
@@ -45,7 +50,10 @@ export default function Homepage({ data }: { data: HomepageData }) {
       {saved.length ? <div className={styles.shelf}>
         {saved.map(item => {
           const references = bookmarkReferences(item, data.bookmarkAyat);
-          return <Link key={item.id} href={item.href} className={styles.book}>
+          const kind = bookmarkKind(item);
+          const KindIcon = KIND_ICONS[kind];
+          return <Link key={item.id} href={item.href} className={styles.book} data-kind={kind}>
+            <span className={styles.bookKind}><KindIcon size={14} aria-hidden />{BOOKMARK_KIND_LABEL[kind][ar ? 'ar' : 'en']}</span>
             {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
               {references.map(reference => <span key={reference.surah}>
                 {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('range' in reference ? '–' : '، ')}</bdi>
