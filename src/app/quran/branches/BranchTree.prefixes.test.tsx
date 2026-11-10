@@ -2,14 +2,14 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import BranchTree from './BranchTree';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace: vi.fn() }) }));
 const quranSurrounding = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding, quranContexts: vi.fn() }));
+vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding }));
 afterEach(() => { cleanup(); quranSurrounding.mockReset(); });
 
 const trunk = ['ذَٰلِكَ فَضْلُ اللَّهِ يُؤْتِيهِ مَن يَشَاءُ'];
@@ -44,10 +44,6 @@ describe('preceding ayat as empty phrase prefixes', () => {
     const earlier = container.querySelector('[data-node="earlier62:4"]')!;
     expect(previous.getAttribute('data-keys')).toBe('62:4');
     expect(earlier.getAttribute('data-keys')).toBe('62:4');
-    const context = container.querySelector<HTMLButtonElement>('[data-node="n-1"] [data-context-open]')!;
-    const click = vi.spyOn(context, 'click').mockImplementation(() => {});
-    fireEvent.click(within(earlier as HTMLElement).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-    expect(click).toHaveBeenCalledOnce();
   });
 
   it('reuses preloaded neighbors without adding a step before the first ayah of a surah', () => {
@@ -59,11 +55,7 @@ describe('preceding ayat as empty phrase prefixes', () => {
     expect(screen.getAllByText('الْحَمْدُ لِلَّهِ')).toHaveLength(1);
     expect(container.querySelector('[data-node="earlier62:4"]')?.getAttribute('data-keys')).toBe('62:4');
     expect(container.querySelector('[data-node="earlier34:2"]')).toBeNull();
-    const context = container.querySelector<HTMLButtonElement>('[data-node="n-1"] [data-context-open]')!;
-    const click = vi.spyOn(context, 'click').mockImplementation(() => {});
-    const previous = container.querySelector<HTMLElement>('[data-node="before34:2"]')!;
-    fireEvent.click(within(previous).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-    expect(click).toHaveBeenCalledOnce();
+    expect(container.querySelector('[data-node="before34:2"]')?.getAttribute('data-keys')).toBe('34:2');
     expect(load).not.toHaveBeenCalled();
   });
 

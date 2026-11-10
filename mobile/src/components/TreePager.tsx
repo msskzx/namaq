@@ -3,11 +3,11 @@ import { Pressable, Share, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Bookmark, Send } from 'lucide-react-native';
-import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
 import TreeCard, { type Lane } from './TreeCard';
+import type { NodeActions } from './BranchTree';
 import MatrixCard from './MatrixCard';
 import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
@@ -67,10 +67,13 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
   /** The tree a search opens on; otherwise the one left open last time. */
   start?: number; onIndex?: (index: number) => void;
   /** A downward swipe on the open tree. */
-  onPull?: () => void };
+  onPull?: () => void;
+  /** A node's «show only this part»: the tree of its own that holds the node's ayat. */
+  onOpen?: (piece: BranchPiece) => void };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onPull }: Props) {
+export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onPull, onOpen }: Props) {
+  const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => onOpen?.(piece) }), [onOpen]);
   const place = useMemo(() => readJson<Place>(PLACE), []);
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
@@ -135,7 +138,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const growing = growth.status === 'playing' || growth.status === 'paused';
   const lane: Lane | undefined = growing ? undefined : { offset, width, count, settle };
 
-  const tap = useCallback((ayahKeys: string[] | null) => {
+  const tap = useCallback((ayahKeys: string[] | null, lightPath?: () => void) => {
     const now = Date.now();
     if (now - moved.current < 350) return;
     clearTimeout(pending.current);
@@ -149,7 +152,8 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
       return;
     }
     lastTap.current = now;
-    if (ayahKeys?.length) pending.current = setTimeout(() => router.push({ pathname: '/ayah', params: { keys: ayahKeys.join(',') } }), DOUBLE_TAP);
+    // As on the website, a tap on a node lights its path (after the wait that tells it from a double tap).
+    if (lightPath) pending.current = setTimeout(lightPath, DOUBLE_TAP);
   }, [pieces, index]);
 
   const openVideo = async () => {
@@ -188,7 +192,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} />}
             </View>
             );
           })}

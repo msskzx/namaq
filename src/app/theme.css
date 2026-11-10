@@ -14,6 +14,7 @@
   --home-highlight-border: #d97706;
   --home-root: #5e4689;
   --home-green: #4b644a;
+  --home-amber: #806239;
   --home-slot-1: #2c6a78;
   --home-slot-2: #5d6a24;
   --home-slot-3: #3f5a8f;
@@ -38,6 +39,7 @@
   --home-accent: #e8876c;
   --home-root: #b9a3dc;
   --home-green: #9bb59a;
+  --home-amber: #dcc5a0;
   --home-slot-1: #8cc8d4;
   --home-slot-2: #c0cc84;
   --home-slot-3: #9fb4e6;
@@ -60,6 +62,7 @@
   --home-on-action: #fff9f0;
   --home-root: #665177;
   --home-green: #506449;
+  --home-amber: #806239;
   --home-highlight: #dcc5a0;
   --home-on-highlight: #202c35;
   --home-highlight-border: #9a7847;
@@ -84,6 +87,7 @@
   --home-accent: #d9a6b0;
   --home-root: #c3afd5;
   --home-green: #b1c59f;
+  --home-amber: #dcc5a0;
   --home-slot-1: #a9c4d1;
   --home-slot-2: #b1c59f;
   --home-slot-3: #c3afd5;

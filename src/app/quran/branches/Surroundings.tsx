@@ -2,7 +2,7 @@
 
 import React, { useSyncExternalStore } from 'react';
 import useSWR from 'swr';
-import { LocateFixed, RotateCwSquare, TextSearch, UnfoldHorizontal } from 'lucide-react';
+import { LocateFixed, RotateCwSquare, UnfoldHorizontal } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
@@ -102,13 +102,12 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
 
 export const SurroundToggle = SurroundSwitch;
 
-export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around; opens: string }) {
+export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const [surah, ayah] = neighbour.key.split(':').map(Number);
   const id = nodeId ?? `${side}${of}`;
   const ref = around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
   const others = [...new Map(Object.values(around.data[side]).flatMap(ayah => ayah ? [[ayah.key, ayah] as const] : [])).values()];
   const match = sharedByAll(others.map(ayah => ({ ayah, before: null, after: null }))).find(context => context.ayah.key === neighbour.key)?.match;
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
@@ -125,9 +124,6 @@ export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { n
       <span className="mt-1 block text-xs">{ref}</span>
       <span className="mt-1 flex flex-wrap items-center gap-2">
         <PathButton id={id} keys={[of]} subject={ref} />
-        <Button size="sm" aria-haspopup="dialog" aria-label={`${label}: ${ref}`} title={label} onClick={event => event.currentTarget.closest('[data-tree]')?.querySelector<HTMLButtonElement>(`[data-node="${opens}"] [data-context-open]`)?.click()}>
-          <TextSearch size={16} aria-hidden />
-        </Button>
         {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`} aria-label={ar ? 'في هذه الشجرة' : 'In this tree'} title={ar ? 'في هذه الشجرة' : 'In this tree'}>
           <LocateFixed size={16} aria-hidden />
         </Button>}

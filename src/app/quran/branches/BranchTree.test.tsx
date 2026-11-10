@@ -15,12 +15,10 @@ import { inJuzRange } from '@shared/quran/juz';
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
-const { quranContexts, quranSurrounding } = vi.hoisted(() => ({ quranContexts: vi.fn(), quranSurrounding: vi.fn() }));
-vi.mock('@/lib/quran/quranText', () => ({ quranContexts, quranSurrounding }));
+const { quranSurrounding } = vi.hoisted(() => ({ quranSurrounding: vi.fn() }));
+vi.mock('@/lib/quran/quranText', () => ({ quranSurrounding }));
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-  quranContexts.mockReset().mockResolvedValue([]);
   quranSurrounding.mockReset().mockResolvedValue({ before: {}, after: {} });
 });
 afterEach(cleanup);
@@ -269,7 +267,6 @@ describe('BranchTree', () => {
     expect(screen.getByRole('list', { name: 'صيغ الكلمة الأولى' }).children).toHaveLength(3);
     expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim() && !node.closest('[role="toolbar"]') && !node.querySelector('[role="toolbar"]'))).toHaveLength(0);
     expect(container.querySelectorAll('a[href^="/quran/read/"]')).toHaveLength(0);
-    expect(screen.getAllByRole('button', { name: /عرض.*السياق|عرض الآيات/ }).length).toBeGreaterThan(0);
     expect(screen.getByText('طَغَىٰ')).toBeTruthy();
   });
 
@@ -314,71 +311,40 @@ describe('BranchTree', () => {
     expect(screen.getByText('الواقعة ١٧').nextElementSibling?.textContent).toBe('يَطُوفُ');
   });
 
-  it('replaces repeated leaf originals with an amber button for every represented ayah', async () => {
+  it('draws a repeated leaf once with every ayah\'s reference and its differently voiced words in amber', () => {
     const group = startingWith(data.ayat as BranchAyah[], 'ان مع العسر');
-    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 94: 'الشرح' }} />);
-    const button = screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ });
-    expect(button.getAttribute('data-variant')).toBe('highlight');
-    expect(within(button).queryByText(/الشرح/)).toBeNull();
+    const { container } = render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 94: 'الشرح' }} />);
     expect(screen.getAllByText(/الشرح/)).toHaveLength(2);
-    expect(screen.queryByRole('link', { name: /الشرح/ })).toBeNull();
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
-    fireEvent.click(button);
-    await vi.waitFor(() => expect(quranContexts).toHaveBeenCalled());
-    expect(quranContexts.mock.calls[0][0]).toEqual(['94:5', '94:6']);
+    expect(container.querySelectorAll('[data-differs]').length).toBeGreaterThan(0);
   });
 
-  it('keeps an amber button on an inner node with differing marks', () => {
+  it('colours the differently voiced word of an inner node amber, at its own offset, and nothing else', () => {
     const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
       { words: ['رب'], ayat: ['7:59'], children: [] },
       { words: ['يا'], ayat: ['57:26'], children: [] },
     ] };
-    render(<BranchTree tree={{ words: [], ayat: [], children: [merged] }} names={{}} />);
-    expect(screen.getAllByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toHaveLength(1);
-    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })).toHaveLength(2);
+    const { container } = render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} />);
+    expect([...container.querySelectorAll('[data-differs]')].map(word => word.textContent)).toEqual(['نُوحًا']);
+    expect(container.querySelector('[data-differs]')!.className).toContain('home-amber');
   });
 
-  it('marks first-word differences separately from the shared root', () => {
+  it('colours a differently voiced first word apart from the shared root', () => {
     const group: BranchAyah[] = [
       { key: '1:1', page: 1, words: ['مِّنْ', 'رب'] },
       { key: '1:2', page: 1, words: ['مِن', 'رب'] },
       { key: '1:3', page: 1, words: ['وَمِن', 'رب'] },
     ];
-    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
+    const { container } = render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
-    expect(within(firstWords).getAllByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toHaveLength(1);
-    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })).toHaveLength(2);
+    expect(firstWords.querySelectorAll('[data-differs]')).toHaveLength(1);
+    expect(container.querySelectorAll('[data-differs]')).toHaveLength(1);
   });
 
-  it('opens every inner node on all its ayat and every leaf on its siblings under the same parent', async () => {
-    render(<BranchTree tree={tree} names={{}} />);
-    const [inner, , leaf] = screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ });
-    const asked = () => quranContexts.mock.calls.at(-1)![0].join(',');
-    fireEvent.click(inner);
-    await vi.waitFor(() => expect(asked()).toBe('15:45,51:15,44:51'));
-    fireEvent.click(leaf);
-    await vi.waitFor(() => expect(asked()).toBe('44:51,15:45,51:15'));
-  });
-
-  it('opens a first-word box on its own ayat and then the other first words that share its child', async () => {
-    const group = startingWith(data.ayat as BranchAyah[], 'الذين ينقضون');
-    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
-    const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
-    fireEvent.click(within(firstWords).getAllByRole('button', { name: /عرض/ })[1]);
-    await vi.waitFor(() => expect(quranContexts).toHaveBeenCalled());
-    expect(quranContexts.mock.calls[0][0]).toEqual(['13:25', '2:27']);
-  });
-
-  it('opens the overlay only from its button, never from the node text or box', () => {
-    render(<BranchTree tree={tree} names={{}} />);
-    const leafText = screen.getByText('مَقَامٍ أَمِينٍۢ');
-    const box = leafText.closest('[data-node]')!;
-    const dialog = box.querySelector('dialog')!;
-    fireEvent.click(leafText);
-    fireEvent.click(box);
-    expect(dialog.open).toBe(false);
-    fireEvent.click(within(box as HTMLElement).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-    expect(dialog.open).toBe(true);
+  it('colours the word a merged node\'s ayat voice differently', () => {
+    const group = startingWith(data.ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
+    const { container } = render(<BranchTree tree={branch(group)} names={{}} />);
+    expect([...container.querySelectorAll('[data-differs]')].map(word => word.textContent)).toEqual([expect.stringMatching(/^ر/)]);
   });
 
   it('lights a path only from its button, never on hover or focus, and keeps several pinned', () => {
@@ -419,25 +385,6 @@ describe('BranchTree', () => {
     expect((container.querySelector('[data-stem]') as HTMLElement).style.display).not.toBe('none');
   });
 
-  it('highlights differing marks of a nested node at its own offset', () => {
-    const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
-      { words: ['رب'], ayat: ['7:59'], children: [] },
-      { words: ['يا'], ayat: ['57:26'], children: [] },
-    ] };
-    render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} />);
-    const marks = screen.getAllByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
-    expect(marks).toHaveLength(1);
-    expect([...marks[0].querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['نُوحًۭا', 'نُوحًا']);
-  });
-
-  it('lists the differing marks of a merged node at the top of its overlay with the differing word highlighted', () => {
-    const group = startingWith(data.ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
-    render(<BranchTree tree={branch(group)} names={{}} />);
-    const marks = screen.getByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
-    expect(within(marks).getAllByRole('listitem', { hidden: true }).map(item => item.textContent)).toEqual([`${group[0].words.slice(0, 2).join(' ')}آيتان`, `${group[2].words.slice(0, 2).join(' ')}آية`]);
-    expect([...marks.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual([group[0].words[1], group[2].words[1]]);
-  });
-
   describe('surrounding ayat', () => {
     const basmala = ['بِسْمِ', 'ٱللَّهِ', 'ٱلرَّحْمَـٰنِ', 'ٱلرَّحِيمِ'];
     const around = {
@@ -470,11 +417,6 @@ describe('BranchTree', () => {
       expect(before.children[1].querySelectorAll('[data-ctx]')).toHaveLength(2);
       expect(screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ')).toBeTruthy();
       expect(screen.getByText('إِنَّ هَـٰذَا')).toBeTruthy();
-      const trunkContext = container.querySelector<HTMLButtonElement>('[data-node="n-1"] [data-context-open]')!;
-      const open = vi.spyOn(trunkContext, 'click').mockImplementation(() => {});
-      const neighbour = screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ').closest('[data-node]') as HTMLElement;
-      fireEvent.click(within(neighbour).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-      expect(open).toHaveBeenCalledOnce();
     });
 
     it('loads nothing until the switch is turned on, then draws the ayah before and after every branch', async () => {
@@ -509,16 +451,6 @@ describe('BranchTree', () => {
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: true }} />);
       fireEvent.click(within((await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-node]') as HTMLElement).getByRole('button', { name: /^إظهار المسار/ }));
       expect([...container.querySelectorAll('[data-lit]')].map(node => node.textContent)).toEqual([expect.stringContaining('إِنَّ هَـٰذَا'), expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ فِى'), expect.stringContaining('مَقَامٍ أَمِينٍۢ'), expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ')]);
-    });
-
-    it('opens the overlay of the node a neighbour joins: the root before, the leaf after', async () => {
-      render(<BranchTree tree={tree} names={names} surround={{ on: true }} />);
-      const before = (await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-node]') as HTMLElement;
-      fireEvent.click(within(before).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-      expect(screen.getByText('إِنَّ ٱلْمُتَّقِينَ فِى').closest('[data-node]')!.querySelector('dialog')!.open).toBe(true);
-      const after = screen.getByText('ٱدْخُلُوهَا بِسَلَـٰمٍ').closest('[data-node]') as HTMLElement;
-      fireEvent.click(within(after).getByRole('button', { name: /عرض الآيات في سياقها/ }));
-      expect(screen.getByText('جَنَّـٰتٍۢ وَعُيُونٍ').closest('[data-node]')!.querySelector('dialog')!.open).toBe(true);
     });
 
     it('shows, after a leaf that runs into the next ayah, the ayah after that one', async () => {

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useLayoutEffect, useMemo, useRef, use
 import { Route } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { litPaths, pathToggleKey, togglePath } from '@/lib/quran/pathHighlight';
+import { litPaths, pathToggleKey, togglePath } from '@shared/quran/pathHighlight';
 import TreeLinks from './TreeLinks';
 
 // Only the path button lights a path: hover lit paths by accident on phones.

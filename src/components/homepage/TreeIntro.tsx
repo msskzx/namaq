@@ -3,10 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { RotateCcw, SkipForward } from 'lucide-react';
 import Button from '../common/Button';
-import MushafText from '../common/MushafText';
 import { MARK } from '../common/Emblem';
-import { num } from '@shared/quran/arabicNumber';
-import type { AyahContext } from '@shared/quran/ayahContext';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
@@ -29,11 +26,9 @@ function shouldPlay() {
 
 export type View = { visible: boolean; waiting: Set<() => void>; running: Set<Animation> };
 
-export type Peek = { context: AyahContext; top: number };
-
 export type Ink = { drop: HTMLElement | null; blot: HTMLElement | null; logo: HTMLElement | null };
 
-async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek | null) => void, cardRef: () => HTMLElement | null, view: View, signal: AbortSignal, undo: (() => void)[], ink: Ink = { drop: null, blot: null, logo: null }) {
+async function play(root: HTMLElement, marker: HTMLElement, view: View, signal: AbortSignal, undo: (() => void)[], ink: Ink = { drop: null, blot: null, logo: null }) {
   const sleep = (ms: number) => new Promise<void>((resolve, reject) => {
     if (signal.aborted) return reject(signal.reason);
     const abort = () => { clearTimeout(timer); reject(signal.reason); };
@@ -212,9 +207,6 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
   const leaves = [...new Set(nodes.flatMap(keysOf))].map(key => nodes.filter(box => keysOf(box).includes(key)).at(-1)!);
   const light = [...content.querySelectorAll<HTMLButtonElement>('[data-node]:not([data-ctx]) button[aria-pressed]')].find(button => showing(button) && leaves.some(leaf => leaf.contains(button)))
     ?? [...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed]')].find(showing);
-  const open = [light?.closest<HTMLElement>('[data-node]')?.querySelector<HTMLElement>('[data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
-  const key = open?.closest<HTMLElement>('[data-node]')?.dataset.keys?.split(' ')[0];
-  const loading = key ? fetch(`/api/quran/context?${new URLSearchParams({ q: key })}`, { signal }).then(response => response.ok ? response.json() as Promise<AyahContext[]> : []).then(found => found[0], () => undefined) : Promise.resolve(undefined);
   if (light) {
     await tap(light);
     light.click();
@@ -224,38 +216,12 @@ async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek |
     restore();
     await wait(600);
   }
-
-  // The ayah in its context, in a small card.
-  const context = await loading;
-  signal.throwIfAborted();
-  if (!open || !context) return;
-  await tap(open);
-  const box = area();
-  const target = open.getBoundingClientRect();
-  peek({ context, top: Math.min(target.bottom - box.top + 10, Math.max(box.height - 260, 8)) });
-  undo.push(() => peek(null));
-  await wait(50);
-  const card = cardRef();
-  if (card) await run(card, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 300, fill: 'forwards' });
-  await wait(1600);
-  const scroller = card?.querySelector<HTMLElement>('[data-peek-scroll]');
-  const far = scroller ? scroller.scrollHeight - scroller.clientHeight : 0;
-  for (let i = 1; scroller && far > 0 && i <= 30; i++) {
-    scroller.scrollTop = (far * i) / 30;
-    await wait(60);
-  }
-  await wait(2400);
-  if (card) await run(card, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' });
-  peek(null);
-  await wait(300);
 }
 
-export default function TreeIntro({ target, ar, names = {} }: { target: RefObject<HTMLElement | null>; ar: boolean; names?: Record<number, string> }) {
+export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElement | null>; ar: boolean }) {
   const [playing, setPlaying] = useState(false);
   const [round, setRound] = useState(0);
-  const [shown, setShown] = useState<Peek | null>(null);
   const marker = useRef<HTMLSpanElement>(null);
-  const card = useRef<HTMLDivElement>(null);
   const drop = useRef<HTMLSpanElement>(null);
   const blot = useRef<HTMLSpanElement>(null);
   const logo = useRef<HTMLDivElement>(null);
@@ -285,13 +251,9 @@ export default function TreeIntro({ target, ar, names = {} }: { target: RefObjec
     };
     skip.current = done;
     setPlaying(true);
-    play(root, marker.current, setShown, () => card.current, view, controller.signal, undo, { drop: drop.current, blot: blot.current, logo: logo.current }).then(done, () => {});
+    play(root, marker.current, view, controller.signal, undo, { drop: drop.current, blot: blot.current, logo: logo.current }).then(done, () => {});
     return stop;
   }, [target, round]);
-  const ref = (key: string) => {
-    const [surah, ayah] = key.split(':').map(Number);
-    return `${names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`)} ${ar ? num(ayah) : ayah}`;
-  };
   return <>
     <span ref={marker} aria-hidden className={styles.tapMarker} />
     <span ref={drop} aria-hidden className={styles.inkDrop} />
@@ -300,14 +262,6 @@ export default function TreeIntro({ target, ar, names = {} }: { target: RefObjec
       <svg viewBox="12 24.7 76 76" dangerouslySetInnerHTML={{ __html: MARK }} />
       <span data-logo-words>{ar ? 'تدبّر القرآن' : 'Reflect on the Quran'}</span>
     </div>
-    {shown && <div ref={card} aria-hidden className={styles.introPeek} style={{ top: shown.top, opacity: 0 }}>
-      <div className={styles.introPeekHead}><strong>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</strong><span>{ref(shown.context.ayah.key)}</span></div>
-      <div data-peek-scroll className={styles.introPeekBody} dir="rtl">
-        {[shown.context.before, shown.context.ayah, shown.context.after].map(ayah => ayah && <p key={ayah.key} className={`font-quran ${ayah === shown.context.ayah ? styles.introPeekAyah : ''}`}>
-          <MushafText>{ayah.words.join(' ')}</MushafText> <span className={styles.introPeekNumber}>{num(Number(ayah.key.split(':')[1]))}</span>
-        </p>)}
-      </div>
-    </div>}
     {playing ? <Button size="icon" className={styles.skipIntro} onClick={() => skip.current()} aria-label={ar ? 'تخطّ' : 'Skip'} title={ar ? 'تخطّ' : 'Skip'}>
       <SkipForward size={16} aria-hidden className={ar ? '-scale-x-100' : undefined} />
     </Button> : <Button size="icon" className={styles.skipIntro} onClick={() => setRound(count => count + 1)} aria-label={ar ? 'إعادة العرض' : 'Replay'} title={ar ? 'إعادة العرض' : 'Replay'}>

@@ -1,17 +1,25 @@
-import { createContext, memo, useContext, useEffect, useRef, type ComponentRef } from 'react';
+import { createContext, memo, useContext, useEffect, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
+import { Route, ZoomIn, type LucideProps } from 'lucide-react-native';
+import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { keys, type Branch } from '@shared/quran/branches';
+import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
-import { aroundOf, mixedBefore } from '@/lib/branches';
+import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
 
-type Tap = (ayahKeys: string[]) => void;
+/** A tap on a box; `lightPath` lights its path, which the host runs unless the tap meant something else (a double tap). */
+type Tap = (ayahKeys: string[], lightPath?: () => void) => void;
+/** The paths lit on a tree, as on the website: a node's ayat, several at once. */
+export type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin: (id: string, keys: string[]) => void };
+/** The button row under each node; when given, every box gets it (the quiz draws none). The matrix shows a node's ayat. */
+export type NodeActions = { onSubtree: (piece: BranchPiece) => void };
 export type Direction = 'side' | 'down';
 /** What a growing tree hides and lights; empty when nothing grows. */
 export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null };
@@ -19,7 +27,8 @@ const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
 export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
-type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode };
+type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions };
+const isLit = (shared: Shared, ayahKeys: string[]) => !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
 /** Where each box registers itself, so a video of the tree can be drawn from where the boxes sit. */
 type Host = ComponentRef<typeof View>;
@@ -52,8 +61,14 @@ function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: 
 
 type Marks = { exact: Set<number>; rooted: Set<number> };
 
-/** A word is coloured when it is the same (accent) or shares its root (purple) in every ayah through this node. */
-function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks) {
+/** Indices of the words a node's ayat voice differently: the node shows one spelling, so these words turn amber (as on the website). */
+function differing(forms?: Record<string, string[]>) {
+  const all = Object.values(forms ?? {});
+  return new Set((all[0] ?? []).flatMap((_, i) => new Set(all.map(words => words[i])).size > 1 ? [i] : []));
+}
+
+/** A word is coloured when it is the same (accent) or shares its root (purple) in every ayah through this node; amber when voiced differently. */
+function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks, differs?: Set<number>) {
   const { palette, matches, offsets } = shared;
   return words.map((word, i) => {
     const kinds = marks ? [marks.rooted.has(i) ? 'root' : marks.exact.has(i) ? 'exact' : undefined] : ayahKeys.map(key => {
@@ -62,13 +77,14 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
       return match?.rooted.has(index) ? 'root' : match?.exact.has(index) ? 'exact' : undefined;
     });
     const kind = !isMark(word) && kinds.length > 0 && kinds.every(Boolean) ? (kinds.includes('root') ? 'root' : 'exact') : undefined;
-    return kind === 'root' ? palette.root : kind === 'exact' ? palette.accent : undefined;
+    // A root match already says the forms differ, so it keeps its purple.
+    return kind === 'root' ? palette.root : differs?.has(i) ? palette.amber : kind === 'exact' ? palette.accent : undefined;
   });
 }
 
-type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string };
-function Words({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) {
-  const tones = tonesOf(words, ayahKeys, at, shared, marks);
+type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string; differs?: Set<number> };
+function Words({ words, ayahKeys, at, shared, size, marks, color, differs }: WordsProps) {
+  const tones = tonesOf(words, ayahKeys, at, shared, marks, differs);
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? shared.palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
       {words.map((word, i) => <Text key={i} style={tones[i] ? { color: tones[i] } : undefined}>{i > 0 ? ' ' : ''}{quranText(word)}</Text>)}
@@ -77,29 +93,48 @@ function Words({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) 
 }
 
 /** The same words as data, for the video. */
-const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color }: WordsProps) => {
-  const tones = tonesOf(words, ayahKeys, at, shared, marks);
+const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, differs }: WordsProps) => {
+  const tones = tonesOf(words, ayahKeys, at, shared, marks, differs);
   return { size, words: words.map((word, i) => ({ text: quranText(word), color: tones[i] ?? color ?? shared.palette.ink })) };
 };
 
-function Box({ id, ayahKeys, leaf, shared, muted, text, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; children: React.ReactNode }) {
-  const { palette, down } = shared;
+function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (props: LucideProps) => React.ReactNode; onPress: () => void; palette: Palette; on?: boolean }) {
+  return (
+    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label} accessibilityState={on === undefined ? undefined : { selected: on }}
+      style={{ padding: 5, borderRadius: 8, borderWidth: 1, borderColor: on ? palette.accent : palette.rule }}>
+      <Icon size={16} color={on ? palette.accent : palette.muted} />
+    </Pressable>
+  );
+}
+
+/** The buttons under a node: light its path, and open the part under it as a tree of its own. */
+function Tools({ id, ayahKeys, shared, subtree }: { id: string; ayahKeys: string[]; shared: Shared; subtree?: BranchPiece }) {
+  const { actions, paths, palette } = shared;
+  if (!actions) return null;
+  const pinned = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 6 }}>
+      <Tool label="إظهار المسار" Icon={Route} palette={palette} on={pinned} onPress={() => paths?.pin(id, ayahKeys)} />
+      {subtree && <Tool label="عرض هذا الجزء وحده" Icon={ZoomIn} palette={palette} onPress={() => actions.onSubtree(subtree)} />}
+    </View>
+  );
+}
+
+function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; tools?: React.ReactNode; children: React.ReactNode }) {
+  const { palette, down, paths } = shared;
   const growth = useContext(Growth);
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { ...text, muted: !!muted, keys: ayahKeys } }); };
   const asked = growth.ask?.id === id ? growth.ask : undefined;
-  const lit = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit));
+  const lit = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit)) || isLit(shared, ayahKeys);
   return (
     <Fade id={id}>
       <Pressable
-        ref={register}
-        onPress={() => shared.onTap(ayahKeys)}
+        onPress={() => shared.onTap(ayahKeys, paths ? () => paths.pin(id, ayahKeys) : undefined)}
         accessibilityRole="button"
         accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}
         style={({ pressed }) => ({
           maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
-          paddingHorizontal: 12,
-          paddingVertical: 4,
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
           borderColor: pressed || lit ? (growth.now.has(id) ? palette.path : palette.accent) : muted ? palette.muted : palette.rule,
@@ -109,7 +144,9 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, children }: { id: string
           borderTopEndRadius: 4,
           borderBottomStartRadius: 4,
         })}>
-        <View style={{ opacity: asked ? 0 : 1 }}>{children}</View>
+        {/* The video draws the box from this part: the words and references, not the buttons. */}
+        <View ref={register} collapsable={false} style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}>{children}</View>
+        {tools && <View style={{ opacity: asked ? 0 : 1 }}>{tools}</View>}
         {asked && <View style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
           {asked.seconds ? <Hourglass left={asked.left} seconds={asked.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
         </View>}
@@ -125,50 +162,76 @@ function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }
   return <View ref={register}><Text style={{ fontFamily: QURAN_FONT, fontSize: 18, color: shared.palette.muted, paddingHorizontal: 4 }}>{text}</Text></View>;
 }
 
-/** One child's elbow: the spine from its siblings and the line into it, curved at the two ends. */
-function Elbow({ first, last, color, down }: { first: boolean; last: boolean; color: string; down: boolean }) {
+/**
+ * One child's elbow: the spine from its siblings and the line into it, curved at the two ends. A lit child lights only its own
+ * line and curve; the stretch of spine up to the parent is drawn by the fan, so a lit path is exactly the lines it runs along.
+ */
+function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolean; color: string; lit?: string; down: boolean }) {
   const only = first && last;
+  const into = lit ?? color;
   if (down) {
     // Children sit in a row under the parent: a bus along the top, a drop into each child.
     return (
       <View style={{ height: 16, alignSelf: 'stretch', flexDirection: 'row' }}>
-        <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderTopWidth: LINE }), ...(last && !only ? { borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE } : {}) }} />
-        <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderTopWidth: LINE }), ...(first && !only ? { borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE } : {}) }} />
-        {(only || (!first && !last)) && <View style={{ position: 'absolute', left: '50%', marginLeft: -LINE / 2, top: 0, bottom: 0, borderStartWidth: LINE, borderColor: color }} />}
+        <View style={{ flex: 1, borderColor: last ? into : color, ...(only || first ? {} : { borderTopWidth: LINE }), ...(last && !only ? { borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE } : {}) }} />
+        <View style={{ flex: 1, borderColor: first ? into : color, ...(only || last ? {} : { borderTopWidth: LINE }), ...(first && !only ? { borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE } : {}) }} />
+        {(only || (!first && !last)) && <View style={{ position: 'absolute', left: '50%', marginLeft: -LINE / 2, top: 0, bottom: 0, borderStartWidth: LINE, borderColor: into }} />}
       </View>
     );
   }
   return (
     <View style={{ width: 16, alignSelf: 'stretch' }}>
-      <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : last ? { borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
-      <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : first ? { borderStartWidth: LINE, borderTopWidth: LINE, borderTopStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
-      {(only || (!first && !last)) && <View style={{ position: 'absolute', top: '50%', marginTop: -LINE / 2, start: 0, end: 0, borderTopWidth: LINE, borderColor: color }} />}
+      <View style={{ flex: 1, borderColor: last ? into : color, ...(only || first ? {} : last ? { borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
+      <View style={{ flex: 1, borderColor: first ? into : color, ...(only || last ? {} : first ? { borderStartWidth: LINE, borderTopWidth: LINE, borderTopStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
+      {(only || (!first && !last)) && <View style={{ position: 'absolute', top: '50%', marginTop: -LINE / 2, start: 0, end: 0, borderTopWidth: LINE, borderColor: into }} />}
     </View>
   );
 }
 
-type Entry = { id: string; item: React.ReactNode };
+type Entry = { id: string; keys: string[]; item: React.ReactNode };
+type Span = { at: number; size: number };
 
-function Fan({ entries, color, down }: { entries: Entry[]; color: string; down: boolean }) {
+/** The lit stretch of a fan's spine: from where the parent's line meets it to the farthest lit child, short of a corner's curve. */
+function litSpine(spans: Span[], lit: boolean[], whole: number): [number, number] | null {
+  const ends = lit.flatMap((on, i) => on && spans[i] ? [i] : []);
+  if (!ends.length) return null;
+  const middle = whole / 2;
+  const centre = (i: number) => spans[i].at + spans[i].size / 2;
+  const from = Math.min(middle, ...ends.map(i => centre(i) + (i === 0 && spans.length > 1 ? CURVE : 0)));
+  const to = Math.max(middle, ...ends.map(i => centre(i) - (i === spans.length - 1 && spans.length > 1 ? CURVE : 0)));
+  return to > from ? [from, to] : null;
+}
+
+function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
+  const { palette, down } = shared;
+  const lit = entries.map(entry => isLit(shared, entry.keys));
+  const [spans, setSpans] = useState<Span[]>([]);
+  const [whole, setWhole] = useState(0);
+  const spine = lit.some(Boolean) ? litSpine(spans, lit, whole) : null;
   return (
-    <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }}>
+    <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
       {entries.map((entry, i) => (
-        <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}>
+        <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}
+          onLayout={event => { const { x, y, width, height } = event.nativeEvent.layout; const span = down ? { at: x, size: width } : { at: y, size: height }; setSpans(old => { const next = [...old]; next[i] = span; return next; }); }}>
           <Fade id={lineId(entry.id)} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
-            <Elbow first={i === 0} last={i === entries.length - 1} color={color} down={down} />
+            <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.accent : undefined} down={down} />
           </Fade>
           <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
         </View>
       ))}
+      {spine && <View pointerEvents="none" style={down
+        ? { position: 'absolute', top: 0, left: spine[0], width: spine[1] - spine[0], borderTopWidth: LINE, borderColor: palette.accent }
+        : { position: 'absolute', start: 0, top: spine[0], height: spine[1] - spine[0], borderStartWidth: LINE, borderColor: palette.accent }} />}
     </View>
   );
 }
 
-/** The connector between a box and its fan; shown once anything in the fan is. */
-function Stub({ color, down, ids }: { color: string; down: boolean; ids: string[] }) {
+/** The connector between a box and its fan; shown once anything in the fan is, lit when a path runs through it. */
+function Stub({ shared, entries }: { shared: Shared; entries: Entry[] }) {
   const { hidden } = useContext(Growth);
-  const visible = ids.some(id => !hidden.has(lineId(id)));
-  return <View style={[down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
+  const visible = entries.some(entry => !hidden.has(lineId(entry.id)));
+  const color = entries.some(entry => isLit(shared, entry.keys)) ? shared.palette.accent : shared.palette.rule;
+  return <View style={[shared.down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
 }
 
 /** Fans drawn before the root (words before the phrase, the ayat before) open the other way: mirrored, then each item mirrored back. */
@@ -176,7 +239,7 @@ function BackFan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const flip = shared.down ? { transform: [{ scaleY: -1 }] } : { transform: [{ scaleX: -1 }] };
   return (
     <View style={flip}>
-      <Fan color={shared.palette.rule} down={shared.down} entries={entries.map(entry => ({ id: entry.id, item: <View style={flip}>{entry.item}</View> }))} />
+      <Fan shared={shared} entries={entries.map(entry => ({ ...entry, item: <View style={flip}>{entry.item}</View> }))} />
     </View>
   );
 }
@@ -188,7 +251,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   const own = sceneWords({ words: beside.words, ayahKeys: [], at: 0, shared, size: 17, marks: beside, color: shared.palette.muted });
   const text: SceneText = { size: 17, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
   return (
-    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text}>
+    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools id={id} ayahKeys={[of]} shared={shared} />}>
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
       <Words words={beside.words} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
@@ -201,7 +264,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
 function befores(ayahKeys: string[], shared: Shared): Entry[] {
   const around = shared.around;
   if (!around) return [];
-  return ayahKeys.flatMap(key => around.before[key] ? [{ id: `b${key}`, item: <NeighbourBox id={`b${key}`} beside={around.before[key]!} of={key} shared={shared} /> }] : []);
+  return ayahKeys.flatMap(key => around.before[key] ? [{ id: `b${key}`, keys: [key], item: <NeighbourBox id={`b${key}`} beside={around.before[key]!} of={key} shared={shared} /> }] : []);
 }
 
 function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Shared }) {
@@ -216,33 +279,37 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   const { around } = shared;
   const afters: Entry[] = !around ? [] : node.ayat.flatMap(key => {
     const beside = around.after[around.ends[key]];
-    return beside ? [{ id: `a${key}`, item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} /> }] : [];
+    return beside ? [{ id: `a${key}`, keys: [key], item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} /> }] : [];
   });
-  const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
+  const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   entries.forEach(entry => edge(shared, id, entry.id));
   const references = node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ');
-  const text: SceneText = { ...sceneWords({ words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20 }), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}) };
+  const shownWords = { words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, differs: differing(node.forms) };
+  const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}) };
   return (
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {shown && (
-        <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}>
+        <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
+          tools={own === undefined && <Tools id={id} ayahKeys={all} shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
-          <Words words={words} ayahKeys={all} at={path.length} shared={shared} size={root ? 22 : 20} />
+          <Words {...shownWords} />
           {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
           </>}
         </Box>
       )}
       {entries.length > 0 && <>
-        <Stub color={shared.palette.rule} down={shared.down} ids={entries.map(entry => entry.id)} />
-        <Fan color={shared.palette.rule} down={shared.down} entries={entries} />
+        <Stub shared={shared} entries={entries} />
+        <Fan shared={shared} entries={entries} />
       </>}
     </View>
   );
 }
 
 type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void;
+  /** The lit paths, and the node buttons (the branches tab draws both; the quiz neither). */
+  paths?: Paths; actions?: NodeActions;
   direction?: Direction; around?: Around; growth?: TreeGrowth;
   /** Filled with a function that measures the drawn tree for the video. */
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
@@ -253,9 +320,9 @@ type Props = { presentation: Presentation; matches: Matches; names: Record<numbe
  * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
  * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
  */
-function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode }: Props) {
+function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions }: Props) {
   const down = direction === 'down';
-  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode };
+  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions };
   const registry = useRef<Registry>(new Map()).current;
   const rootView = useRef<Host>(null);
   const rootId = nodeId(-1);
@@ -266,12 +333,12 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
   const before: Entry[] = presentation.prefixes.length === 0 ? befores(all, shared) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
     if (prefix.word) {
       const lead = befores(prefix.keys, shared);
-      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20 };
+      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, differs: differing(prefix.forms) };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
-      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)}>
+      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)} tools={<Tools id={`p${i}`} ayahKeys={prefix.keys} shared={shared} />}>
         <Words {...prefixWords} />
       </Box>;
-      return [{ id: `p${i}`, item: lead.length ? <View style={{ flexDirection: down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub color={palette.rule} down={down} ids={lead.map(entry => entry.id)} /><BackFan entries={lead} shared={shared} /></View> : box }];
+      return [{ id: `p${i}`, keys: prefix.keys, item: lead.length ? <View style={{ flexDirection: down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub shared={shared} entries={lead} /><BackFan entries={lead} shared={shared} /></View> : box }];
     }
     return mixed ? required(prefix.keys, shared, around ?? aroundOf(presentation)) : befores(prefix.keys, shared);
   });
@@ -283,7 +350,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
       <View ref={rootView} onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
         {before.length > 0 && <>
           <BackFan entries={before} shared={shared} />
-          <Stub color={palette.rule} down={down} ids={before.map(entry => entry.id)} />
+          <Stub shared={shared} entries={before} />
         </>}
         <Node node={presentation.tree} path={[]} shared={shared} />
       </View>
@@ -315,7 +382,7 @@ function required(ayahKeys: string[], shared: Shared, context: Around): Entry[] 
     const earlier = shared.around?.earlier[key];
     const box = <NeighbourBox id={`b${key}`} beside={beside} of={key} shared={shared} />;
     if (earlier) edge(shared, `b${key}`, `e${key}`, true);
-    return [{ id: `b${key}`, item: earlier ? <View style={{ flexDirection: shared.down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub color={shared.palette.rule} down={shared.down} ids={[`e${key}`]} /><NeighbourBox id={`e${key}`} beside={earlier} of={key} shared={shared} /></View> : box }];
+    return [{ id: `b${key}`, keys: [key], item: earlier ? <View style={{ flexDirection: shared.down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub shared={shared} entries={[{ id: `e${key}`, keys: [key], item: null }]} /><NeighbourBox id={`e${key}`} beside={earlier} of={key} shared={shared} /></View> : box }];
   });
 }
 

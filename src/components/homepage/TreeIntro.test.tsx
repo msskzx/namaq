@@ -3,7 +3,6 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { useRef, useState } from 'react';
 import TreeIntro, { LOGO, SEEN } from './TreeIntro';
 
-const opened = vi.fn();
 let reduced = false;
 let surround = false;
 
@@ -16,7 +15,7 @@ function Tree() {
   return <div ref={root}>
     <label><input type="checkbox" role="switch" aria-label="الآيات المحيطة" checked={on} onChange={event => setOn(event.currentTarget.checked)} /></label>
     <div data-tree-content>
-      <div data-node="n-1" data-keys="1:1 1:2"><span className="font-quran">إن</span><button data-context-open onClick={opened}>open</button></div>
+      <div data-node="n-1" data-keys="1:1 1:2"><span className="font-quran">إن</span></div>
       <span data-line />
       <ul>
         <li><div data-node="n0" data-keys="1:1"><PathToggle /><span className="font-quran">جنات</span></div></li>
@@ -34,7 +33,6 @@ const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node
 const skip = () => screen.queryByRole('button', { name: 'تخطّ' });
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 const elementFromPoint = document.elementFromPoint;
-const answer = (ok: boolean) => vi.fn(async () => ({ ok, json: async () => [context] }));
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -42,20 +40,15 @@ beforeEach(() => {
   surround = false;
   localStorage.clear();
   window.history.replaceState(null, '', '/');
-  opened.mockClear();
   lit.mockClear();
   Element.prototype.animate = vi.fn(() => ({ cancel: vi.fn(), finished: Promise.resolve() }) as unknown as Animation);
   window.matchMedia = vi.fn(() => ({ matches: reduced }) as MediaQueryList);
-  vi.stubGlobal('fetch', answer(false));
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); document.elementFromPoint = elementFromPoint; });
 
-const context = { ayah: { key: '1:2', words: ['عيون', 'ثانية'], page: 1 }, before: { key: '1:1', words: ['جنات', 'أولى'], page: 1 }, after: null };
 const showAll = () => { document.elementFromPoint = () => document.querySelector('[data-tree-content]'); };
 
-it('grows the tree level by level with every node typed, then fades in the surrounding ayat, lights one path and shows a small ayah card, and remembers', async () => {
-  const fetched = answer(true);
-  vi.stubGlobal('fetch', fetched);
+it('grows the tree level by level with every node typed, then fades in the surrounding ayat, lights one path, and remembers', async () => {
   showAll();
   render(<Tree />);
   expect(skip()).toBeTruthy();
@@ -88,45 +81,17 @@ it('grows the tree level by level with every node typed, then fades in the surro
   const around = screen.getByTestId('around');
   expect(vi.mocked(Element.prototype.animate).mock.contexts).toContain(around);
   expect(around.style.opacity).toBe('');
-  expect(fetched).not.toHaveBeenCalled();
   await advance(1900);
   expect(lit).toHaveBeenCalledOnce();
   expect(pressed('n0')).toBe('true');
-  expect(fetched).toHaveBeenCalledWith('/api/quran/context?q=1%3A1', expect.objectContaining({ signal: expect.any(AbortSignal) }));
   await advance(2600);
   expect(lit).toHaveBeenCalledTimes(2);
   expect(pressed('n0')).toBe('false');
-  await advance(600);
-  expect(document.body.textContent).toContain('الآيات في سياقها');
-  expect(document.body.textContent).toContain('عيون ثانية');
-  expect(opened).not.toHaveBeenCalled();
-  await advance(5300);
-  expect(document.body.textContent).not.toContain('عيون ثانية');
+  await advance(700);
   expect(skip()).toBeNull();
   expect(toggle.checked).toBe(false);
   expect(screen.queryByTestId('around')).toBeNull();
   expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
-  expect(localStorage.getItem(SEEN)).toBe('1');
-});
-
-it('skip while the ayah card is open removes it and leaves nothing hidden', async () => {
-  vi.stubGlobal('fetch', answer(true));
-  showAll();
-  render(<Tree />);
-  await advance(8000 + LOGO);
-  expect(document.body.textContent).toContain('عيون ثانية');
-  fireEvent.click(skip()!);
-  expect(document.body.textContent).not.toContain('عيون ثانية');
-  expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
-  expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(false);
-});
-
-it('finishes without the card when the ayah context fails to load', async () => {
-  showAll();
-  render(<Tree />);
-  await advance(13000 + LOGO);
-  expect(document.body.textContent).not.toContain('الآيات في سياقها');
-  expect(skip()).toBeNull();
   expect(localStorage.getItem(SEEN)).toBe('1');
 });
 
@@ -141,7 +106,6 @@ it('skip while nodes are being typed shows the whole tree with its words and lig
   expect(localStorage.getItem(SEEN)).toBe('1');
   await advance(20000);
   expect(lit).not.toHaveBeenCalled();
-  expect(opened).not.toHaveBeenCalled();
 });
 
 it('skip while the path is lit turns the light off and puts the surrounding ayat back', async () => {

@@ -1,20 +1,5 @@
-'use client';
-
-import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
-import useSWR from 'swr';
-import { BookOpen, RotateCcw, TextSearch, X } from 'lucide-react';
-import TreeIcon from '@/components/common/TreeIcon';
-import Button from '@/components/common/Button';
-import MushafText from '@/components/common/MushafText';
-import { useLanguage } from '@/components/language/LanguageContext';
-import PageSpread, { MatchLegend, type SpreadMark } from '@/components/quran/PageSpread';
-import { ayatCount, num } from '@shared/quran/arabicNumber';
+import type { SpreadMark } from '@/components/quran/PageSpread';
 import type { AyahContext } from '@shared/quran/ayahContext';
-import { quranContexts } from '@/lib/quran/quranText';
-import styles from './AyahContext.module.css';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-
-export const GroupLinks = createContext<Record<string, string> | undefined>(undefined);
 
 export const MAX_KEYS = 200;
 
@@ -24,85 +9,4 @@ export function sharedMarks(context: AyahContext, exact: string, root: string): 
     if (context.match?.exact.includes(i)) return [[i, { kind: 'exact', title: exact }]];
     return [];
   }));
-}
-
-// docs/plans/quran-shared-openings.md
-export default function AyahContextButton({ children, ayahKeys, subject, siblings = [], spellings = [], spellingAt = 0, differentWords, names, references, before, after }: { before?: React.ReactNode; after?: React.ReactNode; references?: React.ReactNode; children: React.ReactNode; ayahKeys: string[]; subject?: string; siblings?: string[]; spellings?: { words: string[]; keys: string[] }[]; spellingAt?: number; differentWords: number[]; names: Record<number, string> }) {
-  const groupLinks = useContext(GroupLinks);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const titleId = useId();
-  const [open, setOpen] = useState(false);
-  const { language } = useLanguage();
-  const ar = language === 'ar';
-  const differing = differentWords.length > 0;
-  const label = differing ? (ar ? 'عرض اختلافات الضبط والسياق' : 'View spelling differences and context') : (ar ? 'عرض الآيات في سياقها' : 'View ayat in context');
-  const title = differing ? (ar ? 'اختلافات الضبط والسياق' : 'Spelling differences and context') : (ar ? 'الآيات في سياقها' : 'Ayat in context');
-  const several = new Set([...ayahKeys, ...siblings]).size > 1;
-  const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
-  const rootLabel = ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root';
-  const wanted = [...ayahKeys, ...siblings].slice(0, MAX_KEYS);
-  const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? ['quran-context', ...wanted] : null, ([, ...keys]: string[]) => quranContexts(keys), { revalidateOnFocus: false });
-
-  useEffect(() => {
-    if (!open) return;
-    const bodyOverflow = document.body.style.overflow;
-    const rootOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = bodyOverflow;
-      document.documentElement.style.overflow = rootOverflow;
-    };
-  }, [open]);
-
-  const card = (context: AyahContext, own = false) => {
-    const [surah, number] = context.ayah.key.split(':').map(Number);
-    const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
-    const rows = [context.before, context.ayah, context.after].flatMap(ayah => {
-      if (!ayah) return [[]];
-      const target = ayah === context.ayah;
-      const marks = target ? sharedMarks(context, exactLabel, rootLabel) : {};
-      return [[{ number: Number(ayah.key.split(':')[1]), words: ayah.words, current: ayah === context.ayah, marks }]];
-    });
-    return <article key={context.ayah.key} className={styles.card} aria-label={`${name} ${ar ? num(number) : number}${own ? (ar ? ' · آية هذا الفرع' : ' · this branch') : ''}`}>
-      <PageSpread pages={[{ title: name, subtitle: own ? (ar ? `الآية ${num(number)} · آية هذا الفرع` : `Ayah ${number} · this branch`) : (ar ? `الآية ${num(number)} في سياقها` : `Ayah ${number} in context`), rows }]} />
-      <div className="flex gap-1">
-      {groupLinks?.[context.ayah.key] && <Button size="lg" href={groupLinks[context.ayah.key]} aria-label={ar ? 'عرض المتشابه' : 'View parallels'} title={ar ? 'عرض المتشابه' : 'View parallels'} onClick={() => dialog.current?.close()}><TreeIcon aria-hidden /></Button>}
-      <Button size="lg" href={`/quran/read/${context.ayah.page}?a=${context.ayah.key}`} aria-label={ar ? 'قراءة الآية' : 'Read ayah'} title={ar ? 'قراءة الآية' : 'Read ayah'}><BookOpen aria-hidden /></Button>
-      </div>
-    </article>;
-  };
-
-  return (
-    <>
-      <span id={`${titleId}-subject`} className="contents">{children}</span>
-      {references}
-      <span className="mt-1 flex flex-wrap items-center gap-2" dir="rtl">
-        {before}
-        <Button data-context-open size="sm" className="max-w-full" variant={differing ? 'highlight' : 'outline'} aria-label={subject ? `${label}: ${subject}` : label} title={label} aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
-          <TextSearch size={16} aria-hidden />
-        </Button>
-        {after}
-      </span>
-      <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId} dir="rtl" onClose={() => setOpen(false)} onClick={event => {
-        const bounds = event.currentTarget.getBoundingClientRect();
-        if (event.target === event.currentTarget && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.current?.close();
-      }}>
-        <div className={styles.header}>
-          <div className={styles.heading}><h2 id={titleId}>{title}</h2>{several && <MatchLegend exact={exactLabel} root={rootLabel} />}{differing && <p className={styles.note}>{ar ? 'النص كما ورد في كل آية.' : 'Each ayah keeps its original text.'}</p>}{open && data && several && siblings.length > 0 && <p className={styles.note}>{ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها.' : 'This branch\'s ayat come first, then the ayat that meet it at the same node.'}</p>}</div>
-          <Button size="lg" aria-label={ar ? 'إغلاق' : 'Close'} title={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X aria-hidden /></Button>
-        </div>
-        {open && isLoading && <LoadingSpinner />}
-        {open && error && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => void mutate()} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-        {spellings.length > 0 && <section className={styles.spellings} aria-labelledby={`${titleId}-marks`}>
-          <h3 id={`${titleId}-marks`}>{ar ? 'الضبط في هذه العقدة' : 'Marks in this node'}</h3>
-          <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-quran">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
-        </section>}
-        {open && data && <div className={styles.cards}>
-          {data.filter(context => ayahKeys.includes(context.ayah.key)).map(context => card(context, siblings.length > 0))}
-          {data.filter(context => siblings.includes(context.ayah.key)).map(context => card(context))}
-        </div>}
-      </dialog>
-    </>
-  );
 }

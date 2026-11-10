@@ -4,7 +4,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import type { BranchPiece } from '@shared/quran/branchInventory';
-import BranchTree, { type Direction, type TreeGrowth } from './BranchTree';
+import BranchTree, { type Direction, type NodeActions, type Paths, type TreeGrowth } from './BranchTree';
+import { litPaths, togglePath } from '@shared/quran/pathHighlight';
 import type { TreeScene } from '@/lib/scene';
 import { aroundOf, cardOf, surahNames } from '@/lib/branches';
 import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
@@ -35,7 +36,9 @@ type Props = {
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
   initialCamera?: Camera;
   onCamera?: (camera: Camera) => void;
-  onTap: (ayahKeys: string[] | null) => void;
+  onTap: (ayahKeys: string[] | null, lightPath?: () => void) => void;
+  /** The buttons under each node. */
+  actions?: NodeActions;
   /** Told when a finger starts and stops moving the tree or the cards, so the lifted finger is not read as a tap. */
   onMove: () => void;
   /** A downward swipe on a tree that is not zoomed in: the page's main action (search). */
@@ -51,8 +54,11 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0 }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0, actions }: Props) {
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight) }), [full.width, full.height, footHeight]); // eslint-disable-line react-hooks/exhaustive-deps
+  // The paths lit on this tree, as on the website: tapping a node or its path button, several at once, gone with the card.
+  const [pinned, setPinned] = useState(() => new Map<string, string[]>());
+  const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -172,13 +178,13 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     <GestureDetector gesture={gesture}>
       <View collapsable={false} style={{ width: full.width, height: full.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content ? 1 : 0 }, style]}>
-          <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured}
+          <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured} paths={paths} actions={actions}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
         {footer && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: footHeight, opacity: content ? 1 : 0 }, foot]}>{footer}</Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
-            <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={probed(side)} direction={side} around={surrounding} />
+            <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={probed(side)} direction={side} around={surrounding} actions={actions} />
           </View>
         ))}
       </View>
