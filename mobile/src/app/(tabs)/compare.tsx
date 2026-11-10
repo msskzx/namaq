@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { ArrowLeftRight, ChevronDown, ChevronLeft, ChevronRight, Funnel } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronDown, Funnel } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
@@ -74,13 +74,9 @@ export default function CompareScreen() {
 
   const savedIds = useCallback((id: string) => savedAs(id, bookmarks).length > 0, [bookmarks]);
   const count = visit ? (filter.savedOnly ? cardsFor(visit.lead, visit.other).filter(card => savedIds(card.id)).length : cardsFor(visit.lead, visit.other).length) : 0;
-  const step = { padding: 6 };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar>
-        <Pressable onPress={() => go(index - 1)} disabled={index <= 0} accessibilityRole="button" accessibilityLabel="السابق" style={[step, { opacity: index <= 0 ? 0.35 : 1 }]}>
-          <ChevronRight size={22} color={palette.accent} />
-        </Pressable>
         <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
           style={{ flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
           <ArrowLeftRight size={16} color={palette.ink} />
@@ -91,9 +87,6 @@ export default function CompareScreen() {
         <Pressable onPress={() => setFiltering(true)} hitSlop={4} accessibilityRole="button" accessibilityLabel="تصفية" style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <Funnel size={22} color={palette.muted} />
           {(filter.scope || filter.savedOnly) && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-        </Pressable>
-        <Pressable onPress={() => go(index + 1)} disabled={index >= visits.length - 1} accessibilityRole="button" accessibilityLabel="التالي" style={[step, { opacity: index >= visits.length - 1 ? 0.35 : 1 }]}>
-          <ChevronLeft size={22} color={palette.accent} />
         </Pressable>
       </TopBar>
       {visits.length > 1 && <View style={{ height: 3, backgroundColor: palette.paperDeep }} accessibilityLabel={`الصفحة ${num(index + 1)} من ${num(visits.length)}`}>
