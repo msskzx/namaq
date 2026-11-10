@@ -151,37 +151,45 @@ const ACTION_NAMES: Record<GestureAction, string> = {
 };
 
 /** What each touch does on the mushaf page, per mode, like a game's controls (the website's settings sheet). */
-export function GestureSheet({ open, onClose, palette, mode: shownMode }: { open: boolean; onClose: () => void; palette: Palette; mode: ReaderMode }) {
+export function GestureSettings({ palette, mode: shownMode }: { palette: Palette; mode: ReaderMode }) {
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const [mode, setMode] = useState<ReaderMode>(shownMode);
-  useEffect(() => { if (open) setMode(shownMode); }, [open, shownMode]);
+  useEffect(() => { setMode(shownMode); }, [shownMode]);
   const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
-      <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
-        <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-          {(['read', 'recite'] as const).map(option => (
-            <Pressable key={option} onPress={() => setMode(option)} accessibilityRole="tab" accessibilityState={{ selected: mode === option }} style={chip(mode === option)}>
-              <Text style={{ color: mode === option ? palette.onAccent : palette.ink, fontSize: 15 }}>{option === 'read' ? 'قراءة' : 'تسميع'}</Text>
-            </Pressable>
-          ))}
-        </View>
-        {GESTURES.map(gesture => (
-          <View key={gesture} style={{ gap: 6 }}>
-            <Text style={{ color: palette.ink, fontSize: 15 }}>{GESTURE_NAMES[gesture]}</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-              {MODE_ACTIONS[mode].map(action => {
-                const on = gestures[mode][gesture] === action;
-                return (
-                  <Pressable key={action} onPress={() => setGesture(mode, gesture, action)} accessibilityRole="radio" accessibilityState={{ checked: on }} style={chip(on)}>
-                    <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 13 }}>{ACTION_NAMES[action]}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
+    <View style={{ gap: 14 }}>
+      <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
+      <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
+        {(['read', 'recite'] as const).map(option => (
+          <Pressable key={option} onPress={() => setMode(option)} accessibilityRole="tab" accessibilityState={{ selected: mode === option }} style={chip(mode === option)}>
+            <Text style={{ color: mode === option ? palette.onAccent : palette.ink, fontSize: 15 }}>{option === 'read' ? 'قراءة' : 'تسميع'}</Text>
+          </Pressable>
         ))}
+      </View>
+      {GESTURES.map(gesture => (
+        <View key={gesture} style={{ gap: 6 }}>
+          <Text style={{ color: palette.ink, fontSize: 15 }}>{GESTURE_NAMES[gesture]}</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+            {MODE_ACTIONS[mode].map(action => {
+              const on = gestures[mode][gesture] === action;
+              return (
+                <Pressable key={action} onPress={() => setGesture(mode, gesture, action)} accessibilityRole="radio" accessibilityState={{ checked: on }} style={chip(on)}>
+                  <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 13 }}>{ACTION_NAMES[action]}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+export function GestureSheet({ open, onClose, palette, mode }: { open: boolean; onClose: () => void; palette: Palette; mode: ReaderMode }) {
+  return (
+    <Sheet open={open} onClose={onClose} palette={palette}>
+      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+        <GestureSettings key={String(open)} palette={palette} mode={mode} />
       </View>
     </Sheet>
   );

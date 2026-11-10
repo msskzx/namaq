@@ -1,106 +1,188 @@
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { Funnel, GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
-import type { BranchPiece } from '@shared/quran/branchInventory';
+import { useMemo, useState, useSyncExternalStore } from 'react';
+import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { router, type Href } from 'expo-router';
+import { ArrowLeftRight, Bookmark, BookOpen, EyeOff, Feather, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { readAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
+import { forgottenOrder } from '@shared/quran/recite';
+import { JUZ_INDEX } from '@shared/quran/juzIndex';
+import { searchSurahs } from '@shared/quran/surahSearch';
+import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
-import TreePager from '@/components/TreePager';
 import TreeIcon from '@/components/TreeIcon';
-import LoadingDots from '@/components/LoadingDots';
-import FilterSheet from '@/components/FilterSheet';
-import BranchSearch from '@/components/BranchSearch';
-import { surahNames } from '@/lib/branches';
-import { branchList, isFiltered, listShowing, openingIndex, type ListState } from '@/lib/branchList';
-import { router, useLocalSearchParams } from 'expo-router';
-import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
-import { around as aroundSetting, branchView, listState } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
-import { usePalette, type Palette } from '@/lib/theme';
+import Button, { Row } from '@/components/Button';
+import HomeIntro from '@/components/HomeIntro';
+import { surahs, surahNames } from '@/lib/mushaf';
+import { listedPairs } from '@/lib/compare';
+import { savedCard, type SavedCard } from '@/lib/home';
+import { setIntent, type Intent } from '@/lib/intent';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
-function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
-  return (
-    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label} accessibilityState={on === undefined ? undefined : { selected: on }}
-      style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: on ? 1 : 0, borderColor: palette.accent }}>
-      <Icon size={22} color={on ? palette.accent : palette.muted} />
-      {dot && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-    </Pressable>
-  );
-}
+const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
+const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/compare', read: '/read' };
 
-function Chip({ text, onClear, palette }: { text: string; onClear: () => void; palette: Palette }) {
+const go = (intent: Intent) => { setIntent(intent); router.navigate(TAB_OF[intent.tab]); };
+
+type Section = { number: number; name: string; nameTransliterated?: string | null };
+const comparable = new Set(listedPairs.flatMap(pair => [pair.a, pair.b]));
+const JUZ: Section[] = JUZ_INDEX.map(juz => ({ number: juz.juz, name: `الجزء ${num(juz.juz)}` }));
+
+function Heading({ Icon, title, palette, children }: { Icon: (props: LucideProps) => React.ReactNode; title: string; palette: Palette; children?: React.ReactNode }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: palette.rule, borderRadius: 16, paddingStart: 12, paddingEnd: 4, height: 32 }}>
-      <Text style={{ color: palette.ink, fontSize: 14 }} numberOfLines={1}>{text}</Text>
-      <Pressable onPress={onClear} accessibilityRole="button" accessibilityLabel={`إزالة ${text}`} hitSlop={8} style={{ padding: 4 }}><X size={14} color={palette.muted} /></Pressable>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, minHeight: 42 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Icon size={20} color={palette.accent} />
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>{title}</Text>
+      </View>
+      {children}
     </View>
   );
 }
 
-export default function BranchesScreen() {
+/** The website's homepage Quran box: pick a surah or juz, then read it, explore its shared wording or compare it. */
+function QuranPicker({ palette }: { palette: Palette }) {
+  const [unit, setUnit] = useState<'surah' | 'juz'>('surah');
+  const [query, setQuery] = useState('');
+  const [number, setNumber] = useState<number | null>(null);
+  const sections: Section[] = unit === 'surah' ? surahs : JUZ;
+  const shown = useMemo(() => {
+    const needle = unit === 'juz' ? query.match(/[0-9٠-٩۰-۹]+/)?.[0] ?? query : query;
+    return searchSurahs(sections, needle);
+  }, [sections, unit, query]);
+  const selected = sections.find(section => section.number === number);
+  const pickUnit = (next: 'surah' | 'juz') => { setUnit(next); setQuery(''); setNumber(null); };
+  const read = () => {
+    if (!number) return;
+    if (unit === 'surah') go({ tab: 'read', at: `${number}:1` });
+    else { const juz = JUZ_INDEX[number - 1]; go({ tab: 'read', at: `${juz.surah}:${juz.ayah}` }); }
+  };
+  const explore = () => { if (number) go(unit === 'surah' ? { tab: 'branches', surah: number } : { tab: 'branches', juz: number }); };
+  const compare = () => { if (number) go({ tab: 'compare', lead: number }); };
+  const placeholder = unit === 'surah' ? 'ابحث عن سورة' : 'ابحث عن جزء';
+  return (
+    <View style={{ gap: 10, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, backgroundColor: palette.card }}>
+      <Heading Icon={BookOpen} title="القرآن الكريم" palette={palette}>
+        <View accessibilityRole="radiogroup" accessibilityLabel="عرض حسب" style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2, gap: 2 }}>
+          {(['surah', 'juz'] as const).map(value => {
+            const on = unit === value;
+            const Icon = value === 'surah' ? List : Layers;
+            return (
+              <Pressable key={value} onPress={() => pickUnit(value)} accessibilityRole="radio" accessibilityState={{ checked: on }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: on ? palette.accent : 'transparent' }}>
+                <Icon size={16} color={on ? palette.onAccent : palette.ink} />
+                <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 14 }}>{value === 'surah' ? 'السور' : 'الأجزاء'}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </Heading>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.paper }}>
+        <Search size={18} color={palette.muted} />
+        <TextInput value={query} onChangeText={text => { setQuery(text); setNumber(null); }} placeholder={placeholder} placeholderTextColor={palette.muted} accessibilityLabel={placeholder}
+          style={{ flex: 1, height: 42, color: palette.ink, fontSize: 16, textAlign: 'right' }} />
+      </View>
+      <ScrollView nestedScrollEnabled style={{ height: 240, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, backgroundColor: palette.paper }}>
+        {shown.map(section => {
+          const on = section.number === number;
+          return (
+            <Pressable key={section.number} onPress={() => setNumber(section.number)} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={section.name}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderBottomWidth: 1, borderColor: palette.paperDeep, backgroundColor: on ? palette.paperDeep : 'transparent' }}>
+              <Text style={{ width: 32, color: palette.muted, fontSize: 13, textAlign: 'center' }}>{num(section.number)}</Text>
+              <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>{section.name}</Text>
+              <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: on ? 5 : 1.5, borderColor: on ? palette.accent : palette.rule }} />
+            </Pressable>
+          );
+        })}
+        {!shown.length && <Text style={{ padding: 16, color: palette.muted, fontSize: 15, textAlign: 'center' }}>لا توجد نتيجة مطابقة.</Text>}
+      </ScrollView>
+      <Text style={{ color: selected ? palette.ink : palette.muted, fontSize: 15 }}>{selected ? selected.name : unit === 'surah' ? 'اختر سورة' : 'اختر جزءًا'}</Text>
+      <Row>
+        <Button variant="primary" Icon={BookOpen} label="اقرأ" onPress={read} disabled={!selected} />
+        <Button Icon={TreeIcon} label="استكشف المتشابهات" onPress={explore} disabled={!selected} />
+        {unit === 'surah' && <Button Icon={ArrowLeftRight} label="قارن" onPress={compare} disabled={!selected || !comparable.has(selected.number)} />}
+      </Row>
+    </View>
+  );
+}
+
+function ShelfCard({ card, palette }: { card: SavedCard; palette: Palette }) {
+  const Icon = KIND_ICONS[card.kind];
+  const label = BOOKMARK_KIND_LABEL[card.kind].ar;
+  return (
+    <Pressable onPress={() => card.open && go(card.open)} disabled={!card.open} accessibilityRole="link" accessibilityLabel={`${label}: ${card.text}`}
+      style={({ pressed }) => ({ width: 250, minHeight: 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Icon size={14} color={palette.accent} />
+        <Text style={{ color: palette.muted, fontSize: 12 }}>{label}</Text>
+      </View>
+      {card.references.length > 0 && (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 12, rowGap: 2, paddingBottom: 8, borderBottomWidth: 1, borderColor: palette.rule }}>
+          {card.references.map(reference => (
+            <Text key={reference.surah} style={{ color: palette.muted, fontSize: 13 }}>
+              {surahNames[reference.surah]} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
+            </Text>
+          ))}
+        </View>
+      )}
+      <Text numberOfLines={5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{card.text}</Text>
+    </Pressable>
+  );
+}
+
+/** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
+export default function HomeScreen() {
   const palette = usePalette();
-  const [list, setList] = listState.use();
-  const [mode, setMode] = branchView.use();
-  const [around, setAround] = aroundSetting.use();
-  const [rotated, setRotated] = useState(false);
-  const [searching, setSearching] = useState(false);
-  const [filtering, setFiltering] = useState(false);
-  /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. */
-  const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const [pieces, setPieces] = useState<BranchPiece[] | null>(null);
-  useEffect(() => loadPrefs(readJson<Prefs>('branches-grow'), prefs => writeJson('branches-grow', prefs)), []);
-  // The list is built from the bundled data after the first frame, so the tab opens at once.
-  const savedKey = list.saved ? bookmarks : null;
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const frame = requestAnimationFrame(() => { timer = setTimeout(() => setPieces(branchList(list, bookmarks)), 0); });
-    return () => { cancelAnimationFrame(frame); clearTimeout(timer); };
-  }, [list, savedKey]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const change = useCallback((next: ListState, opening?: { id?: string; query?: string }) => {
-    closeStudio();
-    setPieces(null);
-    setStart(opening ?? {});
-    setList(next);
-  }, [setList]);
-  const startIndex = useMemo(() => {
-    if (!pieces || !start) return undefined;
-    if (start.id) { const at = pieces.findIndex(piece => piece.id === start.id); if (at >= 0) return at; }
-    return openingIndex(pieces, start.query ?? '');
-  }, [pieces, start]);
-  const onIndex = useCallback(() => setRotated(false), []);
-  // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
-  const { tree } = useLocalSearchParams<{ tree?: string }>();
-  useEffect(() => {
-    if (!tree) return;
-    const found = listShowing(list, tree, bookmarks);
-    if (found) change(found.list, { id: found.piece.id });
-    router.setParams({ tree: undefined });
-  }, [tree]); // eslint-disable-line react-hooks/exhaustive-deps
-  const listKey = JSON.stringify([list, start]);
-
+  const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
+  const hasTrees = cards.some(card => card.kind === 'tree' && card.open);
+  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
+  const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
+  const push = (href: Href) => router.push(href);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar>
-        <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query} />
-        <BarButton label="تصفية" onPress={() => setFiltering(true)} Icon={Funnel} palette={palette} dot={isFiltered(list)} />
-        <BarButton label={mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => { closeStudio(); setMode(mode === 'tree' ? 'matrix' : 'tree'); }} Icon={mode === 'tree' ? GalleryHorizontal : TreeIcon} palette={palette} />
-        {mode === 'tree' && <BarButton label="تدوير الشجرة" onPress={() => setRotated(!rotated)} Icon={RotateCwSquare} palette={palette} />}
-        <BarButton label="الآيات المحيطة" onPress={() => { closeStudio(); setAround(!around); }} Icon={UnfoldHorizontal} palette={palette} on={around} />
-      </TopBar>
-      {(list.query || list.surah) ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
-        {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
-        {list.surah ? <Chip text={`سورة ${surahNames[list.surah]}`} onClear={() => change({ ...list, surah: undefined })} palette={palette} /> : null}
-      </View> : null}
-      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} />
-        : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-          {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
-        </View>}
-      <FilterSheet open={filtering} onClose={() => setFiltering(false)} state={list} onApply={next => change(next)} palette={palette} />
-      {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
-        onPhrase={(text, id) => { setSearching(false); change({ ...list, query: text }, { id, query: text }); }}
-        onSearch={query => { setSearching(false); change({ ...list, query }, { query }); }}
-        onSurah={surah => { setSearching(false); change({ ...list, query: '', surah }); }} />}
+      <TopBar />
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 28 }}>
+        <QuranPicker palette={palette} />
+
+        <View style={{ gap: 10 }}>
+          <Heading Icon={Bookmark} title="المحفوظات" palette={palette}>
+            {hasTrees && <Button Icon={Library} accessibilityLabel="افتح المحفوظات" onPress={() => go({ tab: 'branches', saved: true })} />}
+          </Heading>
+          {cards.length ? (
+            // Inverted in a left-to-right box, as the compare pager does, so the newest card starts on the right on every platform.
+            <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
+              <FlatList data={cards} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={card => card.id}
+                contentContainerStyle={{ gap: 12, paddingVertical: 4, paddingHorizontal: 16 }}
+                renderItem={({ item }) => <View style={{ direction: 'rtl' }}><ShelfCard card={item} palette={palette} /></View>} />
+            </View>
+          ) : (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
+              <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو عائلة أو بطاقة مقارنة أو آية بزر</Text>
+              <Bookmark size={18} color={palette.muted} accessibilityLabel="الحفظ" />
+              <Text style={{ color: palette.muted, fontSize: 15 }}>لتجدها هنا.</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={{ gap: 12, padding: 16, borderTopWidth: 1, borderBottomWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, marginHorizontal: -16 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+            <Feather size={26} color={palette.accent} />
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>اختبارات القرآن</Text>
+              <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 23, textAlign: 'right' }}>تأمّل الآيات، ثم اختبر مواضع التشابه، أو سمّع حفظك آيةً آية.</Text>
+            </View>
+          </View>
+          <Row>
+            <Button Icon={Feather} label="بمفردك" onPress={() => push('/quiz/solo')} />
+            <Button Icon={Users} label="مع غيرك" onPress={() => push('/quiz/party')} />
+            <Button Icon={EyeOff} label="تسميع" onPress={() => go({ tab: 'read', recite: true })} />
+            {forgotten.length > 0 && <Button Icon={LightbulbOff} label={num(forgotten.length)} accessibilityLabel={`راجع ما نسيت (${num(forgotten.length)})`}
+              onPress={() => go({ tab: 'read', at: forgotten[0], recite: true, review: true })} />}
+          </Row>
+        </View>
+      </ScrollView>
+      <HomeIntro palette={palette} />
     </View>
   );
 }

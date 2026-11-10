@@ -11,6 +11,7 @@ import CompareSheet from '@/components/CompareSheet';
 import FilterSheet from '@/components/FilterSheet';
 import { cardsFor, filteredPairs, filterOfList, landingIndex, listOfFilter, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
 import { readJson, writeJson } from '@/lib/storage';
+import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 
 const PLACE = 'compare-place';
@@ -50,6 +51,23 @@ export default function CompareScreen() {
     setSheet(false);
     if (at >= 0) { pager.current?.goTo(at, false); arrive(at); }
   };
+  // The homepage opens a surah's first pair, or the pair of a saved card; a filter that hides it is cleared.
+  // The pager remounts on the pair, so it lands there whether the tab was open or opens now.
+  const [jumps, setJumps] = useState(0);
+  useIntent('compare', ({ lead, other }) => {
+    const find = (list: typeof visits) => list.findIndex(item => (item.lead === lead && (!other || item.other === other)) || (!!other && item.lead === other && item.other === lead));
+    let list = visits;
+    let at = find(list);
+    if (at < 0 && (filter.scope || filter.savedOnly)) {
+      list = visitsOf(filteredPairs({}));
+      at = find(list);
+      if (at >= 0) { writeJson(FILTER, {}); setFilter({}); }
+    }
+    if (at < 0) return;
+    writeJson(PLACE, { lead: list[at].lead, other: list[at].other });
+    setIndex(at);
+    setJumps(value => value + 1);
+  });
   // A new list (after a filter) remounts the pager at the kept page.
   const listKey = useMemo(() => `${filter.savedOnly ? 's' : ''}${filter.scope ? JSON.stringify(filter.scope) : ''}`, [filter]);
   useEffect(() => { if (visit) writeJson(PLACE, { lead: visit.lead, other: visit.other }); }, [listKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -81,7 +99,7 @@ export default function CompareScreen() {
       {visits.length > 1 && <View style={{ height: 3, backgroundColor: palette.paperDeep }} accessibilityLabel={`الصفحة ${num(index + 1)} من ${num(visits.length)}`}>
         <View style={{ height: 3, width: `${((index + 1) / visits.length) * 100}%`, alignSelf: 'flex-start', backgroundColor: palette.accent }} />
       </View>}
-      {visits.length ? <ComparePager key={listKey} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
+      {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16 }}>لا صفحات بهذه التصفية.</Text></View>}
       <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />
