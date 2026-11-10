@@ -143,7 +143,7 @@ export default function HomeScreen() {
   const onScroll = useShrinkOnScroll();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar settings />
+      <TopBar settings hideOnScroll />
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 28 }}>
         <QuranPicker palette={palette} />
 

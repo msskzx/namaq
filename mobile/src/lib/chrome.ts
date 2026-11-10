@@ -24,7 +24,7 @@ const immersive = flag();
 export const setImmersive = immersive.set;
 export const useImmersive = immersive.use;
 
-/** Whether the bottom tab bar is drawn smaller because the page is scrolling down (see scrollShrink.ts). */
+/** Whether the page is scrolling down (see scrollShrink.ts): the bottom tab bar is drawn smaller and a hideOnScroll top bar slides away. */
 const compact = flag();
 export const setCompact = compact.set;
 export const useCompact = compact.use;

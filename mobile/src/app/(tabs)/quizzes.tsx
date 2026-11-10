@@ -17,7 +17,7 @@ export default function QuizzesScreen() {
   const onScroll = useShrinkOnScroll();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar />
+      <TopBar hideOnScroll />
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, gap: 14 }}>
         {MODES.map(({ href, Icon, title, text }) => (
           <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
