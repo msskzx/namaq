@@ -32,6 +32,8 @@ import MushafPage from './MushafPage';
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
 const SPREAD_KEY = 'quran-reader-spread';
+/** The last page read: /quran/read opens there. */
+export const LAST_PAGE_KEY = 'quran-reader-page';
 const BAR_KEY = 'quran-reader-bar';
 export const LAST_RECITE_KEY = 'quran-recite-last';
 const WIDE = '(min-width: 1024px) and (orientation: landscape)';
@@ -160,6 +162,7 @@ export default function ReaderView({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- endsOn and ayahCounts follow `groups` and `surahs`
     [page, two, router, position, reviewing, groups, ayahCounts],
   );
+  useEffect(() => { write(LAST_PAGE_KEY, String(page)); }, [page]);
   useEffect(() => {
     for (const step of [1, -1] as const) {
       const target = turn(page, two, step);
