@@ -36,6 +36,15 @@
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "66b966c4-8d30-422d-985d-8be1e196c9c6"
+      }
+    },
+    "owner": "brilliant-star",
+    "updates": {
+      "url": "https://u.expo.dev/66b966c4-8d30-422d-985d-8be1e196c9c6"
     }
   }
 }
