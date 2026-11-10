@@ -50,7 +50,8 @@ export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = fals
     };
     for (const start of starts.filter(start => start.keys.includes(step.key))) {
       if (shown.has(start.id)) beat(RELIGHT, [], [start.id]);
-      else { beat(LINE, [lineId(start.id)]); beat(BOX, [start.id], [start.id]); }
+      // A box drawn before the root comes first, then the connector from it toward the root: the tree never opens on a connector.
+      else { beat(BOX, [start.id], [start.id]); beat(LINE, [lineId(start.id)]); }
     }
     step.nodes.forEach((index, j) => {
       const id = nodeId(index);
