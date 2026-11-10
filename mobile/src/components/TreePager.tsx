@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Share, Text, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Bookmark, Share2 } from 'lucide-react-native';
 import { router } from 'expo-router';
@@ -129,6 +130,27 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const growing = growth.status === 'playing' || growth.status === 'paused';
   const lane: Lane | undefined = growing ? undefined : { offset, width, count, settle };
 
+  // The row under the card swipes the cards too, so a thumb near the bottom of the screen still turns the tree.
+  const footFrom = useSharedValue(0);
+  const footSwipe = Gesture.Pan()
+    .enabled(!growing && width > 0)
+    .activeOffsetX([-12, 12])
+    .failOffsetY([-12, 12])
+    .onStart(() => {
+      cancelAnimation(offset);
+      footFrom.value = Math.round(offset.value / width);
+      scheduleOnRN(move);
+    })
+    .onUpdate(event => {
+      const forward = event.translationX > 0;
+      const open = forward ? footFrom.value + 1 < count : footFrom.value > 0;
+      offset.value = footFrom.value * width + (open ? event.translationX : event.translationX / 4);
+    })
+    .onEnd(event => {
+      scheduleOnRN(move);
+      settle(footFrom.value, event.translationX, event.velocityX);
+    });
+
   const tap = useCallback((ayahKeys: string[] | null) => {
     const now = Date.now();
     if (now - moved.current < 350) return;
@@ -178,9 +200,11 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
         {/* Over the card's foot, so opening the studio does not resize the card. */}
         <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: palette.paper }}><StudioProgress palette={palette} /></View>
       </View>
-      <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
-        {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={mode === 'tree' ? () => void openVideo() : undefined} />}
-      </View>
+      <GestureDetector gesture={footSwipe}>
+        <View collapsable={false} style={{ borderTopWidth: 1, borderColor: palette.rule }}>
+          {piece && <Actions piece={piece} palette={palette} position={index + 1} total={count} pop={pop} onVideo={mode === 'tree' ? () => void openVideo() : undefined} />}
+        </View>
+      </GestureDetector>
       <VideoSheet input={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
