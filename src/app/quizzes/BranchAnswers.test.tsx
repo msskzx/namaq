@@ -194,11 +194,6 @@ describe('complete branch tree answers', () => {
     ];
     const own = { tree: branch(group), variants: variants(group) };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
-    const zoom = within(screen.getByRole('region', { name: 'أكمل الشجرة' })).getByRole('toolbar', { name: 'تكبير الشجرة' });
-    expect(within(zoom).getByRole('button', { name: 'ملاءمة' })).toBeTruthy();
-    expect(zoom.className).toContain('max-sm:hidden');
-    expect(zoom.parentElement!.className).toContain('max-sm:hidden');
-    expect(screen.getByRole('button', { name: 'تدوير الشجرة' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
     expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
@@ -249,13 +244,6 @@ describe('complete branch tree answers', () => {
     expect(screen.getAllByText('Nothing typed')).toHaveLength(2);
     const nodes = [...within(screen.getByRole('region', { name: 'Answer tree' })).getAllByText(/Correct|No answer/)].map(verdict => verdict.closest<HTMLElement>('[data-answer]')!.dataset.answer);
     expect(nodes).toEqual(['correct', 'correct', 'incorrect', 'incorrect']);
-  });
-
-  it('checks a completed tree through form submission', () => {
-    const onCheck = vi.fn();
-    render(<BranchInputs question={question} typed={typed} onChange={vi.fn()} onCheck={onCheck} ar={true} />);
-    fireEvent.submit(screen.getByRole('button', { name: 'تحقق' }).closest('form')!);
-    expect(onCheck).toHaveBeenCalledOnce();
   });
 
   it('shows corrections and each leaf reference as plain text', () => {

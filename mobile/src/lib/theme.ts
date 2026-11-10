@@ -13,6 +13,7 @@ export const light = {
   root: '#665177',
   green: '#506449',
   path: '#426578',
+  amber: '#806239',
   // A lit word and its partner on the compare cards.
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
@@ -34,6 +35,7 @@ export const dark: Palette = {
   root: '#c3afd5',
   green: '#b1c59f',
   path: '#a9c4d1',
+  amber: '#dcc5a0',
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
   phases: ['#a9c4d1', '#dcb46e', '#d9a6b0', '#b1c59f', '#c3afd5'],
