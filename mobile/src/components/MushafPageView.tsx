@@ -10,6 +10,8 @@ import { QURAN_FONT, type Palette } from '@/lib/theme';
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
 const BASE = 40;
+/** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
+const EMPTY_END = '\u06DD';
 const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
@@ -169,9 +171,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                             <Text key={end}>
                               {group.word ? ' ' : ''}
                               <Text style={[{ color: !endHidden(end) && saved.has(`${group.surah}:${end}`) ? palette.root : palette.accent },
-                                mark === `${group.surah}:${end}` ? { backgroundColor: tint(palette.accent, 0.18), borderRadius: 99 } : null,
-                                endHidden(end) ? { color: 'transparent', borderRadius: 99, backgroundColor: tint(palette.accent, 0.08), borderWidth: 1, borderColor: tint(palette.accent, 0.55) } : null]}>
-                                {num(end)}
+                                mark === `${group.surah}:${end}` ? { backgroundColor: tint(palette.accent, 0.18), borderRadius: 99 } : null]}>
+                                {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
+                                {endHidden(end) ? EMPTY_END : num(end)}
                               </Text>
                             </Text>
                           ))}
