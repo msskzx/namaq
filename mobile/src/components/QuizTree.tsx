@@ -2,7 +2,7 @@ import { useMemo, useRef } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 import type { Branch, Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
+import { quranText } from '@/lib/quranText';
 import { givenAnswer } from '@shared/quiz/branchAnswers';
 import { gradedTree, neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
@@ -39,7 +39,7 @@ export function QuizInputs({ question, typed, onType, palette, names }: { questi
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
   const asked = question.asked ?? [];
   const renderNode: RenderNode = (node, index) => !isAsked(question, index)
-    ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(givenAnswer(node))}</Text>
+    ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{quranText(givenAnswer(node))}</Text>
     : <TextInput value={values[index]} onChangeText={text => onType(index, text)}
         accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
         autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
@@ -66,8 +66,8 @@ function Graded({ row, palette }: { row: Correction; palette: Palette }) {
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
       </View>
       <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
-        <Text style={{ textDecorationLine: 'underline', textDecorationColor: palette.accent }}>{mushafText(row.node.words.slice(0, cut).join(' '))}</Text>
-        {cut < row.node.words.length ? ` ${mushafText(row.node.words.slice(cut).join(' '))}` : ''}
+        <Text style={{ textDecorationLine: 'underline', textDecorationColor: palette.accent }}>{quranText(row.node.words.slice(0, cut).join(' '))}</Text>
+        {cut < row.node.words.length ? ` ${quranText(row.node.words.slice(cut).join(' '))}` : ''}
       </Text>
       {!row.correct && (
         <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>

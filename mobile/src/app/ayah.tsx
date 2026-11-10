@@ -29,7 +29,7 @@ export default function AyahScreen() {
             <View key={ayah.key} style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 14 }}>
               <Text style={{ color: palette.muted, fontSize: 13, marginBottom: 4 }}>{surahNames[surah]} {num(number)}</Text>
               <Text style={{ fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 48, color: palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-                {mushafText(ayah.words.join(' '))} <Text style={{ color: palette.accent }}>﴿{num(number)}﴾</Text>
+                {mushafText(ayah.words.join(' '))} <Text style={{ color: palette.accent }}>{num(number)}</Text>
               </Text>
             </View>
           );

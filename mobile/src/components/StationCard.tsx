@@ -23,7 +23,7 @@ function Segment({ segment, open, onToggle, palette }: { segment: SegmentView; o
         <View style={{ paddingHorizontal: 12, paddingBottom: 10 }}>
           {segment.lines.map(line => (
             <Text key={line.ayah} style={{ fontFamily: QURAN_FONT, fontSize: 23, lineHeight: 46, color: palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-              {mushafText(line.text)} <Text style={{ color: palette.accent }}>﴿{num(line.ayah)}﴾</Text>
+              {mushafText(line.text)} <Text style={{ color: palette.accent }}>{num(line.ayah)}</Text>
             </Text>
           ))}
         </View>

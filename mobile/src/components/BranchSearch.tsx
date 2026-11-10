@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
-import { mushafText } from '@shared/quran/mushafText';
+import { quranText } from '@/lib/quranText';
 import { suggestions, type ListState } from '@/lib/branchList';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
@@ -47,7 +47,7 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onPhr
         {found.surahs.length > 0 && found.phrases.length > 0 && <Text style={{ color: palette.muted, fontSize: 12, paddingHorizontal: 16, paddingTop: 10 }}>العبارات</Text>}
         {found.phrases.map(piece => (
           <Pressable key={piece.id} onPress={() => onPhrase(piece.text, piece.id)} accessibilityRole="button" style={row}>
-            <Text style={{ flex: 1, color: palette.ink, fontSize: 20, fontFamily: QURAN_FONT, lineHeight: 38, textAlign: 'right' }}>{mushafText(piece.text)}</Text>
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 20, fontFamily: QURAN_FONT, lineHeight: 38, textAlign: 'right' }}>{quranText(piece.text)}</Text>
             <Text style={{ color: palette.accent }}>{num(piece.count)}</Text>
           </Pressable>
         ))}
