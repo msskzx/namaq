@@ -35,3 +35,7 @@ export const around = setting('branches-surround', false, isBoolean);
 /** The filters, search and surah narrowing the trees, kept so the tab opens as it was left. */
 export const listState = setting<ListState>('branches-list', EMPTY_LIST, (value): value is ListState =>
   !!value && typeof value === 'object' && typeof (value as ListState).query === 'string' && typeof (value as ListState).filters === 'object');
+
+/** The settings sheet's look: light, dark, or as the phone is set. */
+export type ThemeChoice = 'light' | 'dark' | 'system';
+export const themeChoice = setting<ThemeChoice>('theme', 'system', (value): value is ThemeChoice => value === 'light' || value === 'dark' || value === 'system');

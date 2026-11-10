@@ -16,6 +16,7 @@ import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from
 import { pageModel, reciteView } from '@/lib/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
+import { useIntent } from '@/lib/intent';
 import { usePalette, type Palette } from '@/lib/theme';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
@@ -97,6 +98,17 @@ export default function Reader() {
       setPosition({ start: to.key, shown: null, words: 0 });
     }
   }, [position]);
+
+  // The homepage opens the mushaf at a surah or juz, or starts a recitation.
+  useIntent('read', intent => {
+    const to = (intent.at && pageOfAyah(intent.at)) || intent.page || page;
+    setPage(to);
+    setActions(null);
+    setTools(false);
+    setReviewing(!!intent.recite && !!intent.review);
+    setMark(intent.at && !intent.recite ? { key: intent.at, page: to } : null);
+    setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], shown: null, words: 0 } : null);
+  });
 
   const startRecite = () => {
     setActions(null);

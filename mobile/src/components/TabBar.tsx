@@ -7,8 +7,9 @@ import { usePalette } from '@/lib/theme';
 import { useImmersive } from '@/lib/chrome';
 
 // The website's phone tabs (src/lib/navigation.ts NAV_SECTIONS), icon only, plus the prophets timeline (owner, 2026-11-10).
+// The homepage (index) has no tab: the logo in the top bar opens it, as on the website.
 const TABS: Record<string, { label: string; Icon: (props: LucideProps) => React.ReactNode }> = {
-  index: { label: 'متشابهات القرآن', Icon: TreeIcon },
+  branches: { label: 'متشابهات القرآن', Icon: TreeIcon },
   compare: { label: 'مقارنة السور', Icon: ArrowLeftRight },
   read: { label: 'المصحف', Icon: BookOpen },
   prophets: { label: 'قصص الأنبياء', Icon: ScrollText },

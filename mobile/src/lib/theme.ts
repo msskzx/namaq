@@ -1,4 +1,5 @@
 import { useColorScheme } from 'react-native';
+import { themeChoice } from './settings';
 
 // The branches pages' palette on the website (src/app/theme.css, docs/palette.md).
 export const light = {
@@ -44,7 +45,9 @@ export const dark: Palette = {
 export const QURAN_FONT = 'KFGQPC Hafs';
 
 export function usePalette(): Palette {
-  return useColorScheme() === 'dark' ? dark : light;
+  const scheme = useColorScheme();
+  const [choice] = themeChoice.use();
+  return (choice === 'system' ? scheme === 'dark' : choice === 'dark') ? dark : light;
 }
 
 /** Joined و is green and joined ف purple, as on the website's trees. */
