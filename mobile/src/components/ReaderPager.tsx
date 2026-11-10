@@ -6,6 +6,8 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 const SWIPE = 0.2;
 const FLICK = 500;
+const PULL = 70;
+const PULL_FLICK = 600;
 
 type Props = {
   /** Current page, from 1. */
@@ -18,13 +20,15 @@ type Props = {
   /** Told when a finger starts moving the pages, so the lifted finger is not read as a tap. */
   onMove: () => void;
   render: (page: number) => ReactNode;
+  /** A downward swipe on the page: the reader's main action (the index and search). */
+  onPull?: () => void;
 };
 
 /**
  * The mushaf as a row of pages, the next page on the left as in a printed mushaf: a finger moving right turns forward.
  * The neighbour follows the finger; the current page and both neighbours stay mounted.
  */
-export default function ReaderPager({ page, count, width, height, onPage, onMove, render }: Props) {
+export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull }: Props) {
   const offset = useSharedValue((page - 1) * width);
   const from = useSharedValue(0);
   const settled = useRef(page);
@@ -73,10 +77,20 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       if (target !== at) scheduleOnRN(arrive, target + 1);
     });
 
+  const pull = Gesture.Pan()
+    .enabled(!!onPull)
+    .activeOffsetY(24)
+    .failOffsetX([-16, 16])
+    .onStart(() => scheduleOnRN(onMove))
+    .onEnd(event => {
+      scheduleOnRN(onMove);
+      if (onPull && (event.translationY > PULL || event.velocityY > PULL_FLICK)) scheduleOnRN(onPull);
+    });
+
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [page - 1, page, page + 1].filter(at => at >= 1 && at <= count);
   return (
-    <GestureDetector gesture={pan}>
+    <GestureDetector gesture={Gesture.Race(pan, pull)}>
       <View style={{ width, height, overflow: 'hidden' }}>
         <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width, height, direction: 'ltr' }, track]}>
           {shown.map(at => (

@@ -170,6 +170,7 @@ export default function Reader() {
     if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
   }, []);
   useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
+  const openIndex = useCallback(() => { setActions(null); setSheet('index'); }, []);
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number) => {
     if (Date.now() - moved.current < 350) return;
     // A touch that closes the ayah buttons only closes them, as on the website.
@@ -203,7 +204,7 @@ export default function Reader() {
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <View style={{ paddingTop: pageInsets.top, paddingBottom: pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} />
+          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} />
         )}
       </View>
       {tools && (

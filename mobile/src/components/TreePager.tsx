@@ -3,7 +3,7 @@ import { Pressable, Share, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Bookmark, Share2 } from 'lucide-react-native';
+import { Bookmark, Send } from 'lucide-react-native';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -52,7 +52,7 @@ function Actions({ piece, palette, position, total, pop, onVideo }: { piece: Bra
         <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
       <Pressable onPress={share} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-        <Share2 size={24} color={palette.ink} />
+        <Send size={24} color={palette.ink} />
       </Pressable>
       <StudioButton palette={palette} />
       <Text style={{ marginStart: 'auto', color: palette.muted, fontSize: 13 }}>{num(position)} / {num(total)}</Text>
@@ -62,10 +62,12 @@ function Actions({ piece, palette, position, total, pop, onVideo }: { piece: Bra
 
 type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean; rotated: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
-  start?: number; onIndex?: (index: number) => void };
+  start?: number; onIndex?: (index: number) => void;
+  /** A downward swipe on the open tree. */
+  onPull?: () => void };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex }: Props) {
+export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onPull }: Props) {
   const place = useMemo(() => readJson<Place>(PLACE), []);
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
@@ -193,7 +195,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} />}
             </View>
           ))}
         </Animated.View>}
