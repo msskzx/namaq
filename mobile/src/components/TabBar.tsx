@@ -1,16 +1,17 @@
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { ArrowLeftRight, BookOpen, Feather, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpen, Feather, ScrollText, type LucideProps } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
 import { usePalette } from '@/lib/theme';
 import { useImmersive } from '@/lib/chrome';
 
-// The website's phone tabs (src/lib/navigation.ts NAV_SECTIONS), icon only.
+// The website's phone tabs (src/lib/navigation.ts NAV_SECTIONS), icon only, plus the prophets timeline (owner, 2026-11-10).
 const TABS: Record<string, { label: string; Icon: (props: LucideProps) => React.ReactNode }> = {
   index: { label: 'متشابهات القرآن', Icon: TreeIcon },
   compare: { label: 'مقارنة السور', Icon: ArrowLeftRight },
   read: { label: 'المصحف', Icon: BookOpen },
+  prophets: { label: 'قصص الأنبياء', Icon: ScrollText },
   quizzes: { label: 'الاختبارات', Icon: Feather },
 };
 

@@ -7,6 +7,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" />
       <Tabs.Screen name="compare" />
       <Tabs.Screen name="read" />
+      <Tabs.Screen name="prophets" />
       <Tabs.Screen name="quizzes" />
     </Tabs>
   );
