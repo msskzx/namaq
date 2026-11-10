@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Bookmark, BookOpen, Clapperboard, Pause, Play, RotateCcw, X } from 'lucide-react-native';
+import { Bookmark, BookOpen, Clapperboard, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -11,6 +11,9 @@ import { mushafText } from '@shared/quran/mushafText';
 import { savedIdsOf, sideKeys, sideLabel, surahName, toggleCardSaved } from '@/lib/compare';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
+import VideoSheet from './VideoSheet';
+import TreeIcon from './TreeIcon';
+import { compareRecorderPage, compareVideoInput } from '@/lib/compareVideo';
 
 const DOUBLE_TAP = 280;
 
@@ -49,11 +52,14 @@ function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; pal
   );
 }
 
-function SideHead({ label, keys, palette }: { label: string; keys: string[]; palette: Palette }) {
+function SideHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <Text style={{ flex: 1, color: palette.muted, fontSize: 14, textAlign: 'right' }}>{label}</Text>
+      {group && <Pressable onPress={() => router.navigate({ pathname: '/', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
+        <TreeIcon size={18} color={palette.muted} />
+      </Pressable>}
       <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={read} style={{ padding: 6 }}>
         <BookOpen size={18} color={palette.muted} />
       </Pressable>
@@ -64,7 +70,9 @@ function SideHead({ label, keys, palette }: { label: string; keys: string[]; pal
 const lightFor = (lit: string | null, step: ReadStep | undefined, side: number, number: number, onWord: (link: string) => void): Light =>
   ({ lit, reading: step && step.side === side && step.ayah === number ? step.word : undefined, onWord });
 
-function Studio({ read, palette }: { read: ReturnType<typeof useReadAlong>; palette: Palette }) {
+function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>; palette: Palette; card: PairCard }) {
+  const [video, setVideo] = useState<((font: string) => string) | null>(null);
+  const record = () => { read.reset(); const input = compareVideoInput(card, read.plan, read.speed, palette); setVideo(() => (font: string) => compareRecorderPage(input, font)); };
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
   const active = playing || read.status === 'paused';
@@ -86,11 +94,13 @@ function Studio({ read, palette }: { read: ReturnType<typeof useReadAlong>; pale
         <Pressable onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${read.speed}×`} style={[button, { minWidth: 44, alignItems: 'center' }]}>
           <Text style={{ color: palette.muted, fontSize: 15 }}>{read.speed}×</Text>
         </Pressable>
+        <Pressable onPress={record} accessibilityRole="button" accessibilityLabel="مشاركة كفيديو" style={button}><Send size={22} color={palette.muted} /></Pressable>
         <Pressable onPress={() => (playing ? read.pause() : read.play())} accessibilityRole="button" accessibilityLabel={label} style={button}>
           {playing ? <Pause size={22} color={palette.accent} /> : <Play size={22} color={active ? palette.accent : palette.muted} />}
         </Pressable>
         <Pressable onPress={read.reset} accessibilityRole="button" accessibilityLabel="إعادة ضبط" style={button}><RotateCcw size={22} color={palette.muted} /></Pressable>
       </View>
+      <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
 }
@@ -127,13 +137,13 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
       const options = card.many.options;
       if (isRefrain(options)) return (
         <View key={i} style={{ gap: 2 }}>
-          <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} />
+          <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
           <AyahText ayah={options[0].ayah} palette={palette} light={lightFor(lit, step, i, options[0].ayah.number, onWord)} />
         </View>
       );
       return (
         <View key={i} style={{ gap: 6 }}>
-          <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} />
+          <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
           {options.map((item, row) => (
             <Pressable key={item.id} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
               accessibilityLabel={`${surahName(cardSide.surah)} ${num(item.ayah.number)}`}
@@ -147,7 +157,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     const ayat = option && card.many ? [option.shared] : cardSide.ayat;
     return (
       <View key={i} style={{ gap: 2 }}>
-        <SideHead label={sideLabel(cardSide)} keys={sideKeys(cardSide)} palette={palette} />
+        <SideHead label={sideLabel(cardSide)} keys={sideKeys(cardSide)} palette={palette} group={i === 0 ? card.group : undefined} />
         {ayat.map(ayah => <AyahText key={ayah.number} ayah={ayah} palette={palette} light={lightFor(lit, step, i, ayah.number, onWord)} />)}
       </View>
     );
@@ -161,7 +171,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
         {side(card.sides[1], 1)}
       </Pressable>
-      {read.studio ? <Studio read={read} palette={palette} /> : (
+      {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
             <Clapperboard size={22} color={palette.muted} />
