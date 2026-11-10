@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { FlatList, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Search, X } from 'lucide-react-native';
+import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw, Search, X } from 'lucide-react-native';
 import type { SurahPair } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
-import { pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
+import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
+import { applyDraft, draftOf, type FilterDraft } from '@/lib/branchList';
+import { FilterFields } from './FilterSheet';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 
@@ -19,15 +21,36 @@ type Row =
   | { kind: 'surah'; key: string; surah: number; count: number; open: boolean; current: boolean }
   | { kind: 'pair'; key: string; pair: SurahPair; lead: number; nested: boolean };
 
-/** The side pane as a bottom sheet: search, sort, then the surah pairs grouped under each surah. The filter is the branches filter sheet. */
-export default function CompareSheet({ open, onClose, pairs, filter, lead, other, onPick, palette }: {
-  open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter;
+/** What the filter keeps, in a few words for the filter row. */
+function scopeText(filter: PairFilter) {
+  const scope = filter.scope;
+  const parts: string[] = [];
+  if (filter.savedOnly) parts.push('المحفوظة');
+  if (scope && 'list' in scope) parts.push(scope.unit === 'surahs' ? `${num(scope.list.length)} سور` : `${num(scope.list.length)} أجزاء`);
+  else if (scope) parts.push(`${scope.unit === 'juz' ? 'الأجزاء' : scope.unit === 'surah' ? 'السور' : 'الصفحات'} ${num(scope.from)} إلى ${num(scope.to)}`);
+  return parts.length ? parts.join(' · ') : 'كل القرآن';
+}
+
+/** The page's one dropdown (owner, 2026-11-10): search, sort, the filter (saved only and the part of the Quran, applied as you pick),
+ *  then the surah pairs grouped under each surah. The filter opens in place of the list. */
+export default function CompareSheet({ open, onClose, pairs, filter, onFilter, lead, other, onPick, palette }: {
+  open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter; onFilter: (filter: PairFilter) => void;
   lead: number; other: number; onPick: (lead: number, other: number) => void; palette: Palette;
 }) {
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [byCount, setByCount] = useState(() => readJson<boolean>(SORT_KEY) ?? false);
   const [expanded, setExpanded] = useState(() => new Set([lead]));
+  const [filtering, setFiltering] = useState(false);
+  const [draft, setDraftState] = useState<FilterDraft>(() => draftOf(listOfFilter(filter)));
+  useEffect(() => { if (open) { setDraftState(draftOf(listOfFilter(filter))); setFiltering(false); } }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Each pick applies at once; a half-made one (no surah picked yet) waits.
+  const setDraft = (next: FilterDraft) => {
+    setDraftState(next);
+    const list = applyDraft(next);
+    if (list && (list.saved || Object.keys(list.filters).length || list.range || !(next.unit === 'surahs' || next.unit === 'juzs'))) onFilter(filterOfList(list));
+  };
+  const filtered = !!(filter.scope || filter.savedOnly);
   useEffect(() => setExpanded(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
   const rows = useMemo(() => {
     const list: Row[] = [];
@@ -119,8 +142,26 @@ export default function CompareSheet({ open, onClose, pairs, filter, lead, other
               </Pressable>
             ))}
           </View>
-          <FlatList data={rows} keyExtractor={row => row.key} renderItem={renderRow} keyboardShouldPersistTaps="handled" style={{ flex: 1 }}
-            ListFooterComponent={empty ? <Text style={{ color: palette.muted, padding: 12, textAlign: 'right' }}>{query.trim() ? 'لا سورة بهذا البحث.' : 'لا صفحات بهذه التصفية.'}</Text> : undefined} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Pressable onPress={() => setFiltering(!filtering)} accessibilityRole="button" accessibilityLabel={`تصفية: ${scopeText(filter)}`} accessibilityState={{ expanded: filtering }}
+              style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 10, height: 44, borderWidth: 1, borderColor: filtering || filtered ? palette.accent : palette.rule, borderRadius: 10 }}>
+              <Funnel size={16} color={filtered ? palette.accent : palette.muted} />
+              <Text numberOfLines={1} style={{ flex: 1, fontSize: 15, color: filtered ? palette.accent : palette.ink, textAlign: 'right' }}>{scopeText(filter)}</Text>
+              <View style={{ transform: [{ rotate: filtering ? '180deg' : '0deg' }] }}><ChevronDown size={16} color={palette.muted} /></View>
+            </Pressable>
+            {filtered && <Pressable onPress={() => { onFilter({}); setDraftState(draftOf(listOfFilter({}))); }} accessibilityRole="button" accessibilityLabel="إعادة ضبط" hitSlop={4}
+              style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}><RotateCcw size={20} color={palette.ink} /></Pressable>}
+          </View>
+          {filtering
+            ? <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 8, gap: 18 }} keyboardShouldPersistTaps="handled">
+                <FilterFields compare draft={draft} setDraft={setDraft} palette={palette} />
+                <Pressable onPress={() => setFiltering(false)} accessibilityRole="button"
+                  style={{ alignSelf: 'center', paddingHorizontal: 20, height: 44, justifyContent: 'center', borderRadius: 22, backgroundColor: palette.accent }}>
+                  <Text style={{ color: palette.onAccent, fontSize: 15 }}>{pairs.length ? `عرض ${num(pairs.length)} زوجًا` : 'لا صفحات بهذه التصفية'}</Text>
+                </Pressable>
+              </ScrollView>
+            : <FlatList data={rows} keyExtractor={row => row.key} renderItem={renderRow} keyboardShouldPersistTaps="handled" style={{ flex: 1 }}
+                ListFooterComponent={empty ? <Text style={{ color: palette.muted, padding: 12, textAlign: 'right' }}>{query.trim() ? 'لا سورة بهذا البحث.' : 'لا صفحات بهذه التصفية.'}</Text> : undefined} />}
         </Animated.View>
       </GestureHandlerRootView>
     </Modal>

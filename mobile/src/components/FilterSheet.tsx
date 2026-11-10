@@ -56,64 +56,74 @@ function nameOf(unit: FilterUnit, n: number) {
 /** A range end as a number; a missing or broken one falls back to the unit's end. */
 const toNumber = (value: string, fallback: number) => { const n = Number(value); return Number.isInteger(n) && n > 0 ? n : fallback; };
 
-/** The website's filter sheet: saved only, the part of the Quran, the comparison kinds and differences, then the sort.
- *  The compare tab uses the same sheet with saved only and the part of the Quran (a pair is kept when both surahs are inside it). */
-export default function FilterSheet({ open, onClose, state, onApply, palette, compare = false }: { open: boolean; onClose: () => void; state: ListState; onApply: (state: ListState) => void; palette: Palette; compare?: boolean }) {
-  const [draft, setDraft] = useState<FilterDraft>(() => draftOf(state));
-  useEffect(() => { if (open) setDraft(draftOf(state)); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort.
+ *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
+export function FilterFields({ draft, setDraft, palette, compare = false }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
   const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
-  const valid = !ranged || !!draftRange(draft);
   const setFilter = (key: keyof GroupFilters, value: string) => setDraft({ ...draft, filters: { ...draft.filters, [key]: value || undefined } });
   const categories = draft.filters.categories ?? 'mutashabeh,pondering';
+  const pickList = draft.unit === 'surahs' ? Array.from({ length: 114 }, (_, i) => ({ n: i + 1, label: `${num(i + 1)} ${surahNames[i + 1]}` }))
+    : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
+  return (
+    <>
+      <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />
+      <Group title="النطاق" palette={palette}>
+        {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
+          onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
+      </Group>
+      {ranged && (() => {
+        const max = UNIT_MAX[draft.unit];
+        const from = toNumber(draft.from, 1), to = toNumber(draft.to, max);
+        const name = (n: number) => nameOf(draft.unit, n);
+        // Moving one end past the other moves both, as in the quiz settings.
+        return <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+          <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette}
+            onChange={n => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) })} />
+          <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
+          <NumberPicker key={`to-${draft.unit}`} value={to} max={max} label="إلى" nameOf={name} palette={palette}
+            onChange={n => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) })} />
+        </View>;
+      })()}
+      {pickList.length > 0 && <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+        {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
+          onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
+      </View>}
+      {!compare && <>
+      <Group title="نوع المقارنة" palette={palette}>
+        {Object.entries(CATEGORIES).map(([id, label]) => <Chip key={id} label={label} active={categories.split(',').includes(id)} palette={palette}
+          onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
+        <Chip label="في كتب المتشابه" active={draft.filters.cited === '1'} palette={palette} onPress={() => setFilter('cited', draft.filters.cited === '1' ? '' : '1')} />
+      </Group>
+      <Group title="نوع الاختلاف" palette={palette}>
+        {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip key={id} label={label.ar} active={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
+          onPress={() => setFilter('differences', toggleFilter(draft.filters.differences, id))} />)}
+      </Group>
+      <Group title="الترتيب" palette={palette}>
+        {SORTS.map((sort, i) => <Chip key={sort} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === sort} palette={palette} onPress={() => setFilter('sort', i ? sort : '')} />)}
+      </Group>
+      </>}
+    </>
+  );
+}
+
+/** The website's filter sheet for the branches tab: saved only, the part of the Quran, the comparison kinds and differences, then the sort. */
+export default function FilterSheet({ open, onClose, state, onApply, palette }: { open: boolean; onClose: () => void; state: ListState; onApply: (state: ListState) => void; palette: Palette }) {
+  const [draft, setDraft] = useState<FilterDraft>(() => draftOf(state));
+  useEffect(() => { if (open) setDraft(draftOf(state)); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
+  const valid = !ranged || !!draftRange(draft);
   const submit = () => {
     const next = applyDraft(draft);
     if (!next) return;
     onApply(next);
     onClose();
   };
-  const pickList = draft.unit === 'surahs' ? Array.from({ length: 114 }, (_, i) => ({ n: i + 1, label: `${num(i + 1)} ${surahNames[i + 1]}` }))
-    : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 12, gap: 18 }} keyboardShouldPersistTaps="handled">
-        <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />
-        <Group title="النطاق" palette={palette}>
-          {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
-            onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
-        </Group>
-        {ranged && (() => {
-          const max = UNIT_MAX[draft.unit];
-          const from = toNumber(draft.from, 1), to = toNumber(draft.to, max);
-          const name = (n: number) => nameOf(draft.unit, n);
-          // Moving one end past the other moves both, as in the quiz settings.
-          return <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
-            <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette}
-              onChange={n => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) })} />
-            <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
-            <NumberPicker key={`to-${draft.unit}`} value={to} max={max} label="إلى" nameOf={name} palette={palette}
-              onChange={n => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) })} />
-          </View>;
-        })()}
-        {pickList.length > 0 && <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-          {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
-            onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
-        </View>}
-        {!compare && <>
-        <Group title="نوع المقارنة" palette={palette}>
-          {Object.entries(CATEGORIES).map(([id, label]) => <Chip key={id} label={label} active={categories.split(',').includes(id)} palette={palette}
-            onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
-          <Chip label="في كتب المتشابه" active={draft.filters.cited === '1'} palette={palette} onPress={() => setFilter('cited', draft.filters.cited === '1' ? '' : '1')} />
-        </Group>
-        <Group title="نوع الاختلاف" palette={palette}>
-          {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip key={id} label={label.ar} active={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
-            onPress={() => setFilter('differences', toggleFilter(draft.filters.differences, id))} />)}
-        </Group>
-        <Group title="الترتيب" palette={palette}>
-          {SORTS.map((sort, i) => <Chip key={sort} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === sort} palette={palette} onPress={() => setFilter('sort', i ? sort : '')} />)}
-        </Group>
-        </>}
+        <FilterFields draft={draft} setDraft={setDraft} palette={palette} />
       </ScrollView>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>
         <IconButton label="إعادة ضبط" onPress={() => setDraft(draftOf(EMPTY_LIST))} Icon={RotateCcw} color={palette.ink} />
