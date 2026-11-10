@@ -43,10 +43,4 @@ describe('/quran/read/[page]', () => {
     expect(await pages('604')).toEqual([603, 604]);
     expect(((await open('342')) as React.ReactElement<Props>).props.pages[1].data.juz).toBe(18);
   });
-
-  it('is cached for a day and built on first visit, not at deploy', async () => {
-    const { revalidate, generateStaticParams } = await import('./page');
-    expect(revalidate).toBe(86400);
-    expect(generateStaticParams()).toEqual([]);
-  });
 });

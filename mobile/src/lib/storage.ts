@@ -1,4 +1,5 @@
 import { setBookmarkStorage } from '@shared/bookmarks';
+import { setKeyStorage } from '@shared/storage';
 import { deviceStorage } from './deviceStorage';
 
 export function readJson<T>(key: string): T | undefined {
@@ -15,3 +16,4 @@ export function writeJson(key: string, value: unknown) {
 }
 
 setBookmarkStorage(deviceStorage);
+setKeyStorage(deviceStorage);

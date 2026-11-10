@@ -1,5 +1,5 @@
-import Soon from '@/components/Soon';
+import Reader from '@/components/Reader';
 
-export default function Screen() {
-  return <Soon path="/quran/read" />;
+export default function ReadScreen() {
+  return <Reader />;
 }
