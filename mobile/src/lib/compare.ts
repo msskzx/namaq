@@ -9,6 +9,7 @@ import { readBookmarks, toggleBookmark, type Bookmark } from '@shared/bookmarks'
 import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
 import { num } from '@shared/quran/arabicNumber';
+import { EMPTY_LIST, type ListState } from './branchList';
 
 /** The website's compare cards, as built by `npm run quran:compare-cards`: only the cards a reader kept. */
 const stored = generated as unknown as StoredCards;
@@ -102,3 +103,32 @@ export function toggleCardSaved(card: PairCard, list: readonly Pick<Bookmark, 'i
 
 /** The ayah keys a card side shows, for the ayah screen. */
 export const sideKeys = (side: CardSide) => side.ayat.map(ayah => `${side.surah}:${ayah.number}`);
+
+/** The compare filter as the branches filter sheet's state, so both tabs share one sheet. */
+export function listOfFilter(filter: PairFilter): ListState {
+  const scope = filter.scope;
+  const filters: ListState['filters'] = {};
+  let range: ListState['range'] = null;
+  if (scope && 'list' in scope) filters[scope.unit === 'surahs' ? 'surahs' : 'juz'] = scope.list.join(',');
+  else if (scope?.unit === 'juz') range = { from: scope.from, to: scope.to };
+  else if (scope) {
+    filters[scope.unit === 'surah' ? 'surahFrom' : 'pageFrom'] = String(scope.from);
+    filters[scope.unit === 'surah' ? 'surahTo' : 'pageTo'] = String(scope.to);
+  }
+  return { ...EMPTY_LIST, filters, range, saved: !!filter.savedOnly };
+}
+
+const listIn = (value: string | undefined) => (value ?? '').split(',').map(Number).filter(n => Number.isInteger(n) && n > 0);
+
+/** The compare filter from a submitted filter sheet. */
+export function filterOfList(state: ListState): PairFilter {
+  const { filters, range } = state;
+  const number = (value: string | undefined, fallback: number) => (value ? Number(value) : fallback);
+  let scope: CompareScope | undefined;
+  if (filters.surahs) scope = { unit: 'surahs', list: listIn(filters.surahs) };
+  else if (filters.juz) scope = { unit: 'juzs', list: listIn(filters.juz) };
+  else if (filters.surahFrom || filters.surahTo) scope = { unit: 'surah', from: number(filters.surahFrom, 1), to: number(filters.surahTo, 114) };
+  else if (filters.pageFrom || filters.pageTo) scope = { unit: 'page', from: number(filters.pageFrom, 1), to: number(filters.pageTo, 604) };
+  else if (range) scope = { unit: 'juz', from: range.from, to: range.to };
+  return { ...(scope ? { scope } : {}), ...(state.saved ? { savedOnly: true } : {}) };
+}

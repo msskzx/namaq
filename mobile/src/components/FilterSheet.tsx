@@ -2,6 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { isCompareBookmark } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
@@ -61,11 +62,13 @@ function NumberField({ value, onChange, label, unit, palette }: { value: string;
   );
 }
 
-/** The website's filter sheet: saved only, the part of the Quran, the comparison kinds and differences, then the sort. */
-export default function FilterSheet({ open, onClose, state, onApply, palette }: { open: boolean; onClose: () => void; state: ListState; onApply: (state: ListState) => void; palette: Palette }) {
+/** The website's filter sheet: saved only, the part of the Quran, the comparison kinds and differences, then the sort.
+ *  The compare tab uses the same sheet with saved only and the part of the Quran (a pair is kept when both surahs are inside it). */
+export default function FilterSheet({ open, onClose, state, onApply, palette, compare = false }: { open: boolean; onClose: () => void; state: ListState; onApply: (state: ListState) => void; palette: Palette; compare?: boolean }) {
   const [draft, setDraft] = useState<FilterDraft>(() => draftOf(state));
   useEffect(() => { if (open) setDraft(draftOf(state)); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-  const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks).length;
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
   const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
   const valid = !ranged || !!draftRange(draft);
   const setFilter = (key: keyof GroupFilters, value: string) => setDraft({ ...draft, filters: { ...draft.filters, [key]: value || undefined } });
@@ -81,7 +84,7 @@ export default function FilterSheet({ open, onClose, state, onApply, palette }: 
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 12, gap: 18 }} keyboardShouldPersistTaps="handled">
-        <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? 'احفظ شجرة بزر الحفظ تحتها أولًا' : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />
+        <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />
         <Group title="النطاق" palette={palette}>
           {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
             onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
@@ -96,6 +99,7 @@ export default function FilterSheet({ open, onClose, state, onApply, palette }: 
           {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
             onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
         </View>}
+        {!compare && <>
         <Group title="نوع المقارنة" palette={palette}>
           {Object.entries(CATEGORIES).map(([id, label]) => <Chip key={id} label={label} active={categories.split(',').includes(id)} palette={palette}
             onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
@@ -108,6 +112,7 @@ export default function FilterSheet({ open, onClose, state, onApply, palette }: 
         <Group title="الترتيب" palette={palette}>
           {SORTS.map((sort, i) => <Chip key={sort} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === sort} palette={palette} onPress={() => setFilter('sort', i ? sort : '')} />)}
         </Group>
+        </>}
       </ScrollView>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>
         <IconButton label="إعادة ضبط" onPress={() => setDraft(draftOf(EMPTY_LIST))} Icon={RotateCcw} color={palette.ink} />

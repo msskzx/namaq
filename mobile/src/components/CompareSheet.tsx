@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowDown01, ArrowDownWideNarrow, Bookmark, ChevronDown, Search, X } from 'lucide-react-native';
+import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Search, X } from 'lucide-react-native';
 import type { SurahPair } from '@shared/quran/compareCards';
-import type { CompareScope } from '@shared/quran/compareScope';
-import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
-import { savedSurahPairs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
 import { readJson, writeJson } from '@/lib/storage';
@@ -22,46 +19,16 @@ type Row =
   | { kind: 'surah'; key: string; surah: number; count: number; open: boolean; current: boolean }
   | { kind: 'pair'; key: string; pair: SurahPair; lead: number; nested: boolean };
 
-/** A switch whose knob sits on the right when on. */
-function Toggle({ on, onChange, label, palette, disabled }: { on: boolean; onChange: (on: boolean) => void; label: string; palette: Palette; disabled?: boolean }) {
-  return (
-    <Pressable onPress={() => !disabled && onChange(!on)} accessibilityRole="switch" accessibilityState={{ checked: on, disabled }} accessibilityLabel={label}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: 8, opacity: disabled ? 0.45 : 1 }}>
-      <View style={{ width: 44, height: 26, borderRadius: 13, backgroundColor: on ? palette.accent : palette.rule, direction: 'ltr', justifyContent: 'center' }}>
-        <View style={{ position: 'absolute', left: on ? 20 : 2, width: 22, height: 22, borderRadius: 11, backgroundColor: palette.paper, alignItems: 'center', justifyContent: 'center' }}>
-          {on && <Bookmark size={12} color={palette.accent} fill={palette.accent} />}
-        </View>
-      </View>
-      <Text style={{ color: palette.ink, fontSize: 15 }}>{label}</Text>
-    </Pressable>
-  );
-}
-
-const juzValue = (text: string) => { const n = Number(text.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660))); return Number.isInteger(n) && n >= 1 && n <= 30 ? n : null; };
-
-/** The side pane as a bottom sheet: search, juz range, saved only, sort, then the surah pairs grouped under each surah. */
-export default function CompareSheet({ open, onClose, pairs, filter, onFilter, lead, other, onPick, palette }: {
-  open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter; onFilter: (filter: PairFilter) => void;
+/** The side pane as a bottom sheet: search, sort, then the surah pairs grouped under each surah. The filter is the branches filter sheet. */
+export default function CompareSheet({ open, onClose, pairs, filter, lead, other, onPick, palette }: {
+  open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter;
   lead: number; other: number; onPick: (lead: number, other: number) => void; palette: Palette;
 }) {
   const insets = useSafeAreaInsets();
-  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const savedCount = savedSurahPairs(bookmarks).size;
   const [query, setQuery] = useState('');
   const [byCount, setByCount] = useState(() => readJson<boolean>(SORT_KEY) ?? false);
   const [expanded, setExpanded] = useState(() => new Set([lead]));
   useEffect(() => setExpanded(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
-  const scope = filter.scope && filter.scope.unit === 'juz' ? filter.scope : undefined;
-  const [from, setFrom] = useState(String(scope?.from ?? 1));
-  const [to, setTo] = useState(String(scope?.to ?? 30));
-  useEffect(() => { setFrom(String(scope?.from ?? 1)); setTo(String(scope?.to ?? 30)); }, [scope?.from, scope?.to]);
-  const applyJuz = (nextFrom: string, nextTo: string) => {
-    const [x, y] = [juzValue(nextFrom), juzValue(nextTo)];
-    if (x === null || y === null || x > y) return;
-    const next: CompareScope | undefined = x === 1 && y === 30 ? undefined : { unit: 'juz', from: x, to: y };
-    onFilter({ ...filter, scope: next });
-  };
-
   const rows = useMemo(() => {
     const list: Row[] = [];
     const stories = filter.savedOnly ? [] : storiesIn(pairs, query);
@@ -144,19 +111,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
               style={[field, { paddingRight: 34, textAlign: 'right' }]} />
             <View pointerEvents="none" style={{ position: 'absolute', right: 10 }}><Search size={16} color={palette.muted} /></View>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <Text style={{ color: palette.ink, fontSize: 15 }}>الأجزاء</Text>
-            <TextInput value={from} onChangeText={setFrom} onEndEditing={() => applyJuz(from, to)} onSubmitEditing={() => applyJuz(from, to)} keyboardType="number-pad" accessibilityLabel="من الجزء" style={[field, { width: 56, textAlign: 'center' }]} />
-            <Text style={{ color: palette.muted }}>–</Text>
-            <TextInput value={to} onChangeText={setTo} onEndEditing={() => applyJuz(from, to)} onSubmitEditing={() => applyJuz(from, to)} keyboardType="number-pad" accessibilityLabel="إلى الجزء" style={[field, { width: 56, textAlign: 'center' }]} />
-            <View style={{ flex: 1 }} />
-            <Toggle on={!!filter.savedOnly} disabled={!filter.savedOnly && savedCount === 0} onChange={savedOnly => onFilter({ ...filter, savedOnly })} label="المحفوظة فقط" palette={palette} />
-          </View>
-          {(filter.scope || filter.savedOnly) && (
-            <Pressable onPress={() => onFilter({})} accessibilityRole="button" style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
-              <Text style={{ color: palette.accent, fontSize: 15 }}>إعادة ضبط</Text>
-            </Pressable>
-          )}
           <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2 }} accessibilityLabel="ترتيب القائمة">
             {[{ count: false, label: 'ترتيب المصحف', Icon: ArrowDown01 }, { count: true, label: 'الأكثر تشابهًا', Icon: ArrowDownWideNarrow }].map(({ count, label, Icon }) => (
               <Pressable key={label} onPress={() => { setByCount(count); writeJson(SORT_KEY, count); }} accessibilityRole="button" accessibilityState={{ selected: byCount === count }} style={sortButton(byCount === count)}>
