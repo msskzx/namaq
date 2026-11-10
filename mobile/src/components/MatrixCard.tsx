@@ -12,7 +12,9 @@ import type { ListState } from '@/lib/branchList';
 import type { Size } from '@/lib/camera';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
-type Props = { piece: BranchPiece; list: ListState; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void };
+type Props = { piece: BranchPiece; list: ListState; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
+  /** The bookmark row, after the last ayah. */
+  footer?: React.ReactNode };
 
 /** A column is most of the card wide, so the next one peeks in beside it (the website's 86%). */
 const SHARE = 0.86;
@@ -60,7 +62,7 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ piece, list, palette, view, lane, around, onTap, onMove }: Props) {
+export default function MatrixCard({ piece, list, palette, view, lane, around, onTap, onMove, footer }: Props) {
   const matrix = useMemo(() => matrixOf(cardOf(piece, list).presentation, around), [piece, list, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -143,6 +145,7 @@ export default function MatrixCard({ piece, list, palette, view, lane, around, o
               </View>
             ))}
           </Animated.View>
+          {footer}
         </ScrollView>
       </View>
     </GestureDetector>

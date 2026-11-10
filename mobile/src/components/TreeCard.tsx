@@ -40,6 +40,9 @@ type Props = {
   onMove: () => void;
   /** A downward swipe on a tree that is not zoomed in: the page's main action (search). */
   onPull?: () => void;
+  /** The bookmark row, drawn right under the tree so it follows it; the tree fits in the space left above it. */
+  footer?: React.ReactNode;
+  footHeight?: number;
 };
 
 const BIG = 20000;
@@ -48,7 +51,8 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0 }: Props) {
+  const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight) }), [full.width, full.height, footHeight]); // eslint-disable-line react-hooks/exhaustive-deps
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -158,17 +162,20 @@ export default function TreeCard({ piece, list, palette, view, lane, around, rot
     });
 
   const gesture = Gesture.Simultaneous(pinch, pan);
+  // Under the tree's last row: it moves with the tree when it is zoomed or moved.
+  const foot = useAnimatedStyle(() => ({ transform: [{ translateY: camera.value.y + contentSize.value.height * camera.value.s }] }));
   const style = useAnimatedStyle(() => ({
     transform: [{ translateX: camera.value.x }, { translateY: camera.value.y }, { scale: camera.value.s }],
   }));
 
   return (
     <GestureDetector gesture={gesture}>
-      <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
+      <View collapsable={false} style={{ width: full.width, height: full.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content ? 1 : 0 }, style]}>
           <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
+        {footer && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: footHeight, opacity: content ? 1 : 0 }, foot]}>{footer}</Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
             <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={probed(side)} direction={side} around={surrounding} />
