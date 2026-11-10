@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { Funnel, GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
+import { GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import TopBar from '@/components/TopBar';
 import TreePager from '@/components/TreePager';
 import TreeIcon from '@/components/TreeIcon';
 import LoadingDots from '@/components/LoadingDots';
-import FilterSheet from '@/components/FilterSheet';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
 import { aliasesOf, branchList, EMPTY_LIST, isFiltered, listShowing, openingIndex, type ListState } from '@/lib/branchList';
@@ -44,7 +43,6 @@ export default function BranchesScreen() {
   const [around, setAround] = aroundSetting.use();
   const [rotated, setRotated] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [filtering, setFiltering] = useState(false);
   /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. */
   const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
@@ -94,8 +92,7 @@ export default function BranchesScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar>
-        <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query} />
-        <BarButton label="تصفية" onPress={() => setFiltering(true)} Icon={Funnel} palette={palette} dot={isFiltered(list)} />
+        <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
         <BarButton label={mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => { closeStudio(); setMode(mode === 'tree' ? 'matrix' : 'tree'); }} Icon={mode === 'tree' ? GalleryHorizontal : TreeIcon} palette={palette} />
         {mode === 'tree' && <BarButton label="تدوير الشجرة" onPress={() => setRotated(!rotated)} Icon={RotateCwSquare} palette={palette} />}
         <BarButton label="الآيات المحيطة" onPress={() => { closeStudio(); setAround(!around); }} Icon={UnfoldHorizontal} palette={palette} on={around} />
@@ -108,11 +105,8 @@ export default function BranchesScreen() {
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}
-      <FilterSheet open={filtering} onClose={() => setFiltering(false)} state={list} onApply={next => change(next)} palette={palette} />
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
-        onPhrase={(text, id) => { setSearching(false); change({ ...list, query: text }, { id, query: text }); }}
-        onSearch={query => { setSearching(false); change({ ...list, query }, { query }); }}
-        onSurah={surah => { setSearching(false); change({ ...list, query: '', surah }); }} />}
+        onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}
     </View>
   );
 }
