@@ -71,6 +71,8 @@ export default function BranchesScreen() {
   }, [pieces, start]);
   // The homepage opens a saved tree (among the saved ones), or a surah's or juz's trees.
   const [jumps, setJumps] = useState(0);
+  // A node's «show only this part» opens that tree as the search for its phrase does.
+  const openPart = useCallback((piece: BranchPiece) => change({ ...list, query: piece.text }, { id: piece.id, query: piece.text }), [change, list]);
   useIntent('branches', intent => {
     setJumps(value => value + 1);
     if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
@@ -102,7 +104,7 @@ export default function BranchesScreen() {
         {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
         {list.surah ? <Chip text={`سورة ${surahNames[list.surah]}`} onClear={() => change({ ...list, surah: undefined })} palette={palette} /> : null}
       </View> : null}
-      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} onPull={openSearch} />
+      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}

@@ -2,7 +2,7 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render as renderUI, screen, waitFor, within } from '@testing-library/react';
+import { cleanup, fireEvent, render as renderUI, screen, within } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
 import { branch, variants, type BranchAyah } from '@shared/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
@@ -155,35 +155,12 @@ describe('complete branch tree answers', () => {
     expect(screen.getAllByRole('textbox')).toHaveLength(4);
   });
 
-  it('offers context for every feedback leaf and distinguishes differing marks', () => {
+  it('colours the differently voiced word of a feedback leaf amber and gives every node a path button', () => {
     const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
-    render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} ar />);
-    expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).getAttribute('data-variant')).toBe('highlight');
-    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ }).map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'outline']);
+    const { container } = render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} ar />);
+    expect([...container.querySelectorAll('[data-differs]')].map(word => word.textContent)).toEqual(['مِنْ']);
     expect(screen.getAllByRole('button', { name: /إظهار المسار/ })).toHaveLength(3);
-  });
-
-  it('opens a feedback leaf on its siblings under the same parent', async () => {
-    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-    quranContexts.mockReset().mockResolvedValue([]);
-    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب'], ayat: ['1:1'], children: [] }, { words: ['يا'], ayat: ['1:2', '1:3'], children: [] }] }, branches: [] };
-    render(<BranchFeedback question={own} typed={['رب', 'يا']} names={{}} ar />);
-    fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
-    await waitFor(() => expect(quranContexts).toHaveBeenCalledWith(['1:1', '1:2', '1:3']));
-  });
-
-  it('marks only the words every ayah of a feedback dialog shares', async () => {
-    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-    quranContexts.mockReset().mockResolvedValue([
-      { ayah: { key: '1:1', page: 1, words: ['قال', 'رب', 'اغفر', 'لي'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
-      { ayah: { key: '1:2', page: 1, words: ['قال', 'ربي', 'يا'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
-    ]);
-    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }, { words: ['ربي', 'يا'], ayat: ['1:2'], children: [] }] }, branches: [] };
-    render(<BranchFeedback question={own} typed={['رب اغفر', 'ربي يا']} names={{}} ar />);
-    fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
-    await waitFor(() => expect(screen.getAllByTitle('نفس الكلمة').map(word => word.textContent)).toEqual(['قال', 'قال']));
-    expect(screen.getAllByTitle('نفس اللفظ أو الجذر').map(word => word.textContent)).toEqual(['رب', 'ربي']);
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
@@ -194,8 +171,7 @@ describe('complete branch tree answers', () => {
     ];
     const own = { tree: branch(group), variants: variants(group) };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
-    expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
-    expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
+    expect(document.querySelector('[data-differs]')).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
     expect(screen.getAllByRole('textbox')).toHaveLength(3);
   });

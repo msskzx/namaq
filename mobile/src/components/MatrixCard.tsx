@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { BookOpen } from 'lucide-react-native';
+import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -48,6 +50,9 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{first === last ? 'الآية' : 'الآيات'} {range}</Text>
+        {current && <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel="قراءة الآية" style={{ position: 'absolute', end: -4, top: -4, padding: 4 }}>
+          <BookOpen size={18} color={palette.muted} />
+        </Pressable>}
       </View>
       {at === 'after' && basmala}
       <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>

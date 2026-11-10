@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpellCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
 import MushafText from "@/components/common/MushafText";
-import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
+import BranchTree, { AyahRefs, Marked, TreeWords } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers";
 import { gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
@@ -42,11 +42,11 @@ function Badge({ row, ar }: { row: Correction; ar: boolean }) {
 }
 
 /** The node's words with the ones that are enough to type underlined. */
-function NeededWords({ words, needed }: { words: string[]; needed: number }) {
+function NeededWords({ words, needed, ayahKeys, at }: { words: string[]; needed: number; ayahKeys: string[]; at: number }) {
   const cut = neededCut(words, needed);
   return <span className="font-quran text-lg leading-loose text-[var(--home-ink)]">
-    <span className="underline decoration-2 underline-offset-8"><MushafText>{words.slice(0, cut).join(" ")}</MushafText></span>
-    {cut < words.length && <MushafText>{` ${words.slice(cut).join(" ")}`}</MushafText>}
+    <span className="underline decoration-2 underline-offset-8"><TreeWords words={words.slice(0, cut)} ayahKeys={ayahKeys} at={at} /></span>
+    {cut < words.length && <>{" "}<TreeWords words={words.slice(cut)} ayahKeys={ayahKeys} at={at + cut} /></>}
   </span>;
 }
 
@@ -89,11 +89,11 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
           const row = byIndex.get(index);
           const marked = (text: React.ReactNode, references: React.ReactNode) => <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} before={<PathButton id={`n${index}`} keys={keys(node)} subject={context.subject} />} references={references}>{text}</Marked>;
-          if (!row) return marked(<span className="font-quran text-lg leading-loose"><MushafText>{answer.words.join(" ")}</MushafText></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />);
+          if (!row) return marked(<span className="font-quran text-lg leading-loose"><TreeWords words={answer.words} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} /></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />);
           return (
             <div className="flex max-w-60 flex-col gap-1" data-answer={row.correct ? "correct" : "incorrect"}>
               <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
-              {marked(<NeededWords words={answer.words} needed={row.needed} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />)}
+              {marked(<NeededWords words={answer.words} needed={row.needed} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />)}
               {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
             </div>
           );

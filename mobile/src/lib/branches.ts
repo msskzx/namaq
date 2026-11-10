@@ -25,6 +25,17 @@ export const ayahOf = (key: string) => byKey().get(key);
 /** The trees of the website's default branches list, in mushaf order. */
 export const treeList = (): BranchPiece[] => branchList(EMPTY_LIST);
 
+const setOf = (ayahKeys: string[]) => [...ayahKeys].sort().join(' ');
+let bySet: Map<string, BranchPiece> | undefined;
+/** The tree of its own that holds exactly a node's ayat, which the node's «show only this part» button opens. */
+export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
+  if (!bySet) {
+    bySet = new Map();
+    for (const piece of treeList()) if (!bySet.has(setOf(piece.keys))) bySet.set(setOf(piece.keys), piece);
+  }
+  return bySet.get(setOf(ayahKeys));
+}
+
 const cards = new Map<string, TreeCard>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */

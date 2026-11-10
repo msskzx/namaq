@@ -1,12 +1,14 @@
 import { useMemo, useRef, useState } from 'react';
 import { ScrollView, Text, View, type LayoutChangeEvent } from 'react-native';
-import BranchTree, { type Direction } from '@/components/BranchTree';
+import BranchTree, { type Direction, type NodeActions } from '@/components/BranchTree';
 import { aroundOf, cardOf, surahNames, treeList } from '@/lib/branches';
 import { sizeKey, type Shipped } from '@/lib/treeSizes';
 import { light } from '@/lib/theme';
 
 const BATCH = 8;
 const DIRECTIONS: Direction[] = ['side', 'down'];
+/** The node buttons take room, so the trees are measured with them, as the branches tab draws them. */
+const ACTIONS: NodeActions = { onSubtree: () => {} };
 
 /**
  * Not linked from the app: `npm run tree-sizes` opens it in the web build. It draws every tree both ways, with and
@@ -45,7 +47,7 @@ export default function TreeSizesScreen() {
           return (
             <View key={`${at}:${key}:${direction}`} style={{ width: 20000, alignItems: 'flex-start', direction: 'ltr' }}>
               <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={light} onTap={() => {}}
-                direction={direction} around={around ? aroundOf(card.presentation) : undefined} onLayout={measured(key, direction, card.presentation.ayat.length)} />
+                direction={direction} around={around ? aroundOf(card.presentation) : undefined} onLayout={measured(key, direction, card.presentation.ayat.length)} actions={ACTIONS} />
             </View>
           );
         }));
