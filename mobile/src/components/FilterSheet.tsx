@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';
@@ -9,7 +9,9 @@ import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
 import Sheet from './Sheet';
 import Toggle from './Toggle';
+import NumberPicker from './NumberPicker';
 import { IconButton } from './Studio';
+import surahRows from '@shared/data/quran/surahs.json';
 import { surahNames } from '@/lib/branches';
 import { applyDraft, draftOf, draftRange, EMPTY_LIST, UNIT_MAX, type FilterDraft, type FilterUnit, type ListState } from '@/lib/branchList';
 import type { Palette } from '@/lib/theme';
@@ -43,24 +45,16 @@ function Group({ title, children, palette }: { title: string; children: React.Re
   );
 }
 
-/** What the number means: the surah's name, or where the juz starts. */
-function nameOf(unit: FilterUnit, value: string) {
-  const n = Number(value.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)));
-  if (!Number.isInteger(n) || n < 1 || n > UNIT_MAX[unit]) return '';
+/** What the number means: the surah's name, where the juz starts, or the surah the page is in. */
+function nameOf(unit: FilterUnit, n: number) {
   if (unit === 'surah') return surahNames[n] ?? '';
   if (unit === 'juz') { const [surah, ayah] = JUZ_STARTS[n - 1].split(':').map(Number); return `${surahNames[surah]} ${num(ayah)}`; }
+  if (unit === 'page') { const surah = surahRows.findLast(row => row.page != null && row.page <= n)?.number; return surah ? surahNames[surah] ?? '' : ''; }
   return '';
 }
 
-function NumberField({ value, onChange, label, unit, palette }: { value: string; onChange: (value: string) => void; label: string; unit: FilterUnit; palette: Palette }) {
-  return (
-    <View style={{ flex: 1, gap: 2 }}>
-      <TextInput value={value} onChangeText={onChange} keyboardType="number-pad" accessibilityLabel={label} selectTextOnFocus
-        style={{ height: 44, borderWidth: 1, borderColor: palette.rule, borderRadius: 8, paddingHorizontal: 10, fontSize: 16, color: palette.ink, textAlign: 'center' }} />
-      <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 12, textAlign: 'center' }}>{nameOf(unit, value)}</Text>
-    </View>
-  );
-}
+/** A range end as a number; a missing or broken one falls back to the unit's end. */
+const toNumber = (value: string, fallback: number) => { const n = Number(value); return Number.isInteger(n) && n > 0 ? n : fallback; };
 
 /** The website's filter sheet: saved only, the part of the Quran, the comparison kinds and differences, then the sort.
  *  The compare tab uses the same sheet with saved only and the part of the Quran (a pair is kept when both surahs are inside it). */
@@ -89,12 +83,19 @@ export default function FilterSheet({ open, onClose, state, onApply, palette, co
           {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
             onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
         </Group>
-        {ranged && <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
-          <NumberField value={draft.from} onChange={from => setDraft({ ...draft, from })} label="من" unit={draft.unit} palette={palette} />
-          <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
-          <NumberField value={draft.to} onChange={to => setDraft({ ...draft, to })} label="إلى" unit={draft.unit} palette={palette} />
-        </View>}
-        {ranged && !valid && <Text style={{ color: palette.accent, fontSize: 13 }}>أدخل رقمين من ١ إلى {num(UNIT_MAX[draft.unit])}، على أن تكون البداية قبل النهاية أو مساوية لها.</Text>}
+        {ranged && (() => {
+          const max = UNIT_MAX[draft.unit];
+          const from = toNumber(draft.from, 1), to = toNumber(draft.to, max);
+          const name = (n: number) => nameOf(draft.unit, n);
+          // Moving one end past the other moves both, as in the quiz settings.
+          return <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+            <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette}
+              onChange={n => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) })} />
+            <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
+            <NumberPicker key={`to-${draft.unit}`} value={to} max={max} label="إلى" nameOf={name} palette={palette}
+              onChange={n => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) })} />
+          </View>;
+        })()}
         {pickList.length > 0 && <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
             onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}

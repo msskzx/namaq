@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
+import { JUZ_STARTS } from '@shared/quran/juz';
 import { QUIZ_LEAVES } from '@shared/quiz/settings';
+import NumberPicker from './NumberPicker';
+import { surahNames } from '@/lib/branches';
 import Button, { Row } from './Button';
 import type { Palette } from '@/lib/theme';
 
@@ -16,20 +18,18 @@ export function Section({ title, palette, children }: { title: string; palette: 
   );
 }
 
-/** A juz number typed with the number pad; it is kept in 1 to 30 when the field is left. */
+/** Where a juz starts, shown beside its number. */
+function juzStart(juz: number) {
+  const [surah, ayah] = JUZ_STARTS[juz - 1].split(':').map(Number);
+  return `${surahNames[surah]} ${num(ayah)}`;
+}
+
+/** A juz number, 1 to 30, picked from a list so the keyboard never opens. */
 export function JuzInput({ label, value, onCommit, palette }: { label: string; value: number; onCommit: (value: number) => void; palette: Palette }) {
-  const [text, setText] = useState<string | null>(null);
-  const commit = () => {
-    const n = Number((text ?? '').replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))));
-    if (text !== null && Number.isInteger(n) && n > 0) onCommit(Math.min(30, n));
-    setText(null);
-  };
   return (
-    <View style={{ gap: 4 }}>
+    <View style={{ gap: 4, flex: 1, minWidth: 140, alignSelf: 'flex-start' }}>
       <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>{label}</Text>
-      <TextInput value={text ?? String(value)} onChangeText={setText} onBlur={commit} onSubmitEditing={commit} keyboardType="number-pad" maxLength={2}
-        accessibilityLabel={label} selectTextOnFocus
-        style={{ width: 72, height: 44, fontSize: 18, textAlign: 'center', color: palette.ink, borderWidth: 1, borderColor: palette.rule, borderRadius: 8 }} />
+      <NumberPicker value={value} onChange={onCommit} max={30} label={label} nameOf={juzStart} palette={palette} />
     </View>
   );
 }
