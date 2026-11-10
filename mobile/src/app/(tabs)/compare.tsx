@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { ArrowLeftRight, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronDown, ChevronLeft, ChevronRight, Funnel } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
@@ -8,7 +8,8 @@ import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
 import ComparePager, { type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
-import { cardsFor, filteredPairs, landingIndex, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
+import FilterSheet from '@/components/FilterSheet';
+import { cardsFor, filteredPairs, filterOfList, landingIndex, listOfFilter, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
 import { readJson, writeJson } from '@/lib/storage';
 import { usePalette } from '@/lib/theme';
 
@@ -28,6 +29,7 @@ export default function CompareScreen() {
   const visit = visits[index];
   const pager = useRef<PagerHandle>(null);
   const [sheet, setSheet] = useState(false);
+  const [filtering, setFiltering] = useState(false);
 
   const arrive = useCallback((at: number) => {
     setIndex(at);
@@ -68,6 +70,10 @@ export default function CompareScreen() {
           <Text style={{ color: palette.accent, fontSize: 14 }}>{num(count)}</Text>
           <ChevronDown size={14} color={palette.ink} />
         </Pressable>
+        <Pressable onPress={() => setFiltering(true)} hitSlop={4} accessibilityRole="button" accessibilityLabel="تصفية" style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
+          <Funnel size={22} color={palette.muted} />
+          {(filter.scope || filter.savedOnly) && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
+        </Pressable>
         <Pressable onPress={() => go(index + 1)} disabled={index >= visits.length - 1} accessibilityRole="button" accessibilityLabel="التالي" style={[step, { opacity: index >= visits.length - 1 ? 0.35 : 1 }]}>
           <ChevronLeft size={22} color={palette.accent} />
         </Pressable>
@@ -77,8 +83,9 @@ export default function CompareScreen() {
       </View>}
       {visits.length ? <ComparePager key={listKey} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16 }}>لا صفحات بهذه التصفية.</Text></View>}
-      <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter} onFilter={changeFilter}
+      <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />
+      <FilterSheet compare open={filtering} onClose={() => setFiltering(false)} state={listOfFilter(filter)} onApply={next => changeFilter(filterOfList(next))} palette={palette} />
     </View>
   );
 }

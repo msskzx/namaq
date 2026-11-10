@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
-import { cardsFor, filteredPairs, landingIndex, listedPairs, pairMatches, savedIdsOf, toggleCardSaved, visitsOf } from './compare';
+import { applyDraft, draftOf } from './branchList';
+import { cardsFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
@@ -68,5 +69,24 @@ describe('saved cards', () => {
     expect(savedIdsOf(moses)).toEqual(['compare:7:110|26:35']);
     toggleCardSaved(moses);
     expect(readBookmarks()).toEqual([]);
+  });
+});
+
+describe('the filter sheet shared with the branches tab', () => {
+  it.each<PairFilter>([
+    {},
+    { savedOnly: true },
+    { scope: { unit: 'juz', from: 27, to: 29 } },
+    { scope: { unit: 'surah', from: 52, to: 68 }, savedOnly: true },
+    { scope: { unit: 'page', from: 500, to: 604 } },
+    { scope: { unit: 'surahs', list: [7, 26] } },
+    { scope: { unit: 'juzs', list: [9, 19] } },
+  ])('opens on the compare filter and gives it back unchanged when applied: %o', filter => {
+    expect(filterOfList(applyDraft(draftOf(listOfFilter(filter)))!)).toEqual(filter);
+  });
+
+  it('narrows the pages to pairs whose two surahs are among the picked surahs', () => {
+    const pairs = filteredPairs(filterOfList(applyDraft({ ...draftOf(listOfFilter({})), unit: 'surahs', picked: [7, 26, 11] })!));
+    expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
   });
 });
