@@ -260,15 +260,15 @@ describe('Recite mode', () => {
 
   it('hides the ayat from the start, reveals them by ayah and by word, steps back, and turns the page at the end', () => {
     const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} recite={{ start: '2:1', shown: null, words: 0 }} />);
-    expect(veiled(container)).toEqual(['الٓمٓ ١', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
     const bar = within(screen.getByRole('toolbar', { name: 'أدوات التسميع' }));
     expect(bar.getByRole('button', { name: 'ارجع خطوة' }).hasAttribute('disabled')).toBe(true);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الكلمة التالية' }));
-    expect(veiled(container)).toEqual(['ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
     fireEvent.click(bar.getByRole('button', { name: 'ارجع خطوة' }));
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
     expect(veiled(container)).toEqual([]);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
@@ -301,17 +301,17 @@ describe('Recite mode', () => {
     const next = () => fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
     expect(title().className).toMatch(/veiled/);
     next();
-    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝']);
     expect(title().className).toMatch(/veiled/);
     const basmala = () => screen.getByText(/^بِسۡمِ|^بِسْمِ|^بسم/).className;
     expect(basmala()).toMatch(/veiled/);
     next();
     expect(title().className).not.toMatch(/veiled/);
     expect(basmala()).toMatch(/veiled/);
-    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝']);
     next();
     expect(basmala()).not.toMatch(/veiled/);
-    expect(veiled(container)).toEqual(['الٓمٓ ١']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝']);
     next();
     expect(veiled(container)).toEqual([]);
   });
@@ -348,7 +348,7 @@ describe('Recite mode', () => {
       <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} mark={{ surah: 2, ayah: 2 }} />
     </RailSlotElement.Provider>);
     fireEvent.click(within(rail).getByRole('button', { name: /^تسميع/ }));
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
   });
 
   it('keeps the rest of an ayah that runs onto the next page hidden there', () => {
@@ -373,7 +373,7 @@ describe('Recite mode', () => {
   it('opens the recite position from the URL', () => {
     search = new URLSearchParams('recite=2:1&upto=2:1');
     const { container } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
   });
 });
 
