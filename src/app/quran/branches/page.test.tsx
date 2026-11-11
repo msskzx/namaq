@@ -22,9 +22,9 @@ import { inJuzRange } from '@shared/quran/juz';
 import data from '@shared/data/quran/trees.json';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
+import { branchInventory } from '@shared/quran/branchInventory';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
-import { branchInventory } from '@shared/quran/branchInventory';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
 
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
@@ -384,7 +384,7 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
     expect(screen.getByText('سورة البقرة')).toBeTruthy();
-    const total = defaultGroups().filter(group => group.tree.occurrences.some(occurrence => occurrence.key.startsWith('2:'))).length;
+    const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('2:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
     expect(new URL(screen.getByRole('link', { name: 'إزالة السورة' }).getAttribute('href')!, 'http://localhost').searchParams.has('s')).toBe(false);

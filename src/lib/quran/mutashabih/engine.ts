@@ -215,17 +215,36 @@ const attested: Attested[] = [
   { places: [['55:13', 0, 4], ['55:16', 0, 4]], citations: ['K10'], kind: 'identical' },
 ];
 
-function anchorFor(rows: Word[][]): { text: string; occurrences: PhraseOccurrence[] } {
+// The tree's trunk is the longest run of words every place shares, so a long
+// common clause is not split by a short word that happens to come first. Ayat grouped by their shared
+// opening keep that opening as the trunk.
+function anchorFor(rows: Word[][], opening = false): { text: string; occurrences: PhraseOccurrence[] } {
   const first = rows[0];
-  for (let start = 0; start < first.length; start++) {
-    const matches = rows.map(row => row.findIndex(word => same(word, first[start])));
-    if (matches.some(index => index < 0)) continue;
-    let length = 1;
-    while (rows.every((row, i) => {
-      const word = row[matches[i] + length];
-      const initial = row[matches[i]];
-      return first[start + length]?.key === first[start].key && word?.key === initial.key && same(word, first[start + length]);
-    })) length++;
+  const runAt = (row: Word[], at: number, start: number) => {
+    let length = 0;
+    while (first[start + length]?.key === first[start].key && row[at + length]?.key === row[at].key && same(row[at + length], first[start + length])) length++;
+    return length;
+  };
+  let best: { start: number; length: number; matches: number[] } | null = null;
+  for (let start = 0; start < (opening ? 1 : first.length); start++) {
+    const matches: number[] = [];
+    let length = Infinity;
+    for (const row of rows) {
+      let at = -1;
+      let longest = 0;
+      row.forEach((_, index) => {
+        if (opening && index > 0) return;
+        const run = runAt(row, index, start);
+        if (run > longest) [at, longest] = [index, run];
+      });
+      if (at < 0) break;
+      matches.push(at);
+      length = Math.min(length, longest);
+    }
+    if (matches.length === rows.length && length > (best?.length ?? 0)) best = { start, length, matches };
+  }
+  if (best) {
+    const { start, length, matches } = best;
     return {
       text: first.slice(start, start + length).map(word => word.text).join(' '),
       occurrences: rows.map((row, i) => ({ key: row[matches[i]].key, start: row[matches[i]].index, end: row[matches[i] + length - 1].index + 1 })),
@@ -237,12 +256,12 @@ function anchorFor(rows: Word[][]): { text: string; occurrences: PhraseOccurrenc
   };
 }
 
-function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citation[] = [], focus?: Record<string, number[]>, detail?: string): Group {
+function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citation[] = [], focus?: Record<string, number[]>, detail?: string, opening = false): Group {
   const id = 'group:' + places.map(p => p.key + (p.through ? '-' + p.through : '')).join(',');
   const anchor = anchorFor(rows.map((row, i) => {
     const place = places[i];
     return row.filter(word => word.key === place.key);
-  }));
+  }), opening);
   const pairs = rows.slice(1).map((b, offset) => {
     const i = 0;
     const a = rows[0];
@@ -460,7 +479,7 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
       if (!fresh) continue;
       const selected = bucket.map(i => rows[i]);
       const places = selected.map(row => place(row[0], row.at(-1)!));
-      const group = makeGroup(places, selected, 'mutashabih_lafzi');
+      const group = makeGroup(places, selected, 'mutashabih_lafzi', [], undefined, undefined, true);
       if (inventory.has(group.id)) continue;
       inventory.add(group.id);
       groups.push(group);

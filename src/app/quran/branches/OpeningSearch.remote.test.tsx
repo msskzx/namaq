@@ -12,8 +12,8 @@ describe('remote phrase suggestions', () => {
   it('removes old selectable suggestions while the new juz request is pending', async () => {
     const replies: ((value: unknown) => void)[] = [];
     const urls: string[] = [];
-    // The search for trees outside the filters goes out 50 ms after this one; on a slow runner both can go out before a
-    // check, so only this one is held and counted.
+    // The outside-the-filters lookup runs on its own 200ms timer, so on a slow run it can land between the
+    // phrase requests; it answers at once and is left out of the count.
     const fetch = vi.fn((url: string) => {
       if (url.includes('outside=1')) return Promise.resolve({ ok: true, json: async () => ({ outside: [] }) });
       urls.push(url);
