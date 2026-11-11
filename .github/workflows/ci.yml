@@ -1,7 +1,10 @@
+# Off for now: threads run these checks locally before merging, and CI was slow.
+# To turn it back on, add `pull_request:` under `on:` again.
+# It can still be run by hand from the Actions tab.
 name: CI
 
 on:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   checks:
