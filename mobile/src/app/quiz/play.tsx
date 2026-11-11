@@ -11,6 +11,7 @@ import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { surahNames } from '@/lib/branches';
 import { check, clearAnswers, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
 
@@ -58,6 +59,7 @@ export default function QuizPlay() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const run = useRun();
+  const typing = useKeyboardShown();
   if (!run || run.questions.length === 0) {
     return (
       <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -77,7 +79,6 @@ export default function QuizPlay() {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <BackBar title={run.submitted ? 'النتيجة' : `السؤال ${num(current + 1)} من ${num(run.questions.length)}`}>
-        {!run.submitted && <Button variant="plain" Icon={RotateCcw} accessibilityLabel="ابدأ من جديد" onPress={() => update({ ...run, typed: run.questions.map(emptyBranchAnswers), checked: run.questions.map(() => false), current: 0 })} />}
         <Button variant="plain" Icon={LogOut} accessibilityLabel="الخروج للإعدادات" onPress={() => { setRun(null); router.back(); }} />
       </BackBar>
       {run.submitted ? <Results run={run} palette={palette} /> : (
@@ -89,7 +90,8 @@ export default function QuizPlay() {
               ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} />
               : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} />}
           </View>
-          <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
+          {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
+          {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
             {!checked && (
               <Row>
                 <Button variant="primary" Icon={SpellCheck} label="تحقق" disabled={!hasTyped(run)} onPress={() => update(check(run))} />
@@ -103,7 +105,7 @@ export default function QuizPlay() {
                 ? <Button variant="primary" Icon={Send} label="إرسال" onPress={() => update(submit(run))} />
                 : <Button Icon={ArrowLeft} label="التالي" onPress={() => update(goTo(run, current + 1))} />}
             </View>
-          </View>
+          </View>}
         </>
       )}
     </KeyboardAvoidingView>

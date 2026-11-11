@@ -61,6 +61,33 @@ export function leadingWords(given: string, words: string[]): number {
 
 export const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
 
+/**
+ * The typed answer without a repeat of the last word of the node before it: someone may type that word again
+ * as the leaf's first word (لما قالوا under ثم يعودون لما). The repeat must be spelled right; it is dropped only
+ * when that grades more words right, so a node that itself starts with the same word keeps it.
+ */
+export function withoutRepeat(given: string, words: string[], before: string[]): string {
+  const typed = given.trim().split(/\s+/).filter(Boolean);
+  const last = before.slice(-1);
+  const answer = typed.join(' ');
+  // Typed words and Quran words need not line up one to one (يا أيها for يَـٰٓأَيُّهَا).
+  const count = last.length ? typed.findIndex((_, at) => at > 0 && matchedWords(typed.slice(0, at).join(' '), last) === 1) : -1;
+  if (count < 1) return answer;
+  const rest = typed.slice(count).join(' ');
+  return rightWords(rest, words) > rightWords(answer, words) ? rest : answer;
+}
+
+/** The spoken words above each node, from the root's down to its parent's. */
+export function wordsBefore(tree: Branch): Map<Branch, string[]> {
+  const before = new Map<Branch, string[]>();
+  const visit = (node: Branch, path: string[]) => node.children.forEach(child => {
+    before.set(child, path);
+    visit(child, [...path, ...spoken(child.words)]);
+  });
+  visit(tree, spoken(tree.words));
+  return before;
+}
+
 const nodeCorrect = (given: string, node: Branch) => {
   const words = spoken(node.words);
   return node.children.length === 0 ? matchedWords(given, words) >= Math.min(LEAF_WORDS, words.length) : matchedWords(given, words) === words.length;
@@ -102,10 +129,14 @@ export type TreeAnswerMatch = { node: Branch; correct: boolean };
 export function matchTreeAnswers(tree: Branch, given: string[], fixed: ReadonlySet<number> = new Set()): (TreeAnswerMatch | null)[] {
   const nodes = branchNodes(tree);
   const indices = new Map(nodes.map((node, index) => [node, index]));
+  const before = wordsBefore(tree);
   const graded = new Map<number, { correct: boolean; words: number }>();
   const grade = (index: number, node: Branch) => {
     const key = index * nodes.length + indices.get(node)!;
-    if (!graded.has(key)) graded.set(key, { correct: nodeCorrect(given[index] ?? '', node), words: leadingWords(given[index] ?? '', spoken(node.words)) });
+    if (!graded.has(key)) {
+      const answer = withoutRepeat(given[index] ?? '', spoken(node.words), before.get(node) ?? []);
+      graded.set(key, { correct: nodeCorrect(answer, node), words: leadingWords(answer, spoken(node.words)) });
+    }
     return graded.get(key)!;
   };
   type Paired = { result: Map<number, TreeAnswerMatch>; correct: number; words: number } | null;

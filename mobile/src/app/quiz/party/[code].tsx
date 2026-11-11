@@ -16,6 +16,7 @@ import QrCode from '@/components/QrCode';
 import QuizExplainer from '@/components/QuizExplainer';
 import { JuzInput, LeavesPicker, Section } from '@/components/QuizForm';
 import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTree';
+import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/branches';
 import { playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import type { QuestionState } from '@/lib/quiz';
@@ -250,6 +251,7 @@ function Choices({ question, answer, revealed, onPick, palette }: { question: Qu
 
 function QuestionStage({ view, send, offset, palette }: { view: PartyView; send: Send; offset: number; palette: Palette }) {
   const insets = useSafeAreaInsets();
+  const typing = useKeyboardShown();
   const question = view.question as Question;
   const revealed = view.phase === 'reveal';
   const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
@@ -296,9 +298,9 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
           <View style={{ flex: 1 }}>
             <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} />
           </View>
-          <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
+          {!typing && <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
             <Button big variant="primary" Icon={Check} label="أرسل" disabled={!started} onPress={() => send({ type: 'submit', answer: typed })} />
-          </View>
+          </View>}
         </>
       ) : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
     </View>

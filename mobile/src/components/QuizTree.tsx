@@ -23,6 +23,7 @@ import { answer, claimTarget, closeStudio, growthState, stop, useGrowth, type Ta
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { around as aroundSetting } from '@/lib/settings';
 import { treeVideo } from '@/lib/treeVideo';
+import { useKeyboardShown } from '@/lib/keyboard';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
@@ -45,12 +46,12 @@ function Scroller({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Tree({ question, tree, palette, names, renderNode, onTap }: { question: TreeQuestion; tree: Branch; palette: Palette; names: Record<number, string>; renderNode: RenderNode; onTap?: (keys: string[]) => void }) {
+function Tree({ question, tree, palette, names, renderNode, onTap, down }: { question: TreeQuestion; tree: Branch; palette: Palette; names: Record<number, string>; renderNode: RenderNode; onTap?: (keys: string[]) => void; down?: boolean }) {
   const presentation = useMemo(() => ({ tree, prefixes: question.prefixes ?? [], offsets: {}, ayat: [] }), [tree, question.prefixes]);
-  return <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={onTap ?? (() => {})} renderNode={renderNode} />;
+  return <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={onTap ?? (() => {})} renderNode={renderNode} direction={down ? 'down' : 'side'} />;
 }
 
-/** The tree with an empty box in each asked node; the other nodes are given. */
+/** The tree with an empty box in each asked node; the other nodes are given. It can rotate, as on the website. */
 export function QuizInputs({ question, typed, onType, palette, names }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string> }) {
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
   const asked = question.asked ?? [];
@@ -60,7 +61,16 @@ export function QuizInputs({ question, typed, onType, palette, names }: { questi
         accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
         autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
         style={{ width: 150, minHeight: 40, fontSize: 18, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
-  return <Scroller><Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} /></Scroller>;
+  const [down, setDown] = useState(false);
+  const typing = useKeyboardShown();
+  return (
+    <View style={{ flex: 1 }}>
+      <Scroller><Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} /></Scroller>
+      {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 8 }}>
+        <Bar label="تدوير الشجرة" onPress={() => setDown(!down)} Icon={RotateCwSquare} palette={palette} />
+      </View>}
+    </View>
+  );
 }
 
 function Badge({ row, palette }: { row: Correction; palette: Palette }) {
@@ -71,8 +81,9 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
   );
 }
 
-/** One asked node after checking: verdict, the node's words with the ones enough to type underlined, and what was typed when wrong. */
-function Graded({ row, palette }: { row: Correction; palette: Palette }) {
+/** One asked node after checking: verdict, the node's words with the ones enough to type underlined, what was typed when wrong, and its ayat. */
+function Graded({ row, palette, names }: { row: Correction; palette: Palette; names: Record<number, string> }) {
+  const references = row.node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`; }).join(' · ');
   const cut = neededCut(row.node.words, row.needed);
   const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
@@ -93,6 +104,7 @@ function Graded({ row, palette }: { row: Correction; palette: Palette }) {
           ))}
         </Text>
       )}
+      {references !== '' && <Text style={{ fontSize: 12, color: palette.muted, textAlign: 'right' }}>{references}</Text>}
     </View>
   );
 }
@@ -171,7 +183,7 @@ export function QuizFeedback({ question, typed, palette, names, onTap }: { quest
   };
   const renderNode: RenderNode = (_, index) => {
     const row = rows.get(index);
-    return row ? <Graded row={row} palette={palette} /> : undefined;
+    return row ? <Graded row={row} palette={palette} names={names} /> : undefined;
   };
   const studio = growth.studio && !matrix;
   const treeGrowth = studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;

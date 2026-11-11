@@ -4,6 +4,7 @@ import example from '@shared/data/quiz/example.json';
 import { type BranchAyah } from '@shared/quran/branches';
 import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
+import { gradedTree } from './feedback';
 import { branchQuestionPool, branchQuestions, branchQuiz } from './branchQuestions';
 
 const all = data.ayat as BranchAyah[];
@@ -86,5 +87,14 @@ describe('branchQuiz (the phone app builds its quiz on the device)', () => {
     const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'ان المتقين في'))[0];
     expect(example.key).toBe(question.key);
     expect(example.tree).toEqual(question.tree);
+  });
+
+  it('forgives typing لما again before قالوا under ثم يعودون لما', () => {
+    const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'ثم يعودون لما'))[0];
+    const nodes = branchNodes(question.tree);
+    const typed = nodes.map(node => node.ayat.includes('58:3') ? 'لما قالوا فتحرير رقبه' : node.words.join(' '));
+    expect(question.tree.words.at(-1)).toBe('لِمَا');
+    expect(matchTreeAnswers(question.tree, typed).every(hit => hit?.correct)).toBe(true);
+    expect(gradedTree({ ...question, asked: nodes.map((_, index) => index) }, typed).rows.every(row => row.correct)).toBe(true);
   });
 });
