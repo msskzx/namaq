@@ -447,11 +447,11 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
     <Button size="lg" variant={ask ? 'ghost' : 'muted'} aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel}>
       <Timer aria-hidden />
     </Button>
-    {share}
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
       {playing ? <Pause aria-hidden /> : <Play aria-hidden />}
     </Button>
     <Button size="lg" variant="muted" onClick={stop} aria-label={resetLabel} title={resetLabel}><RotateCcw aria-hidden /></Button>
+    {share}
   </>;
 }
 
