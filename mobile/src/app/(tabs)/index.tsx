@@ -15,7 +15,7 @@ import Button, { Row } from '@/components/Button';
 import HomeIntro from '@/components/HomeIntro';
 import { surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
-import { savedCard, type SavedCard } from '@/lib/home';
+import { savedCard, shelfText, type SavedCard } from '@/lib/home';
 import { setIntent, type Intent } from '@/lib/intent';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
@@ -125,7 +125,7 @@ function ShelfCard({ card, palette }: { card: SavedCard; palette: Palette }) {
           </View>
         )}
       </View>
-      <Text numberOfLines={5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{card.text}</Text>
+      <Text numberOfLines={5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>
     </Pressable>
   );
 }
