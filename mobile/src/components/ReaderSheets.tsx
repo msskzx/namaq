@@ -30,7 +30,7 @@ type Row =
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
 /** The index of surahs and juz', the search for a surah, an ayah number or words, and the recite shortcuts. */
-export function IndexSheet({ open, onClose, onJump, palette, page, last, forgotten }: {
+export function IndexSheet({ open, onClose, onJump, palette, page, last, forgotten, recite }: {
   open: boolean;
   /** The page open in the reader: the index opens at its surah. */
   page: number;
@@ -40,6 +40,8 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   /** Where the last recitation stopped. */
   last: (() => void) | null;
   forgotten: string[];
+  /** Reciting: the index says what a link does now, as the website's recite index. */
+  recite?: boolean;
 }) {
   const [query, setQuery] = useState('');
   const groups = useMemo(() => juzGroups(surahs), []);
@@ -86,6 +88,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   return (
     <Sheet open={open} onClose={onClose} palette={palette} tall>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
+        {recite && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22 }}>اختر سورة أو جزءًا أو آية. تُخفى الآيات في مواضعها من الصفحة، وتُظهر كل لمسة الآية التالية.</Text>}
         {(last || forgotten.length > 0) && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {last && <Pressable style={button} accessibilityRole="button" onPress={() => { last(); onClose(); }}>

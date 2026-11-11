@@ -16,7 +16,7 @@ export const FRAME = { width: 1080, height: 1920 };
  * Plain JavaScript, since the recorder runs it inside a web view (the phone's engine cannot hand a function's source over).
  */
 const GEOMETRY = String.raw`
-var AREA = { x: 60, y: 260, width: 960, height: 1400 }, MAX_SCALE = 3, STUB = 14;
+var AREA = { x: 60, y: 380, width: 960, height: 1300 }, MAX_SCALE = 3, STUB = 14;
 function placeTree(scene) {
   var scale = Math.min(MAX_SCALE, AREA.width / scene.width, AREA.height / scene.height);
   return { scale: scale, x: AREA.x + (AREA.width - scene.width * scale) / 2, y: AREA.y + (AREA.height - scene.height * scale) / 2 };
@@ -38,7 +38,7 @@ type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>) => { s
 /** The recorder's geometry, run here for the tests. */
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
-export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; font: string; title: string; brand: string };
+export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; font: string; logo: string };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[] };
 
 /** The types tried in order: MP4 shares everywhere; WebM is the fallback some Android phones record. */
@@ -55,9 +55,33 @@ export function recorderPage(input: VideoInput, fontFace = '') {
 <body><canvas width="${FRAME.width}" height="${FRAME.height}"></canvas><script>
 var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
 ${GEOMETRY}
+${READY}
 ${RECORDER}
 </script></body></html>`;
 }
+
+/**
+ * Pausing while it records, for both recorders: the app sends {type: 'pause'} or {type: 'resume'} into the page,
+ * the clock (start) skips the paused time and the recorder leaves it out, as on the website.
+ */
+export const PAUSE = String.raw`
+var pausedAt = 0;
+function control(event) {
+  var data; try { data = JSON.parse(event.data); } catch (e) { return; }
+  if (data.type === 'pause' && !pausedAt && recorder.state === 'recording') { pausedAt = performance.now(); recorder.pause(); }
+  if (data.type === 'resume' && pausedAt) { start += performance.now() - pausedAt; pausedAt = 0; recorder.resume(); }
+}
+window.addEventListener('message', control); document.addEventListener('message', control);
+`;
+
+/** Starts once the Quran font and the emblem have loaded, so the first frame already has both. */
+export const READY = String.raw`
+function ready(logo, font, go) {
+  var left = 2, once = function () { if (--left === 0) go(); };
+  if (logo.complete) once(); else { logo.onload = once; logo.onerror = once; }
+  if (document.fonts && document.fonts.load) document.fonts.load('40px ' + font).then(once, once); else once();
+}
+`;
 
 const RECORDER = String.raw`
 var FRAME = { width: 1080, height: 1920 };
@@ -67,7 +91,8 @@ function send(message) {
   else if (window.parent !== window) window.parent.postMessage(text, '*');
 }
 window.onerror = function (message) { send({ type: 'error', message: String(message) }); };
-var scene = INPUT.scene, look = INPUT.look;
+var scene = INPUT.scene, look = INPUT.look, ASK_HEADING = 'اكمل الايات';
+var logo = new Image(); logo.src = look.logo;
 var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var place = placeTree(scene);
@@ -151,9 +176,10 @@ function drawHourglass(box, left, seconds) {
 function draw(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
-  ctx.fillStyle = look.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
-  ctx.font = '64px ' + look.font; ctx.fillText(look.title, FRAME.width / 2, 150, FRAME.width - 120);
-  ctx.fillStyle = look.muted; ctx.font = '34px sans-serif'; ctx.fillText(look.brand, FRAME.width / 2, 1850);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+  // As the website's frame: the emblem on top, and in ask mode the call to finish the ayat under it.
+  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 70, 70, 140, 140);
+  if (INPUT.ask) { ctx.fillStyle = look.accent; ctx.font = '56px ' + look.font; ctx.fillText(ASK_HEADING, FRAME.width / 2, 290, FRAME.width - 120); }
   var bar = (FRAME.width - 120 - (total - 1) * 10) / Math.max(1, total);
   for (var i = 0; i < total; i++) {
     ctx.fillStyle = done || i <= step ? look.green : look.rule;
@@ -216,6 +242,7 @@ else {
     return current.ask ? (INPUT.timer || 3) * 1000 : current.ms / INPUT.speed;
   }
   function tick() {
+    if (pausedAt) { requestAnimationFrame(tick); return; }
     var t = performance.now() - start;
     while (!done && beat < INPUT.beats.length && t - beatStart >= length(beat)) {
       var ended = INPUT.beats[beat];
@@ -229,7 +256,7 @@ else {
     if (done && t - finishedAt > HOLD) { recorder.stop(); stream.getTracks().forEach(function (track) { track.stop(); }); return; }
     requestAnimationFrame(tick);
   }
-  var go = function () { recorder.start(); enter(0, 0); requestAnimationFrame(tick); };
-  if (document.fonts && document.fonts.load) document.fonts.load('40px ' + look.font).then(go, go); else go();
+  ${PAUSE}
+  ready(logo, look.font, function () { start = performance.now(); recorder.start(); enter(0, 0); requestAnimationFrame(tick); });
 }
 `;
