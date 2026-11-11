@@ -66,7 +66,7 @@ export default function ThemeTiles({ palette }: { palette: Palette }) {
 }
 
 /** Tree or matrix as preview tiles, drawn in the current colours. */
-export function ViewTiles({ palette }: { palette: Palette }) {
+export function ViewTiles({ palette, onPick }: { palette: Palette; onPick?: () => void }) {
   const [view, setView] = branchView.use();
   const label = 'العرض الافتراضي للمتشابه';
   const options: { key: BranchView; name: string }[] = [{ key: 'tree', name: 'شجرة' }, { key: 'matrix', name: 'مصفوفة' }];
@@ -77,7 +77,7 @@ export function ViewTiles({ palette }: { palette: Palette }) {
         {options.map(option => {
           const { boxes, lines } = VIEW_PREVIEW[option.key];
           return (
-            <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); }} palette={palette}>
+            <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); onPick?.(); }} palette={palette}>
               <Svg viewBox="0 0 60 40" width="100%" height="100%" style={{ backgroundColor: palette.paper }}>
                 {lines.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} />)}
                 {boxes.map((box, index) => <Rect key={index} x={box.x} y={box.y} width={box.w} height={box.h} rx={box.tone === 'card' ? 1.5 : 1}

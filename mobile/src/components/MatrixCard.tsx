@@ -22,7 +22,9 @@ type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: 
   /** A book group's word connections (the website's GroupConnections): drawn for the tags given, between the ayat in the middle column. */
   connections?: { group: Group; tags: Tag[] };
   /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. */
-  growth?: { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number } } };
+  growth?: { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number } };
+  /** Told when a swipe moved off the ayah column to the ayah before or after. */
+  onColumn?: () => void };
 
 type Host = ComponentRef<typeof View>;
 /** Where each word of the middle column registers itself, keyed `ayah:index` as the group's positions are. */
@@ -92,7 +94,7 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -102,6 +104,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   const shiftOf = (i: number) => view.width / 2 - (xOf(i) + width / 2);
   const start = matrix.columns.indexOf('ayah');
   const [column, setColumn] = useState(start);
+  useEffect(() => { if (column !== start) onColumn?.(); }, [column]); // eslint-disable-line react-hooks/exhaustive-deps
   const shift = useSharedValue(shiftOf(start));
   const base = useSharedValue(shiftOf(start));
   const at = useSharedValue(start);
