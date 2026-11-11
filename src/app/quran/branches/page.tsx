@@ -28,6 +28,7 @@ import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton, RotateButton } from './Surroundings';
 import PathAyat from './PathAyat';
+import SurahChips from './SurahChips';
 import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
 import { compareLinksFor } from '../compare/pairCards';
 import { PathScope } from './Paths';
@@ -238,6 +239,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
       {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      {treeGroup && presentation && <SurahChips ayahKeys={presentation.ayat.map(ayah => ayah.key)} names={names} interactive={!cards} />}
       {!cards && tree && presentation && <PathAyat ayat={presentation.ayat.map(ayah => ({ key: ayah.key, words: ayah.words }))} names={names} />}
       </PathScope>
       </GroupConnections>

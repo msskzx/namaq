@@ -12,6 +12,7 @@ import type { NodeActions } from './BranchTree';
 import MatrixCard from './MatrixCard';
 import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
+import SurahChips from './SurahChips';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
 import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
@@ -252,6 +253,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare} />
                 </View>
+                {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
               </View>
             );
@@ -264,7 +266,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips />}
             </View>
             );
           })}
