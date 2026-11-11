@@ -22,6 +22,7 @@ import { inJuzRange } from '@shared/quran/juz';
 import data from '@shared/data/quran/trees.json';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
+import { branchInventory } from '@shared/quran/branchInventory';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 
@@ -256,7 +257,8 @@ describe('Quran branch trees', () => {
     expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases') && !url.includes('outside=1'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
     expect(options.filter(option => !option.className.includes('home-muted'))).toHaveLength(1);
     expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
-  });
+    // First test to call the route: it builds the inventories cold, which took over 4s of the 5s default on CI.
+  }, 30000);
 
   it('lists trees the filters hide under their own label; picking one clears the filters', async () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 })));
@@ -380,7 +382,7 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
     expect(screen.getByText('سورة البقرة')).toBeTruthy();
-    const total = defaultGroups().filter(group => group.tree.occurrences.some(occurrence => occurrence.key.startsWith('2:'))).length;
+    const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('2:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
     expect(new URL(screen.getByRole('link', { name: 'إزالة السورة' }).getAttribute('href')!, 'http://localhost').searchParams.has('s')).toBe(false);
