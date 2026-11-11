@@ -1,0 +1,11 @@
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.625rem; min-height: 8rem; }
+.tile { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; font-size: 0.8125rem; color: var(--home-muted); }
+.tile[aria-pressed="true"] { color: var(--home-ink); font-weight: 600; }
+.thumb { position: relative; width: 100%; aspect-ratio: 3 / 2; border: 1px solid var(--home-rule); border-radius: 0.625rem; overflow: hidden; display: flex; }
+.tile[aria-pressed="true"] .thumb { outline: 2px solid var(--home-accent); outline-offset: 2px; }
+.page { flex: 1; display: grid; place-items: center; }
+.card { width: 76%; height: 66%; border: 1px solid; border-radius: 0.3rem; padding-inline: 0.35rem; display: flex; flex-direction: column; justify-content: center; direction: rtl; font-family: var(--font-amiri), serif; font-size: 0.65rem; line-height: 1.45; white-space: nowrap; overflow: hidden; }
+.split { flex: 1; display: grid; grid-template-columns: 1fr 1fr; }
+.split .card { width: 84%; font-size: 0.55rem; }
+.check { position: absolute; top: 0.3rem; inset-inline-start: 0.3rem; width: 1rem; height: 1rem; border-radius: 999px; display: grid; place-items: center; background: var(--home-accent); color: var(--home-paper); }
+.short { min-height: 0; }

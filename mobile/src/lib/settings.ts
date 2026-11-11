@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './branchList';
 import { readJson, writeJson } from './storage';
+import { parseCardTint, type CardMode } from '@shared/cardTint';
 
 /** A value kept on the phone that every screen reading it follows. */
 function setting<T>(key: string, fallback: T, valid: (value: unknown) => value is T) {
@@ -39,3 +40,8 @@ export const listState = setting<ListState>('branches-list', EMPTY_LIST, (value)
 /** The settings sheet's look: light, dark, or as the phone is set. */
 export type ThemeChoice = 'light' | 'dark' | 'system';
 export const themeChoice = setting<ThemeChoice>('theme', 'system', (value): value is ThemeChoice => value === 'light' || value === 'dark' || value === 'system');
+
+/** The card colour chosen for each mode on the theme tiles (shared/cardTint.ts). */
+export type CardTints = Record<CardMode, string>;
+export const cardTints = setting<CardTints>('card-tints', { light: 'paper', dark: 'dim' }, (value): value is CardTints =>
+  !!value && typeof value === 'object' && parseCardTint('light', (value as CardTints).light) === (value as CardTints).light && parseCardTint('dark', (value as CardTints).dark) === (value as CardTints).dark);

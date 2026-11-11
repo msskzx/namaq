@@ -3,9 +3,9 @@
 import React, { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
-import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Monitor, Moon, Settings, ShieldCheck, Sun, type LucideIcon } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
+import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
@@ -26,7 +26,6 @@ export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {
   const { language, toggleLanguage } = useLanguage();
-  const { theme, setTheme } = useTheme();
   const ar = language === 'ar';
   const sheet = useRef<HTMLDivElement>(null);
   useSwipeClose(sheet, true, { direction: 'down', onClose });
@@ -59,11 +58,6 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
     wide?.addEventListener?.('change', onWide);
     return () => { document.removeEventListener('pointerdown', onPointer); window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
   }, [onClose, toggle]);
-  const themes = [
-    { value: 'light', Icon: Sun, label: ar ? 'فاتح' : 'Light' },
-    { value: 'dark', Icon: Moon, label: ar ? 'داكن' : 'Dark' },
-    { value: 'system', Icon: Monitor, label: ar ? 'حسب الجهاز' : 'Device' },
-  ];
   const help = usePageHelp();
   const links = [
     { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
@@ -83,14 +77,8 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
               </button>
             ))}
           </div>
-          <div className={styles.segment} role="group" aria-label={ar ? 'المظهر' : 'Theme'}>
-            {themes.map(({ value, Icon, label }) => (
-              <button key={value} type="button" aria-pressed={(theme ?? 'system') === value} aria-label={label} title={label} onClick={() => setTheme(value)}>
-                <Icon size={20} aria-hidden />
-              </button>
-            ))}
-          </div>
         </div>
+        <ThemeTiles />
         <BranchViewSetting />
         <BranchConnectorSetting />
         <ReaderGestureSetting />

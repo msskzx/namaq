@@ -47,6 +47,13 @@ describe('TabBar', () => {
     fireEvent.click(within(sheet).getByRole('button', { name: 'Dark' }));
     expect(state.setTheme).toHaveBeenCalledWith('dark');
     expect(within(sheet).getByRole('button', { name: 'Device' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Black' }));
+    expect(state.setTheme).toHaveBeenLastCalledWith('dark');
+    expect(localStorage.getItem('card-dark')).toBe('black');
+    expect(document.documentElement.getAttribute('data-card-dark')).toBe('black');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Lighter' }));
+    expect(state.setTheme).toHaveBeenLastCalledWith('light');
+    expect(document.documentElement.getAttribute('data-card-light')).toBe('cream');
     expect(within(sheet).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/about', '/privacy']);
     expect(within(sheet).getAllByRole('link').map(link => link.textContent)).toEqual(['About Namaq', 'Privacy policy']);
     const items = within(sheet).getAllByRole('button').concat(within(sheet).getAllByRole('link'));
