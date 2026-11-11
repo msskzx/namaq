@@ -98,3 +98,7 @@
   --home-bubble-4: #352f26;
   --branch-blue: #a9c4d1;
 }
+
+/* Card colour setting (src/lib/cardTint.ts): paper and dark are the defaults above. */
+:root:not(.dark)[data-card-light="cream"]:has([data-feature-theme]) { --home-card: #faf5ea; }
+:root.dark[data-card-dark="black"]:has([data-feature-theme]) { --home-card: #0b0b0b; }
