@@ -132,3 +132,24 @@ export function filterOfList(state: ListState): PairFilter {
   else if (range) scope = { unit: 'juz', from: range.from, to: range.to };
   return { ...(scope ? { scope } : {}), ...(state.saved ? { savedOnly: true } : {}) };
 }
+
+let pairsByAyah: Map<string, { id: string; a: number; b: number }[]> | undefined;
+/**
+ * The listed surah pair holding a kept compare card with two of these ayat (the website's «في المقارنة» link).
+ * Read from the stored pair ids, so no card is decoded.
+ */
+export function compareTargetFor(keys: string[]): { lead: number; other: number } | undefined {
+  if (!pairsByAyah) {
+    pairsByAyah = new Map();
+    for (const { a, b } of listedPairs) for (const item of stored.cards[`${a}:${b}`] ?? []) {
+      if (item.x) continue;
+      for (const id of item.p) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), { id, a, b }]);
+    }
+  }
+  const shown = new Set(keys);
+  const hit = keys.flatMap(key => pairsByAyah!.get(key) ?? []).find(pair => pair.id.split('|').every(key => shown.has(key)));
+  if (!hit) return undefined;
+  // Seen from the surah of the first shown ayah, as the tree reads.
+  const first = Number(keys[0].split(':')[0]);
+  return first === hit.b ? { lead: hit.b, other: hit.a } : { lead: hit.a, other: hit.b };
+}

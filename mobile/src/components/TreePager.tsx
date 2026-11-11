@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { Pressable, Share, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Bookmark, Send } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Send } from 'lucide-react-native';
+import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
@@ -12,7 +13,11 @@ import MatrixCard from './MatrixCard';
 import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
-import { aroundOf, cardOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
+import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
+import { compareTargetFor } from '@/lib/compare';
+import { setIntent } from '@/lib/intent';
+import EvidenceSheet from './EvidenceSheet';
+import type { Group } from '@shared/quran/mutashabih/types';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { growthBeats } from '@/lib/growth';
@@ -36,7 +41,9 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onEvidence }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void }) {
+  const evidence = useMemo(() => evidenceOf(piece), [piece]);
+  const target = useMemo(() => compareTargetFor(piece.keys), [piece]);
   const saved = useSaved(piece);
   const studio = useGrowth().studio;
   const scale = useSharedValue(1);
@@ -59,6 +66,12 @@ function Actions({ piece, palette, pop, current, onVideo }: { piece: BranchPiece
         <Send size={24} color={palette.ink} />
       </Pressable>
       <StudioButton palette={palette} />
+      {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
+        <BookOpen size={24} color={palette.ink} />
+      </Pressable>}
+      {target && <Pressable onPress={() => { setIntent({ tab: 'compare', ...target }); router.navigate('/compare'); }} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
+        <ArrowLeftRight size={24} color={palette.ink} />
+      </Pressable>}
     </View>
   );
 }
@@ -94,6 +107,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const sceneRef = useRef<(() => Promise<TreeScene | null>) | null>(null);
   const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
   const [video, setVideo] = useState<VideoInput | null>(null);
+  const [evidence, setEvidence] = useState<Group | null>(null);
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { onIndex?.(index); }, [index, onIndex]);
@@ -182,7 +196,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
               <View style={{ height: FOOT, direction: 'rtl' }} onStartShouldSetResponder={() => true}>
                 {current && <StudioProgress palette={palette} />}
                 <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} />
+                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} />
               </View>
             );
             return (
@@ -199,6 +213,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
         </Animated.View>}
       </View>
       <VideoSheet input={video} onClose={() => setVideo(null)} palette={palette} />
+      <EvidenceSheet group={evidence} onClose={() => setEvidence(null)} palette={palette} />
     </View>
   );
 }

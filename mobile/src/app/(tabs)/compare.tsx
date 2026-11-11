@@ -6,6 +6,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import HelpSheet from '@/components/HelpSheet';
 import PageProgress from '@/components/PageProgress';
 import ComparePager, { type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
@@ -21,6 +22,7 @@ type Place = Pick<Visit, 'lead' | 'other'>;
 /** The website's compare page on the phone: surah pairs side by side, their cards scrolled, the pair list in a bottom sheet. */
 export default function CompareScreen() {
   const palette = usePalette();
+  const [help, setHelp] = useState(false);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [filter, setFilter] = useState<PairFilter>(() => readJson<PairFilter>(FILTER) ?? {});
   // The saved-only list follows the bookmarks only when the filter changes, so unsaving a card doesn't pull the page away.
@@ -75,7 +77,7 @@ export default function CompareScreen() {
   const count = visit ? (filter.savedOnly ? cardsFor(visit.lead, visit.other).filter(card => savedIds(card.id)).length : cardsFor(visit.lead, visit.other).length) : 0;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center>
+      <TopBar center help={() => setHelp(true)}>
         <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
           style={{ maxWidth: '100%', flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
           <ArrowLeftRight size={16} color={palette.ink} />
@@ -86,9 +88,10 @@ export default function CompareScreen() {
       </TopBar>
       <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
       {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
-        : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16 }}>لا صفحات بهذه التصفية.</Text></View>}
+        : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16, textAlign: 'center' }}>{filter.savedOnly && !filter.scope ? 'لا بطاقة محفوظة بعد. احفظ بطاقة بزر الحفظ تحتها أولًا.' : 'لا صفحات بهذه التصفية.'}</Text></View>}
       <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter} onFilter={changeFilter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />
+      <HelpSheet topic={help ? 'compare' : null} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

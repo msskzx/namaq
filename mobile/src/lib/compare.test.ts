@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
 import { applyDraft, draftOf, EMPTY_LIST, listShowing } from './branchList';
-import { cardsFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
+import { compareLinkFor } from '@/app/quran/compare/pairCards';
+import { treeList } from './branches';
+import { cardsFor, compareTargetFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
@@ -106,4 +108,18 @@ describe('the tree icon on a compare card', () => {
     const elsewhere = { ...EMPTY_LIST, filters: { surahs: '1' } };
     expect(listShowing(elsewhere, card.group!)?.list).not.toBe(elsewhere);
   });
+});
+
+describe('the «also in compare» button under a tree', () => {
+  it('opens the same surah pair as the website for every tree', () => {
+    let linked = 0;
+    for (const piece of treeList()) {
+      const keys = piece.keys;
+      const web = compareLinkFor(keys)?.match(/a=(\d+)&b=(\d+)/);
+      const app = compareTargetFor(keys);
+      expect(app && [Math.min(app.lead, app.other), Math.max(app.lead, app.other)], piece.id).toEqual(web ? [Number(web[1]), Number(web[2])] : undefined);
+      if (app) linked++;
+    }
+    expect(linked).toBeGreaterThan(50);
+  }, 60_000);
 });

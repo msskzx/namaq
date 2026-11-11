@@ -12,6 +12,7 @@ import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
+import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
 
 /** A tap on a box; `lightPath` lights its path, which the host runs unless the tap meant something else (a double tap). */
@@ -27,7 +28,7 @@ const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
 export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
-type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions };
+type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string> };
 const isLit = (shared: Shared, ayahKeys: string[]) => !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
 /** Where each box registers itself, so a video of the tree can be drawn from where the boxes sit. */
@@ -108,14 +109,18 @@ function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (pro
 }
 
 /** The buttons under a node: light its path, and open the part under it as a tree of its own. */
-function Tools({ id, ayahKeys, shared, subtree }: { id: string; ayahKeys: string[]; shared: Shared; subtree?: BranchPiece }) {
+function Tools({ id, ayahKeys, shared, subtree, inTree }: { id: string; ayahKeys: string[]; shared: Shared; subtree?: BranchPiece;
+  /** A neighbour ayah that is itself in the tree: lights its own place there (the website's «في هذه الشجرة»). */
+  inTree?: string }) {
   const { actions, paths, palette } = shared;
   if (!actions) return null;
   const pinned = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
+  const found = !!inTree && !!paths?.pinned.has(pathToggleKey(`t${inTree}`, [inTree]));
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 6 }}>
       <Tool label="إظهار المسار" Icon={Route} palette={palette} on={pinned} onPress={() => paths?.pin(id, ayahKeys)} />
       {subtree && <Tool label="عرض هذا الجزء وحده" Icon={ZoomIn} palette={palette} onPress={() => actions.onSubtree(subtree)} />}
+      {inTree && <Tool label="في هذه الشجرة" Icon={TreeIcon} palette={palette} on={found} onPress={() => paths?.pin(`t${inTree}`, [inTree])} />}
     </View>
   );
 }
@@ -251,7 +256,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   const own = sceneWords({ words: beside.words, ayahKeys: [], at: 0, shared, size: 17, marks: beside, color: shared.palette.muted });
   const text: SceneText = { size: 17, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
   return (
-    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools id={id} ayahKeys={[of]} shared={shared} />}>
+    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools id={id} ayahKeys={[of]} shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
       <Words words={beside.words} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
@@ -322,7 +327,7 @@ type Props = { presentation: Presentation; matches: Matches; names: Record<numbe
  */
 function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions }: Props) {
   const down = direction === 'down';
-  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions };
+  const shared: Shared = { palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)) };
   const registry = useRef<Registry>(new Map()).current;
   const rootView = useRef<Host>(null);
   const rootId = nodeId(-1);
