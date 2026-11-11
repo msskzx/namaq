@@ -41,6 +41,7 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
         ))}
       </View>
       <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
         onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
         <View style={{ direction: 'rtl' }}>
           <View style={{ flexDirection: 'row', height: BAND, gap: GAP }}>

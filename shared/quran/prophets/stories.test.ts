@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
+import { IDRIS } from './idris';
 import { MUSA } from './musa';
+import { NUH } from './nuh';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
 
@@ -94,6 +96,34 @@ describe('MUSA_EVENTS', () => {
 
   it('keeps every range ordered', () => {
     for (const e of MUSA_EVENTS) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+const NUH_NAMED: Record<number, number[]> = {
+  3: [33], 4: [163], 6: [84], 7: [59, 69], 9: [70], 10: [71],
+  11: [25, 32, 36, 42, 45, 46, 48, 89], 14: [9], 17: [3, 17], 19: [58], 21: [76], 22: [42], 23: [23], 25: [37],
+  26: [105, 106, 116], 29: [14], 33: [7], 37: [75, 79], 38: [12], 40: [5, 31], 42: [13], 50: [12], 51: [46],
+  53: [52], 54: [9], 57: [26], 66: [10], 71: [1, 21, 26],
+};
+
+describe.each([
+  { slug: 'nuh', story: NUH, named: NUH_NAMED, count: 43 },
+  { slug: 'idris', story: IDRIS, named: { 19: [56], 21: [85] }, count: 2 },
+])('$slug', ({ story, named, count }) => {
+  const keys = storyKeys(story.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names him', () => {
+    const all = Object.entries(named).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+    expect(all).toHaveLength(count);
+    expect(all.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of story.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 
