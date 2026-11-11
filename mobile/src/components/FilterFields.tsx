@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -8,7 +8,7 @@ import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
 import Toggle from './Toggle';
-import NumberPicker from './NumberPicker';
+import NumberPicker, { NumberList } from './NumberPicker';
 import { IconButton } from './Studio';
 import surahRows from '@shared/data/quran/surahs.json';
 import { surahNames } from '@/lib/branches';
@@ -59,6 +59,7 @@ const toNumber = (value: string, fallback: number) => { const n = Number(value);
  *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
 export function FilterFields({ draft, setDraft, palette, compare = false }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
   const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
   const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
   const setFilter = (key: keyof GroupFilters, value: string) => setDraft({ ...draft, filters: { ...draft.filters, [key]: value || undefined } });
@@ -77,12 +78,19 @@ export function FilterFields({ draft, setDraft, palette, compare = false }: { dr
         const from = toNumber(draft.from, 1), to = toNumber(draft.to, max);
         const name = (n: number) => nameOf(draft.unit, n);
         // Moving one end past the other moves both, as in the quiz settings.
-        return <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
-          <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette}
-            onChange={n => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) })} />
-          <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
-          <NumberPicker key={`to-${draft.unit}`} value={to} max={max} label="إلى" nameOf={name} palette={palette}
-            onChange={n => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) })} />
+        const pickFrom = (n: number) => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) });
+        const pickTo = (n: number) => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) });
+        // Only one end is open at a time, so its list takes the full width under both fields and shows more rows.
+        return <View style={{ gap: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+            <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette} onChange={pickFrom}
+              open={openEnd === 'from'} onOpen={shown => setOpenEnd(shown ? 'from' : null)} />
+            <Text style={{ color: palette.muted, lineHeight: 44 }}>إلى</Text>
+            <NumberPicker key={`to-${draft.unit}`} value={to} max={max} label="إلى" nameOf={name} palette={palette} onChange={pickTo}
+              open={openEnd === 'to'} onOpen={shown => setOpenEnd(shown ? 'to' : null)} />
+          </View>
+          {openEnd && <NumberList key={openEnd} value={openEnd === 'from' ? from : to} max={max} nameOf={name} palette={palette} shown={8}
+            onPick={n => { (openEnd === 'from' ? pickFrom : pickTo)(n); setOpenEnd(null); }} />}
         </View>;
       })()}
       {pickList.length > 0 && <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>

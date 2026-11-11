@@ -22,10 +22,10 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean }) {
+function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
+    <Text style={inline ? { color: plain ? palette.muted : palette.ink } : { fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
       {ayah.words.map((word, i) => {
         const mark = plain ? undefined : ayah.marks?.[i];
         const lit = !!mark?.link && mark.link === light?.lit;
@@ -48,15 +48,25 @@ function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; pal
 }
 
 /** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
-function Neighbour({ ayah, palette }: { ayah: AroundAyah | null; palette: Palette }) {
-  if (!ayah) return null;
+function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, color: palette.muted, writingDirection: 'rtl', textAlign: 'center' }}>
+    <Text style={{ fontSize: 18, color: palette.muted }}>
       {ayah.words.map((word, i) => {
         const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
         return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
       })}
       <Text> {num(ayah.number)}</Text>
+    </Text>
+  );
+}
+
+/** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
+function RunningAyat({ ayat, before, after, palette, light }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light }) {
+  return (
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
+      {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
+      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} palette={palette} light={light(ayah)} inline /></Text>)}
+      {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
     </Text>
   );
 }
@@ -154,23 +164,21 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
       if (isRefrain(options)) return (
         <View key={i} style={{ gap: 2 }}>
           <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
-          {around && <Neighbour ayah={around.before[i]} palette={palette} />}
-          <AyahText ayah={options[0].ayah} palette={palette} light={lightFor(lit, step, i, options[0].ayah.number, onWord)} />
-          {around && <Neighbour ayah={around.after[i]} palette={palette} />}
+          <RunningAyat ayat={[options[0].ayah]} before={around?.before[i]} after={around?.after[i]} palette={palette} light={ayah => lightFor(lit, step, i, ayah.number, onWord)} />
         </View>
       );
       return (
         <View key={i} style={{ gap: 6 }}>
           <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
-          {around && <Neighbour ayah={around.before[i]} palette={palette} />}
+          {around?.before[i] && <RunningAyat ayat={[]} before={around.before[i]} palette={palette} light={() => ({ lit: null })} />}
           {options.map((item, row) => (
             <Pressable key={item.id} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
               accessibilityLabel={`${surahName(cardSide.surah)} ${num(item.ayah.number)}`}
-              style={{ borderRightWidth: 3, borderColor: row === selected ? palette.accent : 'transparent', paddingRight: 8 }}>
+              style={{ borderRightWidth: 3, borderRightColor: row === selected ? palette.accent : 'transparent', paddingRight: 8, ...(row > 0 ? { borderTopWidth: 1, borderTopColor: palette.rule, paddingTop: 4 } : {}) }}>
               <AyahText ayah={item.ayah} palette={palette} plain={row !== selected} light={row === selected ? lightFor(lit, step, i, item.ayah.number, onWord) : undefined} />
             </Pressable>
           ))}
-          {around && <Neighbour ayah={around.after[i]} palette={palette} />}
+          {around?.after[i] && <RunningAyat ayat={[]} after={around.after[i]} palette={palette} light={() => ({ lit: null })} />}
         </View>
       );
     }
@@ -178,9 +186,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     return (
       <View key={i} style={{ gap: 2 }}>
         <SideHead label={sideLabel(cardSide)} keys={sideKeys(cardSide)} palette={palette} group={i === 0 ? card.group : undefined} />
-        {around && <Neighbour ayah={around.before[i]} palette={palette} />}
-        {ayat.map(ayah => <AyahText key={ayah.number} ayah={ayah} palette={palette} light={lightFor(lit, step, i, ayah.number, onWord)} />)}
-        {around && <Neighbour ayah={around.after[i]} palette={palette} />}
+        <RunningAyat ayat={ayat} before={around?.before[i]} after={around?.after[i]} palette={palette} light={ayah => lightFor(lit, step, i, ayah.number, onWord)} />
       </View>
     );
   };
