@@ -20,6 +20,10 @@ describe('litSpine', () => {
     expect(litSpine(three, [true, true, false], 300)).toEqual([50 + CURVE, 150]);
   });
 
+  it('ignores places left over from children a fan no longer has', () => {
+    expect(litSpine([...two(100, 0), { at: -100, size: 100 }], [true, false], 200)).toEqual([100, 150 - CURVE]);
+  });
+
   it('lights nothing when nothing is lit or there is only one child', () => {
     expect(litSpine(two(0, 100), [false, false], 200)).toBeNull();
     expect(litSpine([{ at: 0, size: 100 }], [true], 100)).toBeNull();
