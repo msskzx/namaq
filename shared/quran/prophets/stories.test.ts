@@ -5,11 +5,13 @@ import { AYYUB } from './ayyub';
 import { DAWUD } from './dawud';
 import { DHUL_KIFL } from './dhul-kifl';
 import { HARUN } from './harun';
+import { IDRIS } from './idris';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
 import { ISA } from './isa';
 import { ADAM } from './adam';
 import { MUSA } from './musa';
+import { NUH } from './nuh';
 import { SALIH } from './salih';
 import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
@@ -137,6 +139,8 @@ describe('SHUAYB', () => {
 
 // Every ayah that names the prophet (Hafs). 19:28 «يا أخت هارون» is about Maryam, so not in Harun's story; 37:130 «إل ياسين» is Ilyas.
 const BRIEF = [
+  { slug: 'idris', story: IDRIS, named: ['19:56', '21:85'] },
+  { slug: 'nuh', story: NUH, named: ['3:33', '4:163', '6:84', '7:59', '7:69', '9:70', '10:71', '11:25', '11:32', '11:36', '11:42', '11:45', '11:46', '11:48', '11:89', '14:9', '17:3', '17:17', '19:58', '21:76', '22:42', '23:23', '25:37', '26:105', '26:106', '26:116', '29:14', '33:7', '37:75', '37:79', '38:12', '40:5', '40:31', '42:13', '50:12', '51:46', '53:52', '54:9', '57:26', '66:10', '71:1', '71:21', '71:26'] },
   { slug: 'ayyub', story: AYYUB, named: ['4:163', '6:84', '21:83', '38:41'] },
   { slug: 'harun', story: HARUN, named: ['2:248', '4:163', '6:84', '7:122', '7:142', '10:75', '19:53', '20:30', '20:70', '20:90', '20:92', '21:48', '23:45', '25:35', '26:13', '26:48', '28:34', '37:114', '37:120'] },
   { slug: 'dhul-kifl', story: DHUL_KIFL, named: ['21:85', '38:48'] },

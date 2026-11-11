@@ -4,10 +4,12 @@ import { AYYUB } from './ayyub';
 import { DAWUD } from './dawud';
 import { DHUL_KIFL } from './dhul-kifl';
 import { HARUN } from './harun';
+import { IDRIS } from './idris';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
 import { ISA } from './isa';
 import { MUSA } from './musa';
+import { NUH } from './nuh';
 import { SALIH } from './salih';
 import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
@@ -18,4 +20,4 @@ import { YAQUB } from './yaqub';
 import { YUSUF } from './yusuf';
 import { ZAKARIYYA } from './zakariyya';
 
-export const STORIES: Record<string, Story> = { yaqub: YAQUB, yusuf: YUSUF, adam: ADAM, ibrahim: IBRAHIM, ayyub: AYYUB, salih: SALIH, shuayb: SHUAYB, musa: MUSA, harun: HARUN, 'dhul-kifl': DHUL_KIFL, dawud: DAWUD, sulayman: SULAYMAN, ilyas: ILYAS, alyasa: ALYASA, zakariyya: ZAKARIYYA, yahya: YAHYA, yunus: YUNUS, isa: ISA };
+export const STORIES: Record<string, Story> = { yaqub: YAQUB, yusuf: YUSUF, adam: ADAM, idris: IDRIS, nuh: NUH, ibrahim: IBRAHIM, ayyub: AYYUB, salih: SALIH, shuayb: SHUAYB, musa: MUSA, harun: HARUN, 'dhul-kifl': DHUL_KIFL, dawud: DAWUD, sulayman: SULAYMAN, ilyas: ILYAS, alyasa: ALYASA, zakariyya: ZAKARIYYA, yahya: YAHYA, yunus: YUNUS, isa: ISA };

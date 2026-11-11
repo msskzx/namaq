@@ -2,6 +2,8 @@ export type Prophet = { slug: string; name: string; nameEn: string; /** The name
 
 export const PROPHETS: Prophet[] = [
   { slug: 'adam', name: 'آدم', nameEn: 'Adam' },
+  { slug: 'idris', name: 'إدريس', nameEn: 'Idris' },
+  { slug: 'nuh', name: 'نوح', nameEn: 'Nuh' },
   { slug: 'ibrahim', name: 'إبراهيم', nameEn: 'Ibrahim' },
   { slug: 'yaqub', name: 'يعقوب', nameEn: 'Yaqub' },
   { slug: 'yusuf', name: 'يوسف', nameEn: 'Yusuf' },
