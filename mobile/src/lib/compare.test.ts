@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
-import { applyDraft, draftOf, EMPTY_LIST, listShowing } from './branchList';
+import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
 import { cardsFor, compareTargetFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
@@ -94,6 +94,9 @@ describe('the filter sheet shared with the branches tab', () => {
 });
 
 describe('the tree icon on a compare card', () => {
+  // A tree outside the default list is looked for among every kind of tree, a list built once and kept. That takes seconds
+  // on a slow CI runner, so build it here instead of inside the first test that looks.
+  beforeAll(() => { branchList(EMPTY_LIST); branchList(ALL_KINDS_LIST); }, 60000);
   it('opens a tree on the branches tab for every card that names one', () => {
     for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
       if (card.group) expect(listShowing(EMPTY_LIST, card.group), card.id).not.toBeNull();
