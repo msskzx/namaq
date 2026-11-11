@@ -8,7 +8,7 @@ vi.mock('@/components/common/NavBar', () => ({
 // @vitest-environment jsdom
 import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
 import BranchTree from './BranchTree';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import QuranBranchesPage from './page';
 import { branchesHref, type BranchAyah } from '@shared/quran/branches';
@@ -24,6 +24,8 @@ import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
+import { branchInventory } from '@shared/quran/branchInventory';
+import { ALL_KINDS } from '@shared/quran/branchSearch';
 
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
@@ -54,6 +56,9 @@ const shortTree = (id: string) => {
 const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
 
 describe('Quran branch trees', () => {
+  // Search outside the filters builds the every-kind tree list once and keeps it. That takes seconds on a slow CI runner and
+  // blocks while it runs, so build it here instead of inside whichever test happens to search first.
+  beforeAll(() => { branchInventory({ categories: ALL_KINDS }, null); }, 60000);
   it('keeps the tree continuation in the matrix for الم without enabling surrounding ayat', async () => {
     localStorage.setItem('branches-surround', '0');
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
@@ -262,15 +267,14 @@ describe('Quran branch trees', () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 })));
     render(await follow({ juzFrom: '1', juzTo: '1' }));
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'إن المجرمين في' } });
-    // The route builds the every-kind inventory on its first call, which can take seconds on a cold CI runner.
-    expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية', {}, { timeout: 20000 })).toBeTruthy();
+    expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية', {}, { timeout: 5000 })).toBeTruthy();
     vi.unstubAllGlobals();
     const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes('ٱلْمُجْرِمِينَ'))!;
     fireEvent.click(hidden);
     const pushed = new URL(navigation.push.mock.calls.at(-1)![0], 'http://localhost');
     expect(pushed.searchParams.get('juzFrom')).toBeNull();
     expect(pushed.searchParams.get('categories')).toBe('mutashabeh,pondering,words');
-  }, 30000);
+  });
 
   it('keeps zoom links to the subtree after an ayah ending', async () => {
     render(await open({ o: 'لا اثم عليه' }));

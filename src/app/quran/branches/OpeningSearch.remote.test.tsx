@@ -12,17 +12,23 @@ describe('remote phrase suggestions', () => {
   it('removes old selectable suggestions while the new juz request is pending', async () => {
     const replies: ((value: unknown) => void)[] = [];
     const urls: string[] = [];
-    const fetch = vi.fn((url: string) => { urls.push(url); return new Promise(resolve => replies.push(resolve)); });
+    // The search for trees outside the filters goes out 50 ms after this one; on a slow runner both can go out before a
+    // check, so only this one is held and counted.
+    const fetch = vi.fn((url: string) => {
+      if (url.includes('outside=1')) return Promise.resolve({ ok: true, json: async () => ({ outside: [] }) });
+      urls.push(url);
+      return new Promise(resolve => replies.push(resolve));
+    });
     vi.stubGlobal('fetch', fetch);
     const props = { phrases: [], top: [], current: '', remote: true, view: { scope: 'inside' as const } };
     const { rerender } = render(<OpeningSearch {...props} juz={{ from: 1, to: 30 }} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'متنا' } });
-    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(urls).toHaveLength(1));
     replies[0]({ ok: true, json: async () => ({ suggestions: [{ id: 'old', text: 'متنا وكنا ترابا', count: 5, kind: 'inside' }] }) });
     await screen.findByRole('option', { name: /متنا وكنا ترابا/ });
     rerender(<OpeningSearch {...props} juz={{ from: 30, to: 30 }} />);
     expect(screen.queryByRole('option', { name: /متنا وكنا ترابا/ })).toBeNull();
-    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(urls).toHaveLength(2));
     expect(urls[1]).toContain('juzFrom=30');
     replies[1]({ ok: true, json: async () => ({ suggestions: [] }) });
     await waitFor(() => expect(screen.queryAllByRole('option')).toHaveLength(0));
