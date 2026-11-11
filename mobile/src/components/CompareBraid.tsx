@@ -9,6 +9,9 @@ import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
 const LINK = 26;
 
+/** The ayah numbers ending at this word: in a shared node both sides' numbers, when they differ. */
+const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
+
 /** Words of one node: the card's colours (same words accent, same root purple), amber where a shared node's two spellings differ. */
 function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: Palette; other?: BraidWord[]; bold?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
@@ -21,7 +24,7 @@ function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: P
           <Text key={i}>
             {i > 0 ? ' ' : ''}
             <Text style={color ? { color } : undefined}>{mushafText(word.text)}</Text>
-            {word.end !== undefined && <Text style={{ color: palette.accent }}> {num(word.end)}</Text>}
+            {ends(word, other?.[i]).length > 0 && <Text style={{ color: palette.accent }}> {ends(word, other?.[i]).map(end => num(end)).join(' · ')}</Text>}
           </Text>
         );
       })}

@@ -46,3 +46,7 @@
   .page h3 { font-size: 1.125rem; }
   .lines { font-size: 1.125rem; line-height: 2.2; }
 }
+
+/* An ayah shown for context only: the ayah before or after in a compare matrix. */
+.lines > p.muted { color: var(--home-muted); font-size: 0.8em; }
+.lines > p.muted mark { opacity: 0.85; }

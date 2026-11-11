@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { BRANCH_VIEW_COOKIE, parseBranchView } from '@shared/quran/branchView';
 import TextCompare from './TextCompare';
 import ThemesCompare from './ThemesCompare';
 import CompareControls from './CompareControls';
@@ -43,7 +45,9 @@ const surahOf = (value: string | string[] | undefined) => {
 async function pairPage(a: number, b: number, review = false, todo = false, scope?: CompareScope, lead = a) {
   const surahs = await surahList();
   const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
-  return <PairCompare a={a} b={b} lead={lead} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} scope={scope} spans={surahSpans} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;
+  // Cards open in the default view chosen in settings (tree or matrix), as the branches page does.
+  const view = parseBranchView((await cookies()).get(BRANCH_VIEW_COOKIE)?.value);
+  return <PairCompare view={view} a={a} b={b} lead={lead} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} scope={scope} spans={surahSpans} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;
 }
 
 export default async function QuranComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {

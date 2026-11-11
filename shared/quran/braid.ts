@@ -1,4 +1,5 @@
 import { normalizeWord } from './normalize';
+import type { CardAyah, CardMark, CardSide } from './compareCards';
 
 /** Word ranges [start, end) on each of the two sides. */
 export type Span = [number, number];
@@ -45,3 +46,20 @@ export function braid(a: string[], b: string[], minShared = MIN_SHARED): Strand[
   if (at[0] < x.length || at[1] < y.length) strands.push({ kind: 'split', a: [at[0], x.length], b: [at[1], y.length] });
   return strands;
 }
+
+/** One word of a braid: its text, its mark on the card, and the ayah number after it when it ends an ayah. */
+export type BraidWord = { text: string; mark?: CardMark; end?: number };
+export type BraidStrand = { kind: Strand['kind']; a: BraidWord[]; b: BraidWord[] };
+
+const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap(ayah => ayah.words.map((text, i) => ({
+  text, mark: ayah.marks?.[i], ...(i === ayah.words.length - 1 ? { end: ayah.number } : {}),
+})));
+
+/** A card's two sides as a braid: one tree for a pair, parting and rejoining. */
+export function braidOf(sides: [CardSide, CardSide]): BraidStrand[] {
+  const a = flat(sides[0].ayat);
+  const b = flat(sides[1].ayat);
+  return braid(a.map(word => word.text), b.map(word => word.text))
+    .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) }));
+}
+

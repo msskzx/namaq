@@ -1,7 +1,7 @@
 import generated from '@shared/data/quran/compareCards';
 import corpus from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
-import { decodeCards, surahOrder, type CardAyah, type CardMark, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
+import { decodeCards, surahOrder, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
 import { pageInScope, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';
 import { curatedComparisons } from '@shared/quran/curatedComparisons';
 import { compareBookmarkId, savedAs, savedSurahPairs } from '@shared/compareBookmarks';
@@ -9,7 +9,7 @@ import { readBookmarks, toggleBookmark, type Bookmark } from '@shared/bookmarks'
 import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
 import { num } from '@shared/quran/arabicNumber';
-import { braid, type Strand } from '@shared/quran/braid';
+export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 import { sharedByAll } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
 import { EMPTY_LIST, type ListState } from './branchList';
@@ -166,22 +166,6 @@ export function shownAyat(card: PairCard, picked = 0): [CardSide, CardSide] {
   sides[many] = { ...sides[many], ayah: option.ayah.number, ayat: [option.ayah] };
   sides[many === 0 ? 1 : 0] = { ...sides[many === 0 ? 1 : 0], ayat: [option.shared] };
   return sides;
-}
-
-/** One word of a braid: its text, its mark on the card, and the ayah number after it when it ends an ayah. */
-export type BraidWord = { text: string; mark?: CardMark; end?: number };
-export type BraidStrand = { kind: Strand['kind']; a: BraidWord[]; b: BraidWord[] };
-
-const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap(ayah => ayah.words.map((text, i) => ({
-  text, mark: ayah.marks?.[i], ...(i === ayah.words.length - 1 ? { end: ayah.number } : {}),
-})));
-
-/** A card's two sides as a braid (shared/quran/braid.ts): one tree for a pair, parting and rejoining. */
-export function braidOf(sides: [CardSide, CardSide]): BraidStrand[] {
-  const a = flat(sides[0].ayat);
-  const b = flat(sides[1].ayat);
-  return braid(a.map(word => word.text), b.map(word => word.text))
-    .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) }));
 }
 
 let ayahByKey: Map<string, BranchAyah> | undefined;
