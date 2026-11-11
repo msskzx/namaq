@@ -262,14 +262,15 @@ describe('Quran branch trees', () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 })));
     render(await follow({ juzFrom: '1', juzTo: '1' }));
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'إن المجرمين في' } });
-    expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية')).toBeTruthy();
+    // The route builds the every-kind inventory on its first call, which can take seconds on a cold CI runner.
+    expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية', {}, { timeout: 20000 })).toBeTruthy();
     vi.unstubAllGlobals();
     const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes('ٱلْمُجْرِمِينَ'))!;
     fireEvent.click(hidden);
     const pushed = new URL(navigation.push.mock.calls.at(-1)![0], 'http://localhost');
     expect(pushed.searchParams.get('juzFrom')).toBeNull();
     expect(pushed.searchParams.get('categories')).toBe('mutashabeh,pondering,words');
-  });
+  }, 30000);
 
   it('keeps zoom links to the subtree after an ayah ending', async () => {
     render(await open({ o: 'لا اثم عليه' }));
