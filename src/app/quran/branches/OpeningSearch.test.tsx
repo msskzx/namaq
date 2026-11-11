@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { branchesHref, TOP } from '@shared/quran/branches';
+import { branchesHref } from '@shared/quran/branches';
 import OpeningSearch from './OpeningSearch';
 
 const language = vi.hoisted(() => ({ value: 'ar' }));
@@ -21,7 +21,7 @@ const top = [
   { id: 'يايها الذين', text: 'يَـٰٓأَيُّهَا ٱلَّذِينَ', count: 90 },
   { id: 'ان الذين', text: 'إِنَّ ٱلَّذِينَ', count: 73 },
   { id: 'الم تر', text: 'أَلَمْ تَرَ', count: 31 },
-  ...Array.from({ length: TOP - 3 }, (_, i) => ({ id: `قال رب${i}`, text: `قال رب${i}`, count: 2 })),
+  ...Array.from({ length: 5 }, (_, i) => ({ id: `قال رب${i}`, text: `قال رب${i}`, count: 2 })),
 ];
 const phrases = [
   ...top,

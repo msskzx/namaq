@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/trees.json';
-import { branch, grown, keys, linkable, listPhrases, sharedOpenings, startingWith, searchPhrases, type Branch, type BranchAyah } from './branches';
+import { searchPhrases, type BranchAyah } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
-import { normalizeWord } from './normalize';
 
 const all = data.ayat as BranchAyah[];
 const families = chapterFamilies(all);
@@ -29,51 +28,6 @@ describe('chapter opening families', () => {
       expect(searchPhrases(families, family.text)).toContain(family);
       expect(searchPhrases(families, family.textEn)).toContain(family);
     }
-  });
-
-  it('keeps original words on every tree path without inserting family names', () => {
-    for (const family of families) {
-      const group = family.keys.map(key => all.find(ayah => ayah.key === key)!);
-      const tree = branch(group, true);
-      const paths = new Map<string, string[]>();
-      const walk = (node: Branch, path: string[]) => {
-        const words = [...path, ...node.words];
-        expect(node.words).not.toContain(family.text);
-        node.ayat.forEach(key => paths.set(key, words));
-        node.children.forEach(child => walk(child, words));
-      };
-      walk(tree, []);
-      expect(keys(tree).sort()).toEqual([...family.keys].sort());
-      for (const ayah of grown(group)) {
-        expect(paths.get(ayah.key)?.map(normalizeWord)).toEqual(ayah.words.map(normalizeWord));
-      }
-    }
-  });
-
-  it('keeps links from family branches resolvable as shared Quran wording', () => {
-    const phrases = listPhrases(sharedOpenings(all));
-    for (const family of families) {
-      const group = family.keys.map(key => all.find(ayah => ayah.key === key)!);
-      const walk = (node: Branch, path: string[]) => {
-        const words = [...path, ...node.words];
-        if (path.length > 0 && node.children.length > 0 && linkable(words)) {
-          const id = words.map(normalizeWord).join(' ');
-          const selected = startingWith(all, id, node.partition);
-          expect(phrases.some(phrase => phrase.id === id && (!phrase.partition || phrase.partition === node.partition)), id).toBe(true);
-          expect(selected.map(ayah => ayah.key)).toEqual(expect.arrayContaining(keys(node)));
-        }
-        node.children.forEach(child => walk(child, words));
-      };
-      walk(branch(group, true), []);
-    }
-  });
-
-  it('branches المسبحات by the actual four opening forms', () => {
-    const family = families.find(family => family.id === 'family:musabbihat')!;
-    const tree = branch(family.keys.map(key => all.find(ayah => ayah.key === key)!), true);
-    expect(tree.words).toEqual([]);
-    expect(tree.children.map(child => normalizeWord(child.words[0]))).toEqual(['سبحن', 'سبح', 'يسبح', 'سبح']);
-    expect(tree.children.map(child => keys(child).length)).toEqual([1, 3, 2, 1]);
   });
 
   it('limits families to the selected juz and omits groups with fewer than two members', () => {

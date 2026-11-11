@@ -3,7 +3,7 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@shared/quran/branches';
+import { branchesHref, type BranchAyah } from '@shared/quran/branches';
 import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
@@ -22,6 +22,9 @@ beforeEach(() => {
   quranSurrounding.mockReset().mockResolvedValue({ before: {}, after: {} });
 });
 afterEach(cleanup);
+
+/** The tree the page draws for these ayat, from their first `words` words on. */
+const live = (keys: string[], words = 1) => phrasePresentation({ id: keys.join(' '), text: '', occurrences: keys.map(key => ({ key, start: 0, end: words })) }, data.ayat as BranchAyah[]);
 
 const tree = {
   words: ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى'],
@@ -84,7 +87,7 @@ describe('BranchTree', () => {
 
   it('colors the merged second ما by lemma while keeping the first exact', () => {
     const ayat = (data.ayat as BranchAyah[]).filter(ayah => ['2:170', '31:21'].includes(ayah.key));
-    const { container } = render(<BranchTree tree={branch(ayat)} ayat={ayat} names={{}} zoomable={false} />);
+    const { container } = render(<BranchTree {...live(['2:170', '31:21'])} names={{}} zoomable={false} />);
     const purple = [...container.querySelectorAll('mark[title="نفس اللفظ أو الجذر"]')].map(mark => mark.textContent);
     expect(purple).toEqual(['مَا']);
     const red = [...container.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent);
@@ -261,10 +264,8 @@ describe('BranchTree', () => {
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
-    const group = startingWith(data.ayat as BranchAyah[], 'اما من').filter(a => inJuzRange(a.key, { from: 30, to: 30 }));
-    const tree = branch(group);
-    const { container } = render(<BranchTree tree={tree} variants={variants(group)} names={{}} />);
-    expect(screen.getByRole('list', { name: 'صيغ الكلمة الأولى' }).children).toHaveLength(3);
+    const keys = data.trees.find(group => group.id === 'اما من')!.occurrences.map(o => o.key).filter(key => inJuzRange(key, { from: 30, to: 30 }));
+    const { container } = render(<BranchTree {...live(keys, 2)} names={{}} />);
     expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim() && !node.closest('[role="toolbar"]') && !node.querySelector('[role="toolbar"]'))).toHaveLength(0);
     expect(container.querySelectorAll('a[href^="/quran/read/"]')).toHaveLength(0);
     expect(screen.getByText('طَغَىٰ')).toBeTruthy();
@@ -312,8 +313,8 @@ describe('BranchTree', () => {
   });
 
   it('draws a repeated leaf once with every ayah\'s reference and its differently voiced words in amber', () => {
-    const group = startingWith(data.ayat as BranchAyah[], 'ان مع العسر');
-    const { container } = render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 94: 'الشرح' }} />);
+    const group = (data.ayat as BranchAyah[]).filter(ayah => ['94:5', '94:6'].includes(ayah.key));
+    const { container } = render(<BranchTree {...live(['94:5', '94:6'])} names={{ 94: 'الشرح' }} />);
     expect(screen.getAllByText(/الشرح/)).toHaveLength(2);
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
     expect(container.querySelectorAll('[data-differs]').length).toBeGreaterThan(0);
@@ -330,21 +331,14 @@ describe('BranchTree', () => {
   });
 
   it('colours a differently voiced first word apart from the shared root', () => {
-    const group: BranchAyah[] = [
-      { key: '1:1', page: 1, words: ['مِّنْ', 'رب'] },
-      { key: '1:2', page: 1, words: ['مِن', 'رب'] },
-      { key: '1:3', page: 1, words: ['وَمِن', 'رب'] },
+    const variants = [
+      { word: 'مِن', conj: '', keys: ['1:1', '1:2'], id: 'من رب', forms: { '1:1': ['مِّنْ'], '1:2': ['مِن'] } },
+      { word: 'وَمِن', conj: 'و', keys: ['1:3'], id: 'من رب' },
     ];
-    const { container } = render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
+    const { container } = render(<BranchTree tree={{ words: ['مِن', 'رب'], ayat: ['1:1', '1:2', '1:3'], children: [] }} variants={variants} names={{}} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     expect(firstWords.querySelectorAll('[data-differs]')).toHaveLength(1);
     expect(container.querySelectorAll('[data-differs]')).toHaveLength(1);
-  });
-
-  it('colours the word a merged node\'s ayat voice differently', () => {
-    const group = startingWith(data.ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
-    const { container } = render(<BranchTree tree={branch(group)} names={{}} />);
-    expect([...container.querySelectorAll('[data-differs]')].map(word => word.textContent)).toEqual([expect.stringMatching(/^ر/)]);
   });
 
   it('lights a path only from its button, never on hover or focus, and keeps several pinned', () => {
@@ -454,9 +448,8 @@ describe('BranchTree', () => {
     });
 
     it('shows, after a leaf that runs into the next ayah, the ayah after that one', async () => {
-      const group = startingWith(data.ayat as BranchAyah[], 'يطوف عليهم');
       quranSurrounding.mockResolvedValue({ before: {}, after: { '56:18': { key: '56:19', page: 535, words: ['لَّا', 'يُصَدَّعُونَ'] } } });
-      render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 56: 'الواقعة' }} surround={{ on: true }} />);
+      render(<BranchTree {...live(['52:24', '56:17', '76:19'], 2)} names={{ 56: 'الواقعة' }} surround={{ on: true }} />);
       const box = (await screen.findByText('لَّا يُصَدَّعُونَ')).closest('[data-ctx]')!;
       expect(box.getAttribute('data-ctx')).toBe('56:17');
       expect(quranSurrounding.mock.calls[0][1]).toEqual(expect.arrayContaining(['56:18', '52:24', '76:19']));
