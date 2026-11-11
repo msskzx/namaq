@@ -14,6 +14,8 @@ import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
 import { YAHYA } from './yahya';
+import { YAQUB } from './yaqub';
+import { YUSUF } from './yusuf';
 import { ZAKARIYYA } from './zakariyya';
 
 const MUSA_EVENTS = MUSA.events;
@@ -139,6 +141,13 @@ const BRIEF = [
   { slug: 'sulayman', story: SULAYMAN, named: ['2:102', '4:163', '6:84', '21:78', '21:79', '21:81', '27:15', '27:16', '27:17', '27:18', '27:30', '27:36', '27:44', '34:12', '38:30', '38:34'] },
   { slug: 'ilyas', story: ILYAS, named: ['6:85', '37:123', '37:130'] },
   { slug: 'alyasa', story: ALYASA, named: ['6:86', '38:48'] },
+  {
+    slug: 'yusuf',
+    story: YUSUF,
+    named: ['6:84', ...[4, 7, 8, 9, 10, 11, 17, 21, 29, 46, 51, 56, 58, 69, 76, 77, 80, 84, 85, 87, 89, 90, 94, 99].map(n => `12:${n}`), '40:34'],
+  },
+  // Yaqub, and Israel where the ayah means him, not his children (3:93, 19:58).
+  { slug: 'yaqub', story: YAQUB, named: ['2:132', '2:133', '2:136', '2:140', '3:84', '3:93', '4:163', '6:84', '11:71', '12:6', '12:38', '12:68', '19:6', '19:49', '19:58', '21:72', '29:27', '38:45'] },
 ];
 
 describe.each(BRIEF)('$slug', ({ story, named }) => {
