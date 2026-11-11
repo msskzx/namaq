@@ -1,5 +1,5 @@
 // docs/adr/0034-one-inventory-defines-quran-branch-trees.md
-import { keys, PIECE_MAX, spell, type Branch, type BranchAyah, type Variant } from './branches';
+import { keys, PIECE_MAX, runOn, spell, type Branch, type BranchAyah, type Variant } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
@@ -166,6 +166,7 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], conti
 export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const positions = new Map(ayat.map((ayah, index) => [ayah.key, index]));
+  const basmala = byKey.get('1:1');
   return (group: PhraseGroup): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } => {
   const seen = new Set<string>();
   const occurrences = group.occurrences.filter(o => {
@@ -188,7 +189,8 @@ export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = tr
       const position = positions.get(ayah.through!);
       const [surah, number] = ayah.through!.split(':').map(Number);
       const explicit = ayah.next ? { key: source[i].through ?? `${surah}:${number + 1}`, page: ayah.page, words: ayah.next, roots: ayah.nextRoots, lemmas: ayah.nextLemmas } : undefined;
-      const next = explicit ?? (followCorpus && position !== undefined ? ayat[position + 1] : undefined);
+      const following = followCorpus && position !== undefined ? ayat[position + 1] : undefined;
+      const next = explicit ?? (following && { ...following, ...runOn(ayah.through!, following, basmala) });
       if (!next || within && !within(next.key)) return undefined;
       const prefix = sourceIds.some((other, at) => at !== i && (other.length > sourceIds[i].length || continueIdentical && other.length === sourceIds[i].length) && sourceIds[i].every((token, word) => token === other[word]));
       return prefix ? next : undefined;

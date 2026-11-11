@@ -274,6 +274,23 @@ const ayahEnd = (key: string) => `﴿${num(Number(key.split(':')[1]))}﴾`;
 
 export const grown = (ayat: BranchAyah[]) => ayat.map(ayah => (ayah.next && (continues(ayah, ayat) || twinned(ayah, ayat)) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next], ...(ayah.roots && { roots: [...ayah.roots, null, ...(ayah.nextRoots ?? ayah.next.map(() => null))] }), ...(ayah.lemmas && { lemmas: [...ayah.lemmas, null, ...(ayah.nextLemmas ?? ayah.next.map(() => null))] }) } : ayah));
 
+type RunOn = Pick<BranchAyah, 'words' | 'roots' | 'lemmas'>;
+
+/**
+ * The words read after `from` when the reading runs on into `next`. When `next` opens another surah, its
+ * basmala is read first (al-Fatiha's is its own first ayah; at-Tawbah has none), so it is put before the ayah.
+ */
+export function runOn(from: string, next: Pick<BranchAyah, 'key' | 'words' | 'roots' | 'lemmas'>, basmala: RunOn | undefined): RunOn {
+  const [surah, ayah] = next.key.split(':').map(Number);
+  if (!basmala || ayah !== 1 || surah === 1 || surah === 9 || from.split(':')[0] === String(surah)) return next;
+  const pad = (own: RunOn['roots'], words: string[]) => own ?? words.map(() => null);
+  return {
+    words: [...basmala.words, ...next.words],
+    ...((next.roots || basmala.roots) && { roots: [...pad(basmala.roots, basmala.words), ...pad(next.roots, next.words)] }),
+    ...((next.lemmas || basmala.lemmas) && { lemmas: [...pad(basmala.lemmas, basmala.words), ...pad(next.lemmas, next.words)] }),
+  };
+}
+
 /** The ayat that follow, in mushaf order and across surahs, until this ayah's run parts from every identical twin's. */
 function following(ayah: BranchAyah, twins: BranchAyah[], after: (key: string) => BranchAyah | undefined): BranchAyah[] {
   const run = (from: BranchAyah, length: number) => {
@@ -293,16 +310,18 @@ function following(ayah: BranchAyah, twins: BranchAyah[], after: (key: string) =
 export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): BranchAyah[] {
   const index = new Map(all.map((ayah, i) => [ayah.key, i]));
   const after = (key: string) => all[index.get(key)! + 1];
+  const basmala = all.find(ayah => ayah.key === '1:1');
   const selected = [...groups.values()].flatMap(group => {
     const own = shown(group);
     return group.map((ayah, i) => {
       const twins = own.filter(other => other.key !== ayah.key && identical(own[i], other));
       const run = twins.length ? following(ayah, twins, after) : (continues(ayah, group) || continues(own[i], own)) && after(ayah.key) ? [after(ayah.key)] : [];
       if (!run.length) return ayah;
-      const joined = <T,>(pick: (next: BranchAyah) => T[]) => run.flatMap((next, j) => [...(j ? [null] : []), ...pick(next)]);
+      const parts = run.map((next, j) => runOn(j ? run[j - 1].key : ayah.key, next, basmala));
+      const joined = <T,>(pick: (next: RunOn) => T[]) => parts.flatMap((next, j) => [...(j ? [null] : []), ...pick(next)]);
       return {
         ...ayah,
-        next: run.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]),
+        next: parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]),
         ...(run[0].roots && { nextRoots: joined(next => next.roots!) }),
         ...(run[0].lemmas && { nextLemmas: joined(next => next.lemmas!) }),
         through: run[run.length - 1].key,

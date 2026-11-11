@@ -1,4 +1,4 @@
-import type { BranchAyah } from '../branches';
+import { runOn, type BranchAyah } from '../branches';
 import { inJuzRange, juzOf, type JuzRange } from '../juz';
 import { num } from '../arabicNumber';
 import { focusPhraseGroup } from '../phraseTrees';
@@ -99,11 +99,12 @@ export function groupAyat(group: Group, ayat: Map<string, BranchAyah>): BranchAy
     const first = ayat.get(place.key)!;
     const last = place.through && ayat.get(place.through);
     if (!last) return { ...first, through: undefined, next: undefined, nextRoots: undefined, nextLemmas: undefined };
+    const read = runOn(first.key, last, ayat.get('1:1'));
     return {
       ...first,
-      words: [...first.words, `﴿${num(Number(first.key.split(':')[1]))}﴾`, ...last.words],
-      roots: [...(first.roots ?? first.words.map(() => null)), null, ...(last.roots ?? last.words.map(() => null))],
-      lemmas: [...(first.lemmas ?? first.words.map(() => null)), null, ...(last.lemmas ?? last.words.map(() => null))],
+      words: [...first.words, `﴿${num(Number(first.key.split(':')[1]))}﴾`, ...read.words],
+      roots: [...(first.roots ?? first.words.map(() => null)), null, ...(read.roots ?? read.words.map(() => null))],
+      lemmas: [...(first.lemmas ?? first.words.map(() => null)), null, ...(read.lemmas ?? read.words.map(() => null))],
       through: last.key, next: undefined, nextRoots: undefined, nextLemmas: undefined,
     };
   });
