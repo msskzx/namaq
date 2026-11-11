@@ -10,6 +10,7 @@ import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
 import { ISA } from './isa';
 import { ADAM } from './adam';
+import { LUT } from './lut';
 import { MUSA } from './musa';
 import { NUH } from './nuh';
 import { SALIH } from './salih';
@@ -376,6 +377,44 @@ describe('ISA', () => {
   it('holds every ayah that names Maryam', () => {
     expect(flat(MARYAM)).toHaveLength(31);
     expect(flat(MARYAM).filter(k => !keys.includes(k))).toEqual([]);
+  });
+});
+
+const LUT_NAMED: Record<number, number[]> = {
+  6: [86],
+  7: [80],
+  11: [70, 74, 77, 81, 89],
+  15: [59, 61],
+  21: [71, 74],
+  22: [43],
+  26: [160, 161, 167],
+  27: [54, 56],
+  29: [26, 28, 32, 33],
+  37: [133],
+  38: [13],
+  50: [13],
+  54: [33, 34],
+  66: [10],
+};
+
+// The overturned towns of Lut's people.
+const MUTAFIKAT = ['9:70', '53:53', '69:9'];
+
+describe('LUT', () => {
+  const keys = storyKeys(LUT.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Lut, and the overturned towns', () => {
+    const named = Object.entries(LUT_NAMED).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+    expect(named).toHaveLength(27);
+    expect([...named, ...MUTAFIKAT].filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of LUT.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 
