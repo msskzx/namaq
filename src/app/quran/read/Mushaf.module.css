@@ -206,6 +206,7 @@
 .saved { color: var(--home-root); }
 
 .ayahActions { position: fixed; z-index: 30; display: flex; gap: 0.5rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
+.ayahChoices { flex-direction: column; align-items: stretch; gap: 0.125rem; width: 18rem; max-width: calc(100vw - 2rem); }
 .reciteBar { position: fixed; z-index: 20; inset-inline: 0; bottom: calc(var(--app-tabbar, 0px) + 1rem); margin-inline: auto; width: max-content; display: flex; gap: 0.75rem; padding: 0.5rem; border: 1px solid var(--home-rule); border-radius: 999px; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
 /* On touch screens a long press on the page is a gesture, not a text selection; a mouse can still select. */
 @media (pointer: coarse) {

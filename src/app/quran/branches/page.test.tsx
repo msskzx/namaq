@@ -213,6 +213,16 @@ describe('Quran branch trees', () => {
     expect([...drawn].sort()).toEqual(wanted.map(place => place.key).sort());
   });
 
+  it("opens the reader's trees of one ayah: the first tree holding it, stepping only through those, with a chip that clears it", async () => {
+    const key = branchInventory({}, null).flatMap(piece => piece.keys).find(item => item.startsWith('2:'))!;
+    const holding = branchInventory({}, null).filter(piece => piece.keys.includes(key));
+    const landed = paramsOf(await target({ k: key }));
+    expect(landed.k).toBe(key);
+    expect(landed.o).toBe(holding[0].id);
+    render(await open(landed));
+    expect(screen.getByLabelText('إزالة الآية').getAttribute('href')).not.toContain('k=');
+  });
+
   it('opens the saved default view and preserves it through the initial redirect', async () => {
     preference.value = 'cards';
     expect(new URL(await target({}), 'http://localhost').searchParams.get('m')).toBe('cards');

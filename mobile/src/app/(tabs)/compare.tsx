@@ -9,9 +9,9 @@ import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
 import HelpSheet from '@/components/HelpSheet';
 import PageProgress from '@/components/PageProgress';
-import ComparePager, { type PagerHandle } from '@/components/ComparePager';
+import ComparePager, { type Focus, type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
-import { cardsFor, filteredPairs, landingIndex, pairTitle, visitsOf, type PairFilter } from '@/lib/compare';
+import { cardsFor, filteredPairs, landingIndex, pairTitle, visitKey, visitsOf, type PairFilter } from '@/lib/compare';
 import { readJson, writeJson } from '@/lib/storage';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
@@ -56,7 +56,9 @@ export default function CompareScreen() {
   // The homepage opens a surah's first pair, or the pair of a saved card; a filter that hides it is cleared.
   // The pager remounts on the pair, so it lands there whether the tab was open or opens now.
   const [jumps, setJumps] = useState(0);
-  useIntent('compare', ({ lead, other }) => {
+  /** The pair page that opens on the card of these ayat (the reader's ayah menu, a saved card); cleared once it has landed. */
+  const [focus, setFocus] = useState<Focus | undefined>(undefined);
+  useIntent('compare', ({ lead, other, ayat }) => {
     const find = (list: typeof visits) => list.findIndex(item => (item.lead === lead && (!other || item.other === other)) || (!!other && item.lead === other && item.other === lead));
     let list = visits;
     let at = find(list);
@@ -67,6 +69,7 @@ export default function CompareScreen() {
     }
     if (at < 0) return;
     writeJson(PLACE, { lead: list[at].lead, other: list[at].other });
+    setFocus(ayat?.length ? { visit: visitKey(list[at]), ayat } : undefined);
     setIndex(at);
     setJumps(value => value + 1);
   });
@@ -88,7 +91,7 @@ export default function CompareScreen() {
         </Pressable>
       </TopBar>
       <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
-      {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} />
+      {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} focus={focus} onLanded={() => setFocus(undefined)} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}><Text style={{ color: palette.muted, fontSize: 16, textAlign: 'center' }}>{filter.savedOnly && !filter.scope ? 'لا بطاقة محفوظة بعد. احفظ بطاقة بزر الحفظ تحتها أولًا.' : 'لا صفحات بهذه التصفية.'}</Text></View>}
       <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter} onFilter={changeFilter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />

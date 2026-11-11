@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
@@ -13,6 +13,11 @@ import TopBar from './TopBar';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
+import CompareTargetsSheet from './CompareTargetsSheet';
+import TreeIcon from './TreeIcon';
+import { hasTrees } from '@/lib/branchList';
+import { compareTargetsOfAyah, type CompareTarget } from '@/lib/compare';
+import { openCompare, openTreesOf } from '@/lib/ways';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@/lib/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
@@ -201,6 +206,12 @@ export default function Reader() {
 
   const actionKey = actions?.key;
   const forgotCount = actionKey ? (forgot[actionKey]?.forgot ?? 0) : 0;
+  // Where else the ayah is: its compare cards and the trees that hold it, each shown only when there are any.
+  const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
+  const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
+  const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
+  const buttons = 2 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0);
+  const barWidth = buttons * 48 + 12;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <View style={{ paddingTop: pageInsets.top, paddingBottom: pageInsets.bottom }}>
@@ -218,7 +229,7 @@ export default function Reader() {
       )}
       {actions && (
         <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - 170, Math.max(8, actions.x - 80)), flexDirection: 'row', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), flexDirection: 'row', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
           <Pressable accessibilityRole="button" accessibilityLabel={forgotCount ? `نسيتها مرة أخرى (نسيتها ${num(forgotCount)} من قبل)` : 'نسيتها'}
             onPress={() => { markForgotten(actions.key); setActions(null); }}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>
@@ -227,8 +238,12 @@ export default function Reader() {
           </Pressable>
           {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها، أزلها من المراجعة" palette={palette} onPress={() => { clearForgotten(actions.key); setActions(null); }} />}
           <IconButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
+          {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" palette={palette}
+            onPress={() => { setActions(null); if (targets.length === 1) openCompare(targets[0]); else setChoosing(targets); }} />}
+          {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); openTreesOf(key); }} />}
         </View>
       )}
+      <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
           style={{ position: 'absolute', bottom: insets.bottom + 6 + (tools ? 55 : 0), alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>

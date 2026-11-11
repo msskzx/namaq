@@ -16,7 +16,8 @@ import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
-import { savedCard, shelfText, type SavedCard } from '@/lib/home';
+import { cardWays, savedCard, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import WaysSheet from '@/components/WaysSheet';
 import { setIntent, type Intent } from '@/lib/intent';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
@@ -109,11 +110,12 @@ function QuranPicker({ palette }: { palette: Palette }) {
   );
 }
 
-function ShelfCard({ card, palette }: { card: SavedCard; palette: Palette }) {
+function ShelfCard({ card, palette, onMore }: { card: SavedCard; palette: Palette; onMore: () => void }) {
   const Icon = KIND_ICONS[card.kind];
   const label = BOOKMARK_KIND_LABEL[card.kind].ar;
   return (
-    <Pressable onPress={() => card.open && go(card.open)} disabled={!card.open} accessibilityRole="link" accessibilityLabel={`${label}: ${card.text}`}
+    <Pressable onPress={() => card.open && go(card.open)} onLongPress={onMore} delayLongPress={450} disabled={!card.open} accessibilityRole="link"
+      accessibilityActions={[{ name: 'longpress', label: 'افتحها في عرض آخر' }]} onAccessibilityAction={event => { if (event.nativeEvent.actionName === 'longpress') onMore(); }} accessibilityLabel={`${label}: ${card.text}`}
       style={({ pressed }) => ({ width: 250, minHeight: 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
         <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
@@ -137,6 +139,8 @@ export default function HomeScreen() {
   const palette = usePalette();
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
+  /** A saved card's long press: the other views of its ayat. */
+  const [ways, setWays] = useState<CardWay[] | null>(null);
   const hasTrees = cards.some(card => card.kind === 'tree' && card.open);
   const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
@@ -153,14 +157,15 @@ export default function HomeScreen() {
           <Heading Icon={Bookmark} title="المحفوظات" palette={palette}>
             {hasTrees && <Button Icon={Library} accessibilityLabel="افتح المحفوظات" onPress={() => go({ tab: 'branches', saved: true })} />}
           </Heading>
-          {cards.length ? (
-            // Inverted in a left-to-right box, as the compare pager does, so the newest card starts on the right on every platform.
+          {cards.length ? (<>
+            {/* Inverted in a left-to-right box, as the compare pager does, so the newest card starts on the right on every platform. */}
             <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
               <FlatList data={cards} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={card => card.id}
                 contentContainerStyle={{ gap: 12, paddingVertical: 4, paddingHorizontal: 16 }}
-                renderItem={({ item }) => <View style={{ direction: 'rtl' }}><ShelfCard card={item} palette={palette} /></View>} />
+                renderItem={({ item, index }) => <View style={{ direction: 'rtl' }}><ShelfCard card={item} palette={palette} onMore={() => { const found = cardWays(bookmarks[index]); if (found.length) setWays(found); }} /></View>} />
             </View>
-          ) : (
+            <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>اضغط مطوّلًا على بطاقة لتفتحها في المصحف أو الشجرة أو المقارنة.</Text>
+          </>) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
               <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو عائلة أو بطاقة مقارنة أو آية بزر</Text>
               <Bookmark size={18} color={palette.muted} accessibilityLabel="الحفظ" />
@@ -187,6 +192,7 @@ export default function HomeScreen() {
           </Row>
         </View>
       </ScrollView>
+      <WaysSheet ways={ways} onClose={() => setWays(null)} palette={palette} />
       {!seen && <Tour palette={palette} onDone={() => setSeen(true)} />}
     </View>
   );

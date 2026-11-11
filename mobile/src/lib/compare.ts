@@ -154,7 +154,7 @@ export type CompareTarget = { lead: number; other: number; ayat: [number, number
  * compareLinksFor): a tree across two surahs opens its pair, one across more lists them to choose from.
  * Seen from the surah of the first shown ayah when it is one of the two, as the tree reads.
  */
-export function compareTargetsFor(keys: string[]): CompareTarget[] {
+function hitsOf(key: string) {
   if (!pairsByAyah) {
     pairsByAyah = new Map();
     for (const { a, b } of listedPairs) for (const item of stored.cards[`${a}:${b}`] ?? []) {
@@ -162,10 +162,14 @@ export function compareTargetsFor(keys: string[]): CompareTarget[] {
       for (const id of item.p) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), { id, a, b }]);
     }
   }
+  return pairsByAyah.get(key) ?? [];
+}
+
+export function compareTargetsFor(keys: string[]): CompareTarget[] {
   const shown = new Set(keys);
   const first = Number(keys[0]?.split(':')[0]);
   const bySurahs = new Map<string, CompareTarget>();
-  for (const hit of keys.flatMap(key => pairsByAyah!.get(key) ?? [])) {
+  for (const hit of keys.flatMap(hitsOf)) {
     if (!hit.id.split('|').every(key => shown.has(key)) || bySurahs.has(`${hit.a}:${hit.b}`)) continue;
     const [x, y] = hit.id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
     const flip = first === hit.b && hit.a !== hit.b;
@@ -176,6 +180,33 @@ export function compareTargetsFor(keys: string[]): CompareTarget[] {
     const [qa, qb] = q.split(':').map(Number);
     return pa - qa || pb - qb;
   }).map(([, target]) => target);
+}
+
+/**
+ * Every listed surah pair holding a kept card of this one ayah (the reader's ayah menu), in mushaf order:
+ * seen from the ayah's own surah, with the ayah and its partner as `ayat`.
+ */
+export function compareTargetsOfAyah(key: string): CompareTarget[] {
+  const [own, number] = key.split(':').map(Number);
+  const bySurahs = new Map<string, CompareTarget>();
+  for (const hit of hitsOf(key)) {
+    if (bySurahs.has(`${hit.a}:${hit.b}`)) continue;
+    const partner = hit.id.split('|').find(other => other !== key) ?? key;
+    const [surah, ayah] = partner.split(':').map(Number);
+    bySurahs.set(`${hit.a}:${hit.b}`, { lead: own, other: surah, ayat: [number, ayah] });
+  }
+  return [...bySurahs.values()].sort((p, q) => Math.min(p.lead, p.other) - Math.min(q.lead, q.other) || Math.max(p.lead, p.other) - Math.max(q.lead, q.other));
+}
+
+/** Whether a card shows this ayah on either side, or as one of its one-to-many partners. */
+export const holdsAyah = (card: PairCard, key: string) =>
+  card.sides.some(side => side.ayat.some(ayah => `${side.surah}:${ayah.number}` === key)) ||
+  !!card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key);
+
+/** The card a page opens on for these ayat: the one holding them all, else the first holding the first; -1 for none. */
+export function focusIndex(cards: PairCard[], ayat: string[]) {
+  const all = cards.findIndex(card => ayat.every(key => holdsAyah(card, key)));
+  return all >= 0 ? all : cards.findIndex(card => holdsAyah(card, ayat[0]));
 }
 
 /** The ayat each side of a card shows: a one-to-many card shows its picked partner against the shared ayah. */
