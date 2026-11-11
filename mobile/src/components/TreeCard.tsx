@@ -56,7 +56,7 @@ const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
 export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0, actions }: Props) {
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight) }), [full.width, full.height, footHeight]); // eslint-disable-line react-hooks/exhaustive-deps
-  // The paths lit on this tree, as on the website: tapping a node or its path button, several at once, gone with the card.
+  // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
   const [pinned, setPinned] = useState(() => {
