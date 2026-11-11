@@ -3,7 +3,12 @@ import corpus from '@shared/data/quran/trees.json';
 import { groups as artifact } from '@shared/quran/mutashabih/data';
 import type { BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
-import { buildGroups, compareAyat } from './engine';
+import { groupHasId } from '@shared/quran/mutashabih/identity';
+import { buildGroups, compareAyat, MATCH_CONFIG } from './engine';
+
+// A short-opening group: whole ayat whose shared anchor is their first three or more words.
+const isOpening = (group: (typeof artifact)[number]) => group.kind === 'mutashabih_lafzi' && group.places.every(place => place.start === 0 && !place.through)
+  && group.tree.occurrences.every(occurrence => occurrence.start === 0 && occurrence.end >= MATCH_CONFIG.minOpeningWords);
 
 const byKey = new Map(corpus.ayat.map(ayah => [ayah.key, ayah]));
 const ayah = (key: string) => {
@@ -128,7 +133,7 @@ describe('automatic matching', () => {
   });
 
   it('keeps every automatic pair strong within the published word spans', () => {
-    for (const group of artifact.filter(group => group.kind === 'mutashabih_lafzi' && group.citations.length === 0)) {
+    for (const group of artifact.filter(group => group.kind === 'mutashabih_lafzi' && group.citations.length === 0 && !isOpening(group))) {
       const selected = group.places.map(place => {
         const original = ayah(place.key);
         return {
@@ -145,6 +150,18 @@ describe('automatic matching', () => {
         expect(comparison.columns.filter(column => column.level && column.level !== 'root').length, group.id).toBeGreaterThanOrEqual(6);
       }
     }
+  });
+
+  it('groups short ayat that open with the same three or more words and then part', () => {
+    const openings = artifact.filter(isOpening);
+    expect(openings.length).toBeGreaterThan(300);
+    for (const group of openings) {
+      expect(group.places.length, group.id).toBeLessThanOrEqual(MATCH_CONFIG.maxOpeningPlaces);
+      const firstWords = group.places.map(place => ayah(place.key).words.slice(0, MATCH_CONFIG.minOpeningWords).map(word => normalizeWord(word).replace(/^[وف]/u, '')));
+      for (const words of firstWords) expect(words, group.id).toEqual(firstWords[0]);
+    }
+    const mujrimin = artifact.find(group => groupHasId(group, 'group:43:74,54:47'));
+    expect(normalizeWord(mujrimin!.text)).toBe(normalizeWord('إن المجرمين في'));
   });
 
   it('ranks a near-complete parallel above a short shared span', () => {

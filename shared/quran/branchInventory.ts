@@ -1,6 +1,7 @@
 import corpus from '../data/quran/trees.json';
 import type { BranchAyah, Opening } from './branches';
 import { buildPhraseGroups, type TreeGroup } from './phraseTrees';
+import { ALL_KINDS, searchSharedPhrases } from './branchSearch';
 import { subtreeIndex } from './subtrees';
 import { browseGroups, filteredAyat, type GroupFilters } from './mutashabih/browse';
 import { groups } from './mutashabih/data';
@@ -63,4 +64,19 @@ export function branchInventory(filters: GroupFilters, range: JuzRange | null): 
   if (inventories.size >= 16) inventories.delete(inventories.keys().next().value!);
   inventories.set(cacheKey, result);
   return result;
+}
+
+export const OUTSIDE_SUGGESTIONS = 5;
+
+/**
+ * Trees a search finds that the current filters hide, for the search box's «خارج التصفية الحالية» section.
+ * Searched among every kind of tree with no range, surah or saved-only limit; picking one resets the filters to that.
+ */
+export function outsideMatches(query: string, shown: BranchPiece[], limit = OUTSIDE_SUGGESTIONS): BranchPiece[] {
+  if (!query.trim()) return [];
+  const seen = new Set(shown.flatMap(piece => [piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])]));
+  const places = (piece: BranchPiece) => [...piece.keys].sort().join(',');
+  const shownPlaces = new Set(shown.map(places));
+  const hidden = (piece: BranchPiece) => !shownPlaces.has(places(piece)) && ![piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])].some(id => seen.has(id));
+  return distinctBranchPieces(searchSharedPhrases(branchInventory({ categories: ALL_KINDS }, null), query)).filter(hidden).slice(0, limit);
 }

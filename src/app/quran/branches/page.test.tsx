@@ -28,8 +28,9 @@ import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
 const params = new URLSearchParams();
+const navigation = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
+  useRouter: () => ({ push: navigation.push, replace: vi.fn(), prefetch: vi.fn() }),
   usePathname: () => '/quran/branches',
   useSearchParams: () => params,
   redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); },
@@ -252,9 +253,22 @@ describe('Quran branch trees', () => {
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'فذرهم يخوضوا ويلعبوا' } });
     const options = await screen.findAllByRole('option');
     vi.unstubAllGlobals();
-    expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
-    expect(options).toHaveLength(1);
+    expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases') && !url.includes('outside=1'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
+    expect(options.filter(option => !option.className.includes('home-muted'))).toHaveLength(1);
     expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
+  });
+
+  it('lists trees the filters hide under their own label; picking one clears the filters', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 })));
+    render(await follow({ juzFrom: '1', juzTo: '1' }));
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'إن المجرمين في' } });
+    expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية')).toBeTruthy();
+    vi.unstubAllGlobals();
+    const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes('ٱلْمُجْرِمِينَ'))!;
+    fireEvent.click(hidden);
+    const pushed = new URL(navigation.push.mock.calls.at(-1)![0], 'http://localhost');
+    expect(pushed.searchParams.get('juzFrom')).toBeNull();
+    expect(pushed.searchParams.get('categories')).toBe('mutashabeh,pondering,words');
   });
 
   it('keeps zoom links to the subtree after an ayah ending', async () => {
