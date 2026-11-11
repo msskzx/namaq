@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '@/components/Text';
 import Svg, { Path } from 'react-native-svg';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
 import { num } from '@shared/quran/arabicNumber';

@@ -1,5 +1,6 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, EyeOff, Feather, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';

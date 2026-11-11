@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { EyeOff, User, Users, type LucideProps } from 'lucide-react-native';
 import TopBar from '@/components/TopBar';

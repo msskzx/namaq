@@ -1,5 +1,6 @@
 import { Fragment, memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';

@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
 import type { Palette } from '@/lib/theme';
 

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
+import { Modal, Pressable, View, type LayoutChangeEvent } from 'react-native';
+import { Text } from '@/components/Text';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';

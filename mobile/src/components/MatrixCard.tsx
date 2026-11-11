@@ -1,5 +1,6 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';

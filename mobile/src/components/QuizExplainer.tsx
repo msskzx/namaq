@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import example from '@shared/data/quiz/example.json';
 import type { Branch, Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';

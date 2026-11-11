@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { NAME_MAX } from '@shared/party/rules';

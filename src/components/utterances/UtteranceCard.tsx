@@ -13,14 +13,14 @@ import type { Utterance } from '@/types/utterance';
 function Text({ utterance }: { utterance: Utterance }) {
   if (utterance.kind !== 'POETRY') {
     return (
-      <p className="font-arabic text-xl/9 text-gray-900 dark:text-gray-100" dir="rtl">
+      <p className="text-xl/9 text-gray-900 dark:text-gray-100" dir="rtl">
         {utterance.textArabic}
       </p>
     );
   }
 
   return (
-    <div className="font-arabic text-xl/9 text-gray-900 dark:text-gray-100 space-y-1" dir="rtl">
+    <div className="text-xl/9 text-gray-900 dark:text-gray-100 space-y-1" dir="rtl">
       {utterance.textArabic.split('\n').map((line, index) => (
         <div key={index} className="text-center">
           {line}

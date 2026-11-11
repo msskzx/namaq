@@ -21,7 +21,7 @@ export default function NamaqDefinition() {
           </section>
         ))}
       </div>
-      <p className="mt-6 font-arabic text-lg leading-loose text-[var(--home-muted)]" dir="rtl" lang="ar">{words.join(' · ')}</p>
+      <p className="mt-6 text-lg leading-loose text-[var(--home-muted)]" dir="rtl" lang="ar">{words.join(' · ')}</p>
     </details>
   );
 }

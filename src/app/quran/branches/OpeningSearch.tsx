@@ -163,7 +163,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             const index = surahHits.length + i;
             return <li key={opening.id} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-                <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+                <span className="text-lg flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
                 <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
               </button>
             </li>;
@@ -173,7 +173,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             const index = surahHits.length + suggestions.length + i;
             return <li key={`o${opening.id}`} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => openOutside(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-                <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+                <span className="text-lg flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
                 <span>{ar ? num(opening.count) : opening.count}</span>
               </button>
             </li>;

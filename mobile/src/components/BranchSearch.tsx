@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';

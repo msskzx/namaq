@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
 import corpus from '@shared/data/quran/trees.json';
 import type { BranchAyah } from '@shared/quran/branches';

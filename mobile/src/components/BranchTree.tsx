@@ -1,5 +1,6 @@
 import { createContext, memo, useContext, useEffect, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
+import { Pressable, View, type LayoutChangeEvent } from 'react-native';
+import { Text } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';

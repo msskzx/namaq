@@ -1,4 +1,5 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { Clapperboard, Pause, Play, RotateCcw, Send, Timer, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { closeStudio, openStudio, pause, play, setPrefs, SPEEDS, stop, TIMERS, useGrowth } from '@/lib/growPlayer';

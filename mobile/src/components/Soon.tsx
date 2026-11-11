@@ -1,4 +1,5 @@
-import { Linking, Pressable, Text, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import TopBar from './TopBar';
 import { WEBSITE } from '@/lib/branches';
 import { usePalette } from '@/lib/theme';

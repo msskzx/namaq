@@ -38,6 +38,7 @@ import { parseJuzRange } from "@shared/quran/juz";
 import type { Branch, Variant } from "@shared/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
 import QuestionReview from "./QuestionReview";
 import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/quiz/score";
@@ -92,7 +93,7 @@ interface QuizQuestionView {
 function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
   return (
     <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-      <p className="font-arabic text-xl leading-loose text-[var(--home-ink)]">{ayah.text}</p>
+      <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(ayah.text)}</p>
       <p className="text-sm text-[var(--home-muted)]">{ayah.reference}</p>
     </blockquote>
   );

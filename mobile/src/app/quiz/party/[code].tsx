@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
