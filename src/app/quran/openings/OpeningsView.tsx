@@ -59,7 +59,7 @@ export default function OpeningsView({ items, tasbih }: { items: OpeningView[]; 
               <p key={l.ayah} data-role={l.role} className={`text-2xl leading-[2.2] font-quran border-s-4 rounded px-2 mb-1 ${ROLES[l.role].block}`}>
                 <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
                 {mushafText(l.text)}
-                {l.role === 'answer' && !l.sourced && <span className={`${NOTE} ms-2`}>قراءتنا</span>}
+                {l.role === 'answer' && !l.sourced && <span className={`${NOTE} ms-2 font-sans`}>قراءتنا</span>}
               </p>
             ))}
           </section>

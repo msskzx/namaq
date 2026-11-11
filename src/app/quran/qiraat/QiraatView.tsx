@@ -80,7 +80,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
                 <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
                 <p className="text-2xl leading-[2.2] font-quran">
                   {around(found.before)}{' '}
-                  {spans[i].length === 0 && <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
+                  {spans[i].length === 0 && <mark className={`bg-transparent font-sans ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
                   {spans[i].map((w, k) => (
                     <React.Fragment key={k}>
                       {differing[i].has(k) ? <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{mushafText(w)}</mark> : mushafText(w)}{' '}
