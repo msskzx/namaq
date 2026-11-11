@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
-import { MUSA } from './musa';
 import { ALYASA } from './alyasa';
 import { AYYUB } from './ayyub';
+import { DAWUD } from './dawud';
 import { DHUL_KIFL } from './dhul-kifl';
 import { HARUN } from './harun';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
+import { MUSA } from './musa';
 import { SHUAYB } from './shuayb';
+import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
 import { YAHYA } from './yahya';
@@ -132,6 +134,8 @@ const BRIEF = [
   { slug: 'ayyub', story: AYYUB, named: ['4:163', '6:84', '21:83', '38:41'] },
   { slug: 'harun', story: HARUN, named: ['2:248', '4:163', '6:84', '7:122', '7:142', '10:75', '19:53', '20:30', '20:70', '20:90', '20:92', '21:48', '23:45', '25:35', '26:13', '26:48', '28:34', '37:114', '37:120'] },
   { slug: 'dhul-kifl', story: DHUL_KIFL, named: ['21:85', '38:48'] },
+  { slug: 'dawud', story: DAWUD, named: ['2:251', '4:163', '5:78', '6:84', '17:55', '21:78', '21:79', '27:15', '27:16', '34:10', '34:13', '38:17', '38:22', '38:24', '38:26', '38:30'] },
+  { slug: 'sulayman', story: SULAYMAN, named: ['2:102', '4:163', '6:84', '21:78', '21:79', '21:81', '27:15', '27:16', '27:17', '27:18', '27:30', '27:36', '27:44', '34:12', '38:30', '38:34'] },
   { slug: 'ilyas', story: ILYAS, named: ['6:85', '37:123', '37:130'] },
   { slug: 'alyasa', story: ALYASA, named: ['6:86', '38:48'] },
 ];
