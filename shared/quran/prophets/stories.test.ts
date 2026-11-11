@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
 import { IBRAHIM } from './ibrahim';
 import { MUSA } from './musa';
+import { SHUAYB } from './shuayb';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
 
@@ -95,6 +96,27 @@ describe('MUSA_EVENTS', () => {
 
   it('keeps every range ordered', () => {
     for (const e of MUSA_EVENTS) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+describe('SHUAYB', () => {
+  const keys = storyKeys(SHUAYB.events);
+  const flat = (byS: Record<number, number[]>) => Object.entries(byS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Shuayb', () => {
+    const named = flat({ 7: [85, 88, 90, 92], 11: [84, 87, 91, 94], 26: [177], 29: [36] });
+    expect(named).toHaveLength(10);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names his people, Madyan or the people of the thicket', () => {
+    const named = flat({ 7: [85], 9: [70], 11: [84, 95], 15: [78], 22: [44], 26: [176], 29: [36], 38: [13], 50: [14] });
+    expect(named).toHaveLength(10);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
   });
 });
 

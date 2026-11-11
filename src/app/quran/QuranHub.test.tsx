@@ -2,7 +2,6 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
-import { PROPHETS } from '@shared/quran/prophets';
 import QuranHub from './QuranHub';
 
 const lang = vi.hoisted(() => ({ language: 'ar' as 'ar' | 'en' }));
@@ -16,7 +15,7 @@ afterEach(() => {
 const routes = [
   '/quran/read', '/quran/compare', '/quran/words', '/quran/branches',
   '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings',
-  '/quran/oaths', '/quran/tajwid/tuhfat-al-atfal', ...PROPHETS.map(p => `/quran/prophets/${p.slug}`),
+  '/quran/oaths', '/quran/tajwid/tuhfat-al-atfal', '/quran/prophets/musa',
 ];
 
 describe('QuranHub', () => {
@@ -32,7 +31,7 @@ describe('QuranHub', () => {
     render(<QuranHub />);
     expect(screen.getByRole('heading', { level: 1, name: 'القرآن' })).toBeTruthy();
     expect(within(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('article')!).getByRole('link', { name: 'قراءة القرآن' }).getAttribute('href')).toBe('/quran/read');
-    expect(within(screen.getByRole('heading', { name: 'قصة موسى' }).closest('article')!).getByRole('link', { name: 'قصة موسى' }).getAttribute('href')).toBe('/quran/prophets/musa');
+    expect(within(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('article')!).getByRole('link', { name: 'قصص الأنبياء في القرآن' }).getAttribute('href')).toBe('/quran/prophets/musa');
   });
 
   it('writes the titles and descriptions in English', () => {

@@ -3,15 +3,14 @@
 import { writeFileSync } from 'node:fs';
 import corpus from '../../shared/data/quran/trees.json';
 import type { BranchAyah } from '../../shared/quran/branches';
-import type { TreeGroup } from '../../shared/quran/phraseTrees';
-import { branchQuestions } from '../../shared/quiz/branchQuestions';
+import { branchQuestions, quizTrees } from '../../shared/quiz/branchQuestions';
 
 const ayat = corpus.ayat as BranchAyah[];
 const counts: Record<string, number> = {};
 for (let from = 1; from <= 30; from++) {
   for (let to = from; to <= 30; to++) {
     const whole = from === 1 && to === 30;
-    counts[`${from}-${to}`] = branchQuestions(ayat, whole ? null : { from, to }, corpus.trees as TreeGroup[]).length;
+    counts[`${from}-${to}`] = branchQuestions(ayat, whole ? null : { from, to }, quizTrees(whole ? null : { from, to })).length;
   }
   console.log(`juz ${from} done`);
 }

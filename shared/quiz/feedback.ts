@@ -2,7 +2,7 @@
 // The website (src/app/quizzes/BranchAnswers.tsx) and the phone app draw the same rows.
 import { num } from '../quran/arabicNumber';
 import type { Branch } from '../quran/branches';
-import { branchNodes, LEAF_WORDS, matchTreeAnswers, rightWords, spoken } from './branchAnswers';
+import { branchNodes, LEAF_WORDS, matchTreeAnswers, rightWords, spoken, withoutRepeat, wordsBefore } from './branchAnswers';
 import { givenNodes, isAsked, type ScoredQuestion } from './score';
 
 export type Correction = { index: number; number: number; node: Branch; typed: string; correct: boolean; right: number; needed: number };
@@ -10,10 +10,12 @@ export type Correction = { index: number; number: number; node: Branch; typed: s
 /** One row per asked node: what was typed, word by word, against the node it was graded with. */
 export function corrections(question: ScoredQuestion, typed: string[], matches: ReturnType<typeof matchTreeAnswers>): Correction[] {
   const nodes = branchNodes(question.tree!);
+  const before = wordsBefore(question.tree!);
   return nodes.flatMap((node, index) => isAsked(question, index) ? [index] : []).map((index, at) => {
     const answer = matches[index]?.node ?? nodes[index];
     const words = spoken(answer.words);
-    const text = typed[index]?.trim() ?? '';
+    // A repeat of the word before the node is not counted against it (see withoutRepeat).
+    const text = withoutRepeat(typed[index] ?? '', words, before.get(answer) ?? []);
     return { index, number: at + 1, node: answer, typed: text, correct: Boolean(matches[index]?.correct), right: rightWords(text, words), needed: answer.children.length === 0 ? Math.min(LEAF_WORDS, words.length) : words.length };
   });
 }

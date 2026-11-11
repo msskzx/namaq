@@ -124,6 +124,21 @@ describe('matchTreeAnswers', () => {
     expect(matchTreeAnswers(tree, ['غلمان لهم', 'ولدان', 'بأكواب', 'إذا رأيتهم']).map((hit) => hit?.correct)).toEqual([true, false, true, true]);
     expect(matchTreeAnswers(tree, ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم']).every((hit) => hit?.correct)).toBe(true);
   });
+
+  it('forgives typing the last word of the node before again, when it is spelled right', () => {
+    expect(results(['النبي لم تحرم', 'النبي جاهد الكفار', 'النبي قل'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
+    expect(results(['يا أيها النبي لم تحرم', 'جاهد الكفار', 'قل'])[0]).toEqual(['66:1', false]);
+    expect(results(['النبى لم تحرم', 'الكفار جاهد الكفار', 'نبي قل'])).toEqual([['66:1', true], ['66:9', false], ['33:28', false]]);
+  });
+
+  it('keeps a node\'s own first word when it is the same as the word before', () => {
+    const tree = { words: ['قَالَ', 'إِن'], ayat: [], children: [
+      { words: ['إِن', 'كُنتَ'], ayat: ['1:1'], children: [] },
+      { words: ['هَـٰذَآ', 'إِلَّا'], ayat: ['1:2'], children: [] },
+    ] };
+    expect(matchTreeAnswers(tree, ['إن كنت', 'هذا إلا']).every((hit) => hit?.correct)).toBe(true);
+    expect(matchTreeAnswers(tree, ['إن إن كنت', 'إن هذا إلا']).every((hit) => hit?.correct)).toBe(true);
+  });
 });
 
 describe('leadingWords', () => {

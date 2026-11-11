@@ -2,6 +2,7 @@
 import { keys, type Branch, type BranchAyah, type Variant } from '../quran/branches';
 import { inJuzRange, type JuzRange } from '../quran/juz';
 import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '../quran/phraseTrees';
+import { branchInventory } from '../quran/branchInventory';
 import { askedNodes } from './branchAnswers';
 import { shuffle, type Random } from './random';
 
@@ -26,11 +27,18 @@ export interface BranchQuestion {
 
 const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
 
+/**
+ * The trees the quiz asks: the متشابهات of the branches page, not its word trees («أشجار الكلمات»),
+ * scoped to the juz range as the page scopes them.
+ */
+export const quizTrees = (range: JuzRange | null = null): TreeGroup[] => branchInventory({ categories: 'mutashabeh' }, range).map(piece => piece.phrase);
+
 /** The trees a quiz may ask, and how to turn one into a question; building a question costs time, so callers build only what they ask. */
 export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]) {
   const ayat = range ? all.filter(entry => inJuzRange(entry.key, range)) : all;
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
-  const trees = range || !supplied ? buildTreeGroups(ayat) : supplied;
+  // Supplied trees keep only their places inside the range.
+  const trees = supplied ? supplied.map(group => ({ ...group, occurrences: group.occurrences.filter(occurrence => byKey.has(occurrence.key)) })) : buildTreeGroups(ayat);
   const present = createPhrasePresenter(ayat, true, !range);
   const candidates = trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 2 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= MAX_BRANCHES && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2);
   const build = (group: TreeGroup): BranchQuestion | null => {
@@ -66,6 +74,14 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
   return candidates.flatMap(group => build(group) ?? []);
 }
 
+/**
+ * A harder quiz (more answers per tree) picks bigger trees: trees with at least `leaves` leaves first, then the
+ * biggest of the rest. Until each tree has its own difficulty, size stands in for it. Keeps the order otherwise.
+ */
+export function biggerFirst<T>(items: T[], leaves: number, size: (item: T) => number): T[] {
+  return [...items.filter(item => size(item) >= leaves), ...items.filter(item => size(item) < leaves).sort((a, b) => size(b) - size(a))];
+}
+
 export type AskedBranchQuestion = BranchQuestion & { asked: number[] };
 
 /**
@@ -74,7 +90,8 @@ export type AskedBranchQuestion = BranchQuestion & { asked: number[] };
  */
 export function branchQuiz(pool: ReturnType<typeof branchQuestionPool>, length: number, leaves: number, random: Random): AskedBranchQuestion[] {
   const picked: AskedBranchQuestion[] = [];
-  for (const group of shuffle(pool.candidates, random)) {
+  const ayat = (group: TreeGroup) => new Set(group.occurrences.map(occurrence => occurrence.key)).size;
+  for (const group of biggerFirst(shuffle(pool.candidates, random), leaves, ayat)) {
     if (picked.length >= length) break;
     const question = pool.build(group);
     if (question) picked.push({ ...question, asked: askedNodes(question.tree, leaves, random) });
