@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
-import { IDRIS } from './idris';
 import { MUSA } from './musa';
+import { ALYASA } from './alyasa';
+import { AYYUB } from './ayyub';
+import { DHUL_KIFL } from './dhul-kifl';
+import { HARUN } from './harun';
+import { IDRIS } from './idris';
+import { ILYAS } from './ilyas';
 import { NUH } from './nuh';
+import { SHUAYB } from './shuayb';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
 
@@ -99,17 +105,39 @@ describe('MUSA_EVENTS', () => {
   });
 });
 
-const NUH_NAMED: Record<number, number[]> = {
-  3: [33], 4: [163], 6: [84], 7: [59, 69], 9: [70], 10: [71],
-  11: [25, 32, 36, 42, 45, 46, 48, 89], 14: [9], 17: [3, 17], 19: [58], 21: [76], 22: [42], 23: [23], 25: [37],
-  26: [105, 106, 116], 29: [14], 33: [7], 37: [75, 79], 38: [12], 40: [5, 31], 42: [13], 50: [12], 51: [46],
-  53: [52], 54: [9], 57: [26], 66: [10], 71: [1, 21, 26],
-};
+describe('SHUAYB', () => {
+  const keys = storyKeys(SHUAYB.events);
+  const flat = (byS: Record<number, number[]>) => Object.entries(byS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
 
-describe.each([
-  { slug: 'nuh', story: NUH, named: NUH_NAMED, count: 43 },
-  { slug: 'idris', story: IDRIS, named: { 19: [56], 21: [85] }, count: 2 },
-])('$slug', ({ story, named, count }) => {
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Shuayb', () => {
+    const named = flat({ 7: [85, 88, 90, 92], 11: [84, 87, 91, 94], 26: [177], 29: [36] });
+    expect(named).toHaveLength(10);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names his people, Madyan or the people of the thicket', () => {
+    const named = flat({ 7: [85], 9: [70], 11: [84, 95], 15: [78], 22: [44], 26: [176], 29: [36], 38: [13], 50: [14] });
+    expect(named).toHaveLength(10);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+});
+
+// Every ayah that names the prophet (Hafs). 19:28 «يا أخت هارون» is about Maryam, so not in Harun's story; 37:130 «إل ياسين» is Ilyas.
+const BRIEF = [
+  { slug: 'idris', story: IDRIS, named: ['19:56', '21:85'] },
+  { slug: 'nuh', story: NUH, named: ['3:33', '4:163', '6:84', '7:59', '7:69', '9:70', '10:71', '11:25', '11:32', '11:36', '11:42', '11:45', '11:46', '11:48', '11:89', '14:9', '17:3', '17:17', '19:58', '21:76', '22:42', '23:23', '25:37', '26:105', '26:106', '26:116', '29:14', '33:7', '37:75', '37:79', '38:12', '40:5', '40:31', '42:13', '50:12', '51:46', '53:52', '54:9', '57:26', '66:10', '71:1', '71:21', '71:26'] },
+  { slug: 'ayyub', story: AYYUB, named: ['4:163', '6:84', '21:83', '38:41'] },
+  { slug: 'harun', story: HARUN, named: ['2:248', '4:163', '6:84', '7:122', '7:142', '10:75', '19:53', '20:30', '20:70', '20:90', '20:92', '21:48', '23:45', '25:35', '26:13', '26:48', '28:34', '37:114', '37:120'] },
+  { slug: 'dhul-kifl', story: DHUL_KIFL, named: ['21:85', '38:48'] },
+  { slug: 'ilyas', story: ILYAS, named: ['6:85', '37:123', '37:130'] },
+  { slug: 'alyasa', story: ALYASA, named: ['6:86', '38:48'] },
+];
+
+describe.each(BRIEF)('$slug', ({ story, named }) => {
   const keys = storyKeys(story.events);
 
   it('puts no ayah in two events', () => {
@@ -117,9 +145,7 @@ describe.each([
   });
 
   it('holds every ayah that names him', () => {
-    const all = Object.entries(named).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(all).toHaveLength(count);
-    expect(all.filter(k => !keys.includes(k))).toEqual([]);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
   });
 
   it('keeps every range ordered', () => {

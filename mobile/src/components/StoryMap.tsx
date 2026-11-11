@@ -13,7 +13,6 @@ const TITLES = 176;
 const BAND = 30;
 const SMALLEST = 7;
 const LARGEST = 26;
-/** Roughly how wide a group's name runs at the band's 13px bold, so a group of one or two events can widen its columns to fit it. */
 const LETTER = 7.5;
 
 /**
@@ -43,9 +42,9 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
           </View>
         ))}
       </View>
-      <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }} contentContainerStyle={{ flexGrow: 1 }}
-        onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
-        <View style={{ direction: 'rtl', flexGrow: 1 }}>
+      <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
+        <View style={{ direction: 'rtl' }}>
           <View style={{ flexDirection: 'row', height: BAND, gap: GAP }}>
             {groups.map(g => (
               <View key={g.name} style={{ width: g.events.length * g.cell, borderBottomWidth: 3, borderColor: groupColor(palette, g.phase), justifyContent: 'flex-end', paddingBottom: 3 }}>
