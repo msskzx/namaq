@@ -257,7 +257,8 @@ describe('Quran branch trees', () => {
     expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases') && !url.includes('outside=1'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
     expect(options.filter(option => !option.className.includes('home-muted'))).toHaveLength(1);
     expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
-  });
+    // First test to call the route: it builds the inventories cold, which took over 4s of the 5s default on CI.
+  }, 30000);
 
   it('lists trees the filters hide under their own label; picking one clears the filters', async () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 })));
