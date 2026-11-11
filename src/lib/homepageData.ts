@@ -2,6 +2,7 @@ import { surahList } from './quran/surahList';
 import { homeQuranSections } from './homeQuranSections';
 import treeData from '@shared/data/quran/trees.json';
 import { buildPhraseGroups } from '@shared/quran/phraseTrees';
+import { tourTree } from './tourTree';
 import { groups } from '@shared/quran/mutashabih/data';
 import { listedPairs } from '@/app/quran/compare/pairCards';
 
@@ -17,6 +18,7 @@ export async function getHomepageData() {
       ...treeData.subtrees.map(tree => [tree.id, tree.keys] as const),
       ...groups.map(group => [group.id, [...new Set(group.places.map(place => place.key))]] as const),
     ]),
+    tour: tourTree(),
     sections: homeQuranSections(surahs, new Set(listedPairs.flatMap(pair => [pair.a, pair.b]))),
   };
 }

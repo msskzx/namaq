@@ -3,7 +3,7 @@
 import React, { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Play, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -60,6 +60,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
   }, [onClose, toggle]);
   const help = usePageHelp();
   const links = [
+    { href: '/?tour=1', icon: <Play size={20} aria-hidden />, label: ar ? 'الجولة التعريفية' : 'Tour' },
     { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
     { href: '/privacy', icon: <ShieldCheck size={20} aria-hidden />, label: ar ? 'سياسة الخصوصية' : 'Privacy policy' },
   ];
