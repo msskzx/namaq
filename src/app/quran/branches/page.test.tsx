@@ -484,3 +484,18 @@ describe('Quran branch trees', () => {
   });
 });
 
+
+describe('branches review', () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('shows keep / drop / discuss only in review on the owner\'s machine, and keeps review in the redirect', async () => {
+    const landing = await target({ review: '1' });
+    expect(paramsOf(landing).review).toBe('1');
+    vi.stubEnv('NODE_ENV', 'development');
+    render(await open(paramsOf(landing)));
+    expect(screen.getByRole('button', { name: 'حذف البطاقة' })).toBeTruthy();
+    cleanup();
+    render(await open({ ...paramsOf(landing), review: '' }));
+    expect(screen.queryByRole('button', { name: 'حذف البطاقة' })).toBeNull();
+  }, 30000);
+});

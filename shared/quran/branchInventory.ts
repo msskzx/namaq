@@ -8,6 +8,7 @@ import { groups } from './mutashabih/data';
 import { phraseTreeId } from './mutashabih/identity';
 import type { Group } from './mutashabih/types';
 import type { JuzRange } from './juz';
+import { droppedBranch } from './branchVerdicts';
 
 export type BranchPiece = Opening & { legacyId: string; legacyIds?: string[]; keys: string[]; phrase: TreeGroup; opening: Opening; group?: Group };
 const ayat = new Map<string, BranchAyah>(corpus.ayat.map(ayah => [ayah.key, ayah]));
@@ -53,7 +54,13 @@ export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
   });
 }
 
-export function branchInventory(filters: GroupFilters, range: JuzRange | null): BranchPiece[] {
+/** The cards to browse. Cards the owner dropped are left out unless `withDropped` (review) asks for them. */
+export function branchInventory(filters: GroupFilters, range: JuzRange | null, withDropped = false): BranchPiece[] {
+  const all = allBranchPieces(filters, range);
+  return withDropped ? all : all.filter(piece => !droppedBranch(piece));
+}
+
+function allBranchPieces(filters: GroupFilters, range: JuzRange | null): BranchPiece[] {
   const effective = { ...filters, categories: filters.categories ?? 'mutashabeh,pondering' };
   const cacheKey = JSON.stringify([effective, range]);
   const cached = inventories.get(cacheKey);
