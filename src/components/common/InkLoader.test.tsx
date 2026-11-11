@@ -4,10 +4,10 @@ import InkLoader from './InkLoader';
 
 afterEach(cleanup);
 
-it('grows the logo: the nun bowl, its six boughs and nine nodes', () => {
+it('grows the logo: the nun bowl, its five boughs (the trunk reaching into the bowl, no separate foot) and nine nodes', () => {
   const { container } = render(<InkLoader />);
   expect(container.querySelectorAll('ellipse')).toHaveLength(0);
-  expect(container.querySelectorAll('g[fill] > path')).toHaveLength(6);
+  expect(container.querySelectorAll('g[fill] > path')).toHaveLength(5);
   expect(container.querySelectorAll('circle')).toHaveLength(9);
 });
 

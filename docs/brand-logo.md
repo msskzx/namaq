@@ -19,7 +19,7 @@ Files live in `public/brand/`.
 
 # Namaq icon
 
-A wordless mark: a calligraphic tree with round terracotta nodes on its tips, rising from the bowl of a ن, which also reads as a crescent. The ن has no dot. The tree is the Distillate logo's tree with its drop removed, its lowest right bough joined to the trunk and its trunk flared into the bowl. One drawing serves every size.
+A wordless mark: a calligraphic tree with round terracotta nodes on its tips, rising from the bowl of a ن, which also reads as a crescent. The ن has no dot. The tree is the Distillate logo's tree with its drop removed, its lowest right bough joined to the trunk and its trunk running thin into the bowl. One drawing serves every size.
 
 The navbar shows the icon beside logo B. Everywhere else that needs a mark (footer, browser tab, home screen, manifest, link previews) uses the icon alone. The homepage hero keeps logo B as the page's heading.
 
