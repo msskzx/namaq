@@ -101,6 +101,20 @@ describe('the ayah matrix', () => {
     expect(sharedCounts[0]).toBeGreaterThan(0);
   });
 
+  it('links words only some rows share, faded, with one link per word across the rows', () => {
+    const linksOf = (index: number) => matrixOf(presentationOf(index), false).rows.map(row => row.ayah!.ayat[0]);
+    // A tree of three or more ayat where some words are shared by only some of them.
+    const index = list.findIndex((piece, i) => piece.keys.length >= 3 && linksOf(i).some(ayah => [...ayah.links!.values()].some(link => link.some)));
+    expect(index).toBeGreaterThanOrEqual(0);
+    const ayat = linksOf(index);
+    const links = ayat.map(ayah => [...ayah.links!.entries()]);
+    // Words every row shares are the full-colour ones and carry no `some`.
+    ayat.forEach((ayah, n) => expect(links[n].filter(([, link]) => !link.some).map(([i]) => i).sort((x, y) => x - y)).toEqual([...ayah.exact, ...ayah.rooted].sort((x, y) => x - y)));
+    // Each link a row has turns up in at least one other row.
+    const all = links.flat().map(([, link]) => link.link);
+    for (const link of new Set(all)) expect(all.filter(item => item === link).length).toBeGreaterThanOrEqual(2);
+  });
+
   it('with the switch, puts the ayah before and after each row beside it', () => {
     const matrix = matrixOf(presentation, true);
     expect(matrix.columns).toEqual(['before', 'ayah', 'after']);

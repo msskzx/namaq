@@ -26,8 +26,8 @@ describe('GET /api/quran/context', () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual([
-      { ayah: all[1], before: all[0], after: all[2], match: { exact: [1, 2, 3], rooted: [0] } },
-      { ayah: all[2], before: all[1], after: all[3], match: { exact: [1, 2, 3], rooted: [0] } },
+      { ayah: all[1], before: all[0], after: all[2], match: expect.objectContaining({ exact: [1, 2, 3], rooted: [0] }) },
+      { ayah: all[2], before: all[1], after: all[3], match: expect.objectContaining({ exact: [1, 2, 3], rooted: [0] }) },
     ]);
   });
 

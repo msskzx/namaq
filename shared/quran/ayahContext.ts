@@ -4,7 +4,7 @@ import { spell, type BranchAyah } from './branches';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
-export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[] } };
+export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[]; links?: Record<number, WordLink> } };
 
 export function isAyahKey(key: string) {
   const [surah, ayah] = key.split(':').map(Number);
@@ -44,16 +44,25 @@ function aligned(a: string[], b: string[]) {
   return on;
 }
 
+/** A word's partners in the other rows: words lined up together share a `link`; `rows` counts the rows that have it, `exact` says they are all spelled alike. */
+export type WordLink = { link: string; rows: number; exact: boolean };
+
+/**
+ * Words the ayat share, lined up across them. `exact` and `rooted` are the words every ayah has (spelled alike, or only the
+ * same root or lemma); `links` also holds words only some of the ayat share, so the matrix can colour and light them too.
+ */
 export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   if (contexts.length < 2) return contexts;
   const raw = contexts.map(context => tokens(context.ayah).keys);
   // A word with no corpus key falls back to its letters, so «وفي» would miss «في»: drop a leading و/ف
-  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too).
+  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too), or, when no other
+  // ayah has the word as it is, one another ayah has.
   const sets = raw.map(keys => new Set(keys));
   const tokenised = raw.map((keys, n) => keys.map(key => {
     if (!/^[وف]./.test(key) || sets.every((set, m) => m === n || set.has(key))) return key;
     const bare = key.slice(1);
-    return sets.every((set, m) => m === n || set.has(bare)) ? bare : key;
+    if (sets.every((set, m) => m === n || set.has(bare))) return bare;
+    return !sets.some((set, m) => m !== n && set.has(key)) && sets.some((set, m) => m !== n && set.has(bare)) ? bare : key;
   }));
   const all = contexts.map((context, n) => {
     const keys = tokenised[n];
@@ -65,22 +74,31 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     const rank = (i: number) => -lined.filter(set => set.has(i)).length;
     return { forms, byKey, rank };
   });
-  const shared = [...all[0].byKey.keys()].flatMap(key => {
+  const shared = [...new Set(all.flatMap(ayah => [...ayah.byKey.keys()]))].flatMap(key => {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
     const count = Math.min(...lists.map(list => list.length));
-    const chosen = lists.map((list, n) => [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || x - y).slice(0, count).sort((x, y) => x - y));
-    return Array.from({ length: count }, (_, at) => {
-      const indices = chosen.map(list => list[at]);
-      return { indices, exact: new Set(indices.map((i, n) => all[n].forms[i])).size === 1 };
+    // The occurrences every ayah shares first, in reading order; the rest after, best lined up first.
+    const ordered = lists.map((list, n) => {
+      const ranked = [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || x - y);
+      return [...ranked.slice(0, count).sort((x, y) => x - y), ...ranked.slice(count)];
     });
+    return Array.from({ length: Math.max(...lists.map(list => list.length)) }, (_, at) => {
+      const indices = ordered.map(list => list[at]);
+      const forms = indices.flatMap((i, n) => i === undefined ? [] : [all[n].forms[i]]);
+      return { indices, rows: forms.length, exact: new Set(forms).size === 1 };
+    }).filter(match => match.rows > 1);
   });
   return contexts.map((context, n) => {
     const exact: number[] = [];
     const rooted: number[] = [];
-    shared.forEach(match => {
-      (match.exact ? exact : rooted).push(match.indices[n]);
+    const links: Record<number, WordLink> = {};
+    shared.forEach((match, link) => {
+      const i = match.indices[n];
+      if (i === undefined) return;
+      links[i] = { link: String(link), rows: match.rows, exact: match.exact };
+      if (match.rows === contexts.length) (match.exact ? exact : rooted).push(i);
     });
-    return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y) } };
+    return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y), links } };
   });
 }
 

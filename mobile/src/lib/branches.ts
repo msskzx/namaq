@@ -100,8 +100,13 @@ export function aroundOf(presentation: Presentation): Around {
  */
 export const mixedBefore = (presentation: Presentation) => presentation.prefixes.some(prefix => prefix.word);
 
-/** One cell of the matrix: an ayah (or a passage running over several) with the words every row shares at that step. */
-export type MatrixAyah = { key: string; page: number; words: string[]; exact: Set<number>; rooted: Set<number>; basmala?: string[] };
+/** A word only some rows share (`some`), or any shared word's link: the same link in every row that has the word. */
+export type MatrixLink = { link: string; exact: boolean; some: boolean };
+/**
+ * One cell of the matrix: an ayah (or a passage running over several) with the words every row shares at that step, and
+ * `links` for every shared word, those only some rows share too, so a tap lights the word in each row that has it.
+ */
+export type MatrixAyah = { key: string; page: number; words: string[]; exact: Set<number>; rooted: Set<number>; links?: Map<number, MatrixLink>; basmala?: string[] };
 export type MatrixCell = { ayat: MatrixAyah[] } | null;
 export type MatrixColumn = 'before' | 'ayah' | 'after';
 export type Matrix = { columns: MatrixColumn[]; rows: Record<MatrixColumn, MatrixCell>[] };
@@ -114,10 +119,14 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
   const starts = presentation.ayat.map(ayah => ayah.key);
   const passages = starts.map(key => all.slice(positions.get(key)!, positions.get(ends[key] ?? key)! + 1));
   const steps = Math.max(0, ...passages.map(passage => passage.length));
-  const matched = new Map<string, { exact: Set<number>; rooted: Set<number> }>();
+  const matched = new Map<string, { exact: Set<number>; rooted: Set<number>; links: Map<number, MatrixLink> }>();
   for (let step = 0; step < steps; step++) {
     const wanted = passages.flatMap(passage => passage[step] ? [passage[step].key] : []);
-    sharedByAll(ayahContexts(all, wanted)).forEach(context => matched.set(`${step}:${context.ayah.key}`, { exact: new Set(context.match?.exact), rooted: new Set(context.match?.rooted) }));
+    const rows = new Set(wanted).size;
+    sharedByAll(ayahContexts(all, wanted)).forEach(context => matched.set(`${step}:${context.ayah.key}`, {
+      exact: new Set(context.match?.exact), rooted: new Set(context.match?.rooted),
+      links: new Map(Object.entries(context.match?.links ?? {}).map(([i, item]) => [Number(i), { link: `${step}:${item.link}`, exact: item.exact, some: item.rows < rows }])),
+    }));
   }
   const around = withAround ? aroundOf(presentation) : undefined;
   const cellOf = (beside: Beside | null | undefined): MatrixCell => beside ? { ayat: [{ key: beside.key, page: beside.page, words: beside.words, exact: beside.exact, rooted: beside.rooted, basmala: beside.basmala }] } : null;
