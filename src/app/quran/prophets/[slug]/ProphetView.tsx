@@ -1,14 +1,17 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
-import { CircleHelp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronDown, CircleHelp } from 'lucide-react';
+import { PROPHETS } from '@shared/quran/prophets';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
 import EventPlaces from './EventPlaces';
 import StoryMap from './StoryMap';
 
 // docs/plans/quran-prophet-timelines.md
-export default function ProphetView({ title, intro, phases, events }: { title: string; intro: string; phases: readonly string[]; events: EventView[] }) {
+export default function ProphetView({ slug, title, intro, phases, events }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[] }) {
   const [help, setHelp] = useState(false);
+  const router = useRouter();
   const map = useMemo(() => storyMap(events), [events]);
   const [open, setOpen] = useState<{ event: number; surah?: number }>();
   const detail = useRef<HTMLDivElement>(null);
@@ -26,6 +29,7 @@ export default function ProphetView({ title, intro, phases, events }: { title: s
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold leading-tight sm:text-3xl">{title}</h1>
+          <ProphetPicker slug={slug} onPick={next => router.push(`/quran/prophets/${next}`)} />
           <button type="button" onClick={() => setHelp(!help)} aria-expanded={help} aria-controls="story-help" aria-label="شرح الصفحة" title="شرح الصفحة"
             className="rounded-full p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]">
             <CircleHelp size={20} aria-hidden />
@@ -54,5 +58,17 @@ export default function ProphetView({ title, intro, phases, events }: { title: s
         )}
       </div>
     </div>
+  );
+}
+
+/** Which prophet's story the page shows: an icon-sized dropdown beside the title. */
+function ProphetPicker({ slug, onPick }: { slug: string; onPick: (slug: string) => void }) {
+  return (
+    <label className="relative inline-flex items-center rounded-full p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]" title="قصة نبي آخر">
+      <ChevronDown size={20} aria-hidden />
+      <select value={slug} onChange={e => onPick(e.target.value)} aria-label="قصة نبي آخر" className="absolute inset-0 cursor-pointer opacity-0 text-base">
+        {PROPHETS.map(p => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+      </select>
+    </label>
   );
 }

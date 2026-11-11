@@ -13,6 +13,7 @@ const TITLES = 176;
 const BAND = 30;
 const SMALLEST = 7;
 const LARGEST = 26;
+const LABEL = 150;
 
 /**
  * The website's story map (src/app/quran/prophets/[slug]/StoryMap.tsx): a column for each event under its group's colour,
@@ -29,6 +30,9 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
 }) {
   const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) })).filter(g => g.events.length > 0);
   const rule = { borderBottomWidth: 1, borderColor: palette.rule };
+  // The last group's name may run past its columns; the map keeps room for it at its far end.
+  const lastWidth = groups[groups.length - 1].events.length * CELL;
+  const spill = lastWidth < LABEL ? LABEL - lastWidth : 0;
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);
   return (
     <View style={{ flexDirection: 'row' }}>
@@ -41,12 +45,13 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
         ))}
       </View>
       <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }}
-        onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
-        <View style={{ direction: 'rtl' }}>
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
+        <View style={{ direction: 'rtl', paddingLeft: spill }}>
           <View style={{ flexDirection: 'row', height: BAND, gap: GAP }}>
-            {groups.map(g => (
+            {groups.map((g, k) => (
               <View key={g.name} style={{ width: g.events.length * CELL, borderBottomWidth: 3, borderColor: groupColor(palette, g.phase), justifyContent: 'flex-end', paddingBottom: 3 }}>
-                <Text numberOfLines={1} style={{ color: groupColor(palette, g.phase), fontSize: 13, fontWeight: '700', textAlign: 'center' }}>{g.name}</Text>
+                <Text numberOfLines={1} style={[{ color: groupColor(palette, g.phase), fontSize: 13, fontWeight: '700', textAlign: 'center' },
+                  k === groups.length - 1 && spill > 0 && { position: 'absolute', right: 0, bottom: 3, width: LABEL, maxWidth: LABEL, textAlign: 'right' }]}>{g.name}</Text>
               </View>
             ))}
           </View>

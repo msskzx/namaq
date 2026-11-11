@@ -6,7 +6,6 @@ import cards from '@/components/common/ExplorationCard.module.css';
 import styles from '@/components/common/PaperPage.module.css';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { getAllNavLinks } from '@/lib/siteLinks';
-import { PROPHETS } from '@shared/quran/prophets';
 
 type Language = 'en' | 'ar';
 
@@ -21,8 +20,7 @@ export const QURAN_CARDS: { href: string; desc: Record<Language, string> }[] = [
   { href: '/quran/openings', desc: { ar: 'كيف تبدأ السور: الشرط وجوابه، والتسبيح', en: 'How surahs open: conditions and their answers, and tasbih' } },
   { href: '/quran/oaths', desc: { ar: 'أقسام الأجزاء من ٢٥ إلى ٣٠ وما أُقسم به', en: 'The oaths of juz 25 to 30 and what is sworn by' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
-  // One card for all the stories; each story page has a picker between prophets.
-  { href: `/quran/prophets/${PROPHETS[0].slug}`, desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
+  { href: '/quran/prophets/musa', desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
 ];
 
 export default function QuranHub() {

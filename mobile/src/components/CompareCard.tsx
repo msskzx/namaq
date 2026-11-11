@@ -224,6 +224,10 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+          {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
+          {tree && card.group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
+            <TreeIcon size={22} color={palette.muted} />
+          </Pressable>}
           <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
           </Pressable>
