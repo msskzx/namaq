@@ -194,8 +194,9 @@ function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }
 }
 
 /**
- * One child's elbow: the spine from its siblings and the line into it, curved at the two ends. A lit child lights only its own
- * line and curve; the stretch of spine up to the parent is drawn by the fan, so a lit path is exactly the lines it runs along.
+ * One child's elbow: the spine from its siblings and the line into it, curved at the two ends. The spine is always drawn plain;
+ * a lit child lights only its own line and, at an end, its curve. The lit stretch of spine up to the parent is drawn by the fan
+ * on top, so a lit path is exactly the lines it runs along and never the spine past the parent's line.
  */
 function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolean; color: string; lit?: string; down: boolean }) {
   const only = first && last;
@@ -204,16 +205,36 @@ function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolea
     // Children sit in a row under the parent: a bus along the top, a drop into each child.
     return (
       <View style={{ height: 16, alignSelf: 'stretch', flexDirection: 'row' }}>
-        <View style={{ flex: 1, borderColor: last ? into : color, ...(only || first ? {} : { borderTopWidth: LINE }), ...(last && !only ? { borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE } : {}) }} />
-        <View style={{ flex: 1, borderColor: first ? into : color, ...(only || last ? {} : { borderTopWidth: LINE }), ...(first && !only ? { borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE } : {}) }} />
+        {last && !only
+          ? <View style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ flex: 1, borderTopWidth: LINE, borderColor: color }} />
+              <View style={{ width: CURVE, borderColor: into, borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE }} />
+            </View>
+          : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderTopWidth: LINE }) }} />}
+        {first && !only
+          ? <View style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ width: CURVE, borderColor: into, borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE }} />
+              <View style={{ flex: 1, borderTopWidth: LINE, borderColor: color }} />
+            </View>
+          : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderTopWidth: LINE }) }} />}
         {(only || (!first && !last)) && <View style={{ position: 'absolute', left: '50%', marginLeft: -LINE / 2, top: 0, bottom: 0, borderStartWidth: LINE, borderColor: into }} />}
       </View>
     );
   }
   return (
     <View style={{ width: 16, alignSelf: 'stretch' }}>
-      <View style={{ flex: 1, borderColor: last ? into : color, ...(only || first ? {} : last ? { borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
-      <View style={{ flex: 1, borderColor: first ? into : color, ...(only || last ? {} : first ? { borderStartWidth: LINE, borderTopWidth: LINE, borderTopStartRadius: CURVE } : { borderStartWidth: LINE }) }} />
+      {last && !only
+        ? <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, borderStartWidth: LINE, borderColor: color }} />
+            <View style={{ height: CURVE, borderColor: into, borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE }} />
+          </View>
+        : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderStartWidth: LINE }) }} />}
+      {first && !only
+        ? <View style={{ flex: 1 }}>
+            <View style={{ height: CURVE, borderColor: into, borderStartWidth: LINE, borderTopWidth: LINE, borderTopStartRadius: CURVE }} />
+            <View style={{ flex: 1, borderStartWidth: LINE, borderColor: color }} />
+          </View>
+        : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderStartWidth: LINE }) }} />}
       {(only || (!first && !last)) && <View style={{ position: 'absolute', top: '50%', marginTop: -LINE / 2, start: 0, end: 0, borderTopWidth: LINE, borderColor: into }} />}
     </View>
   );
@@ -372,7 +393,8 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
   return (
     <Boxes.Provider value={sceneRef ? registry : null}>
     <Growth.Provider value={growth}>
-      <View ref={rootView} onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
+      {/* dir: the web build reads start/end from it, not from the direction style, so it draws the tree as the phone does. */}
+      <View {...({ dir: 'rtl' } as object)} ref={rootView} onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
         {before.length > 0 && <>
           <BackFan entries={before} shared={shared} />
           <Stub shared={shared} entries={before} />
