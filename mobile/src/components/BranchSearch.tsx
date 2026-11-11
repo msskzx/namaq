@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -16,6 +16,7 @@ type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClos
 /**
  * Search and filter in one screen: the box takes the whole top bar; under it the filters, or, while typing,
  * the surahs and phrases inside them. Enter or the apply button opens the list.
+ * The keyboard waits for a tap on the box; the apply row rides above it, and a tap on empty space or a scroll closes it.
  */
 export default function BranchSearch({ state, bookmarks, palette, onClose, onApply }: Props) {
   const insets = useSafeAreaInsets();
@@ -33,30 +34,33 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
   };
   const row = { flexDirection: 'row' as const, alignItems: 'baseline' as const, gap: 10, paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderColor: palette.rule };
   return (
-    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: palette.paper, zIndex: 10 }}>
-      <View style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
+    <KeyboardAvoidingView behavior="padding"
+      style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: palette.paper, zIndex: 10 }}>
+      <Pressable accessible={false} onPress={Keyboard.dismiss} style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
         <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 6 }}>
           <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={8} style={{ padding: 6 }}>
             <ChevronRight size={26} color={palette.ink} />
           </Pressable>
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 20, paddingHorizontal: 10, height: 40 }}>
             <Search size={18} color={palette.muted} />
-            <TextInput autoFocus value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
+            <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
               accessibilityLabel="ابحث عن عبارة مشتركة بين آيتين أو أكثر" onSubmitEditing={() => apply({}, { query: query.trim() })}
               style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
             {typed && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
           </View>
         </View>
-      </View>
+      </Pressable>
       {!suggesting && <>
-        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, gap: 18 }}>
-          <FilterFields draft={draft} setDraft={setDraft} palette={palette} />
+        <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1 }}>
+          <Pressable accessible={false} onPress={Keyboard.dismiss} style={{ flexGrow: 1, padding: 16, gap: 18 }}>
+            <FilterFields draft={draft} setDraft={setDraft} palette={palette} />
+          </Pressable>
         </ScrollView>
         <View style={{ paddingBottom: insets.bottom + 8 }}>
           <FilterActions onReset={() => { setDraft(draftOf(EMPTY_LIST)); setQuery(''); }} onApply={() => apply({}, { query: query.trim() })} valid={valid} palette={palette} />
         </View>
       </>}
-      {suggesting && <ScrollView keyboardShouldPersistTaps="handled">
+      {suggesting && <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1 }}>
         {found.surahs.length > 0 && <Text style={{ color: palette.muted, fontSize: 12, paddingHorizontal: 16, paddingTop: 10 }}>السور</Text>}
         {found.surahs.map(surah => (
           <Pressable key={`s${surah.number}`} onPress={() => apply({ query: '', surah: surah.number })} accessibilityRole="button" style={row}>
@@ -80,7 +84,8 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
           </Pressable>
         ))}
         {!found.surahs.length && !found.phrases.length && !found.outside.length && <Text style={{ color: palette.muted, padding: 16 }}>لا عبارة مشتركة تطابق البحث.</Text>}
+        <Pressable accessible={false} onPress={Keyboard.dismiss} style={{ flexGrow: 1, minHeight: 80 }} />
       </ScrollView>}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
