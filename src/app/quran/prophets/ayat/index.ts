@@ -5,6 +5,7 @@ import ayyub from './ayyub.json';
 import dawud from './dawud.json';
 import dhulKifl from './dhul-kifl.json';
 import harun from './harun.json';
+import hud from './hud.json';
 import idris from './idris.json';
 import ibrahim from './ibrahim.json';
 import ilyas from './ilyas.json';
@@ -21,4 +22,4 @@ import yusuf from './yusuf.json';
 import zakariyya from './zakariyya.json';
 import yunus from './yunus.json';
 
-export const AYAT: Record<string, StoryData> = { yaqub, yusuf, adam, idris, nuh, ibrahim, ayyub, salih, lut, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya, yunus, isa };
+export const AYAT: Record<string, StoryData> = { hud, yaqub, yusuf, adam, idris, nuh, ibrahim, ayyub, salih, lut, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya, yunus, isa };

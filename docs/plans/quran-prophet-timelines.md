@@ -1,8 +1,8 @@
 # Timelines of the prophets
 
 `/quran/prophets/[slug]` maps one prophet's story: its events, and the surahs
-that tell each of them. Musa is the only prophet
-with a story so far; the rest of this document describes his.
+that tell each of them. Most of this document
+describes Musa's, the first one built.
 
 ## Adding a prophet
 
@@ -67,4 +67,10 @@ told across the surahs (owner, 2026-11-11). So the page is a map, not a line:
   69:9-10, 73:15-16, and 66:11 for Pharaoh's household). 5:12, 5:44-45 and
   45:16-17 tell of Bani Israil without naming him and are in, by the owner's
   request.
+- Hud: every ayah that names Hud (7) or Aad (22, from the corpus morphology
+  file) is in an event, except 7:74, where Salih reminds Thamud they came after
+  Aad: it belongs to Salih's story. 23:31-41 (a messenger to a generation after
+  Nuh, taken by «الصيحة») is left out, since the mufassirun differ on Aad or
+  Thamud. 7:69 sits with 26:132-135 in «التذكير بنعم الله» although in al-A'raf
+  it comes after his people's first answer.
 - No link from an ayah to a reader page, since none exists.
