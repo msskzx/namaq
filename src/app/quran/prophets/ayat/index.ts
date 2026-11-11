@@ -7,5 +7,7 @@ import ibrahim from './ibrahim.json';
 import ilyas from './ilyas.json';
 import musa from './musa.json';
 import shuayb from './shuayb.json';
+import yahya from './yahya.json';
+import zakariyya from './zakariyya.json';
 
-export const AYAT: Record<string, StoryData> = { ibrahim, ayyub, shuayb, musa, harun, 'dhul-kifl': dhulKifl, ilyas, alyasa };
+export const AYAT: Record<string, StoryData> = { ibrahim, ayyub, shuayb, musa, harun, 'dhul-kifl': dhulKifl, ilyas, alyasa, zakariyya, yahya };

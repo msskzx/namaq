@@ -10,6 +10,8 @@ import { ILYAS } from './ilyas';
 import { SHUAYB } from './shuayb';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
+import { YAHYA } from './yahya';
+import { ZAKARIYYA } from './zakariyya';
 
 const MUSA_EVENTS = MUSA.events;
 
@@ -147,6 +149,21 @@ describe.each(BRIEF)('$slug', ({ story, named }) => {
 
   it('keeps every range ordered', () => {
     for (const e of story.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+describe.each([
+  { name: 'Zakariyya', story: ZAKARIYYA, named: ['3:37', '3:38', '6:85', '19:2', '19:7', '21:89'] },
+  { name: 'Yahya', story: YAHYA, named: ['3:39', '6:85', '19:7', '19:12', '21:90'] },
+])('$name', ({ story, named }) => {
+  const keys = storyKeys(story.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names him', () => {
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
   });
 });
 
