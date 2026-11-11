@@ -6,6 +6,8 @@ export const PROPHETS: Prophet[] = [
   { slug: 'musa', name: 'موسى', nameEn: 'Musa' },
   { slug: 'harun', name: 'هارون', nameEn: 'Harun' },
   { slug: 'dhul-kifl', name: 'ذو الكفل', nameEn: 'Dhul-Kifl', of: 'ذي الكفل' },
+  { slug: 'dawud', name: 'داود', nameEn: 'Dawud' },
+  { slug: 'sulayman', name: 'سليمان', nameEn: 'Sulayman' },
   { slug: 'ilyas', name: 'إلياس', nameEn: 'Ilyas' },
   { slug: 'alyasa', name: 'اليسع', nameEn: 'Alyasa' },
   { slug: 'zakariyya', name: 'زكريا', nameEn: 'Zakariyya' },
