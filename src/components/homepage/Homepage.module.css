@@ -1,9 +1,5 @@
 .page { width: 100%; min-width: 0; max-width: 76rem; margin-inline: auto; padding: 2rem var(--home-gutter) 3rem; color: var(--home-ink); display: grid; gap: 2.25rem; }
 .page > * { min-width: 0; }
-.search { display: flex; align-items: center; gap: 0.25rem; width: min(100%, 34rem); margin-inline: auto; }
-.search > div { flex: 1; min-width: 0; }
-.search input { font-size: 16px; }
-.search [role='option'] > span:last-child { display: none; }
 .sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.65rem; min-height: 2rem; }
 .sectionHeading h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; }
 .sectionHeading svg { color: var(--home-accent); }

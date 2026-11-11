@@ -8,8 +8,6 @@ const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
 vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => children }));
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
-vi.mock('@/app/quran/branches/OpeningSearch', () => ({ default: () => <input aria-label="Phrase search" /> }));
-vi.mock('@/app/quran/branches/Filters', () => ({ FilterButton: () => <button>Filter</button> }));
 
 const surahs = [
   { number: 2, name: 'البقرة', nameEn: undefined, count: 0 },
