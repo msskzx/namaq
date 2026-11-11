@@ -21,7 +21,7 @@ import type { Group } from '@shared/quran/mutashabih/types';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { growthBeats } from '@/lib/growth';
-import { answer, growthState, setTarget, stop, useGrowth } from '@/lib/growPlayer';
+import { answer, claimTarget, growthState, stop, useGrowth } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
@@ -122,13 +122,13 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   // The open tree is the one the studio grows; a matrix has nothing to grow.
   const piece = pieces[Math.min(index, pieces.length - 1)];
   useEffect(() => {
-    if (mode !== 'tree' || !piece) { setTarget(null); return; }
+    if (mode !== 'tree' || !piece) { claimTarget('branches', null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
     const options = { ...parts, prefixes: presentation.prefixes };
     beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
-    setTarget(beatsRef.current);
-    return () => setTarget(null);
+    claimTarget('branches', beatsRef.current);
+    return () => claimTarget('branches', null);
   }, [piece, list, mode, around]);
 
   const arrive = useCallback((next: number) => {

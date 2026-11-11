@@ -19,7 +19,7 @@ import { ayahOf, aroundOf, growthParts, isSaved, toggleSaved, WEBSITE, type Pres
 import { EMPTY_LIST, listShowing } from '@/lib/branchList';
 import type { Size } from '@/lib/camera';
 import { growthBeats } from '@/lib/growth';
-import { answer, closeStudio, currentTarget, growthState, setTarget, stop, useGrowth, type Target } from '@/lib/growPlayer';
+import { answer, claimTarget, closeStudio, growthState, stop, useGrowth, type Target } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { around as aroundSetting } from '@/lib/settings';
 import { treeVideo } from '@/lib/treeVideo';
@@ -111,6 +111,7 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
   // Finding the branches tree can take a moment, so the answer shows first.
   const [piece, setPiece] = useState<BranchPiece | undefined>(undefined);
   useEffect(() => {
+    setPiece(undefined);
     const timer = setTimeout(() => setPiece(listShowing(EMPTY_LIST, phrase)?.piece), 0);
     return () => clearTimeout(timer);
   }, [phrase]);
@@ -130,9 +131,16 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
  * As on the website, it can turn to the matrix, rotate, show the surrounding ayat, grow in the studio, and be saved, shared or opened.
  */
 export function QuizFeedback({ question, typed, palette, names, onTap }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void }) {
-  const graded = useMemo(() => gradedTree(question, typed), [question, typed]);
+  // Graded once per question and answer: a party sends a new copy of the same question with every update, and an
+  // unanswered question comes with a new empty answer each render, which must not rebuild the tree (and stop the studio).
+  const snapshot = JSON.stringify({ question, typed });
+  const { graded, presentation } = useMemo(() => {
+    const given = JSON.parse(snapshot) as { question: TreeQuestion; typed: string[] };
+    const graded = gradedTree(given.question, given.typed);
+    const presentation: Presentation = { tree: graded.tree, prefixes: given.question.prefixes ?? [], offsets: {}, ayat: keys(graded.tree).flatMap(key => ayahOf(key) ?? []) };
+    return { graded, presentation };
+  }, [snapshot]);
   const rows = useMemo(() => new Map(graded.rows.map(row => [row.index, row])), [graded]);
-  const presentation = useMemo<Presentation>(() => ({ tree: graded.tree, prefixes: question.prefixes ?? [], offsets: {}, ayat: keys(graded.tree).flatMap(key => ayahOf(key) ?? []) }), [graded, question.prefixes]);
   const [matrix, setMatrix] = useState(false);
   const [down, setDown] = useState(false);
   const [around, setAround] = aroundSetting.use();
@@ -142,15 +150,13 @@ export function QuizFeedback({ question, typed, palette, names, onTap }: { quest
   const beats = useRef<Target | null>(null);
   const sceneRef = useRef<(() => Promise<TreeScene | null>) | null>(null);
   const [video, setVideo] = useState<VideoInput | null>(null);
-  // The studio grows this tree while it shows; the tree it grew before (a branches card under the quiz) comes back after.
+  // The studio grows this tree while it shows; a branches card under the quiz gets it back after.
   useEffect(() => {
     if (matrix) return;
-    const previous = currentTarget();
-    closeStudio();
     const options = { ...growthParts(presentation, surrounding), prefixes: presentation.prefixes };
     beats.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
-    setTarget(beats.current);
-    return () => { closeStudio(); setTarget(previous); };
+    claimTarget('quiz', beats.current);
+    return () => claimTarget('quiz', null);
   }, [presentation, surrounding, matrix]);
   const tap = (ayahKeys: string[] | null) => {
     const state = growthState();

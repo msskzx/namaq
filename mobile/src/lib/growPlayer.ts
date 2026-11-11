@@ -59,13 +59,27 @@ let reveal: (() => void) | null = null;
 
 const totalOf = (beats: Beat[]) => beats.length ? beats[beats.length - 1].step + 1 : 0;
 
-/** The tree the studio grows now, so a screen opened over another (a quiz's answer tree) can hand it back when it closes. */
-export const currentTarget = () => target;
-
 export function setTarget(next: Target | null) {
   stop();
   target = next;
   set({ total: next ? totalOf(next.watch) : 0, studio: next ? state.studio : false });
+}
+
+/**
+ * Each screen that can grow a tree claims the studio with its own tree (null lets go). The last screen to claim it
+ * (a quiz's answer tree over the branches tab) owns it until it lets go; a screen below may change its tree meanwhile
+ * without taking the studio back. A change of owner closes the studio.
+ */
+const claims: { owner: string; target: Target }[] = [];
+export function claimTarget(owner: string, next: Target | null) {
+  const top = claims[claims.length - 1]?.owner;
+  const at = claims.findIndex(claim => claim.owner === owner);
+  if (next && at >= 0) claims[at] = { owner, target: next };
+  else if (next) claims.push({ owner, target: next });
+  else if (at >= 0) claims.splice(at, 1);
+  const active = claims[claims.length - 1];
+  if (active?.owner !== top) closeStudio();
+  if ((active?.target ?? null) !== target) setTarget(active?.target ?? null);
 }
 
 const TICK = 50;

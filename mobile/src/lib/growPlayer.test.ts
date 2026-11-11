@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { answer, growthState, pause, play, setPrefs, setTarget } from './growPlayer';
+import { answer, claimTarget, growthState, openStudio, pause, play, setPrefs, setTarget } from './growPlayer';
 import type { Beat } from './growth';
 
 const beats = (ask: boolean): Beat[] => [
@@ -42,5 +42,23 @@ describe('the growth player', () => {
     await vi.advanceTimersByTimeAsync(500);
     await done;
     expect(growthState().status).toBe('done');
+  });
+
+  it('gives the studio to the screen on top, and back to the one below when it lets go', () => {
+    const branches = { watch: beats(false), ask: beats(true) };
+    const quiz = { watch: beats(false).slice(0, 2), ask: beats(true).slice(0, 2) };
+    claimTarget('branches', branches);
+    expect(growthState().total).toBe(2);
+    openStudio();
+    claimTarget('quiz', quiz);
+    expect(growthState()).toMatchObject({ total: 1, studio: false });
+    openStudio();
+    // The branches tab rebuilding its tree under the quiz leaves the quiz's studio alone.
+    claimTarget('branches', { ...branches });
+    expect(growthState()).toMatchObject({ total: 1, studio: true });
+    claimTarget('quiz', null);
+    expect(growthState()).toMatchObject({ total: 2, studio: false });
+    claimTarget('branches', null);
+    expect(growthState().total).toBe(0);
   });
 });

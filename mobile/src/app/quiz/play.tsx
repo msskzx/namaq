@@ -29,7 +29,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
           {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
         </Text>
-        <QuizFeedback question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} />
+        <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} />
         <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule }}>
           <Button label="العودة للنتيجة" onPress={() => setReview(null)} />
         </View>
