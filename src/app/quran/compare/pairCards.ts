@@ -91,12 +91,13 @@ export function compareLinksFor(keys: string[]): CompareLink[] {
     const [qa, qb] = q.split(':').map(Number);
     return pa - qa || pb - qb;
   }).map(([, id]) => {
-    const [x, y] = id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0]);
+    const [x, y] = id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
     const [a, b] = [surahName(x[0]), surahName(y[0])];
+    const itself = x[0] === y[0];
     return {
       href: holders.get(id)!,
-      label: `${a?.name} مع ${b?.name} · ${num(x[1])} · ${num(y[1])}`,
-      labelEn: `${a?.nameTransliterated} with ${b?.nameTransliterated} · ${x[1]} · ${y[1]}`,
+      label: `${a?.name} مع ${itself ? 'نفسها' : b?.name} · ${num(x[1])} · ${num(y[1])}`,
+      labelEn: `${a?.nameTransliterated} with ${itself ? 'itself' : b?.nameTransliterated} · ${x[1]} · ${y[1]}`,
     };
   });
 }

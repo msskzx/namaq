@@ -64,7 +64,9 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     const closest = x !== null && y === null ? closestPair(review ? reviewPairs : listedPairs, x) : undefined;
     // A link to one surah opens its closest pair seen from that surah.
     if (closest) redirect(`/quran/compare?a=${x}&b=${closest.a === x ? closest.b : closest.a}${keepReview}`);
-    if (x === null || y === null || x === y) {
+    // A surah with itself (?a=26&b=26) opens only when compare lists it.
+    const itself = x !== null && x === y && (review ? reviewPairs : listedPairs).some(pair => pair.a === x && pair.b === x);
+    if (x === null || y === null || (x === y && !itself)) {
       if (query.a !== undefined || query.b !== undefined || query.preset !== undefined) redirect(`${surahPairHref(curatedComparisons[0].a, curatedComparisons[0].b)}${keepReview}`);
       return pairPage(curatedComparisons[0].a, curatedComparisons[0].b, review, todo, scope);
     }

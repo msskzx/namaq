@@ -8,6 +8,7 @@ import { encodeMark, type CardSide, type MarkKind, type PairCard } from '@shared
 import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import within from './withinPairs.json';
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
 /** `remove` lists engine links `[a word, b word]` that a reader judged wrong for this pair. */
@@ -48,7 +49,7 @@ function joinCurated(chains: AyahPair[][]) {
   }, chains);
 }
 
-const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs] as SimilarAyahPair[]), groups);
+const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs, ...within.pairs] as SimilarAyahPair[]), groups);
 /** Curation runs after the engine: pairs a reader judged to share only vocabulary are left out. */
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);
@@ -144,6 +145,13 @@ function manyGroups(singles: AyahPair[]) {
   });
 }
 
+/** Whether a run's two sides share an ayah, which only a surah compared with itself can do. */
+function overlaps(chain: AyahPair[]) {
+  const span = (side: 'a' | 'b') => [Math.min(...chain.map(pair => ayahOf(pair[side]))), Math.max(...chain.map(pair => ayahOf(pair[side])))];
+  const [[a, b], [c, d]] = [span('a'), span('b')];
+  return chain.length > 1 && a <= d && c <= b;
+}
+
 /** The similar ayah pairs of two surahs as cards, lower surah first, in mushaf order. Kept pairs that continue each other become one
  *  range card, and an ayah paired with several far ones becomes one card (docs/plans/curated-passage-comparisons.md).
  *  `review` also shows the pairs curation left out, each with its verdict. */
@@ -151,8 +159,14 @@ function pairCards(x: number, y: number, review = false): PairCard[] {
   const pairs = pairsFor(review ? foundBySurah : bySurah, x, y);
   const alone = (pair: AyahPair) => !!verdictFor(pair.a, pair.b)?.alone;
   const kept = pairs.filter(keptPair);
-  const chains = joinCurated(pairChains(kept.filter(pair => !alone(pair))));
-  const groups = manyGroups(chains.filter(chain => chain.length === 1).map(chain => chain[0]));
+  // A surah with itself: a refrain repeated word for word is one card (its first place against the others), kept apart from
+  // the runs, and a run whose two sides overlap (6:76-77 with 6:77-78) is split back into its pairs.
+  const refrain = (pair: AyahPair) => x === y && words.get(pair.a)?.join(' ') === words.get(pair.b)?.join(' ');
+  const runs = pairChains(kept.filter(pair => !alone(pair) && !refrain(pair)))
+    .flatMap(chain => x === y && overlaps(chain) ? chain.map(pair => [pair]) : [chain]);
+  const chains = [...joinCurated(runs), ...kept.filter(refrain).map(pair => [pair])];
+  const singles = chains.filter(chain => chain.length === 1).map(chain => chain[0]);
+  const groups = [...manyGroups(singles.filter(refrain)), ...manyGroups(singles.filter(pair => !refrain(pair)))];
   const grouped = new Set(groups.flatMap(group => group.pairs));
   const order = (pair: AyahPair) => [keyOrder(pair.a), keyOrder(pair.b)];
   return [

@@ -25959,6 +25959,4366 @@
    "why": "Agreed with the page",
    "checked": true,
    "draft": {}
+  },
+  "2:14|2:76": {
+   "keep": true,
+   "why": "Same scene: hypocrites meeting the believers, then alone with their own"
+  },
+  "2:16|2:175": {
+   "keep": true,
+   "why": "Same description: those who bought error for guidance"
+  },
+  "2:23|2:94": {
+   "keep": false,
+   "why": "Only the challenge formula «إن كنتم صادقين»; different subjects"
+  },
+  "2:37|2:160": {
+   "keep": true,
+   "why": "Repentance accepted, both closing with «التواب الرحيم»"
+  },
+  "2:39|2:81": {
+   "keep": true,
+   "why": "Same verdict: companions of the Fire, abiding in it"
+  },
+  "2:40|2:47": {
+   "keep": true,
+   "why": "Same call to the Children of Israel to remember the favour"
+  },
+  "2:40|2:122": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "2:45|2:153": {
+   "keep": true,
+   "why": "Same command: seek help in patience and prayer"
+  },
+  "2:47|2:122": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "2:48|2:123": {
+   "keep": true,
+   "why": "Same warning of the Day no soul avails another"
+  },
+  "2:51|2:92": {
+   "keep": true,
+   "why": "Same rebuke: taking the calf after Musa"
+  },
+  "2:62|2:112": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:62|2:262": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:62|2:277": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:63|2:93": {
+   "keep": true,
+   "why": "Same covenant and the mount raised over them"
+  },
+  "2:68|2:69": {
+   "keep": true,
+   "why": "Same story: the cow, asking again"
+  },
+  "2:89|2:101": {
+   "keep": true,
+   "why": "Same pattern: what came from Allah confirming what they had, rejected"
+  },
+  "2:94|2:111": {
+   "keep": true,
+   "why": "Claims of the Jews about the hereafter, challenged to be truthful"
+  },
+  "2:97|2:170": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "2:103|2:239": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "2:103|2:278": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "2:103|2:280": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "2:106|2:148": {
+   "keep": false,
+   "why": "Only the closing «إن الله على كل شيء قدير»"
+  },
+  "2:110|2:277": {
+   "keep": true,
+   "why": "Prayer and zakah, with the reward with their Lord"
+  },
+  "2:111|2:135": {
+   "keep": true,
+   "why": "Same claim of the Jews and Christians"
+  },
+  "2:112|2:262": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:112|2:274": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:112|2:277": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:129|2:151": {
+   "keep": true,
+   "why": "Same mission: a messenger reciting the signs, teaching the Book and wisdom, purifying"
+  },
+  "2:134|2:141": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "2:144|2:149": {
+   "keep": true,
+   "why": "Same command: turn your face toward the Sacred Mosque"
+  },
+  "2:144|2:150": {
+   "keep": true,
+   "why": "Same command: turn your face toward the Sacred Mosque"
+  },
+  "2:154|2:190": {
+   "keep": false,
+   "why": "Martyrs alive vs the command to fight; different subjects"
+  },
+  "2:154|2:244": {
+   "keep": false,
+   "why": "Martyrs alive vs the command to fight; different subjects"
+  },
+  "2:168|2:208": {
+   "keep": true,
+   "why": "Same warning: do not follow the steps of Satan"
+  },
+  "2:190|2:195": {
+   "keep": true,
+   "why": "Contrast: fight in Allah's way and do not transgress, spend in Allah's way and do good"
+  },
+  "2:190|2:244": {
+   "keep": true,
+   "why": "Same command: fight in the way of Allah"
+  },
+  "2:234|2:240": {
+   "keep": true,
+   "why": "Same law: those who die leaving wives"
+  },
+  "2:262|2:274": {
+   "keep": true,
+   "why": "Spending wealth, the same reward with their Lord"
+  },
+  "2:262|2:277": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "2:274|2:277": {
+   "keep": true,
+   "why": "Same reward: no fear on them nor grief"
+  },
+  "3:4|3:11": {
+   "keep": true,
+   "why": "Same punishment for those who deny the signs of Allah"
+  },
+  "3:6|3:62": {
+   "keep": false,
+   "why": "Only the closing «العزيز الحكيم»"
+  },
+  "3:10|3:116": {
+   "keep": true,
+   "why": "Same verdict: wealth and children avail nothing"
+  },
+  "3:15|3:198": {
+   "keep": true,
+   "why": "Same reward: gardens for those who fear their Lord"
+  },
+  "3:18|3:62": {
+   "keep": true,
+   "why": "Same witness: none has the right to be worshipped but Allah"
+  },
+  "3:19|3:199": {
+   "keep": true,
+   "why": "People of the Book: those who differ and those who believe, both closing «إن الله سريع الحساب»"
+  },
+  "3:21|3:181": {
+   "keep": true,
+   "why": "Same crime: killing the prophets without right"
+  },
+  "3:22|3:56": {
+   "keep": true,
+   "why": "Same end: no helpers in this world and the hereafter"
+  },
+  "3:25|3:161": {
+   "keep": true,
+   "why": "Same justice: every soul repaid what it earned"
+  },
+  "3:29|3:165": {
+   "keep": false,
+   "why": "Only the closing «على كل شيء قدير»"
+  },
+  "3:29|3:189": {
+   "keep": true,
+   "why": "Allah's dominion over the heavens and earth and His power"
+  },
+  "3:31|3:129": {
+   "keep": false,
+   "why": "Only the closing «والله غفور رحيم»"
+  },
+  "3:32|3:132": {
+   "keep": true,
+   "why": "Same command: obey Allah and the Messenger"
+  },
+  "3:33|3:42": {
+   "keep": true,
+   "why": "Same choosing: Allah chose them over the worlds"
+  },
+  "3:40|3:47": {
+   "keep": true,
+   "why": "Same question «رب أنى يكون لي» and answer «كذلك الله»: Zakariyya and Maryam"
+  },
+  "3:40|3:165": {
+   "keep": false,
+   "why": "Only «أنى»; different subjects"
+  },
+  "3:52|3:160": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "3:57|3:76": {
+   "keep": true,
+   "why": "Contrast: Allah does not love the wrongdoers, He loves those who fear Him"
+  },
+  "3:62|3:126": {
+   "keep": false,
+   "why": "Only «العزيز الحكيم»"
+  },
+  "3:67|3:95": {
+   "keep": true,
+   "why": "Same description of Ibrahim: upright, not of the polytheists"
+  },
+  "3:70|3:98": {
+   "keep": true,
+   "why": "Same rebuke to the People of the Book"
+  },
+  "3:83|3:109": {
+   "keep": true,
+   "why": "All in the heavens and earth belong and return to Allah"
+  },
+  "3:86|3:101": {
+   "keep": true,
+   "why": "Disbelieving after belief and after the signs came"
+  },
+  "3:98|3:99": {
+   "keep": true,
+   "why": "Same rebuke to the People of the Book"
+  },
+  "3:104|3:114": {
+   "keep": true,
+   "why": "Same description: enjoining good and forbidding evil"
+  },
+  "3:122|3:160": {
+   "keep": true,
+   "why": "Same closing: upon Allah let the believers rely"
+  },
+  "3:124|3:125": {
+   "keep": true,
+   "why": "Same promise: reinforced with thousands of angels"
+  },
+  "3:130|3:200": {
+   "keep": true,
+   "why": "Same call: O you who believe, fear Allah that you may succeed"
+  },
+  "3:136|3:198": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding"
+  },
+  "3:157|3:169": {
+   "keep": true,
+   "why": "Killed in the way of Allah, and what awaits them"
+  },
+  "3:176|3:177": {
+   "keep": true,
+   "why": "Same verdict: they will not harm Allah at all"
+  },
+  "4:5|4:8": {
+   "keep": true,
+   "why": "Same command: provide for them and speak kindly"
+  },
+  "4:11|4:12": {
+   "keep": true,
+   "why": "Same law of inheritance: shares after a bequest or debt"
+  },
+  "4:11|4:176": {
+   "keep": true,
+   "why": "Same law of inheritance: shares of the deceased's kin"
+  },
+  "4:13|4:57": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding"
+  },
+  "4:13|4:122": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding"
+  },
+  "4:17|4:26": {
+   "keep": true,
+   "why": "Allah accepts repentance, closing with «عليم حكيم»"
+  },
+  "4:17|4:104": {
+   "keep": false,
+   "why": "Only the closing «وكان الله عليما حكيما»"
+  },
+  "4:17|4:148": {
+   "keep": false,
+   "why": "Only «السوء» and a closing name; different subjects"
+  },
+  "4:29|4:152": {
+   "keep": false,
+   "why": "Only the closing «رحيما»"
+  },
+  "4:30|4:169": {
+   "keep": true,
+   "why": "Same end: the Fire, and that is easy for Allah"
+  },
+  "4:38|4:39": {
+   "keep": true,
+   "why": "Contrast: spending to be seen without belief, and what if they believed and spent"
+  },
+  "4:40|4:67": {
+   "keep": true,
+   "why": "Same reward from Him: a great reward"
+  },
+  "4:44|4:51": {
+   "keep": true,
+   "why": "Same opening: those given a portion of the Book"
+  },
+  "4:45|4:166": {
+   "keep": false,
+   "why": "Only «وكفى بالله»; different subjects"
+  },
+  "4:48|4:116": {
+   "keep": true,
+   "why": "Same verse on shirk, two different endings"
+  },
+  "4:57|4:122": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding forever"
+  },
+  "4:59|4:136": {
+   "keep": true,
+   "why": "Same call to the believers: obey and believe in Allah and His Messenger"
+  },
+  "4:60|4:136": {
+   "keep": true,
+   "why": "Belief in what was sent to you and what was sent before"
+  },
+  "4:64|4:110": {
+   "keep": true,
+   "why": "Wronging oneself, then seeking forgiveness: Allah found forgiving"
+  },
+  "4:74|4:76": {
+   "keep": true,
+   "why": "Fighting in the way of Allah"
+  },
+  "4:79|4:165": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "4:86|4:126": {
+   "keep": false,
+   "why": "Only the closing «وكان الله ... شيء»"
+  },
+  "4:96|4:106": {
+   "keep": false,
+   "why": "Only the closing «غفورا رحيما»"
+  },
+  "4:96|4:110": {
+   "keep": false,
+   "why": "Only the closing «غفورا رحيما»"
+  },
+  "4:99|4:149": {
+   "keep": true,
+   "why": "Pardoning, and Allah is Pardoning"
+  },
+  "4:106|4:110": {
+   "keep": true,
+   "why": "Seek Allah's forgiveness and find Him forgiving"
+  },
+  "4:106|4:152": {
+   "keep": false,
+   "why": "Only the closing «غفورا رحيما»"
+  },
+  "4:108|4:126": {
+   "keep": true,
+   "why": "Allah encompasses what they do and all things"
+  },
+  "4:116|4:167": {
+   "keep": true,
+   "why": "Same end: straying far astray"
+  },
+  "4:123|4:173": {
+   "keep": true,
+   "why": "Contrast: the evildoer finds no protector, the believer is repaid in full"
+  },
+  "4:131|4:170": {
+   "keep": true,
+   "why": "If you disbelieve, to Allah belongs what is in the heavens and earth"
+  },
+  "4:136|4:162": {
+   "keep": true,
+   "why": "Belief in what was sent to you and what was sent before"
+  },
+  "4:137|4:168": {
+   "keep": true,
+   "why": "Same verdict: Allah will not forgive them nor guide them"
+  },
+  "4:139|4:144": {
+   "keep": true,
+   "why": "Same warning: taking the disbelievers as allies instead of the believers"
+  },
+  "4:158|4:165": {
+   "keep": false,
+   "why": "Only the closing «عزيزا حكيما»"
+  },
+  "5:7|5:11": {
+   "keep": true,
+   "why": "Same command: remember the favour of Allah upon you"
+  },
+  "5:10|5:86": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "5:15|5:19": {
+   "keep": true,
+   "why": "Same call: O People of the Book, Our Messenger has come to you making clear"
+  },
+  "5:17|5:18": {
+   "keep": true,
+   "why": "Answering the claims about the Messiah and the sons of Allah"
+  },
+  "5:17|5:40": {
+   "keep": true,
+   "why": "Who can do anything against Allah; His is the dominion"
+  },
+  "5:17|5:72": {
+   "keep": true,
+   "why": "Same opening: they have disbelieved who say Allah is the Messiah"
+  },
+  "5:18|5:40": {
+   "keep": true,
+   "why": "Same: He forgives whom He wills and punishes whom He wills"
+  },
+  "5:34|5:39": {
+   "keep": true,
+   "why": "Repentance, and Allah is Forgiving, Merciful"
+  },
+  "5:34|5:74": {
+   "keep": true,
+   "why": "Repentance, and Allah is Forgiving, Merciful"
+  },
+  "5:34|5:98": {
+   "keep": false,
+   "why": "Only the closing «غفور رحيم»"
+  },
+  "5:39|5:74": {
+   "keep": true,
+   "why": "Repentance, and Allah is Forgiving, Merciful"
+  },
+  "5:39|5:98": {
+   "keep": false,
+   "why": "Only the closing «غفور رحيم»"
+  },
+  "5:40|5:97": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "5:40|5:120": {
+   "keep": true,
+   "why": "Same: His is the dominion of the heavens and earth, over all things competent"
+  },
+  "5:47|5:59": {
+   "keep": true,
+   "why": "People of the Book and what Allah sent down, the defiantly disobedient"
+  },
+  "5:55|5:56": {
+   "keep": true,
+   "why": "Same allegiance: Allah, His Messenger and the believers"
+  },
+  "5:59|5:81": {
+   "keep": true,
+   "why": "People of the Book, belief in what was sent down, most are defiantly disobedient"
+  },
+  "5:62|5:63": {
+   "keep": true,
+   "why": "Same scene: sin and eating the unlawful, evil is what they do"
+  },
+  "5:74|5:98": {
+   "keep": false,
+   "why": "Only the closing «غفور رحيم»"
+  },
+  "5:85|5:119": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, abiding"
+  },
+  "5:112|5:114": {
+   "keep": true,
+   "why": "Same story: the table spread from the sky"
+  },
+  "6:11|6:24": {
+   "keep": false,
+   "why": "Only «انظر كيف»; different subjects"
+  },
+  "6:23|6:161": {
+   "keep": false,
+   "why": "Only «مشركين»; different subjects"
+  },
+  "6:27|6:30": {
+   "keep": true,
+   "why": "Same scene: if you could see when they are made to stand"
+  },
+  "6:30|6:77": {
+   "keep": false,
+   "why": "Only «قال هذا ربي»-like words; different subjects"
+  },
+  "6:40|6:47": {
+   "keep": true,
+   "why": "Same question: have you considered if the punishment of Allah came to you"
+  },
+  "6:53|6:58": {
+   "keep": true,
+   "why": "Allah knows best the grateful and the wrongdoers"
+  },
+  "6:76|6:77": {
+   "keep": true,
+   "why": "Same story: Ibrahim and the star, moon and sun"
+  },
+  "6:76|6:78": {
+   "keep": true,
+   "why": "Same story: Ibrahim and the star, moon and sun"
+  },
+  "6:77|6:78": {
+   "keep": true,
+   "why": "Same story: Ibrahim and the star, moon and sun"
+  },
+  "6:78|6:161": {
+   "keep": true,
+   "why": "Ibrahim upright, free of shirk"
+  },
+  "6:101|6:102": {
+   "keep": true,
+   "why": "Creator of all things"
+  },
+  "6:118|6:121": {
+   "keep": true,
+   "why": "Contrast: eat what Allah's name is mentioned on, not what it is not"
+  },
+  "6:143|6:144": {
+   "keep": true,
+   "why": "Same question about the eight mates"
+  },
+  "7:4|7:97": {
+   "keep": true,
+   "why": "Same punishment coming by night or at rest"
+  },
+  "7:9|7:177": {
+   "keep": true,
+   "why": "Those who denied Our signs and wronged themselves"
+  },
+  "7:23|7:149": {
+   "keep": true,
+   "why": "Same plea: if You do not forgive us and have mercy, we will be among the losers"
+  },
+  "7:23|7:151": {
+   "keep": true,
+   "why": "Plea for forgiveness and mercy"
+  },
+  "7:44|7:50": {
+   "keep": true,
+   "why": "Same scene: the people of Paradise and the Fire calling each other"
+  },
+  "7:46|7:48": {
+   "keep": true,
+   "why": "Same scene: the people of al-A'raf who know each by their marks"
+  },
+  "7:59|7:65": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, you have no god but Him"
+  },
+  "7:60|7:66": {
+   "keep": true,
+   "why": "Same reply of the chiefs: we see you in error"
+  },
+  "7:60|7:90": {
+   "keep": true,
+   "why": "Same: the chiefs of his people"
+  },
+  "7:60|7:109": {
+   "keep": true,
+   "why": "Same: the chiefs of the people"
+  },
+  "7:61|7:67": {
+   "keep": true,
+   "why": "Same answer of the prophets: I am a messenger from the Lord of the worlds"
+  },
+  "7:61|7:79": {
+   "keep": true,
+   "why": "Same: the prophet addressing his people about the message"
+  },
+  "7:61|7:93": {
+   "keep": true,
+   "why": "Same: the prophet addressing his people about the message"
+  },
+  "7:61|7:104": {
+   "keep": true,
+   "why": "Same: a messenger from the Lord of the worlds"
+  },
+  "7:62|7:68": {
+   "keep": true,
+   "why": "Same: I convey the messages of my Lord and advise you"
+  },
+  "7:62|7:79": {
+   "keep": true,
+   "why": "Same: conveying the messages of my Lord and advising"
+  },
+  "7:62|7:93": {
+   "keep": true,
+   "why": "Same: conveying the messages of my Lord and advising"
+  },
+  "7:64|7:72": {
+   "keep": true,
+   "why": "Same end: We saved him and those with him, and destroyed those who denied"
+  },
+  "7:66|7:67": {
+   "keep": true,
+   "why": "Same exchange: foolishness charged and denied"
+  },
+  "7:66|7:90": {
+   "keep": true,
+   "why": "Same: the disbelieving chiefs of his people"
+  },
+  "7:66|7:109": {
+   "keep": true,
+   "why": "Same: the chiefs of the people"
+  },
+  "7:67|7:79": {
+   "keep": true,
+   "why": "Same: the prophet addressing his people about the message"
+  },
+  "7:67|7:93": {
+   "keep": true,
+   "why": "Same: the prophet addressing his people about the message"
+  },
+  "7:67|7:104": {
+   "keep": true,
+   "why": "Same: a messenger from the Lord of the worlds"
+  },
+  "7:68|7:79": {
+   "keep": true,
+   "why": "Same: conveying the messages of my Lord and advising"
+  },
+  "7:69|7:74": {
+   "keep": true,
+   "why": "Same: remember when He made you successors, remember the favours of Allah"
+  },
+  "7:70|7:106": {
+   "keep": true,
+   "why": "Same demand: bring it if you are truthful"
+  },
+  "7:72|7:136": {
+   "keep": true,
+   "why": "Same end of those who denied Our signs"
+  },
+  "7:72|7:177": {
+   "keep": true,
+   "why": "Those who denied Our signs"
+  },
+  "7:73|7:85": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, a clear sign has come"
+  },
+  "7:75|7:88": {
+   "keep": true,
+   "why": "Same: the arrogant chiefs of his people"
+  },
+  "7:78|7:91": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "7:79|7:93": {
+   "keep": true,
+   "why": "Same farewell: he turned from them, I conveyed the message"
+  },
+  "7:84|7:103": {
+   "keep": true,
+   "why": "Same: see how was the end of the criminals and the corrupters"
+  },
+  "7:90|7:109": {
+   "keep": true,
+   "why": "Same: the chiefs of the people answering the prophet"
+  },
+  "7:97|7:98": {
+   "keep": true,
+   "why": "Same warning: do the people of the towns feel secure from Our punishment"
+  },
+  "7:118|7:139": {
+   "keep": true,
+   "why": "Same end: void is what they used to do"
+  },
+  "7:136|7:177": {
+   "keep": true,
+   "why": "Those who denied Our signs"
+  },
+  "7:159|7:181": {
+   "keep": true,
+   "why": "Same description: a community guiding by the truth and by it establishing justice"
+  },
+  "7:178|7:186": {
+   "keep": true,
+   "why": "Contrast: whom Allah guides and whom He leaves astray"
+  },
+  "7:192|7:197": {
+   "keep": true,
+   "why": "Same: the idols cannot help them nor help themselves"
+  },
+  "8:4|8:74": {
+   "keep": true,
+   "why": "Same verdict: they are the believers in truth, forgiveness and noble provision"
+  },
+  "8:10|8:49": {
+   "keep": false,
+   "why": "Only the closing «إن الله عزيز حكيم»"
+  },
+  "8:13|8:52": {
+   "keep": true,
+   "why": "Punishment for opposing Allah, «شديد العقاب»"
+  },
+  "8:22|8:55": {
+   "keep": true,
+   "why": "Same opening: the worst of creatures with Allah"
+  },
+  "8:27|8:58": {
+   "keep": true,
+   "why": "Contrast: do not betray, Allah does not love the betrayers"
+  },
+  "8:43|8:44": {
+   "keep": true,
+   "why": "Same scene: Allah showing them as few"
+  },
+  "8:49|8:63": {
+   "keep": false,
+   "why": "Only «قلوب» and the closing «عزيز حكيم»"
+  },
+  "8:52|8:54": {
+   "keep": true,
+   "why": "Same: like the way of the people of Pharaoh and those before them"
+  },
+  "8:62|8:64": {
+   "keep": true,
+   "why": "Same assurance: Allah suffices you, and the believers"
+  },
+  "8:65|8:66": {
+   "keep": true,
+   "why": "Same: steadfast few overcoming many"
+  },
+  "9:15|9:27": {
+   "keep": true,
+   "why": "Allah turns in repentance to whom He wills"
+  },
+  "9:15|9:106": {
+   "keep": true,
+   "why": "Allah turns to them, «والله عليم حكيم»"
+  },
+  "9:15|9:110": {
+   "keep": false,
+   "why": "Only «قلوب» and the closing «عليم حكيم»"
+  },
+  "9:16|9:59": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "9:18|9:19": {
+   "keep": true,
+   "why": "Who truly tends the mosques of Allah: believing in Allah and the Last Day"
+  },
+  "9:19|9:99": {
+   "keep": false,
+   "why": "Only «يؤمن بالله واليوم الآخر»; different subjects"
+  },
+  "9:20|9:44": {
+   "keep": true,
+   "why": "Striving with wealth and lives"
+  },
+  "9:22|9:63": {
+   "keep": false,
+   "why": "Only «خالدين فيها ... عظيم»; Paradise vs Hell, a common formula"
+  },
+  "9:27|9:102": {
+   "keep": true,
+   "why": "Allah may turn to them, Forgiving, Merciful"
+  },
+  "9:41|9:44": {
+   "keep": true,
+   "why": "Striving with wealth and lives"
+  },
+  "9:41|9:88": {
+   "keep": true,
+   "why": "Striving with wealth and lives"
+  },
+  "9:44|9:45": {
+   "keep": true,
+   "why": "Contrast: those who believe do not ask leave, those who do not believe ask leave"
+  },
+  "9:44|9:88": {
+   "keep": true,
+   "why": "Striving with wealth and lives"
+  },
+  "9:55|9:85": {
+   "keep": true,
+   "why": "Same verse: let not their wealth and children impress you"
+  },
+  "9:62|9:96": {
+   "keep": true,
+   "why": "Same: swearing to please you"
+  },
+  "9:72|9:89": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great attainment"
+  },
+  "9:72|9:100": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great attainment"
+  },
+  "9:87|9:93": {
+   "keep": true,
+   "why": "Same: content to be with those who stay behind, hearts sealed"
+  },
+  "9:89|9:100": {
+   "keep": true,
+   "why": "Same reward: gardens beneath which rivers flow, the great attainment"
+  },
+  "9:94|9:105": {
+   "keep": true,
+   "why": "Same: Allah will see your deeds, and His Messenger, then you return to the Knower of the unseen"
+  },
+  "10:6|10:67": {
+   "keep": true,
+   "why": "Same: in that are signs for a people"
+  },
+  "10:6|10:101": {
+   "keep": false,
+   "why": "Only «في السموات والأرض»; different subjects"
+  },
+  "10:17|10:69": {
+   "keep": true,
+   "why": "Same: those who invent lies against Allah will not succeed"
+  },
+  "10:17|10:95": {
+   "keep": true,
+   "why": "Those who deny the signs of Allah"
+  },
+  "10:18|10:68": {
+   "keep": true,
+   "why": "Answering those who associate with Allah, glory be to Him"
+  },
+  "10:33|10:96": {
+   "keep": true,
+   "why": "Same: the word of your Lord has come true, they will not believe"
+  },
+  "10:39|10:73": {
+   "keep": true,
+   "why": "Same: see how was the end"
+  },
+  "10:47|10:54": {
+   "keep": true,
+   "why": "Same: judged between them in justice, not wronged"
+  },
+  "10:52|10:70": {
+   "keep": true,
+   "why": "Tasting the punishment for what they earned"
+  },
+  "10:55|10:68": {
+   "keep": true,
+   "why": "To Allah belongs what is in the heavens and earth"
+  },
+  "10:77|10:80": {
+   "keep": true,
+   "why": "Same story: Musa and the magicians"
+  },
+  "11:28|11:63": {
+   "keep": true,
+   "why": "Same words of the prophets: if I am on clear evidence from my Lord"
+  },
+  "11:39|11:93": {
+   "keep": true,
+   "why": "Same threat: you will know who gets a disgracing punishment"
+  },
+  "11:41|11:47": {
+   "keep": false,
+   "why": "Only «غفور رحيم» and «تغفر»; different moments"
+  },
+  "11:46|11:47": {
+   "keep": true,
+   "why": "Same story: Nuh asking about his son"
+  },
+  "11:50|11:61": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, you have no god but Him"
+  },
+  "11:50|11:84": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, you have no god but Him"
+  },
+  "11:58|11:66": {
+   "keep": true,
+   "why": "Same rescue: when Our command came We saved him and those who believed"
+  },
+  "11:58|11:94": {
+   "keep": true,
+   "why": "Same rescue: when Our command came We saved him and those who believed"
+  },
+  "11:61|11:84": {
+   "keep": true,
+   "why": "Same call of the prophets: worship Allah, you have no god but Him"
+  },
+  "11:62|11:109": {
+   "keep": true,
+   "why": "Same: worshipping what their fathers worshipped"
+  },
+  "11:66|11:94": {
+   "keep": true,
+   "why": "Same rescue: when Our command came We saved him and those who believed"
+  },
+  "11:67|11:94": {
+   "keep": true,
+   "why": "Same end: the blast seized those who did wrong"
+  },
+  "11:102|11:117": {
+   "keep": true,
+   "why": "Allah's seizing of the towns"
+  },
+  "11:107|11:108": {
+   "keep": true,
+   "why": "Contrast: abiding as long as the heavens and earth endure, Hell and Paradise"
+  },
+  "12:13|12:14": {
+   "keep": true,
+   "why": "Same story: fear the wolf will eat him"
+  },
+  "12:15|12:102": {
+   "keep": true,
+   "why": "Same story: when they agreed on their plan"
+  },
+  "12:18|12:83": {
+   "keep": true,
+   "why": "Same words of Yaqub: beautiful patience"
+  },
+  "12:27|12:28": {
+   "keep": true,
+   "why": "Same story: the shirt torn from behind"
+  },
+  "12:29|12:97": {
+   "keep": true,
+   "why": "Asking forgiveness for being sinners"
+  },
+  "12:38|12:68": {
+   "keep": true,
+   "why": "Same closing: but most people do not know/thank"
+  },
+  "12:43|12:46": {
+   "keep": true,
+   "why": "Same dream: seven fat cows and seven lean"
+  },
+  "12:63|12:81": {
+   "keep": true,
+   "why": "Returning to their father: O our father"
+  },
+  "12:75|12:79": {
+   "keep": true,
+   "why": "Same story: taking the one with whom the cup was found"
+  },
+  "12:91|12:97": {
+   "keep": true,
+   "why": "Same confession: we have been sinners"
+  },
+  "12:92|12:98": {
+   "keep": true,
+   "why": "Same: forgiveness for the brothers"
+  },
+  "13:1|13:19": {
+   "keep": true,
+   "why": "Same: what was sent down to you from your Lord is the truth"
+  },
+  "13:7|13:27": {
+   "keep": true,
+   "why": "Same demand: why has a sign not been sent down to him"
+  },
+  "14:2|14:7": {
+   "keep": true,
+   "why": "Severe punishment for the disbelievers"
+  },
+  "15:26|15:28": {
+   "keep": true,
+   "why": "Same creation: from clay of altered black mud"
+  },
+  "15:26|15:33": {
+   "keep": true,
+   "why": "Same creation: from clay of altered black mud"
+  },
+  "15:28|15:33": {
+   "keep": true,
+   "why": "Same creation: from clay of altered black mud"
+  },
+  "15:32|15:33": {
+   "keep": true,
+   "why": "Same story: Iblis refusing to prostrate"
+  },
+  "16:11|16:67": {
+   "keep": true,
+   "why": "Same: in that is a sign for a people who"
+  },
+  "16:19|16:23": {
+   "keep": true,
+   "why": "Allah knows what you conceal and what you declare"
+  },
+  "16:26|16:45": {
+   "keep": true,
+   "why": "Same: punishment came from where they did not perceive"
+  },
+  "16:28|16:32": {
+   "keep": true,
+   "why": "Contrast: whom the angels take in death, wronging themselves or good"
+  },
+  "16:33|16:118": {
+   "keep": true,
+   "why": "Same: they were wronging themselves"
+  },
+  "16:56|16:87": {
+   "keep": true,
+   "why": "Their inventions"
+  },
+  "16:65|16:79": {
+   "keep": true,
+   "why": "Same: in that is a sign for a people who"
+  },
+  "16:96|16:97": {
+   "keep": true,
+   "why": "Same promise: repaid by the best of what they did"
+  },
+  "16:110|16:119": {
+   "keep": true,
+   "why": "Same: then indeed your Lord, after that, is Forgiving, Merciful"
+  },
+  "16:120|16:123": {
+   "keep": true,
+   "why": "Ibrahim upright, not of the polytheists"
+  },
+  "17:17|17:30": {
+   "keep": true,
+   "why": "Same closing: Acquainted and Seeing of His servants"
+  },
+  "17:17|17:96": {
+   "keep": true,
+   "why": "Same closing: Acquainted and Seeing of His servants"
+  },
+  "17:22|17:39": {
+   "keep": true,
+   "why": "Same command: do not set up another god with Allah"
+  },
+  "17:30|17:96": {
+   "keep": true,
+   "why": "Same closing: Acquainted and Seeing of His servants"
+  },
+  "17:49|17:98": {
+   "keep": true,
+   "why": "Same claim: when we are bones and fragments, will we be resurrected"
+  },
+  "18:2|18:30": {
+   "keep": true,
+   "why": "Reward for those who believe and do good"
+  },
+  "18:2|18:88": {
+   "keep": true,
+   "why": "Reward for those who believe and do good"
+  },
+  "18:10|18:16": {
+   "keep": true,
+   "why": "Same story: the youths taking refuge in the cave"
+  },
+  "18:30|18:88": {
+   "keep": true,
+   "why": "Reward for those who believe and do good"
+  },
+  "18:30|18:107": {
+   "keep": true,
+   "why": "Same opening: those who believe and do good"
+  },
+  "18:61|18:63": {
+   "keep": true,
+   "why": "Same story: the fish took its way into the sea"
+  },
+  "18:67|18:72": {
+   "keep": true,
+   "why": "Same words of al-Khidr: you will not be able to have patience with me"
+  },
+  "18:67|18:75": {
+   "keep": true,
+   "why": "Same words of al-Khidr: you will not be able to have patience with me"
+  },
+  "18:67|18:78": {
+   "keep": true,
+   "why": "Same story: patience Musa could not have"
+  },
+  "18:70|18:76": {
+   "keep": true,
+   "why": "Same condition: do not ask me about anything"
+  },
+  "18:72|18:75": {
+   "keep": true,
+   "why": "Same words of al-Khidr: did I not say you would not have patience"
+  },
+  "18:72|18:78": {
+   "keep": true,
+   "why": "Same story: patience Musa could not have"
+  },
+  "18:75|18:78": {
+   "keep": true,
+   "why": "Same story: patience Musa could not have"
+  },
+  "18:85|18:89": {
+   "keep": true,
+   "why": "Same story: Dhul-Qarnayn followed a way"
+  },
+  "18:85|18:92": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "18:88|18:107": {
+   "keep": true,
+   "why": "Reward for those who believe and do good"
+  },
+  "18:89|18:92": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "18:94|18:95": {
+   "keep": true,
+   "why": "Same story: a barrier between us and them"
+  },
+  "19:4|19:48": {
+   "keep": true,
+   "why": "Same words: not unblessed in calling my Lord"
+  },
+  "19:8|19:20": {
+   "keep": true,
+   "why": "Same question: how will I have a boy, Zakariyya and Maryam"
+  },
+  "19:9|19:21": {
+   "keep": true,
+   "why": "Same answer: thus said your Lord, it is easy for Me"
+  },
+  "19:9|19:67": {
+   "keep": true,
+   "why": "Created before when you were nothing"
+  },
+  "19:10|19:21": {
+   "keep": true,
+   "why": "Same story: a sign"
+  },
+  "19:14|19:32": {
+   "keep": true,
+   "why": "Same description: dutiful to his parent, not a tyrant: Yahya and Isa"
+  },
+  "19:15|19:33": {
+   "keep": true,
+   "why": "Same peace: on the day he was born, dies and is raised alive"
+  },
+  "19:16|19:41": {
+   "keep": true,
+   "why": "Same opening: mention in the Book"
+  },
+  "19:16|19:51": {
+   "keep": true,
+   "why": "Same opening: mention in the Book"
+  },
+  "19:16|19:54": {
+   "keep": true,
+   "why": "Same opening: mention in the Book"
+  },
+  "19:16|19:56": {
+   "keep": true,
+   "why": "Same opening: mention in the Book"
+  },
+  "19:30|19:49": {
+   "keep": true,
+   "why": "Made a prophet"
+  },
+  "19:41|19:51": {
+   "keep": true,
+   "why": "Same opening: mention in the Book, a prophet"
+  },
+  "19:41|19:54": {
+   "keep": true,
+   "why": "Same opening: mention in the Book, a prophet"
+  },
+  "19:41|19:56": {
+   "keep": true,
+   "why": "Same: mention in the Book, he was a man of truth and a prophet"
+  },
+  "19:51|19:54": {
+   "keep": true,
+   "why": "Same: mention in the Book, a messenger and a prophet"
+  },
+  "19:51|19:56": {
+   "keep": true,
+   "why": "Same opening: mention in the Book, a prophet"
+  },
+  "19:54|19:56": {
+   "keep": true,
+   "why": "Same opening: mention in the Book, a prophet"
+  },
+  "19:60|19:96": {
+   "keep": true,
+   "why": "Reward for those who believe and do good"
+  },
+  "19:61|19:63": {
+   "keep": true,
+   "why": "The Paradise promised to His servants"
+  },
+  "19:74|19:98": {
+   "keep": true,
+   "why": "Same: how many generations We destroyed before them"
+  },
+  "19:78|19:87": {
+   "keep": true,
+   "why": "Same: taken a covenant with the Most Merciful"
+  },
+  "20:24|20:43": {
+   "keep": true,
+   "why": "Same command: go to Pharaoh, he has transgressed"
+  },
+  "20:47|20:134": {
+   "keep": true,
+   "why": "Messenger and signs from your Lord"
+  },
+  "20:57|20:63": {
+   "keep": true,
+   "why": "Same charge: to drive you from your land with magic"
+  },
+  "20:60|20:64": {
+   "keep": true,
+   "why": "Same story: gathering the plot"
+  },
+  "20:75|20:82": {
+   "keep": true,
+   "why": "Believing and doing good"
+  },
+  "20:100|20:124": {
+   "keep": true,
+   "why": "Same warning: whoever turns away"
+  },
+  "21:4|21:56": {
+   "keep": true,
+   "why": "Lord of the heavens and earth"
+  },
+  "21:66|21:67": {
+   "keep": true,
+   "why": "Same story: Ibrahim, what you worship besides Allah"
+  },
+  "21:66|21:98": {
+   "keep": true,
+   "why": "What you worship besides Allah"
+  },
+  "21:67|21:98": {
+   "keep": true,
+   "why": "What you worship besides Allah"
+  },
+  "21:75|21:86": {
+   "keep": true,
+   "why": "Same: We admitted him into Our mercy, he was of the righteous"
+  },
+  "22:3|22:8": {
+   "keep": true,
+   "why": "Same opening: among people is he who disputes about Allah without knowledge"
+  },
+  "22:6|22:74": {
+   "keep": false,
+   "why": "Only shared words, different subjects"
+  },
+  "22:8|22:68": {
+   "keep": true,
+   "why": "Disputing about Allah"
+  },
+  "22:12|22:62": {
+   "keep": true,
+   "why": "Same: what they call upon besides Allah"
+  },
+  "22:14|22:23": {
+   "keep": true,
+   "why": "Same: Allah admits those who believe and do good into gardens"
+  },
+  "22:14|22:56": {
+   "keep": true,
+   "why": "Those who believe and do good in gardens"
+  },
+  "22:28|22:34": {
+   "keep": true,
+   "why": "Same: to mention the name of Allah over the livestock He provided"
+  },
+  "22:61|22:75": {
+   "keep": true,
+   "why": "Same closing: Allah is Hearing, Seeing"
+  },
+  "23:23|23:32": {
+   "keep": true,
+   "why": "Same call: worship Allah, you have no god but Him, will you not fear"
+  },
+  "23:24|23:33": {
+   "keep": true,
+   "why": "Same reply of the disbelieving chiefs: this is only a man like you"
+  },
+  "23:26|23:39": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "23:29|23:118": {
+   "keep": true,
+   "why": "Same prayer form: and say, my Lord, You are the best of"
+  },
+  "23:31|23:42": {
+   "keep": true,
+   "why": "Same: then We produced after them other generations"
+  },
+  "23:35|23:82": {
+   "keep": true,
+   "why": "Same claim: when we die and become dust and bones"
+  },
+  "23:41|23:94": {
+   "keep": true,
+   "why": "The wrongdoing people"
+  },
+  "23:66|23:105": {
+   "keep": true,
+   "why": "Same rebuke: were not My verses recited to you"
+  },
+  "23:109|23:118": {
+   "keep": true,
+   "why": "Same prayer: forgive and have mercy, You are the best of the merciful"
+  },
+  "23:112|23:113": {
+   "keep": true,
+   "why": "Same scene: how long did you remain"
+  },
+  "24:1|24:34": {
+   "keep": true,
+   "why": "Same: We have sent down clear verses"
+  },
+  "24:1|24:46": {
+   "keep": true,
+   "why": "Same: We have sent down clear verses"
+  },
+  "24:6|24:8": {
+   "keep": true,
+   "why": "Same law: four testimonies by Allah"
+  },
+  "24:7|24:9": {
+   "keep": true,
+   "why": "Same law: the fifth oath"
+  },
+  "24:8|24:13": {
+   "keep": true,
+   "why": "Liars and testimony"
+  },
+  "24:10|24:20": {
+   "keep": true,
+   "why": "Same: were it not for the favour of Allah upon you and His mercy"
+  },
+  "24:14|24:19": {
+   "keep": true,
+   "why": "Painful punishment in this world and the hereafter for spreading slander"
+  },
+  "24:14|24:23": {
+   "keep": true,
+   "why": "Same: in this world and the hereafter a great punishment"
+  },
+  "24:18|24:59": {
+   "keep": true,
+   "why": "Same: Allah makes clear to you the verses, Knowing, Wise"
+  },
+  "24:19|24:23": {
+   "keep": true,
+   "why": "Slander, in this world and the hereafter a punishment"
+  },
+  "24:34|24:46": {
+   "keep": true,
+   "why": "Same: We have sent down clear verses"
+  },
+  "24:41|24:64": {
+   "keep": true,
+   "why": "Allah's knowledge of all in the heavens and earth"
+  },
+  "24:47|24:51": {
+   "keep": true,
+   "why": "Contrast: they say we obey then turn away; the believers say we hear and obey"
+  },
+  "24:48|24:51": {
+   "keep": true,
+   "why": "Contrast: called to Allah and His Messenger to judge between them"
+  },
+  "25:7|25:20": {
+   "keep": true,
+   "why": "Same: eating food and walking in the markets"
+  },
+  "25:27|25:57": {
+   "keep": true,
+   "why": "Taking a way with the Messenger / to his Lord"
+  },
+  "25:41|25:43": {
+   "keep": false,
+   "why": "Only «اتخذ»; different subjects"
+  },
+  "25:47|25:62": {
+   "keep": true,
+   "why": "Same: He made the night and the day for you"
+  },
+  "26:8|26:67": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:8|26:103": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:8|26:121": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:8|26:139": {
+   "keep": true,
+   "why": "Same refrain of al-Shu'ara: in that is a sign, most of them were not believers"
+  },
+  "26:8|26:158": {
+   "keep": true,
+   "why": "Same refrain of al-Shu'ara: in that is a sign, most of them were not believers"
+  },
+  "26:8|26:174": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:8|26:190": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:68": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:104": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:122": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:140": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:159": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:175": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:9|26:191": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:24|26:28": {
+   "keep": true,
+   "why": "Same answer of Musa: Lord of ... and what is between them"
+  },
+  "26:31|26:154": {
+   "keep": true,
+   "why": "Same demand: bring it if you are truthful"
+  },
+  "26:40|26:41": {
+   "keep": true,
+   "why": "Same story: the magicians, if they are the winners"
+  },
+  "26:51|26:82": {
+   "keep": true,
+   "why": "Same hope: that my Lord forgive my sins"
+  },
+  "26:67|26:103": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:67|26:121": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:67|26:139": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:67|26:158": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:67|26:174": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:67|26:190": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:104": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:122": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:140": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:159": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:175": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:68|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:103|26:121": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:103|26:139": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:103|26:158": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:103|26:174": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:103|26:190": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:104|26:122": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:104|26:140": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:104|26:159": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:104|26:175": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:104|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:105|26:160": {
+   "keep": true,
+   "why": "Same opening: the people of ... denied the messengers"
+  },
+  "26:106|26:124": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:106|26:142": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:106|26:161": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:108|26:110": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:126": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:131": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:144": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:150": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:163": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:108|26:179": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:109|26:127": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:109|26:145": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:109|26:164": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:109|26:180": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "26:110|26:126": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:110|26:131": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:110|26:144": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:110|26:150": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:110|26:163": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:110|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:116|26:167": {
+   "keep": true,
+   "why": "Same threat: if you do not desist"
+  },
+  "26:121|26:139": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:121|26:158": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:121|26:174": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:121|26:190": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:122|26:140": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:122|26:159": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:122|26:175": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:122|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:124|26:142": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:124|26:161": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:126|26:131": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:126|26:144": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:126|26:150": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:126|26:163": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:126|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:127|26:145": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:127|26:164": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:127|26:180": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:131|26:144": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:131|26:150": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:131|26:163": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:131|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:134|26:147": {
+   "keep": true,
+   "why": "Same: gardens and springs"
+  },
+  "26:135|26:156": {
+   "keep": true,
+   "why": "Same: the punishment of a tremendous day"
+  },
+  "26:139|26:158": {
+   "keep": true,
+   "why": "Same refrain of al-Shu'ara: in that is a sign"
+  },
+  "26:139|26:174": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:139|26:190": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:140|26:159": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:140|26:175": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:140|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:142|26:161": {
+   "keep": true,
+   "why": "Same: when their brother said, will you not fear"
+  },
+  "26:144|26:150": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:144|26:163": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:144|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:145|26:164": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:145|26:180": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:150|26:163": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:150|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:156|26:189": {
+   "keep": true,
+   "why": "Same: the punishment of a tremendous day"
+  },
+  "26:158|26:174": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:158|26:190": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "26:159|26:175": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:159|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:163|26:179": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:164|26:180": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:174|26:190": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "26:175|26:191": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "27:14|27:51": {
+   "keep": true,
+   "why": "Same: see how was the end"
+  },
+  "27:14|27:69": {
+   "keep": true,
+   "why": "Same: see how was the end"
+  },
+  "27:15|27:59": {
+   "keep": true,
+   "why": "Praise be to Allah, His servants"
+  },
+  "27:27|27:41": {
+   "keep": true,
+   "why": "Same: we will see whether"
+  },
+  "27:27|27:69": {
+   "keep": false,
+   "why": "Only «انظر»; different subjects"
+  },
+  "27:38|27:42": {
+   "keep": true,
+   "why": "Same story: the throne of the queen of Sheba"
+  },
+  "27:41|27:69": {
+   "keep": false,
+   "why": "Only «ننظر/انظروا»; different subjects"
+  },
+  "27:42|27:84": {
+   "keep": false,
+   "why": "Only «جاء ... علم»; different subjects"
+  },
+  "27:51|27:69": {
+   "keep": true,
+   "why": "Same: see how was the end"
+  },
+  "27:84|27:90": {
+   "keep": true,
+   "why": "Recompensed for what you used to do"
+  },
+  "28:37|28:85": {
+   "keep": true,
+   "why": "Same: my Lord knows best who brought guidance"
+  },
+  "28:62|28:65": {
+   "keep": true,
+   "why": "Same: the Day He will call them and say"
+  },
+  "28:62|28:74": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "28:65|28:74": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "28:68|28:87": {
+   "keep": true,
+   "why": "Exalted above what they associate / do not be of the polytheists"
+  },
+  "28:70|28:88": {
+   "keep": true,
+   "why": "None has the right to be worshipped but Him, His is the judgement and to Him you return"
+  },
+  "28:71|28:72": {
+   "keep": true,
+   "why": "Same question: if Allah made the night / the day perpetual"
+  },
+  "29:16|29:36": {
+   "keep": true,
+   "why": "Same call: worship Allah"
+  },
+  "29:31|29:33": {
+   "keep": true,
+   "why": "Same story: when Our messengers came to Ibrahim and to Lut"
+  },
+  "29:32|29:33": {
+   "keep": true,
+   "why": "Same words: save him and his family except his wife"
+  },
+  "29:44|29:61": {
+   "keep": true,
+   "why": "Creation of the heavens and earth"
+  },
+  "30:9|30:42": {
+   "keep": true,
+   "why": "Same: travel in the land and see how was the end of those before"
+  },
+  "30:12|30:14": {
+   "keep": true,
+   "why": "Same opening: the Day the Hour is established"
+  },
+  "30:12|30:55": {
+   "keep": true,
+   "why": "Same opening: the Day the Hour is established"
+  },
+  "30:15|30:45": {
+   "keep": true,
+   "why": "Those who believe and do good"
+  },
+  "31:12|31:26": {
+   "keep": true,
+   "why": "Same closing: Allah is Free of need, Praiseworthy"
+  },
+  "31:25|31:26": {
+   "keep": true,
+   "why": "Same closing: Allah is Free of need, Praiseworthy"
+  },
+  "33:1|33:48": {
+   "keep": true,
+   "why": "Same command: do not obey the disbelievers and hypocrites"
+  },
+  "33:3|33:48": {
+   "keep": true,
+   "why": "Same: rely upon Allah, sufficient is Allah as Disposer"
+  },
+  "33:24|33:73": {
+   "keep": true,
+   "why": "Same: punish the hypocrites, accept repentance, Forgiving, Merciful"
+  },
+  "33:27|33:54": {
+   "keep": false,
+   "why": "Only the closing «كان الله ... شيء»"
+  },
+  "33:29|33:57": {
+   "keep": true,
+   "why": "Contrast: those who want Allah and His Messenger, those who hurt Allah and His Messenger"
+  },
+  "33:38|33:62": {
+   "keep": true,
+   "why": "Same: the way of Allah with those who passed before"
+  },
+  "33:40|33:54": {
+   "keep": true,
+   "why": "Same closing: Allah is Knowing of all things"
+  },
+  "33:52|33:55": {
+   "keep": true,
+   "why": "Same closing: Allah is over all things a Witness/Observer"
+  },
+  "34:5|34:38": {
+   "keep": true,
+   "why": "Same: those who strive against Our verses to cause failure"
+  },
+  "34:26|34:48": {
+   "keep": true,
+   "why": "The Truth from my Lord"
+  },
+  "34:36|34:39": {
+   "keep": true,
+   "why": "Same: my Lord extends provision for whom He wills and restricts"
+  },
+  "36:9|36:45": {
+   "keep": true,
+   "why": "Before them and behind them"
+  },
+  "36:29|36:53": {
+   "keep": true,
+   "why": "Same: it was but one shout"
+  },
+  "36:48|36:52": {
+   "keep": true,
+   "why": "The promise and the truthful"
+  },
+  "37:16|37:53": {
+   "keep": true,
+   "why": "Same claim: when we have died and become dust and bones"
+  },
+  "37:27|37:50": {
+   "keep": true,
+   "why": "Same scene: they turn to one another asking"
+  },
+  "37:40|37:74": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:40|37:128": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:40|37:160": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:40|37:169": {
+   "keep": true,
+   "why": "Same: the chosen servants of Allah"
+  },
+  "37:74|37:128": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "37:74|37:160": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "37:74|37:169": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:76|37:115": {
+   "keep": true,
+   "why": "Same: We saved him and his people from the great distress"
+  },
+  "37:78|37:108": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:78|37:119": {
+   "keep": true,
+   "why": "Same: We left for him praise among later generations"
+  },
+  "37:78|37:129": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:80|37:110": {
+   "keep": true,
+   "why": "Same: thus do We reward the doers of good"
+  },
+  "37:80|37:121": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:80|37:131": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "37:108|37:119": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:108|37:129": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "37:110|37:121": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:110|37:131": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:119|37:129": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:121|37:131": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "37:128|37:160": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "37:128|37:169": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:160|37:169": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "37:174|37:178": {
+   "keep": true,
+   "why": "Same command: turn away from them for a time"
+  },
+  "38:10|38:66": {
+   "keep": true,
+   "why": "The heavens and earth and what is between them"
+  },
+  "38:25|38:40": {
+   "keep": true,
+   "why": "Same: near access to Us and a good return"
+  },
+  "38:29|38:43": {
+   "keep": false,
+   "why": "Only «أولي الألباب»; different subjects"
+  },
+  "38:71|38:76": {
+   "keep": true,
+   "why": "Same story: creating a man from clay"
+  },
+  "39:1|39:2": {
+   "keep": true,
+   "why": "Sending down the Book"
+  },
+  "39:2|39:11": {
+   "keep": true,
+   "why": "Same: worship Allah, sincere to Him in religion"
+  },
+  "39:2|39:14": {
+   "keep": true,
+   "why": "Same: worship Allah, sincere to Him in religion"
+  },
+  "39:11|39:14": {
+   "keep": true,
+   "why": "Same: worship Allah, sincere to Him in religion"
+  },
+  "39:11|39:64": {
+   "keep": true,
+   "why": "Commanded to worship Allah"
+  },
+  "39:24|39:47": {
+   "keep": true,
+   "why": "Same: the worst punishment on the Day of Resurrection"
+  },
+  "39:25|39:54": {
+   "keep": true,
+   "why": "Same: the punishment came upon them"
+  },
+  "39:25|39:55": {
+   "keep": true,
+   "why": "Same: the punishment came upon them when they did not perceive"
+  },
+  "39:32|39:60": {
+   "keep": true,
+   "why": "Same: is there not in Hell a residence for"
+  },
+  "39:54|39:55": {
+   "keep": true,
+   "why": "Same: before the punishment comes upon you"
+  },
+  "40:4|40:69": {
+   "keep": true,
+   "why": "Same: disputing about the signs of Allah"
+  },
+  "40:20|40:74": {
+   "keep": true,
+   "why": "What they call upon besides Allah"
+  },
+  "40:21|40:82": {
+   "keep": true,
+   "why": "Same: have they not travelled in the land and seen the end of those before"
+  },
+  "40:22|40:50": {
+   "keep": true,
+   "why": "Same: their messengers came with clear proofs"
+  },
+  "40:30|40:32": {
+   "keep": true,
+   "why": "Same: the believer of Pharaoh's people, I fear for you a day"
+  },
+  "40:35|40:56": {
+   "keep": true,
+   "why": "Same: disputing about the signs of Allah without authority"
+  },
+  "40:48|40:60": {
+   "keep": true,
+   "why": "The arrogant"
+  },
+  "40:50|40:74": {
+   "keep": true,
+   "why": "Same scene: the disbelievers in the Fire and their calling"
+  },
+  "40:55|40:77": {
+   "keep": true,
+   "why": "Same command: be patient, the promise of Allah is true"
+  },
+  "40:69|40:81": {
+   "keep": true,
+   "why": "The signs of Allah"
+  },
+  "40:84|40:85": {
+   "keep": true,
+   "why": "Same scene: when they saw Our punishment"
+  },
+  "41:14|41:30": {
+   "keep": true,
+   "why": "The angels and the message"
+  },
+  "41:20|41:22": {
+   "keep": true,
+   "why": "Same: their hearing, sight and skins testify"
+  },
+  "41:49|41:51": {
+   "keep": true,
+   "why": "Same: when evil touches man"
+  },
+  "42:6|42:9": {
+   "keep": true,
+   "why": "Same: taking protectors besides Him"
+  },
+  "42:12|42:29": {
+   "keep": true,
+   "why": "Allah's power over the heavens and earth"
+  },
+  "42:30|42:34": {
+   "keep": true,
+   "why": "Same: what you earned, and He pardons much"
+  },
+  "43:9|43:84": {
+   "keep": true,
+   "why": "Creator of the heavens and earth, Knowing"
+  },
+  "43:9|43:87": {
+   "keep": true,
+   "why": "Same question: if you asked them who created"
+  },
+  "43:22|43:23": {
+   "keep": true,
+   "why": "Same: we found our fathers on a religion"
+  },
+  "43:24|43:30": {
+   "keep": true,
+   "why": "Same: we are disbelievers in it"
+  },
+  "44:7|44:29": {
+   "keep": false,
+   "why": "Only «السموات والأرض»; different subjects"
+  },
+  "44:7|44:38": {
+   "keep": true,
+   "why": "The heavens and earth and what is between them"
+  },
+  "45:3|45:13": {
+   "keep": true,
+   "why": "Same: signs in the heavens and earth"
+  },
+  "45:10|45:19": {
+   "keep": true,
+   "why": "Will not avail them, protectors"
+  },
+  "45:15|45:30": {
+   "keep": true,
+   "why": "Deeds and their return"
+  },
+  "45:24|45:26": {
+   "keep": true,
+   "why": "Life and death"
+  },
+  "47:1|47:8": {
+   "keep": true,
+   "why": "Same: Allah made their deeds go astray"
+  },
+  "47:1|47:32": {
+   "keep": true,
+   "why": "Same: those who disbelieved and averted from the way of Allah"
+  },
+  "47:1|47:34": {
+   "keep": true,
+   "why": "Same: those who disbelieved and averted from the way of Allah"
+  },
+  "47:9|47:28": {
+   "keep": true,
+   "why": "Same: so He made their deeds worthless"
+  },
+  "47:32|47:34": {
+   "keep": true,
+   "why": "Same: those who disbelieved and averted from the way of Allah"
+  },
+  "48:4|48:7": {
+   "keep": true,
+   "why": "Same: to Allah belong the soldiers of the heavens and earth"
+  },
+  "48:7|48:14": {
+   "keep": true,
+   "why": "Allah's dominion over the heavens and earth"
+  },
+  "48:7|48:19": {
+   "keep": true,
+   "why": "Same closing: Allah is Mighty, Wise"
+  },
+  "49:1|49:10": {
+   "keep": true,
+   "why": "O you who believe, fear Allah"
+  },
+  "49:16|49:18": {
+   "keep": true,
+   "why": "Allah knows what is in the heavens and earth"
+  },
+  "51:39|51:52": {
+   "keep": true,
+   "why": "Same charge: a magician or a madman"
+  },
+  "51:50|51:51": {
+   "keep": true,
+   "why": "Same: I am to you from Him a clear warner"
+  },
+  "53:43|53:60": {
+   "keep": true,
+   "why": "Laughter and weeping"
+  },
+  "54:16|54:18": {
+   "keep": true,
+   "why": "Same refrain of al-Qamar: how was My punishment and warning"
+  },
+  "54:16|54:21": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "54:16|54:30": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "54:17|54:22": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "54:17|54:32": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "54:17|54:40": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "54:18|54:21": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "54:18|54:30": {
+   "keep": false,
+   "why": "Refrain repeat: shown with the refrain's first place"
+  },
+  "54:21|54:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "54:22|54:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "54:22|54:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "54:32|54:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "54:37|54:39": {
+   "keep": true,
+   "why": "Same refrain of al-Qamar: taste My punishment and warning"
+  },
+  "55:13|55:16": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:18": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:21": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:23": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:25": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:28": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:30": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:32": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:34": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:36": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:38": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:40": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:42": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:45": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:47": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:49": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:51": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:53": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:55": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:57": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:59": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:61": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:63": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:65": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:67": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:69": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:71": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:73": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:75": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:13|55:77": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "55:16|55:18": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:21": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:23": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:25": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:28": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:16|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:21": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:23": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:25": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:28": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:18|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:23": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:25": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:28": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:21|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:25": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:28": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:23|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:28": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:25|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:27|55:78": {
+   "keep": true,
+   "why": "Same: your Lord, Owner of Majesty and Honour"
+  },
+  "55:28|55:30": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:28|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:32": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:30|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:34": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:32|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:36": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:34|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:38": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:36|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:40": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:38|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:42": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:40|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:45": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:42|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:47": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:45|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:49": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:47|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:51": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:49|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:53": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:51|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:55": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:53|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:57": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:55|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:56|55:74": {
+   "keep": true,
+   "why": "Same: untouched before them by man or jinn"
+  },
+  "55:57|55:59": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:57|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:61": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:59|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:63": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:61|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:65": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:63|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:67": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:65|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:67|55:69": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:67|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:67|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:67|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:67|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:69|55:71": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:69|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:69|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:69|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:71|55:73": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:71|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:71|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:73|55:75": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:73|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "55:75|55:77": {
+   "keep": false,
+   "why": "Same refrain: shown on the card of its first place"
+  },
+  "56:8|56:27": {
+   "keep": true,
+   "why": "Same: the companions of the right"
+  },
+  "56:13|56:39": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "56:74|56:96": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "57:2|57:5": {
+   "keep": true,
+   "why": "Same: His is the dominion of the heavens and earth"
+  },
+  "57:11|57:18": {
+   "keep": true,
+   "why": "Same: a goodly loan to Allah, multiplied, a noble reward"
+  },
+  "57:21|57:29": {
+   "keep": true,
+   "why": "Same: that is the bounty of Allah, He gives it to whom He wills"
+  },
+  "58:6|58:18": {
+   "keep": true,
+   "why": "Same opening: the Day Allah will resurrect them all"
+  },
+  "58:9|58:12": {
+   "keep": true,
+   "why": "Same: O you who believe, when you converse privately"
+  },
+  "59:1|59:24": {
+   "keep": true,
+   "why": "Same: exalting Allah is what is in the heavens and earth, Mighty, Wise"
+  },
+  "60:8|60:9": {
+   "keep": true,
+   "why": "Contrast: Allah does not forbid you / Allah only forbids you"
+  },
+  "63:1|63:7": {
+   "keep": true,
+   "why": "The hypocrites and the Messenger of Allah"
+  },
+  "69:19|69:25": {
+   "keep": true,
+   "why": "Contrast: whoever is given his record in his right hand / left hand"
+  },
+  "72:2|72:13": {
+   "keep": true,
+   "why": "Same: we believed in it"
+  },
+  "74:19|74:20": {
+   "keep": true,
+   "why": "Same: may he be destroyed, how he deliberated"
+  },
+  "76:5|76:17": {
+   "keep": true,
+   "why": "Same: a cup whose mixture is"
+  },
+  "82:17|82:18": {
+   "keep": true,
+   "why": "Same: what will make you know what the Day of Recompense is"
+  },
+  "83:9|83:20": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "83:23|83:35": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "84:2|84:5": {
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
+  "89:15|89:16": {
+   "keep": true,
+   "why": "Contrast: when his Lord tries him, honouring or restricting"
+  },
+  "94:5|94:6": {
+   "keep": true,
+   "why": "Same: with hardship comes ease"
+  },
+  "98:1|98:6": {
+   "keep": true,
+   "why": "Same: those who disbelieved among the People of the Book and the polytheists"
+  },
+  "99:7|99:8": {
+   "keep": true,
+   "why": "Contrast: whoever does an atom's weight of good / of evil"
   }
  }
 }

@@ -12,7 +12,7 @@ export default function CompareTargetsSheet({ targets, onPick, onClose, palette 
       {targets && <View style={{ paddingHorizontal: 16, paddingBottom: 20, gap: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', marginBottom: 4 }}>افتح في المقارنة</Text>
         {targets.map(target => {
-          const label = `${surahName(target.lead)} مع ${surahName(target.other)}`;
+          const label = target.lead === target.other ? `${surahName(target.lead)} مع نفسها` : `${surahName(target.lead)} مع ${surahName(target.other)}`;
           const ayat = `${num(target.ayat[0])} · ${num(target.ayat[1])}`;
           return (
             <Pressable key={`${target.lead}:${target.other}`} onPress={() => onPick(target)} accessibilityRole="button" accessibilityLabel={`${label} ${ayat}`}

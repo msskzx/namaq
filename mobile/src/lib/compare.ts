@@ -35,7 +35,8 @@ export function cardsFor(a: number, b: number): PairCard[] {
 }
 
 export const surahName = (n: number) => surahRows.find(row => row.number === n)?.name ?? String(n);
-export const pairTitle = (lead: number, other: number) => `سورة ${surahName(lead)} وسورة ${surahName(other)}`;
+/** «سورة البقرة وسورة آل عمران», or «سورة الشعراء مع نفسها» for a surah compared with itself. */
+export const pairTitle = (lead: number, other: number) => (lead === other ? `سورة ${surahName(lead)} مع نفسها` : `سورة ${surahName(lead)} وسورة ${surahName(other)}`);
 export const visitKey = (visit: Pick<Visit, 'lead' | 'other'>) => `${visit.lead}·${visit.other}`;
 
 /** "البقرة ٢٥٥–٢٦٠" for a card side. */
@@ -166,8 +167,8 @@ export function compareTargetsFor(keys: string[]): CompareTarget[] {
   const bySurahs = new Map<string, CompareTarget>();
   for (const hit of keys.flatMap(key => pairsByAyah!.get(key) ?? [])) {
     if (!hit.id.split('|').every(key => shown.has(key)) || bySurahs.has(`${hit.a}:${hit.b}`)) continue;
-    const [x, y] = hit.id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0]);
-    const flip = first === hit.b;
+    const [x, y] = hit.id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+    const flip = first === hit.b && hit.a !== hit.b;
     bySurahs.set(`${hit.a}:${hit.b}`, { lead: flip ? hit.b : hit.a, other: flip ? hit.a : hit.b, ayat: flip ? [y[1], x[1]] : [x[1], y[1]] });
   }
   return [...bySurahs.entries()].sort(([p], [q]) => {
