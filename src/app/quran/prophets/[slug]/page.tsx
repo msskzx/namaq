@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import { findProphet, PROPHETS, storyTitle } from '@shared/quran/prophets';
 import { buildStory, storedText } from '@shared/quran/prophets/story';
 import { STORIES } from '@shared/quran/prophets/stories';
+import data from '@shared/quran/prophets/verdicts.json';
+import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
+import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
 import { AYAT } from '../ayat';
 import ProphetView from './ProphetView';
 
@@ -23,9 +26,14 @@ export default async function QuranProphetPage({ params }: Props) {
   const prophet = findProphet((await params).slug);
   if (!prophet) notFound();
   const story = STORIES[prophet.slug];
+  const all = withUnappliedStoryReviews(data.places as PlaceVerdicts);
+  const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${prophet.slug}/`)));
+  const events = buildStory(story.events, storedText(AYAT[prophet.slug]));
+  // Readers get the story already cut; the dropped dots and the drafted reasons go only to the owner's own machine, where review can save.
+  const owner = process.env.NODE_ENV === 'development';
   return (
     <div dir="rtl" className="w-full px-4 py-6 sm:px-6 lg:px-10 flex flex-col gap-8 text-[var(--home-ink)]">
-      <ProphetView slug={prophet.slug} title={storyTitle(prophet)} intro={story.intro} phases={story.phases} events={buildStory(story.events, storedText(AYAT[prophet.slug]))} />
+      <ProphetView slug={prophet.slug} title={storyTitle(prophet)} intro={story.intro} phases={story.phases} events={owner ? events : keptViews(prophet.slug, events, verdicts)} {...(owner ? { verdicts } : {})} />
     </div>
   );
 }

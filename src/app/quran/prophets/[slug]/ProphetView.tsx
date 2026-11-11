@@ -4,15 +4,22 @@ import { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, CircleHelp } from 'lucide-react';
 import { PROPHETS } from '@shared/quran/prophets';
+import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
 import EventPlaces from './EventPlaces';
+import { useReviewMode } from './PlaceReview';
 import StoryMap from './StoryMap';
 
 // docs/plans/quran-prophet-timelines.md
-export default function ProphetView({ slug, title, intro, phases, events }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[] }) {
+/** `verdicts` comes only on the owner's machine, with every dot in `events`; readers get the story already cut. */
+export default function ProphetView({ slug, title, intro, phases, events: all, verdicts }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[]; verdicts?: PlaceVerdicts }) {
   const [help, setHelp] = useState(false);
   const router = useRouter();
+  const review = useReviewMode() && verdicts !== undefined;
+  // Dropped dots show only in review.
+  const events = useMemo(() => (review || !verdicts ? all : keptViews(slug, all, verdicts)), [review, all, slug, verdicts]);
   const map = useMemo(() => storyMap(events), [events]);
+  const reviewing = review && verdicts ? { slug, verdicts } : undefined;
   const [open, setOpen] = useState<{ event: number; surah?: number }>();
   const detail = useRef<HTMLDivElement>(null);
 
@@ -43,14 +50,15 @@ export default function ProphetView({ slug, title, intro, phases, events }: { sl
           </div>
         )}
       </header>
-      <StoryMap map={map} events={events} phases={phases} onRead={read} />
+      <StoryMap map={map} events={events} phases={phases} onRead={read} review={reviewing} />
       <div ref={detail} className="scroll-mt-6">
-        {open && (
+        {open && events[open.event] && (
           <EventPlaces
             event={events[open.event]}
             places={map.places[open.event]}
             phase={phases[events[open.event].phase]}
             focus={open.surah}
+            review={reviewing}
             hasPrev={open.event > 0}
             hasNext={open.event < events.length - 1}
             onStep={dir => setOpen({ event: open.event + dir })}

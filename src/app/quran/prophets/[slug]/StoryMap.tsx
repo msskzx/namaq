@@ -2,11 +2,16 @@
 
 import { Fragment, useEffect, useRef, useState, type RefObject } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, BookOpen, Columns3, X } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Check, CircleHelp, Columns3, X } from 'lucide-react';
+import { PlaceReview, placeState } from './PlaceReview';
 import { counted } from '@shared/quran/arabicNumber';
+import { placeKeyOf, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { dotSize, placeIn, rangeText, type EventView, type Place, type StoryMap as StoryMapData } from '@shared/quran/prophets/story';
 
 export const groupColor = (phase: number) => `var(--story-${phase % 5})`;
+
+/** On the owner's review: dropped and drafted-to-drop dots are rings, and a small mark says what the owner chose. */
+export type StoryReview = { slug: string; verdicts: PlaceVerdicts };
 
 type Picked = { event: number; surah: number; x: number; y: number };
 
@@ -17,7 +22,8 @@ const CELL = 'w-[2.375rem] min-w-[2.375rem]';
 /** Where to compare a place: the other surah with the most ayat in the same event. */
 const partnerOf = (places: Place[], surah: number) => places.filter(p => p.surah !== surah).sort((a, b) => b.count - a.count)[0];
 
-function PlaceCard({ card, event, place, places, onRead, onClose, sheet }: {
+function PlaceCard({ card, event, place, places, onRead, onClose, sheet, review }: {
+  review?: StoryReview;
   card: RefObject<HTMLDivElement | null>;
   event: EventView;
   place: Place;
@@ -38,6 +44,7 @@ function PlaceCard({ card, event, place, places, onRead, onClose, sheet }: {
         </div>
         <button type="button" onClick={onClose} aria-label="إغلاق" className="rounded p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]"><X size={16} aria-hidden /></button>
       </div>
+      {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}
       <button type="button" onClick={onRead} className={`${action} border-transparent bg-[var(--home-ink)] text-[var(--home-paper)] hover:bg-[var(--home-ink)] hover:opacity-90`}>
         <Columns3 size={16} aria-hidden />
         {places.length > 1 ? `اقرأ مواضعه في ${counted(places.length, ['سورة', 'سورتين', 'سور'])}` : 'اقرأ آياته'}
@@ -60,7 +67,8 @@ function PlaceCard({ card, event, place, places, onRead, onClose, sheet }: {
  * The story as a grid: a column for each event under its group's colour, a row for each surah.
  * A dot's size is how many ayat that surah gives the event; tapping it opens what can be done with them.
  */
-export default function StoryMap({ map, events, phases, onRead }: {
+export default function StoryMap({ map, events, phases, onRead, review }: {
+  review?: StoryReview;
   map: StoryMapData;
   events: EventView[];
   phases: readonly string[];
@@ -153,13 +161,16 @@ export default function StoryMap({ map, events, phases, onRead }: {
                       const here = map.places[i].find(p => p.surah === surah);
                       const on = picked?.event === i && picked.surah === surah;
                       const size = here ? dotSize(here.count, map.most, SMALLEST, LARGEST) : 0;
+                      const verdict = here && review ? review.verdicts[placeKeyOf(review.slug, here)] : undefined;
+                      const ring = verdict?.keep === false;
+                      const state = review ? placeState(verdict) : null;
                       return (
                         <td key={e.n} className={`${CELL} text-center`}>
                           {here && (
                             <button
                               type="button"
                               data-dot
-                              aria-label={`${e.title}، ${name}، ${counted(here.count, ['آية', 'آيتان', 'آيات'])}`}
+                              aria-label={`${e.title}، ${name}، ${counted(here.count, ['آية', 'آيتان', 'آيات'])}${review ? `، ${STATE_LABEL[state ?? (ring ? 'draftDrop' : 'draftKeep')]}` : ''}`}
                               aria-expanded={on}
                               aria-haspopup="dialog"
                               aria-controls={on ? 'place-card' : undefined}
@@ -167,9 +178,11 @@ export default function StoryMap({ map, events, phases, onRead }: {
                               className="inline-flex size-8 items-center justify-center rounded-full align-middle focus-visible:outline-2 focus-visible:outline-[var(--home-ink)]"
                             >
                               <span
-                                className={`block rounded-full transition-transform hover:scale-110 ${on ? 'outline-[3px] outline-offset-2 outline-[var(--home-ink)]' : ''}`}
-                                style={{ width: size, height: size, background: groupColor(g.phase), outlineStyle: on ? 'solid' : undefined }}
-                              />
+                                className={`relative block rounded-full transition-transform hover:scale-110 ${on ? 'outline-[3px] outline-offset-2 outline-[var(--home-ink)]' : ''}`}
+                                style={{ width: ring ? Math.max(size, 12) : size, height: ring ? Math.max(size, 12) : size, background: ring ? 'transparent' : groupColor(g.phase), boxShadow: ring ? `inset 0 0 0 2px ${groupColor(g.phase)}` : undefined, outlineStyle: on ? 'solid' : undefined }}
+                              >
+                                {state && <StateMark state={state} />}
+                              </span>
                             </button>
                           )}
                         </td>
@@ -184,13 +197,25 @@ export default function StoryMap({ map, events, phases, onRead }: {
       </div>
       {picked && place && (sheet ? (
         <div className="fixed inset-x-0 bottom-0 z-50">
-          <PlaceCard card={card} event={events[picked.event]} place={place} places={map.places[picked.event]} sheet onClose={dismiss} onRead={() => { setPicked(undefined); onRead(picked.event, picked.surah); }} />
+          <PlaceCard card={card} review={review} event={events[picked.event]} place={place} places={map.places[picked.event]} sheet onClose={dismiss} onRead={() => { setPicked(undefined); onRead(picked.event, picked.surah); }} />
         </div>
       ) : (
         <div className="absolute z-30" style={{ top: picked.y, left: Math.max(0, Math.min(width - 288, picked.x - 144)) }}>
-          <PlaceCard card={card} event={events[picked.event]} place={place} places={map.places[picked.event]} sheet={false} onClose={dismiss} onRead={() => { setPicked(undefined); onRead(picked.event, picked.surah); }} />
+          <PlaceCard card={card} review={review} event={events[picked.event]} place={place} places={map.places[picked.event]} sheet={false} onClose={dismiss} onRead={() => { setPicked(undefined); onRead(picked.event, picked.surah); }} />
         </div>
       ))}
     </div>
+  );
+}
+
+const STATE_LABEL = { keep: 'أبقيته', drop: 'حذفته', discuss: 'للنقاش', draftKeep: 'مسودة: إبقاء', draftDrop: 'مسودة: حذف' } as const;
+
+/** The owner's choice on a dot, as a small badge at its corner. */
+function StateMark({ state }: { state: 'keep' | 'drop' | 'discuss' }) {
+  const [Icon, color, label] = ({ keep: [Check, 'var(--home-green)', 'أبقيته'], drop: [X, 'var(--home-accent)', 'حذفته'], discuss: [CircleHelp, 'var(--home-accent)', 'للنقاش'] } as const)[state];
+  return (
+    <span aria-hidden title={label} className="absolute -top-2.5 -end-3 flex size-3.5 items-center justify-center rounded-full bg-[var(--home-paper)]" style={{ color }}>
+      <Icon size={11} strokeWidth={3} aria-hidden />
+    </span>
   );
 }
