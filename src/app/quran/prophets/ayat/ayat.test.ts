@@ -7,8 +7,8 @@ import { buildStory, storedText, storyKeys } from '@shared/quran/prophets/story'
 import { AYAT } from '.';
 
 const quran = new Map((corpus.ayat as { key: string; words: string[] }[]).map(a => [a.key, a.words.join(' ')]));
-// Two encodings of the same Hafs text: compare letters only, forgiving the hamza seat (ئ/ي) and word breaks.
-const letters = (text: string) => ayahWords(text, false).norm.join('').replace(/ئ/g, 'ي');
+// Two encodings of the same Hafs text: compare letters only, forgiving the hamza seat (ئ/ي), word breaks and the sajda sign (۩ with its direction mark).
+const letters = (text: string) => ayahWords(text.replace(/[۩\u200f]/g, ''), false).norm.join('').replace(/ئ/g, 'ي');
 
 describe.each(PROPHETS)('stored ayat of $slug', ({ slug }) => {
   it('hold exactly the ayat of the story, and the page builds from them', () => {
