@@ -115,6 +115,14 @@
   line-height: 1;
 }
 
+/* Pages 1 and 2: the block sits in the middle of the page, its lines inside a double-ruled oval. */
+.opening {
+  align-content: center;
+  background: radial-gradient(var(--oval, circle 0 at 50% 50%), transparent 98.6%, var(--home-rule) 98.6% 99%, transparent 99% 99.6%, var(--home-rule) 99.6% 100%, transparent 100%);
+}
+.opening .titleRow { align-self: start; height: calc(var(--one-line) * 0.94); }
+.opening .line { margin-inline: auto; transform-origin: center; }
+
 .basmala { text-align: center; line-height: 1; font-size: min(1em, calc(var(--one-line, 1em) * 0.58)); }
 
 .badge {

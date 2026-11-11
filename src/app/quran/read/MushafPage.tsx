@@ -15,6 +15,40 @@ const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 /** A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages. */
 const ONE_LINE = 'calc(100% / 15)';
+const TITLE_ABOVE_OVAL = 'calc(100% / 15 * 2.6)';
+
+/** Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height. */
+function fitOpening(body: HTMLElement, natural: number[], lines: HTMLElement[]) {
+  const width = body.clientWidth;
+  const pitch = body.clientHeight / 15;
+  const rows = [...body.children] as HTMLElement[];
+  const inOval = rows.filter(row => !row.querySelector('h2'));
+  const origin = body.getBoundingClientRect().top;
+  const offset = (row: HTMLElement) => row.getBoundingClientRect().top - origin;
+  const top = inOval[0] ? offset(inOval[0]) : 0;
+  const centre = top + (inOval.length * pitch) / 2;
+  const ry = (inOval.length / 2 + 0.7) * pitch;
+  const rx = width / 2 - 2;
+  const textRy = ry - 0.3 * pitch;
+  const textRx = rx - 0.05 * width;
+  const chord = (line: HTMLElement) => {
+    const y = offset(line.parentElement!) + pitch / 2 - centre;
+    return 2 * textRx * Math.sqrt(Math.max(0, 1 - (y / textRy) ** 2));
+  };
+  const chords = lines.map(chord);
+  const size = Math.max(1, Math.min(pitch * 0.72, ...lines.map((_, at) => (100 * chords[at]) / natural[at])));
+  body.style.fontSize = `${size}px`;
+  lines.forEach((line, at) => {
+    const drawn = (natural[at] * size) / 100;
+    const short = drawn < chords[at] * 0.7;
+    line.toggleAttribute('data-centred', short);
+    if (short) return;
+    const scale = Math.min(STRETCH, chords[at] / drawn);
+    line.style.width = `${chords[at] / scale}px`;
+    line.style.transform = `scaleX(${scale})`;
+  });
+  body.style.setProperty('--oval', `ellipse ${rx}px ${ry}px at 50% ${centre}px`);
+}
 
 function fit(body: HTMLElement, centred: boolean) {
   body.style.fontSize = '100px';
@@ -27,12 +61,13 @@ function fit(body: HTMLElement, centred: boolean) {
     const words = [...line.children] as HTMLElement[];
     return Math.max(1, words.reduce((sum, word) => sum + word.offsetWidth, 0) + (words.length - 1) * GAP * 100);
   });
+  body.style.setProperty('--one-line', `${body.clientHeight / 15}px`);
+  if (centred) return fitOpening(body, natural, lines);
   const width = body.clientWidth;
   const sorted = [...natural].sort((a, b) => a - b);
   const typical = sorted[Math.floor(sorted.length * 0.6)] ?? 1;
   const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), (body.clientHeight / Math.max(1, body.children.length)) * 0.72));
   body.style.fontSize = `${size}px`;
-  body.style.setProperty('--one-line', `${body.clientHeight / 15}px`);
   lines.forEach((line, at) => {
     const drawn = (natural[at] * size) / 100;
     const centre = centred || drawn < width * 0.7;
@@ -112,7 +147,7 @@ export default function MushafPage({
         <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
-        <div ref={body} className={styles.body} style={{ gridTemplateRows: data.items.map(item => ('line' in item ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
+        <div ref={body} className={`${styles.body} ${page <= 2 ? styles.opening : ''}`} style={{ gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
           {data.items.map((item, index) => (
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (

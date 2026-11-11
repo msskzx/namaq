@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react';
+import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/components/Text';
 import type { MushafPage } from '@shared/quran/readerPage';
@@ -14,7 +15,9 @@ const BASE = 40;
 /** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
 const EMPTY_END = '\u06DD';
 const GAP = 0.2;
-const SQUEEZE = 0.9;
+/** One text size on every page, as a share of the page's width: pages with long lines squeeze them, pages with short ones spread them. */
+const SIZE = 0.063;
+const SQUEEZE = 0.8;
 const STRETCH = 1.15;
 
 /** Natural width of each line at BASE, per page; the same on every screen, so measured once per page. */
@@ -70,13 +73,31 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
   const oneLine = body ? body.height / 15 : 0;
   const lineHeight = body && lineAt.length ? (body.height - oneLine * (rows - lineAt.length)) / lineAt.length : rowHeight;
+  // Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height (the website's fitOpening()).
+  const opening = page <= 2;
+  const oval = useMemo(() => {
+    if (!opening || !body) return null;
+    const count = rows - 1;
+    const top = (body.height - oneLine * (count + 2.6)) / 2 + oneLine * 2.6;
+    const centre = top + (count * oneLine) / 2;
+    const ry = (count / 2 + 0.7) * oneLine;
+    const rx = body.width / 2 - 2;
+    const textRy = ry - 0.3 * oneLine;
+    const textRx = rx - 0.05 * body.width;
+    const chords: Record<number, number> = {};
+    lineAt.forEach(at => {
+      const y = top + (at - 1 + 0.5) * oneLine - centre;
+      chords[at] = 2 * textRx * Math.sqrt(Math.max(0, 1 - (y / textRy) ** 2));
+    });
+    return { top, centre, rx, ry, chords };
+  }, [opening, body, rows, oneLine, lineAt]);
   const size = useMemo(() => {
     if (!body || !measured) return 0;
+    if (oval) return Math.max(1, Math.min(oneLine * 0.72, ...lineAt.map(at => (BASE * oval.chords[at]) / (measured[at] ?? 1))));
     const widths = lineAt.map(at => measured[at] ?? 1);
-    const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
     const widest = Math.max(1, ...widths);
-    return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * (page <= 2 ? 1 : SQUEEZE)), rowHeight * 0.72));
-  }, [body, measured, lineAt, page, rowHeight]);
+    return Math.max(1, Math.min(SIZE * body.width, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
+  }, [body, measured, lineAt, page, rowHeight, oval, oneLine]);
 
   const first = data.items[0];
   const current = first && 'surah' in first ? first.surah : top;
@@ -157,12 +178,19 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 })}
               </View>
             )}
+            {oval && (
+              <Svg pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0 }} width={body!.width} height={body!.height}>
+                <Ellipse cx={body!.width / 2} cy={oval.centre} rx={oval.rx} ry={oval.ry} stroke={palette.rule} strokeWidth={1} fill="none" />
+                <Ellipse cx={body!.width / 2} cy={oval.centre} rx={oval.rx - 3} ry={oval.ry - 3} stroke={palette.rule} strokeWidth={1} fill="none" />
+              </Svg>
+            )}
+            {oval && <View style={{ height: oval.top - oneLine * 2.6 }} />}
             {size > 0 && data.items.map((item, index) => {
               if ('surah' in item) {
                 surahHere = item.surah;
                 const veil = surahHidden(item.surah);
                 return (
-                  <View key={index} style={{ height: oneLine, justifyContent: 'center' }}>
+                  <View key={index} style={{ height: oneLine * (oval ? 2.6 : 1), justifyContent: oval ? 'flex-start' : 'center' }}>
                     <View style={{ height: oneLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
                       <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, oneLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
@@ -181,9 +209,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 );
               }
               const drawn = ((measured?.[index] ?? 0) * size) / BASE;
-              const width = body!.width;
-              const centred = page <= 2 || drawn < width * 0.7;
-              const scale = centred ? 1 : Math.min(STRETCH, Math.max(SQUEEZE, width / drawn));
+              const width = oval ? oval.chords[index] : body!.width;
+              const centred = drawn < width * 0.7;
+              const scale = centred ? 1 : Math.min(STRETCH, Math.max(oval ? 0 : SQUEEZE, width / drawn));
               const cells = (model.lines[index] ?? []).map(group => {
                 const key = `${group.surah}:${group.ayah}`;
                 const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
@@ -191,10 +219,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 return { group, key, wordHidden, lit: !wordHidden && !!forgot[key] };
               });
               return (
-                <View key={index} style={{ height: lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred ? 'center' : 'flex-start' }}>
+                <View key={index} style={{ height: oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred || oval ? 'center' : 'flex-start' }}>
                   <View style={centred
                     ? { flexDirection: 'row', gap: GAP * size }
-                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: 'right' }}>
+                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
                     {bands(index, cells)}
                     {cells.map(({ group, key, wordHidden, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
