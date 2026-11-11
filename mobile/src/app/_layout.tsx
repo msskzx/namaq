@@ -15,7 +15,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({ [QURAN_FONT]: require('../../assets/fonts/UthmanicHafs1Ver18.ttf') });
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
   if (!loaded) return null;
-  const base = palette === dark ? DarkTheme : DefaultTheme;
+  const base = palette.paper === dark.paper ? DarkTheme : DefaultTheme;
   const theme = { ...base, colors: { ...base.colors, background: palette.paper, card: palette.paper, text: palette.ink, border: palette.rule, primary: palette.accent } };
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -29,7 +29,7 @@ export default function RootLayout() {
               <Stack.Screen name="prophets/[slug]" />
             </Stack>
           </View>
-          <StatusBar style={palette === dark ? 'light' : 'dark'} />
+          <StatusBar style={palette.paper === dark.paper ? 'light' : 'dark'} />
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
