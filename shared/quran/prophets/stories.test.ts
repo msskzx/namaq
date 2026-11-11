@@ -15,6 +15,7 @@ import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
+import { YUNUS } from './yunus';
 import { YAHYA } from './yahya';
 import { YAQUB } from './yaqub';
 import { YUSUF } from './yusuf';
@@ -256,6 +257,22 @@ describe('IBRAHIM', () => {
 
   it('keeps every range ordered', () => {
     for (const e of IBRAHIM.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+describe('YUNUS', () => {
+  const keys = storyKeys(YUNUS.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  // Named Yunus, Dhu al-Nun (21:87) or the companion of the whale (68:48), and the whole telling in al-Saffat.
+  it('holds every ayah that names him and every ayah of his telling', () => {
+    const named = ['4:163', '6:86', '10:98', '21:87', '37:139', '68:48'];
+    const told = [...Array.from({ length: 10 }, (_, i) => `37:${139 + i}`), '21:88', '68:49', '68:50'];
+    expect([...named, ...told].filter(k => !keys.includes(k))).toEqual([]);
+    expect(keys).toHaveLength(18);
   });
 });
 

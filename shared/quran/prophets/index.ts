@@ -18,6 +18,7 @@ export const PROPHETS: Prophet[] = [
   { slug: 'alyasa', name: 'اليسع', nameEn: 'Alyasa' },
   { slug: 'zakariyya', name: 'زكريا', nameEn: 'Zakariyya' },
   { slug: 'yahya', name: 'يحيى', nameEn: 'Yahya' },
+  { slug: 'yunus', name: 'يونس', nameEn: 'Yunus' },
 ];
 
 export const findProphet = (slug: string) => PROPHETS.find(p => p.slug === slug);
