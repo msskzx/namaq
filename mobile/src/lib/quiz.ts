@@ -7,6 +7,7 @@ import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@share
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
 import type { Random } from '@shared/quiz/random';
+import counts from './quizCounts.json';
 
 export type SoloSettings = { juzFrom: number; juzTo: number; leaves: number; length: number };
 export const DEFAULT_SOLO: SoloSettings = { juzFrom: 1, juzTo: 30, leaves: DEFAULT_LEAVES, length: 5 };
@@ -39,6 +40,12 @@ function poolFor(settings: SoloSettings, ayat: BranchAyah[], trees: TreeGroup[])
     pools.set(id, pool);
   }
   return pool;
+}
+
+/** How many tree questions a juz range holds (counted ahead by `npm run quiz:app-counts`), and the quiz lengths it fills. */
+export function availability({ juzFrom, juzTo }: Pick<SoloSettings, 'juzFrom' | 'juzTo'>) {
+  const available = (counts as Record<string, number>)[`${juzFrom}-${juzTo}`] ?? 0;
+  return { available, lengths: QUIZ_LENGTHS.filter(length => length <= available) };
 }
 
 export type SoloRun = {

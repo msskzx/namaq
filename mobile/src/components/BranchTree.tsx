@@ -11,7 +11,7 @@ import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, toneOf, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
@@ -326,7 +326,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
   const before: Entry[] = presentation.prefixes.length === 0 ? befores(all, shared) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
     if (prefix.word) {
       const lead = befores(prefix.keys, shared);
-      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, differs: differing(prefix.forms) };
+      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, differs: differing(prefix.forms), color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
       const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)}>
         <Words {...prefixWords} />

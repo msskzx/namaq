@@ -51,7 +51,7 @@ export function setPrefs(next: Partial<Prefs>) {
 }
 
 /** The tree the studio grows: a card hands its beats (built for both modes) when it becomes the open card. */
-type Target = { watch: Beat[]; ask: Beat[] };
+export type Target = { watch: Beat[]; ask: Beat[] };
 let target: Target | null = null;
 let run = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -63,6 +63,23 @@ export function setTarget(next: Target | null) {
   stop();
   target = next;
   set({ total: next ? totalOf(next.watch) : 0, studio: next ? state.studio : false });
+}
+
+/**
+ * Each screen that can grow a tree claims the studio with its own tree (null lets go). The last screen to claim it
+ * (a quiz's answer tree over the branches tab) owns it until it lets go; a screen below may change its tree meanwhile
+ * without taking the studio back. A change of owner closes the studio.
+ */
+const claims: { owner: string; target: Target }[] = [];
+export function claimTarget(owner: string, next: Target | null) {
+  const top = claims[claims.length - 1]?.owner;
+  const at = claims.findIndex(claim => claim.owner === owner);
+  if (next && at >= 0) claims[at] = { owner, target: next };
+  else if (next) claims.push({ owner, target: next });
+  else if (at >= 0) claims.splice(at, 1);
+  const active = claims[claims.length - 1];
+  if (active?.owner !== top) closeStudio();
+  if ((active?.target ?? null) !== target) setTarget(active?.target ?? null);
 }
 
 const TICK = 50;

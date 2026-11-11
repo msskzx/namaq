@@ -12,6 +12,7 @@ import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
+import QrCode from '@/components/QrCode';
 import QuizExplainer from '@/components/QuizExplainer';
 import { JuzInput, LeavesPicker, Section } from '@/components/QuizForm';
 import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTree';
@@ -116,9 +117,12 @@ function Invite({ code, palette }: { code: string; palette: Palette }) {
   const link = `${WEBSITE}/quizzes/party/${code}`;
   return (
     <Section title="رقم الاختبار" palette={palette}>
-      <Text style={{ color: palette.ink, fontSize: 40, fontWeight: '700', letterSpacing: 8, textAlign: 'center', writingDirection: 'ltr' }}>{code}</Text>
-      <View style={{ alignItems: 'flex-start' }}>
-        <Button Icon={Send} label="شارك الرابط" onPress={() => void Share.share({ message: `اختبار جماعي في نمق: ${code}\n${link}` })} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+        <QrCode value={link} size={128} ink={palette.ink} paper={palette.card} />
+        <View style={{ flex: 1, gap: 10, alignItems: 'flex-start' }}>
+          <Text style={{ color: palette.ink, fontSize: 34, fontWeight: '700', letterSpacing: 6, writingDirection: 'ltr' }}>{code}</Text>
+          <Button Icon={Send} label="شارك الرابط" onPress={() => void Share.share({ message: `اختبار جماعي في نمق: ${code}\n${link}` })} />
+        </View>
       </View>
     </Section>
   );
