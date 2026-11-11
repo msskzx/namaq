@@ -9,7 +9,8 @@ import { quranText } from '@/lib/quranText';
 import { givenAnswer } from '@shared/quiz/branchAnswers';
 import { gradedTree, neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
-import BranchTree, { type RenderNode } from './BranchTree';
+import BranchTree, { type Paths, type RenderNode } from './BranchTree';
+import { litPaths, togglePath } from '@shared/quran/pathHighlight';
 import MatrixCard from './MatrixCard';
 import TreeIcon from './TreeIcon';
 import VideoSheet from './VideoSheet';
@@ -30,6 +31,15 @@ export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[]
 
 const NO_MATCHES = {};
 
+/** The paths lit on a quiz tree, as on the branches tab: a tap on a node lights its path, several at once. */
+function usePaths(): Paths {
+  const [pinned, setPinned] = useState(() => new Map<string, string[]>());
+  return useMemo(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
+}
+const lightOnTap = (_: string[], lightPath?: () => void) => lightPath?.();
+/** The size BranchTree draws its other nodes in, so leaves look the same. */
+const LEAF_SIZE = 20;
+
 /**
  * Scrolls a tree both ways; quiz trees are small, so they are drawn at full size with no zoom.
  * The root is on the right, so a tree wider than the phone opens scrolled to its right end.
@@ -46,9 +56,10 @@ function Scroller({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Tree({ question, tree, palette, names, renderNode, onTap, down }: { question: TreeQuestion; tree: Branch; palette: Palette; names: Record<number, string>; renderNode: RenderNode; onTap?: (keys: string[]) => void; down?: boolean }) {
+function Tree({ question, tree, palette, names, renderNode, down }: { question: TreeQuestion; tree: Branch; palette: Palette; names: Record<number, string>; renderNode: RenderNode; down?: boolean }) {
+  const paths = usePaths();
   const presentation = useMemo(() => ({ tree, prefixes: question.prefixes ?? [], offsets: {}, ayat: [] }), [tree, question.prefixes]);
-  return <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={onTap ?? (() => {})} renderNode={renderNode} direction={down ? 'down' : 'side'} />;
+  return <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={lightOnTap} paths={paths} renderNode={renderNode} direction={down ? 'down' : 'side'} />;
 }
 
 /** The tree with an empty box in each asked node; the other nodes are given. It can rotate, as on the website. */
@@ -56,11 +67,11 @@ export function QuizInputs({ question, typed, onType, palette, names }: { questi
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
   const asked = question.asked ?? [];
   const renderNode: RenderNode = (node, index) => !isAsked(question, index)
-    ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{quranText(givenAnswer(node))}</Text>
+    ? <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>{quranText(givenAnswer(node))}</Text>
     : <TextInput value={values[index]} onChangeText={text => onType(index, text)}
         accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
         autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
-        style={{ width: 150, minHeight: 40, fontSize: 18, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
+        style={{ width: 150, minHeight: 40, fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
   const [down, setDown] = useState(false);
   const typing = useKeyboardShown();
   return (
@@ -92,7 +103,7 @@ function Graded({ row, palette, names }: { row: Correction; palette: Palette; na
         <Badge row={row} palette={palette} />
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
       </View>
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
+      <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
         <Text style={{ textDecorationLine: 'underline', textDecorationColor: palette.accent }}>{quranText(row.node.words.slice(0, cut).join(' '))}</Text>
         {cut < row.node.words.length ? ` ${quranText(row.node.words.slice(cut).join(' '))}` : ''}
       </Text>
@@ -139,7 +150,7 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
 }
 
 /**
- * The answer tree: each asked node shows how it was graded; tapping a node opens its ayat.
+ * The answer tree: each asked node shows how it was graded; tapping a node lights its path (the matrix opens its ayat).
  * As on the website, it can turn to the matrix, rotate, show the surrounding ayat, grow in the studio, and be saved, shared or opened.
  */
 export function QuizFeedback({ question, typed, palette, names, onTap }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void }) {
@@ -170,11 +181,13 @@ export function QuizFeedback({ question, typed, palette, names, onTap }: { quest
     claimTarget('quiz', beats.current);
     return () => claimTarget('quiz', null);
   }, [presentation, surrounding, matrix]);
-  const tap = (ayahKeys: string[] | null) => {
+  const paths = usePaths();
+  // As on the branches tab, a tap on a node lights its path.
+  const tap = (ayahKeys: string[] | null, lightPath?: () => void) => {
     const state = growthState();
     if (state.ask) { answer(); return; }
     if (state.studio || !ayahKeys) return;
-    onTap?.(ayahKeys);
+    lightPath?.();
   };
   const openVideo = async () => {
     stop();
@@ -193,7 +206,7 @@ export function QuizFeedback({ question, typed, palette, names, onTap }: { quest
       <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {matrix
           ? size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} />
-          : <Scroller><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} renderNode={renderNode}
+          : <Scroller><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
             direction={down ? 'down' : 'side'} around={surrounding} growth={treeGrowth} sceneRef={sceneRef} /></Scroller>}
       </View>
       {studio ? (

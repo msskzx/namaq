@@ -19,7 +19,7 @@ export default function QuizExplainer({ leaves, palette }: { leaves: number; pal
     if (node.children.length > 0) return undefined;
     const shown = node.words.slice(0, LEAF_WORDS + 1);
     if (asked.includes(index)) return <View accessibilityLabel="تكتبه أنت" style={{ width: 96, height: 30, borderWidth: 1, borderStyle: 'dashed', borderColor: palette.accent, borderRadius: 4 }} />;
-    return <Text style={{ fontFamily: QURAN_FONT, fontSize: 17, lineHeight: 32, color: palette.muted }}>{quranText(shown.join(' '))}{shown.length < node.words.length ? ' …' : ''}</Text>;
+    return <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>{quranText(shown.join(' '))}{shown.length < node.words.length ? ' …' : ''}</Text>;
   };
   const rule = (title: string, text: string) => (
     <Text style={{ color: palette.ink, fontSize: 15, lineHeight: 24, textAlign: 'right' }}><Text style={{ fontWeight: '700' }}>{title}</Text>{text}</Text>
