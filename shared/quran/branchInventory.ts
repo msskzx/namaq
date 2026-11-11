@@ -33,6 +33,23 @@ export function distinctBranchPieces(pieces: BranchPiece[]): BranchPiece[] {
   return result;
 }
 
+const isFamily = (piece: BranchPiece) => !!piece.group && piece.group.kind !== 'shared_phrase';
+const trunk = (piece: BranchPiece) => piece.phrase.occurrences[0] ? piece.phrase.occurrences[0].end - piece.phrase.occurrences[0].start : 0;
+
+/**
+ * Drops a family (a whole-ayah likeness) when a phrase tree in the same list holds all its ayat on a trunk at least as long:
+ * the phrase tree already shows what the family would. The family's ids move to that tree so a saved family still opens.
+ */
+export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
+  return pieces.filter(piece => {
+    if (!isFamily(piece) || piece.group!.citations.length) return true;
+    const cover = pieces.find(other => other !== piece && !isFamily(other) && piece.keys.every(key => other.keys.includes(key)) && trunk(other) >= trunk(piece));
+    if (!cover) return true;
+    cover.legacyIds = [...new Set([...(cover.legacyIds ?? []), piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group!.aliases ?? [])])];
+    return false;
+  });
+}
+
 export function branchInventory(filters: GroupFilters, range: JuzRange | null): BranchPiece[] {
   const effective = { ...filters, categories: filters.categories ?? 'mutashabeh,pondering' };
   const cacheKey = JSON.stringify([effective, range]);
@@ -60,7 +77,7 @@ export function branchInventory(filters: GroupFilters, range: JuzRange | null): 
       entries.push(scoped);
     }
   }
-  const result = distinctBranchPieces(entries);
+  const result = withoutCoveredFamilies(distinctBranchPieces(entries));
   if (inventories.size >= 16) inventories.delete(inventories.keys().next().value!);
   inventories.set(cacheKey, result);
   return result;
