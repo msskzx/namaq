@@ -9,6 +9,7 @@ import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } fr
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
+import type { AyahLinks } from './ayahLinks';
 import { usePageGestures } from './usePageGestures';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
@@ -68,6 +69,7 @@ export default function ReaderView({
   fontClass,
   recite,
   review = false,
+  links = {},
 }: {
   page: number;
   pages: ReaderPage[];
@@ -77,6 +79,8 @@ export default function ReaderView({
   fontClass?: string;
   /** Recite mode (تسميع): where it started and how far it has been revealed. */
   recite?: RecitePosition | null;
+  /** Each shown ayah's compare cards and trees, for its long-press buttons. */
+  links?: AyahLinks;
   /** Recite only the forgotten ayat, one after another. */
   review?: boolean;
 }) {
@@ -397,7 +401,7 @@ export default function ReaderView({
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} />
         ))}
       </article>
-      {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)}
+      {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} links={links[actions.key]}
         onForgot={() => markForgotten(actions.key)} onClear={() => clearForgotten(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
       {position && <div className={mushaf.reciteBar} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar

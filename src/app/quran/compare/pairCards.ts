@@ -101,3 +101,28 @@ export function compareLinksFor(keys: string[]): CompareLink[] {
     };
   });
 }
+
+/**
+ * Every listed surah pair holding a kept card of this one ayah, one link each in mushaf order (the reader's
+ * ayah menu): the card's own anchor, labelled with the partner ayah.
+ */
+export function compareLinksOfAyah(key: string): CompareLink[] {
+  const [own] = key.split(':').map(Number);
+  const bySurahs = new Map<string, string>();
+  for (const id of pairsByAyah.get(key) ?? []) {
+    const partner = id.split('|').find(other => other !== key) ?? key;
+    const surah = Number(partner.split(':')[0]);
+    const at = `${Math.min(own, surah)}:${Math.max(own, surah)}`;
+    if (!bySurahs.has(at)) bySurahs.set(at, id);
+  }
+  return [...bySurahs].sort(([p], [q]) => {
+    const [pa, pb] = p.split(':').map(Number);
+    const [qa, qb] = q.split(':').map(Number);
+    return pa - qa || pb - qb;
+  }).map(([, id]) => {
+    const partner = id.split('|').find(other => other !== key) ?? key;
+    const [surah, ayah] = partner.split(':').map(Number);
+    const row = surahName(surah);
+    return { href: holders.get(id)!, label: `${row?.name} ${num(ayah)}`, labelEn: `${row?.nameTransliterated} ${ayah}` };
+  });
+}

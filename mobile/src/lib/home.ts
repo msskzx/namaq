@@ -1,7 +1,8 @@
 import type { Bookmark } from '@shared/bookmarks';
 import { bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
-import { compareBookmarkAyat } from '@shared/compareBookmarks';
-import { aliasesOf } from './branchList';
+import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
+import { aliasesOf, hasTrees } from './branchList';
+import { cardsFor, compareTargetsFor, compareTargetsOfAyah, type CompareTarget } from './compare';
 import { treeList } from './branches';
 import type { Intent } from './intent';
 import { quranText } from './quranText';
@@ -40,7 +41,7 @@ export function savedCard(item: Bookmark): SavedCard {
     const keys = compareBookmarkAyat(item);
     const surahs = keys.map(key => split(key)[0]);
     const other = surahs.find(surah => surah !== surahs[0]) ?? surahs[0];
-    return { id: item.id, text: item.text, kind, references: referencesOf(keys, /\d-\d/.test(item.id)), open: surahs.length ? { tab: 'compare', lead: surahs[0], other } : null };
+    return { id: item.id, text: item.text, kind, references: referencesOf(keys, /\d-\d/.test(item.id)), open: surahs.length ? { tab: 'compare', lead: surahs[0], other, ayat: keys } : null };
   }
   const keys = keysOfTree(item.id);
   return { id: item.id, text: item.text, kind, references: referencesOf(keys ?? []), open: keys ? { tab: 'branches', open: item.id } : null };
@@ -51,3 +52,51 @@ export function savedCard(item: Bookmark): SavedCard {
  * trees and compare cards hold the corpus spelling, whose marks (such as the small zero over a silent alif) the font has no glyph for.
  */
 export const shelfText = (card: Pick<SavedCard, 'kind' | 'text'>) => (card.kind === 'ayah' ? card.text : quranText(card.text));
+
+/**
+ * Where else a saved card's ayat can be seen, for its long press: the mushaf, its tree and matrix (or, for an ayah,
+ * the trees that hold it) and compare. Only the ones that lead somewhere; `targets` lists the compare pages to pick from.
+ */
+export type CardWay =
+  | { to: 'mushaf'; at: string }
+  | { to: 'tree' | 'matrix'; open: Intent | null; tree?: string }
+  | { to: 'trees'; ayah: string }
+  | { to: 'compare'; targets: CompareTarget[] };
+
+const inMushafOrder = (keys: string[]) => [...keys].sort((p, q) => { const [a, b] = split(p); const [c, d] = split(q); return a - c || b - d; });
+
+export function cardWays(item: Bookmark): CardWay[] {
+  const kind = bookmarkKind(item);
+  if (kind === 'ayah') {
+    const key = item.id.slice('ayah:'.length);
+    const [surah, ayah] = split(key);
+    if (!surah || !ayah) return [];
+    const targets = compareTargetsOfAyah(key);
+    return [
+      { to: 'mushaf', at: key },
+      ...(hasTrees(key) ? [{ to: 'trees' as const, ayah: key }] : []),
+      ...(targets.length ? [{ to: 'compare' as const, targets }] : []),
+    ];
+  }
+  if (kind === 'compare') {
+    const keys = compareBookmarkAyat(item);
+    if (!keys.length) return [];
+    const surahs = keys.map(key => split(key)[0]);
+    const other = surahs.find(surah => surah !== surahs[0]) ?? surahs[0];
+    const group = cardsFor(surahs[0], other).find(card => savedAs(card.id, [item]).length)?.group;
+    return [
+      { to: 'mushaf', at: inMushafOrder(keys)[0] },
+      ...(group ? (['tree', 'matrix'] as const).map(to => ({ to, open: null, tree: group })) : []),
+      { to: 'compare', targets: [{ lead: surahs[0], other, ayat: [split(keys[0])[1], split(keys[keys.length - 1])[1]] }] },
+    ];
+  }
+  const keys = keysOfTree(item.id);
+  if (!keys) return [];
+  const targets = compareTargetsFor(keys);
+  return [
+    { to: 'mushaf', at: inMushafOrder(keys)[0] },
+    { to: 'tree', open: { tab: 'branches', open: item.id } },
+    { to: 'matrix', open: { tab: 'branches', open: item.id } },
+    ...(targets.length ? [{ to: 'compare' as const, targets }] : []),
+  ];
+}

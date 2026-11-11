@@ -38,7 +38,7 @@ const chapterOpening = (ayah: BranchAyah) => {
 };
 const openingLength = (ayah: BranchAyah) => chapterOpening(ayah)?.split(' ').length ?? OPENING_WORDS;
 
-export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; mode?: 'list' | BranchView; card?: number | 'last'; saved?: string[]; filters?: GroupFilters; review?: boolean };
+export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number; ayah?: string; mode?: 'list' | BranchView; card?: number | 'last'; saved?: string[]; filters?: GroupFilters; review?: boolean };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -52,6 +52,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (id && view.mode === 'cards' && view.card && view.card !== 1) params.set('n', `${view.card}`);
   if (view.query) params.set('q', view.query);
   if (view.surah) params.set('s', `${view.surah}`);
+  if (view.ayah) params.set('k', view.ayah);
   if (view.saved?.length) params.set('b', view.saved.join('|'));
   for (const [key, value] of Object.entries(view.filters ?? {})) if (value) params.set(key, value);
   if (view.review) params.set('review', '1');

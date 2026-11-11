@@ -8,7 +8,8 @@ import type { JuzRange } from '@shared/quran/juz';
 import type { Bookmark } from '@shared/bookmarks';
 
 /** What narrows the trees on the branches tab: the filter sheet, the search box and a picked surah. Kept on the phone. */
-export type ListState = { filters: GroupFilters; range: JuzRange | null; query: string; surah?: number; saved: boolean };
+/** `ayah`: only the trees holding this ayah (the reader's ayah menu). */
+export type ListState = { filters: GroupFilters; range: JuzRange | null; query: string; surah?: number; ayah?: string; saved: boolean };
 export const EMPTY_LIST: ListState = { filters: {}, range: null, query: '', saved: false };
 
 const surahOf = (key: string) => Number(key.split(':')[0]);
@@ -35,8 +36,13 @@ export function branchList(state: ListState, bookmarks: Bookmark[] = []): Branch
   let found = query ? distinctBranchPieces(searchSharedPhrases(inventory, query)) : inventory;
   if (state.saved) found = query ? found.filter(piece => isSavedIn(piece, bookmarks)) : savedFirst(found, bookmarks);
   if (state.surah) found = found.filter(piece => piece.keys.some(key => surahOf(key) === state.surah));
+  if (state.ayah) found = found.filter(piece => piece.keys.includes(state.ayah!));
   return found;
 }
+
+let treeAyat: Set<string> | undefined;
+/** Whether any tree of the unfiltered list holds this ayah, so the reader offers its trees. */
+export const hasTrees = (key: string) => (treeAyat ??= new Set(branchList(EMPTY_LIST).flatMap(piece => piece.keys))).has(key);
 
 /** Where a search opens: the tree whose phrase is exactly what was typed, else the first found. */
 export function openingIndex(pieces: BranchPiece[], query: string) {

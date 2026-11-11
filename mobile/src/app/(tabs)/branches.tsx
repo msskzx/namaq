@@ -4,6 +4,7 @@ import { Text } from '@/components/Text';
 import { GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
 import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
@@ -77,6 +78,7 @@ export default function BranchesScreen() {
   useIntent('branches', intent => {
     setJumps(value => value + 1);
     if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
+    else if (intent.ayah) change({ ...EMPTY_LIST, ayah: intent.ayah });
     else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
     else if (intent.juz) change({ ...EMPTY_LIST, range: { from: intent.juz, to: intent.juz } });
   });
@@ -100,9 +102,10 @@ export default function BranchesScreen() {
         {mode === 'tree' && <BarButton label="تدوير الشجرة" onPress={() => setRotated(!rotated)} Icon={RotateCwSquare} palette={palette} />}
         <BarButton label="الآيات المحيطة" onPress={() => { closeStudio(); setAround(!around); }} Icon={UnfoldHorizontal} palette={palette} on={around} />
       </TopBar>
-      {(list.query || list.surah) ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
+      {(list.query || list.surah || list.ayah) ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
         {list.surah ? <Chip text={`سورة ${surahNames[list.surah]}`} onClear={() => change({ ...list, surah: undefined })} palette={palette} /> : null}
+        {list.ayah ? <Chip text={`${surahNames[Number(list.ayah.split(':')[0])]} ${num(Number(list.ayah.split(':')[1]))}`} onClear={() => change({ ...list, ayah: undefined })} palette={palette} /> : null}
       </View> : null}
       {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>

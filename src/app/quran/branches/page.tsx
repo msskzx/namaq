@@ -113,13 +113,16 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const id = requestedGroup?.id ?? (resolved ? treeId(resolved) : requestedId);
   const picked = Number(first(params.s));
   const surah = Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
+  // The reader's ayah menu opens the trees holding one ayah (?k=2:255).
+  const ayahParam = first(params.k);
+  const ayah = ayahParam && /^\d{1,3}:\d{1,3}$/.test(ayahParam) ? ayahParam : undefined;
   const savedIds = (first(params.b) ?? '').split('|').filter(Boolean);
   const settings = await cookies();
   const defaultConnections = settings.get(BRANCH_CONNECTORS_COOKIE)?.value === 'on';
   const explicitMode = parseBranchView(first(params.m));
   const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
   const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
-  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, filters, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, ayah, mode, filters, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
   if (resolved?.family && query && !textIs(resolved.text, query)) redirect(branchesHref(id, juz, { ...state, query: resolved.text }));
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId && !(requestedGroup && groupHasId(requestedGroup, requestedId)) && resolved?.id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
@@ -142,7 +145,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     ? distinct([...inventory, ...toPieces([requestedGroup.tree]).map(piece => ({ ...piece, group: requestedGroup }))]) : inventory;
   const savedSet = savedIds.length ? new Map(savedInventory.flatMap(piece => [piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])].map(alias => [alias, piece] as const))) : undefined;
   const found = savedSet ? (needle ? searched.filter(piece => savedIds.some(saved => savedSet.get(saved)?.id === piece.id)) : distinct(savedIds.flatMap(saved => savedSet.get(saved) ?? []))) : searched;
-  const cut = surah ? found.filter(piece => piece.keys.some(key => surahOf(key) === surah)) : found;
+  const bySurah = surah ? found.filter(piece => piece.keys.some(key => surahOf(key) === surah)) : found;
+  const cut = ayah ? bySurah.filter(piece => piece.keys.includes(ayah)) : bySurah;
   const opening = query ? cut.find(piece => textIs(piece.text, query)) ?? cut[0] : cut[0];
   const constrained = hasGroupFilters(filters) || !!requestedGroup && !!range;
   const focusedRequest = !!resolved && !requestedGroup && filters.categories !== 'none' && filters.cited !== '1' && !filters.differences && new Set(resolved.occurrences.filter(occurrence => withinScope(occurrence.key)).map(occurrence => occurrence.key)).size >= 2;
@@ -172,7 +176,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   }));
   const holding = tree && query ? drawn.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key) : [];
   const marked = holding.length < drawn.length ? holding : [];
-  const treeView = { ...state, query: undefined, surah: undefined, saved: undefined };
+  const treeView = { ...state, query: undefined, surah: undefined, ayah: undefined, saved: undefined };
   const cards = !!tree && state.mode === 'cards';
   const ends = tree && ayahEnds(tree);
   const passageKeys = cards ? presentation!.ayat.map(ayah => {
@@ -226,6 +230,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       </NavButtons>
       <MatchingRules>{tree && <CardsLegend />}</MatchingRules>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { ...state, surah: undefined })} />}
+      {ayah && names[surahOf(ayah)] && <SurahChip surah={names[surahOf(ayah)]} ayah={Number(ayah.split(':')[1])} clear={branchesHref(id, juz, { ...state, ayah: undefined })} />}
       {(!id || constrained && !opening && !focusedRequest) && <NoTrees query={query} grouped={constrained} />}
       {unavailable && !(constrained && !opening && !focusedRequest) && <UnavailableNote />}
       {steps && <TreeProgress steps={steps} />}

@@ -10,6 +10,7 @@ import useDismissable from '@/components/common/useDismissable';
 import type { CompareLink } from '../compare/pairCards';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@shared/quran/branches';
+import { num } from '@shared/quran/arabicNumber';
 import Toggle from '@/components/common/Toggle';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import type { JuzRange } from '@shared/quran/juz';
@@ -196,11 +197,12 @@ export function ShareButton({ video = false, href }: { video?: boolean; href?: s
 }
 
 /** Above the tree while a surah narrows the trees: its chip, which removes the filter. */
-export function SurahChip({ surah, clear }: { surah: string; clear: string }) {
+/** The picked surah, or one ayah of it (the trees the reader's ayah menu opens), with a cross that clears it. */
+export function SurahChip({ surah, ayah, clear }: { surah: string; ayah?: number; clear: string }) {
   const ar = useLanguage().language === 'ar';
-  const remove = ar ? 'إزالة السورة' : 'Remove surah';
+  const remove = ayah ? (ar ? 'إزالة الآية' : 'Remove ayah') : (ar ? 'إزالة السورة' : 'Remove surah');
   return <span className="inline-flex items-center gap-1 self-start rounded-full border border-[var(--home-rule)] ps-3 pe-1 py-0.5 text-sm text-[var(--home-ink)]">
-    {ar ? `سورة ${surah}` : `Surah ${surah}`}
+    {ayah ? (ar ? `${surah} ${num(ayah)}` : `${surah} ${ayah}`) : ar ? `سورة ${surah}` : `Surah ${surah}`}
     <Link href={clear} scroll={false} aria-label={remove} title={remove} className="grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]"><X size={14} aria-hidden /></Link>
   </span>;
 }
