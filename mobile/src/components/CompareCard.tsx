@@ -2,13 +2,15 @@ import { memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Bookmark, BookOpen, Clapperboard, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { savedIdsOf, sideKeys, sideLabel, surahName, toggleCardSaved } from '@/lib/compare';
+import { aroundOf, savedIdsOf, shownAyat, sideKeys, sideLabel, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
+import { branchView, type BranchView } from '@/lib/settings';
+import CompareBraid from './CompareBraid';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
@@ -41,6 +43,20 @@ function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; pal
         );
       })}
       <Text style={{ color: palette.accent }}> {num(ayah.number)}</Text>
+    </Text>
+  );
+}
+
+/** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
+function Neighbour({ ayah, palette }: { ayah: AroundAyah | null; palette: Palette }) {
+  if (!ayah) return null;
+  return (
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, color: palette.muted, writingDirection: 'rtl', textAlign: 'right' }}>
+      {ayah.words.map((word, i) => {
+        const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
+        return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
+      })}
+      <Text> {num(ayah.number)}</Text>
     </Text>
   );
 }
@@ -110,6 +126,11 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   const selected = step?.option ?? picked;
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
   const option = card.many?.options[selected];
+  const [view, setView] = useState<BranchView>(branchView.get);
+  // The read-along studio lights words in the matrix, so it shows the matrix while open.
+  const tree = view === 'tree' && !read.studio;
+  const sides = shownAyat(card, selected);
+  const around = view === 'matrix' || read.studio ? aroundOf(sides) : undefined;
 
   const scale = useSharedValue(1);
   const [pop, setPop] = useState(0);
@@ -125,18 +146,21 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     } else lastTap.current = now;
   };
 
-  const side = (cardSide: CardSide, i: number) => {
+  const side = (cardSide: CardSide, i: 0 | 1) => {
     if (card.many && card.many.side === i) {
       const options = card.many.options;
       if (isRefrain(options)) return (
         <View key={i} style={{ gap: 2 }}>
           <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
+          {around && <Neighbour ayah={around.before[i]} palette={palette} />}
           <AyahText ayah={options[0].ayah} palette={palette} light={lightFor(lit, step, i, options[0].ayah.number, onWord)} />
+          {around && <Neighbour ayah={around.after[i]} palette={palette} />}
         </View>
       );
       return (
         <View key={i} style={{ gap: 6 }}>
           <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
+          {around && <Neighbour ayah={around.before[i]} palette={palette} />}
           {options.map((item, row) => (
             <Pressable key={item.id} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
               accessibilityLabel={`${surahName(cardSide.surah)} ${num(item.ayah.number)}`}
@@ -144,6 +168,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
               <AyahText ayah={item.ayah} palette={palette} plain={row !== selected} light={row === selected ? lightFor(lit, step, i, item.ayah.number, onWord) : undefined} />
             </Pressable>
           ))}
+          {around && <Neighbour ayah={around.after[i]} palette={palette} />}
         </View>
       );
     }
@@ -151,21 +176,43 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     return (
       <View key={i} style={{ gap: 2 }}>
         <SideHead label={sideLabel(cardSide)} keys={sideKeys(cardSide)} palette={palette} group={i === 0 ? card.group : undefined} />
+        {around && <Neighbour ayah={around.before[i]} palette={palette} />}
         {ayat.map(ayah => <AyahText key={ayah.number} ayah={ayah} palette={palette} light={lightFor(lit, step, i, ayah.number, onWord)} />)}
+        {around && <Neighbour ayah={around.after[i]} palette={palette} />}
       </View>
     );
   };
+
+  const pickers = card.many && !isRefrain(card.many.options) && (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+      {card.many.options.map((item, row) => (
+        <Pressable key={item.id} onPress={() => setPicked(row)} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
+          accessibilityLabel={`${surahName(card.sides[card.many!.side].surah)} ${num(item.ayah.number)}`}
+          style={{ minWidth: 44, minHeight: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: row === selected ? palette.accent : palette.rule, paddingHorizontal: 8 }}>
+          <Text style={{ color: row === selected ? palette.accent : palette.muted, fontSize: 14 }}>{num(item.ayah.number)}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
 
   return (
     <View style={{ gap: 4 }}>
       <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ"
         style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, gap: 10 }}>
-        {side(card.sides[0], 0)}
-        <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
-        {side(card.sides[1], 1)}
+        {tree ? <>
+          {pickers}
+          <CompareBraid sides={sides} palette={palette} />
+        </> : <>
+          {side(card.sides[0], 0)}
+          <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
+          {side(card.sides[1], 1)}
+        </>}
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+            {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
+          </Pressable>
           <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
             <Clapperboard size={22} color={palette.muted} />
           </Pressable>

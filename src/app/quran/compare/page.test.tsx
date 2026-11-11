@@ -11,6 +11,7 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => loc
 
 const redirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`redirect ${url}`); }));
 vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {}, prefetch: () => {} }) }));
+vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => (name === 'branches-view' ? { value: 'cards' } : undefined) }) }));
 vi.mock('./TextCompare', () => ({ default: (props: object) => <div data-testid="text">{JSON.stringify(props)}</div> }));
 vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="similar">{JSON.stringify(p)}</div>, similarSurahPairs: (range: { range: unknown }) => (range.range ? [[52, 56], [56, 69], [56, 52]] : [[56, 69], [56, 56]]) }));
 vi.mock('@/lib/quran/topicEngine', () => ({ getTopicSurahPairs: async () => [[16, 43]] }));

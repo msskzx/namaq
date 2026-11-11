@@ -9,6 +9,9 @@ import { readBookmarks, toggleBookmark, type Bookmark } from '@shared/bookmarks'
 import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
 import { num } from '@shared/quran/arabicNumber';
+export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
+import { sharedByAll } from '@shared/quran/ayahContext';
+import type { BranchAyah } from '@shared/quran/branches';
 import { EMPTY_LIST, type ListState } from './branchList';
 
 /** The website's compare cards, as built by `npm run quran:compare-cards`: only the cards a reader kept. */
@@ -152,4 +155,43 @@ export function compareTargetFor(keys: string[]): { lead: number; other: number 
   // Seen from the surah of the first shown ayah, as the tree reads.
   const first = Number(keys[0].split(':')[0]);
   return first === hit.b ? { lead: hit.b, other: hit.a } : { lead: hit.a, other: hit.b };
+}
+
+/** The ayat each side of a card shows: a one-to-many card shows its picked partner against the shared ayah. */
+export function shownAyat(card: PairCard, picked = 0): [CardSide, CardSide] {
+  const option = card.many?.options[picked];
+  if (!card.many || !option) return card.sides;
+  const sides = card.sides.map(side => ({ ...side })) as [CardSide, CardSide];
+  const many = card.many.side;
+  sides[many] = { ...sides[many], ayah: option.ayah.number, ayat: [option.ayah] };
+  sides[many === 0 ? 1 : 0] = { ...sides[many === 0 ? 1 : 0], ayat: [option.shared] };
+  return sides;
+}
+
+let ayahByKey: Map<string, BranchAyah> | undefined;
+const ayahAt = (key: string) => (ayahByKey ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]))).get(key);
+
+/** An ayah around a card side, with the words the other side's ayah there shares (exact) or shares a root with. */
+export type AroundAyah = { key: string; number: number; words: string[]; exact: Set<number>; rooted: Set<number> };
+export type Around = { before: (AroundAyah | null)[]; after: (AroundAyah | null)[] };
+
+/** The matrix's ayah before and after each side, coloured where the two sides' neighbours share words. */
+export function aroundOf(sides: [CardSide, CardSide]): Around {
+  const at = (side: CardSide, step: -1 | 1) => {
+    const numbers = side.ayat.map(ayah => ayah.number);
+    const number = step < 0 ? Math.min(...numbers) - 1 : Math.max(...numbers) + 1;
+    return ayahAt(`${side.surah}:${number}`) ?? null;
+  };
+  const pair = (step: -1 | 1) => {
+    const ayat = sides.map(side => at(side, step));
+    const present = ayat.filter((ayah): ayah is BranchAyah => !!ayah);
+    const shared = present.length === 2 && present[0].key !== present[1].key
+      ? new Map(sharedByAll(present.map(ayah => ({ ayah, before: null, after: null }))).map(context => [context.ayah.key, context.match]))
+      : new Map();
+    return ayat.map(ayah => ayah && {
+      key: ayah.key, number: Number(ayah.key.split(':')[1]), words: ayah.words,
+      exact: new Set<number>(shared.get(ayah.key)?.exact), rooted: new Set<number>(shared.get(ayah.key)?.rooted),
+    });
+  };
+  return { before: pair(-1), after: pair(1) };
 }

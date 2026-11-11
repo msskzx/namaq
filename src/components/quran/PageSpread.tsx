@@ -5,7 +5,8 @@ import styles from './PageSpread.module.css';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */
 export type SpreadMark = { kind: 'exact' | 'root' | 'related'; slot?: number; title?: string; link?: string; lit?: boolean };
-export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; wordKey?: string; current?: boolean; bare?: boolean; reading?: number };
+/** `muted`: an ayah shown only for context (the ayah before or after), drawn quieter. */
+export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; wordKey?: string; current?: boolean; bare?: boolean; reading?: number; muted?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; footer?: React.ReactNode; action?: React.ReactNode; pick?: { selected: number; labels: string[]; onPick: (row: number) => void } };
 
 const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
@@ -49,7 +50,7 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
           <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}{page.action && <span className={styles.action}>{page.action}</span>}</header>
           <div className={styles.lines} lang="ar">
             {Array.from({ length: stacked && !page.pick ? 1 : rows }, (_, row) => (
-              <p key={row} style={stacked && !page.pick ? { gridRow: `span ${rows}` } : undefined} className={page.pick && row > 0 && page.rows[row] ? styles.pickDivider : undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
+              <p key={row} style={stacked && !page.pick ? { gridRow: `span ${rows}` } : undefined} className={[page.pick && row > 0 && page.rows[row] && styles.pickDivider, page.rows[row]?.length && page.rows[row].every(ayah => ayah.muted) && styles.muted].filter(Boolean).join(' ') || undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
                 {page.pick && page.rows[row]
                   ? <button type="button" data-tap-through className={styles.pick} aria-pressed={page.pick.selected === row} onClick={() => page.pick!.onPick(row)}><span className="sr-only">{page.pick.labels[row]}: </span><RowAyat ayat={page.rows[row]} /></button>
                   : <RowAyat ayat={page.rows[row] ?? []} />}
