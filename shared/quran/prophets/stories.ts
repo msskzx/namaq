@@ -1,4 +1,5 @@
 import { MUSA } from './musa';
+import { SHUAYB } from './shuayb';
 import type { Story } from './story';
 
-export const STORIES: Record<string, Story> = { musa: MUSA };
+export const STORIES: Record<string, Story> = { musa: MUSA, shuayb: SHUAYB };
