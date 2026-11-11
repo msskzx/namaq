@@ -4,7 +4,6 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render as renderUI, screen, within } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
-import { branch, variants, type BranchAyah } from '@shared/quran/branches';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
 import { branchesCorrect, emptyBranchAnswers } from '@shared/quiz/score';
 import { readBookmarks } from '@shared/bookmarks';
@@ -164,12 +163,13 @@ describe('complete branch tree answers', () => {
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
-    const group: BranchAyah[] = [
-      { key: '1:1', page: 1, words: ['مِّنْ', 'ربْ', 'زيد'] },
-      { key: '1:2', page: 1, words: ['مِن', 'رب', 'عمر'] },
-      { key: '1:3', page: 1, words: ['وَمِن', 'رب', 'علي'] },
-    ];
-    const own = { tree: branch(group), variants: variants(group) };
+    // The root and a first word are voiced differently across the ayat; the quiz shows neither difference.
+    const own = {
+      tree: { words: ['رب'], ayat: [], forms: { '1:1': ['ربْ'], '1:2': ['رب'], '1:3': ['رب'] }, children: [
+        { words: ['زيد'], ayat: ['1:1'], children: [] }, { words: ['عمر'], ayat: ['1:2'], children: [] }, { words: ['علي'], ayat: ['1:3'], children: [] },
+      ] },
+      prefixes: [{ word: 'مِن', conj: '', keys: ['1:1', '1:2'], id: 'من رب', forms: { '1:1': ['مِّنْ'], '1:2': ['مِن'] } }, { word: 'وَمِن', conj: 'و', keys: ['1:3'], id: 'من رب' }],
+    };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
     expect(document.querySelector('[data-differs]')).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
