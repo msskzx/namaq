@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { Fragment, memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -171,13 +171,14 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         <View key={i} style={{ gap: 6 }}>
           <SideHead label={`${surahName(cardSide.surah)} ${options.map(item => num(item.ayah.number)).join(' · ')}`} keys={options.map(item => `${cardSide.surah}:${item.ayah.number}`)} palette={palette} group={i === 0 ? card.group : undefined} />
           {around?.before[i] && <RunningAyat ayat={[]} before={around.before[i]} palette={palette} light={() => ({ lit: null })} />}
-          {options.map((item, row) => (
-            <Pressable key={item.id} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
+          {options.map((item, row) => (<Fragment key={item.id}>
+            {row > 0 && <Rule dashed color={palette.rule} />}
+            <Pressable onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
               accessibilityLabel={`${surahName(cardSide.surah)} ${num(item.ayah.number)}`}
-              style={{ borderRightWidth: 3, borderRightColor: row === selected ? palette.accent : 'transparent', paddingRight: 8, ...(row > 0 ? { borderTopWidth: 1, borderTopColor: palette.rule, paddingTop: 4 } : {}) }}>
+              style={{ borderRightWidth: 3, borderRightColor: row === selected ? palette.accent : 'transparent', paddingRight: 8 }}>
               <AyahText ayah={item.ayah} palette={palette} plain={row !== selected} light={row === selected ? lightFor(lit, step, i, item.ayah.number, onWord) : undefined} />
             </Pressable>
-          ))}
+          </Fragment>))}
           {around?.after[i] && <RunningAyat ayat={[]} after={around.after[i]} palette={palette} light={() => ({ lit: null })} />}
         </View>
       );
@@ -217,7 +218,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
           <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />
         </> : <>
           {side(card.sides[0], 0)}
-          <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
+          <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
           {side(card.sides[1], 1)}
         </>}
       </Pressable>
@@ -242,3 +243,14 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
 }
 
 export default memo(CompareCard);
+
+// A line between ayat: solid between two surahs, dashed between ayat of one surah, as on the website.
+// iOS draws no dashed border on one edge only, so a dashed box is clipped to its top edge.
+function Rule({ dashed, color }: { dashed?: boolean; color: string }) {
+  if (!dashed) return <View style={{ height: 1, backgroundColor: color }} />;
+  return (
+    <View style={{ height: 1, overflow: 'hidden' }}>
+      <View style={{ height: 3, borderWidth: 1, borderColor: color, borderStyle: 'dashed' }} />
+    </View>
+  );
+}
