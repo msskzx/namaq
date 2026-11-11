@@ -57,7 +57,7 @@ const toNumber = (value: string, fallback: number) => { const n = Number(value);
 
 /** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz all but sort).
  *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
-export function FilterFields({ draft, setDraft, palette, compare = false, sort = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean }) {
+export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, savedOnly = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; savedOnly?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
   const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
@@ -68,7 +68,7 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
     : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
   return (
     <>
-      <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />
+      {savedOnly && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />}
       <Group title="النطاق" palette={palette}>
         {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
           onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}

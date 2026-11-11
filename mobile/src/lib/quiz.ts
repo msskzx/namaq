@@ -9,7 +9,8 @@ import type { Random } from '@shared/quiz/random';
 import { readBookmarks, type Bookmark } from '@shared/bookmarks';
 import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 import type { JuzRange } from '@shared/quran/juz';
-import { branchList, EMPTY_LIST, isSavedIn } from './branchList';
+import { quizTrees } from '@shared/quiz/treeScope';
+import { isCompareBookmark } from '@shared/compareBookmarks';
 
 /** Which trees the quiz asks, with the branches tab's filters: kinds, differences, part of the Quran, saved only. */
 export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
@@ -44,17 +45,15 @@ type Pool = ReturnType<typeof branchQuestionPool>;
 const pools = new Map<string, Pool>();
 
 /** The trees the filters keep, as the branches tab lists them; saved only keeps just the saved ones. */
-export function quizPieces(list: QuizList, bookmarks: Bookmark[] = readBookmarks()) {
-  const pieces = branchList({ ...EMPTY_LIST, ...list }, bookmarks);
-  return list.saved ? pieces.filter(piece => isSavedIn(piece, bookmarks)) : pieces;
-}
+const treesFor = (list: QuizList, bookmarks: Bookmark[]) =>
+  quizTrees(list.range, { filters: list.filters, saved: list.saved ? bookmarks.filter(item => !isCompareBookmark(item)).map(item => item.id) : undefined });
 
 /** The questions the filters hold; kept for the last few filters, since working them out takes a moment on a phone. */
 function poolFor(list: QuizList, bookmarks: Bookmark[] = readBookmarks()): Pool {
   const id = JSON.stringify([list, list.saved ? bookmarks.map(item => item.id) : []]);
   let pool = pools.get(id);
   if (!pool) {
-    pool = branchQuestionPool(corpus.ayat as BranchAyah[], list.range, quizPieces(list, bookmarks).map(piece => piece.phrase));
+    pool = branchQuestionPool(corpus.ayat as BranchAyah[], list.range, treesFor(list, bookmarks));
     if (pools.size > 4) pools.delete(pools.keys().next().value!);
     pools.set(id, pool);
   }

@@ -122,15 +122,20 @@ describe('GET /api/quiz', () => {
   it('passes the requested person through for PERSON_CIRCLE', async () => {
     assembleQuiz.mockResolvedValueOnce([]);
     await GET(request('?topic=PERSON_CIRCLE&length=5&person=prophet-muhammad'));
-    expect(availableQuestionCount).toHaveBeenCalledWith(['PERSON_CIRCLE'], 'prophet-muhammad', null);
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PERSON_CIRCLE'], 'prophet-muhammad', null, { filters: { categories: 'mutashabeh' } });
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ personSlug: 'prophet-muhammad' }));
   });
 
   it('passes a juz range through for shared openings', async () => {
     assembleQuiz.mockResolvedValueOnce([]);
     await GET(request('?topic=BRANCHES&length=5&juzFrom=30&juzTo=29'));
-    expect(availableQuestionCount).toHaveBeenCalledWith(['BRANCHES'], undefined, { from: 29, to: 30 });
+    expect(availableQuestionCount).toHaveBeenCalledWith(['BRANCHES'], undefined, { from: 29, to: 30 }, { filters: { categories: 'mutashabeh' } });
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ juz: { from: 29, to: 30 } }));
+  });
+
+  it('passes the branches filters and saved trees through for tree questions', async () => {
+    await GET(request('?topic=BRANCHES&length=5&differences=taqdim&surahs=2,36&sort=closest&saved=a,b'));
+    expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ scope: { filters: { differences: 'taqdim', surahs: '2,36', categories: 'mutashabeh' }, saved: ['a', 'b'] } }));
   });
 
   it('names the surahs a shared-opening question cites', async () => {
@@ -150,7 +155,7 @@ describe('GET /api/quiz', () => {
   it('combines repeated and comma-separated topics without duplicates', async () => {
     assembleQuiz.mockResolvedValueOnce([]);
     await GET(request('?topic=PEOPLE,BATTLES&topic=AYAT&topic=PEOPLE&length=5'));
-    expect(availableQuestionCount).toHaveBeenCalledWith(['PEOPLE', 'BATTLES', 'AYAT'], undefined, null);
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PEOPLE', 'BATTLES', 'AYAT'], undefined, null, { filters: { categories: 'mutashabeh' } });
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ topics: ['PEOPLE', 'BATTLES', 'AYAT'] }));
   });
 

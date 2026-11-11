@@ -138,20 +138,21 @@ describe('QuizzesPage', () => {
       questions[0] = original;
     }
   });
-  it('keeps a typed juz range when Start is clicked before navigation completes', () => {
+  it('keeps a picked juz range when Start is clicked before navigation completes', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     const pushes: string[] = [];
     const pending = vi.spyOn(nav, 'push').mockImplementation((url) => { pushes.push(url); });
-    render(<QuizzesPage />);
-    const from = screen.getByRole('spinbutton', { name: "From juz'" });
-    fireEvent.change(from, { target: { value: '25' } });
-    fireEvent.blur(from);
-    fireEvent.click(screen.getByRole('button', { name: 'Start quiz' }));
-    const final = new URLSearchParams(pushes.at(-1)?.split('?')[1]);
-    expect(final.get('juzFrom')).toBe('25');
-    expect(final.get('length')).toBe('5');
-    expect(final.get('topic')).toBe('BRANCHES');
-    pending.mockRestore();
+    try {
+      render(<QuizzesPage />);
+      fireEvent.change(screen.getByLabelText('From juz'), { target: { value: '25' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Start quiz' }));
+      const final = new URLSearchParams(pushes.at(-1)?.split('?')[1]);
+      expect(final.get('juzFrom')).toBe('25');
+      expect(final.get('length')).toBe('5');
+      expect(final.get('topic')).toBe('BRANCHES');
+    } finally {
+      pending.mockRestore();
+    }
   });
 
   it('renders reviewed Arabic content and only shows Submit on the final question', () => {
@@ -343,17 +344,12 @@ describe('QuizzesPage', () => {
     }
   });
 
-  it('commits a typed juz range on blur and preserves the other URL options', () => {
+  it('picks a juz range with the branches filters and preserves the other URL options', () => {
     nav.reset('/quizzes?topic=BRANCHES&juzFrom=1&juzTo=30&view=tree');
     render(<QuizzesPage />);
-
-    const from = screen.getByRole('spinbutton', { name: "From juz'" });
-    const to = screen.getByRole('spinbutton', { name: "To juz'" });
-    expect((from as HTMLInputElement).value).toBe('1');
-    expect((to as HTMLInputElement).value).toBe('30');
-    fireEvent.change(from, { target: { value: '25' } });
-    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('juzFrom')).toBe('1');
-    fireEvent.blur(from);
+    expect((screen.getByLabelText('From juz') as HTMLSelectElement).value).toBe('1');
+    expect((screen.getByLabelText('To juz') as HTMLSelectElement).value).toBe('30');
+    fireEvent.change(screen.getByLabelText('From juz'), { target: { value: '25' } });
     const params = new URLSearchParams(nav.getUrl().split('?')[1]);
     expect(params.get('juzFrom')).toBe('25');
     expect(params.get('juzTo')).toBe('30');
@@ -363,15 +359,24 @@ describe('QuizzesPage', () => {
     expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&juzFrom=25&juzTo=30');
   });
 
-  it('keeps the juz range beside a person circle and never lets from pass to', () => {
+  it('keeps the juz range beside a person circle and moves to along when from passes it', () => {
     nav.reset('/quizzes?topic=BRANCHES,PERSON_CIRCLE&person=abu-ubaydah&juzFrom=20&juzTo=25');
     render(<QuizzesPage />);
-    const from = screen.getByRole('spinbutton', { name: "From juz'" });
-    fireEvent.change(from, { target: { value: '28' } });
-    fireEvent.blur(from);
+    fireEvent.change(screen.getByLabelText('From juz'), { target: { value: '28' } });
     const params = new URLSearchParams(nav.getUrl().split('?')[1]);
     expect(params.get('juzFrom')).toBe('28');
     expect(params.get('juzTo')).toBe('28');
+    expect(params.get('person')).toBe('abu-ubaydah');
+  });
+
+  it('asks the kinds of difference picked, as on the branches page, and sends them with the count', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: /Word trees/ }));
+    const params = new URLSearchParams(nav.getUrl().split('?')[1]);
+    expect(params.get('categories')).toBe('mutashabeh,words');
+    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&categories=mutashabeh%2Cwords');
+    expect(screen.queryByRole('group', { name: 'Sort' })).toBeNull();
   });
 
   it('offers one to ten answers per tree, defaulting to three, and sends the choice with the quiz', () => {

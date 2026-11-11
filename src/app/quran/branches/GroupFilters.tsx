@@ -12,7 +12,7 @@ const categories = {
   words: { ar: 'أشجار الكلمات', en: 'Word trees' },
 };
 
-export default function GroupFilterControls({ filters: draft, onChange }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void }) {
+export default function GroupFilterControls({ filters: draft, onChange, sort = true, defaultCategories = 'mutashabeh,pondering' }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void; sort?: boolean; defaultCategories?: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const set = (key: keyof GroupFilters, value: string) => onChange(groupFilters({ ...draft, [key]: value }));
@@ -24,7 +24,7 @@ export default function GroupFilterControls({ filters: draft, onChange }: { filt
   return <>
     {groups.map(group => <fieldset key={group.key} className="flex flex-wrap gap-1.5"><legend className="mb-1 text-sm">{group.label}</legend>
       {Object.entries(group.values).map(([id, label]) => {
-        const selected = draft[group.key] ?? (group.key === 'categories' ? 'mutashabeh,pondering' : '');
+        const selected = draft[group.key] ?? (group.key === 'categories' ? defaultCategories : '');
         const active = selected.split(',').includes(id);
         return <Button key={id} size="sm" variant="neutral" active={active} aria-pressed={active} onClick={() => set(group.key, toggleFilter(selected, id) || (group.key === 'categories' ? 'none' : ''))}>
           {active ? <Check size={12} aria-hidden /> : group.key === 'categories' ? <Link2 size={12} aria-hidden /> : <Tags size={12} aria-hidden />}{ar ? label.ar : label.en}
@@ -34,13 +34,13 @@ export default function GroupFilterControls({ filters: draft, onChange }: { filt
         <BookOpen size={12} aria-hidden />{ar ? 'في كتب المتشابه' : 'In the books'}
       </Button>}
     </fieldset>)}
-    <fieldset className="flex flex-wrap gap-1.5"><legend className="mb-1 text-sm">{ar ? 'الترتيب' : 'Sort'}</legend>
-      {SORTS.map((sort, index) => {
-        const active = (draft.sort || 'mushaf') === sort;
-        return <Button size="sm" variant="neutral" key={sort} active={active} aria-pressed={active} onClick={() => set('sort', index ? sort : '')}>
+    {sort && <fieldset className="flex flex-wrap gap-1.5"><legend className="mb-1 text-sm">{ar ? 'الترتيب' : 'Sort'}</legend>
+      {SORTS.map((order, index) => {
+        const active = (draft.sort || 'mushaf') === order;
+        return <Button size="sm" variant="neutral" key={order} active={active} aria-pressed={active} onClick={() => set('sort', index ? order : '')}>
           <ArrowDownWideNarrow size={12} aria-hidden />{sorts[index]}
         </Button>;
       })}
-    </fieldset>
+    </fieldset>}
   </>;
 }

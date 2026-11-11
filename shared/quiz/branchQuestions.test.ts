@@ -5,7 +5,8 @@ import { type BranchAyah } from '@shared/quran/branches';
 import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
 import { gradedTree } from './feedback';
-import { biggerFirst, branchQuestionPool, branchQuestions, branchQuiz, quizTrees } from './branchQuestions';
+import { biggerFirst, branchQuestionPool, branchQuestions, branchQuiz } from './branchQuestions';
+import { quizTrees } from './treeScope';
 
 const all = data.ayat as BranchAyah[];
 const trees = data.trees as TreeGroup[];
@@ -106,5 +107,13 @@ describe('branchQuiz (the phone app builds its quiz on the device)', () => {
   it('puts trees with at least as many leaves as asked first, then the biggest of the rest', () => {
     expect(biggerFirst([2, 5, 1, 4, 3], 4, size => size)).toEqual([5, 4, 3, 2, 1]);
     expect(biggerFirst([2, 5, 1, 4, 3], 1, size => size)).toEqual([2, 5, 1, 4, 3]);
+  });
+
+  it('narrows the trees with the branches filters and saved trees', () => {
+    const yasin = quizTrees(null, { filters: { surahs: '36' } });
+    expect(yasin.length).toBeGreaterThan(0);
+    expect(yasin.every(tree => tree.occurrences.some(occurrence => occurrence.key.startsWith('36:')))).toBe(true);
+    expect(quizTrees(null, { saved: [] })).toEqual([]);
+    expect(quizTrees(null, { saved: [yasin[0].id] }).map(tree => tree.id)).toEqual([yasin[0].id]);
   });
 });

@@ -14,10 +14,13 @@ import LoadingDots from '@/components/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
 import QrCode from '@/components/QrCode';
 import QuizExplainer from '@/components/QuizExplainer';
-import { JuzInput, LeavesPicker, Section } from '@/components/QuizForm';
+import { LeavesPicker, Section } from '@/components/QuizForm';
+import { FilterFields } from '@/components/FilterFields';
+import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTree';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/branches';
+import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import type { QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -129,6 +132,18 @@ function Invite({ code, palette }: { code: string; palette: Palette }) {
   );
 }
 
+/** The branches tab's filters for the host (saved only is left out: each phone saves its own trees). */
+function PartyFilters({ settings, change, palette }: { settings: PartySettings; change: (next: Partial<PartySettings>) => void; palette: Palette }) {
+  const range = settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo };
+  const [draft, setDraftState] = useState<FilterDraft>(() => draftOf({ ...EMPTY_LIST, filters: settings.filters ?? {}, range }));
+  const setDraft = (next: FilterDraft) => {
+    setDraftState(next);
+    const applied = applyDraft(next);
+    if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: applied.filters });
+  };
+  return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} savedOnly={false} />;
+}
+
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
@@ -137,7 +152,7 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   if (!editable) {
     const rows: [string, string][] = [
       ['عدد الأسئلة', num(settings.length)],
-      ...(branches ? [['الأجزاء', `${num(settings.juzFrom)} إلى ${num(settings.juzTo)}`], ['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
+      ...(branches ? [['الأشجار', scopeSummary(settings, true)], ['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
     return (
@@ -162,10 +177,7 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
       )}
       {branches && (
         <>
-          <Row gap={16}>
-            <JuzInput label="من الجزء" value={settings.juzFrom} onCommit={value => change({ juzFrom: value, ...(value > settings.juzTo && { juzTo: value }) })} palette={palette} />
-            <JuzInput label="إلى الجزء" value={settings.juzTo} onCommit={value => change({ juzTo: value, ...(value < settings.juzFrom && { juzFrom: value }) })} palette={palette} />
-          </Row>
+          <PartyFilters settings={settings} change={change} palette={palette} />
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
           <Label palette={palette}>وقت سؤال الشجرة</Label>

@@ -1,9 +1,6 @@
 import { Text, View } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { JUZ_STARTS } from '@shared/quran/juz';
 import { QUIZ_LEAVES } from '@shared/quiz/settings';
-import NumberPicker from './NumberPicker';
-import { surahNames } from '@/lib/branches';
 import Button, { Row } from './Button';
 import type { Palette } from '@/lib/theme';
 
@@ -14,22 +11,6 @@ export function Section({ title, palette, children }: { title: string; palette: 
     <View style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 14, padding: 14, gap: 10 }}>
       <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {children}
-    </View>
-  );
-}
-
-/** Where a juz starts, shown beside its number. */
-function juzStart(juz: number) {
-  const [surah, ayah] = JUZ_STARTS[juz - 1].split(':').map(Number);
-  return `${surahNames[surah]} ${num(ayah)}`;
-}
-
-/** A juz number, 1 to 30, picked from a list so the keyboard never opens. */
-export function JuzInput({ label, value, onCommit, palette }: { label: string; value: number; onCommit: (value: number) => void; palette: Palette }) {
-  return (
-    <View style={{ gap: 4, flex: 1, minWidth: 140, alignSelf: 'flex-start' }}>
-      <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>{label}</Text>
-      <NumberPicker value={value} onChange={onCommit} max={30} label={label} nameOf={juzStart} palette={palette} />
     </View>
   );
 }

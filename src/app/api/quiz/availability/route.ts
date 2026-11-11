@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { availableQuestionCount } from '@/lib/quiz/assemble';
 import { parseQuizTopics } from '@/lib/quiz/topics';
 import { parseJuzRange } from '@shared/quran/juz';
+import { parseTreeScope } from '@shared/quiz/treeScope';
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '@/lib/quiz/types';
 
 export async function GET(request: Request) {
@@ -9,8 +10,9 @@ export async function GET(request: Request) {
   const topics = parseQuizTopics(searchParams);
   const person = searchParams.get('person') ?? undefined;
   const juz = parseJuzRange(searchParams.get('juzFrom'), searchParams.get('juzTo'));
+  const scope = parseTreeScope(searchParams);
   if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) return NextResponse.json({ error: 'Unknown topic' }, { status: 400 });
   if (topics.includes('PERSON_CIRCLE') && !person) return NextResponse.json({ error: 'This topic needs a person' }, { status: 400 });
-  const available = await availableQuestionCount(topics as QuizTopic[], person, juz);
+  const available = await availableQuestionCount(topics as QuizTopic[], person, juz, scope);
   return NextResponse.json({ available, lengths: QUIZ_LENGTHS.filter((length) => length <= available) });
 }
