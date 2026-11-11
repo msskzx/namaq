@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { grown, type BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
-import { ayahContexts, sharedByAll, surrounding, treeContexts } from '@shared/quran/ayahContext';
+import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext } from '@shared/quran/ayahContext';
 import treeData from '@shared/data/quran/trees.json';
 import { loadReaderAyat } from './readerAyat';
 
@@ -57,7 +57,31 @@ describe('loadReaderAyat', () => {
   });
 });
 
+const pick = (context: AyahContext) => ({ exact: context.match?.exact, rooted: context.match?.rooted });
+
 describe('sharedByAll', () => {
+  it('links words only some ayat share, and the words every ayah shares to each other', async () => {
+    const all = await loadReaderAyat();
+    // يونس ٤٢، النمل ٨٠، الروم ٥٢، الزخرف ٤٠: «تسمع الصم» in all four; النمل and الروم are near twins.
+    const [yunus, naml, rum, zukhruf] = sharedByAll(ayahContexts(all, ['10:42', '27:80', '30:52', '43:40']));
+    const at = (context: AyahContext, word: string) => context.ayah.words.findIndex(w => normalizeWord(w) === normalizeWord(word));
+    const link = (context: AyahContext, i: number) => context.match!.links![i];
+    // تُسْمِعُ ٱلصُّمَّ: every row, the same link across them.
+    const summ = [yunus, naml, rum, zukhruf].map(context => link(context, at(context, 'ٱلصُّمَّ')));
+    expect(summ.every(item => item.rows === 4 && item.link === summ[0].link)).toBe(true);
+    // ٱلدُّعَآءَ: النمل and الروم only.
+    expect(link(naml, at(naml, 'ٱلدُّعَآءَ'))).toEqual(link(rum, at(rum, 'ٱلدُّعَآءَ')));
+    expect(link(naml, at(naml, 'ٱلدُّعَآءَ')).rows).toBe(2);
+    expect(Object.values(yunus.match!.links!).map(item => item.link)).not.toContain(link(naml, at(naml, 'ٱلدُّعَآءَ')).link);
+    // لَا: three rows, lined up wherever it sits.
+    expect(link(yunus, at(yunus, 'لَا'))).toEqual({ link: link(naml, 1).link, rows: 3, exact: true });
+    expect(link(rum, 1).link).toBe(link(naml, 1).link);
+    // A word every row shares is still the only kind in exact and rooted.
+    for (const context of [yunus, naml, rum, zukhruf]) {
+      expect([...context.match!.exact, ...context.match!.rooted].sort((x, y) => x - y)).toEqual(Object.entries(context.match!.links!).flatMap(([i, item]) => item.rows === 4 ? [Number(i)] : []));
+    }
+  });
+
   it('matches من with منها by lemma and حيث exactly despite their corpus POS difference', async () => {
     const all = await loadReaderAyat();
     const [a, b] = sharedByAll(ayahContexts(all, ['2:35', '7:19']));
@@ -83,14 +107,14 @@ describe('sharedByAll', () => {
   it('marks only the words found in every ayah: the same form exact, otherwise by root', async () => {
     const all = await loadReaderAyat();
     const [first, second, third] = sharedByAll(ayahContexts(all, ['2:6', '94:5', '94:6']));
-    expect(first.match).toEqual({ exact: [], rooted: [0] });
-    expect(second.match).toEqual({ exact: [], rooted: [0] });
-    expect(third.match).toEqual({ exact: [], rooted: [0] });
+    expect(pick(first)).toEqual({ exact: [], rooted: [0] });
+    expect(pick(second)).toEqual({ exact: [], rooted: [0] });
+    expect(pick(third)).toEqual({ exact: [], rooted: [0] });
   });
 
   it('marks words differing only in tashkeel by root, and every word exact when all ayat agree', async () => {
     const all = await loadReaderAyat();
-    expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(context => context.match)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
+    expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(pick)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
     expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact)).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
   });
 

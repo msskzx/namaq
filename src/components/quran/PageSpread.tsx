@@ -4,12 +4,13 @@ import { num } from '@shared/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */
-export type SpreadMark = { kind: 'exact' | 'root' | 'related'; slot?: number; title?: string; link?: string; lit?: boolean };
+/** `some`: a word only some of the rows share, drawn faded. */
+export type SpreadMark = { kind: 'exact' | 'root' | 'related'; slot?: number; title?: string; link?: string; lit?: boolean; some?: boolean };
 /** `muted`: an ayah shown only for context (the ayah before or after), drawn quieter. */
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; wordKey?: string; current?: boolean; bare?: boolean; reading?: number; muted?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; footer?: React.ReactNode; action?: React.ReactNode; pick?: { selected: number; labels: string[]; onPick: (row: number) => void } };
 
-const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
+const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.some && styles.some, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
 
 function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;

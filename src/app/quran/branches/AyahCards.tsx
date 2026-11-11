@@ -41,9 +41,18 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
   const connections = useGroupConnections();
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const passages = shown.map((key, i) => passageKeys?.[i] ?? [key]);
+  const treeKey = passages.map(passage => passage.join(',')).join(' ');
   const ends = passages.map(passage => passage[passage.length - 1]);
   const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];
   const [column, setColumn] = useState(context ? 1 : 0);
+  // A tapped word in the ayah column lights the words lined up with it in the other rows, as on the compare page.
+  const [lit, setLit] = useState<string | null>(null);
+  const light = (event: React.MouseEvent) => {
+    const id = (event.target as HTMLElement).closest?.('[data-col][data-current] mark[data-link]')?.getAttribute('data-link');
+    if (id) setLit(current => (current === id ? null : id));
+  };
+  // Links are numbered per tree, so a new tree starts with nothing lit.
+  useEffect(() => setLit(null), [treeKey]);
   const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[][]>(['quran-passages', passages], async () => {
     const columns = await Promise.all(Array.from({ length: Math.max(0, ...passages.map(passage => passage.length)) }, (_, step) =>
@@ -225,8 +234,8 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
         label: `${name} ${range}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
-          ...(at === 'ayah' ? [data![row].map(item => ({ number: Number(item.ayah.key.split(':')[1]), words: item.ayah.words, current: true,
-            marks: sharedMarks(item, exactLabel, rootLabel), wordKey: connections?.group ? item.ayah.key : undefined }))]
+          ...(at === 'ayah' ? [data![row].map((item, step) => ({ number: Number(item.ayah.key.split(':')[1]), words: item.ayah.words, current: true,
+            marks: sharedMarks(item, exactLabel, rootLabel, step, lit), wordKey: connections?.group ? item.ayah.key : undefined }))]
             : [[{ number, words: ayah.words, marks: marksFor(at, ayah.key) }]]),
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
@@ -252,7 +261,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track}>
-        <div ref={lane} data-matrix-content className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
+        <div ref={lane} data-matrix-content onClick={light} className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
           <ConnectionLines lane={lane} column={column} ready={ready} />
         </div>

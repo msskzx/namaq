@@ -10,7 +10,7 @@ import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
 import { matrixOf, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import type { Size } from '@/lib/camera';
-import { QURAN_FONT, toneColor, type Palette } from '@/lib/theme';
+import { QURAN_FONT, blend, toneColor, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
@@ -37,28 +37,44 @@ const GAP = 8;
 const SWIPE = 0.2;
 const FLICK = 500;
 
-function Ayah({ ayah, palette, muted }: { ayah: MatrixAyah; palette: Palette; muted: boolean }) {
+type Light = { lit: string | null; onWord: (link: string) => void };
+
+/** A word's colour: shared by every row in full, by only some rows faded into the card, lit on the highlight. */
+function toneOf(ayah: MatrixAyah, i: number, palette: Palette, light?: Light) {
+  const link = ayah.links?.get(i);
+  if (link && light?.lit === link.link) return { color: palette.onHighlight, backgroundColor: palette.highlight };
+  if (ayah.rooted.has(i)) return { color: palette.root };
+  if (ayah.exact.has(i)) return { color: palette.accent };
+  if (link?.some) return { color: blend(link.exact ? palette.accent : palette.root, palette.card, 0.55) };
+  return undefined;
+}
+
+function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light }) {
   const [, number] = ayah.key.split(':').map(Number);
   const registry = useContext(Words);
+  const press = (i: number) => {
+    const link = light && ayah.links?.get(i)?.link;
+    return link ? () => light.onWord(link) : undefined;
+  };
   if (registry && !muted) return <>
     {ayah.words.map((word, i) => {
-      const tone = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : palette.ink;
+      const tone = toneOf(ayah, i, palette, light);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
-        <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: tone }}>{mushafText(word)}</Text>
+        <Text onPress={press(i)} style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink }, tone]}>{mushafText(word)}</Text>
       </View>;
     })}
     <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.accent }}>{num(number)}</Text>
   </>;
   return <>
     {ayah.words.map((word, i) => {
-      const tone = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
-      return <Text key={i} style={tone ? { color: tone } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
+      const tone = toneOf(ayah, i, palette, light);
+      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)} style={tone}>{mushafText(word)}</Text></Text>;
     })}
     <Text style={{ color: muted ? palette.muted : palette.accent }}> {num(number)} </Text>
   </>;
 }
 
-function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void }) {
+function Cell({ cell, at, palette, width, current, onPress, light }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light }) {
   if (!cell) return <View style={{ width }} />;
   const first = cell.ayat[0];
   const last = cell.ayat[cell.ayat.length - 1];
@@ -67,6 +83,8 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
   const wordViews = !!useContext(Words);
+  // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
+  const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress(); } } : undefined;
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${surahNames[surah]} ${range}`}
@@ -81,9 +99,9 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
       {at === 'after' && basmala}
       {wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} />)}</View>
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}</View>
         : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} />)}
+          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}
         </Text>}
       {at === 'before' && basmala}
     </Pressable>
@@ -167,6 +185,11 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   // In the studio's recall mode, a mark where the next line lands waits for a tap (or its timer).
   const asked = growth?.ask && lines.routes.find(route => route.id === growth.ask!.id);
   const keysOf = (cell: MatrixCell) => cell?.ayat.map(ayah => ayah.key) ?? [];
+  // A tapped word lights the words lined up with it in the other rows, as on the compare tab.
+  const [lit, setLit] = useState<string | null>(null);
+  // Links are numbered per tree, so a new tree starts with nothing lit.
+  useEffect(() => setLit(null), [presentation]);
+  const light: Light = { lit, onWord: link => setLit(current => (current === link ? null : link)) };
 
   return (
     <GestureDetector gesture={pan}>
@@ -177,7 +200,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
             {matrix.rows.map((row, r) => (
               <View key={r} style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
                 {matrix.columns.map((name, i) => (
-                  <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column}
+                  <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light}
                     onPress={() => (i === column ? onTap(keysOf(row[name])) : goTo(i))} />
                 ))}
               </View>
