@@ -70,5 +70,14 @@ export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = fals
 /** Everything a growth can hide: every box and connector it reveals at some point. */
 export const grownIds = (beats: Beat[]) => new Set(beats.flatMap(beat => beat.reveal));
 
+/** The website's connections studio (Grow.tsx playMatrix): the matrix's lines one by one, `r<n>` in drawing order; ask waits before each. */
+export function connectionBeats(count: number, ask = false): Beat[] {
+  return Array.from({ length: count }, (_, i) => [
+    ...(ask ? [{ step: i, key: '', ms: 0, reveal: [], now: [], ask: `r${i}` }] : []),
+    { step: i, key: '', ms: 700, reveal: [`r${i}`], now: [`r${i}`] },
+    { step: i, key: '', ms: 500, reveal: [], now: [] },
+  ]).flat();
+}
+
 /** The ayah keys each node holds, for lighting the path of the ayah that is growing. */
 export const nodeKeys = (tree: Branch) => new Map([...nodeIndices(tree)].map(([node, index]) => [nodeId(index), keys(node)]));

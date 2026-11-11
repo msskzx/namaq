@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { groups } from '@shared/quran/mutashabih/data';
+import { groups } from './data';
 import { wordConnections } from './connections';
 
 const group = groups.find(group => group.citations.some(citation => citation.id === 'K02'))!;

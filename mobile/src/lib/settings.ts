@@ -30,6 +30,9 @@ const isBoolean = (value: unknown): value is boolean => typeof value === 'boolea
 export type BranchView = 'tree' | 'matrix';
 export const branchView = setting<BranchView>('branches-view', 'tree', (value): value is BranchView => value === 'tree' || value === 'matrix');
 
+/** The website's «ربط الكلمات المتشابهة بخطوط تلقائيًا»: a matrix of a book group opens with its word connections drawn. */
+export const connectors = setting('branches-connectors', false, isBoolean);
+
 /** The surrounding-ayat switch: one setting for every tree and matrix on the branches tab. */
 export const around = setting('branches-surround', false, isBoolean);
 

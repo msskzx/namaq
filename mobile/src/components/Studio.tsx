@@ -27,20 +27,21 @@ const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.
 export function StudioButton({ palette }: { palette: Palette }) {
   const growth = useGrowth();
   if (!growth.total) return null;
-  return <IconButton label="استوديو النمو" onPress={openStudio} Icon={Clapperboard} color={palette.ink} />;
+  return <IconButton label={growth.kind === 'matrix' ? 'استوديو الروابط' : 'استوديو النمو'} onPress={openStudio} Icon={Clapperboard} color={palette.ink} />;
 }
 
 export function StudioControls({ palette, onVideo }: { palette: Palette; onVideo?: () => void }) {
   const growth = useGrowth();
   const active = growth.status === 'playing' || growth.status === 'paused';
   const playing = growth.status === 'playing';
-  const label = playing ? 'إيقاف مؤقت' : growth.status === 'paused' ? 'متابعة' : growth.status === 'done' ? 'إعادة' : 'شاهد الشجرة تنمو';
+  const matrix = growth.kind === 'matrix';
+  const label = playing ? 'إيقاف مؤقت' : growth.status === 'paused' ? 'متابعة' : growth.status === 'done' ? 'إعادة' : matrix ? 'شاهد الروابط' : 'شاهد الشجرة تنمو';
   const ask = growth.mode === 'ask';
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
       <Chip label={`السرعة ${growth.speed}×`} text={`${growth.speed}×`} onPress={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} palette={palette} />
       {ask && <Chip label={`مهلة السؤال ${growth.timer ? num(growth.timer) : '∞'}`} text={growth.timer ? `${growth.timer}s` : '∞'} onPress={() => setPrefs({ timer: next(TIMERS, growth.timer) })} palette={palette} active={!!growth.timer} />}
-      <IconButton label="اكمل الآيات" onPress={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} Icon={Timer} color={ask ? palette.accent : palette.ink} pressed={ask} />
+      <IconButton label={matrix ? 'تذكّر الرابط' : 'اكمل الآيات'} onPress={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} Icon={Timer} color={ask ? palette.accent : palette.ink} pressed={ask} />
       <IconButton label={label} onPress={() => (active ? pause(playing) : void play())} Icon={playing ? Pause : Play} color={active ? palette.accent : palette.ink} />
       <IconButton label="إعادة ضبط" onPress={stop} Icon={RotateCcw} color={palette.ink} />
       {onVideo && <IconButton label="مشاركة كفيديو" onPress={onVideo} Icon={Send} color={palette.ink} />}
@@ -59,7 +60,7 @@ export function StudioProgress({ palette }: { palette: Palette }) {
       {Array.from({ length: growth.total }, (_, i) => {
         const done = growth.status === 'done' || (growth.status !== 'idle' && i <= growth.at);
         return (
-          <Pressable key={i} onPress={() => void play(i)} accessibilityRole="button" accessibilityLabel={`من الآية ${num(i + 1)}`} style={{ flex: 1, height: 20, justifyContent: 'center' }}>
+          <Pressable key={i} onPress={() => void play(i)} accessibilityRole="button" accessibilityLabel={`${growth.kind === 'matrix' ? 'من الرابط' : 'من الآية'} ${num(i + 1)}`} style={{ flex: 1, height: 20, justifyContent: 'center' }}>
             <View style={{ height: 4, borderRadius: 2, backgroundColor: done ? palette.green : palette.rule }} />
           </Pressable>
         );

@@ -1,6 +1,7 @@
 import { useColorScheme } from 'react-native';
 import { useMemo } from 'react';
 import { cardColour } from '@shared/cardTint';
+import type { ConnectionTone } from '@shared/quran/mutashabih/connections';
 import { cardTints, themeChoice } from './settings';
 
 // The branches pages' palette on the website (src/app/theme.css, docs/palette.md).
@@ -22,6 +23,8 @@ export const light = {
   onHighlight: '#202c35',
   /** The prophets timeline's five phase colours, in the website's order (blue, amber, rose, green, violet), muted to this palette. */
   phases: ['#426578', '#8a6420', '#783d49', '#506449', '#665177'],
+  /** The website's --home-slot-1…4: the word-connection colours. */
+  slots: ['#426578', '#617047', '#665177', '#806239'],
 };
 
 export type Palette = typeof light;
@@ -42,6 +45,7 @@ export const dark: Palette = {
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
   phases: ['#a9c4d1', '#dcb46e', '#d9a6b0', '#b1c59f', '#c3afd5'],
+  slots: ['#a9c4d1', '#b1c59f', '#c3afd5', '#dcc5a0'],
 };
 
 export const QURAN_FONT = 'KFGQPC Hafs';
@@ -64,4 +68,10 @@ export function blend(a: string, b: string, weight: number) {
   const parts = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
   const [x, y] = [parts(a), parts(b)];
   return `#${x.map((value, i) => Math.round(value * weight + y[i] * (1 - weight)).toString(16).padStart(2, '0')).join('')}`;
+}
+
+/** A kind of difference's colour for its connection lines and chip, as on the website. */
+export function toneColor(palette: Palette, tone: ConnectionTone) {
+  if (tone === 'root' || tone === 'green' || tone === 'muted') return palette[tone];
+  return palette.slots[Number(tone.slice(4)) - 1];
 }

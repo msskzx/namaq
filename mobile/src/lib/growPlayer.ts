@@ -22,10 +22,12 @@ export type Growth = Prefs & {
   ask?: { id: string; left: number; seconds: number };
   /** The ayah whose path is lit. */
   lit: string | null;
+  /** What the studio grows: a tree, or a matrix's word connections. */
+  kind: 'tree' | 'matrix';
 };
 
 const NONE = new Set<string>();
-let state: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: NONE, now: NONE, lit: null };
+let state: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: NONE, now: NONE, lit: null, kind: 'tree' };
 const listeners = new Set<() => void>();
 const set = (next: Partial<Growth>) => {
   state = { ...state, ...next };
@@ -51,7 +53,7 @@ export function setPrefs(next: Partial<Prefs>) {
 }
 
 /** The tree the studio grows: a card hands its beats (built for both modes) when it becomes the open card. */
-export type Target = { watch: Beat[]; ask: Beat[] };
+export type Target = { watch: Beat[]; ask: Beat[]; kind?: 'tree' | 'matrix' };
 let target: Target | null = null;
 let run = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -62,7 +64,7 @@ const totalOf = (beats: Beat[]) => beats.length ? beats[beats.length - 1].step +
 export function setTarget(next: Target | null) {
   stop();
   target = next;
-  set({ total: next ? totalOf(next.watch) : 0, studio: next ? state.studio : false });
+  set({ total: next ? totalOf(next.watch) : 0, studio: next ? state.studio : false, kind: next?.kind ?? 'tree' });
 }
 
 /**

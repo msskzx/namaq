@@ -1,4 +1,4 @@
-import type { Group, Position, Tag } from '@shared/quran/mutashabih/types';
+import type { Group, Position, Tag } from './types';
 
 export type ConnectionEnd = { words: Position[] } | { gap: Position; edge: 'before' | 'after' };
 export type WordConnection = { from: ConnectionEnd; to: ConnectionEnd };
@@ -32,3 +32,13 @@ export function wordConnections(group: Group, tag: Tag): WordConnection[] {
     return links;
   });
 }
+
+export type ConnectionTone = 'slot1' | 'slot2' | 'slot3' | 'slot4' | 'root' | 'green' | 'muted';
+const TONES: Partial<Record<Tag, ConnectionTone>> = {
+  order: 'slot1', inversion: 'slot1',
+  word: 'slot3', addition_omission: 'slot2',
+  particle: 'root', number: 'green', definiteness: 'slot4',
+};
+
+/** Each kind of difference keeps one colour for its lines and its chip. */
+export const connectionTone = (tag: Tag): ConnectionTone => TONES[tag] ?? 'muted';

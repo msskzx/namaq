@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode, type RefObject } from 'react';
 import { closeStudio, growthState, useGrowth, useMatrixGrowTarget } from './Grow';
-import { wordConnections, type ConnectionEnd } from '@/lib/quran/mutashabih/connections';
+import { connectionTone, wordConnections, type ConnectionEnd, type ConnectionTone } from '@shared/quran/mutashabih/connections';
 import type { Group, Tag } from '@shared/quran/mutashabih/types';
 import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
 
@@ -19,13 +19,9 @@ export function GroupConnections({ group: original, shownKeys, children, default
   </Connections.Provider>;
 }
 
-const COLORS: Partial<Record<Tag, string>> = {
-  order: '--home-slot-1', inversion: '--home-slot-1',
-  word: '--home-slot-3', addition_omission: '--home-slot-2',
-  particle: '--home-root', number: '--home-green', definiteness: '--home-slot-4',
-};
+const VARS: Record<ConnectionTone, string> = { slot1: '--home-slot-1', slot2: '--home-slot-2', slot3: '--home-slot-3', slot4: '--home-slot-4', root: '--home-root', green: '--home-green', muted: '--home-muted' };
 
-export const connectionColor = (tag: Tag) => `var(${COLORS[tag] ?? '--home-muted'})`;
+export const connectionColor = (tag: Tag) => `var(${VARS[connectionTone(tag)]})`;
 
 const noConnections = () => {};
 const NO_TAGS: Tag[] = [];
