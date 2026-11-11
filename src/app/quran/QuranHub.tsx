@@ -23,7 +23,7 @@ export const QURAN_CARDS: { href: string; desc: Record<Language, string> }[] = [
   { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
   ...PROPHETS.map(({ slug, name, nameEn }) => ({
     href: `/quran/prophets/${slug}`,
-    desc: { ar: `قصة ${name} في القرآن على خط زمني`, en: `The story of ${nameEn} in the Quran on a timeline` },
+    desc: { ar: `أحداث قصة ${name} وأين ذُكرت في السور`, en: `The events of ${nameEn}'s story and the surahs that tell them` },
   })),
 ];
 

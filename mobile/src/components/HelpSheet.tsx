@@ -2,7 +2,7 @@ import { ScrollView, Text, View } from 'react-native';
 import Sheet from './Sheet';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
-export type HelpTopic = 'branches' | 'compare';
+export type HelpTopic = 'branches' | 'compare' | 'prophets';
 
 /** A coloured sample word and what its colour means. */
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
@@ -14,19 +14,23 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
  * with the colour legend inside it. Shared by the branches and compare tabs.
  */
-export default function HelpSheet({ topic, onClose, palette }: { topic: HelpTopic | null; onClose: () => void; palette: Palette }) {
+export default function HelpSheet({ topic, note, onClose, palette }: { topic: HelpTopic | null; note?: string; onClose: () => void; palette: Palette }) {
   const paragraph = { color: palette.ink, fontSize: 15, lineHeight: 25, textAlign: 'right' as const };
   return (
     <Sheet open={!!topic} onClose={onClose} palette={palette}>
       {topic && <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
-        {topic === 'branches' ? <>
+        {topic === 'prophets' ? <>
+          <Text style={paragraph}>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</Text>
+          <Text style={paragraph}>اضغط دائرة لتقرأ مواضع الحدث سورةً تحت سورة، أو تفتح الآيات في المصحف، أو تقارن السورتين. وفي المواضع تُلوَّن الكلمات التي جاءت متتابعة في سورة أخرى من مواضع الحدث نفسه.</Text>
+          {note && <Text style={[paragraph, { color: palette.muted }]}>{note}</Text>}
+        </> : topic === 'branches' ? <>
           <Text style={paragraph}>تجمع البطاقة مواضع متشابهة، وتعرضها كشجرة أو مصفوفة. تطابق كل موضعين شرط للتجميع الآلي، وتحفظ مجموعات الكتب كما وردت. زر المصادر تحت البطاقة يعرض أنواع الاختلاف التي ذكرتها الكتب، وبجانب كل نوع مثال كلماته، ثم نص كل كتاب وموضعه. الرمز ∅ يدل على حذف. تظل العبارات العامة متاحة بالبحث.</Text>
           <Text style={paragraph}>وسوم التذكير والتأنيث والإظهار والإضمار والإعراب والقالب الواحد امتدادات نمق. حدود المطابقة العددية اختيارات نمق، والنص برواية حفص كما في المصحف.</Text>
           <View style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>

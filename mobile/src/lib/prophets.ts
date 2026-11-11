@@ -23,6 +23,3 @@ export function prophetStory(slug: string): ProphetStory | undefined {
   }
   return found;
 }
-
-/** Where a station sits in the pager: the last index if `n` is past the end, the first if it is unknown. */
-export const stationIndex = (events: EventView[], n: number | undefined) => Math.max(0, Math.min(events.length - 1, (n ?? 1) - 1));

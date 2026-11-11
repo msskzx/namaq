@@ -1,7 +1,7 @@
 # Timelines of the prophets
 
-`/quran/prophets/[slug]` is a horizontal timeline of one prophet's story, with
-the ayat of every surah that tells each part of it. Musa is the only prophet
+`/quran/prophets/[slug]` maps one prophet's story: its events, and the surahs
+that tell each of them. Musa is the only prophet
 with a story so far; the rest of this document describes his.
 
 ## Adding a prophet
@@ -16,28 +16,30 @@ with a story so far; the rest of this document describes his.
    `src/app/quran/prophets/ayat/index.ts`.
 
 `npm test` fails until all three agree on the slugs, and until the JSON holds
-exactly the ayat the story's ranges name. The page cycles five phase colors, so
-a story with more than five phases repeats them.
+exactly the ayat the story's ranges name. The page has five group colours, so a
+story with more than five groups repeats them.
 
 ## Shape
 
-- One station per event, left to right in reading order (the page is RTL, so the
-  line starts at the right edge). Each station is a card hanging from the line,
-  colored by one of five phases: upbringing, the mission, the exodus, his people
-  Bani Israil, his knowledge and book. Every station is in a phase, with none
-  left ungrouped. An index above the line lists every station by topic under its
-  phase; a click scrolls the line into view and centers the station.
-- A station holds segments, each one surah and one ayah range, so an event told
-  in several surahs lists them together. Each segment is an `AyatDisclosure`,
-  closed until opened.
-- The first station is the mother of Musa. Pharaoh's killing of the sons
+The events have no dates. Their order only says what came before what, and the page is about how each event is
+told across the surahs (owner, 2026-11-11). So the page is a map, not a line:
+
+- A column for each event, under its group's colour (upbringing, the mission, the exodus, his people Bani
+  Israil, his knowledge and book), and a row for each surah that tells part of the story, in mushaf order. The
+  dot's size is how many ayat that surah gives the event. The surah names stay put while the columns scroll.
+- Tapping a dot opens a small card (a sheet on the phone): read the event's places, open the ayat in the
+  reader, or compare the surah with the one that gives the event the most ayat. Tapping an event title opens
+  its places too.
+- The places of an event are cards one under another, one per surah. A word sits in colour when it is in a run of
+  two or more words that another surah's place in the same event also has.
+- The page carries little text. The intro and the legend are behind the help icon by the title (the help sheet
+  in the app). The word «روايات» is not used for the tellings; the page says «مواضع».
+- The group colours are `--story-0..4` in `src/app/theme.css` and `phases` in the app's `theme.ts`.
+- A station holds segments, each one surah and one ayah range. The map gathers an event's segments by surah
+  (`placesOf` in `shared/quran/prophets/story.ts`).
+- The first event is the mother of Musa. Pharaoh's killing of the sons
   (28:3-6) opens it, since the Qur'an gives it as the reason she cast him in the
   river; 40:25 is a later killing and sits with the believer of Pharaoh's house.
-- Stations follow the order the story is told in. The cow, Qarun
-  (of Musa's people, 28:76) and the harm done to him follow as part of his
-  people, though no ayah fixes their place; the righteous servant, his name among
-  the prophets and the book he was given close the line. The order of those six
-  is ours and the page says so.
 
 ## Rules
 

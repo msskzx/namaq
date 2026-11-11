@@ -19,7 +19,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
       quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
     ] },
     { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
-      { href: '/quran/prophets/musa', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'قصص الأنبياء في القرآن على خط زمني', en: 'The prophets’ stories in the Quran on a timeline' } },
+      { href: '/quran/prophets/musa', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
       quran('/quran/iltifat', { ar: 'الالتفات', en: 'Iltifat' }),
       quran('/quran/openings', { ar: 'افتتاح السور', en: 'Surah openings' }),
       quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
