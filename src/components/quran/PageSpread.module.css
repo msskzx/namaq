@@ -47,6 +47,6 @@
   .lines { font-size: 1.125rem; line-height: 2.2; }
 }
 
-/* An ayah shown for context only: the ayah before or after in a compare matrix. */
-.lines > p.muted { color: var(--home-muted); font-size: 0.8em; }
-.lines > p.muted mark { opacity: 0.85; }
+/* An ayah shown for context only: the ayah before or after in a compare matrix, running on with the ayat it frames. */
+.mutedAyah { color: var(--home-muted); font-size: 0.8em; }
+.mutedAyah mark { opacity: 0.85; }

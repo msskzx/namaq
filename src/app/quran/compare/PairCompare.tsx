@@ -310,7 +310,8 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
     ? `${ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? side.surah} ${card.many.options.map(item => (ar ? num(item.ayah.number) : item.ayah.number)).join(' · ')}`
     : sidePage(side, names, ar, null).title;
   const withNeighbours = (page: SpreadPage, i: number): SpreadPage => neighbours && !page.pick
-    ? { ...page, rows: [[neighbours.before[i] ?? { number: 0, words: [], muted: true }], ...page.rows, [neighbours.after[i] ?? { number: 0, words: [], muted: true }]] }
+    // The ayah before and after run on with the side's ayat as one text, not rows of their own.
+    ? { ...page, rows: [[...(neighbours.before[i] ? [neighbours.before[i]!] : []), ...page.rows.flat(), ...(neighbours.after[i] ? [neighbours.after[i]!] : [])]] }
     : page;
   const partners = (side: CardSide) => {
     const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);

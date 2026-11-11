@@ -27,7 +27,7 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
 }
 
 function RowAyat({ ayat }: { ayat: SpreadAyah[] }) {
-  return ayat.map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}<Ayah ayah={ayah} /></Fragment>);
+  return ayat.map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}{ayah.muted ? <span className={styles.mutedAyah}><Ayah ayah={ayah} /></span> : <Ayah ayah={ayah} />}</Fragment>);
 }
 
 export function MatchLegend({ exact, root }: { exact?: string; root?: string }) {
@@ -50,7 +50,7 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
           <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}{page.action && <span className={styles.action}>{page.action}</span>}</header>
           <div className={styles.lines} lang="ar">
             {Array.from({ length: stacked && !page.pick ? 1 : rows }, (_, row) => (
-              <p key={row} style={stacked && !page.pick ? { gridRow: `span ${rows}` } : undefined} className={[page.pick && row > 0 && page.rows[row] && styles.pickDivider, page.rows[row]?.length && page.rows[row].every(ayah => ayah.muted) && styles.muted].filter(Boolean).join(' ') || undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
+              <p key={row} style={stacked && !page.pick ? { gridRow: `span ${rows}` } : undefined} className={page.pick && row > 0 && page.rows[row] ? styles.pickDivider : undefined} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>
                 {page.pick && page.rows[row]
                   ? <button type="button" data-tap-through className={styles.pick} aria-pressed={page.pick.selected === row} onClick={() => page.pick!.onPick(row)}><span className="sr-only">{page.pick.labels[row]}: </span><RowAyat ayat={page.rows[row]} /></button>
                   : <RowAyat ayat={page.rows[row] ?? []} />}
