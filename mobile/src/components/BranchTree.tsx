@@ -11,7 +11,7 @@ import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
-import { QURAN_FONT, toneOf, type Palette } from '@/lib/theme';
+import { blend, QURAN_FONT, toneOf, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
@@ -31,6 +31,8 @@ const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
 type Shared = { palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string> };
 const isLit = (shared: Shared, ayahKeys: string[]) => !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
+/** The ayat whose paths were lit by a tap (not by a search), as the website names them on the box the path starts from. */
+const tapped = (shared: Shared, ayahKeys: string[]) => !shared.paths ? [] : ayahKeys.filter(key => [...shared.paths!.pinned].some(([id, lit]) => id !== 'search' && lit.includes(key)));
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
 /** Where each box registers itself, so a video of the tree can be drawn from where the boxes sit. */
 type Host = ComponentRef<typeof View>;
@@ -58,6 +60,27 @@ function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: 
     return shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   }).join(' · ');
   return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
+}
+
+/**
+ * Above the box a lit path starts from: which ayah it is, or how many, as on the website. Not when the box itself ends
+ * that one ayah, since its own reference already says so.
+ */
+function startLabel(shared: Shared, ayahKeys: string[], ending: string[] = []) {
+  const lit = tapped(shared, ayahKeys);
+  if (lit.length === 0 || (lit.length === 1 && ending.includes(lit[0]))) return undefined;
+  if (lit.length > 1) return `الآيات: ${num(lit.length)}`;
+  const [surah, ayah] = lit[0].split(':').map(Number);
+  return shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
+}
+
+function StartReference({ label, shared }: { label?: string; shared: Shared }) {
+  if (!label) return null;
+  return (
+    <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}>
+      <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{label}</Text>
+    </View>
+  );
 }
 
 type Marks = { exact: Set<number>; rooted: Set<number> };
@@ -131,7 +154,10 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { ...text, muted: !!muted, keys: ayahKeys } }); };
   const asked = growth.ask?.id === id ? growth.ask : undefined;
-  const lit = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit)) || isLit(shared, ayahKeys);
+  const growing = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit));
+  // A lit path tints its boxes blue, and the box tapped is outlined, as on the website.
+  const onPath = isLit(shared, ayahKeys);
+  const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
   return (
     <Fade id={id}>
       <Pressable
@@ -142,8 +168,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
           maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
-          borderColor: pressed || lit ? (growth.now.has(id) ? palette.path : palette.accent) : muted ? palette.muted : palette.rule,
-          backgroundColor: muted ? 'transparent' : palette.paperDeep,
+          borderColor: growing ? (growth.now.has(id) ? palette.path : palette.accent) : pressed ? palette.accent : muted ? palette.muted : selected ? palette.path : palette.rule,
+          backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.paperDeep,
           borderTopStartRadius: 14,
           borderBottomEndRadius: 14,
           borderTopEndRadius: 4,
@@ -207,14 +233,14 @@ function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
         <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}
           onLayout={event => { const { x, y, width, height } = event.nativeEvent.layout; const span = down ? { at: x, size: width } : { at: y, size: height }; setSpans(old => { const next = [...old]; next[i] = span; return next; }); }}>
           <Fade id={lineId(entry.id)} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
-            <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.accent : undefined} down={down} />
+            <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.path : undefined} down={down} />
           </Fade>
           <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
         </View>
       ))}
       {spine && <View pointerEvents="none" style={down
-        ? { position: 'absolute', top: 0, left: spine[0], width: spine[1] - spine[0], borderTopWidth: LINE, borderColor: palette.accent }
-        : { position: 'absolute', start: 0, top: spine[0], height: spine[1] - spine[0], borderStartWidth: LINE, borderColor: palette.accent }} />}
+        ? { position: 'absolute', top: 0, left: spine[0], width: spine[1] - spine[0], borderTopWidth: LINE, borderColor: palette.path }
+        : { position: 'absolute', start: 0, top: spine[0], height: spine[1] - spine[0], borderStartWidth: LINE, borderColor: palette.path }} />}
     </View>
   );
 }
@@ -223,7 +249,7 @@ function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
 function Stub({ shared, entries }: { shared: Shared; entries: Entry[] }) {
   const { hidden } = useContext(Growth);
   const visible = entries.some(entry => !hidden.has(lineId(entry.id)));
-  const color = entries.some(entry => isLit(shared, entry.keys)) ? shared.palette.accent : shared.palette.rule;
+  const color = entries.some(entry => isLit(shared, entry.keys)) ? shared.palette.path : shared.palette.rule;
   return <View style={[shared.down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
 }
 
@@ -260,7 +286,9 @@ function befores(ayahKeys: string[], shared: Shared): Entry[] {
   return ayahKeys.flatMap(key => around.before[key] ? [{ id: `b${key}`, keys: [key], item: <NeighbourBox id={`b${key}`} beside={around.before[key]!} of={key} shared={shared} /> }] : []);
 }
 
-function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Shared }) {
+function Node({ node, path, shared, starts }: { node: Branch; path: string[]; shared: Shared;
+  /** On the root: the ayat that start here rather than in a box of words before the phrase. */
+  starts?: string[] }) {
   const root = path.length === 0;
   const all = keys(node);
   const words = node.words;
@@ -278,7 +306,8 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
   entries.forEach(entry => edge(shared, id, entry.id));
   const references = node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ');
   const shownWords = { words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, differs: differing(node.forms) };
-  const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}) };
+  const start = starts && startLabel(shared, starts, node.ayat);
+  const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
   return (
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
@@ -286,6 +315,7 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
         <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
           tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
+          <StartReference label={start} shared={shared} />
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
           <Words {...shownWords} />
           {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
@@ -328,7 +358,9 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
       const lead = befores(prefix.keys, shared);
       const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, differs: differing(prefix.forms), color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
-      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)}>
+      const start = startLabel(shared, prefix.keys);
+      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={{ ...sceneWords(prefixWords), ...(start ? { header: start } : {}) }}>
+        <StartReference label={start} shared={shared} />
         <Words {...prefixWords} />
       </Box>;
       return [{ id: `p${i}`, keys: prefix.keys, item: lead.length ? <View style={{ flexDirection: down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub shared={shared} entries={lead} /><BackFan entries={lead} shared={shared} /></View> : box }];
@@ -345,7 +377,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
           <BackFan entries={before} shared={shared} />
           <Stub shared={shared} entries={before} />
         </>}
-        <Node node={presentation.tree} path={[]} shared={shared} />
+        <Node node={presentation.tree} path={[]} shared={shared} starts={all.filter(key => !presentation.prefixes.some(prefix => prefix.word && prefix.keys.includes(key)))} />
       </View>
     </Growth.Provider>
     </Boxes.Provider>
