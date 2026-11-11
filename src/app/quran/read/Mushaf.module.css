@@ -110,11 +110,12 @@
   justify-content: center;
   border: 3px double var(--home-rule);
   color: var(--home-accent);
-  font-size: 0.8em;
+  /* The opening pages draw bigger words, but the title still fits its one-line box. */
+  font-size: min(0.8em, calc(var(--one-line, 1em) * 0.46));
   line-height: 1;
 }
 
-.basmala { text-align: center; line-height: 1; }
+.basmala { text-align: center; line-height: 1; font-size: min(1em, calc(var(--one-line, 1em) * 0.58)); }
 
 .badge {
   position: absolute;
