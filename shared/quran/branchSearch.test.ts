@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { ALL_KINDS, searchSharedPhrases } from './branchSearch';
 import { branchInventory, distinctBranchPieces, outsideMatches, OUTSIDE_SUGGESTIONS } from './branchInventory';
 
@@ -19,6 +19,9 @@ it('retains named family English search and Arabic normalization', () => {
 });
 
 describe('trees outside the current filters', () => {
+  // Search outside the filters builds the every-kind tree list once and keeps it. That takes seconds on a slow CI runner and
+  // blocks while it runs, so build it here instead of inside whichever test happens to search first.
+  beforeAll(() => { branchInventory({ categories: ALL_KINDS }, null); }, 60000);
   it('lists word trees the default list hides, and none already shown', () => {
     const shown = branchInventory({}, null);
     const found = distinctBranchPieces(searchSharedPhrases(shown, 'ألم تر كيف'));
