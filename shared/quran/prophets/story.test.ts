@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MUSA } from './musa';
-import { AYAT } from '../../../src/app/quran/prophets/ayat';
 import { buildStory, dotSize, placeIn, placesOf, rangeText, seg, sharedWords, storedText, storyMap } from './story';
+import { QURAN_TEXT } from './text';
 
 const events = [
   { phase: 0, title: 'a', segments: [seg(28, 3, 4), seg(20, 37)] },
@@ -33,7 +33,7 @@ describe('placesOf', () => {
 });
 
 describe('storyMap', () => {
-  const map = storyMap(buildStory(MUSA.events, storedText(AYAT.musa)));
+  const map = storyMap(buildStory(MUSA.events, QURAN_TEXT));
 
   it('has a row for each surah that tells part of the story, in mushaf order', () => {
     expect(map.surahs.length).toBe(45);

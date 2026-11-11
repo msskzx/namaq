@@ -1,12 +1,8 @@
-import corpus from '@shared/data/quran/trees.json';
-import surahRows from '@shared/data/quran/surahs.json';
 import { findProphet, storyTitle } from '@shared/quran/prophets';
 import { STORIES } from '@shared/quran/prophets/stories';
 import { buildStory, type EventView, type Story } from '@shared/quran/prophets/story';
+import { QURAN_TEXT } from '@shared/quran/prophets/text';
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
-let text: Map<string, string> | undefined;
-const ayah = (key: string) => (text ??= new Map(corpus.ayat.map(a => [a.key, a.words.join(' ')]))).get(key);
 
 export type ProphetStory = { slug: string; name: string; title: string; story: Story; events: EventView[] };
 const built = new Map<string, ProphetStory>();
@@ -18,7 +14,7 @@ export function prophetStory(slug: string): ProphetStory | undefined {
   let found = built.get(slug);
   if (!found) {
     const story = STORIES[slug];
-    found = { slug, name: prophet.name, title: storyTitle(prophet), story, events: buildStory(story.events, { names, ayah }) };
+    found = { slug, name: prophet.name, title: storyTitle(prophet), story, events: buildStory(story.events, QURAN_TEXT) };
     built.set(slug, found);
   }
   return found;

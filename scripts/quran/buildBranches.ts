@@ -1,21 +1,21 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { readerAyat, sharedOpenings, withConjunctions, withNext, withRoots } from '../../shared/quran/branches';
+import { sharedOpenings, withConjunctions, withNext, withRoots } from '../../shared/quran/branches';
 import { chapterFamilies } from '../../shared/quran/chapterFamilies';
-import { mushafPages, type MushafPage, type ReaderPageData } from '../../shared/quran/readerPage';
+import { mushafPages, type MushafPage } from '../../shared/quran/readerPage';
 import { buildTreeGroups, phrasePieces } from '../../shared/quran/phraseTrees';
 import { buildSubtrees } from '../../shared/quran/subtrees';
 
 // docs/plans/quran-shared-openings.md
-const READER = join(__dirname, '../../src/app/quran/read/data');
 const MUSHAF = join(__dirname, '../../shared/data/quran/mushaf');
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
 const OUT = join(__dirname, '../../shared/data/quran/trees.json');
 
-const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(READER, `${i + 1}.json`), 'utf8')));
 const mushaf: MushafPage[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(MUSHAF, `${i + 1}.json`), 'utf8')));
 const morphology = readFileSync(MORPHOLOGY, 'utf8');
-const read = withRoots(withConjunctions(readerAyat(pages, mushafPages(mushaf)), morphology), morphology);
+const pageOf = mushafPages(mushaf);
+const stored: { key: string; words: string[] }[] = JSON.parse(readFileSync(OUT, 'utf8')).ayat;
+const read = withRoots(withConjunctions(stored.map(({ key, words }) => ({ key, page: pageOf.get(key)!, words })), morphology), morphology);
 const started = performance.now();
 const byKey = new Map(read.map(ayah => [ayah.key, ayah]));
 const continuations = withNext(new Map([

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
+import { ayahEnds, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { buildPhraseGroups, buildTreeGroups, createPhrasePresenter, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
 import treeData from '../data/quran/trees.json';
@@ -194,9 +194,8 @@ describe('buildPhraseGroups', () => {
 
   it('merges hamza seats in the five real resurrection passages', () => {
     const wanted = ['23:82', '37:16', '37:53', '50:3', '56:47'];
-    const pages = Array.from({ length: 604 }, (_, index) => JSON.parse(readFileSync(join(process.cwd(), 'src/app/quran/read/data', `${index + 1}.json`), 'utf8')));
     const morphology = readFileSync(join(process.cwd(), 'data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
-    const ayat = withRoots(readerAyat(pages).filter(entry => wanted.includes(entry.key)), morphology);
+    const ayat = withRoots((treeData.ayat as BranchAyah[]).filter(entry => wanted.includes(entry.key)).map(({ key, page, words }) => ({ key, page, words })), morphology);
     expect(ayat).toHaveLength(5);
     const group = find(buildPhraseGroups(ayat), 'أءذا متنا وكنا ترابا');
     expect(members(group!)).toEqual([...wanted].sort());
