@@ -1,5 +1,6 @@
 import { Fragment, useRef } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { counted } from '@shared/quran/arabicNumber';
 import { dotSize, type EventView, type StoryMap as StoryMapData } from '@shared/quran/prophets/story';
 import type { Palette } from '@/lib/theme';

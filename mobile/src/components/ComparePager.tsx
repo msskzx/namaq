@@ -1,5 +1,6 @@
 import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { FlatList, Platform, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Text } from '@/components/Text';
 import type { Visit } from '@shared/quran/compareCards';
 import { curatedFor } from '@shared/quran/curatedComparisons';
 import { cardsFor, visitKey } from '@/lib/compare';

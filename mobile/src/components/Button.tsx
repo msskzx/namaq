@@ -1,4 +1,5 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import type { LucideProps } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
 

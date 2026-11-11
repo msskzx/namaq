@@ -1,4 +1,5 @@
-import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
 import Sheet from './Sheet';
 import Logo from './Logo';

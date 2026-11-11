@@ -52,7 +52,7 @@ function NeededWords({ words, needed, ayahKeys, at }: { words: string[]; needed:
 
 function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   if (!row.typed) return <span className="text-[var(--home-muted)]">{ar ? "لم تكتب شيئًا" : "Nothing typed"}</span>;
-  return <span className="font-arabic text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
+  return <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
     {at > 0 && " "}
     {at < row.right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
   </React.Fragment>)}</span>;
@@ -122,7 +122,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
             <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
             <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]}
               onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
-              className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-arabic text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
+              className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
           </label>
         )} />
       </div>

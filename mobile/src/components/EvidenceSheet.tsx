@@ -1,4 +1,5 @@
-import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { ExternalLink, Tags } from 'lucide-react-native';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import Sheet from './Sheet';

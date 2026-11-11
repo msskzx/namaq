@@ -1,5 +1,6 @@
 import { useState, useSyncExternalStore } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';

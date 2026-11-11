@@ -1,5 +1,6 @@
 import { useState, useSyncExternalStore } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';

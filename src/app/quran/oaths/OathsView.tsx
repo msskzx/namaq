@@ -8,6 +8,7 @@ import Button from '@/components/common/Button';
 import { RAIL_COLORS, RailCell } from '@/components/quran/Rail';
 import { num } from '@shared/quran/arabicNumber';
 import type { OathView, WordLine } from '@/lib/quran/oaths';
+import { mushafText } from '@shared/quran/mushafText';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 
@@ -40,9 +41,9 @@ export default function OathsView({ oaths, lines }: { oaths: OathView[]; lines: 
               <div className={`${PANEL} flex flex-col gap-2`}>
                 <h2 className="text-xl">{`${num(o.surah)} ${o.name} ${num(o.range[0])}${o.range[1] > o.range[0] ? `-${num(o.range[1])}` : ''}`}</h2>
                 {o.lines.map(l => (
-                  <p key={l.ayah} className="text-2xl leading-[2.2] font-arabic">
+                  <p key={l.ayah} className="text-2xl leading-[2.2] font-quran">
                     <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
-                    {l.text}
+                    {mushafText(l.text)}
                   </p>
                 ))}
                 <ul className="flex flex-wrap gap-1" aria-label="المقسم به">

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, Text, View } from 'react-native';
+import { Pressable, Share, View } from 'react-native';
+import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ArrowLeftRight, Bookmark, BookOpen, Send, Tags } from 'lucide-react-native';

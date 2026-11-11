@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { ArrowLeftRight, ChevronDown } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';

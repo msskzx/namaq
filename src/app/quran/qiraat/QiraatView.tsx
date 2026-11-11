@@ -12,6 +12,7 @@ import { ayahWords, plainName } from '@shared/quran/normalize';
 import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
 import { num } from '@shared/quran/arabicNumber';
 import { wordDiff } from '@shared/quran/wordDiff';
+import { mushafText } from '@shared/quran/mushafText';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
@@ -65,7 +66,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
   });
   const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
-  const around = (side: readonly [number, number]) => words.display.slice(side[0], side[1]).join(' ');
+  const around = (side: readonly [number, number]) => mushafText(words.display.slice(side[0], side[1]).join(' '));
 
   return (
     <section className="flex flex-col gap-4">
@@ -77,12 +78,12 @@ function Card({ entry }: { entry: QiraatEntry }) {
             {rows.map((_, i) => (
               <div key={i} className="row-span-2 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
-                <p className="text-2xl leading-[2.2] font-arabic">
+                <p className="text-2xl leading-[2.2] font-quran">
                   {around(found.before)}{' '}
-                  {spans[i].length === 0 && <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
+                  {spans[i].length === 0 && <mark className={`bg-transparent font-sans ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
                   {spans[i].map((w, k) => (
                     <React.Fragment key={k}>
-                      {differing[i].has(k) ? <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{w}</mark> : w}{' '}
+                      {differing[i].has(k) ? <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{mushafText(w)}</mark> : mushafText(w)}{' '}
                     </React.Fragment>
                   ))}
                   {around(found.after)}

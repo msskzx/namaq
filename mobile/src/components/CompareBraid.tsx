@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '@/components/Text';
 import Svg, { Path } from 'react-native-svg';
 import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';

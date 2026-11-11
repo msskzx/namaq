@@ -1,6 +1,7 @@
 import React from 'react';
 import { num } from '@shared/quran/arabicNumber';
 import { ANSWER_SRC, DISPUTE, NOTES, TASBIH_NOTES, TASBIH_SRC, type OpeningView, type Role, type TasbihRole, type TasbihView } from '@/lib/quran/openings';
+import { mushafText } from '@shared/quran/mushafText';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
@@ -55,10 +56,10 @@ export default function OpeningsView({ items, tasbih }: { items: OpeningView[]; 
           <section key={surah.number} className={PANEL} aria-label={`${num(surah.number)} ${surah.plain}`}>
             <h2 className="text-xl text-amber-600 dark:text-amber-400 mb-2">{`${num(surah.number)} ${surah.plain}`}</h2>
             {lines.map(l => (
-              <p key={l.ayah} data-role={l.role} className={`text-2xl leading-[2.2] font-arabic border-s-4 rounded px-2 mb-1 ${ROLES[l.role].block}`}>
+              <p key={l.ayah} data-role={l.role} className={`text-2xl leading-[2.2] font-quran border-s-4 rounded px-2 mb-1 ${ROLES[l.role].block}`}>
                 <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
-                {l.text}
-                {l.role === 'answer' && !l.sourced && <span className={`${NOTE} ms-2`}>قراءتنا</span>}
+                {mushafText(l.text)}
+                {l.role === 'answer' && !l.sourced && <span className={`${NOTE} ms-2 font-sans`}>قراءتنا</span>}
               </p>
             ))}
           </section>
@@ -84,12 +85,12 @@ export default function OpeningsView({ items, tasbih }: { items: OpeningView[]; 
         {tasbih.map(({ surah, ayah, words }) => (
           <section key={surah.number} className={PANEL} aria-label={`${num(surah.number)} ${surah.plain}`}>
             <h3 className="text-xl text-amber-600 dark:text-amber-400 mb-2">{`${num(surah.number)} ${surah.plain}`}</h3>
-            <p className="text-2xl leading-[2.2] font-arabic">
+            <p className="text-2xl leading-[2.2] font-quran">
               <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(ayah)}</span>
               {runs(words).map((r, i) => (
                 <React.Fragment key={i}>
                   {i > 0 && ' '}
-                  {r.role ? <mark data-role={r.role} className={`rounded px-1 text-inherit ${TASBIH_ROLES[r.role].mark}`}>{r.text}</mark> : r.text}
+                  {r.role ? <mark data-role={r.role} className={`rounded px-1 text-inherit ${TASBIH_ROLES[r.role].mark}`}>{mushafText(r.text)}</mark> : mushafText(r.text)}
                 </React.Fragment>
               ))}
             </p>

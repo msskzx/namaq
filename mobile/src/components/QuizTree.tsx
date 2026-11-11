@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, Share, View } from 'react-native';
+import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
 import { Bookmark, GalleryHorizontal, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -114,9 +115,9 @@ function Graded({ row, palette, names }: { row: Correction; palette: Palette; na
       {!row.correct && (
         <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
           {'كتبتَ: '}
-          {typed.length === 0 ? 'لا شيء' : typed.map((word, i) => (
+          {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
             <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
-          ))}
+          ))}</Text>}
         </Text>
       )}
       {references !== '' && <Text style={{ fontSize: 12, color: palette.muted, textAlign: 'right' }}>{references}</Text>}

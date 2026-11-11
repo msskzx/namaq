@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { Check, ChevronDown } from 'lucide-react-native';
 import { findProphet, PROPHETS } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';

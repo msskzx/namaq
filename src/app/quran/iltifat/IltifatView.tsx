@@ -18,7 +18,7 @@ function CuratedCard({ item: { surah, parts, note, speakers } }: { item: Curated
       {speakers && (
         <ul className="flex flex-wrap gap-x-6 gap-y-1 mb-3 text-sm" aria-label="المتكلمون">
           {(Object.entries(speakers) as [Mode, string][]).map(([m, label]) => (
-            <li key={m} className={`font-arabic text-lg ${SLOT_COLORS[MODES[m].slot]}`}>{label}</li>
+            <li key={m} className={`text-lg ${SLOT_COLORS[MODES[m].slot]}`}>{label}</li>
           ))}
         </ul>
       )}
@@ -39,7 +39,7 @@ export default function IltifatView({ curated, modes }: { curated: CuratedView[]
       <ul className={`${PANEL} flex flex-wrap gap-x-6 gap-y-2`} aria-label="ألوان الضمائر">
         {modes.map(m => (
           <li key={m} className="flex items-center gap-2 text-sm">
-            <span className={`font-arabic text-xl ${SLOT_COLORS[MODES[m].slot]}`}>{MODES[m].sample}</span>
+            <span className={`text-xl ${SLOT_COLORS[MODES[m].slot]}`}>{MODES[m].sample}</span>
             {MODES[m].label}
           </li>
         ))}

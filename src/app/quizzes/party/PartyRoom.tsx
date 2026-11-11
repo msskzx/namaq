@@ -20,6 +20,7 @@ import { BranchFeedback, BranchInputs } from "../BranchAnswers";
 import PartySettingsPanel from "./PartySettings";
 import { Eye } from "lucide-react";
 import QuestionReview from "../QuestionReview";
+import { mushafText } from '@shared/quran/mushafText';
 
 type Question = PartyQuestion & {
   promptArabic: string;
@@ -244,7 +245,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         <p dir="rtl" lang="ar" className={`mb-4 ${question.tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
           <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-            <p className="font-arabic text-xl leading-loose text-[var(--home-ink)]">{question.ayah.text}</p>
+            <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(question.ayah.text)}</p>
             <p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p>
           </blockquote>
         )}

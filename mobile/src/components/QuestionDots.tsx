@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { Check, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { QuestionState } from '@/lib/quiz';

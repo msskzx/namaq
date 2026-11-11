@@ -45,7 +45,7 @@ export default function StatsCard({ icon, value, suffix, label, desc, dir = 'ltr
           {animatedValue}{suffix}
         </div>
       </div>
-      <div className={`font-arabic text-lg sm:text-xl mb-1 text-indigo-800 dark:text-indigo-300 ${textAlign}`}>{label}</div>
+      <div className={`text-lg sm:text-xl mb-1 text-indigo-800 dark:text-indigo-300 ${textAlign}`}>{label}</div>
       <div className={`text-sm sm:text-base text-gray-700 dark:text-indigo-100 ${textAlign}`}>{desc}</div>
     </div>
   );

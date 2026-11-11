@@ -9,6 +9,7 @@ import type { QuestionChoice } from "@/lib/quiz/types";
 import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@shared/quiz/score";
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
+import { mushafText } from '@shared/quran/mushafText';
 
 type ReviewQuestion = ScoredQuestion & {
   key: string;
@@ -47,7 +48,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
     <p>{question.tree
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
-    {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-arabic text-xl leading-loose">{question.ayah.text}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
+    {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     {question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} /> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}

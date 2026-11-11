@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { treeSurahs } from '@shared/quran/treeSurahs';
 import { surahNames } from '@/lib/branches';

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';

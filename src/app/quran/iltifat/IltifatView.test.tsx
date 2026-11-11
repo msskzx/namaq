@@ -5,6 +5,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { buildCurated, MODES, USED_MODES } from '@/lib/quran/curatedShifts';
 import data from './ayat.json';
 import IltifatView from './IltifatView';
+import { mushafText } from '@shared/quran/mushafText';
 
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: 'ar' }),
@@ -23,8 +24,8 @@ describe('IltifatView', () => {
 
   it('gives the same mode the same color in every shift', () => {
     renderView();
-    const swatch = screen.getByText(MODES.first.sample).className.replace('font-arabic text-xl ', '');
-    const we = [...document.querySelectorAll('mark')].filter(m => ['فَسُقۡنَـٰهُ', 'أَرۡسَلۡنَـٰكَ', 'فَأَحۡیَیۡنَا'].includes(m.textContent!));
+    const swatch = screen.getByText(MODES.first.sample).className.replace('text-xl ', '');
+    const we = [...document.querySelectorAll('mark')].filter(m => ['فَسُقۡنَـٰهُ', 'أَرۡسَلۡنَـٰكَ', 'فَأَحۡیَیۡنَا'].map(mushafText).includes(m.textContent!));
     expect(we.map(m => m.className.replace('bg-transparent ', ''))).toEqual([swatch, swatch, swatch]);
   });
 

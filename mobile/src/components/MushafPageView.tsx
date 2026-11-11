@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Pressable, Text, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
+import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
+import { Text } from '@/components/Text';
 import type { MushafPage } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';

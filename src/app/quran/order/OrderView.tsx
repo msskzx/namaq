@@ -11,6 +11,7 @@ import { OPENING_GROUPS, TASBIH_SURAHS } from '@/lib/quran/openings';
 import { THEMES, TOPICS_SRC, type ChipView, type HopView, type TopicView } from '@/lib/quran/surahOrder';
 import { RAIL_COLORS, RailCell, type RailColor, type RailSpan } from '@/components/quran/Rail';
 import { SLOT_COLORS } from '@/components/quran/slotColors';
+import { mushafText } from '@shared/quran/mushafText';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
@@ -25,7 +26,7 @@ function Words({ line }: { line: Line }) {
   return line.text.split(' ').map((word, i) => (
     <React.Fragment key={i}>
       {i > 0 && ' '}
-      {line.slots && i in line.slots ? <mark className={`bg-transparent ${SLOT_COLORS[line.slots[i] % SLOT_COLORS.length]}`}>{word}</mark> : word}
+      {line.slots && i in line.slots ? <mark className={`bg-transparent ${SLOT_COLORS[line.slots[i] % SLOT_COLORS.length]}`}>{mushafText(word)}</mark> : mushafText(word)}
     </React.Fragment>
   ));
 }
@@ -35,7 +36,7 @@ function Side({ title, lines }: { title: string; lines: Line[] }) {
     <div>
       <h3 className={`${NOTE} mb-1`}>{title}</h3>
       {lines.map(l => (
-        <p key={l.ayah} className="text-2xl leading-[2.2] font-arabic">
+        <p key={l.ayah} className="text-2xl leading-[2.2] font-quran">
           <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
           <Words line={l} />
         </p>
@@ -93,7 +94,7 @@ function TopicOverlay({ surahName, group, onClose }: { surahName: string; group:
               <p className="text-sm text-amber-600 dark:text-amber-400 mb-1">
                 {`${item.labelAr} (${num(item.ayahFrom)}${item.ayahFrom === item.ayahTo ? '' : `-${num(item.ayahTo)}`})`}
               </p>
-              <p className="font-arabic text-lg leading-relaxed">{item.excerptAr}</p>
+              <p className="text-lg leading-relaxed">{item.excerptAr}</p>
             </li>
           ))}
         </ul>

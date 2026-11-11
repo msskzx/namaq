@@ -30,7 +30,7 @@ export default function TitlesPage() {
                   <TitleCard key={title.slug} title={title} language={language} url={`/people?title=${title.slug}`} />
                 ))
               ) : (
-                <div className="col-span-full text-center py-4 text-gray-500 font-arabic">
+                <div className="col-span-full text-center py-4 text-gray-500">
                   {language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'}
                 </div>
               )}
