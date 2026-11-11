@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, ArrowRight, CircleCheck, CircleX, Eraser, Eye, LogOut, RotateCcw, Send, SpellCheck } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, Check, CircleCheck, CircleX, Eraser, Eye, LogOut, RotateCcw, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { emptyBranchAnswers } from '@shared/quiz/score';
 import BackBar from '@/components/BackBar';
@@ -76,6 +76,13 @@ export default function QuizPlay() {
   const checked = run.checked[current];
   const last = current === run.questions.length - 1;
   const update = (next: SoloRun) => setRun(next);
+  // The question strip and prompt scroll away with the tree.
+  const top = (
+    <>
+      <QuestionDots states={run.questions.map((_, i) => questionState(run, i))} current={current} onPick={i => update(goTo(run, i))} palette={palette} />
+      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text>
+    </>
+  );
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <BackBar title={run.submitted ? 'النتيجة' : `السؤال ${num(current + 1)} من ${num(run.questions.length)}`}>
@@ -83,27 +90,25 @@ export default function QuizPlay() {
       </BackBar>
       {run.submitted ? <Results run={run} palette={palette} /> : (
         <>
-          <QuestionDots states={run.questions.map((_, i) => questionState(run, i))} current={current} onPick={i => update(goTo(run, i))} palette={palette} />
-          <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text>
           <View style={{ flex: 1 }}>
             {checked
-              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} />
-              : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} />}
+              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} header={top} />
+              : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top} />}
           </View>
           {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
           {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
             {!checked && (
               <Row>
-                <Button variant="primary" Icon={SpellCheck} label="تحقق" disabled={!hasTyped(run)} onPress={() => update(check(run))} />
+                <Button variant="primary" Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => update(check(run))} />
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />
                 <Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(showAnswer(run))} />
               </Row>
             )}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Button Icon={ArrowRight} label="السابق" disabled={current === 0} onPress={() => update(goTo(run, current - 1))} />
+              <Button Icon={ArrowRight} accessibilityLabel="السابق" disabled={current === 0} onPress={() => update(goTo(run, current - 1))} />
               {last
                 ? <Button variant="primary" Icon={Send} label="إرسال" onPress={() => update(submit(run))} />
-                : <Button Icon={ArrowLeft} label="التالي" onPress={() => update(goTo(run, current + 1))} />}
+                : <Button Icon={ArrowLeft} accessibilityLabel="التالي" onPress={() => update(goTo(run, current + 1))} />}
             </View>
           </View>}
         </>

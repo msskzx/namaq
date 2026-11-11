@@ -253,6 +253,8 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const insets = useSafeAreaInsets();
   const typing = useKeyboardShown();
   const question = view.question as Question;
+  // On a tree the prompt scrolls away with it; the countdown stays.
+  const prompt = question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text> : null;
   const revealed = view.phase === 'reveal';
   const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
   const sent = view.answer !== null;
@@ -291,12 +293,12 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: 10, gap: 8 }}>
         {view.deadline !== null && <Countdown deadline={view.deadline} total={total} offset={offset} palette={palette} />}
-        {question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text> : null}
+        {!isTree(question) && prompt}
       </View>
       {isTree(question) ? (
         <>
           <View style={{ flex: 1 }}>
-            <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} />
+            <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} header={prompt} />
           </View>
           {!typing && <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
             <Button big variant="primary" Icon={Check} label="أرسل" disabled={!started} onPress={() => send({ type: 'submit', answer: typed })} />

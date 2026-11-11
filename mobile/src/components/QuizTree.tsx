@@ -43,15 +43,19 @@ const LEAF_SIZE = 20;
 /**
  * Scrolls a tree both ways; quiz trees are small, so they are drawn at full size with no zoom.
  * The root is on the right, so a tree wider than the phone opens scrolled to its right end.
+ * `header` (the question strip and prompt) scrolls away with the tree instead of staying pinned.
  */
-function Scroller({ children }: { children: React.ReactNode }) {
+function Scroller({ header, children }: { header?: React.ReactNode; children: React.ReactNode }) {
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled">
-      <ScrollView ref={sideways as never} horizontal style={{ direction: 'ltr' }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled"
-        onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
-        {children}
-      </ScrollView>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      {header}
+      <View style={{ flexGrow: 1, justifyContent: 'center' }}>
+        <ScrollView ref={sideways as never} horizontal style={{ direction: 'ltr' }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled"
+          onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
+          {children}
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 }
@@ -63,7 +67,7 @@ function Tree({ question, tree, palette, names, renderNode, down }: { question: 
 }
 
 /** The tree with an empty box in each asked node; the other nodes are given. It can rotate, as on the website. */
-export function QuizInputs({ question, typed, onType, palette, names }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string> }) {
+export function QuizInputs({ question, typed, onType, palette, names, header }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode }) {
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
   const asked = question.asked ?? [];
   const renderNode: RenderNode = (node, index) => !isAsked(question, index)
@@ -76,7 +80,7 @@ export function QuizInputs({ question, typed, onType, palette, names }: { questi
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
-      <Scroller><Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} /></Scroller>
+      <Scroller header={header}><Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} /></Scroller>
       {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 8 }}>
         <Bar label="تدوير الشجرة" onPress={() => setDown(!down)} Icon={RotateCwSquare} palette={palette} />
       </View>}
@@ -153,7 +157,7 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
  * The answer tree: each asked node shows how it was graded; tapping a node lights its path (the matrix opens its ayat).
  * As on the website, it can turn to the matrix, rotate, show the surrounding ayat, grow in the studio, and be saved, shared or opened.
  */
-export function QuizFeedback({ question, typed, palette, names, onTap }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void }) {
+export function QuizFeedback({ question, typed, palette, names, onTap, header }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode }) {
   // Graded once per question and answer: a party sends a new copy of the same question with every update, and an
   // unanswered question comes with a new empty answer each render, which must not rebuild the tree (and stop the studio).
   const snapshot = JSON.stringify({ question, typed });
@@ -205,8 +209,8 @@ export function QuizFeedback({ question, typed, palette, names, onTap }: { quest
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {matrix
-          ? size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} />
-          : <Scroller><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
+          ? size && <>{header}<MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} /></>
+          : <Scroller header={header}><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
             direction={down ? 'down' : 'side'} around={surrounding} growth={treeGrowth} sceneRef={sceneRef} /></Scroller>}
       </View>
       {studio ? (

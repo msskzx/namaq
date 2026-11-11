@@ -7,6 +7,7 @@ import { quranText } from '@/lib/quranText';
 import { askedNodes, LEAF_WORDS } from '@shared/quiz/branchAnswers';
 import BranchTree, { type RenderNode } from './BranchTree';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { surahNames } from '@/lib/branches';
 
 const tree = example.tree as Branch;
 // The example's first word has two spellings (قَالَ and فَقَالَ): each is drawn before the rest of the tree, in its colour.
@@ -30,7 +31,7 @@ export default function QuizExplainer({ leaves, palette }: { leaves: number; pal
         {`تكتب ${num(leaves)} من أطراف الشجرة، ويُعرض باقيها مكتوبًا. الشجرة التي أطرافها أقل تُطلب كل أطرافها.`}
       </Text>
       <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-        <BranchTree presentation={presentation} matches={{}} names={{}} palette={palette} onTap={() => {}} renderNode={renderNode} />
+        <BranchTree presentation={presentation} matches={{}} names={surahNames} palette={palette} onTap={() => {}} renderNode={renderNode} />
       </ScrollView>
       {rule('التصحيح: ', 'تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب.')}
       {rule('الكلمة الملوّنة: ', 'تظهر بعد التحقق في عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه، فتُرسم الكلمة المختلفة باللون الكهرماني. اضغط العقدة لترى كل آية في سياقها.')}
