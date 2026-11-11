@@ -60,9 +60,10 @@ describe('sharedOpenings', () => {
 
 describe('withNext', () => {
   it('grows a synthetic twin into the next surah', () => {
-    const read = [ayah('1:1', 'سبح ربك'), ayah('1:2', 'قل هو'), ayah('2:1', 'سبح ربك'), ayah('3:1', 'الم')];
-    const grownAyat = withNext(new Map([['سبح ربك', [read[0], read[2]]]]), read);
-    expect(grownAyat.map(a => [a.key, a.next, a.through])).toEqual([['1:1', ['قل', 'هو'], '1:2'], ['2:1', ['الم'], '3:1']]);
+    const read = [ayah('1:1', 'بسم الله الرحمن الرحيم'), ayah('2:1', 'سبح ربك'), ayah('2:2', 'قل هو'), ayah('3:1', 'سبح ربك'), ayah('4:1', 'الم'), ayah('8:2', 'سبح ربك'), ayah('9:1', 'براءة')];
+    const grownAyat = withNext(new Map([['سبح ربك', [read[1], read[3], read[5]]]]), read);
+    // The next surah's basmala is read before its first ayah; at-Tawbah has none.
+    expect(grownAyat.map(a => [a.key, a.next, a.through])).toEqual([['2:1', ['قل', 'هو'], '2:2'], ['3:1', ['بسم', 'الله', 'الرحمن', 'الرحيم', 'الم'], '4:1'], ['8:2', ['براءة'], '9:1']]);
   });
 });
 

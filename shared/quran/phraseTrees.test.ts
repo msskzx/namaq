@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { buildPhraseGroups, buildTreeGroups, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
+import { buildPhraseGroups, buildTreeGroups, createPhrasePresenter, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
 import treeData from '../data/quran/trees.json';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
@@ -336,4 +336,40 @@ it('uses the recorded endpoint when an explicit continuation crosses a surah bou
   };
   const presentation = phrasePresentation(group, ayat);
   expect(ayahEnds(presentation.tree)).toMatchObject({ '56:96': '57:1', '69:52': '70:1' });
+});
+
+describe('the basmala where a tree runs on into another surah', () => {
+  const BASMALA = 'بسم الله الرحمن الرحيم';
+  const all = treeData.ayat as BranchAyah[];
+  const surahOf = (key: string) => Number(key.split(':')[0]);
+  const opensWithBasmala = (from: string, to: string) => surahOf(to) !== surahOf(from) && surahOf(to) !== 9;
+  const plain = (words: string[]) => words.filter(word => !word.startsWith('﴿') && word !== '۝').map(normalizeWord).join(' ');
+
+  it('is read before the next surah in every stored continuation', () => {
+    const crossing = all.filter(ayah => ayah.through && opensWithBasmala(ayah.key, ayah.through));
+    expect(crossing.map(ayah => ayah.key)).toEqual(['37:182', '56:96', '69:52']);
+    for (const ayah of crossing) {
+      expect(plain(ayah.next!.slice(0, 4)), ayah.key).toBe(BASMALA);
+      expect(ayah.nextRoots!.slice(0, 4), ayah.key).toEqual(['smw', 'Alh', 'rHm', 'rHm']);
+    }
+  });
+
+  it('is on the path of every ayah whose branch runs on into another surah, in every tree', () => {
+    const paths = (node: Branch, words: string[] = []): [string, string[]][] => {
+      const here = [...words, ...node.words];
+      return [...node.ayat.map(key => [key, here] as [string, string[]]), ...node.children.flatMap(child => paths(child, here))];
+    };
+    const present = createPhrasePresenter(all);
+    let crossings = 0;
+    for (const group of treeData.trees as PhraseGroup[]) {
+      const { tree } = present(group);
+      const ends = ayahEnds(tree);
+      for (const [key, words] of paths(tree)) {
+        if (!opensWithBasmala(key, ends[key])) continue;
+        crossings++;
+        expect(plain(words), `${group.id} ${key} → ${ends[key]}`).toContain(BASMALA);
+      }
+    }
+    expect(crossings).toBeGreaterThan(10);
+  }, 120_000);
 });

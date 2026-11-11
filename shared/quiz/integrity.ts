@@ -1,7 +1,7 @@
 // Every quiz question must give back the exact Quran text: what is shown plus what is asked,
 // put together in order, has to equal the stored mushaf words, with nothing missing or changed.
 import { num } from '../quran/arabicNumber';
-import { type Branch, type BranchAyah } from '../quran/branches';
+import { runOn, type Branch, type BranchAyah } from '../quran/branches';
 import { type BranchQuestion } from './branchQuestions';
 
 /** Marks the end of an ayah when a branch runs on into the next one: ﴿٤٣﴾, or ۝ in a merged display. */
@@ -39,6 +39,7 @@ export function rebuildTreeAnswers(question: Pick<BranchQuestion, 'tree' | 'pref
  */
 export function checkRebuilt(question: string, rebuilt: readonly Rebuilt[], ayat: readonly BranchAyah[]): IntegrityError[] {
   const order = new Map(ayat.map((ayah, index) => [ayah.key, index]));
+  const basmala = ayat.find(ayah => ayah.key === '1:1');
   return rebuilt.flatMap(({ key, words }) => {
     const fail = (problem: string, expected: string[] = []) => [{ question, key, problem, rebuilt: words.join(' '), expected: expected.join(' ') }];
     if (words.some(word => !word.trim())) return fail('empty word');
@@ -50,7 +51,7 @@ export function checkRebuilt(question: string, rebuilt: readonly Rebuilt[], ayat
       if (!mark) continue;
       if (mark[2] && mark[2] !== num(Number(ayat[at].key.split(':')[1]))) return fail('wrong ayah number', expected);
       if (++at >= ayat.length) return fail('runs past the last ayah', expected);
-      expected.push(word, ...ayat[at].words);
+      expected.push(word, ...runOn(ayat[at - 1].key, ayat[at], basmala).words);
     }
     return words.join(' ') === expected.join(' ') ? [] : fail('text differs', expected);
   });
