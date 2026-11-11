@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '@shared/data/quran/trees.json';
+import example from '@shared/data/quiz/example.json';
 import { type BranchAyah } from '@shared/quran/branches';
 import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
@@ -79,5 +80,11 @@ describe('branchQuiz (the phone app builds its quiz on the device)', () => {
   it('stops at the trees there are when the juz range has fewer than asked', () => {
     const tiny: BranchAyah[] = [1, 2, 3].map(n => ({ key: `1:${n}`, page: 1, words: ['قال', 'رب', ['اغفر', 'ارحم', 'اهد'][n - 1]] }));
     expect(branchQuiz(branchQuestionPool(tiny), 5, 3, seeded(1))).toHaveLength(1);
+  });
+
+  it('keeps the explainer example tree the same as the إن المتقين question in the pool', () => {
+    const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'ان المتقين في'))[0];
+    expect(example.key).toBe(question.key);
+    expect(example.tree).toEqual(question.tree);
   });
 });
