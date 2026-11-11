@@ -13,6 +13,8 @@ const EMPTY_END = '\u06DD';
 const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
+/** A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages. */
+const ONE_LINE = 'calc(100% / 15)';
 
 function fit(body: HTMLElement, centred: boolean) {
   body.style.fontSize = '100px';
@@ -30,6 +32,7 @@ function fit(body: HTMLElement, centred: boolean) {
   const typical = sorted[Math.floor(sorted.length * 0.6)] ?? 1;
   const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), (body.clientHeight / Math.max(1, body.children.length)) * 0.72));
   body.style.fontSize = `${size}px`;
+  body.style.setProperty('--one-line', `${body.clientHeight / 15}px`);
   lines.forEach((line, at) => {
     const drawn = (natural[at] * size) / 100;
     const centre = centred || drawn < width * 0.7;
@@ -109,7 +112,7 @@ export default function MushafPage({
         <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
-        <div ref={body} className={styles.body} style={{ gridTemplateRows: `repeat(${data.items.length}, minmax(0, 1fr))` }}>
+        <div ref={body} className={styles.body} style={{ gridTemplateRows: data.items.map(item => ('line' in item ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
           {data.items.map((item, index) => (
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (

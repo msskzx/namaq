@@ -67,6 +67,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
 
   const rows = data.items.length;
   const rowHeight = body ? body.height / rows : 0;
+  // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
+  const oneLine = body ? body.height / 15 : 0;
+  const lineHeight = body && lineAt.length ? (body.height - oneLine * (rows - lineAt.length)) / lineAt.length : rowHeight;
   const size = useMemo(() => {
     if (!body || !measured) return 0;
     const widths = lineAt.map(at => measured[at] ?? 1);
@@ -159,10 +162,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 surahHere = item.surah;
                 const veil = surahHidden(item.surah);
                 return (
-                  <View key={index} style={{ height: rowHeight, justifyContent: 'center' }}>
-                    <View style={{ height: rowHeight * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
+                  <View key={index} style={{ height: oneLine, justifyContent: 'center' }}>
+                    <View style={{ height: oneLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
                       <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={[{ fontFamily: QURAN_FONT, fontSize: size * 0.8, color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
+                        <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, oneLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
                       </View>
                     </View>
                   </View>
@@ -172,8 +175,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 const surah = surahHere;
                 const veil = surah !== undefined && basmalaHidden(surah);
                 return (
-                  <View key={index} style={{ height: rowHeight, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={[{ fontFamily: QURAN_FONT, fontSize: size, color: palette.ink }, veil ? veiled : null, veil && surah !== undefined && !surahHidden(surah) && next === `${surah}:1` ? upcoming : null]}>{BASMALA}</Text>
+                  <View key={index} style={{ height: oneLine, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size, oneLine * 0.58), color: palette.ink }, veil ? veiled : null, veil && surah !== undefined && !surahHidden(surah) && next === `${surah}:1` ? upcoming : null]}>{BASMALA}</Text>
                   </View>
                 );
               }
@@ -188,7 +191,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 return { group, key, wordHidden, lit: !wordHidden && !!forgot[key] };
               });
               return (
-                <View key={index} style={{ height: rowHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred ? 'center' : 'flex-start' }}>
+                <View key={index} style={{ height: lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred ? 'center' : 'flex-start' }}>
                   <View style={centred
                     ? { flexDirection: 'row', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: 'right' }}>
