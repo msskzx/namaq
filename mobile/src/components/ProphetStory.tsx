@@ -1,131 +1,111 @@
-import { useCallback, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, ArrowRight } from 'lucide-react-native';
-import { num } from '@shared/quran/arabicNumber';
-import { storySummary } from '@shared/quran/prophets/story';
-import StationPager, { type StationPagerHandle } from '@/components/StationPager';
-import { phaseColor } from '@/components/StationCard';
-import { prophetStory, stationIndex } from '@/lib/prophets';
-import { readJson, writeJson } from '@/lib/storage';
+import { router } from 'expo-router';
+import { ArrowLeftRight, BookOpen, Columns3 } from 'lucide-react-native';
+import { counted } from '@shared/quran/arabicNumber';
+import { placeIn, rangeText, storyMap } from '@shared/quran/prophets/story';
+import EventPlaces from '@/components/EventPlaces';
+import HelpSheet from '@/components/HelpSheet';
+import Sheet from '@/components/Sheet';
+import StoryMap from '@/components/StoryMap';
+import { setIntent } from '@/lib/intent';
+import { readAyah } from '@/lib/openReader';
+import { prophetStory } from '@/lib/prophets';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 
-const PLACE = 'prophets-place';
-type Places = Record<string, number>;
+// The page scrolls only once the dot's sheet has slid away (Sheet.tsx CLOSE_MS).
+const SHEET_CLOSED = 300;
 
-const title = (name: string) => `خط ${name} عليه السلام الزمني في القرآن`;
+const title = (name: string) => `قصة ${name} عليه السلام في القرآن`;
 
-function Pill({ text, palette }: { text: string; palette: Palette }) {
-  return <Text style={{ color: palette.ink, fontSize: 13, borderWidth: 1, borderColor: palette.rule, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 }}>{text}</Text>;
-}
-
-function StepButton({ label, dir, onPress, palette }: { label: string; dir: 1 | -1; onPress: () => void; palette: Palette }) {
-  const Icon = dir === 1 ? ArrowLeft : ArrowRight;
+function Action({ icon, label, onPress, primary, palette }: { icon: React.ReactNode; label: string; onPress: () => void; primary?: boolean; palette: Palette }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={6}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 }}>
-      {dir === -1 && <Icon size={16} color={palette.ink} />}
-      <Text style={{ color: palette.ink, fontSize: 15 }}>{label}</Text>
-      {dir === 1 && <Icon size={16} color={palette.ink} />}
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12, borderRadius: 12, borderWidth: 1,
+        borderColor: primary ? palette.ink : palette.rule, backgroundColor: primary ? palette.ink : 'transparent' }}>
+      {icon}
+      <Text style={{ color: primary ? palette.paper : palette.ink, fontSize: 16 }}>{label}</Text>
     </Pressable>
   );
 }
 
 /**
- * The website's /quran/prophets/[slug] page: the intro, the index of stations by phase, and the stations one by one.
- * Shown in the prophets tab under the top bar, and at /prophets/[slug] under a back bar.
+ * The website's /quran/prophets/[slug] page: the story map (events by group, surahs by row), a sheet for a tapped dot,
+ * and the event's places one under another. The prophets tab (Musa) and /prophets/[slug] for links.
  */
-export default function ProphetStory({ slug, header, inTab = false }: { slug: string; header: React.ReactNode; inTab?: boolean }) {
+export default function ProphetStory({ slug, header, inTab = false }: { slug: string; header: (help: () => void) => React.ReactNode; inTab?: boolean }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const prophet = useMemo(() => prophetStory(slug), [slug]);
-  const [index, setIndex] = useState(() => (prophet ? stationIndex(prophet.events, readJson<Places>(PLACE)?.[slug]) : 0));
-  const [marked, setMarked] = useState<number>();
-  const [open, setOpen] = useState<ReadonlySet<string>>(new Set());
+  const map = useMemo(() => (prophet ? storyMap(prophet.events) : undefined), [prophet]);
+  const [picked, setPicked] = useState<{ event: number; surah: number }>();
+  const [open, setOpen] = useState<{ event: number; surah?: number }>();
+  const [help, setHelp] = useState(false);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  const pager = useRef<StationPagerHandle>(null);
-  const trackY = useRef(0);
+  const detailY = useRef(0);
+  const placeY = useRef<Record<number, number>>({});
+  const pending = useRef<number | undefined>(undefined);
   const onScroll = useShrinkOnScroll();
 
-  const arrive = useCallback((next: number) => {
-    setIndex(next);
-    setMarked(undefined);
-    writeJson(PLACE, { ...readJson<Places>(PLACE), [slug]: next + 1 });
-  }, [slug]);
-  const jump = (next: number) => {
-    arrive(next);
-    setMarked(next);
-    scroll.current?.scrollTo({ y: trackY.current, animated: true });
-  };
-  const isOpen = useCallback((event: number, segment: number) => open.has(`${event}:${segment}`), [open]);
-  const toggle = useCallback((event: number, segment: number) => setOpen(old => {
-    const next = new Set(old);
-    const key = `${event}:${segment}`;
-    if (!next.delete(key)) next.add(key);
-    return next;
-  }), []);
-
-  if (!prophet) return <View style={{ flex: 1, backgroundColor: palette.paper }}>{header}</View>;
+  if (!prophet || !map) return <View style={{ flex: 1, backgroundColor: palette.paper }}>{header(() => setHelp(true))}</View>;
 
   const { name, story, events } = prophet;
-  const summary = storySummary(events);
+  const scrollTo = (y: number) => setTimeout(() => scroll.current?.scrollTo({ y, animated: true }), SHEET_CLOSED);
+  const read = (event: number, surah?: number) => {
+    setPicked(undefined);
+    pending.current = undefined;
+    if (surah === undefined) scrollTo(detailY.current);
+    else if (open?.event === event && placeY.current[surah] !== undefined) scrollTo(detailY.current + placeY.current[surah] - 12);
+    else { placeY.current = {}; pending.current = surah; }
+    setOpen({ event, surah });
+  };
+  const place = picked && placeIn(map, picked.event, picked.surah);
+  const partner = picked && map.places[picked.event].filter(p => p.surah !== picked.surah).sort((a, b) => b.count - a.count)[0];
+  const others = picked ? map.places[picked.event].length : 0;
+
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {header}
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 24 }}>
-        <View style={{ gap: 10, paddingHorizontal: 16 }}>
-          <Text style={{ color: palette.accent, fontSize: 14, fontWeight: '600' }}>قصص الأنبياء في القرآن</Text>
-          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, fontWeight: '700', lineHeight: 38 }}>{title(name)}</Text>
-          <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26 }}>{story.intro}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 }} accessibilityLabel="ملخص">
-            <Pill text={`${num(summary.events)} محطة`} palette={palette} />
-            <Pill text={`${num(summary.ayat)} آية`} palette={palette} />
-            <Pill text={`${num(summary.surahs)} سورة`} palette={palette} />
-          </View>
-        </View>
-
-        <View style={{ gap: 10, paddingHorizontal: 16 }} accessibilityLabel="فهرس المحطات">
-          {story.phases.map((phase, ph) => {
-            const inPhase = events.map((e, at) => ({ e, at })).filter(({ e }) => e.phase === ph);
-            const color = phaseColor(palette, ph);
-            return (
-              <View key={phase} style={{ gap: 8, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, borderStartWidth: 4, borderStartColor: color, backgroundColor: palette.card }}>
-                <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                  <Text style={{ color, fontSize: 15, fontWeight: '600' }}>{phase}</Text>
-                  <Text style={{ color: palette.muted, fontSize: 12 }}>{`${num(inPhase.length)} محطة`}</Text>
-                </View>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-                  {inPhase.map(({ e, at }) => {
-                    const active = marked === at;
-                    return (
-                      <Pressable key={e.n} onPress={() => jump(at)} accessibilityRole="button" accessibilityLabel={e.title}
-                        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderRadius: 999, borderWidth: 1, paddingVertical: 3, paddingStart: 3, paddingEnd: 10,
-                          borderColor: active ? palette.accent : palette.rule, backgroundColor: active ? palette.paperDeep : palette.paper }}>
-                        <View style={{ minWidth: 22, height: 22, borderRadius: 11, paddingHorizontal: 4, backgroundColor: color, alignItems: 'center', justifyContent: 'center' }}>
-                          <Text style={{ color: palette.paper, fontSize: 12 }}>{num(e.n)}</Text>
-                        </View>
-                        <Text style={{ color: palette.ink, fontSize: 14 }}>{e.title}</Text>
-                      </Pressable>
-                    );
-                  })}
-                </View>
-              </View>
-            );
-          })}
-        </View>
-
-        <View onLayout={e => { trackY.current = e.nativeEvent.layout.y; }} style={{ gap: 12 }} accessibilityLabel={`أحداث قصة ${name}`}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16 }}>
-            <StepButton label="السابق" dir={-1} onPress={() => pager.current?.step(-1)} palette={palette} />
-            <Text style={{ color: palette.muted, fontSize: 13 }}>{`${num(index + 1)} / ${num(events.length)}`}</Text>
-            <StepButton label="التالي" dir={1} onPress={() => pager.current?.step(1)} palette={palette} />
-          </View>
-          <StationPager ref={pager} events={events} phases={story.phases} index={index} onIndex={arrive} marked={marked}
-            isOpen={isOpen} onToggle={toggle} palette={palette} />
+      {header(() => setHelp(true))}
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 20 }}>
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, fontWeight: '700', lineHeight: 36, paddingHorizontal: 16 }}>{title(name)}</Text>
+        <StoryMap map={map} events={events} phases={story.phases} picked={picked} palette={palette}
+          onPick={(event, surah) => setPicked(old => (old?.event === event && old.surah === surah ? undefined : { event, surah }))} onTitle={event => read(event)} />
+        <View onLayout={e => { detailY.current = e.nativeEvent.layout.y; }}>
+          {open && (
+            <EventPlaces event={events[open.event]} places={map.places[open.event]} phase={story.phases[events[open.event].phase]} focus={open.surah} palette={palette}
+              hasPrev={open.event > 0} hasNext={open.event < events.length - 1}
+              onStep={dir => read(open.event + dir)}
+              onLayoutPlace={(surah, y) => {
+                placeY.current[surah] = y;
+                if (surah !== pending.current) return;
+                pending.current = undefined;
+                scrollTo(detailY.current + y - 12);
+              }} />
+          )}
         </View>
       </ScrollView>
+      <Sheet open={!!place} onClose={() => setPicked(undefined)} palette={palette}>
+        {picked && place && (
+          <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
+            <View>
+              <Text style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>{`${events[picked.event].title} · ${place.name}`}</Text>
+              <Text style={{ color: palette.muted, fontSize: 14 }}>{`${place.segments.map(g => `${place.name} ${rangeText(g.range)}`).join('، ')} · ${counted(place.count, ['آية', 'آيتان', 'آيات'])}`}</Text>
+            </View>
+            <Action primary palette={palette} icon={<Columns3 size={18} color={palette.paper} />}
+              label={others > 1 ? `اقرأ مواضعه في ${counted(others, ['سورة', 'سورتين', 'سور'])}` : 'اقرأ آياته'} onPress={() => read(picked.event, picked.surah)} />
+            <Action palette={palette} icon={<BookOpen size={18} color={palette.ink} />} label="افتح الآيات في المصحف"
+              onPress={() => { setPicked(undefined); readAyah(`${place.surah}:${place.segments[0].range[0]}`); }} />
+            {partner && (
+              <Action palette={palette} icon={<ArrowLeftRight size={18} color={palette.ink} />} label={`قارن ${place.name} بـ${partner.name}`}
+                onPress={() => { setPicked(undefined); setIntent({ tab: 'compare', lead: place.surah, other: partner.surah }); router.navigate('/compare'); }} />
+            )}
+          </View>
+        )}
+      </Sheet>
+      <HelpSheet topic={help ? 'prophets' : null} note={story.intro} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

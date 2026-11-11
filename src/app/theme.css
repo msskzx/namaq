@@ -75,6 +75,12 @@
   --home-bubble-3: #e2e6d9;
   --home-bubble-4: #e9e0d1;
   --branch-blue: #426578;
+  /* Prophet story groups, the same five as the app's theme.ts phases. */
+  --story-0: #426578;
+  --story-1: #8a6420;
+  --story-2: #783d49;
+  --story-3: #506449;
+  --story-4: #665177;
 }
 
 :root.dark:has([data-feature-theme]) {
@@ -97,6 +103,11 @@
   --home-bubble-3: #2c3328;
   --home-bubble-4: #352f26;
   --branch-blue: #a9c4d1;
+  --story-0: #a9c4d1;
+  --story-1: #dcb46e;
+  --story-2: #d9a6b0;
+  --story-3: #b1c59f;
+  --story-4: #c3afd5;
 }
 
 /* Card colour setting (src/lib/cardTint.ts): paper and dark are the defaults above. */
