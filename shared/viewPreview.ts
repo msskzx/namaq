@@ -1,24 +1,31 @@
-// The tree and matrix preview drawings on the settings sheet's view tiles (website and phone app).
-// A 60×40 box, root on the right as the trees read. `tone` picks the colour: card, rule or accent.
+// The sample on the settings sheet's preview tiles (website and phone app): the إن المتقين في tree
+// (shared/data/quiz/example.json), with «ونعيم» (52:17) as the ayah the tiles light up.
 
-export type PreviewBox = { x: number; y: number; w: number; h: number; tone: 'card' | 'accent' };
-export type PreviewDrawing = { boxes: PreviewBox[]; lines: string[] };
+/** The theme tiles' card: 52:17 on two lines, its own ending in the accent. */
+export const SAMPLE_AYAH = { start: 'إِنَّ ٱلْمُتَّقِينَ', end: 'فِى جَنَّـٰتٍ', ending: 'وَنَعِيمٍ' } as const;
 
-export const VIEW_PREVIEW: Record<'tree' | 'matrix', PreviewDrawing> = {
-  tree: {
-    lines: ['M40 20 C31 20 31 9 23 9', 'M40 20 C31 20 31 31 23 31'],
-    boxes: [
-      { x: 40, y: 16, w: 16, h: 8, tone: 'card' },
-      { x: 5, y: 5, w: 18, h: 8, tone: 'card' },
-      { x: 5, y: 27, w: 18, h: 8, tone: 'card' },
-      { x: 44, y: 19, w: 8, h: 2, tone: 'accent' },
-    ],
-  },
-  matrix: {
-    lines: [],
-    boxes: [6, 17, 28].flatMap(y => [
-      { x: 4, y, w: 52, h: 8, tone: 'card' as const },
-      { x: 38, y: y + 3, w: 14, h: 2, tone: 'accent' as const },
-    ]),
-  },
-};
+/** The view tiles: the shared start, then the endings that branch off it, the sample's one marked. */
+export const SAMPLE_TREE = {
+  trunk: ['إِنَّ ٱلْمُتَّقِينَ', 'فِى جَنَّـٰتٍ'],
+  endings: [
+    { words: 'وَعُيُونٍ', mark: false },
+    { words: 'وَنَعِيمٍ', mark: true },
+    { words: 'وَنَهَرٍ', mark: false },
+  ],
+} as const;
+
+/** Where the tree tile's boxes sit, in percent of the tile, root on the right as the trees read. */
+export const TREE_LAYOUT = {
+  trunk: { right: 5, top: 29, width: 40, height: 42 },
+  ending: { left: 5, width: 30, height: 24, tops: [5, 38, 71] },
+} as const;
+
+/** The tree tile's branch lines in a 100×100 box (stretched to the tile): trunk's left edge to each ending's right edge. */
+export const TREE_LINES = TREE_LAYOUT.ending.tops.map(top => {
+  const fromX = 100 - TREE_LAYOUT.trunk.right - TREE_LAYOUT.trunk.width;
+  const toX = TREE_LAYOUT.ending.left + TREE_LAYOUT.ending.width;
+  const toY = top + TREE_LAYOUT.ending.height / 2;
+  const fromY = TREE_LAYOUT.trunk.top + TREE_LAYOUT.trunk.height / 2;
+  const mid = (fromX + toX) / 2;
+  return `M${fromX} ${fromY} C${mid} ${fromY} ${mid} ${toY} ${toX} ${toY}`;
+});

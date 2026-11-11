@@ -1,21 +1,21 @@
 import { Pressable, Text, View } from 'react-native';
-import Svg, { Path, Rect } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { Check } from 'lucide-react-native';
 import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';
-import { VIEW_PREVIEW } from '@shared/viewPreview';
+import { SAMPLE_AYAH, SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import { closeStudio } from '@/lib/growPlayer';
 import { branchView, cardTints, themeChoice, type BranchView } from '@/lib/settings';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
-/** A small page with a card on it: the tile's page colour, card tint and a matched word. */
+/** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
 function Mini({ mode, card, small }: { mode: CardMode; card: string; small?: boolean }) {
   const colours = MODE_PREVIEW[mode];
   const text = { color: colours.ink, fontFamily: QURAN_FONT, fontSize: small ? 8 : 10, lineHeight: small ? 14 : 17, textAlign: 'center' as const };
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colours.page }}>
       <View style={{ width: small ? '86%' : '76%', height: '66%', justifyContent: 'center', borderWidth: 1, borderColor: colours.rule, borderRadius: 5, backgroundColor: card, overflow: 'hidden' }}>
-        <Text numberOfLines={1} style={text}><Text style={{ color: colours.accent }}>هُدًى</Text> لِّلْمُتَّقِينَ</Text>
-        <Text numberOfLines={1} style={text}>ذَٰلِكَ ٱلْكِتَٰبُ</Text>
+        <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.start}</Text>
+        <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.end} <Text style={{ color: colours.accent, fontWeight: '700' }}>{SAMPLE_AYAH.ending}</Text></Text>
       </View>
     </View>
   );
@@ -75,18 +75,45 @@ export function ViewTiles({ palette, onPick }: { palette: Palette; onPick?: () =
       <Text style={{ color: palette.muted, fontSize: 14 }}>{label}</Text>
       <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
         {options.map(option => {
-          const { boxes, lines } = VIEW_PREVIEW[option.key];
           return (
             <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); onPick?.(); }} palette={palette}>
-              <Svg viewBox="0 0 60 40" width="100%" height="100%" style={{ backgroundColor: palette.paper }}>
-                {lines.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} />)}
-                {boxes.map((box, index) => <Rect key={index} x={box.x} y={box.y} width={box.w} height={box.h} rx={box.tone === 'card' ? 1.5 : 1}
-                  fill={box.tone === 'card' ? palette.card : palette.accent} stroke={box.tone === 'card' ? palette.rule : 'none'} strokeWidth={0.6} />)}
-              </Svg>
+              <ViewPreview view={option.key} palette={palette} />
             </Tile>
           );
         })}
       </View>
+    </View>
+  );
+}
+
+/** The view drawn small in the current colours, with the إن المتقين في tree as its sample. */
+function ViewPreview({ view, palette }: { view: BranchView; palette: Palette }) {
+  const text = { color: palette.ink, fontFamily: QURAN_FONT, fontSize: 9, lineHeight: 13, textAlign: 'center' as const };
+  const box = { position: 'absolute' as const, alignItems: 'center' as const, justifyContent: 'center' as const, borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, overflow: 'hidden' as const };
+  if (view === 'matrix') return (
+    <View style={{ flex: 1, justifyContent: 'center', gap: 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
+      {SAMPLE_TREE.endings.map(ending => (
+        <View key={ending.words} style={{ borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, paddingHorizontal: 3 }}>
+          <Text numberOfLines={1} style={text}>{SAMPLE_TREE.trunk.join(' ')} <Text style={{ color: palette.accent, fontWeight: '700' }}>{ending.words}</Text></Text>
+        </View>
+      ))}
+    </View>
+  );
+  const { trunk, ending } = TREE_LAYOUT;
+  return (
+    <View style={{ flex: 1, backgroundColor: palette.paper }}>
+      <Svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" style={{ position: 'absolute' }}>
+        {TREE_LINES.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
+      </Svg>
+      <View style={[box, { right: `${trunk.right}%`, top: `${trunk.top}%`, width: `${trunk.width}%`, height: `${trunk.height}%` }]}>
+        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={text}>{line}</Text>)}
+      </View>
+      {SAMPLE_TREE.endings.map((leaf, index) => (
+        <View key={leaf.words} style={[box, { left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` },
+          leaf.mark && { borderColor: palette.accent }]}>
+          <Text numberOfLines={1} style={[text, leaf.mark && { color: palette.accent, fontWeight: '700' }]}>{leaf.words}</Text>
+        </View>
+      ))}
     </View>
   );
 }
