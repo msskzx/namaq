@@ -436,8 +436,6 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   const resetLabel = ar ? 'إعادة ضبط' : 'Reset';
   const askLabel = growth.kind === 'matrix' ? (ar ? 'تذكّر الرابط' : 'Recall the connection') : (ar ? 'اكمل الايات' : 'Complete the ayat');
   return <>
-    <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
-    <span className="flex-1" />
     <Button size="md" variant="muted" className={chip} onClick={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} aria-label={`${ar ? 'السرعة' : 'Speed'} ${SPEED_LABEL(growth.speed)}`} title={ar ? 'السرعة' : 'Speed'}>
       <span dir="ltr">{SPEED_LABEL(growth.speed)}</span>
     </Button>
@@ -452,6 +450,8 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
     </Button>
     <Button size="lg" variant="muted" onClick={stop} aria-label={resetLabel} title={resetLabel}><RotateCcw aria-hidden /></Button>
     {share}
+    <span className="flex-1" />
+    <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
   </>;
 }
 
