@@ -142,6 +142,18 @@ let pairsByAyah: Map<string, { id: string; a: number; b: number }[]> | undefined
  * Read from the stored pair ids, so no card is decoded.
  */
 export function compareTargetFor(keys: string[]): { lead: number; other: number } | undefined {
+  return compareTargetsFor(keys)[0];
+}
+
+/** One way from a tree into compare: a listed surah pair holding a kept card of two of its ayat, and those ayah numbers. */
+export type CompareTarget = { lead: number; other: number; ayat: [number, number] };
+
+/**
+ * Every listed surah pair holding a kept card of two of these ayat, one each, in mushaf order (the website's
+ * compareLinksFor): a tree across two surahs opens its pair, one across more lists them to choose from.
+ * Seen from the surah of the first shown ayah when it is one of the two, as the tree reads.
+ */
+export function compareTargetsFor(keys: string[]): CompareTarget[] {
   if (!pairsByAyah) {
     pairsByAyah = new Map();
     for (const { a, b } of listedPairs) for (const item of stored.cards[`${a}:${b}`] ?? []) {
@@ -150,11 +162,19 @@ export function compareTargetFor(keys: string[]): { lead: number; other: number 
     }
   }
   const shown = new Set(keys);
-  const hit = keys.flatMap(key => pairsByAyah!.get(key) ?? []).find(pair => pair.id.split('|').every(key => shown.has(key)));
-  if (!hit) return undefined;
-  // Seen from the surah of the first shown ayah, as the tree reads.
-  const first = Number(keys[0].split(':')[0]);
-  return first === hit.b ? { lead: hit.b, other: hit.a } : { lead: hit.a, other: hit.b };
+  const first = Number(keys[0]?.split(':')[0]);
+  const bySurahs = new Map<string, CompareTarget>();
+  for (const hit of keys.flatMap(key => pairsByAyah!.get(key) ?? [])) {
+    if (!hit.id.split('|').every(key => shown.has(key)) || bySurahs.has(`${hit.a}:${hit.b}`)) continue;
+    const [x, y] = hit.id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0]);
+    const flip = first === hit.b;
+    bySurahs.set(`${hit.a}:${hit.b}`, { lead: flip ? hit.b : hit.a, other: flip ? hit.a : hit.b, ayat: flip ? [y[1], x[1]] : [x[1], y[1]] });
+  }
+  return [...bySurahs.entries()].sort(([p], [q]) => {
+    const [pa, pb] = p.split(':').map(Number);
+    const [qa, qb] = q.split(':').map(Number);
+    return pa - qa || pb - qb;
+  }).map(([, target]) => target);
 }
 
 /** The ayat each side of a card shows: a one-to-many card shows its picked partner against the shared ayah. */

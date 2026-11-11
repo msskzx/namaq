@@ -28,7 +28,7 @@ import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton, RotateButton } from './Surroundings';
 import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
-import { compareLinkFor } from '../compare/pairCards';
+import { compareLinksFor } from '../compare/pairCards';
 import { PathScope } from './Paths';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
@@ -228,7 +228,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </PathScope>
       </DoubleTapSave>
-      {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareHref={compareLinkFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       </GroupConnections>
     </div>
   );

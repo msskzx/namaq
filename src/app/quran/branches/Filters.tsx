@@ -6,6 +6,8 @@ import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Link2, Se
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import Button from '@/components/common/Button';
+import useDismissable from '@/components/common/useDismissable';
+import type { CompareLink } from '../compare/pairCards';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@shared/quran/branches';
 import Toggle from '@/components/common/Toggle';
@@ -108,8 +110,22 @@ export function DoubleTapSave({ id, text, href, aliases = [], children }: { id: 
   </div>;
 }
 
+/** A tree across three or more surahs: the surah pairs compare holds a card of, to pick the page to open. */
+function ComparePicker({ links, label, ar }: { links: CompareLink[]; label: string; ar: boolean }) {
+  const ref = useDismissable<HTMLDetailsElement>();
+  return <details ref={ref} className="relative">
+    <summary aria-label={label} title={label} className="flex size-11 cursor-pointer list-none items-center justify-center rounded-md text-[var(--home-muted)] hover:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
+      <ArrowLeftRight aria-hidden />
+    </summary>
+    <div className="absolute bottom-full end-0 z-30 mb-1 flex w-72 flex-col gap-1 rounded-md border border-[var(--home-rule)] bg-[var(--home-paper)] p-2 shadow-lg">
+      <p className="px-2 text-sm font-semibold">{ar ? 'افتح في المقارنة' : 'Open in compare'}</p>
+      {links.map(link => <Link key={link.href} href={link.href} className="rounded px-2 py-2 text-sm hover:bg-[var(--home-paper-deep)]">{ar ? link.label : link.labelEn}</Link>)}
+    </div>
+  </details>;
+}
+
 /** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text, href, aliases = [], details, compareHref }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareHref?: string }) {
+export function CardActions({ id, text, href, aliases = [], details, compareLinks = [] }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[] }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -123,7 +139,8 @@ export function CardActions({ id, text, href, aliases = [], details, compareHref
     <div className="flex flex-wrap items-center gap-1">
     {!studio && <>
       <span className="flex-1" />
-      {compareHref && <Button size="lg" variant="muted" href={compareHref} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}
+      {compareLinks.length === 1 && <Button size="lg" variant="muted" href={compareLinks[0].href} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}
+      {compareLinks.length > 1 && <ComparePicker links={compareLinks} label={compareLabel} ar={ar} />}
       <ShareButton video href={href} />
       <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
