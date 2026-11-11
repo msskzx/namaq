@@ -30,6 +30,8 @@ import { AroundButton, RotateButton } from './Surroundings';
 import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
 import { compareLinksFor } from '../compare/pairCards';
 import { PathScope } from './Paths';
+import TreeReview from './TreeReview';
+import { branchReviewState, branchVerdictFor, droppedBranch } from '@shared/quran/branchVerdicts';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
 
@@ -92,6 +94,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const juz = range ?? undefined;
   const requestedId = first(params.o) ?? '';
   const query = (first(params.q) ?? '').trim();
+  // Review (?review=1) also shows the cards the owner dropped; on the owner's own machine it adds the keep / drop / discuss buttons.
+  const review = params.review === '1';
+  const editable = review && process.env.NODE_ENV === 'development';
   const built = view(null);
   const requestedOccurrences = parseOccurrences(first(params.at));
   const subtree = built.subtrees?.byId.get(requestedId);
@@ -112,7 +117,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const explicitMode = parseBranchView(first(params.m));
   const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
   const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
-  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, filters, saved: savedIds.length ? savedIds : undefined };
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, mode, filters, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
   if (resolved?.family && query && !textIs(resolved.text, query)) redirect(branchesHref(id, juz, { ...state, query: resolved.text }));
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId && !(requestedGroup && groupHasId(requestedGroup, requestedId)) && resolved?.id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
@@ -122,9 +127,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     return keys.length < 2 ? [] : [{ ...piece, keys, count: keys.length, opening: { ...piece.opening, count: keys.length }, phrase: { ...piece.phrase, occurrences } }];
   });
   const distinct = distinctBranchPieces;
-  const inventory = branchInventory(filters, range);
-  const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? scopePieces(piecesFor(built)) : inventory;
-  const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), effectiveFilters, range]) : '';
+  const inventory = branchInventory(filters, range, review);
+  const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? scopePieces(piecesFor(built)).filter(piece => review || !droppedBranch(piece)) : inventory;
+  const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), effectiveFilters, range, review]) : '';
   if (needle && !built.searches.has(needle)) {
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
     built.searches.set(needle, distinct(searchSharedPhrases(inventory, query)));
@@ -228,6 +233,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </PathScope>
       </DoubleTapSave>
+      {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }))} />}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       </GroupConnections>
     </div>
