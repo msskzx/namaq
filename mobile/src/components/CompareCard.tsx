@@ -108,8 +108,6 @@ function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>
         ))}
       </View>}
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Pressable onPress={read.close} accessibilityRole="button" accessibilityLabel="إغلاق الاستوديو" style={button}><X size={22} color={palette.muted} /></Pressable>
-        <View style={{ flex: 1 }} />
         <Pressable onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${read.speed}×`} style={[button, { minWidth: 44, alignItems: 'center' }]}>
           <Text style={{ color: palette.muted, fontSize: 15 }}>{read.speed}×</Text>
         </Pressable>
@@ -118,6 +116,8 @@ function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>
         </Pressable>
         <Pressable onPress={read.reset} accessibilityRole="button" accessibilityLabel="إعادة ضبط" style={button}><RotateCcw size={22} color={palette.muted} /></Pressable>
         <Pressable onPress={record} accessibilityRole="button" accessibilityLabel="مشاركة كفيديو" style={button}><Send size={22} color={palette.muted} /></Pressable>
+        <View style={{ flex: 1 }} />
+        <Pressable onPress={read.close} accessibilityRole="button" accessibilityLabel="إغلاق الاستوديو" style={button}><X size={22} color={palette.muted} /></Pressable>
       </View>
       <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
@@ -222,7 +222,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         </>}
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
           <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
           </Pressable>
