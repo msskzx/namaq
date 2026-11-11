@@ -1,6 +1,7 @@
 export type Prophet = { slug: string; name: string; nameEn: string; /** The name after «قصة» where it changes case: ذو → ذي. */ of?: string };
 
 export const PROPHETS: Prophet[] = [
+  { slug: 'adam', name: 'آدم', nameEn: 'Adam' },
   { slug: 'idris', name: 'إدريس', nameEn: 'Idris' },
   { slug: 'nuh', name: 'نوح', nameEn: 'Nuh' },
   { slug: 'ayyub', name: 'أيوب', nameEn: 'Ayyub' },
