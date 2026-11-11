@@ -12,10 +12,12 @@ type Props = {
   /** Read out by screen readers; needed when the button shows only an icon. */
   accessibilityLabel?: string;
   big?: boolean;
+  /** Grows to share the row's width with its neighbours, with a little less side padding so three fit on a phone. */
+  grow?: boolean;
 };
 
 /** The app's button: a filled terracotta primary, an outlined one, or a plain icon button. */
-export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big }: Props) {
+export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow }: Props) {
   const palette = usePalette();
   const filled = variant === 'primary' || active;
   const color = filled ? palette.onAccent : variant === 'plain' ? palette.ink : palette.ink;
@@ -24,7 +26,7 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
       accessibilityState={{ disabled, selected: active }} hitSlop={6}
       style={({ pressed }) => ({
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-        minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : 14) : 8, borderRadius: 10,
+        minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : grow ? 10 : 14) : 8, borderRadius: 10, flexGrow: grow ? 1 : 0,
         backgroundColor: filled ? palette.accent : 'transparent',
         borderWidth: variant === 'plain' ? 0 : 1, borderColor: filled ? palette.accent : palette.rule,
         opacity: disabled ? 0.4 : pressed ? 0.7 : 1,

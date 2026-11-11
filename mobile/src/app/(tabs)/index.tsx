@@ -168,20 +168,21 @@ export default function HomeScreen() {
           )}
         </View>
 
-        <View style={{ gap: 12, padding: 16, borderTopWidth: 1, borderBottomWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, marginHorizontal: -16 }}>
+        <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, backgroundColor: palette.paperDeep }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
             <Feather size={26} color={palette.accent} />
             <View style={{ flex: 1, gap: 4 }}>
               <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>اختبارات القرآن</Text>
               <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 23, textAlign: 'right' }}>تأمّل الآيات، ثم اختبر مواضع التشابه، أو سمّع حفظك آيةً آية.</Text>
             </View>
-          </View>
-          <Row>
-            <Button Icon={Feather} label="بمفردك" onPress={() => push('/quiz/solo')} />
-            <Button Icon={Users} label="مع غيرك" onPress={() => push('/quiz/party')} />
-            <Button Icon={EyeOff} label="تسميع" onPress={() => go({ tab: 'read', recite: true })} />
+            {/* In the heading, as the shelf's open-saved button, so the three quiz buttons keep one row on a phone. */}
             {forgotten.length > 0 && <Button Icon={LightbulbOff} label={num(forgotten.length)} accessibilityLabel={`راجع ما نسيت (${num(forgotten.length)})`}
               onPress={() => go({ tab: 'read', at: forgotten[0], recite: true, review: true })} />}
+          </View>
+          <Row>
+            <Button grow Icon={Feather} label="بمفردك" onPress={() => push('/quiz/solo')} />
+            <Button grow Icon={Users} label="مع غيرك" onPress={() => push('/quiz/party')} />
+            <Button grow Icon={EyeOff} label="تسميع" onPress={() => go({ tab: 'read', recite: true })} />
           </Row>
         </View>
       </ScrollView>
