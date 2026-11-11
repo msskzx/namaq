@@ -185,6 +185,11 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     );
   };
 
+  // A refrain card's tree names every place the refrain repeats, as its matrix does.
+  const refrainLabels = card.many && isRefrain(card.many.options)
+    ? sides.map((side, i) => (i === card.many!.side ? `${surahName(side.surah)} ${card.many!.options.map(item => num(item.ayah.number)).join(' · ')}` : sideLabel(side))) as [string, string]
+    : undefined;
+
   const pickers = card.many && !isRefrain(card.many.options) && (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
       {card.many.options.map((item, row) => (
@@ -203,7 +208,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, gap: 10 }}>
         {tree ? <>
           {pickers}
-          <CompareBraid sides={sides} palette={palette} around={around} />
+          <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />
         </> : <>
           {side(card.sides[0], 0)}
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />

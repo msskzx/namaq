@@ -112,3 +112,17 @@ export function similarAyat(source: BranchAyah[], criteria = COMPARE_CRITERIA): 
   }
   return pairs;
 }
+
+/** Every pair of ayat within one surah that meets the compare criteria, earlier ayah first: a surah compared with itself. */
+export function similarWithin(source: BranchAyah[], criteria = COMPARE_CRITERIA): SimilarAyahPair[] {
+  const ayat = source.map(withAliases);
+  const weights = rootWeights(ayat);
+  const bySurah = new Map<number, BranchAyah[]>();
+  for (const ayah of ayat) bySurah.set(surahOf(ayah.key), [...(bySurah.get(surahOf(ayah.key)) ?? []), ayah]);
+  const pairs: SimilarAyahPair[] = [];
+  for (const list of bySurah.values()) for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const pair = similarAyahPair(list[i], list[j], weights, criteria);
+    if (pair) pairs.push(pair);
+  }
+  return pairs;
+}

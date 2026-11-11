@@ -89,7 +89,7 @@ describe('the filter sheet shared with the branches tab', () => {
 
   it('narrows the pages to pairs whose two surahs are among the picked surahs', () => {
     const pairs = filteredPairs(filterOfList(applyDraft({ ...draftOf(listOfFilter({})), unit: 'surahs', picked: [7, 26, 11] })!));
-    expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
+    expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26', '7:7', '11:11', '26:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
   });
 });
 

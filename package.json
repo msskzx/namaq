@@ -28,6 +28,7 @@
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",
     "quran:mutashabih": "tsx scripts/quran/buildMutashabih.ts",
     "quran:compare-pairs": "tsx scripts/quran/buildComparePairs.ts",
+    "quran:within-pairs": "tsx scripts/quran/buildWithinPairs.ts",
     "quran:passage-pairs": "tsx scripts/quran/buildPassagePairs.ts",
     "quran:compare-cards": "tsx scripts/quran/buildCompareCards.ts",
     "quran:compare-apply": "tsx scripts/quran/applyCompareReviewLog.ts",

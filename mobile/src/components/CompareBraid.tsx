@@ -74,7 +74,7 @@ function Node({ children, palette, shared }: { children: React.ReactNode; palett
  * The tree of a compare card: a braid. Where the two sides say the same words they run as one node (green frame);
  * where they part, each side has its own node (the first side on the right), and they rejoin on the next common stretch.
  */
-export default function CompareBraid({ sides, palette, around }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around }) {
+export default function CompareBraid({ sides, palette, around, labels }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around; labels?: [string, string] }) {
   const rows: Row[] = [
     ...(around ? [{ kind: 'around' as const, a: [], b: [], near: around.before }] : []),
     ...braidOf(sides),
@@ -84,7 +84,7 @@ export default function CompareBraid({ sides, palette, around }: { sides: [CardS
   return (
     <View style={{ gap: 0 }} accessibilityLabel={`${sideLabel(sides[0])} و${sideLabel(sides[1])} شجرةً`}>
       <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-        {sides.map((side, i) => <Text key={i} style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'center' }}>{sideLabel(side)}</Text>)}
+        {sides.map((side, i) => <Text key={i} style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'center' }}>{labels?.[i] ?? sideLabel(side)}</Text>)}
       </View>
       {rows.map((row, r) => (
         <View key={r}>

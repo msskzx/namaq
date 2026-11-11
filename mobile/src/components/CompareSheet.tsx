@@ -63,7 +63,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
     const matching = pairs.filter(pair => pairMatches(pair, query));
     if (!byCount && !query.trim()) {
       const groups = new Map<number, SurahPair[]>();
-      for (const pair of matching) for (const n of [pair.a, pair.b]) groups.set(n, [...(groups.get(n) ?? []), pair]);
+      for (const pair of matching) for (const n of new Set([pair.a, pair.b])) groups.set(n, [...(groups.get(n) ?? []), pair]);
       for (const n of [...groups.keys()].sort((x, y) => x - y)) {
         const isOpen = expanded.has(n);
         list.push({ kind: 'surah', key: `g-${n}`, surah: n, count: groups.get(n)!.length, open: isOpen, current: n === lead || n === other });
@@ -105,7 +105,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
     const pair = item.pair;
     const from = item.kind === 'pair' ? item.lead : pair.a;
     const current = isCurrent(pair, from);
-    const label = item.kind === 'story' ? item.name : item.nested ? surahName(otherOf(pair, from)) : `${surahName(pair.a)} · ${surahName(pair.b)}`;
+    const label = item.kind === 'story' ? item.name : pair.a === pair.b ? (item.nested ? 'مع نفسها' : `${surahName(pair.a)} مع نفسها`) : item.nested ? surahName(otherOf(pair, from)) : `${surahName(pair.a)} · ${surahName(pair.b)}`;
     return (
       <Pressable onPress={() => onPick(from, otherOf(pair, from))} accessibilityRole="button" accessibilityState={{ selected: current }}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, marginRight: item.kind === 'pair' && item.nested ? 22 : 0, borderRightWidth: 2, borderColor: current ? palette.accent : item.kind === 'pair' && item.nested ? palette.rule : 'transparent', backgroundColor: current ? palette.paperDeep : 'transparent', borderRadius: 6 }}>

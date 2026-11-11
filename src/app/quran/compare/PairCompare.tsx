@@ -48,7 +48,7 @@ function useNames(names: Names, ar: boolean) {
   const plain = (n: number) => (ar ? plainName(names[n]?.ar ?? '') : names[n]?.en ?? String(n));
   // Names from the database already start with «سُورَةُ»; say it once either way.
   const surah = (n: number) => { const name = names[n]?.ar ?? ''; return plainName(name).startsWith('سورة ') ? name : `سُورَةُ ${name}`; };
-  const title = (a: number, b: number) => ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
+  const title = (a: number, b: number) => a === b ? (ar ? `${surah(a)} مع نفسها` : `${plain(a)} with itself`) : ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
   return { plain, title };
 }
 
@@ -169,13 +169,14 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
   const inList = new Set(listed.map(pair => `${pair.a}:${pair.b}`));
   const stories = savedOnly ? [] : curatedComparisons.filter(pair => matches(pair) && inList.has(`${pair.a}:${pair.b}`) && (!todo || unreviewed(states, pair)));
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
-  const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
+  const itself = ar ? 'مع نفسها' : 'with itself';
+  const sides = (pair: { a: number; b: number }) => (pair.a === pair.b ? `${plain(pair.a)} ${itself}` : `${plain(pair.a)} · ${plain(pair.b)}`);
   // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
   const grouped = !byCount && !terms.length;
   const [open, setOpen] = useState(() => new Set([lead]));
   useEffect(() => setOpen(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
   const groups = new Map<number, SurahPair[]>();
-  if (grouped) for (const pair of pairs) for (const n of [pair.a, pair.b]) groups.set(n, [...(groups.get(n) ?? []), pair]);
+  if (grouped) for (const pair of pairs) for (const n of new Set([pair.a, pair.b])) groups.set(n, [...(groups.get(n) ?? []), pair]);
   const surahs = [...groups.keys()].sort((x, y) => x - y);
   const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   // Under a surah's heading, a row opens the page with that surah first; it is current only under the surah being browsed.
@@ -226,7 +227,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
                   : groups.get(n)!.every(pair => ['checked', 'dropped'].includes(states[`${pair.a}:${pair.b}`])) ? 'checked' : undefined} ar={ar} />}
                 <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
               </summary>
-              <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n)), n))}</ul>
+              <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, pair.a === pair.b ? itself : plain(other(pair, n)), n))}</ul>
             </details>
           </li>
         ))}</ul>
@@ -304,7 +305,10 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   const neighbours = useNeighbours(shownSides, aroundOn && !card.many);
   const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');
-  const titleOf = (side: CardSide) => sidePage(side, names, ar, null).title;
+  // A refrain card's tree names every place the refrain repeats, as its matrix does.
+  const titleOf = (side: CardSide, i: number) => card.many?.side === i && isRefrain(card.many.options)
+    ? `${ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? side.surah} ${card.many.options.map(item => (ar ? num(item.ayah.number) : item.ayah.number)).join(' · ')}`
+    : sidePage(side, names, ar, null).title;
   const withNeighbours = (page: SpreadPage, i: number): SpreadPage => neighbours && !page.pick
     ? { ...page, rows: [[neighbours.before[i] ?? { number: 0, words: [], muted: true }], ...page.rows, [neighbours.after[i] ?? { number: 0, words: [], muted: true }]] }
     : page;
@@ -332,7 +336,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
               {ar ? num(item.ayah.number) : item.ayah.number}
             </button>)}
           </div>}
-          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0]), titleOf(shownSides[1])]} ar={ar} around={card.many ? undefined : neighbours} />
+          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0], 0), titleOf(shownSides[1], 1)]} ar={ar} around={card.many ? undefined : neighbours} />
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
