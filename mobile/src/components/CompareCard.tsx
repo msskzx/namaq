@@ -2,14 +2,14 @@ import { memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { aroundOf, savedIdsOf, shownAyat, sideKeys, sideLabel, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
-import { branchView, type BranchView } from '@/lib/settings';
+import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
 import CompareBraid from './CompareBraid';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
@@ -130,7 +130,9 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   // The read-along studio lights words in the matrix, so it shows the matrix while open.
   const tree = view === 'tree' && !read.studio;
   const sides = shownAyat(card, selected);
-  const around = view === 'matrix' || read.studio ? aroundOf(sides) : undefined;
+  // The surrounding-ayat switch is the branches tab's: one setting for every tree and matrix.
+  const [aroundOn, setAround] = aroundSetting.use();
+  const around = aroundOn ? aroundOf(sides) : undefined;
 
   const scale = useSharedValue(1);
   const [pop, setPop] = useState(0);
@@ -201,7 +203,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, gap: 10 }}>
         {tree ? <>
           {pickers}
-          <CompareBraid sides={sides} palette={palette} />
+          <CompareBraid sides={sides} palette={palette} around={around} />
         </> : <>
           {side(card.sides[0], 0)}
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
@@ -212,6 +214,9 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
+          </Pressable>
+          <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
+            <UnfoldHorizontal size={22} color={aroundOn ? palette.accent : palette.muted} />
           </Pressable>
           <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
             <Clapperboard size={22} color={palette.muted} />
