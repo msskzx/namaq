@@ -32,7 +32,7 @@ function Action({ icon, label, onPress, primary, palette }: { icon: React.ReactN
 
 /**
  * The website's /quran/prophets/[slug] page: the story map (events by group, surahs by row), a sheet for a tapped dot,
- * and the event's places one under another. The prophets tab (Musa) and /prophets/[slug] for links.
+ * and the event's places one under another. The prophets tab (with its prophet picker) and /prophets/[slug] for links.
  */
 export default function ProphetStory({ slug, header, inTab = false }: { slug: string; header: (help: () => void) => React.ReactNode; inTab?: boolean }) {
   const palette = usePalette();
