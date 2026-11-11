@@ -12,7 +12,7 @@ The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآ
 - These questions skip the reviewed bank under `data/quiz/`. The answer is the Quran text itself, and there is no distractor to check.
 - The topic can be combined with the bank topics in one quiz, a person's circle included. A person's circle adds that person's questions to the other topics chosen beside it.
 - Solo and party setup take the number of answers per tree (`leaves`, 1 to 10, default 3; 1 is labelled easy and 10 hard). `askedNodes` picks that many leaves at random for each question, and every other node is shown already filled in. A tree with fewer leaves asks for all of them. A question without `asked` asks every node, as before.
-- The setup draws a real tree from the pool (`shared/data/quiz/example.json`, the قال piece, checked against the pool by a test) with the asked leaves as empty boxes, and states the grading rule and the meaning of the amber button and the green and purple first words.
+- The setup draws a real tree from the pool (`shared/data/quiz/example.json`, the `إن المتقين في` tree, checked against the pool by a test in `shared/quiz/branchQuestions.test.ts`) with the asked leaves as empty boxes, and states the grading rule and the meaning of the amber button and the green and purple first words.
 
 ## Grading (`matchTreeAnswers` in `shared/quiz/branchAnswers.ts`)
 
