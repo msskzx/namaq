@@ -25,7 +25,7 @@ type Light = { lit: string | null; reading?: number; onWord?: (link: string) => 
 function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
       {ayah.words.map((word, i) => {
         const mark = plain ? undefined : ayah.marks?.[i];
         const lit = !!mark?.link && mark.link === light?.lit;
@@ -51,7 +51,7 @@ function AyahText({ ayah, palette, light, plain = false }: { ayah: CardAyah; pal
 function Neighbour({ ayah, palette }: { ayah: AroundAyah | null; palette: Palette }) {
   if (!ayah) return null;
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, color: palette.muted, writingDirection: 'rtl', textAlign: 'right' }}>
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, color: palette.muted, writingDirection: 'rtl', textAlign: 'center' }}>
       {ayah.words.map((word, i) => {
         const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
         return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
