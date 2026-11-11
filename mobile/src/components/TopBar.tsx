@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Settings } from 'lucide-react-native';
+import { Settings, CircleHelp } from 'lucide-react-native';
 import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
@@ -19,7 +19,9 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * together with the bottom bar shrinking (owner, 2026-11-10).
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
-export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean }) {
+export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+  /** The page's help (rules and colour legend), in the gear's place at the bar's far end. */
+  help?: () => void }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
@@ -36,6 +38,11 @@ export default function TopBar({ children, settings: withSettings = false, hideO
         {center
           ? <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>
           : <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
+        {help && center && <View style={{ flex: 1 }} />}
+        {help && <Pressable onPress={help} accessibilityRole="button" accessibilityLabel="مساعدة" hitSlop={4}
+          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
+          <CircleHelp size={22} color={palette.muted} />
+        </Pressable>}
         {withSettings && <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <Settings size={22} color={palette.muted} />

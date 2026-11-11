@@ -2,10 +2,12 @@ import corpus from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type Neighbour } from '@shared/quran/ayahContext';
-import { ayahEnds, branchesHref, keys, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { ayahEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
+import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
+import type { Group } from '@shared/quran/mutashabih/types';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
 
@@ -146,4 +148,18 @@ export function growthParts(presentation: Presentation, around: Around | undefin
   });
   const afters = around ? Object.fromEntries(all.flatMap(key => around.after[around.ends[key]] ? [[key, `a${key}`]] : [])) : {};
   return { starts, afters };
+}
+
+/** The website's details under a tree: the difference kinds and book citations for the ayat shown, or null when there are none. */
+export function evidenceOf(piece: BranchPiece): Group | null {
+  if (!piece.group) return null;
+  const group = evidenceGroup(piece.group, piece.keys);
+  return group.tags.length || group.citations.length ? group : null;
+}
+
+/** The ayat of a searched tree that hold the searched words, lit when they are only some of them (the website's PathScope `lit`). */
+export function searchLit(presentation: Presentation, query: string): string[] {
+  if (!query.trim()) return [];
+  const holding = presentation.ayat.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key);
+  return holding.length < presentation.ayat.length ? holding : [];
 }

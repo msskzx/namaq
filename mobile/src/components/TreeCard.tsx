@@ -7,7 +7,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import BranchTree, { type Direction, type NodeActions, type Paths, type TreeGrowth } from './BranchTree';
 import { litPaths, togglePath } from '@shared/quran/pathHighlight';
 import type { TreeScene } from '@/lib/scene';
-import { aroundOf, cardOf, surahNames } from '@/lib/branches';
+import { aroundOf, cardOf, searchLit, surahNames } from '@/lib/branches';
 import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
 import type { ListState } from '@/lib/branchList';
 import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
@@ -57,9 +57,13 @@ const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0, actions }: Props) {
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight) }), [full.width, full.height, footHeight]); // eslint-disable-line react-hooks/exhaustive-deps
   // The paths lit on this tree, as on the website: tapping a node or its path button, several at once, gone with the card.
-  const [pinned, setPinned] = useState(() => new Map<string, string[]>());
-  const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
+  // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
+  const [pinned, setPinned] = useState(() => {
+    const found = searchLit(card.presentation, list.query);
+    return new Map<string, string[]>(found.length ? [['search', found]] : []);
+  });
+  const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
   // first time it opened), so the tree shows at once; a tree with no sizes yet shows sideways while both ways are

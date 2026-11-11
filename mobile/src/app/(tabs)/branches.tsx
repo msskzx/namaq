@@ -4,6 +4,7 @@ import { GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type Lu
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import TopBar from '@/components/TopBar';
+import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
 import TreeIcon from '@/components/TreeIcon';
 import LoadingDots from '@/components/LoadingDots';
@@ -38,6 +39,7 @@ function Chip({ text, onClear, palette }: { text: string; onClear: () => void; p
 
 export default function BranchesScreen() {
   const palette = usePalette();
+  const [help, setHelp] = useState(false);
   const [list, setList] = listState.use();
   const [mode, setMode] = branchView.use();
   const [around, setAround] = aroundSetting.use();
@@ -91,7 +93,7 @@ export default function BranchesScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar>
+      <TopBar help={() => setHelp(true)}>
         <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
         <BarButton label={mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => { closeStudio(); setMode(mode === 'tree' ? 'matrix' : 'tree'); }} Icon={mode === 'tree' ? GalleryHorizontal : TreeIcon} palette={palette} />
         {mode === 'tree' && <BarButton label="تدوير الشجرة" onPress={() => setRotated(!rotated)} Icon={RotateCwSquare} palette={palette} />}
@@ -103,10 +105,11 @@ export default function BranchesScreen() {
       </View> : null}
       {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} rotated={rotated} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-          {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
+          {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : list.saved && !isFiltered({ ...list, saved: false }) ? 'لا شجرة محفوظة بعد. احفظ شجرة بزر الحفظ تحتها أولًا.' : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
         onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}
+      <HelpSheet topic={help ? 'branches' : null} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

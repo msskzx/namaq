@@ -9,20 +9,13 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { savedIdsOf, sideKeys, sideLabel, surahName, toggleCardSaved } from '@/lib/compare';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import TreeIcon from './TreeIcon';
 import { compareRecorderPage, compareVideoInput } from '@/lib/compareVideo';
 
 const DOUBLE_TAP = 280;
-
-/** Halfway between two colours, for marks that share only a root: a faint purple, as on the website. */
-function blend(a: string, b: string, weight: number) {
-  const parts = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
-  const [x, y] = [parts(a), parts(b)];
-  return `#${x.map((value, i) => Math.round(value * weight + y[i] * (1 - weight)).toString(16).padStart(2, '0')).join('')}`;
-}
 
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
