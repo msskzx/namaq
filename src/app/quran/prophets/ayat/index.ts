@@ -1,4 +1,5 @@
 import type { StoryData } from '@shared/quran/prophets/story';
+import adam from './adam.json';
 import alyasa from './alyasa.json';
 import ayyub from './ayyub.json';
 import dawud from './dawud.json';
@@ -12,4 +13,4 @@ import sulayman from './sulayman.json';
 import yahya from './yahya.json';
 import zakariyya from './zakariyya.json';
 
-export const AYAT: Record<string, StoryData> = { ibrahim, ayyub, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya };
+export const AYAT: Record<string, StoryData> = { adam, ibrahim, ayyub, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya };

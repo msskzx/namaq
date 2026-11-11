@@ -7,6 +7,7 @@ import { DHUL_KIFL } from './dhul-kifl';
 import { HARUN } from './harun';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
+import { ADAM } from './adam';
 import { MUSA } from './musa';
 import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
@@ -168,6 +169,53 @@ describe.each([
 
   it('holds every ayah that names him', () => {
     expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+});
+
+const ADAM_NAMED: Record<number, number[]> = {
+  2: [31, 33, 34, 35, 37],
+  3: [33, 59],
+  5: [27],
+  7: [11, 19, 26, 27, 31, 35, 172],
+  17: [61, 70],
+  18: [50],
+  19: [58],
+  20: [115, 116, 117, 120, 121],
+  36: [60],
+};
+
+const IBLIS: Record<number, number[]> = {
+  2: [34],
+  7: [11],
+  15: [31, 32],
+  17: [61],
+  18: [50],
+  20: [116],
+  34: [20],
+  38: [74, 75],
+};
+
+describe('ADAM', () => {
+  const keys = storyKeys(ADAM.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Adam', () => {
+    const named = Object.entries(ADAM_NAMED).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+    expect(named).toHaveLength(25);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names Iblis, but for its scene on the Last Day (26:95)', () => {
+    const named = Object.entries(IBLIS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+    expect(named).toHaveLength(10);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of ADAM.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 

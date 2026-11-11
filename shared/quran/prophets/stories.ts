@@ -1,3 +1,4 @@
+import { ADAM } from './adam';
 import { ALYASA } from './alyasa';
 import { AYYUB } from './ayyub';
 import { DAWUD } from './dawud';
@@ -12,4 +13,4 @@ import type { Story } from './story';
 import { YAHYA } from './yahya';
 import { ZAKARIYYA } from './zakariyya';
 
-export const STORIES: Record<string, Story> = { ibrahim: IBRAHIM, ayyub: AYYUB, shuayb: SHUAYB, musa: MUSA, harun: HARUN, 'dhul-kifl': DHUL_KIFL, dawud: DAWUD, sulayman: SULAYMAN, ilyas: ILYAS, alyasa: ALYASA, zakariyya: ZAKARIYYA, yahya: YAHYA };
+export const STORIES: Record<string, Story> = { adam: ADAM, ibrahim: IBRAHIM, ayyub: AYYUB, shuayb: SHUAYB, musa: MUSA, harun: HARUN, 'dhul-kifl': DHUL_KIFL, dawud: DAWUD, sulayman: SULAYMAN, ilyas: ILYAS, alyasa: ALYASA, zakariyya: ZAKARIYYA, yahya: YAHYA };
