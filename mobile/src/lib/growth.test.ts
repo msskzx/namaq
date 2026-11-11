@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
-import { growthBeats, lineId, nodeId, nodeIndices } from './growth';
+import { connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
 import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, treeList } from './branches';
 
 const list = treeList();
@@ -106,5 +106,20 @@ describe('the ayah matrix', () => {
     expect(matrix.columns).toEqual(['before', 'ayah', 'after']);
     const [surah, ayah] = matrix.rows[0].ayah!.ayat[0].key.split(':').map(Number);
     if (ayah > 1) expect(matrix.rows[0].before!.ayat[0].key).toBe(`${surah}:${ayah - 1}`);
+  });
+});
+
+describe('connectionBeats', () => {
+  it('draws each connection once, in order, one step each', () => {
+    const beats = connectionBeats(3);
+    expect([...grownIds(beats)]).toEqual(['r0', 'r1', 'r2']);
+    expect(beats.at(-1)!.step).toBe(2);
+    expect(beats.some(beat => beat.ask)).toBe(false);
+  });
+
+  it('asks for each connection before drawing it', () => {
+    const beats = connectionBeats(2, true);
+    beats.forEach((beat, i) => { if (beat.ask) expect(beats[i + 1].reveal).toEqual([beat.ask]); });
+    expect(beats.filter(beat => beat.ask).map(beat => beat.ask)).toEqual(['r0', 'r1']);
   });
 });

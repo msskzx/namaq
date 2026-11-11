@@ -151,10 +151,16 @@ export function growthParts(presentation: Presentation, around: Around | undefin
 }
 
 /** The website's details under a tree: the difference kinds and book citations for the ayat shown, or null when there are none. */
+const evidenceCache = new WeakMap<BranchPiece, Group | null>();
+
+/** Cached per piece, so the matrix's word connections keep one group object across renders and are not measured again on every studio tick. */
 export function evidenceOf(piece: BranchPiece): Group | null {
   if (!piece.group) return null;
+  if (evidenceCache.has(piece)) return evidenceCache.get(piece)!;
   const group = evidenceGroup(piece.group, piece.keys);
-  return group.tags.length || group.citations.length ? group : null;
+  const found = group.tags.length || group.citations.length ? group : null;
+  evidenceCache.set(piece, found);
+  return found;
 }
 
 /** The ayat of a searched tree that hold the searched words, lit when they are only some of them (the website's PathScope `lit`). */

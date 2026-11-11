@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
@@ -10,11 +10,24 @@ import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
 import { matrixOf, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import type { Size } from '@/lib/camera';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, toneColor, type Palette } from '@/lib/theme';
+import Hourglass from './Hourglass';
+import Svg, { Circle, Path } from 'react-native-svg';
+import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
+import type { Group, Tag } from '@shared/quran/mutashabih/types';
 
 type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
-  footer?: React.ReactNode };
+  footer?: React.ReactNode;
+  /** A book group's word connections (the website's GroupConnections): drawn for the tags given, between the ayat in the middle column. */
+  connections?: { group: Group; tags: Tag[] };
+  /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. */
+  growth?: { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number } } };
+
+type Host = ComponentRef<typeof View>;
+/** Where each word of the middle column registers itself, keyed `ayah:index` as the group's positions are. */
+const Words = createContext<{ words: Map<string, Host>; measure: () => void } | null>(null);
+type Route = { id: string; tag: Tag; d: string; from: { x: number; y: number }; to: { x: number; y: number } };
 
 /** A column is most of the card wide, so the next one peeks in beside it (the website's 86%). */
 const SHARE = 0.86;
@@ -24,6 +37,16 @@ const FLICK = 500;
 
 function Ayah({ ayah, palette, muted }: { ayah: MatrixAyah; palette: Palette; muted: boolean }) {
   const [, number] = ayah.key.split(':').map(Number);
+  const registry = useContext(Words);
+  if (registry && !muted) return <>
+    {ayah.words.map((word, i) => {
+      const tone = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : palette.ink;
+      return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
+        <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: tone }}>{mushafText(word)}</Text>
+      </View>;
+    })}
+    <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.accent }}>{num(number)}</Text>
+  </>;
   return <>
     {ayah.words.map((word, i) => {
       const tone = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
@@ -41,6 +64,7 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
   const [lastSurah, lastNumber] = last.key.split(':').map(Number);
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
+  const wordViews = !!useContext(Words);
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${surahNames[surah]} ${range}`}
@@ -53,9 +77,12 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
         </Pressable>}
       </View>
       {at === 'after' && basmala}
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-        {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} />)}
-      </Text>
+      {wordViews && !muted
+        // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} />)}</View>
+        : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
+          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} />)}
+        </Text>}
       {at === 'before' && basmala}
     </Pressable>
   );
@@ -65,7 +92,7 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -132,13 +159,18 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
     });
 
   const lanes = useAnimatedStyle(() => ({ transform: [{ translateX: shift.value }] }));
+  const middle = matrix.columns.indexOf('ayah');
+  const lines = useConnectionLines(connections, column === middle, palette);
+  // In the studio's recall mode, a mark where the next line lands waits for a tap (or its timer).
+  const asked = growth?.ask && lines.routes.find(route => route.id === growth.ask!.id);
   const keysOf = (cell: MatrixCell) => cell?.ayat.map(ayah => ayah.key) ?? [];
 
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
         <ScrollView contentContainerStyle={{ paddingVertical: 12 }} showsVerticalScrollIndicator={false}>
-          <Animated.View style={[{ width: count * step, gap: 10 }, lanes]}>
+          <Words.Provider value={connections ? lines.registry : null}>
+          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step, gap: 10 }, lanes]}>
             {matrix.rows.map((row, r) => (
               <View key={r} style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
                 {matrix.columns.map((name, i) => (
@@ -147,10 +179,79 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
                 ))}
               </View>
             ))}
+            {lines.routes.length > 0 && <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: count * step, height: '100%' }}>
+              {lines.routes.filter(route => !growth?.hidden.has(route.id)).map(route => (
+                <Fragment key={route.id}>
+                  <Path d={route.d} stroke={toneColor(palette, connectionTone(route.tag))} strokeWidth={1.25} fill="none" />
+                  <Circle cx={route.from.x} cy={route.from.y} r={2} fill={palette.paperDeep} stroke={toneColor(palette, connectionTone(route.tag))} strokeWidth={1.25} />
+                  <Circle cx={route.to.x} cy={route.to.y} r={2} fill={palette.paperDeep} stroke={toneColor(palette, connectionTone(route.tag))} strokeWidth={1.25} />
+                </Fragment>
+              ))}
+            </Svg>}
+            {asked && <View pointerEvents="none" style={{ position: 'absolute', left: asked.to.x - 22, top: asked.to.y - 52, width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.card, borderWidth: 1, borderColor: palette.accent }}>
+              {growth!.ask!.seconds ? <Hourglass left={growth!.ask!.left} seconds={growth!.ask!.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
+            </View>}
           </Animated.View>
+          </Words.Provider>
           {footer}
         </ScrollView>
       </View>
     </GestureDetector>
   );
+}
+
+type Box = { left: number; right: number; top: number; bottom: number };
+
+/**
+ * The website's ConnectionLines: a curve from each word of one ayah to its counterpart in the next, coloured by the kind of
+ * difference; a word missing on one side points at the gap where it would sit. Words are measured in the lane's own points.
+ */
+function useConnectionLines(connections: Props['connections'], shown: boolean, palette: Palette) {
+  const words = useRef(new Map<string, Host>()).current;
+  const frame = useRef<Host>(null);
+  const [routes, setRoutes] = useState<Route[]>([]);
+  const [layout, setLayout] = useState(0);
+  // Many words report their layout at once: measure once, on the next frame.
+  const pending = useRef(false);
+  const measure = useCallback(() => {
+    if (pending.current) return;
+    pending.current = true;
+    requestAnimationFrame(() => { pending.current = false; setLayout(value => value + 1); });
+  }, []);
+  const registry = useMemo(() => ({ words, measure }), [words, measure]);
+  const group = connections?.group;
+  const tags = connections?.tags.join(' ') ?? '';
+  useEffect(() => {
+    const root = frame.current;
+    if (!root || !group || !tags || !shown) { setRoutes([]); return; }
+    const links = tags.split(' ').flatMap(tag => wordConnections(group, tag as Tag).map(link => ({ ...link, tag: tag as Tag })));
+    const place = (key: string) => new Promise<Box | null>(resolve => {
+      const view = words.get(key);
+      if (!view) { resolve(null); return; }
+      try { view.measureLayout(root, (x, y, w, h) => resolve({ left: x, right: x + w, top: y, bottom: y + h }), () => resolve(null)); } catch { resolve(null); }
+    });
+    const end = async (side: ConnectionEnd): Promise<Box | null> => {
+      if ('gap' in side) {
+        const box = await place(`${side.gap.key}:${side.gap.index}`);
+        if (!box) return null;
+        const x = side.edge === 'after' ? box.left - 4 : box.right + 4;
+        return { left: x, right: x, top: box.top, bottom: box.bottom };
+      }
+      const boxes = await Promise.all(side.words.map(word => place(`${word.key}:${word.index}`)));
+      if (boxes.some(box => !box)) return null;
+      const all = boxes as Box[];
+      return { left: Math.min(...all.map(box => box.left)), right: Math.max(...all.map(box => box.right)), top: Math.min(...all.map(box => box.top)), bottom: Math.max(...all.map(box => box.bottom)) };
+    };
+    let active = true;
+    void Promise.all(links.map(async (link, index) => {
+      const [a, b] = await Promise.all([end(link.from), end(link.to)]);
+      if (!a || !b) return [];
+      const from = { x: (a.left + a.right) / 2, y: a.bottom + 2 };
+      const to = { x: (b.left + b.right) / 2, y: b.top - 2 };
+      const mid = (from.y + to.y) / 2;
+      return [{ id: `r${index}`, tag: link.tag, from, to, d: `M ${from.x} ${from.y} C ${from.x} ${mid}, ${to.x} ${mid}, ${to.x} ${to.y}` }];
+    })).then(found => { if (active) setRoutes(found.flat()); });
+    return () => { active = false; };
+  }, [group, tags, shown, layout, words, palette]);
+  return { registry, frame, routes, measure };
 }

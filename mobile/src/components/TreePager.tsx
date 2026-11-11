@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, View } from 'react-native';
+import { Pressable, Share, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, Send } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Send, Tags } from 'lucide-react-native';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -18,16 +18,19 @@ import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
 import CompareTargetsSheet from './CompareTargetsSheet';
-import type { Group } from '@shared/quran/mutashabih/types';
+import { TAGS, type Group, type Tag } from '@shared/quran/mutashabih/types';
+import { connectionTone } from '@shared/quran/mutashabih/connections';
+import { connectors } from '@/lib/settings';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
-import { growthBeats } from '@/lib/growth';
+import { connectionBeats, growthBeats } from '@/lib/growth';
+import { wordConnections } from '@shared/quran/mutashabih/connections';
 import { answer, claimTarget, growthState, stop, useGrowth } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
-import type { Palette } from '@/lib/theme';
+import { toneColor, type Palette } from '@/lib/theme';
 
 const PLACE = 'branches-place';
 type Place = { id: string; camera?: Camera };
@@ -78,6 +81,29 @@ function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare 
   );
 }
 
+/** The website's chips under a book group's card: each kind of difference turns its word connections on and off, its example words beside it. */
+function ConnectionChips({ group, selected, onToggle, palette }: { group: Group; selected: Tag[]; onToggle: (tag: Tag) => void; palette: Palette }) {
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 16, paddingBottom: 12 }}>
+      {group.tags.map(tag => {
+        const on = selected.includes(tag);
+        const tone = toneColor(palette, connectionTone(tag));
+        const example = group.examples?.[tag] ?? (group.tags.length === 1 ? group.detail : undefined);
+        return (
+          <View key={tag} style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
+            <Pressable onPress={() => onToggle(tag)} hitSlop={4} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={TAGS[tag].ar}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: tone, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, backgroundColor: on ? tone : 'transparent' }}>
+              <Tags size={13} color={on ? palette.paper : tone} />
+              <Text style={{ color: on ? palette.paper : tone, fontSize: 13 }}>{TAGS[tag].ar}</Text>
+            </Pressable>
+            {example ? <Text style={{ color: palette.ink, fontSize: 14 }}>{example}</Text> : null}
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean; rotated: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
   start?: number; onIndex?: (index: number) => void;
@@ -110,6 +136,14 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
   const [video, setVideo] = useState<VideoInput | null>(null);
   const [evidence, setEvidence] = useState<Group | null>(null);
+  // The open card's word connections: all its kinds when the setting says so, else none until a chip turns one on.
+  const [connectorsOn] = connectors.use();
+  const [picked, setPicked] = useState<{ id: string; tags: Tag[] } | null>(null);
+  const tagsOf = (at: BranchPiece, group: Group) => picked?.id === at.id ? picked.tags : connectorsOn ? group.tags : [];
+  const toggleTag = (at: BranchPiece, group: Group, tag: Tag) => {
+    const current = tagsOf(at, group);
+    setPicked({ id: at.id, tags: current.includes(tag) ? current.filter(value => value !== tag) : [...current, tag] });
+  };
   // A tree across two surahs opens its compare page at once; across more, a sheet lists the pairs to pick from.
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
   const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); router.navigate('/compare'); };
@@ -126,7 +160,20 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
 
   // The open tree is the one the studio grows; a matrix has nothing to grow.
   const piece = pieces[Math.min(index, pieces.length - 1)];
+  // A book group's matrix grows its word connections instead (the website's connections studio).
+  const matrixGroup = useMemo(() => (mode === 'matrix' && piece ? evidenceOf(piece) : null), [mode, piece]);
+  const studioTags = matrixGroup?.tags.length ? (tagsOf(piece, matrixGroup).length ? tagsOf(piece, matrixGroup) : matrixGroup.tags) : [];
+  const studioKey = studioTags.join(' ');
+  // Opening the studio on a matrix with no kind chosen turns them all on, as on the website; they stay on after it closes.
   useEffect(() => {
+    if (growth.studio && growth.kind === 'matrix' && matrixGroup?.tags.length && piece && !tagsOf(piece, matrixGroup).length) setPicked({ id: piece.id, tags: matrixGroup.tags });
+  }, [growth.studio, growth.kind, matrixGroup, piece]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (mode === 'matrix' && matrixGroup && studioTags.length) {
+      const count = studioTags.reduce((sum, tag) => sum + wordConnections(matrixGroup, tag).length, 0);
+      claimTarget('branches', { kind: 'matrix', watch: connectionBeats(count), ask: connectionBeats(count, true) });
+      return () => claimTarget('branches', null);
+    }
     if (mode !== 'tree' || !piece) { claimTarget('branches', null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
@@ -134,7 +181,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
     beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
     claimTarget('branches', beatsRef.current);
     return () => claimTarget('branches', null);
-  }, [piece, list, mode, around]);
+  }, [piece, list, mode, around, studioKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const arrive = useCallback((next: number) => {
     restore.current = undefined;
@@ -195,18 +242,25 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
           {shown.map(at => {
             const current = at === index;
+            const group = mode === 'matrix' ? evidenceOf(pieces[at]) : null;
+            const linked = group?.tags.length ? group : null;
             const footer = (
               // Taps between the buttons stay here, so they are not read as taps on the tree.
-              <View style={{ height: FOOT, direction: 'rtl' }} onStartShouldSetResponder={() => true}>
-                {current && <StudioProgress palette={palette} />}
-                <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare} />
+              <View style={{ direction: 'rtl' }} onStartShouldSetResponder={() => true}>
+                <View style={{ height: FOOT }}>
+                  {current && <StudioProgress palette={palette} />}
+                  <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
+                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare} />
+                </View>
+                {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
               </View>
             );
             return (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {mode === 'matrix'
-                ? <MatrixCard key={String(around)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer} />
+                ? <MatrixCard key={String(around)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer}
+                  connections={linked ? { group: linked, tags: current && growth.studio ? studioTags : tagsOf(pieces[at], linked) } : undefined}
+                  growth={current && growth.studio && growth.kind === 'matrix' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}

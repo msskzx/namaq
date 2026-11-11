@@ -5,6 +5,8 @@ import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
+import { connectors } from '@/lib/settings';
+import Toggle from './Toggle';
 import type { Palette } from '@/lib/theme';
 
 /** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About and Privacy. */
@@ -19,6 +21,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>الإعدادات</Text>
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />
+        <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
           {links.map(link => (
@@ -32,5 +35,16 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         </View>
       </ScrollView>
     </Sheet>
+  );
+}
+
+/** The website's BranchConnectorSetting. */
+function ConnectorsSetting({ palette }: { palette: Palette }) {
+  const [on, setOn] = connectors.use();
+  return (
+    <View style={{ gap: 2 }}>
+      <Toggle on={on} onChange={setOn} label="ربط الكلمات المتشابهة بخطوط تلقائيًا" palette={palette} />
+      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.</Text>
+    </View>
   );
 }
