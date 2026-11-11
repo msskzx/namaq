@@ -5,6 +5,7 @@ import { AYYUB } from './ayyub';
 import { DAWUD } from './dawud';
 import { DHUL_KIFL } from './dhul-kifl';
 import { HARUN } from './harun';
+import { HUD } from './hud';
 import { IDRIS } from './idris';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
@@ -417,6 +418,35 @@ describe('LUT', () => {
     for (const e of LUT.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
+
+describe('HUD', () => {
+  const keys = storyKeys(HUD.events);
+  const flat = (byS: Record<number, number[]>) => Object.entries(byS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Hud', () => {
+    const named = flat({ 7: [65], 11: [50, 53, 58, 60, 89], 26: [124] });
+    expect(named).toHaveLength(7);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names Aad', () => {
+    const named = flat({
+      7: [65], 9: [70], 11: [50, 59, 60], 14: [9], 22: [42], 25: [38], 26: [123], 29: [38], 38: [12], 40: [31],
+      41: [13, 15], 46: [21], 50: [13], 51: [41], 53: [50], 54: [18], 69: [4, 6], 89: [6],
+    });
+    expect(named).toHaveLength(22);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of HUD.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
 
 describe('STORIES', () => {
   it('gives every prophet a story', () => {
