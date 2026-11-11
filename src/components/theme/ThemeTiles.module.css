@@ -11,7 +11,7 @@
 .short { min-height: 0; }
 .tree, .matrix { position: relative; flex: 1; background: var(--home-paper); direction: rtl; font-family: var(--font-amiri), serif; font-size: 0.6rem; line-height: 1.35; color: var(--home-ink); white-space: nowrap; }
 .node { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 0.25rem; background: var(--home-card); overflow: hidden; }
-.node[data-mark] { border-color: var(--home-accent); color: var(--home-accent); font-weight: 700; }
+.node[data-shared] { color: var(--home-accent); font-weight: 700; }
 .matrix { display: flex; flex-direction: column; justify-content: center; gap: 6%; padding-inline: 6%; }
 .row { display: block; border: 1px solid var(--home-rule); border-radius: 0.25rem; background: var(--home-card); padding: 0.1rem 0.3rem; overflow: hidden; text-align: center; }
 .row b { color: var(--home-accent); }

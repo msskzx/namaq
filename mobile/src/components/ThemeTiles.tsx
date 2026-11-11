@@ -106,12 +106,11 @@ function ViewPreview({ view, palette }: { view: BranchView; palette: Palette }) 
         {TREE_LINES.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
       </Svg>
       <View style={[box, { right: `${trunk.right}%`, top: `${trunk.top}%`, width: `${trunk.width}%`, height: `${trunk.height}%` }]}>
-        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={text}>{line}</Text>)}
+        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={[text, { color: palette.accent, fontWeight: '700' }]}>{line}</Text>)}
       </View>
       {SAMPLE_TREE.endings.map((leaf, index) => (
-        <View key={leaf.words} style={[box, { left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` },
-          leaf.mark && { borderColor: palette.accent }]}>
-          <Text numberOfLines={1} style={[text, leaf.mark && { color: palette.accent, fontWeight: '700' }]}>{leaf.words}</Text>
+        <View key={leaf.words} style={[box, { left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` }]}>
+          <Text numberOfLines={1} style={text}>{leaf.words}</Text>
         </View>
       ))}
     </View>

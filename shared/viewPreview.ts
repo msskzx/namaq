@@ -4,13 +4,13 @@
 /** The theme tiles' card: 52:17 on two lines, its own ending in the accent. */
 export const SAMPLE_AYAH = { start: 'إِنَّ ٱلْمُتَّقِينَ', end: 'فِى جَنَّـٰتٍ', ending: 'وَنَعِيمٍ' } as const;
 
-/** The view tiles: the shared start, then the endings that branch off it, the sample's one marked. */
+/** The view tiles: the shared start (coloured, as the views colour matching words), then the endings that branch off it. */
 export const SAMPLE_TREE = {
   trunk: ['إِنَّ ٱلْمُتَّقِينَ', 'فِى جَنَّـٰتٍ'],
   endings: [
-    { words: 'وَعُيُونٍ', mark: false },
-    { words: 'وَنَعِيمٍ', mark: true },
-    { words: 'وَنَهَرٍ', mark: false },
+    { words: 'وَعُيُونٍ' },
+    { words: 'وَنَعِيمٍ' },
+    { words: 'وَنَهَرٍ' },
   ],
 } as const;
 
