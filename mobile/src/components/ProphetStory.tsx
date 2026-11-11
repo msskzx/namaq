@@ -19,8 +19,6 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 // The page scrolls only once the dot's sheet has slid away (Sheet.tsx CLOSE_MS).
 const SHEET_CLOSED = 300;
 
-const title = (name: string) => `قصة ${name} عليه السلام في القرآن`;
-
 function Action({ icon, label, onPress, primary, palette }: { icon: React.ReactNode; label: string; onPress: () => void; primary?: boolean; palette: Palette }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label}
@@ -52,7 +50,7 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
 
   if (!prophet || !map) return <View style={{ flex: 1, backgroundColor: palette.paper }}>{header(() => setHelp(true))}</View>;
 
-  const { name, story, events } = prophet;
+  const { title, story, events } = prophet;
   const scrollTo = (y: number) => setTimeout(() => scroll.current?.scrollTo({ y, animated: true }), SHEET_CLOSED);
   const read = (event: number, surah?: number) => {
     setPicked(undefined);
@@ -70,7 +68,7 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {header(() => setHelp(true))}
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 20 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, fontWeight: '700', lineHeight: 36, paddingHorizontal: 16 }}>{title(name)}</Text>
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, fontWeight: '700', lineHeight: 36, paddingHorizontal: 16 }}>{title}</Text>
         <StoryMap map={map} events={events} phases={story.phases} picked={picked} palette={palette}
           onPick={(event, surah) => setPicked(old => (old?.event === event && old.surah === surah ? undefined : { event, surah }))} onTitle={event => read(event)} />
         <View onLayout={e => { detailY.current = e.nativeEvent.layout.y; }}>
