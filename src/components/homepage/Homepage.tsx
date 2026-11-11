@@ -18,6 +18,7 @@ import { plainName } from '@shared/quran/normalize';
 import type { HomepageData } from '@/lib/homepageData';
 import styles from './Homepage.module.css';
 import HomeQuranWidget from './HomeQuranWidget';
+import Tour from './Tour';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
 const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
@@ -30,6 +31,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
   const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
   return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
     <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
+    {data.tour && <Tour tour={data.tour} names={Object.fromEntries(names)} />}
 
     <HomeQuranWidget sections={data.sections} />
 

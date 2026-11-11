@@ -54,8 +54,8 @@ describe('TabBar', () => {
     fireEvent.click(within(sheet).getByRole('button', { name: 'Lighter' }));
     expect(state.setTheme).toHaveBeenLastCalledWith('light');
     expect(document.documentElement.getAttribute('data-card-light')).toBe('cream');
-    expect(within(sheet).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/about', '/privacy']);
-    expect(within(sheet).getAllByRole('link').map(link => link.textContent)).toEqual(['About Namaq', 'Privacy policy']);
+    expect(within(sheet).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/?tour=1', '/about', '/privacy']);
+    expect(within(sheet).getAllByRole('link').map(link => link.textContent)).toEqual(['Tour', 'About Namaq', 'Privacy policy']);
     const items = within(sheet).getAllByRole('button').concat(within(sheet).getAllByRole('link'));
     items.at(-1)!.focus();
     fireEvent.keyDown(document, { key: 'Tab' });

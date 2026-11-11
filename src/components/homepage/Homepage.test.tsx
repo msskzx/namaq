@@ -18,6 +18,7 @@ const data = {
   surahs,
   sections: homeQuranSections(surahs),
   bookmarkAyat: { family: ['2:129', '2:151', '3:164', '62:2'] },
+  tour: null,
 };
 const bookmark = { id: 'family', text: 'الكتاب والحكمة', href: '/quran/branches?o=family', savedAt: 1 };
 
