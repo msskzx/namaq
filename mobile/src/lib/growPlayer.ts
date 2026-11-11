@@ -51,13 +51,16 @@ export function setPrefs(next: Partial<Prefs>) {
 }
 
 /** The tree the studio grows: a card hands its beats (built for both modes) when it becomes the open card. */
-type Target = { watch: Beat[]; ask: Beat[] };
+export type Target = { watch: Beat[]; ask: Beat[] };
 let target: Target | null = null;
 let run = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let reveal: (() => void) | null = null;
 
 const totalOf = (beats: Beat[]) => beats.length ? beats[beats.length - 1].step + 1 : 0;
+
+/** The tree the studio grows now, so a screen opened over another (a quiz's answer tree) can hand it back when it closes. */
+export const currentTarget = () => target;
 
 export function setTarget(next: Target | null) {
   stop();

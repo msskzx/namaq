@@ -22,8 +22,8 @@ import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { growthBeats } from '@/lib/growth';
 import { answer, growthState, setTarget, stop, useGrowth } from '@/lib/growPlayer';
-import { logoUrl } from '@/lib/logo';
-import { VIDEO_TYPES, type TreeScene, type VideoInput } from '@/lib/scene';
+import type { TreeScene, VideoInput } from '@/lib/scene';
+import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
@@ -176,9 +176,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
     const scene = await sceneRef.current?.();
     const beats = beatsRef.current;
     if (!scene || !beats) return;
-    const state = growthState();
-    setVideo({ scene, beats: state.mode === 'ask' ? beats.ask : beats.watch, speed: state.speed, ask: state.mode === 'ask', timer: state.timer, types: VIDEO_TYPES,
-      look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, font: '"KFGQPC Hafs"', logo: logoUrl(palette.ink, palette.accent) } });
+    setVideo(treeVideo(scene, beats, palette));
   };
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
@@ -203,7 +201,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
             return (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {mode === 'matrix'
-                ? <MatrixCard key={String(around)} piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer} />
+                ? <MatrixCard key={String(around)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}

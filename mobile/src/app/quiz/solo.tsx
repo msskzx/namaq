@@ -3,13 +3,12 @@ import { ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { QUIZ_LENGTHS } from '@shared/quiz/settings';
 import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
 import { JuzInput, LeavesPicker, Section } from '@/components/QuizForm';
-import { cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
+import { availability, cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette } from '@/lib/theme';
 
@@ -30,11 +29,14 @@ export default function SoloSetup() {
     const crossed = key === 'juzFrom' ? value > other : value < other;
     change({ [key]: value, ...(crossed && { [key === 'juzFrom' ? 'juzTo' : 'juzFrom']: value }) });
   };
+  const { available, lengths } = availability(settings);
+  // A length the range cannot fill gives way to the first one it can, as on the website.
+  const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
   const start = () => {
     setBuilding(true);
     // Building the trees of a narrow juz range takes a moment; the loader shows first.
     requestAnimationFrame(() => setTimeout(() => {
-      setRun(startSolo(settings));
+      setRun(startSolo({ ...settings, length }));
       setBuilding(false);
       router.push('/quiz/play');
     }, 0));
@@ -65,13 +67,16 @@ export default function SoloSetup() {
           <QuizExplainer leaves={settings.leaves} palette={palette} />
         </Section>
         <Section title="عدد الأسئلة" palette={palette}>
-          <Row>
-            {QUIZ_LENGTHS.map(value => <Button key={value} label={num(value)} active={settings.length === value} onPress={() => change({ length: value })} />)}
-          </Row>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>
+          {lengths.length > 0
+            ? <Row>{lengths.map(value => <Button key={value} label={num(value)} active={length === value} onPress={() => change({ length: value })} />)}</Row>
+            : <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>لا توجد خمسة أسئلة لهذا الاختيار. وسّع نطاق الأجزاء.</Text>}
         </Section>
-        <View style={{ alignItems: 'flex-start', minHeight: 50, justifyContent: 'center' }}>
-          {building ? <LoadingDots /> : <Button big variant="primary" Icon={Play} label="ابدأ الاختبار" onPress={start} />}
-        </View>
+        {lengths.length > 0 && (
+          <View style={{ alignItems: 'flex-start', minHeight: 50, justifyContent: 'center' }}>
+            {building ? <LoadingDots /> : <Button big variant="primary" Icon={Play} label="ابدأ الاختبار" onPress={start} />}
+          </View>
+        )}
       </ScrollView>
     </View>
   );

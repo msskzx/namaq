@@ -5,16 +5,14 @@ import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import type { BranchPiece } from '@shared/quran/branchInventory';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
-import { cardOf, matrixOf, surahNames, type MatrixAyah, type MatrixCell } from '@/lib/branches';
-import type { ListState } from '@/lib/branchList';
+import { matrixOf, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import type { Size } from '@/lib/camera';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
-type Props = { piece: BranchPiece; list: ListState; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
+type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
   footer?: React.ReactNode };
 
@@ -67,8 +65,8 @@ function Cell({ cell, at, palette, width, current, onPress }: { cell: MatrixCell
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ piece, list, palette, view, lane, around, onTap, onMove, footer }: Props) {
-  const matrix = useMemo(() => matrixOf(cardOf(piece, list).presentation, around), [piece, list, around]);
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer }: Props) {
+  const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
   const step = width + GAP;
