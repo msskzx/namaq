@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import Segmented from '@/components/common/Segmented';
@@ -33,6 +33,7 @@ import type { CardSide, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
 import CompareBraid from './CompareBraid';
 import { useNeighbours } from './useNeighbours';
+import { useAroundSetting } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
@@ -298,7 +299,10 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   const [view, setView] = useState<BranchView>(preferred);
   // The read-along studio lights words in the matrix, so it shows the matrix while open.
   const tree = view === 'tree' && !read.studio;
-  const neighbours = useNeighbours(shownSides, !tree && !card.many);
+  // The surrounding-ayat switch is the branches page's: one setting for every tree and matrix.
+  const [aroundOn, setAround] = useAroundSetting();
+  const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
+  const neighbours = useNeighbours(shownSides, aroundOn && !card.many);
   const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');
   const titleOf = (side: CardSide) => sidePage(side, names, ar, null).title;
   const withNeighbours = (page: SpreadPage, i: number): SpreadPage => neighbours && !page.pick
@@ -328,7 +332,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
               {ar ? num(item.ayah.number) : item.ayah.number}
             </button>)}
           </div>}
-          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0]), titleOf(shownSides[1])]} ar={ar} />
+          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0]), titleOf(shownSides[1])]} ar={ar} around={card.many ? undefined : neighbours} />
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
@@ -341,6 +345,8 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
         <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
         </Button>
+        <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
+          className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}

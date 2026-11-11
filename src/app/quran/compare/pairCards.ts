@@ -1,4 +1,6 @@
 import treeData from '@shared/data/quran/trees.json';
+import surahRows from '@shared/data/quran/surahs.json';
+import { num } from '@shared/quran/arabicNumber';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import { withUnappliedReviews } from '@/lib/quran/curation/reviewLog';
 import { compareAnchor } from '@shared/compareBookmarks';
@@ -60,9 +62,41 @@ for (const { a, b } of listedPairs) for (const card of cardsOf(`${a}:${b}`, fals
 const pairsByAyah = new Map<string, string[]>();
 for (const id of holders.keys()) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), id]);
 
-/** The compare card that holds two of these ayat as a kept pair, on a listed page. */
+/** The first compare card (mushaf order of surah pairs) holding two of these ayat as a kept pair, on a listed page. */
 export function compareLinkFor(keys: string[]): string | undefined {
+  return compareLinksFor(keys)[0]?.href;
+}
+
+/** A tree's way into compare: one listed surah pair holding a kept card of two of its ayat. */
+export type CompareLink = { href: string; label: string; labelEn: string };
+
+const surahName = (n: number) => surahRows.find(row => row.number === n);
+
+/**
+ * Every listed surah pair holding a kept card of two of these ayat, one link each in mushaf order: a tree across
+ * two surahs has one, a tree across more gets a short list to choose from (the «في المقارنة» button).
+ */
+export function compareLinksFor(keys: string[]): CompareLink[] {
   const shown = new Set(keys);
-  const id = keys.flatMap(key => pairsByAyah.get(key) ?? []).find(pair => pair.split('|').every(key => shown.has(key)));
-  return id && holders.get(id);
+  const ids = [...new Set(keys.flatMap(key => pairsByAyah.get(key) ?? []))].filter(pair => pair.split('|').every(key => shown.has(key)));
+  const bySurahs = new Map<string, string>();
+  for (const id of ids) {
+    const [x, y] = id.split('|').map(key => key.split(':').map(Number));
+    const pair = x[0] < y[0] ? [x, y] : [y, x];
+    const at = `${pair[0][0]}:${pair[1][0]}`;
+    if (!bySurahs.has(at)) bySurahs.set(at, id);
+  }
+  return [...bySurahs].sort(([p], [q]) => {
+    const [pa, pb] = p.split(':').map(Number);
+    const [qa, qb] = q.split(':').map(Number);
+    return pa - qa || pb - qb;
+  }).map(([, id]) => {
+    const [x, y] = id.split('|').map(key => key.split(':').map(Number)).sort((p, q) => p[0] - q[0]);
+    const [a, b] = [surahName(x[0]), surahName(y[0])];
+    return {
+      href: holders.get(id)!,
+      label: `${a?.name} مع ${b?.name} · ${num(x[1])} · ${num(y[1])}`,
+      labelEn: `${a?.nameTransliterated} with ${b?.nameTransliterated} · ${x[1]} · ${y[1]}`,
+    };
+  });
 }

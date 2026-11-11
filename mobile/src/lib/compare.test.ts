@@ -148,3 +148,18 @@ describe('compare card views', () => {
     expect(around.after[0]!.exact.size).toBeGreaterThan(0);
   });
 });
+
+describe('tree to compare', () => {
+  it('offers the same surah pairs as the website for every tree, in the same order', async () => {
+    const { compareLinksFor } = await import('@/app/quran/compare/pairCards');
+    const { compareTargetsFor } = await import('./compare');
+    let choosers = 0;
+    for (const piece of treeList()) {
+      const app = compareTargetsFor(piece.keys).map(target => [Math.min(target.lead, target.other), Math.max(target.lead, target.other)].join(':'));
+      const web = compareLinksFor(piece.keys).map(link => { const url = new URL(link.href, 'http://x'); return `${url.searchParams.get('a')}:${url.searchParams.get('b')}`; });
+      expect(app, piece.id).toEqual(web);
+      if (app.length > 1) choosers++;
+    }
+    expect(choosers).toBeGreaterThan(50);
+  });
+});
