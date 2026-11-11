@@ -11,6 +11,7 @@ import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subsc
 import Sheet from './Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { quranText } from '@/lib/quranText';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
@@ -149,7 +150,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
                 {start > 0 ? '… ' : ''}
                 {row.words.slice(start, end).map((word, at) => {
                   const inside = start + at >= row.from && start + at <= row.to;
-                  return <Text key={at} style={inside ? { color: palette.accent } : undefined}>{word} </Text>;
+                  return <Text key={at} style={inside ? { color: palette.accent } : undefined}>{quranText(word)} </Text>;
                 })}
                 {end < row.words.length ? '…' : ''}
               </Text>

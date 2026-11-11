@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { referencesOf, savedCard } from './home';
+import { referencesOf, savedCard, shelfText } from './home';
 import { treeList } from './branches';
 import { aliasesOf } from './branchList';
 
@@ -33,5 +33,16 @@ describe('the homepage shelf', () => {
 
   it('does not open a saved tree the app no longer has', () => {
     expect(savedCard(saved('no-such-tree')).open).toBeNull();
+  });
+
+  it('draws a saved tree or compare card in the mushaf font’s marks, and leaves a saved ayah’s mushaf words as they are', () => {
+    const corpus = 'يَـٰقَوْمِ ٱعْبُدُوا۟ ٱللَّهَ';
+    for (const kind of ['tree', 'compare'] as const) {
+      const shown = shelfText({ kind, text: corpus });
+      expect(shown).not.toMatch(/[\u06DF]/);
+      expect(shown).toContain('ٱعۡبُدُواْ');
+    }
+    const page = 'ٱعۡبُدُواْ ٱللَّهَ';
+    expect(shelfText({ kind: 'ayah', text: page })).toBe(page);
   });
 });

@@ -4,6 +4,7 @@ import { compareBookmarkAyat } from '@shared/compareBookmarks';
 import { aliasesOf } from './branchList';
 import { treeList } from './branches';
 import type { Intent } from './intent';
+import { quranText } from './quranText';
 
 export type Reference = { surah: number; ayat: number[]; range?: boolean };
 export type SavedCard = { id: string; text: string; kind: BookmarkKind; references: Reference[]; open: Intent | null };
@@ -44,3 +45,9 @@ export function savedCard(item: Bookmark): SavedCard {
   const keys = keysOfTree(item.id);
   return { id: item.id, text: item.text, kind, references: referencesOf(keys ?? []), open: keys ? { tab: 'branches', open: item.id } : null };
 }
+
+/**
+ * A shelf card's words as the mushaf font draws them. A saved ayah already holds the mushaf page's own words;
+ * trees and compare cards hold the corpus spelling, whose marks (such as the small zero over a silent alif) the font has no glyph for.
+ */
+export const shelfText = (card: Pick<SavedCard, 'kind' | 'text'>) => (card.kind === 'ayah' ? card.text : quranText(card.text));
