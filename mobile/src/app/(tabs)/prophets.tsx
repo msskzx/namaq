@@ -10,10 +10,10 @@ import { usePalette } from '@/lib/theme';
 
 const PICKED = 'prophets-picked';
 
-/** The prophets tab: one prophet's story at a time, picked from a dropdown in the middle of the top bar (like the compare tab's). */
+/** The prophets tab: one prophet's story at a time (Musa until one is picked), picked from a dropdown in the middle of the top bar (like the compare tab's). */
 export default function ProphetsTab() {
   const palette = usePalette();
-  const [slug, setSlug] = useState(() => findProphet(readJson<string>(PICKED) ?? '')?.slug ?? PROPHETS[0].slug);
+  const [slug, setSlug] = useState(() => findProphet(readJson<string>(PICKED) ?? '')?.slug ?? 'musa');
   const [picking, setPicking] = useState(false);
   const name = findProphet(slug)?.name ?? '';
   const pick = (next: string) => {
