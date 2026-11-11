@@ -5,7 +5,7 @@ import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming
 import { scheduleOnRN } from 'react-native-worklets';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import BranchTree, { type Direction, type NodeActions, type Paths, type TreeGrowth } from './BranchTree';
-import { litPaths, togglePath } from '@shared/quran/pathHighlight';
+import { litPaths, pathToggleKey, togglePath } from '@shared/quran/pathHighlight';
 import type { TreeScene } from '@/lib/scene';
 import { aroundOf, cardOf, searchLit, surahNames } from '@/lib/branches';
 import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
@@ -13,6 +13,7 @@ import type { ListState } from '@/lib/branchList';
 import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
 import type { Palette } from '@/lib/theme';
 import PathAyat from './PathAyat';
+import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
 
 /** What the pager lends the card that has the focus, so one finger either moves the zoomed tree or the row of cards. */
 export type Lane = {
@@ -47,6 +48,8 @@ type Props = {
   /** The bookmark row, drawn right under the tree so it follows it; the tree fits in the space left above it. */
   footer?: React.ReactNode;
   footHeight?: number;
+  /** The tree's surahs as chips under the bookmark row. */
+  chips?: boolean;
 };
 
 const BIG = 20000;
@@ -55,7 +58,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0, actions }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -69,6 +72,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     const lit = new Set([...pinned].flatMap(([id, ayahKeys]) => id === 'search' ? [] : ayahKeys));
     return card.presentation.ayat.map(ayah => ayah.key).filter(key => lit.has(key));
   }, [pinned, card]);
+  const ayahKeys = useMemo(() => card.presentation.ayat.map(ayah => ayah.key), [card]);
+  const showChips = chips && !growth;
+  const footHeight = rowHeight + (showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const strip = tappedKeys.length && !growth ? stripHeight : 0;
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -193,8 +199,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
           <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured} paths={paths} actions={actions}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
-        {(footer || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
-          {footer && <View style={{ height: footHeight }}>{footer}</View>}
+        {(footer || showChips || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
+          {footer && <View style={{ height: rowHeight }}>{footer}</View>}
+          {showChips && <SurahChips tuck ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />}
           {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
