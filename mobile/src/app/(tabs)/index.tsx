@@ -12,12 +12,13 @@ import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
 import TreeIcon from '@/components/TreeIcon';
 import Button, { Row } from '@/components/Button';
-import HomeIntro from '@/components/HomeIntro';
+import Tour from '@/components/Tour';
 import { surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
 import { savedCard, shelfText, type SavedCard } from '@/lib/home';
 import { setIntent, type Intent } from '@/lib/intent';
 import { useShrinkOnScroll } from '@/lib/chrome';
+import { tourSeen } from '@/lib/settings';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
@@ -140,6 +141,7 @@ export default function HomeScreen() {
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   const push = (href: Href) => router.push(href);
   const onScroll = useShrinkOnScroll();
+  const [seen, setSeen] = tourSeen.use();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings hideOnScroll />
@@ -183,7 +185,7 @@ export default function HomeScreen() {
           </Row>
         </View>
       </ScrollView>
-      <HomeIntro palette={palette} />
+      {!seen && <Tour palette={palette} onDone={() => setSeen(true)} />}
     </View>
   );
 }

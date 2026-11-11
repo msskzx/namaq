@@ -26,6 +26,9 @@ function setting<T>(key: string, fallback: T, valid: (value: unknown) => value i
 
 const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';
 
+/** The first-launch tour ran or was skipped; the settings sheet clears it to play the tour again. */
+export const tourSeen = setting('tour-seen', false, isBoolean);
+
 /** Tree or matrix: the website's default-view setting. */
 export type BranchView = 'tree' | 'matrix';
 export const branchView = setting<BranchView>('branches-view', 'tree', (value): value is BranchView => value === 'tree' || value === 'matrix');

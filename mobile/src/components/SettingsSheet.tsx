@@ -1,13 +1,16 @@
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import { ExternalLink, ShieldCheck } from 'lucide-react-native';
+import { ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
 import Sheet from './Sheet';
 import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
-import { connectors } from '@/lib/settings';
+import { connectors, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import type { Palette } from '@/lib/theme';
+
+/** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. */
+const REPLAY_AFTER = 400;
 
 /** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About and Privacy. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
@@ -24,6 +27,11 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
+          <Pressable onPress={() => { onClose(); setTimeout(() => tourSeen.set(false), REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
+            style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
+            <Play size={20} color={palette.ink} />
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>الجولة التعريفية</Text>
+          </Pressable>
           {links.map(link => (
             <Pressable key={link.href} onPress={() => void Linking.openURL(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
