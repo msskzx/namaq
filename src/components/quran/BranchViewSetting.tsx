@@ -6,17 +6,27 @@ import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/quran/branchView';
-import { VIEW_PREVIEW } from '@shared/viewPreview';
+import { SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import styles from '@/components/theme/ThemeTiles.module.css';
 
-/** A small drawing of the view, in the page's own colours. */
+/** The view drawn small in the page's own colours, with the إن المتقين في tree as its sample; both colour the words every ayah shares, as the real views do. */
 function Preview({ view }: { view: 'tree' | 'matrix' }) {
-  const { boxes, lines } = VIEW_PREVIEW[view];
-  return <svg viewBox="0 0 60 40" className="size-full" style={{ background: 'var(--home-paper)' }}>
-    {lines.map(d => <path key={d} d={d} fill="none" stroke="var(--home-rule)" strokeWidth={1} />)}
-    {boxes.map((box, index) => <rect key={index} x={box.x} y={box.y} width={box.w} height={box.h} rx={box.tone === 'card' ? 1.5 : 1}
-      fill={box.tone === 'card' ? 'var(--home-card)' : 'var(--home-accent)'} stroke={box.tone === 'card' ? 'var(--home-rule)' : 'none'} strokeWidth={0.6} />)}
-  </svg>;
+  if (view === 'matrix') return <span className={styles.matrix}>
+    {SAMPLE_TREE.endings.map(ending => <span key={ending.words} className={styles.row}>
+      <b>{SAMPLE_TREE.trunk.join(' ')}</b> {ending.words}
+    </span>)}
+  </span>;
+  const { trunk, ending } = TREE_LAYOUT;
+  return <span className={styles.tree}>
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full">
+      {TREE_LINES.map(d => <path key={d} d={d} fill="none" stroke="var(--home-rule)" strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
+    </svg>
+    <span className={styles.node} data-shared style={{ right: `${trunk.right}%`, top: `${trunk.top}%`, width: `${trunk.width}%`, height: `${trunk.height}%` }}>
+      {SAMPLE_TREE.trunk.map(line => <span key={line}>{line}</span>)}
+    </span>
+    {SAMPLE_TREE.endings.map((leaf, index) => <span key={leaf.words} className={styles.node}
+      style={{ left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` }}>{leaf.words}</span>)}
+  </span>;
 }
 
 /** `onPick` hears every choice, even of the view already set (the first-visit tour waits for one). */

@@ -22,7 +22,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 20 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>الإعدادات</Text>
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />
         <ConnectorsSetting palette={palette} />
@@ -31,13 +31,13 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
           <Pressable onPress={() => { onClose(); setTimeout(() => tourSeen.set(false), REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
             <Play size={20} color={palette.ink} />
-            <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>الجولة التعريفية</Text>
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>
           </Pressable>
           {links.map(link => (
             <Pressable key={link.href} onPress={() => void Linking.openURL(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
               {link.icon}
-              <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>{link.label}</Text>
+              <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{link.label}</Text>
               <ExternalLink size={16} color={palette.muted} />
             </Pressable>
           ))}
@@ -53,7 +53,7 @@ function ConnectorsSetting({ palette }: { palette: Palette }) {
   return (
     <View style={{ gap: 2 }}>
       <Toggle on={on} onChange={setOn} label="ربط الكلمات المتشابهة بخطوط تلقائيًا" palette={palette} />
-      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.</Text>
+      <Text style={{ color: palette.muted, fontSize: 13 }}>إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.</Text>
     </View>
   );
 }

@@ -5,16 +5,17 @@ import { useTheme } from 'next-themes';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';
+import { SAMPLE_AYAH } from '@shared/viewPreview';
 import { readCardTint, setCardTint } from '@/lib/cardTint';
 import styles from './ThemeTiles.module.css';
 
-/** A small page with a card on it: the tile's page colour, card tint and a matched word. */
+/** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
 function Mini({ mode, card }: { mode: CardMode; card: string }) {
   const colours = MODE_PREVIEW[mode];
   return <span className={styles.page} style={{ background: colours.page }}>
     <span className={styles.card} style={{ background: card, color: colours.ink, borderColor: colours.rule }}>
-      <span><b style={{ color: colours.accent }}>هُدًى</b> لِّلْمُتَّقِينَ</span>
-      <span>ذَٰلِكَ ٱلْكِتَٰبُ</span>
+      <span>{SAMPLE_AYAH.start}</span>
+      <span>{SAMPLE_AYAH.end} <b style={{ color: colours.accent }}>{SAMPLE_AYAH.ending}</b></span>
     </span>
   </span>;
 }
