@@ -494,8 +494,10 @@ describe('branches review', () => {
     vi.stubEnv('NODE_ENV', 'development');
     render(await open(paramsOf(landing)));
     expect(screen.getByRole('button', { name: 'حذف البطاقة' })).toBeTruthy();
+    expect(document.querySelector('[data-draft]')?.textContent).toContain('drafted by Claude');
     cleanup();
     render(await open({ ...paramsOf(landing), review: '' }));
     expect(screen.queryByRole('button', { name: 'حذف البطاقة' })).toBeNull();
+    expect(document.querySelector('[data-draft]')).toBeNull();
   }, 30000);
 });

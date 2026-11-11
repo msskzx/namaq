@@ -200,6 +200,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
   const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree ayat={neighbour.ayat} tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" zoomInRail="preview" surround={{ on: false, sync: true }} />;
 
+  const verdict = id ? branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }) : undefined;
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
       <PreloadQuranText />
@@ -233,7 +234,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </PathScope>
       </DoubleTapSave>
-      {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }))} />}
+      {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
+      {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       </GroupConnections>
     </div>
