@@ -15,9 +15,7 @@ const BASE = 40;
 /** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
 const EMPTY_END = '\u06DD';
 const GAP = 0.2;
-/** One text size on every page, as a share of the page's width: pages with long lines squeeze them, pages with short ones spread them. */
-const SIZE = 0.063;
-const SQUEEZE = 0.8;
+const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 
 /** Natural width of each line at BASE, per page; the same on every screen, so measured once per page. */
@@ -96,7 +94,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     if (oval) return Math.max(1, Math.min(oneLine * 0.72, ...lineAt.map(at => (BASE * oval.chords[at]) / (measured[at] ?? 1))));
     const widths = lineAt.map(at => measured[at] ?? 1);
     const widest = Math.max(1, ...widths);
-    return Math.max(1, Math.min(SIZE * body.width, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
+    const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
+    return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
   }, [body, measured, lineAt, page, rowHeight, oval, oneLine]);
 
   const first = data.items[0];
