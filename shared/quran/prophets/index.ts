@@ -8,6 +8,7 @@ export const PROPHETS: Prophet[] = [
   { slug: 'yaqub', name: 'يعقوب', nameEn: 'Yaqub' },
   { slug: 'yusuf', name: 'يوسف', nameEn: 'Yusuf' },
   { slug: 'ayyub', name: 'أيوب', nameEn: 'Ayyub' },
+  { slug: 'salih', name: 'صالح', nameEn: 'Salih' },
   { slug: 'shuayb', name: 'شعيب', nameEn: 'Shuayb' },
   { slug: 'musa', name: 'موسى', nameEn: 'Musa' },
   { slug: 'harun', name: 'هارون', nameEn: 'Harun' },
@@ -18,6 +19,7 @@ export const PROPHETS: Prophet[] = [
   { slug: 'alyasa', name: 'اليسع', nameEn: 'Alyasa' },
   { slug: 'zakariyya', name: 'زكريا', nameEn: 'Zakariyya' },
   { slug: 'yahya', name: 'يحيى', nameEn: 'Yahya' },
+  { slug: 'isa', name: 'عيسى', nameEn: 'Isa' },
   { slug: 'yunus', name: 'يونس', nameEn: 'Yunus' },
 ];
 

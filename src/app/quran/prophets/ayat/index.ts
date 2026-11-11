@@ -8,8 +8,10 @@ import harun from './harun.json';
 import idris from './idris.json';
 import ibrahim from './ibrahim.json';
 import ilyas from './ilyas.json';
+import isa from './isa.json';
 import musa from './musa.json';
 import nuh from './nuh.json';
+import salih from './salih.json';
 import shuayb from './shuayb.json';
 import sulayman from './sulayman.json';
 import yahya from './yahya.json';
@@ -18,4 +20,4 @@ import yusuf from './yusuf.json';
 import zakariyya from './zakariyya.json';
 import yunus from './yunus.json';
 
-export const AYAT: Record<string, StoryData> = { yaqub, yusuf, adam, idris, nuh, ibrahim, ayyub, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya, yunus };
+export const AYAT: Record<string, StoryData> = { yaqub, yusuf, adam, idris, nuh, ibrahim, ayyub, salih, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya, yunus, isa };

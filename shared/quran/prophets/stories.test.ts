@@ -8,9 +8,11 @@ import { HARUN } from './harun';
 import { IDRIS } from './idris';
 import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
+import { ISA } from './isa';
 import { ADAM } from './adam';
 import { MUSA } from './musa';
 import { NUH } from './nuh';
+import { SALIH } from './salih';
 import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
@@ -276,6 +278,107 @@ describe('YUNUS', () => {
   });
 });
 
+// Ayat that name Salih, and those that name Thamud or the people of al-Hijr.
+const SALIH_NAMED: Record<number, number[]> = { 7: [73, 75, 77], 11: [61, 62, 66, 89], 26: [142], 27: [45] };
+const THAMUD: Record<number, number[]> = {
+  7: [73],
+  9: [70],
+  11: [61, 68, 95],
+  14: [9],
+  15: [80],
+  17: [59],
+  22: [42],
+  25: [38],
+  26: [141],
+  27: [45],
+  29: [38],
+  38: [13],
+  40: [31],
+  41: [13, 17],
+  50: [12],
+  51: [43],
+  53: [51],
+  54: [23],
+  69: [4, 5],
+  85: [18],
+  89: [9],
+  91: [11],
+};
+
+describe('SALIH', () => {
+  const keys = storyKeys(SALIH.events);
+  const flat = (m: Record<number, number[]>) => Object.entries(m).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Salih', () => {
+    expect(flat(SALIH_NAMED)).toHaveLength(9);
+    expect(flat(SALIH_NAMED).filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names Thamud or the people of al-Hijr', () => {
+    expect(flat(THAMUD)).toHaveLength(26);
+    expect(flat(THAMUD).filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of SALIH.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+// Ayat that name him: عيسى, المسيح or ابن مريم.
+const ISA_NAMED: Record<number, number[]> = {
+  2: [87, 136, 253],
+  3: [45, 52, 55, 59, 84],
+  4: [157, 163, 171, 172],
+  5: [17, 46, 72, 75, 78, 110, 112, 114, 116],
+  6: [85],
+  9: [30, 31],
+  19: [34],
+  23: [50],
+  33: [7],
+  42: [13],
+  43: [57, 63],
+  57: [27],
+  61: [6, 14],
+};
+
+const MARYAM: Record<number, number[]> = {
+  2: [87, 253],
+  3: [36, 37, 42, 43, 44, 45],
+  4: [156, 157, 171],
+  5: [17, 46, 72, 75, 78, 110, 112, 114, 116],
+  9: [31],
+  19: [16, 27, 34],
+  23: [50],
+  33: [7],
+  43: [57],
+  57: [27],
+  61: [6, 14],
+  66: [12],
+};
+
+describe('ISA', () => {
+  const keys = storyKeys(ISA.events);
+  const flat = (named: Record<number, number[]>) => Object.entries(named).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Isa', () => {
+    expect(flat(ISA_NAMED)).toHaveLength(33);
+    expect(flat(ISA_NAMED).filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names Maryam', () => {
+    expect(flat(MARYAM)).toHaveLength(31);
+    expect(flat(MARYAM).filter(k => !keys.includes(k))).toEqual([]);
+  });
+});
+
 describe('STORIES', () => {
   it('gives every prophet a story', () => {
     expect(Object.keys(STORIES).sort()).toEqual(PROPHETS.map(p => p.slug).sort());
@@ -285,5 +388,12 @@ describe('STORIES', () => {
     const phases = STORIES[slug].events.map(e => e.phase);
     expect(phases).toEqual([...phases].sort((a, b) => a - b));
     expect([...new Set(phases)]).toEqual(STORIES[slug].phases.map((_, i) => i));
+  });
+
+  it.each(PROPHETS)('$slug keeps every range ordered and puts no ayah in two events', ({ slug }) => {
+    const { events } = STORIES[slug];
+    for (const e of events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+    const keys = storyKeys(events);
+    expect(new Set(keys).size).toBe(keys.length);
   });
 });
