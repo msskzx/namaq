@@ -10,7 +10,7 @@ import { PROPHETS } from '@shared/quran/prophets';
 
 type Language = 'en' | 'ar';
 
-export const QURAN_CARDS: { href: string; desc: Record<Language, string> }[] = [
+export const QURAN_CARDS: { href: string; title?: Record<Language, string>; desc: Record<Language, string> }[] = [
   { href: '/quran/read', desc: { ar: 'اقرأ المصحف صفحةً صفحة برواية حفص', en: 'Read the mushaf page by page, in Hafs' } },
   { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },
   { href: '/quran/words', desc: { ar: 'كم مرة ترد كل كلمة، وكلمات متقابلة جنبًا إلى جنب', en: 'How often each word occurs, and opposite words side by side' } },
@@ -23,6 +23,7 @@ export const QURAN_CARDS: { href: string; desc: Record<Language, string> }[] = [
   { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
   ...PROPHETS.map(({ slug, name, nameEn }) => ({
     href: `/quran/prophets/${slug}`,
+    title: { ar: `قصة ${name}`, en: `The story of ${nameEn}` },
     desc: { ar: `أحداث قصة ${name} وأين ذُكرت في السور`, en: `The events of ${nameEn}'s story and the surahs that tell them` },
   })),
 ];
@@ -36,9 +37,9 @@ export default function QuranHub() {
         <h1>{language === 'ar' ? 'القرآن' : 'Quran'}</h1>
       </header>
       <ol className={cards.grid}>
-        {QURAN_CARDS.map(({ href, desc }, index) => (
+        {QURAN_CARDS.map(({ href, title, desc }, index) => (
           <li key={href}>
-            <ExplorationCard url={href} title={links.find(l => l.href === href)?.label ?? href} desc={desc[language]} number={index + 1} language={language} />
+            <ExplorationCard url={href} title={links.find(l => l.href === href)?.label ?? title?.[language] ?? href} desc={desc[language]} number={index + 1} language={language} />
           </li>
         ))}
       </ol>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
+import { IBRAHIM } from './ibrahim';
 import { MUSA } from './musa';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
@@ -94,6 +95,33 @@ describe('MUSA_EVENTS', () => {
 
   it('keeps every range ordered', () => {
     for (const e of MUSA_EVENTS) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
+  });
+});
+
+// Ayat that name Ibrahim, and his sons Ismail and Ishaq, whose story is told inside his.
+const IBRAHIM_NAMED: Record<string, string> = {
+  Ibrahim:
+    '2:124 2:125 2:126 2:127 2:130 2:132 2:133 2:135 2:136 2:140 2:258 2:260 3:33 3:65 3:67 3:68 3:84 3:95 3:97 4:54 4:125 4:163 6:74 6:75 6:83 6:161 9:70 9:114 11:69 11:74 11:75 11:76 12:6 12:38 14:35 15:51 16:120 16:123 19:41 19:46 19:58 21:51 21:60 21:62 21:69 22:26 22:43 22:78 26:69 29:16 29:31 33:7 37:83 37:104 37:109 38:45 42:13 43:26 51:24 53:37 57:26 60:4 87:19',
+  Ismail: '2:125 2:127 2:133 2:136 2:140 3:84 4:163 6:86 14:39 19:54 21:85 38:48',
+  Ishaq: '2:133 2:136 2:140 3:84 4:163 6:84 11:71 12:6 12:38 14:39 19:49 21:72 29:27 37:112 37:113 38:45',
+};
+const IBRAHIM_COUNTS: Record<string, number> = { Ibrahim: 63, Ismail: 12, Ishaq: 16 };
+
+describe('IBRAHIM', () => {
+  const keys = storyKeys(IBRAHIM.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it.each(Object.keys(IBRAHIM_NAMED))('holds every ayah that names %s', name => {
+    const named = IBRAHIM_NAMED[name].split(' ');
+    expect(named).toHaveLength(IBRAHIM_COUNTS[name]);
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of IBRAHIM.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 
