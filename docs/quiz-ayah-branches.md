@@ -4,7 +4,8 @@ The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآ
 
 ## Questions (`branchQuestions` in `shared/quiz/branchQuestions.ts`)
 
-- The questions come from `shared/data/quran/trees.json` through `buildTreeGroups`, so the explorer and quiz use the same tree inventory. Nothing is stored separately for the quiz.
+- The questions come from the متشابهات of the branches page (`quizTrees`: `branchInventory` with the `mutashabeh` category, scoped to the juz range), not its word trees («أشجار الكلمات»). Nothing is stored separately for the quiz.
+- More answers per tree means a harder quiz, so it picks trees with at least that many leaves first, then the biggest of the rest (`biggerFirst`), until each tree has its own difficulty.
 - A question accepts 2–10 distinct ayat and 2–10 branches at the first split. It carries the complete tree after the shared phrase and the words preceding that phrase in each ayah. Empty prefixes are omitted; they do not request a previous ayah. A tree is left out when an ayah ends at the shared phrase or when it does not split. The explorer's separate `PIECE_MAX` limit does not constrain quizzes.
 - Where the ayat of a piece open with different first words, with or without a leading و or ف or with a different lemma, the prompt names each spelling, such as «يَطُوفُ عَلَيْهِمْ» أو «وَيَطُوفُ عَلَيْهِمْ» or «وَإِنَّ» أو «وَإِن», and the tree draws each spelling as its own node before the shared words, as `/quran/branches` does. In the quiz these nodes carry no link, since the spelling's own tree would show the answers. After checking, each ayah carries its spelling beside its reference.
 - The setup takes a juz' range (`juzFrom` and `juzTo`, 1 to 30, default all). The ayat outside it are dropped before the tree is built, so the reader answers only the branches inside the range. In juz' 29 to 30, فلا أقسم has four branches (69:38, 70:40, 81:15, 84:16), and 56:75 in juz' 27 is not asked for. The range applies to this topic only.
@@ -12,7 +13,7 @@ The quiz topic "Shared Quranic wording" (`BRANCHES`, متشابهات القرآ
 - These questions skip the reviewed bank under `data/quiz/`. The answer is the Quran text itself, and there is no distractor to check.
 - The topic can be combined with the bank topics in one quiz, a person's circle included. A person's circle adds that person's questions to the other topics chosen beside it.
 - Solo and party setup take the number of answers per tree (`leaves`, 1 to 10, default 3; 1 is labelled easy and 10 hard). `askedNodes` picks that many leaves at random for each question, and every other node is shown already filled in. A tree with fewer leaves asks for all of them. A question without `asked` asks every node, as before.
-- The setup draws a real tree from the pool (`shared/data/quiz/example.json`, the `إن المتقين في` tree, checked against the pool by a test in `shared/quiz/branchQuestions.test.ts`) with the asked leaves as empty boxes, and states the grading rule and the meaning of the amber button and the green and purple first words.
+- The setup draws a real tree (`shared/data/quiz/example.json`, the `إن المتقين في` word tree the owner chose, checked against the data by a test in `shared/quiz/branchQuestions.test.ts`) with the asked leaves as empty boxes, and states the grading rule and the meaning of the amber button and the green and purple first words.
 
 ## Grading (`matchTreeAnswers` in `shared/quiz/branchAnswers.ts`)
 
