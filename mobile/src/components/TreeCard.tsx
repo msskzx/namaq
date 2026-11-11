@@ -194,8 +194,8 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
         {(footer || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
-          {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
           {footer && <View style={{ height: footHeight }}>{footer}</View>}
+          {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
