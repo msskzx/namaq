@@ -13,7 +13,7 @@ const events: StoryEvent[] = [
   { phase: 2, title: 'خليفة في الأرض', segments: [seg(38, 26)] },
   { phase: 2, title: 'الحكم في الحرث', segments: [seg(21, 78, 79)] },
   { phase: 3, title: 'وهبنا لداود سليمان', segments: [seg(38, 30), seg(27, 16)] },
-  { phase: 3, title: 'في ذرية إبراهيم', segments: [seg(6, 84)] },
+  { phase: 3, title: 'بين الأنبياء', segments: [seg(6, 84)] },
   { phase: 3, title: 'لعن الكافرين على لسانه', segments: [seg(5, 78)] },
 ];
 
