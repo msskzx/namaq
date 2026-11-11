@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import useSWR from "swr";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "@/components/common/PaperPage.module.css";
 import NumberInput from "@/components/common/NumberInput";
+import TreeFilters from "./TreeFilters";
+import { QUIZ_CATEGORIES, quizFilters, SCOPE_KEYS, treeScopeParams } from "@shared/quiz/scopeParams";
+import { readBookmarks, serverBookmarks, subscribeBookmarks } from "@shared/bookmarks";
+import { isCompareBookmark } from "@shared/compareBookmarks";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
@@ -108,7 +112,17 @@ export default function QuizzesPage() {
   const leaves = parseLeaves(searchParams.get("leaves"));
   const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
-  const scopeQuery = `${person ? `&person=${encodeURIComponent(person)}` : ""}${juzFrom ? `&juzFrom=${encodeURIComponent(juzFrom)}` : ""}${juzTo ? `&juzTo=${encodeURIComponent(juzTo)}` : ""}`;
+  // The branches page's filters for the trees; saved only sends this browser's saved trees.
+  const treeFilters = useMemo(() => quizFilters(topics.includes("BRANCHES") ? Object.fromEntries(searchParams) : {}), [topics, searchParams]);
+  const savedOnly = topics.includes("BRANCHES") && searchParams.get("saved") === "1";
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  const liveSaved = useMemo(() => bookmarks.filter((item) => !isCompareBookmark(item)).map((item) => item.id), [bookmarks]);
+  // Saving a tree during the quiz must not start a new one, so the saved trees are fixed once a quiz is chosen.
+  const savedSnapshot = useRef(liveSaved);
+  if (!length || savedSnapshot.current.length === 0) savedSnapshot.current = liveSaved;
+  const savedIds = savedOnly ? savedSnapshot.current : undefined;
+  const filterQuery = treeScopeParams({ filters: treeFilters, saved: savedIds }).map(([key, value]) => `&${key}=${encodeURIComponent(value)}`).join("");
+  const scopeQuery = `${person ? `&person=${encodeURIComponent(person)}` : ""}${juzFrom ? `&juzFrom=${encodeURIComponent(juzFrom)}` : ""}${juzTo ? `&juzTo=${encodeURIComponent(juzTo)}` : ""}${filterQuery}`;
   const canCheckAvailability = Boolean(topics.length && (!topics.includes("PERSON_CIRCLE") || person));
   const availabilityQuery = canCheckAvailability
     ? `/api/quiz/availability?${topicQuery}${scopeQuery}`
@@ -221,17 +235,13 @@ export default function QuizzesPage() {
             <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
               <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "متشابهات القرآن" : "Phrase trees"}</legend>
               <div className="mb-5 flex flex-wrap items-start gap-x-6 gap-y-4">
-                {([["juzFrom", juz?.from ?? 1, ar ? "من الجزء" : "From juz'"], ["juzTo", juz?.to ?? 30, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
-                  <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
-                    <span>{label}</span>
-                    <NumberInput label={label} value={value} min={1} max={30} steppers={false}
-                      onChange={(next) => {
-                        const other = key === "juzFrom" ? juz?.to ?? 30 : juz?.from ?? 1;
-                        const crossed = key === "juzFrom" ? next > other : next < other;
-                        setParam({ [key]: String(next), ...(crossed && { [key === "juzFrom" ? "juzTo" : "juzFrom"]: String(next) }), length: undefined });
-                      }} />
-                  </div>
-                ))}
+                <div className="min-w-0 basis-full">
+                  <TreeFilters choice={{ range: juz, filters: treeFilters, saved: savedOnly }} onChange={({ range, filters, saved }) => setParam({
+                    juzFrom: range ? String(range.from) : undefined, juzTo: range ? String(range.to) : undefined,
+                    ...Object.fromEntries(SCOPE_KEYS.map((key) => [key, key === "categories" && filters[key] === QUIZ_CATEGORIES ? undefined : filters[key] || undefined])),
+                    saved: saved ? "1" : undefined, length: undefined,
+                  })} />
+                </div>
               <div role="group" aria-labelledby="quiz-leaves">
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
                 <div className="flex flex-wrap items-start gap-2">

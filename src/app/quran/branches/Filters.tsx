@@ -60,7 +60,7 @@ export function FilterButton({ range, view, allSurahs = [] }: { range: JuzRange 
 
 const useBookmarks = () => useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
 
-function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+export function SavedOnly({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().filter(item => !isCompareBookmark(item));
   const id = useId();

@@ -10,7 +10,7 @@ import Button, { Row } from '@/components/Button';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { surahNames } from '@/lib/branches';
-import { check, clearAnswers, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -47,7 +47,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
       <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اضغط سؤالًا لتراجع إجابته في الشجرة.</Text>
       <QuestionDots states={states} current={-1} onPick={setReview} palette={palette} />
       <Row>
-        <Button big variant="primary" Icon={RotateCcw} label="اختبار جديد" onPress={() => setRun(startSolo(run.settings))} />
+        <Button big variant="primary" Icon={RotateCcw} label="اختبار جديد" onPress={() => setRun(startSolo(cleanSolo(run.settings)))} />
         <Button big label="الإعدادات" onPress={() => { setRun(null); router.back(); }} />
       </Row>
     </ScrollView>

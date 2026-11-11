@@ -3,7 +3,8 @@
 import React from "react";
 import useSWR from "swr";
 import Button from "@/components/common/Button";
-import NumberInput from "@/components/common/NumberInput";
+import TreeFilters from "../TreeFilters";
+import { scopeSummary } from "@shared/quiz/scopeSummary";
 import styles from "@/components/common/PaperPage.module.css";
 import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
@@ -43,7 +44,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       [ar ? "المواضيع" : "Topics", settings.topics.map((topic) => TOPIC_LABELS[topic][ar ? "ar" : "en"]).join(ar ? "، " : ", ") || "—"],
       [ar ? "عدد الأسئلة" : "Questions", n(settings.length, ar)],
       ...(branches ? [
-        [ar ? "الأجزاء" : "Juz'", ar ? `${num(settings.juzFrom)} إلى ${num(settings.juzTo)}` : `${settings.juzFrom} to ${settings.juzTo}`] as [string, string],
+        [ar ? "الأشجار" : "Trees", scopeSummary(settings, ar)] as [string, string],
         [ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string],
         [ar ? "وقت سؤال الشجرة" : "Time per tree", duration(settings.treeSeconds, ar)] as [string, string],
       ] : []),
@@ -77,12 +78,10 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       {branches && (
         <>
           <div className="mb-4 flex flex-wrap items-start gap-x-6 gap-y-4">
-            {([["juzFrom", settings.juzFrom, ar ? "من الجزء" : "From juz'"], ["juzTo", settings.juzTo, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
-              <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
-                <span>{label}</span>
-                <NumberInput label={label} value={value} min={1} max={30} steppers={false} onChange={(next) => onChange({ [key]: next })} />
-              </div>
-            ))}
+            <div className="min-w-0 basis-full">
+              <TreeFilters savedOnly={false} choice={{ range: settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo }, filters: settings.filters ?? {}, saved: false }}
+                onChange={({ range, filters }) => onChange({ juzFrom: range?.from ?? 1, juzTo: range?.to ?? 30, filters })} />
+            </div>
           <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
             {QUIZ_LEAVES.map((value) => (
               <div key={value} className="flex flex-col items-center gap-0.5">

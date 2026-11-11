@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 import { branchNodes, spelled } from '@shared/quiz/branchAnswers';
-import { branchQuestions, quizTrees } from '@shared/quiz/branchQuestions';
+import { branchQuestions } from '@shared/quiz/branchQuestions';
+import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/data/quran/trees.json';
 import { isAsked } from '@shared/quiz/score';
-import { availability, check, cleanSolo, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
@@ -18,21 +19,23 @@ function typeRight(run: SoloRun) {
 }
 
 describe('solo quiz on the phone', () => {
-  it('keeps settings in range and the juz range in order', () => {
-    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ juzFrom: 28, juzTo: 30, leaves: 6, length: 10 });
-    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ juzFrom: 1, juzTo: 30, leaves: 3, length: 5 });
+  it('keeps settings in range, and turns an older juz range into the filters', () => {
+    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, leaves: 6, length: 10 });
+    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, leaves: 3, length: 5 });
   });
 
-  it('knows how many questions a juz range holds, as the website counts them', () => {
-    // When this fails, the trees changed: run `npm run quiz:app-counts`.
-    for (const [from, to] of [[30, 30], [1, 1], [27, 30]]) {
-      expect(availability({ juzFrom: from, juzTo: to }).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], { from, to }, quizTrees({ from, to })).length);
+  it('counts the questions the filters hold, as the website does', () => {
+    for (const list of [{ ...DEFAULT_LIST, range: { from: 30, to: 30 } }, { ...DEFAULT_LIST, filters: { categories: 'mutashabeh', surahs: '2,36' } }]) {
+      expect(availability(list, []).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], list.range, quizTrees(list.range, { filters: list.filters })).length);
     }
-    expect(availability({ juzFrom: 1, juzTo: 30 }).lengths).toEqual([5, 10, 15]);
+    expect(availability(DEFAULT_LIST, []).lengths).toEqual([5, 10, 15]);
   });
 
-  it('offers only the lengths a juz range fills', () => {
-    expect(availability({ juzFrom: 0, juzTo: 0 })).toEqual({ available: 0, lengths: [] });
+  it('asks only saved trees when saved only is on', () => {
+    expect(availability({ ...DEFAULT_LIST, saved: true }, []).available).toBe(0);
+    const run = startSolo(cleanSolo({ list: { ...DEFAULT_LIST, range: { from: 30, to: 30 } }, length: 5 }), seeded(2));
+    const saved = [{ id: run.questions[0].phrase, text: '' }];
+    expect(availability({ ...DEFAULT_LIST, saved: true }, saved).available).toBe(1);
   });
 
   it('asks only ayat of the chosen juz', () => {

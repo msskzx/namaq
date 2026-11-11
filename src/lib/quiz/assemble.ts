@@ -4,8 +4,9 @@ import treeData from '@shared/data/quran/trees.json';
 import type { Branch, BranchAyah, Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { askedNodes, branchNodes } from '@shared/quiz/branchAnswers';
-import { biggerFirst, branchQuestions, quizTrees, type BranchAnswer, type BranchQuestion } from '@shared/quiz/branchQuestions';
+import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } from '@shared/quiz/branchQuestions';
 import { shuffle, type Random } from '@shared/quiz/random';
+import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
 
@@ -29,16 +30,22 @@ export interface AssembleQuizParams {
   topics: QuizTopics;
   personSlug?: string;
   juz?: JuzRange | null;
+  /** The branches page's filters and saved trees, for tree questions. */
+  scope?: TreeScope;
   leaves?: number;
   length: QuizLength;
   random: Random;
 }
 
 const branchPools = new Map<string, BranchQuestion[]>();
-function branchesFor(topics: QuizTopics, juz: JuzRange | null = null) {
+function branchesFor(topics: QuizTopics, juz: JuzRange | null = null, scope: TreeScope = {}) {
   if (!topics.includes('BRANCHES')) return [];
-  const id = juz ? `${juz.from}-${juz.to}` : 'all';
-  if (!branchPools.has(id)) branchPools.set(id, branchQuestions(treeData.ayat as BranchAyah[], juz, quizTrees(juz)));
+  const id = JSON.stringify([juz, scope]);
+  if (!branchPools.has(id)) {
+    // Filters vary a lot, so only the last few pools are kept.
+    if (branchPools.size >= 32) branchPools.delete(branchPools.keys().next().value!);
+    branchPools.set(id, branchQuestions(treeData.ayat as BranchAyah[], juz, quizTrees(juz, scope)));
+  }
   return branchPools.get(id) as BranchQuestion[];
 }
 
@@ -53,12 +60,12 @@ function whereFor(topics: QuizTopics, personSlug?: string): Prisma.QuizQuestionW
   return scopes.length === 1 ? { status: 'APPROVED', ...scopes[0] } : { status: 'APPROVED', OR: scopes };
 }
 
-export async function availableQuestionCount(topics: QuizTopics, personSlug?: string, juz: JuzRange | null = null) {
+export async function availableQuestionCount(topics: QuizTopics, personSlug?: string, juz: JuzRange | null = null, scope: TreeScope = {}) {
   const where = whereFor(topics, personSlug);
-  return (where ? await prisma.quizQuestion.count({ where }) : 0) + branchesFor(topics, juz).length;
+  return (where ? await prisma.quizQuestion.count({ where }) : 0) + branchesFor(topics, juz, scope).length;
 }
 
-export async function assembleQuiz({ topics, personSlug, juz = null, leaves = DEFAULT_LEAVES, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
+export async function assembleQuiz({ topics, personSlug, juz = null, scope = {}, leaves = DEFAULT_LEAVES, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
   const where = whereFor(topics, personSlug);
   const rows = where ? await prisma.quizQuestion.findMany({
     where,
@@ -83,7 +90,7 @@ export async function assembleQuiz({ topics, personSlug, juz = null, leaves = DE
     evidence: row.evidence as unknown as { claimKeys: string[] },
   }));
   // Harder quizzes take bigger trees first (see biggerFirst).
-  const trees = biggerFirst(shuffle(branchesFor(topics, juz), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length).slice(0, length);
+  const trees = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length).slice(0, length);
   return shuffle([...bank, ...trees], random).slice(0, length).map((question) => ({
     ...question,
     choices: shuffle(question.choices, random),

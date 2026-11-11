@@ -1,6 +1,7 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
 import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '../quiz/settings';
+import { QUIZ_CATEGORIES, quizFilters, treeScopeParams, type ScopeFilters } from '../quiz/scopeParams';
 
 export const QUESTION_SECONDS = [15, 30, 60, 90] as const;
 export const TREE_SECONDS = [60, 120, 180, 300] as const;
@@ -15,12 +16,14 @@ export type PartySettings = {
   person: string;
   juzFrom: number;
   juzTo: number;
+  /** The branches page's filters for the trees (the juz range stays in juzFrom/juzTo). */
+  filters: ScopeFilters;
   leaves: number;
   seconds: number;
   treeSeconds: number;
 };
 
-export const DEFAULT_SETTINGS: PartySettings = { topics: ['BRANCHES'], length: 5, person: '', juzFrom: 1, juzTo: 30, leaves: 3, seconds: 60, treeSeconds: 180 };
+export const DEFAULT_SETTINGS: PartySettings = { topics: ['BRANCHES'], length: 5, person: '', juzFrom: 1, juzTo: 30, filters: { categories: QUIZ_CATEGORIES }, leaves: 3, seconds: 60, treeSeconds: 180 };
 
 export type PartyQuestion = ScoredQuestion & { key: string; correctAnswer: string; [field: string]: unknown };
 export type Points = { earned: number; total: number };
@@ -86,6 +89,7 @@ export function cleanSettings(settings: Partial<PartySettings>, base: PartySetti
     person: typeof settings.person === 'string' ? settings.person.trim() : base.person,
     juzFrom: Math.min(from, to),
     juzTo: Math.max(from, to),
+    filters: quizFilters(settings.filters && typeof settings.filters === 'object' ? settings.filters : base.filters),
     leaves: pick(QUIZ_LEAVES, settings.leaves, base.leaves as (typeof QUIZ_LEAVES)[number]),
     seconds: pick(QUESTION_SECONDS, settings.seconds, base.seconds as (typeof QUESTION_SECONDS)[number]),
     treeSeconds: pick(TREE_SECONDS, settings.treeSeconds, base.treeSeconds as (typeof TREE_SECONDS)[number]),
@@ -102,6 +106,7 @@ export function quizQuery(settings: PartySettings) {
       params.set('juzFrom', String(settings.juzFrom));
       params.set('juzTo', String(settings.juzTo));
     }
+    treeScopeParams({ filters: settings.filters }).forEach(([key, value]) => params.set(key, value));
     params.set('leaves', String(settings.leaves));
   }
   return params.toString();

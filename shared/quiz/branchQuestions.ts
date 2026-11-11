@@ -2,7 +2,6 @@
 import { keys, type Branch, type BranchAyah, type Variant } from '../quran/branches';
 import { inJuzRange, type JuzRange } from '../quran/juz';
 import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '../quran/phraseTrees';
-import { branchInventory } from '../quran/branchInventory';
 import { askedNodes } from './branchAnswers';
 import { shuffle, type Random } from './random';
 
@@ -26,12 +25,6 @@ export interface BranchQuestion {
 }
 
 const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
-
-/**
- * The trees the quiz asks: the متشابهات of the branches page, not its word trees («أشجار الكلمات»),
- * scoped to the juz range as the page scopes them.
- */
-export const quizTrees = (range: JuzRange | null = null): TreeGroup[] => branchInventory({ categories: 'mutashabeh' }, range).map(piece => piece.phrase);
 
 /** The trees a quiz may ask, and how to turn one into a question; building a question costs time, so callers build only what they ask. */
 export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]) {
