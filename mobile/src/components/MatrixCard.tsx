@@ -83,6 +83,8 @@ function Cell({ cell, at, palette, width, current, onPress, light }: { cell: Mat
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
   const wordViews = !!useContext(Words);
+  // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
+  const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress(); } } : undefined;
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${surahNames[surah]} ${range}`}
@@ -97,9 +99,9 @@ function Cell({ cell, at, palette, width, current, onPress, light }: { cell: Mat
       {at === 'after' && basmala}
       {wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={current && !muted ? light : undefined} />)}</View>
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}</View>
         : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={current && !muted ? light : undefined} />)}
+          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}
         </Text>}
       {at === 'before' && basmala}
     </Pressable>
@@ -185,6 +187,8 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   const keysOf = (cell: MatrixCell) => cell?.ayat.map(ayah => ayah.key) ?? [];
   // A tapped word lights the words lined up with it in the other rows, as on the compare tab.
   const [lit, setLit] = useState<string | null>(null);
+  // Links are numbered per tree, so a new tree starts with nothing lit.
+  useEffect(() => setLit(null), [presentation]);
   const light: Light = { lit, onWord: link => setLit(current => (current === link ? null : link)) };
 
   return (

@@ -55,14 +55,12 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   if (contexts.length < 2) return contexts;
   const raw = contexts.map(context => tokens(context.ayah).keys);
   // A word with no corpus key falls back to its letters, so «وفي» would miss «في»: drop a leading و/ف
-  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too), or, when no other
-  // ayah has the word as it is, one another ayah has.
+  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too).
   const sets = raw.map(keys => new Set(keys));
   const tokenised = raw.map((keys, n) => keys.map(key => {
     if (!/^[وف]./.test(key) || sets.every((set, m) => m === n || set.has(key))) return key;
     const bare = key.slice(1);
-    if (sets.every((set, m) => m === n || set.has(bare))) return bare;
-    return !sets.some((set, m) => m !== n && set.has(key)) && sets.some((set, m) => m !== n && set.has(bare)) ? bare : key;
+    return sets.every((set, m) => m === n || set.has(bare)) ? bare : key;
   }));
   const all = contexts.map((context, n) => {
     const keys = tokenised[n];

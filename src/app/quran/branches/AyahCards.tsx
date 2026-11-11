@@ -41,15 +41,18 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
   const connections = useGroupConnections();
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const passages = shown.map((key, i) => passageKeys?.[i] ?? [key]);
+  const treeKey = passages.map(passage => passage.join(',')).join(' ');
   const ends = passages.map(passage => passage[passage.length - 1]);
   const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];
   const [column, setColumn] = useState(context ? 1 : 0);
   // A tapped word in the ayah column lights the words lined up with it in the other rows, as on the compare page.
   const [lit, setLit] = useState<string | null>(null);
   const light = (event: React.MouseEvent) => {
-    const id = (event.target as HTMLElement).closest?.('[data-current] mark[data-link]')?.getAttribute('data-link');
+    const id = (event.target as HTMLElement).closest?.('[data-col][data-current] mark[data-link]')?.getAttribute('data-link');
     if (id) setLit(current => (current === id ? null : id));
   };
+  // Links are numbered per tree, so a new tree starts with nothing lit.
+  useEffect(() => setLit(null), [treeKey]);
   const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[][]>(['quran-passages', passages], async () => {
     const columns = await Promise.all(Array.from({ length: Math.max(0, ...passages.map(passage => passage.length)) }, (_, step) =>
