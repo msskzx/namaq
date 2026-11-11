@@ -94,7 +94,7 @@ function ViewPreview({ view, palette }: { view: BranchView; palette: Palette }) 
     <View style={{ flex: 1, justifyContent: 'center', gap: 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
       {SAMPLE_TREE.endings.map(ending => (
         <View key={ending.words} style={{ borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, paddingHorizontal: 3 }}>
-          <Text numberOfLines={1} style={text}>{SAMPLE_TREE.trunk.join(' ')} <Text style={{ color: palette.accent, fontWeight: '700' }}>{ending.words}</Text></Text>
+          <Text numberOfLines={1} style={text}><Text style={{ color: palette.accent, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</Text>
         </View>
       ))}
     </View>

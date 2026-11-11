@@ -9,11 +9,11 @@ import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/qu
 import { SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import styles from '@/components/theme/ThemeTiles.module.css';
 
-/** The view drawn small in the page's own colours, with the إن المتقين في tree as its sample. */
+/** The view drawn small in the page's own colours, with the إن المتقين في tree as its sample; the matrix colours the words every row shares, as the real one does. */
 function Preview({ view }: { view: 'tree' | 'matrix' }) {
   if (view === 'matrix') return <span className={styles.matrix}>
     {SAMPLE_TREE.endings.map(ending => <span key={ending.words} className={styles.row}>
-      {SAMPLE_TREE.trunk.join(' ')} <b>{ending.words}</b>
+      <b>{SAMPLE_TREE.trunk.join(' ')}</b> {ending.words}
     </span>)}
   </span>;
   const { trunk, ending } = TREE_LAYOUT;
