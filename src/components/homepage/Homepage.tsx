@@ -5,11 +5,8 @@ import Link from 'next/link';
 import { ArrowLeftRight, Bookmark, BookOpen, EyeOff, Feather, Library, LightbulbOff, Users } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
-import { NavActions } from '@/components/common/NavBar';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
-import OpeningSearch from '@/app/quran/branches/OpeningSearch';
-import { FilterButton } from '@/app/quran/branches/Filters';
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -33,12 +30,6 @@ export default function Homepage({ data }: { data: HomepageData }) {
   const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
   return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
     <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
-    <NavActions>
-      <div className={styles.search}>
-        <OpeningSearch top={[]} remote surahs={data.surahs} />
-        <FilterButton range={null} view={{}} allSurahs={data.surahs} />
-      </div>
-    </NavActions>
 
     <HomeQuranWidget sections={data.sections} />
 
