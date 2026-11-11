@@ -55,9 +55,9 @@ function nameOf(unit: FilterUnit, n: number) {
 /** A range end as a number; a missing or broken one falls back to the unit's end. */
 const toNumber = (value: string, fallback: number) => { const n = Number(value); return Number.isInteger(n) && n > 0 ? n : fallback; };
 
-/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort.
+/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz all but sort).
  *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
-export function FilterFields({ draft, setDraft, palette, compare = false }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean }) {
+export function FilterFields({ draft, setDraft, palette, compare = false, sort = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
   const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
@@ -107,9 +107,9 @@ export function FilterFields({ draft, setDraft, palette, compare = false }: { dr
         {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip key={id} label={label.ar} active={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
           onPress={() => setFilter('differences', toggleFilter(draft.filters.differences, id))} />)}
       </Group>
-      <Group title="الترتيب" palette={palette}>
-        {SORTS.map((sort, i) => <Chip key={sort} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === sort} palette={palette} onPress={() => setFilter('sort', i ? sort : '')} />)}
-      </Group>
+      {sort && <Group title="الترتيب" palette={palette}>
+        {SORTS.map((order, i) => <Chip key={order} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === order} palette={palette} onPress={() => setFilter('sort', i ? order : '')} />)}
+      </Group>}
       </>}
     </>
   );

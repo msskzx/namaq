@@ -2,24 +2,39 @@
 // graded with the website's rules (shared/quiz), and kept so a quiz survives leaving the app.
 import corpus from '@shared/data/quran/trees.json';
 import type { BranchAyah } from '@shared/quran/branches';
-import { branchQuestionPool, branchQuiz, quizTrees, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
+import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
 import type { Random } from '@shared/quiz/random';
-import counts from './quizCounts.json';
+import { readBookmarks, type Bookmark } from '@shared/bookmarks';
+import type { GroupFilters } from '@shared/quran/mutashabih/browse';
+import type { JuzRange } from '@shared/quran/juz';
+import { branchList, EMPTY_LIST, isSavedIn } from './branchList';
 
-export type SoloSettings = { juzFrom: number; juzTo: number; leaves: number; length: number };
-export const DEFAULT_SOLO: SoloSettings = { juzFrom: 1, juzTo: 30, leaves: DEFAULT_LEAVES, length: 5 };
+/** Which trees the quiz asks, with the branches tab's filters: kinds, differences, part of the Quran, saved only. */
+export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
+export type SoloSettings = { list: QuizList; leaves: number; length: number };
+export const DEFAULT_LIST: QuizList = { filters: { categories: 'mutashabeh' }, range: null, saved: false };
+export const DEFAULT_SOLO: SoloSettings = { list: DEFAULT_LIST, leaves: DEFAULT_LEAVES, length: 5 };
 
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
-/** Settings read back from storage or typed in: anything out of range falls back, and the juz range is put in order. */
-export function cleanSolo(settings: Partial<SoloSettings> | undefined): SoloSettings {
-  const from = juz(settings?.juzFrom, DEFAULT_SOLO.juzFrom);
-  const to = juz(settings?.juzTo, DEFAULT_SOLO.juzTo);
+/** A stored list, or the juz range older settings kept. */
+function cleanList(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?: number } | undefined): QuizList {
+  const list = settings?.list;
+  if (list && typeof list === 'object' && list.filters && typeof list.filters === 'object') {
+    const range = list.range && juz(list.range.from, 0) && juz(list.range.to, 0) ? { from: Math.min(list.range.from, list.range.to), to: Math.max(list.range.from, list.range.to) } : null;
+    return { filters: list.filters, range: range && (range.from !== 1 || range.to !== 30) ? range : null, saved: list.saved === true };
+  }
+  const from = juz(settings?.juzFrom, 1), to = juz(settings?.juzTo, 30);
+  const range = { from: Math.min(from, to), to: Math.max(from, to) };
+  return { ...DEFAULT_LIST, range: range.from === 1 && range.to === 30 ? null : range };
+}
+
+/** Settings read back from storage or typed in: anything out of range falls back. */
+export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?: number } | undefined): SoloSettings {
   return {
-    juzFrom: Math.min(from, to),
-    juzTo: Math.max(from, to),
+    list: cleanList(settings),
     leaves: (QUIZ_LEAVES as readonly number[]).includes(settings?.leaves as number) ? settings!.leaves! : DEFAULT_SOLO.leaves,
     length: (QUIZ_LENGTHS as readonly number[]).includes(settings?.length as number) ? settings!.length! : DEFAULT_SOLO.length,
   };
@@ -28,23 +43,27 @@ export function cleanSolo(settings: Partial<SoloSettings> | undefined): SoloSett
 type Pool = ReturnType<typeof branchQuestionPool>;
 const pools = new Map<string, Pool>();
 
-/** The trees a juz range can ask: the متشابهات of the branches tab in that range, as on the website. */
-function poolFor(settings: SoloSettings, ayat: BranchAyah[]): Pool {
-  const whole = settings.juzFrom === 1 && settings.juzTo === 30;
-  const id = `${settings.juzFrom}-${settings.juzTo}`;
+/** The trees the filters keep, as the branches tab lists them; saved only keeps just the saved ones. */
+export function quizPieces(list: QuizList, bookmarks: Bookmark[] = readBookmarks()) {
+  const pieces = branchList({ ...EMPTY_LIST, ...list }, bookmarks);
+  return list.saved ? pieces.filter(piece => isSavedIn(piece, bookmarks)) : pieces;
+}
+
+/** The questions the filters hold; kept for the last few filters, since working them out takes a moment on a phone. */
+function poolFor(list: QuizList, bookmarks: Bookmark[] = readBookmarks()): Pool {
+  const id = JSON.stringify([list, list.saved ? bookmarks.map(item => item.id) : []]);
   let pool = pools.get(id);
   if (!pool) {
-    const range = whole ? null : { from: settings.juzFrom, to: settings.juzTo };
-    pool = branchQuestionPool(ayat, range, quizTrees(range));
+    pool = branchQuestionPool(corpus.ayat as BranchAyah[], list.range, quizPieces(list, bookmarks).map(piece => piece.phrase));
     if (pools.size > 4) pools.delete(pools.keys().next().value!);
     pools.set(id, pool);
   }
   return pool;
 }
 
-/** How many tree questions a juz range holds (counted ahead by `npm run quiz:app-counts`), and the quiz lengths it fills. */
-export function availability({ juzFrom, juzTo }: Pick<SoloSettings, 'juzFrom' | 'juzTo'>) {
-  const available = (counts as Record<string, number>)[`${juzFrom}-${juzTo}`] ?? 0;
+/** How many tree questions the filters hold, and the quiz lengths they fill. */
+export function availability(list: QuizList, bookmarks?: Bookmark[]) {
+  const available = poolFor(list, bookmarks).candidates.length;
   return { available, lengths: QUIZ_LENGTHS.filter(length => length <= available) };
 }
 
@@ -59,8 +78,8 @@ export type SoloRun = {
   submitted: boolean;
 };
 
-export function startSolo(settings: SoloSettings, random: Random = Math.random): SoloRun {
-  const questions = branchQuiz(poolFor(settings, corpus.ayat as BranchAyah[]), settings.length, settings.leaves, random);
+export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
+  const questions = branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random);
   return { settings, questions, typed: questions.map(emptyBranchAnswers), checked: questions.map(() => false), current: 0, submitted: false };
 }
 

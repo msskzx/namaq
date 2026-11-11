@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
@@ -7,12 +7,15 @@ import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
-import { JuzInput, LeavesPicker, Section } from '@/components/QuizForm';
+import { LeavesPicker, Section } from '@/components/QuizForm';
+import { FilterFields } from '@/components/FilterFields';
+import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
+import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { availability, cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette } from '@/lib/theme';
 
-/** The solo quiz setup: juz range, how many leaves to type per tree, how many questions. */
+/** The solo quiz setup: which trees (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
   const palette = usePalette();
   const [settings, setSettings] = useState<SoloSettings>(readSettings);
@@ -23,13 +26,15 @@ export default function SoloSetup() {
     setSettings(clean);
     writeSettings(clean);
   };
-  const juz = (key: 'juzFrom' | 'juzTo', value: number) => {
-    // Moving one end past the other moves both, as on the website.
-    const other = key === 'juzFrom' ? settings.juzTo : settings.juzFrom;
-    const crossed = key === 'juzFrom' ? value > other : value < other;
-    change({ [key]: value, ...(crossed && { [key === 'juzFrom' ? 'juzTo' : 'juzFrom']: value }) });
+  // The branches tab's filter fields; a range still being picked keeps the last whole one.
+  const [draft, setDraftState] = useState<FilterDraft>(() => draftOf({ ...EMPTY_LIST, ...settings.list }));
+  const setDraft = (next: FilterDraft) => {
+    setDraftState(next);
+    const applied = applyDraft(next);
+    if (applied) change({ list: { filters: applied.filters, range: applied.range, saved: applied.saved } });
   };
-  const { available, lengths } = availability(settings);
+  useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const { available, lengths } = availability(settings.list);
   // A length the range cannot fill gives way to the first one it can, as on the website.
   const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
   const start = () => {
@@ -58,11 +63,10 @@ export default function SoloSetup() {
             </Row>
           </View>
         )}
-        <Section title="متشابهات القرآن" palette={palette}>
-          <Row gap={16}>
-            <JuzInput label="من الجزء" value={settings.juzFrom} onCommit={value => juz('juzFrom', value)} palette={palette} />
-            <JuzInput label="إلى الجزء" value={settings.juzTo} onCommit={value => juz('juzTo', value)} palette={palette} />
-          </Row>
+        <Section title="الأشجار" palette={palette}>
+          <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} />
+        </Section>
+        <Section title="الإجابات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
         </Section>
@@ -70,7 +74,7 @@ export default function SoloSetup() {
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>
           {lengths.length > 0
             ? <Row>{lengths.map(value => <Button key={value} label={num(value)} active={length === value} onPress={() => change({ length: value })} />)}</Row>
-            : <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>لا توجد خمسة أسئلة لهذا الاختيار. وسّع نطاق الأجزاء.</Text>}
+            : <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>لا توجد خمسة أسئلة لهذا الاختيار. وسّع التصفية.</Text>}
         </Section>
         {lengths.length > 0 && (
           <View style={{ alignItems: 'flex-start', minHeight: 50, justifyContent: 'center' }}>
