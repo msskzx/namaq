@@ -32,7 +32,7 @@ describe('QuranHub', () => {
     render(<QuranHub />);
     expect(screen.getByRole('heading', { level: 1, name: 'القرآن' })).toBeTruthy();
     expect(within(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('article')!).getByRole('link', { name: 'قراءة القرآن' }).getAttribute('href')).toBe('/quran/read');
-    expect(within(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('article')!).getByRole('link', { name: 'قصص الأنبياء في القرآن' }).getAttribute('href')).toBe('/quran/prophets/musa');
+    expect(within(screen.getByRole('heading', { name: 'قصة موسى' }).closest('article')!).getByRole('link', { name: 'قصة موسى' }).getAttribute('href')).toBe('/quran/prophets/musa');
   });
 
   it('writes the titles and descriptions in English', () => {

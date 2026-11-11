@@ -39,7 +39,7 @@ export default function QuranHub() {
       <ol className={cards.grid}>
         {QURAN_CARDS.map(({ href, title, desc }, index) => (
           <li key={href}>
-            <ExplorationCard url={href} title={links.find(l => l.href === href)?.label ?? title?.[language] ?? href} desc={desc[language]} number={index + 1} language={language} />
+            <ExplorationCard url={href} title={title?.[language] ?? links.find(l => l.href === href)?.label ?? href} desc={desc[language]} number={index + 1} language={language} />
           </li>
         ))}
       </ol>
