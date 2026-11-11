@@ -7,6 +7,7 @@ import { quranText } from '@/lib/quranText';
 import { askedNodes, LEAF_WORDS } from '@shared/quiz/branchAnswers';
 import BranchTree, { type RenderNode } from './BranchTree';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { surahNames } from '@/lib/branches';
 
 const tree = example.tree as Branch;
 // The example's first word has two spellings (قَالَ and فَقَالَ): each is drawn before the rest of the tree, in its colour.
@@ -19,7 +20,7 @@ export default function QuizExplainer({ leaves, palette }: { leaves: number; pal
     if (node.children.length > 0) return undefined;
     const shown = node.words.slice(0, LEAF_WORDS + 1);
     if (asked.includes(index)) return <View accessibilityLabel="تكتبه أنت" style={{ width: 96, height: 30, borderWidth: 1, borderStyle: 'dashed', borderColor: palette.accent, borderRadius: 4 }} />;
-    return <Text style={{ fontFamily: QURAN_FONT, fontSize: 17, lineHeight: 32, color: palette.muted }}>{quranText(shown.join(' '))}{shown.length < node.words.length ? ' …' : ''}</Text>;
+    return <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>{quranText(shown.join(' '))}{shown.length < node.words.length ? ' …' : ''}</Text>;
   };
   const rule = (title: string, text: string) => (
     <Text style={{ color: palette.ink, fontSize: 15, lineHeight: 24, textAlign: 'right' }}><Text style={{ fontWeight: '700' }}>{title}</Text>{text}</Text>
@@ -30,7 +31,7 @@ export default function QuizExplainer({ leaves, palette }: { leaves: number; pal
         {`تكتب ${num(leaves)} من أطراف الشجرة، ويُعرض باقيها مكتوبًا. الشجرة التي أطرافها أقل تُطلب كل أطرافها.`}
       </Text>
       <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-        <BranchTree presentation={presentation} matches={{}} names={{}} palette={palette} onTap={() => {}} renderNode={renderNode} />
+        <BranchTree presentation={presentation} matches={{}} names={surahNames} palette={palette} onTap={() => {}} renderNode={renderNode} />
       </ScrollView>
       {rule('التصحيح: ', 'تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب.')}
       {rule('الكلمة الملوّنة: ', 'تظهر بعد التحقق في عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه، فتُرسم الكلمة المختلفة باللون الكهرماني. اضغط العقدة لترى كل آية في سياقها.')}

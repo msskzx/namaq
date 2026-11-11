@@ -1,9 +1,8 @@
-// The solo quiz on the phone: tree questions built on the device from the bundled trees,
+// The solo quiz on the phone: tree questions built on the device from the bundled متشابهات,
 // graded with the website's rules (shared/quiz), and kept so a quiz survives leaving the app.
 import corpus from '@shared/data/quran/trees.json';
 import type { BranchAyah } from '@shared/quran/branches';
-import type { TreeGroup } from '@shared/quran/phraseTrees';
-import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
+import { branchQuestionPool, branchQuiz, quizTrees, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
 import type { Random } from '@shared/quiz/random';
@@ -29,13 +28,14 @@ export function cleanSolo(settings: Partial<SoloSettings> | undefined): SoloSett
 type Pool = ReturnType<typeof branchQuestionPool>;
 const pools = new Map<string, Pool>();
 
-/** The trees a juz range can ask; the whole Quran reuses the bundled trees, a narrower range regroups its own ayat, as on the website. */
-function poolFor(settings: SoloSettings, ayat: BranchAyah[], trees: TreeGroup[]): Pool {
+/** The trees a juz range can ask: the متشابهات of the branches tab in that range, as on the website. */
+function poolFor(settings: SoloSettings, ayat: BranchAyah[]): Pool {
   const whole = settings.juzFrom === 1 && settings.juzTo === 30;
   const id = `${settings.juzFrom}-${settings.juzTo}`;
   let pool = pools.get(id);
   if (!pool) {
-    pool = branchQuestionPool(ayat, whole ? null : { from: settings.juzFrom, to: settings.juzTo }, trees);
+    const range = whole ? null : { from: settings.juzFrom, to: settings.juzTo };
+    pool = branchQuestionPool(ayat, range, quizTrees(range));
     if (pools.size > 4) pools.delete(pools.keys().next().value!);
     pools.set(id, pool);
   }
@@ -60,7 +60,7 @@ export type SoloRun = {
 };
 
 export function startSolo(settings: SoloSettings, random: Random = Math.random): SoloRun {
-  const questions = branchQuiz(poolFor(settings, corpus.ayat as BranchAyah[], corpus.trees as TreeGroup[]), settings.length, settings.leaves, random);
+  const questions = branchQuiz(poolFor(settings, corpus.ayat as BranchAyah[]), settings.length, settings.leaves, random);
   return { settings, questions, typed: questions.map(emptyBranchAnswers), checked: questions.map(() => false), current: 0, submitted: false };
 }
 

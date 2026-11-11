@@ -2,9 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 import { branchNodes, spelled } from '@shared/quiz/branchAnswers';
-import { branchQuestions } from '@shared/quiz/branchQuestions';
+import { branchQuestions, quizTrees } from '@shared/quiz/branchQuestions';
 import type { BranchAyah } from '@shared/quran/branches';
-import type { TreeGroup } from '@shared/quran/phraseTrees';
 import corpus from '@shared/data/quran/trees.json';
 import { isAsked } from '@shared/quiz/score';
 import { availability, check, cleanSolo, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
@@ -27,7 +26,7 @@ describe('solo quiz on the phone', () => {
   it('knows how many questions a juz range holds, as the website counts them', () => {
     // When this fails, the trees changed: run `npm run quiz:app-counts`.
     for (const [from, to] of [[30, 30], [1, 1], [27, 30]]) {
-      expect(availability({ juzFrom: from, juzTo: to }).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], { from, to }, corpus.trees as TreeGroup[]).length);
+      expect(availability({ juzFrom: from, juzTo: to }).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], { from, to }, quizTrees({ from, to })).length);
     }
     expect(availability({ juzFrom: 1, juzTo: 30 }).lengths).toEqual([5, 10, 15]);
   });

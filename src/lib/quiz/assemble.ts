@@ -3,9 +3,8 @@ import { prisma } from '@/lib/prisma';
 import treeData from '@shared/data/quran/trees.json';
 import type { Branch, BranchAyah, Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
-import { askedNodes } from '@shared/quiz/branchAnswers';
-import { branchQuestions, type BranchAnswer, type BranchQuestion } from '@shared/quiz/branchQuestions';
-import type { TreeGroup } from '@shared/quran/phraseTrees';
+import { askedNodes, branchNodes } from '@shared/quiz/branchAnswers';
+import { biggerFirst, branchQuestions, quizTrees, type BranchAnswer, type BranchQuestion } from '@shared/quiz/branchQuestions';
 import { shuffle, type Random } from '@shared/quiz/random';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
@@ -39,7 +38,7 @@ const branchPools = new Map<string, BranchQuestion[]>();
 function branchesFor(topics: QuizTopics, juz: JuzRange | null = null) {
   if (!topics.includes('BRANCHES')) return [];
   const id = juz ? `${juz.from}-${juz.to}` : 'all';
-  if (!branchPools.has(id)) branchPools.set(id, branchQuestions(treeData.ayat as BranchAyah[], juz, treeData.trees as TreeGroup[]));
+  if (!branchPools.has(id)) branchPools.set(id, branchQuestions(treeData.ayat as BranchAyah[], juz, quizTrees(juz)));
   return branchPools.get(id) as BranchQuestion[];
 }
 
@@ -83,7 +82,9 @@ export async function assembleQuiz({ topics, personSlug, juz = null, leaves = DE
     correctAnswer: row.correctAnswer,
     evidence: row.evidence as unknown as { claimKeys: string[] },
   }));
-  return shuffle([...bank, ...branchesFor(topics, juz)], random).slice(0, length).map((question) => ({
+  // Harder quizzes take bigger trees first (see biggerFirst).
+  const trees = biggerFirst(shuffle(branchesFor(topics, juz), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length).slice(0, length);
+  return shuffle([...bank, ...trees], random).slice(0, length).map((question) => ({
     ...question,
     choices: shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),

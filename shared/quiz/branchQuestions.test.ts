@@ -4,7 +4,8 @@ import example from '@shared/data/quiz/example.json';
 import { type BranchAyah } from '@shared/quran/branches';
 import { type TreeGroup } from '@shared/quran/phraseTrees';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
-import { branchQuestionPool, branchQuestions, branchQuiz } from './branchQuestions';
+import { gradedTree } from './feedback';
+import { biggerFirst, branchQuestionPool, branchQuestions, branchQuiz, quizTrees } from './branchQuestions';
 
 const all = data.ayat as BranchAyah[];
 const trees = data.trees as TreeGroup[];
@@ -82,9 +83,28 @@ describe('branchQuiz (the phone app builds its quiz on the device)', () => {
     expect(branchQuiz(branchQuestionPool(tiny), 5, 3, seeded(1))).toHaveLength(1);
   });
 
-  it('keeps the explainer example tree the same as the إن المتقين question in the pool', () => {
+  it('keeps the explainer example tree the same as the إن المتقين tree built from the data', () => {
     const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'ان المتقين في'))[0];
     expect(example.key).toBe(question.key);
     expect(example.tree).toEqual(question.tree);
+  });
+
+  it('forgives typing لما again before قالوا under ثم يعودون لما', () => {
+    const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'ثم يعودون لما'))[0];
+    const nodes = branchNodes(question.tree);
+    const typed = nodes.map(node => node.ayat.includes('58:3') ? 'لما قالوا فتحرير رقبه' : node.words.join(' '));
+    expect(question.tree.words.at(-1)).toBe('لِمَا');
+    expect(matchTreeAnswers(question.tree, typed).every(hit => hit?.correct)).toBe(true);
+    expect(gradedTree({ ...question, asked: nodes.map((_, index) => index) }, typed).rows.every(row => row.correct)).toBe(true);
+  });
+
+  it('asks the متشابهات of the branches page, not its word trees', () => {
+    const asked = new Set(branchQuestions(all, null, quizTrees()).map(question => question.phrase));
+    expect(asked.size).toBeGreaterThan(100);
+  });
+
+  it('puts trees with at least as many leaves as asked first, then the biggest of the rest', () => {
+    expect(biggerFirst([2, 5, 1, 4, 3], 4, size => size)).toEqual([5, 4, 3, 2, 1]);
+    expect(biggerFirst([2, 5, 1, 4, 3], 1, size => size)).toEqual([2, 5, 1, 4, 3]);
   });
 });
