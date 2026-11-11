@@ -9,6 +9,7 @@ import { IBRAHIM } from './ibrahim';
 import { ILYAS } from './ilyas';
 import { ADAM } from './adam';
 import { MUSA } from './musa';
+import { SALIH } from './salih';
 import { SHUAYB } from './shuayb';
 import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
@@ -269,6 +270,56 @@ describe('YUNUS', () => {
     const told = [...Array.from({ length: 10 }, (_, i) => `37:${139 + i}`), '21:88', '68:49', '68:50'];
     expect([...named, ...told].filter(k => !keys.includes(k))).toEqual([]);
     expect(keys).toHaveLength(18);
+  });
+});
+
+// Ayat that name Salih, and those that name Thamud or the people of al-Hijr.
+const SALIH_NAMED: Record<number, number[]> = { 7: [73, 75, 77], 11: [61, 62, 66, 89], 26: [142], 27: [45] };
+const THAMUD: Record<number, number[]> = {
+  7: [73],
+  9: [70],
+  11: [61, 68, 95],
+  14: [9],
+  15: [80],
+  17: [59],
+  22: [42],
+  25: [38],
+  26: [141],
+  27: [45],
+  29: [38],
+  38: [13],
+  40: [31],
+  41: [13, 17],
+  50: [12],
+  51: [43],
+  53: [51],
+  54: [23],
+  69: [4, 5],
+  85: [18],
+  89: [9],
+  91: [11],
+};
+
+describe('SALIH', () => {
+  const keys = storyKeys(SALIH.events);
+  const flat = (m: Record<number, number[]>) => Object.entries(m).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names Salih', () => {
+    expect(flat(SALIH_NAMED)).toHaveLength(9);
+    expect(flat(SALIH_NAMED).filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('holds every ayah that names Thamud or the people of al-Hijr', () => {
+    expect(flat(THAMUD)).toHaveLength(26);
+    expect(flat(THAMUD).filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of SALIH.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 
