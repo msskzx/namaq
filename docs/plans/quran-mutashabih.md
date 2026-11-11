@@ -10,6 +10,12 @@ The thirty cases supplied in the owner's book-rules report are recorded in `shar
 
 `MATCH_CONFIG` in the engine holds Namaq's retrieval choices. The books provide no numeric thresholds. Initial settings require six strongly matching words and 72% coverage for a complete ayah comparison. A local span needs eight matches, with at most three intervening words. Unattributed shared phrases need six words and at most thirty-six places. The labelled set includes fifteen common-formula negatives. These values passed that bounded set and require further corpus review.
 
+Short ayat cannot reach six matches, so a separate pass groups whole ayat that open with the same three or more words (letters, root and lemma, a leading و/ف ignored) and then part, at most six places per group; a bigger opening family is split by its next shared word (`minOpeningWords`, `maxOpeningPlaces`). Example: إن المجرمين في ضلال وسعر (54:47) and إن المجرمين في عذاب جهنم خالدون (43:74). The `short_opening` rule in the review manifest admits a group when its shared opening holds two or more rooted words or covers at least half of the shorter ayah; the rest stay word trees.
+
+## Search outside the filters
+
+The search box lists, after the matches inside the current filters, up to five trees that only the filters hide (searched among every kind of tree with no range, surah or saved-only limit) under «خارج التصفية الحالية، فتحها يمسح التصفية». Picking one opens it with the filters reset to every kind of tree, on the website and in the app.
+
 The static build stores group places, original word indices, alignment levels, moved-word tags, all supported difference tags and citations. Alignments use one reference place against each other place to keep the artifact linear in group size. Clique membership is checked independently across every pair.
 
 Published difference chips require book evidence supporting the exact displayed passage selections. Computational alignments alone do not authorize grammatical chips. Case remains available where supported by the recorded source; unsupported gender, noun/pronoun and frame tags are hidden. The plural-form contrast خطاياكم / خطيئاتكم is not labelled singular/plural.

@@ -15,6 +15,8 @@ export const MATCH_CONFIG = {
   minLocalMatchedWords: 8,
   minPhraseWords: 6,
   maxPhrasePlaces: 36,
+  minOpeningWords: 3,
+  maxOpeningPlaces: 6,
 };
 
 const letters = (word: string) => normalizeWord(word.normalize('NFC'));
@@ -434,6 +436,37 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
     }
   }
 
+
+  // Short ayat that open with the same words and then part (إن المجرمين في ضلال وسعر / في عذاب جهنم خالدون)
+  // never reach the six-word floor above. Ayat sharing their first three or more words form a group of at most
+  // six places; a bigger opening family is split by its next shared word until each part is small enough.
+  const linked = new Set(groups.flatMap(group => group.places.flatMap((a, i) => group.places.slice(i + 1).map(b => pairKey(a.key, b.key)))));
+  const wordKey = (word: Word) => `${word.base}|${word.root ?? ''}|${word.lemma ?? word.letters}`;
+  const openings = (members: number[], length: number) => {
+    const buckets = new Map<string, number[]>();
+    for (const i of members) {
+      if (rows[i].length <= length) continue;
+      const key = wordKey(rows[i][length]);
+      buckets.set(key, [...buckets.get(key) ?? [], i]);
+    }
+    for (const bucket of buckets.values()) {
+      if (bucket.length < 2) continue;
+      if (length + 1 < config.minOpeningWords || bucket.length > config.maxOpeningPlaces) {
+        openings(bucket, length + 1);
+        continue;
+      }
+      const keys = bucket.map(i => ayat[i].key);
+      const fresh = keys.some((a, i) => keys.slice(i + 1).some(b => !linked.has(pairKey(a, b)) && !declared.has(pairKey(a, b))));
+      if (!fresh) continue;
+      const selected = bucket.map(i => rows[i]);
+      const places = selected.map(row => place(row[0], row.at(-1)!));
+      const group = makeGroup(places, selected, 'mutashabih_lafzi');
+      if (inventory.has(group.id)) continue;
+      inventory.add(group.id);
+      groups.push(group);
+    }
+  };
+  openings(rows.flatMap((row, i) => row.length ? [i] : []), 0);
 
   const phrases = buildPhraseGroups(ayat)
     .filter(phrase => phrase.text.split(' ').length >= config.minPhraseWords && new Set(phrase.occurrences.map(o => o.key)).size <= config.maxPhrasePlaces)
