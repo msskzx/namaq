@@ -321,7 +321,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
-        {tree ? <div className="flex flex-col gap-2">
+        {tree ? <div className="flex flex-col gap-2 border-4 border-double border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
             {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
               className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
