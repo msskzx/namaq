@@ -239,7 +239,7 @@ export default function Reader() {
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
       )}
-      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten}
+      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
         last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
     </View>
   );

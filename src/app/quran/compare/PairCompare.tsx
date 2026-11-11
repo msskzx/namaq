@@ -364,11 +364,11 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
       <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
       <span className="flex-1" />
       <Button size="sm" variant="muted" className="min-w-9 tabular-nums" onClick={() => setReadSpeed(next)} aria-label={`${ar ? 'السرعة' : 'Speed'} ${read.speed}×`} title={ar ? 'السرعة' : 'Speed'}><span dir="ltr">{read.speed}×</span></Button>
-      {canRecord() && <Button size="icon" variant="muted" onClick={() => { read.reset(); setVideo(true); }} aria-label={videoLabel} title={videoLabel}><Send size={18} aria-hidden /></Button>}
       <Button size="icon" variant="muted" onClick={() => (playing ? read.pause() : read.play())} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
         {playing ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
       </Button>
       <Button size="icon" variant="muted" onClick={read.reset} aria-label={resetLabel} title={resetLabel}><RotateCcw size={18} aria-hidden /></Button>
+      {canRecord() && <Button size="icon" variant="muted" onClick={() => { read.reset(); setVideo(true); }} aria-label={videoLabel} title={videoLabel}><Send size={18} aria-hidden /></Button>}
     </div>
     {video && <ReadVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
   </div>;

@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RotateCcw, Send, X } from 'lucide-react-native';
+import { Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import LoadingDots from './LoadingDots';
-import VideoFrame from './VideoFrame';
+import VideoFrame, { type FrameHandle } from './VideoFrame';
 import { IconButton } from './Studio';
 import { recorderPage, type VideoInput } from '@/lib/scene';
 import { fontFace, shareVideo } from '@/lib/shareVideo';
@@ -20,10 +20,13 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
   const [run, setRun] = useState(0);
   const [video, setVideo] = useState<Video | null>(null);
   const [failed, setFailed] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const frame = useRef<FrameHandle>(null);
   useEffect(() => {
     if (!open) return;
     setVideo(null);
     setFailed(false);
+    setPaused(false);
     fontFace().then(setFont, () => setFont(''));
   }, [input, page]); // eslint-disable-line react-hooks/exhaustive-deps
   const message = useCallback((data: string) => {
@@ -33,7 +36,9 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
       if (parsed.type === 'error') setFailed(true);
     } catch {}
   }, []);
-  const again = () => { setVideo(null); setFailed(false); setRun(value => value + 1); };
+  const again = () => { setVideo(null); setFailed(false); setPaused(false); setRun(value => value + 1); };
+  // As on the website, the recording can be paused: the paused time is left out of the video.
+  const toggle = () => { frame.current?.send({ type: paused ? 'resume' : 'pause' }); setPaused(!paused); };
   return (
     <Modal visible={open} animationType="slide" onRequestClose={onClose} statusBarTranslucent>
       <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
@@ -42,7 +47,7 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
           <IconButton label="إغلاق" onPress={onClose} Icon={X} color={palette.ink} />
         </View>
         <View style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule }}>
-          {open && font !== null && <VideoFrame key={run} html={page ? page(font) : recorderPage(input!, font)} onMessage={message} />}
+          {open && font !== null && <VideoFrame ref={frame} key={run} html={page ? page(font) : recorderPage(input!, font)} onMessage={message} />}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 64 }}>
           {failed ? <Text style={{ color: palette.accent }}>لا يمكن تسجيل الفيديو على هذا الجهاز.</Text>
@@ -52,7 +57,10 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
                 style={{ width: 56, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
                 <Send size={24} color={palette.onAccent} />
               </Pressable>
-            </> : <View accessibilityLabel="جارٍ تجهيز الفيديو"><LoadingDots /></View>}
+            </> : <>
+              {font !== null && <IconButton label={paused ? 'متابعة' : 'إيقاف مؤقت'} onPress={toggle} Icon={paused ? Play : Pause} color={palette.ink} />}
+              <View accessibilityLabel="جارٍ تجهيز الفيديو"><LoadingDots /></View>
+            </>}
         </View>
       </View>
     </Modal>

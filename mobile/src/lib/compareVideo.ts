@@ -3,7 +3,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { ayahStarts, stepTime, type ReadStep } from '@shared/quran/readPlan';
 import { pairTitle, sideLabel } from './compare';
-import { VIDEO_TYPES } from './scene';
+import { logoUrl } from './logo';
+import { PAUSE, READY, VIDEO_TYPES } from './scene';
 import { QURAN_FONT, type Palette } from './theme';
 
 /** One word as the video draws it: its text, which ayah and word it is (-1 for the ayah number), its mark. */
@@ -15,7 +16,7 @@ export type CompareVideoInput = {
   options: [VideoSide, VideoSide][];
   steps: (ReadStep & { ms: number })[];
   starts: number[];
-  look: { paper: string; ink: string; muted: string; rule: string; accent: string; root: string; highlight: string; onHighlight: string; font: string };
+  look: { paper: string; ink: string; muted: string; rule: string; accent: string; root: string; highlight: string; onHighlight: string; font: string; logo: string };
   types: string[];
 };
 
@@ -46,7 +47,7 @@ export function compareVideoInput(card: PairCard, plan: ReadStep[], speed: numbe
     options: Array.from({ length: count }, (_, option) => sidesAt(card, option).map(videoSide) as [VideoSide, VideoSide]),
     steps: plan.map(step => ({ ...step, ms: stepTime(step, speed) })),
     starts: ayahStarts(plan),
-    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, root: palette.root, highlight: palette.highlight, onHighlight: palette.onHighlight, font: `"${QURAN_FONT}"` },
+    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, root: palette.root, highlight: palette.highlight, onHighlight: palette.onHighlight, font: `"${QURAN_FONT}"`, logo: logoUrl(palette.ink, palette.accent) },
     types: VIDEO_TYPES,
   };
 }
@@ -57,6 +58,7 @@ export function compareRecorderPage(input: CompareVideoInput, fontFace = '') {
 <style>${fontFace}html,body{margin:0;height:100%;background:${input.look.paper};overflow:hidden}canvas{display:block;height:100%;width:auto;margin:0 auto;max-width:100%;object-fit:contain}</style></head>
 <body><canvas width="1080" height="1920"></canvas><script>
 var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
+${READY}
 ${RECORDER}
 </script></body></html>`;
 }
@@ -70,7 +72,8 @@ function send(message) {
   else if (window.parent !== window) window.parent.postMessage(text, '*');
 }
 window.onerror = function (message) { send({ type: 'error', message: String(message) }); };
-var look = INPUT.look, canvas = document.querySelector('canvas'), ctx = canvas.getContext('2d');
+var look = INPUT.look, logo = new Image(), canvas = document.querySelector('canvas'), ctx = canvas.getContext('2d');
+logo.src = look.logo;
 
 function place(side, size) {
   ctx.font = size + 'px ' + look.font;
@@ -108,8 +111,10 @@ function box(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(
 function draw(step, at, done) {
   var frame = layout(step && step.option !== undefined ? step.option : 0);
   ctx.direction = 'rtl'; ctx.fillStyle = look.paper; ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  ctx.textAlign = 'center'; ctx.fillStyle = look.ink; ctx.font = '48px sans-serif';
-  ctx.fillText(INPUT.title, WIDTH / 2, 230, WIDTH - 2 * MARGIN);
+  // The emblem above the surahs' names, as the website's video.
+  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, WIDTH / 2 - 60, 90, 120, 120);
+  ctx.textAlign = 'center'; ctx.fillStyle = look.ink; ctx.font = '44px sans-serif';
+  ctx.fillText(INPUT.title, WIDTH / 2, 270, WIDTH - 2 * MARGIN);
   var room = HEIGHT - TOP - BOTTOM, y = TOP + (room - frame.blocks[0].height - frame.blocks[1].height - 80) / 2;
   frame.blocks.forEach(function (block, side) {
     if (side === 1) { ctx.fillStyle = look.rule; ctx.fillRect(MARGIN * 2, y + 30, WIDTH - MARGIN * 4, 2); y += 80; }
@@ -159,6 +164,7 @@ else {
   INPUT.steps.forEach(function (step) { sum += step.ms; ends.push(sum); });
   var start = 0;
   function tick() {
+    if (pausedAt) { requestAnimationFrame(tick); return; }
     var t = performance.now() - start, at = 0;
     while (at < ends.length && ends[at] <= t) at++;
     var done = at >= ends.length;
@@ -167,7 +173,7 @@ else {
     if (done && t - sum > HOLD) { recorder.stop(); stream.getTracks().forEach(function (track) { track.stop(); }); return; }
     requestAnimationFrame(tick);
   }
-  var go = function () { recorder.start(); start = performance.now(); requestAnimationFrame(tick); };
-  if (document.fonts && document.fonts.load) document.fonts.load('40px ' + look.font).then(go, go); else go();
+  ${PAUSE}
+  ready(logo, look.font, function () { recorder.start(); start = performance.now(); requestAnimationFrame(tick); });
 }
 `;
