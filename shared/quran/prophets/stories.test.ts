@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { PROPHETS } from '.';
 import { MUSA } from './musa';
+import { ALYASA } from './alyasa';
+import { AYYUB } from './ayyub';
+import { DHUL_KIFL } from './dhul-kifl';
+import { HARUN } from './harun';
+import { ILYAS } from './ilyas';
 import { SHUAYB } from './shuayb';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
@@ -116,6 +121,31 @@ describe('SHUAYB', () => {
     const named = flat({ 7: [85], 9: [70], 11: [84, 95], 15: [78], 22: [44], 26: [176], 29: [36], 38: [13], 50: [14] });
     expect(named).toHaveLength(10);
     expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+});
+
+// Every ayah that names the prophet (Hafs). 19:28 «يا أخت هارون» is about Maryam, so not in Harun's story; 37:130 «إل ياسين» is Ilyas.
+const BRIEF = [
+  { slug: 'ayyub', story: AYYUB, named: ['4:163', '6:84', '21:83', '38:41'] },
+  { slug: 'harun', story: HARUN, named: ['2:248', '4:163', '6:84', '7:122', '7:142', '10:75', '19:53', '20:30', '20:70', '20:90', '20:92', '21:48', '23:45', '25:35', '26:13', '26:48', '28:34', '37:114', '37:120'] },
+  { slug: 'dhul-kifl', story: DHUL_KIFL, named: ['21:85', '38:48'] },
+  { slug: 'ilyas', story: ILYAS, named: ['6:85', '37:123', '37:130'] },
+  { slug: 'alyasa', story: ALYASA, named: ['6:86', '38:48'] },
+];
+
+describe.each(BRIEF)('$slug', ({ story, named }) => {
+  const keys = storyKeys(story.events);
+
+  it('puts no ayah in two events', () => {
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('holds every ayah that names him', () => {
+    expect(named.filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('keeps every range ordered', () => {
+    for (const e of story.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
   });
 });
 

@@ -27,7 +27,7 @@ export default async function QuranProphetPage({ params }: Props) {
   const story = STORIES[prophet.slug];
   return (
     <div dir="rtl" className="w-full px-4 py-6 sm:px-6 lg:px-10 flex flex-col gap-8 text-[var(--home-ink)]">
-      <ProphetView title={title(prophet.name)} intro={story.intro} phases={story.phases} events={buildStory(story.events, storedText(AYAT[prophet.slug]))} />
+      <ProphetView slug={prophet.slug} title={title(prophet.name)} intro={story.intro} phases={story.phases} events={buildStory(story.events, storedText(AYAT[prophet.slug]))} />
     </div>
   );
 }
