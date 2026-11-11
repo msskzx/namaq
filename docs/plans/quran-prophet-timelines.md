@@ -74,3 +74,21 @@ told across the surahs (owner, 2026-11-11). So the page is a map, not a line:
   Thamud. 7:69 sits with 26:132-135 in «التذكير بنعم الله» although in al-A'raf
   it comes after his people's first answer.
 - No link from an ayah to a reader page, since none exists.
+
+## Review mode (2026-11-11)
+
+- One verdict per dot (a surah's place in one event) in
+  `shared/quran/prophets/verdicts.json`, keyed `slug/surah:first-ayah` so
+  renaming or moving an event keeps it. Same shape as compare's verdicts.
+- `?review=1` on the website shows every dot with keep, drop and discuss
+  buttons in the dot's popup and on each card under "read its places", with the
+  drafted reason. Drop draws the dot as a ring; a small mark shows the owner's
+  choice. Presses save on the owner's machine (dev server only) to
+  `.story-review-log.jsonl`; `npm run quran:story-apply` folds them into the
+  file.
+- Readers never see a dropped dot, and an event with nothing left goes too. A
+  dot with an open question stays. The phone app does not hide dropped dots yet.
+- Drafts: a keep with a reason for every dot except adam/34:20 (Saba, not
+  Adam's story). Keeps whose reason names a doubt (a misplaced ayah, an extra
+  ayah in the segment) are for the owner's eye: musa/20:80, 10:93, 17:104,
+  musa/66:11, adam/7:189, ibrahim/26:83, salih/51:43, nuh/10:74, isa/5:78.

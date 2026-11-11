@@ -5,10 +5,13 @@ import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
-import { groupColor } from './StoryMap';
+import { placeKeyOf } from '@shared/quran/prophets/review';
+import { PlaceReview } from './PlaceReview';
+import { groupColor, type StoryReview } from './StoryMap';
 
 /** One event read across the surahs that tell it: a card for each surah, one under another, words another surah also has in colour. */
-export default function EventPlaces({ event, places, phase, focus, onStep, hasPrev, hasNext }: {
+export default function EventPlaces({ event, places, phase, focus, onStep, hasPrev, hasNext, review }: {
+  review?: StoryReview;
   event: EventView;
   places: Place[];
   phase: string;
@@ -34,7 +37,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
           <article
             key={place.surah}
             data-surah={place.surah}
-            className={`flex flex-col gap-1 rounded-xl border bg-[var(--home-card)] p-4 ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
+            className={`flex flex-col gap-1 rounded-xl border bg-[var(--home-card)] p-4 ${review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false ? 'opacity-60' : ''} ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
           >
             <header className="flex items-center gap-2">
               <h3 className="font-semibold">{place.name}</h3>
@@ -55,6 +58,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
                 ))}
               </p>
             ))}
+            {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}
           </article>
         ))}
       </div>

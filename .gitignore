@@ -50,3 +50,4 @@ next-env.d.ts
 
 # Review button presses not yet folded into the verdicts
 /.review-log.*
+/.story-review-log.*
