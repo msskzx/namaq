@@ -12,6 +12,7 @@ import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
 import type { ListState } from '@/lib/branchList';
 import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
 import type { Palette } from '@/lib/theme';
+import PathAyat from './PathAyat';
 
 /** What the pager lends the card that has the focus, so one finger either moves the zoomed tree or the row of cards. */
 export type Lane = {
@@ -55,7 +56,6 @@ const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
 export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight = 0, actions }: Props) {
-  const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight) }), [full.width, full.height, footHeight]); // eslint-disable-line react-hooks/exhaustive-deps
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -64,6 +64,14 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     return new Map<string, string[]>(found.length ? [['search', found]] : []);
   });
   const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
+  // The ayat a tap lit (not a search), in the tree's order, read in full under the tree.
+  const tappedKeys = useMemo(() => {
+    const lit = new Set([...pinned].flatMap(([id, ayahKeys]) => id === 'search' ? [] : ayahKeys));
+    return card.presentation.ayat.map(ayah => ayah.key).filter(key => lit.has(key));
+  }, [pinned, card]);
+  const [stripHeight, setStripHeight] = useState(0);
+  const strip = tappedKeys.length && !growth ? stripHeight : 0;
+  const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
   // first time it opened), so the tree shows at once; a tree with no sizes yet shows sideways while both ways are
@@ -185,7 +193,10 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
           <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured} paths={paths} actions={actions}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
-        {footer && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, height: footHeight, opacity: content ? 1 : 0 }, foot]}>{footer}</Animated.View>}
+        {(footer || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
+          {footer && <View style={{ height: footHeight }}>{footer}</View>}
+          {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
+        </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
             <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={probed(side)} direction={side} around={surrounding} actions={actions} />

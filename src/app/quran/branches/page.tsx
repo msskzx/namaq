@@ -27,6 +27,7 @@ import OpeningSearch, { UnavailableNote } from './OpeningSearch';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton, RotateButton } from './Surroundings';
+import PathAyat from './PathAyat';
 import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './Filters';
 import { compareLinksFor } from '../compare/pairCards';
 import { PathScope } from './Paths';
@@ -228,15 +229,17 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {unavailable && !(constrained && !opening && !focusedRequest) && <UnavailableNote />}
       {steps && <TreeProgress steps={steps} />}
       <GroupConnections key={`${id}:${defaultConnections}`} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} defaultOn={defaultConnections}>
-      <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''} aliases={bookmarkAliases}>
+      {/* The paths lit on the tree reach the card under its buttons, which reads their ayat in full. */}
       <PathScope key={`${id}:${marked.join(' ')}`} lit={marked} organic>
+      <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''} aliases={bookmarkAliases}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
-      </PathScope>
       </DoubleTapSave>
       {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
       {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      {!cards && tree && presentation && <PathAyat ayat={presentation.ayat.map(ayah => ({ key: ayah.key, words: ayah.words }))} names={names} />}
+      </PathScope>
       </GroupConnections>
     </div>
   );
