@@ -10,9 +10,10 @@
 .shelf { display: flex; gap: 1rem; overflow-x: auto; padding: 0.25rem 0.25rem 0.75rem; scroll-snap-type: x mandatory; }
 .book { flex: 0 0 calc((100% - 3rem) / 4); min-height: 14rem; padding: 1rem; border: 1px solid var(--home-rule); border-inline-start: 5px solid var(--home-rule); border-radius: 2px 5px 5px 2px; background: var(--home-paper-deep); display: flex; flex-direction: column; gap: 0.75rem; scroll-snap-align: start; box-shadow: 2px 3px 0 color-mix(in srgb, var(--home-rule) 30%, transparent); }
 .book:hover { border-color: var(--home-accent); }
-.bookKind { display: inline-flex; align-items: center; gap: 0.35rem; align-self: flex-start; color: var(--home-muted); font-size: 0.75rem; line-height: 1; }
-.bookKind svg { color: var(--home-accent); flex-shrink: 0; }
-.bookReferences { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; color: var(--home-muted); font-size: 0.8125rem; line-height: 1.8; border-bottom: 1px solid var(--home-rule); padding-bottom: 0.75rem; }
+.bookHead { display: flex; align-items: flex-start; gap: 0.5rem; }
+.bookHead:has(.bookReferences) { border-bottom: 1px solid var(--home-rule); padding-bottom: 0.75rem; }
+.bookKind { display: inline-flex; align-items: center; flex-shrink: 0; height: 1.4625rem; color: var(--home-accent); }
+.bookReferences { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; color: var(--home-muted); font-size: 0.8125rem; line-height: 1.8; }
 .bookText { font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.5rem; line-height: 2; margin-block: auto; }
 .empty { display: flex; align-items: center; flex-wrap: wrap; gap: 0.35rem; padding-block: 0.75rem; color: var(--home-muted); font-size: 0.9375rem; }
 .quiz { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; border-block: 1px solid var(--home-rule); background: var(--home-paper-deep); }

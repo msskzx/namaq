@@ -53,12 +53,14 @@ export default function Homepage({ data }: { data: HomepageData }) {
           const kind = bookmarkKind(item);
           const KindIcon = KIND_ICONS[kind];
           return <Link key={item.id} href={item.href} className={styles.book} data-kind={kind}>
-            <span className={styles.bookKind}><KindIcon size={14} aria-hidden />{BOOKMARK_KIND_LABEL[kind][ar ? 'ar' : 'en']}</span>
-            {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
-              {references.map(reference => <span key={reference.surah}>
-                {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('range' in reference ? '–' : '، ')}</bdi>
-              </span>)}
-            </span>}
+            <span className={styles.bookHead}>
+              <span className={styles.bookKind} role="img" aria-label={BOOKMARK_KIND_LABEL[kind][ar ? 'ar' : 'en']} title={BOOKMARK_KIND_LABEL[kind][ar ? 'ar' : 'en']}><KindIcon size={16} aria-hidden /></span>
+              {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
+                {references.map(reference => <span key={reference.surah}>
+                  {names.get(reference.surah)} <bdi>{reference.ayat.map(ayah => ar ? num(ayah) : ayah).join('range' in reference ? '–' : '، ')}</bdi>
+                </span>)}
+              </span>}
+            </span>
             <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
           </Link>;
         })}

@@ -1,6 +1,6 @@
 import surahRows from '@shared/data/quran/surahs.json';
-import { branchInventory, distinctBranchPieces, type BranchPiece } from '@shared/quran/branchInventory';
-import { searchSharedPhrases } from '@shared/quran/branchSearch';
+import { branchInventory, distinctBranchPieces, outsideMatches, type BranchPiece } from '@shared/quran/branchInventory';
+import { ALL_KINDS, searchSharedPhrases } from '@shared/quran/branchSearch';
 import { textIs } from '@shared/quran/branches';
 import { hasGroupFilters, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { matchesSurah } from '@shared/quran/surahSearch';
@@ -51,15 +51,17 @@ const SURAH_HITS = 3;
 export const SUGGESTIONS = 10;
 
 /** What the search box suggests while typing: surahs that have trees, then phrases (as on the website). */
-export function suggestions(state: ListState, query: string, bookmarks: Bookmark[] = []): { surahs: SurahHit[]; phrases: BranchPiece[] } {
+export function suggestions(state: ListState, query: string, bookmarks: Bookmark[] = []): { surahs: SurahHit[]; phrases: BranchPiece[]; outside: BranchPiece[] } {
   const typed = query.trim();
-  if (!typed) return { surahs: [], phrases: [] };
+  if (!typed) return { surahs: [], phrases: [], outside: [] };
   // Within what the filters, saved-only and the picked surah already show, as the website's suggestions are.
   const inventory = branchList({ ...state, query: '' }, bookmarks);
   const counts: Record<number, number> = {};
   inventory.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(number => { counts[number] = (counts[number] ?? 0) + 1; }));
   const surahs = surahRows.filter(row => counts[row.number] && matchesSurah(row, typed)).slice(0, SURAH_HITS).map(row => ({ number: row.number, name: row.name, count: counts[row.number] }));
-  return { surahs, phrases: searchSharedPhrases(inventory, typed).slice(0, SUGGESTIONS) };
+  const matched = distinctBranchPieces(searchSharedPhrases(inventory, typed));
+  // Trees the filters hide, listed last under their own label (as on the website).
+  return { surahs, phrases: matched.slice(0, SUGGESTIONS), outside: outsideMatches(typed, matched) };
 }
 
 /** The filter sheet's draft: a range of juz, surahs or pages, or picked surahs or juz, with the website's group filters. */
@@ -117,11 +119,12 @@ export function applyDraft(draft: FilterDraft): ListState | null {
 export const findPiece = (pieces: BranchPiece[], id: string) =>
   pieces.find(piece => piece.id === id || piece.group?.id === id || aliasesOf(piece).includes(id));
 
-const ALL_KINDS: ListState = { ...EMPTY_LIST, filters: { categories: 'mutashabeh,pondering,words' } };
+/** The list a tree found outside the filters opens in: no filters but every kind of tree. */
+export const ALL_KINDS_LIST: ListState = { ...EMPTY_LIST, filters: { categories: ALL_KINDS } };
 
 /** The list to open a linked tree in: the one shown when it holds the tree, else no filters, else every kind of tree. Null when no list holds it. */
 export function listShowing(state: ListState, id: string, bookmarks: Bookmark[] = []): { list: ListState; piece: BranchPiece } | null {
-  for (const list of [state, EMPTY_LIST, ALL_KINDS]) {
+  for (const list of [state, EMPTY_LIST, ALL_KINDS_LIST]) {
     const piece = findPiece(branchList(list, bookmarks), id);
     if (piece) return { list, piece };
   }

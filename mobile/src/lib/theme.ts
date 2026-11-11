@@ -1,5 +1,7 @@
 import { useColorScheme } from 'react-native';
-import { themeChoice } from './settings';
+import { useMemo } from 'react';
+import { cardColour } from '@shared/cardTint';
+import { cardTints, themeChoice } from './settings';
 
 // The branches pages' palette on the website (src/app/theme.css, docs/palette.md).
 export const light = {
@@ -47,7 +49,11 @@ export const QURAN_FONT = 'KFGQPC Hafs';
 export function usePalette(): Palette {
   const scheme = useColorScheme();
   const [choice] = themeChoice.use();
-  return (choice === 'system' ? scheme === 'dark' : choice === 'dark') ? dark : light;
+  const [tints] = cardTints.use();
+  const isDark = choice === 'system' ? scheme === 'dark' : choice === 'dark';
+  const card = isDark ? cardColour('dark', tints.dark) : cardColour('light', tints.light);
+  // Cards and reading areas take the tint chosen on the theme tiles; the page stays as it is.
+  return useMemo(() => ({ ...(isDark ? dark : light), card }), [isDark, card]);
 }
 
 /** Joined و is green and joined ف purple, as on the website's trees. */

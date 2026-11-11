@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, Pause, Play, RotateCcw, Search, Send, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import Segmented from '@/components/common/Segmented';
@@ -31,6 +31,10 @@ import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
 import ReadVideo, { canRecord } from './ReadVideo';
+import CompareBraid from './CompareBraid';
+import { useNeighbours } from './useNeighbours';
+import { useAroundSetting } from '../branches/Surroundings';
+import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 
 export type SurahName = { ar: string; en?: string };
@@ -44,7 +48,7 @@ function useNames(names: Names, ar: boolean) {
   const plain = (n: number) => (ar ? plainName(names[n]?.ar ?? '') : names[n]?.en ?? String(n));
   // Names from the database already start with «سُورَةُ»; say it once either way.
   const surah = (n: number) => { const name = names[n]?.ar ?? ''; return plainName(name).startsWith('سورة ') ? name : `سُورَةُ ${name}`; };
-  const title = (a: number, b: number) => ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
+  const title = (a: number, b: number) => a === b ? (ar ? `${surah(a)} مع نفسها` : `${plain(a)} with itself`) : ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
   return { plain, title };
 }
 
@@ -165,13 +169,14 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
   const inList = new Set(listed.map(pair => `${pair.a}:${pair.b}`));
   const stories = savedOnly ? [] : curatedComparisons.filter(pair => matches(pair) && inList.has(`${pair.a}:${pair.b}`) && (!todo || unreviewed(states, pair)));
   const all = (byCount ? [...pairs].sort((p, q) => q.count - p.count || p.a - q.a || p.b - q.b) : pairs).filter(matches);
-  const sides = (pair: { a: number; b: number }) => `${plain(pair.a)} · ${plain(pair.b)}`;
+  const itself = ar ? 'مع نفسها' : 'with itself';
+  const sides = (pair: { a: number; b: number }) => (pair.a === pair.b ? `${plain(pair.a)} ${itself}` : `${plain(pair.a)} · ${plain(pair.b)}`);
   // In mushaf order without a search, pairs sit under each of their two surahs, collapsed except the current surah's.
   const grouped = !byCount && !terms.length;
   const [open, setOpen] = useState(() => new Set([lead]));
   useEffect(() => setOpen(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
   const groups = new Map<number, SurahPair[]>();
-  if (grouped) for (const pair of pairs) for (const n of [pair.a, pair.b]) groups.set(n, [...(groups.get(n) ?? []), pair]);
+  if (grouped) for (const pair of pairs) for (const n of new Set([pair.a, pair.b])) groups.set(n, [...(groups.get(n) ?? []), pair]);
   const surahs = [...groups.keys()].sort((x, y) => x - y);
   const other = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
   // Under a surah's heading, a row opens the page with that surah first; it is current only under the surah being browsed.
@@ -222,7 +227,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
                   : groups.get(n)!.every(pair => ['checked', 'dropped'].includes(states[`${pair.a}:${pair.b}`])) ? 'checked' : undefined} ar={ar} />}
                 <span className="text-xs tabular-nums text-[var(--home-muted)]">{ar ? num(groups.get(n)!.length) : groups.get(n)!.length}</span>
               </summary>
-              <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, plain(other(pair, n)), n))}</ul>
+              <ul className="ms-5 border-s border-[var(--home-rule)]">{groups.get(n)!.map(pair => row(pair, pair.a === pair.b ? itself : plain(other(pair, n)), n))}</ul>
             </details>
           </li>
         ))}</ul>
@@ -269,7 +274,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
 const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
-function Card({ card, names, ar, savedIds, review }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number } }) {
+function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -292,6 +297,22 @@ function Card({ card, names, ar, savedIds, review }: { card: PairCard; names: Na
   const selected = step?.option ?? picked;
   const option = card.many?.options[selected];
   const shownSides = card.sides.map((side, i) => !option ? side : i === card.many!.side ? { ...side, ayah: option.ayah.number, ayat: [option.ayah] } : { ...side, ayat: [option.shared] });
+  const [view, setView] = useState<BranchView>(preferred);
+  // The read-along studio lights words in the matrix, so it shows the matrix while open.
+  const tree = view === 'tree' && !read.studio;
+  // The surrounding-ayat switch is the branches page's: one setting for every tree and matrix.
+  const [aroundOn, setAround] = useAroundSetting();
+  const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
+  const neighbours = useNeighbours(shownSides, aroundOn && !card.many);
+  const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');
+  // A refrain card's tree names every place the refrain repeats, as its matrix does.
+  const titleOf = (side: CardSide, i: number) => card.many?.side === i && isRefrain(card.many.options)
+    ? `${ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? side.surah} ${card.many.options.map(item => (ar ? num(item.ayah.number) : item.ayah.number)).join(' · ')}`
+    : sidePage(side, names, ar, null).title;
+  const withNeighbours = (page: SpreadPage, i: number): SpreadPage => neighbours && !page.pick
+    // The ayah before and after run on with the side's ayat as one text, not rows of their own.
+    ? { ...page, rows: [[...(neighbours.before[i] ? [neighbours.before[i]!] : []), ...page.rows.flat(), ...(neighbours.after[i] ? [neighbours.after[i]!] : [])]] }
+    : page;
   const partners = (side: CardSide) => {
     const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
     const options = card.many!.options;
@@ -309,14 +330,28 @@ function Card({ card, names, ar, savedIds, review }: { card: PairCard; names: Na
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
-        <div onClick={event => pick(event.target)}>
-          <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => sidePage(side, names, ar, lit, i === 0 && card.group ? (
+        {tree ? <div className="flex flex-col gap-2 border-4 border-double border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
+          {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
+            {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
+              className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
+              {ar ? num(item.ayah.number) : item.ayah.number}
+            </button>)}
+          </div>}
+          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0], 0), titleOf(shownSides[1], 1)]} ar={ar} around={card.many ? undefined : neighbours} />
+        </div> : <div onClick={event => pick(event.target)}>
+          <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined))} />
-        </div>
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined), i))} />
+        </div>}
       </DoubleTapSave>
-      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-end">
+      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
+        {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
+        <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
+          {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
+        </Button>
+        <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
+          className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
@@ -361,20 +396,20 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
       })}
     </div>}
     <div className="flex items-center">
-      <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
-      <span className="flex-1" />
       <Button size="sm" variant="muted" className="min-w-9 tabular-nums" onClick={() => setReadSpeed(next)} aria-label={`${ar ? 'السرعة' : 'Speed'} ${read.speed}×`} title={ar ? 'السرعة' : 'Speed'}><span dir="ltr">{read.speed}×</span></Button>
       <Button size="icon" variant="muted" onClick={() => (playing ? read.pause() : read.play())} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
         {playing ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
       </Button>
       <Button size="icon" variant="muted" onClick={read.reset} aria-label={resetLabel} title={resetLabel}><RotateCcw size={18} aria-hidden /></Button>
       {canRecord() && <Button size="icon" variant="muted" onClick={() => { read.reset(); setVideo(true); }} aria-label={videoLabel} title={videoLabel}><Send size={18} aria-hidden /></Button>}
+      <span className="flex-1" />
+      <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
     </div>
     {video && <ReadVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
   </div>;
 }
 
-export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, names, review = false, states, editable = false, todo = false, scope: juz, spans = { juz: {}, page: {} } }: { a: number; b: number; lead?: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean; scope?: CompareScope; spans?: SurahSpans }) {
+export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, names, review = false, states, editable = false, todo = false, scope: juz, spans = { juz: {}, page: {} }, view }: { a: number; b: number; lead?: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean; scope?: CompareScope; spans?: SurahSpans; /** The default view from settings: tree or matrix. */ view?: BranchView }) {
   const pairs = juz ? allPairs.filter(pair => pageInScope(pair, spans, juz)) : allPairs;
   const ar = useLanguage().language === 'ar';
   const { title } = useNames(names, ar);
@@ -413,7 +448,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
   const previousCards = usePairCards(previous?.pair, review);
   // While swiping, the neighbouring page itself comes in beside this one: its first cards, as it opens.
   const preview = (list: PairCard[] | undefined) => list && <ol className="flex flex-col gap-4">
-    {list.slice(0, 6).map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} />)}
+    {list.slice(0, 6).map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} view={view} />)}
   </ol>;
   const nextStep = next && { ...stepTo(next)!, preview: preview(nextCards) };
   const previousStep = previous && { ...stepTo(previous)!, preview: preview(previousCards) };
@@ -469,7 +504,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
-            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} />)}</ol>}
+            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} />)}</ol>}
         </PairSwipe>
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">

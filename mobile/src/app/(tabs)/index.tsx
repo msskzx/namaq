@@ -113,19 +113,18 @@ function ShelfCard({ card, palette }: { card: SavedCard; palette: Palette }) {
   return (
     <Pressable onPress={() => card.open && go(card.open)} disabled={!card.open} accessibilityRole="link" accessibilityLabel={`${label}: ${card.text}`}
       style={({ pressed }) => ({ width: 250, minHeight: 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-        <Icon size={14} color={palette.accent} />
-        <Text style={{ color: palette.muted, fontSize: 12 }}>{label}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
+        <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
+        {card.references.length > 0 && (
+          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', columnGap: 12, rowGap: 2 }}>
+            {card.references.map(reference => (
+              <Text key={reference.surah} style={{ color: palette.muted, fontSize: 13, lineHeight: 20 }}>
+                {surahNames[reference.surah]} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
+              </Text>
+            ))}
+          </View>
+        )}
       </View>
-      {card.references.length > 0 && (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 12, rowGap: 2, paddingBottom: 8, borderBottomWidth: 1, borderColor: palette.rule }}>
-          {card.references.map(reference => (
-            <Text key={reference.surah} style={{ color: palette.muted, fontSize: 13 }}>
-              {surahNames[reference.surah]} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
-            </Text>
-          ))}
-        </View>
-      )}
       <Text numberOfLines={5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{card.text}</Text>
     </Pressable>
   );

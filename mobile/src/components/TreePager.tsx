@@ -14,9 +14,10 @@ import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
 import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
-import { compareTargetFor } from '@/lib/compare';
+import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
+import CompareTargetsSheet from './CompareTargetsSheet';
 import type { Group } from '@shared/quran/mutashabih/types';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
@@ -42,9 +43,9 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onEvidence }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
-  const target = useMemo(() => compareTargetFor(piece.keys), [piece]);
+  const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
   const studio = useGrowth().studio;
   const scale = useSharedValue(1);
@@ -70,7 +71,7 @@ function Actions({ piece, palette, pop, current, onVideo, onEvidence }: { piece:
       {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
         <BookOpen size={24} color={palette.ink} />
       </Pressable>}
-      {target && <Pressable onPress={() => { setIntent({ tab: 'compare', ...target }); router.navigate('/compare'); }} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
+      {targets.length > 0 && <Pressable onPress={() => onCompare(targets)} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
         <ArrowLeftRight size={24} color={palette.ink} />
       </Pressable>}
     </View>
@@ -109,6 +110,10 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
   const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
   const [video, setVideo] = useState<VideoInput | null>(null);
   const [evidence, setEvidence] = useState<Group | null>(null);
+  // A tree across two surahs opens its compare page at once; across more, a sheet lists the pairs to pick from.
+  const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
+  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); router.navigate('/compare'); };
+  const compare = (targets: CompareTarget[]) => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets));
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { onIndex?.(index); }, [index, onIndex]);
@@ -195,7 +200,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
               <View style={{ height: FOOT, direction: 'rtl' }} onStartShouldSetResponder={() => true}>
                 {current && <StudioProgress palette={palette} />}
                 <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} />
+                  onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare} />
               </View>
             );
             return (
@@ -213,6 +218,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
       </View>
       <VideoSheet input={video} onClose={() => setVideo(null)} palette={palette} />
       <EvidenceSheet group={evidence} onClose={() => setEvidence(null)} palette={palette} />
+      <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
     </View>
   );
 }

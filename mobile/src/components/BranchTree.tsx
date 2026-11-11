@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useEffect, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, Text, View, type LayoutChangeEvent } from 'react-native';
-import { Route, ZoomIn, type LucideProps } from 'lucide-react-native';
+import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { keys, type Branch } from '@shared/quran/branches';
@@ -10,6 +10,7 @@ import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
+import { CURVE, litSpine, type Span } from '@/lib/litSpine';
 import { QURAN_FONT, toneOf, type Palette } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import TreeIcon from './TreeIcon';
@@ -38,7 +39,6 @@ const Boxes = createContext<Registry | null>(null);
 const edge = (shared: Shared, from: string, to: string, back = false) => { if (!shared.edges.some(item => item.from === from && item.to === to)) shared.edges.push({ from, to, back }); };
 
 const LINE = 2;
-const CURVE = 10;
 const isMark = (word: string) => word === '۝' || word.startsWith('﴿');
 
 /** Fades a box or connector in and out as the tree grows. */
@@ -108,17 +108,17 @@ function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (pro
   );
 }
 
-/** The buttons under a node: light its path, and open the part under it as a tree of its own. */
-function Tools({ id, ayahKeys, shared, subtree, inTree }: { id: string; ayahKeys: string[]; shared: Shared; subtree?: BranchPiece;
+/** The buttons under a node: open the part under it as a tree of its own, or light a neighbour ayah's own place in the tree. */
+function Tools({ shared, subtree, inTree }: { shared: Shared; subtree?: BranchPiece;
   /** A neighbour ayah that is itself in the tree: lights its own place there (the website's «في هذه الشجرة»). */
   inTree?: string }) {
   const { actions, paths, palette } = shared;
   if (!actions) return null;
-  const pinned = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
+  // Tapping the box lights its path, so it has no path button.
+  if (!subtree && !inTree) return null;
   const found = !!inTree && !!paths?.pinned.has(pathToggleKey(`t${inTree}`, [inTree]));
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 6 }}>
-      <Tool label="إظهار المسار" Icon={Route} palette={palette} on={pinned} onPress={() => paths?.pin(id, ayahKeys)} />
       {subtree && <Tool label="عرض هذا الجزء وحده" Icon={ZoomIn} palette={palette} onPress={() => actions.onSubtree(subtree)} />}
       {inTree && <Tool label="في هذه الشجرة" Icon={TreeIcon} palette={palette} on={found} onPress={() => paths?.pin(`t${inTree}`, [inTree])} />}
     </View>
@@ -194,18 +194,6 @@ function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolea
 }
 
 type Entry = { id: string; keys: string[]; item: React.ReactNode };
-type Span = { at: number; size: number };
-
-/** The lit stretch of a fan's spine: from where the parent's line meets it to the farthest lit child, short of a corner's curve. */
-function litSpine(spans: Span[], lit: boolean[], whole: number): [number, number] | null {
-  const ends = lit.flatMap((on, i) => on && spans[i] ? [i] : []);
-  if (!ends.length) return null;
-  const middle = whole / 2;
-  const centre = (i: number) => spans[i].at + spans[i].size / 2;
-  const from = Math.min(middle, ...ends.map(i => centre(i) + (i === 0 && spans.length > 1 ? CURVE : 0)));
-  const to = Math.max(middle, ...ends.map(i => centre(i) - (i === spans.length - 1 && spans.length > 1 ? CURVE : 0)));
-  return to > from ? [from, to] : null;
-}
 
 function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const { palette, down } = shared;
@@ -256,7 +244,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   const own = sceneWords({ words: beside.words, ayahKeys: [], at: 0, shared, size: 17, marks: beside, color: shared.palette.muted });
   const text: SceneText = { size: 17, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
   return (
-    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools id={id} ayahKeys={[of]} shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
+    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
       <Words words={beside.words} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
@@ -296,7 +284,7 @@ function Node({ node, path, shared }: { node: Branch; path: string[]; shared: Sh
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {shown && (
         <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
-          tools={own === undefined && <Tools id={id} ayahKeys={all} shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
+          tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
           <Words {...shownWords} />
@@ -340,7 +328,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
       const lead = befores(prefix.keys, shared);
       const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, differs: differing(prefix.forms), color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
-      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)} tools={<Tools id={`p${i}`} ayahKeys={prefix.keys} shared={shared} />}>
+      const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={sceneWords(prefixWords)}>
         <Words {...prefixWords} />
       </Box>;
       return [{ id: `p${i}`, keys: prefix.keys, item: lead.length ? <View style={{ flexDirection: down ? 'column-reverse' : 'row-reverse', alignItems: 'center' }}>{box}<Stub shared={shared} entries={lead} /><BackFan entries={lead} shared={shared} /></View> : box }];

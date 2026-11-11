@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
-import { applyDraft, draftOf, EMPTY_LIST, listShowing } from './branchList';
+import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
 import { cardsFor, compareTargetFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
@@ -89,11 +89,14 @@ describe('the filter sheet shared with the branches tab', () => {
 
   it('narrows the pages to pairs whose two surahs are among the picked surahs', () => {
     const pairs = filteredPairs(filterOfList(applyDraft({ ...draftOf(listOfFilter({})), unit: 'surahs', picked: [7, 26, 11] })!));
-    expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
+    expect(pairs.map(pair => `${pair.a}:${pair.b}`).sort()).toEqual(['11:26', '7:11', '7:26', '7:7', '11:11', '26:26'].filter(id => listedPairs.some(pair => `${pair.a}:${pair.b}` === id)).sort());
   });
 });
 
 describe('the tree icon on a compare card', () => {
+  // A tree outside the default list is looked for among every kind of tree, a list built once and kept. That takes seconds
+  // on a slow CI runner, so build it here instead of inside the first test that looks.
+  beforeAll(() => { branchList(EMPTY_LIST); branchList(ALL_KINDS_LIST); }, 60000);
   it('opens a tree on the branches tab for every card that names one', () => {
     for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
       if (card.group) expect(listShowing(EMPTY_LIST, card.group), card.id).not.toBeNull();
@@ -122,4 +125,41 @@ describe('the «also in compare» button under a tree', () => {
     }
     expect(linked).toBeGreaterThan(50);
   }, 60_000);
+});
+
+describe('compare card views', () => {
+  it('braids every card so both sides are covered in order', async () => {
+    const { braidOf, shownAyat } = await import('./compare');
+    for (const pair of listedPairs.slice(0, 60)) for (const card of cardsFor(pair.a, pair.b)) {
+      const sides = shownAyat(card);
+      const strands = braidOf(sides);
+      const words = (i: 0 | 1) => sides[i].ayat.flatMap(ayah => ayah.words);
+      expect(strands.flatMap(strand => strand.a.map(word => word.text))).toEqual(words(0));
+      expect(strands.flatMap(strand => strand.b.map(word => word.text))).toEqual(words(1));
+    }
+  });
+
+  it('finds the ayah before and after each side, colouring what the neighbours share', async () => {
+    const { aroundOf, shownAyat } = await import('./compare');
+    const card = cardsFor(2, 7).find(item => item.sides[0].ayat.some(ayah => ayah.number === 35) && item.sides[1].ayat.some(ayah => ayah.number === 19))!;
+    const around = aroundOf(shownAyat(card));
+    expect(around.before.map(ayah => ayah?.key)).toEqual(['2:34', '7:18']);
+    expect(around.after.map(ayah => ayah?.key)).toEqual(['2:36', '7:20']);
+    expect(around.after[0]!.exact.size).toBeGreaterThan(0);
+  });
+});
+
+describe('tree to compare', () => {
+  it('offers the same surah pairs as the website for every tree, in the same order', async () => {
+    const { compareLinksFor } = await import('@/app/quran/compare/pairCards');
+    const { compareTargetsFor } = await import('./compare');
+    let choosers = 0;
+    for (const piece of treeList()) {
+      const app = compareTargetsFor(piece.keys).map(target => [Math.min(target.lead, target.other), Math.max(target.lead, target.other)].join(':'));
+      const web = compareLinksFor(piece.keys).map(link => { const url = new URL(link.href, 'http://x'); return `${url.searchParams.get('a')}:${url.searchParams.get('b')}`; });
+      expect(app, piece.id).toEqual(web);
+      if (app.length > 1) choosers++;
+    }
+    expect(choosers).toBeGreaterThan(50);
+  });
 });

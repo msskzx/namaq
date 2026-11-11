@@ -50,7 +50,8 @@ describe('release homepage', () => {
     expect(card.textContent).toContain('آل عمران ١٦٤');
     expect(card.textContent).toContain('الجمعة ٢');
     expect(card.getAttribute('data-kind')).toBe('tree');
-    expect(card.textContent).toMatch(/^شجرة/);
+    expect(card.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('شجرة');
+    expect(card.textContent).toMatch(/^البقرة/);
     expect(card.textContent).not.toMatch(/عائلة|فتح للمقارنة|فتح للاستكشاف/);
   });
 
@@ -63,9 +64,11 @@ describe('release homepage', () => {
     const compare = screen.getByRole('link', { name: /ولا تقولوا/ });
     const ayah = screen.getByRole('link', { name: /الله لا إله إلا هو/ });
     expect(compare.getAttribute('data-kind')).toBe('compare');
-    expect(compare.textContent).toMatch(/^مقارنة/);
+    expect(compare.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('مقارنة');
+    expect(compare.textContent).not.toContain('مقارنة');
     expect(ayah.getAttribute('data-kind')).toBe('ayah');
-    expect(ayah.textContent).toMatch(/^آية/);
+    expect(ayah.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('آية');
+    expect(ayah.textContent).not.toContain('آية');
   });
 
   it('reacts to saves and removals made through the existing bookmark API', () => {

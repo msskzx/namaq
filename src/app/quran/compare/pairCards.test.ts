@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
 import data from './pairs.json';
 import passage from './passagePairs.json';
+import within from './withinPairs.json';
 import curatedLinks from '@/lib/quran/curation/compareLinks.json';
 import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
 import treeData from '@shared/data/quran/trees.json';
 import { normalizeWord } from '@shared/quran/normalize';
-import { compareLinkFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
+import { compareLinkFor, compareLinksFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
 
 describe('compare pair cards', () => {
   it('shows At-Tur and Al-Qalam as five cards, the last two ayat merged, with marks inside each ayah', () => {
@@ -169,6 +170,10 @@ describe('compare pair cards', () => {
 
   it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
     expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
+    // A tree across two surahs has one link; one across more lists every listed pair holding a kept card of two of its ayat.
+    expect(compareLinksFor(['2:35', '7:19'])).toEqual([{ href: '/quran/compare?a=2&b=7#c-2-35-7-19', label: 'البقرة مع الأعراف · ٣٥ · ١٩', labelEn: "Al-Baqara with Al-A'raaf · 35 · 19" }]);
+    const many = compareLinksFor(['2:35', '7:19', '20:117']);
+    expect(many.map(link => link.href.split('#')[0])).toEqual([...new Set(many.map(link => link.href.split('#')[0]))]);
     expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();
     expect(compareLinkFor(['2:23'])).toBeUndefined();
   });
@@ -210,8 +215,31 @@ describe('compare pair cards', () => {
     });
   });
 
+  describe('a surah with itself', () => {
+    it('lists surahs whose own ayat resemble each other, al-Rahman and al-Shu\'ara among them', () => {
+      expect(listedPairs).toEqual(expect.arrayContaining([expect.objectContaining({ a: 55, b: 55 }), expect.objectContaining({ a: 26, b: 26 })]));
+    });
+
+    it('collapses a refrain repeated word for word into one card from its first place', () => {
+      const refrain = pairCards(55, 55).filter(card => card.many?.options.length === 30);
+      expect(refrain.map(card => card.sides[0].ayah)).toEqual([13]);
+      expect(pairCards(55, 55).filter(card => card.id.startsWith('55:16|'))).toEqual([]);
+    });
+
+    it('keeps the two sides of a run from overlapping', () => {
+      for (const card of pairCards(6, 6)) {
+        const [a, b] = card.sides.map(side => [side.ayah, side.ayat[side.ayat.length - 1].number]);
+        expect(card.many || a[1] < b[0] || b[1] < a[0]).toBeTruthy();
+      }
+    });
+
+    it('names the page «… مع نفسها» from a tree inside one surah', () => {
+      expect(compareLinksFor(['6:76', '6:77'])[0]?.label).toBe('الأنعام مع نفسها · ٧٦ · ٧٧');
+    });
+  });
+
   it('has a verdict only for known pairs, and one for every passage pair', () => {
-    const found = new Set(([...data.pairs, ...passage.pairs, ...curatedLinks.links.map(item => ({ a: item.pair.split('|')[0], b: item.pair.split('|')[1] }))] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
+    const found = new Set(([...data.pairs, ...passage.pairs, ...within.pairs, ...curatedLinks.links.map(item => ({ a: item.pair.split('|')[0], b: item.pair.split('|')[1] }))] as { a: string; b: string }[]).map(pair => [pair.a, pair.b].sort((x, y) => Number(x.split(':')[0]) - Number(y.split(':')[0])).join('|')));
     expect(Object.keys(compareVerdicts).filter(id => !found.has(id))).toEqual([]);
     expect(passage.pairs.filter(pair => !compareVerdicts[`${pair.a}|${pair.b}`])).toEqual([]);
   });

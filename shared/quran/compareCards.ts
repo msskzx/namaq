@@ -117,12 +117,14 @@ export type Visit = { lead: number; other: number; pair: SurahPair };
 export function surahOrder(pairs: SurahPair[]): Visit[] {
   const groups = new Map<number, Visit[]>();
   for (const pair of pairs) {
-    for (const [lead, other] of [[pair.a, pair.b], [pair.b, pair.a]]) groups.set(lead, [...(groups.get(lead) ?? []), { lead, other, pair }]);
+    for (const [lead, other] of pair.a === pair.b ? [[pair.a, pair.a]] : [[pair.a, pair.b], [pair.b, pair.a]]) groups.set(lead, [...(groups.get(lead) ?? []), { lead, other, pair }]);
   }
-  return [...groups.keys()].sort((x, y) => x - y).flatMap(n => groups.get(n)!);
+  // A surah with itself comes last under it, after its pairs with other surahs.
+  const self = (visit: Visit) => (visit.lead === visit.other ? 1 : 0);
+  return [...groups.keys()].sort((x, y) => x - y).flatMap(n => [...groups.get(n)!].sort((p, q) => self(p) - self(q)));
 }
 
-/** The pair a surah shares the most ayat with. */
+/** The other surah a surah shares the most ayat with (not the surah with itself). */
 export function closestPair(listed: SurahPair[], surah: number) {
-  return listed.filter(pair => pair.a === surah || pair.b === surah).sort((p, q) => q.count - p.count)[0];
+  return listed.filter(pair => pair.a !== pair.b && (pair.a === surah || pair.b === surah)).sort((p, q) => q.count - p.count)[0];
 }

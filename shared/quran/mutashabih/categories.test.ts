@@ -4,6 +4,7 @@ import corpus from '../../data/quran/trees.json';
 import manifest from './categories.json';
 import { groups } from './data';
 import { groupHasId } from './identity';
+import { branchInventory } from '../branchInventory';
 
 it('assigns every generated comparison exactly once in the reviewed manifest', () => {
   const ids = manifest.rules.flatMap(rule => rule.groups);
@@ -34,5 +35,12 @@ it('preserves the exact Quran word selections of focused editorial comparisons',
       expect(place.end).toBeLessThanOrEqual(words.length);
       expect(normalized(words.slice(place.start, place.end).join(' '))).toBe(normalized(comparison.text));
     }
+  }
+});
+
+it('puts short ayat that open alike on the default list (إن المجرمين في: 43:74 and 54:47)', () => {
+  const pieces = branchInventory({}, null);
+  for (const pair of [['43:74', '54:47'], ['26:90', '50:31'], ['113:1', '114:1']]) {
+    expect(pieces.some(piece => pair.every(key => piece.keys.includes(key))), pair.join(' ')).toBe(true);
   }
 });

@@ -38,14 +38,14 @@ export function StudioControls({ palette, onVideo }: { palette: Palette; onVideo
   const ask = growth.mode === 'ask';
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
-      <IconButton label="إغلاق الاستوديو" onPress={closeStudio} Icon={X} color={palette.ink} />
-      <View style={{ flex: 1 }} />
       <Chip label={`السرعة ${growth.speed}×`} text={`${growth.speed}×`} onPress={() => setPrefs({ speed: next(SPEEDS, growth.speed) })} palette={palette} />
       {ask && <Chip label={`مهلة السؤال ${growth.timer ? num(growth.timer) : '∞'}`} text={growth.timer ? `${growth.timer}s` : '∞'} onPress={() => setPrefs({ timer: next(TIMERS, growth.timer) })} palette={palette} active={!!growth.timer} />}
       <IconButton label="اكمل الآيات" onPress={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} Icon={Timer} color={ask ? palette.accent : palette.ink} pressed={ask} />
       <IconButton label={label} onPress={() => (active ? pause(playing) : void play())} Icon={playing ? Pause : Play} color={active ? palette.accent : palette.ink} />
       <IconButton label="إعادة ضبط" onPress={stop} Icon={RotateCcw} color={palette.ink} />
       {onVideo && <IconButton label="مشاركة كفيديو" onPress={onVideo} Icon={Send} color={palette.ink} />}
+      <View style={{ flex: 1 }} />
+      <IconButton label="إغلاق الاستوديو" onPress={closeStudio} Icon={X} color={palette.ink} />
     </View>
   );
 }
