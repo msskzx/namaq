@@ -189,10 +189,10 @@ describe('PairCompare', () => {
       { surah: 7, ayah: 148, ayat: [{ number: 148, words: ['عجلا'] }] },
     ] };
     const { unmount } = render(<PairCompare view="cards" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
-    expect(screen.getAllByRole('separator').map(node => node.textContent)).toEqual(['٥١–٥٢', '٩٢']);
+    expect(screen.getAllByRole('separator').map(node => node.getAttribute('aria-label'))).toEqual(['٥١–٥٢', '٩٢']);
     unmount();
     render(<PairCompare view="tree" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
-    expect(screen.getAllByRole('separator', { name: 'آيات محذوفة' })).toHaveLength(1);
+    expect(screen.getAllByRole('separator', { name: 'آيات محذوفة، ثم الآية ٩٢' })).toHaveLength(1);
   });
 
   it('says when a story card\'s side steps back in its surah', () => {

@@ -75,6 +75,29 @@ describe('compare pair cards', () => {
     expect(musa[3].sides.map(side => side.rows)).toEqual([[[], [57, 58, 59, 60, 61]], [[138, 139, 140, 141], [159, 160, 161, 162]]]);
   });
 
+  it('leaves a story part the owner dropped off the page, and counts unjudged parts against the page\'s review', () => {
+    const id = '2:55|7:154';
+    expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(true);
+    compareVerdicts[id] = { keep: false, why: 'test', checked: true };
+    try {
+      expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(false);
+      expect(pairCards(2, 7, true).find(card => card.id === '2:55-56|7:154-156')?.pairs?.[0].verdict?.keep).toBe(false);
+    } finally {
+      delete compareVerdicts[id];
+    }
+    expect(compareVerdicts['11:25|26:105']?.checked).toBeFalsy();
+    expect(reviewStates()['11:26']).not.toBe('checked');
+  });
+
+  it('puts an engine pair on the story part that shows both its ayat', () => {
+    const card = pairCards(2, 7, true).find(card => card.id === '2:57-61|7:138-162')!;
+    expect(card.pairs?.map(pair => pair.id)).toEqual(expect.arrayContaining(['2:57|7:160', '2:58|7:161']));
+    for (const part of pairCards(2, 7, true).filter(card => card.sides[0].rows)) for (const { id } of part.pairs ?? []) {
+      const [a] = id.split('|');
+      expect(part.sides[0].ayat.some(ayah => `2:${ayah.number}` === a), id).toBe(true);
+    }
+  });
+
   it('gives a range card the tree link of its first pair that has one', () => {
     const block = engineCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
     expect(block.group).toBeDefined();

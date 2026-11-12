@@ -38,7 +38,7 @@ function RowAyat({ ayat, gaps = false, onRule = false }: { ayat: SpreadAyah[]; g
     const run = starts.indexOf(i);
     const last = run >= 0 ? ayat[(starts[run + 1] ?? ayat.length) - 1].number : 0;
     return <Fragment key={ayah.number}>
-      {(broken && run >= 0) || (onRule && run === 0) ? <span role="separator" className={run > 0 ? styles.gap : onRule ? styles.gapOnRule : `${styles.gap} ${styles.gapFirst}`}>{num(ayah.number)}{last > ayah.number ? `–${num(last)}` : ''}</span> : i > 0 && ' '}
+      {(broken && run >= 0) || (onRule && run === 0) ? <span role="separator" aria-label={`${num(ayah.number)}${last > ayah.number ? `–${num(last)}` : ''}`} className={run > 0 ? styles.gap : onRule ? styles.gapOnRule : `${styles.gap} ${styles.gapFirst}`}>{num(ayah.number)}{last > ayah.number ? `–${num(last)}` : ''}</span> : i > 0 && ' '}
       {ayah.muted ? <span className={styles.mutedAyah}><Ayah ayah={ayah} /></span> : <Ayah ayah={ayah} />}
     </Fragment>;
   });

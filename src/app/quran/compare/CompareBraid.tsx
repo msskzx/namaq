@@ -24,7 +24,7 @@ function Words({ words, other, ar }: { words: BraidWord[]; other?: BraidWord[]; 
     const colour = colourOf(word, other?.[i]);
     return <Fragment key={i}>
       {i > 0 && ' '}
-      {word.skip && <span role="separator" aria-label={ar ? 'آيات محذوفة' : 'Ayat left out'} className="text-[var(--home-muted)]">⋯ </span>}
+      {word.skip && <span role="separator" aria-label={ar ? `آيات محذوفة، ثم الآية ${num(word.skip)}` : `Ayat left out, then ayah ${word.skip}`} className="text-[var(--home-muted)]">⋯ </span>}
       <span style={colour ? { color: colour } : undefined}><MushafText>{word.text}</MushafText></span>
       {ends(word, other?.[i]).length > 0 && <span className="text-[var(--home-accent)]"> {endMark(ends(word, other?.[i]), ar)}</span>}
     </Fragment>;

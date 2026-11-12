@@ -48,13 +48,13 @@ export function braid(a: string[], b: string[], minShared = MIN_SHARED): Strand[
   return strands;
 }
 
-/** One word of a braid: its text, its mark on the card, the ayah number after it when it ends an ayah, and `skip` when it opens an ayah that does not follow the last. */
-export type BraidWord = { text: string; mark?: CardMark; end?: number; skip?: boolean };
+/** One word of a braid: its text, its mark on the card, the ayah number after it when it ends an ayah, and `skip` (its ayah number) when it opens an ayah that does not follow the last. */
+export type BraidWord = { text: string; mark?: CardMark; end?: number; skip?: number };
 export type BraidStrand = { kind: Strand['kind']; a: BraidWord[]; b: BraidWord[] };
 
 const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap((ayah, k) => ayah.words.map((text, i) => ({
   text, mark: ayah.marks?.[i], ...(i === ayah.words.length - 1 ? { end: ayah.number } : {}),
-  ...(i === 0 && k > 0 && ayah.number !== ayat[k - 1].number + 1 ? { skip: true } : {}),
+  ...(i === 0 && k > 0 && ayah.number !== ayat[k - 1].number + 1 ? { skip: ayah.number } : {}),
 })));
 
 /** A card's two sides as a braid: one tree for a pair, parting and rejoining. */

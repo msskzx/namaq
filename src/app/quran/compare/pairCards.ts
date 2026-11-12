@@ -32,7 +32,9 @@ export function reviewStates(): Record<string, ReviewState> {
   const states: Record<string, ReviewState> = {};
   const current = withUnappliedReviews(compareVerdicts);
   for (const { a, b } of reviewPairs) {
-    const verdicts = (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p).map(id => current[id]);
+    // A page with a story judges its parts too, under the pairs they hold or their own.
+    const ids = partsFor(a, b).length ? pairCards(a, b, true).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]) : (stored.cards[`${a}:${b}`] ?? []).flatMap(card => card.p);
+    const verdicts = ids.map(id => current[id]);
     if (verdicts.some(verdict => verdict?.ask)) states[`${a}:${b}`] = 'ask';
     else if (verdicts.every(verdict => verdict?.checked)) states[`${a}:${b}`] = verdicts.some(verdict => verdict?.keep !== false) ? 'checked' : 'dropped';
   }
@@ -52,7 +54,8 @@ for (const ayah of treeData.ayat as { key: string; page: number }[]) {
 }
 
 const rangeNumbers = (text: string) => {
-  const [from, to = from] = text.split(':')[1].split('-').map(Number);
+  const [from, to = from] = (text.split(':')[1] ?? '').split('-').map(Number);
+  if (!Number.isInteger(from) || !Number.isInteger(to) || to < from) throw new Error(`compareLinks.json: bad ayah range "${text}"`);
   return Array.from({ length: to - from + 1 }, (_, k) => from + k);
 };
 const surahOfRange = (text: string) => Number(text.split(':')[0]);
@@ -101,8 +104,10 @@ type StoryPages = { storyParts?: { parts: (string | string[])[] }[]; timelineSto
 function curatedParts(x: number, y: number): Part[][] {
   return ((links as StoryPages).storyParts ?? []).flatMap(({ parts }) => {
     const rows = parts.map(part => (Array.isArray(part) ? part : [part]).map(row => row.split('|')));
-    const first = rows.flat(2).find(Boolean)!;
-    if (surahOfRange(first) !== x || rows.flat(1).some(([, b]) => b && surahOfRange(b) !== y)) return [];
+    const [as, bs] = [0, 1].map(s => rows.flat(1).map(row => row[s]).filter(Boolean));
+    if (surahOfRange(as[0]) !== x || surahOfRange(bs[0]) !== y) return [];
+    const stray = [...as.filter(a => surahOfRange(a) !== x), ...bs.filter(b => surahOfRange(b) !== y)];
+    if (stray.length) throw new Error(`compareLinks.json: ${stray.join(', ')} outside ${x}:${y}`);
     return [rows.map(part => ({ rows: part.map(([a, b]) => [a ? rangeNumbers(a) : [], b ? rangeNumbers(b) : []] as [number[], number[]]) }))];
   });
 }
@@ -180,6 +185,10 @@ function partsFor(x: number, y: number): Part[][] {
  * that steps back in its surah is marked `back`.
  */
 function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Record<string, Verdict>): PairCard[] {
+  // Parts gather every engine pair inside the story, a pair curation left out too, so a part is judged the same way in
+  // review and on the page; off review, a part every pair of which was dropped is left out like any card.
+  const everyPair = verdicts ? undefined : engineCards(x, y, true);
+  const judged = verdicts ?? compareVerdicts;
   return partsFor(x, y).reduce((current, unsorted) => {
     const ayatOf = (part: Part) => [0, 1].map(s => [...new Set(part.rows.flatMap(row => row[s]))].sort((p, q) => p - q)) as [number[], number[]];
     // The first surah reads forward, as on every compare page; the second side is marked where it steps back.
@@ -193,12 +202,13 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
       const [a, b] = id.split('|');
       return told[0].has(ayahOfKey(a)) && told[1].has(ayahOfKey(b));
     });
-    const taken = current.filter(inStory).flatMap(pairsOf);
-    const groupOf = (pairs: { id: string }[]) => current.find(card => inStory(card) && card.group && pairsOf(card).some(pair => pairs.some(own => own.id === pair.id)))?.group;
+    const inside = (everyPair ?? current).filter(inStory);
+    const taken = inside.flatMap(pairsOf);
+    const groupOf = (pairs: { id: string }[]) => inside.find(card => card.group && pairsOf(card).some(pair => pairs.some(own => own.id === pair.id)))?.group;
     const surahs: [number, number] = [x, y];
     // An ayah an engine card already marks keeps those marks, curated links included; each link keeps its card's name so a tap lights its own partner.
     const engineMarks = [new Map<number, Record<number, CardMark>>(), new Map<number, Record<number, CardMark>>()];
-    for (const card of current.filter(inStory)) card.sides.forEach((side, s) => side.ayat.forEach(ayah => {
+    for (const card of inside) card.sides.forEach((side, s) => side.ayat.forEach(ayah => {
       if (!engineMarks[s].has(ayah.number) && Object.keys(ayah.marks ?? {}).length) engineMarks[s].set(ayah.number, Object.fromEntries(Object.entries(ayah.marks!).map(([word, mark]) => [word, { ...mark, ...(mark.link ? { link: `${card.id}/${mark.link}` } : {}) }])));
     }));
     const storyCards = parts.map((part, p): PairCard => {
@@ -207,12 +217,14 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
       for (const row of part.rows) if (row[0].length && row[1].length) partMarks(surahs, row).forEach((side, s) => side.forEach((ayah, n) => marks[s].set(n, ayah)));
       engineMarks.forEach((side, s) => side.forEach((ayah, n) => { if (sides[s].includes(n)) marks[s].set(n, ayah); }));
       const firstIds = sides.map((numbers, s) => `${surahs[s]}:${numbers[0]}`).join('|');
-      const pairs = taken.filter(({ id }) => sides[0].includes(ayahOfKey(id.split('|')[0])));
+      // A pair goes with the part that shows both its ayat, else with the part holding its first.
+      const holds = (q: number, id: string) => id.split('|').every((key, s) => sideAyat[q][s].includes(ayahOfKey(key)));
+      const pairs = taken.filter(({ id }) => holds(p, id) || (!parts.some((_, q) => holds(q, id)) && sides[0].includes(ayahOfKey(id.split('|')[0]))));
       return {
         id: sides.map((numbers, s) => `${surahs[s]}:${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`).join('|'),
         // A part with no engine pair is judged under its first two ayat, so the owner can keep or drop it like any card.
         ...(groupOf(pairs) ? { group: groupOf(pairs) } : {}),
-        pairs: pairs.length ? pairs : [{ id: firstIds, ...(verdicts?.[firstIds] ? { verdict: verdicts[firstIds] } : {}) }],
+        pairs: (pairs.length ? pairs : [{ id: firstIds }]).map(({ id }) => ({ id, ...(verdicts?.[id] ? { verdict: verdicts[id] } : {}) })),
         sides: sides.map((numbers, s) => {
           return {
             surah: surahs[s],
@@ -224,9 +236,10 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
         }) as PairCard['sides'],
       };
     });
+    const shown = verdicts ? storyCards : storyCards.filter(card => card.pairs!.some(({ id }) => judged[id]?.keep !== false));
     const found = current.findIndex(inStory);
     const at = found >= 0 ? found : [...current, null].findIndex(card => !card || card.sides[0].ayah > storyCards[0].sides[0].ayah);
-    return [...current.slice(0, at).filter(card => !inStory(card)), ...storyCards, ...current.slice(at).filter(card => !inStory(card))];
+    return [...current.slice(0, at).filter(card => !inStory(card)), ...shown, ...current.slice(at).filter(card => !inStory(card))];
   }, cards);
 }
 
