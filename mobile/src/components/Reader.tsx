@@ -22,6 +22,7 @@ import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from
 import { pageModel, reciteView } from '@/lib/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
+import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette, type Palette } from '@/lib/theme';
 
@@ -30,6 +31,8 @@ const PLACE = 'reader-place';
 /** Where the last recitation (not a review) stopped, to continue it later. */
 const LAST_RECITE = 'reader-recite-last';
 type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean };
+/** How big the page is drawn, kept from one visit to the next. */
+const ZOOM = 'reader-zoom';
 
 /** How long (ms) a first tap waits for a second one, when a double tap does something. */
 const DOUBLE_TAP = 260;
@@ -69,6 +72,8 @@ export default function Reader() {
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
+  const zoomTo = useCallback((next: number) => { setZoom(next); writeJson(ZOOM, next); }, []);
   const forgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
@@ -201,10 +206,10 @@ export default function Reader() {
   // While reciting, the page sits right on top of the slim recite bar, so it loses only that bar's height.
   const pageInsets = { top: insets.top, bottom: insets.bottom + (reciting ? RECITE_BAR + 1 : 0) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
-  const render = (at: number) => {
+  const render = (at: number, width: number, pageHeight: number) => {
     const atModel = modelOf(at);
     return (
-      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size!.width} height={height}
+      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={pageHeight}
         top={surahBefore(at)} names={surahNames} mark={mark?.page === at ? mark.key : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch} />
     );
@@ -222,7 +227,7 @@ export default function Reader() {
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <View style={{ paddingTop: pageInsets.top, paddingBottom: pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} />
+          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} />
         )}
       </View>
       {tools && (
