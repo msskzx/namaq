@@ -68,13 +68,15 @@ describe('compare pair cards', () => {
       return Array.from({ length: to - from + 1 }, (_, k) => `${range.split(':')[0]}:${from + k}`);
     };
     const shown = new Map<string, string[]>();
-    const add = (pair: string, keys: string[]) => shown.set(pair, [...(shown.get(pair) ?? []), ...keys]);
+    // One card shows an ayah once even when two of its rows hold it, so each card counts its ayat once.
+    const add = (pair: string, keys: string[]) => shown.set(pair, [...(shown.get(pair) ?? []), ...new Set(keys)]);
     for (const { story, surahs: [x, y] } of timelineStories) for (const part of timelineParts(STORIES[story], [x, y])) {
-      add(`${x}:${y}`, part.rows.flatMap(([a, b]) => [...a.map(n => `${x}:${n}`), ...b.map(n => `${y}:${n}`)]));
+      add(`${x}:${y}`, part.rows.flatMap(([a, b]) => [...a.map(n => `a ${x}:${n}`), ...b.map(n => `b ${y}:${n}`)]));
     }
     for (const { parts } of storyParts) {
-      const ranges = parts.flat().flatMap(row => row.split('|')).filter(Boolean);
-      add(`${ranges[0].split(':')[0]}:${ranges.find(range => range.split(':')[0] !== ranges[0].split(':')[0])?.split(':')[0]}`, ranges.flatMap(numbers));
+      const sides = [0, 1].map(s => parts.flat().map(row => row.split('|')[s]).filter(Boolean));
+      const pair = sides.map(side => side[0].split(':')[0]).join(':');
+      for (const part of parts) add(pair, [part].flat().flatMap(row => row.split('|').flatMap((range, s) => (range ? numbers(range).map(key => `${'ab'[s]} ${key}`) : []))));
     }
     for (const [pair, keys] of shown) expect(keys.filter((key, i) => keys.indexOf(key) !== i), pair).toEqual([]);
   });
