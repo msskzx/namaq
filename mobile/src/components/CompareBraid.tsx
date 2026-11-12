@@ -8,6 +8,7 @@ import { endMark } from '@shared/quran/braid';
 import { normalizeWord } from '@shared/quran/normalize';
 import { braidOf, sideLabel, type Around, type AroundAyah, type BraidWord } from '@/lib/compare';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
+import { Silent } from './StoryParts';
 
 const LINK = 26;
 
@@ -25,6 +26,7 @@ function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: P
         return (
           <Text key={i}>
             {i > 0 ? ' ' : ''}
+            {word.skip ? <Text accessibilityLabel={`آيات محذوفة، ثم الآية ${num(word.skip)}`} style={{ color: palette.muted }}>⋯ </Text> : null}
             <Text style={color ? { color } : undefined}>{mushafText(word.text)}</Text>
             {ends(word, other?.[i]).length > 0 && <Text style={{ color: palette.accent }}> {endMark(ends(word, other?.[i]), true)}</Text>}
           </Text>
@@ -76,7 +78,7 @@ function Node({ children, palette, shared }: { children: React.ReactNode; palett
  * The tree of a compare card: a braid. Where the two sides say the same words they run as one node (green frame);
  * where they part, each side has its own node (the first side on the right), and they rejoin on the next common stretch.
  */
-export default function CompareBraid({ sides, palette, around, labels }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around; labels?: [string, string] }) {
+export default function CompareBraid({ sides, palette, around, labels, empty }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around; labels?: [string, string]; empty?: [string, string] }) {
   const rows: Row[] = [
     ...(around ? [{ kind: 'around' as const, a: [], b: [], near: around.before }] : []),
     ...braidOf(sides),
@@ -106,6 +108,7 @@ export default function CompareBraid({ sides, palette, around, labels }: { sides
                       {row.kind === 'around'
                         ? (near ? <Neighbour ayah={near} palette={palette} /> : <View style={{ flex: 1, minHeight: 16 }} />)
                         : words.length ? <Node palette={palette}><Words words={words} palette={palette} /></Node>
+                          : empty && !sides[i].ayat.length ? <Silent note={empty[i]} palette={palette} />
                           : <View accessibilityLabel="لا كلمات هنا" style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: palette.rule }} />}
                       {r < rows.length - 1 && (row.kind !== 'around' || near) && <View style={{ flex: 1, minHeight: words.length || near ? 8 : 16, width: 1.5, backgroundColor: palette.muted }} />}
                     </View>

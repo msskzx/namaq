@@ -8,7 +8,8 @@ import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
 import treeData from '@shared/data/quran/trees.json';
 import { normalizeWord } from '@shared/quran/normalize';
-import { compareLinkFor, compareLinksFor, engineCards, listedPairs, pairCards, reviewPairs, reviewStates, stepsBack, timelineParts } from './pairCards';
+import { compareLinkFor, compareLinksFor, engineCards, listedPairs, pairCards, reviewPairs, reviewStates, stepsBack, storyCards, timelineParts } from './pairCards';
+import { shownCards, type PairCard, type StoredCards } from '@shared/quran/compareCards';
 import { STORIES } from '@shared/quran/prophets/stories';
 
 describe('compare pair cards', () => {
@@ -182,7 +183,26 @@ describe('compare pair cards', () => {
   });
 
   it('is built from the current pairs and verdicts: run npm run quran:compare-cards after changing them', () => {
-    expect(generated).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
+    const { stories, ...cards } = generated as unknown as StoredCards;
+    expect(cards).toEqual(JSON.parse(JSON.stringify(buildCompareCards())));
+    expect(stories).toEqual(JSON.parse(JSON.stringify(storyCards())));
+  });
+
+  it('gives the phone app every story page as the website shows it', () => {
+    const stored = generated as unknown as StoredCards;
+    const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
+    const wordsOf = (key: string) => words.get(key);
+    expect(Object.keys(stored.stories ?? {}).length).toBeGreaterThan(0);
+    for (const key of Object.keys(stored.stories!)) {
+      const [a, b] = key.split(':').map(Number);
+      // Link names are numbered afresh in the file; only which words share one matters.
+      const plain = (cards: PairCard[]) => JSON.parse(JSON.stringify(cards, (key, value) => (key === 'link' ? undefined : value)));
+      const partners = (cards: PairCard[]) => cards.map(card => card.sides.flatMap(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link))))
+        .map(links => links.map(link => (link === undefined ? -1 : links.indexOf(link))));
+      const [shown, page] = [shownCards(stored, wordsOf, a, b), pairCards(a, b)];
+      expect(plain(shown)).toEqual(plain(page));
+      expect(partners(shown)).toEqual(partners(page));
+    }
   });
 
   it('joins a curated passage that runs in a different order into one card', () => {

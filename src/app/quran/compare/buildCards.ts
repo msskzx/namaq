@@ -4,7 +4,7 @@ import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahP
 import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { compareVerdicts, keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
-import { encodeMark, type CardSide, type MarkKind, type PairCard } from '@shared/quran/compareCards';
+import { encodeAyat, type CardSide, type PairCard } from '@shared/quran/compareCards';
 import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
@@ -175,16 +175,6 @@ function pairCards(x: number, y: number, review = false): PairCard[] {
     ...pairs.filter(pair => !keptPair(pair)).map(pair => ({ at: pair, build: () => card([pair], review) })),
     ...groups.map(group => ({ at: group.pairs[0], build: () => manyCard(group.pairs, group.shared, review) })),
   ].sort((p, q) => order(p.at)[0] - order(q.at)[0] || order(p.at)[1] - order(q.at)[1]).map(entry => entry.build());
-}
-
-type Marks = SpreadAyah['marks'];
-
-/** One mark as one number, so the file holds no text: which ayah of the card, which word, what kind, which link. */
-function encodeAyat(ayat: SpreadAyah[], links: Map<string, number>) {
-  return ayat.flatMap((ayah, offset) => Object.entries((ayah.marks ?? {}) as NonNullable<Marks>).map(([word, mark]) => {
-    if (!links.has(mark.link!)) links.set(mark.link!, links.size);
-    return encodeMark(offset, Number(word), mark.kind as MarkKind, links.get(mark.link!)!);
-  }));
 }
 
 function storedCard(card: PairCard) {

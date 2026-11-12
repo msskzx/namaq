@@ -7,7 +7,7 @@ import { compareAnchor } from '@shared/compareBookmarks';
 import { juzOf } from '@shared/quran/juz';
 import type { SurahSpans } from '@shared/quran/compareScope';
 import generated from '@shared/data/quran/compareCards';
-import { decodeCards, type CardMark, type PairCard, type StoredCards, type Verdict } from '@shared/quran/compareCards';
+import { decodeCards, encodeShownCard, type CardMark, type PairCard, type StoredCards, type Verdict } from '@shared/quran/compareCards';
 import type { BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
 import { STORIES } from '@shared/quran/prophets/stories';
@@ -253,6 +253,11 @@ function cardsOf(key: string, review: boolean) {
   return withStoryParts(engineCards(x, y, review), x, y, review ? withUnappliedReviews(compareVerdicts) : undefined);
 }
 
+/** Every listed page with a story, its cards as this page shows them off review, for the phone app (`stories` in the card file). */
+export function storyCards() {
+  return Object.fromEntries(listedPairs.filter(({ a, b }) => partsFor(a, b).length).map(({ a, b }) => [`${a}:${b}`, pairCards(a, b).map(encodeShownCard)]));
+}
+
 /** The cards of two surahs, lower surah first, in mushaf order. `review` also shows the pairs curation left out, each with its verdict. */
 export function pairCards(x: number, y: number, review = false): PairCard[] {
   return cardsOf(`${Math.min(x, y)}:${Math.max(x, y)}`, review);
@@ -263,7 +268,9 @@ const holders = new Map<string, string>();
 for (const { a, b } of listedPairs) {
   const engine = new Set(engineCards(a, b).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]));
   for (const card of cardsOf(`${a}:${b}`, false)) {
-    for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) if (engine.has(id) && compareVerdicts[id]?.keep !== false) holders.set(id, `/quran/compare?a=${a}&b=${b}#${compareAnchor(card.sides[0], card.sides[1])}`);
+    const shows = (key: string) => card.sides.some(side => side.ayat.some(ayah => `${side.surah}:${ayah.number}` === key)) || !!card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key);
+    // A story part can hold an engine pair whose ayah it leaves out; a link there would open a card without it.
+    for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) if (engine.has(id) && id.split('|').every(shows) && compareVerdicts[id]?.keep !== false) holders.set(id, `/quran/compare?a=${a}&b=${b}#${compareAnchor(card.sides[0], card.sides[1])}`);
   }
 }
 const pairsByAyah = new Map<string, string[]>();
