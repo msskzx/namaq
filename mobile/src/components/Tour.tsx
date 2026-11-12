@@ -5,7 +5,7 @@ import { Gesture, GestureDetector, GestureHandlerRootView, ScrollView } from 're
 import { scheduleOnRN } from 'react-native-worklets';
 import { ChevronsLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { GrowingLogo } from './Logo';
 import TreeCard from './TreeCard';
 import MatrixCard from './MatrixCard';
@@ -84,9 +84,10 @@ function Timeline({ palette, onPick }: { palette: Palette; onPick: () => void })
   );
 }
 
-/** A sideways swipe this far, or this fast, turns the step. */
-const SWIPE = 60;
+/** A flick this fast turns the step even when it moved less than a quarter of the width. */
 const FLICK = 500;
+/** The tree opens at reading size, scrolled to its right edge (the root); TreeCard keeps it inside the card. */
+const READING = { s: 1, x: -100000, y: 0 };
 
 /**
  * The first-launch tour: the opening, then the matrix of «إن المتقين في», the same ayat as a tree (tap a branch), the
@@ -109,62 +110,106 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
   const steps: TourStep[] = piece ? ['opening', ...TOUR_STEPS] : ['opening', 'recite'];
   const at = steps.indexOf(step);
   const last = at === steps.length - 1;
-  const next = () => (last ? onDone() : setStep(steps[at + 1]));
-  const back = () => { if (at > 1) setStep(steps[at - 1]); };
   const did = (which: TourStep) => setDone(current => (current[which] ? current : { ...current, [which]: true }));
   // The question opens with the matrix chosen, once per tour, so coming back to the step keeps what was tapped.
   const preselected = useRef(false);
   useEffect(() => { if (step === 'view' && !preselected.current) { preselected.current = true; setView('matrix'); } }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Off on the story map, whose own sideways scroll would fight it.
-  const swipe = Gesture.Pan().enabled(step !== 'timeline').activeOffsetX([-24, 24]).failOffsetY([-18, 18]).onEnd(event => {
-    const { translationX: x, velocityX: v } = event;
-    if (x > 0 && (x > SWIPE || v > FLICK)) scheduleOnRN(next);
-    else if (x < 0 && (x < -SWIPE || v < -FLICK)) scheduleOnRN(back);
-  });
+  // The steps sit side by side, each at its own place (step i at i widths to the left, as the next step comes from the
+  // left in Arabic), and the strip slides under the finger: dragging right pulls the next step in. Letting go past a
+  // quarter of the width (or with a flick) finishes the turn, else it springs back. Pages never move, so turning a step
+  // only moves the strip; nothing is reset and nothing jumps.
+  const [width, setWidth] = useState(0);
+  const offset = useSharedValue(0);
+  const start = useSharedValue(0);
+  const hasNext = at < steps.length - 1;
+  const hasBack = at > 1;
+  const rest = at * width;
+  useEffect(() => { offset.value = rest; }, [rest]); // eslint-disable-line react-hooks/exhaustive-deps
+  const turnTo = (index: number) => setStep(steps[index]);
+  const slide = (dir: 1 | -1) => {
+    const target = at + dir;
+    if (!width) return turnTo(target);
+    offset.value = withTiming(target * width, { duration: 260 }, finished => { if (finished) scheduleOnRN(turnTo, target); });
+  };
+  const next = () => (last ? onDone() : step === 'opening' ? setStep(steps[1]) : slide(1));
+  const swipe = Gesture.Pan().enabled(step !== 'timeline').activeOffsetX([-16, 16]).failOffsetY([-14, 14])
+    .onStart(() => { start.value = offset.value; })
+    .onUpdate(event => {
+      const x = event.translationX;
+      // Past the first or last step the page only gives a little.
+      offset.value = start.value + ((x > 0 && !hasNext) || (x < 0 && !hasBack) ? x / 4 : x);
+    })
+    .onEnd(event => {
+      const { translationX: x, velocityX: v } = event;
+      const target = hasNext && x > 0 && (x > width / 4 || v > FLICK) ? at + 1 : hasBack && x < 0 && (x < -width / 4 || v < -FLICK) ? at - 1 : at;
+      if (target === at) offset.value = withSpring(rest, { damping: 20, stiffness: 220 });
+      else offset.value = withTiming(target * width, { duration: 200 }, finished => { if (finished) scheduleOnRN(turnTo, target); });
+    });
+  const strip = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
 
   const title: Record<TourStep, string> = { opening: '', matrix: 'المصفوفة', tree: 'شجرة المتشابهات', view: 'أيهما تفضّل؟', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
-  const hint: Partial<Record<TourStep, string>> = { tree: 'اضغط غصنًا', timeline: 'اضغط نقطة لترى آياتها', recite: 'اضغط لتظهر الآية التالية' };
+  const hint: Partial<Record<TourStep, string>> = { tree: 'اسحب الشجرة واضغط غصنًا', timeline: 'اضغط نقطة لترى آياتها', recite: 'اضغط لتظهر الآية التالية' };
+
+  /** One step's page: its title and its card. Neighbours are drawn too, so they can peek in while dragging. */
+  const pageOf = (which: TourStep) => (
+    <View style={{ flex: 1 }}>
+      {/* No textAlign: in a right-to-left row the title starts on the right by itself. */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, minHeight: 44 }}>
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, fontWeight: '700' }}>{title[which]}</Text>
+      </View>
+      <View style={{ flex: 1, paddingHorizontal: which === 'tree' ? 0 : 12, paddingTop: 8 }}>
+        {which === 'matrix' && card && (
+          <Fit>{size => <MatrixCard presentation={card.presentation} palette={palette} view={size} around={false} onTap={noop} onMove={noop} alongside={swipe} />}</Fit>
+        )}
+        {/* The tree at reading size, dragged around inside its card, its root (right) in view first. Its own drag wins
+            here, so on this step a swipe on the title or the buttons' row turns the step. */}
+        {which === 'tree' && card && (
+          <View style={{ flex: 1, backgroundColor: palette.card, overflow: 'hidden' }}>
+            <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop}
+              initialCamera={READING} onTap={(keys, lightPath) => { if (!keys) return; lightPath?.(); did('tree'); }} />}</Fit>
+          </View>
+        )}
+        {which === 'view' && (
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ViewTiles palette={palette} big />
+            <Text style={{ marginTop: 14, color: palette.muted, fontSize: 13, textAlign: 'center' }}>تغيّره متى شئت من الإعدادات</Text>
+          </View>
+        )}
+        {which === 'timeline' && <Timeline palette={palette} onPick={() => did('timeline')} />}
+        {which === 'recite' && (
+          <Fit>{size => (
+            <MushafPageView page={page} data={pageData(page)} model={model} palette={palette} width={size.width} height={size.height}
+              top={surahBefore(page)} names={mushafNames} mark={null} recite={recite} forgot={{}} saved={new Set()}
+              onTouch={touch => {
+                if (touch !== 'tap') return;
+                const shown = recite.nextAyah();
+                if (shown) setPosition(shown);
+                did('recite');
+              }} />
+          )}</Fit>
+        )}
+      </View>
+    </View>
+  );
+  // The current page and its two neighbours are drawn; the rest wait until they are next to the current one.
+  const pages = [at - 1, at, at + 1].filter(index => index >= 1 && index < steps.length);
 
   return (
     <Modal visible animationType="none" onRequestClose={onDone} statusBarTranslucent>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={{ flex: 1, direction: 'rtl', backgroundColor: palette.paper, paddingTop: insets.top + 8, paddingBottom: insets.bottom + 12 }}>
           {step === 'opening' ? <Opening palette={palette} onStart={next} /> : <GestureDetector gesture={swipe}><View style={{ flex: 1 }}>
-            {/* No textAlign: in a right-to-left row the title starts on the right by itself. */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, minHeight: 44 }}>
-              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, fontWeight: '700' }}>{title[step]}</Text>
-            </View>
-            {/* The tree gets the whole width, so it is drawn as big as it can be while it still fits. */}
-            <View key={step} style={{ flex: 1, paddingHorizontal: step === 'tree' ? 0 : 12, paddingTop: 8 }}>
-              {step === 'matrix' && card && (
-                <Fit>{size => <MatrixCard presentation={card.presentation} palette={palette} view={size} around={false} onTap={noop} onMove={noop} alongside={swipe} />}</Fit>
-              )}
-              {step === 'tree' && card && (
-                <View style={{ flex: 1, backgroundColor: palette.card, overflow: 'hidden' }}>
-                  <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop} alongside={swipe}
-                    onTap={(keys, lightPath) => { if (!keys) return; lightPath?.(); did('tree'); }} />}</Fit>
-                </View>
-              )}
-              {step === 'view' && (
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                  <ViewTiles palette={palette} big />
-                  <Text style={{ marginTop: 14, color: palette.muted, fontSize: 13, textAlign: 'center' }}>تغيّره متى شئت من الإعدادات</Text>
-                </View>
-              )}
-              {step === 'timeline' && <Timeline palette={palette} onPick={() => did('timeline')} />}
-              {step === 'recite' && (
-                <Fit>{size => (
-                  <MushafPageView page={page} data={pageData(page)} model={model} palette={palette} width={size.width} height={size.height}
-                    top={surahBefore(page)} names={mushafNames} mark={null} recite={recite} forgot={{}} saved={new Set()}
-                    onTouch={touch => {
-                      if (touch !== 'tap') return;
-                      const shown = recite.nextAyah();
-                      if (shown) setPosition(shown);
-                      did('recite');
-                    }} />
-                )}</Fit>
-              )}
+            {/* The whole screen takes the swipe, the buttons' row too, so a step turns even where a card keeps its drags. */}
+            <View style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setWidth(Math.round(event.nativeEvent.layout.width))}>
+                {/* All three pages are keyed siblings, so a page that slides in stays mounted as it becomes the current one. */}
+                <Animated.View style={[{ flex: 1 }, strip]}>
+                  {width > 0 && pages.map(index => (
+                    <View key={steps[index]} pointerEvents={index === at ? 'auto' : 'none'} accessibilityElementsHidden={index !== at}
+                      importantForAccessibility={index === at ? 'auto' : 'no-hide-descendants'}
+                      style={{ position: 'absolute', top: 0, bottom: 0, width, left: -index * width }}>{pageOf(steps[index])}</View>
+                  ))}
+                </Animated.View>
             </View>
             <View style={{ alignItems: 'center', gap: 12, paddingTop: 12 }}>
               <View style={{ minHeight: 40, justifyContent: 'center' }}>
