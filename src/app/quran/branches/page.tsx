@@ -20,8 +20,9 @@ import type { Group } from '@shared/quran/mutashabih/types';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import { groups } from '@shared/quran/mutashabih/data';
 import { phraseTreeId, groupHasId } from '@shared/quran/mutashabih/identity';
+import Link from 'next/link';
 import { searchSharedPhrases } from '@shared/quran/branchSearch';
-import { branchInventory, distinctBranchPieces } from '@shared/quran/branchInventory';
+import { branchInventory, distinctBranchPieces, reviewFilters, reviewPool } from '@shared/quran/branchInventory';
 import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
@@ -87,18 +88,20 @@ function view(range: JuzRange | null) {
   return views.get(key)!;
 }
 
+const RELATED_MAX = 12;
 const first = (value: string | string[] | undefined) => typeof value === 'string' ? value : null;
 
 export default async function QuranBranchesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;
-  const filters = groupFilters(params);
+  // Review (?review=1) lists the whole pool the owner judges (reviewPool).
+  // On the owner's own machine it adds the keep / drop / discuss buttons.
+  const review = params.review === '1';
+  const asked = groupFilters(params);
+  const filters = review ? reviewFilters(asked) : asked;
   const range = parseJuzRange(first(params.juzFrom), first(params.juzTo));
   const juz = range ?? undefined;
   const requestedId = first(params.o) ?? '';
   const query = (first(params.q) ?? '').trim();
-  // Review (?review=1) also shows the cards the owner dropped; on the owner's own machine it adds the keep / drop / discuss buttons.
-  const review = params.review === '1';
-  const editable = review && process.env.NODE_ENV === 'development';
   const built = view(null);
   const requestedOccurrences = parseOccurrences(first(params.at));
   const subtree = built.subtrees?.byId.get(requestedId);
@@ -122,7 +125,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const explicitMode = parseBranchView(first(params.m));
   const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
   const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
-  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, ayah, mode, filters, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, ayah, mode, filters: asked, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
   if (resolved?.family && query && !textIs(resolved.text, query)) redirect(branchesHref(id, juz, { ...state, query: resolved.text }));
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId && !(requestedGroup && groupHasId(requestedGroup, requestedId)) && resolved?.id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
@@ -132,7 +135,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     return keys.length < 2 ? [] : [{ ...piece, keys, count: keys.length, opening: { ...piece.opening, count: keys.length }, phrase: { ...piece.phrase, occurrences } }];
   });
   const distinct = distinctBranchPieces;
-  const inventory = branchInventory(filters, range, review);
+  const inventory = review ? reviewPool(asked, range) : branchInventory(filters, range);
   const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? scopePieces(piecesFor(built)).filter(piece => review || !droppedBranch(piece)) : inventory;
   const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), effectiveFilters, range, review]) : '';
   if (needle && !built.searches.has(needle)) {
@@ -149,7 +152,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const cut = ayah ? bySurah.filter(piece => piece.keys.includes(ayah)) : bySurah;
   const opening = query ? cut.find(piece => textIs(piece.text, query)) ?? cut[0] : cut[0];
   const constrained = hasGroupFilters(filters) || !!requestedGroup && !!range;
-  const focusedRequest = !!resolved && !requestedGroup && filters.categories !== 'none' && filters.cited !== '1' && !filters.differences && new Set(resolved.occurrences.filter(occurrence => withinScope(occurrence.key)).map(occurrence => occurrence.key)).size >= 2;
+  const focusedRequest = !review && !!resolved && !requestedGroup && filters.categories !== 'none' && filters.cited !== '1' && !filters.differences && new Set(resolved.occurrences.filter(occurrence => withinScope(occurrence.key)).map(occurrence => occurrence.key)).size >= 2;
   if ((!id || constrained && !cut.some(piece => piece.id === id) && !focusedRequest) && opening) {
     redirect(branchesHref(opening.id, juz, { ...state, occurrences: undefined }));
   }
@@ -206,6 +209,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
   const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree ayat={neighbour.ayat} tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" zoomInRail="preview" surround={{ on: false, sync: true }} />;
 
+  const shownKeys = new Set(treeGroup?.occurrences.map(occurrence => occurrence.key));
+  const related = review && shownKeys.size ? inventory.flatMap(piece => {
+    if (piece.id === id || piece.keys.length === shownKeys.size) return [];
+    const shared = piece.keys.filter(key => shownKeys.has(key)).length;
+    return shared === shownKeys.size ? [{ piece, inside: true }] : shared === piece.keys.length ? [{ piece, inside: false }] : [];
+  }).sort((a, b) => a.piece.keys.length - b.piece.keys.length).slice(0, RELATED_MAX) : [];
   const verdict = id ? branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }) : undefined;
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
@@ -241,8 +250,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </DoubleTapSave>
-      {editable && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
+      {review && process.env.NODE_ENV === 'development' && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
       {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
+      {review && related.length > 0 && <ul data-related dir="ltr" className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
+        {related.map(({ piece, inside }) => <li key={piece.id}>{inside ? 'Inside' : 'Holds'} <Link href={branchesHref(piece.id, juz, { review: true, mode: state.mode, filters: asked })} className="underline" dir="rtl">{piece.text}</Link> ({piece.keys.length})</li>)}
+      </ul>}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       {treeGroup && presentation && <SurahChips ayahKeys={presentation.ayat.map(ayah => ayah.key)} names={names} interactive={!cards} />}
       {!cards && tree && presentation && <PathAyat ayat={presentation.ayat.map(ayah => ({ key: ayah.key, words: ayah.words }))} names={names} />}

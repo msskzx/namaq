@@ -510,4 +510,19 @@ describe('branches review', () => {
     expect(screen.queryByRole('button', { name: 'حذف البطاقة' })).toBeNull();
     expect(document.querySelector('[data-draft]')).toBeNull();
   }, 30000);
+
+  it('reviews every kind of tree up to 35 ayat and names the trees a tree sits inside', async () => {
+    const pool = branchInventory({ categories: ALL_KINDS }, null, true);
+    const big = pool.find(piece => piece.keys.length > 35)!;
+    const landing = await target({ o: big.id, review: '1' });
+    expect(landing).not.toBe('');
+    expect(paramsOf(landing).o).not.toBe(big.id);
+    render(await open({ o: 'cmp:0ilg4fd106qkbh', review: '1' }));
+    const related = () => [...document.querySelectorAll('[data-related] li')].map(item => item.textContent!.replace(/ .* /, ' '));
+    expect(related()).toEqual(['Inside (3)', 'Inside (31)']);
+    expect(document.querySelector('[data-related] a')!.getAttribute('href')).toBe(branchesHref('cmp:039jbxl1kswrcn', undefined, { review: true }));
+    cleanup();
+    render(await open({ o: 'cmp:039jbxl1kswrcn', review: '1' }));
+    expect(related()).toEqual(['Holds (2)', 'Inside (31)']);
+  }, 30000);
 });
