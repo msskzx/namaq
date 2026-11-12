@@ -24,7 +24,7 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
   map: StoryMapData;
   events: EventView[];
   phases: readonly string[];
-  picked?: { event: number; surah: number };
+  picked?: { event: number; surah?: number };
   onPick: (event: number, surah: number) => void;
   onTitle: (event: number) => void;
   palette: Palette;
@@ -77,7 +77,7 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
                     return (
                       <Fragment key={e.n}>
                         {here ? (
-                          <Pressable onPress={() => onPick(i, surah)} accessibilityRole="button" accessibilityState={{ expanded: on }} accessibilityLabel={`${e.title}، ${name}، ${counted(here.count, ['آية', 'آيتان', 'آيات'])}`}
+                          <Pressable onPress={() => onPick(i, surah)} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`${e.title}، ${name}، ${counted(here.count, ['آية', 'آيتان', 'آيات'])}`}
                             style={{ width: g.cell, alignItems: 'center', justifyContent: 'center' }}>
                             <View style={{ width: size + (on ? 8 : 0), height: size + (on ? 8 : 0), borderRadius: 99, borderWidth: on ? 2.5 : 0, borderColor: palette.ink, alignItems: 'center', justifyContent: 'center' }}>
                               <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: groupColor(palette, g.phase) }} />

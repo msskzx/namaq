@@ -6,13 +6,14 @@ import { ChevronDown, CircleHelp } from 'lucide-react';
 import { PROPHETS } from '@shared/quran/prophets';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
+import type { CompareLink } from '../../compare/pairCards';
 import EventPlaces from './EventPlaces';
 import { useReviewMode } from './PlaceReview';
 import StoryMap from './StoryMap';
 
 // docs/plans/quran-prophet-timelines.md
 /** `verdicts` comes only on the owner's machine, with every dot in `events`; readers get the story already cut. */
-export default function ProphetView({ slug, title, intro, phases, events: all, verdicts }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[]; verdicts?: PlaceVerdicts }) {
+export default function ProphetView({ slug, title, intro, phases, events: all, verdicts, compare }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[]; verdicts?: PlaceVerdicts; compare: Record<string, CompareLink[]> }) {
   const [help, setHelp] = useState(false);
   const router = useRouter();
   const review = useReviewMode() && verdicts !== undefined;
@@ -45,15 +46,17 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
         {help && (
           <div id="story-help" className="flex max-w-3xl flex-col gap-2 rounded-xl border border-[var(--home-rule)] bg-[var(--home-card)] p-4 text-sm leading-7">
             <p>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</p>
-            <p>اضغط دائرة لتقرأ مواضع الحدث سورةً تحت سورة، أو تفتح الآيات في المصحف، أو تقارن السورتين. وفي المواضع تُلوَّن الكلمة إذا جاءت في سورة أخرى من مواضع الحدث نفسه.</p>
+            <p>اضغط دائرة لتقرأ آياتها مع مواضع الحدث في السور الأخرى، ومن كل موضع تفتحه في المصحف أو تقارنه بسورة أخرى. وفي المواضع تُلوَّن الكلمة إذا جاءت في سورة أخرى من مواضع الحدث نفسه.</p>
             <p className="text-[var(--home-muted)]">{intro}</p>
           </div>
         )}
       </header>
-      <StoryMap map={map} events={events} phases={phases} onRead={read} review={reviewing} />
-      <div ref={detail} className="scroll-mt-6">
+      <StoryMap map={map} events={events} phases={phases} onRead={read} current={open} review={reviewing} />
+      <div ref={detail} className="scroll-mt-6 overflow-x-clip">
         {open && events[open.event] && (
           <EventPlaces
+            slug={slug}
+            compare={compare}
             event={events[open.event]}
             places={map.places[open.event]}
             phase={phases[events[open.event].phase]}
@@ -61,7 +64,7 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
             review={reviewing}
             hasPrev={open.event > 0}
             hasNext={open.event < events.length - 1}
-            onStep={dir => setOpen({ event: open.event + dir })}
+            onStep={dir => read(open.event + dir)}
           />
         )}
       </div>
