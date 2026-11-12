@@ -279,7 +279,7 @@ describe('compare pair cards', () => {
   it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
     expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
     // A tree across two surahs has one link; one across more lists every listed pair holding a kept card of two of its ayat.
-    expect(compareLinksFor(['2:35', '7:19'])).toEqual([{ href: '/quran/compare?a=2&b=7#c-2-35-7-19', label: 'البقرة مع الأعراف · ٣٥ · ١٩', labelEn: "Al-Baqara with Al-A'raaf · 35 · 19" }]);
+    expect(compareLinksFor(['2:35', '7:19'])).toEqual([{ href: '/quran/compare?a=2&b=7#c-2-35-7-19', label: 'البقرة مع الأعراف · ٣٥ · ١٩', labelEn: "Al-Baqara with Al-A'raaf · 35 · 19", surahs: [2, 7] }]);
     const many = compareLinksFor(['2:35', '7:19', '20:117']);
     expect(many.map(link => link.href.split('#')[0])).toEqual([...new Set(many.map(link => link.href.split('#')[0]))]);
     expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();
