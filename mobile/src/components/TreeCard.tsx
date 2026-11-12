@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, type LayoutChangeEvent } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -10,7 +10,7 @@ import type { TreeScene } from '@/lib/scene';
 import { aroundOf, cardOf, searchLit, surahNames } from '@/lib/branches';
 import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
 import type { ListState } from '@/lib/branchList';
-import { clampCamera, fillCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
+import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
 import type { Palette } from '@/lib/theme';
 import PathAyat from './PathAyat';
 import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
@@ -50,11 +50,8 @@ type Props = {
   footHeight?: number;
   /** The tree's surahs as chips under the bookmark row. */
   chips?: boolean;
-  /**
-   * Opens the tree filling the card's height, its root (right side) in view, instead of shrunk to show it whole (the tour).
-   * The tapped path's ayah strip is left out: the card keeps its height, and the tour shows the ayah under the card itself.
-   */
-  fillHeight?: boolean;
+  /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
+  alongside?: GestureType;
 };
 
 const BIG = 20000;
@@ -63,7 +60,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, fillHeight = false }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -81,7 +78,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const showChips = chips && !growth;
   const footHeight = rowHeight + (showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
-  const strip = tappedKeys.length && !growth && !fillHeight ? stripHeight : 0;
+  const strip = tappedKeys.length && !growth ? stripHeight : 0;
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -127,9 +124,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     contentSize.value = size;
     const saved = restored.current;
     restored.current = undefined;
-    camera.value = saved ? settleCamera(saved, size, view) : fillHeight ? fillCamera(size, view) : fitCamera(size, view);
+    camera.value = saved ? settleCamera(saved, size, view) : fitCamera(size, view);
     setContent(size);
-  }, [camera, contentSize, view, fillHeight]);
+  }, [camera, contentSize, view]);
 
   const report = onCamera;
   const pinch = Gesture.Pinch()
@@ -190,6 +187,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       mode.value = 'idle';
     });
 
+  if (alongside) pan.simultaneousWithExternalGesture(alongside);
   const gesture = Gesture.Simultaneous(pinch, pan);
   // Under the tree's last row: it moves with the tree when it is zoomed or moved.
   const foot = useAnimatedStyle(() => ({ transform: [{ translateY: camera.value.y + contentSize.value.height * camera.value.s }] }));
@@ -207,7 +205,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
         {(footer || showChips || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
           {footer && <View style={{ height: rowHeight }}>{footer}</View>}
           {showChips && <SurahChips tuck ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />}
-          {!growth && !fillHeight && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
+          {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>

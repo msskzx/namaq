@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
-import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, ScrollView, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { num } from '@shared/quran/arabicNumber';
@@ -25,7 +25,9 @@ type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: 
   /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. */
   growth?: { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number } };
   /** Told when a swipe moved off the ayah column to the ayah before or after. */
-  onColumn?: () => void };
+  onColumn?: () => void;
+  /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
+  alongside?: GestureType };
 
 type Host = ComponentRef<typeof View>;
 /** Where each word of the middle column registers itself, keyed `ayah:index` as the group's positions are. */
@@ -113,7 +115,7 @@ function Cell({ cell, at, palette, width, current, onPress, light }: { cell: Mat
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn, alongside }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -192,6 +194,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   useEffect(() => setLit(null), [presentation]);
   const light: Light = { lit, onWord: link => setLit(current => (current === link ? null : link)) };
 
+  if (alongside) pan.simultaneousWithExternalGesture(alongside);
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
