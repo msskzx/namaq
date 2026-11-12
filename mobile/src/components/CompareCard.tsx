@@ -9,9 +9,10 @@ import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { aroundOf, savedIdsOf, shownAyat, sideKeys, sideLabel, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
+import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
 import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
 import CompareBraid from './CompareBraid';
+import { Gap, PartRule, Silent } from './StoryParts';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
@@ -70,6 +71,23 @@ function RunningAyat({ ayat, before, after, palette, light }: { ayat: CardAyah[]
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
     </Text>
   );
+}
+
+/** Ayat in unbroken stretches: where a story part skips ayat, each further stretch opens on a dotted rule naming its ayat. */
+function Stretches({ ayat, named, before, after, palette, light }: { ayat: CardAyah[]; named?: boolean; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light }) {
+  const runs = ayat.reduce<CardAyah[][]>((list, ayah, i) => {
+    if (i > 0 && ayah.number === ayat[i - 1].number + 1) list[list.length - 1].push(ayah);
+    else list.push([ayah]);
+    return list;
+  }, []);
+  if (runs.length < 2) return <RunningAyat ayat={ayat} before={before} after={after} palette={palette} light={light} />;
+  const range = (run: CardAyah[]) => runsLabel(run.map(ayah => ayah.number));
+  return runs.map((run, k) => (
+    <Fragment key={run[0].number}>
+      {k > 0 ? <Gap label={range(run)} palette={palette} /> : !named && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'center' }}>{range(run)}</Text>}
+      <RunningAyat ayat={run} before={k === 0 ? before : undefined} after={k === runs.length - 1 ? after : undefined} palette={palette} light={light} />
+    </Fragment>
+  ));
 }
 
 function SideHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
@@ -144,6 +162,13 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   // The surrounding-ayat switch is the branches tab's: one setting for every tree and matrix.
   const [aroundOn, setAround] = aroundSetting.use();
   const around = aroundOn ? aroundOf(sides) : undefined;
+  // A story card lines its parts up in rows; any part folds to its ayah range, both sides at once.
+  const parts = card.many ? undefined : card.sides[0].rows;
+  const [closed, setFolded] = useState<number[]>([]);
+  // The studio reads every part, so it opens them all while it runs.
+  const folded = read.studio ? [] : closed;
+  const toggle = (row: number) => setFolded(current => (current.includes(row) ? current.filter(other => other !== row) : [...current, row]));
+  const partName = (cardSide: CardSide, row: number) => `${surahName(cardSide.surah)} ${runsLabel(cardSide.rows![row])}`.trim();
 
   const scale = useSharedValue(1);
   const [pop, setPop] = useState(0);
@@ -185,10 +210,24 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
       );
     }
     const ayat = option && card.many ? [option.shared] : cardSide.ayat;
+    const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord);
     return (
       <View key={i} style={{ gap: 2 }}>
         <SideHead label={sideLabel(cardSide)} keys={sideKeys(cardSide)} palette={palette} group={i === 0 ? card.group : undefined} />
-        <RunningAyat ayat={ayat} before={around?.before[i]} after={around?.after[i]} palette={palette} light={ayah => lightFor(lit, step, i, ayah.number, onWord)} />
+        {/* Story cards run in the first surah's order, so this surah tells this part before the last card's. */}
+        {cardSide.back && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>قبلُ في السورة</Text>}
+        {parts ? cardSide.rows!.map((numbers, row) => {
+          const closed = folded.includes(row);
+          const shown = ayat.filter(ayah => numbers.includes(ayah.number));
+          const broken = shown.findIndex((ayah, k) => k > 0 && ayah.number !== shown[k - 1].number + 1);
+          const first = broken < 0 ? shown : shown.slice(0, broken);
+          return (
+            <View key={row}>
+              <PartRule label={numbers.length ? runsLabel((closed ? shown : first).map(ayah => ayah.number)) : undefined} folded={closed} onToggle={() => toggle(row)} name={partName(cardSide, row)} palette={palette} />
+              {!closed && (shown.length ? <Stretches ayat={shown} named palette={palette} light={light} /> : <Silent note={silentNote(cardSide.surah)} palette={palette} />)}
+            </View>
+          );
+        }) : <Stretches ayat={ayat} before={around?.before[i]} after={around?.after[i]} palette={palette} light={light} />}
       </View>
     );
   };
@@ -216,7 +255,18 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
         style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, gap: 10 }}>
         {tree ? <>
           {pickers}
-          <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />
+          {parts ? rowSides(sides).map((row, r) => (
+            <View key={r} style={{ gap: 4 }}>
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                {sides.map((cardSide, i) => (
+                  <View key={i} style={{ flex: 1 }}>
+                    <PartRule label={folded.includes(r) && row[i].ayat.length ? runsLabel(cardSide.rows![r]) : undefined} folded={folded.includes(r)} onToggle={() => toggle(r)} name={partName(cardSide, r)} palette={palette} />
+                  </View>
+                ))}
+              </View>
+              {!folded.includes(r) && <CompareBraid sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
+            </View>
+          )) : <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />}
         </> : <>
           {side(card.sides[0], 0)}
           <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
@@ -232,9 +282,10 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
           <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
           </Pressable>
-          <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
+          {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
+          {!parts && <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
             <UnfoldHorizontal size={22} color={aroundOn ? palette.accent : palette.muted} />
-          </Pressable>
+          </Pressable>}
           <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
             <Clapperboard size={22} color={palette.muted} />
           </Pressable>

@@ -1,7 +1,7 @@
 import generated from '@shared/data/quran/compareCards';
 import corpus from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
-import { decodeCards, surahOrder, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
+import { shownCards, surahOrder, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
 import { pageInScope, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';
 import { curatedComparisons } from '@shared/quran/curatedComparisons';
 import { compareBookmarkId, savedAs, savedSurahPairs } from '@shared/compareBookmarks';
@@ -27,7 +27,7 @@ export function cardsFor(a: number, b: number): PairCard[] {
   const key = `${Math.min(a, b)}:${Math.max(a, b)}`;
   let cards = cache.get(key);
   if (!cards) {
-    cards = decodeCards(stored, wordsOf, a, b);
+    cards = shownCards(stored, wordsOf, a, b);
     if (cache.size > 30) cache.delete(cache.keys().next().value!);
     cache.set(key, cards);
   }
@@ -39,10 +39,31 @@ export const surahName = (n: number) => surahRows.find(row => row.number === n)?
 export const pairTitle = (lead: number, other: number) => (lead === other ? `سورة ${surahName(lead)} مع نفسها` : `سورة ${surahName(lead)} وسورة ${surahName(other)}`);
 export const visitKey = (visit: Pick<Visit, 'lead' | 'other'>) => `${visit.lead}·${visit.other}`;
 
-/** "البقرة ٢٥٥–٢٦٠" for a card side. */
-export function sideLabel(side: CardSide) {
-  const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
-  return `${surahName(side.surah)} ${num(side.ayah)}${last > side.ayah ? `–${num(last)}` : ''}`;
+/** Ayah numbers in order as unbroken runs: «٣٠–٣٣ · ٣٥» for 30, 31, 32, 33, 35. */
+export function runsLabel(numbers: number[]) {
+  const runs = numbers.reduce<[number, number][]>((list, n) => {
+    const last = list[list.length - 1];
+    if (last && n === last[1] + 1) last[1] = n;
+    else list.push([n, n]);
+    return list;
+  }, []);
+  return runs.map(([from, to]) => `${num(from)}${to > from ? `–${num(to)}` : ''}`).join(' · ');
+}
+
+/** "البقرة ٢٥٥–٢٦٠" for a card side, each stretch named when a story part skips ayat; a side silent here is its surah alone. */
+export const sideLabel = (side: CardSide) => `${surahName(side.surah)} ${runsLabel(side.ayat.map(ayah => ayah.number))}`.trim();
+
+/** What a side says in a story part its surah does not tell. */
+export const silentNote = (surah: number) => `لا تذكر سورة ${surahName(surah)} هذا الجزء`;
+
+/** A story card as one pair of sides per row, each row lined up across the two surahs; any other card as itself. */
+export function rowSides(sides: [CardSide, CardSide]): [CardSide, CardSide][] {
+  const rows = sides[0].rows;
+  if (!rows) return [sides];
+  return rows.map((_, row) => sides.map(side => {
+    const ayat = side.ayat.filter(ayah => side.rows![row].includes(ayah.number));
+    return { surah: side.surah, ayah: ayat[0]?.number ?? side.ayah, ayat };
+  }) as [CardSide, CardSide]);
 }
 
 let spans: SurahSpans | undefined;
@@ -157,9 +178,13 @@ export type CompareTarget = { lead: number; other: number; ayat: [number, number
 function hitsOf(key: string) {
   if (!pairsByAyah) {
     pairsByAyah = new Map();
-    for (const { a, b } of listedPairs) for (const item of stored.cards[`${a}:${b}`] ?? []) {
-      if (item.x) continue;
-      for (const id of item.p) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), { id, a, b }]);
+    for (const { a, b } of listedPairs) {
+      const engine = (stored.cards[`${a}:${b}`] ?? []).filter(item => !item.x);
+      const story = stored.stories?.[`${a}:${b}`];
+      const ids = new Set(engine.flatMap(item => item.p));
+      // On a story page only the engine pairs whose two ayat a shown card holds link in, as on the website.
+      const shown = story?.flatMap(item => item.p.filter(id => ids.has(id) && (!item.a || id.split('|').every((key, s) => item.a![s].includes(Number(key.split(':')[1]))))));
+      for (const id of shown ?? engine.flatMap(item => item.p)) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), { id, a, b }]);
     }
   }
   return pairsByAyah.get(key) ?? [];

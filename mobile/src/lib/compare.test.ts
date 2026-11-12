@@ -26,8 +26,8 @@ describe('compare cards on the phone', () => {
     }
   });
 
-  it('merges the Moses and the magicians passage into one card, as on the website', () => {
-    expect(cardsFor(7, 26).map(card => card.id)).toContain('7:106-125|26:31-50');
+  it('tells the Moses and the magicians passage as one story part, as on the website', () => {
+    expect(cardsFor(7, 26).map(card => card.id)).toContain('7:109-126|26:34-51');
   });
 });
 
@@ -66,7 +66,7 @@ describe('saved cards', () => {
   });
 
   it('reads a pair saved on the website as saving the range card that now holds it', () => {
-    const moses = cardsFor(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
+    const moses = cardsFor(7, 26).find(card => card.id === '7:109-126|26:34-51')!;
     memory.set('bookmarks', JSON.stringify([{ id: 'compare:7:110|26:35', text: '', href: '/quran/compare?a=7&b=26', savedAt: 1 }]));
     expect(savedIdsOf(moses)).toEqual(['compare:7:110|26:35']);
     toggleCardSaved(moses);
