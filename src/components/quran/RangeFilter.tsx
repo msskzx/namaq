@@ -26,7 +26,7 @@ export function RangeFields({ range, max, names, labels, iconOnly = false, arabi
   return <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-sm">
     {[0, 1].map(index => <span key={index} className="flex items-center gap-2">
       {index === 1 ? labels.toText ?? labels.to : !hideFromLabel && labels.from}
-      <NumberInput className="[&_input]:h-10" name={names[index]} label={index === 0 ? labels.from : labels.to} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => onChange(index === 0 ? [value, draft[1]] : [draft[0], value])} min={1} max={max} steppers={false} arabicDigits={arabicDigits} />
+      <NumberInput className="[&_input]:h-9" name={names[index]} label={index === 0 ? labels.from : labels.to} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => onChange(index === 0 ? [value, draft[1]] : [draft[0], value])} min={1} max={max} steppers={false} arabicDigits={arabicDigits} />
     </span>)}
     {!hideReset && (draft[0] !== '1' || draft[1] !== String(max)) && <Button variant="muted" size={iconOnly ? 'icon' : 'sm'} onClick={() => onChange(['1', String(max)])} aria-label={labels.all} title={labels.all}>
       <RotateCcw size={16} aria-hidden />{!iconOnly && labels.all}

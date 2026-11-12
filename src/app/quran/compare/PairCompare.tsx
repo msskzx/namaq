@@ -506,6 +506,11 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} />)}</ol>}
         </PairSwipe>
+        {/* At the end of the cards, step on without scrolling back up. */}
+        {(previousStep || nextStep) && <nav aria-label={ar ? 'السابق والتالي' : 'Previous and next pair'} className="flex items-center justify-between">
+          <StepLink step={previousStep} forward={false} ar={ar} />
+          <StepLink step={nextStep} forward ar={ar} />
+        </nav>}
         </div>
         <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
           <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />

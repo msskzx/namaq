@@ -46,10 +46,10 @@ export function ScopeFields({ draft, onChange, range, allSurahs }: { draft: Scop
       : null;
   return <div className="flex flex-wrap items-start gap-2">
     <select aria-label={ar ? 'التصفية حسب' : 'Filter by'} value={unit} onChange={event => { const next = event.target.value as FilterUnit; onChange({ ...draft, unit: next, values: ['1', String(scopeMax(next))] }); }}
-      className="h-10 max-w-[45%] shrink-0 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base">
+      className="h-9 max-w-[45%] shrink-0 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-0 text-base">
       {units.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
     </select>
-    {listed ? <div className="basis-full"><RangeSelects options={listed} draft={draft.values} onChange={values => onChange({ ...draft, values })} labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to' }} /></div>
+    {listed ? <div className="min-w-0 basis-full"><RangeSelects options={listed} draft={draft.values} onChange={values => onChange({ ...draft, values })} labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to' }} /></div>
       : isRangeUnit(unit) ? <RangeFields range={unit === 'juz' ? range : null} max={max} names={[`${unit}From`, `${unit}To`]} draft={draft.values} onChange={values => onChange({ ...draft, values })} iconOnly arabicDigits hideFromLabel hideReset
       labels={{ from: fromLabel, to: toLabel, toText: ar ? 'إلى' : 'to', form: label, all: ar ? 'الكل' : 'All', invalid: () => ar ? `أدخل رقمين من ١ إلى ${num(max)}، على أن تكون البداية قبل النهاية أو مساوية لها.` : `Enter whole numbers from 1 to ${max}, with From no greater than To.` }} />
       : <ScopePicker key={unit} name={unit === 'surahs' ? (ar ? 'ابحث عن سورة' : 'Find a chapter') : (ar ? 'ابحث عن جزء' : 'Find a juz')}
