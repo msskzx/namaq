@@ -97,9 +97,11 @@ function TourBody({ tour, names, onDone }: Props & { onDone: () => void }) {
       </div>
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-hidden px-4 pt-3">
         {step === 'tree' && <>
-          <div className="min-h-0 flex-1" dir="rtl">
+          {/* The tree card fills the room left between the title and the ayah, and its viewport takes what the card leaves,
+              so the tree fits the window rather than its usual fixed height (which ran under the ayah on short screens). */}
+          <div className="flex min-h-0 flex-1 flex-col [&>[data-tree]]:flex [&>[data-tree]]:min-h-0 [&>[data-tree]]:flex-1 [&>[data-tree]]:flex-col" dir="rtl">
             <PathProvider value={paths}>
-              <BranchTree tree={tour.tree} prefixes={tour.prefixes} offsets={tour.offsets} names={names} surround={{ on: false, sync: true }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared-phrase tree'} />
+              <BranchTree tree={tour.tree} prefixes={tour.prefixes} offsets={tour.offsets} names={names} viewportHeight="auto" surround={{ on: false, sync: true }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared-phrase tree'} />
             </PathProvider>
           </div>
           {/* Room kept for the ayah from the start, so the tree does not jump when it shows. */}
