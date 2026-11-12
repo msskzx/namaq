@@ -224,5 +224,5 @@
   .stage[data-gestures] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 }
 @media (max-width: 640px) {
-  .reciteBar { inset-inline: 0; bottom: 0; justify-content: space-evenly; gap: 0; }
+  .reciteBar { inset-inline: 0; bottom: 0; justify-content: space-evenly; gap: 0; padding-bottom: env(safe-area-inset-bottom); }
 }
