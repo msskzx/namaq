@@ -23,17 +23,17 @@ function Mini({ mode, card, small }: { mode: CardMode; card: string; small?: boo
 }
 
 /** One preview tile: a small picture with a check when chosen, and its name under it. */
-function Tile({ name, on, onPress, palette, children }: { name: string; on: boolean; onPress: () => void; palette: Palette; children: React.ReactNode }) {
+function Tile({ name, on, onPress, palette, children, big }: { name: string; on: boolean; onPress: () => void; palette: Palette; children: React.ReactNode; big?: boolean }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={name}
-      style={({ pressed }) => ({ width: '31%', gap: 5, alignItems: 'center', opacity: pressed ? 0.7 : 1 })}>
+      style={({ pressed }) => ({ width: big ? '100%' : '31%', gap: 5, alignItems: 'center', opacity: pressed ? 0.7 : 1 })}>
       <View style={{ width: '100%', aspectRatio: 3 / 2, borderRadius: 12, borderWidth: 2, borderColor: on ? palette.accent : 'transparent', padding: 2 }}>
         <View style={{ flex: 1, flexDirection: 'row', borderRadius: 9, borderWidth: 1, borderColor: palette.rule, overflow: 'hidden' }}>{children}</View>
-        {on && <View style={{ position: 'absolute', top: 6, right: 6, width: 16, height: 16, borderRadius: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
-          <Check size={10} strokeWidth={3} color={palette.onAccent} />
+        {on && <View style={{ position: 'absolute', top: 6, right: 6, width: big ? 24 : 16, height: big ? 24 : 16, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
+          <Check size={big ? 15 : 10} strokeWidth={3} color={palette.onAccent} />
         </View>}
       </View>
-      <Text style={{ color: on ? palette.ink : palette.muted, fontSize: 13, fontWeight: on ? '600' : '400' }}>{name}</Text>
+      <Text style={{ color: on ? palette.ink : palette.muted, fontSize: big ? 17 : 13, fontWeight: on ? '600' : '400' }}>{name}</Text>
     </Pressable>
   );
 }
@@ -67,18 +67,19 @@ export default function ThemeTiles({ palette }: { palette: Palette }) {
 }
 
 /** Tree or matrix as preview tiles, drawn in the current colours. */
-export function ViewTiles({ palette, onPick }: { palette: Palette; onPick?: () => void }) {
+/** `big`: the two tiles one above the other, full width with readable words (the first-launch tour). */
+export function ViewTiles({ palette, onPick, big }: { palette: Palette; onPick?: () => void; big?: boolean }) {
   const [view, setView] = branchView.use();
   const label = 'العرض الافتراضي للمتشابه';
   const options: { key: BranchView; name: string }[] = [{ key: 'tree', name: 'شجرة' }, { key: 'matrix', name: 'مصفوفة' }];
   return (
     <View style={{ gap: 8 }}>
-      <Text style={{ color: palette.muted, fontSize: 14 }}>{label}</Text>
-      <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-        {options.map(option => {
+      {!big && <Text style={{ color: palette.muted, fontSize: 14 }}>{label}</Text>}
+      <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: big ? 'column' : 'row', flexWrap: 'wrap', gap: big ? 18 : 10 }}>
+        {(big ? [...options].reverse() : options).map(option => {
           return (
-            <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); onPick?.(); }} palette={palette}>
-              <ViewPreview view={option.key} palette={palette} />
+            <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); onPick?.(); }} palette={palette} big={big}>
+              <ViewPreview view={option.key} palette={palette} big={big} />
             </Tile>
           );
         })}
@@ -88,11 +89,11 @@ export function ViewTiles({ palette, onPick }: { palette: Palette; onPick?: () =
 }
 
 /** The view drawn small in the current colours, with the إن المتقين في tree as its sample. */
-function ViewPreview({ view, palette }: { view: BranchView; palette: Palette }) {
-  const text = { color: palette.ink, fontFamily: QURAN_FONT, fontSize: 9, lineHeight: 13, textAlign: 'center' as const };
+function ViewPreview({ view, palette, big }: { view: BranchView; palette: Palette; big?: boolean }) {
+  const text = { color: palette.ink, fontFamily: QURAN_FONT, fontSize: big ? 19 : 9, lineHeight: big ? 28 : 13, textAlign: 'center' as const };
   const box = { position: 'absolute' as const, alignItems: 'center' as const, justifyContent: 'center' as const, borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, overflow: 'hidden' as const };
   if (view === 'matrix') return (
-    <View style={{ flex: 1, justifyContent: 'center', gap: 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
+    <View style={{ flex: 1, justifyContent: 'center', gap: big ? 8 : 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
       {SAMPLE_TREE.endings.map(ending => (
         <View key={ending.words} style={{ borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, paddingHorizontal: 3 }}>
           <Text numberOfLines={1} style={text}><Text style={{ color: palette.accent, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</Text>

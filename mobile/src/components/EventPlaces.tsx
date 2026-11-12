@@ -19,7 +19,7 @@ function Step({ dir, enabled, onPress, palette }: { dir: 1 | -1; enabled: boolea
 }
 
 /** The website's EventPlaces: one event, a card for each surah that tells it, one under another, shared runs of words in colour. */
-export default function EventPlaces({ event, places, phase, focus, onStep, hasPrev, hasNext, onLayoutPlace, palette }: {
+export default function EventPlaces({ event, places, phase, focus, onStep, hasPrev, hasNext, onLayoutPlace, palette, readable = true }: {
   event: EventView;
   places: Place[];
   phase: string;
@@ -28,6 +28,8 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
   hasPrev: boolean;
   hasNext: boolean;
   onLayoutPlace: (surah: number, y: number) => void;
+  /** Shows the open-in-mushaf button on each place (off in the first-launch tour, which can't leave its screen). */
+  readable?: boolean;
   palette: Palette;
 }) {
   const shared = sharedWords(places);
@@ -47,9 +49,9 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
             <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
-            <Pressable onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} accessibilityRole="button" accessibilityLabel={`افتح ${place.name} في المصحف`} hitSlop={8} style={{ padding: 4 }}>
+            {readable && <Pressable onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} accessibilityRole="button" accessibilityLabel={`افتح ${place.name} في المصحف`} hitSlop={8} style={{ padding: 4 }}>
               <BookOpen size={18} color={palette.muted} />
-            </Pressable>
+            </Pressable>}
           </View>
           {place.segments.map((g, gi) => (
             <Text key={g.range[0]} style={{ fontFamily: QURAN_FONT, fontSize: 23, lineHeight: 46, color: palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
