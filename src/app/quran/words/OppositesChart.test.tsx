@@ -51,7 +51,7 @@ describe('OppositesChart', () => {
     show();
     expect(within(section()).getByRole('status').textContent).toBe('');
     fireEvent.change(adder(), { target: { value: 'شمس' } });
-    fireEvent.click(within(section()).getByRole('button', { name: /شَمْس/ }));
+    fireEvent.click(within(section()).getByRole('button', { name: /شَمۡس/ }));
     expect(within(section()).getByRole('status').textContent).toMatch('الطرف الأول: شَمْس. اختر مقابله.');
     fireEvent.click(within(section()).getByRole('button', { name: /إلغاء/ }));
     expect(within(section()).queryByText(/الطرف الأول/)).toBeNull();

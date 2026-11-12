@@ -13,6 +13,12 @@ import { ALL_KINDS, searchSharedPhrases } from '@shared/quran/branchSearch';
 import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { matchesSurah } from '@shared/quran/surahSearch';
+import { mushafText } from '@shared/quran/mushafText';
+
+/** A phrase's words in the Quran font, or its English gloss when the page is in English. */
+function PhraseText({ text, en, className }: { text: string; en?: string; className: string }) {
+  return en ? <span className={className} dir="rtl">{en}</span> : <span className={`font-quran ${className}`} dir="rtl">{mushafText(text)}</span>;
+}
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 h-11 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
@@ -163,7 +169,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             const index = surahHits.length + i;
             return <li key={opening.id} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-                <span className="text-lg flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+                <PhraseText text={opening.text} en={ar ? undefined : opening.textEn} className="text-lg flex-1" />
                 <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
               </button>
             </li>;
@@ -173,7 +179,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
             const index = surahHits.length + suggestions.length + i;
             return <li key={`o${opening.id}`} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => openOutside(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-                <span className="text-lg flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+                <PhraseText text={opening.text} en={ar ? undefined : opening.textEn} className="text-lg flex-1" />
                 <span>{ar ? num(opening.count) : opening.count}</span>
               </button>
             </li>;
@@ -185,7 +191,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
         <p className={NOTE}>{ar ? 'تطابق هذه العبارة مجموعات مختلفة. اختر العبارة المقصودة.' : 'This link matches different groups. Choose the intended phrase.'}</p>
         {alternatives.map(phrase => <Button key={phrase.partition} href={href(phrase)} onClick={() => { setQuery(''); setSelected(-1); }} className="self-start">
           <TreeIcon size={16} aria-hidden />
-          <span dir="rtl">{phrase.text}</span>
+          <span dir="rtl" className="font-quran">{mushafText(phrase.text)}</span>
           <span>{ar ? num(phrase.count) : phrase.count}</span>
         </Button>)}
       </div>}

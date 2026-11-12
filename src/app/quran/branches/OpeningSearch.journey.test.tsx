@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { branchesHref } from '@shared/quran/branches';
 import OpeningSearch from './OpeningSearch';
+import { mushafText } from '@shared/quran/mushafText';
 
 const navigation = vi.hoisted(() => ({
   search: '',
@@ -78,7 +79,7 @@ describe('opening search journey', () => {
 
     expect(navigation.push).not.toHaveBeenCalled();
     expect(navigation.replace).not.toHaveBeenCalled();
-    expect(suggestionOptions()[0].textContent).toContain('أَرَءَيْتُمْ');
+    expect(suggestionOptions()[0].textContent).toContain(mushafText('أَرَءَيْتُمْ'));
     fireEvent.click(suggestionOptions()[0]);
 
     expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', { from: 25, to: 30 }, { grouped: true, page: 4, query: 'أَرَءَيْتُمْ' }));

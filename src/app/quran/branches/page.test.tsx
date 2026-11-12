@@ -26,6 +26,7 @@ import { branchInventory } from '@shared/quran/branchInventory';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
+import { mushafText } from '@shared/quran/mushafText';
 
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
@@ -270,7 +271,7 @@ describe('Quran branch trees', () => {
     vi.unstubAllGlobals();
     expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases') && !url.includes('outside=1'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
     expect(options.filter(option => !option.className.includes('home-muted'))).toHaveLength(1);
-    expect(options[0].textContent).toContain('يَوْمَهُمُ ٱلَّذِى');
+    expect(options[0].textContent).toContain(mushafText('يَوْمَهُمُ ٱلَّذِى'));
   });
 
   it('lists trees the filters hide under their own label; picking one clears the filters', async () => {
@@ -279,7 +280,7 @@ describe('Quran branch trees', () => {
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'إن المجرمين في' } });
     expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية', {}, { timeout: 5000 })).toBeTruthy();
     vi.unstubAllGlobals();
-    const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes('ٱلْمُجْرِمِينَ'))!;
+    const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes(mushafText('ٱلْمُجْرِمِينَ')))!;
     fireEvent.click(hidden);
     const pushed = new URL(navigation.push.mock.calls.at(-1)![0], 'http://localhost');
     expect(pushed.searchParams.get('juzFrom')).toBeNull();

@@ -31,7 +31,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
   const choiceText = (value: string) => {
     const choice = question.choices.find(item => item.value === value);
     const detail = question.choiceDetails?.[value];
-    return detail ? <span>{detail.text}<span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span> : choice?.labelArabic;
+    return detail ? <span><span className="font-quran">{mushafText(detail.text)}</span><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span> : choice?.labelArabic;
   };
   const correct = result.earned === result.total;
   const Back = ar ? ArrowRight : ArrowLeft;

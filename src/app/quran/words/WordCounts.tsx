@@ -11,6 +11,7 @@ import type { LemmaCounts } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@shared/quran/normalize';
 import { NOTE, PANEL } from '../panel';
 import WordPlaces from './WordPlaces';
+import { mushafText } from '@shared/quran/mushafText';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
@@ -61,7 +62,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (
             <li key={r.rank}>
               <button type="button" onClick={() => add(r.rank)} className="w-full flex items-baseline gap-2 px-2 py-1 text-start hover:bg-amber-100 dark:hover:bg-white/10">
-                <span className="text-lg">{r.word}</span>
+                <span className="font-quran text-lg">{mushafText(r.word)}</span>
                 <span className={`${NOTE} flex-1`}>{r.root}</span>
                 <span className="text-amber-700 dark:text-amber-300">{num(r.count)}</span>
               </button>
@@ -74,7 +75,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
           {bars.map(b => (
             <li key={b.rank} className="grid grid-cols-[6rem_1fr_3.5rem_auto] sm:grid-cols-[8rem_1fr_4rem_auto] items-center gap-2" title={`${b.word}: ${num(b.count)}`}>
               <button type="button" aria-pressed={open === b.rank} aria-label={`مواضع «${b.word}»`} onClick={() => setOpen(open === b.rank ? null : b.rank)}
-                className={`text-lg truncate text-start underline-offset-4 hover:underline ${open === b.rank ? 'text-[var(--home-accent)] underline' : ''}`}>{b.word}</button>
+                className={`font-quran text-lg truncate text-start underline-offset-4 hover:underline ${open === b.rank ? 'text-[var(--home-accent)] underline' : ''}`}>{mushafText(b.word)}</button>
               <span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} />
               <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
               <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => choose(chosen.filter(rank => rank !== b.rank))}>

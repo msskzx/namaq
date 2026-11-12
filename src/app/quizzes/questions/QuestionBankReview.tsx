@@ -15,6 +15,7 @@ import type { QuizReference } from '@/lib/quiz/quizReference';
 import { fetcher } from '@/lib/swr';
 import { useState } from 'react';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { mushafText } from '@shared/quran/mushafText';
 
 interface ReviewQuestion {
   key: string;
@@ -61,7 +62,7 @@ export default function QuestionBankReview() {
   const choiceContent = (question: ReviewQuestion, choice: QuestionChoice) => {
     const detail = question.choiceDetails?.[choice.value];
     if (!detail) return choice.labelArabic;
-    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+    return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
   };
 
   return (
@@ -97,7 +98,7 @@ export default function QuestionBankReview() {
                   <p className="mb-3 font-semibold" dir="rtl">{prompt}</p>
                   {question.ayah ? (
                     <blockquote className="mb-3 border-s-2 border-[var(--home-accent)] ps-3" dir="rtl">
-                      <p className="leading-relaxed">{question.ayah.text}</p>
+                      <p className="font-quran leading-relaxed">{mushafText(question.ayah.text)}</p>
                       <p className="text-xs text-[var(--home-muted)]">{question.ayah.reference}</p>
                     </blockquote>
                   ) : null}

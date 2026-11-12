@@ -200,7 +200,7 @@ export default function QuizzesPage() {
     if (!choice) return null;
     const detail = question.choiceDetails?.[choice.value];
     if (!detail) return choice.labelArabic;
-    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+    return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
   };
 
   if (!searchParams.get("topic") && !searchParams.get("solo")) return <QuizModes ar={ar} />;

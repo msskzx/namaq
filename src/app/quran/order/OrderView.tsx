@@ -120,7 +120,7 @@ function Link({ item: { hop, tail, head, words, common } }: { item: HopView }) {
         )}
         <h3 className={`${NOTE} mb-1`}>آخر السورة وأول التالية</h3>
         <p className="mb-3">{hop.note}</p>
-        {words.length > 0 && <p className={`${NOTE} mb-3`}>{`كلمات مشتركة: ${words.join('، ')}`}</p>}
+        {words.length > 0 && <p className={`${NOTE} mb-3`}>{'كلمات مشتركة: '}<span className="font-quran text-base">{mushafText(words.join('، '))}</span></p>}
         <div className="grid md:grid-cols-2 gap-x-4">
           <Side title="آخر السورة" lines={tail} />
           <Side title="أول التالية" lines={head} />

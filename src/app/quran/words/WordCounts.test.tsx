@@ -48,7 +48,7 @@ describe('WordCounts chart', () => {
     show();
     fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
     fireEvent.change(adder(), { target: { value: 'رحمه' } });
-    fireEvent.click(within(suggestions()!).getByRole('button', { name: /رَحْمَة/ }));
+    fireEvent.click(within(suggestions()!).getByRole('button', { name: /رَحۡمَة/ }));
     expect(bars()).toEqual(['رَحْمَة: ٣']);
     expect(suggestions()).toBeNull();
     fireEvent.change(adder(), { target: { value: 'اللَّه' } });
