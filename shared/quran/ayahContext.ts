@@ -32,16 +32,38 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: norm.map((_, i) => ayah.roots?.[i] ? `r:${ayah.roots[i]}` : ayah.lemmas?.[i] ? `p:${ayah.lemmas[i]!.replace(/\d+$/, '')}` : fallback[i]) };
 };
 
-/** Indices of `a` on a longest in-order run of words shared with `b` (LCS), so a repeated word is matched where it lines up. */
-function aligned(a: string[], b: string[]) {
+/** Index pairs `a`↔`b` on a longest in-order run of words the two share (LCS), so a repeated word is matched where it lines up. */
+function alignedPairs(a: string[], b: string[]) {
   const table = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
   for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--)
     table[i][j] = a[i] === b[j] ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
-  const on = new Set<number>();
+  const pairs = new Map<number, number>();
   for (let i = 0, j = 0; i < a.length && j < b.length;) {
-    if (a[i] === b[j]) { on.add(i); i++; j++; } else if (table[i + 1][j] >= table[i][j + 1]) i++; else j++;
+    if (a[i] === b[j]) { pairs.set(i, j); i++; j++; } else if (table[i + 1][j] >= table[i][j + 1]) i++; else j++;
   }
-  return on;
+  return pairs;
+}
+
+type Lined = { forms: string[]; lined: Map<number, number>[] };
+type Match = { indices: (number | undefined)[]; rows: number; exact: boolean };
+
+/** Matches for a word with no root: each occurrence in a pivot row, with the occurrences the LCS lines up with it in the other rows. */
+function particleMatches(lists: number[][], all: Lined[]): Match[] {
+  const used = lists.map(() => new Set<number>());
+  const matches: Match[] = [];
+  lists.forEach((list, pivot) => list.forEach(i => {
+    if (used[pivot].has(i)) return;
+    const indices = lists.map((other, m) => {
+      if (m === pivot) return i;
+      const j = all[pivot].lined[m].get(i);
+      return j !== undefined && other.includes(j) && !used[m].has(j) ? j : undefined;
+    });
+    const forms = indices.flatMap((at, n) => at === undefined ? [] : [all[n].forms[at]]);
+    if (forms.length < 2) return;
+    indices.forEach((at, n) => at !== undefined && used[n].add(at));
+    matches.push({ indices, rows: forms.length, exact: new Set(forms).size === 1 });
+  }));
+  return matches;
 }
 
 /** A word's partners in the other rows: words lined up together share a `link`; `rows` counts the rows that have it, `exact` says they are all spelled alike. */
@@ -68,9 +90,9 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     const byKey = new Map<string, number[]>();
     keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
     // Lined up with every other ayah: where a word repeats, these occurrences are the ones the ayat share.
-    const lined = tokenised.filter((_, m) => m !== n).map(other => aligned(keys, other));
-    const rank = (i: number) => -lined.filter(set => set.has(i)).length;
-    return { forms, byKey, rank };
+    const lined = tokenised.map((other, m) => m === n ? new Map<number, number>() : alignedPairs(keys, other));
+    const rank = (i: number) => -lined.filter(pairs => pairs.has(i)).length;
+    return { forms, byKey, rank, lined };
   });
   const shared = [...new Set(all.flatMap(ayah => [...ayah.byKey.keys()]))].flatMap(key => {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
@@ -80,6 +102,9 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
       const ranked = [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || x - y);
       return [...ranked.slice(0, count).sort((x, y) => x - y), ...ranked.slice(count)];
     });
+    // A word with a root («ألقوا», «ملقون») may sit anywhere in the other ayah; a particle with none («من», «لا»)
+    // is only paired where the ayat line up in order with one row's occurrence, so a stray «من» is not tied to a «ومنهم» far away.
+    if (!key.startsWith('r:')) return particleMatches(lists, all);
     return Array.from({ length: Math.max(...lists.map(list => list.length)) }, (_, at) => {
       const indices = ordered.map(list => list[at]);
       const forms = indices.flatMap((i, n) => i === undefined ? [] : [all[n].forms[i]]);
