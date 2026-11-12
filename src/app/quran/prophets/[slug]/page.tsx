@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { findProphet, PROPHETS, storyTitle } from '@shared/quran/prophets';
-import { buildStory } from '@shared/quran/prophets/story';
-import { QURAN_TEXT } from '@shared/quran/prophets/text';
+import { buildStory, storedText } from '@shared/quran/prophets/story';
 import { STORIES } from '@shared/quran/prophets/stories';
 import data from '@shared/quran/prophets/verdicts.json';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
+import { AYAT } from '../ayat';
 import ProphetView from './ProphetView';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -28,7 +28,7 @@ export default async function QuranProphetPage({ params }: Props) {
   const story = STORIES[prophet.slug];
   const all = withUnappliedStoryReviews(data.places as PlaceVerdicts);
   const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${prophet.slug}/`)));
-  const events = buildStory(story.events, QURAN_TEXT);
+  const events = buildStory(story.events, storedText(AYAT[prophet.slug]));
   // Readers get the story already cut; the dropped dots and the drafted reasons go only to the owner's own machine, where review can save.
   const owner = process.env.NODE_ENV === 'development';
   return (

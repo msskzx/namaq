@@ -1,0 +1,25 @@
+import type { StoryData } from '@shared/quran/prophets/story';
+import adam from './adam.json';
+import alyasa from './alyasa.json';
+import ayyub from './ayyub.json';
+import dawud from './dawud.json';
+import dhulKifl from './dhul-kifl.json';
+import harun from './harun.json';
+import hud from './hud.json';
+import idris from './idris.json';
+import ibrahim from './ibrahim.json';
+import ilyas from './ilyas.json';
+import isa from './isa.json';
+import lut from './lut.json';
+import musa from './musa.json';
+import nuh from './nuh.json';
+import salih from './salih.json';
+import shuayb from './shuayb.json';
+import sulayman from './sulayman.json';
+import yahya from './yahya.json';
+import yaqub from './yaqub.json';
+import yusuf from './yusuf.json';
+import zakariyya from './zakariyya.json';
+import yunus from './yunus.json';
+
+export const AYAT: Record<string, StoryData> = { hud, yaqub, yusuf, adam, idris, nuh, ibrahim, ayyub, salih, lut, shuayb, musa, harun, 'dhul-kifl': dhulKifl, dawud, sulayman, ilyas, alyasa, zakariyya, yahya, yunus, isa };

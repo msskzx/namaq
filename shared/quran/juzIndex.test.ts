@@ -1,11 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { MushafPage } from './readerPage';
+import type { ReaderPageData } from './readerPage';
 import { JUZ_INDEX, juzGroups, matchesSurah, parseReference, type IndexSurah } from './juzIndex';
 
-const pages: MushafPage[] = Array.from({ length: 604 }, (_, i) =>
-  JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${i + 1}.json`), 'utf8')),
+const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>
+  JSON.parse(readFileSync(join(__dirname, '../../src/app/quran/read/data', `${i + 1}.json`), 'utf8')),
 );
 
 const startPage = new Map<string, number>();
@@ -21,7 +21,6 @@ pages.forEach((data, at) => {
       open = true;
       continue;
     }
-    if (!('line' in item)) continue;
     for (const token of item.line) {
       if (typeof token === 'number') {
         ayah = token + 1;

@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { mushafPages, pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from '@shared/quran/readerPage';
 
-const load = async (page: number): Promise<MushafPage> =>
-  JSON.parse(readFileSync(join(__dirname, '../../../shared/data/quran/mushaf', `${page}.json`), 'utf8'));
+const load = async (page: number): Promise<ReaderPageData> =>
+  JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${page}.json`), 'utf8'));
 
 describe('pageOfAyah', () => {
   it('finds the page an ayah starts on, scanning from the surah page', async () => {
