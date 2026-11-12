@@ -73,9 +73,9 @@ describe('sharedByAll', () => {
     expect(link(naml, at(naml, 'ٱلدُّعَآءَ'))).toEqual(link(rum, at(rum, 'ٱلدُّعَآءَ')));
     expect(link(naml, at(naml, 'ٱلدُّعَآءَ')).rows).toBe(2);
     expect(Object.values(yunus.match!.links!).map(item => item.link)).not.toContain(link(naml, at(naml, 'ٱلدُّعَآءَ')).link);
-    // لَا: three rows, lined up wherever it sits.
-    expect(link(yunus, at(yunus, 'لَا'))).toEqual({ link: link(naml, 1).link, rows: 3, exact: true });
-    expect(link(rum, 1).link).toBe(link(naml, 1).link);
+    // لَا: «إنك لا تسمع» in النمل and الروم pair; يونس's «لا يعقلون» comes after «تسمع الصم», out of order, so it stays unpaired.
+    expect(link(rum, 1)).toEqual({ link: link(naml, 1).link, rows: 2, exact: true });
+    expect(link(yunus, at(yunus, 'لَا'))).toBeUndefined();
     // A word every row shares is still the only kind in exact and rooted.
     for (const context of [yunus, naml, rum, zukhruf]) {
       expect([...context.match!.exact, ...context.match!.rooted].sort((x, y) => x - y)).toEqual(Object.entries(context.match!.links!).flatMap(([i, item]) => item.rows === 4 ? [Number(i)] : []));
