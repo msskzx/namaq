@@ -10,7 +10,7 @@ const events: StoryEvent[] = [
   { phase: 1, title: 'إنا لنراك في سفاهة', segments: [seg(7, 66, 68)] },
   { phase: 1, title: 'ما جئتنا ببينة', segments: [seg(11, 53, 57)] },
   { phase: 1, title: 'سواء علينا أوعظت', segments: [seg(26, 136, 138)] },
-  { phase: 1, title: 'من أشد منا قوة', segments: [seg(41, 15)] },
+  { phase: 1, title: 'من أشد منا قوة', segments: [seg(41, 13, 15)] },
   { phase: 1, title: 'فأتنا بما تعدنا', segments: [seg(7, 70, 71), seg(46, 22, 23)] },
   { phase: 2, title: 'هذا عارض ممطرنا', segments: [seg(46, 24, 25)] },
   { phase: 2, title: 'الريح الصرصر', segments: [seg(69, 6, 8), seg(54, 18, 21), seg(41, 16), seg(51, 41, 42)] },
@@ -20,7 +20,7 @@ const events: StoryEvent[] = [
   {
     phase: 3,
     title: 'عاد بين الأمم المكذبة',
-    segments: [seg(9, 70), seg(11, 89), seg(14, 9), seg(22, 42), seg(25, 38), seg(29, 38), seg(38, 12), seg(40, 31), seg(41, 13, 14), seg(50, 13), seg(53, 50), seg(69, 4)],
+    segments: [seg(9, 70), seg(11, 89), seg(14, 9), seg(22, 42), seg(25, 38), seg(29, 38), seg(38, 12), seg(40, 31), seg(50, 13), seg(53, 50), seg(69, 4)],
   },
 ];
 
