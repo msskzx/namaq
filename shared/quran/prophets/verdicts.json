@@ -1314,11 +1314,7 @@
   },
   "musa/10:75": {
    "keep": true,
-   "why": "We sent Musa and Harun; they said it is magic."
-  },
-  "musa/10:79": {
-   "keep": true,
-   "why": "Bring every learned magician; what you brought is magic."
+   "why": "We sent Musa and Harun to Firawn with our signs (75)."
   },
   "musa/10:83": {
    "keep": true,
@@ -1458,7 +1454,7 @@
   },
   "musa/28:29": {
    "keep": true,
-   "why": "The fire at the side of the Mount; the call (29-35, 44-46)."
+   "why": "The fire at the side of the Mount; the call (29-35)."
   },
   "musa/28:36": {
    "keep": true,
@@ -1466,7 +1462,7 @@
   },
   "musa/28:43": {
    "keep": true,
-   "why": "We gave Musa the Book after destroying earlier generations (43, 48-49)."
+   "why": "We gave Musa the Book after destroying earlier generations; you were not on the western side when We decreed the command to Musa (43-46, 48-49)."
   },
   "musa/28:76": {
    "keep": true,
@@ -1578,15 +1574,11 @@
   },
   "musa/79:15": {
    "keep": true,
-   "why": "His Lord called him in the sacred valley of Tuwa."
-  },
-  "musa/79:17": {
-   "keep": true,
-   "why": "Go to Firawn, he has transgressed."
+   "why": "His Lord called him in the sacred valley of Tuwa; go to Firawn, he has transgressed (15-19)."
   },
   "musa/79:20": {
    "keep": true,
-   "why": "He showed him the great sign; Firawn: I am your highest lord."
+   "why": "He showed him the great sign; Firawn denied and said: I am your highest lord (20-24)."
   },
   "musa/85:17": {
    "keep": true,
@@ -2599,6 +2591,14 @@
   "salih/91:14": {
    "keep": true,
    "why": "They denied him and hamstrung her, and their Lord crushed them (14)."
+  },
+  "musa/79:25": {
+   "keep": true,
+   "why": "Allah seized him with the punishment of the hereafter and the first (25-26)."
+  },
+  "musa/10:76": {
+   "keep": true,
+   "why": "They called the truth magic; bring every learned magician; what you brought is magic (76-82)."
   }
  }
 }
