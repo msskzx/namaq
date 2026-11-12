@@ -216,7 +216,7 @@ function ChoiceText({ question, value }: { question: Question; value: string }) 
   const detail = question.choiceDetails?.[value];
   if (!choice) return null;
   if (!detail) return <>{choice.labelArabic}</>;
-  return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+  return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 }
 
 function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: ReturnType<typeof usePartySocket>["send"]; offset: number; ar: boolean }) {

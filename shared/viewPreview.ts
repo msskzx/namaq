@@ -1,12 +1,13 @@
 // The sample on the settings sheet's preview tiles (website and phone app): the إن المتقين في tree
 // (shared/data/quiz/example.json), with «ونعيم» (52:17) as the ayah the tiles light up.
+// Written as the Quran font (KFGQPC Hafs) encodes it, like mushafText's output.
 
 /** The theme tiles' card: 52:17 on two lines, its own ending in the accent. */
-export const SAMPLE_AYAH = { start: 'إِنَّ ٱلْمُتَّقِينَ', end: 'فِى جَنَّـٰتٍ', ending: 'وَنَعِيمٍ' } as const;
+export const SAMPLE_AYAH = { start: 'إِنَّ ٱلۡمُتَّقِينَ', end: 'فِي جَنَّـٰتٍ', ending: 'وَنَعِيمٍ' } as const;
 
 /** The view tiles: the shared start (coloured, as the views colour matching words), then the endings that branch off it. */
 export const SAMPLE_TREE = {
-  trunk: ['إِنَّ ٱلْمُتَّقِينَ', 'فِى جَنَّـٰتٍ'],
+  trunk: ['إِنَّ ٱلۡمُتَّقِينَ', 'فِي جَنَّـٰتٍ'],
   endings: [
     { words: 'وَعُيُونٍ' },
     { words: 'وَنَعِيمٍ' },

@@ -4,12 +4,12 @@
 .thumb { position: relative; width: 100%; aspect-ratio: 3 / 2; border: 1px solid var(--home-rule); border-radius: 0.625rem; overflow: hidden; display: flex; }
 .tile[aria-pressed="true"] .thumb { outline: 2px solid var(--home-accent); outline-offset: 2px; }
 .page { flex: 1; display: grid; place-items: center; }
-.card { width: 76%; height: 66%; border: 1px solid; border-radius: 0.3rem; padding-inline: 0.35rem; display: flex; flex-direction: column; justify-content: center; direction: rtl; font-family: var(--font-amiri), serif; font-size: 0.65rem; line-height: 1.45; white-space: nowrap; overflow: hidden; }
+.card { width: 76%; height: 66%; border: 1px solid; border-radius: 0.3rem; padding-inline: 0.35rem; display: flex; flex-direction: column; justify-content: center; direction: rtl; font-family: var(--font-quran); font-size: 0.65rem; line-height: 1.45; white-space: nowrap; overflow: hidden; }
 .split { flex: 1; display: grid; grid-template-columns: 1fr 1fr; }
 .split .card { width: 88%; padding-inline: 0.15rem; font-size: 0.45rem; }
 .check { position: absolute; top: 0.3rem; inset-inline-start: 0.3rem; width: 1rem; height: 1rem; border-radius: 999px; display: grid; place-items: center; background: var(--home-accent); color: var(--home-paper); }
 .short { min-height: 0; }
-.tree, .matrix { position: relative; flex: 1; background: var(--home-paper); direction: rtl; font-family: var(--font-amiri), serif; font-size: 0.6rem; line-height: 1.35; color: var(--home-ink); white-space: nowrap; }
+.tree, .matrix { position: relative; flex: 1; background: var(--home-paper); direction: rtl; font-family: var(--font-quran); font-size: 0.6rem; line-height: 1.35; color: var(--home-ink); white-space: nowrap; }
 .node { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 0.25rem; background: var(--home-card); overflow: hidden; }
 .node[data-shared] { color: var(--home-accent); font-weight: 700; }
 .matrix { display: flex; flex-direction: column; justify-content: center; gap: 6%; padding-inline: 6%; }

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { branchesHref } from '@shared/quran/branches';
 import OpeningSearch from './OpeningSearch';
+import { mushafText } from '@shared/quran/mushafText';
 
 const language = vi.hoisted(() => ({ value: 'ar' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: language.value }) }));
@@ -36,7 +37,7 @@ describe('OpeningSearch', () => {
   it('finds a phrase longer than two words, typed with or without diacritics', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'أَلَمْ تَرَ كيف' } });
-    expect(suggested()).toEqual(['أَلَمْ تَرَ كَيْفَ٣', 'أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ٢']);
+    expect(suggested()).toEqual([`${mushafText('أَلَمْ تَرَ كَيْفَ')}٣`, `${mushafText('أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ')}٢`]);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'كهيعص' } });
     expect(screen.getByText('لا عبارة مشتركة تطابق البحث.')).toBeTruthy();
   });
@@ -44,7 +45,7 @@ describe('OpeningSearch', () => {
   it('lists phrases that start with the search before those that only contain it', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'تر' } });
-    expect(suggested()[0]).toBe('أَلَمْ تَرَ٣١');
+    expect(suggested()[0]).toBe(`${mushafText('أَلَمْ تَرَ')}٣١`);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'الذين' } });
     expect(suggested()).toEqual(['يَـٰٓأَيُّهَا ٱلَّذِينَ٩٠', 'إِنَّ ٱلَّذِينَ٧٣']);
   });
