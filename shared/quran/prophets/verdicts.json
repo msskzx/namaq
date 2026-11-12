@@ -470,11 +470,7 @@
   },
   "hud/41:13": {
    "keep": true,
-   "why": "A thunderbolt like that of Ad and Thamud; their messengers came to them."
-  },
-  "hud/41:15": {
-   "keep": true,
-   "why": "Ad were arrogant: who is stronger than us."
+   "why": "A thunderbolt like that of Ad and Thamud; they rejected the messengers; Ad were arrogant: who is stronger than us (13-15)."
   },
   "hud/41:16": {
    "keep": true,
@@ -1910,11 +1906,7 @@
   },
   "salih/11:66": {
    "keep": true,
-   "why": "We saved Salih and those who believed."
-  },
-  "salih/11:67": {
-   "keep": true,
-   "why": "The blast seized the wrongdoers."
+   "why": "When the command came We saved Salih and the believers, and the blast seized the wrongdoers (66-68)."
   },
   "salih/11:89": {
    "keep": true,
@@ -2074,11 +2066,7 @@
   },
   "salih/91:12": {
    "keep": true,
-   "why": "The most wretched rose up (12); they hamstrung her and were crushed (14)."
-  },
-  "salih/91:13": {
-   "keep": true,
-   "why": "The messenger said: Allah's she-camel and her drink."
+   "why": "The most wretched rose up, and the messenger said: Allah's she-camel and her drink (12-13)."
   },
   "salih/91:15": {
    "keep": true,
@@ -2583,6 +2571,10 @@
   "musa/7:171": {
    "keep": true,
    "why": "The mountain raised over them like a canopy (171)."
+  },
+  "salih/91:14": {
+   "keep": true,
+   "why": "They denied him and hamstrung her, and their Lord crushed them (14)."
   }
  }
 }

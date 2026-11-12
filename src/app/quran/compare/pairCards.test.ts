@@ -110,6 +110,46 @@ describe('compare pair cards', () => {
     }
   });
 
+  it('tells Nuh, Hud, Salih and Shu\'ayb on every page with each story ayah on one card and no pair split across cards', () => {
+    const peoples = ['nuh', 'hud', 'salih', 'shuayb'];
+    const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
+    const pages = new Map<string, [number[], number[]][][]>();
+    const add = (key: string, parts: [number[], number[]][][]) => pages.set(key, [...(pages.get(key) ?? []), ...parts]);
+    for (const { story, surahs } of curatedLinks.timelineStories) {
+      if (story === 'musa') continue;
+      expect(peoples, story).toContain(story);
+      add(surahs.join(':'), timelineParts(STORIES[story], [surahs[0], surahs[1]]).map(part => part.rows));
+    }
+    const range = (text: string) => {
+      const [from, to = from] = text.split(':')[1].split('-').map(Number);
+      return Array.from({ length: to - from + 1 }, (_, k) => from + k);
+    };
+    for (const { parts } of curatedLinks.storyParts.slice(1)) {
+      const rows = parts.map(part => (Array.isArray(part) ? part : [part]).map(row => row.split('|').map(side => (side ? range(side) : [])) as [number[], number[]]));
+      const [a, b] = [0, 1].map(s => rows.flat().find(row => row[s].length)![s]);
+      const surahs = [0, 1].map(s => Number((parts.flat().map(row => row.split('|')[s]).find(Boolean) ?? '').split(':')[0]));
+      expect(a.length && b.length).toBeTruthy();
+      add(surahs.join(':'), rows);
+    }
+    expect(pages.size).toBeGreaterThan(100);
+    for (const [key, parts] of pages) {
+      const [x, y] = key.split(':').map(Number);
+      const cards = pairCards(x, y, true);
+      const ids = parts.map(rows => [0, 1].map(s => `${[x, y][s]}:${span([...new Set(rows.flatMap(row => row[s]))].sort((p, q) => p - q))}`).join('|'));
+      const story = ids.map(id => cards.find(card => card.id === id));
+      expect(story.every(Boolean), `${key}: ${ids.join(' ')}`).toBe(true);
+      for (const s of [0, 1]) {
+        const shown = story.flatMap(card => card!.sides[s].ayat.map(ayah => ayah.number));
+        expect(new Set(shown).size, `${key}: an ayah on two cards`).toBe(shown.length);
+        expect(new Set(shown), key).toEqual(new Set(parts.flat().flatMap(row => row[s])));
+      }
+      for (const card of story) for (const { id } of card!.pairs ?? []) {
+        const [a, b] = id.split('|').map(ayah => Number(ayah.split(':')[1]));
+        expect([card!.sides[0].ayat.some(ayah => ayah.number === a), card!.sides[1].ayat.some(ayah => ayah.number === b)], `${key}: ${id} split from ${card!.id}`).toEqual([true, true]);
+      }
+    }
+  });
+
   it('gives a range card the tree link of its first pair that has one', () => {
     const block = engineCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
     expect(block.group).toBeDefined();
