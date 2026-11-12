@@ -99,3 +99,5 @@ export default function CompareScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

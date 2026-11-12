@@ -39,3 +39,5 @@ export default function AyahScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

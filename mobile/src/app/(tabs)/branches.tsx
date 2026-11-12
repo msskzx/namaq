@@ -117,3 +117,5 @@ export default function BranchesScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

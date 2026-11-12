@@ -25,3 +25,5 @@ export default function ProphetScreen() {
   );
   return <ProphetStory slug={slug} header={back} />;
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

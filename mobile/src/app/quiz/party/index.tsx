@@ -7,7 +7,7 @@ import { NAME_MAX } from '@shared/party/rules';
 import BackBar from '@/components/BackBar';
 import Button from '@/components/Button';
 import { Section } from '@/components/QuizForm';
-import { playerId, saveName, savedName, startParty } from '@/lib/party';
+import { NoPartyServer, playerId, saveName, savedName, startParty } from '@/lib/party';
 import { usePalette } from '@/lib/theme';
 
 const toLatin = (text: string) => text.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/\D/g, '');
@@ -27,8 +27,8 @@ export default function PartyStart() {
     saveName(name);
     try {
       router.push(`/quiz/party/${await startParty(playerId(), name.trim())}`);
-    } catch {
-      setError('تعذر بدء الاختبار. حاول مرة أخرى.');
+    } catch (problem) {
+      setError(problem instanceof NoPartyServer ? 'لم يُضبط خادم الاختبار الجماعي في هذه النسخة.' : 'تعذر بدء الاختبار. تحقق من الاتصال وحاول مرة أخرى.');
     }
     setBusy(false);
   };
@@ -66,3 +66,5 @@ export default function PartyStart() {
     </KeyboardAvoidingView>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';
