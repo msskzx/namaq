@@ -70,7 +70,7 @@ describe('PairCompare', () => {
     const { container } = render(<PairCompare a={52} b={68} cards={parting} pairs={pairs} names={names} />);
     const tree = screen.getByLabelText(/شجرةً$/);
     const nodes = [...tree.querySelectorAll('span.rounded-xl')].map(node => node.textContent);
-    expect(nodes).toEqual(['أم تسألهم', 'أجرا', 'خرجا', 'فهم من مغرم مثقلون ٤٠ · ٤٦']);
+    expect(nodes).toEqual(['أم تسألهم', 'أجرا', 'خرجا', 'فهم من مغرم مثقلون ۝']);
     expect(container.querySelector('article')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'عرض المصفوفة' }));
     expect(container.querySelectorAll('article')).toHaveLength(2);

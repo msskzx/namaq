@@ -1,3 +1,4 @@
+import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
 import type { CardAyah, CardMark, CardSide } from './compareCards';
 
@@ -63,3 +64,8 @@ export function braidOf(sides: [CardSide, CardSide]): BraidStrand[] {
     .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) }));
 }
 
+/**
+ * The ayah-end marker after a word. The Quran font draws each number as its own medallion, so where two
+ * ayat with different numbers end together it shows one empty medallion; the side headers carry the numbers.
+ */
+export const endMark = (ends: number[], ar: boolean) => ends.length > 1 ? '\u06DD' : ends.length ? (ar ? num(ends[0]) : `${ends[0]}`) : '';

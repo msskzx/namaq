@@ -4,6 +4,7 @@ import Svg, { Path } from 'react-native-svg';
 import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
+import { endMark } from '@shared/quran/braid';
 import { normalizeWord } from '@shared/quran/normalize';
 import { braidOf, sideLabel, type Around, type AroundAyah, type BraidWord } from '@/lib/compare';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
@@ -25,7 +26,7 @@ function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: P
           <Text key={i}>
             {i > 0 ? ' ' : ''}
             <Text style={color ? { color } : undefined}>{mushafText(word.text)}</Text>
-            {ends(word, other?.[i]).length > 0 && <Text style={{ color: palette.accent }}> {ends(word, other?.[i]).map(end => num(end)).join(' · ')}</Text>}
+            {ends(word, other?.[i]).length > 0 && <Text style={{ color: palette.accent }}> {endMark(ends(word, other?.[i]), true)}</Text>}
           </Text>
         );
       })}
