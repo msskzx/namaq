@@ -11,7 +11,7 @@ export type WordFeatures = { gender?: string; number?: string; case?: string; po
 
 export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
-export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
+export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[]; absorbed?: string[] };
 export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
 
 const OPENING_WORDS = 2;

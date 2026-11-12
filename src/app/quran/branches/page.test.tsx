@@ -21,7 +21,6 @@ import { resolveTree } from '@/lib/quran/branchTreeLinks';
 import { inJuzRange } from '@shared/quran/juz';
 import data from '@shared/data/quran/trees.json';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
-import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { branchInventory } from '@shared/quran/branchInventory';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
@@ -53,7 +52,7 @@ const shortTree = (id: string) => {
   if (!tree) throw new Error(`Missing tree ${id}`);
   return `tree:${comparisonId(tree.occurrences).slice(4)}`;
 };
-const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
+const defaultGroups = (range: { from: number; to: number } | null = null) => branchInventory({}, range).map(piece => ({ id: piece.id, tree: piece.phrase }));
 
 describe('Quran branch trees', () => {
   // Search outside the filters builds the every-kind tree list once and keeps it. That takes seconds on a slow CI runner and
@@ -324,6 +323,18 @@ describe('Quran branch trees', () => {
     const firstInRange = defaultGroups({ from: 30, to: 30 })[0];
     await expect(open({})).rejects.toThrow(`REDIRECT ${branchesHref(groups[0].id)}`);
     await expect(open({ juzFrom: '30', juzTo: '30', m: 'cards' })).rejects.toThrow(`REDIRECT ${branchesHref(firstInRange.id, { from: 30, to: 30 }, { mode: 'cards' })}`);
+  });
+
+  it('opens the bigger tree from the link of a card it holds, and keeps the smaller tree among every kind', async () => {
+    await expect(open({ o: 'cmp:1nwj2hp1e489mj' })).rejects.toThrow(`REDIRECT ${branchesHref('cmp:1qybkxb00jnpnz')}`);
+    render(await open({ o: 'cmp:1nwj2hp1e489mj', categories: ALL_KINDS }));
+    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+  });
+
+  it('finds the bigger tree by the wording of a card it holds, in the search box and on Enter', async () => {
+    const all = await (await phrasesRoute(new NextRequest('http://localhost/api/quran/branch-phrases?all=1'))).json();
+    expect(JSON.stringify(all)).toContain('"absorbed"');
+    expect(paramsOf(await target({ q: 'به الأرض بعد موتها' })).o).toBe('cmp:0b416wy11gjwfy');
   });
 
   it('keeps the search when the juz range changes, opening the tree whose phrase is the search', async () => {

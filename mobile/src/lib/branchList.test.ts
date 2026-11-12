@@ -22,7 +22,7 @@ describe('the trees the branches tab swipes through', () => {
   it('finds trees whose phrase holds the search and opens on the exact phrase', () => {
     const list = branchList({ ...EMPTY_LIST, query: 'الذين' });
     expect(list.length).toBeGreaterThan(0);
-    for (const piece of list) expect(textHolds(piece.text, 'الذين', 'loose'), piece.text).toBe(true);
+    for (const piece of list) expect([piece.text, ...(piece.absorbed ?? [])].some(text => textHolds(text, 'الذين', 'loose')), piece.text).toBe(true);
     const exact = all.find(piece => piece.text.split(' ').length >= 3)!;
     const found = branchList({ ...EMPTY_LIST, query: exact.text });
     expect(found[openingIndex(found, exact.text)].text).toBe(exact.text);
