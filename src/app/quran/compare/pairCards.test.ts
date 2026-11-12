@@ -61,6 +61,26 @@ describe('compare pair cards', () => {
     expect(rows('nuh', [11, 26]).flat(2)).not.toContain('89-89');
   });
 
+  it('shows no ayah on two story cards of one pair, across every story that tells it', () => {
+    const { timelineStories = [], storyParts = [] } = curatedLinks as { timelineStories?: { story: string; surahs: number[] }[]; storyParts?: { parts: (string | string[])[] }[] };
+    const numbers = (range: string) => {
+      const [from, to = from] = range.split(':')[1].split('-').map(Number);
+      return Array.from({ length: to - from + 1 }, (_, k) => `${range.split(':')[0]}:${from + k}`);
+    };
+    const shown = new Map<string, string[]>();
+    // One card shows an ayah once even when two of its rows hold it, so each card counts its ayat once.
+    const add = (pair: string, keys: string[]) => shown.set(pair, [...(shown.get(pair) ?? []), ...new Set(keys)]);
+    for (const { story, surahs: [x, y] } of timelineStories) for (const part of timelineParts(STORIES[story], [x, y])) {
+      add(`${x}:${y}`, part.rows.flatMap(([a, b]) => [...a.map(n => `a ${x}:${n}`), ...b.map(n => `b ${y}:${n}`)]));
+    }
+    for (const { parts } of storyParts) {
+      const sides = [0, 1].map(s => parts.flat().map(row => row.split('|')[s]).filter(Boolean));
+      const pair = sides.map(side => side[0].split(':')[0]).join(':');
+      for (const part of parts) add(pair, [part].flat().flatMap(row => row.split('|').flatMap((range, s) => (range ? numbers(range).map(key => `${'ab'[s]} ${key}`) : []))));
+    }
+    for (const [pair, keys] of shown) expect(keys.filter((key, i) => keys.indexOf(key) !== i), pair).toEqual([]);
+  });
+
   it('serves the timeline cards in place of the engine cards inside the story, and marks a side that steps back', () => {
     const ids = pairCards(11, 26, true).map(card => card.id);
     expect(ids.slice(0, 3)).toEqual(['11:25-26|26:105-110', '11:27-31|26:111-115', '11:32-49|26:116-122']);
