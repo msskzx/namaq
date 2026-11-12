@@ -61,6 +61,24 @@ describe('compare pair cards', () => {
     expect(rows('nuh', [11, 26]).flat(2)).not.toContain('89-89');
   });
 
+  it('shows no ayah on two story cards of one pair, across every story that tells it', () => {
+    const { timelineStories = [], storyParts = [] } = curatedLinks as { timelineStories?: { story: string; surahs: number[] }[]; storyParts?: { parts: (string | string[])[] }[] };
+    const numbers = (range: string) => {
+      const [from, to = from] = range.split(':')[1].split('-').map(Number);
+      return Array.from({ length: to - from + 1 }, (_, k) => `${range.split(':')[0]}:${from + k}`);
+    };
+    const shown = new Map<string, string[]>();
+    const add = (pair: string, keys: string[]) => shown.set(pair, [...(shown.get(pair) ?? []), ...keys]);
+    for (const { story, surahs: [x, y] } of timelineStories) for (const part of timelineParts(STORIES[story], [x, y])) {
+      add(`${x}:${y}`, part.rows.flatMap(([a, b]) => [...a.map(n => `${x}:${n}`), ...b.map(n => `${y}:${n}`)]));
+    }
+    for (const { parts } of storyParts) {
+      const ranges = parts.flat().flatMap(row => row.split('|')).filter(Boolean);
+      add(`${ranges[0].split(':')[0]}:${ranges.find(range => range.split(':')[0] !== ranges[0].split(':')[0])?.split(':')[0]}`, ranges.flatMap(numbers));
+    }
+    for (const [pair, keys] of shown) expect(keys.filter((key, i) => keys.indexOf(key) !== i), pair).toEqual([]);
+  });
+
   it('serves the timeline cards in place of the engine cards inside the story, and marks a side that steps back', () => {
     const ids = pairCards(11, 26, true).map(card => card.id);
     expect(ids.slice(0, 3)).toEqual(['11:25-26|26:105-110', '11:27-31|26:111-115', '11:32-49|26:116-122']);
