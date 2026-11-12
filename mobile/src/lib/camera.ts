@@ -50,3 +50,17 @@ export function pickDirection(side: Size, down: Size, view: Size): 'side' | 'dow
   const fit = (size: Size) => Math.min(MAX_FIT, view.width / size.width, view.height / size.height);
   return fit(down) > fit(side) * DOWN_GAIN ? 'down' : 'side';
 }
+
+// After clampCamera: worklets capture the functions they call when they are created.
+/**
+ * The camera that fills the card's height (never zoomed past MAX_FIT or below the whole-tree fit), with the tree's right
+ * edge, where a sideways tree's root is, at the card's right edge. A tree wider than the card is then panned to see the rest.
+ */
+export function fillCamera(content: Size, view: Size): Camera {
+  'worklet';
+  const fit = fitCamera(content, view);
+  const s = Math.min(MAX_FIT, view.height / content.height);
+  // Barely past the fit counts as the fit (as in settleCamera), so a tree is never cut by a sliver it can't be panned to.
+  if (s <= fit.s * 1.02) return fit;
+  return clampCamera({ s, x: view.width - content.width * s, y: 0 }, content, view);
+}

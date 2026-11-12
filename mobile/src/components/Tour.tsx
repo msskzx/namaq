@@ -73,7 +73,7 @@ function Opening({ palette, onStart }: { palette: Palette; onStart: () => void }
 
 /**
  * The first-launch tour: the opening, then four steps the user does with the real cards (light a path in a tree, swipe
- * the matrix, pick the default view, reveal an ayah in recite mode). «تخطَّ» moves on; the settings sheet plays it again.
+ * the matrix, pick the default view, reveal an ayah in recite mode). «تخطَّ» ends the tour; the settings sheet plays it again.
  */
 export default function Tour({ palette, onDone }: { palette: Palette; onDone: () => void }) {
   const insets = useSafeAreaInsets();
@@ -103,14 +103,14 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
           {step === 'opening' ? <Opening palette={palette} onStart={next} /> : <>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, minHeight: 44 }}>
               <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 20, fontWeight: '700', textAlign: 'right' }}>{title[step]}</Text>
-              <Pressable onPress={next} accessibilityRole="button" accessibilityLabel="تخطَّ" hitSlop={10}>
+              <Pressable onPress={onDone} accessibilityRole="button" accessibilityLabel="تخطَّ" hitSlop={10}>
                 <Text style={{ color: palette.muted, fontSize: 15 }}>تخطَّ</Text>
               </Pressable>
             </View>
             <View key={step} style={{ flex: 1, paddingHorizontal: 16, paddingTop: 12 }}>
               {step === 'tree' && card && <>
                 <View style={{ flex: 1, borderRadius: 16, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, overflow: 'hidden' }}>
-                  <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop}
+                  <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop} fillHeight
                     onTap={(keys, lightPath) => { if (!keys) return; lightPath?.(); setTapped(keys); did('tree'); }} />}</Fit>
                 </View>
                 {/* Room kept for the ayah from the start, so the tree does not shrink when it shows. */}

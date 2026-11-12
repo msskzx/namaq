@@ -57,7 +57,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
             <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
           </Link>;
         })}
-      </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو عائلة أو بطاقة مقارنة أو آية بزر' : 'Save a tree, family, compare card or ayah with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
+      </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو بطاقة مقارنة أو آية بزر' : 'Save a tree, compare card or ayah with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
     </section>
     <section className={styles.quiz} aria-labelledby="quiz-title">
       <Feather size={26} aria-hidden />
