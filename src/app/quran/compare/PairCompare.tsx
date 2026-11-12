@@ -267,6 +267,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
       </Link>
     </span>,
     gaps: true,
+    gapsLabel: ar ? 'الآيات' : 'Ayat',
     ...(side.rows ? { empty: emptyNote(name, ar) } : {}),
     // Story cards run in the first surah's order, so this side's surah tells this part before the last card's.
     ...(side.back ? { subtitle: ar ? 'قبلُ في السورة' : 'Earlier in the surah' } : {}),

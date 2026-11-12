@@ -77,16 +77,27 @@ describe('compare pair cards', () => {
 
   it('leaves a story part the owner dropped off the page, and counts unjudged parts against the page\'s review', () => {
     const id = '2:55|7:154';
-    expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(true);
-    compareVerdicts[id] = { keep: false, why: 'test', checked: true };
+    const before = compareVerdicts[id];
+    compareVerdicts[id] = { keep: true, why: 'test', checked: true };
     try {
+      expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(true);
+      compareVerdicts[id] = { keep: false, why: 'test', checked: true };
       expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(false);
       expect(pairCards(2, 7, true).find(card => card.id === '2:55-56|7:154-156')?.pairs?.[0].verdict?.keep).toBe(false);
     } finally {
-      delete compareVerdicts[id];
+      if (before) compareVerdicts[id] = before;
+      else delete compareVerdicts[id];
     }
-    expect(compareVerdicts['11:25|26:105']?.checked).toBeFalsy();
-    expect(reviewStates()['11:26']).not.toBe('checked');
+    // Every engine pair on 11/26 checked, the Nuh parts still unjudged: the page is not done.
+    const engine = engineCards(11, 26, true).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]);
+    const saved = engine.map(key => [key, compareVerdicts[key]] as const);
+    for (const key of engine) compareVerdicts[key] = { keep: true, why: 'test', checked: true };
+    try {
+      expect(compareVerdicts['11:25|26:105']?.checked).toBeFalsy();
+      expect(reviewStates()['11:26']).not.toBe('checked');
+    } finally {
+      for (const [key, verdict] of saved) if (verdict) compareVerdicts[key] = verdict; else delete compareVerdicts[key];
+    }
   });
 
   it('puts an engine pair on the story part that shows both its ayat', () => {

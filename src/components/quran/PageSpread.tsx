@@ -11,7 +11,7 @@ export type SpreadMark = { kind: 'exact' | 'root' | 'related'; slot?: number; ti
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; wordKey?: string; current?: boolean; bare?: boolean; reading?: number; muted?: boolean };
 /** `empty`: what a row this page has no ayat for says, so the gap reads as the text's own and not a failed load. `heads`: a control sitting on a row's top rule, and `ruleLabels` a name in the rule's middle. `bare`: a folded row, showing only those. */
 export type RowHead = React.ReactNode | undefined;
-export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; empty?: string; heads?: RowHead[]; ruleLabels?: (string | undefined)[]; bare?: boolean[]; gaps?: boolean; footer?: React.ReactNode; action?: React.ReactNode; pick?: { selected: number; labels: string[]; onPick: (row: number) => void } };
+export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; empty?: string; heads?: RowHead[]; ruleLabels?: (string | undefined)[]; bare?: boolean[]; gaps?: boolean; gapsLabel?: string; footer?: React.ReactNode; action?: React.ReactNode; pick?: { selected: number; labels: string[]; onPick: (row: number) => void } };
 
 const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.some && styles.some, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
 
@@ -31,14 +31,14 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
 }
 
 /** With `gaps`, a row whose ayat skip part of the surah opens each unbroken stretch on a dotted line naming its ayat; a row under its own rule (`onRule`) always names its first stretch on that rule. */
-function RowAyat({ ayat, gaps = false, onRule = false }: { ayat: SpreadAyah[]; gaps?: boolean; onRule?: boolean }) {
+function RowAyat({ ayat, gaps = false, onRule = false, label = '' }: { ayat: SpreadAyah[]; gaps?: boolean; onRule?: boolean; label?: string }) {
   const starts = ayat.flatMap((ayah, i) => (i === 0 || ayah.number !== ayat[i - 1].number + 1 ? [i] : []));
   const broken = gaps && starts.length > 1;
   return ayat.map((ayah, i) => {
     const run = starts.indexOf(i);
     const last = run >= 0 ? ayat[(starts[run + 1] ?? ayat.length) - 1].number : 0;
     return <Fragment key={ayah.number}>
-      {(broken && run >= 0) || (onRule && run === 0) ? <span role="separator" aria-label={`${num(ayah.number)}${last > ayah.number ? `–${num(last)}` : ''}`} className={run > 0 ? styles.gap : onRule ? styles.gapOnRule : `${styles.gap} ${styles.gapFirst}`}>{num(ayah.number)}{last > ayah.number ? `–${num(last)}` : ''}</span> : i > 0 && ' '}
+      {(broken && run >= 0) || (onRule && run === 0) ? <span role="separator" aria-label={`${label} ${num(ayah.number)}${last > ayah.number ? `–${num(last)}` : ''}`.trim()} className={run > 0 ? styles.gap : onRule ? styles.gapOnRule : `${styles.gap} ${styles.gapFirst}`}>{num(ayah.number)}{last > ayah.number ? `–${num(last)}` : ''}</span> : i > 0 && ' '}
       {ayah.muted ? <span className={styles.mutedAyah}><Ayah ayah={ayah} /></span> : <Ayah ayah={ayah} />}
     </Fragment>;
   });
@@ -70,9 +70,9 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
                 {page.heads?.[row] && <span className={styles.rowHead}>{page.heads[row]}</span>}
                 {page.ruleLabels?.[row] && <span aria-hidden className={styles.gapOnRule}>{page.ruleLabels[row]}</span>}
                 {page.pick && page.rows[row]
-                  ? <button type="button" data-tap-through className={styles.pick} aria-pressed={page.pick.selected === row} onClick={() => page.pick!.onPick(row)}><span className="sr-only">{page.pick.labels[row]}: </span><RowAyat ayat={page.rows[row]} gaps={page.gaps} onRule={onRule} /></button>
+                  ? <button type="button" data-tap-through className={styles.pick} aria-pressed={page.pick.selected === row} onClick={() => page.pick!.onPick(row)}><span className="sr-only">{page.pick.labels[row]}: </span><RowAyat ayat={page.rows[row]} gaps={page.gaps} onRule={onRule} label={page.gapsLabel} /></button>
                   : page.bare?.[row] ? null
-                  : silent ? <span className={styles.emptyRow}><Rope className={styles.rope} />{page.empty}<Rope className={styles.rope} /></span> : <RowAyat ayat={page.rows[row] ?? []} gaps={page.gaps} onRule={onRule} />}
+                  : silent ? <span className={styles.emptyRow}><Rope className={styles.rope} />{page.empty}<Rope className={styles.rope} /></span> : <RowAyat ayat={page.rows[row] ?? []} gaps={page.gaps} onRule={onRule} label={page.gapsLabel} />}
               </p>;
             })}
           </div>

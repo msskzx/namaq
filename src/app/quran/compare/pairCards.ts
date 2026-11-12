@@ -186,7 +186,7 @@ function partsFor(x: number, y: number): Part[][] {
  */
 function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Record<string, Verdict>): PairCard[] {
   // Parts gather every engine pair inside the story, a pair curation left out too, so a part is judged the same way in
-  // review and on the page; off review, a part every pair of which was dropped is left out like any card.
+  // review and on the page; off review, a part shows once one of its pairs is kept, like any card.
   const everyPair = verdicts ? undefined : engineCards(x, y, true);
   const judged = verdicts ?? compareVerdicts;
   return partsFor(x, y).reduce((current, unsorted) => {
@@ -236,7 +236,7 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
         }) as PairCard['sides'],
       };
     });
-    const shown = verdicts ? storyCards : storyCards.filter(card => card.pairs!.some(({ id }) => judged[id]?.keep !== false));
+    const shown = verdicts ? storyCards : storyCards.filter(card => card.pairs!.some(({ id }) => judged[id]?.keep === true));
     const found = current.findIndex(inStory);
     const at = found >= 0 ? found : [...current, null].findIndex(card => !card || card.sides[0].ayah > storyCards[0].sides[0].ayah);
     return [...current.slice(0, at).filter(card => !inStory(card)), ...shown, ...current.slice(at).filter(card => !inStory(card))];
