@@ -8,6 +8,8 @@
 .lines { display: contents; font-family: var(--font-quran); font-size: 1.5rem; line-height: 2.5; text-align: center; }
 .lines > p { align-self: start; }
 .ruled .lines > p:not(:first-child) { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; }
+/* a compact card in parts: the first part opens on a rule too, under the title */
+.compact.ruled .lines > p:first-child { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; margin-top: 0.5rem; }
 .spread mark, .legend mark { color: var(--home-accent); background: transparent; }
 .spread mark.slot1 { color: var(--home-slot-1); }
 .spread mark.slot2 { color: var(--home-slot-2); }
@@ -36,6 +38,21 @@
 .pick[aria-pressed="false"] { opacity: 0.5; }
 .pick:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
 .pickDivider { border-top: 1px dotted var(--home-rule); }
+/* a row this side does not tell: the theme's rope runs on through it to the next part, with a note saying so */
+.lines > p.emptyCell { align-self: stretch; display: flex; }
+.emptyRow { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; font-family: var(--font-amiri), serif; font-size: 0.875rem; line-height: 1.6; color: var(--home-muted); }
+.rope { flex: 1; color: var(--home-rule); }
+/* a control on a row's dotted top rule, at its start; a folded row is only that rule */
+.headed { position: relative; min-height: 1.75rem; }
+.rowHead { position: absolute; top: 0; inset-inline-start: 0; transform: translateY(-50%); z-index: 1; display: flex; line-height: 1; background: var(--home-card); }
+/* where a row's ayat skip part of the surah: each unbroken stretch opens on a dotted line naming its ayat */
+.gap { display: flex; align-items: center; gap: 0.5rem; margin-block: 0.25rem; font-family: var(--font-amiri), serif; font-size: 0.75rem; line-height: 1.6; color: var(--home-muted); }
+.gap::before, .gap::after { content: ''; flex: 1; border-top: 1px dotted var(--home-rule); }
+/* the first stretch already sits under the row's own rule, so its label stands without lines */
+.gapFirst { justify-content: center; margin-top: 0; }
+.gapFirst::before, .gapFirst::after { border-top: 0; }
+.ruled .lines > p { position: relative; }
+.gapOnRule { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding-inline: 0.5rem; background: var(--home-card); font-family: var(--font-amiri), serif; font-size: 0.75rem; line-height: 1.6; color: var(--home-muted); }
 .verseEnd { white-space: nowrap; }
 .verseSeal { color: var(--home-muted); white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }

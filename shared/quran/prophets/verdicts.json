@@ -1230,7 +1230,7 @@
   },
   "musa/2:55": {
    "keep": true,
-   "why": "We will not believe until we see Allah; the mountain raised (55-56, 63-64)."
+   "why": "We will not believe until we see Allah; the thunderbolt and the raising (55-56)."
   },
   "musa/2:57": {
    "keep": true,
@@ -1314,11 +1314,11 @@
   },
   "musa/7:154": {
    "keep": true,
-   "why": "The tablets; the seventy men; the mountain raised (154-156, 159, 171)."
+   "why": "The tablets; the seventy men (154-156)."
   },
-  "musa/7:160": {
+  "musa/7:159": {
    "keep": true,
-   "why": "Twelve tribes; strike the rock; twelve springs."
+   "why": "A community of Musa's people guided by the truth; twelve tribes; strike the rock; twelve springs."
   },
   "musa/7:161": {
    "keep": true,
@@ -2575,6 +2575,14 @@
   "zakariyya/21:90": {
    "keep": true,
    "why": "We gave him Yahya."
+  },
+  "musa/2:63": {
+   "keep": true,
+   "why": "The covenant taken and the mountain raised (63-64)."
+  },
+  "musa/7:171": {
+   "keep": true,
+   "why": "The mountain raised over them like a canopy (171)."
   }
  }
 }

@@ -48,6 +48,11 @@ describe('the compare review route', () => {
     expect(log()).toMatchObject([{ page: '2/3', card: ['2:1|3:1', '2:2|3:2'], action: 'discuss' }]);
   });
 
+  it('logs a press on a surah compared with itself', async () => {
+    expect((await post({ a: 2, b: 2, card: ['2:35|2:58'], action: 'keep' })).status).toBe(200);
+    expect(log()).toMatchObject([{ page: '2/2', card: ['2:35|2:58'], action: 'keep' }]);
+  });
+
   it('appends each press to the log in order and touches nothing else', async () => {
     expect((await post({ a: 2, b: 3, action: 'drop' })).status).toBe(200);
     expect((await post({ a: 2, b: 3, action: 'undo' })).status).toBe(200);

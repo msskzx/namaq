@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import MushafText from '@/components/common/MushafText';
+import Rope from '@/components/common/Rope';
 import { braidOf, endMark, type BraidWord } from '@shared/quran/braid';
 import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
@@ -23,6 +24,7 @@ function Words({ words, other, ar }: { words: BraidWord[]; other?: BraidWord[]; 
     const colour = colourOf(word, other?.[i]);
     return <Fragment key={i}>
       {i > 0 && ' '}
+      {word.skip && <span role="separator" aria-label={ar ? 'آيات محذوفة' : 'Ayat left out'} className="text-[var(--home-muted)]">⋯ </span>}
       <span style={colour ? { color: colour } : undefined}><MushafText>{word.text}</MushafText></span>
       {ends(word, other?.[i]).length > 0 && <span className="text-[var(--home-accent)]"> {endMark(ends(word, other?.[i]), ar)}</span>}
     </Fragment>;
@@ -64,7 +66,7 @@ const STEM = 'w-[1.5px] flex-1 bg-[var(--home-muted)]';
  * part where they differ, and rejoin on the next common stretch of two words or more. With the surrounding-ayat
  * switch, the ayah before each side opens the tree and the ayah after closes it.
  */
-export default function CompareBraid({ sides, titles, ar, around }: { sides: [CardSide, CardSide]; titles: [string, string]; ar: boolean; around?: { before: (SpreadAyah | null)[]; after: (SpreadAyah | null)[] } }) {
+export default function CompareBraid({ sides, titles, ar, around, empty }: { sides: [CardSide, CardSide]; titles: [string, string]; ar: boolean; empty?: string[]; around?: { before: (SpreadAyah | null)[]; after: (SpreadAyah | null)[] } }) {
   const rows: Row[] = [
     ...(around ? [{ kind: 'around' as const, a: [], b: [], near: around.before }] : []),
     ...braidOf(sides),
@@ -92,7 +94,9 @@ export default function CompareBraid({ sides, titles, ar, around }: { sides: [Ca
                       ? (near?.words.length ? <Neighbour ayah={near} ar={ar} /> : <span className="min-h-4 flex-1" />)
                       : words.length
                         ? <span className={`${NODE} border border-[var(--home-rule)]`}><Words words={words} ar={ar} /></span>
-                        : <span aria-label={ar ? 'لا كلمات هنا' : 'No words here'} className="size-2 rounded-full bg-[var(--home-rule)]" />}
+                        : sides[i].ayat.length === 0 && empty?.[i]
+                          ? <span className="flex flex-col items-center gap-1 px-2 text-center font-[family-name:var(--font-amiri)] text-sm leading-relaxed text-[var(--home-muted)]"><Rope className="text-[var(--home-rule)]" />{empty[i]}<Rope className="text-[var(--home-rule)]" /></span>
+                          : <span aria-label={ar ? 'لا كلمات هنا' : 'No words here'} className="size-2 rounded-full bg-[var(--home-rule)]" />}
                     {r < rows.length - 1 && (row.kind !== 'around' || near?.words.length) && <span className={`${STEM} ${words.length || near ? 'min-h-2' : 'min-h-4'}`} />}
                   </div>;
                 })}

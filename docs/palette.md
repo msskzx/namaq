@@ -2,6 +2,8 @@
 
 Namaq gives the source text the most space and contrast. Warm paper, ink, fine rules and restrained typography borrow from a printed reference book. Color draws attention to an action, a selection or a meaningful distinction in the content. Secondary information stays quiet and can be disclosed when needed.
 
+The owner's [Figma file](https://www.figma.com/design/Frtbtabq1hg07tHopvyC6v/%D9%86%D9%85%D9%82?node-id=1409-16693) holds the design, mood board, themes and visual direction, including the materials (leaf veins, rope fibres, woven cloth, paper grain). The rope that runs through an empty part of a compare story card (`src/components/common/Rope.tsx`) is one strand of its rope fibres.
+
 `src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors.
 
 - Paper and deeper paper distinguish reading surfaces. `--home-card` is the surface of Quran text cards: in the light feature theme it is a lighter warm paper, for contrast, and elsewhere deeper paper. Ink is primary text, muted ink is secondary text, and rules separate content.

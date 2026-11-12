@@ -40,5 +40,5 @@ export function useNeighbours(sides: CardSide[], on: boolean): Neighbours | unde
     }).catch(() => {});
     return () => { live = false; };
   }, [on, key]); // eslint-disable-line react-hooks/exhaustive-deps
-  return loaded?.key === key ? loaded.neighbours : undefined;
+  return on && loaded?.key === key ? loaded.neighbours : undefined;
 }
