@@ -47,3 +47,5 @@ export default function ProphetsTab() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

@@ -197,3 +197,5 @@ export default function HomeScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

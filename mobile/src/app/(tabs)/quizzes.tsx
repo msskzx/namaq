@@ -32,3 +32,5 @@ export default function QuizzesScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

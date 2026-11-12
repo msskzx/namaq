@@ -87,3 +87,5 @@ export default function SoloSetup() {
   );
 }
 
+
+export { ErrorBoundary } from '@/components/CrashScreen';
