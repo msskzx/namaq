@@ -624,10 +624,6 @@
    "keep": true,
    "why": "Our messengers came with good news; the roasted calf."
   },
-  "ibrahim/11:71": {
-   "keep": true,
-   "why": "His wife laughed; good news of Ishaq and Yaqub."
-  },
   "ibrahim/11:74": {
    "keep": true,
    "why": "He argued with Us about Lut's people."
@@ -787,10 +783,6 @@
   "ibrahim/51:24": {
    "keep": true,
    "why": "The honoured guests and the roasted calf."
-  },
-  "ibrahim/51:29": {
-   "keep": true,
-   "why": "His wife struck her face: a barren old woman."
   },
   "ibrahim/51:31": {
    "keep": true,
@@ -1022,7 +1014,7 @@
   },
   "lut/11:69": {
    "keep": true,
-   "why": "The messengers at Ibrahim's: the meal, the news of Ishaq, his plea for Lut's people."
+   "why": "Our messengers came to Ibrahim with good news; the roasted calf."
   },
   "lut/11:77": {
    "keep": true,
@@ -1046,7 +1038,7 @@
   },
   "lut/15:51": {
    "keep": true,
-   "why": "Ibrahim's guests: good news, then their mission to Lut's people."
+   "why": "Ibrahim's guests: we are afraid of you."
   },
   "lut/15:61": {
    "keep": true,
@@ -1154,11 +1146,7 @@
   },
   "lut/37:133": {
    "keep": true,
-   "why": "Lut was of the messengers."
-  },
-  "lut/37:134": {
-   "keep": true,
-   "why": "Same rescue, except an old woman."
+   "why": "Lut was of the messengers, when We saved him and his family."
   },
   "lut/37:136": {
    "keep": true,
@@ -1178,7 +1166,7 @@
   },
   "lut/51:24": {
    "keep": true,
-   "why": "Ibrahim's honoured guests: the meal and their mission, stones of clay."
+   "why": "Ibrahim's honoured guests and the roasted calf."
   },
   "lut/51:35": {
    "keep": true,
@@ -2583,6 +2571,38 @@
   "musa/7:171": {
    "keep": true,
    "why": "The mountain raised over them like a canopy (171)."
+  },
+  "ibrahim/11:70": {
+   "keep": true,
+   "why": "No fear: we are sent to Lut's people; his wife laughed, good news of Ishaq and Yaqub."
+  },
+  "ibrahim/51:28": {
+   "keep": true,
+   "why": "He felt fear; they gave him good news of a knowing boy; his wife struck her face."
+  },
+  "lut/11:70": {
+   "keep": true,
+   "why": "No fear: we are sent to Lut's people; good news of Ishaq and Yaqub."
+  },
+  "lut/15:53": {
+   "keep": true,
+   "why": "Good news of a knowing boy."
+  },
+  "lut/51:28": {
+   "keep": true,
+   "why": "He felt fear; good news of a knowing boy."
+  },
+  "lut/11:74": {
+   "keep": true,
+   "why": "He argued with Us about Lut's people."
+  },
+  "lut/15:57": {
+   "keep": true,
+   "why": "What is your errand: sent to a criminal people, except Lut's family."
+  },
+  "lut/51:31": {
+   "keep": true,
+   "why": "What is your errand; stones of clay for the transgressors."
   }
  }
 }
