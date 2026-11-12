@@ -46,7 +46,8 @@ describe('compare pair cards', () => {
     expect(part(parts[1]).sides[0].rows).toBeUndefined();
     const marked = (ayah: { words: string[]; marks?: Record<number, unknown> }) => Object.keys(ayah.marks ?? {}).map(i => normalizeWord(ayah.words[Number(i)]));
     expect(marked(part(parts[4]).sides[0].ayat[0])).toContain(normalizeWord('ٱهْبِطُوا۟'));
-    expect(pairCards(2, 38).map(card => card.id)).toEqual(['2:34|38:74']);
+    // Adam's story in Sad comes from his timeline: one card, al-Baqarah's whole stretch beside Sad's.
+    expect(pairCards(2, 38).map(card => card.id)).toEqual(['2:30-39|38:71-85']);
   });
 
   it('cuts a prophet\'s story into cards from the timeline: one per shared event, with the one-sided events as rows', () => {
@@ -59,6 +60,38 @@ describe('compare pair cards', () => {
     // 26:10-17 comes before the first event al-A'raf shares, so it is a row on that card; 11:89 lies outside Nuh's stretch of Hud.
     expect(rows('musa', [7, 26])[0]).toEqual([['', '10-17'], ['103-108', '18-33']]);
     expect(rows('nuh', [11, 26]).flat(2)).not.toContain('89-89');
+  });
+
+  it('shows no ayah on two story cards of one pair, across every story that tells it', () => {
+    const { timelineStories = [], storyParts = [] } = curatedLinks as { timelineStories?: { story: string; surahs: number[] }[]; storyParts?: { parts: (string | string[])[] }[] };
+    const numbers = (range: string) => {
+      const [from, to = from] = range.split(':')[1].split('-').map(Number);
+      return Array.from({ length: to - from + 1 }, (_, k) => `${range.split(':')[0]}:${from + k}`);
+    };
+    const shown = new Map<string, string[]>();
+    // One card shows an ayah once even when two of its rows hold it, so each card counts its ayat once.
+    const add = (pair: string, keys: string[]) => shown.set(pair, [...(shown.get(pair) ?? []), ...new Set(keys)]);
+    for (const { story, surahs: [x, y] } of timelineStories) for (const part of timelineParts(STORIES[story], [x, y])) {
+      add(`${x}:${y}`, part.rows.flatMap(([a, b]) => [...a.map(n => `a ${x}:${n}`), ...b.map(n => `b ${y}:${n}`)]));
+    }
+    for (const { parts } of storyParts) {
+      const sides = [0, 1].map(s => parts.flat().map(row => row.split('|')[s]).filter(Boolean));
+      const pair = sides.map(side => side[0].split(':')[0]).join(':');
+      for (const part of parts) add(pair, [part].flat().flatMap(row => row.split('|').flatMap((range, s) => (range ? numbers(range).map(key => `${'ab'[s]} ${key}`) : []))));
+    }
+    for (const [pair, keys] of shown) expect(keys.filter((key, i) => keys.indexOf(key) !== i), pair).toEqual([]);
+  });
+
+  it('tells Zakariyya and Maryam on one pair of surahs without an ayah on two cards', () => {
+    const ids = ['3:37-38|19:2-6', '3:39|19:7', '3:40|19:8-9', '3:41|19:10-11', '3:42-63|19:16-40'];
+    const story = pairCards(3, 19, true).filter(card => ids.includes(card.id));
+    expect(story.map(card => card.id)).toEqual(ids);
+    const shown = [0, 1].map(s => story.flatMap(card => card.sides[s].ayat.map(ayah => ayah.number)));
+    for (const side of shown) expect(new Set(side).size).toBe(side.length);
+    // Al-Ma'idah gathers Isa's signs (5:109-110) apart from his disciples and the table (5:111-119), so neither card steps back.
+    const maidah = pairCards(3, 5, true).filter(card => card.sides[0].rows);
+    expect(maidah.map(card => card.id)).toEqual(['3:42-51|5:109-110', '3:52-63|5:111-119']);
+    expect(maidah.some(card => card.sides.some(side => side.back))).toBe(false);
   });
 
   it('serves the timeline cards in place of the engine cards inside the story, and marks a side that steps back', () => {
@@ -120,10 +153,10 @@ describe('compare pair cards', () => {
     }
   });
 
-  it('tells Nuh, Hud, Salih, Shu\'ayb, Ibrahim and Lut on every page, each story ayah on one story card and no story card pair split', () => {
-    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'ibrahim', 'lut'];
-    // Pairs whose two ayat sit in different events of the timeline, waiting on the owner (compare-refine/open-questions.md, #655).
-    const waiting = new Set(['2:135|3:95', '15:62|51:25']);
+  it('tells every timeline story on every page, each story ayah on one story card and no story card pair split', () => {
+    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut'];
+    // Open questions for the owner (compare-refine/open-questions.md, #659): an ayah that tells two events, or a shared formula (#659, #655).
+    const openSplits = ['2:36|20:123', '3:62|4:158', '2:135|3:95', '15:62|51:25'];
     const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
     const pages = new Map<string, [number[], number[]][][]>();
     const add = (key: string, parts: [number[], number[]][][]) => pages.set(key, [...(pages.get(key) ?? []), ...parts]);
@@ -154,7 +187,7 @@ describe('compare pair cards', () => {
         expect(new Set(shown).size, `${key}: an ayah on two cards`).toBe(shown.length);
         expect(new Set(shown), key).toEqual(new Set(parts.flat().flatMap(row => row[s])));
       }
-      for (const card of story) for (const { id } of (card!.pairs ?? []).filter(pair => !waiting.has(pair.id))) {
+      for (const card of story) for (const { id } of (card!.pairs ?? []).filter(pair => !openSplits.includes(pair.id))) {
         const [a, b] = id.split('|').map(ayah => Number(ayah.split(':')[1]));
         expect([card!.sides[0].ayat.some(ayah => ayah.number === a), card!.sides[1].ayat.some(ayah => ayah.number === b)], `${key}: ${id} split from ${card!.id}`).toEqual([true, true]);
       }
@@ -203,8 +236,8 @@ describe('compare pair cards', () => {
     expect(many.pairs?.every(pair => pair.verdict)).toBe(true);
   });
 
-  it('adds a curated word link and the pair it needs, inside the range card', () => {
-    const card = pairCards(3, 19).find(item => item.id === '3:40-41|19:8-10')!;
+  it('adds a curated word link and the pair it needs, and keeps it on the story card that takes the range over', () => {
+    const card = pairCards(3, 19).find(item => item.id === '3:40|19:8-9')!;
     expect(card.pairs?.map(pair => pair.id)).toContain('3:40|19:9');
     const [a, b] = [card.sides[0].ayat[0], card.sides[1].ayat[1]];
     expect(a.number).toBe(40);
