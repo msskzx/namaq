@@ -29,7 +29,7 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
         {topic === 'prophets' ? <>
           <Text style={paragraph}>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</Text>
-          <Text style={paragraph}>اضغط دائرة لتقرأ مواضع الحدث سورةً تحت سورة، أو تفتح الآيات في المصحف، أو تقارن السورتين. وفي المواضع تُلوَّن الكلمات التي جاءت متتابعة في سورة أخرى من مواضع الحدث نفسه.</Text>
+          <Text style={paragraph}>اضغط دائرة لتقرأ آياتها مع مواضع الحدث في السور الأخرى، ومن كل موضع تفتحه في المصحف أو تقارنه بسورة أخرى. وفي المواضع تُلوَّن الكلمات التي جاءت متتابعة في سورة أخرى من مواضع الحدث نفسه.</Text>
           {note && <Text style={[paragraph, { color: palette.muted }]}>{note}</Text>}
         </> : topic === 'branches' ? <>
           <Text style={paragraph}>تجمع البطاقة مواضع متشابهة، وتعرضها كشجرة أو مصفوفة. تطابق كل موضعين شرط للتجميع الآلي، وتحفظ مجموعات الكتب كما وردت. زر المصادر تحت البطاقة يعرض أنواع الاختلاف التي ذكرتها الكتب، وبجانب كل نوع مثال كلماته، ثم نص كل كتاب وموضعه. الرمز ∅ يدل على حذف. تظل العبارات العامة متاحة بالبحث.</Text>
