@@ -22,7 +22,7 @@ import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTr
 import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/branches';
 import { scopeSummary } from '@shared/quiz/scopeSummary';
-import { playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
+import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import type { QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
 
@@ -343,7 +343,8 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
 }
 
 function Notice({ status, palette }: { status: PartyStatus | 'started'; palette: Palette }) {
-  const text = status === 'missing' ? 'لا يوجد اختبار بهذا الرقم، أو انتهى.'
+  const text = status === 'offline' ? (partyUrl() ? 'تعذر الوصول إلى خادم الاختبار. تحقق من الاتصال، والتطبيق يعيد المحاولة.' : 'لم يُضبط خادم الاختبار الجماعي في هذه النسخة.')
+    : status === 'missing' ? 'لا يوجد اختبار بهذا الرقم، أو انتهى.'
     : status === 'started' ? 'بدأ هذا الاختبار، فلا يمكن الانضمام إليه الآن.'
     : 'أخرجك المضيف من هذا الاختبار.';
   return (
@@ -365,7 +366,7 @@ export default function PartyRoom() {
   const nameError = !joined && error && (error === 'name-taken' || error === 'name-empty') ? ERRORS[error] : null;
   const leave = () => { if (joined) send({ type: 'leave' }); router.back(); };
   let body: React.ReactNode;
-  if (status === 'missing' || status === 'removed') body = <Notice status={status} palette={palette} />;
+  if (status === 'missing' || status === 'removed' || (status === 'offline' && !view)) body = <Notice status={status} palette={palette} />;
   else if (!joined && error === 'started') body = <Notice status="started" palette={palette} />;
   else if (!name || nameError) body = <NameForm initial={name ?? ''} error={nameError} palette={palette} onSubmit={value => { saveName(value); setName(value); }} />;
   else if (!view) body = <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><LoadingDots /></View>;
@@ -377,7 +378,7 @@ export default function PartyRoom() {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <BackBar title={title}>
-        {(status === 'connecting' || status === 'closed') && view ? <Text style={{ color: palette.muted, fontSize: 14 }}>يعيد الاتصال…</Text> : null}
+        {(status === 'connecting' || status === 'closed' || status === 'offline') && view ? <Text style={{ color: palette.muted, fontSize: 14 }}>يعيد الاتصال…</Text> : null}
         {joined && <Button variant="plain" Icon={LogOut} accessibilityLabel="غادر" onPress={leave} />}
       </BackBar>
       {joined && error && !['not-ready', 'name-taken', 'name-empty'].includes(error) ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right', padding: 12 }}>{ERRORS[error]}</Text> : null}
@@ -385,3 +386,5 @@ export default function PartyRoom() {
     </KeyboardAvoidingView>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

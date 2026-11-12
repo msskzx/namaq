@@ -117,3 +117,5 @@ export default function QuizPlay() {
     </KeyboardAvoidingView>
   );
 }
+
+export { ErrorBoundary } from '@/components/CrashScreen';

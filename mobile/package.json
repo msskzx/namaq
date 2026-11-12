@@ -40,7 +40,8 @@
     "typecheck": "tsc --noEmit",
     "update": "eas update --auto",
     "lint": "expo lint",
-    "tree-sizes": "expo export --platform web && node scripts/tree-sizes.mjs"
+    "tree-sizes": "expo export --platform web && node scripts/tree-sizes.mjs",
+    "test": "cd .. && npx vitest run mobile/ shared/"
   },
   "private": true
 }
