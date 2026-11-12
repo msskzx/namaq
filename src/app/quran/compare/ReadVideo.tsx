@@ -38,7 +38,7 @@ function place(context: CanvasRenderingContext2D, side: CardSide, size: number, 
   context.font = `${size}px ${look.quran}`;
   const tokens = side.ayat.flatMap(ayah => [
     ...ayah.words.map((word, index) => ({ text: mushafText(word), ayah: ayah.number, word: index, mark: ayah.marks?.[index] })),
-    { text: `﴿${num(ayah.number)}﴾`, ayah: ayah.number, word: -1, mark: undefined, seal: true },
+    { text: num(ayah.number), ayah: ayah.number, word: -1, mark: undefined, seal: true },
   ]);
   const space = context.measureText(' ').width;
   const width = WIDTH - 2 * MARGIN;

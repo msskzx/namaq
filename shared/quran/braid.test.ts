@@ -43,3 +43,12 @@ describe('braid', () => {
     expect(braid(['قال', 'موسى'], ['قال', 'فرعون']).map(strand => strand.kind)).toEqual(['split']);
   });
 });
+
+describe('endMark', () => {
+  it('shows one empty medallion where two ayat with different numbers end together, never two', async () => {
+    const { endMark } = await import('./braid');
+    expect(endMark([15, 186], true)).toBe('۝');
+    expect(endMark([7], true)).toBe('٧');
+    expect(endMark([], true)).toBe('');
+  });
+});

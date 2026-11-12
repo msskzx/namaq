@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import MushafText from '@/components/common/MushafText';
-import { braidOf, type BraidWord } from '@shared/quran/braid';
+import { braidOf, endMark, type BraidWord } from '@shared/quran/braid';
 import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { normalizeWord } from '@shared/quran/normalize';
@@ -24,7 +24,7 @@ function Words({ words, other, ar }: { words: BraidWord[]; other?: BraidWord[]; 
     return <Fragment key={i}>
       {i > 0 && ' '}
       <span style={colour ? { color: colour } : undefined}><MushafText>{word.text}</MushafText></span>
-      {ends(word, other?.[i]).length > 0 && <span className="text-[var(--home-accent)]"> {ends(word, other?.[i]).map(end => (ar ? num(end) : end)).join(' · ')}</span>}
+      {ends(word, other?.[i]).length > 0 && <span className="text-[var(--home-accent)]"> {endMark(ends(word, other?.[i]), ar)}</span>}
     </Fragment>;
   });
 }

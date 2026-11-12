@@ -11,3 +11,9 @@ it('covers every source word without the font-incompatible circle character', ()
     }
   }
 });
+
+it('leaves an ayah number bare so the font draws one medallion, not one inside ﴿﴾', async () => {
+  const { mushafText } = await import('./mushafText');
+  expect(mushafText('﴿٤٣﴾')).toBe('٤٣');
+  expect(mushafText('ٱلۡمُتَّقِينَ ﴿٤٣﴾ فِي')).not.toMatch(/[﴿﴾]/);
+});

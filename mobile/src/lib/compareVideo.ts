@@ -35,7 +35,7 @@ const videoSide = (side: CardSide): VideoSide => ({
       const mark = ayah.marks?.[index];
       return { text: mushafText(word), ayah: ayah.number, word: index, ...(mark ? { kind: mark.kind, ...(mark.link ? { link: mark.link } : {}) } : {}) };
     }),
-    { text: `﴿${num(ayah.number)}﴾`, ayah: ayah.number, word: -1, seal: true },
+    { text: num(ayah.number), ayah: ayah.number, word: -1, seal: true },
   ]),
 });
 
