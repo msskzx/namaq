@@ -109,6 +109,16 @@ describe('compare pair cards', () => {
     expect(musa[3].sides.map(side => side.rows)).toEqual([[[], [57, 58, 59, 60, 61]], [[138, 139, 140, 141], [159, 160, 161, 162]]]);
   });
 
+  it('tells Ibrahim\'s guests, the good news and the errand to Lut\'s people as three cards, each holding its pairs', () => {
+    const ids = (a: number, b: number) => pairCards(a, b, true).filter(card => card.sides.every(side => side.ayat.length)).map(card => card.id);
+    expect(ids(15, 51)).toEqual(expect.arrayContaining(['15:51-52|51:24-27', '15:53-56|51:28-30', '15:57-60|51:31-34']));
+    // 51:28 holds the fear and the good news, so it sits with both 11:70 and 15:53.
+    expect(ids(11, 51)).toEqual(expect.arrayContaining(['11:69|51:24-27', '11:70-73|51:28-30']));
+    const lut = pairCards(26, 37, true).find(card => card.id.startsWith('26:160'))!;
+    // 37:133 «وإن لوطا لمن المرسلين» opens the rescue that 37:134 continues with «إذ».
+    expect(lut.sides[1].ayat.map(ayah => ayah.number)).toEqual([133, 134, 135]);
+  });
+
   it('leaves a story part the owner dropped off the page, and counts unjudged parts against the page\'s review', () => {
     const id = '2:55|7:154';
     const before = compareVerdicts[id];
@@ -144,9 +154,9 @@ describe('compare pair cards', () => {
   });
 
   it('tells every timeline story on every page, each story ayah on one story card and no story card pair split', () => {
-    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya'];
-    // Open questions for the owner (compare-refine/open-questions.md, #659): an ayah that tells two events, or a shared formula.
-    const openSplits = ['2:36|20:123', '3:62|4:158'];
+    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut'];
+    // Open questions for the owner (compare-refine/open-questions.md, #659): an ayah that tells two events, or a shared formula (#659, #655).
+    const openSplits = ['2:36|20:123', '3:62|4:158', '2:135|3:95', '15:62|51:25'];
     const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
     const pages = new Map<string, [number[], number[]][][]>();
     const add = (key: string, parts: [number[], number[]][][]) => pages.set(key, [...(pages.get(key) ?? []), ...parts]);
@@ -216,7 +226,9 @@ describe('compare pair cards', () => {
 
   it('puts every pair on exactly one card, with verdicts per pair in review', () => {
     const count = new Map<string, number>();
-    for (const card of pairCards(2, 3, true)) for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) count.set(id, (count.get(id) ?? 0) + 1);
+    // Ibrahim's story parts on this page judge a part with no engine pair under its own first ayat; those are not engine pairs.
+    const engine = new Set(engineCards(2, 3, true).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]));
+    for (const card of pairCards(2, 3, true)) for (const id of card.pairs?.map(pair => pair.id) ?? [card.id]) if (engine.has(id)) count.set(id, (count.get(id) ?? 0) + 1);
     expect(count.size).toBe(reviewPairs.find(pair => pair.a === 2 && pair.b === 3)!.count);
     expect([...count.values()].every(n => n === 1)).toBe(true);
     const many = pairCards(10, 26, true).find(item => item.id === '10:72|26:109,127,145,164,180')!;
@@ -328,7 +340,8 @@ describe('compare pair cards', () => {
     expect(ids(pairCards(2, 3))).not.toEqual(expect.arrayContaining([dropped[0]]));
     expect(ids(pairCards(2, 3))).toEqual(expect.arrayContaining(['2:66|3:138', '2:127|3:35']));
     const review = pairCards(2, 3, true);
-    expect(review.reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0)).toBe(reviewPairs.find(pair => pair.a === 2 && pair.b === 3)!.count);
+    const engine = new Set(engineCards(2, 3, true).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]));
+    expect(review.reduce((sum, card) => sum + (card.pairs?.filter(pair => engine.has(pair.id)).length ?? 1), 0)).toBe(reviewPairs.find(pair => pair.a === 2 && pair.b === 3)!.count);
     expect(review.find(card => card.id === '2:107|3:29')?.verdict?.keep).toBe(false);
     expect(listedPairs.find(pair => pair.a === 2 && pair.b === 3)?.count).toBe(pairCards(2, 3).reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0));
   });
