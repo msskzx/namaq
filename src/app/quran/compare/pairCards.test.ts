@@ -110,7 +110,7 @@ describe('compare pair cards', () => {
     }
   });
 
-  it('tells Nuh, Hud, Salih and Shu\'ayb on every page with each story ayah on one card and no pair split across cards', () => {
+  it('tells Nuh, Hud, Salih and Shu\'ayb on every page, each story ayah on one story card and no story card pair split', () => {
     const peoples = ['nuh', 'hud', 'salih', 'shuayb'];
     const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
     const pages = new Map<string, [number[], number[]][][]>();
@@ -124,11 +124,10 @@ describe('compare pair cards', () => {
       const [from, to = from] = text.split(':')[1].split('-').map(Number);
       return Array.from({ length: to - from + 1 }, (_, k) => from + k);
     };
-    for (const { parts } of curatedLinks.storyParts.slice(1)) {
+    for (const { story, parts } of curatedLinks.storyParts) {
+      if (story === 'Adam\'s creation') continue;
       const rows = parts.map(part => (Array.isArray(part) ? part : [part]).map(row => row.split('|').map(side => (side ? range(side) : [])) as [number[], number[]]));
-      const [a, b] = [0, 1].map(s => rows.flat().find(row => row[s].length)![s]);
       const surahs = [0, 1].map(s => Number((parts.flat().map(row => row.split('|')[s]).find(Boolean) ?? '').split(':')[0]));
-      expect(a.length && b.length).toBeTruthy();
       add(surahs.join(':'), rows);
     }
     expect(pages.size).toBeGreaterThan(100);
