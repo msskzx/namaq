@@ -127,6 +127,31 @@ describe('compare pair cards', () => {
     expect(lut.sides[1].ayat.map(ayah => ayah.number)).toEqual([133, 134, 135]);
   });
 
+  it('keeps every pair of Musa\'s and Harun\'s story on one card and no story ayah on two, apart from echoes across two scenes', () => {
+    const echoes = ['2:36|7:24', '11:32|26:31', '7:111|26:53', '2:49|7:141', '7:132|10:79', '7:133|10:75', '20:23|79:20', '20:43|79:17', '20:45|26:12', '20:45|28:33'];
+    const pages = (curatedLinks.timelineStories ?? []).filter(({ story }) => story === 'musa' || story === 'harun');
+    expect(pages.length).toBeGreaterThan(100);
+    for (const { story: slug, surahs: [x, y] } of pages) {
+      const told = new Set(STORIES[slug].events.flatMap(event => event.segments.flatMap(({ surah, range: [lo, hi] }) => Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`))));
+      const engine = engineCards(x, y, true);
+      const shape = (card: (typeof engine)[number]) => `${card.id} ${card.sides.map(side => side.ayat.map(ayah => ayah.number).join(',')).join('|')}`;
+      const engineShapes = new Set(engine.map(shape));
+      const story = pairCards(x, y, true).filter(card => !engineShapes.has(shape(card)) && card.sides.every(side => side.ayat.some(ayah => told.has(`${side.surah}:${ayah.number}`))));
+      expect(story.length, `${x}:${y}`).toBeGreaterThan(0);
+      for (const s of [0, 1]) {
+        const shown = story.flatMap(card => card.sides[s].ayat.map(ayah => ayah.number));
+        expect(shown.length, `${x}:${y}`).toBe(new Set(shown).size);
+      }
+      const cardOf = (s: number, n: number) => story.findIndex(card => card.sides[s].ayat.some(ayah => ayah.number === n));
+      for (const { id, verdict } of engine.flatMap(card => card.pairs ?? [{ id: card.id, verdict: card.verdict }])) {
+        if (verdict?.keep === false || echoes.includes(id)) continue;
+        const [a, b] = id.split('|').map(key => Number(key.split(':')[1]));
+        const [ca, cb] = [cardOf(0, a), cardOf(1, b)];
+        if (ca >= 0 && cb >= 0) expect(ca, `${id} on ${x}:${y}`).toBe(cb);
+      }
+    }
+  });
+
   it('leaves a story part the owner dropped off the page, and counts unjudged parts against the page\'s review', () => {
     const id = '2:55|7:154';
     const before = compareVerdicts[id];
@@ -169,7 +194,7 @@ describe('compare pair cards', () => {
     const pages = new Map<string, [number[], number[]][][]>();
     const add = (key: string, parts: [number[], number[]][][]) => pages.set(key, [...(pages.get(key) ?? []), ...parts]);
     for (const { story, surahs } of curatedLinks.timelineStories) {
-      if (story === 'musa') continue;
+      if (story === 'musa' || story === 'harun') continue;
       expect(peoples, story).toContain(story);
       add(surahs.join(':'), timelineParts(STORIES[story], [surahs[0], surahs[1]]).map(part => part.rows));
     }
