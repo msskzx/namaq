@@ -13,6 +13,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
+import { writtenForms } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
@@ -72,15 +73,13 @@ export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {
   return found.size > 1 ? [...found.values()].sort((a, b) => b.keys.length - a.keys.length) : [];
 }
 
-/** Word indices (from the ayah start) a node's ayat voice differently: the node shows one spelling, so the word is marked. */
-const Different = createContext<Set<number>>(new Set());
+/** The node whose words are being drawn: how each of its ayat writes them, and where the node starts in the ayah. */
+const Written = createContext<{ forms?: Branch['forms']; offset: number; names: Record<number, string> }>({ offset: 0, names: {} });
 
-export function Marked({ node, children, skip = 0, offset = 0, enabled = true, references, before, after }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys?: string[]; subject?: string; siblings?: string[]; skip?: number; offset?: number; before?: React.ReactNode; after?: React.ReactNode; names?: Record<number, string>; children: React.ReactNode }) {
+export function Marked({ node, children, offset = 0, enabled = true, references, before, after, names = {} }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys?: string[]; subject?: string; siblings?: string[]; skip?: number; offset?: number; before?: React.ReactNode; after?: React.ReactNode; names?: Record<number, string>; children: React.ReactNode }) {
   const buttons = (before || after) && <span className="mt-1 flex flex-wrap items-center justify-center gap-2" dir="rtl">{before}{after}</span>;
   if (!enabled) return <>{children}{references}</>;
-  const forms = Object.values(node.forms ?? {}).map(words => words.slice(skip));
-  const differentWords = (forms[0] ?? []).flatMap((_, i) => new Set(forms.map(words => words[i])).size > 1 ? [offset + skip + i] : []);
-  return <><Different.Provider value={new Set(differentWords)}>{children}</Different.Provider>{references}{buttons}</>;
+  return <><Written.Provider value={{ forms: node.forms, offset, names }}>{children}</Written.Provider>{references}{buttons}</>;
 }
 
 const Comparison = createContext<{ contexts: AyahContext[]; offsets: Record<string, number> }>({ contexts: [], offsets: {} });
@@ -88,7 +87,8 @@ const Comparison = createContext<{ contexts: AyahContext[]; offsets: Record<stri
 /** A node's words: shared-word colours when the tree compares ayat, and amber for a word its ayat voice differently (inside `Marked`). */
 export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: string[]; ayahKeys: string[]; at?: number; prefix?: boolean }) {
   const { contexts, offsets } = useContext(Comparison);
-  const different = useContext(Different);
+  const written = useContext(Written);
+  const lit = useOuterPaths()?.lit;
   const ar = useLanguage().language === 'ar';
   return words.map((word, i) => {
     const matches = ayahKeys.map(key => {
@@ -97,10 +97,22 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
       return match?.rooted.includes(index) ? 'root' : match?.exact.includes(index) ? 'exact' : undefined;
     });
     const kind = word !== '۝' && !word.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : 'exact' : undefined;
-    const text = kind ? <mark data-match={kind} className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>;
-    // The ayat voice this word differently (the node shows one spelling; the matrix shows each ayah's own): amber.
-    // A root match already says the forms differ, so it keeps its purple.
-    return <React.Fragment key={i}>{i > 0 && ' '}{different.has(at + i) && kind !== 'root' ? <span data-differs className="text-[var(--home-amber)]" title={ar ? 'تختلف حركاتها بين الآيات' : 'Voiced differently across the ayat'}><MushafText>{word}</MushafText></span> : text}</React.Fragment>;
+    const forms = writtenForms(written, at + i - written.offset, word, lit);
+    const differs = forms.length > 1 || forms[0].word !== word;
+    const shown = forms[0].word.replace(/^﴿(.+)﴾$/, word.startsWith('﴿') ? '$&' : '$1');
+    const text = kind ? <mark data-match={kind} className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
+    const title = ar ? 'تختلف حركاتها بين الآيات' : 'Voiced differently across the ayat';
+    // docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md
+    return <React.Fragment key={i}>{i > 0 && ' '}{forms.length > 1 ? (
+      <span data-forms title={title} className="mx-1 inline-flex flex-col rounded-md border-x-2 border-[var(--home-amber)] px-1.5 align-middle leading-normal">
+        {forms.map(form => (
+          <span key={form.word} data-form className="flex flex-col items-center border-dashed border-[var(--home-rule)] [&+&]:border-t">
+            <span className="text-[var(--home-amber)]"><MushafText>{form.word}</MushafText></span>
+            <span style={{ fontFamily: 'var(--font-amiri), serif' }}><AyahRefs keys={form.keys} names={written.names} className="-mt-1 justify-center pb-0.5" /></span>
+          </span>
+        ))}
+      </span>
+    ) : differs && kind !== 'root' && word !== '۝' ? <span data-differs className="text-[var(--home-amber)]" title={title}><MushafText>{shown}</MushafText></span> : text}</React.Fragment>;
   });
 }
 

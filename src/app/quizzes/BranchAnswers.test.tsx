@@ -154,11 +154,11 @@ describe('complete branch tree answers', () => {
     expect(screen.getAllByRole('textbox')).toHaveLength(4);
   });
 
-  it('colours the differently voiced word of a feedback leaf amber and gives every node a path button', () => {
+  it('writes the differently voiced word of a feedback leaf in each ayah\'s form and gives every node a path button', () => {
     const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
     const { container } = render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} ar />);
-    expect([...container.querySelectorAll('[data-differs]')].map(word => word.textContent)).toEqual(['مِنْ']);
+    expect([...container.querySelectorAll('[data-form] > span:first-child')].map(word => word.textContent)).toEqual(['مِّنْ', 'مِنْ']);
     expect(screen.getAllByRole('button', { name: /إظهار المسار/ })).toHaveLength(3);
   });
 
