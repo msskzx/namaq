@@ -94,6 +94,14 @@ describe('compare pair cards', () => {
     expect(maidah.some(card => card.sides.some(side => side.back))).toBe(false);
   });
 
+  it('tells Sulayman then Ayyub on al-Anbiya\' and Sad, and the prophet lists as one card', () => {
+    const ids = pairCards(21, 38, true).map(card => card.id);
+    expect(ids.slice(ids.indexOf('21:81|38:30-36'), ids.indexOf('21:81|38:30-36') + 4)).toEqual(['21:81|38:30-36', '21:82|38:37-40', '21:83|38:41', '21:84|38:42-44']);
+    expect(ids).not.toContain('21:83-84|38:41-43');
+    // The prophet lists are one hand-cut card, so 4:163 shows once however many timelines hold it.
+    expect(pairCards(4, 6, true).filter(card => card.sides[0].ayat.some(ayah => ayah.number === 163)).map(card => card.id)).toEqual(['4:163|6:84-86']);
+  });
+
   it('serves the timeline cards in place of the engine cards inside the story, and marks a side that steps back', () => {
     const ids = pairCards(11, 26, true).map(card => card.id);
     expect(ids.slice(0, 3)).toEqual(['11:25-26|26:105-110', '11:27-31|26:111-115', '11:32-49|26:116-122']);
@@ -154,7 +162,7 @@ describe('compare pair cards', () => {
   });
 
   it('tells every timeline story on every page, each story ayah on one story card and no story card pair split', () => {
-    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut'];
+    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut', 'dawud', 'sulayman', 'ayyub', 'yunus'];
     // Open questions for the owner (compare-refine/open-questions.md, #659): an ayah that tells two events, or a shared formula (#659, #655).
     const openSplits = ['2:36|20:123', '3:62|4:158', '2:135|3:95', '15:62|51:25'];
     const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
