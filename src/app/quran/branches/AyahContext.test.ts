@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ayahContexts, sharedByAll } from '@shared/quran/ayahContext';
+import { normalizeWord } from '@shared/quran/normalize';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import { sharedMarks } from './AyahContext';
 
@@ -21,4 +22,20 @@ describe('sharedMarks', () => {
     // Without a step (the ayah before and after), marks stay as they were: every-row words only, nothing to tap.
     expect(Object.values(sharedMarks(araf, 'exact', 'root')).every(mark => !mark.some && !mark.link)).toBe(true);
   });
+
+  it('pairs a particle only where the ayat line up in order, and a rooted word anywhere', async () => {
+    const all = await loadReaderAyat();
+    const [baqara, nur] = sharedByAll(ayahContexts(all, ['2:106', '24:45']));
+    // «ما ننسخ» opens 2:106; the only «ما» in 24:45 sits near its end, out of order: no pair.
+    expect(baqara.match!.links![0]).toBeUndefined();
+    // «من آية» pairs with «من ماء», not with a later «ومنهم».
+    expect(nur.match!.links![4]?.link).toBe(baqara.match!.links![2].link);
+    expect(nur.match!.links![11]).toBeUndefined();
+    // الأعراف ١١٦ and الشعراء ٤٤ tell «ألقوا» in a different order; rooted words still pair.
+    const [araf, shuara] = sharedByAll(ayahContexts(all, ['7:116', '26:44']));
+    const alqaw = (context: typeof araf) => Object.entries(context.match!.links!).find(([i]) => normalizeWord(context.ayah.words[+i]).includes('لقوا'))?.[1].link;
+    expect(alqaw(araf)).toBeDefined();
+    expect(alqaw(araf)).toBe(alqaw(shuara));
+  });
 });
+
