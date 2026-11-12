@@ -54,20 +54,6 @@ export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
   });
 }
 
-/** Hides a card when a bigger card holds all its ayat (ADR 0035). Cards that do not `count` hide nothing and stay. */
-export function withoutSmallerTrees(pieces: BranchPiece[], counts: (piece: BranchPiece) => boolean = () => true): BranchPiece[] {
-  const kept: BranchPiece[] = [];
-  const hidden = new Set<BranchPiece>();
-  for (const piece of pieces.filter(counts).sort((a, b) => b.keys.length - a.keys.length)) {
-    const cover = kept.find(other => other.keys.length > piece.keys.length && piece.keys.every(key => other.keys.includes(key)));
-    if (!cover) { kept.push(piece); continue; }
-    cover.legacyIds = [...new Set([...(cover.legacyIds ?? []), piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])])];
-    cover.absorbed = [...new Set([...(cover.absorbed ?? []), piece.text, ...(piece.absorbed ?? [])])];
-    hidden.add(piece);
-  }
-  return pieces.filter(piece => !hidden.has(piece));
-}
-
 /** The cards to browse. Cards the owner dropped are left out unless `withDropped` (review) asks for them. */
 export function branchInventory(filters: GroupFilters, range: JuzRange | null, withDropped = false): BranchPiece[] {
   const all = allBranchPieces(filters, range);
@@ -101,8 +87,7 @@ function allBranchPieces(filters: GroupFilters, range: JuzRange | null): BranchP
       entries.push(scoped);
     }
   }
-  const distinct = withoutCoveredFamilies(distinctBranchPieces(entries));
-  const result = effective.categories.split(',').includes('words') ? distinct : withoutSmallerTrees(distinct, piece => !droppedBranch(piece));
+  const result = withoutCoveredFamilies(distinctBranchPieces(entries));
   if (inventories.size >= 16) inventories.delete(inventories.keys().next().value!);
   inventories.set(cacheKey, result);
   return result;

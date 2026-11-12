@@ -46,9 +46,8 @@ export const hasTrees = (key: string) => (treeAyat ??= new Set(branchList(EMPTY_
 
 /** Where a search opens: the tree whose phrase is exactly what was typed, else the first found. */
 export function openingIndex(pieces: BranchPiece[], query: string) {
-  if (!query.trim()) return 0;
-  const exact = pieces.findIndex(piece => textIs(piece.text, query));
-  return Math.max(0, exact >= 0 ? exact : pieces.findIndex(piece => piece.absorbed?.some(text => textIs(text, query))));
+  const exact = query.trim() ? pieces.findIndex(piece => textIs(piece.text, query)) : -1;
+  return Math.max(0, exact);
 }
 
 export const isFiltered = (state: ListState) => !!(state.range || state.saved || hasGroupFilters(state.filters) || state.filters.sort);

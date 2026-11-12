@@ -133,8 +133,6 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   });
   const distinct = distinctBranchPieces;
   const inventory = branchInventory(filters, range, review);
-  const bigger = requestedGroup && !review && !requestedOccurrences.length && !inventory.some(piece => piece.id === id) ? inventory.find(piece => piece.absorbed?.includes(requestedGroup.tree.text) && piece.legacyIds?.includes(id)) : undefined;
-  if (bigger) redirect(branchesHref(bigger.id, juz, state));
   const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? scopePieces(piecesFor(built)).filter(piece => review || !droppedBranch(piece)) : inventory;
   const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), effectiveFilters, range, review]) : '';
   if (needle && !built.searches.has(needle)) {
@@ -149,7 +147,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const found = savedSet ? (needle ? searched.filter(piece => savedIds.some(saved => savedSet.get(saved)?.id === piece.id)) : distinct(savedIds.flatMap(saved => savedSet.get(saved) ?? []))) : searched;
   const bySurah = surah ? found.filter(piece => piece.keys.some(key => surahOf(key) === surah)) : found;
   const cut = ayah ? bySurah.filter(piece => piece.keys.includes(ayah)) : bySurah;
-  const opening = query ? cut.find(piece => textIs(piece.text, query)) ?? cut.find(piece => piece.absorbed?.some(text => textIs(text, query))) ?? cut[0] : cut[0];
+  const opening = query ? cut.find(piece => textIs(piece.text, query)) ?? cut[0] : cut[0];
   const constrained = hasGroupFilters(filters) || !!requestedGroup && !!range;
   const focusedRequest = !!resolved && !requestedGroup && filters.categories !== 'none' && filters.cited !== '1' && !filters.differences && new Set(resolved.occurrences.filter(occurrence => withinScope(occurrence.key)).map(occurrence => occurrence.key)).size >= 2;
   if ((!id || constrained && !cut.some(piece => piece.id === id) && !focusedRequest) && opening) {
@@ -203,7 +201,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const surahCounts = countSurahs(inventory);
   const surahs = allSurahs.filter(row => surahCounts[row.number]).map(row => ({ number: row.number, name: row.name, count: surahCounts[row.number] }));
   const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? 'tree' : 'cards' });
-  const bookmarkAliases = [...(requestedGroup?.aliases ?? (resolved ? [resolved.id] : [])), ...(inventory.find(piece => piece.id === id)?.legacyIds ?? [])];
+  const bookmarkAliases = requestedGroup?.aliases ?? (resolved ? [resolved.id] : []);
   const viewportHeight = 'clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)';
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
   const neighbourCard = (neighbour: typeof neighbours.next) => neighbour && <BranchTree ayat={neighbour.ayat} tree={neighbour.tree} prefixes={neighbour.prefixes} offsets={neighbour.offsets} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} direction="auto" zoomInRail="preview" surround={{ on: false, sync: true }} />;
