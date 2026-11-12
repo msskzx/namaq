@@ -18,7 +18,8 @@ export type Verdict = { keep: boolean; why: string; checked?: boolean; ask?: str
 /** Two surahs with at least one similar ayah pair, lower surah first. */
 export type SurahPair = { a: number; b: number; count: number };
 
-export type CardSide = { surah: number; ayah: number; ayat: CardAyah[] };
+/** `rows`: the ayah numbers of each row, lined up with the other side's rows (a story part). `back`: this side steps back in its surah from the card before. */
+export type CardSide = { surah: number; ayah: number; ayat: CardAyah[]; rows?: number[][]; back?: boolean };
 /** One ayah against several far ones: `side` holds the partners. `shared` is the one ayah with the marks of that pairing. */
 export type ManyOption = { id: string; ayah: CardAyah; shared: CardAyah };
 /** `pairs` lists the ayah pairs of a range or one-to-many card; a single-pair card has `verdict` instead. */

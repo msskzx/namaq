@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import Segmented from '@/components/common/Segmented';
@@ -259,16 +259,41 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
   const show = (n: number) => (ar ? num(n) : n);
   const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
   return {
-    title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}`.trim() : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
+    title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}`.trim() : side.ayat.length === 0 ? name : side.rows || runsOf(side.ayat.map(ayah => ayah.number)).length > 1 ? `${name} ${runsOf(side.ayat.map(ayah => ayah.number)).map(([from, to]) => `${show(from)}${to > from ? `–${show(to)}` : ''}`).join(' · ')}` : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
     action: <span className="flex">
       {extra}
       <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
         <BookOpen size={16} aria-hidden />
       </Link>
     </span>,
-    rows: partners?.ayat ?? [side.ayat.map(lightMarks(lit, reading))],
+    gaps: true,
+    gapsLabel: ar ? 'الآيات' : 'Ayat',
+    ...(side.rows ? { empty: emptyNote(name, ar) } : {}),
+    // Story cards run in the first surah's order, so this side's surah tells this part before the last card's.
+    ...(side.back ? { subtitle: ar ? 'قبلُ في السورة' : 'Earlier in the surah' } : {}),
+    rows: partners?.ayat ?? (side.rows ?? [side.ayat.map(ayah => ayah.number)]).map(row => side.ayat.filter(ayah => row.includes(ayah.number)).map(lightMarks(lit, reading))),
     ...(partners ? { pick: partners.pick, footer: partners.footer } : {}),
   };
+}
+
+/** Ayah numbers in order as unbroken runs, so a story card's title names each stretch it shows. */
+const runsOf = (numbers: number[]) => numbers.reduce<[number, number][]>((runs, n) => {
+  const last = runs[runs.length - 1];
+  if (last && n === last[1] + 1) last[1] = n;
+  else runs.push([n, n]);
+  return runs;
+}, []);
+
+const emptyNote = (name: string, ar: boolean) => (ar ? `لا تذكر سورة ${name.replace(/^سورة\s+/, '')} هذا الجزء` : `${name} does not tell this part`);
+
+/** A card whose sides line up in rows (a curated story part) as one pair of sides per row; any other card as itself. */
+function rowsOf(sides: CardSide[]): [CardSide, CardSide][] {
+  const rows = sides[0].rows;
+  if (!rows) return [sides as [CardSide, CardSide]];
+  return rows.map((_, row) => sides.map(side => {
+    const ayat = side.ayat.filter(ayah => side.rows![row].includes(ayah.number));
+    return { ...side, ayah: ayat[0]?.number ?? side.ayah, ayat, rows: undefined };
+  }) as [CardSide, CardSide]);
 }
 
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
@@ -298,6 +323,31 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   const option = card.many?.options[selected];
   const shownSides = card.sides.map((side, i) => !option ? side : i === card.many!.side ? { ...side, ayah: option.ayah.number, ayat: [option.ayah] } : { ...side, ayat: [option.shared] });
   const [view, setView] = useState<BranchView>(preferred);
+  // Any part of a story card folds to its ayah range, both sides at once.
+  const [folded, setFolded] = useState<number[]>([]);
+  const parts = shownSides[0].rows;
+  const toggleFold = (row: number) => setFolded(current => (current.includes(row) ? current.filter(other => other !== row) : [...current, row]));
+  // The rule's label is the ayat alone, as on every rule; the button's name adds the surah for a screen reader.
+  const ayatOf = (row: number, side: CardSide) => runsOf(side.rows![row]).map(([from, to]) => `${ar ? num(from) : from}${to > from ? `–${ar ? num(to) : to}` : ''}`).join(' · ');
+  const rangeOf = (row: number, side: CardSide) => `${ar ? plainName(names[side.surah]?.ar ?? '').replace(/^سورة\s+/, '') : names[side.surah]?.en ?? String(side.surah)} ${ayatOf(row, side)}`;
+  // Folded, the chevron keeps its corner and the part's range takes the middle of the rule, as every rule's label does.
+  const foldButton = (row: number, side: CardSide) => {
+    const told = shownSides.find(other => other.rows![row].length)!;
+    const range = side.rows![row].length ? rangeOf(row, side) : `${rangeOf(row, told)}: ${emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar)}`;
+    const closed = folded.includes(row);
+    const label = closed ? (ar ? `افتح ${range}` : `Open ${range}`) : (ar ? `اطوِ ${range}` : `Fold ${range}`);
+    return <Button size="sm" variant="muted" aria-expanded={!closed} aria-label={label} title={label} onClick={event => { event.stopPropagation(); toggleFold(row); }} className="font-[family-name:var(--font-amiri)]">
+      {closed ? <ChevronDown size={14} aria-hidden /> : <ChevronUp size={14} aria-hidden />}
+    </Button>;
+  };
+  const foldPage = (page: SpreadPage, i: number): SpreadPage => !parts ? page : {
+    ...page,
+    // Each side carries the button, a silent side too; a folded row is bare on both sides.
+    heads: parts.map((_, row) => foldButton(row, shownSides[i])),
+    bare: parts.map((_, row) => folded.includes(row)),
+    rows: page.rows.map((ayat, row) => (folded.includes(row) ? [] : ayat)),
+    ruleLabels: parts.map((_, row) => (folded.includes(row) && shownSides[i].rows![row].length ? ayatOf(row, shownSides[i]) : undefined)),
+  };
   // The read-along studio lights words in the matrix, so it shows the matrix while open.
   const tree = view === 'tree' && !read.studio;
   // The surrounding-ayat switch is the branches page's: one setting for every tree and matrix.
@@ -337,11 +387,18 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
               {ar ? num(item.ayah.number) : item.ayah.number}
             </button>)}
           </div>}
-          <CompareBraid sides={shownSides as [CardSide, CardSide]} titles={[titleOf(shownSides[0], 0), titleOf(shownSides[1], 1)]} ar={ar} around={card.many ? undefined : neighbours} />
+          {rowsOf(shownSides).map((sides, row) => <div key={row} className={`${row > 0 || parts ? 'border-t border-dotted border-[var(--home-rule)]' : ''} ${parts ? 'min-h-7 pt-4' : row > 0 ? 'pt-2' : ''}`}>
+            {parts && <div dir="rtl" className="grid h-0 grid-cols-2">{shownSides.map((side, i) => <div key={i} className="relative">
+              <div className="absolute start-0 top-0 z-10 -translate-y-1/2 bg-[var(--home-card)]">{foldButton(row, side)}</div>
+              {side.rows![row].length > 0 && folded.includes(row) && <span aria-hidden className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[var(--home-card)] px-2 font-[family-name:var(--font-amiri)] text-xs text-[var(--home-muted)]">{ayatOf(row, side)}</span>}
+            </div>)}</div>}
+            {!folded.includes(row) && <CompareBraid sides={sides} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : neighbours}
+              empty={sides.map(side => emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar))} />}
+          </div>)}
         </div> : <div onClick={event => pick(event.target)}>
-          <PageSpread compact stackOnMobile pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
+          <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined), i))} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined), i)).map(foldPage)} />
         </div>}
       </DoubleTapSave>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">

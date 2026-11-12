@@ -138,6 +138,68 @@ describe('PairCompare', () => {
     expect(within(pane()).getAllByRole('link').every(link => link.getAttribute('href')!.endsWith('&review=1'))).toBe(true);
   });
 
+  it('lines a story part\'s rows up across the two sides, in the cards and in the tree', () => {
+    const part: PairCard = {
+      id: '2:30-34|7:11-12', pairs: [],
+      sides: [
+        { surah: 2, ayah: 30, ayat: [{ number: 30, words: ['خليفة'] }, { number: 34, words: ['اسجدوا'] }], rows: [[30], [34]] },
+        { surah: 7, ayah: 11, ayat: [{ number: 11, words: ['اسجدوا'] }, { number: 12, words: ['منعك'] }], rows: [[], [11, 12]] },
+      ],
+    };
+    const { container, unmount } = render(<PairCompare view="cards" a={2} b={7} cards={[part]} pairs={pairs} names={{ ...names, 7: { ar: 'سُورَةُ الْاَعْرَافِ', en: "Al-A'raf" } }} />);
+    const rows = [...container.querySelectorAll('article')].map(page => [...page.querySelectorAll('p')].map(row => row.textContent?.replace(/[٠-٩]/g, '').replace(/\s+/g, ' ').trim()));
+    expect(rows).toEqual([['خليفة', 'اسجدوا'], ['لا تذكر سورة الاعراف هذا الجزء', '–اسجدوا منعك']]);
+    // Each part under a rule names its ayat on that rule.
+    expect(screen.getAllByRole('separator').map(node => node.textContent)).toEqual(['٣٠', '٣٤', '١١–١٢']);
+    unmount();
+    render(<PairCompare view="tree" a={2} b={7} cards={[part]} pairs={pairs} names={names} />);
+    expect(screen.getAllByLabelText(/شجرةً$/)).toHaveLength(2);
+    expect(screen.getByText('لا تذكر سورة الاعراف هذا الجزء')).toBeTruthy();
+    expect(screen.queryByLabelText('لا كلمات هنا')).toBeNull();
+  });
+
+  it('folds any story part to its ayah range, both sides at once, in the cards and in the tree', () => {
+    const part: PairCard = {
+      id: '2:30-34|7:11-12', pairs: [],
+      sides: [
+        { surah: 2, ayah: 30, ayat: [{ number: 30, words: ['خليفة'] }, { number: 34, words: ['اسجدوا'] }], rows: [[30], [34]] },
+        { surah: 7, ayah: 11, ayat: [{ number: 11, words: ['اسجدوا'] }, { number: 12, words: ['منعك'] }], rows: [[], [11, 12]] },
+      ],
+    };
+    for (const view of ['cards', 'tree'] as const) {
+      const { unmount } = render(<PairCompare view={view} a={2} b={7} cards={[part]} pairs={pairs} names={names} />);
+      expect(screen.getAllByRole('button', { name: /^اطوِ / }).map(button => button.getAttribute('aria-label')).sort()).toEqual(['اطوِ البقرة ٣٠', 'اطوِ البقرة ٣٠: لا تذكر سورة الاعراف هذا الجزء', 'اطوِ البقرة ٣٤', 'اطوِ الاعراف ١١–١٢'].sort());
+      fireEvent.click(screen.getByRole('button', { name: 'اطوِ البقرة ٣٠' }));
+      expect(screen.queryByText('خليفة')).toBeNull();
+      expect(screen.getAllByText('٣٠').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('منعك').length).toBeGreaterThan(0);
+      fireEvent.click(screen.getByRole('button', { name: 'اطوِ الاعراف ١١–١٢' }));
+      expect(screen.queryByText('منعك')).toBeNull();
+      expect(screen.getByRole('button', { name: 'افتح البقرة ٣٤' })).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٤' }));
+      fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٠' }));
+      expect(screen.getByText('خليفة')).toBeTruthy();
+      unmount();
+    }
+  });
+
+  it('opens each unbroken stretch of a side whose ayat skip part of the surah on a separator naming its ayat', () => {
+    const calf: PairCard = { id: '2:51-93|7:148', sides: [
+      { surah: 2, ayah: 51, ayat: [{ number: 51, words: ['العجل'] }, { number: 52, words: ['عفونا'] }, { number: 92, words: ['جاءكم'] }] },
+      { surah: 7, ayah: 148, ayat: [{ number: 148, words: ['عجلا'] }] },
+    ] };
+    const { unmount } = render(<PairCompare view="cards" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
+    expect(screen.getAllByRole('separator').map(node => node.getAttribute('aria-label'))).toEqual(['الآيات ٥١–٥٢', 'الآيات ٩٢']);
+    unmount();
+    render(<PairCompare view="tree" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
+    expect(screen.getAllByRole('separator', { name: 'آيات محذوفة، ثم الآية ٩٢' })).toHaveLength(1);
+  });
+
+  it('says when a story card\'s side steps back in its surah', () => {
+    render(<PairCompare view="cards" a={52} b={68} cards={[{ ...cards[0], sides: [cards[0].sides[0], { ...cards[0].sides[1], back: true }] }]} pairs={pairs} names={names} />);
+    expect(screen.getAllByText('قبلُ في السورة')).toHaveLength(1);
+  });
+
   it('filters the pages by scope and keeps it in its links', () => {
     render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} scope={{ unit: 'juz', from: 27, to: 29 }} spans={{ page: {}, juz: { 2: [1, 3], 7: [8, 9], 11: [11, 12], 26: [19, 19], 52: [27, 27], 68: [29, 29] } }} />);
     const rows = [...pane().querySelectorAll('ul a')].map(link => link.getAttribute('href'));

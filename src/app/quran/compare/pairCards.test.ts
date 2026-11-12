@@ -8,7 +8,8 @@ import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
 import treeData from '@shared/data/quran/trees.json';
 import { normalizeWord } from '@shared/quran/normalize';
-import { compareLinkFor, compareLinksFor, listedPairs, pairCards, reviewPairs, reviewStates } from './pairCards';
+import { compareLinkFor, compareLinksFor, engineCards, listedPairs, pairCards, reviewPairs, reviewStates, stepsBack, timelineParts } from './pairCards';
+import { STORIES } from '@shared/quran/prophets/stories';
 
 describe('compare pair cards', () => {
   it('shows At-Tur and Al-Qalam as five cards, the last two ayat merged, with marks inside each ayah', () => {
@@ -18,16 +19,101 @@ describe('compare pair cards', () => {
   });
 
   it('merges the Moses and the magicians passage into one range card and leaves far pairs apart', () => {
-    const cards = pairCards(7, 26);
+    const cards = engineCards(7, 26);
     const moses = cards.find(card => card.id === '7:106-125|26:31-50')!;
     expect(moses.sides.map(side => side.ayat.map(ayah => ayah.number))).toEqual([Array.from({ length: 20 }, (_, i) => 106 + i), Array.from({ length: 20 }, (_, i) => 31 + i)]);
     expect(moses.pairs?.map(pair => pair.id)).toEqual(expect.arrayContaining(['7:106|26:31', '7:113|26:40', '7:113|26:41', '7:125|26:50']));
     expect(cards.map(card => card.id)).toEqual(expect.arrayContaining(['7:106|26:154', '7:111|26:53']));
   });
 
+  it('tells the creation of Adam on Al-Baqarah and Al-A\'raf as its curated parts, in place of the engine cards inside it', () => {
+    const ids = pairCards(2, 7, true).map(card => card.id);
+    const parts = ['2:30-34|7:11-18', '2:35|7:19', '2:36|7:20-22', '2:37|7:23', '2:38-39|7:24-25'];
+    expect(ids.slice(ids.indexOf(parts[0]), ids.indexOf(parts[0]) + 5)).toEqual(parts);
+    expect(ids).not.toContain('2:34|7:11');
+    expect(ids).not.toContain('2:36|7:24');
+    const cards = pairCards(2, 7, true);
+    const part = (id: string) => cards.find(card => card.id === id)!;
+    expect(part(parts[2]).pairs?.map(pair => pair.id)).toEqual(['2:36|7:24']);
+    expect(part(parts[3]).pairs?.map(pair => pair.id)).toEqual(['2:37|7:23']);
+    expect(part(parts[4]).pairs?.map(pair => pair.id)).toEqual(['2:38|7:24']);
+    expect(part(parts[0]).sides.map(side => side.ayat.map(ayah => ayah.number))).toEqual([[30, 31, 32, 33, 34], [11, 12, 13, 14, 15, 16, 17, 18]]);
+    // Al-Baqarah dwells on what comes before the prostration, al-A'raf on Iblis after it; the prostration they share lines up between.
+    expect(part(parts[0]).sides.map(side => side.rows)).toEqual([[[30, 31, 32, 33], [34], []], [[], [11], [12, 13, 14, 15, 16, 17, 18]]]);
+    expect(Object.keys(part(parts[0]).sides[0].ayat[4].marks ?? {}).length).toBeGreaterThan(5);
+    expect(Object.keys(part(parts[0]).sides[0].ayat[0].marks ?? {})).toEqual([]);
+    expect(part(parts[1]).sides[0].rows).toBeUndefined();
+    const marked = (ayah: { words: string[]; marks?: Record<number, unknown> }) => Object.keys(ayah.marks ?? {}).map(i => normalizeWord(ayah.words[Number(i)]));
+    expect(marked(part(parts[4]).sides[0].ayat[0])).toContain(normalizeWord('ٱهْبِطُوا۟'));
+    expect(pairCards(2, 38).map(card => card.id)).toEqual(['2:34|38:74']);
+  });
+
+  it('cuts a prophet\'s story into cards from the timeline: one per shared event, with the one-sided events as rows', () => {
+    const rows = (story: string, surahs: [number, number]) => timelineParts(STORIES[story], surahs).map(part => part.rows.map(row => row.map(side => (side.length ? `${side[0]}-${side[side.length - 1]}` : ''))));
+    expect(rows('nuh', [11, 26])).toEqual([
+      [['25-26', '105-110']],
+      [['27-31', '111-115']],
+      [['32-35', '116-116'], ['', '117-118'], ['36-39', ''], ['40-41', ''], ['42-43', ''], ['', '119-122'], ['44-44', ''], ['45-47', ''], ['48-49', '']],
+    ]);
+    // 26:10-17 comes before the first event al-A'raf shares, so it is a row on that card; 11:89 lies outside Nuh's stretch of Hud.
+    expect(rows('musa', [7, 26])[0]).toEqual([['', '10-17'], ['103-108', '18-33']]);
+    expect(rows('nuh', [11, 26]).flat(2)).not.toContain('89-89');
+  });
+
+  it('serves the timeline cards in place of the engine cards inside the story, and marks a side that steps back', () => {
+    const ids = pairCards(11, 26, true).map(card => card.id);
+    expect(ids.slice(0, 3)).toEqual(['11:25-26|26:105-110', '11:27-31|26:111-115', '11:32-49|26:116-122']);
+    const moses = pairCards(7, 26, true).find(card => card.id === '7:109-126|26:34-51')!;
+    expect(moses.pairs?.map(pair => pair.id)).toEqual(expect.arrayContaining(['7:113|26:40', '7:125|26:50']));
+    expect(Object.keys(moses.sides[0].ayat[4].marks ?? {}).length).toBeGreaterThan(0);
+    expect(stepsBack([[[1, 2], [5]], [[3], [2]], [[4], []]])).toEqual([[false, false], [false, true], [false, false]]);
+    // Al-Baqarah lists Musa's events out of the story's order, so its cards run in its own order and al-A'raf steps back once.
+    const musa = pairCards(2, 7, true).filter(card => (card.sides[0].rows && !card.id.startsWith('2:30')) || ['2:55-56|7:154-156', '2:63-64|7:171'].includes(card.id));
+    expect(musa.map(card => card.id)).toEqual(['2:49-50|7:103-137', '2:51-93|7:142-153', '2:55-56|7:154-156', '2:57-61|7:138-162', '2:63-64|7:171']);
+    expect(musa.map(card => card.sides.map(side => !!side.back))).toEqual([[false, false], [false, false], [false, false], [false, true], [false, false]]);
+    // The town (2:58-59) sits inside the manna passage, so the two events share one card with no hole in al-Baqarah.
+    expect(musa[3].sides.map(side => side.rows)).toEqual([[[], [57, 58, 59, 60, 61]], [[138, 139, 140, 141], [159, 160, 161, 162]]]);
+  });
+
+  it('leaves a story part the owner dropped off the page, and counts unjudged parts against the page\'s review', () => {
+    const id = '2:55|7:154';
+    const before = compareVerdicts[id];
+    compareVerdicts[id] = { keep: true, why: 'test', checked: true };
+    try {
+      expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(true);
+      compareVerdicts[id] = { keep: false, why: 'test', checked: true };
+      expect(pairCards(2, 7).some(card => card.id === '2:55-56|7:154-156')).toBe(false);
+      expect(pairCards(2, 7, true).find(card => card.id === '2:55-56|7:154-156')?.pairs?.[0].verdict?.keep).toBe(false);
+    } finally {
+      if (before) compareVerdicts[id] = before;
+      else delete compareVerdicts[id];
+    }
+    // Every engine pair on 11/26 checked, the Nuh parts still unjudged: the page is not done.
+    const engine = engineCards(11, 26, true).flatMap(card => card.pairs?.map(pair => pair.id) ?? [card.id]);
+    const saved = engine.map(key => [key, compareVerdicts[key]] as const);
+    for (const key of engine) compareVerdicts[key] = { keep: true, why: 'test', checked: true };
+    try {
+      expect(compareVerdicts['11:25|26:105']?.checked).toBeFalsy();
+      expect(reviewStates()['11:26']).not.toBe('checked');
+    } finally {
+      for (const [key, verdict] of saved) if (verdict) compareVerdicts[key] = verdict; else delete compareVerdicts[key];
+    }
+  });
+
+  it('puts an engine pair on the story part that shows both its ayat', () => {
+    const card = pairCards(2, 7, true).find(card => card.id === '2:57-61|7:138-162')!;
+    expect(card.pairs?.map(pair => pair.id)).toEqual(expect.arrayContaining(['2:57|7:160', '2:58|7:161']));
+    for (const part of pairCards(2, 7, true).filter(card => card.sides[0].rows)) for (const { id } of part.pairs ?? []) {
+      const [a] = id.split('|');
+      expect(part.sides[0].ayat.some(ayah => `2:${ayah.number}` === a), id).toBe(true);
+    }
+  });
+
   it('gives a range card the tree link of its first pair that has one', () => {
-    const block = pairCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
+    const block = engineCards(2, 7).find(card => card.id === '2:57-60|7:160-162')!;
     expect(block.group).toBeDefined();
+    // A story part that takes the range card over keeps its tree link.
+    expect(pairCards(2, 7).find(card => card.id === '2:57-61|7:138-162')!.group).toBe(block.group);
   });
 
   it('shows an ayah paired with several far ones as one card, opening on the first', () => {
@@ -48,9 +134,9 @@ describe('compare pair cards', () => {
     const reversed = pairCards(26, 34).find(item => item.id === '26:109,127,145,164,180|34:47')!;
     expect(reversed.many?.side).toBe(0);
     expect(reversed.sides.map(side => side.ayah)).toEqual([109, 47]);
-    const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
+    const moses = engineCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
     expect(moses.many).toBeUndefined();
-    expect(pairCards(7, 26).some(card => card.many?.options.some(option => moses.pairs!.some(pair => pair.id === option.id)))).toBe(false);
+    expect(engineCards(7, 26).some(card => card.many?.options.some(option => moses.pairs!.some(pair => pair.id === option.id)))).toBe(false);
   });
 
   it('puts every pair on exactly one card, with verdicts per pair in review', () => {
@@ -108,7 +194,7 @@ describe('compare pair cards', () => {
   });
 
   it('gives each word one partner on the curated Moses card', () => {
-    const moses = pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
+    const moses = engineCards(7, 26).find(card => card.id === '7:106-125|26:31-50')!;
     const [a, b] = moses.sides.map(side => side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link)));
     expect(new Set(a).size).toBe(a.length);
     expect(new Set(b).size).toBe(b.length);
@@ -121,21 +207,23 @@ describe('compare pair cards', () => {
   });
 
   it('keeps every word link on both sides of a range card', () => {
-    for (const card of pairCards(7, 26)) {
+    for (const card of engineCards(7, 26)) {
       const [a, b] = card.sides.map(side => new Set(side.ayat.flatMap(ayah => Object.values(ayah.marks ?? {}).map(mark => mark.link))));
       expect([...a].sort()).toEqual([...b].sort());
     }
   });
 
   it('keeps a verdict per ayah pair inside a range card in review', () => {
-    const moses = pairCards(7, 26, true).find(card => card.id === '7:106-125|26:31-50')!;
+    const moses = engineCards(7, 26, true).find(card => card.id === '7:106-125|26:31-50')!;
     expect(moses.verdict).toBeUndefined();
     expect(moses.pairs?.every(pair => pair.verdict?.keep)).toBe(true);
-    expect(pairCards(7, 26).find(card => card.id === '7:106-125|26:31-50')?.pairs?.some(pair => pair.verdict)).toBe(false);
+    expect(engineCards(7, 26).find(card => card.id === '7:106-125|26:31-50')?.pairs?.some(pair => pair.verdict)).toBe(false);
   });
 
   it('counts every ayah pair once across the cards of a page', () => {
-    const count = (cards: ReturnType<typeof pairCards>) => cards.reduce((sum, card) => sum + (card.pairs?.length ?? 1), 0);
+    // A story part with no engine pair carries one of its own to be judged under, which the engine never counted.
+    const engine = new Set([...data.pairs, ...passage.pairs, ...within.pairs].map(pair => `${pair.a}|${pair.b}`));
+    const count = (cards: ReturnType<typeof pairCards>) => cards.reduce((sum, card) => sum + (card.pairs?.filter(pair => engine.has(pair.id)).length ?? 1), 0);
     for (const pair of listedPairs.slice(0, 50)) expect(count(pairCards(pair.a, pair.b))).toBe(pair.count);
   });
 
@@ -178,8 +266,8 @@ describe('compare pair cards', () => {
     expect(compareLinkFor(['2:23'])).toBeUndefined();
   });
 
-  it('links a pair inside a range card to the card that holds it', () => {
-    expect(compareLinkFor(['7:113', '26:40'])).toBe('/quran/compare?a=7&b=26#c-7-106-26-31');
+  it('links a pair inside a story part to the part that holds it', () => {
+    expect(compareLinkFor(['7:113', '26:40'])).toBe('/quran/compare?a=7&b=26#c-7-109-26-34');
   });
 
   describe('passage pairs', () => {
