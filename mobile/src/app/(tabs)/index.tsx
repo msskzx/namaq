@@ -167,7 +167,7 @@ export default function HomeScreen() {
             <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>اضغط مطوّلًا على بطاقة لتفتحها في المصحف أو الشجرة أو المقارنة.</Text>
           </>) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
-              <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو عائلة أو بطاقة مقارنة أو آية بزر</Text>
+              <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو بطاقة مقارنة أو آية بزر</Text>
               <Bookmark size={18} color={palette.muted} accessibilityLabel="الحفظ" />
               <Text style={{ color: palette.muted, fontSize: 15 }}>لتجدها هنا.</Text>
             </View>

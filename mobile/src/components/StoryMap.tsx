@@ -10,7 +10,7 @@ export const groupColor = (palette: Palette, phase: number) => palette.phases[ph
 const CELL = 34;
 const ROW = 38;
 const GAP = 10;
-const TITLES = 176;
+const TITLES = 200;
 const BAND = 30;
 const SMALLEST = 7;
 const LARGEST = 26;
@@ -59,7 +59,7 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
                 {g.events.map(({ e, i }) => (
                   <Pressable key={e.n} onPress={() => onTitle(i)} accessibilityRole="button" accessibilityLabel={e.title} style={{ width: g.cell, height: TITLES, overflow: 'hidden' }}>
                     <View style={{ position: 'absolute', width: TITLES - 8, height: CELL, left: (g.cell - TITLES + 8) / 2, top: (TITLES - 8 - CELL) / 2 + 4, transform: [{ rotate: '90deg' }], justifyContent: 'center' }}>
-                      <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>{e.title}</Text>
+                      <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>{e.title}</Text>
                     </View>
                   </Pressable>
                 ))}

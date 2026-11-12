@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
-import { ArrowLeft, Play } from 'lucide-react-native';
+import { ArrowLeft } from 'lucide-react-native';
 import { NAME_MAX } from '@shared/party/rules';
 import BackBar from '@/components/BackBar';
 import Button from '@/components/Button';
@@ -46,18 +46,18 @@ export default function PartyStart() {
         </Text>
         <Section title="اسمك" palette={palette}>
           <TextInput value={name} onChangeText={setName} maxLength={NAME_MAX} autoComplete="nickname" accessibilityLabel="اسمك"
-            style={{ ...input, textAlign: 'right' }} />
+            placeholder="اكتب اسمك" placeholderTextColor={palette.muted} style={{ ...input, textAlign: 'right' }} />
         </Section>
         <Section title="ابدأ اختبارًا" palette={palette}>
           {error ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{error}</Text> : null}
           <View style={{ alignItems: 'flex-start' }}>
-            <Button variant="primary" Icon={Play} label={busy ? 'يبدأ…' : 'ابدأ'} disabled={!name.trim() || busy} onPress={start} />
+            <Button variant="primary" Icon={ArrowLeft} label={busy ? 'يبدأ…' : 'ابدأ'} disabled={!name.trim() || busy} onPress={start} />
           </View>
         </Section>
         <Section title="انضم إلى اختبار" palette={palette}>
           <TextInput value={code} onChangeText={text => setCode(toLatin(text).slice(0, 6))} keyboardType="number-pad" maxLength={6} placeholder="رقم الاختبار"
             placeholderTextColor={palette.muted} accessibilityLabel="رقم الاختبار"
-            style={{ ...input, fontSize: 26, letterSpacing: 6, textAlign: 'center', writingDirection: 'ltr', height: 56 }} />
+            style={{ ...input, fontSize: code ? 26 : 18, letterSpacing: code ? 6 : 0, textAlign: 'center', writingDirection: 'ltr', height: 56 }} />
           <View style={{ alignItems: 'flex-start' }}>
             <Button variant="primary" Icon={ArrowLeft} label="انضم" disabled={code.length !== 6} onPress={join} />
           </View>
