@@ -1,5 +1,7 @@
 /** The compare page's cards, read back from the file `npm run quran:compare-cards` writes (shared/data/quran/compareCards.js). */
 
+import { droppedBranch } from './branchVerdicts';
+
 export const MARK_KINDS = ['exact', 'root', 'related'] as const;
 export type MarkKind = (typeof MARK_KINDS)[number];
 /** `link` names the matched pair a word belongs to: tapping it lights its partner. */
@@ -67,7 +69,7 @@ function rangeCard(item: StoredCard, words: WordsOf, verdicts: Verdicts): PairCa
   const verdict = item.p.length === 1 ? verdicts?.[item.p[0]] : undefined;
   return {
     id: item.p.length === 1 ? item.p[0] : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
-    ...(item.g ? { group: item.g } : {}),
+    ...(item.g && !droppedBranch({ id: item.g }) ? { group: item.g } : {}),
     ...(verdict ? { verdict } : {}),
     ...(item.p.length > 1 ? { pairs: item.p.map(pairVerdict(verdicts)) } : {}),
     sides: sides.map(({ surah, ayah, ayat }) => ({ surah, ayah, ayat })) as PairCard['sides'],
@@ -92,7 +94,7 @@ function manyCard(item: StoredCard, words: WordsOf, verdicts: Verdicts): PairCar
   sides[shared] = { surah: sharedSurah, ayah: sharedAyah, ayat: [options[0].shared] };
   return {
     id: side === 1 ? `${sharedKey}|${partners}` : `${partners}|${sharedKey}`,
-    ...(item.g ? { group: item.g } : {}),
+    ...(item.g && !droppedBranch({ id: item.g }) ? { group: item.g } : {}),
     pairs: item.p.map(pairVerdict(verdicts)),
     many: { side, options },
     sides,
