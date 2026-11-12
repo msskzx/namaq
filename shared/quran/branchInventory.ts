@@ -60,6 +60,13 @@ export function branchInventory(filters: GroupFilters, range: JuzRange | null, w
   return withDropped ? all : all.filter(piece => !droppedBranch(piece));
 }
 
+export const REVIEW_MAX = 35;
+export const reviewFilters = (filters: GroupFilters): GroupFilters => filters.categories ? filters : { ...filters, categories: ALL_KINDS };
+
+/** The pool the owner judges: every kind of tree with at most REVIEW_MAX ayat, dropped ones included. A verdict is keyed by a piece's `id`. */
+export const reviewPool = (filters: GroupFilters = {}, range: JuzRange | null = null): BranchPiece[] =>
+  branchInventory(reviewFilters(filters), range, true).filter(piece => piece.keys.length <= REVIEW_MAX);
+
 function allBranchPieces(filters: GroupFilters, range: JuzRange | null): BranchPiece[] {
   const effective = { ...filters, categories: filters.categories ?? 'mutashabeh,pondering' };
   const cacheKey = JSON.stringify([effective, range]);
