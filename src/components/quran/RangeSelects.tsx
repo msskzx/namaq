@@ -15,7 +15,7 @@ export default function RangeSelects({ options, draft, onChange, labels }: { opt
   const to = Math.min(Math.max(Math.trunc(Number(draft[1])) || last, from), last);
   // A range from the address bar may be backwards or out of bounds: keep the draft equal to what the lists show.
   useEffect(() => { if (draft[0] !== String(from) || draft[1] !== String(to)) onChange([String(from), String(to)]); }, [draft, from, to, onChange]);
-  const select = 'h-10 min-w-0 flex-1 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base';
+  const select = 'h-9 min-w-0 flex-1 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-0 text-base';
   return <div className="flex min-w-0 flex-1 items-center gap-2 text-sm">
     <select aria-label={labels.from} value={from} className={select}
       onChange={event => { const value = Number(event.target.value); onChange([String(value), String(Math.max(value, to))]); }}>

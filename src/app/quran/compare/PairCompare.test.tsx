@@ -205,10 +205,18 @@ describe('PairCompare', () => {
       return <><header aria-label="top bar"><div ref={setSlot} /></header><NavSlotElement.Provider value={slot}>{children}</NavSlotElement.Provider></>;
     }
     render(<PairCompare view="cards" a={2} b={7} cards={cards} pairs={pairs} names={names} />, { wrapper: Chrome });
-    const previous = screen.getByRole('link', { name: /السابق/ });
+    const bar = screen.getByRole('banner', { name: 'top bar' });
+    const previous = within(bar).getByRole('link', { name: /السابق/ });
     expect(previous.getAttribute('aria-disabled')).toBe('true');
     expect(previous.getAttribute('href')).toBeNull();
-    expect(screen.getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=11');
+    expect(within(bar).getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=11');
+  });
+
+  it('repeats the previous and next chevrons after the last card', () => {
+    render(<PairCompare view="cards" a={7} b={11} cards={cards} pairs={pairs} names={names} />);
+    const end = screen.getByRole('navigation', { name: 'السابق والتالي' });
+    expect(within(end).getByRole('link', { name: /التالي/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=26');
+    expect(within(end).getByRole('link', { name: /السابق/ }).getAttribute('href')).toBe('/quran/compare?a=7&b=2');
   });
 
   it('saves a card with its bookmark button and links back to it', () => {
