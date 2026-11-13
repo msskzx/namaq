@@ -54,7 +54,7 @@ The reasoning and lessons from building Namaq live in
   examines failures in verification.
 
 Challenges met while building Namaq, with their fixes, are recorded in
-[docs/lessons](docs/lessons/README.md).
+[docs/records](docs/records/README.md).
 
 ## License and source rights
 
