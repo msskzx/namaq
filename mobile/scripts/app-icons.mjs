@@ -1,6 +1,7 @@
 // Draws the app icon, Android adaptive-icon layers, splash images and web favicon from the logo (src/lib/logo.ts).
 // Run with `npm run app-icons` after changing the logo or the palette. Needs Playwright.
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { BERRIES, BOWL, BRANCHES } from '../src/lib/logo.ts';
 
 // Playwright is not an app dependency: use the one installed on the machine.
@@ -30,6 +31,6 @@ const page = await browser.newPage({ deviceScaleFactor: 1 });
 for (const { file, size, share, colours, background } of images) {
   await page.setViewportSize({ width: size, height: size });
   await page.setContent(`<body style="margin:0;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;background:${background ?? 'transparent'}">${emblem(colours.ink, colours.accent, Math.round(size * share))}</body>`);
-  await page.screenshot({ path: new URL(`../assets/${file}`, import.meta.url).pathname, omitBackground: !background });
+  await page.screenshot({ path: fileURLToPath(new URL(`../assets/${file}`, import.meta.url)), omitBackground: !background });
 }
 await browser.close();
