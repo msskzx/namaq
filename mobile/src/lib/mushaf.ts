@@ -29,8 +29,12 @@ export function pageOfAyah(key: string): number | undefined {
   return starts.get(key);
 }
 
-/** One ayah's words as the mushaf writes them. */
+/** One ayah's words as the mushaf writes them, looked for from its surah's first page so that only a few pages are read. */
 export function ayahText(key: string): string {
-  const start = pageOfAyah(key);
-  return start ? ayahWords(key, pageData(start), surahBefore(start)).join(' ') : '';
+  const surah = surahs.find(row => row.number === Number(key.split(':')[0]));
+  for (let page = surah?.page ?? PAGES + 1; page <= PAGES; page++) {
+    const words = ayahWords(key, pageData(page), surahBefore(page));
+    if (words.length) return words.join(' ');
+  }
+  return '';
 }

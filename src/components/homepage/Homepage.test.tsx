@@ -119,6 +119,18 @@ describe('release homepage', () => {
     expect(within(forgotten).getAllByRole('button')).toHaveLength(1);
   });
 
+  it('closes the icons on Escape and gives the focus back to the card', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
+    render(<Homepage data={data} />);
+    const card = screen.getByRole('button', { name: /الكتاب والحكمة/ });
+    card.focus();
+    fireEvent.click(card);
+    expect(document.activeElement?.closest('[role="dialog"]')).toBeTruthy();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(document.activeElement).toBe(card);
+  });
+
   it('hides the forgotten shelf when nothing is forgotten', () => {
     render(<Homepage data={data} />);
     expect(screen.queryByRole('region', { name: 'ما نسيته' })).toBeNull();

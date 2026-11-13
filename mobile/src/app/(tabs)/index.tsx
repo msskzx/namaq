@@ -1,10 +1,10 @@
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, Feather, GalleryHorizontal, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { ayahBookmarkId, clearForgotten, readAyahMarks, recentlyForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
+import { clearForgotten, readAyahMarks, recentlyForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
@@ -17,7 +17,7 @@ import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { ayahText, surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs, type CompareTarget } from '@/lib/compare';
-import { cardWays, savedCard, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import { cardWays, forgottenCard, forgottenWays, savedCard, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import CardMenu, { type MenuAt, type MenuItem } from '@/components/CardMenu';
 import CompareTargetsSheet from '@/components/CompareTargetsSheet';
 import { followWay } from '@/lib/ways';
@@ -123,8 +123,14 @@ function QuranPicker({ palette }: { palette: Palette }) {
 function ShelfCard({ card, palette, onPress, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
   card: SavedCard; palette: Palette; onPress: (at: MenuAt) => void; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
 }) {
+  const box = useRef<ComponentRef<typeof View>>(null);
+  // A screen reader's tap often carries no point: the menu then opens over the card's top.
+  const open = ({ pageX, pageY }: { pageX: number; pageY: number }) => {
+    if (pageX || pageY) onPress({ x: pageX, y: pageY });
+    else box.current?.measureInWindow((x: number, y: number, width: number) => onPress({ x: x + width / 2, y: y + 24 }));
+  };
   return (
-    <Pressable onPress={event => onPress({ x: event.nativeEvent.pageX, y: event.nativeEvent.pageY })} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
+    <Pressable ref={box} onPress={event => open(event.nativeEvent)} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
       style={({ pressed }) => ({ width: 250, minHeight: 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
         <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
@@ -154,12 +160,6 @@ function Shelf({ cards, render }: { cards: SavedCard[]; render: (card: SavedCard
   );
 }
 
-/** A forgotten ayah as a shelf card; tapping it reviews from that ayah. */
-const forgottenCard = (key: string): SavedCard => {
-  const [surah, ayah] = key.split(':').map(Number);
-  return { id: key, text: ayahText(key), kind: 'ayah', references: [{ surah, ayat: [ayah] }], open: { tab: 'read', at: key, recite: true, review: true } };
-};
-
 /** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
 export default function HomeScreen() {
   const palette = usePalette();
@@ -170,7 +170,7 @@ export default function HomeScreen() {
   const hasTrees = cards.some(card => card.kind === 'tree' && card.open);
   const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
-  const forgottenCards = useMemo(() => recentlyForgotten(marks).map(forgottenCard), [marks]);
+  const forgottenCards = useMemo(() => recentlyForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
   /** Every other view of a card's ayat; compare across several surahs is picked next. */
   const wayItems = (ways: CardWay[]): MenuItem[] => ways.map(way => ({
     id: way.to, ...WAYS[way.to],
@@ -182,7 +182,7 @@ export default function HomeScreen() {
   ] });
   const forgottenMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: 'آية نسيتها', items: [
     { id: 'recite', Icon: EyeOff, label: 'سمّع من هذه الآية', onPress: () => card.open && go(card.open) },
-    ...wayItems(cardWays({ id: ayahBookmarkId(card.id), text: card.text, href: '', savedAt: 0 })),
+    ...wayItems(forgottenWays(card.id)),
     { id: 'clear', Icon: Check, label: 'تذكّرتها، أزلها من المراجعة', onPress: () => clearForgotten(card.id) },
   ] });
   const push = (href: Href) => router.push(href);

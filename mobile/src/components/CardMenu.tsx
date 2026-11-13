@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
+import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { LucideProps } from 'lucide-react-native';
 import type { Palette } from '@/lib/theme';
@@ -18,9 +18,9 @@ export default function CardMenu({ at, items, label, onClose, palette }: { at: M
   const barWidth = items.length * BUTTON + 12;
   const above = at ? at.y - BUTTON - 28 : 0;
   return (
-    <Modal visible={!!at} transparent animationType="none" onRequestClose={onClose}>
-      <Pressable style={{ flex: 1 }} onPress={onClose} accessibilityLabel="أغلق" accessibilityRole="button">
-        {at && (
+    <Modal visible={!!at} transparent statusBarTranslucent animationType="none" onRequestClose={onClose}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="أغلق" accessibilityRole="button" />
+      {at && (
           <View accessibilityRole="toolbar" accessibilityLabel={label}
             style={{ position: 'absolute', top: above < insets.top + 8 ? at.y + 20 : above, left: Math.min(width - barWidth - 8, Math.max(8, at.x - barWidth / 2)), flexDirection: 'row', gap: 0, padding: 6, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
             {items.map(({ id, Icon, label: itemLabel, on, onPress }) => (
@@ -30,8 +30,7 @@ export default function CardMenu({ at, items, label, onClose, palette }: { at: M
               </Pressable>
             ))}
           </View>
-        )}
-      </Pressable>
+      )}
     </Modal>
   );
 }

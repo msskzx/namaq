@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { referencesOf, savedCard, shelfText } from './home';
+import { cardWays, forgottenCard, forgottenWays, referencesOf, savedCard, shelfText } from './home';
 import { treeList } from './branches';
 import { aliasesOf } from './branchList';
 
 const saved = (id: string) => ({ id, text: 'نص', href: '/', savedAt: 0 });
 
 describe('the homepage shelf', () => {
+  it('reviews a forgotten ayah from where it is, and offers the views a saved ayah has', () => {
+    expect(forgottenCard('2:255', 'نص')).toEqual({ id: '2:255', text: 'نص', kind: 'ayah', references: [{ surah: 2, ayat: [255] }], open: { tab: 'read', at: '2:255', recite: true, review: true } });
+    expect(forgottenWays('2:255')).toEqual(cardWays(saved('ayah:2:255')));
+    expect(forgottenWays('2:255')[0]).toEqual({ to: 'mushaf', at: '2:255' });
+  });
+
   it('lists a card’s ayat by surah in mushaf order', () => {
     expect(referencesOf(['26:109', '10:72', '26:127', '10:72'])).toEqual([{ surah: 10, ayat: [72] }, { surah: 26, ayat: [109, 127] }]);
   });
