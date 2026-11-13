@@ -1,8 +1,10 @@
 import { useMemo, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { ArrowLeftRight, Bookmark, Moon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Moon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
-import { hijriDate } from '@shared/hijri';
+import { hijriDate, todaysJuz } from '@shared/hijri';
+import { JUZ_INDEX } from '@shared/quran/juzIndex';
+import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
 import { Text } from './Text';
 import { AyahText } from './CompareCard';
@@ -19,11 +21,15 @@ function Icon({ Icon, label, on, onPress, palette }: { Icon: (props: LucideProps
   );
 }
 
-/** The homepage's top card: today's Hijri date and one look-alike pair to reflect on today. No streaks, nothing counted. */
+/** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
+const juzLabel = (juz: number[]) => juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`;
+
+/** The homepage's top card: today's Hijri date, today's juz (one juz a Hijri day) and one look-alike pair to reflect on today. No streaks, nothing counted. */
 export default function DailyCard({ palette }: { palette: Palette }) {
   const day = dayNumber(new Date());
   const pair = useMemo(() => dailyPair(), [day]); // eslint-disable-line react-hooks/exhaustive-deps
   const date = useMemo(() => hijriDate(new Date()), [day]); // eslint-disable-line react-hooks/exhaustive-deps
+  const juz = useMemo(() => todaysJuz(new Date()), [day]); // eslint-disable-line react-hooks/exhaustive-deps
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   if (!pair && !date) return null;
   const saved = !!pair && savedIdsOf(pair, bookmarks).length > 0;
@@ -40,8 +46,17 @@ export default function DailyCard({ palette }: { palette: Palette }) {
           <Icon Icon={Bookmark} label={saved ? 'أزلها من المحفوظات' : 'احفظ'} on={saved} onPress={() => toggleCardSaved(pair)} palette={palette} />
         </>}
         <View style={{ flex: 1 }} />
-        {date && <Moon size={18} color={palette.accent} />}
-        {date && <Text accessibilityLabel={`اليوم ${date}`} style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>}
+        {date && <View style={{ alignItems: 'flex-start', gap: 2 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Moon size={18} color={palette.accent} />
+            <Text accessibilityLabel={`اليوم ${date}`} style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>
+          </View>
+          {juz && <Pressable onPress={() => { const start = JUZ_INDEX[juz[0] - 1]; openIntent({ tab: 'read', at: `${start.surah}:${start.ayah}` }); }} hitSlop={6}
+            accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 2 }}>
+            <BookOpen size={18} color={palette.accent} />
+            <Text style={{ color: palette.accent, fontSize: 15 }}>{juzLabel(juz)}</Text>
+          </Pressable>}
+        </View>}
       </View>
       {pair?.sides.map((side, i) => (
         <View key={side.surah} style={{ gap: 2, paddingTop: 8, borderTopWidth: 1, borderStyle: i ? 'dashed' : 'solid', borderColor: palette.rule }}>

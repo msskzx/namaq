@@ -39,7 +39,10 @@
 .wide .noteText { -webkit-line-clamp: unset; }
 .daily { padding: 0.75rem 1rem 1rem; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); display: grid; gap: 0.5rem; }
 .dailyHead { display: flex; align-items: center; gap: 0.25rem; min-height: 2.25rem; }
-.hijri { margin-inline-start: auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; }
+.today { margin-inline-start: auto; display: grid; justify-items: start; gap: 0.125rem; }
+a.hijri { color: var(--home-accent); text-decoration: none; }
+a.hijri:hover { text-decoration: underline; }
+.hijri { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; }
 .hijri svg { color: var(--home-accent); }
 .dailySide { padding-top: 0.5rem; border-top: 1px solid var(--home-rule); }
 .dailySide + .dailySide { border-top-style: dashed; }
