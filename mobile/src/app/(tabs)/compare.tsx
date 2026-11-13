@@ -7,6 +7,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import PageProgress from '@/components/PageProgress';
@@ -50,6 +51,11 @@ export default function CompareScreen() {
     setFilter(next);
     setIndex(at);
   };
+  // The compare tab tapped again: back to the first pair, then (tapped again there) the filter cleared.
+  useTabRetap('compare', () => {
+    if (index > 0) go(0);
+    else if (filter.scope || filter.savedOnly) { writeJson(FILTER, {}); setFilter({}); setIndex(0); setJumps(value => value + 1); }
+  });
   const pick = (lead: number, other: number) => {
     const at = visits.findIndex(item => item.lead === lead && item.other === other);
     setSheet(false);
