@@ -10,6 +10,7 @@ import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks,
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type RecitePosition } from '@shared/quran/recite';
 import TopBar from './TopBar';
+import { tabBarTop } from './tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
@@ -46,8 +47,6 @@ const modelOf = (page: number) => {
 
 /** The recite bar's height above the safe area: one icon button tall. */
 const RECITE_BAR = 44;
-/** The tab bar's full height above the safe area (TabBar.tsx FULL) plus its top rule. */
-const TAB_BAR = 55;
 
 function IconButton({ Icon, label, onPress, palette, on = false, disabled = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; onPress: () => void; palette: Palette; on?: boolean; disabled?: boolean }) {
   return (
@@ -255,10 +254,10 @@ export default function Reader() {
         </View>
       )}
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
-      {/* The recite bar: flush with the bottom edge and full width, like a video app's bottom bar; above the tab bar when the app's bars are shown. */}
+      {/* The recite bar: flush with the bottom edge and full width, like a video app's bottom bar; just above the floating tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
-          style={{ position: 'absolute', left: 0, right: 0, bottom: tools ? TAB_BAR + insets.bottom : 0, height: RECITE_BAR + 1 + (tools ? 0 : insets.bottom), paddingBottom: tools ? 0 : insets.bottom, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderTopWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
+          style={{ position: 'absolute', left: 0, right: 0, bottom: tools ? tabBarTop(insets.bottom) + 8 : 0, height: RECITE_BAR + 1 + (tools ? 0 : insets.bottom), paddingBottom: tools ? 0 : insets.bottom, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderTopWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
           {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
           <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
           <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />

@@ -11,6 +11,7 @@ import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { searchSurahs } from '@shared/quran/surahSearch';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import { useTabBarSpace } from '@/components/tabBarSpace';
 import TreeIcon from '@/components/TreeIcon';
 import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
@@ -146,11 +147,12 @@ export default function HomeScreen() {
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   const push = (href: Href) => router.push(href);
   const onScroll = useShrinkOnScroll();
+  const bottom = useTabBarSpace();
   const [seen, setSeen] = tourSeen.use();
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 28 }}>
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 28 }}>
         <QuranPicker palette={palette} />
 
         <View style={{ gap: 10 }}>

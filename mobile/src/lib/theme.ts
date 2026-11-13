@@ -25,6 +25,10 @@ export const light = {
   phases: ['#426578', '#8a6420', '#783d49', '#506449', '#665177'],
   /** The website's --home-slot-1…4: the word-connection colours. */
   slots: ['#426578', '#617047', '#665177', '#806239'],
+  /** The see-through top and bottom bars: a tint over the blurred page, and a faint edge. */
+  glass: '#f8f6f0b8',
+  glassEdge: '#202c351f',
+  scheme: 'light' as 'light' | 'dark',
 };
 
 export type Palette = typeof light;
@@ -46,6 +50,9 @@ export const dark: Palette = {
   onHighlight: '#202c35',
   phases: ['#a9c4d1', '#dcb46e', '#d9a6b0', '#b1c59f', '#c3afd5'],
   slots: ['#a9c4d1', '#b1c59f', '#c3afd5', '#dcc5a0'],
+  glass: '#242727b3',
+  glassEdge: '#edeae21a',
+  scheme: 'dark',
 };
 
 export const QURAN_FONT = 'KFGQPC Hafs';

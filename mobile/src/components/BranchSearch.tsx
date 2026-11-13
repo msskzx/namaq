@@ -7,6 +7,8 @@ import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
 import { quranText } from '@/lib/quranText';
 import { ALL_KINDS_LIST, applyDraft, draftOf, EMPTY_LIST, suggestions, type FilterDraft, type ListState } from '@/lib/branchList';
+import { useTabBarSpace } from './tabBarSpace';
+import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
@@ -21,6 +23,9 @@ type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClos
  */
 export default function BranchSearch({ state, bookmarks, palette, onClose, onApply }: Props) {
   const insets = useSafeAreaInsets();
+  // The floating tab bar lies over this screen's bottom; with the keyboard up the keyboard covers it instead.
+  const tabBarSpace = useTabBarSpace();
+  const typing = useKeyboardShown();
   const [query, setQuery] = useState(state.query);
   const [draft, setDraft] = useState<FilterDraft>(() => draftOf(state));
   const valid = draftValid(draft);
@@ -57,11 +62,11 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
             <FilterFields draft={draft} setDraft={setDraft} palette={palette} />
           </Pressable>
         </ScrollView>
-        <View style={{ paddingBottom: insets.bottom + 8 }}>
+        <View style={{ paddingBottom: typing ? 8 : tabBarSpace }}>
           <FilterActions onReset={() => { setDraft(draftOf(EMPTY_LIST)); setQuery(''); }} onApply={() => apply({}, { query: query.trim() })} valid={valid} palette={palette} />
         </View>
       </>}
-      {suggesting && <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1 }}>
+      {suggesting && <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1, paddingBottom: tabBarSpace }}>
         {found.surahs.length > 0 && <Text style={{ color: palette.muted, fontSize: 12, paddingHorizontal: 16, paddingTop: 10 }}>السور</Text>}
         {found.surahs.map(surah => (
           <Pressable key={`s${surah.number}`} onPress={() => apply({ query: '', surah: surah.number })} accessibilityRole="button" style={row}>

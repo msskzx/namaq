@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -9,7 +10,7 @@ import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
 import { useCompact } from '@/lib/chrome';
 
-const HEIGHT = 53; // 52 and the rule under it
+const HEIGHT = 52;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
@@ -17,6 +18,7 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * The gear shows only on the homepage (owner, 2026-11-10); the logo shows everywhere and opens home.
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
+ * See-through with no line under it, like the floating tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
 export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
@@ -28,10 +30,12 @@ export default function TopBar({ children, settings: withSettings = false, hideO
   const hidden = useCompact() && hideOnScroll;
   const away = useSharedValue(0);
   useEffect(() => { away.value = withTiming(hidden ? 1 : 0, { duration: 180 }); }, [hidden, away]);
-  const row = useAnimatedStyle(() => ({ height: interpolate(away.value, [0, 1], [HEIGHT, 0]), opacity: interpolate(away.value, [0, 0.6], [1, 0], 'clamp'), borderBottomWidth: away.value > 0.95 ? 0 : 1 }));
+  const row = useAnimatedStyle(() => ({ height: interpolate(away.value, [0, 1], [HEIGHT, 0]), opacity: interpolate(away.value, [0, 0.6], [1, 0], 'clamp') }));
   return (
-    <View style={{ paddingTop: insets.top, backgroundColor: palette.paper }}>
-      <Animated.View style={[{ overflow: 'hidden', borderBottomWidth: 1, borderColor: palette.rule, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
+    <View style={{ paddingTop: insets.top, overflow: 'hidden' }}>
+      <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
+      <Animated.View style={[{ overflow: 'hidden', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
         <Pressable onPress={() => router.navigate('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
           <Logo size={34} />
         </Pressable>
