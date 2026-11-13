@@ -38,7 +38,11 @@ import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions"
 import { parseJuzRange } from "@shared/quran/juz";
 import type { Branch, Variant } from "@shared/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
-import { DIFFICULTY_LABELS, DIFFICULTY_NOTE, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
+import { RANGED_TOPICS } from "@shared/quiz/settings";
+import { FORGOT, RECITE_SNIPPET } from "@shared/quiz/reciteSnippet";
+import { markForgotten } from "@shared/ayahMarks";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
 import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
@@ -87,7 +91,7 @@ type QuizData = { questions: QuizQuestionView[]; surahNames?: Record<number, str
 
 interface QuizQuestionView {
   key: string;
-  family: QuestionFamily | BranchQuestion["family"];
+  family: QuestionFamily | BranchQuestion["family"] | QuizTopic;
   promptArabic: string;
   choices: QuestionChoice[];
   phrase?: string;
@@ -96,6 +100,11 @@ interface QuizQuestionView {
   variants?: Variant[];
   prefixes?: Variant[];
   asked?: number[];
+  quran?: ChoiceParts["quran"];
+  reveal?: ChoiceParts["reveal"];
+  ayahKey?: string;
+  alike?: ChoiceParts["alike"];
+  note?: ChoiceParts["note"];
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
@@ -120,14 +129,16 @@ export default function QuizzesPage() {
   const topics = useMemo(() => parseQuizTopics(searchParams) as QuizTopic[], [searchParams]);
   const length = Number(searchParams.get("length")) as QuizLength | 0;
   const person = searchParams.get("person") ?? "";
-  const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
-  const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
+  // The trees and the Quran kinds (which surah, recite) are asked over the part of the Quran the filters keep.
+  const ranged = topics.some((topic) => RANGED_TOPICS.includes(topic));
+  const juzFrom = ranged ? searchParams.get("juzFrom") ?? "" : "";
+  const juzTo = ranged ? searchParams.get("juzTo") ?? "" : "";
   const leaves = parseLeaves(searchParams.get("leaves"));
   const difficulty = parseDifficulty(searchParams.get("difficulty"));
   const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
   // The branches page's filters for the trees; saved only sends this browser's saved trees.
-  const treeFilters = useMemo(() => quizFilters(topics.includes("BRANCHES") ? Object.fromEntries(searchParams) : {}), [topics, searchParams]);
+  const treeFilters = useMemo(() => quizFilters(ranged ? Object.fromEntries(searchParams) : {}), [ranged, searchParams]);
   const savedOnly = topics.includes("BRANCHES") && searchParams.get("saved") === "1";
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const liveSaved = useMemo(() => bookmarks.filter((item) => !isCompareBookmark(item)).map((item) => item.id), [bookmarks]);
@@ -156,7 +167,7 @@ export default function QuizzesPage() {
   const restored = stored && stored.search === search ? stored : null;
   const started = Boolean(topics.length && length && stored !== undefined && (restored || availability?.lengths.includes(length)) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started && !restored
-    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&difficulty=${difficulty}&leaves=${leaves}` : ""}`
+    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${ranged ? `&difficulty=${difficulty}&leaves=${leaves}` : ""}`
     : null;
   const { data: fetched, error, isLoading: fetching } = useSWR<QuizData>(query, fetcher, {
     revalidateOnFocus: false,
@@ -171,6 +182,8 @@ export default function QuizzesPage() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [typed, setTyped] = useState<Record<number, string[]>>({});
   const [hints, setHints] = useState<Record<number, Hints>>({});
+  // A recited snippet whose rest was shown, so its choices come up.
+  const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const [submitted, setSubmitted] = useState(false);
   const [reviewing, setReviewing] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
@@ -194,6 +207,7 @@ export default function QuizzesPage() {
     setAnswers({});
     setTyped({});
     setHints({});
+    setRevealed({});
     setSubmitted(false);
     setReviewing(false);
     setReferenceIndex(null);
@@ -220,7 +234,7 @@ export default function QuizzesPage() {
   // «الأسئلة مما أحفظ فقط» (shared/memorized.ts): a trees quiz set up with no range opens on what is memorized, once per visit.
   const memorizedDefault = useRef(false);
   useEffect(() => {
-    if (memorizedDefault.current || !topics.includes("BRANCHES") || length) return;
+    if (memorizedDefault.current || !ranged || length) return;
     memorizedDefault.current = true;
     const memorized = readMemorized();
     if (!memorized || !memorizedQuestions.read() || ["saved", "juzFrom", "juzTo", "surahs", "juz", "surahFrom", "surahTo", "pageFrom", "pageTo"].some((key) => searchParams.has(key))) return;
@@ -230,7 +244,7 @@ export default function QuizzesPage() {
     for (const [key, value] of Object.entries(scope)) next.set(key, value);
     pendingParams.current = next.toString();
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
-  }, [topics, length, searchParams, pathname, router]);
+  }, [ranged, length, searchParams, pathname, router]);
 
   const reset = useCallback(() => {
     setCurrent(0);
@@ -307,12 +321,12 @@ export default function QuizzesPage() {
             ))}
             {topics.includes("PERSON_CIRCLE") && <PersonPicker person={person} ar={ar} onCommit={(slug) => setParam({ person: slug, length: undefined })} />}
           </fieldset>
-          {hasBranches && (
+          {ranged && (
             <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
-              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "متشابهات القرآن" : "Phrase trees"}</legend>
+              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{hasBranches ? (ar ? "متشابهات القرآن" : "Phrase trees") : (ar ? "النطاق" : "Range")}</legend>
               <div className="mb-5 flex flex-wrap items-start gap-x-6 gap-y-4">
                 <div className="min-w-0 basis-full">
-                  <TreeFilters choice={{ range: juz, filters: treeFilters, saved: savedOnly }} onChange={({ range, filters, saved }) => setParam({
+                  <TreeFilters trees={hasBranches} choice={{ range: juz, filters: treeFilters, saved: savedOnly }} onChange={({ range, filters, saved }) => setParam({
                     juzFrom: range ? String(range.from) : undefined, juzTo: range ? String(range.to) : undefined,
                     ...Object.fromEntries(SCOPE_KEYS.map((key) => [key, key === "categories" && filters[key] === QUIZ_CATEGORIES ? undefined : filters[key] || undefined])),
                     saved: saved ? "1" : undefined, length: undefined,
@@ -328,9 +342,9 @@ export default function QuizzesPage() {
                     </Button>
                   ))}
                 </div>
-                <p className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTE[ar ? "ar" : "en"]}</p>
+                {topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
               </div>
-              <div role="group" aria-labelledby="quiz-leaves">
+              {hasBranches && <div role="group" aria-labelledby="quiz-leaves">
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
@@ -340,9 +354,9 @@ export default function QuizzesPage() {
                     </Button>
                   ))}
                 </div>
+              </div>}
               </div>
-              </div>
-              <BranchExplainer leaves={leaves} ar={ar} />
+              {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}
             </fieldset>
           )}
           {availability && (
@@ -424,6 +438,8 @@ export default function QuizzesPage() {
             <div className={styles.panel}>
               <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
+              <ChoiceQuran question={questions[current]} given={answers[current]} revealed={Boolean(revealed[current] || answers[current] !== undefined)}
+                onReveal={() => setRevealed((previous) => ({ ...previous, [current]: true }))} ar={ar} />
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
                   <BranchFeedback key={questions[current].key} question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} hints={hints[current]} />
@@ -440,7 +456,7 @@ export default function QuizzesPage() {
                     ar={ar}
                   />
                 )
-              ) : <div className="flex flex-col gap-2">
+              ) : questions[current].reveal && !revealed[current] && answers[current] === undefined ? null : <div className="flex flex-col gap-2">
                 {questions[current].choices.map((choice) => {
                   const locked = answers[current] !== undefined;
                   const isAnswer = choice.value === questions[current].correctAnswer;
@@ -452,6 +468,8 @@ export default function QuizzesPage() {
                       active={isGiven}
                       onClick={() => {
                         if (answers[current] !== undefined) return;
+                        const question = questions[current];
+                        if (question.family === RECITE_SNIPPET && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
                         setAnswers((previous) => ({ ...previous, [current]: choice.value }));
                       }}
                     >
@@ -466,7 +484,9 @@ export default function QuizzesPage() {
                   );
                 })}
               </div>}
-              {answers[current] === undefined && <Button className="mt-3" size="sm" onClick={() => {
+              {answers[current] !== undefined && <ChoiceAfter question={questions[current]} given={answers[current]} ar={ar}
+                surahName={(value) => questions[current].choices.find((choice) => choice.value === value)?.labelArabic} />}
+              {answers[current] === undefined && !questions[current].reveal && <Button className="mt-3" size="sm" onClick={() => {
                 if (questions[current].tree) setTyped(previous => ({ ...previous, [current]: emptyBranchAnswers(questions[current]) }));
                 setAnswers(previous => ({ ...previous, [current]: "" }));
               }}><Eye size={16} aria-hidden />{ar ? "إظهار الإجابة" : "Show answer"}</Button>}

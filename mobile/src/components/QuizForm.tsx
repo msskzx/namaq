@@ -1,8 +1,8 @@
 import { View } from 'react-native';
 import { Text } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
-import { QUIZ_LEAVES } from '@shared/quiz/settings';
-import { DIFFICULTIES, DIFFICULTY_NAMES, type Difficulty } from '@shared/quiz/difficulty';
+import { QUIZ_LEAVES, type QuizTopic } from '@shared/quiz/settings';
+import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_NOTES, type Difficulty } from '@shared/quiz/difficulty';
 import Button, { Row } from './Button';
 import { CARD, type Palette } from '@/lib/theme';
 
@@ -29,12 +29,12 @@ export function LeavesPicker({ value, onChange, palette }: { value: number; onCh
   );
 }
 
-/** Easy, medium or hard trees (shared/quiz/difficulty.ts): how alike the tree's ayat are. */
-export function DifficultyPicker({ value, onChange, palette }: { value: Difficulty; onChange: (value: Difficulty) => void; palette: Palette }) {
+/** Easy, medium or hard (shared/quiz/difficulty.ts), with what it changes in each kind of question asked. */
+export function DifficultyPicker({ value, onChange, palette, kinds = ['BRANCHES'] }: { value: Difficulty; onChange: (value: Difficulty) => void; palette: Palette; kinds?: QuizTopic[] }) {
   return (
     <>
       <Row>{DIFFICULTIES.map(level => <Button key={level} label={DIFFICULTY_NAMES[level]} active={value === level} onPress={() => onChange(level)} />)}</Row>
-      <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.</Text>
+      {kinds.flatMap(kind => DIFFICULTY_NOTES[kind] ? [<Text key={kind} style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{DIFFICULTY_NOTES[kind]!.ar}</Text>] : [])}
     </>
   );
 }

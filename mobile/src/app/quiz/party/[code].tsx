@@ -7,7 +7,11 @@ import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, 
 import { num } from '@shared/quran/arabicNumber';
 import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
-import { QUIZ_LENGTHS } from '@shared/quiz/settings';
+import { QUIZ_LENGTHS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { CHOICE_KINDS } from '@shared/quiz/kinds';
+import type { ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import QuizChoice from '@/components/QuizChoice';
+import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
 import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
@@ -143,18 +147,27 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
     const applied = applyDraft(next);
     if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: applied.filters });
   };
-  return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} savedOnly={false} />;
+  return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
 }
+
+/** The kinds a party can mix (a recited snippet stays solo: the reader grades it alone). */
+const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'شجرة المتشابهات' }, ...CHOICE_KINDS.filter(kind => kind.party)];
+
+/** A choice question's surah view (which surah), or its plain choices. */
+const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran);
 
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
   const branches = settings.topics.includes('BRANCHES');
+  const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
   const others = settings.topics.some(topic => topic !== 'BRANCHES');
   if (!editable) {
     const rows: [string, string][] = [
+      ['الأسئلة', settings.topics.map(topic => PARTY_KINDS.find(kind => kind.id === topic)?.name).filter(Boolean).join('، ')],
       ['عدد الأسئلة', num(settings.length)],
-      ...(branches ? [['الأشجار', scopeSummary(settings, true)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]], ['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
+      ...(ranged ? [[branches ? 'الأشجار' : 'النطاق', scopeSummary(settings, true, branches)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]]] as [string, string][] : []),
+      ...(branches ? [['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
     return (
@@ -172,16 +185,18 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   }
   return (
     <Section title="إعدادات الاختبار" palette={palette}>
-      {!branches && (
-        <View style={{ alignItems: 'flex-start' }}>
-          <Button label="متشابهات القرآن" onPress={() => change({ topics: ['BRANCHES'] })} />
-        </View>
-      )}
-      {branches && (
+      <Label palette={palette}>أنواع الأسئلة</Label>
+      <Row>{PARTY_KINDS.map(kind => <Button key={kind.id} label={kind.name} active={settings.topics.includes(kind.id)}
+        onPress={() => change({ topics: settings.topics.includes(kind.id) ? settings.topics.filter(topic => topic !== kind.id) : [...settings.topics, kind.id] })} />)}</Row>
+      {ranged && (
         <>
           <PartyFilters settings={settings} change={change} palette={palette} />
           <Label palette={palette}>الصعوبة</Label>
-          <DifficultyPicker value={settings.difficulty ?? DEFAULT_DIFFICULTY} onChange={difficulty => change({ difficulty })} palette={palette} />
+          <DifficultyPicker value={settings.difficulty ?? DEFAULT_DIFFICULTY} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.topics} />
+        </>
+      )}
+      {branches && (
+        <>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
           <Label palette={palette}>وقت سؤال الشجرة</Label>
@@ -291,6 +306,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
       {question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right', paddingHorizontal: 16, paddingTop: 12 }}>{question.promptArabic}</Text> : null}
       {isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
         : <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
@@ -320,7 +336,9 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
             <Button big variant="primary" Icon={Check} label="أرسل" disabled={!started} onPress={() => send({ type: 'submit', answer: typed })} />
           </View>}
         </>
-      ) : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
+      ) : isAyahChoice(question)
+        ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })} /></View>
+        : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
     </View>
   );
 }
@@ -339,6 +357,7 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
       {entries.length > 0 && <QuestionDots states={states} current={review ?? -1} onPick={setReview} palette={palette} />}
       {entry && question && (isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
         : <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />)}
       {view.you === view.hostId && <View style={{ alignItems: 'flex-start' }}><Button big variant="primary" Icon={RotateCcw} label="اختبار آخر بالفريق نفسه" onPress={() => send({ type: 'again' })} /></View>}
     </ScrollView>

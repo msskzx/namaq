@@ -2,6 +2,7 @@
 // same word for word, and a little harder for each ayah past two. Size alone cannot tell trees apart: most quiz
 // trees have just two ayat.
 import { normalizeWord } from '../quran/normalize';
+import type { QuizTopic } from './settings';
 
 export const DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 export type Difficulty = (typeof DIFFICULTIES)[number];
@@ -17,7 +18,7 @@ const PER_AYAH = 0.05;
  * so each level holds about a third of them. With a juz range, only the ayat inside it are scored.
  */
 const EASY_BELOW = 0.308;
-const HARD_FROM = 0.468;
+export const HARD_FROM = 0.468;
 
 function common(a: string[], b: string[]) {
   let row = new Array(b.length + 1).fill(0);
@@ -28,6 +29,9 @@ function common(a: string[], b: string[]) {
   }
   return row[b.length];
 }
+
+/** The share of two ayat's words they have in common, in order, out of the longer one. */
+export const wordShare = (a: string[], b: string[]) => common(a.map(normalizeWord), b.map(normalizeWord)) / Math.max(a.length, b.length, 1);
 
 /** The tree's score: the share of words its ayat have in common (in order), two by two, plus a little per extra ayah. */
 export function treeScore(ayat: string[][]): number {
@@ -53,3 +57,19 @@ export function byDifficulty<T>(items: T[], difficulty: Difficulty, level: (item
   const levels = new Map(items.map(item => [item, distance(level(item), difficulty)]));
   return [0, 1, 2].flatMap(far => items.filter(item => levels.get(item) === far));
 }
+
+/** What the difficulty changes in each topic that has one. */
+export const DIFFICULTY_NOTES: Partial<Record<QuizTopic, { en: string; ar: string }>> = {
+  BRANCHES: {
+    ar: 'الأشجار، سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.',
+    en: 'Trees, easy: ayat that part soon. Hard: ayat alike but for a word or two.',
+  },
+  SURAH: {
+    ar: 'في أي سورة، سهل: سور متباعدة. متوسط: سور مجاورة. صعب: آيات لها شبيهة قريبة في سورة أخرى، والسورتان بين الخيارات.',
+    en: 'Which surah, easy: surahs far apart. Medium: neighbouring surahs. Hard: ayat with a close look-alike in another surah, both surahs offered.',
+  },
+  RECITE: {
+    ar: 'سمّع بقية الآية، سهل: تظهر كلمتان زيادة من أولها. صعب: يظهر أقل ما يميّزها.',
+    en: 'Recite the rest, easy: two more opening words. Hard: just enough to tell the ayah.',
+  },
+};

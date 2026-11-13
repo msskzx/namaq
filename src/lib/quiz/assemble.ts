@@ -8,12 +8,15 @@ import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } 
 import { shuffle, type Random } from '@shared/quiz/random';
 import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
+import { mixQuestions, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { CHOICE_KINDS } from '@shared/quiz/kinds';
+import { CHOICE_TOPICS } from '@shared/quiz/settings';
 import { DEFAULT_LEAVES } from './types';
-import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
+import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic, QuizTopics } from './types';
 
 export interface AssembledQuestion {
   key: string;
-  family: QuestionFamily | BranchQuestion['family'];
+  family: QuestionFamily | BranchQuestion['family'] | QuizTopic;
   attribute?: string | null;
   promptArabic: string;
   choices: QuestionChoice[];
@@ -24,6 +27,11 @@ export interface AssembledQuestion {
   variants?: Variant[];
   prefixes?: Variant[];
   asked?: number[];
+  quran?: ChoiceQuestion['quran'];
+  reveal?: ChoiceQuestion['reveal'];
+  ayahKey?: string;
+  alike?: ChoiceQuestion['alike'];
+  note?: ChoiceQuestion['note'];
   evidence: { claimKeys: string[] };
 }
 
@@ -54,7 +62,7 @@ function branchesFor(topics: QuizTopics, juz: JuzRange | null = null, scope: Tre
 
 // docs/quiz-ayah-branches.md
 function whereFor(topics: QuizTopics, personSlug?: string): Prisma.QuizQuestionWhereInput | null {
-  const bank = topics.filter((topic) => topic !== 'BRANCHES' && topic !== 'PERSON_CIRCLE');
+  const bank = topics.filter((topic) => topic !== 'BRANCHES' && topic !== 'PERSON_CIRCLE' && !(CHOICE_TOPICS as readonly string[]).includes(topic));
   const scopes: Prisma.QuizQuestionWhereInput[] = [
     ...(bank.length > 0 ? [{ topic: { in: bank } }] : []),
     ...(topics.includes('PERSON_CIRCLE') && personSlug ? [{ personSlugs: { has: personSlug } }] : []),
@@ -63,9 +71,13 @@ function whereFor(topics: QuizTopics, personSlug?: string): Prisma.QuizQuestionW
   return scopes.length === 1 ? { status: 'APPROVED', ...scopes[0] } : { status: 'APPROVED', OR: scopes };
 }
 
+const kindsOf = (topics: QuizTopics) => CHOICE_KINDS.filter((kind) => topics.includes(kind.id));
+const choiceScope = (juz: JuzRange | null, scope: TreeScope): ChoiceScope => ({ range: juz, filters: scope.filters ?? {} });
+
 export async function availableQuestionCount(topics: QuizTopics, personSlug?: string, juz: JuzRange | null = null, scope: TreeScope = {}) {
   const where = whereFor(topics, personSlug);
-  return (where ? await prisma.quizQuestion.count({ where }) : 0) + branchesFor(topics, juz, scope).length;
+  const kinds = kindsOf(topics).reduce((sum, kind) => sum + kind.count(choiceScope(juz, scope)), 0);
+  return (where ? await prisma.quizQuestion.count({ where }) : 0) + branchesFor(topics, juz, scope).length + kinds;
 }
 
 export async function assembleQuiz({ topics, personSlug, juz = null, scope = {}, difficulty = DEFAULT_DIFFICULTY, leaves = DEFAULT_LEAVES, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
@@ -94,10 +106,12 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   }));
   // Trees of the chosen difficulty first; within each, trees big enough for the leaves asked first (see biggerFirst).
   const bigger = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length);
-  const trees = byDifficulty(bigger, difficulty, question => question.level).slice(0, length);
-  return shuffle([...bank, ...trees], random).slice(0, length).map((question) => ({
+  const trees: AssembledQuestion[] = byDifficulty(bigger, difficulty, question => question.level).slice(0, length);
+  const kinds = kindsOf(topics).map((kind) => kind.questions(choiceScope(juz, scope), difficulty, random, length) as AssembledQuestion[]);
+  // Each kind gets its share of the quiz (choiceKinds.ts mixQuestions).
+  return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random).map((question) => ({
     ...question,
-    choices: shuffle(question.choices, random),
+    choices: question.reveal ? question.choices : shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),
   }));
 }

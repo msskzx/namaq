@@ -7,37 +7,39 @@ import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/data/quran/trees.json';
 import { isAsked } from '@shared/quiz/score';
-import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, questionState, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
 /** Types the right words (in ordinary spelling) into every asked node of the current question. */
 function typeRight(run: SoloRun) {
-  const question = run.questions[run.current];
+  const question = run.questions[run.current] as AskedBranchQuestion;
   return branchNodes(question.tree).reduce((next, node, index) =>
     isAsked(question, index) ? typeAnswer(next, index, node.words.map(spelled).join(' ')) : next, run);
 }
 
 describe('solo quiz on the phone', () => {
   it('keeps settings in range, and turns an older juz range into the filters', () => {
-    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, difficulty: 'medium', leaves: 6, length: 10 });
-    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ kinds: ['BRANCHES'], list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, difficulty: 'medium', leaves: 6, length: 10 });
+    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ kinds: ['BRANCHES'], list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ kinds: ['RECITE', 'nope' as never, 'SURAH'] }).kinds).toEqual(['SURAH', 'RECITE']);
     expect(cleanSolo({ difficulty: 'hard' }).difficulty).toBe('hard');
     expect(cleanSolo({ difficulty: 'nope' as never }).difficulty).toBe('medium');
   });
 
   it('counts the questions the filters hold, as the website does', () => {
     for (const list of [{ ...DEFAULT_LIST, range: { from: 30, to: 30 } }, { ...DEFAULT_LIST, filters: { categories: 'mutashabeh', surahs: '2,36' } }]) {
-      expect(availability(list, []).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], list.range, quizTrees(list.range, { filters: list.filters })).length);
+      expect(availability({ kinds: ['BRANCHES'], list }, []).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], list.range, quizTrees(list.range, { filters: list.filters })).length);
     }
-    expect(availability(DEFAULT_LIST, []).lengths).toEqual([5, 10, 15]);
+    expect(availability({ kinds: ['BRANCHES'], list: DEFAULT_LIST }, []).lengths).toEqual([5, 10, 15]);
   });
 
   it('asks only saved trees when saved only is on', () => {
-    expect(availability({ ...DEFAULT_LIST, saved: true }, []).available).toBe(0);
+    expect(availability({ kinds: ['BRANCHES'], list: { ...DEFAULT_LIST, saved: true } }, []).available).toBe(0);
     const run = startSolo(cleanSolo({ list: { ...DEFAULT_LIST, range: { from: 30, to: 30 } }, length: 5 }), seeded(2));
-    const saved = [{ id: run.questions[0].phrase, text: '' }];
-    expect(availability({ ...DEFAULT_LIST, saved: true }, saved).available).toBe(1);
+    const saved = [{ id: (run.questions[0] as AskedBranchQuestion).phrase, text: '' }];
+    expect(availability({ kinds: ['BRANCHES'], list: { ...DEFAULT_LIST, saved: true } }, saved).available).toBe(1);
   });
 
   it('asks only ayat of the chosen juz', () => {
@@ -78,7 +80,7 @@ describe('solo quiz on the phone', () => {
     run = submit(run);
     expect(questionState(run, 0)).toBe('correct');
     expect(questionState(run, 1)).toBe('unanswered');
-    expect(soloScore(run).score).toBe(run.questions[0].asked.length);
+    expect(soloScore(run).score).toBe((run.questions[0] as AskedBranchQuestion).asked.length);
   });
 
   it('keeps hints per question until it is checked, also for runs saved before hints', () => {
@@ -87,5 +89,29 @@ describe('solo quiz on the phone', () => {
     const hinted = setHints(old, { 2: 1 });
     expect(hinted.hints).toEqual([{}, { 2: 1 }, {}, {}, {}]);
     expect(setHints(check(hinted), { 2: 2 }).hints).toEqual(hinted.hints);
+  });
+
+  it('mixes which-surah questions with the trees and scores a picked surah as one point', () => {
+    const settings = cleanSolo({ kinds: ['BRANCHES', 'SURAH'], list: { ...DEFAULT_LIST, range: { from: 30, to: 30 } }, length: 10 });
+    expect(availability(settings, []).available).toBeGreaterThan(availability({ ...settings, kinds: ['BRANCHES'] }, []).available + 400);
+    let run = startSolo(settings, seeded(4));
+    expect(run.questions.filter(question => !isTree(question))).toHaveLength(5);
+    run = goTo(run, run.questions.findIndex(question => !isTree(question)));
+    const question = run.questions[run.current];
+    expect(hasTyped(run)).toBe(false);
+    run = pick(run, question.correctAnswer);
+    expect(pick(run, 'other')).toBe(run);
+    expect(questionState(run, run.current)).toBe('correct');
+    expect(soloScore(submit(run)).points[run.current]).toEqual({ earned: 1, total: 1 });
+  });
+
+  it('shows a recited snippet\'s rest before its choices, and counts «نسيتها» as not had', () => {
+    let run = startSolo(cleanSolo({ kinds: ['RECITE'], list: { ...DEFAULT_LIST, range: { from: 30, to: 30 } } }), seeded(6));
+    expect(run.questions.every(question => !isTree(question) && question.reveal?.length)).toBe(true);
+    run = reveal(run);
+    expect(run.shown).toEqual([true, false, false, false, false]);
+    run = pick(run, '0');
+    expect(questionState(run, 0)).toBe('incorrect');
+    expect(questionState(submit(run), 1)).toBe('unanswered');
   });
 });

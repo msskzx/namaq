@@ -1,6 +1,6 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
-import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizTopic } from '../quiz/settings';
+import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, SOLO_TOPICS, type QuizTopic } from '../quiz/settings';
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, type Difficulty } from '../quiz/difficulty';
 import { QUIZ_CATEGORIES, quizFilters, treeScopeParams, type ScopeFilters } from '../quiz/scopeParams';
 
@@ -83,7 +83,7 @@ const pick = <T,>(options: readonly T[], value: unknown, fallback: T) => options
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
 export function cleanSettings(settings: Partial<PartySettings>, base: PartySettings = DEFAULT_SETTINGS): PartySettings {
-  const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic)))] : base.topics;
+  const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic) && !SOLO_TOPICS.includes(topic)))] : base.topics;
   const from = juz(settings.juzFrom, base.juzFrom);
   const to = juz(settings.juzTo, base.juzTo);
   return {
@@ -105,7 +105,7 @@ export function quizQuery(settings: PartySettings) {
   settings.topics.forEach(topic => params.append('topic', topic));
   params.set('length', String(settings.length));
   if (settings.topics.includes('PERSON_CIRCLE') && settings.person) params.set('person', settings.person);
-  if (settings.topics.includes('BRANCHES')) {
+  if (settings.topics.some(topic => RANGED_TOPICS.includes(topic))) {
     if (settings.juzFrom !== 1 || settings.juzTo !== 30) {
       params.set('juzFrom', String(settings.juzFrom));
       params.set('juzTo', String(settings.juzTo));
@@ -268,7 +268,8 @@ export type PartyView = {
 export function viewFor(state: PartyState, playerId: string, now: number): PartyView {
   const revealed = state.phase === 'reveal';
   const question = state.phase === 'question' || revealed ? state.questions[state.current] : null;
-  const hidden = question && !revealed ? { ...question, correctAnswer: '', evidence: undefined } : question;
+  // A choice question's ayah and look-alikes name its surah, so they wait for the reveal too.
+  const hidden = question && !revealed ? { ...question, correctAnswer: '', evidence: undefined, ayahKey: undefined, alike: undefined, note: undefined } : question;
   return {
     code: state.code,
     you: playerId,
