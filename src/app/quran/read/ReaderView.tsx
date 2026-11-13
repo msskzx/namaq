@@ -10,7 +10,7 @@ import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
-import { maxLetters, typedLetters, writeTargets, writtenRight } from '@shared/quran/writeAyah';
+import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
@@ -171,7 +171,7 @@ export default function ReaderView({
   const writeKey = writing && upcoming && !(reviewing && position?.shown) ? upcoming : null;
   const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
   // Words already shown (by the next-word button) are not asked.
-  const asked = writeKey && position ? writeTargets(writeWords.length).filter(at => at + titleSteps >= position.words) : [];
+  const asked = writeKey && position ? wordTargets(writeWords).filter(at => at + titleSteps >= position.words) : [];
   const askedKey = asked.join(',');
   // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
   const [writeFor, setWriteFor] = useState(writeKey);
@@ -221,7 +221,7 @@ export default function ReaderView({
     const letters = typedLetters(text);
     const filled = { ...typed, [current]: letters };
     setTyped(filled);
-    if (!composing && (/\s/.test(text) || letters.length >= maxLetters(writeWords[current]))) moveOn(filled);
+    if (!composing && ((/\s/.test(text) && !keepsSpace(text, writeWords[current])) || letters.length >= maxLetters(writeWords[current]))) moveOn(filled);
   };
   const back = () => {
     const at = current === null ? -1 : asked.indexOf(current);

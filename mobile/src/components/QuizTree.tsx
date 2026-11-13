@@ -243,7 +243,11 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header }:
   }, [snapshot]);
   const rows = useMemo(() => new Map(graded.rows.map(row => [row.index, row])), [graded]);
   const [matrix, setMatrix] = useState(false);
-  const [down, setDown] = useState(false);
+  // As while answering: turned top down and shrunk when wider than the phone, so the graded answers are on screen.
+  const [chosen, setChosen] = useState<boolean | null>(null);
+  const [fits, setFits] = useState(true);
+  const down = chosen ?? !fits;
+  const overflow = useCallback(() => setFits(false), []);
   const [around, setAround] = aroundSetting.use();
   const surrounding = useMemo(() => around ? aroundOf(presentation) : undefined, [around, presentation]);
   const [size, setSize] = useState<Size | null>(null);
@@ -281,10 +285,12 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header }:
   const switchView = (next: () => void) => { closeStudio(); next(); };
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      <View style={{ flex: 1 }}>
         {matrix
-          ? size && <>{header}<MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} /></>
-          : <Scroller header={header}><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
+          ? <>{header}<View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+            {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} />}
+          </View></>
+          : <Scroller header={header} fit onOverflow={!down && chosen === null ? overflow : undefined}><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
             direction={down ? 'down' : 'side'} around={surrounding} growth={treeGrowth} sceneRef={sceneRef} /></Scroller>}
       </View>
       {studio ? (
@@ -298,7 +304,7 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header }:
           {!matrix && <StudioButton palette={palette} />}
           <View style={{ flex: 1 }} />
           <Bar label={matrix ? 'عرض الشجرة' : 'عرض المصفوفة'} onPress={() => switchView(() => setMatrix(!matrix))} Icon={matrix ? TreeIcon : GalleryHorizontal} palette={palette} />
-          {!matrix && <Bar label="تدوير الشجرة" onPress={() => switchView(() => setDown(!down))} Icon={RotateCwSquare} palette={palette} />}
+          {!matrix && <Bar label="تدوير الشجرة" onPress={() => switchView(() => setChosen(!down))} Icon={RotateCwSquare} palette={palette} />}
           <Bar label="الآيات المحيطة" onPress={() => switchView(() => setAround(!around))} Icon={UnfoldHorizontal} palette={palette} on={around} />
         </View>
       )}

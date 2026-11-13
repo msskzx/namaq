@@ -11,7 +11,7 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, su
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
-import { maxLetters, typedLetters, writeTargets, writtenRight } from '@shared/quran/writeAyah';
+import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
 import TopBar from './TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
 import ReaderPager from './ReaderPager';
@@ -109,7 +109,7 @@ export default function Reader() {
   const writeWords = useMemo(() => (writeKey ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? []) : []), [writeKey, model]);
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   // Words already shown (by the next-word button) are not asked.
-  const asked = writeKey && view ? writeTargets(writeWords.length).filter(at => view.hidden(writeKey, at + offset)) : [];
+  const asked = writeKey && view ? wordTargets(writeWords).filter(at => view.hidden(writeKey, at + offset)) : [];
   const askedKey = asked.join(',');
   useEffect(() => {
     setTyped({});
@@ -131,7 +131,7 @@ export default function Reader() {
   };
   const onWrite = (text: string) => {
     if (current === null) return;
-    const done = /\s/.test(text);
+    const done = /\s/.test(text) && !keepsSpace(text, writeWords[current]);
     const letters = typedLetters(text);
     const filled = { ...typed, [current]: letters };
     setTyped(filled);

@@ -7,8 +7,8 @@ import { ayahLinksFor, pageAyat } from '@/app/quran/read/ayahLinks';
 import page264 from '@shared/data/quran/mushaf/264.json';
 import type { MushafPage } from '@shared/quran/readerPage';
 import { branchList, EMPTY_LIST, hasTrees } from './branchList';
-import { cardsFor, compareTargetsOfAyah, focusIndex, holdsAyah } from './compare';
-import { cardWays } from './home';
+import { cardsFor, compareTargetsOfAyah, focusIndex, holdsAyah, listedPairs } from './compare';
+import { cardWays, savedCard } from './home';
 import { treeList } from './branches';
 
 const memory = new Map<string, string>();
@@ -97,5 +97,15 @@ describe('the compare page opened on a card', () => {
     }
     expect(focusIndex(cardsFor(2, 7), ['2:49'])).toBe(cardsFor(2, 7).findIndex(card => holdsAyah(card, '2:49')));
     expect(checked).toBeGreaterThan(0);
+  });
+
+  it('opens a saved card on itself, not on a one-to-many card or story part holding the same ayat', () => {
+    const wrong: string[] = [];
+    for (const { a, b } of listedPairs) for (const card of cardsFor(a, b)) {
+      const open = savedCard({ id: compareBookmarkId(card.id), text: '', href: '', savedAt: 0 }).open as { lead: number; other: number; ayat: string[] };
+      const cards = cardsFor(open.lead, open.other);
+      if (cards[focusIndex(cards, open.ayat)]?.id !== card.id) wrong.push(`${a}-${b} ${card.id}`);
+    }
+    expect(wrong).toEqual([]);
   });
 });
