@@ -2,6 +2,7 @@
 
 import { Tags } from 'lucide-react';
 import Button from '@/components/common/Button';
+import ExternalLink from '@/components/common/ExternalLink';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
@@ -25,7 +26,7 @@ export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: s
     {group.citations.map(citation => <p key={citation.id} lang="ar" dir="rtl" className="m-0 text-xs leading-relaxed text-[var(--home-muted)]">
       {citation.book}، {citation.edition}{' · '}
       <span dir="ltr">{ar ? citation.places.join(' ↔ ').replace(/\d/g, digit => Number(digit).toLocaleString('ar-EG')) : citation.places.join(' ↔ ')}</span>{' · '}
-      <a className="underline" href={citation.url}>{ar ? citation.locator.replace(/\d/g, digit => Number(digit).toLocaleString('ar-EG')) : citation.locator}</a>
+      <ExternalLink className="underline" href={citation.url}>{ar ? citation.locator.replace(/\d/g, digit => Number(digit).toLocaleString('ar-EG')) : citation.locator}</ExternalLink>
       <br /><q>{citation.quote}</q>
     </p>)}
   </div>;

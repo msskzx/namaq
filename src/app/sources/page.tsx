@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import styles from '@/components/common/PaperPage.module.css';
+import ExternalLink from '@/components/common/ExternalLink';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import type { SourceShelfEntry } from '@/types/provenance';
@@ -63,7 +64,7 @@ export default function SourcesPage() {
                   ))}
                 </p>
                 <p className="mt-1 text-sm">
-                  <a className={ACTION} href={book.link.url} target="_blank" rel="noreferrer">{book.link.label}</a>
+                  <ExternalLink className={ACTION} href={book.link.url}>{book.link.label}</ExternalLink>
                   {book.shelf && (
                     <>
                       {' · '}
