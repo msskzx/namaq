@@ -4,7 +4,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 export type Intent =
   | { tab: 'branches'; open?: string; saved?: boolean; surah?: number; juz?: number; ayah?: string }
   | { tab: 'compare'; lead: number; other?: number; ayat?: string[] }
-  | { tab: 'read'; at?: string; page?: number; recite?: boolean; review?: boolean };
+  | { tab: 'read'; at?: string; page?: number; recite?: boolean; review?: boolean; write?: boolean };
 
 let pending: Intent | null = null;
 const listeners = new Set<() => void>();

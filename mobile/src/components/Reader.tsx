@@ -1,19 +1,20 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, PenLine, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type RecitePosition } from '@shared/quran/recite';
+import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
+import { maxLetters, typedLetters, writeTargets, writtenRight } from '@shared/quran/writeAyah';
 import TopBar from './TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
 import ReaderPager from './ReaderPager';
-import MushafPageView, { type Touch } from './MushafPageView';
+import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import TreeIcon from './TreeIcon';
@@ -24,6 +25,7 @@ import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';
+import { useKeyboardHeight } from '@/lib/keyboard';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -35,6 +37,8 @@ const LAST_RECITE = 'reader-recite-last';
 type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean };
 /** How big the page is drawn, kept from one visit to the next. */
 const ZOOM = 'reader-zoom';
+/** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
+const WRITE = 'reader-write';
 
 /** How long (ms) a first tap waits for a second one, when a double tap does something. */
 const DOUBLE_TAP = 260;
@@ -85,6 +89,53 @@ export default function Reader() {
   const model = modelOf(page);
   const view = position ? reciteView(model, position) : null;
 
+  // Write mode (owner, 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes its first
+  // and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
+  // green when right and amber when wrong.
+  const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
+  const [typed, setTyped] = useState<Record<number, string>>({});
+  const [current, setCurrent] = useState<number | null>(null);
+  const [checked, setChecked] = useState<Checked | null>(null);
+  const input = useRef<ComponentRef<typeof TextInput>>(null);
+  const writeKey = writing && view?.upcoming ? view.upcoming : null;
+  const writeWords = useMemo(() => (writeKey ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? []) : []), [writeKey, model]);
+  const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
+  // Words already shown (by the next-word button) are not asked.
+  const asked = writeKey && view ? writeTargets(writeWords.length).filter(at => view.hidden(writeKey, at + offset)) : [];
+  const askedKey = asked.join(',');
+  useEffect(() => {
+    setTyped({});
+    setCurrent(writeKey ? (askedKey ? Number(askedKey.split(',')[0]) : null) : null);
+    if (writeKey) setTimeout(() => input.current?.focus(), 50);
+  }, [writeKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const keyboard = useKeyboardHeight(reciting && writing);
+  const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); input.current?.blur(); };
+  const check = (filled: Record<number, string>) => {
+    if (!writeKey || !position) return;
+    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
+    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)) });
+    setPosition(revealAyah(position, writeKey));
+  };
+  const moveOn = (filled: Record<number, string>) => {
+    const at = current === null ? -1 : asked.indexOf(current);
+    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
+    else check(filled);
+  };
+  const onWrite = (text: string) => {
+    if (current === null) return;
+    const done = /\s/.test(text);
+    const letters = typedLetters(text);
+    const filled = { ...typed, [current]: letters };
+    setTyped(filled);
+    if (done || letters.length >= maxLetters(writeWords[current])) moveOn(filled);
+  };
+  const onWriteKey = (key: string) => {
+    if (key !== 'Backspace' || current === null || typed[current]) return;
+    const at = asked.indexOf(current);
+    if (at > 0) setCurrent(asked[at - 1]);
+  };
+  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed, current, onBox: at => { setCurrent(at); input.current?.focus(); } } : null;
+
   // The app's bars step aside while reading; a tap brings them back.
   useEffect(() => {
     setImmersive(focused && !tools);
@@ -129,6 +180,7 @@ export default function Reader() {
     setReviewing(!!intent.recite && !!intent.review);
     setMark(intent.at && !intent.recite ? { key: intent.at, page: to } : null);
     setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], shown: null, words: 0 } : null);
+    if (intent.write) { setWriting(true); writeJson(WRITE, true); setChecked(null); }
   });
 
   const startRecite = () => {
@@ -137,7 +189,7 @@ export default function Reader() {
     setReviewing(false);
     setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
   };
-  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); };
+  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
   const reviewDone = reviewing && !!position?.shown;
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
@@ -189,8 +241,12 @@ export default function Reader() {
   }, []);
   useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
   const openIndex = useCallback(() => { setActions(null); setSheet('index'); }, []);
+  const writingNow = useRef(false);
+  writingNow.current = !!writeKey;
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number) => {
     if (Date.now() - moved.current < 350) return;
+    // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
+    if (writingNow.current) { input.current?.focus(); return; }
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
     // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
@@ -208,14 +264,17 @@ export default function Reader() {
   }, [mode]);
 
   // While reciting the page ends above the recite pill, so it never covers a line.
-  const pageInsets = { top: insets.top, bottom: reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : insets.bottom };
+  // While writing, the page also ends above the keyboard, so the boxes stay in sight.
+  const pillBottom = keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom);
+  const pageInsets = { top: insets.top, bottom: reciting ? (keyboard ? pillBottom : tabBarBottom(insets.bottom)) + RECITE_BAR + 8 : insets.bottom };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const render = (at: number, width: number, pageHeight: number) => {
     const atModel = modelOf(at);
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={pageHeight}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
-        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch} />
+        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
+        write={at === page ? write : null} checked={position ? checked : null} />
     );
   };
 
@@ -262,7 +321,7 @@ export default function Reader() {
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
-          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom), height: RECITE_BAR, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: pillBottom, height: RECITE_BAR, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
           {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
@@ -270,8 +329,15 @@ export default function Reader() {
           <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
           <IconButton Icon={reviewDone ? ArrowLeft : ChevronsLeft} label={reviewDone ? 'الآية المنسية التالية' : 'أظهر الآية التالية'} palette={palette}
             disabled={reviewDone ? !reviewNext : !view?.upcoming && page === PAGES} onPress={revealNextAyah} />
+          <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : 'اكتب أول كل آية وآخرها'} palette={palette} on={writing} onPress={toggleWriting} />
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
+      )}
+      {/* The keyboard writes into the box being written; the field itself is out of sight. */}
+      {writeKey && (
+        <TextInput ref={input} value={current === null ? '' : typed[current] ?? ''} onChangeText={onWrite} onKeyPress={event => onWriteKey(event.nativeEvent.key)}
+          autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off" blurOnSubmit={false} onSubmitEditing={() => moveOn(typed)}
+          accessibilityLabel="اكتب الكلمة" style={{ position: 'absolute', opacity: 0, width: 1, height: 1, top: 0, left: 0 }} />
       )}
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
         last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
