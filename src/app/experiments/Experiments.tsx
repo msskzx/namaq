@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { EXPERIMENT_SECTIONS, type NavItem } from '@/lib/navigation';
 import styles from '@/components/common/PaperPage.module.css';
@@ -18,6 +19,7 @@ export const LIVE: NavItem[] = [
   { href: '/quran/oaths', label: { ar: 'الأقسام في القرآن', en: 'Oaths in the Quran' }, purpose: { ar: 'كل قسم في القرآن وما أُقسم به، من الله ومن غيره', en: 'Every oath in the Quran and what is sworn by, Allah’s and others’' } },
   { href: '/quran/iltifat', label: { ar: 'الالتفات', en: 'Iltifat' }, purpose: { ar: 'تحوّل الكلام بين الغائب والمتكلم والمخاطب، لكل مثال صورته', en: 'Speech turning between he, we and you, each example with its own picture' } },
   { href: '/quizzes?topic=BRANCHES', label: { ar: 'اختبار فردي', en: 'Solo quiz' }, purpose: { ar: 'أكمل فروع شجرة المتشابهات', en: 'Complete the branches of a phrase tree' } },
+  { href: '/quizzes/openings', label: { ar: 'أوائل السور', en: 'Surah openings' }, purpose: { ar: 'ترى اسم السورة وتكتب أول آية فيها', en: 'See a surah’s name and write its first ayah' } },
   { href: '/quizzes/party', label: { ar: 'اختبار جماعي', en: 'Party quiz' }, purpose: { ar: 'الاختبار نفسه مع أصحابك برابط واحد', en: 'The same quiz with friends, from one link' } },
   { href: '/library?tab=saved', label: { ar: 'المحفوظات', en: 'Saved' }, purpose: { ar: 'الآيات والشجرات والمقارنات التي حفظتها', en: 'The ayat, trees and comparisons you saved' } },
   { href: '/library?tab=forgotten', label: { ar: 'ما نسيته', en: 'Forgotten' }, purpose: { ar: 'الآيات التي نسيتها، تعود إليك حتى تثبت', en: 'The ayat you forgot, coming back until they stick' } },
@@ -29,15 +31,30 @@ export const LIVE: NavItem[] = [
   { href: '/utilities', label: { ar: 'مواقيت الصلاة والقبلة', en: 'Prayer times and qibla' }, purpose: { ar: 'مواقيت اليوم، واتجاه القبلة، والتقويم الهجري', en: 'Today\'s prayer times, the qibla direction and the Hijri calendar' } },
 ];
 
+/** Built features with no page of their own, and where to find them. */
+export const LIVE_INSIDE: Text[] = [
+  { ar: 'قراءات القرّاء العشرة في الآيات التي اختلفوا فيها، من أزرار الآية في المصحف', en: 'The ten readers’ readings, for ayat where they differ, from the ayah’s buttons in the mushaf' },
+  { ar: 'ما أحفظه: الأسئلة منه، والتأمل يقدّمه، من الإعدادات', en: 'What I memorized: questions come from it and pondering puts it first, set in settings' },
+  { ar: 'مستوى صعوبة الاختبار، والتلميح بالحروف', en: 'Quiz difficulty, and letter hints' },
+  { ar: 'مشاركة أي بطاقة صورةً', en: 'Share any card as an image' },
+  { ar: 'مشاركة صفحة المقارنة أو بطاقاتها فيديو', en: 'Share a compare page, or some of its cards, as a video' },
+  { ar: 'جولة التعريف، وتلميحة عند أول زيارة للصفحات الرئيسية', en: 'The welcome tour, and a tip on the first visit to the main pages' },
+];
+
 /** Being built now; listed without links until they are live. The column hides when nothing is. */
 const COMING: Text[] = [];
 
 const LIVE_PATHS = new Set(LIVE.map(item => item.href.split('?')[0]).concat('/quizzes'));
 
-function Item({ item, language }: { item: NavItem; language: 'en' | 'ar' }) {
-  return <li className="py-1.5">
-    <Link href={item.href} className="text-base text-[var(--home-accent)] hover:underline">{item.label[language]}</Link>
-    <p className="text-sm leading-relaxed text-[var(--home-muted)]">{item.purpose[language]}</p>
+const LiveMark = () => <Check size={16} strokeWidth={2.5} aria-hidden className="mt-1 shrink-0 text-[var(--home-green)]" />;
+
+function Item({ item, language, live }: { item: NavItem; language: 'en' | 'ar'; live?: boolean }) {
+  return <li className="flex gap-2 py-1.5">
+    {live && <LiveMark />}
+    <div className="min-w-0">
+      <Link href={item.href} className="text-base text-[var(--home-accent)] hover:underline">{item.label[language]}</Link>
+      <p className="text-sm leading-relaxed text-[var(--home-muted)]">{item.purpose[language]}</p>
+    </div>
   </li>;
 }
 
@@ -53,9 +70,12 @@ export default function Experiments() {
     <div dir={ar ? 'rtl' : 'ltr'} className={`${styles.page} mx-auto max-w-[var(--home-width)] px-[var(--home-gutter)] py-6`}>
       <section aria-labelledby="experiment-live" className={`mb-8 grid gap-x-8 ${COMING.length ? 'sm:grid-cols-2' : ''}`}>
         <div>
-          <h2 id="experiment-live" className="text-2xl text-[var(--home-accent)]">{ar ? 'متاح' : 'Live'}</h2>
+          <h2 id="experiment-live" className="text-2xl text-[var(--home-green)]">{ar ? 'متاح' : 'Live'}</h2>
           <ul className={`mt-2 sm:columns-2 sm:gap-8 [&>li]:break-inside-avoid ${COMING.length ? '' : 'xl:columns-4'}`}>
-            {LIVE.map(item => <Item key={item.href} item={item} language={language} />)}
+            {LIVE.map(item => <Item key={item.href} item={item} language={language} live />)}
+          </ul>
+          <ul aria-label={ar ? 'داخل الصفحات' : 'Inside the pages'} className={`mt-2 sm:columns-2 sm:gap-8 [&>li]:break-inside-avoid ${COMING.length ? '' : 'xl:columns-4'}`}>
+            {LIVE_INSIDE.map(text => <li key={text.en} className="flex gap-2 py-1.5 text-base"><LiveMark />{text[language]}</li>)}
           </ul>
         </div>
         {COMING.length > 0 && <div className="mt-6 border-t border-[var(--home-rule)] pt-3 sm:mt-0 sm:border-t-0 sm:pt-0">
