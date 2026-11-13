@@ -1,4 +1,5 @@
-import { useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Check, ChevronDown } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -29,6 +30,28 @@ export default function TuhfaScreen() {
   const tops = useRef<number[]>([]);
   const [chapter, setChapter] = useState(0);
   const [picking, setPicking] = useState(false);
+  // The search opens a verse with ?verse=<number>: scrolled to it once laid out, and marked until the next search.
+  const verseY = useRef<Record<number, number>>({});
+  const { verse } = useLocalSearchParams<{ verse?: string }>();
+  const [marked, setMarked] = useState<number>();
+  const pending = useRef<number>(undefined);
+  const toVerse = () => {
+    const number = pending.current;
+    const part = chapters.findIndex(chapter => chapter.verses.some(item => item.number === number));
+    const top = tops.current[part];
+    const y = number === undefined ? undefined : verseY.current[number];
+    if (top === undefined || y === undefined) return;
+    pending.current = undefined;
+    scroll.current?.scrollTo({ y: Math.max(0, top + y - 60), animated: false });
+  };
+  useEffect(() => {
+    const number = Number(verse);
+    if (!verse || !Number.isInteger(number)) return;
+    setMarked(number);
+    pending.current = number;
+    router.setParams({ verse: undefined });
+    toVerse();
+  }, [verse]); // eslint-disable-line react-hooks/exhaustive-deps
   useTabRetap('tuhfa', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
@@ -54,16 +77,17 @@ export default function TuhfaScreen() {
           <ChevronDown size={14} color={palette.ink} />
         </Pressable>
       </TopBar>
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: bottom }}>
+      <ScrollView ref={scroll} onScroll={onScroll} onContentSizeChange={toVerse} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: bottom }}>
         <Text style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'center' }}>{poem.title}</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'center', marginTop: 4 }}>{`${poem.author}، ${num(poem.composed)}هـ، ${num(count)} بيتًا`}</Text>
         <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center', marginTop: 2 }}>{poem.edition.name}</Text>
         {chapters.map((part, i) => (
-          <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; }} style={{ marginTop: 18 }}>
+          <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; toVerse(); }} style={{ marginTop: 18 }}>
             <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>{part.title}</Text>
             {part.verses.map(verse => (
               <View key={verse.number} accessible accessibilityLabel={`${num(verse.number)}: ${verse.first}، ${verse.second}`}
-                style={{ flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderColor: `${palette.rule}40` }}>
+                onLayout={event => { verseY.current[verse.number] = event.nativeEvent.layout.y; }}
+                style={{ flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderColor: `${palette.rule}40`, borderRadius: 8, backgroundColor: marked === verse.number ? palette.paperDeep : 'transparent' }}>
                 <Text style={{ width: 22, color: palette.muted, fontSize: 13, paddingTop: 6, textAlign: 'right' }}>{num(verse.number)}</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{verse.first}</Text>

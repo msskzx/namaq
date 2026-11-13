@@ -93,6 +93,8 @@ const under = (pathname: string, href: string) => pathname === href || (href !==
 
 export function activeSection(path: string): string | undefined {
   const pathname = path.split('?')[0];
+  // The one search opens from home and lights it, as in the app.
+  if (pathname === '/search') return '/';
   return NAV_SECTIONS.find(section => section.href === '/quran'
     ? pathname === '/quran' || section.paths!.some(href => under(pathname, href))
     : under(pathname, section.href.split('?')[0]))?.href;

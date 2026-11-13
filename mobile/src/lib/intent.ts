@@ -2,7 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 
 /** What another screen (the homepage) asks a tab to open when it is shown: a tree, a surah or juz, a compare pair, an ayah. */
 export type Intent =
-  | { tab: 'branches'; open?: string; saved?: boolean; surah?: number; juz?: number; ayah?: string }
+  | { tab: 'branches'; open?: string; query?: string; saved?: boolean; surah?: number; juz?: number; ayah?: string }
   | { tab: 'compare'; lead: number; other?: number; ayat?: string[] }
   | { tab: 'read'; at?: string; page?: number; recite?: boolean; review?: boolean; write?: boolean };
 

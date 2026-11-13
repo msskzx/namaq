@@ -1,7 +1,7 @@
 'use client';
 
 // docs/plans/quran-repetition-merge.md
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -34,6 +34,16 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
   const add = (rank: number) => { setChosen([...chosen, rank]); setQuery(''); setOpen(rank); };
   const choose = (ranks: number[]) => { setChosen(ranks); if (open !== null && !ranks.includes(open)) setOpen(null); };
   const opened = bars.find(b => b.rank === open);
+  // The search opens a word with ?w=<word>: added to the chart with its places open.
+  useEffect(() => {
+    const asked = new URLSearchParams(window.location.search).get('w');
+    const found = asked ? ranked.find(r => r.word === asked) ?? ranked.find(r => r.key === normalizeWord(asked)) : undefined;
+    if (!found) return;
+    setChosen(ranks => (ranks.includes(found.rank) ? ranks : [...ranks, found.rank]));
+    setOpen(found.rank);
+    const timer = setTimeout(() => document.querySelector('ol [aria-pressed="true"]')?.scrollIntoView({ block: 'start' }), 0);
+    return () => clearTimeout(timer);
+  }, [ranked]);
 
   return (
     <section className={PANEL}>
