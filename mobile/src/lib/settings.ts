@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './branchList';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
+import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';
 import { isAdhanAlerts, NO_ALERTS, type AdhanAlerts } from '@shared/adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
@@ -32,8 +33,8 @@ const isBoolean = (value: unknown): value is boolean => typeof value === 'boolea
 export const tourSeen = setting('tour-seen', false, isBoolean);
 
 /** The first-visit hints already shown (TabHint.tsx), by page; replaying the tour clears them too. */
-export type HintId = 'read' | 'branches' | 'compare' | 'prophets' | 'utilities';
-export const hintsSeen = setting<HintId[]>('hints-seen', [], (value): value is HintId[] => Array.isArray(value) && value.every(item => typeof item === 'string'));
+export type { HintId };
+export const hintsSeen = setting<HintId[]>(HINTS_SEEN, [], (value): value is HintId[] => Array.isArray(value) && value.every(item => HINT_IDS.includes(item)));
 
 /** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
