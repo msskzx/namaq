@@ -23,13 +23,14 @@ const read = (key: string) => {
   return ayat[key];
 };
 
-// The opening: whole ayat from the first until ten words or four ayat.
+// The opening: whole ayat from the first until ten words, four ayat or the surah's end.
 const numbers = Object.keys(ORDER_AIMS).map(Number);
 const openings: Record<number, string[]> = {};
 for (const surah of numbers) {
   const keys: string[] = [];
   let count = 0;
-  for (let a = 1; count < 10 && keys.length < 4; a++) {
+  const last = surahs.find(s => s.number === surah)!.numberOfAyat;
+  for (let a = 1; a <= last && count < 10 && keys.length < 4; a++) {
     const key = `${surah}:${a}`;
     count += read(key).split(' ').length;
     keys.push(key);

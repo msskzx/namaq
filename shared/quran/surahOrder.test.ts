@@ -40,6 +40,16 @@ describe('orderSurahs', () => {
     for (const s of surahs) expect(s.opening[0].ayah).toBe(1);
   });
 
+  it('stops the opening at ten words, four ayat or the surah\'s end', () => {
+    for (const s of surahs) {
+      const counts = s.opening.map(a => a.text.split(' ').length);
+      const total = counts.reduce((x, y) => x + y, 0);
+      expect(s.opening.length).toBeLessThanOrEqual(4);
+      expect(total >= 10 || s.opening.length === 4 || s.opening.length === data.counts[String(s.surah) as keyof typeof data.counts]).toBe(true);
+      expect(total - counts.at(-1)!).toBeLessThan(10);
+    }
+  });
+
   it('colours the words a pair shares', () => {
     const duha = surahs.find(s => s.surah === 93)!;
     const [layl, duhaAyah] = duha.link!.pairs[0];
@@ -62,5 +72,6 @@ describe('cites', () => {
     expect(citeLabel(ORDER_AIMS[91].src, num)).toBe('البقاعي، نظم الدرر ٢٢/٦٩');
     expect(citeLabel(ORDER_LINKS[93].src, num)).toBe('السيوطي، تناسق الدرر ص١٦٠');
     expect(citeUrl(ORDER_LINKS[93].src)).toBe('https://shamela.ws/book/9992/166');
+    expect(citeLabel(ORDER_LINKS[45].src, num)).toBe('ابن الزبير، البرهان ص٣٠٣–٣٠٤');
   });
 });
