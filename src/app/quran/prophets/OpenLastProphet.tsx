@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { findProphet } from '@shared/quran/prophets';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -19,5 +20,8 @@ export function lastProphet() {
 export default function OpenLastProphet() {
   const router = useRouter();
   useEffect(() => { router.replace(`/quran/prophets/${lastProphet()}`); }, [router]);
-  return <div className="flex min-h-[50svh] items-center justify-center"><LoadingDots /></div>;
+  return <div className="flex min-h-[50svh] items-center justify-center">
+    <LoadingDots />
+    <noscript><Link href="/quran/prophets/musa">قصة موسى</Link></noscript>
+  </div>;
 }

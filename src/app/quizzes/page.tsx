@@ -133,9 +133,16 @@ export default function QuizzesPage() {
     : null;
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(availabilityQuery, fetcher);
   // undefined until this browser's unfinished quiz is read, so a quiz it holds is not fetched anew first.
+  // It is read again on every URL change, so Back or a tab link never offers a run that has since moved on or ended.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [stored, setStored] = useState<SoloRun<QuizData> | null | undefined>(undefined);
-  useEffect(() => setStored(readRun<QuizData>()), []);
+  const [readFor, setReadFor] = useState<string | null>(null);
   const search = searchParams.toString();
+  if (mounted && readFor !== search) {
+    setReadFor(search);
+    setStored(readRun<QuizData>());
+  }
   const restored = stored && stored.search === search ? stored : null;
   const started = Boolean(topics.length && length && stored !== undefined && (restored || availability?.lengths.includes(length)) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started && !restored
@@ -156,6 +163,19 @@ export default function QuizzesPage() {
   const [submitted, setSubmitted] = useState(false);
   const [reviewing, setReviewing] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
+  // The quiz whose answers the state holds, and so may save; none while leaving it for the setup.
+  const [owner, setOwner] = useState<string | null>(null);
+  const [leavingFrom, setLeavingFrom] = useState<string | null>(null);
+  if (leavingFrom !== null && leavingFrom !== search) setLeavingFrom(null);
+  if (owner !== null && owner !== search) setOwner(null);
+  else if (owner === null && started && search !== leavingFrom) {
+    if (restored) {
+      setOwner(search);
+      setCurrent(Math.min(restored.current, restored.data.questions.length - 1));
+      setAnswers(restored.answers);
+      setTyped(restored.typed);
+    } else if (fetched?.questions.length) setOwner(search);
+  }
 
   useEffect(() => {
     setCurrent(0);
@@ -165,21 +185,11 @@ export default function QuizzesPage() {
     setReviewing(false);
     setReferenceIndex(null);
   }, [query]);
+  // Every step of an unfinished quiz is kept; Submit lets it go.
   useEffect(() => {
-    if (!restored) return;
-    setCurrent(Math.min(restored.current, restored.data.questions.length - 1));
-    setAnswers(restored.answers);
-    setTyped(restored.typed);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per quiz taken from storage
-  }, [restored?.search]);
-  // Every step of an unfinished quiz is kept; a submitted one is let go.
-  useEffect(() => {
-    if (!started || !data?.questions.length) return;
-    if (submitted) { writeRun(null); return; }
-    const run = { search, data, current, answers, typed };
-    writeRun(run);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- `search` names the quiz `data` belongs to
-  }, [started, data, current, answers, typed, submitted]);
+    if (owner !== search || submitted || !data?.questions.length) return;
+    writeRun({ search, data, current, answers, typed });
+  }, [owner, search, data, current, answers, typed, submitted]);
 
   const pendingParams = useRef(searchParams.toString());
   useEffect(() => { pendingParams.current = searchParams.toString(); }, [searchParams]);
@@ -201,10 +211,11 @@ export default function QuizzesPage() {
     setSubmitted(false);
     setReviewing(false);
     setReferenceIndex(null);
-    // Back at the setup, an unfinished quiz is offered to continue; a submitted one is gone.
-    setStored(readRun<QuizData>());
+    // The cleared state belongs to no quiz: an unfinished one stays saved as it was, and the setup offers it.
+    setOwner(null);
+    setLeavingFrom(search);
     router.push(`${pathname}?${topicQuery || "solo=1"}`);
-  }, [pathname, router, topicQuery]);
+  }, [pathname, router, topicQuery, search]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
   const leave = () => { writeRun(null); setStored(null); };
@@ -444,6 +455,7 @@ export default function QuizzesPage() {
                     ...previous,
                   }));
                   setSubmitted(true);
+                  writeRun(null);
                 }}>
                   <FontAwesomeIcon icon={faPaperPlane} />
                   {ar ? "إرسال" : "Submit"}

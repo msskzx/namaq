@@ -1,7 +1,7 @@
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 
 const nav = vi.hoisted(() => {
   let url = '/quizzes';
@@ -295,6 +295,46 @@ describe('QuizzesPage', () => {
     expect(localStorage.getItem('quiz-solo-run')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'New quiz' }));
     expect(screen.queryByText(/unfinished quiz/)).toBeNull();
+  });
+
+  it('keeps the saved progress through Exit to setup and saves nothing after New quiz, while the URL is still changing', () => {
+    const stalled = vi.spyOn(nav, 'push').mockImplementation(() => {});
+    try {
+      nav.reset('/quizzes?topic=PEOPLE&length=5');
+      render(<QuizzesPage />);
+      fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Exit to setup' }));
+      const kept = JSON.parse(localStorage.getItem('quiz-solo-run')!);
+      expect(kept.current).toBe(1);
+      expect(kept.answers).toEqual({ 0: 'one' });
+      cleanup();
+
+      render(<QuizzesPage />);
+      fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+      fireEvent.click(screen.getByRole('button', { name: 'New quiz' }));
+      expect(localStorage.getItem('quiz-solo-run')).toBeNull();
+    } finally {
+      stalled.mockRestore();
+    }
+  });
+
+  it('offers the latest progress after leaving the quiz without its buttons, as Back does', () => {
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+    act(() => nav.push('/quizzes?topic=PEOPLE'));
+    expect(screen.getByText('You have an unfinished quiz, at question 1 of 5.')).toBeTruthy();
+    act(() => nav.push('/quizzes?topic=PEOPLE&length=5'));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
+    act(() => nav.push('/quizzes?topic=PEOPLE'));
+    expect(screen.getByText('You have an unfinished quiz, at question 2 of 5.')).toBeTruthy();
+    act(() => nav.push('/quizzes?topic=PEOPLE&length=5'));
+    expect(screen.getByText('السؤال العربي 2؟')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Question 2 - correct' })).toBeTruthy();
   });
 
   it('opens the quiz reference overlay from a locked question', () => {
