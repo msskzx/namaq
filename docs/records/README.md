@@ -1,12 +1,13 @@
-# Lessons
+# Records
 
 Each file records one challenge met while building Namaq: what the problem was,
 what fixed it, and when that fix applies. Read the ones that match your task
 before you start; they exist so a thread does not repeat a detour another
 thread already took.
 
-These are engineering lessons. They are a different thing from the historical
-records under `data/history/`.
+Agents write these records as they work. They are different from Distillate
+lessons (long write-ups the owner asks for when discussing a feature in depth)
+and from the historical records under `data/history/`.
 
 ## Format
 
@@ -30,6 +31,10 @@ A failure is "failed under these conditions", not a ban.
 
 **Evidence:** PR, commit, test or file.
 
+**Tried:** (when more than one attempt was made, dead ends included)
+- first attempt → what happened
+- second attempt → what happened
+
 ## What happened
 
 A few short paragraphs: what happened, what surprised us, why the fix works.
@@ -41,17 +46,24 @@ A few short paragraphs: what happened, what surprised us, why the fix works.
 - Topics come from this list: agent-review, build-tooling, data-sync,
   evidence-model, graph-layout, graph-ui, migrations, runtime-versions,
   source-extraction, testing, text-matching, ui-rtl, ui-state.
-- Optional lines: `**Builds on:**` and `**Same problem as:**` link earlier lessons.
+- Optional lines: `**Tried:**` lists each attempt and its outcome, so a dead end
+  is not tried again; `**Builds on:**` and `**Same problem as:**` link earlier records.
 - Write one when a real challenge was solved in a way the code alone does not
-  show. Skip routine work, and update an existing lesson rather than writing a
+  show. Skip routine work, and update an existing record rather than writing a
   second one about the same finding.
 
-Lessons 0001 to 0027 came from the Distillate project (2026-09 to 2026-11).
+Records 0001 to 0027 came from the Distillate project (2026-09 to 2026-11).
 Paths marked "since moved" no longer exist under that name.
+
+## Usage
+
+Every PR description has a `Records used:` line (see the PR template). To count
+how often each record was used across merged PRs, run `npm run records:used`
+(needs the `gh` CLI signed in).
 
 ## Index
 
-| # | Lesson | Kind | Outcome |
+| # | Record | Kind | Outcome |
 | --- | --- | --- | --- |
 | [0001](0001-eligibility-is-not-extractability.md) | Group headings: an eligibility question, not an extraction one | challenge | solved |
 | [0002](0002-mission-set-to-design-evolution.md) | Mission set: evolve the design, not author or review batches | challenge | solved |
