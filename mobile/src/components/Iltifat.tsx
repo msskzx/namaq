@@ -80,7 +80,7 @@ function Tree({ trunk, leaves, palette }: { trunk: string; leaves: { ayah: numbe
 /** Android draws a one-sided dashed border solid, so the scene cut is a drawn line. */
 function Dash({ palette }: { palette: Palette }) {
   return (
-    <Svg style={{ flex: 1 }} height={2}>
+    <Svg style={{ flex: 1, height: 2 }}>
       <SvgLine x1="0" y1="1" x2="100%" y2="1" stroke={palette.rule} strokeWidth={1.5} strokeDasharray="4 3" />
     </Svg>
   );
