@@ -5,11 +5,11 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
-import { X, Menu } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Menu } from 'lucide-react';
 import translations from '../language/translations';
 import Button from './Button';
 import Emblem from './Emblem';
-import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
+import { NAV_SECTIONS, activeSection, isQuranTool } from '@/lib/navigation';
 import { HelpButton, SettingsButton } from './TabBar';
 import styles from './NavBar.module.css';
 
@@ -101,9 +101,10 @@ export default function NavBar() {
         onFocus={showBar}
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
-          {!menuOnly &&
-            <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>
-          }
+          {/* As in the app: a Quran tool (trees, compare, prophets, Tuhfa) shows a back arrow to the Quran hub in the logo's place. */}
+          {!menuOnly && (isQuranTool(path)
+            ? <Link href="/quran" className={styles.wordmark} aria-label={ar ? 'رجوع' : 'Back'} title={ar ? 'رجوع' : 'Back'}>{ar ? <ChevronRight size={28} aria-hidden /> : <ChevronLeft size={28} aria-hidden />}</Link>
+            : <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>)}
           <div ref={setPageSlot} className={styles.pageActions} />
           <div ref={actions} className={styles.actions}>
             {/* As in the app: the page's help, and the settings gear on the homepage only. Desktop keeps both in the rail. */}

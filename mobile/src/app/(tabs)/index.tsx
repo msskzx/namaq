@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router, type Href } from 'expo-router';
@@ -18,6 +18,7 @@ import { FORGOTTEN_LABEL, NOTE_LABEL, REVIEW_LABEL, reviewForgotten, Shelf, Shel
 import { openIntent as go } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
+import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette, type Palette, CARD } from '@/lib/theme';
 
 /** A home shelf shows the latest few cards; «عرض الكل» opens the full list. */
@@ -109,7 +110,7 @@ function SeeAll({ tab }: { tab: 'saved' | 'forgotten' | 'notes' }) {
   return <Button Icon={ChevronLeft} accessibilityLabel="عرض الكل" onPress={() => router.push({ pathname: '/library', params: { tab } })} />;
 }
 
-/** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
+/** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The home button in the middle of the tab bar opens it, and so does the logo. */
 export default function HomeScreen() {
   const palette = usePalette();
   const { cards, forgotten, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus } = useHomeCards(palette);
@@ -118,10 +119,13 @@ export default function HomeScreen() {
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const [seen, setSeen] = tourSeen.use();
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  // The home button tapped again: back to the top.
+  useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 28 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 28 }}>
         <DailyCard palette={palette} />
         <QuranPicker palette={palette} />
 

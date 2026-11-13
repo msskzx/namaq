@@ -1,9 +1,22 @@
-import { QURAN_CARDS } from '@/app/quran/QuranHub';
-
 type Language = 'en' | 'ar';
 type Text = Record<Language, string>;
 export type NavItem = { href: string; label: Text; purpose: Text };
 export type NavSection = { href: string; label: Text; groups: { title?: Text; items: NavItem[] }[] };
+
+/** Every Quran page with its purpose, for the experiments page (EXPERIMENT_SECTIONS below). */
+export const QURAN_CARDS: { href: string; desc: Text }[] = [
+  { href: '/quran/read', desc: { ar: 'اقرأ المصحف صفحةً صفحة برواية حفص', en: 'Read the mushaf page by page, in Hafs' } },
+  { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },
+  { href: '/quran/words', desc: { ar: 'كم مرة ترد كل كلمة، وكلمات متقابلة جنبًا إلى جنب', en: 'How often each word occurs, and opposite words side by side' } },
+  { href: '/quran/branches', desc: { ar: 'آيات تبدأ بالكلمات نفسها، وأين تتفرع', en: 'Ayat that open with the same words, and where they branch apart' } },
+  { href: '/quran/iltifat', desc: { ar: 'تحولات مختارة في الخطاب بين الغائب والمتكلم والمخاطب', en: 'Hand-picked shifts of address between third, first and second person' } },
+  { href: '/quran/qiraat', desc: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
+  { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بمواضيعها، وما يصل كل سورة بالتي تليها', en: 'The surahs of juz 25 to 30 with their themes, and how each joins the next' } },
+  { href: '/quran/openings', desc: { ar: 'كيف تبدأ السور: الشرط وجوابه، والتسبيح', en: 'How surahs open: conditions and their answers, and tasbih' } },
+  { href: '/quran/oaths', desc: { ar: 'أقسام الأجزاء من ٢٥ إلى ٣٠ وما أُقسم به', en: 'The oaths of juz 25 to 30 and what is sworn by' } },
+  { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
+  { href: '/quran/prophets', desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
+];
 
 const quran = (href: string, label: Text): NavItem => ({ href, label, purpose: QURAN_CARDS.find(card => card.href === href)!.desc });
 export const EXPERIMENT_SECTIONS: NavSection[] = [
@@ -53,19 +66,37 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 ];
 
 
-export const NAV_SECTIONS: NavSection[] = [
-  { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
-  { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, groups: [] },
-  { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
-  { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, groups: [] },
-  { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
+/** The Quran tab's tools, as in the app's Quran hub (owner, 2026-11-13); the Quran tab is lit on the hub and on each of them. */
+export const QURAN_TOOLS: NavItem[] = [
+  { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
 ];
+
+/** Utilities (prayer times, qibla, Hijri calendar) shows once the first of them lands, as in the app (SHOW_UTILITIES there). */
+export const SHOW_UTILITIES = false;
+
+/**
+ * The app's five tab buttons (owner, 2026-11-13), first on the right: Quran, mushaf, home, quizzes, utilities.
+ * `paths` are the pages that light a section besides its own href and the pages under it.
+ */
+export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
+  { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [], paths: QURAN_TOOLS.map(tool => tool.href) },
+  { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
+  { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [] },
+  { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
+  ...(SHOW_UTILITIES ? [{ href: '/utilities', label: { ar: 'الأدوات', en: 'Utilities' }, groups: [] }] : []),
+];
+
+const under = (pathname: string, href: string) => pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
 
 export function activeSection(path: string): string | undefined {
   const pathname = path.split('?')[0];
-  return [...NAV_SECTIONS].reverse().find(section => {
-    const href = section.href.split('?')[0];
-    return pathname === href || pathname.startsWith(`${href}/`);
-  })?.href;
+  return NAV_SECTIONS.find(section => section.href === '/quran'
+    ? pathname === '/quran' || section.paths!.some(href => under(pathname, href))
+    : under(pathname, section.href.split('?')[0]))?.href;
 }
 
+/** A Quran tool's page (not the hub): its phone top bar shows a back arrow to the Quran hub in the logo's place, as in the app. */
+export const isQuranTool = (path: string) => QURAN_TOOLS.some(tool => under(path.split('?')[0], tool.href));

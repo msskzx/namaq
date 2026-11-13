@@ -1,7 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { type Poem } from '@/lib/tajwid/poem';
-import poem from './poem.json';
+import { type Poem } from '@shared/tajwid/poem';
+import poem from '@shared/tajwid/tuhfat-al-atfal.json';
 import PoemView from './PoemView';
 
 const state = vi.hoisted(() => ({ language: 'ar' }));

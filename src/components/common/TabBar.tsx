@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Play, ScrollText, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Compass, Feather, House, Play, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -19,11 +19,11 @@ import { useSwipeClose } from './useSwipeClose';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
-  '/quran/branches': TreeIcon,
-  '/quran/compare': ArrowLeftRight,
+  '/quran': TreeIcon,
   '/quran/read': BookOpen,
-  '/quran/prophets': ScrollText,
+  '/': House,
   '/quizzes': Feather,
+  '/utilities': Compass,
 };
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {

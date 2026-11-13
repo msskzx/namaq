@@ -12,7 +12,7 @@ vi.mock('@/components/language/LanguageContext', () => ({
 vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restoreAllMocks(); vi.clearAllMocks(); });
 
-const destinations = ['/quran/branches', '/quran/compare', '/quran/read', '/quran/prophets', '/quizzes'];
+const destinations = ['/quran', '/quran/read', '/', '/quizzes'];
 
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
@@ -23,6 +23,13 @@ describe('launch navigation', () => {
     expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/']);
     expect(within(nav).getByRole('link').querySelectorAll('svg')).toHaveLength(1);
     expect(within(nav).queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it.each(['/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal'])('puts a back arrow to the Quran hub in the logo\'s place on %s, as in the app', path => {
+    state.path = path;
+    render(<NavBar />);
+    const back = within(screen.getByRole('navigation')).getByRole('link', { name: 'Back' });
+    expect(back.getAttribute('href')).toBe('/quran');
   });
 
   it('puts the settings gear in the homepage top bar only, as in the app', () => {
@@ -39,8 +46,12 @@ describe('launch navigation', () => {
     expect(activeSection('/quizzes?topic=BRANCHES')).toBe('/quizzes');
     expect(activeSection('/quizzes/party/123456')).toBe('/quizzes');
     expect(activeSection('/quran/read/3')).toBe('/quran/read');
-    expect(activeSection('/quran/branches?o=test')).toBe('/quran/branches');
-    expect(activeSection('/quran/compare')).toBe('/quran/compare');
+    expect(activeSection('/quran/branches?o=test')).toBe('/quran');
+    expect(activeSection('/quran/compare')).toBe('/quran');
+    expect(activeSection('/quran/tajwid/tuhfat-al-atfal')).toBe('/quran');
+    expect(activeSection('/quran')).toBe('/quran');
+    expect(activeSection('/')).toBe('/');
+    expect(activeSection('/quran/words')).toBeUndefined();
     expect(activeSection('/graphs')).toBeUndefined();
     expect(activeSection('/experiments')).toBeUndefined();
   });
