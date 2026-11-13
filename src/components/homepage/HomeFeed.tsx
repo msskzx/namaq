@@ -103,7 +103,7 @@ export function ContinueReading() {
       {data && <span className={styles.muted}>{names[data.surah]}</span>}
     </div>
     <Link href={href} className={styles.pageSlice} aria-label="افتح المصحف حيث توقفت" lang="ar">
-      {data?.words.map((word, i) => typeof word === 'number' ? <span key={i} className={styles.accent}>{` ${num(word)} `}</span> : `${word} `)}
+      <span className={styles.pageLines}>{data?.words.map((word, i) => typeof word === 'number' ? <span key={i} className={styles.accent}>{` ${num(word)} `}</span> : `${word} `)}</span>
     </Link>
     <div className={styles.readFoot}>
       <Button href={href} variant="primary" className="min-h-10 rounded-[10px] px-4 text-base"><BookOpen size={18} aria-hidden />اقرأ</Button>
