@@ -2,8 +2,8 @@
 
 .page :global([data-node]) {
   border: 1px solid var(--home-rule);
-  border-radius: 0.35rem 0.85rem;
-  background: transparent;
+  border-radius: var(--card-radius);
+  background: var(--home-card);
   transition: opacity var(--grow-fade, 250ms) ease-out, background-color 160ms, border-color 160ms;
 }
 

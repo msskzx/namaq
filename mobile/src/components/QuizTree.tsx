@@ -26,7 +26,7 @@ import type { TreeScene, VideoInput } from '@/lib/scene';
 import { around as aroundSetting } from '@/lib/settings';
 import { treeVideo } from '@/lib/treeVideo';
 import { useKeyboardShown } from '@/lib/keyboard';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette, CARD } from '@/lib/theme';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
 
@@ -116,7 +116,7 @@ function MatrixInputs({ question, values, onType, palette, names }: { question: 
       {rows.map(({ leaf, path }) => {
         const [surah, ayah] = (leaf.ayat[0] ?? '').split(':').map(Number);
         return (
-          <View key={path.join('-')} style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, backgroundColor: palette.card }}>
+          <View key={path.join('-')} style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
             {surah ? <Text style={{ color: palette.muted, fontSize: 13 }}>{`${names[surah] ?? num(surah)} ${num(ayah)}`}</Text> : null}
             <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
               <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>

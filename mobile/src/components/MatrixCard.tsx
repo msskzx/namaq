@@ -11,7 +11,7 @@ import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
 import { matrixOf, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import type { Size } from '@/lib/camera';
-import { QURAN_FONT, blend, toneColor, type Palette } from '@/lib/theme';
+import { QURAN_FONT, blend, toneColor, type Palette, CARD } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
@@ -91,7 +91,7 @@ function Cell({ cell, at, palette, width, current, onPress, light }: { cell: Mat
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${surahNames[surah]} ${range}`}
-      style={{ width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 8 }}>
+      style={{ width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{first === last ? 'الآية' : 'الآيات'} {range}</Text>

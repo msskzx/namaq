@@ -17,11 +17,21 @@ const destinations = ['/quran/branches', '/quran/compare', '/quran/read', '/qura
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
     state.language = language;
+    state.path = '/quran/read';
     render(<NavBar />);
     const nav = screen.getByRole('navigation');
     expect(within(nav).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/']);
     expect(within(nav).getByRole('link').querySelectorAll('svg')).toHaveLength(1);
     expect(within(nav).queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it('puts the settings gear in the homepage top bar only, as in the app', () => {
+    render(<NavBar />);
+    expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Settings' })).toBeTruthy();
+    cleanup();
+    state.path = '/quran/compare';
+    render(<NavBar />);
+    expect(within(screen.getByRole('navigation')).queryByRole('button', { name: 'Settings' })).toBeNull();
   });
 
   it('marks the quizzes section on solo and party routes', () => {

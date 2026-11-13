@@ -58,7 +58,7 @@ function Neighbour({ ayah, ar }: { ayah: SpreadAyah; ar: boolean }) {
   </p>;
 }
 
-const NODE = 'max-w-full rounded-xl px-3 py-0.5 text-center';
+const NODE = 'max-w-full rounded-[var(--card-radius)] px-3 py-0.5 text-center';
 const STEM = 'w-[1.5px] flex-1 bg-[var(--home-muted)]';
 
 /**

@@ -60,7 +60,7 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
           <article
             key={place.surah}
             data-surah={place.surah}
-            className={`flex flex-col gap-1 rounded-xl border bg-[var(--home-card)] p-4 ${review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false ? 'opacity-60' : ''} ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
+            className={`flex flex-col gap-1 rounded-[var(--card-radius)] border bg-[var(--home-card)] p-4 ${review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false ? 'opacity-60' : ''} ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
           >
             <header className="flex items-center gap-2">
               <h3 className="font-semibold">{place.name}</h3>

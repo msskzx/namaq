@@ -10,7 +10,7 @@ import { rangeText, sharedWords, type EventView, type Place } from '@shared/qura
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import { readAyah } from '@/lib/openReader';
-import type { Palette } from '@/lib/theme';
+import { CARD, type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
 import { groupColor } from './StoryMap';
@@ -76,7 +76,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
       </View>
       {places.map((place, k) => (
         <View key={place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}
-          style={{ gap: 4, padding: 14, borderRadius: 12, backgroundColor: palette.card, borderWidth: focus === place.surah ? 2 : 1, borderColor: focus === place.surah ? palette.ink : palette.rule }}>
+          style={{ gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: focus === place.surah ? 2 : 1, borderColor: focus === place.surah ? palette.ink : palette.rule }}>
           {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
           {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>

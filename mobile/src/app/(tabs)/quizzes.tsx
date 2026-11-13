@@ -4,7 +4,7 @@ import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { EyeOff, User, Users, type LucideProps } from 'lucide-react-native';
 import TopBar from '@/components/TopBar';
-import { usePalette } from '@/lib/theme';
+import { usePalette, CARD } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -29,7 +29,7 @@ export default function QuizzesScreen() {
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         {MODES.map(({ href, Icon, title, text }) => (
           <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
-            style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 14, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
+            style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
             <Icon size={44} color={palette.accent} strokeWidth={1.5} />
             <Text style={{ color: palette.ink, fontSize: 20, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
             <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 24, textAlign: 'right' }}>{text}</Text>

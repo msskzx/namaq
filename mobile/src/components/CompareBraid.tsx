@@ -7,7 +7,7 @@ import { mushafText } from '@shared/quran/mushafText';
 import { endMark } from '@shared/quran/braid';
 import { normalizeWord } from '@shared/quran/normalize';
 import { braidOf, sideLabel, type Around, type AroundAyah, type BraidWord } from '@/lib/compare';
-import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
+import { QURAN_FONT, blend, CARD, type Palette } from '@/lib/theme';
 import { Silent } from './StoryParts';
 
 const LINK = 26;
@@ -69,10 +69,10 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 
 type Row = { kind: 'shared' | 'split' | 'around'; a: BraidWord[]; b: BraidWord[]; near?: (AroundAyah | null)[] };
 
-/** A node drawn as the branches tree draws one: a filled box, a thin rule-coloured frame, two round corners and two square ones. */
+/** A node drawn as the branches tree draws one: a filled box, a thin rule-coloured frame, round corners. */
 function Node({ children, palette }: { children: React.ReactNode; palette: Palette }) {
   return (
-    <View style={{ borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, borderTopStartRadius: 14, borderBottomEndRadius: 14, borderTopEndRadius: 4, borderBottomStartRadius: 4,
+    <View style={{ borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, ...CARD,
       paddingHorizontal: 12, paddingVertical: 2, alignSelf: 'center', maxWidth: '100%' }}>
       {children}
     </View>

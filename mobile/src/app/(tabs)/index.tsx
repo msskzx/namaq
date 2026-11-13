@@ -17,7 +17,7 @@ import { FORGOTTEN_LABEL, reviewForgotten, reviewLabel, Shelf, ShelfCard, useHom
 import { openIntent as go } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
-import { usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette, CARD } from '@/lib/theme';
 
 /** A home shelf shows the latest few cards; «عرض الكل» opens the full list. */
 const SHELF = 5;
@@ -59,7 +59,7 @@ function QuranPicker({ palette }: { palette: Palette }) {
   const compare = () => { if (number) go({ tab: 'compare', lead: number }); };
   const placeholder = unit === 'surah' ? 'ابحث عن سورة' : 'ابحث عن جزء';
   return (
-    <View style={{ gap: 10, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, backgroundColor: palette.card }}>
+    <View style={{ gap: 10, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, backgroundColor: palette.card }}>
       <Heading Icon={BookOpen} title="القرآن الكريم" palette={palette}>
         <View accessibilityRole="radiogroup" accessibilityLabel="عرض حسب" style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2, gap: 2 }}>
           {(['surah', 'juz'] as const).map(value => {
@@ -153,7 +153,7 @@ export default function HomeScreen() {
           )}
         </View>
 
-        <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, backgroundColor: palette.card }}>
+        <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
             <Feather size={26} color={palette.accent} />
             <View style={{ flex: 1, gap: 4 }}>

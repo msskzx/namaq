@@ -1,6 +1,8 @@
 /* docs/palette.md */
 :root {
   --home-width: 88rem;
+  /* Every card's corners, tree nodes included (the app's CARD in mobile/src/lib/theme.ts). */
+  --card-radius: 14px;
   --home-gutter: clamp(1.25rem, 4vw, 4rem);
   --home-paper: #f4ecdb;
   --home-paper-deep: #ebe0c8;

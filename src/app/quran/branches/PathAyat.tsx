@@ -14,7 +14,7 @@ export default function PathAyat({ ayat, names }: { ayat: { key: string; words: 
   if (shown.length === 0) return null;
   const many = shown.length > 1;
   return (
-    <section data-path-ayat aria-live="polite" className={`rounded-xl border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-4 text-center ${many ? 'py-1' : 'py-3'}`}>
+    <section data-path-ayat aria-live="polite" className={`rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 text-center ${many ? 'py-1' : 'py-3'}`}>
       {shown.map(ayah => {
         const [surah, number] = ayah.key.split(':').map(Number);
         // A tree's ayah may run on into the next one (past its ﴿n﴾ end): the card reads the ayah alone.

@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, CircleHelp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { NavActions } from '@/components/common/NavBar';
+import { SettingsHelp } from '@/components/common/SettingsHelp';
 import { PROPHETS } from '@shared/quran/prophets';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
@@ -15,7 +17,6 @@ import { rememberProphet } from '../OpenLastProphet';
 // docs/plans/quran-prophet-timelines.md
 /** `verdicts` comes only on the owner's machine, with every dot in `events`; readers get the story already cut. */
 export default function ProphetView({ slug, title, intro, phases, events: all, verdicts, compare }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[]; verdicts?: PlaceVerdicts; compare: Record<string, CompareLink[]> }) {
-  const [help, setHelp] = useState(false);
   const router = useRouter();
   useEffect(() => rememberProphet(slug), [slug]);
   const review = useReviewMode() && verdicts !== undefined;
@@ -37,21 +38,10 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold leading-tight sm:text-3xl">{title}</h1>
-          <ProphetPicker slug={slug} onPick={next => router.push(`/quran/prophets/${next}`)} />
-          <button type="button" onClick={() => setHelp(!help)} aria-expanded={help} aria-controls="story-help" aria-label="شرح الصفحة" title="شرح الصفحة"
-            className="rounded-full p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]">
-            <CircleHelp size={20} aria-hidden />
-          </button>
-        </div>
-        {help && (
-          <div id="story-help" className="flex max-w-3xl flex-col gap-2 rounded-xl border border-[var(--home-rule)] bg-[var(--home-card)] p-4 text-sm leading-7">
-            <p>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</p>
-            <p>اضغط دائرة لتقرأ آياتها مع مواضع الحدث في السور الأخرى، ومن كل موضع تفتحه في المصحف أو تقارنه بسورة أخرى. وفي المواضع تُلوَّن الكلمة إذا جاءت في سورة أخرى من مواضع الحدث نفسه.</p>
-            <p className="text-[var(--home-muted)]">{intro}</p>
-          </div>
-        )}
+        {/* As in the app: the prophet picker sits in the top bar, and the help behind its question mark. */}
+        <NavActions><div className="flex flex-1 justify-center"><ProphetPicker slug={slug} onPick={next => router.push(`/quran/prophets/${next}`)} /></div></NavActions>
+        <SettingsHelp label="كيف تُقرأ القصة؟">{STORY_HELP}<p className="text-[var(--home-muted)]">{intro}</p></SettingsHelp>
+        <h1 className="text-2xl font-bold leading-tight sm:text-3xl">{title}</h1>
       </header>
       <StoryMap map={map} events={events} phases={phases} onRead={read} current={open} review={reviewing} />
       <div ref={detail} className="scroll-mt-6 overflow-x-clip">
@@ -74,11 +64,18 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
   );
 }
 
-/** Which prophet's story the page shows: an icon-sized dropdown beside the title. */
+const STORY_HELP = <>
+  <p>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</p>
+  <p>اضغط دائرة لتقرأ آياتها مع مواضع الحدث في السور الأخرى، ومن كل موضع تفتحه في المصحف أو تقارنه بسورة أخرى. وفي المواضع تُلوَّن الكلمة إذا جاءت في سورة أخرى من مواضع الحدث نفسه.</p>
+</>;
+
+/** Which prophet's story the page shows: the prophet's name and a dropdown, in the top bar as in the app. */
 function ProphetPicker({ slug, onPick }: { slug: string; onPick: (slug: string) => void }) {
+  const name = PROPHETS.find(p => p.slug === slug)?.name;
   return (
-    <label className="relative inline-flex items-center rounded-full p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]" title="قصة نبي آخر">
-      <ChevronDown size={20} aria-hidden />
+    <label className="relative inline-flex items-center gap-1.5 rounded-[10px] border border-[var(--home-rule)] px-3 py-1.5 text-[0.9375rem] text-[var(--home-ink)]" title="قصة نبي آخر">
+      <span className="truncate">{name}</span>
+      <ChevronDown size={14} aria-hidden />
       <select value={slug} onChange={e => onPick(e.target.value)} aria-label="قصة نبي آخر" className="absolute inset-0 cursor-pointer opacity-0 text-base">
         {PROPHETS.map(p => <option key={p.slug} value={p.slug}>{p.name}</option>)}
       </select>
