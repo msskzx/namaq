@@ -187,7 +187,7 @@ describe('compare pair cards', () => {
   });
 
   it('tells every timeline story on every page, each story ayah on one story card and no story card pair split', () => {
-    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut', 'dawud', 'sulayman', 'ayyub', 'yunus'];
+    const peoples = ['nuh', 'hud', 'salih', 'shuayb', 'adam', 'isa', 'zakariyya', 'ibrahim', 'lut', 'dawud', 'sulayman', 'ayyub', 'yunus', 'muhammad'];
     // Open questions for the owner (compare-refine/open-questions.md, #659): an ayah that tells two events, or a shared formula (#659, #655).
     const openSplits = ['2:36|20:123', '3:62|4:158', '2:135|3:95', '15:62|51:25'];
     const span = (numbers: number[]) => `${numbers[0]}${numbers.length > 1 ? `-${numbers[numbers.length - 1]}` : ''}`;
