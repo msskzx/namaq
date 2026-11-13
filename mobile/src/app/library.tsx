@@ -38,10 +38,12 @@ export default function LibraryScreen() {
   const shown = tab === 'saved' ? cards : forgottenCards;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center><Switch tab={tab} onTab={setTab} palette={palette} /></TopBar>
+      <TopBar center>
+        <Switch tab={tab} onTab={setTab} palette={palette} />
+      </TopBar>
       <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 12 }}
-        renderItem={({ item, index }) => tab === 'saved'
-          ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(index, at)} />
+        renderItem={({ item }) => tab === 'saved'
+          ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />
           : <ShelfCard wide card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(item, at)} />}
         ListEmptyComponent={<Text style={{ paddingVertical: 24, color: palette.muted, fontSize: 15, textAlign: 'center' }}>{tab === 'saved' ? 'لا شيء محفوظ بعد.' : 'لا آيات منسية.'}</Text>} />
       {menus}

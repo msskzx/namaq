@@ -85,9 +85,10 @@ export function useHomeCards(palette: Palette) {
     id: way.to, ...WAYS[way.to],
     onPress: () => (way.to === 'compare' && way.targets.length > 1 ? setChoosing({ way, targets: way.targets }) : followWay(way)),
   }));
-  const savedMenu = (index: number, at: MenuAt) => {
-    const item: Saved = bookmarks[index];
-    setMenu({ at, label: BOOKMARK_KIND_LABEL[cards[index].kind].ar, items: [
+  const savedMenu = (card: SavedCard, at: MenuAt) => {
+    const item: Saved | undefined = bookmarks.find(saved => saved.id === card.id);
+    if (!item) return;
+    setMenu({ at, label: BOOKMARK_KIND_LABEL[card.kind].ar, items: [
       ...wayItems(cardWays(item)),
       { id: 'saved', Icon: Bookmark, label: 'أزلها من المحفوظات', on: true, onPress: () => toggleBookmark(item) },
     ] });

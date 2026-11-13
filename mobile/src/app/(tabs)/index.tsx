@@ -143,7 +143,7 @@ export default function HomeScreen() {
             </Row>
           </Heading>
           {cards.length ? (
-            <Shelf cards={cards.slice(0, SHELF)} render={(card, index) => <ShelfCard card={card} palette={palette} onPress={at => savedMenu(index, at)} />} />
+            <Shelf cards={cards.slice(0, SHELF)} render={card => <ShelfCard card={card} palette={palette} onPress={at => savedMenu(card, at)} />} />
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
               <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو بطاقة مقارنة أو آية بزر</Text>
