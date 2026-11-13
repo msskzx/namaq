@@ -1,10 +1,15 @@
 import { branchInventory } from '@shared/quran/branchInventory';
 import { branchesHref } from '@shared/quran/branches';
+import type { WordDifference } from '@shared/quran/qiraat';
+import { qiraatOf } from '@shared/quran/qiraatData';
 import type { MushafPage } from '@shared/quran/readerPage';
 import { compareLinksOfAyah, type CompareLink } from '../compare/pairCards';
 
-/** Where an ayah's long press leads beyond the reader: its compare cards, and the trees that hold it (the branches page's own list). */
-export type AyahLink = { compare: CompareLink[]; trees?: string };
+/**
+ * Where an ayah's long press leads beyond the reader: its compare cards, the trees that hold it (the branches page's own
+ * list), and how the ten readers differ in its words (sent with the page, so the 300 KB of readings stay on the server).
+ */
+export type AyahLink = { compare: CompareLink[]; trees?: string; qiraat?: WordDifference[] };
 export type AyahLinks = Record<string, AyahLink>;
 
 let treeAyat: Set<string> | undefined;
@@ -26,6 +31,7 @@ export function ayahLinksFor(keys: string[]): AyahLinks {
   return Object.fromEntries(keys.flatMap(key => {
     const compare = compareLinksOfAyah(key);
     const trees = inTrees(key) ? branchesHref('', undefined, { ayah: key }) : undefined;
-    return compare.length || trees ? [[key, { compare, ...(trees ? { trees } : {}) }]] : [];
+    const qiraat = qiraatOf(key);
+    return compare.length || trees || qiraat.length ? [[key, { compare, ...(trees ? { trees } : {}), ...(qiraat.length ? { qiraat } : {}) }]] : [];
   }));
 }

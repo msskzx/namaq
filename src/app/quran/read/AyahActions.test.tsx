@@ -34,4 +34,15 @@ describe("the reader's ayah buttons", () => {
     render(<AyahActions {...props} noted onNote={onNote} />);
     expect(screen.getByLabelText('تأملك في الآية').getAttribute('aria-pressed')).toBe('true');
   });
+
+  it('names each button under its icon, and shows the readings button only for an ayah whose words the readers differ in', () => {
+    const onPreview = vi.fn();
+    render(<AyahActions {...props} onPreview={onPreview} />);
+    expect(screen.getByLabelText('احفظ الآية').textContent).toBe('احفظ');
+    expect(screen.queryByLabelText('القراءات العشر في كلمات الآية')).toBeNull();
+    cleanup();
+    render(<AyahActions {...props} onPreview={onPreview} links={{ compare: [], qiraat: [{ at: [0, 0], readings: [{ text: 'أ', rawis: [10] }, { text: 'ب', rawis: [1] }] }] }} />);
+    fireEvent.click(screen.getByLabelText('القراءات العشر في كلمات الآية'));
+    expect(onPreview).toHaveBeenLastCalledWith('readings');
+  });
 });
