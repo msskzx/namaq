@@ -51,3 +51,41 @@ export const typedLetters = (text: string) => text.replace(/\s+/g, '');
  * ة/ه, ى/ي and small letters. A typed آ counts as ا too, since the hamza on it is forgiven anyway (وبالآخرة).
  */
 export const writtenRight = (typed: string, word: string) => matchedWords(typedLetters(typed).replace(/آ/g, 'ا'), [word]) === 1;
+
+/** What the write boxes hold: the letters typed in each (by word place) and the box being written. */
+export type Boxes = { typed: Record<number, string>; current: number | null };
+
+/** Empty boxes, the first one being written. */
+export const freshBoxes = (asked: number[]): Boxes => ({ typed: {}, current: asked.length ? asked[0] : null });
+
+/** On to the box after the one being written; `finished` when it was the last, so the ayah is checked. */
+export function nextBox(boxes: Boxes, asked: number[]): { boxes: Boxes; finished: boolean } {
+  const at = boxes.current === null ? -1 : asked.indexOf(boxes.current);
+  return at + 1 < asked.length ? { boxes: { ...boxes, current: asked[at + 1] }, finished: false } : { boxes, finished: true };
+}
+
+/** Back to the box before (a Backspace in an empty box), or null on the first one. */
+export function previousBox(boxes: Boxes, asked: number[]): Boxes | null {
+  const at = boxes.current === null ? -1 : asked.indexOf(boxes.current);
+  return at > 0 ? { ...boxes, current: asked[at - 1] } : null;
+}
+
+/**
+ * The hidden field changed while writing a box: the box keeps the typed letters, and a space (not one a vocative keeps)
+ * or a full box moves on to the next. `composing` (a keyboard still composing a letter) never moves on.
+ */
+export function typeInBox(boxes: Boxes, asked: number[], words: string[], text: string, composing = false): { boxes: Boxes; finished: boolean } {
+  if (boxes.current === null) return { boxes, finished: false };
+  const word = words[boxes.current];
+  const letters = typedLetters(text);
+  const filled = { ...boxes, typed: { ...boxes.typed, [boxes.current]: letters } };
+  const done = !composing && ((/\s/.test(text) && !keepsSpace(text, word)) || letters.length >= maxLetters(word));
+  return done ? nextBox(filled, asked) : { boxes: filled, finished: false };
+}
+
+/** The written words graded: right and wrong places, and what was typed for each wrong one. */
+export function gradeWritten(asked: number[], typed: Record<number, string>, words: string[]) {
+  const right = asked.filter(at => writtenRight(typed[at] ?? '', words[at]));
+  const wrong = asked.filter(at => !right.includes(at));
+  return { right, wrong, typed: Object.fromEntries(wrong.map(at => [at, typed[at] ?? ''])) as Record<number, string> };
+}

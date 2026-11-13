@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import { keepsSpace, maxLetters, wordTargets, writeTargets, writtenRight } from './writeAyah';
+import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
 
 describe('writing an ayah\'s first and last words', () => {
   it('asks the first and last three words, or every word of a short ayah', () => {
@@ -71,5 +71,32 @@ describe('the letters people type for what the mushaf writes small', () => {
     expect(writtenRight('يا قوم', inMushaf('يقوم'))).toBe(true);
     expect(keepsSpace('يا ', inMushaf('يوم'))).toBe(false);
     expect(keepsSpace('قوم ', inMushaf('يقوم'))).toBe(false);
+  });
+});
+
+describe('the write boxes', () => {
+  const words = ['قَالَ', 'رَبِّ', 'ٱشۡرَحۡ', 'لِي', 'صَدۡرِي'];
+  const asked = [0, 1, 4];
+
+  it('fill a box, move on with a space or a full box, and finish on the last', () => {
+    let boxes = freshBoxes(asked);
+    expect(boxes.current).toBe(0);
+    let step = typeInBox(boxes, asked, words, 'قال ');
+    expect(step).toEqual({ boxes: { typed: { 0: 'قال' }, current: 1 }, finished: false });
+    step = typeInBox(step.boxes, asked, words, 'رب');
+    expect(step.boxes.current).toBe(4);
+    boxes = step.boxes;
+    step = typeInBox(boxes, asked, words, 'صدر', true);
+    expect(step.finished).toBe(false);
+    step = typeInBox(boxes, asked, words, 'صدري');
+    expect(step.finished).toBe(true);
+    expect(gradeWritten(asked, step.boxes.typed, words)).toEqual({ right: [0, 1, 4], wrong: [], typed: {} });
+  });
+
+  it('go back from an empty box and grade a wrong word with what was typed', () => {
+    expect(previousBox({ typed: {}, current: 0 }, asked)).toBeNull();
+    expect(previousBox({ typed: {}, current: 4 }, asked)?.current).toBe(1);
+    expect(nextBox({ typed: {}, current: 4 }, asked).finished).toBe(true);
+    expect(gradeWritten(asked, { 0: 'قال', 1: 'خطا', 4: 'صدري' }, words)).toEqual({ right: [0, 4], wrong: [1], typed: { 1: 'خطا' } });
   });
 });

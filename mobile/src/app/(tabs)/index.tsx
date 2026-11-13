@@ -54,7 +54,7 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings search={() => toTab('/search')} hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <Stories palette={palette} />
         <ContinueReading palette={palette} />
         <MemorizedPrompt palette={palette} />

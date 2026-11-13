@@ -88,7 +88,7 @@ export type Checked = { key: string; right: number[]; wrong: number[]; typed: Re
  * A word to write, in write mode (the app's WriteBox): the hidden word's own box in its place on the line, so it is as wide
  * as the word, holding what was typed. The box being written has the accent border.
  */
-function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
+export function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
   return (
     <button type="button" data-write-active={active || undefined} aria-pressed={active} aria-label={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'}
       className={styles.writeBox} onPointerDown={event => event.preventDefault()} onClick={onPick}>
@@ -97,6 +97,16 @@ function WriteBox({ word, typed, active, onPick }: { word: string; typed: string
     </button>
   );
 }
+
+/** A word written in write mode, once checked: green when right, amber when wrong with what was typed struck through above it. */
+export function WrittenWord({ word, right, mistyped }: { word: string; right: boolean; mistyped?: string }) {
+  return mistyped !== undefined && !right
+    ? <span className={`${styles.wrong} ${styles.mistake}`}>{word}{mistyped ? <span role="note" aria-label={`كتبت: ${mistyped}`} className={styles.mistyped}>{mistyped}</span> : null}</span>
+    : <span className={right ? styles.right : undefined}>{word}</span>;
+}
+
+/** A hidden word that is not written, beside the write boxes: a faint dashed box its width. */
+export const FaintWord = ({ word }: { word: string }) => <span className={`${styles.veiled} ${styles.faint}`}>{word}</span>;
 
 export default function MushafPage({
   page,
@@ -204,7 +214,7 @@ export default function MushafPage({
                           ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />
                           : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span>
                           // A wrong word keeps what was typed, struck through above it, so the reader sees the mistake.
-                          : mistyped ? <span className={styles.mistake}>{group.word}<span role="note" aria-label={`كتبت: ${mistyped}`} className={styles.mistyped}>{mistyped}</span></span> : group.word}
+                          : mistyped ? <WrittenWord word={group.word} right={false} mistyped={mistyped} /> : group.word}
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}

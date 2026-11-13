@@ -10,7 +10,8 @@ import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
-import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { wordTargets } from '@shared/quran/writeAyah';
+import { useWriteBoxes } from './useWriteBoxes';
 import { WRITE_KEY } from './writeKey';
 import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
@@ -181,23 +182,19 @@ export default function ReaderView({
   // first and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(false);
-  const [typed, setTyped] = useState<Record<number, string>>({});
-  const [current, setCurrent] = useState<number | null>(null);
   const [checked, setChecked] = useState<Checked | null>(null);
-  const input = useRef<HTMLInputElement>(null);
   const writeKey = writing && upcoming && !reviewDone ? upcoming : null;
   const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && position ? wordTargets(writeWords).filter(at => at + titleSteps >= position.words) : [];
-  const askedKey = asked.join(',');
-  // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
-  const [writeFor, setWriteFor] = useState(writeKey);
-  if (writeFor !== writeKey) {
-    setWriteFor(writeKey);
-    setTyped({});
-    setCurrent(writeKey && askedKey ? Number(askedKey.split(',')[0]) : null);
-  }
-  useEffect(() => { if (writeKey) input.current?.focus({ preventScroll: true }); }, [writeKey]);
+  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
+    if (!writeKey || !position) return;
+    setChecked({ key: writeKey, ...graded, before: 0 });
+    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
+    if (graded.wrong.length) markForgotten(writeKey);
+    setPosition(revealAyah(position, writeKey));
+  } });
+  const { input, typed, current } = boxes;
   // On a phone the keyboard covers the page's lower part: the recite pill rises above it, and the page (kept at its size)
   // moves up just enough to show the box being written (the app scrolls it, #691).
   const [keyboard, setKeyboard] = useState(0);
@@ -220,49 +217,11 @@ export default function ReaderView({
   }, [keyboard, current, writeKey]);
   /** The ayah's words on the shown pages before each one, so a box's place counts from the ayah's first word. */
   const before = (index: number, key: string) => shown.slice(0, index).reduce((sum, _, at) => sum + (wordCounts[at][key] ?? 0), 0);
-  const check = (filled: Record<number, string>) => {
-    if (!writeKey || !position) return;
-    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    const wrong = asked.filter(at => !right.includes(at));
-    setChecked({ key: writeKey, right, wrong, typed: Object.fromEntries(wrong.map(at => [at, filled[at] ?? ''])), before: 0 });
-    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
-    if (wrong.length) markForgotten(writeKey);
-    setPosition(revealAyah(position, writeKey));
-  };
-  const moveOn = (filled: Record<number, string>) => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
-    else check(filled);
-  };
-  // A word revealed by the next-word button while its box was being written has no box any more.
-  if (current !== null && asked.length && !asked.includes(current)) setCurrent(asked[0]);
-  const onWrite = (text: string, composing = false) => {
-    if (current === null) return;
-    const letters = typedLetters(text);
-    const filled = { ...typed, [current]: letters };
-    setTyped(filled);
-    if (!composing && ((/\s/.test(text) && !keepsSpace(text, writeWords[current])) || letters.length >= maxLetters(writeWords[current]))) moveOn(filled);
-  };
-  const back = () => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at > 0) setCurrent(asked[at - 1]);
-    return at > 0;
-  };
-  const onWriteKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') { event.preventDefault(); moveOn(typed); return; }
-    if (event.key !== 'Backspace' || current === null || typed[current]) return;
-    if (back()) event.preventDefault();
-  };
-  // Android keyboards often send no Backspace key for an empty field, only a delete input.
-  const onWriteInput = (event: React.FormEvent<HTMLInputElement>) => {
-    const native = event.nativeEvent as InputEvent;
-    if (native.inputType === 'deleteContentBackward' && current !== null && !typed[current] && back()) event.preventDefault();
-  };
   const toggleWriting = () => {
     setWriting(on => { write(WRITE_KEY, on ? 'off' : 'on'); return !on; });
     setChecked(null);
   };
-  const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: at => { setCurrent(at); input.current?.focus({ preventScroll: true }); } } : null;
+  const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: boxes.pick } : null;
   const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
@@ -568,9 +527,7 @@ export default function ReaderView({
         <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
       </div></div>}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
-      {reciting && writing && <input ref={input} value={current === null ? '' : typed[current] ?? ''} onChange={event => onWrite(event.target.value, (event.nativeEvent as InputEvent).isComposing)} onCompositionEnd={event => onWrite(event.currentTarget.value)} onBeforeInput={onWriteInput} onKeyDown={onWriteKey}
-        dir="rtl" lang="ar" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="next" aria-label={ar ? 'اكتب الكلمة' : 'Write the word'}
-        className="fixed left-0 top-0 h-px w-px text-[16px] opacity-0" />}
+      {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>
   );
 }

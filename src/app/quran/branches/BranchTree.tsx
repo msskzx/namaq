@@ -24,7 +24,9 @@ import { useGroupConnections } from './GroupConnections';
 
 type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
-type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode };
+type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode;
+  /** Where the tree is not the page's own (the home feed): the swipe steps here instead of following the page's step links. */
+  onStep?: (forward: boolean) => void };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
@@ -575,7 +577,9 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
       : ar ? `الآيات: ${num(selected.length)}` : `${selected.length} ayat`}</ReferenceHeader>;
   };
   const prefixed = new Set((prefixes?.length ? prefixes : variants).flatMap(prefix => prefix.word ? prefix.keys : []));
-  const step = (forward: boolean) => document.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click();
+  const step = (forward: boolean) => (typeof steppable === 'object' && steppable.onStep
+    ? steppable.onStep(forward)
+    : document.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click());
   // On the branches page the surrounding-ayat switch is one setting in the side rail; the tree only says when it is loading.
   const controls = surround && !surround.sync ? <SurroundToggle on={on} onChange={setOn} loading={isLoading} failed={!!error} />
     : surround && on && (isLoading || error) ? <AroundStatus loading={isLoading} failed={!!error} /> : undefined;
