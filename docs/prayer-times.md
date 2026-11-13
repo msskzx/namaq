@@ -28,3 +28,11 @@ adhan's bearing equals a great-circle bearing computed separately: Cairo 136.14�
 
 ## Hijri date
 From the phone's Intl Umm al-Qura calendar (same as the home widget, shared/hijri.ts). Egypt's Dar al-Ifta starts months by sighting, so it can differ by a day from Umm al-Qura.
+
+## Adhan notifications
+- A bell on each of the five rows of the prayer page switches that prayer's notification on or off (all off at first). The notification permission is asked for the first time one is switched on; if the phone blocks it, a line under the card opens the phone's settings.
+- Local notifications through expo-notifications, no server. The plan (shared/adhanAlerts.ts) covers up to 14 days and at most 60 alerts, under iOS's limit of 64 waiting notifications per app. mobile/src/lib/adhan.ts cancels and reschedules when a switch, the place or the method changes, and when the app opens on a new day. A phone left unopened for two weeks (less with all five on: 60 alerts is 12 days) stops ringing until the app is opened.
+- Sound: the phone's default notification sound. Android uses a channel «الأذان» with high importance.
+- Expo Go: local notifications work on iOS and Android (only remote push was removed from Expo Go on Android in SDK 53); they show under Expo Go's name and icon, and a custom sound is not possible there.
+- A real build can ship a short adhan clip as the notification sound through the expo-notifications plugin's `sounds` option. iOS plays at most 30 seconds of a notification sound, so a full adhan needs a different approach (an alarm-style app on Android, nothing equivalent on iOS). The recording needs a licence that allows bundling it in an app: the muezzin's or the recording owner's written permission, or a clip released under a licence such as CC0 or CC BY.
+- Android 12+ in a real build: without the exact-alarm permission, Android may deliver the notification a few minutes late. Not requested yet.

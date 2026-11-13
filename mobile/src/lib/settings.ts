@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './branchList';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
+import { isAdhanAlerts, NO_ALERTS, type AdhanAlerts } from '@shared/adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
 /** A value kept on the phone that every screen reading it follows. */
@@ -22,7 +23,7 @@ function setting<T>(key: string, fallback: T, valid: (value: unknown) => value i
   };
   const subscribe = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
   const use = () => [useSyncExternalStore(subscribe, get, get), set] as const;
-  return { get, set, use };
+  return { get, set, use, subscribe };
 }
 
 const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';
@@ -59,5 +60,7 @@ export const cardTints = setting<CardTints>('card-tints', { light: 'paper', dark
 /** The utilities tab: where the prayer times are for (null until the person picks), the method and Asr school, and the view last open. */
 export const prayerPlace = setting<Place | null>('prayer-place', null, (value): value is Place | null => value === null || isPlace(value));
 export const prayerSettings = setting<PrayerSettings>('prayer-settings', DEFAULT_PRAYER_SETTINGS, isPrayerSettings);
+/** Which of the five prayers ring a notification at their time; all off until the person turns one on. */
+export const adhanAlerts = setting<AdhanAlerts>('adhan-alerts', NO_ALERTS, isAdhanAlerts);
 export type UtilityView = 'times' | 'qibla' | 'calendar';
 export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar');
