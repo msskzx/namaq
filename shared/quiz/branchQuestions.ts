@@ -3,6 +3,7 @@ import { keys, type Branch, type BranchAyah, type Variant } from '../quran/branc
 import { inJuzRange, type JuzRange } from '../quran/juz';
 import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '../quran/phraseTrees';
 import { askedNodes } from './branchAnswers';
+import { byDifficulty, DEFAULT_DIFFICULTY, levelOf, treeScore, type Difficulty } from './difficulty';
 import { shuffle, type Random } from './random';
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
@@ -19,6 +20,8 @@ export interface BranchQuestion {
   correctAnswer: string;
   branches: BranchAnswer[];
   tree: Branch;
+  /** How hard the tree is (difficulty.ts). */
+  level: Difficulty;
   variants: Variant[];
   prefixes: Variant[];
   evidence: { claimKeys: string[] };
@@ -34,6 +37,13 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
   const trees = supplied ? supplied.map(group => ({ ...group, occurrences: group.occurrences.filter(occurrence => byKey.has(occurrence.key)) })) : buildTreeGroups(ayat);
   const present = createPhrasePresenter(ayat, true, !range);
   const candidates = trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 2 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= MAX_BRANCHES && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2);
+  const levels = new Map<TreeGroup, Difficulty>();
+  /** A tree's difficulty, from its whole ayat. */
+  const level = (group: TreeGroup) => {
+    let found = levels.get(group);
+    if (!found) levels.set(group, (found = levelOf(treeScore([...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => byKey.get(key)!.words)))));
+    return found;
+  };
   const build = (group: TreeGroup): BranchQuestion | null => {
     const presentation = present(group);
     const tree = presentation.tree;
@@ -47,6 +57,7 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
       choices: [],
       correctAnswer: tree.words.join(' '),
       tree,
+      level: level(group),
       variants: [],
       prefixes: presentation.prefixes.filter(prefix => prefix.word),
       branches: tree.children.map(child => ({
@@ -59,7 +70,7 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
       evidence: { claimKeys: [] },
     };
   };
-  return { candidates, build };
+  return { candidates, build, level };
 }
 
 export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]): BranchQuestion[] {
@@ -78,13 +89,14 @@ export function biggerFirst<T>(items: T[], leaves: number, size: (item: T) => nu
 export type AskedBranchQuestion = BranchQuestion & { asked: number[] };
 
 /**
- * A quiz of tree questions only, built on the device: random trees from the pool, each with
+ * A quiz of tree questions only, built on the device: random trees from the pool, of the chosen difficulty first, each with
  * `leaves` of its leaves to type. Only the trees it asks are built.
  */
-export function branchQuiz(pool: ReturnType<typeof branchQuestionPool>, length: number, leaves: number, random: Random): AskedBranchQuestion[] {
+export function branchQuiz(pool: ReturnType<typeof branchQuestionPool>, length: number, leaves: number, random: Random, difficulty: Difficulty = DEFAULT_DIFFICULTY): AskedBranchQuestion[] {
   const picked: AskedBranchQuestion[] = [];
   const ayat = (group: TreeGroup) => new Set(group.occurrences.map(occurrence => occurrence.key)).size;
-  for (const group of biggerFirst(shuffle(pool.candidates, random), leaves, ayat)) {
+  // The chosen level first; within each level, trees big enough for the leaves asked first.
+  for (const group of byDifficulty(biggerFirst(shuffle(pool.candidates, random), leaves, ayat), difficulty, pool.level)) {
     if (picked.length >= length) break;
     const question = pool.build(group);
     if (question) picked.push({ ...question, asked: askedNodes(question.tree, leaves, random) });

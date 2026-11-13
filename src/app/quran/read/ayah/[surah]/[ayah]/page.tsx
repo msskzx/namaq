@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 const load = async (page: number): Promise<MushafPage> => (await import(`../../../../../../../shared/data/quran/mushaf/${page}.json`)).default;
 
 /** Recite and review links keep their own query; plain links mark the ayah. */
-const KEEP = ['recite', 'upto', 'w', 'review'];
+const KEEP = ['recite', 'upto', 'w', 'review', 'openings'];
 
 export default async function AyahRedirect({ params, searchParams }: { params: Promise<{ surah: string; ayah: string }>; searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
   const { surah, ayah } = await params;

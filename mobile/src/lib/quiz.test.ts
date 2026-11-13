@@ -7,7 +7,7 @@ import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/data/quran/trees.json';
 import { isAsked } from '@shared/quiz/score';
-import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, questionState, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
@@ -20,8 +20,10 @@ function typeRight(run: SoloRun) {
 
 describe('solo quiz on the phone', () => {
   it('keeps settings in range, and turns an older juz range into the filters', () => {
-    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, leaves: 6, length: 10 });
-    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, leaves: 3, length: 5 });
+    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, difficulty: 'medium', leaves: 6, length: 10 });
+    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ difficulty: 'hard' }).difficulty).toBe('hard');
+    expect(cleanSolo({ difficulty: 'nope' as never }).difficulty).toBe('medium');
   });
 
   it('counts the questions the filters hold, as the website does', () => {
@@ -77,5 +79,13 @@ describe('solo quiz on the phone', () => {
     expect(questionState(run, 0)).toBe('correct');
     expect(questionState(run, 1)).toBe('unanswered');
     expect(soloScore(run).score).toBe(run.questions[0].asked.length);
+  });
+
+  it('keeps hints per question until it is checked, also for runs saved before hints', () => {
+    const run = startSolo(cleanSolo({ list: { ...DEFAULT_LIST, range: { from: 30, to: 30 } }, length: 5 }), seeded(3));
+    const old = { ...run, hints: undefined, current: 1 };
+    const hinted = setHints(old, { 2: 1 });
+    expect(hinted.hints).toEqual([{}, { 2: 1 }, {}, {}, {}]);
+    expect(setHints(check(hinted), { 2: 2 }).hints).toEqual(hinted.hints);
   });
 });

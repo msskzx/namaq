@@ -6,6 +6,7 @@ import type { JuzRange } from '@shared/quran/juz';
 import { askedNodes, branchNodes } from '@shared/quiz/branchAnswers';
 import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } from '@shared/quiz/branchQuestions';
 import { shuffle, type Random } from '@shared/quiz/random';
+import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
@@ -32,6 +33,8 @@ export interface AssembleQuizParams {
   juz?: JuzRange | null;
   /** The branches page's filters and saved trees, for tree questions. */
   scope?: TreeScope;
+  /** Easy, medium or hard trees first (shared/quiz/difficulty.ts). */
+  difficulty?: Difficulty;
   leaves?: number;
   length: QuizLength;
   random: Random;
@@ -65,7 +68,7 @@ export async function availableQuestionCount(topics: QuizTopics, personSlug?: st
   return (where ? await prisma.quizQuestion.count({ where }) : 0) + branchesFor(topics, juz, scope).length;
 }
 
-export async function assembleQuiz({ topics, personSlug, juz = null, scope = {}, leaves = DEFAULT_LEAVES, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
+export async function assembleQuiz({ topics, personSlug, juz = null, scope = {}, difficulty = DEFAULT_DIFFICULTY, leaves = DEFAULT_LEAVES, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
   const where = whereFor(topics, personSlug);
   const rows = where ? await prisma.quizQuestion.findMany({
     where,
@@ -89,8 +92,9 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
     correctAnswer: row.correctAnswer,
     evidence: row.evidence as unknown as { claimKeys: string[] },
   }));
-  // Harder quizzes take bigger trees first (see biggerFirst).
-  const trees = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length).slice(0, length);
+  // Trees of the chosen difficulty first; within each, trees big enough for the leaves asked first (see biggerFirst).
+  const bigger = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length);
+  const trees = byDifficulty(bigger, difficulty, question => question.level).slice(0, length);
   return shuffle([...bank, ...trees], random).slice(0, length).map((question) => ({
     ...question,
     choices: shuffle(question.choices, random),

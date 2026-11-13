@@ -37,16 +37,18 @@ import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions"
 import { parseJuzRange } from "@shared/quran/juz";
 import type { Branch, Variant } from "@shared/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
-import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { DIFFICULTY_LABELS, DIFFICULTY_NOTE, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
 import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
 import { readRun, writeRun, type SoloRun } from "./soloRun";
+import type { Hints } from "@shared/quiz/hints";
 import QuestionReview from "./QuestionReview";
 import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
-import { Eye, EyeOff, LogOut, PenLine, RotateCcw, User, Users } from "lucide-react";
+import { BookOpenText, Eye, EyeOff, LogOut, PenLine, RotateCcw, User, Users } from "lucide-react";
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings. */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -57,6 +59,9 @@ function QuizModes({ ar }: { ar: boolean }) {
       text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
     { href: "/quran/read/recite", Icon: EyeOff, title: ar ? "تسميع" : "Recite",
       text: ar ? "تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه." : "The ayat are hidden in the mushaf; reveal them one by one as you recite, and mark what you forgot to review it." },
+    // A surah's name, and its first ayah to write in the mushaf (the app's card, owner 2026-11-13).
+    { href: "/quizzes/openings", Icon: BookOpenText, title: ar ? "أوائل السور" : "Surah openings",
+      text: ar ? "ترى اسم السورة، وتكتب أول آية منها في مكانها من المصحف." : "See a surah's name, and write its first ayah in its place on the mushaf page." },
     // Recite with writing on, from the top of the page the mushaf is open at (the app's card, owner 2026-11-13).
     { href: "/quran/read?write=1", Icon: PenLine, title: ar ? "اكتب أول الآية وآخرها" : "Write the first and last words",
       text: ar ? "كلمات الآية صناديق في مكانها من المصحف، تكتب أول كلماتها وآخرها، ثم تظهر الآية." : "Each ayah's words are boxes in their places on the mushaf page; write its first and last words, then the ayah shows." },
@@ -117,6 +122,7 @@ export default function QuizzesPage() {
   const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
   const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
   const leaves = parseLeaves(searchParams.get("leaves"));
+  const difficulty = parseDifficulty(searchParams.get("difficulty"));
   const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
   // The branches page's filters for the trees; saved only sends this browser's saved trees.
@@ -149,7 +155,7 @@ export default function QuizzesPage() {
   const restored = stored && stored.search === search ? stored : null;
   const started = Boolean(topics.length && length && stored !== undefined && (restored || availability?.lengths.includes(length)) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started && !restored
-    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&leaves=${leaves}` : ""}`
+    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&difficulty=${difficulty}&leaves=${leaves}` : ""}`
     : null;
   const { data: fetched, error, isLoading: fetching } = useSWR<QuizData>(query, fetcher, {
     revalidateOnFocus: false,
@@ -163,6 +169,7 @@ export default function QuizzesPage() {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [typed, setTyped] = useState<Record<number, string[]>>({});
+  const [hints, setHints] = useState<Record<number, Hints>>({});
   const [submitted, setSubmitted] = useState(false);
   const [reviewing, setReviewing] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
@@ -177,6 +184,7 @@ export default function QuizzesPage() {
       setCurrent(Math.min(restored.current, restored.data.questions.length - 1));
       setAnswers(restored.answers);
       setTyped(restored.typed);
+      setHints(restored.hints ?? {});
     } else if (fetched?.questions.length) setOwner(search);
   }
 
@@ -184,6 +192,7 @@ export default function QuizzesPage() {
     setCurrent(0);
     setAnswers({});
     setTyped({});
+    setHints({});
     setSubmitted(false);
     setReviewing(false);
     setReferenceIndex(null);
@@ -191,8 +200,8 @@ export default function QuizzesPage() {
   // Every step of an unfinished quiz is kept; Submit lets it go.
   useEffect(() => {
     if (owner !== search || submitted || !data?.questions.length) return;
-    writeRun({ search, data, current, answers, typed });
-  }, [owner, search, data, current, answers, typed, submitted]);
+    writeRun({ search, data, current, answers, typed, hints });
+  }, [owner, search, data, current, answers, typed, hints, submitted]);
 
   const pendingParams = useRef(searchParams.toString());
   useEffect(() => { pendingParams.current = searchParams.toString(); }, [searchParams]);
@@ -211,6 +220,7 @@ export default function QuizzesPage() {
     setCurrent(0);
     setAnswers({});
     setTyped({});
+    setHints({});
     setSubmitted(false);
     setReviewing(false);
     setReferenceIndex(null);
@@ -292,17 +302,26 @@ export default function QuizzesPage() {
                     saved: saved ? "1" : undefined, length: undefined,
                   })} />
                 </div>
+              <div role="group" aria-labelledby="quiz-difficulty">
+                <p id="quiz-difficulty" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "الصعوبة" : "Difficulty"}</p>
+                <div className="flex flex-wrap items-start gap-2">
+                  {DIFFICULTIES.map((value) => (
+                    <Button key={value} active={difficulty === value} aria-pressed={difficulty === value}
+                      onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })}>
+                      {DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}
+                    </Button>
+                  ))}
+                </div>
+                <p className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTE[ar ? "ar" : "en"]}</p>
+              </div>
               <div role="group" aria-labelledby="quiz-leaves">
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
-                    <div key={value} className="flex flex-col items-center gap-0.5">
-                      <Button size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
-                        onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
-                        {ar ? num(value) : value}
-                      </Button>
-                      {LEAF_LEVELS[value] && <span className="text-xs text-[var(--home-muted)]">{LEAF_LEVELS[value][ar ? "ar" : "en"]}</span>}
-                    </div>
+                    <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
+                      onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
+                      {ar ? num(value) : value}
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -353,7 +372,7 @@ export default function QuizzesPage() {
               {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
             </p>
             <Button className="mb-4" aria-expanded={reviewing} onClick={() => setReviewing(value => !value)}><Eye size={16} aria-hidden />{reviewing ? (ar ? "العودة للنتيجة" : "Back to results") : (ar ? "مراجعة الأسئلة" : "Review questions")}</Button>
-            {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree ? typed[index] ?? null : answers[index] ?? null, result: points[index] }))} names={data.surahNames ?? {}} ar={ar} />}
+            {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree ? typed[index] ?? null : answers[index] ?? null, result: points[index], hints: hints[index] }))} names={data.surahNames ?? {}} ar={ar} />}
             <Button className="mt-6" variant="primary" onClick={reset}>
               <FontAwesomeIcon icon={faRotateLeft} />
               {ar ? "اختبار جديد" : "New quiz"}
@@ -362,7 +381,7 @@ export default function QuizzesPage() {
         ) : (
           <div>
             <div className="mb-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => { setCurrent(0); setAnswers({}); setTyped({}); setReferenceIndex(null); }}><RotateCcw size={16} aria-hidden />{ar ? "ابدأ من جديد" : "Start over"}</Button>
+              <Button size="sm" onClick={() => { setCurrent(0); setAnswers({}); setTyped({}); setHints({}); setReferenceIndex(null); }}><RotateCcw size={16} aria-hidden />{ar ? "ابدأ من جديد" : "Start over"}</Button>
               <Button size="sm" onClick={reset}><LogOut size={16} aria-hidden />{ar ? "الخروج للإعدادات" : "Exit to setup"}</Button>
             </div>
             <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={ar ? "الأسئلة" : "Questions"}>
@@ -391,12 +410,13 @@ export default function QuizzesPage() {
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
-                  <BranchFeedback key={questions[current].key} question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
+                  <BranchFeedback key={questions[current].key} question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} hints={hints[current]} />
                 ) : (
                   <BranchInputs key={questions[current].key}
                     question={questions[current]}
                     typed={typed[current] ?? emptyBranchAnswers(questions[current])}
                     onChange={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
+                    hints={hints[current] ?? {}} onHints={(value) => setHints((previous) => ({ ...previous, [current]: value }))}
                     onCheck={() => {
                       const value = typed[current] ?? emptyBranchAnswers(questions[current]);
                       setAnswers((previous) => ({ ...previous, [current]: branchesCorrect(questions[current], value) ? questions[current].correctAnswer : "" }));

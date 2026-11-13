@@ -1,5 +1,6 @@
 "use client";
 
+import type { Hints } from "@shared/quiz/hints";
 import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, BookOpen, Check, X } from "lucide-react";
 import Button from "@/components/common/Button";
@@ -20,7 +21,7 @@ type ReviewQuestion = ScoredQuestion & {
   evidence?: { reference: QuizReference | null };
 };
 
-export type ReviewEntry = { question: ReviewQuestion; answer: QuestionAnswer | null; result: { earned: number; total: number } };
+export type ReviewEntry = { question: ReviewQuestion; answer: QuestionAnswer | null; result: { earned: number; total: number }; hints?: Hints };
 
 export default function QuestionReview({ entries, names, ar }: { entries: ReviewEntry[]; names: Record<number, string>; ar: boolean }) {
   const [index, setIndex] = useState(0);
@@ -49,7 +50,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
     {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
-    {question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} /> : <>
+    {question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
     </>}

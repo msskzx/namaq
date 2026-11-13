@@ -5,7 +5,9 @@ import type { BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
+import { DEFAULT_DIFFICULTY, parseDifficulty, type Difficulty } from '@shared/quiz/difficulty';
 import type { Random } from '@shared/quiz/random';
+import type { Hints } from '@shared/quiz/hints';
 import { readBookmarks, type Bookmark } from '@shared/bookmarks';
 import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 import type { JuzRange } from '@shared/quran/juz';
@@ -14,9 +16,9 @@ import { isCompareBookmark } from '@shared/compareBookmarks';
 
 /** Which trees the quiz asks, with the branches tab's filters: kinds, differences, part of the Quran, saved only. */
 export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
-export type SoloSettings = { list: QuizList; leaves: number; length: number };
+export type SoloSettings = { list: QuizList; difficulty: Difficulty; leaves: number; length: number };
 export const DEFAULT_LIST: QuizList = { filters: { categories: 'mutashabeh' }, range: null, saved: false };
-export const DEFAULT_SOLO: SoloSettings = { list: DEFAULT_LIST, leaves: DEFAULT_LEAVES, length: 5 };
+export const DEFAULT_SOLO: SoloSettings = { list: DEFAULT_LIST, difficulty: DEFAULT_DIFFICULTY, leaves: DEFAULT_LEAVES, length: 5 };
 
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
@@ -36,6 +38,7 @@ function cleanList(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?:
 export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?: number } | undefined): SoloSettings {
   return {
     list: cleanList(settings),
+    difficulty: parseDifficulty(settings?.difficulty),
     leaves: (QUIZ_LEAVES as readonly number[]).includes(settings?.leaves as number) ? settings!.leaves! : DEFAULT_SOLO.leaves,
     length: (QUIZ_LENGTHS as readonly number[]).includes(settings?.length as number) ? settings!.length! : DEFAULT_SOLO.length,
   };
@@ -73,12 +76,14 @@ export type SoloRun = {
   typed: string[][];
   /** A question is checked once its answer was graded, or its answer shown. */
   checked: boolean[];
+  /** The hints shown in each question (older runs have none). */
+  hints?: Hints[];
   current: number;
   submitted: boolean;
 };
 
 export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
-  const questions = branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random);
+  const questions = branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty);
   return { settings, questions, typed: questions.map(emptyBranchAnswers), checked: questions.map(() => false), current: 0, submitted: false };
 }
 
@@ -86,6 +91,9 @@ const at = <T,>(list: T[], index: number, value: T) => list.map((item, i) => i =
 
 export const typeAnswer = (run: SoloRun, node: number, text: string): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, at(run.typed[run.current], node, text)) };
+
+export const setHints = (run: SoloRun, hints: Hints): SoloRun =>
+  run.checked[run.current] ? run : { ...run, hints: run.questions.map((_, i) => i === run.current ? hints : run.hints?.[i] ?? {}) };
 
 export const clearAnswers = (run: SoloRun): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, emptyBranchAnswers(run.questions[run.current])) };

@@ -1,3 +1,5 @@
+import type { Hints } from '@shared/quiz/hints';
+
 /** The solo quiz in progress, kept in this browser so a reload or a later visit can continue it (as the app keeps it). */
 export type SoloRun<Data> = {
   /** The quiz page's query string, which names the quiz's settings. */
@@ -6,6 +8,8 @@ export type SoloRun<Data> = {
   current: number;
   answers: Record<number, string>;
   typed: Record<number, string[]>;
+  /** The hints shown in each tree question (older runs have none). */
+  hints?: Record<number, Hints>;
 };
 
 const KEY = 'quiz-solo-run';

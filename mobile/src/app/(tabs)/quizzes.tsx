@@ -2,7 +2,7 @@ import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
-import { EyeOff, PenLine, User, Users, type LucideProps } from 'lucide-react-native';
+import { BookOpenText, EyeOff, PenLine, User, Users, type LucideProps } from 'lucide-react-native';
 import { setIntent, type Intent } from '@/lib/intent';
 import TopBar from '@/components/TopBar';
 import { usePalette, CARD } from '@/lib/theme';
@@ -15,6 +15,8 @@ const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title:
   { href: '/quiz/solo', Icon: User, title: 'اختبار فردي', text: 'أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها.' },
   { href: '/quiz/party', Icon: Users, title: 'اختبار جماعي', text: 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' },
   { href: '/read', Icon: EyeOff, title: 'تسميع', text: 'تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه.' },
+  // A surah's name, and its first ayah to write in the mushaf (owner, 2026-11-13).
+  { href: '/quiz/openings', Icon: BookOpenText, title: 'أوائل السور', text: 'ترى اسم السورة، وتكتب أول آية منها في مكانها من المصحف.' },
   // Recite with writing on, from the top of the page the mushaf is open at (owner, 2026-11-13).
   { href: '/read', Icon: PenLine, title: 'اكتب أول الآية وآخرها', text: 'كلمات الآية صناديق في مكانها من المصحف، تكتب أول كلماتها وآخرها، ثم تظهر الآية.', intent: { tab: 'read', recite: true, write: true } },
 ];

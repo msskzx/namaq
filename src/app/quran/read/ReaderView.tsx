@@ -11,6 +11,8 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, se
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { WRITE_KEY } from './writeKey';
+import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
@@ -42,8 +44,6 @@ const SPREAD_KEY = 'quran-reader-spread';
 export const LAST_PAGE_KEY = 'quran-reader-page';
 const BAR_KEY = 'quran-reader-bar';
 export const LAST_RECITE_KEY = 'quran-recite-last';
-/** Whether recite mode asks to write each ayah's first and last words (the app's reader-write setting). */
-const WRITE_KEY = 'quran-reader-write';
 const WIDE = '(min-width: 1024px) and (orientation: landscape)';
 const PHONE = '(max-width: 640px)';
 
@@ -77,6 +77,7 @@ export default function ReaderView({
   recite,
   review = false,
   write: startWriting = false,
+  openings: openingsOn = false,
   links = {},
 }: {
   page: number;
@@ -93,6 +94,8 @@ export default function ReaderView({
   review?: boolean;
   /** Start reciting with writing on, from the top of the page (the quizzes page's write card). */
   write?: boolean;
+  /** The surah openings quiz: one surah's first ayah at a time; the round is kept in sessionStorage. */
+  openings?: boolean;
 }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
@@ -154,7 +157,20 @@ export default function ReaderView({
     : undefined;
   const titleSteps = upcoming && upcoming.endsWith(':1') ? Math.max(0, ...shown.map((_, index) => titledOn(index).get(Number(upcoming.split(':')[0])) ?? 0)) : 0;
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
-  const reviewDone = reviewing && !!position?.shown;
+  // The surah openings quiz (the app's, owner 2026-11-13): like a review, one ayah at a time.
+  const [openings, setOpenings] = useState<Openings | null>(null);
+  useEffect(() => {
+    if (!openingsOn || !recite) { setOpenings(null); return; }
+    try {
+      const round = JSON.parse(sessionStorage.getItem(OPENINGS_KEY) ?? 'null') as Openings | null;
+      // Back or a reload lands on an earlier surah of the round: the round goes on from there.
+      const at = round ? round.keys.indexOf(recite.start) : -1;
+      setOpenings(round && at >= 0 ? { ...round, at } : { range: null, keys: [recite.start], at: 0 });
+    } catch { setOpenings({ range: null, keys: [recite.start], at: 0 }); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- follows the URL's recite start
+  }, [openingsOn, sameRecite]);
+  const quizzing = !!openings && !!position && position.start === openings.keys[openings.at];
+  const reviewDone = (reviewing || quizzing) && !!position?.shown;
   // The ayah under review counts even after it is cleared from the list.
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -168,7 +184,7 @@ export default function ReaderView({
   const [current, setCurrent] = useState<number | null>(null);
   const [checked, setChecked] = useState<Checked | null>(null);
   const input = useRef<HTMLInputElement>(null);
-  const writeKey = writing && upcoming && !(reviewing && position?.shown) ? upcoming : null;
+  const writeKey = writing && upcoming && !reviewDone ? upcoming : null;
   const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && position ? wordTargets(writeWords).filter(at => at + titleSteps >= position.words) : [];
@@ -281,17 +297,17 @@ export default function ReaderView({
   };
 
   // The URL keeps the recite position, so a reload or a shared link resumes it; the last one is kept to continue later.
-  const query = position ? positionQuery(position, reviewing ? { review: '1' } : {}) : null;
+  const query = position ? positionQuery(position, reviewing ? { review: '1' } : quizzing ? { openings: '1' } : {}) : null;
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     const params = new URLSearchParams(window.location.search);
-    for (const name of ['recite', 'upto', 'w', 'review', 'write']) params.delete(name);
+    for (const name of ['recite', 'upto', 'w', 'review', 'write', 'openings']) params.delete(name);
     new URLSearchParams(query ?? '').forEach((value, name) => params.set(name, value));
     const url = `${window.location.pathname}${params.size ? `?${params}` : ''}`;
     if (url !== `${window.location.pathname}${window.location.search}`) window.history.replaceState(window.history.state, '', url);
-    if (query && !reviewing) write(LAST_RECITE_KEY, url);
-  }, [query, reviewing]);
+    if (query && !reviewing && !quizzing) write(LAST_RECITE_KEY, url);
+  }, [query, reviewing, quizzing]);
   const startRecite = () => {
     setActions(null);
     // Reciting starts full screen on phones: the app bars and reading tools step aside, as after a page swipe.
@@ -307,9 +323,19 @@ export default function ReaderView({
     setPosition({ start: order[0], shown: null, words: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the page opens with ?write=1
   }, [startWriting]);
-  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
+  const nextLabel = reviewDone
+    ? quizzing ? (ar ? 'السورة التالية' : 'Next surah') : (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah')
+    : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah');
+  const stopRecite = () => { setOpenings(null); setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
   const revealNextAyah = () => {
     if (!position) return;
+    if (quizzing && position.shown && openings) {
+      const next = nextOpening(openings, Math.random);
+      try { sessionStorage.setItem(OPENINGS_KEY, JSON.stringify(next)); } catch {}
+      const key = next.keys[next.at];
+      router.push(`${ayahHref(key)}?recite=${key}&openings=1`);
+      return;
+    }
     if (reviewing && position.shown) {
       if (reviewNext) router.push(`${ayahHref(reviewNext)}?recite=${reviewNext}&review=1`);
       return;
@@ -320,7 +346,7 @@ export default function ReaderView({
   };
   const revealNextWord = () => {
     if (!position) return;
-    if (upcoming && !(reviewing && position.shown)) setPosition(revealWord(position, upcoming, upcomingLength));
+    if (upcoming && !reviewDone) setPosition(revealWord(position, upcoming, upcomingLength));
     else revealNextAyah();
   };
   const stepBackOne = () => { if (position) { setPosition(stepBack(position, ayahCounts)); setChecked(null); } };
@@ -523,11 +549,13 @@ export default function ReaderView({
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
           ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`
           : `Review ${reviewAt} of ${reviewTotal}`}</span>}
+        {quizzing && openings && <span className="px-2 text-sm text-[var(--home-muted)]" aria-label={ar ? `أوائل السور، السورة ${num(openings.at + 1)} من ${num(openings.keys.length)}` : `Surah openings, ${openings.at + 1} of ${openings.keys.length}`}>{ar
+          ? `${num(openings.at + 1)} من ${num(openings.keys.length)}`
+          : `${openings.at + 1} of ${openings.keys.length}`}</span>}
         <Button size="lg" variant="muted" aria-label={ar ? 'ارجع خطوة' : 'Step back'} title={ar ? 'ارجع خطوة' : 'Step back'} disabled={atStart(position)} onClick={stepBackOne}><Undo2 aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} title={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} disabled={reviewDone} onClick={revealNextWord}>{ar ? <ChevronLeft aria-hidden /> : <ChevronRight aria-hidden />}</Button>
-        <Button size="lg" variant="ghost" aria-label={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
-          title={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
-          disabled={reviewDone ? !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : ar ? <ChevronsLeft aria-hidden /> : <ChevronsRight aria-hidden />}</Button>
+        <Button size="lg" variant="ghost" aria-label={nextLabel} title={nextLabel}
+          disabled={reviewDone ? !quizzing && !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : ar ? <ChevronsLeft aria-hidden /> : <ChevronsRight aria-hidden />}</Button>
         <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} aria-label={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')}
           title={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')} onClick={toggleWriting}><PenLine aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
@@ -552,5 +580,5 @@ export function MarkedReaderView(props: ReaderProps) {
     if (asked && !holds) router.replace(`/quran/read/ayah/${surah}/${ayah}`);
   }, [asked, holds, surah, ayah, router]);
   const params = useSearchParams();
-  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} recite={readPosition(params)} review={params.get('review') === '1'} write={params.get('write') === '1'} />;
+  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} recite={readPosition(params)} review={params.get('review') === '1'} write={params.get('write') === '1'} openings={params.get('openings') === '1'} />;
 }
