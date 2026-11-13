@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { withMemorizedScope, touchesMemorized, isMemorized, memorizedFilters, memorizedKeys, recallOfDay } from './memorized';
+import { withMemorizedScope, touchesMemorized, isMemorized, memorizedFilters, memorizedKeys, recallOfDay, memorizedScope, isMemorizedScope } from './memorized';
 
 describe('memorized', () => {
   const juz30 = { unit: 'juz' as const, picked: [30] };
@@ -38,5 +38,23 @@ describe('memorized', () => {
   it('swaps a quiz range for what is memorized, keeping the other filters', () => {
     expect(withMemorizedScope({ categories: 'mutashabeh', surahFrom: '2', surahTo: '3' }, juz30)).toEqual({ categories: 'mutashabeh', juz: '30' });
     expect(withMemorizedScope({ categories: 'mutashabeh', juz: '1' }, { all: true })).toEqual({ categories: 'mutashabeh' });
+  });
+});
+
+describe('memorizedScope', () => {
+  it('turns what is memorized into the compare filter scope', () => {
+    expect(memorizedScope({ unit: 'juz', picked: [29, 30] })).toEqual({ unit: 'juzs', list: [29, 30] });
+    expect(memorizedScope({ unit: 'surah', picked: [2, 18] })).toEqual({ unit: 'surahs', list: [2, 18] });
+    expect(memorizedScope({ all: true })).toBeUndefined();
+    expect(memorizedScope(null)).toBeUndefined();
+  });
+
+  it('sees a scope as memorized only when it lists the same juz or surahs', () => {
+    const memorized = { unit: 'juz' as const, picked: [29, 30] };
+    expect(isMemorizedScope({ unit: 'juzs', list: [30, 29] }, memorized)).toBe(true);
+    expect(isMemorizedScope({ unit: 'juzs', list: [30] }, memorized)).toBe(false);
+    expect(isMemorizedScope({ unit: 'surahs', list: [29, 30] }, memorized)).toBe(false);
+    expect(isMemorizedScope({ unit: 'juz', from: 29, to: 30 }, memorized)).toBe(false);
+    expect(isMemorizedScope(undefined, memorized)).toBe(false);
   });
 });

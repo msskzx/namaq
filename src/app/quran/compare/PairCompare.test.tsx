@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
+import { writeMemorized } from '@shared/memorized';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
@@ -20,7 +21,7 @@ const cards: PairCard[] = [{
   ],
 }];
 
-afterEach(() => { cleanup(); localStorage.clear(); });
+afterEach(() => { cleanup(); localStorage.clear(); writeMemorized(null); });
 
 const pane = () => screen.getByRole('complementary', { name: 'اختر سورتين' });
 const listed = () => within(within(pane()).getByRole('heading', { name: 'كل السور المتشابهة' }).nextElementSibling as HTMLElement).getAllByRole('link').map(link => link.getAttribute('href'));
@@ -210,6 +211,33 @@ describe('PairCompare', () => {
     expect((within(filter).getByRole('combobox', { name: 'التصفية حسب' }) as HTMLSelectElement).value).toBe('juz');
     fireEvent.click(within(filter).getByRole('button', { name: /إعادة ضبط/ }));
     expect(router.push).toHaveBeenCalledWith('/quran/compare?a=52&b=68');
+  });
+
+  it('narrows the list to what is memorized in one tap, and back to the whole Quran', () => {
+    const memorizedSwitch = () => within(pane()).getByRole('switch', { name: 'ما أحفظه' }) as HTMLInputElement;
+    const { unmount } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    expect(memorizedSwitch().disabled).toBe(true);
+    unmount();
+    writeMemorized({ unit: 'juz', picked: [29, 27] });
+    const { rerender } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    expect(memorizedSwitch().checked).toBe(false);
+    fireEvent.click(memorizedSwitch());
+    expect(router.push).toHaveBeenLastCalledWith('/quran/compare?a=52&b=68&juzs=27,29');
+    rerender(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} scope={{ unit: 'juzs', list: [27, 29] }} />);
+    expect(memorizedSwitch().checked).toBe(true);
+    fireEvent.click(memorizedSwitch());
+    expect(router.push).toHaveBeenLastCalledWith('/quran/compare?a=52&b=68');
+  });
+
+  it('keeps review on when the memorized switch narrows the list, and hides the switch when the whole Quran is memorized', () => {
+    writeMemorized({ unit: 'surah', picked: [68, 52] });
+    const { unmount } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} review todo states={{}} />);
+    fireEvent.click(within(pane()).getByRole('switch', { name: 'ما أحفظه' }));
+    expect(router.push).toHaveBeenLastCalledWith('/quran/compare?a=52&b=68&review=1&todo=1&surahs=52,68');
+    unmount();
+    writeMemorized({ all: true });
+    render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    expect(within(pane()).queryByRole('switch', { name: 'ما أحفظه' })).toBeNull();
   });
 
   it('in review, the unreviewed-only switch hides finished pages and keeps those with a question', () => {

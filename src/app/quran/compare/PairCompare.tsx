@@ -16,6 +16,7 @@ import { ShareImageButton } from '@/components/share/ShareImage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
+import { isMemorizedScope, memorizedScope, readMemorized, serverMemorized, subscribeMemorized } from '@shared/memorized';
 import { pageInScope, scopeParam, SCOPE_MAX, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';
 import { isRangeUnit, ScopeFields, scopeRange, type ScopeDraft } from '@/components/quran/ScopeFilter';
 import { compareAnchor, compareBookmarkId, savedAs, savedSurahPairs } from '@shared/compareBookmarks';
@@ -140,6 +141,20 @@ function TodoOnly({ a, b, todo, juz }: { a: number; b: number; todo: boolean; ju
   return <span title={label} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={todo} label={label} onIcon={<CircleHelp className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, true, checked, juz))} /><label htmlFor={id}>{label}</label></span>;
 }
 
+/** «ما أحفظه»: one tap narrows the list to the juz or surahs said in settings, and off again to the whole Quran. */
+function MemorizedOnly({ a, b, review, todo, juz }: { a: number; b: number; review: boolean; todo: boolean; juz?: CompareScope }) {
+  const ar = useLanguage().language === 'ar';
+  const router = useRouter();
+  const id = useId();
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized, serverMemorized);
+  const mine = memorizedScope(memorized);
+  // The whole Quran memorized leaves nothing to narrow.
+  if (memorized && 'all' in memorized) return null;
+  const label = ar ? 'ما أحفظه' : 'What I memorized';
+  const hint = mine ? label : (ar ? 'اختر ما تحفظه من الإعدادات أولًا' : 'Choose what you memorized in settings first');
+  return <span title={hint} className="inline-flex items-center gap-2 px-1 text-sm"><Toggle id={id} checked={isMemorizedScope(juz, memorized)} label={label} disabled={!mine} onIcon={<BookOpen className="size-3" aria-hidden />} onChange={checked => router.push(pairHref(a, b, review, todo, checked ? mine : undefined))} /><label htmlFor={id}>{label}</label></span>;
+}
+
 /** A neighbouring page's cards, fetched once it is a swipe away. */
 function usePairCards(pair: { a: number; b: number } | undefined, review: boolean) {
   const key = pair && `a=${pair.a}&b=${pair.b}${review ? '&review=1' : ''}`;
@@ -213,6 +228,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
       </label>
       <CompareFilter a={lead} b={lead === a ? b : a} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly}>
         {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
+        <MemorizedOnly a={lead} b={lead === a ? b : a} review={review} todo={todo} juz={juz} />
         {review && <TodoOnly a={lead} b={lead === a ? b : a} todo={todo} juz={juz} />}
       </CompareFilter>
       <Segmented label={ar ? 'ترتيب القائمة' : 'Sort the list'} className="w-full [&>*]:flex-1" options={[

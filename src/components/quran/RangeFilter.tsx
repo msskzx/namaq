@@ -9,8 +9,6 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
-export const NAVIGATING = 'range-filter:navigating';
-export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGATING));
 export type RangeDraft = [string, string];
 export type RangeLabels = { from: string; to: string; toText?: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
