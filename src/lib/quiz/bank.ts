@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { QUESTION_FAMILIES, QUESTION_STATUSES, QUIZ_TOPICS } from './types';
+import { CHOICE_TOPICS, QUESTION_FAMILIES, QUESTION_STATUSES, QUIZ_TOPICS } from './types';
 import type { GeneratedQuestion, QuestionBank, QuestionBankEntry } from './types';
 
 export const questionBankPath = 'data/quiz/questions.json';
@@ -77,7 +77,7 @@ export function validateQuestionBank(bank: QuestionBank): string[] {
     if (keys.has(question.key)) issues.push(`${at}: duplicate key`);
     keys.add(question.key);
     if (!QUESTION_FAMILIES.includes(question.family)) issues.push(`${at}: unknown family ${question.family}`);
-    if (!QUIZ_TOPICS.filter((topic) => topic !== 'BRANCHES').includes(question.topic)) issues.push(`${at}: unknown topic ${question.topic}`);
+    if (!QUIZ_TOPICS.filter((topic) => topic !== 'BRANCHES' && !(CHOICE_TOPICS as readonly string[]).includes(topic)).includes(question.topic)) issues.push(`${at}: unknown topic ${question.topic}`);
     if (!QUESTION_STATUSES.includes(question.status)) issues.push(`${at}: unknown status ${question.status}`);
     if (question.choices.length !== 4) issues.push(`${at}: expected 4 choices`);
     if (new Set(question.choices.map((choice) => choice.value)).size !== question.choices.length) issues.push(`${at}: choice values must be distinct`);

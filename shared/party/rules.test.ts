@@ -242,6 +242,15 @@ describe('party helpers', () => {
     expect(cleanSettings({ difficulty: 'nope' as never }).difficulty).toBe('medium');
   });
 
+  it('asks which surah over the range, leaves recite to solo, and keeps the surah hidden until the reveal', () => {
+    expect(quizQuery(cleanSettings({ topics: ['SURAH', 'RECITE'], juzFrom: 30, juzTo: 30 }))).toBe('topic=SURAH&length=5&juzFrom=30&juzTo=30&leaves=3');
+    const asked = { ...choice('SURAH:2:34', '2'), ayahKey: '2:34', alike: { 17: { key: '17:61', words: [] } } };
+    let state = playing([asked, choice('q2')]);
+    expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'q0', correctAnswer: '', ayahKey: undefined, alike: undefined });
+    state = run(state, ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'b' }) as Action));
+    expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'SURAH:2:34', correctAnswer: '2', ayahKey: '2:34' });
+  });
+
   it('expires an idle party', () => {
     const state = createParty('1', 'p0', 'Host', 0);
     expect(expired(state, IDLE_MS - 1)).toBe(false);

@@ -234,6 +234,50 @@ describe('QuizzesPage', () => {
     }
   });
 
+  it('asks which surah an ayah is in and shows the look-alike in the surah picked wrongly', () => {
+    const original = questions[0];
+    questions[0] = {
+      ...original, key: 'SURAH:2:34', family: 'SURAH', promptArabic: 'في أي سورة هذه الآية؟',
+      choices: [{ value: '20', labelArabic: 'طه' }, { value: '2', labelArabic: 'البقرة' }, { value: '18', labelArabic: 'الكهف' }, { value: '17', labelArabic: 'الإسراء' }],
+      correctAnswer: '2',
+      ...{ quran: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'أَبَىٰ'], ayahKey: '2:34', alike: { 17: { key: '17:61', words: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'قَالَ'] } } },
+    };
+    try {
+      nav.reset('/quizzes?topic=SURAH&length=5');
+      render(<QuizzesPage />);
+      expect(document.querySelectorAll('p.font-quran span')).toHaveLength(4);
+      expect(screen.queryByRole('link', { name: 'In the mushaf' })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'الإسراء' }));
+      expect(screen.getByText('Incorrect')).toBeTruthy();
+      expect(screen.getByText('آية الإسراء التي تشبهها، ٦١')).toBeTruthy();
+      expect(screen.getByRole('link', { name: 'In the mushaf' }).getAttribute('href')).toBe('/quran/read/ayah/2/34');
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('keeps a recited snippet\'s rest and choices hidden until shown, and saves «نسيتها» as forgotten', () => {
+    const original = questions[0];
+    questions[0] = {
+      ...original, key: 'RECITE:36:1', family: 'RECITE', promptArabic: 'سمّع بقية الآية',
+      choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }], correctAnswer: '1',
+      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2' },
+    };
+    try {
+      nav.reset('/quizzes?topic=RECITE&length=5');
+      render(<QuizzesPage />);
+      expect(document.querySelector('p.font-quran')!.textContent).toMatch(/…$/);
+      expect(screen.queryByRole('button', { name: 'نسيتها' })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Show answer' })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'Show the ayah' }));
+      fireEvent.click(screen.getByRole('button', { name: 'نسيتها' }));
+      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+      expect(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')['36:2'].forgot).toBe(1);
+    } finally {
+      questions[0] = original;
+    }
+  });
+
   it('marks a wrong answer incorrect, reveals the correct one and keeps feedback across navigation', () => {
     nav.reset('/quizzes?topic=PEOPLE&length=5');
     render(<QuizzesPage />);

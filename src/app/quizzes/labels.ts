@@ -9,10 +9,12 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
   BRANCHES: { en: "Shared Quranic wording", ar: "متشابهات القرآن" },
+  SURAH: { en: "Which surah?", ar: "في أي سورة؟" },
+  RECITE: { en: "Recite the rest", ar: "سمّع بقية الآية" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "SURAH", "RECITE"] },
 ];
 
 export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> = {
@@ -20,7 +22,4 @@ export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> =
   medium: { en: "Medium", ar: DIFFICULTY_NAMES.medium },
   hard: { en: "Hard", ar: DIFFICULTY_NAMES.hard },
 };
-export const DIFFICULTY_NOTE = {
-  ar: "سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.",
-  en: "Easy: ayat that part soon. Hard: ayat alike but for a word or two.",
-};
+export { DIFFICULTY_NOTES } from "@shared/quiz/difficulty";
