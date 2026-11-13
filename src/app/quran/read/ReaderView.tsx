@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, Search, Undo2, X } from 'lucide-react';
-import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
@@ -99,7 +99,7 @@ export default function ReaderView({
   const two = spread && !phone;
   const shown = two ? pages.filter(entry => spreadOf(page).includes(entry.page)) : pages.filter(entry => entry.page === page);
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
-  const forgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
+  const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const groups = useMemo(() => shown.map(entry => pageGroups(entry.data.items, entry.top)), [shown]);
@@ -402,7 +402,7 @@ export default function ReaderView({
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} links={links[actions.key]}
-        onForgot={() => markForgotten(actions.key)} onClear={() => clearForgotten(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
+        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
       {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
           ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`

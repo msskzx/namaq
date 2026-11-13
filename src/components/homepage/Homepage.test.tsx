@@ -117,7 +117,7 @@ describe('release homepage', () => {
     const menu = screen.getByRole('dialog', { name: 'آية نسيتها' });
     expect(within(menu).getByRole('link', { name: 'سمّع من هذه الآية' }).getAttribute('href')).toBe('/quran/read/ayah/3/164?recite=3:164&review=1');
     expect(within(menu).getByRole('link', { name: 'في المصحف' }).getAttribute('href')).toBe('/quran/read/ayah/3/164');
-    fireEvent.click(within(menu).getByRole('button', { name: 'تذكّرتها، أزلها من المراجعة' }));
+    fireEvent.click(within(menu).getByRole('button', { name: 'تذكّرتها' }));
     expect(within(forgotten).getAllByRole('button')).toHaveLength(1);
   });
 
