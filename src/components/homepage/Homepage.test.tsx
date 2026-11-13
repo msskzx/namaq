@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { toggleBookmark } from '@shared/bookmarks';
 import Homepage from './Homepage';
+import { Stories } from './HomeFeed';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
@@ -54,6 +55,20 @@ describe('home', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('نمق');
     expect(screen.queryByRole('region', { name: 'ما نسيته' })).toBeNull();
     await waitFor(() => expect(screen.getAllByRole('article').length).toBeGreaterThan(0));
+  });
+
+  it('updates the daily juz after midnight while home stays open', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 10, 13, 23, 59, 45));
+    try {
+      render(<Stories />);
+      const before = screen.getByRole('link', { name: /^جزء اليوم:/ }).getAttribute('aria-label');
+      act(() => { vi.advanceTimersByTime(30_000); });
+      expect(screen.getByRole('link', { name: /^جزء اليوم:/ }).getAttribute('aria-label')).not.toBe(before);
+    } finally {
+      cleanup();
+      vi.useRealTimers();
+    }
   });
 
   it('continues reading on the page the mushaf was left on', async () => {
