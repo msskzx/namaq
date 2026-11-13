@@ -20,7 +20,8 @@ import { shareCard } from '@/lib/shareImage';
 import TreeIcon from './TreeIcon';
 import { cardVideoPage } from '@/lib/compareVideo';
 import { WEBSITE } from '@/lib/branches';
-import { compareHref } from '@shared/quran/compare';
+import { surahPairHref } from '@shared/quran/curatedComparisons';
+import { compareAnchor } from '@shared/compareBookmarks';
 
 const DOUBLE_TAP = 280;
 
@@ -29,12 +30,8 @@ type Light = { lit: string | null; reading?: number; onWord?: (link: string) => 
 /** The card's first words and a link to its two passages on the website. */
 export function cardLink(card: PairCard) {
   const [a, b] = card.sides;
-  const range = (side: CardSide) => {
-    const numbers = side.ayat.length ? side.ayat.map(ayah => ayah.number) : [side.ayah];
-    return { from: Math.min(...numbers), to: Math.max(...numbers) };
-  };
-  // A one-to-many card links to its two surahs, since its far side is one of several ayat.
-  const href = card.many ? `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}` : compareHref(a.surah, range(a), b.surah, range(b));
+  // The two surahs' page, scrolled to this card; a one-to-many card links to the page alone, since its far side is one of several ayat.
+  const href = `${surahPairHref(a.surah, b.surah)}${card.many ? '' : `#${compareAnchor(a, b)}`}`;
   return `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}`;
 }
 

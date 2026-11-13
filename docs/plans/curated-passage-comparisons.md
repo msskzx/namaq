@@ -27,7 +27,7 @@ In local development, `?review=1` adds agree and drop buttons that write `compar
 - On the owner's machine, the review buttons append each press to `.review-log.jsonl` and answer at once, so the page can be closed straight away. Each card has keep, drop and discuss buttons that log the card's pairs the same way; a card's choice stays when the whole page is pressed later. Review pages show the unapplied presses. `npm run quran:compare-apply` folds them into `comparePairs.json` and rebuilds the cards; `.review-log.offset` records how far it got. Nothing commits on its own.
 - There are no juz' filters, topics or ayah-by-ayah blocks. `?preset=` and reversed or invalid pairs redirect to a valid `?a=&b=`.
 
-The earlier comparison page, with ayah-by-ayah blocks, topics and ranges, stays reachable from the experiments page (`/quran/compare?view=similar`) and from any URL that carries its range or view parameters.
+The earlier comparison page, with ayah-by-ayah blocks, topics and ranges, was removed on 2026-11-13 (owner); the compare filter covers juz, surah and page ranges, and «ما أحفظه».
 
 ## Validation
 
