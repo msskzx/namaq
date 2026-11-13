@@ -6,7 +6,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
@@ -296,6 +296,7 @@ const MORE = 3;
 export function Feed({ palette }: { palette: Palette }) {
   const { day } = useToday();
   const [batches, setBatches] = useState(1);
+  const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
@@ -310,9 +311,9 @@ export function Feed({ palette }: { palette: Palette }) {
     return () => listener.remove();
   }, []);
   const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
-    { prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized]);
+    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
   const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
-    { prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized]);
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
   useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {

@@ -13,14 +13,14 @@ import BranchTree from '@/app/quran/branches/BranchTree';
 import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
-import { placeStore, settingsStore, viewStore } from '@/components/utilities/Utilities';
+import { placeStore, settingsStore, useNow, viewStore } from '@/components/utilities/Utilities';
 import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { compareAnchor, compareBookmarkId, savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { CardAyah, PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -51,12 +51,8 @@ const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_IND
 
 /** The reader's own day, worked out in the browser (null while the page is drawn on the server). */
 function useToday() {
-  const [today, setToday] = useState<{ day: number; date: string | null; juz: number[] | null } | null>(null);
-  useEffect(() => {
-    const now = new Date();
-    setToday({ day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now) });
-  }, []);
-  return today;
+  const now = useNow();
+  return useMemo(() => now ? { day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now) } : null, [now]);
 }
 
 const STORY: Record<StoryId, { label: string; Icon: typeof BookOpen | typeof TreeIcon; href: string }> = {
@@ -230,6 +226,7 @@ export function Feed() {
   const today = useToday();
   const day = today?.day;
   const [batches, setBatches] = useState(1);
+  const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
@@ -249,9 +246,9 @@ export function Feed() {
   const picked = useMemo(() => {
     if (!ids) return null;
     const pick = (list: (string | null)[], keys?: string[][]) => freshPicks(offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, batches,
-      { tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
+      { since: visit, tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
     return { pairs: pick(ids.pairs, ids.pairKeys), trees: pick(ids.trees, ids.treeKeys) };
-  }, [ids, seen, batches, prefer, memorized]);
+  }, [ids, seen, batches, prefer, memorized, visit]);
   const { data: content } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, { revalidateOnFocus: false, keepPreviousData: true });
   useEffect(() => { if (content) markFeedSeen([...content.pairs.map(pair => pair.id), ...content.trees.map(tree => tree.id)]); }, [content]);
   const posts: React.ReactNode[] = [];

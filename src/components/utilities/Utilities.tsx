@@ -44,7 +44,7 @@ function locate(): Promise<Place | null> {
 }
 
 /** The time now, moved on twice a minute so the shaded prayer and the day follow the clock. Null on the server. */
-function useNow() {
+export function useNow() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
     setNow(new Date());
