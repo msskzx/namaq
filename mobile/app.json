@@ -16,7 +16,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#f8f6f0",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": true
@@ -36,7 +35,20 @@
           "locationWhenInUsePermission": "يستعمل نمق موقعك لحساب مواقيت الصلاة واتجاه القبلة على جهازك فقط."
         }
       ],
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 150,
+          "resizeMode": "contain",
+          "backgroundColor": "#f8f6f0",
+          "dark": {
+            "image": "./assets/splash-icon-dark.png",
+            "backgroundColor": "#15191b"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": false
