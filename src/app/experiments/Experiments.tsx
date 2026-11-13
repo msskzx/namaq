@@ -15,6 +15,7 @@ export const LIVE: NavItem[] = [
   { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, purpose: { ar: 'سورتان جنبًا إلى جنب، مع بطاقات قصص الأنبياء المشتركة', en: 'Two surahs side by side, with story cards for the prophets they share' } },
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث كل قصة وكيف تُروى في السور', en: 'The events of each story and how the surahs tell them' } },
   { href: '/quran/prophets/muhammad', label: { ar: 'سيرة النبي ﷺ في القرآن', en: 'The Prophet ﷺ in the Quran' }, purpose: { ar: 'أحداث السيرة التي ذكرها القرآن', en: 'The events of his life that the Quran mentions' } },
+  { href: '/quran/oaths', label: { ar: 'الأقسام في القرآن', en: 'Oaths in the Quran' }, purpose: { ar: 'كل قسم في القرآن وما أُقسم به، من الله ومن غيره', en: 'Every oath in the Quran and what is sworn by, Allah’s and others’' } },
   { href: '/quizzes?topic=BRANCHES', label: { ar: 'اختبار فردي', en: 'Solo quiz' }, purpose: { ar: 'أكمل فروع شجرة المتشابهات', en: 'Complete the branches of a phrase tree' } },
   { href: '/quizzes/party', label: { ar: 'اختبار جماعي', en: 'Party quiz' }, purpose: { ar: 'الاختبار نفسه مع أصحابك برابط واحد', en: 'The same quiz with friends, from one link' } },
   { href: '/library?tab=saved', label: { ar: 'المحفوظات', en: 'Saved' }, purpose: { ar: 'الآيات والشجرات والمقارنات التي حفظتها', en: 'The ayat, trees and comparisons you saved' } },

@@ -4,7 +4,7 @@
  * on any of them, and a tap on it from another tab goes back to the Quran page that was open last.
  */
 export const QURAN_HUB = 'quran';
-export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'words'] as const;
+export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'words', 'oaths'] as const;
 const QURAN_PAGES: readonly string[] = [QURAN_HUB, ...QURAN_TOOLS];
 
 /** The bar button a tab page belongs to: the Quran pages share one, every other page has its own. */

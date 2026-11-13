@@ -22,7 +22,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [slot, setSlot] = useState<HTMLDivElement | null>(null);
   const [railSlot, setRailSlot] = useState<HTMLDivElement | null>(null);
   const pathname = usePathname() ?? '/';
-  const featureTheme = pathname === '/' || pathname === '/quran' || pathname === '/library' || /^\/quran\/(read|branches|compare|prophets|tajwid)(?:\/|$)/.test(pathname) || /^\/quizzes(?:\/|$)/.test(pathname);
+  const featureTheme = pathname === '/' || pathname === '/quran' || pathname === '/library' || /^\/quran\/(read|branches|compare|prophets|tajwid|oaths)(?:\/|$)/.test(pathname) || /^\/quizzes(?:\/|$)/.test(pathname);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(pathname);
   const tabs = !footerHidden && !partyRoom;
   // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
