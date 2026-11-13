@@ -95,10 +95,10 @@ function QuranPicker({ palette }: { palette: Palette }) {
         {!shown.length && <Text style={{ padding: 16, color: palette.muted, fontSize: 15, textAlign: 'center' }}>لا توجد نتيجة مطابقة.</Text>}
       </ScrollView>
       <Text style={{ color: selected ? palette.ink : palette.muted, fontSize: 15 }}>{selected ? selected.name : unit === 'surah' ? 'اختر سورة' : 'اختر جزءًا'}</Text>
-      <Row>
-        <Button variant="primary" Icon={BookOpen} label="اقرأ" onPress={read} disabled={!selected} />
-        <Button Icon={TreeIcon} label="استكشف المتشابهات" onPress={explore} disabled={!selected} />
-        {unit === 'surah' && <Button Icon={ArrowLeftRight} label="قارن" onPress={compare} disabled={!selected || !comparable.has(selected.number)} />}
+      <Row gap={6}>
+        <Button variant="primary" Icon={BookOpen} label="القرآن" onPress={read} disabled={!selected} grow />
+        <Button Icon={TreeIcon} label="المتشابهات" onPress={explore} disabled={!selected} grow />
+        {unit === 'surah' && <Button Icon={ArrowLeftRight} label="المقارنة" onPress={compare} disabled={!selected || !comparable.has(selected.number)} grow />}
       </Row>
     </View>
   );
@@ -153,7 +153,7 @@ export default function HomeScreen() {
           )}
         </View>
 
-        <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, backgroundColor: palette.paperDeep }}>
+        <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, backgroundColor: palette.card }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
             <Feather size={26} color={palette.accent} />
             <View style={{ flex: 1, gap: 4 }}>

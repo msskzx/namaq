@@ -39,7 +39,7 @@ export function ShelfCard({ card, palette, onPress, wide = false, Icon = KIND_IC
   };
   return (
     <Pressable ref={box} onPress={event => open(event.nativeEvent)} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
-      style={({ pressed }) => ({ width: wide ? '100%' : 250, minHeight: wide ? 0 : 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
+      style={({ pressed }) => ({ width: wide ? '100%' : 250, minHeight: wide ? 0 : 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.card, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
         <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
         {card.references.length > 0 && (

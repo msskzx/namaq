@@ -148,7 +148,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
     });
   const strip = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
 
-  const title: Record<TourStep, string> = { opening: '', matrix: 'المصفوفة', tree: 'شجرة المتشابهات', view: 'أيهما تفضّل؟', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
+  const title: Record<TourStep, string> = { opening: '', matrix: '', tree: '', view: 'أيهما تفضّل؟', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
   const hint: Partial<Record<TourStep, string>> = { tree: 'اسحب الشجرة واضغط غصنًا', timeline: 'اضغط نقطة لترى آياتها', recite: 'اضغط لتظهر الآية التالية' };
 
   /** One step's page: its title and its card. Neighbours are drawn too, so they can peek in while dragging. */
@@ -171,7 +171,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
           </View>
         )}
         {which === 'view' && (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View style={{ flex: 1, paddingBottom: 8 }}>
             <ViewTiles palette={palette} big />
             <Text style={{ marginTop: 14, color: palette.muted, fontSize: 13, textAlign: 'center' }}>تغيّره متى شئت من الإعدادات</Text>
           </View>

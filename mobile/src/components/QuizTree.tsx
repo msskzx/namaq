@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, Share, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
@@ -40,21 +40,38 @@ function usePaths(): Paths {
 const lightOnTap = (_: string[], lightPath?: () => void) => lightPath?.();
 /** The size BranchTree draws its other nodes in, so leaves look the same. */
 const LEAF_SIZE = 20;
+/** The smallest a quiz tree is shrunk to fit the phone, so its words and boxes stay easy to read and tap. */
+const FIT_MIN = 0.6;
 
 /**
  * Scrolls a tree both ways; quiz trees are small, so they are drawn at full size with no zoom.
  * The root is on the right, so a tree wider than the phone opens scrolled to its right end.
  * `header` (the question strip and prompt) scrolls away with the tree instead of staying pinned.
  */
-function Scroller({ header, children }: { header?: React.ReactNode; children: React.ReactNode }) {
+function Scroller({ header, children, onOverflow, fit = false }: { header?: React.ReactNode; children: React.ReactNode;
+  /** Told when the tree is wider than the phone, so the quiz can turn it top down. */
+  onOverflow?: () => void;
+  /** Shrinks a tree still wider than the phone (down to FIT_MIN) so all of it shows; the rest scrolls sideways. */
+  fit?: boolean }) {
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);
+  const [view, setView] = useState(0);
+  const [natural, setNatural] = useState<Size | null>(null);
+  useEffect(() => { if (onOverflow && view && natural && natural.width > view + 1) onOverflow(); }, [onOverflow, view, natural]);
+  const scale = fit && view && natural && natural.width > view ? Math.max(FIT_MIN, view / natural.width) : 1;
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
       {header}
       <View style={{ flexGrow: 1, justifyContent: 'center' }}>
         <ScrollView ref={sideways as never} horizontal style={{ direction: 'ltr' }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled"
+          onLayout={event => setView(event.nativeEvent.layout.width)}
           onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
-          {children}
+          {/* The tree at its own size, measured, then scaled from its top right corner into a box of the scaled size. */}
+          <View style={{ width: natural ? natural.width * scale : undefined, height: natural ? natural.height * scale : undefined }}>
+            <View onLayout={event => { const { width, height } = event.nativeEvent.layout; setNatural(old => old && old.width === width && old.height === height ? old : { width, height }); }}
+              style={{ position: natural ? 'absolute' : 'relative', top: 0, right: 0, transform: [{ scale }], transformOrigin: 'top right' }}>
+              {children}
+            </View>
+          </View>
         </ScrollView>
       </View>
     </ScrollView>
@@ -67,23 +84,79 @@ function Tree({ question, tree, palette, names, renderNode, down }: { question: 
   return <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={lightOnTap} paths={paths} renderNode={renderNode} direction={down ? 'down' : 'side'} />;
 }
 
-/** The tree with an empty box in each asked node; the other nodes are given. It can rotate, as on the website. */
+/** The input for one asked node: the same box in the tree and in the matrix, so an answer typed in one shows in the other. */
+function blank(question: TreeQuestion, index: number, value: string, onType: (node: number, text: string) => void, palette: Palette, width = 150) {
+  const asked = question.asked ?? [];
+  return <TextInput value={value} onChangeText={text => onType(index, text)}
+    accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
+    autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
+    style={{ width, minHeight: 40, fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
+}
+
+/** The question's nodes in branchNodes order (each child, then its own children), each with the nodes above it. */
+function rowsOf(tree: Branch): { leaf: Branch; path: number[] }[] {
+  const rows: { leaf: Branch; path: number[] }[] = [];
+  let next = 0;
+  const walk = (node: Branch, path: number[]) => node.children.forEach(child => {
+    const index = next++;
+    const here = [...path, index];
+    if (!child.children.length) rows.push({ leaf: child, path: here });
+    walk(child, here);
+  });
+  walk(tree, []);
+  return rows;
+}
+
+/** The matrix view of a question: one row per ayah, the shared start in colour, an empty box where a node is asked. */
+function MatrixInputs({ question, values, onType, palette, names }: { question: TreeQuestion; values: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string> }) {
+  const rows = useMemo(() => rowsOf(question.tree), [question.tree]);
+  const text = { fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, writingDirection: 'rtl' as const };
+  return (
+    <View style={{ gap: 10, paddingHorizontal: 12, paddingVertical: 8 }}>
+      {rows.map(({ leaf, path }) => {
+        const [surah, ayah] = (leaf.ayat[0] ?? '').split(':').map(Number);
+        return (
+          <View key={path.join('-')} style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, backgroundColor: palette.card }}>
+            {surah ? <Text style={{ color: palette.muted, fontSize: 13 }}>{`${names[surah] ?? num(surah)} ${num(ayah)}`}</Text> : null}
+            <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
+              <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>
+              {path.map(index => isAsked(question, index)
+                ? <View key={index}>{blank(question, index, values[index], onType, palette, 130)}</View>
+                : <Text key={index} style={text}>{quranText(values[index])}</Text>)}
+            </View>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
+/**
+ * The question with an empty box in each asked node; the other nodes are given. Shown as a tree (it can rotate, and turns
+ * top down by itself when it is wider than the phone, so no box starts off the screen) or, per question, as the matrix.
+ */
 export function QuizInputs({ question, typed, onType, palette, names, header }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode }) {
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
-  const asked = question.asked ?? [];
   const renderNode: RenderNode = (node, index) => !isAsked(question, index)
     ? <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>{quranText(givenAnswer(node))}</Text>
-    : <TextInput value={values[index]} onChangeText={text => onType(index, text)}
-        accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
-        autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
-        style={{ width: 150, minHeight: 40, fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
-  const [down, setDown] = useState(false);
+    : blank(question, index, values[index], onType, palette);
+  // null until the user rotates: then the tree is drawn the way that fits, sideways first.
+  const [chosen, setChosen] = useState<boolean | null>(null);
+  const [fits, setFits] = useState(true);
+  const down = chosen ?? !fits;
+  const overflow = useCallback(() => setFits(false), []);
+  const [matrix, setMatrix] = useState(false);
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
-      <Scroller header={header}><Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} /></Scroller>
+      {matrix
+        ? <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} onType={onType} palette={palette} names={names} /></ScrollView>
+        : <Scroller header={header} fit onOverflow={!down && chosen === null ? overflow : undefined}>
+          <Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} />
+        </Scroller>}
       {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 8 }}>
-        <Bar label="تدوير الشجرة" onPress={() => setDown(!down)} Icon={RotateCwSquare} palette={palette} />
+        <Bar label={matrix ? 'عرض الشجرة' : 'عرض المصفوفة'} onPress={() => setMatrix(!matrix)} Icon={matrix ? TreeIcon : GalleryHorizontal} palette={palette} />
+        {!matrix && <Bar label="تدوير الشجرة" onPress={() => setChosen(!down)} Icon={RotateCwSquare} palette={palette} />}
       </View>}
     </View>
   );
