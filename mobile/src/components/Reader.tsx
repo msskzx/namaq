@@ -7,7 +7,7 @@ import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type RecitePosition } from '@shared/quran/recite';
 import TopBar from './TopBar';
@@ -75,7 +75,7 @@ export default function Reader() {
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
   const zoomTo = useCallback((next: number) => { setZoom(next); writeJson(ZOOM, next); }, []);
-  const forgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
+  const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
@@ -251,7 +251,7 @@ export default function Reader() {
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>
             <LightbulbOff size={24} color={forgotCount ? palette.onAccent : palette.ink} />
           </Pressable>
-          {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها، أزلها من المراجعة" palette={palette} color={palette.green} onPress={() => { clearForgotten(actions.key); setActions(null); }} />}
+          {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <IconButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
           {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" palette={palette}
             onPress={() => { setActions(null); if (targets.length === 1) openCompare(targets[0]); else setChoosing(targets); }} />}

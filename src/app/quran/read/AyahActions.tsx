@@ -50,7 +50,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onFo
   const label = ar ? `الآية ${num(number)} من السورة ${num(surah)}` : `Ayah ${surah}:${number}`;
   const forgotLabel = forgot ? (ar ? 'نسيتها مرة أخرى' : 'Forgot again') : (ar ? 'نسيتها' : 'I forgot it');
   const saveLabel = saved ? (ar ? 'أزلها من المحفوظات' : 'Remove from saved') : (ar ? 'احفظ الآية' : 'Save ayah');
-  const clearLabel = ar ? 'تذكّرتها، أزلها من المراجعة' : 'I know it now, stop reviewing it';
+  const clearLabel = ar ? 'تذكّرتها' : 'I remember it now';
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
   const treesLabel = ar ? 'أشجار هذه الآية' : 'Trees of this ayah';
   const compare = links?.compare ?? [];

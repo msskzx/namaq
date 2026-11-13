@@ -3,7 +3,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { clearForgotten, readAyahMarks, mostForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
+import { mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
@@ -78,7 +78,7 @@ export function useHomeCards(palette: Palette) {
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
   const [menu, setMenu] = useState<{ at: MenuAt; label: string; items: MenuItem[] } | null>(null);
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
-  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
+  const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
   /** Every other view of a card's ayat; compare across several surahs is picked next. */
@@ -97,7 +97,7 @@ export function useHomeCards(palette: Palette) {
   const forgottenMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: FORGOTTEN_LABEL, items: [
     { id: 'recite', Icon: EyeOff, label: 'سمّع من هذه الآية', onPress: () => card.open && openIntent(card.open) },
     ...wayItems(forgottenWays(card.id)),
-    { id: 'clear', Icon: Check, label: 'تذكّرتها، أزلها من المراجعة', onPress: () => clearForgotten(card.id) },
+    { id: 'clear', Icon: Check, label: 'تذكّرتها', onPress: () => rememberAyah(card.id) },
   ] });
   const menus = (<>
     <CardMenu at={menu?.at ?? null} items={menu?.items ?? []} label={menu?.label ?? ''} onClose={() => setMenu(null)} palette={palette} />

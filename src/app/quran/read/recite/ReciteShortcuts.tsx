@@ -4,7 +4,7 @@ import { useMemo, useSyncExternalStore } from 'react';
 import { LightbulbOff, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { ayahHref, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { forgottenOrder } from '@shared/quran/recite';
 import { LAST_RECITE_KEY } from '../ReaderView';
 
@@ -16,7 +16,7 @@ const subscribe = (listener: () => void) => { window.addEventListener('storage',
 export default function ReciteShortcuts() {
   const ar = useLanguage().language !== 'en';
   const last = useSyncExternalStore(subscribe, readLast, noLast);
-  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
+  const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   if (!last && !forgotten.length) return null;
   return <div className="mb-5 flex flex-wrap gap-2">

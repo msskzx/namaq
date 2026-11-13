@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { ayahHref, clearForgotten, readAyahMarks, mostForgotten, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { ayahHref, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { forgottenOrder } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
 import { BOOKMARK_KIND_LABEL, bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
@@ -57,7 +57,7 @@ function useAyahTexts(keys: string[]) {
 export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const ar = useLanguage().language === 'ar';
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
-  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
+  const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = forgottenOrder(Object.keys(marks));
   const recent = mostForgotten(marks);
   const texts = useAyahTexts(recent.slice(0, forgottenShown));
@@ -79,7 +79,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const forgottenMenu = (key: string, event: MouseEvent<HTMLElement>) => setMenu({ ...menuAt(event), label: forgottenLabel, items: [
     { id: 'recite', Icon: EyeOff, label: ar ? 'سمّع من هذه الآية' : 'Recite from this ayah', href: reviewHref(key) },
     { id: 'mushaf', Icon: BookOpen, label: ar ? 'في المصحف' : 'In the mushaf', href: ayahHref(key) },
-    { id: 'clear', Icon: Check, label: ar ? 'تذكّرتها، أزلها من المراجعة' : 'I know it now, stop reviewing it', onClick: () => clearForgotten(key) },
+    { id: 'clear', Icon: Check, label: ar ? 'تذكّرتها' : 'I remember it now', onClick: () => rememberAyah(key) },
   ] });
 
   const savedCard = (item: Saved, wide = false) => {
