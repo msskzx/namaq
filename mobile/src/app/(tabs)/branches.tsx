@@ -113,7 +113,7 @@ export default function BranchesScreen() {
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>{list.query ? `لا شجرة تطابق «${list.query}».` : list.saved && !isFiltered({ ...list, saved: false }) ? 'لا شجرة محفوظة بعد. احفظ شجرة بزر الحفظ تحتها أولًا.' : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'}</Text> : <LoadingDots />}
         </View>}
-      {/* Room for the floating tab bar; a spacer and not padding, so the search screen still covers the whole page. */}
+      {/* Room for the tab bar, which lies over the page; a spacer and not padding, so the search screen still covers the whole page. */}
       <View style={{ height: bottom }} />
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
         onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}

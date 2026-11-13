@@ -18,7 +18,7 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * The gear shows only on the homepage (owner, 2026-11-10); the logo shows everywhere and opens home.
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
- * See-through with no line under it, like the floating tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
+ * See-through with no line under it, like the see-through tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
 export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
@@ -10,7 +11,7 @@ import { ayahBookmarkId, ayahHref, clearForgotten, markForgotten, readAyahMarks,
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, stepBack, type RecitePosition } from '@shared/quran/recite';
 import TopBar from './TopBar';
-import { tabBarTop } from './tabBarSpace';
+import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
@@ -46,8 +47,8 @@ const modelOf = (page: number) => {
   return model;
 };
 
-/** The recite bar's height above the safe area: one icon button tall. */
-const RECITE_BAR = 44;
+/** The recite pill's height: one icon button tall, and a little room around it. */
+const RECITE_BAR = 52;
 
 function IconButton({ Icon, label, onPress, palette, on = false, disabled = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; onPress: () => void; palette: Palette; on?: boolean; disabled?: boolean }) {
   return (
@@ -203,8 +204,8 @@ export default function Reader() {
     pending.current = { timer: setTimeout(() => { pending.current = null; latest.current(set.tap, key, x, y); }, DOUBLE_TAP) };
   }, [mode]);
 
-  // While reciting, the page sits right on top of the slim recite bar, so it loses only that bar's height.
-  const pageInsets = { top: insets.top, bottom: insets.bottom + (reciting ? RECITE_BAR + 1 : 0) };
+  // While reciting the page ends above the recite pill, so it never covers a line.
+  const pageInsets = { top: insets.top, bottom: reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : insets.bottom };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const render = (at: number, width: number, pageHeight: number) => {
     const atModel = modelOf(at);
@@ -255,10 +256,12 @@ export default function Reader() {
         </View>
       )}
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
-      {/* The recite bar: flush with the bottom edge and full width, like a video app's bottom bar; just above the floating tab bar when the app's bars are shown. */}
+      {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
-          style={{ position: 'absolute', left: 0, right: 0, bottom: tools ? tabBarTop(insets.bottom) + 8 : 0, height: RECITE_BAR + 1 + (tools ? 0 : insets.bottom), paddingBottom: tools ? 0 : insets.bottom, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderTopWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper }}>
+          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom), height: RECITE_BAR, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
           {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
           <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
           <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
