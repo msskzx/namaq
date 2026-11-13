@@ -20,7 +20,7 @@ afterEach(() => {
 describe('AttributionsPage', () => {
   it('lists every source with its licence and where it is used', () => {
     render(<AttributionsPage />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Attributions' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'Sources and licences' })).toBeTruthy();
     for (const source of SOURCES) {
       const card = document.getElementById(source.id) as HTMLElement;
       expect(within(card).getByRole('heading', { name: source.title.en })).toBeTruthy();
