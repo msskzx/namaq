@@ -24,6 +24,7 @@ export const LIVE: NavItem[] = [
   { href: '/quran/read?write=1', label: { ar: 'اكتب أول الآية وآخرها', en: 'Write the first and last words' }, purpose: { ar: 'كلمات الآية صناديق في مكانها من المصحف، تكتب أولها وآخرها', en: 'Each ayah\'s words are boxes on the mushaf page; write its first and last words' } },
   { href: '/library?tab=notes', label: { ar: 'تأملاتي', en: 'My notes' }, purpose: { ar: 'خواطرك على الآيات، تكتبها من المصحف', en: 'Your reflections on ayat, written from the mushaf' } },
   { href: '/quran/words', label: { ar: 'عدّ الكلمات', en: 'Word counts' }, purpose: { ar: 'كم مرة ترد كل كلمة، وأين', en: 'How often each word occurs, and where' } },
+  { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: 'أنواع الافتتاح العشرة، والسور التي تتشابه أوائلها جنبًا إلى جنب', en: 'The ten kinds of opening, and surahs whose openings look alike side by side' } },
   { href: '/search', label: { ar: 'البحث', en: 'Search' }, purpose: { ar: 'بحث واحد في السور والآيات والشجرات والكلمات', en: 'One search across surahs, ayat, trees and words' } },
   { href: '/', label: { ar: 'بطاقة اليوم', en: "Today's card" }, purpose: { ar: 'التاريخ الهجري وجزء اليوم وآيتان متشابهتان كل يوم', en: 'The Hijri date, today\'s juz and a look-alike pair each day' } },
   { href: '/utilities', label: { ar: 'مواقيت الصلاة والقبلة', en: 'Prayer times and qibla' }, purpose: { ar: 'مواقيت اليوم، واتجاه القبلة، والتقويم الهجري', en: 'Today\'s prayer times, the qibla direction and the Hijri calendar' } },

@@ -1,72 +1,63 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen, within } from '@testing-library/react';
-import { buildOpenings, buildTasbih, SPANS, TASBIH_SURAHS } from '@/lib/quran/openings';
-import data from './ayat.json';
-import OpeningsView from './OpeningsView';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import treeData from '@shared/data/quran/trees.json';
+import { CONDITION_SPANS, OPENING_CARDS, conditionLines, openingCards } from '@shared/quran/openingKinds';
+import OpeningsView, { type ConditionText } from './OpeningsView';
 
-afterEach(cleanup);
+vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
+vi.mock('@/components/share/ShareImage', () => ({ ShareImageButton: () => <button type="button">مشاركة</button> }));
 
-const items = buildOpenings(data);
-const tasbih = buildTasbih(data);
-const renderView = () => render(<OpeningsView items={items} tasbih={tasbih} />);
-const region = (n: number) => within(screen.getByRole('region', { name: new RegExp(String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d])) }));
-const roles = (n: number) => [...region(n).getAllByText(/./, { selector: 'p' })].map(p => p.getAttribute('data-role'));
+const byKey = new Map((treeData as { ayat: { key: string; words: string[] }[] }).ayat.map(ayah => [ayah.key, ayah.words]));
+const words = (key: string) => byKey.get(key) ?? [];
+const cards = openingCards(words);
+const names = Object.fromEntries(Array.from({ length: 114 }, (_, i) => [i + 1, `سورة ${i + 1}`]));
+const conditions: ConditionText = Object.fromEntries(Object.keys(CONDITION_SPANS).map(s => [s, conditionLines(Number(s)).map(line => ({ ...line, words: words(line.key) }))]));
+const shown = () => [...document.querySelectorAll('[data-card]')].map(card => card.getAttribute('data-card'));
 
-describe('OpeningsView', () => {
-  it('shows every ayah from the first to the end of each span', () => {
-    renderView();
-    expect(items.map(i => i.lines.length)).toEqual([SPANS[81].to, SPANS[82].to, SPANS[84].to]);
+afterEach(() => { cleanup(); window.history.replaceState(null, '', '/'); });
+
+describe('the surah openings page', () => {
+  it('shows every card until a kind is chosen, then only that kind\'s, and a second tap shows all again', () => {
+    Element.prototype.scrollIntoView = vi.fn();
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    expect(shown()).toHaveLength(OPENING_CARDS.length);
+    fireEvent.click(screen.getByRole('button', { name: 'القسم' }));
+    expect(shown()).toEqual(OPENING_CARDS.filter(card => card.kind === 'oath').map(card => card.id));
+    expect(window.location.search).toBe('?kind=oath');
+    fireEvent.click(screen.getByRole('button', { name: 'القسم' }));
+    expect(shown()).toHaveLength(OPENING_CARDS.length);
   });
 
-  it('colors each ayah by its role: conditions, then the answer in 81 and 82', () => {
-    renderView();
-    expect(roles(81)).toEqual([...Array(13).fill('condition'), 'answer']);
-    expect(roles(82)).toEqual([...Array(4).fill('condition'), 'answer']);
+  it('opens on the kind in the link', () => {
+    window.history.replaceState(null, '', '/quran/openings?kind=prayer');
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    expect(shown()).toEqual(['wayl', 'prayer-alone']);
   });
 
-  it('leaves the answer of 84 unmarked and labels it disputed', () => {
-    renderView();
-    expect(roles(84)).toEqual([...Array(5).fill('condition'), 'disputed']);
-    expect(region(84).queryAllByText('قراءتنا')).toHaveLength(0);
-    expect(region(82).getAllByText('قراءتنا')).toHaveLength(1);
-    expect(region(81).queryAllByText('قراءتنا')).toHaveLength(0);
+  it('colours the words one surah alone has, and tags a guest with its kind', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const card = within(document.getElementById('ha-mim')!);
+    expect(card.getByText('الخبر')).toBeTruthy();
+    expect(document.querySelectorAll('#ha-mim [data-own]').length).toBeGreaterThan(0);
+    expect(document.querySelectorAll('#saffat [data-own]')).toHaveLength(0);
   });
 
-  it('lists the views on the answer in 84 with a source', () => {
-    renderView();
-    expect(screen.getByRole('list', { name: 'دلالة الألوان' }).children).toHaveLength(3);
-    expect(screen.getByRole('heading', { name: 'الجواب في الانشقاق' })).toBeTruthy();
-    expect(screen.getByText(/المبرد/).textContent).toContain('تقديم وتأخير');
-    expect(screen.getByText(/الكسائي/).textContent).toContain('النحاس');
-    expect(screen.getByRole('list', { name: 'مصدر الخلاف' }).querySelector('a')!.getAttribute('href')).toMatch(/^https:\/\//);
+  it('opens the إذا السماء card on its conditions and their answer', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const card = document.getElementById('idha-sama')!;
+    expect(card.querySelectorAll('[data-role]')).toHaveLength(0);
+    fireEvent.click(within(card).getByRole('button', { name: 'الشرط وجوابه' }));
+    expect(card.querySelectorAll('[data-role="answer"]')).toHaveLength(2);
+    expect(card.querySelectorAll('[data-role="disputed"]')).toHaveLength(1);
+    expect(within(card).getByText('الجواب، قراءتنا')).toBeTruthy();
+    expect(document.getElementById('hamd')!.querySelector('[aria-expanded]')).toBeNull();
   });
 
-  it('marks the tasbih word, its scope and its closing in the first ayah of all seven', () => {
-    renderView();
-    expect(tasbih.map(t => t.surah.number)).toEqual(TASBIH_SURAHS);
-    for (const t of tasbih) {
-      const roles = new Set(t.words.map(w => w.role).filter(Boolean));
-      expect(roles).toEqual(new Set(['verb', 'scope', 'closing']));
-      expect(region(t.surah.number).getAllByText(/./, { selector: 'mark' })).toHaveLength(3);
-    }
-    expect(screen.getByRole('list', { name: 'دلالة ألوان التسبيح' }).children).toHaveLength(3);
-  });
-
-  it('colors the tasbih word alone in the verb role and keeps 59 and 61 identical', () => {
-    for (const t of tasbih) expect(t.words.filter(w => w.role === 'verb')).toHaveLength(1);
-    const text = (n: number) => tasbih.find(t => t.surah.number === n)!.words.map(w => w.text);
-    expect(text(59)).toEqual(text(61));
-    expect(text(59).length - text(57).length).toBe(2);
-    expect(text(59).filter(w => !text(57).includes(w))).toContain('وَمَا');
-  });
-
-  it('highlights a run of words once and keeps the notes free of bare surah numbers', () => {
-    renderView();
-    const closing = region(62).getAllByText(/./, { selector: 'mark[data-role="closing"]' });
-    expect(closing).toHaveLength(1);
-    expect(closing[0].textContent!.split(' ').length).toBeGreaterThan(1);
-    expect(screen.queryByText(/١٧ و٥٧/)).toBeNull();
+  it('links each surah to the mushaf and the page to the openings quiz', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    expect(screen.getByRole('link', { name: 'سورة 106' }).getAttribute('href')).toBe('/quran/read/ayah/106/1');
+    expect(screen.getByRole('link', { name: 'اختبار أوائل السور' }).getAttribute('href')).toBe('/quizzes/openings');
   });
 });

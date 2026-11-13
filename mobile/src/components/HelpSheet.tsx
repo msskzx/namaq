@@ -1,12 +1,13 @@
-import { ScrollView, View } from 'react-native';
+import { Linking, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { OATHS_HELP } from '@shared/quran/oaths';
 import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
 import { VOICE_NAME, voiceColor } from './Iltifat';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings';
 
 /** A coloured sample word and what its colour means. */
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
@@ -18,7 +19,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -41,6 +42,11 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
             {examples().map(view => <Text key={view.key} style={[paragraph, { color: palette.muted, fontSize: 14, lineHeight: 22 }]}>{view.name} {rangeLabel(view)}: {view.source}</Text>)}
           </View>
           <Text style={[paragraph, { color: palette.muted, fontSize: 14 }]}>النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</Text>
+        </> : topic === 'openings' ? <>
+          {OPENINGS_HELP.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
+          <Text style={[paragraph, { fontWeight: '700' }]}>الشرط وجوابه</Text>
+          {CONDITION_NOTES.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
+          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <Text key={source.url} accessibilityRole="link" style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]} onPress={() => Linking.openURL(source.url)}>{source.title}</Text>)}
         </> : topic === 'words' ? <>
           <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
           <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>

@@ -12,7 +12,7 @@ export const QURAN_CARDS: { href: string; desc: Text }[] = [
   { href: '/quran/iltifat', desc: { ar: 'أمثلة لتحوّل الكلام بين الغائب والمتكلم والمخاطب، لكل مثال صورته', en: 'Examples of speech turning between he, we and you, each with its own picture' } },
   { href: '/quran/qiraat', desc: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
   { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بمواضيعها، وما يصل كل سورة بالتي تليها', en: 'The surahs of juz 25 to 30 with their themes, and how each joins the next' } },
-  { href: '/quran/openings', desc: { ar: 'كيف تبدأ السور: الشرط وجوابه، والتسبيح', en: 'How surahs open: conditions and their answers, and tasbih' } },
+  { href: '/quran/openings', desc: { ar: 'أنواع افتتاح السور العشرة، ومقارنة الأوائل المتشابهة', en: 'The ten kinds of surah opening, with look-alike openings side by side' } },
   { href: '/quran/oaths', desc: { ar: 'كل قسم في القرآن وما أُقسم به، من الله ومن غيره', en: 'Every oath in the Quran and what is sworn by, Allah’s and others’' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
   { href: '/quran/prophets', desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
@@ -74,6 +74,7 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
   { href: '/quran/iltifat', label: { ar: 'الالتفات', en: 'Iltifat' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: '', en: '' } },
 ];
 
 /** Utilities (prayer times, qibla, Hijri calendar) shows once the first of them lands, as in the app (SHOW_UTILITIES there). */

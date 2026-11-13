@@ -1,22 +1,22 @@
 import type { Metadata } from 'next';
-import { buildOpenings, buildTasbih } from '@/lib/quran/openings';
-import data from './ayat.json';
-import OpeningsView from './OpeningsView';
+import treeData from '@shared/data/quran/trees.json';
+import surahs from '@shared/data/quran/surahs.json';
+import { CONDITION_SPANS, conditionLines, openingCards } from '@shared/quran/openingKinds';
+import OpeningsView, { type ConditionText } from './OpeningsView';
 
 export const metadata: Metadata = {
-  title: 'افتتاح السور: الشرط وجوابه والتسبيح',
+  title: 'افتتاح السور',
 };
 
+const byKey = new Map((treeData as { ayat: { key: string; words: string[] }[] }).ayat.map(ayah => [ayah.key, ayah.words]));
+const words = (key: string) => byKey.get(key) ?? [];
+
 export default function QuranOpeningsPage() {
+  const names = Object.fromEntries(surahs.map(s => [s.number, s.name]));
+  const conditions: ConditionText = Object.fromEntries(Object.keys(CONDITION_SPANS).map(surah => [surah, conditionLines(Number(surah)).map(line => ({ ...line, words: words(line.key) }))]));
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
-      <header>
-        <h1 className="text-3xl mb-2">افتتاح السور: الشرط وجوابه والتسبيح</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. في التكوير والانفطار والانشقاق كل آيات «إذا» من أولها إلى جوابها، وكل آية بلون دورها. وفي الإسراء والحديد والحشر والصف والجمعة والتغابن والأعلى الآية الأولى، وكل جزء منها بلون دوره.
-        </p>
-      </header>
-      <OpeningsView items={buildOpenings(data)} tasbih={buildTasbih(data)} />
+    <div dir="rtl" className="w-full max-w-3xl mx-auto px-4 py-6 flex flex-col gap-4 text-[var(--home-ink)]">
+      <OpeningsView cards={openingCards(words)} names={names} conditions={conditions} />
     </div>
   );
 }

@@ -18,6 +18,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="iltifat" />
       <Tabs.Screen name="words" />
       <Tabs.Screen name="oaths" />
+      <Tabs.Screen name="openings" />
       <Tabs.Screen name="search" />
     </Tabs>
   );

@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { buildOrder, THEMES } from '@/lib/quran/surahOrder';
 import type { TopicInstance, TopicRecord } from '@/lib/quran/topicTypes';
-import { OPENING_GROUPS } from '@/lib/quran/openings';
+import { openingLike } from '@shared/quran/openingKinds';
 import data from './ayat.json';
 import OrderView, { type JuzRange } from './OrderView';
 
@@ -152,7 +152,8 @@ describe('OrderView', () => {
   it('links the surahs that open alike to the openings page', () => {
     renderView();
     const hrefs = screen.getAllByRole('link').map(a => a.getAttribute('href'));
-    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(OPENING_GROUPS.flat().filter(n => n >= 41).length);
+    expect(hrefs.filter(h => h?.startsWith('/quran/openings?'))).toHaveLength(Array.from({ length: 74 }, (_, i) => i + 41).filter(n => openingLike(n)).length);
+    expect(hrefs).toContain('/quran/openings?kind=condition#idha-sama');
   });
 
   it('labels a step without a source and links the ones with one', () => {

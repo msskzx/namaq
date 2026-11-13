@@ -26,7 +26,6 @@
     "quran:reader": "tsx --env-file=.env scripts/quran/buildReader.ts",
     "quran:mushaf": "tsx scripts/quran/buildMushaf.ts",
     "quran:prophets": "tsx --env-file=.env scripts/quran/buildProphets.ts",
-    "quran:openings": "tsx --env-file=.env scripts/quran/buildOpenings.ts",
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",
     "quran:mutashabih": "tsx scripts/quran/buildMutashabih.ts",
     "quran:compare-pairs": "tsx scripts/quran/buildComparePairs.ts",
