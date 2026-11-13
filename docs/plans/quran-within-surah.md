@@ -1,6 +1,8 @@
 # Relations within a single surah
 
-Status: built as the demo page `/quran/shifts`, since merged into the repetition page, now part of `/quran/compare` (see [quran-repetition-merge.md](quran-repetition-merge.md)), whose redirect keeps the old URL working; the section "Verdict after testing"
+Status (2026-11-13): the iltifat page now keeps its seven examples in `shared/quran/iltifat.ts`, text in `shared/data/quran/iltifat.json`, shown on the website and in the app, each card with its own picture; `curatedShifts.ts` and `src/app/quran/iltifat/ayat.json` below are gone.
+
+Earlier status: built as the demo page `/quran/shifts`, since merged into the repetition page, now part of `/quran/compare` (see [quran-repetition-merge.md](quran-repetition-merge.md)), whose redirect keeps the old URL working; the section "Verdict after testing"
 at the end overrides the ideas above where they differ. No citations yet.
 
 ## What the owner wants

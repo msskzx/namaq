@@ -25,7 +25,7 @@ describe('launch navigation', () => {
     expect(within(nav).queryAllByRole('button')).toHaveLength(0);
   });
 
-  it.each(['/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal'])('puts a back arrow to the Quran hub in the logo\'s place on %s, as in the app', path => {
+  it.each(['/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal', '/quran/iltifat'])('puts a back arrow to the Quran hub in the logo\'s place on %s, as in the app', path => {
     state.path = path;
     render(<NavBar />);
     const back = within(screen.getByRole('navigation')).getByRole('link', { name: 'Back' });

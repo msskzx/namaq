@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Pressable, Share, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Line as SvgLine, Path } from 'react-native-svg';
 import { BookOpen, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
@@ -8,6 +8,8 @@ import { letterDiff, rangeLabel, shareText, type ExampleView, type Line, type St
 import { Text } from '@/components/Text';
 import { readAyah } from '@/lib/openReader';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+
+// The app lays out right to left (direction: 'rtl' in app/_layout.tsx), so a row starts on the right.
 
 /** The website's colours for the three voices (src/app/quran/iltifat/IltifatView.tsx). */
 export const voiceColor = (palette: Palette, voice: Voice) => ({ he: palette.path, we: palette.green, you: palette.root })[voice];
@@ -32,14 +34,14 @@ function Words({ lines, palette }: { lines: Line[]; palette: Palette }) {
 
 function Strip({ steps, palette }: { steps: Step[]; palette: Palette }) {
   return (
-    <View style={{ flexDirection: 'row-reverse', alignItems: 'flex-start' }} accessibilityLabel={steps.map(step => `${step.label}: ${VOICE_NAME[step.voice]}`).join('، ثم ')}>
+    <View accessible style={{ flexDirection: 'row', alignItems: 'flex-start' }} accessibilityLabel={steps.map(step => `${step.label}: ${VOICE_NAME[step.voice]}`).join('، ثم ')}>
       {steps.map((step, i) => {
         const color = voiceColor(palette, step.voice);
         return (
-          <View key={i} style={{ flexDirection: 'row-reverse', alignItems: 'flex-start' }}>
+          <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             {i > 0 && <View style={{ width: 36, height: 1.5, marginTop: 16, backgroundColor: palette.rule }} />}
             <View style={{ alignItems: 'center', minWidth: 56 }}>
-              <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: 5, borderWidth: 1.5, borderColor: color, borderRadius: 999, paddingHorizontal: 12, minHeight: 32 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, borderWidth: 1.5, borderColor: color, borderRadius: 999, paddingHorizontal: 12, minHeight: 32 }}>
                 <Text style={{ color, fontSize: 17 }}>{step.label}</Text>
                 {step.count && <Text style={{ color, fontSize: 9, letterSpacing: 2 }}>{'●'.repeat(step.count)}</Text>}
               </View>
@@ -63,7 +65,7 @@ function Tree({ trunk, leaves, palette }: { trunk: string; leaves: { ayah: numbe
       <Svg width="100%" height={22} viewBox="0 0 320 22" preserveAspectRatio="none">
         <Path d="M160 0 V8 Q160 12 150 12 H90 Q80 12 80 22 M160 8 Q160 12 170 12 H230 Q240 12 240 22" stroke={palette.rule} strokeWidth={1.5} fill="none" vectorEffect="non-scaling-stroke" />
       </Svg>
-      <View style={{ flexDirection: 'row-reverse', gap: 12 }}>
+      <View style={{ flexDirection: 'row', gap: 12 }}>
         {leaves.map((leaf, i) => (
           <View key={leaf.ayah} style={[box, { flex: 1, alignItems: 'center', paddingVertical: 4 }]} accessibilityLabel={`${leaf.who}، ${num(leaf.ayah)}`}>
             <Text style={[quran(palette), { fontSize: 24, lineHeight: 46 }]}>{parts[i][0]}<Text style={{ color: palette.accent }}>{parts[i][1]}</Text>{parts[i][2]}</Text>
@@ -75,23 +77,32 @@ function Tree({ trunk, leaves, palette }: { trunk: string; leaves: { ayah: numbe
   );
 }
 
+/** Android draws a one-sided dashed border solid, so the scene cut is a drawn line. */
+function Dash({ palette }: { palette: Palette }) {
+  return (
+    <Svg style={{ flex: 1 }} height={2}>
+      <SvgLine x1="0" y1="1" x2="100%" y2="1" stroke={palette.rule} strokeWidth={1.5} strokeDasharray="4 3" />
+    </Svg>
+  );
+}
+
 function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
   return (
     <View style={{ gap: 8 }}>
       {turns.map((turn, i) => {
         if ('cut' in turn) return (
           <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <View style={{ flex: 1, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: palette.rule }} />
+            <Dash palette={palette} />
             <Text style={{ color: palette.muted, fontSize: 13 }}>{turn.cut}</Text>
-            <View style={{ flex: 1, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: palette.rule }} />
+            <Dash palette={palette} />
           </View>
         );
         if ('narration' in turn) return <Text key={i} style={[quran(palette), { fontSize: 20, lineHeight: 40, color: palette.muted, textAlign: 'center' }]}><Words lines={turn.narration} palette={palette} /></Text>;
         const color = voiceColor(palette, turn.voice);
         const start = turn.side === 'start';
         return (
-          <View key={i} style={{ maxWidth: '88%', alignSelf: start ? 'flex-end' : 'flex-start', backgroundColor: palette.paper, ...CARD,
-            borderTopRightRadius: start ? 4 : CARD.borderRadius, borderTopLeftRadius: start ? CARD.borderRadius : 4,
+          <View key={i} style={{ maxWidth: '88%', alignSelf: start ? 'flex-start' : 'flex-end', backgroundColor: palette.paper, ...CARD,
+            borderTopStartRadius: start ? 4 : CARD.borderRadius, borderTopEndRadius: start ? CARD.borderRadius : 4,
             borderWidth: turn.said ? 1.5 : 0, borderColor: color, paddingHorizontal: 12, paddingTop: 6, paddingBottom: 2 }}>
             <Text style={{ color, fontSize: 13, textAlign: 'right' }}>{turn.who}</Text>
             <Text style={[quran(palette), { fontSize: 20, lineHeight: 40, textAlign: 'right' }]}><Words lines={turn.lines} palette={palette} /></Text>
@@ -114,7 +125,7 @@ export function IltifatCard({ view, palette }: { view: ExampleView; palette: Pal
       </>}
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
-      <View style={{ flexDirection: 'row-reverse' }}>
+      <View style={{ flexDirection: 'row' }}>
         <Pressable onPress={() => readAyah(`${view.surah}:${view.from}`)} accessibilityRole="button" accessibilityLabel={`افتح ${title} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
           <BookOpen size={21} color={palette.muted} />
         </Pressable>
