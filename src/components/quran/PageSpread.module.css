@@ -28,7 +28,8 @@
 /* compact: one card holding both ayat, a small label over each, as on the compare pair list */
 .single { grid-template-columns: minmax(0, 1fr); }
 .compact { column-gap: 0; row-gap: 0; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); }
-.compact > .page { border: 0; background: transparent; padding: 0.75rem 1rem 1rem; }
+/* The halves are plain parts of the one card: no corners of their own, so the divider runs straight. */
+.compact > .page { border: 0; border-radius: 0; background: transparent; padding: 0.75rem 1rem 1rem; }
 .compact > .page + .page { border-inline-start: 1px solid var(--home-rule); }
 .compact .page header { border: 0; padding: 0; margin-bottom: 0.25rem; }
 .compact .page h3 { font-family: inherit; font-size: 0.875rem; color: var(--home-muted); }
