@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import Experiments, { LIVE } from './Experiments';
+import Experiments, { LIVE, LIVE_INSIDE } from './Experiments';
 import { metadata } from './page';
 import { getAllNavLinks } from '@/lib/siteLinks';
 
@@ -32,6 +32,20 @@ describe('experiments directory', () => {
     const hrefs = [...live.querySelectorAll('a')].map(link => link.getAttribute('href'));
     expect(hrefs).toEqual(LIVE.map(item => item.href));
     for (const href of ['/quran/read', '/quran/branches', '/quran/compare', '/quran/prophets']) expect(hrefs).toContain(href);
+  });
+
+  it('marks every live feature in green, with the features that live inside other pages', () => {
+    render(<Experiments />);
+    const live = screen.getByRole('heading', { level: 2, name: 'Live' }).closest('section')!;
+    expect(live.querySelector('h2')!.className).toContain('--home-green');
+    expect(live.querySelectorAll('li svg[class*="--home-green"]')).toHaveLength(LIVE.length + LIVE_INSIDE.length);
+    expect(screen.getByRole('list', { name: 'Inside the pages' }).textContent).toContain('ten readers');
+    const rest = [...document.querySelectorAll('section')].filter(section => section !== live);
+    for (const section of rest) expect(section.querySelector('svg[class*="--home-green"]')).toBeNull();
+    cleanup();
+    language.current = 'ar';
+    render(<Experiments />);
+    expect(screen.getByRole('list', { name: 'داخل الصفحات' }).children).toHaveLength(LIVE_INSIDE.length);
   });
 
   it('requests exclusion from indexing and link following', () => {
