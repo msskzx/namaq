@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { ChevronLeft, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import LoadingDots from './LoadingDots';
 import VideoFrame, { type FrameHandle } from './VideoFrame';
 import { IconButton } from './Studio';
@@ -13,8 +13,8 @@ import type { Palette } from '@/lib/theme';
 type Video = { data: string; mime: string };
 
 /** Share as video: the tree grows (or a compare card is read along) in a story frame while it is recorded, then goes to the phone's share sheet.
- *  `page` builds another recorder page from the font, in place of the tree's. */
-export default function VideoSheet({ input, page, onClose, palette }: { input?: VideoInput | null; page?: ((font: string) => string) | null; onClose: () => void; palette: Palette }) {
+ *  `page` builds another recorder page from the font, in place of the tree's. A page video in parts names the `part`, and `onNext` records the next one. */
+export default function VideoSheet({ input, page, onClose, palette, part, onNext }: { input?: VideoInput | null; page?: ((font: string) => string) | null; onClose: () => void; palette: Palette; part?: string; onNext?: () => void }) {
   const open = !!input || !!page;
   const insets = useSafeAreaInsets();
   const [font, setFont] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
     <Modal visible={open} animationType="slide" onRequestClose={onClose} statusBarTranslucent>
       <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52 }}>
-          <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>مشاركة كفيديو</Text>
+          <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>{part ? `مشاركة كفيديو · ${part}` : 'مشاركة كفيديو'}</Text>
           <IconButton label="إغلاق" onPress={onClose} Icon={X} color={palette.ink} />
         </View>
         <View style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule }}>
@@ -58,6 +58,11 @@ export default function VideoSheet({ input, page, onClose, palette }: { input?: 
                 style={{ width: 56, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
                 <Send size={24} color={palette.onAccent} />
               </Pressable>
+              {onNext && <Pressable onPress={onNext} accessibilityRole="button" accessibilityLabel="الجزء التالي"
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 48, paddingHorizontal: 12, borderRadius: 24, borderWidth: 1, borderColor: palette.rule }}>
+                <Text style={{ color: palette.ink, fontSize: 15 }}>الجزء التالي</Text>
+                <ChevronLeft size={20} color={palette.ink} />
+              </Pressable>}
             </> : <>
               {font !== null && <IconButton label={paused ? 'متابعة' : 'إيقاف مؤقت'} onPress={toggle} Icon={paused ? Play : Pause} color={palette.ink} />}
               <View accessibilityLabel="جارٍ تجهيز الفيديو"><LoadingDots /></View>
