@@ -12,6 +12,9 @@ export function toTab(href: Href) {
   router.navigate(href);
 }
 
+/** Back from a Quran tool (trees, compare, prophets, Tuhfa) to the Quran hub. */
+export const toQuranHub = () => toTab('/quran');
+
 /** Opens the tab an intent is for, which then takes it. */
 export const openIntent = (intent: Intent) => { setIntent(intent); toTab(TAB_OF[intent.tab]); };
 

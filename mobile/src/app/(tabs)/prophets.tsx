@@ -6,6 +6,7 @@ import { findProphet, PROPHETS, prophetName } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';
 import Sheet from '@/components/Sheet';
 import TopBar from '@/components/TopBar';
+import { toQuranHub } from '@/lib/ways';
 import { readJson, writeJson } from '@/lib/storage';
 import { usePalette } from '@/lib/theme';
 
@@ -26,7 +27,7 @@ export default function ProphetsTab() {
   return (
     <View style={{ flex: 1 }}>
       <ProphetStory key={slug} slug={slug} inTab header={help => (
-        <TopBar hideOnScroll center help={help}>
+        <TopBar back={toQuranHub} hideOnScroll center help={help}>
           <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel={`اختر نبيًّا: ${name}`}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 7 }}>
             <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 15 }}>{name}</Text>

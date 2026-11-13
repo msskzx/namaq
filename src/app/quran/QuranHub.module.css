@@ -1,0 +1,12 @@
+.page { width: 100%; max-width: 48rem; margin-inline: auto; padding: 1rem; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; list-style: none; margin: 0; padding: 0; }
+@media (min-width: 48rem) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; height: 7rem;
+  border-radius: 14px; background: var(--home-card, var(--home-paper)); color: var(--home-ink); font-size: 1.1rem; text-decoration: none;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+.tile svg { color: var(--home-accent, currentColor); }
+.tile:hover { background: color-mix(in srgb, var(--home-card, var(--home-paper)) 85%, var(--home-ink)); }
+.tile:active { transform: scale(0.98); }
+.tile:focus-visible { outline: 2px solid var(--home-accent, currentColor); outline-offset: 2px; }

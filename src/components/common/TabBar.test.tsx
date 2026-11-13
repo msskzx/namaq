@@ -13,13 +13,16 @@ vi.mock('next-themes', () => ({ useTheme: () => ({ theme: 'system', setTheme: st
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.loaded = true; vi.clearAllMocks(); });
 
 describe('TabBar', () => {
-  it.each(['ar', 'en'] as const)('marks the passage comparison tab as selected in %s', language => {
+  it.each(['ar', 'en'] as const)('lights the Quran tab on the Quran hub and each of its tools in %s', language => {
     state.language = language;
-    state.path = '/quran/compare';
-    render(<TabBar />);
-    const link = screen.getByRole('link', { name: language === 'ar' ? 'مقارنة السور' : 'Compare surahs' });
-    expect(link.getAttribute('href')).toBe('/quran/compare');
-    expect(link.getAttribute('aria-current')).toBe('page');
+    for (const path of ['/quran', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal']) {
+      state.path = path;
+      render(<TabBar />);
+      const link = screen.getByRole('link', { name: language === 'ar' ? 'القرآن' : 'Quran' });
+      expect(link.getAttribute('href')).toBe('/quran');
+      expect(link.getAttribute('aria-current')).toBe('page');
+      cleanup();
+    }
   });
 
   it.each(['ar', 'en'] as const)('shows icon-only section tabs with names for screen readers in %s', language => {
@@ -28,7 +31,8 @@ describe('TabBar', () => {
     render(<TabBar />);
     const [logo, ...tabs] = within(screen.getByRole('navigation')).getAllByRole('link');
     expect(logo.getAttribute('href')).toBe('/');
-    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran/branches', '/quran/compare', '/quran/read', '/quran/prophets', '/quizzes']);
+    // The app's five buttons, first on the right; utilities waits for its first tool.
+    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran', '/quran/read', '/', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
     expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('-rotate-90');
@@ -74,7 +78,7 @@ describe('TabBar', () => {
     state.loaded = false;
     render(<TabBar />);
     expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran/branches', '/quran/compare', '/quran/read', '/quran/prophets', '/quizzes']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran', '/quran/read', '/', '/quizzes']);
   });
 
   it('closes the desktop settings panel on a press outside it, but not inside', () => {

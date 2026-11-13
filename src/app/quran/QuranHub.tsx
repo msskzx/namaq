@@ -1,43 +1,39 @@
 'use client';
 
 import React from 'react';
-import ExplorationCard from '@/components/common/ExplorationCard';
-import cards from '@/components/common/ExplorationCard.module.css';
-import styles from '@/components/common/PaperPage.module.css';
+import Link from 'next/link';
+import { ArrowLeftRight, BookMarked, ScrollText, type LucideIcon } from 'lucide-react';
+import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { getAllNavLinks } from '@/lib/siteLinks';
+import { QURAN_TOOLS } from '@/lib/navigation';
+import styles from './QuranHub.module.css';
 
 type Language = 'en' | 'ar';
 
-export const QURAN_CARDS: { href: string; desc: Record<Language, string> }[] = [
-  { href: '/quran/read', desc: { ar: 'اقرأ المصحف صفحةً صفحة برواية حفص', en: 'Read the mushaf page by page, in Hafs' } },
-  { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },
-  { href: '/quran/words', desc: { ar: 'كم مرة ترد كل كلمة، وكلمات متقابلة جنبًا إلى جنب', en: 'How often each word occurs, and opposite words side by side' } },
-  { href: '/quran/branches', desc: { ar: 'آيات تبدأ بالكلمات نفسها، وأين تتفرع', en: 'Ayat that open with the same words, and where they branch apart' } },
-  { href: '/quran/iltifat', desc: { ar: 'تحولات مختارة في الخطاب بين الغائب والمتكلم والمخاطب', en: 'Hand-picked shifts of address between third, first and second person' } },
-  { href: '/quran/qiraat', desc: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
-  { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بمواضيعها، وما يصل كل سورة بالتي تليها', en: 'The surahs of juz 25 to 30 with their themes, and how each joins the next' } },
-  { href: '/quran/openings', desc: { ar: 'كيف تبدأ السور: الشرط وجوابه، والتسبيح', en: 'How surahs open: conditions and their answers, and tasbih' } },
-  { href: '/quran/oaths', desc: { ar: 'أقسام الأجزاء من ٢٥ إلى ٣٠ وما أُقسم به', en: 'The oaths of juz 25 to 30 and what is sworn by' } },
-  { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
-  { href: '/quran/prophets', desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
-];
 
+const ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
+  '/quran/branches': TreeIcon,
+  '/quran/compare': ArrowLeftRight,
+  '/quran/prophets': ScrollText,
+  '/quran/tajwid/tuhfat-al-atfal': BookMarked,
+};
+
+/** The Quran tab, as in the app (owner, 2026-11-13): its tools as tiles, two to a row on a phone. The mushaf has its own tab. */
 export default function QuranHub() {
   const { language } = useLanguage() as { language: Language };
-  const links = getAllNavLinks(language);
   return (
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`${styles.page} w-full max-w-5xl mx-auto p-4`}>
-      <header className={styles.heading}>
-        <h1>{language === 'ar' ? 'القرآن' : 'Quran'}</h1>
-      </header>
-      <ol className={cards.grid}>
-        {QURAN_CARDS.map(({ href, desc }, index) => (
-          <li key={href}>
-            <ExplorationCard url={href} title={links.find(l => l.href === href)?.label ?? href} desc={desc[language]} number={index + 1} language={language} />
-          </li>
-        ))}
-      </ol>
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={styles.page}>
+      <h1 className="sr-only">{language === 'ar' ? 'القرآن' : 'Quran'}</h1>
+      <ul className={styles.grid}>
+        {QURAN_TOOLS.map(({ href, label }) => {
+          const Icon = ICONS[href];
+          return (
+            <li key={href}>
+              <Link href={href} className={styles.tile}><Icon size={30} strokeWidth={1.75} aria-hidden /><span>{label[language]}</span></Link>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

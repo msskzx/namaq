@@ -6,6 +6,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import { toQuranHub } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
@@ -105,7 +106,7 @@ export default function BranchesScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar help={() => setHelp(true)}>
+      <TopBar back={toQuranHub} help={() => setHelp(true)}>
         <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
         <BarButton label={mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => { closeStudio(); setMode(mode === 'tree' ? 'matrix' : 'tree'); }} Icon={mode === 'tree' ? GalleryHorizontal : TreeIcon} palette={palette} />
         <BarButton label="الآيات المحيطة" onPress={() => { closeStudio(); setAround(!around); }} Icon={UnfoldHorizontal} palette={palette} on={around} />
