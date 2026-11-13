@@ -64,11 +64,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - The skills `pr-cycle`, `blind-test-brief`, `review-brief` and
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
   steps and the subagent briefs for this cycle.
-- What work here teaches lives in Distillate (github.com/msskzx/distillate), not in
-  this repo. Search its records before planning and after a first fix fails, and
-  record challenges, obstacles and detours as they happen, with `capture-record`.
-  Write a lesson with `write-lesson`. These Distillate records are a different thing
-  from the historical records under `data/history/`.
+- Reusable engineering findings live in Distillate (github.com/msskzx/distillate),
+  separate from historical records under `data/history/`. Use `capture-record` to
+  consult relevant local records, append actual read/used events to its activity
+  log, and capture worthwhile findings as local MDX files. Capture stops at those
+  file writes. Lessons require an explicit user request; indexing, checks, commits
+  and batch PRs happen only when the user requests publication. Use local files,
+  without invoking Distillate MCP tools.
 
 ## Quiz questions
 
