@@ -43,6 +43,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `page.tsx` may only export `default`, `metadata`, and the other names
   Next recognizes; anything else, like a helper function, fails only here)
   — run it before every PR, not just when something feels risky.
+- A change to the phone app, or to a website page the UI tests visit, also runs
+  `npm run test:ui` (Playwright, about 2.5 minutes; see [e2e/README.md](e2e/README.md)).
+  It is a local check, not a CI job. In a cloud container run `./e2e/cloud-db.sh`
+  first and export the two URLs it prints, or the database pages skip. A flow you add or change gets a test there.
 
 ## Review before a PR
 
