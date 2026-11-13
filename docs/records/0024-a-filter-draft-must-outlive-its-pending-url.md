@@ -1,20 +1,19 @@
-# A filter draft must outlive its pending URL
-
-Rapid filter changes lost a picked value, and a partial fix restored a cleared value from the old address.
-
-Kind: detour · Outcome: solved · Date: 2026-11-04 · Topics: testing, ui-state
-
-**Problem:** A second live filter change is computed from URL state that has not caught up with the first change.
-
-**Fix:** Keep the latest complete draft in a ref, reconcile only matching navigation responses, restore it on browser history changes, and replace all managed URL filter keys from that draft.
-
-**When it applies:** Next.js server-rendered Quran browse results with live multi-select surah and juz filters, React client controls and delayed router replacement.
-
-**Rule it changes:** Race tests should leave router.replace pending while another input changes, including a deletion followed by an addition.
-
-**Evidence:** Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b; GroupFilters.tsx and GroupFilters.test.tsx; Playwright multi-select navigation check.
-
-## What happened
+---
+title: "A filter draft must outlive its pending URL"
+summary: "Rapid filter changes lost a picked value, and a partial fix restored a cleared value from the old address."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A second live filter change is computed from URL state that has not caught up with the first change."
+approach: "Keep the latest complete draft in a ref, reconcile only matching navigation responses, restore it on browser history changes, and replace all managed URL filter keys from that draft."
+outcome: "solved"
+conditions: "Next.js server-rendered Quran browse results with live multi-select surah and juz filters, React client controls and delayed router replacement."
+evidence: "Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b; GroupFilters.tsx and GroupFilters.test.tsx; Playwright multi-select navigation check."
+implication: "Race tests should leave router.replace pending while another input changes, including a deletion followed by an addition."
+date: "2026-11-04"
+topics: ["testing","ui-state"]
+buildsOn: ["distillate/0005-a-mock-router-too-fast-to-show-a-race"]
+---
 
 Picking a second surah before the first route finished could lose the first
 pick. The optimistic state reverted before the server returned the updated

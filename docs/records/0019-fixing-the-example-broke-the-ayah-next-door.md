@@ -1,20 +1,19 @@
-# Fixing the highlight the owner pointed at broke the one next to it
-
-Four highlight rules, each checked only on the ayah named in the message, each moved highlights nobody looked at.
-
-Kind: detour · Outcome: solved · Date: 2026-10-18 · Topics: testing, text-matching
-
-**Problem:** A rule that runs over a whole text was fixed and checked only on the example the owner named, and it moved results nobody looked at.
-
-**Fix:** Four highlight rules each broke a neighbouring ayah; a before/after diff of every mark over all 5,082 matches led to pairing the ayat of equal windows in order, which changed 93 matches and held.
-
-**When it applies:** The similar-ayat view colours a word amber when the other side has it letter for letter; 5,082 matches in similar.json.
-
-**Rule it changes:** Diff a changed data file against the previous one and read a sample, and add stated invariants to src/lib/quran/similar.test.ts as checks over every pair.
-
-**Evidence:** Commits on claude/similar-ayat from "ignore a leading wa or fa" to "link each similar-ayat highlight to its partner"; src/lib/quran/similar.ts (marks, paired)
-
-## What happened
+---
+title: "Fixing the highlight the owner pointed at broke the one next to it"
+summary: "Four highlight rules, each checked only on the ayah named in the message, each moved highlights nobody looked at."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A rule that runs over a whole text was fixed and checked only on the example the owner named, and it moved results nobody looked at."
+approach: "Four highlight rules each broke a neighbouring ayah; a before/after diff of every mark over all 5,082 matches led to pairing the ayat of equal windows in order, which changed 93 matches and held."
+outcome: "solved"
+conditions: "The similar-ayat view colours a word amber when the other side has it letter for letter; 5,082 matches in similar.json."
+evidence: "Commits on claude/similar-ayat from \"ignore a leading wa or fa\" to \"link each similar-ayat highlight to its partner\"; src/lib/quran/similar.ts (marks, paired)"
+implication: "Diff a changed data file against the previous one and read a sample, and add stated invariants to src/lib/quran/similar.test.ts as checks over every pair."
+date: "2026-10-18"
+topics: ["testing","text-matching"]
+lesson: "text-to-evidence/0006-the-ayah-next-door"
+---
 
 The similar-ayat view colours a word amber when the other side has it letter for
 letter. The owner asked why the لا of الحاقة ٣٩ (وما لا تبصرون) was amber: it

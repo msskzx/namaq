@@ -1,22 +1,19 @@
-# A new column breaks every query until someone applies the migration
-
-A new column on a table the app reads breaks every query until the migration is applied.
-
-Kind: obstacle · Outcome: solved · Date: 2026-10-08 · Topics: migrations, data-sync
-
-**Problem:** Adding a column to a table the app reads breaks every query until the migration is applied.
-
-**Fix:** Planned hijriMonth and hijriDay columns on Event and Battle, then put them in a new table catalog_date_parts instead; a reader falls back to nothing when the table is missing.
-
-**When it applies:** Prisma selects every column of a model; the owner applies migrations by hand with prisma migrate deploy and the build has no migrate step.
-
-**Rule it changes:** When the owner applies migrations by hand, add tables, not columns, so a merge never waits on a person.
-
-**Evidence:** docs/plans/time-layer.md ("No column added to a table the app already reads"); prisma/schema.prisma; migration 20261008120000_catalog_date_parts
-
-**Same problem as:** [0009](0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it.md)
-
-## What happened
+---
+title: "A new column breaks every query until someone applies the migration"
+summary: "A new column on a table the app reads breaks every query until the migration is applied."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "obstacle"
+problem: "Adding a column to a table the app reads breaks every query until the migration is applied."
+approach: "Planned hijriMonth and hijriDay columns on Event and Battle, then put them in a new table catalog_date_parts instead; a reader falls back to nothing when the table is missing."
+outcome: "solved"
+conditions: "Prisma selects every column of a model; the owner applies migrations by hand with prisma migrate deploy and the build has no migrate step."
+evidence: "docs/plans/time-layer.md (\"No column added to a table the app already reads\"); prisma/schema.prisma; migration 20261008120000_catalog_date_parts"
+implication: "When the owner applies migrations by hand, add tables, not columns, so a merge never waits on a person."
+date: "2026-10-08"
+topics: ["migrations","data-sync"]
+variantOf: ["namaq/0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it"]
+---
 
 The plan for event months and days started with the obvious design: add `hijriMonth` and
 `hijriDay` to `Event` and `Battle`, like `hijriYear`. The first review of the plan caught

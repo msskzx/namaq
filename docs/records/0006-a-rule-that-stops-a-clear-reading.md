@@ -1,20 +1,18 @@
-# A rule that guards the unclear must not stop a reading that is clear
-
-A rule that guards the unclear must say where it does not apply, or it stops a reading that is clear.
-
-Kind: obstacle · Outcome: solved · Date: 2026-10-05 · Topics: evidence-model, source-extraction, agent-review
-
-**Problem:** A guard rule written for ambiguous input also blocks readings that are clear, and agents apply it to the clear case.
-
-**Fix:** The hadith pilot showed a bare qala labelled "speaker not stated" though the speaker followed from alternation. ADR 0024 restated the rule to say it guards the unclear and a clear reading is recorded directly with basis spans.
-
-**When it applies:** Hadith pilot of Jibril; plan sections 2.5a and 2.13 treated alternation-derived speakers as inferences; sharh pages 114 and 115.
-
-**Rule it changes:** State in a rule what it guards against and where it does not apply, test a new rule on a passage a reader would simply read, and read the source before saying it says nothing.
-
-**Evidence:** src/lib/model/fixtures/jibril/data/history/sources/test-fath/v1/ pages 114-115; docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md
-
-## What happened
+---
+title: "A rule that guards the unclear must not stop a reading that is clear"
+summary: "A rule that guards the unclear must say where it does not apply, or it stops a reading that is clear."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "obstacle"
+problem: "A guard rule written for ambiguous input also blocks readings that are clear, and agents apply it to the clear case."
+approach: "The hadith pilot showed a bare qala labelled \"speaker not stated\" though the speaker followed from alternation. ADR 0024 restated the rule to say it guards the unclear and a clear reading is recorded directly with basis spans."
+outcome: "solved"
+conditions: "Hadith pilot of Jibril; plan sections 2.5a and 2.13 treated alternation-derived speakers as inferences; sharh pages 114 and 115."
+evidence: "src/lib/model/fixtures/jibril/data/history/sources/test-fath/v1/ pages 114-115; docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md"
+implication: "State in a rule what it guards against and where it does not apply, test a new rule on a passage a reader would simply read, and read the source before saying it says nothing."
+date: "2026-10-05"
+topics: ["evidence-model","source-extraction","agent-review"]
+---
 
 The hadith pilot showed the plan's inference rule doing the opposite of its
 purpose. Plan sections 2.5a and 2.13 treated a bare «قَالَ» whose speaker follows

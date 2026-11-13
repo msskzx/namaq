@@ -1,20 +1,18 @@
-# With physics on, two chains became one
-
-A force engine with physics on stacked two chains into one; a layout function drew the known shape.
-
-Kind: detour · Outcome: solved · Date: 2026-10-08 · Topics: graph-layout, graph-ui
-
-**Problem:** A force-directed graph layout overlaps nodes when drawing a known, fixed shape such as a diamond of two chains.
-
-**Fix:** Tried the existing engine with dagMode="td", where wide nodes landed on the same x; a small rank-and-spread function drawing static SVG drew the diamond correctly every time.
-
-**When it applies:** Nodes 200 px wide; the force simulation treats nodes as points; isnad of one hadith (Bukhari one chain, Muslim two chains meeting at Yahya).
-
-**Rule it changes:** Use a layout function to draw a known shape and the force engine for questions about a network; the two views can coexist.
-
-**Evidence:** namaq PR #344, renderings on muslim-jibril before the force version was removed
-
-## What happened
+---
+title: "With physics on, two chains became one"
+summary: "A force engine with physics on stacked two chains into one; a layout function drew the known shape."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A force-directed graph layout overlaps nodes when drawing a known, fixed shape such as a diamond of two chains."
+approach: "Tried the existing engine with dagMode=\"td\", where wide nodes landed on the same x; a small rank-and-spread function drawing static SVG drew the diamond correctly every time."
+outcome: "solved"
+conditions: "Nodes 200 px wide; the force simulation treats nodes as points; isnad of one hadith (Bukhari one chain, Muslim two chains meeting at Yahya)."
+evidence: "namaq PR #344, renderings on muslim-jibril before the force version was removed"
+implication: "Use a layout function to draw a known shape and the force engine for questions about a network; the two views can coexist."
+date: "2026-10-08"
+topics: ["graph-layout","graph-ui"]
+---
 
 The isnad diagram needed to draw one chain (Bukhari's) and a diamond (Muslim's two chains
 meeting at Yahya). The graph engine already in the app has a `dagMode`, so it was tried first.

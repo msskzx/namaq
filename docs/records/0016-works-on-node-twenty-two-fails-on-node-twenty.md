@@ -1,20 +1,18 @@
-# It worked on Node 22 and failed on CI's Node 20
-
-Tests passed on Node 22 and failed on CI's Node 20 because of a built-in Node 21 introduced.
-
-Kind: detour · Outcome: solved · Date: 2026-10-08 · Topics: runtime-versions, build-tooling
-
-**Problem:** Code that passes tests and type checks locally fails on CI because it uses a built-in that the CI runtime's Node version lacks.
-
-**Fix:** Map.groupBy, added in Node 21, failed on CI's Node 20 after passing on the laptop's Node 22.5; replacing it with a plain Map and a loop held.
-
-**When it applies:** Laptop on Node 22.5, .github/workflows pins Node 20, TypeScript lib includes Map.groupBy, tsconfig target ES2017, no engines field in package.json.
-
-**Rule it changes:** Before using a newer built-in, check the Node version the workflow pins, and set an engines field or match Node locally.
-
-**Evidence:** CI log (orderingProblems src/lib/catalog/ordering.ts); workflow node-version: 20
-
-## What happened
+---
+title: "It worked on Node 22 and failed on CI's Node 20"
+summary: "Tests passed on Node 22 and failed on CI's Node 20 because of a built-in Node 21 introduced."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "Code that passes tests and type checks locally fails on CI because it uses a built-in that the CI runtime's Node version lacks."
+approach: "Map.groupBy, added in Node 21, failed on CI's Node 20 after passing on the laptop's Node 22.5; replacing it with a plain Map and a loop held."
+outcome: "solved"
+conditions: "Laptop on Node 22.5, .github/workflows pins Node 20, TypeScript lib includes Map.groupBy, tsconfig target ES2017, no engines field in package.json."
+evidence: "CI log (orderingProblems src/lib/catalog/ordering.ts); workflow node-version: 20"
+implication: "Before using a newer built-in, check the Node version the workflow pins, and set an engines field or match Node locally."
+date: "2026-10-08"
+topics: ["runtime-versions","build-tooling"]
+---
 
 All 2,184 tests passed on the laptop and CI failed on the first run of PR C with
 `TypeError: Map.groupBy is not a function`. The grouping of orderings by source used

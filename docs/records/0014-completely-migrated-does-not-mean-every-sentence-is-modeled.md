@@ -1,22 +1,19 @@
-# "Completely migrated" does not mean every sentence is modeled
-
-The model holds a selection of spans, so a migration is complete when every sentence is accounted for.
-
-Kind: challenge · Outcome: solved · Date: 2026-10-08 · Topics: evidence-model, source-extraction, testing
-
-**Problem:** Defining what a complete migration of a text into a structured model means when the model holds only a selection of spans.
-
-**Fix:** Added model:coverage, which puts every sentence in an entry into covered by a span or not modeled; for al-Zubayr that gave 24 covered and 318 not modeled of 342.
-
-**When it applies:** Siyar entry siyar-v4-3-az-zubayr, pages 41 to 67; model:check validated each span but not what no span covers.
-
-**Rule it changes:** Call a migration complete when every sentence is accounted for, and treat the not-modeled pile as a to-do list.
-
-**Evidence:** npm run model:coverage -- siyar-v4-3-az-zubayr; data/works/siyar-alam-al-nubala/summary.md; src/lib/model/coverage.test.ts
-
-**Builds on:** [0008](0008-prove-a-split-by-putting-it-back-together.md)
-
-## What happened
+---
+title: "\"Completely migrated\" does not mean every sentence is modeled"
+summary: "The model holds a selection of spans, so a migration is complete when every sentence is accounted for."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "Defining what a complete migration of a text into a structured model means when the model holds only a selection of spans."
+approach: "Added model:coverage, which puts every sentence in an entry into covered by a span or not modeled; for al-Zubayr that gave 24 covered and 318 not modeled of 342."
+outcome: "solved"
+conditions: "Siyar entry siyar-v4-3-az-zubayr, pages 41 to 67; model:check validated each span but not what no span covers."
+evidence: "npm run model:coverage -- siyar-v4-3-az-zubayr; data/works/siyar-alam-al-nubala/summary.md; src/lib/model/coverage.test.ts"
+implication: "Call a migration complete when every sentence is accounted for, and treat the not-modeled pile as a to-do list."
+date: "2026-10-08"
+topics: ["evidence-model","source-extraction","testing"]
+buildsOn: ["namaq/0008-prove-a-split-by-putting-it-back-together"]
+---
 
 When the owner asked for al-Zubayr to be migrated completely, the first thing missing was a
 way to say what "completely" would mean. The model holds a selection: 24 spans for names, titles,

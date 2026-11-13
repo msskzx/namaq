@@ -1,20 +1,18 @@
-# The page was keyed by who read it, not by where it sits in the book
-
-A source page belongs to its volume, keyed by (volume, printedPage), with the account demoted to a span.
-
-Kind: challenge · Outcome: solved · Date: 2026-09-30 · Topics: evidence-model, migrations
-
-**Problem:** Choosing the key and owner for stored source pages, so that citations resolve without adding a new subject kind.
-
-**Fix:** Rejected a proposed WORK_SECTION subject kind; keyed a page by (volume, printedPage), made the account a span over pages, and moved pages into a per-source store. The cleaner key held.
-
-**When it applies:** Citations resolve passage to page to volume; the account is not in that chain.
-
-**Rule it changes:** Lead with the key and only then ask what still needs a bearer, instead of offering defensive modelling constructs.
-
-**Evidence:** The design session that rejected WORK_SECTION and moved pages into a per-source store
-
-## What happened
+---
+title: "The page was keyed by who read it, not by where it sits in the book"
+summary: "A source page belongs to its volume, keyed by (volume, printedPage), with the account demoted to a span."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "Choosing the key and owner for stored source pages, so that citations resolve without adding a new subject kind."
+approach: "Rejected a proposed WORK_SECTION subject kind; keyed a page by (volume, printedPage), made the account a span over pages, and moved pages into a per-source store. The cleaner key held."
+outcome: "solved"
+conditions: "Citations resolve passage to page to volume; the account is not in that chain."
+evidence: "The design session that rejected WORK_SECTION and moved pages into a per-source store"
+implication: "Lead with the key and only then ask what still needs a bearer, instead of offering defensive modelling constructs."
+date: "2026-09-30"
+topics: ["evidence-model","migrations"]
+---
 
 Reached the decision that a source page belongs to its volume, keyed by
 `(volume, printedPage)`, with the account demoted to a span. Got there by

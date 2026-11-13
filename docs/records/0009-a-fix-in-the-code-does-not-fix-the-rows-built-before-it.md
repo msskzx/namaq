@@ -1,22 +1,19 @@
-# A fix in the code does not fix the rows built before it
-
-A fix in the code did not change the stored rows built before it, and the page kept serving them.
-
-Kind: detour · Outcome: solved · Date: 2026-10-08 · Topics: data-sync, testing
-
-**Problem:** A code fix has no effect on a page because it reads stored rows built by the old code.
-
-**Fix:** After fixing sceneLines, the page still showed the repeat; the page reads model_units first. Re-running the projection from the checkout holding the change fixed it, after a first run from the main checkout rebuilt the old output.
-
-**When it applies:** Page reads model_units and falls back to files only when the row is missing; the projection command was run against the preview environment.
-
-**Rule it changes:** After changing code that builds a stored view, run the projection from the checkout that holds the change and say so in the PR; consider storing a builder version in each row.
-
-**Evidence:** npm run model:project -- --units --root src/lib/model/fixtures/jibril --apply --env preview; src/lib/model/hadithView.ts
-
-**Same problem as:** [0007](0007-a-page-that-reads-the-repo-at-request-time.md)
-
-## What happened
+---
+title: "A fix in the code does not fix the rows built before it"
+summary: "A fix in the code did not change the stored rows built before it, and the page kept serving them."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A code fix has no effect on a page because it reads stored rows built by the old code."
+approach: "After fixing sceneLines, the page still showed the repeat; the page reads model_units first. Re-running the projection from the checkout holding the change fixed it, after a first run from the main checkout rebuilt the old output."
+outcome: "solved"
+conditions: "Page reads model_units and falls back to files only when the row is missing; the projection command was run against the preview environment."
+evidence: "npm run model:project -- --units --root src/lib/model/fixtures/jibril --apply --env preview; src/lib/model/hadithView.ts"
+implication: "After changing code that builds a stored view, run the projection from the checkout that holds the change and say so in the PR; consider storing a builder version in each row."
+date: "2026-10-08"
+topics: ["data-sync","testing"]
+variantOf: ["namaq/0007-a-page-that-reads-the-repo-at-request-time"]
+---
 
 Scene 1 of both hadith began by repeating the last narrator of the isnad: `عَنْ أَبِي هُرَيْرَةَ،`
 right under a bubble already labelled `أَبِي هُرَيْرَةَ`. The cause was one line in

@@ -1,20 +1,18 @@
-# A test against the shared link list misses a menu that keeps its own
-
-A test against the shared link list missed a menu that keeps its own array of hrefs.
-
-Kind: detour · Outcome: solved · Date: 2026-10-18 · Topics: testing
-
-**Problem:** A test that compares against a shared list misses a second copy of that list kept in a component.
-
-**Fix:** A new page was in getAllNavLinks but not in the desktop menu's own QURAN_SUBMENU_HREFS; adding it and a test looping over every /quran/ link in the shared list expecting each in the submenu held.
-
-**When it applies:** Next.js app navbar with the shared list in src/lib/siteLinks.ts and a separate hrefs array in src/components/common/NavBar.tsx.
-
-**Rule it changes:** When adding a page, grep a sibling page's href and touch every list that names pages, and derive test expectations from the shared list.
-
-**Evidence:** namaq PR #398 diff, fixed in #399; QURAN_SUBMENU_HREFS in src/components/common/NavBar.tsx
-
-## What happened
+---
+title: "A test against the shared link list misses a menu that keeps its own"
+summary: "A test against the shared link list missed a menu that keeps its own array of hrefs."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A test that compares against a shared list misses a second copy of that list kept in a component."
+approach: "A new page was in getAllNavLinks but not in the desktop menu's own QURAN_SUBMENU_HREFS; adding it and a test looping over every /quran/ link in the shared list expecting each in the submenu held."
+outcome: "solved"
+conditions: "Next.js app navbar with the shared list in src/lib/siteLinks.ts and a separate hrefs array in src/components/common/NavBar.tsx."
+evidence: "namaq PR #398 diff, fixed in #399; QURAN_SUBMENU_HREFS in src/components/common/NavBar.tsx"
+implication: "When adding a page, grep a sibling page's href and touch every list that names pages, and derive test expectations from the shared list."
+date: "2026-10-18"
+topics: ["testing"]
+---
 
 `/quran/branches` shipped in #398 with a card on `/quran` and an entry in
 `getAllNavLinks`, and the owner could not find it in the navbar. The desktop Quran

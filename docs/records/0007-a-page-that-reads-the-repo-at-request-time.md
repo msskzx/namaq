@@ -1,20 +1,18 @@
-# A page that reads repo files at request time works on a laptop and breaks on a deploy
-
-A page that reads repo files from disk works on localhost and fails on a deploy that ships only traced files.
-
-Kind: detour · Outcome: solved · Date: 2026-10-05 · Topics: data-sync, build-tooling
-
-**Problem:** A page that reads files from disk at request time works locally but fails on a serverless deploy that ships only traced files.
-
-**Fix:** Read the Jibril fixtures with fs; it failed on Vercel while returning HTTP 200 with an error digest. Rather than add outputFileTracingIncludes, projected the data into the database (model_units), which held.
-
-**When it applies:** Next.js on Vercel, whose tracer ships only statically imported files; preview deployments sat behind Vercel login and returned 302 to outside requests.
-
-**Rule it changes:** A page that works because a file is on disk proves nothing about the deploy; put derived data in the database via a projection, and check the response body, not the status.
-
-**Evidence:** docs/adr/0023-files-are-the-authority-and-both-databases-are-derived.md; docs/plans/hadith-in-the-database.md
-
-## What happened
+---
+title: "A page that reads repo files at request time works on a laptop and breaks on a deploy"
+summary: "A page that reads repo files from disk works on localhost and fails on a deploy that ships only traced files."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A page that reads files from disk at request time works locally but fails on a serverless deploy that ships only traced files."
+approach: "Read the Jibril fixtures with fs; it failed on Vercel while returning HTTP 200 with an error digest. Rather than add outputFileTracingIncludes, projected the data into the database (model_units), which held."
+outcome: "solved"
+conditions: "Next.js on Vercel, whose tracer ships only statically imported files; preview deployments sat behind Vercel login and returned 302 to outside requests."
+evidence: "docs/adr/0023-files-are-the-authority-and-both-databases-are-derived.md; docs/plans/hadith-in-the-database.md"
+implication: "A page that works because a file is on disk proves nothing about the deploy; put derived data in the database via a projection, and check the response body, not the status."
+date: "2026-10-05"
+topics: ["data-sync","build-tooling"]
+---
 
 The `/hadith` pages first read the Jibril fixtures from disk with `fs`. They worked
 on localhost, where the files sit next to the code, and failed on Vercel, which
