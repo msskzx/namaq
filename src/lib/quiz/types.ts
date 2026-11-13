@@ -18,7 +18,7 @@ export type QuestionFamily = (typeof QUESTION_FAMILIES)[number];
 export { QUIZ_TOPICS, CHOICE_TOPICS, QUIZ_LENGTHS, QUIZ_LEAVES, DEFAULT_LEAVES, parseLeaves } from '@shared/quiz/settings';
 export type { QuizTopic, QuizTopics, QuizLength } from '@shared/quiz/settings';
 import type { QuizTopic } from '@shared/quiz/settings';
-export type QuestionTopic = Exclude<QuizTopic, 'PERSON_CIRCLE' | 'BRANCHES' | 'SURAH' | 'RECITE'>;
+export type QuestionTopic = Exclude<QuizTopic, 'PERSON_CIRCLE' | 'BRANCHES' | 'SURAH' | 'RECITE' | 'TUHFA_COMPLETE' | 'TUHFA_NEXT' | 'TUHFA_RULE'>;
 
 export const QUESTION_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'RETIRED'] as const;
 export type QuestionStatus = (typeof QUESTION_STATUSES)[number];

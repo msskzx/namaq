@@ -64,6 +64,15 @@ describe('approved quiz assembly', () => {
     expect(await availableQuestionCount(['SURAH', 'RECITE'], undefined, { from: 30, to: 30 })).toBeGreaterThan(surah);
   });
 
+  it('asks Tuhfat al-Atfal questions without the bank, whatever the juz range', async () => {
+    const topics = ['TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const;
+    expect(await availableQuestionCount([...topics], undefined, { from: 30, to: 30 })).toBe(61 + 60 + 84);
+    const questions = await assembleQuiz({ topics: [...topics], juz: { from: 30, to: 30 }, length: 15, random: Math.random });
+    expect(findMany).not.toHaveBeenCalled();
+    expect(questions).toHaveLength(15);
+    expect(new Set(questions.map((question) => question.family))).toEqual(new Set(topics));
+  });
+
   it('keeps a recited snippet\'s two answers in order', async () => {
     const [question] = await assembleQuiz({ topics: ['RECITE'], length: 5, random: Math.random });
     expect(question.choices.map((choice) => choice.labelArabic)).toEqual(['حفظتها', 'نسيتها']);

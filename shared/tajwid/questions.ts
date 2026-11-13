@@ -1,19 +1,15 @@
 // Tuhfat al-Atfal multiple-choice questions (owner, 2026-11-13): kinds mixed into the shared quiz, not a quiz of their own.
 // Every answer comes from the poem itself: its verses, and the letters it names for each rule.
 import { num } from '../quran/arabicNumber';
+import type { ChoiceQuestion } from '../quiz/choiceKinds';
+import type { Difficulty } from '../quiz/difficulty';
 import { shuffle, type Random } from '../quiz/random';
 import { numberVerses, type NumberedVerse, type Poem } from './poem';
 import poemData from './tuhfat-al-atfal.json';
 
-/** The shared quiz's choice question (shared/quiz/choiceKinds.ts, built by the "which surah" thread). */
-export type TuhfaQuestion = {
-  key: string;
-  family: string;
-  promptArabic: string;
-  choices: { value: string; labelArabic: string }[];
-  correctAnswer: string;
-  note?: { label: string; text: string };
-};
+export const TUHFA_COMPLETE = 'TUHFA_COMPLETE';
+export const TUHFA_NEXT = 'TUHFA_NEXT';
+export const TUHFA_RULE = 'TUHFA_RULE';
 
 export const verses: NumberedVerse[] = numberVerses(poemData as Poem).flatMap(chapter => chapter.verses);
 const verse = (number: number) => verses[number - 1];
@@ -40,51 +36,56 @@ export const LAM_RULES = [
 
 type Rules = readonly { rule: string; letters: string; verse: number }[];
 
-/** Up to three wrong verse halves, nearest verses first so they sound like the right one, then shuffled with it. */
-function halfChoices(right: string, near: number, half: 'first' | 'second', random: Random) {
-  const others = verses
-    .filter(item => item[half] !== right)
-    .sort((a, b) => Math.abs(a.number - near) - Math.abs(b.number - near))
-    .slice(0, 8);
+/**
+ * Three wrong verse halves beside the right one: easy takes them from verses far away, medium and hard from the
+ * verses nearest it (hard the very nearest), which sound most like it.
+ */
+function halfChoices(right: string, near: number, half: 'first' | 'second', difficulty: Difficulty, random: Random) {
+  const away = (item: NumberedVerse) => Math.abs(item.number - near);
+  const pool = verses.filter(item => item[half] !== right).sort((a, b) => away(a) - away(b));
+  const others = difficulty === 'easy' ? pool.filter(item => away(item) > 10) : pool.slice(0, difficulty === 'hard' ? 4 : 8);
   const wrong = shuffle(others, random).slice(0, 3).map(item => item[half]);
   return shuffle([right, ...wrong], random).map(text => ({ value: text, labelArabic: text }));
 }
 
 /** Complete the verse: its first half is shown, its second half picked. */
-export function completeQuestions(random: Random): TuhfaQuestion[] {
+export function completeQuestions(difficulty: Difficulty, random: Random): ChoiceQuestion[] {
   return verses.map(({ number, first, second }) => ({
     key: `tuhfa:complete:${number}`,
-    family: 'TUHFA_COMPLETE',
-    promptArabic: `أَكْمِلِ الْبَيْتَ:\n${first}`,
-    choices: halfChoices(second, number, 'second', random),
+    family: TUHFA_COMPLETE,
+    promptArabic: `أَكْمِلِ الْبَيْتَ: ${first} …`,
+    choices: halfChoices(second, number, 'second', difficulty, random),
     correctAnswer: second,
     note: noteOf(number),
+    evidence: { claimKeys: [] },
   }));
 }
 
 /** The next verse: a verse is shown, the first half of the one after it picked. */
-export function nextQuestions(random: Random): TuhfaQuestion[] {
+export function nextQuestions(difficulty: Difficulty, random: Random): ChoiceQuestion[] {
   return verses.slice(0, -1).map(({ number }) => ({
     key: `tuhfa:next:${number}`,
-    family: 'TUHFA_NEXT',
-    promptArabic: `مَا الْبَيْتُ الَّذِي بَعْدَهُ؟\n${whole(number)}`,
-    choices: halfChoices(verse(number + 1).first, number + 1, 'first', random),
+    family: TUHFA_NEXT,
+    promptArabic: `مَا الْبَيْتُ الَّذِي بَعْدَ: ${whole(number)}؟`,
+    choices: halfChoices(verse(number + 1).first, number + 1, 'first', difficulty, random),
     correctAnswer: verse(number + 1).first,
     note: noteOf(number + 1),
+    evidence: { claimKeys: [] },
   }));
 }
 
-function letterQuestions(name: string, rules: Rules, prompt: (letter: string) => string, random: Random): TuhfaQuestion[] {
+function letterQuestions(name: string, rules: Rules, prompt: (letter: string) => string, random: Random): ChoiceQuestion[] {
   return rules.flatMap(({ rule, letters, verse: number }) => [...letters].map(letter => {
     // Four rules at most: the right one and three others (noon has five).
     const others = shuffle(rules.filter(item => item.rule !== rule), random).slice(0, 3).map(item => item.rule);
     return {
       key: `tuhfa:${name}:${letter}`,
-      family: 'TUHFA_RULE',
+      family: TUHFA_RULE,
       promptArabic: prompt(letter),
       choices: shuffle([rule, ...others], random).map(text => ({ value: text, labelArabic: text })),
       correctAnswer: rule,
       note: noteOf(number),
+      evidence: { claimKeys: [] },
     };
   }));
 }
@@ -92,7 +93,7 @@ function letterQuestions(name: string, rules: Rules, prompt: (letter: string) =>
 const shown = (letter: string) => (letter === 'ء' ? 'الْهَمْزَةُ' : `«${letter}»`);
 
 /** The rule for a letter: after noon sakinah or tanween, after meem sakinah, and after the lam of al. */
-export function ruleQuestions(random: Random): TuhfaQuestion[] {
+export function ruleQuestions(random: Random): ChoiceQuestion[] {
   return [
     ...letterQuestions('noon', NOON_RULES, letter => `نُونٌ سَاكِنَةٌ أَوْ تَنْوِينٌ فِي آخِرِ كَلِمَةٍ، وَأَوَّلُ الَّتِي بَعْدَهَا ${shown(letter)}: مَا حُكْمُهَا؟`, random),
     ...letterQuestions('meem', MEEM_RULES, letter => `مِيمٌ سَاكِنَةٌ بَعْدَهَا ${shown(letter)}: مَا حُكْمُهَا؟`, random),

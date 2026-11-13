@@ -68,6 +68,10 @@ export const DIFFICULTY_NOTES: Partial<Record<QuizTopic, { en: string; ar: strin
     ar: 'في أي سورة، سهل: سور متباعدة. متوسط: سور مجاورة. صعب: آيات لها شبيهة قريبة في سورة أخرى، والسورتان بين الخيارات.',
     en: 'Which surah, easy: surahs far apart. Medium: neighbouring surahs. Hard: ayat with a close look-alike in another surah, both surahs offered.',
   },
+  TUHFA_COMPLETE: {
+    ar: 'التحفة، سهل: خيارات من أبيات بعيدة. صعب: من الأبيات المجاورة.',
+    en: 'Tuhfa verses, easy: choices from verses far away. Hard: from the neighbouring verses.',
+  },
   RECITE: {
     ar: 'سمّع بقية الآية، سهل: تظهر كلمتان زيادة من أولها. صعب: يظهر أقل ما يميّزها.',
     en: 'Recite the rest, easy: two more opening words. Hard: just enough to tell the ayah.',
