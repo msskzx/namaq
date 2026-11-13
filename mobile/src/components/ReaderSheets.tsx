@@ -98,7 +98,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
             </Pressable>}
             {forgotten.length > 0 && <Pressable style={button} accessibilityRole="button"
               onPress={() => go({ page: pageOfAyah(forgotten[0]) ?? 1, key: forgotten[0], mark: false }, 'review')}>
-              <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت ({num(forgotten.length)})</Text>
+              <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت</Text>
             </Pressable>}
           </View>
         )}

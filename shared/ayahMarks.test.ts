@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { clearForgotten, markForgotten, readAyahMarks, recentlyForgotten } from './ayahMarks';
+import { clearForgotten, markForgotten, readAyahMarks, mostForgotten } from './ayahMarks';
 
 describe('ayahMarks', () => {
   beforeEach(() => localStorage.clear());
@@ -21,7 +21,7 @@ describe('ayahMarks', () => {
     expect(Object.keys(readAyahMarks())).toEqual(['2:1']);
   });
 
-  it('lists the last forgotten ayah first', () => {
-    expect(recentlyForgotten({ '2:255': { forgot: 3, at: 10 }, '1:1': { forgot: 1, at: 30 }, '57:3': { forgot: 1, at: 20 } })).toEqual(['1:1', '57:3', '2:255']);
+  it('lists the most forgotten ayah first, then the last forgotten', () => {
+    expect(mostForgotten({ '2:255': { forgot: 3, at: 10 }, '1:1': { forgot: 1, at: 30 }, '57:3': { forgot: 1, at: 20 } })).toEqual(['2:255', '1:1', '57:3']);
   });
 });

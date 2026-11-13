@@ -48,7 +48,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onFo
   }, [onClose, onDismiss]);
   const [surah, number] = ayah.split(':').map(Number);
   const label = ar ? `الآية ${num(number)} من السورة ${num(surah)}` : `Ayah ${surah}:${number}`;
-  const forgotLabel = forgot ? (ar ? `نسيتها مرة أخرى (نسيتها ${num(forgot)} من قبل)` : `Forgot again (${forgot} before)`) : (ar ? 'نسيتها' : 'I forgot it');
+  const forgotLabel = forgot ? (ar ? 'نسيتها مرة أخرى' : 'Forgot again') : (ar ? 'نسيتها' : 'I forgot it');
   const saveLabel = saved ? (ar ? 'أزلها من المحفوظات' : 'Remove from saved') : (ar ? 'احفظ الآية' : 'Save ayah');
   const clearLabel = ar ? 'تذكّرتها، أزلها من المراجعة' : 'I know it now, stop reviewing it';
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
@@ -65,9 +65,9 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onFo
   return (
     <div ref={box} role="dialog" aria-label={label} className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
       <Button size="lg" variant={forgot ? 'primary' : 'muted'} aria-label={forgotLabel} title={forgotLabel} onClick={() => { onForgot(); onClose(); }}>
-        <LightbulbOff aria-hidden />{forgot > 0 && <span className="text-sm tabular-nums">{ar ? num(forgot) : forgot}</span>}
+        <LightbulbOff aria-hidden />
       </Button>
-      {forgot > 0 && <Button size="lg" variant="muted" aria-label={clearLabel} title={clearLabel} onClick={() => { onClear(); onClose(); }}><Check aria-hidden /></Button>}
+      {forgot > 0 && <Button size="lg" variant="muted" aria-label={clearLabel} title={clearLabel} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Button>}
       <Button size="lg" variant={saved ? 'primary' : 'muted'} aria-label={saveLabel} title={saveLabel} aria-pressed={saved} onClick={() => { onSave(); onClose(); }}>
         <Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} />
       </Button>

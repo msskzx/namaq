@@ -3,7 +3,6 @@
 import { Bookmark, EyeOff, Feather, Library, LightbulbOff, ScrollText, Users } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { isCompareBookmark } from '@shared/compareBookmarks';
-import { num } from '@shared/quran/arabicNumber';
 import type { HomepageData } from '@/lib/homepageData';
 import styles from './Homepage.module.css';
 import HomeQuranWidget from './HomeQuranWidget';
@@ -16,7 +15,7 @@ export const SHELF = 5;
 export default function Homepage({ data }: { data: HomepageData }) {
   const { ar, saved, forgotten, recent, names, savedCard, forgottenCard, menu } = useHomeCards(data, SHELF);
   const trees = saved.filter(item => !isCompareBookmark(item) && !item.id.startsWith('ayah:'));
-  const reviewLabel = ar ? `راجع ما نسيت (${num(forgotten.length)})` : `Review what you forgot (${forgotten.length})`;
+  const reviewLabel = ar ? 'راجع ما نسيت' : 'Review what you forgot';
   return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
     <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
     {(data.tour || data.tourStory || data.tourRecite) && <Tour tour={data.tour} story={data.tourStory} recite={data.tourRecite} names={Object.fromEntries(names)} />}
@@ -27,7 +26,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
       <div className={styles.sectionHeading}>
         <h2 id="forgotten-title"><LightbulbOff size={18} aria-hidden />{ar ? 'ما نسيته' : 'Forgotten'}</h2>
         <div className="flex items-center gap-2">
-          <Button href={reviewHref(forgotten[0])} aria-label={reviewLabel} title={reviewLabel}><EyeOff size={18} aria-hidden /><span className="tabular-nums">{ar ? num(forgotten.length) : forgotten.length}</span></Button>
+          <Button href={reviewHref(forgotten[0])} aria-label={reviewLabel} title={reviewLabel}><EyeOff size={18} aria-hidden /><span>{ar ? 'راجع' : 'Review'}</span></Button>
           {recent.length > SHELF && <SeeAll tab="forgotten" />}
         </div>
       </div>

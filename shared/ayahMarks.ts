@@ -38,9 +38,9 @@ export function clearForgotten(key: string) {
   write(rest);
 }
 
-/** The forgotten ayat, the last one forgotten first, as the homepage shows them. */
-export const recentlyForgotten = (marks: AyahMarks) =>
-  Object.keys(marks).sort((a, b) => marks[b].at - marks[a].at);
+/** The forgotten ayat as the homepage shows them: the most often forgotten first, then the last one forgotten. */
+export const mostForgotten = (marks: AyahMarks) =>
+  Object.keys(marks).sort((a, b) => marks[b].forgot - marks[a].forgot || marks[b].at - marks[a].at);
 
 export const subscribeAyahMarks = store.subscribe;
 export const serverAyahMarks = () => NONE;

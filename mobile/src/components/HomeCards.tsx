@@ -3,7 +3,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { clearForgotten, readAyahMarks, recentlyForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
+import { clearForgotten, readAyahMarks, mostForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
@@ -80,7 +80,7 @@ export function useHomeCards(palette: Palette) {
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
   const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
-  const forgottenCards = useMemo(() => recentlyForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
+  const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
   /** Every other view of a card's ayat; compare across several surahs is picked next. */
   const wayItems = (ways: CardWay[]): MenuItem[] => ways.map(way => ({
     id: way.to, ...WAYS[way.to],
@@ -109,4 +109,4 @@ export function useHomeCards(palette: Palette) {
 
 /** The review button: the reader in recite mode on the first forgotten ayah in mushaf order, stepping through the rest. */
 export const reviewForgotten = (forgotten: string[]) => openIntent({ tab: 'read', at: forgotten[0], recite: true, review: true });
-export const reviewLabel = (count: number) => `راجع ما نسيت (${num(count)})`;
+export const REVIEW_LABEL = 'راجع ما نسيت';

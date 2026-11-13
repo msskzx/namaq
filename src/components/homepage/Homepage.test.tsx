@@ -102,16 +102,16 @@ describe('release homepage', () => {
     expect(screen.queryByRole('button', { name: /الكتاب والحكمة/ })).toBeNull();
   });
 
-  it('shows the forgotten ayat, the last forgotten first, each with its words and its icons', async () => {
+  it('shows the forgotten ayat, the most forgotten first, each with its words and its icons', async () => {
     quranContexts.mockResolvedValue([{ ayah: { key: '2:255', words: ['الله', 'لا', 'إله'] } }, { ayah: { key: '3:164', words: ['لقد', 'من'] } }]);
-    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 2, at: 5 }, '3:164': { forgot: 1, at: 9 } }));
+    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 }, '3:164': { forgot: 1, at: 9 } }));
     render(<Homepage data={data} />);
     const forgotten = screen.getByRole('region', { name: 'ما نسيته' });
     const cards = within(forgotten).getAllByRole('button');
     expect(cards[0].textContent).toMatch(/^آل عمران ١٦٤/);
     expect(cards[1].textContent).toMatch(/^البقرة ٢٥٥/);
     await waitFor(() => expect(cards[1].textContent).toContain('الله لا إله'));
-    expect(within(forgotten).getByRole('link', { name: 'راجع ما نسيت (٢)' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
+    expect(within(forgotten).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
     expect(within(screen.getByRole('region', { name: 'اختبارات القرآن' })).queryByRole('link', { name: /راجع ما نسيت/ })).toBeNull();
     fireEvent.click(cards[0]);
     const menu = screen.getByRole('dialog', { name: 'آية نسيتها' });

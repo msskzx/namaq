@@ -174,7 +174,7 @@ export default function MushafPage({
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
-                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, marked(group.surah, end) ? styles.endMarked : '', !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
+                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
                               {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                               {endHidden(end) ? EMPTY_END : num(end)}
                             </span>

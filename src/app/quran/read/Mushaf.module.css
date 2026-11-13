@@ -93,11 +93,6 @@
 
 .marked { color: var(--home-accent); }
 
-.endMarked {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--home-accent) 18%, transparent);
-}
-
 .titleRow {
   display: flex;
   align-self: stretch;
