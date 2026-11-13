@@ -20,7 +20,7 @@ describe('experiments directory', () => {
       if (href === '/people/prophet-muhammad') continue;
       expect(hrefs, href).toContain(href);
     }
-    for (const href of ['/quizzes/party', '/quizzes/questions', '/library?tab=saved', '/library?tab=forgotten', '/quran/read/recite', '/quran/prophets/muhammad']) expect(hrefs).toContain(href);
+    for (const href of ['/quizzes/party', '/quizzes/questions', '/library?tab=saved', '/library?tab=forgotten', '/library?tab=notes', '/quran/read/recite', '/quran/prophets/muhammad', '/quran/words', '/search', '/utilities']) expect(hrefs).toContain(href);
     expect(hrefs).not.toContain('/experiments');
     // A live page leaves the experiments list, so it is listed once.
     for (const { href } of LIVE) expect(hrefs.filter(h => h === href), href).toHaveLength(1);
