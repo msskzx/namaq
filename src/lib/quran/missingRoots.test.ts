@@ -60,6 +60,28 @@ describe('rootGaps', () => {
   });
 });
 
+describe('rootGaps pairing', () => {
+  it('reports the pairing a range card lines up over an earlier word with the same root', () => {
+    const card: PairCard = {
+      id: '7:116|26:35-36',
+      pairs: [{ id: '26:36|7:116' }],
+      sides: [{ surah: 26, ayah: 35, ayat: [ayah('26:35'), ayah('26:36')] }, { surah: 7, ayah: 116, ayat: [ayah('7:116')] }],
+    };
+    const qwl = rootGaps(card, info, [7, 26]).find(gap => gap.root === 'qwl')!;
+    expect([qwl.a.key, qwl.where]).toEqual(['26:36', 'same pair']);
+  });
+
+  it('keeps a one-to-many card with its partners on the first side in card order', () => {
+    const card: PairCard = {
+      id: '26:35,36|7:116',
+      pairs: [{ id: '26:35|7:116' }, { id: '26:36|7:116' }],
+      many: { side: 0, options: [{ id: '26:35|7:116', ayah: ayah('26:35'), shared: ayah('7:116') }, { id: '26:36|7:116', ayah: ayah('26:36'), shared: ayah('7:116') }] },
+      sides: [{ surah: 26, ayah: 35, ayat: [ayah('26:35')] }, { surah: 7, ayah: 116, ayat: [ayah('7:116')] }],
+    };
+    expect(rootGaps(card, info, [7, 26]).every(gap => gap.a.key.startsWith('26:') && gap.b.key === '7:116')).toBe(true);
+  });
+});
+
 describe('rootTable', () => {
   it('puts the rarest root first and writes one Markdown row per gap', () => {
     const card: PairCard = { id: '7:116|26:35', sides: [{ surah: 7, ayah: 116, ayat: [ayah('7:116')] }, { surah: 26, ayah: 35, ayat: [ayah('26:35')] }] };

@@ -41,24 +41,21 @@ function sidePairs(card: PairCard): [Side, Side][] {
 
 /**
  * Words that share a root across a card's two sides while neither carries a mark: links the alignment did not make. Each root
- * counts once per card, from its first unmarked word on the first side to a partner in the same pair or row when there is one.
+ * counts once per card (once per option of a one-to-many card): a pairing the card lines up (same pair or row) when there is one,
+ * since that missing link is the alignment's and not the layout's, else the root's first unmarked word on each side.
  */
 export function rootGaps(card: PairCard, info: Map<string, BranchAyah>, page: [number, number]): RootGap[] {
   const href = `/quran/compare?a=${page[0]}&b=${page[1]}#${compareAnchor(card.sides[0], card.sides[1])}`;
+  const lemma = (w: GapWord) => info.get(w.key)?.lemmas?.[w.index];
   return sidePairs(card).flatMap(([a, b]) => {
     const later = unmarked(b, info);
-    const seen = new Set<string>();
-    return unmarked(a, info).flatMap(word => {
-      const partners = later.filter(other => other.root === word.root);
-      // A partner the card lines up with this word's ayah comes first: that missing link is the alignment's, not the layout's.
-      const partner = partners.find(other => ['same pair', 'same row'].includes(whereOf(card, a, b, word.key, other.key))) ?? partners[0];
-      if (seen.has(word.root) || !partner) return [];
-      seen.add(word.root);
-      const lemma = (w: GapWord) => info.get(w.key)?.lemmas?.[w.index];
+    const byRoot = new Map<string, RootGap[]>();
+    for (const { root, ...word } of unmarked(a, info)) for (const { key, index, word: text } of later.filter(other => other.root === root)) {
+      const partner = { key, index, word: text };
       const same = normalizeWord(word.word) === normalizeWord(partner.word) ? 'letters' : lemma(word) && lemma(word) === lemma(partner) ? 'lemma' : 'root';
-      const strip = ({ key, index, word: text }: GapWord) => ({ key, index, word: text });
-      return [{ root: word.root, href, a: strip(word), b: strip(partner), same, where: whereOf(card, a, b, word.key, partner.key) }];
-    });
+      byRoot.set(root, [...(byRoot.get(root) ?? []), { root, href, a: word, b: partner, same, where: whereOf(card, a, b, word.key, partner.key) }]);
+    }
+    return [...byRoot.values()].map(gaps => gaps.find(gap => gap.where === 'same pair' || gap.where === 'same row') ?? gaps[0]);
   });
 }
 
