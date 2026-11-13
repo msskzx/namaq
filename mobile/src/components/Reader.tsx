@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -138,7 +138,9 @@ export default function Reader() {
     const at = asked.indexOf(current);
     if (at > 0) setCurrent(asked[at - 1]);
   };
-  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed, current, onBox: at => { setCurrent(at); input.current?.focus(); } } : null;
+  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed, current, onBox: at => { setCurrent(at); input.current?.focus(); }, onActive: (y, h) => follow.current(y, h) } : null;
+  // Scrolls the box being written into the part of the screen above the pill and keyboard.
+  const follow = useRef((_y: number, _h: number) => {});
 
   // The app's bars step aside while reading; a tap brings them back.
   useEffect(() => {
@@ -268,10 +270,21 @@ export default function Reader() {
   }, [mode]);
 
   // While reciting the page ends above the recite pill, so it never covers a line.
-  // While writing, the page also ends above the keyboard, so the boxes stay in sight.
+  // While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no squeezed page),
+  // following the box being written.
   const pillBottom = keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom);
-  const pageInsets = { top: insets.top, bottom: reciting ? (keyboard ? pillBottom : tabBarBottom(insets.bottom)) + RECITE_BAR + 8 : insets.bottom };
+  const pageInsets = { top: insets.top, bottom: reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : insets.bottom };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
+  const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
+  const scrolled = useRef(0);
+  useEffect(() => { if (!keyboard) { scroller.current?.scrollTo({ y: 0, animated: false }); scrolled.current = 0; } }, [keyboard]);
+  follow.current = (y, h) => {
+    if (!keyboard || !size) return;
+    const top = insets.top + 8;
+    const bottom = size.height - pillBottom - RECITE_BAR - 12;
+    if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
+    else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
+  };
   const render = (at: number, width: number, pageHeight: number) => {
     const atModel = modelOf(at);
     return (
@@ -292,11 +305,13 @@ export default function Reader() {
   const barWidth = buttons * 48 + 12;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-      <View style={{ paddingTop: pageInsets.top, paddingBottom: pageInsets.bottom }}>
+      <ScrollView ref={scroller} scrollEnabled={!!keyboard} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
+        onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; }}
+        style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
           <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} />
         )}
-      </View>
+      </ScrollView>
       {tools && (
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
           <TopBar>
