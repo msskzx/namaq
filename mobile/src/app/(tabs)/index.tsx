@@ -1,12 +1,8 @@
-import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router, type Href } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, Feather, GalleryHorizontal, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
-import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { clearForgotten, readAyahMarks, recentlyForgotten, subscribeAyahMarks } from '@shared/ayahMarks';
-import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
-import { forgottenOrder } from '@shared/quran/recite';
+import { ArrowLeftRight, Bookmark, BookOpen, ChevronLeft, EyeOff, Feather, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { searchSurahs } from '@shared/quran/surahSearch';
 import { num } from '@shared/quran/arabicNumber';
@@ -15,28 +11,16 @@ import { useTabBarSpace } from '@/components/tabBarSpace';
 import TreeIcon from '@/components/TreeIcon';
 import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
-import { ayahText, surahs, surahNames } from '@/lib/mushaf';
-import { listedPairs, type CompareTarget } from '@/lib/compare';
-import { cardWays, forgottenCard, forgottenWays, savedCard, shelfText, shownBookmarks, type CardWay, type SavedCard } from '@/lib/home';
-import CardMenu, { type MenuAt, type MenuItem } from '@/components/CardMenu';
-import CompareTargetsSheet from '@/components/CompareTargetsSheet';
-import { followWay } from '@/lib/ways';
-import { setIntent, type Intent } from '@/lib/intent';
+import { surahs } from '@/lib/mushaf';
+import { listedPairs } from '@/lib/compare';
+import { FORGOTTEN_LABEL, reviewForgotten, reviewLabel, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
+import { openIntent as go } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
 
-const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
-const WAYS: Record<CardWay['to'], { label: string; Icon: (props: LucideProps) => React.ReactNode }> = {
-  mushaf: { label: 'في المصحف', Icon: BookOpen },
-  tree: { label: 'الشجرة', Icon: TreeIcon },
-  matrix: { label: 'المصفوفة', Icon: GalleryHorizontal },
-  trees: { label: 'الأشجار التي فيها الآية', Icon: TreeIcon },
-  compare: { label: 'في المقارنة', Icon: ArrowLeftRight },
-};
-const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/compare', read: '/read' };
-
-const go = (intent: Intent) => { setIntent(intent); router.navigate(TAB_OF[intent.tab]); };
+/** A home shelf shows the latest few cards; «عرض الكل» opens the full list. */
+const SHELF = 5;
 
 type Section = { number: number; name: string; nameTransliterated?: string | null };
 const comparable = new Set(listedPairs.flatMap(pair => [pair.a, pair.b]));
@@ -120,72 +104,15 @@ function QuranPicker({ palette }: { palette: Palette }) {
   );
 }
 
-function ShelfCard({ card, palette, onPress, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
-  card: SavedCard; palette: Palette; onPress: (at: MenuAt) => void; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
-}) {
-  const box = useRef<ComponentRef<typeof View>>(null);
-  // A screen reader's tap often carries no point: the menu then opens over the card's top.
-  const open = ({ pageX, pageY }: { pageX: number; pageY: number }) => {
-    if (pageX || pageY) onPress({ x: pageX, y: pageY });
-    else box.current?.measureInWindow((x: number, y: number, width: number) => onPress({ x: x + width / 2, y: y + 24 }));
-  };
-  return (
-    <Pressable ref={box} onPress={event => open(event.nativeEvent)} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
-      style={({ pressed }) => ({ width: 250, minHeight: 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, borderRadius: 6, backgroundColor: palette.paperDeep, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
-        <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
-        {card.references.length > 0 && (
-          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', columnGap: 12, rowGap: 2 }}>
-            {card.references.map(reference => (
-              <Text key={reference.surah} style={{ color: palette.muted, fontSize: 13, lineHeight: 20 }}>
-                {surahNames[reference.surah]} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
-              </Text>
-            ))}
-          </View>
-        )}
-      </View>
-      <Text numberOfLines={5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>
-    </Pressable>
-  );
-}
-
-/** A row of cards, the first on the right. Inverted in a left-to-right box, as the compare pager does, so it starts on the right on every platform. */
-function Shelf({ cards, render }: { cards: SavedCard[]; render: (card: SavedCard, index: number) => React.ReactNode }) {
-  return (
-    <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
-      <FlatList data={cards} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={card => card.id}
-        contentContainerStyle={{ gap: 12, paddingVertical: 4, paddingHorizontal: 16 }}
-        renderItem={({ item, index }) => <View style={{ direction: 'rtl' }}>{render(item, index)}</View>} />
-    </View>
-  );
+function SeeAll({ tab }: { tab: 'saved' | 'forgotten' }) {
+  return <Button Icon={ChevronLeft} accessibilityLabel="عرض الكل" onPress={() => router.push({ pathname: '/library', params: { tab } })} />;
 }
 
 /** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
 export default function HomeScreen() {
   const palette = usePalette();
-  const allBookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const bookmarks = useMemo(() => shownBookmarks(allBookmarks), [allBookmarks]);
-  const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
-  const [menu, setMenu] = useState<{ at: MenuAt; label: string; items: MenuItem[] } | null>(null);
-  const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
+  const { cards, forgotten, forgottenCards, savedMenu, forgottenMenu, menus } = useHomeCards(palette);
   const hasTrees = cards.some(card => card.kind === 'tree' && card.open);
-  const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
-  const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
-  const forgottenCards = useMemo(() => recentlyForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
-  /** Every other view of a card's ayat; compare across several surahs is picked next. */
-  const wayItems = (ways: CardWay[]): MenuItem[] => ways.map(way => ({
-    id: way.to, ...WAYS[way.to],
-    onPress: () => (way.to === 'compare' && way.targets.length > 1 ? setChoosing({ way, targets: way.targets }) : followWay(way)),
-  }));
-  const savedMenu = (item: Saved, at: MenuAt) => setMenu({ at, label: BOOKMARK_KIND_LABEL[savedCard(item).kind].ar, items: [
-    ...wayItems(cardWays(item)),
-    { id: 'saved', Icon: Bookmark, label: 'أزلها من المحفوظات', on: true, onPress: () => toggleBookmark(item) },
-  ] });
-  const forgottenMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: 'آية نسيتها', items: [
-    { id: 'recite', Icon: EyeOff, label: 'سمّع من هذه الآية', onPress: () => card.open && go(card.open) },
-    ...wayItems(forgottenWays(card.id)),
-    { id: 'clear', Icon: Check, label: 'تذكّرتها، أزلها من المراجعة', onPress: () => clearForgotten(card.id) },
-  ] });
   const push = (href: Href) => router.push(href);
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
@@ -199,19 +126,24 @@ export default function HomeScreen() {
         {forgottenCards.length > 0 && (
           <View style={{ gap: 10 }}>
             <Heading Icon={LightbulbOff} title="ما نسيته" palette={palette}>
-              <Button Icon={EyeOff} label={num(forgotten.length)} accessibilityLabel={`راجع ما نسيت (${num(forgotten.length)})`}
-                onPress={() => go({ tab: 'read', at: forgotten[0], recite: true, review: true })} />
+              <Row>
+                <Button Icon={EyeOff} label={num(forgotten.length)} accessibilityLabel={reviewLabel(forgotten.length)} onPress={() => reviewForgotten(forgotten)} />
+                {forgottenCards.length > SHELF && <SeeAll tab="forgotten" />}
+              </Row>
             </Heading>
-            <Shelf cards={forgottenCards} render={card => <ShelfCard card={card} palette={palette} Icon={LightbulbOff} label="آية نسيتها" onPress={at => forgottenMenu(card, at)} />} />
+            <Shelf cards={forgottenCards.slice(0, SHELF)} render={card => <ShelfCard card={card} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(card, at)} />} />
           </View>
         )}
 
         <View style={{ gap: 10 }}>
           <Heading Icon={Bookmark} title="المحفوظات" palette={palette}>
-            {hasTrees && <Button Icon={Library} accessibilityLabel="افتح المحفوظات" onPress={() => go({ tab: 'branches', saved: true })} />}
+            <Row>
+              {hasTrees && <Button Icon={Library} accessibilityLabel="افتح المحفوظات" onPress={() => go({ tab: 'branches', saved: true })} />}
+              {cards.length > SHELF && <SeeAll tab="saved" />}
+            </Row>
           </Heading>
           {cards.length ? (
-            <Shelf cards={cards} render={(card, index) => <ShelfCard card={card} palette={palette} onPress={at => savedMenu(bookmarks[index], at)} />} />
+            <Shelf cards={cards.slice(0, SHELF)} render={card => <ShelfCard card={card} palette={palette} onPress={at => savedMenu(card, at)} />} />
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
               <Text style={{ color: palette.muted, fontSize: 15 }}>احفظ شجرة أو بطاقة مقارنة أو آية بزر</Text>
@@ -236,9 +168,7 @@ export default function HomeScreen() {
           </Row>
         </View>
       </ScrollView>
-      <CardMenu at={menu?.at ?? null} items={menu?.items ?? []} label={menu?.label ?? ''} onClose={() => setMenu(null)} palette={palette} />
-      <CompareTargetsSheet targets={choosing?.targets ?? null} palette={palette}
-        onPick={target => { const way = choosing!.way; setChoosing(null); followWay(way, target); }} onClose={() => setChoosing(null)} />
+      {menus}
       {!seen && <Tour palette={palette} onDone={() => setSeen(true)} />}
     </View>
   );
