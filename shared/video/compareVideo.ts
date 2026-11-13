@@ -13,14 +13,13 @@ export type VideoCard = { options: [VideoSide, VideoSide][]; steps: ReadStep[]; 
 export type CompareLook = { paper: string; ink: string; muted: string; rule: string; accent: string; root: string; highlight: string; onHighlight: string; font: string; logo: string };
 /**
  * What the compare recorder needs. One card with no frames is the studio's video of that card;
- * several cards get a title frame (`title`, `subtitle`, `part`), a counter on each card, and an end frame with `link` and `next`.
+ * several cards get a title frame (`title`, `subtitle`, `part`), a counter on each card, and an end frame with the emblem and `next`.
  */
 export type CompareVideoInput = {
   title: string;
   subtitle?: string;
   part?: string;
   next?: string;
-  link: string;
   counters?: string[];
   cards: VideoCard[];
   timeline: Segment[];
@@ -71,13 +70,13 @@ export const ENGLISH: FrameWords = { part: (at, of) => `Part ${at} of ${of}`, ne
 
 /**
  * The picked cards of a page as videos of about 3 minutes or less, in order: each part opens on the pair's name
- * (and «الجزء ١ من ٣» when there are several) and ends on the page's link (and where the next part goes on).
+ * (and «الجزء ١ من ٣» when there are several) and ends on the emblem (and where the next part goes on).
  */
-export function pageVideoInputs({ title, subtitle, link, cards, look, words = ARABIC }: { title: string; subtitle?: string; link: string; cards: VideoCard[]; look: CompareLook; words?: FrameWords }): CompareVideoInput[] {
+export function pageVideoInputs({ title, subtitle, cards, look, words = ARABIC }: { title: string; subtitle?: string; cards: VideoCard[]; look: CompareLook; words?: FrameWords }): CompareVideoInput[] {
   const parts = videoParts(cards.map(card => card.ends));
   const several = parts.length > 1;
   return parts.map((part, i) => compareVideoInput({
-    title, link, look,
+    title, look,
     ...(subtitle ? { subtitle } : {}),
     ...(several ? { part: words.part(i + 1, parts.length) } : {}),
     ...(i < parts.length - 1 ? { next: words.next(i + 2) } : {}),
@@ -191,7 +190,6 @@ function header(card) {
   text(INPUT.title, 270, 44, look.ink);
   if (many && INPUT.counters) text(INPUT.counters[card], 330, 30, look.muted);
 }
-function footer() { text('namaq.vercel.app', HEIGHT - 70, 32, look.muted, false); }
 
 function titleFrame(alpha) {
   ctx.globalAlpha = alpha;
@@ -204,9 +202,7 @@ function titleFrame(alpha) {
 function endFrame(alpha) {
   ctx.globalAlpha = alpha;
   emblem(260, 560);
-  text('namaq.vercel.app', 970, 52, look.ink, false);
-  text(INPUT.link, 1040, 30, look.muted, false);
-  if (INPUT.next) text(INPUT.next, 1160, 40, look.accent);
+  if (INPUT.next) text(INPUT.next, 1000, 40, look.accent);
   ctx.globalAlpha = 1;
 }
 
@@ -226,13 +222,11 @@ function draw(t) {
     // Forward in Arabic: the card read moves off to the right and the next comes in from the left, as swiping in the app.
     drawCard(segment.from, undefined, from.steps.length, true, p * WIDTH);
     drawCard(segment.to, undefined, 0, false, (p - 1) * WIDTH);
-    footer();
     return { card: segment.to, at: 0, total: 1 };
   }
   var card = INPUT.cards[segment.card], at = stepIndex(segment.ends, local), done = at >= card.steps.length;
   header(segment.card);
   drawCard(segment.card, done ? undefined : card.steps[at], at, done, 0);
-  footer();
   return { card: segment.card, at: at, total: card.steps.length };
 }
 

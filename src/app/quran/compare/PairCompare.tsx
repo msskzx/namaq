@@ -581,7 +581,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
           <div className="min-w-0 flex-1">{index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}</div>
           {shown.length > 0 && canShare && <Button size="icon" variant="muted" onClick={() => setPageVideo(true)} aria-label={pageVideoLabel} title={pageVideoLabel}><Clapperboard size={18} aria-hidden /></Button>}
         </div>
-        {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} link={`namaq.vercel.app${pairHref(lead, other, false)}`} label={sideNamer(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
+        {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
