@@ -2,43 +2,60 @@
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { buildOaths, OATHS } from '@/lib/quran/oaths';
-import data from './ayat.json';
+import { ALLAH_OATHS, OTHER_OATHS, buildOaths } from '@shared/quran/oaths';
+import data from '@shared/data/quran/oaths.json';
 import OathsView from './OathsView';
+import { metadata } from './page';
 
 afterEach(cleanup);
 
-const { oaths, lines } = buildOaths(data);
-const renderView = () => render(<OathsView oaths={oaths} lines={lines} />);
-const toggles = () => within(screen.getByRole('list', { name: 'الألفاظ' }));
-const cells = () => document.querySelectorAll('[data-rail-cell]');
+const allah = buildOaths('allah', data);
+const others = buildOaths('others', data);
+const renderView = () => render(<OathsView allah={allah} others={others} />);
+const cards = () => within(screen.getByRole('list', { name: 'الأقسام' })).getAllByRole('listitem');
+const chips = () => within(screen.getByRole('list', { name: 'ما أُقسم به' }));
 
 describe('OathsView', () => {
-  it('lists one station per oath, in order', () => {
+  it('starts on Allah’s oaths, every one in mushaf order', () => {
     renderView();
-    expect(within(screen.getByRole('list', { name: 'الأقسام' })).getAllByRole('heading', { level: 2 })).toHaveLength(OATHS.length);
+    expect(cards()).toHaveLength(ALLAH_OATHS.length);
+    expect(cards()[0].textContent).toContain('النساء');
+    expect(screen.getByRole('button', { name: 'أقسم الله' }).getAttribute('aria-pressed')).toBe('true');
   });
 
-  it('starts with every word on and draws a column for each', () => {
+  it('switches to the oaths of others, each with its speaker', () => {
     renderView();
-    const on = toggles().getAllByRole('button').filter(b => b.getAttribute('aria-pressed') === 'true');
-    expect(on).toHaveLength(lines.length);
-    expect(cells()).toHaveLength(lines.length * OATHS.length);
+    fireEvent.click(screen.getByRole('button', { name: 'أقسم غيره' }));
+    expect(cards()).toHaveLength(OTHER_OATHS.length);
+    expect(cards().find(card => card.textContent?.includes('إبليس'))).toBeTruthy();
   });
 
-  it('puts a dot on every oath that carries the word and an arrow on the last', () => {
+  it('keeps only the oaths of a picked word, and all of them again from «الكل»', () => {
     renderView();
-    const line = lines[0];
-    expect(document.querySelectorAll(`[data-dot="${line.id}"]`)).toHaveLength(line.has.size);
-    expect(document.querySelectorAll(`[data-arrow="${line.id}"]`)).toHaveLength(1);
+    const night = allah.chips.find(c => c.word === 'الليل')!;
+    fireEvent.click(chips().getByRole('button', { name: 'الليل' }));
+    expect(cards()).toHaveLength(night.count);
+    fireEvent.click(chips().getByRole('button', { name: 'الكل' }));
+    expect(cards()).toHaveLength(ALLAH_OATHS.length);
   });
 
-  it('removes and restores a column when a word is toggled', () => {
+  it('clears the picked word when the switch changes, since the chips differ', () => {
     renderView();
-    const first = toggles().getAllByRole('button')[0];
-    fireEvent.click(first);
-    expect(cells()).toHaveLength((lines.length - 1) * OATHS.length);
-    fireEvent.click(first);
-    expect(cells()).toHaveLength(lines.length * OATHS.length);
+    fireEvent.click(chips().getByRole('button', { name: 'السماء' }));
+    fireEvent.click(screen.getByRole('button', { name: 'أقسم غيره' }));
+    expect(cards()).toHaveLength(OTHER_OATHS.length);
+    expect(chips().getByRole('button', { name: 'الكل' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('colours the words sworn by and links each oath to the mushaf', () => {
+    renderView();
+    const first = cards()[0];
+    expect(first.querySelectorAll('[data-sworn]')).toHaveLength(1);
+    expect(within(first).getByRole('link', { name: /في المصحف/ }).getAttribute('href')).toBe('/quran/read/ayah/4/65');
+    expect(within(first).getByRole('button', { name: /شارك/ })).toBeTruthy();
+  });
+
+  it('names the whole Quran in its title', () => {
+    expect(metadata.title).toBe('الأقسام في القرآن');
   });
 });

@@ -1,9 +1,10 @@
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
+import { OATHS_HELP } from '@shared/quran/oaths';
 import Sheet from './Sheet';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths';
 
 /** A coloured sample word and what its colour means. */
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
@@ -15,7 +16,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -27,7 +28,9 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
     <Sheet open={!!topic} onClose={onClose} palette={palette}>
       {topic && <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
-        {topic === 'words' ? <>
+        {topic === 'oaths' ? <>
+          {OATHS_HELP.map((text, i) => <Text key={i} style={i === OATHS_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
+        </> : topic === 'words' ? <>
           <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
           <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>
           <Text style={paragraph}>وإذا اتفقت كلمتان في الرسم واختلفتا في المعنى عُدّت كل منهما وحدها، وبجانبها ما يميّزها، مثل «عصا» و«عصى».</Text>

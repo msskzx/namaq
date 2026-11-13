@@ -16,6 +16,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="prophets" />
       <Tabs.Screen name="tuhfa" />
       <Tabs.Screen name="words" />
+      <Tabs.Screen name="oaths" />
       <Tabs.Screen name="search" />
     </Tabs>
   );
