@@ -4,15 +4,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import QuranIltifatPage from './page';
 
-vi.mock('@/components/language/LanguageContext', () => ({
-  useLanguage: () => ({ language: 'ar' }),
-}));
-
+vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
 describe('QuranIltifatPage', () => {
-  it('links the repeated phrases to /quran/compare, where they now live', () => {
+  it('shows the title and the seven cards, with no explanation on the page', () => {
     render(<QuranIltifatPage />);
-    expect(screen.getByRole('link', { name: /تكرار العبارات/ }).getAttribute('href')).toBe('/quran/compare');
+    expect(screen.getByRole('heading', { level: 1, name: 'الالتفات' })).toBeTruthy();
+    expect(screen.getAllByRole('article')).toHaveLength(7);
+    expect(document.body.textContent).not.toContain('انتقال الكلام');
   });
 });

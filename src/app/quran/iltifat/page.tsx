@@ -1,37 +1,17 @@
 import type { Metadata } from 'next';
-import { faListOl, faRepeat } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '@/components/common/Button';
-import { buildCurated, USED_MODES } from '@/lib/quran/curatedShifts';
-import data from './ayat.json';
+import { examples } from '@shared/quran/iltifat';
 import IltifatView from './IltifatView';
 
 export const metadata: Metadata = {
-  title: 'التفات: تحولات مختارة',
+  title: 'الالتفات',
 };
 
+/** As in the app (owner, 2026-11-13): seven examples, each card with its own picture, the explanation behind the help icon. */
 export default function QuranIltifatPage() {
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
-      <header>
-        <div className="flex flex-wrap items-center gap-3 mb-2">
-          <h1 className="text-3xl">التفات: تحولات مختارة</h1>
-        </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل لون نوع من الضمير، واللون نفسه للنوع نفسه في كل الأمثلة.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" href="/quran/compare">
-            <FontAwesomeIcon icon={faRepeat} />
-            تكرار العبارات
-          </Button>
-          <Button size="sm" variant="outline" href="/quran/order">
-            <FontAwesomeIcon icon={faListOl} />
-            ترتيب السور: من النبأ إلى الناس
-          </Button>
-        </div>
-      </header>
-      <IltifatView curated={buildCurated(data)} modes={USED_MODES} />
+    <div dir="rtl" className="mx-auto flex w-full max-w-2xl flex-col gap-4 p-4 text-[var(--home-ink)]">
+      <h1 className="text-3xl">الالتفات</h1>
+      <IltifatView views={examples()} />
     </div>
   );
 }

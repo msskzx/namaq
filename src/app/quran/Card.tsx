@@ -1,7 +1,7 @@
 // docs/plans/quran-repetition-merge.md
 import React from 'react';
 import { AyahCard, type WordNote } from '@/components/quran/AyahCard';
-import type { Surah } from '@/lib/quran/curatedShifts';
+import type { Surah } from '@/lib/quran/passage';
 import type { Ayah } from '@/types/quran';
 
 export function Card({ surah, ayah, text, slots, notes }: { surah: Surah; ayah: number; text: string; slots?: Record<number, number>; notes?: Record<number, WordNote> }) {

@@ -1,10 +1,12 @@
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { OATHS_HELP } from '@shared/quran/oaths';
+import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
+import { VOICE_NAME, voiceColor } from './Iltifat';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat';
 
 /** A coloured sample word and what its colour means. */
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
@@ -16,7 +18,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -30,6 +32,15 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
         {topic === 'oaths' ? <>
           {OATHS_HELP.map((text, i) => <Text key={i} style={i === OATHS_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
+        </> : topic === 'iltifat' ? <>
+          <Text style={paragraph}>انتقال الكلام من غيبة إلى خطاب أو تكلم، أو من أحدها إلى غيره، والمتحدَّث عنه واحد.</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16 }}>
+            {(['he', 'we', 'you'] as Voice[]).map(voice => <Text key={voice} style={{ color: voiceColor(palette, voice), fontSize: 15 }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</Text>)}
+          </View>
+          <View style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>
+            {examples().map(view => <Text key={view.key} style={[paragraph, { color: palette.muted, fontSize: 14, lineHeight: 22 }]}>{view.name} {rangeLabel(view)}: {view.source}</Text>)}
+          </View>
+          <Text style={[paragraph, { color: palette.muted, fontSize: 14 }]}>النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</Text>
         </> : topic === 'words' ? <>
           <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
           <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>

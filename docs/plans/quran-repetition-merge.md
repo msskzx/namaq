@@ -78,7 +78,7 @@ stored. Surah 43, the old default, has exactly one phrase.
   `findOpeners`, `Opener`, `Form`.
 - `src/lib/quran/passages.ts` or a new module: group passages into phrases for
   display.
-- `src/lib/quran/curatedShifts.ts`: use the unified phrases; check its test.
+- `src/lib/quran/curatedShifts.ts` (now `shared/quran/iltifat.ts`): use the unified phrases; check its test.
 - `src/app/api/quran/repetition/route.ts`: the endpoint.
 - `src/app/quran/page.tsx` and `QuranDemo.tsx`: the matrix, ranked list and
   detail sections.

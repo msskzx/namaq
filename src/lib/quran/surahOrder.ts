@@ -1,4 +1,4 @@
-import { resolve, type Data, type Range, type Surah } from './curatedShifts';
+import { resolve, type Data, type Range, type Surah } from './passage';
 import { ayahWords, plainName } from '@shared/quran/normalize';
 import type { TopicInstance } from './topicTypes';
 

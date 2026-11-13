@@ -15,7 +15,7 @@ afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.load
 describe('TabBar', () => {
   it.each(['ar', 'en'] as const)('lights the Quran tab on the Quran hub and each of its tools in %s', language => {
     state.language = language;
-    for (const path of ['/quran', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal']) {
+    for (const path of ['/quran', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal', '/quran/iltifat']) {
       state.path = path;
       render(<TabBar />);
       const link = screen.getByRole('link', { name: language === 'ar' ? 'القرآن' : 'Quran' });
