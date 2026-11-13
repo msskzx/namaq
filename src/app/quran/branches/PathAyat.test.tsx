@@ -37,6 +37,15 @@ describe('the ayat of tapped paths under the tree', () => {
     expect(shown()).toEqual([]);
   });
 
+  it('opens each ayah in the mushaf, and in compare when it has a compare card', () => {
+    render(<PathScope><BranchTree tree={tree} names={{ 1: 'الفاتحة' }} /><PathAyat ayat={ayat} names={{ 1: 'الفاتحة' }} compare={{ '1:2': [{ href: '/quran/compare?a=1&b=2', label: 'الفاتحة والبقرة', labelEn: '' }] }} /></PathScope>);
+    fireEvent.click(screen.getByText('وسط').closest('[data-node]')!);
+    expect(screen.getByRole('link', { name: 'افتح الفاتحة ١ في المصحف' }).getAttribute('href')).toBe('/quran/read/ayah/1/1');
+    expect(screen.getByRole('link', { name: 'افتح الفاتحة ٢ في المصحف' }).getAttribute('href')).toBe('/quran/read/ayah/1/2');
+    expect(screen.queryByRole('link', { name: 'قارن الفاتحة ١' })).toBeNull();
+    expect(screen.getByRole('link', { name: 'قارن الفاتحة ٢' }).getAttribute('href')).toBe('/quran/compare?a=1&b=2');
+  });
+
   it('stays away for ayat a search lit', () => {
     setup(['1:1']);
     expect(shown()).toEqual([]);
