@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 afterEach(cleanup);
 
-const open = (cards: PairCard[]) => render(<PageVideo cards={cards} title="البقرة والأعراف" link="namaq.vercel.app/quran/compare?a=2&b=7" label={label} ar onClose={() => {}} />);
+const open = (cards: PairCard[]) => render(<PageVideo cards={cards} title="البقرة والأعراف" label={label} ar onClose={() => {}} />);
 
 describe('the page video', () => {
   it('lists every card ticked, and unticking leaves a card out', () => {
@@ -44,7 +44,7 @@ describe('the page video', () => {
     const input = JSON.parse(page.match(/var INPUT = (.*);\n/)![1]);
     expect(input.part).toBe('الجزء ١ من ٣');
     expect(input.next).toBe('يتبع في الجزء ٢');
-    expect(input.link).toBe('namaq.vercel.app/quran/compare?a=2&b=7');
+    expect(page).not.toContain('vercel');
     expect(input.timeline[0].kind).toBe('title');
     expect(input.timeline.at(-1).kind).toBe('end');
     expect(input.counters).toEqual(['١ من ٦', '٢ من ٦']);

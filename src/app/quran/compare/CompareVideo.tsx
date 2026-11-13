@@ -116,7 +116,7 @@ function RecorderDialog({ pages, title, ar, onClose }: { pages: string[]; title:
 
 /** One card's read-along as a video, from its studio. */
 export function CardVideo({ card, plan, speed, title, label, ar, onClose }: { card: PairCard; plan: ReadStep[]; speed: number; title: string; label: (side: CardSide) => string; ar: boolean; onClose: () => void }) {
-  const [pages] = useState(() => [pageOf(compareVideoInput({ title, link: '', cards: [videoCard(card, plan, speed, label)], look: webLook() }))]);
+  const [pages] = useState(() => [pageOf(compareVideoInput({ title, cards: [videoCard(card, plan, speed, label)], look: webLook() }))]);
   return <RecorderDialog pages={pages} title={title} ar={ar} onClose={onClose} />;
 }
 
@@ -124,7 +124,7 @@ export function CardVideo({ card, plan, speed, title, label, ar, onClose }: { ca
  * Share a pair page as video: every card is ticked at first; untick the ones to leave out.
  * A video over about 3 minutes is split into parts (shared/video/pageVideo.ts), recorded one after another.
  */
-export function PageVideo({ cards, title, subtitle, link, label, ar, onClose }: { cards: PairCard[]; title: string; subtitle?: string; link: string; label: (side: CardSide) => string; ar: boolean; onClose: () => void }) {
+export function PageVideo({ cards, title, subtitle, label, ar, onClose }: { cards: PairCard[]; title: string; subtitle?: string; label: (side: CardSide) => string; ar: boolean; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const speed = useReadSpeed();
   const [off, setOff] = useState<string[]>([]);
@@ -139,7 +139,7 @@ export function PageVideo({ cards, title, subtitle, link, label, ar, onClose }: 
   const next = READ_SPEEDS[(READ_SPEEDS.indexOf(speed) + 1) % READ_SPEEDS.length];
   useEffect(() => { dialog.current?.showModal(); }, []);
   const record = () => {
-    const inputs = pageVideoInputs({ title, link, look: webLook(), cards: picked.map(({ card, plan }) => videoCard(card, plan, speed, label)), ...(subtitle ? { subtitle } : {}), ...(ar ? {} : { words: ENGLISH }) });
+    const inputs = pageVideoInputs({ title, look: webLook(), cards: picked.map(({ card, plan }) => videoCard(card, plan, speed, label)), ...(subtitle ? { subtitle } : {}), ...(ar ? {} : { words: ENGLISH }) });
     setPages(inputs.map(pageOf));
   };
   const toggle = (id: string) => setOff(list => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]));
