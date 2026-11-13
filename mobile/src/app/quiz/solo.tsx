@@ -15,7 +15,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { memorizedQuestions, readMemorized, withMemorizedScope } from '@shared/memorized';
 import { availability, cleanSolo, SOLO_KINDS, startSolo, type SoloSettings } from '@/lib/quiz';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
-import type { QuizTopic } from '@shared/quiz/settings';
+import { RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette, CARD } from '@/lib/theme';
 
@@ -48,6 +48,8 @@ export default function SoloSetup() {
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const { available, lengths } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
+  // A kind that does not ask the Quran (the Tuhfa's lines) has no range to pick.
+  const ranged = settings.kinds.some(kind => RANGED_TOPICS.includes(kind));
   // At least one kind stays picked.
   const toggleKind = (kind: QuizTopic) => {
     const kinds = settings.kinds.includes(kind) ? settings.kinds.filter(item => item !== kind) : [...settings.kinds, kind];
@@ -85,9 +87,9 @@ export default function SoloSetup() {
           <Row>{SOLO_KINDS.map(kind => <Button key={kind} label={KIND_NAMES[kind]} active={settings.kinds.includes(kind)} onPress={() => toggleKind(kind)} />)}</Row>
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>اختر نوعًا أو أكثر، فتأتي أسئلتها مخلوطة في اختبار واحد.</Text>
         </Section>
-        <Section title={trees ? 'الأشجار' : 'النطاق'} palette={palette}>
+        {ranged && <Section title={trees ? 'الأشجار' : 'النطاق'} palette={palette}>
           <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} trees={trees} />
-        </Section>
+        </Section>}
         <Section title="الصعوبة" palette={palette}>
           <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.kinds} />
         </Section>
