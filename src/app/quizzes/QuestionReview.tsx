@@ -11,8 +11,9 @@ import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@s
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 import { mushafText } from '@shared/quran/mushafText';
+import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 
-type ReviewQuestion = ScoredQuestion & {
+type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   key: string;
   promptArabic: string;
   choices: QuestionChoice[];
@@ -50,9 +51,11 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
     {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
+    <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} />
     {question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
+      <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} surahName={value => question.choices.find(item => item.value === value)?.labelArabic} />
     </>}
     {question.evidence?.reference && <Button className="self-start" size="sm" onClick={() => setSource(true)}><BookOpen size={16} aria-hidden />{ar ? "المصدر" : "Source"}</Button>}
     <nav className="flex justify-between gap-2" aria-label={ar ? "التنقل في المراجعة" : "Review navigation"}>

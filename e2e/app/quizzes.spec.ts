@@ -90,3 +90,24 @@ test('recite mode on the mushaf shows the next ayah on a tap', async ({ page }) 
   await expect.poll(async () => (await stored<{ position: { shown: string | null } }>(page, 'reader-place'))?.position?.shown).not.toBe(before?.position?.shown ?? null);
   expect(await readerPage(page)).not.toBeNull();
 });
+
+test('a solo quiz of which surah and recite questions: pick, reveal, then the result', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'في أي سورة؟' }).click();
+  await page.getByRole('button', { name: 'سمّع بقية الآية' }).click();
+  await page.getByRole('button', { name: 'شجرة المتشابهات' }).click();
+  await expect(page.getByText('عدد الإجابات')).toHaveCount(0);
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { family: string; correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
+  for (const [index, question] of run!.questions.entries()) {
+    if (question.family === 'RECITE') {
+      await page.getByRole('button', { name: 'أظهر الآية' }).click();
+      await page.getByRole('button', { name: 'حفظتها' }).click();
+    } else await page.getByRole('button', { name: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic, exact: true }).click();
+    await expect(page.getByRole('button', { name: 'في المصحف' })).toBeVisible();
+    await page.getByRole('button', { name: index === run!.questions.length - 1 ? 'إرسال' : 'التالي' }).click();
+  }
+  await expect(page.getByText(/^النتيجة: ٥ من ٥/)).toBeVisible();
+});

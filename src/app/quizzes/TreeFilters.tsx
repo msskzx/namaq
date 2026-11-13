@@ -43,8 +43,9 @@ function choiceOf(draft: Draft): TreeChoice | null {
 /**
  * The branches page's filters for the quiz's trees, inline instead of in a sheet: saved only (solo), the part of the
  * Quran, and the kinds of comparison and difference. Sort means nothing for a random quiz, so it is left out.
+ * Without trees in the quiz only the part of the Quran is left.
  */
-export default function TreeFilters({ choice, onChange, savedOnly = true }: { choice: TreeChoice; onChange: (choice: TreeChoice) => void; savedOnly?: boolean }) {
+export default function TreeFilters({ choice, onChange, savedOnly = true, trees = true }: { choice: TreeChoice; onChange: (choice: TreeChoice) => void; savedOnly?: boolean; trees?: boolean }) {
   const [draft, setDraftState] = useState<Draft>(() => draftOf(choice));
   const setDraft = (next: Draft) => {
     setDraftState(next);
@@ -52,9 +53,9 @@ export default function TreeFilters({ choice, onChange, savedOnly = true }: { ch
     if (picked) onChange(picked);
   };
   return <div className="flex w-full min-w-0 flex-col gap-3">
-    {savedOnly && <SavedOnly checked={draft.saved} onChange={saved => setDraft({ ...draft, saved })} />}
+    {savedOnly && trees && <SavedOnly checked={draft.saved} onChange={saved => setDraft({ ...draft, saved })} />}
     <ScopeFields range={choice.range} allSurahs={allSurahs} draft={{ unit: draft.unit, values: draft.values, surahs: draft.filters.surahs, juz: draft.filters.juz }}
       onChange={({ unit, values, surahs, juz }) => setDraft({ ...draft, unit, values, filters: { ...draft.filters, ...(surahs !== undefined ? { surahs } : {}), ...(juz !== undefined ? { juz } : {}) } })} />
-    <GroupFilterControls filters={draft.filters} onChange={filters => setDraft({ ...draft, filters })} sort={false} defaultCategories={QUIZ_CATEGORIES} />
+    {trees && <GroupFilterControls filters={draft.filters} onChange={filters => setDraft({ ...draft, filters })} sort={false} defaultCategories={QUIZ_CATEGORIES} />}
   </div>;
 }

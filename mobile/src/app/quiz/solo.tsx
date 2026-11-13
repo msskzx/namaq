@@ -13,11 +13,16 @@ import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { memorizedQuestions, readMemorized, withMemorizedScope } from '@shared/memorized';
-import { availability, cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
+import { availability, cleanSolo, SOLO_KINDS, startSolo, type SoloSettings } from '@/lib/quiz';
+import { CHOICE_KINDS } from '@shared/quiz/kinds';
+import type { QuizTopic } from '@shared/quiz/settings';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette, CARD } from '@/lib/theme';
 
-/** The solo quiz setup: which trees (the branches tab's filters), how many leaves to type per tree, how many questions. */
+/** What each kind is called on its chip. */
+const KIND_NAMES = { BRANCHES: 'شجرة المتشابهات', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
+
+/** The solo quiz setup: the kinds of question mixed, the part of the Quran (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
   const palette = usePalette();
   // «الأسئلة مما أحفظ فقط» on: the setup opens on what is memorized (settings, «ما أحفظه»); the range can still be changed here.
@@ -41,7 +46,13 @@ export default function SoloSetup() {
     if (applied) change({ list: { filters: applied.filters, range: applied.range, saved: applied.saved } });
   };
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const { available, lengths } = availability(settings.list);
+  const { available, lengths } = availability(settings);
+  const trees = settings.kinds.includes('BRANCHES');
+  // At least one kind stays picked.
+  const toggleKind = (kind: QuizTopic) => {
+    const kinds = settings.kinds.includes(kind) ? settings.kinds.filter(item => item !== kind) : [...settings.kinds, kind];
+    if (kinds.length) change({ kinds });
+  };
   // A length the range cannot fill gives way to the first one it can, as on the website.
   const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
   const start = () => {
@@ -70,16 +81,20 @@ export default function SoloSetup() {
             </Row>
           </View>
         )}
-        <Section title="الأشجار" palette={palette}>
-          <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} />
+        <Section title="أنواع الأسئلة" palette={palette}>
+          <Row>{SOLO_KINDS.map(kind => <Button key={kind} label={KIND_NAMES[kind]} active={settings.kinds.includes(kind)} onPress={() => toggleKind(kind)} />)}</Row>
+          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>اختر نوعًا أو أكثر، فتأتي أسئلتها مخلوطة في اختبار واحد.</Text>
+        </Section>
+        <Section title={trees ? 'الأشجار' : 'النطاق'} palette={palette}>
+          <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} trees={trees} />
         </Section>
         <Section title="الصعوبة" palette={palette}>
-          <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} />
+          <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.kinds} />
         </Section>
-        <Section title="الإجابات" palette={palette}>
+        {trees && <Section title="الإجابات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
-        </Section>
+        </Section>}
         <Section title="عدد الأسئلة" palette={palette}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>
           {lengths.length > 0
