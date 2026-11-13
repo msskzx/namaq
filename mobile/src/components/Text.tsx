@@ -1,6 +1,7 @@
 import { createContext, useContext, type ComponentProps } from 'react';
-import { StyleSheet, Text as NativeText, TextInput as NativeTextInput, type StyleProp, type TextStyle } from 'react-native';
+import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type StyleProp, type TextStyle } from 'react-native';
 import { QURAN_FONT, UI_FONT, UI_FONT_BOLD } from '@/lib/theme';
+import { textDirection } from '@/lib/rtl';
 
 /** Amiri draws smaller than a system font at the same size, so interface sizes grow by this much (the website's type scale does the same). */
 export const UI_SCALE = 1.12;
@@ -29,11 +30,16 @@ export function uiStyle(style: StyleProp<TextStyle>, parent: Role | null): { sty
   return { style: Object.keys(patch).length ? [style, patch] : style, role: 'ui' };
 }
 
+/** Right-to-left for a top-level text: see textDirection in lib/rtl. */
+function rtlStyle(style: StyleProp<TextStyle>): StyleProp<TextStyle> {
+  return [style, textDirection(StyleSheet.flatten(style) ?? {}, Platform.OS !== 'web')];
+}
+
 /** React Native's Text in the app's interface font. Import this instead of Text from react-native. */
 export function Text({ style, ...props }: ComponentProps<typeof NativeText>) {
   const parent = useContext(Inside);
   const ui = uiStyle(style, parent);
-  const text = <NativeText {...props} style={ui.style} />;
+  const text = <NativeText {...props} style={parent ? ui.style : rtlStyle(ui.style)} />;
   return ui.role === parent ? text : <Inside.Provider value={ui.role}>{text}</Inside.Provider>;
 }
 
