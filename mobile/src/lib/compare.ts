@@ -228,8 +228,24 @@ export const holdsAyah = (card: PairCard, key: string) =>
   card.sides.some(side => side.ayat.some(ayah => `${side.surah}:${ayah.number}` === key)) ||
   !!card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key);
 
-/** The card a page opens on for these ayat: the one holding them all, else the first holding the first; -1 for none. */
+const size = (card: PairCard) => card.sides.reduce((sum, side) => sum + side.ayat.length, card.many?.options.length ?? 0);
+const sideOf = (card: PairCard, key: string) => {
+  const at = card.sides.findIndex(side => side.ayat.some(ayah => `${side.surah}:${ayah.number}` === key));
+  return at < 0 && card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key) ? card.many.side : at;
+};
+
+/**
+ * The card a page opens on for these ayat: the smallest one showing them across its two sides (so a saved card opens
+ * on itself, not on a one-to-many card or a story part that also holds them), else the one holding them all, else the first
+ * holding the first; -1 for none.
+ */
 export function focusIndex(cards: PairCard[], ayat: string[]) {
+  let across = -1;
+  cards.forEach((card, at) => {
+    const sides = new Set(ayat.map(key => sideOf(card, key)));
+    if (!sides.has(-1) && sides.size === 2 && (across < 0 || size(card) < size(cards[across]))) across = at;
+  });
+  if (across >= 0) return across;
   const all = cards.findIndex(card => ayat.every(key => holdsAyah(card, key)));
   return all >= 0 ? all : cards.findIndex(card => holdsAyah(card, ayat[0]));
 }

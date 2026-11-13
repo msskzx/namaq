@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { maxLetters, writeTargets, writtenRight } from './writeAyah';
+import type { MushafPage } from './readerPage';
+import { keepsSpace, maxLetters, wordTargets, writeTargets, writtenRight } from './writeAyah';
 
 describe('writing an ayah\'s first and last words', () => {
   it('asks the first and last three words, or every word of a short ayah', () => {
@@ -7,6 +9,13 @@ describe('writing an ayah\'s first and last words', () => {
     expect(writeTargets(7)).toEqual([0, 1, 2, 4, 5, 6]);
     expect(writeTargets(6)).toEqual([0, 1, 2, 3, 4, 5]);
     expect(writeTargets(2)).toEqual([0, 1]);
+  });
+
+  it('asks no box for the ۞ that opens a quarter', () => {
+    const ayah = ['۞', 'وَإِذِ', 'ٱبۡتَلَىٰٓ', 'إِبۡرَٰهِـۧمَ', 'رَبُّهُۥ', 'بِكَلِمَٰتٖ', 'فَأَتَمَّهُنَّۖ', 'قَالَ'];
+    expect(wordTargets(ayah)).toEqual([1, 2, 3, 5, 6, 7]);
+    expect(wordTargets(['۞', 'قُلۡ', 'هُوَ'])).toEqual([1, 2]);
+    expect(wordTargets(['قُلۡ', 'هُوَ'])).toEqual(writeTargets(2));
   });
 
   it('sizes each box by the letters the word is said with', () => {
@@ -26,5 +35,41 @@ describe('writing an ayah\'s first and last words', () => {
     expect(writtenRight('بمن', 'بِمَآ')).toBe(false);
     expect(writtenRight('الذين', 'وَٱلَّذِينَ')).toBe(false);
     expect(writtenRight('', 'هُمۡ')).toBe(false);
+  });
+});
+
+// Words as the mushaf data stores them (the order of a word's marks matters), found by their bare letters.
+const mushafWords = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(new URL(`../data/quran/mushaf/${i + 1}.json`, import.meta.url), 'utf8')) as MushafPage)
+  .flatMap(page => page.items.flatMap(item => ('line' in item ? item.line : []).filter((token): token is string => typeof token === 'string')));
+const bare = (word: string) => word.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640\u0653]/g, '');
+const inMushaf = (letters: string) => {
+  const found = mushafWords.find(word => bare(word) === letters);
+  if (!found) throw new Error(`no mushaf word ${letters}`);
+  return found;
+};
+
+describe('the letters people type for what the mushaf writes small', () => {
+  it('lets the common spelling fill its box before moving on', () => {
+    const typed: [string, string][] = [
+      ['شيئا', 'شيا'], ['يسألونك', 'يسلونك'], ['سيئاتكم', 'سياتكم'], ['خاسئين', 'خسين'], ['يئوده', 'يوده'],
+      ['إبراهيم', 'إبرهم'], ['النبيين', 'ٱلنبين'], ['داوود', 'داود'], ['تلوون', 'تلون'], ['ننجي', 'نجي'],
+      ['إيلافهم', 'إلفهم'], ['الموءودة', 'ٱلموءدة'], ['ءاتاني', 'ءاتىن'],
+      ['بآياتنا', 'بايتنا'], ['المآب', 'ٱلماب'], ['الآن', 'ٱلن'], ['له', 'له'], ['به', 'به'], ['موسى', 'موسى'],
+    ];
+    for (const [spelling, letters] of typed) {
+      const word = inMushaf(letters);
+      expect(writtenRight(spelling, word), spelling).toBe(true);
+      expect(maxLetters(word), spelling).toBe([...spelling].length);
+    }
+  });
+
+  it('keeps the box after a vocative يا or ها typed apart', () => {
+    expect(keepsSpace('يا ', inMushaf('يقوم'))).toBe(true);
+    expect(keepsSpace('يا ', inMushaf('يأيها'))).toBe(true);
+    expect(keepsSpace('ويا ', inMushaf('ويقوم'))).toBe(true);
+    expect(keepsSpace('ها ', inMushaf('هأنتم'))).toBe(true);
+    expect(writtenRight('يا قوم', inMushaf('يقوم'))).toBe(true);
+    expect(keepsSpace('يا ', inMushaf('يوم'))).toBe(false);
+    expect(keepsSpace('قوم ', inMushaf('يقوم'))).toBe(false);
   });
 });

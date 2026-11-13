@@ -6,7 +6,7 @@ import { shuffle, type Random } from './random';
 const DAGGER = 'ٰ';
 const HAMZA = /[ءئؤٕٔ]/;
 const SEATS = 'ويى';
-const SMALL: Record<string, string> = { 'ۥ': 'و?', 'ۦ': 'ي?', 'ۧ': 'ي?' };
+const SMALL: Record<string, string> = { 'ۥ': 'و?', 'ۦ': 'ي?', 'ۧ': 'ي?', 'ۨ': 'ن?' };
 
 const letters = (text: string) => normalizeWord(text.replace(/آ/g, 'ءا').replace(/[ئؤ]/g, 'ء')).replace(/[^ء-ي]/g, '');
 

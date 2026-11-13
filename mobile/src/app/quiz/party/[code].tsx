@@ -287,7 +287,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24, gap: 12 }}>
       {question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right', paddingHorizontal: 16, paddingTop: 12 }}>{question.promptArabic}</Text> : null}
       {isTree(question)
-        ? <View style={{ height: 420 }}><QuizFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
@@ -335,7 +335,7 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
       {entries.length > 0 && <Label palette={palette} muted>اضغط سؤالًا لتراجع إجابتك فيه.</Label>}
       {entries.length > 0 && <QuestionDots states={states} current={review ?? -1} onPick={setReview} palette={palette} />}
       {entry && question && (isTree(question)
-        ? <View style={{ height: 420 }}><QuizFeedback question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />)}
       {view.you === view.hostId && <View style={{ alignItems: 'flex-start' }}><Button big variant="primary" Icon={RotateCcw} label="اختبار آخر بالفريق نفسه" onPress={() => send({ type: 'again' })} /></View>}
     </ScrollView>
