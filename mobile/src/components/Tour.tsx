@@ -5,6 +5,7 @@ import { Gesture, GestureDetector, GestureHandlerRootView, ScrollView } from 're
 import { scheduleOnRN } from 'react-native-worklets';
 import { ChevronsLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { GrowingLogo } from './Logo';
 import TreeCard from './TreeCard';
@@ -160,7 +161,14 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
       </View>
       <View style={{ flex: 1, paddingHorizontal: which === 'tree' ? 0 : 12, paddingTop: 8 }}>
         {which === 'matrix' && card && (
-          <Fit>{size => <MatrixCard presentation={card.presentation} palette={palette} view={size} around={false} onTap={noop} onMove={noop} alongside={swipe} />}</Fit>
+          <View style={{ flex: 1 }}>
+            <Fit>{size => <MatrixCard presentation={card.presentation} palette={palette} view={size} around={false} onTap={noop} onMove={noop} alongside={swipe} />}</Fit>
+            {/* More cards wait below: the bottom edge fades out instead of cutting the last card flat. */}
+            <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 40 }} width="100%" height={40}>
+              <Defs><LinearGradient id="below" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={palette.paper} stopOpacity={0} /><Stop offset="1" stopColor={palette.paper} stopOpacity={1} /></LinearGradient></Defs>
+              <Rect x="0" y="0" width="100%" height="40" fill="url(#below)" />
+            </Svg>
+          </View>
         )}
         {/* The tree at reading size, dragged around inside its card, its root (right) in view first. Its own drag wins
             here, so on this step a swipe on the title or the buttons' row turns the step. */}

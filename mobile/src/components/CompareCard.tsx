@@ -1,5 +1,5 @@
 import { Fragment, memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, Share, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -18,10 +18,24 @@ import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import TreeIcon from './TreeIcon';
 import { compareRecorderPage, compareVideoInput } from '@/lib/compareVideo';
+import { WEBSITE } from '@/lib/branches';
+import { compareHref } from '@shared/quran/compare';
 
 const DOUBLE_TAP = 280;
 
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
+
+/** The card's first words and a link to its two passages on the website. */
+function shareCard(card: PairCard) {
+  const [a, b] = card.sides;
+  const range = (side: CardSide) => {
+    const numbers = side.ayat.length ? side.ayat.map(ayah => ayah.number) : [side.ayah];
+    return { from: Math.min(...numbers), to: Math.max(...numbers) };
+  };
+  // A one-to-many card links to its two surahs, since its far side is one of several ayat.
+  const href = card.many ? `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}` : compareHref(a.surah, range(a), b.surah, range(b));
+  void Share.share({ message: `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}` });
+}
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
 function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
@@ -44,7 +58,7 @@ function AyahText({ ayah, palette, light, plain = false, inline = false }: { aya
           </Text>
         );
       })}
-      <Text style={{ color: palette.accent }}> {num(ayah.number)}</Text>
+      <Text style={{ color: palette.accent }}>{"\u00A0"}{num(ayah.number)}</Text>
     </Text>
   );
 }
@@ -57,7 +71,7 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
         const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
         return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
       })}
-      <Text> {num(ayah.number)}</Text>
+      <Text>{"\u00A0"}{num(ayah.number)}</Text>
     </Text>
   );
 }
@@ -275,22 +289,26 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
-          {tree && card.group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
-            <TreeIcon size={22} color={palette.muted} />
-          </Pressable>}
-          <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
-            {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
+          <Pressable onPress={() => toggleCardSaved(card)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: saved }} accessibilityLabel={saved ? 'إزالة من المحفوظة' : 'حفظ'} style={{ padding: 8 }}>
+            <Animated.View style={popped}><Bookmark size={22} color={saved ? palette.accent : palette.muted} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
+          </Pressable>
+          <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
+            <Clapperboard size={22} color={palette.muted} />
           </Pressable>
           {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
           {!parts && <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
             <UnfoldHorizontal size={22} color={aroundOn ? palette.accent : palette.muted} />
           </Pressable>}
-          <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
-            <Clapperboard size={22} color={palette.muted} />
+          <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+            {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
           </Pressable>
-          <Pressable onPress={() => toggleCardSaved(card)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: saved }} accessibilityLabel={saved ? 'إزالة من المحفوظة' : 'حفظ'} style={{ padding: 8 }}>
-            <Animated.View style={popped}><Bookmark size={22} color={saved ? palette.accent : palette.muted} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
+          {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
+          {tree && card.group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
+            <TreeIcon size={22} color={palette.muted} />
+          </Pressable>}
+          {/* Share is always the last button (the left end), as on the branches tab. */}
+          <Pressable onPress={() => shareCard(card)} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
+            <Send size={22} color={palette.muted} />
           </Pressable>
         </View>
       )}

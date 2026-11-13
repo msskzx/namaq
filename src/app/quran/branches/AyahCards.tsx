@@ -230,7 +230,9 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
     return <div key={key} {...props}>
       <PageSpread pages={[{
         title: name,
-        subtitle: ar ? `${end === ayah.key ? 'الآية' : 'الآيات'} ${range}` : `${end === ayah.key ? 'Ayah' : 'Ayat'} ${range}`,
+        // An ayah that runs into the next surah names that surah after a «ثم», not inside a dash range.
+        subtitle: lastSurah !== surah ? (ar ? `الآية ${first} ثم ${names[lastSurah] ? `سورة ${names[lastSurah]}` : nameOf(lastSurah)} ${last}` : `Ayah ${first}, then ${nameOf(lastSurah)} ${last}`)
+          : ar ? `${end === ayah.key ? 'الآية' : 'الآيات'} ${range}` : `${end === ayah.key ? 'Ayah' : 'Ayat'} ${range}`,
         label: `${name} ${range}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),

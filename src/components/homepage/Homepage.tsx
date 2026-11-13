@@ -54,7 +54,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
     </section>
     <section className={styles.quiz} aria-labelledby="quiz-title">
       <Feather size={26} aria-hidden />
-      <div><h2 id="quiz-title">{ar ? 'اختبارات القرآن' : 'Quran quizzes'}</h2><p>{ar ? 'تأمّل الآيات، ثم اختبر مواضع التشابه، أو سمّع حفظك آيةً آية.' : 'Read the ayat, then try a question on their shared wording, or recite from memory ayah by ayah.'}</p></div>
+      <div><h2 id="quiz-title">{ar ? 'اختبارات القرآن' : 'Quran quizzes'}</h2><p>{ar ? 'تأمّل الآيات، ثم اختبر مواضع التشابه، أو سمّع حفظك آيةً آية.' : 'Read the ayat, then try a question on their shared wording, or recite from memory ayah by ayah.'}</p></div>
       <div className={styles.quizActions}><Button href="/quizzes"><Feather size={18} aria-hidden />{ar ? 'بمفردك' : 'Solo'}</Button><Button href="/quizzes/party"><Users size={18} aria-hidden />{ar ? 'مع غيرك' : 'Party'}</Button><Button href="/quran/read/recite"><EyeOff size={18} aria-hidden />{ar ? 'تسميع' : 'Recite'}</Button></div>
     </section>
     {menu}

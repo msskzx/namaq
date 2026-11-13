@@ -35,11 +35,11 @@ function rtlStyle(style: StyleProp<TextStyle>): StyleProp<TextStyle> {
   return [style, textDirection(StyleSheet.flatten(style) ?? {}, Platform.OS !== 'web')];
 }
 
-/** React Native's Text in the app's interface font. Import this instead of Text from react-native. */
+/** React Native's Text in the app's interface font. Import this instead of Text from react-native. Not selectable unless asked, as on a phone, so a tap on the web build doesn't select words. */
 export function Text({ style, ...props }: ComponentProps<typeof NativeText>) {
   const parent = useContext(Inside);
   const ui = uiStyle(style, parent);
-  const text = <NativeText {...props} style={parent ? ui.style : rtlStyle(ui.style)} />;
+  const text = <NativeText selectable={false} {...props} style={parent ? ui.style : rtlStyle(ui.style)} />;
   return ui.role === parent ? text : <Inside.Provider value={ui.role}>{text}</Inside.Provider>;
 }
 
