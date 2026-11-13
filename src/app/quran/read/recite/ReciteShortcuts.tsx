@@ -5,7 +5,6 @@ import { LightbulbOff, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { ayahHref, readAyahMarks, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
-import { num } from '@shared/quran/arabicNumber';
 import { forgottenOrder } from '@shared/quran/recite';
 import { LAST_RECITE_KEY } from '../ReaderView';
 
@@ -23,7 +22,7 @@ export default function ReciteShortcuts() {
   return <div className="mb-5 flex flex-wrap gap-2">
     {last?.startsWith('/quran/read/') && <Button href={last}><Play size={18} aria-hidden />{ar ? 'تابع من حيث توقفت' : 'Continue where you stopped'}</Button>}
     {forgotten.length > 0 && <Button href={`${ayahHref(forgotten[0])}?recite=${forgotten[0]}&review=1`}>
-      <LightbulbOff size={18} aria-hidden />{ar ? `راجع ما نسيت (${num(forgotten.length)})` : `Review what you forgot (${forgotten.length})`}
+      <LightbulbOff size={18} aria-hidden />{ar ? 'راجع ما نسيت' : 'Review what you forgot'}
     </Button>}
   </div>;
 }

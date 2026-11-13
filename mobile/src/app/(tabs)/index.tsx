@@ -13,7 +13,7 @@ import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { surahs } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
-import { FORGOTTEN_LABEL, reviewForgotten, reviewLabel, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
+import { FORGOTTEN_LABEL, REVIEW_LABEL, reviewForgotten, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { openIntent as go } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
@@ -127,7 +127,7 @@ export default function HomeScreen() {
           <View style={{ gap: 10 }}>
             <Heading Icon={LightbulbOff} title="ما نسيته" palette={palette}>
               <Row>
-                <Button Icon={EyeOff} label={num(forgotten.length)} accessibilityLabel={reviewLabel(forgotten.length)} onPress={() => reviewForgotten(forgotten)} />
+                <Button Icon={EyeOff} label="راجع" accessibilityLabel={REVIEW_LABEL} onPress={() => reviewForgotten(forgotten)} />
                 {forgottenCards.length > SHELF && <SeeAll tab="forgotten" />}
               </Row>
             </Heading>

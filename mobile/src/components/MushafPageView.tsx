@@ -252,8 +252,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                           {group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}
-                              <Text style={[{ color: !endHidden(end) && saved.has(`${group.surah}:${end}`) ? palette.root : palette.accent },
-                                mark === `${group.surah}:${end}` ? { backgroundColor: tint(palette.accent, 0.18), borderRadius: 99 } : null]}>
+                              <Text style={{ color: !endHidden(end) && saved.has(`${group.surah}:${end}`) ? palette.root : palette.accent }}>
                                 {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                                 {endHidden(end) ? EMPTY_END : num(end)}
                               </Text>

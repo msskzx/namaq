@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { ayahHref, clearForgotten, readAyahMarks, recentlyForgotten, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
+import { ayahHref, clearForgotten, readAyahMarks, mostForgotten, serverAyahMarks, subscribeAyahMarks } from '@shared/ayahMarks';
 import { forgottenOrder } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
 import { BOOKMARK_KIND_LABEL, bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
@@ -59,7 +59,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const marks = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
   const forgotten = forgottenOrder(Object.keys(marks));
-  const recent = recentlyForgotten(marks);
+  const recent = mostForgotten(marks);
   const texts = useAyahTexts(recent.slice(0, forgottenShown));
   const [menu, setMenu] = useState<Menu | null>(null);
   const closeMenu = useCallback(() => setMenu(null), []);
