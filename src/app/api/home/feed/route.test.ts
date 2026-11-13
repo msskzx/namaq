@@ -12,6 +12,8 @@ describe('GET /api/home/feed', () => {
     expect(ids.pairs.length).toBe(60);
     expect(ids.pairs[0]).toBeTruthy();
     expect(ids.trees[0]).toBeTruthy();
+    expect(ids.pairKeys[0].length).toBeGreaterThan(1);
+    expect(ids.treeKeys[0][0]).toMatch(/^\d+:\d+$/);
     const content = await get(`day=${today}&p=0,1&t=0`);
     expect(content.pairs.map((pair: { id: string }) => pair.id)).toEqual(ids.pairs.slice(0, 2));
     expect(content.trees[0].id).toBe(ids.trees[0]);

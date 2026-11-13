@@ -19,6 +19,10 @@ describe('feed seen', () => {
     expect(freshPicks(pick, id, { ...seen, e: 10 }, 2, { since: 10 })).toEqual(['e', 'a']);
   });
 
+  it('puts preferred fresh items first', () => {
+    expect(freshPicks(pick, id, { c: 1 }, 3, { since: 10, prefer: item => item === 'c' || item === 'd' })).toEqual(['d', 'a', 'b']);
+  });
+
   it('takes an item that is the number 0', () => {
     expect(freshPicks(offset => (offset < 3 ? offset : undefined), String, {}, 2)).toEqual([0, 1]);
   });

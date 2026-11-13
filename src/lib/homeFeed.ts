@@ -18,7 +18,15 @@ export function treeOfDay(day: number, offset = 0) {
 /** The ids of the next pairs and trees from a day, by offset, for the browser to skip what it has seen (shared/feedSeen.ts). */
 export function feedIds(day: number, count = FEED_AHEAD) {
   const offsets = Array.from({ length: count }, (_, offset) => offset);
-  return { pairs: offsets.map(offset => pairOfDay(day + offset)?.id ?? null), trees: offsets.map(offset => treeOfDay(day, offset)?.id ?? null) };
+  const pairs = offsets.map(offset => pairOfDay(day + offset));
+  const trees = offsets.map(offset => treeOfDay(day, offset));
+  return {
+    pairs: pairs.map(pair => pair?.id ?? null),
+    trees: trees.map(piece => piece?.id ?? null),
+    // Their ayat, for putting what is memorized first («قدّم ما أحفظه في التأمل», shared/memorized.ts).
+    pairKeys: pairs.map(pair => pair?.sides.flatMap(side => side.ayat.map(ayah => `${side.surah}:${ayah.number}`)) ?? []),
+    treeKeys: trees.map(piece => piece?.keys ?? []),
+  };
 }
 
 /** The picked pairs and trees, by offset from the day. */

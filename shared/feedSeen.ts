@@ -55,21 +55,25 @@ export const isFresh = (seen: Seen, id: string, since = visitStart()) => !(id in
 
 /**
  * `count` items for the feed, walking `pick(0)`, `pick(1)`… and keeping the fresh ones, without repeats.
+ * With `prefer` (the «قدّم ما أحفظه» setting), fresh items it likes come first, the rest after, each in walking order.
  * When too few are fresh (everything was seen), the rest are filled from the seen ones, so the feed starts over.
  */
-export function freshPicks<T>(pick: (offset: number) => T | undefined, idOf: (item: T) => string, seen: Seen, count: number, { tries = FEED_AHEAD, since = visitStart() }: { tries?: number; since?: number } = {}): T[] {
+export function freshPicks<T>(pick: (offset: number) => T | undefined, idOf: (item: T) => string, seen: Seen, count: number,
+  { tries = FEED_AHEAD, since = visitStart(), prefer }: { tries?: number; since?: number; prefer?: (item: T) => boolean } = {}): T[] {
+  const liked: T[] = [];
   const fresh: T[] = [];
   const old: T[] = [];
   const taken = new Set<string>();
-  for (let offset = 0; offset < tries && fresh.length < count; offset++) {
+  for (let offset = 0; offset < tries && liked.length < count && (prefer || fresh.length < count); offset++) {
     const item = pick(offset);
     if (item === undefined || item === null) continue;
     const id = idOf(item);
     if (taken.has(id)) continue;
     taken.add(id);
-    (isFresh(seen, id, since) ? fresh : old).push(item);
+    if (!isFresh(seen, id, since)) old.push(item);
+    else (prefer?.(item) ? liked : fresh).push(item);
   }
-  return [...fresh, ...old].slice(0, count);
+  return [...liked, ...fresh, ...old].slice(0, count);
 }
 
 /**

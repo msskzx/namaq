@@ -25,7 +25,7 @@ const nav = vi.hoisted(() => {
 vi.mock('next/navigation', async () => {
   const ReactActual = await vi.importActual<typeof import('react')>('react');
   return {
-    useRouter: () => ({ push: nav.push }),
+    useRouter: () => ({ push: nav.push, replace: nav.push }),
     usePathname: () => '/quizzes',
     useSearchParams: () => {
       const search = ReactActual.useSyncExternalStore(
@@ -431,6 +431,23 @@ describe('QuizzesPage', () => {
     } finally {
       questions[0] = original;
     }
+  });
+
+  it('opens a trees quiz on what is memorized while «الأسئلة مما أحفظ فقط» is on, and not over a range already picked', () => {
+    localStorage.setItem('memorized', JSON.stringify({ unit: 'juz', picked: [29, 30] }));
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('juz')).toBe('29,30');
+    cleanup();
+    nav.reset('/quizzes?topic=BRANCHES&juzFrom=1&juzTo=5');
+    render(<QuizzesPage />);
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).has('juz')).toBe(false);
+    cleanup();
+    localStorage.setItem('memorized-questions', '0');
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).has('juz')).toBe(false);
+    localStorage.clear();
   });
 
   it('picks a juz range with the branches filters and preserves the other URL options', () => {

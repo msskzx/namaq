@@ -8,6 +8,7 @@ import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
 import { connectors, haptics, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
+import { MemorizedSetting } from './Memorized';
 import type { Palette } from '@/lib/theme';
 
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. */
@@ -23,6 +24,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
     <Sheet open={open} onClose={onClose} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 20 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
+        <MemorizedSetting palette={palette} />
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />
         <ConnectorsSetting palette={palette} />

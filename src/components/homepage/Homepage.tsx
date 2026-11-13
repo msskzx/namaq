@@ -8,6 +8,7 @@ import styles from './Homepage.module.css';
 import Tour from './Tour';
 import { SeeAll, useHomeCards } from './HomeCards';
 import { ContinueReading, Divider, Feed, PrayerRow, Stories } from './HomeFeed';
+import { MemorizedPrompt } from './Memorized';
 
 /** A shelf shows the latest few cards; «عرض الكل» opens the library page with all of them. */
 export const SHELF = 5;
@@ -25,6 +26,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
 
     <Stories />
     <ContinueReading />
+    <MemorizedPrompt />
     <Feed />
 
     <Divider label="أدوات" />
