@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { shownBookmarks } from '@/lib/home';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
@@ -61,7 +62,7 @@ const toNumber = (value: string, fallback: number) => { const n = Number(value);
 export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, savedOnly = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; savedOnly?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
-  const saved = bookmarks.filter(item => isCompareBookmark(item) === compare).length;
+  const saved = shownBookmarks(bookmarks).filter(item => isCompareBookmark(item) === compare).length;
   const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
   const setFilter = (key: keyof GroupFilters, value: string) => setDraft({ ...draft, filters: { ...draft.filters, [key]: value || undefined } });
   const categories = draft.filters.categories ?? 'mutashabeh,pondering';
