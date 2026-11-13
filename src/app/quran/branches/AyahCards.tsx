@@ -28,14 +28,16 @@ export function CardsLegend() {
   return <MatchLegend exact={exact} root={root} />;
 }
 
-type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<number, string>; steps?: Steps };
+type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<number, string>; steps?: Steps;
+  /** Shown under an ayah in the middle column, by its first ayah (a checked quiz answer). */
+  note?: (key: string) => React.ReactNode };
 
 export default function AyahCards(props: Props) {
   const [context] = useAroundSetting();
   return <Matrix key={String(context)} context={context} {...props} />;
 }
 
-function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { context: boolean }) {
+function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & { context: boolean }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const connections = useGroupConnections();
@@ -241,6 +243,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context }: Props & { cont
             : [[{ number, words: ayah.words, marks: marksFor(at, ayah.key) }]]),
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
+        footer: at === 'ayah' ? note?.(context.ayah.key) : undefined,
         action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
       }]} />
     </div>;

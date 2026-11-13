@@ -14,7 +14,7 @@ import MushafText from "@/components/common/MushafText";
 import BranchTree, { AyahRefs, Marked, TreeWords } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers";
-import { gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
+import { correctionOf, gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
 import { branchesHref, keys, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
@@ -83,7 +83,13 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
         {!matrix && <RotateButton />}
         <AroundButton />
       </NavButtons>}
-      {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
+      {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} note={key => {
+        const row = correctionOf(rows, key);
+        return row && <div className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2" data-answer={row.correct ? "correct" : "incorrect"}>
+          <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
+          {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
+        </div>;
+      }} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
         renderNode={(node, index, tags) => {
           const answer = matches[index]?.node ?? node;
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
