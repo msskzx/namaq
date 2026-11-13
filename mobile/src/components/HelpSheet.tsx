@@ -1,8 +1,9 @@
-import { Linking, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { OATHS_HELP } from '@shared/quran/oaths';
 import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
+import ExternalLink from './ExternalLink';
 import { VOICE_NAME, voiceColor } from './Iltifat';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
@@ -45,12 +46,12 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
           <Text style={[paragraph, { color: palette.muted, fontSize: 14 }]}>النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</Text>
         </> : topic === 'order' ? <>
           {ORDER_HELP.map((text, i) => <Text key={i} style={i === ORDER_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
-          {Object.values(BOOKS).map(book => <Text key={book.shamela} accessibilityRole="link" style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]} onPress={() => Linking.openURL(`https://shamela.ws/book/${book.shamela}`)}>{book.title}</Text>)}
+          {Object.values(BOOKS).map(book => <ExternalLink key={book.shamela} url={`https://shamela.ws/book/${book.shamela}`} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{book.title}</ExternalLink>)}
         </> : topic === 'openings' ? <>
           {OPENINGS_HELP.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
           <Text style={[paragraph, { fontWeight: '700' }]}>الشرط وجوابه</Text>
           {CONDITION_NOTES.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
-          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <Text key={source.url} accessibilityRole="link" style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]} onPress={() => Linking.openURL(source.url)}>{source.title}</Text>)}
+          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{source.title}</ExternalLink>)}
         </> : topic === 'words' ? <>
           <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
           <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>

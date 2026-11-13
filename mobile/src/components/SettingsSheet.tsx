@@ -1,6 +1,7 @@
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { BookOpen, ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
+import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-native';
+import { openExternal } from './ExternalLink';
 import Sheet from './Sheet';
 import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
@@ -38,11 +39,11 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>
           </Pressable>
           {links.map(link => (
-            <Pressable key={link.href} onPress={() => void Linking.openURL(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
+            <Pressable key={link.href} onPress={() => openExternal(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
               {link.icon}
               <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{link.label}</Text>
-              <ExternalLink size={16} color={palette.muted} />
+              <SquareArrowOutUpLeft size={16} color={palette.muted} />
             </Pressable>
           ))}
         </View>

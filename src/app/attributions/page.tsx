@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ExternalLink from "@/components/common/ExternalLink";
 import styles from "@/components/common/PaperPage.module.css";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { GROUPS, SOURCES, type Source } from "@shared/sources";
@@ -12,19 +13,19 @@ function Extra({ id, language }: { id: string; language: "ar" | "en" }) {
       <>
         <p className="mt-1 leading-loose">
           <span className="text-[var(--home-muted)]">{language === 'ar' ? 'النسخة المصورة: ' : 'Scanned edition: '}</span>
-          <a className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/details/sanbz" target="_blank" rel="noreferrer">
+          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/details/sanbz">
             {language === 'ar' ? 'Archive.org، الطبعة الثالثة، ١٤٠٥/١٩٨٥' : 'Archive.org, third edition, 1405/1985'}
-          </a>
+          </ExternalLink>
         </p>
         <p className="mt-1 leading-loose">
           <span className="text-[var(--home-muted)]">{language === 'ar' ? 'نص OCR للبحث: ' : 'Searchable OCR text: '}</span>
-          <a className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera1_djvu.txt" target="_blank" rel="noreferrer">
+          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera1_djvu.txt">
             {language === 'ar' ? 'السيرة النبوية، المجلد الأول' : 'Prophet’s Sira, volume 1'}
-          </a>
+          </ExternalLink>
           {' · '}
-          <a className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera2_djvu.txt" target="_blank" rel="noreferrer">
+          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera2_djvu.txt">
             {language === 'ar' ? 'السيرة النبوية، المجلد الثاني' : 'Prophet’s Sira, volume 2'}
-          </a>
+          </ExternalLink>
         </p>
         <p className="mt-2 text-sm leading-loose text-[var(--home-muted)]">
           {language === 'ar'
@@ -74,7 +75,7 @@ function SourceCard({ source, language }: { source: Source; language: "ar" | "en
         <div>
           <dt className="inline text-[var(--home-muted)]">{language === 'ar' ? 'المصدر: ' : 'Source: '}</dt>
           <dd className="inline">
-            <a className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href={source.link.url} target="_blank" rel="noreferrer">{source.link.label}</a>
+            <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href={source.link.url}>{source.link.label}</ExternalLink>
           </dd>
         </div>
         <div>

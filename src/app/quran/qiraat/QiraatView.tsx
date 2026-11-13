@@ -2,10 +2,9 @@
 
 // docs/plans/quran-qiraat.md
 import React, { useState } from 'react';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
+import ExternalLink from '@/components/common/ExternalLink';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
 import { ayahWords, plainName } from '@shared/quran/normalize';
@@ -31,10 +30,7 @@ function Meaning({ meaning }: { meaning: NonNullable<Variant['meaning']> }) {
     return (
       <div className="flex flex-col gap-1">
         {meaning.quotes.map(q => <blockquote key={q} className="border-s-2 border-amber-400 ps-3">«{q}»</blockquote>)}
-        <a href={meaning.url} className="inline-flex items-center gap-2 text-sm underline" target="_blank" rel="noreferrer">
-          <FontAwesomeIcon icon={faLink} />
-          {meaning.source}
-        </a>
+        <ExternalLink href={meaning.url} className="text-sm underline">{meaning.source}</ExternalLink>
       </div>
     );
   }
@@ -124,10 +120,9 @@ function Card({ entry }: { entry: QiraatEntry }) {
           <Meaning meaning={variant.meaning} />
         </div>
       )}
-      <a href={pediaUrl(variant)} className="inline-flex items-center gap-2 text-sm underline" target="_blank" rel="noreferrer">
-        <FontAwesomeIcon icon={faLink} />
+      <ExternalLink href={pediaUrl(variant)} className="text-sm underline">
         قوائم القرّاء من موسوعة القرآن: <bdi dir="ltr">{pediaUrl(variant)}</bdi>
-      </a>
+      </ExternalLink>
     </section>
   );
 }

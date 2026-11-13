@@ -185,6 +185,16 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   needs no such care.
   A picker whose buttons are short codes, such as the ayah references on the qira'at
   page (`36:35`), carries no icon: the code is the label.
+- Every link that leaves Namaq (a Shamela citation, a source on /sources or
+  /attributions, Quranpedia, archive.org) goes through `ExternalLink`:
+  `src/components/common/ExternalLink.tsx` on the website,
+  `mobile/src/components/ExternalLink.tsx` in the app (or its `openExternal`
+  for a settings row that draws the same mark itself). It ends the text with a
+  small out-of-site mark (lucide `SquareArrowOutUpLeft`, mirrored in English) in
+  the link's own colour, so a reader knows before tapping that the link leaves
+  the app. Internal links stay plain `next/link` or app navigation, with no mark.
+  `ExternalLink.test.tsx` fails on a raw `target="_blank"`, `href="http…"` or
+  `Linking.openURL` anywhere else.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.

@@ -1,11 +1,12 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { FlatList, Linking, Pressable, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import data from '@shared/data/quran/surahOrder.json';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { citeLabel, citeUrl, ORDER_JUZ, orderInJuz, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
 import { Text } from '@/components/Text';
+import ExternalLink from '@/components/ExternalLink';
 import HelpSheet from '@/components/HelpSheet';
 import TopBar from '@/components/TopBar';
 import { useTabBarSpace } from '@/components/tabBarSpace';
@@ -20,10 +21,10 @@ type Row = { kind: 'link'; surah: number; link: OrderLinkView } | { kind: 'surah
 
 function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
   return (
-    <Text accessibilityRole="link" onPress={() => Linking.openURL(citeUrl(cite))}
-      style={{ color: palette.muted, fontSize: 13, textDecorationLine: 'underline', textDecorationColor: palette.rule, textAlign: 'right' }}>
+    <ExternalLink url={citeUrl(cite)} color={palette.muted} size={13}
+      style={{ textDecorationLine: 'underline', textDecorationColor: palette.rule, textAlign: 'right' }}>
       {citeLabel(cite, num)}
-    </Text>
+    </ExternalLink>
   );
 }
 
