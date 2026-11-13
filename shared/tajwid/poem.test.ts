@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import poem from '@/app/quran/tajwid/tuhfat-al-atfal/poem.json';
+import poem from './tuhfat-al-atfal.json';
 import { numberVerses, type Poem } from './poem';
 
 const marks = /[ً-ْ]/;
@@ -23,5 +23,11 @@ describe('Tuhfat al-Atfal', () => {
       expect(second.trim()).toBe(second);
       for (const word of `${first} ${second}`.split(' ')) expect(word).toMatch(marks);
     }
+  });
+
+  it('marks the lam of al- before a moon letter with a sukun, in titles and verses alike', () => {
+    // A bare lam followed by a vowelled letter that has no shadda: «المِيمِ» instead of «الْمِيمِ».
+    const bare = /(^| )(وَ|فَ|بِ|لِ|كَ)?ال[ء-ي][َُِ](?!ّ)/;
+    for (const chapter of poem.chapters) for (const text of [chapter.title, ...chapter.verses.flat()]) expect(text).not.toMatch(bare);
   });
 });

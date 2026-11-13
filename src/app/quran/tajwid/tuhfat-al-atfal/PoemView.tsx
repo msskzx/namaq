@@ -3,7 +3,7 @@
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import paper from '@/components/common/PaperPage.module.css';
-import { numberVerses, type Poem } from '@/lib/tajwid/poem';
+import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import styles from './Poem.module.css';
 
 export default function PoemView({ poem }: { poem: Poem }) {
