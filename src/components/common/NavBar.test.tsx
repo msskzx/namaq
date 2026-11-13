@@ -12,7 +12,7 @@ vi.mock('@/components/language/LanguageContext', () => ({
 vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restoreAllMocks(); vi.clearAllMocks(); });
 
-const destinations = ['/quran', '/quran/read', '/', '/quizzes'];
+const destinations = ['/quran', '/quran/read', '/', '/quizzes', '/utilities'];
 
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
