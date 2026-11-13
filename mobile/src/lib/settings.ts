@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './branchList';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
+import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
 /** A value kept on the phone that every screen reading it follows. */
 function setting<T>(key: string, fallback: T, valid: (value: unknown) => value is T) {
@@ -54,3 +55,9 @@ export const themeChoice = setting<ThemeChoice>('theme', 'system', (value): valu
 export type CardTints = Record<CardMode, string>;
 export const cardTints = setting<CardTints>('card-tints', { light: 'paper', dark: 'dim' }, (value): value is CardTints =>
   !!value && typeof value === 'object' && parseCardTint('light', (value as CardTints).light) === (value as CardTints).light && parseCardTint('dark', (value as CardTints).dark) === (value as CardTints).dark);
+
+/** The utilities tab: where the prayer times are for (null until the person picks), the method and Asr school, and the view last open. */
+export const prayerPlace = setting<Place | null>('prayer-place', null, (value): value is Place | null => value === null || isPlace(value));
+export const prayerSettings = setting<PrayerSettings>('prayer-settings', DEFAULT_PRAYER_SETTINGS, isPrayerSettings);
+export type UtilityView = 'times' | 'qibla' | 'calendar';
+export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar');

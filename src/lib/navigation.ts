@@ -75,7 +75,7 @@ export const QURAN_TOOLS: NavItem[] = [
 ];
 
 /** Utilities (prayer times, qibla, Hijri calendar) shows once the first of them lands, as in the app (SHOW_UTILITIES there). */
-export const SHOW_UTILITIES = false;
+export const SHOW_UTILITIES = true;
 
 /**
  * The app's five tab buttons (owner, 2026-11-13), first on the right: Quran, mushaf, home, quizzes, utilities.

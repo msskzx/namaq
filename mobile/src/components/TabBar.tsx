@@ -16,7 +16,7 @@ import { buttonOf, noteRoute, pageOf } from '@/lib/tabGroups';
  * Utilities shows once its first tool lands (owner, 2026-11-13): the bar never opens an empty page.
  * The thread building prayer times, qibla and the Hijri calendar turns this on with its utilities page.
  */
-export const SHOW_UTILITIES = false;
+export const SHOW_UTILITIES = true;
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
 // read left to right they are utilities, quizzes, home, mushaf, Quran. The Quran button holds the Quran hub and its tools (lib/tabGroups.ts).
