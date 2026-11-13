@@ -1,6 +1,6 @@
 /// <reference types="expo/types" />
 import surahRows from '@shared/data/quran/surahs.json';
-import { mushafPages, type MushafPage } from '@shared/quran/readerPage';
+import { ayahWords, mushafPages, type MushafPage } from '@shared/quran/readerPage';
 
 /** The 604 pages of the 1441 Madinah mushaf, bundled with the app; each file is read the first time its page is shown. */
 const files = require.context('../../../shared/data/quran/mushaf', false, /^\.\/\d+\.json$/);
@@ -27,4 +27,14 @@ let starts: Map<string, number> | undefined;
 export function pageOfAyah(key: string): number | undefined {
   starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
   return starts.get(key);
+}
+
+/** One ayah's words as the mushaf writes them, looked for from its surah's first page so that only a few pages are read. */
+export function ayahText(key: string): string {
+  const surah = surahs.find(row => row.number === Number(key.split(':')[0]));
+  for (let page = surah?.page ?? PAGES + 1; page <= PAGES; page++) {
+    const words = ayahWords(key, pageData(page), surahBefore(page));
+    if (words.length) return words.join(' ');
+  }
+  return '';
 }
