@@ -46,7 +46,7 @@ import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/qui
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
-import { Eye, EyeOff, LogOut, RotateCcw, User, Users } from "lucide-react";
+import { Eye, EyeOff, LogOut, PenLine, RotateCcw, User, Users } from "lucide-react";
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings. */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -57,6 +57,9 @@ function QuizModes({ ar }: { ar: boolean }) {
       text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
     { href: "/quran/read/recite", Icon: EyeOff, title: ar ? "تسميع" : "Recite",
       text: ar ? "تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه." : "The ayat are hidden in the mushaf; reveal them one by one as you recite, and mark what you forgot to review it." },
+    // Recite with writing on, from the top of the page the mushaf is open at (the app's card, owner 2026-11-13).
+    { href: "/quran/read?write=1", Icon: PenLine, title: ar ? "اكتب أول الآية وآخرها" : "Write the first and last words",
+      text: ar ? "كلمات الآية صناديق في مكانها من المصحف، تكتب أول كلماتها وآخرها، ثم تظهر الآية." : "Each ayah's words are boxes in their places on the mushaf page; write its first and last words, then the ayah shows." },
   ];
   return (
     <div className={styles.page}>

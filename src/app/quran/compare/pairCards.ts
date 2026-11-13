@@ -286,7 +286,7 @@ export function compareLinkFor(keys: string[]): string | undefined {
 }
 
 /** A tree's way into compare: one listed surah pair holding a kept card of two of its ayat. */
-export type CompareLink = { href: string; label: string; labelEn: string; surahs?: [number, number] };
+export type CompareLink = { href: string; label: string; labelEn: string; surahs?: [number, number]; partner?: string };
 
 const surahName = (n: number) => surahRows.find(row => row.number === n);
 
@@ -342,6 +342,6 @@ export function compareLinksOfAyah(key: string): CompareLink[] {
     const partner = id.split('|').find(other => other !== key) ?? key;
     const [surah, ayah] = partner.split(':').map(Number);
     const row = surahName(surah);
-    return { href: holders.get(id)!, label: `${row?.name} ${num(ayah)}`, labelEn: `${row?.nameTransliterated} ${ayah}` };
+    return { href: holders.get(id)!, label: `${row?.name} ${num(ayah)}`, labelEn: `${row?.nameTransliterated} ${ayah}`, partner, surahs: [own, surah] as [number, number] };
   });
 }

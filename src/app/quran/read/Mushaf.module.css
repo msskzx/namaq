@@ -205,13 +205,20 @@
 /* Recite mode (تسميع): hidden words keep their place; the next ayah is tinted. */
 .veiled { color: transparent; border-radius: 0.2em; background: color-mix(in srgb, var(--home-muted) 10%, transparent); box-shadow: inset 0 0 0 0.12em var(--home-paper); }
 .upcoming { background: color-mix(in srgb, var(--home-accent) 22%, transparent); }
+/* Write mode (the app's WriteBox and faint Veil): the words to write are boxes as wide as the hidden word; the others stay dashed. */
+.faint { background: transparent; box-shadow: none; outline: 1px dashed var(--home-rule); outline-offset: -0.12em; opacity: 0.7; }
+.writeBox { position: relative; display: inline-block; padding: 0; border: 1px solid var(--home-rule); border-radius: 0.2em; background: var(--home-paper); font: inherit; line-height: inherit; color: inherit; cursor: text; vertical-align: baseline; }
+.writeBox[data-write-active] { border: 2px solid var(--home-accent); }
+.writeWord { color: transparent; }
+.typed { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; white-space: nowrap; font-family: var(--font-amiri), serif; font-size: 0.72em; color: var(--home-ink); }
+.right { color: var(--home-green); }
+.wrong { color: var(--home-amber); }
 /* A forgotten ayah is highlighted as one band: each word after the first fills the gap back to the word before it. */
 .forgot { position: relative; background: color-mix(in srgb, var(--home-accent) 16%, var(--home-card)); }
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 .saved { color: var(--home-root); }
 
 .ayahActions { position: fixed; z-index: 30; display: flex; gap: 0.5rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
-.ayahChoices { flex-direction: column; align-items: stretch; gap: 0.125rem; width: 18rem; max-width: calc(100vw - 2rem); }
 /* The recite buttons sit in a see-through pill floating low over the page, like the tab bar (NavBar.module.css .tabs)
    and the app's recite pill (mobile/src/components/Reader.tsx); just above the tab pill when that shows. */
 .reader { --recite-pill: 52px; }
@@ -232,3 +239,5 @@
   .reciteBar { inset-inline: 0; }
   .reader[data-reader-immersive="true"] .reciteBar { bottom: max(8px, calc(env(safe-area-inset-bottom) - 10px)); }
 }
+/* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */
+.reader[data-keyboard] .reciteBar { bottom: calc(var(--keyboard) + 8px); }

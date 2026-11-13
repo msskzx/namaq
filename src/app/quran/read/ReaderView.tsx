@@ -3,15 +3,17 @@
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, Search, Undo2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, PenLine, Search, Undo2, X } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { plainName } from '@shared/quran/normalize';
 import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
+import { maxLetters, typedLetters, writeTargets, writtenRight } from '@shared/quran/writeAyah';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
+import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import type { AyahLinks } from './ayahLinks';
 import { usePageGestures } from './usePageGestures';
 import { createPortal } from 'react-dom';
@@ -31,7 +33,7 @@ import styles from '@/components/homepage/Home.module.css';
 import mushaf from './Mushaf.module.css';
 import type { IndexSurah } from '@shared/quran/juzIndex';
 import SurahIndex from './SurahIndex';
-import MushafPage from './MushafPage';
+import MushafPage, { type Checked, type Write } from './MushafPage';
 
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
@@ -40,6 +42,8 @@ const SPREAD_KEY = 'quran-reader-spread';
 export const LAST_PAGE_KEY = 'quran-reader-page';
 const BAR_KEY = 'quran-reader-bar';
 export const LAST_RECITE_KEY = 'quran-recite-last';
+/** Whether recite mode asks to write each ayah's first and last words (the app's reader-write setting). */
+const WRITE_KEY = 'quran-reader-write';
 const WIDE = '(min-width: 1024px) and (orientation: landscape)';
 const PHONE = '(max-width: 640px)';
 
@@ -72,6 +76,7 @@ export default function ReaderView({
   fontClass,
   recite,
   review = false,
+  write: startWriting = false,
   links = {},
 }: {
   page: number;
@@ -86,6 +91,8 @@ export default function ReaderView({
   links?: AyahLinks;
   /** Recite only the forgotten ayat, one after another. */
   review?: boolean;
+  /** Start reciting with writing on, from the top of the page (the quizzes page's write card). */
+  write?: boolean;
 }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
@@ -152,8 +159,94 @@ export default function ReaderView({
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
+
+  // Write mode (the app's, owner 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes its
+  // first and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
+  // green when right and amber when wrong.
+  const [writing, setWriting] = useState(false);
+  const [typed, setTyped] = useState<Record<number, string>>({});
+  const [current, setCurrent] = useState<number | null>(null);
+  const [checked, setChecked] = useState<Checked | null>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const writeKey = writing && upcoming && !(reviewing && position?.shown) ? upcoming : null;
+  const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
+  // Words already shown (by the next-word button) are not asked.
+  const asked = writeKey && position ? writeTargets(writeWords.length).filter(at => at + titleSteps >= position.words) : [];
+  const askedKey = asked.join(',');
+  // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
+  const [writeFor, setWriteFor] = useState(writeKey);
+  if (writeFor !== writeKey) {
+    setWriteFor(writeKey);
+    setTyped({});
+    setCurrent(writeKey && askedKey ? Number(askedKey.split(',')[0]) : null);
+  }
+  useEffect(() => { if (writeKey) input.current?.focus({ preventScroll: true }); }, [writeKey]);
+  // On a phone the keyboard covers the page's lower part: the recite pill rises above it, and the page (kept at its size)
+  // moves up just enough to show the box being written (the app scrolls it, #691).
+  const [keyboard, setKeyboard] = useState(0);
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!reciting || !writing || !viewport) { setKeyboard(0); return; }
+    const measure = () => { const covered = window.innerHeight - viewport.height - viewport.offsetTop; setKeyboard(covered > 80 ? covered : 0); };
+    measure();
+    viewport.addEventListener('resize', measure);
+    viewport.addEventListener('scroll', measure);
+    return () => { viewport.removeEventListener('resize', measure); viewport.removeEventListener('scroll', measure); };
+  }, [reciting, writing]);
+  useLayoutEffect(() => {
+    const element = stage.current;
+    if (!element) return;
+    element.style.transform = '';
+    const box = keyboard ? element.querySelector('[data-write-active]')?.getBoundingClientRect() : null;
+    const room = window.innerHeight - keyboard - 52 - 24;
+    if (box && box.bottom > room) element.style.transform = `translateY(${room - box.bottom}px)`;
+  }, [keyboard, current, writeKey]);
+  /** The ayah's words on the shown pages before each one, so a box's place counts from the ayah's first word. */
+  const before = (index: number, key: string) => shown.slice(0, index).reduce((sum, _, at) => sum + (wordCounts[at][key] ?? 0), 0);
+  const check = (filled: Record<number, string>) => {
+    if (!writeKey || !position) return;
+    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
+    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)), before: 0 });
+    setPosition(revealAyah(position, writeKey));
+  };
+  const moveOn = (filled: Record<number, string>) => {
+    const at = current === null ? -1 : asked.indexOf(current);
+    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
+    else check(filled);
+  };
+  // A word revealed by the next-word button while its box was being written has no box any more.
+  if (current !== null && asked.length && !asked.includes(current)) setCurrent(asked[0]);
+  const onWrite = (text: string, composing = false) => {
+    if (current === null) return;
+    const letters = typedLetters(text);
+    const filled = { ...typed, [current]: letters };
+    setTyped(filled);
+    if (!composing && (/\s/.test(text) || letters.length >= maxLetters(writeWords[current]))) moveOn(filled);
+  };
+  const back = () => {
+    const at = current === null ? -1 : asked.indexOf(current);
+    if (at > 0) setCurrent(asked[at - 1]);
+    return at > 0;
+  };
+  const onWriteKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') { event.preventDefault(); moveOn(typed); return; }
+    if (event.key !== 'Backspace' || current === null || typed[current]) return;
+    if (back()) event.preventDefault();
+  };
+  // Android keyboards often send no Backspace key for an empty field, only a delete input.
+  const onWriteInput = (event: React.FormEvent<HTMLInputElement>) => {
+    const native = event.nativeEvent as InputEvent;
+    if (native.inputType === 'deleteContentBackward' && current !== null && !typed[current] && back()) event.preventDefault();
+  };
+  const toggleWriting = () => {
+    setWriting(on => { write(WRITE_KEY, on ? 'off' : 'on'); return !on; });
+    setChecked(null);
+  };
+  const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: at => { setCurrent(at); input.current?.focus({ preventScroll: true }); } } : null;
+  const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
+  const [preview, setPreview] = useState<Preview | null>(null);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const closeActions = useCallback(() => setActions(null), []);
   /** When the ayah buttons were last closed by a press elsewhere: that press only closes them. */
@@ -193,7 +286,7 @@ export default function ReaderView({
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     const params = new URLSearchParams(window.location.search);
-    for (const name of ['recite', 'upto', 'w', 'review']) params.delete(name);
+    for (const name of ['recite', 'upto', 'w', 'review', 'write']) params.delete(name);
     new URLSearchParams(query ?? '').forEach((value, name) => params.set(name, value));
     const url = `${window.location.pathname}${params.size ? `?${params}` : ''}`;
     if (url !== `${window.location.pathname}${window.location.search}`) window.history.replaceState(window.history.state, '', url);
@@ -206,7 +299,15 @@ export default function ReaderView({
     setReviewing(false);
     setPosition({ start: mark ? `${mark.surah}:${mark.ayah}` : order[0], shown: null, words: 0 });
   };
-  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); };
+  // The quizzes page's write card: recite from the top of the page with writing on.
+  useEffect(() => {
+    if (!startWriting || position) return;
+    setWriting(true);
+    write(WRITE_KEY, 'on');
+    setPosition({ start: order[0], shown: null, words: 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the page opens with ?write=1
+  }, [startWriting]);
+  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
   const revealNextAyah = () => {
     if (!position) return;
     if (reviewing && position.shown) {
@@ -222,7 +323,7 @@ export default function ReaderView({
     if (upcoming && !(reviewing && position.shown)) setPosition(revealWord(position, upcoming, upcomingLength));
     else revealNextAyah();
   };
-  const stepBackOne = () => { if (position) setPosition(stepBack(position, ayahCounts)); };
+  const stepBackOne = () => { if (position) { setPosition(stepBack(position, ayahCounts)); setChecked(null); } };
   const ayahText = (key: string) => {
     const words = groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []));
     return `${words.join(' ')}${endsOn(key) ? '' : ' …'}`;
@@ -250,12 +351,14 @@ export default function ReaderView({
     const stored = read(SPREAD_KEY);
     setSpread(stored ? stored === 'two' : !!window.matchMedia?.(WIDE).matches);
     setHidden(read(BAR_KEY) === 'hidden');
+    if (!startWriting) setWriting(read(WRITE_KEY) === 'on');
     const query = window.matchMedia?.(PHONE);
     if (!query) return;
     const update = () => setPhone(query.matches);
     update();
     query.addEventListener?.('change', update);
     return () => query.removeEventListener?.('change', update);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- read once on opening; ?write=1 turns writing on itself
   }, []);
 
   useLayoutEffect(() => {
@@ -275,7 +378,9 @@ export default function ReaderView({
     const onKey = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.defaultPrevented) return;
       if (event.shiftKey && event.key.startsWith('Arrow')) return;
-      if (event.target instanceof Element && event.target.closest('input, textarea, select, [popover], dialog[open], [contenteditable]:not([contenteditable="false"])')) return;
+      // The hidden write field keeps the arrows for turning pages.
+      const writeField = event.target === input.current && event.key.startsWith('Arrow');
+      if (!writeField && event.target instanceof Element && event.target.closest('input, textarea, select, [popover], dialog[open], [contenteditable]:not([contenteditable="false"])')) return;
       if (event.key === 'ArrowLeft') go(1);
       else if (event.key === 'ArrowRight') go(-1);
       else if (event.key.toLowerCase() === 'd' && !phone) chooseSpread(!spread);
@@ -313,6 +418,8 @@ export default function ReaderView({
     onGesture: (gesture, target, mouse) => {
       // With a mouse, reading keeps clicks and double clicks for selecting text; only reciting takes them.
       if (mouse && !reciting && gesture !== 'long') return;
+      // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
+      if (writeKey) { input.current?.focus({ preventScroll: true }); return; }
       setActions(null);
       runGesture(gestures[mode][gesture], target);
     },
@@ -341,7 +448,7 @@ export default function ReaderView({
     </SwipePanel>
   </>;
   return (
-    <div ref={frame} data-reader-immersive={!phoneTools} data-reciting={reciting || undefined} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} ${mushaf.reader} flex flex-col`}>
+    <div ref={frame} data-reader-immersive={!phoneTools} data-reciting={reciting || undefined} data-keyboard={keyboard ? '' : undefined} style={keyboard ? { '--keyboard': `${keyboard}px` } as React.CSSProperties : undefined} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} ${mushaf.reader} flex flex-col`}>
       {rail && <SettingsHelp label={ar ? 'اختصارات القراءة' : 'Reading shortcuts'}>
         <ul className="space-y-2">
           <li><kbd>←</kbd> <kbd>→</kbd> {ar ? 'لتقليب الصفحات' : 'Turn pages'}</li>
@@ -403,11 +510,14 @@ export default function ReaderView({
           {toggleTools}
         </Button>}
         {shown.map((entry, at) => (
-          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} />
+          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
+            write={writeOn(at)} checked={checkedOn(at)} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
-        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
+        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)}
+        onPreview={kind => setPreview({ kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
+      <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
       {noting && <NoteDialog ayah={noting} name={plainName(names[Number(noting.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined} ar={ar} onClose={() => setNoting(null)} />}
       {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
@@ -418,8 +528,14 @@ export default function ReaderView({
         <Button size="lg" variant="ghost" aria-label={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
           title={reviewDone ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah') : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah')}
           disabled={reviewDone ? !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : ar ? <ChevronsLeft aria-hidden /> : <ChevronsRight aria-hidden />}</Button>
+        <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} aria-label={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')}
+          title={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')} onClick={toggleWriting}><PenLine aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
       </div></div>}
+      {/* The keyboard writes into the box being written; the field itself is out of sight. */}
+      {reciting && writing && <input ref={input} value={current === null ? '' : typed[current] ?? ''} onChange={event => onWrite(event.target.value, (event.nativeEvent as InputEvent).isComposing)} onCompositionEnd={event => onWrite(event.currentTarget.value)} onBeforeInput={onWriteInput} onKeyDown={onWriteKey}
+        dir="rtl" lang="ar" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="next" aria-label={ar ? 'اكتب الكلمة' : 'Write the word'}
+        className="fixed left-0 top-0 h-px w-px text-[16px] opacity-0" />}
     </div>
   );
 }
@@ -436,5 +552,5 @@ export function MarkedReaderView(props: ReaderProps) {
     if (asked && !holds) router.replace(`/quran/read/ayah/${surah}/${ayah}`);
   }, [asked, holds, surah, ayah, router]);
   const params = useSearchParams();
-  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} recite={readPosition(params)} review={params.get('review') === '1'} />;
+  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} recite={readPosition(params)} review={params.get('review') === '1'} write={params.get('write') === '1'} />;
 }

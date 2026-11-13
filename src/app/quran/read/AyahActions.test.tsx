@@ -15,17 +15,14 @@ describe("the reader's ayah buttons", () => {
     expect(screen.queryByLabelText('أشجار هذه الآية')).toBeNull();
   });
 
-  it('links straight to the one compare card and to the trees holding the ayah', () => {
-    render(<AyahActions {...props} links={{ compare: [one], trees: '/quran/branches?k=2%3A49' }} />);
-    expect(screen.getByLabelText('في المقارنة').getAttribute('href')).toBe(one.href);
-    expect(screen.getByLabelText('أشجار هذه الآية').getAttribute('href')).toBe('/quran/branches?k=2%3A49');
-  });
-
-  it('lists the surahs to pick from when several hold a card of the ayah', () => {
-    render(<AyahActions {...props} links={{ compare: [one, two] }} />);
+  it('previews the compare cards and the trees holding the ayah in a sheet instead of leaving the mushaf', () => {
+    const onPreview = vi.fn();
+    render(<AyahActions {...props} onPreview={onPreview} links={{ compare: [one, two], trees: '/quran/branches?k=2%3A49' }} />);
+    expect(screen.getByLabelText('في المقارنة').getAttribute('href')).toBeNull();
     fireEvent.click(screen.getByLabelText('في المقارنة'));
-    expect(screen.getByRole('link', { name: 'الأعراف ١٤١' }).getAttribute('href')).toBe(one.href);
-    expect(screen.getByRole('link', { name: 'إبراهيم ٦' }).getAttribute('href')).toBe(two.href);
+    expect(onPreview).toHaveBeenLastCalledWith('compare');
+    fireEvent.click(screen.getByLabelText('أشجار هذه الآية'));
+    expect(onPreview).toHaveBeenLastCalledWith('trees');
   });
 
   it('opens the note, filled when the ayah has one', () => {
