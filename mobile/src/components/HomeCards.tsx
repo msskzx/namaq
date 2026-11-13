@@ -12,7 +12,7 @@ import CardMenu, { type MenuAt, type MenuItem } from './CardMenu';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { ayahText, surahNames } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
-import { cardWays, forgottenCard, forgottenWays, savedCard, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import { cardWays, forgottenCard, forgottenWays, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
@@ -73,7 +73,8 @@ export function Shelf({ cards, render }: { cards: SavedCard[]; render: (card: Sa
  * `menus` renders the icon row and the compare chooser; place it once at the end of the screen.
  */
 export function useHomeCards(palette: Palette) {
-  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const allBookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const bookmarks = useMemo(() => shownBookmarks(allBookmarks), [allBookmarks]);
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
   const [menu, setMenu] = useState<{ at: MenuAt; label: string; items: MenuItem[] } | null>(null);
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
