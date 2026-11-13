@@ -10,7 +10,8 @@ import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@shared/party/rules";
-import { DIFFICULTY_LABELS, DIFFICULTY_NOTE, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
+import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
+import { RANGED_TOPICS, SOLO_TOPICS } from "@shared/quiz/settings";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@shared/quiz/difficulty";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";
@@ -32,6 +33,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 /** The host edits the party's quiz here; everyone else reads the same settings. */
 export default function PartySettingsPanel({ settings, editable, onChange, ar }: { settings: PartySettings; editable: boolean; onChange: (change: Partial<PartySettings>) => void; ar: boolean }) {
   const branches = settings.topics.includes("BRANCHES");
+  const ranged = settings.topics.some((topic) => RANGED_TOPICS.includes(topic));
   const others = settings.topics.some((topic) => topic !== "BRANCHES");
   const ready = settings.topics.length > 0 && (!settings.topics.includes("PERSON_CIRCLE") || settings.person);
   const scope = new URLSearchParams(quizQuery(settings));
@@ -45,9 +47,11 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
     const rows: [string, string][] = [
       [ar ? "المواضيع" : "Topics", settings.topics.map((topic) => TOPIC_LABELS[topic][ar ? "ar" : "en"]).join(ar ? "، " : ", ") || "—"],
       [ar ? "عدد الأسئلة" : "Questions", n(settings.length, ar)],
-      ...(branches ? [
-        [ar ? "الأشجار" : "Trees", scopeSummary(settings, ar)] as [string, string],
+      ...(ranged ? [
+        [branches ? (ar ? "الأشجار" : "Trees") : (ar ? "النطاق" : "Range"), scopeSummary(settings, ar, branches)] as [string, string],
         [ar ? "الصعوبة" : "Difficulty", DIFFICULTY_LABELS[settings.difficulty ?? DEFAULT_DIFFICULTY][ar ? "ar" : "en"]] as [string, string],
+      ] : []),
+      ...(branches ? [
         [ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string],
         [ar ? "وقت سؤال الشجرة" : "Time per tree", duration(settings.treeSeconds, ar)] as [string, string],
       ] : []),
@@ -70,7 +74,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       <h2 className="mb-3 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
       {TOPIC_GROUPS.map((group) => (
         <Row key={group.en} label={group[ar ? "ar" : "en"]}>
-          {group.topics.map((topic) => (
+          {group.topics.filter((topic) => !SOLO_TOPICS.includes(topic)).map((topic) => (
             <Button key={topic} active={settings.topics.includes(topic)} aria-pressed={settings.topics.includes(topic)} onClick={() => toggle(topic)}>
               {TOPIC_LABELS[topic][ar ? "ar" : "en"]}
             </Button>
@@ -78,27 +82,29 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         </Row>
       ))}
       {settings.topics.includes("PERSON_CIRCLE") && <div className="mb-4"><PersonPicker person={settings.person} ar={ar} onCommit={(person) => onChange({ person: person ?? "" })} /></div>}
-      {branches && (
+      {ranged && (
         <>
           <div className="mb-4 flex flex-wrap items-start gap-x-6 gap-y-4">
             <div className="min-w-0 basis-full">
-              <TreeFilters savedOnly={false} choice={{ range: settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo }, filters: settings.filters ?? {}, saved: false }}
+              <TreeFilters savedOnly={false} trees={branches} choice={{ range: settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo }, filters: settings.filters ?? {}, saved: false }}
                 onChange={({ range, filters }) => onChange({ juzFrom: range?.from ?? 1, juzTo: range?.to ?? 30, filters })} />
             </div>
           <Row label={ar ? "الصعوبة" : "Difficulty"}>
             {DIFFICULTIES.map((value) => <Button key={value} active={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} aria-pressed={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })}>{DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}</Button>)}
-            <p className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTE[ar ? "ar" : "en"]}</p>
+            {settings.topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
           </Row>
-          <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
+          {branches && <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
             {QUIZ_LEAVES.map((value) => (
               <Button key={value} size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
             ))}
-          </Row>
+          </Row>}
           </div>
-          <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
-          <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
-            {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
-          </Row>
+          {branches && <>
+            <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
+            <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
+              {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
+            </Row>
+          </>}
         </>
       )}
       {others && (

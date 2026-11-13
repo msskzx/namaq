@@ -20,9 +20,10 @@ import { BranchFeedback, BranchInputs } from "../BranchAnswers";
 import PartySettingsPanel from "./PartySettings";
 import { Eye } from "lucide-react";
 import QuestionReview from "../QuestionReview";
+import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import { mushafText } from '@shared/quran/mushafText';
 
-type Question = PartyQuestion & {
+type Question = PartyQuestion & ChoiceParts & {
   promptArabic: string;
   choices: QuestionChoice[];
   choiceDetails?: Record<string, { text: string; reference: string }>;
@@ -249,6 +250,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             <p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p>
           </blockquote>
         )}
+        <ChoiceQuran question={question} given={revealed ? view.answer as string ?? undefined : undefined} revealed ar={ar} />
         {question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
@@ -276,6 +278,9 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : `${view.result.earned} of ${view.result.total} leaves`)
             : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}
+        {revealed && view.answer !== null && !question.tree && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
+          surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
+        {revealed && view.answer === null && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
         {revealed && question.evidence?.reference && (
           <Button className="mt-3" size="sm" variant="outline" onClick={() => setSource(true)}><FontAwesomeIcon icon={faBookOpen} />{ar ? "المصدر" : "Source"}</Button>
         )}

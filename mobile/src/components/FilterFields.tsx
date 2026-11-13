@@ -59,7 +59,8 @@ const toNumber = (value: string, fallback: number) => { const n = Number(value);
 
 /** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz all but sort).
  *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
-export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, savedOnly = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; savedOnly?: boolean }) {
+/** Without `trees` (a quiz with no tree questions) only the part of the Quran is asked. */
+export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, savedOnly = true, trees = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; savedOnly?: boolean; trees?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
   const saved = shownBookmarks(bookmarks).filter(item => isCompareBookmark(item) === compare).length;
@@ -70,8 +71,8 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
     : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
   return (
     <>
-      {savedOnly && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label="المحفوظة فقط" palette={palette} disabled={!draft.saved && !saved} />}
-      {savedOnly && !draft.saved && !saved && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -6 }}>لا محفوظات بعد: احفظ {compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها.</Text>}
+      {savedOnly && trees && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label="المحفوظة فقط" palette={palette} disabled={!draft.saved && !saved} />}
+      {savedOnly && trees && !draft.saved && !saved && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -6 }}>لا محفوظات بعد: احفظ {compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها.</Text>}
       <Group title="النطاق" palette={palette}>
         {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
           onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
@@ -100,7 +101,7 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
         {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
           onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
       </View>}
-      {!compare && <>
+      {!compare && trees && <>
       <Group title="نوع المقارنة" palette={palette}>
         {Object.entries(CATEGORIES).map(([id, label]) => <Chip key={id} label={label} active={categories.split(',').includes(id)} palette={palette}
           onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}

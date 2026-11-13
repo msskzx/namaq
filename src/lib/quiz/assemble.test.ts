@@ -52,6 +52,23 @@ describe('approved quiz assembly', () => {
     expect(questions[0].branches?.length).toBeGreaterThanOrEqual(2);
   });
 
+  it('mixes which-surah questions with the trees, half each, over the chosen juz', async () => {
+    const questions = await assembleQuiz({ topics: ['BRANCHES', 'SURAH'], juz: { from: 30, to: 30 }, length: 10, random: Math.random });
+    expect(findMany).not.toHaveBeenCalled();
+    expect(questions.filter((question) => question.family === 'SURAH')).toHaveLength(5);
+    for (const question of questions.filter((question) => question.family === 'SURAH')) {
+      expect(Number(question.correctAnswer)).toBeGreaterThanOrEqual(78);
+      expect(question.choices).toHaveLength(4);
+    }
+    const surah = await availableQuestionCount(['SURAH'], undefined, { from: 30, to: 30 });
+    expect(await availableQuestionCount(['SURAH', 'RECITE'], undefined, { from: 30, to: 30 })).toBeGreaterThan(surah);
+  });
+
+  it('keeps a recited snippet\'s two answers in order', async () => {
+    const [question] = await assembleQuiz({ topics: ['RECITE'], length: 5, random: Math.random });
+    expect(question.choices.map((choice) => choice.labelArabic)).toEqual(['حفظتها', 'نسيتها']);
+  });
+
   it('counts shared openings on top of the bank and beside a person circle', async () => {
     const branches = await availableQuestionCount(['BRANCHES']);
     const both = await availableQuestionCount(['AYAT', 'BRANCHES']);

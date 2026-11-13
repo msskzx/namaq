@@ -11,7 +11,11 @@ import Button, { Row } from '@/components/Button';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { surahNames } from '@/lib/branches';
-import { check, cleanSolo, clearAnswers, goTo, hasTyped, questionState, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import QuizChoice from '@/components/QuizChoice';
+import { readAyah } from '@/lib/openReader';
+import { markForgotten } from '@shared/ayahMarks';
+import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -28,10 +32,15 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
     return (
       <View style={{ flex: 1 }}>
         <QuestionDots states={states} current={review} onPick={setReview} palette={palette} />
-        <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
-          {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
-        </Text>
-        <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} hints={run.hints?.[review]} />
+        {isTree(question) ? <>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
+            {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
+          </Text>
+          <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} hints={run.hints?.[review]} />
+        </> : <View style={{ flex: 1 }}>
+          <QuizChoice key={question.key} question={question} picked={run.typed[review][0] ?? ''} shown palette={palette} onOpen={readAyah}
+            header={<Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text>} />
+        </View>}
         <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule }}>
           <Button label="العودة للنتيجة" onPress={() => setReview(null)} />
         </View>
@@ -45,7 +54,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
         {passed ? <CircleCheck size={22} color={palette.green} /> : <CircleX size={22} color={palette.accent} />}
         <Text style={{ color: passed ? palette.green : palette.accent, fontSize: 18, fontWeight: '600' }}>{passed ? 'ناجح' : 'راسب'}</Text>
       </View>
-      <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اضغط سؤالًا لتراجع إجابته في الشجرة.</Text>
+      <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اضغط سؤالًا لتراجع إجابته.</Text>
       <QuestionDots states={states} current={-1} onPick={setReview} palette={palette} />
       <Row>
         <Button big variant="primary" Icon={RotateCcw} label="اختبار جديد" onPress={() => setRun(startSolo(cleanSolo(run.settings)))} />
@@ -92,14 +101,21 @@ export default function QuizPlay() {
       {run.submitted ? <Results run={run} palette={palette} /> : (
         <>
           <View style={{ flex: 1 }}>
-            {checked
+            {!isTree(question)
+              ? <QuizChoice key={question.key} question={question} picked={run.typed[current][0]} shown={!!run.shown?.[current]} palette={palette} header={top} onOpen={readAyah}
+                onReveal={() => update(reveal(run))}
+                onPick={value => {
+                  if (question.family === RECITE_SNIPPET && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+                  update(pick(run, value));
+                }} />
+              : checked
               ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} header={top} hints={run.hints?.[current]} />
               : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top}
                 hints={run.hints?.[current] ?? {}} onHints={hints => update(setHints(run, hints))} />}
           </View>
           {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
           {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
-            {!checked && (
+            {!checked && isTree(question) && (
               <Row>
                 <Button variant="primary" Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => update(check(run))} />
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />
