@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -327,7 +327,7 @@ function rowsOf(sides: CardSide[]): [CardSide, CardSide][] {
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
 const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
-function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView }) {
+function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onPageVideo }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -443,7 +443,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
-        <ShareImageButton size="icon" iconSize={18} href={`#${anchor}`} onVideo={canRecord() ? read.open : undefined} />
+        <ShareImageButton size="icon" iconSize={18} href={`#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
@@ -507,8 +507,8 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
   const sheet = useRef<HTMLDialogElement>(null);
   const [pageVideo, setPageVideo] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const openPageVideo = useCallback(() => setPageVideo(true), []);
   useEffect(() => setCanShare(canRecord()), []);
-  const pageVideoLabel = ar ? 'مشاركة الصفحة كفيديو' : 'Share the page as video';
   const pane = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [savedOnly, setSavedOnly] = useState(false);
@@ -597,15 +597,12 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-3">
         {/* Where this page sits in the list swiping walks, as on the branches trees. */}
-        <div className="flex items-center gap-2">
-          <div className="min-w-0 flex-1">{index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}</div>
-          {shown.length > 0 && canShare && <Button size="icon" variant="muted" onClick={() => setPageVideo(true)} aria-label={pageVideoLabel} title={pageVideoLabel}><Clapperboard size={18} aria-hidden /></Button>}
-        </div>
+        {index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}
         {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
-            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} />)}</ol>}
+            : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} onPageVideo={canShare ? openPageVideo : undefined} />)}</ol>}
         </PairSwipe>
         {/* At the end of the cards, step on without scrolling back up. */}
         {(previousStep || nextStep) && <nav aria-label={ar ? 'السابق والتالي' : 'Previous and next pair'} className="flex items-center justify-between max-lg:hidden">

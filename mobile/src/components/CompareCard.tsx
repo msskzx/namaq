@@ -153,7 +153,7 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
 }
 
 /** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
-function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
+function CompareCard({ card, palette, onPageVideo }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
@@ -284,7 +284,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   );
   // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
   const cardBox = { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, gap: 10 };
-  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record });
+  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
   return (
     <View style={{ gap: 4 }}>
       <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={cardBox}>

@@ -5,10 +5,8 @@ import type { Visit } from '@shared/quran/compareCards';
 import { curatedFor } from '@shared/quran/curatedComparisons';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
-import { Clapperboard } from 'lucide-react-native';
 import CompareCard from './CompareCard';
 import PageVideo from './PageVideo';
-import { IconButton } from './Studio';
 
 const GAP = 14;
 
@@ -43,18 +41,19 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
     list.current?.scrollToOffset({ offset, animated: false });
   }, []);
   const stop = useCallback(() => { pending.current = -1; landed.current?.(); }, []);
+  // The whole page's video opens from any card's share sheet, beside that card's own video.
   const [video, setVideo] = useState(false);
+  const pageVideo = useCallback(() => setVideo(true), []);
   return (
     <View style={{ width, height, direction: 'rtl' }}>
       <PageVideo lead={visit.lead} other={visit.other} cards={cards} open={video} onClose={() => setVideo(false)} palette={palette} />
       <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop}
         contentContainerStyle={{ padding: 12, gap: GAP, paddingBottom: 32 }}
-        ListHeaderComponent={cards.length ? <View onLayout={event => { head.current = event.nativeEvent.layout.height + GAP; land(); }} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 40 }}>
-          <Text style={{ flex: 1, color: palette.accent, fontSize: 16, textAlign: 'right' }}>{story?.name.ar ?? ''}</Text>
-          <IconButton label="مشاركة الصفحة كفيديو" onPress={() => setVideo(true)} Icon={Clapperboard} color={palette.muted} size={22} />
+        ListHeaderComponent={cards.length && story ? <View onLayout={event => { head.current = event.nativeEvent.layout.height + GAP; land(); }}>
+          <Text style={{ color: palette.accent, fontSize: 16, textAlign: 'right' }}>{story.name.ar}</Text>
         </View> : undefined}
         ListEmptyComponent={<Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{savedOnly ? 'لا بطاقات محفوظة بين السورتين.' : 'لا آيات متشابهة بين السورتين.'}</Text>}
-        renderItem={({ item, index }) => <View onLayout={event => { heights.current[index] = event.nativeEvent.layout.height; land(); }}><CompareCard card={item} palette={palette} /></View>} />
+        renderItem={({ item, index }) => <View onLayout={event => { heights.current[index] = event.nativeEvent.layout.height; land(); }}><CompareCard card={item} palette={palette} onPageVideo={pageVideo} /></View>} />
     </View>
   );
 });
