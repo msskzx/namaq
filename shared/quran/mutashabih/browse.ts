@@ -72,13 +72,18 @@ export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<s
 
 export function deduplicateGroups(groups: Group[]): Group[] {
   const retained: Group[] = [];
+  const bySignature = new Map<string, Group[]>();
   const signature = (group: Group) => group.places.map(place => `${place.key}-${place.through ?? ''}`).sort().join(',');
   const contains = (outer: Place[], inner: Place[]) => inner.every(place => outer.some(other => other.key === place.key && other.through === place.through && other.start <= place.start && other.end >= place.end));
   const length = (group: Group) => group.tree.occurrences.reduce((sum, occurrence) => sum + occurrence.end - occurrence.start, 0);
   for (const group of [...groups].sort((a, b) => length(b) - length(a) || b.citations.length - a.citations.length)) {
-    const existing = retained.find(other => signature(other) === signature(group) && (contains(other.tree.occurrences, group.tree.occurrences) || contains(group.tree.occurrences, other.tree.occurrences)));
+    const key = signature(group);
+    const bucket = bySignature.get(key) ?? [];
+    const existing = bucket.find(other => (contains(other.tree.occurrences, group.tree.occurrences) || contains(group.tree.occurrences, other.tree.occurrences)));
     if (!existing) {
-      retained.push({ ...group });
+      const kept = { ...group };
+      retained.push(kept);
+      bySignature.set(key, [...bucket, kept]);
       continue;
     }
     existing.aliases = [...new Set([...(existing.aliases ?? []), group.id, ...(group.aliases ?? [])])].filter(id => id !== existing.id);
