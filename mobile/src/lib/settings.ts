@@ -31,6 +31,10 @@ const isBoolean = (value: unknown): value is boolean => typeof value === 'boolea
 /** The first-launch tour ran or was skipped; the settings sheet clears it to play the tour again. */
 export const tourSeen = setting('tour-seen', false, isBoolean);
 
+/** The first-visit hints already shown (TabHint.tsx), by page; replaying the tour clears them too. */
+export type HintId = 'read' | 'branches' | 'compare' | 'prophets' | 'utilities';
+export const hintsSeen = setting<HintId[]>('hints-seen', [], (value): value is HintId[] => Array.isArray(value) && value.every(item => typeof item === 'string'));
+
 /** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
 
