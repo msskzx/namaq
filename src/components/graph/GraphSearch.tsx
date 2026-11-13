@@ -184,7 +184,7 @@ export default function GraphSearch({ personOnly = false, hint }: { personOnly?:
                   <div className="flex items-start justify-between gap-3">
                     <button
                       type="button"
-                      className="min-w-0 flex-1 text-left hover:text-amber-700 dark:hover:text-amber-300"
+                      className="min-w-0 flex-1 text-start hover:text-amber-700 dark:hover:text-amber-300"
                       disabled={!isAddable(suggestion)}
                       onMouseDown={(e) => {
                         e.preventDefault();

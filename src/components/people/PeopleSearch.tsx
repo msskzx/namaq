@@ -155,7 +155,7 @@ export default function PeopleSearch({
                   <div className="flex items-start justify-between gap-3">
                     <button
                       type="button"
-                      className="min-w-0 flex-1 text-left rtl:text-right hover:text-amber-700 dark:hover:text-amber-300"
+                      className="min-w-0 flex-1 text-start hover:text-amber-700 dark:hover:text-amber-300"
                       onMouseDown={(e) => {
                         e.preventDefault();
                         handleSelectSuggestion(suggestion);
