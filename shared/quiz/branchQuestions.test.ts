@@ -116,4 +116,13 @@ describe('branchQuiz (the phone app builds its quiz on the device)', () => {
     expect(quizTrees(null, { saved: [] })).toEqual([]);
     expect(quizTrees(null, { saved: [yasin[0].id] }).map(tree => tree.id)).toEqual([yasin[0].id]);
   });
+
+  it('asks the one tree the branches page shows where it holds smaller trees', () => {
+    const places = (tree: TreeGroup) => [...new Set(tree.occurrences.map(occurrence => occurrence.key))].sort().join(',');
+    const holding = quizTrees().filter(tree => tree.occurrences.some(occurrence => occurrence.key === '18:37') && tree.occurrences.some(occurrence => occurrence.key === '40:67'));
+    expect(holding.map(places)).toEqual(['18:37,22:5,35:11,40:67']);
+    expect(quizTrees().filter(tree => places(tree) === '22:5,40:67' && tree.text.startsWith('طِفْلًۭا'))).toEqual([]);
+    // A tree saved under its smaller tree's id is still asked, as the bigger tree.
+    expect(quizTrees(null, { saved: ['cmp:1s03nru1ozf8pk'] }).map(places)).toEqual(['18:37,22:5,35:11,40:67']);
+  });
 });
