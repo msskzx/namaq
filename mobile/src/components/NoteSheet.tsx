@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { NotebookPen, Trash2 } from 'lucide-react-native';
+import { NotebookPen, Send, Trash2 } from 'lucide-react-native';
+import { shareAyah } from './AyahShare';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import Sheet from './Sheet';
@@ -40,6 +41,11 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
           {!!text.trim() && (
             <Pressable onPress={() => { edit('', true); onClose(); }} hitSlop={6} accessibilityRole="button" accessibilityLabel="احذف التأمل" style={{ padding: 6 }}>
               <Trash2 size={20} color={palette.muted} />
+            </Pressable>
+          )}
+          {!!text.trim() && shown && (
+            <Pressable onPress={() => { flush(); onClose(); shareAyah(shown, palette, text.trim(), true); }} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 6 }}>
+              <Send size={20} color={palette.muted} />
             </Pressable>
           )}
         </View>

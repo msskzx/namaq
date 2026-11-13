@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, Bookmark, BookmarkCheck, Check, Clapperboard, Link2, Send, X } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookmarkCheck, Send, X } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import Button from '@/components/common/Button';
@@ -21,6 +21,7 @@ import GroupFilterControls from './GroupFilters';
 import { hasGroupFilters, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
+import { ShareImageButton } from '@/components/share/ShareImage';
 
 type FilterDraft = { unit: FilterUnit; values: RangeDraft; filters: GroupFilters; saved: boolean };
 
@@ -153,47 +154,10 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
   </div>;
 }
 
-/** Shares the page's address, which holds the tree, the view and the filters: the phone's share sheet, or a copied link. */
+/** Shares the tree or matrix as an image, as in the phone app; the dialog also offers the tree's video and the page's address. */
 export function ShareButton({ video = false, href }: { video?: boolean; href?: string }) {
-  const ar = useLanguage().language === 'ar';
-  const [copied, setCopied] = useState(false);
-  const [menu, setMenu] = useState(false);
   const growing = useGrowth().total > 0;
-  const holder = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!menu) return;
-    const away = (event: Event) => { if (!holder.current?.contains(event.target as Node)) setMenu(false); };
-    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenu(false); };
-    document.addEventListener('pointerdown', away);
-    document.addEventListener('keydown', escape);
-    return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', escape); };
-  }, [menu]);
-  const label = copied ? (ar ? 'نُسخ الرابط' : 'Link copied') : (ar ? 'مشاركة' : 'Share');
-  const share = async () => {
-    const url = href ? new URL(href, window.location.origin).href : window.location.href;
-    if (navigator.share) {
-      try { await navigator.share({ title: document.title, url }); } catch {}
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {}
-  };
-  const button = (onClick: () => void) => <Button data-share-tree={video || undefined} size="lg" variant="muted" onClick={onClick} aria-label={label} title={label} aria-expanded={video && growing ? menu : undefined}>
-    {copied ? <Check aria-hidden /> : <Send aria-hidden />}
-  </Button>;
-  // A tree can also go out as a video of it growing: the button then asks which.
-  if (!video || !growing || !canRecord()) return button(() => void share());
-  const item = 'flex w-full items-center gap-3 whitespace-nowrap px-4 py-3 text-start text-sm hover:bg-[var(--home-paper-deep)]';
-  return <div ref={holder} className="relative">
-    {button(() => setMenu(open => !open))}
-    {menu && <div className="absolute bottom-full start-0 z-30 mb-2 overflow-hidden rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
-      <button type="button" className={item} onClick={() => { setMenu(false); void share(); }}><Link2 size={18} aria-hidden />{ar ? 'مشاركة الرابط' : 'Share link'}</button>
-      <button type="button" className={item} onClick={() => { setMenu(false); openVideo(); }}><Clapperboard size={18} aria-hidden />{ar ? 'مشاركة كفيديو' : 'Share as video'}</button>
-    </div>}
-  </div>;
+  return <ShareImageButton href={href} onVideo={video && growing && canRecord() ? openVideo : undefined} />;
 }
 
 /** Above the tree while a surah narrows the trees: its chip, which removes the filter. */

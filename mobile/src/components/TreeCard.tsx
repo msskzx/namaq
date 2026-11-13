@@ -36,6 +36,8 @@ type Props = {
   rotated?: boolean;
   growth?: TreeGrowth;
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
+  /** Filled with the tree as share as image draws it: the way it is shown, its lit paths kept. */
+  shareRef?: React.MutableRefObject<(() => React.ReactNode) | null>;
   initialCamera?: Camera;
   onCamera?: (camera: Camera) => void;
   onTap: (ayahKeys: string[] | null, lightPath?: () => void) => void;
@@ -60,7 +62,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -88,6 +90,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const sizes = useMemo(() => sizesOf(piece.id, card.presentation, around), [piece, card, around, measuredSizes]); // eslint-disable-line react-hooks/exhaustive-deps
   const own: Direction = sizes ? pickDirection({ width: sizes[0], height: sizes[1] }, { width: sizes[2], height: sizes[3] }, view) : 'side';
   const direction: Direction = rotated ? (own === 'side' ? 'down' : 'side') : own;
+  if (shareRef) shareRef.current = () => (
+    <BranchTree presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={() => {}} paths={paths} direction={direction} around={surrounding} />
+  );
   const probeTag = `${around}:${card.presentation.ayat.length}`;
   const probe = useRef<{ tag?: string } & Partial<Record<Direction, Size>>>({});
   const probed = useCallback((side: Direction) => (event: LayoutChangeEvent) => {

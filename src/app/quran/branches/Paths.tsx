@@ -57,7 +57,7 @@ export function PathButton({ id, keys, subject }: { id: string; keys: string[]; 
   if (!paths) return null;
   const active = paths.pinned.has(pathToggleKey(id, keys));
   return (
-    <Button size="sm" data-path-toggle={pathToggleKey(id, keys)} active={active} aria-pressed={active} aria-label={subject ? `${label}: ${subject}` : label} title={label} onClick={() => paths.pin(id, keys)}>
+    <Button size="sm" data-share-skip data-path-toggle={pathToggleKey(id, keys)} active={active} aria-pressed={active} aria-label={subject ? `${label}: ${subject}` : label} title={label} onClick={() => paths.pin(id, keys)}>
       <Route size={16} aria-hidden />
     </Button>
   );

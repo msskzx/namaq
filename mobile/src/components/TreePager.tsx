@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -10,7 +10,8 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
 import TreeCard, { type Lane } from './TreeCard';
 import type { NodeActions } from './BranchTree';
-import MatrixCard from './MatrixCard';
+import MatrixCard, { MatrixShare } from './MatrixCard';
+import { shareCard } from '@/lib/shareImage';
 import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import SurahChips from './SurahChips';
@@ -48,7 +49,7 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare, onRotate }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
   const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
@@ -63,7 +64,6 @@ function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare,
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   if (studio && current) return <StudioControls palette={palette} onVideo={onVideo} />;
   const save = () => toggleSaved(piece);
-  const share = () => void Share.share({ message: `${piece.text}\n${WEBSITE}${branchesHref(piece.id)}` });
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
@@ -80,7 +80,7 @@ function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare,
         <ArrowLeftRight size={24} color={palette.ink} />
       </Pressable>}
       {/* Share is always the last button (the left end). */}
-      <Pressable onPress={share} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
+      <Pressable onPress={onShare} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
         <Send size={24} color={palette.ink} />
       </Pressable>
     </View>
@@ -141,6 +141,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
   const width = view?.width ?? 0;
   const growth = useGrowth();
   const sceneRef = useRef<(() => Promise<TreeScene | null>) | null>(null);
+  const shareRef = useRef<(() => React.ReactNode) | null>(null);
   const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
   const [video, setVideo] = useState<VideoInput | null>(null);
   const [evidence, setEvidence] = useState<Group | null>(null);
@@ -239,6 +240,18 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     setVideo(treeVideo(scene, beats, palette));
   };
 
+  // Share as image: the open tree as it is drawn, or the matrix's ayah column; the tree's video from here too.
+  const share = (at: BranchPiece) => {
+    const link = `${at.text}\n${WEBSITE}${branchesHref(at.id)}`;
+    if (mode === 'matrix') {
+      const { presentation } = cardOf(at, list);
+      shareCard({ content: width => <MatrixShare presentation={presentation} palette={palette} width={width} />, link });
+      return;
+    }
+    const draw = shareRef.current;
+    if (draw) shareCard({ content: () => draw(), link, onVideo: () => void openVideo() });
+  };
+
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [index - 1, index, index + 1].filter(at => at >= 0 && at < count);
   const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;
@@ -258,7 +271,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                 <View style={{ height: FOOT }}>
                   {current && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare}
+                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined} />
                 </View>
                 {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
@@ -272,7 +285,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                   connections={linked ? { group: linked, tags: current && growth.studio ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind === 'matrix' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
-                  rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
+                  rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
                   onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips />}
             </View>

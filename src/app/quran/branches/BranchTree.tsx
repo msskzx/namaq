@@ -61,7 +61,7 @@ function ReferenceHeader({ children }: { children: React.ReactNode }) {
 function SubtreeButton({ href }: { href: string }) {
   const { language } = useLanguage();
   const label = language === 'ar' ? 'عرض هذا الجزء وحده' : 'Show only this part of the tree';
-  return <Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button>;
+  return <span data-share-skip className="contents"><Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button></span>;
 }
 
 export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {

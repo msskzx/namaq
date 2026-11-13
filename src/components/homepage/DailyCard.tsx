@@ -9,6 +9,7 @@ import { compareAnchor, compareBookmarkId, savedAs } from '@shared/compareBookma
 import type { CardAyah, PairCard } from '@shared/quran/compareCards';
 import { hijriDate } from '@shared/hijri';
 import { num } from '@shared/quran/arabicNumber';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import styles from './Homepage.module.css';
 
 /** One ayah with its shared words in the accent and shared roots in purple, as on the compare cards. */
@@ -35,14 +36,16 @@ export default function DailyCard({ pair, names, ar }: { pair?: PairCard | null;
   const href = a && b ? `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}#${compareAnchor(a, b)}` : '';
   const compareLabel = ar ? 'افتحها في المقارنة' : 'Open in compare';
   const saveLabel = saved ? (ar ? 'أزلها من المحفوظات' : 'Remove from saved') : (ar ? 'احفظ' : 'Save');
-  return <section className={styles.daily} aria-label={ar ? 'اليوم' : 'Today'} dir="rtl">
-    <div className={styles.dailyHead}>
+  return <section className={styles.daily} aria-label={ar ? 'اليوم' : 'Today'} dir="rtl" data-share-card>
+    {/* The image shows the pair alone: the date and the buttons are left out. */}
+    <div className={styles.dailyHead} data-share-skip>
       {pair && <>
         <Button size="lg" variant="muted" href={href} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}
           onClick={() => toggleBookmark({ id: compareBookmarkId(pair.id), text: `${a?.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href }, savedIds)}>
           <Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} />
         </Button>
+        <ShareImageButton href={href} />
       </>}
       {date && <p className={styles.hijri} lang="ar"><Moon size={18} aria-hidden />{date}</p>}
     </div>

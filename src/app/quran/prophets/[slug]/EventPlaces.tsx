@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { placeKeyOf } from '@shared/quran/prophets/review';
 import CompareLinks from '@/components/common/CompareLinks';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import { SLIDE, useSwipe } from '@/components/common/useSwipe';
 import type { CompareLink } from '@/app/quran/compare/pairCards';
 import { PlaceReview } from './PlaceReview';
@@ -59,16 +60,25 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
         {places.map((place, k) => (
           <article
             key={place.surah}
+            data-share-card
             data-surah={place.surah}
             className={`flex flex-col gap-1 rounded-[var(--card-radius)] border bg-[var(--home-card)] p-4 ${review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false ? 'opacity-60' : ''} ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
           >
+            {/* In the image the place carries its event, as in the phone app. */}
+            <div data-share-only hidden>
+              <p className="text-sm font-semibold" style={{ color: groupColor(event.phase) }}>{phase}</p>
+              <p className="text-xl font-bold leading-snug">{event.title}</p>
+            </div>
             <header className="flex items-center gap-2">
               <h3 className="font-semibold">{place.name}</h3>
               <span className="text-xs text-[var(--home-muted)]">{place.segments.map(g => rangeText(g.range)).join('، ')}</span>
-              <Link href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} aria-label={`افتح ${place.name} في المصحف`} title="افتح في المصحف" className={`ms-auto ${icon}`}>
-                <BookOpen size={16} aria-hidden />
-              </Link>
-              <CompareLinks links={compare[placeKeyOf(slug, place)] ?? []} label={`قارن ${place.name}`} className={icon} />
+              <span data-share-skip className="ms-auto flex items-center gap-2">
+                <Link href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} aria-label={`افتح ${place.name} في المصحف`} title="افتح في المصحف" className={icon}>
+                  <BookOpen size={16} aria-hidden />
+                </Link>
+                <CompareLinks links={compare[placeKeyOf(slug, place)] ?? []} label={`قارن ${place.name}`} className={icon} />
+                <ShareImageButton size="icon" iconSize={16} href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} />
+              </span>
             </header>
             <PlaceText place={place} shared={shared[k]} />
             {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}

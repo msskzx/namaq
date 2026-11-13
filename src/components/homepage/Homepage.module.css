@@ -38,11 +38,10 @@
 .noteText { font-size: 1.0625rem; line-height: 1.75; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
 .wide .noteText { -webkit-line-clamp: unset; }
 .daily { padding: 0.75rem 1rem 1rem; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); display: grid; gap: 0.5rem; }
-.dailyHead { display: flex; align-items: center; gap: 0.25rem; min-height: 2.25rem; }
-.hijri { margin-inline-start: auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; }
+.dailyHead { display: flex; align-items: center; gap: 0.25rem; min-height: 2.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--home-rule); }
+.hijri { margin-inline-start: auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; white-space: nowrap; }
 .hijri svg { color: var(--home-accent); }
-.dailySide { padding-top: 0.5rem; border-top: 1px solid var(--home-rule); }
-.dailySide + .dailySide { border-top-style: dashed; }
+.dailySide + .dailySide { padding-top: 0.5rem; border-top: 1px dashed var(--home-rule); }
 .dailyLabel { color: var(--home-muted); font-size: 0.8125rem; }
 .dailyAyah { font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.1; text-align: center; }
 .dailySame { color: var(--home-accent); }

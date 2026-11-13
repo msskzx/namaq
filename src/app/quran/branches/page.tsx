@@ -218,7 +218,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   }).sort((a, b) => a.piece.keys.length - b.piece.keys.length).slice(0, RELATED_MAX) : [];
   const verdict = id ? branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }) : undefined;
   return (
-    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
+    <div id="quran-branches" dir="rtl" data-share-card className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
       <PreloadQuranText />
       <BranchHeading />
       {/* Search and filter are one control in the site's top bar: the filter button sits inside the search box
@@ -247,10 +247,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <GroupConnections key={`${id}:${defaultConnections}`} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} defaultOn={defaultConnections}>
       {/* The paths lit on the tree reach the card under its buttons, which reads their ayat in full. */}
       <PathScope key={`${id}:${marked.join(' ')}`} lit={marked} organic>
+      <div data-share-image>
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''} aliases={bookmarkAliases}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </DoubleTapSave>
+      </div>
       {review && process.env.NODE_ENV === 'development' && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
       {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
       {review && related.length > 0 && <ul data-related dir="ltr" className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
