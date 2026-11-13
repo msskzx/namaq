@@ -182,6 +182,8 @@ export default function Reader() {
   actionsOpen.current = !!actions;
   const latest = useRef(run);
   latest.current = run;
+  const shown = useRef(page);
+  shown.current = page;
   const onMove = useCallback(() => {
     moved.current = Date.now();
     if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
@@ -192,6 +194,8 @@ export default function Reader() {
     if (Date.now() - moved.current < 350) return;
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
+    // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
+    if (mode === 'read') setMark(key ? { key, page: shown.current } : null);
     const set = readGestures()[mode];
     if (touch === 'long') { latest.current(set.long, key, x, y); return; }
     if (pending.current) {
@@ -211,7 +215,7 @@ export default function Reader() {
     const atModel = modelOf(at);
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={pageHeight}
-        top={surahBefore(at)} names={surahNames} mark={mark?.page === at ? mark.key : null}
+        top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch} />
     );
   };
