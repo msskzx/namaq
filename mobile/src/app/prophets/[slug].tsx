@@ -9,7 +9,7 @@ import { usePalette } from '@/lib/theme';
 export default function ProphetScreen() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
-  const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
+  const { slug = '', event } = useLocalSearchParams<{ slug?: string; event?: string }>();
   const back = (help: () => void) => (
     <View style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
       <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
@@ -23,7 +23,7 @@ export default function ProphetScreen() {
       </View>
     </View>
   );
-  return <ProphetStory slug={slug} header={back} />;
+  return <ProphetStory slug={slug} header={back} startEvent={event !== undefined && /^\d+$/.test(event) ? Number(event) : undefined} />;
 }
 
 export { ErrorBoundary } from '@/components/CrashScreen';

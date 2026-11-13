@@ -99,3 +99,15 @@ export async function pageOfAyah(
   }
   return null;
 }
+
+/** The first lines of a page (words, and ayah numbers where ayat end) and the surah the first line belongs to: the home page's reading card. */
+export function pageStart(data: MushafPage, surahBefore: number | undefined, lines = 3): { surah: number; words: (string | number)[] } {
+  let surah = surahBefore ?? 1;
+  const out: (string | number)[][] = [];
+  for (const item of data.items) {
+    if ('surah' in item && !out.length) surah = item.surah;
+    if ('line' in item) out.push(item.line);
+    if (out.length >= lines) break;
+  }
+  return { surah, words: out.flat() };
+}

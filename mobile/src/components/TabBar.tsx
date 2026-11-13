@@ -10,7 +10,7 @@ import { TAB_BAR, tabBarBottom } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
-import { buttonOf, noteRoute, pageOf } from '@/lib/tabGroups';
+import { buttonOf, isRetap, noteRoute, pageOf } from '@/lib/tabGroups';
 
 /**
  * Utilities shows once its first tool lands (owner, 2026-11-13): the bar never opens an empty page.
@@ -58,7 +58,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
           const active = buttonOf(current) === key;
           // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts).
           const press = () => {
-            if (active) { retapTab(current); return; }
+            if (isRetap(current, key)) { retapTab(current); return; }
             const route = state.routes.find(item => item.name === pageOf(key));
             if (route) navigateToTab(route.key);
           };

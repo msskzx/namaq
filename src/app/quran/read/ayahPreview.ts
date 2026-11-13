@@ -1,6 +1,6 @@
 import treeData from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
-import { branchInventory } from '@shared/quran/branchInventory';
+import { branchInventory, type BranchPiece } from '@shared/quran/branchInventory';
 import { branchesHref, type BranchAyah } from '@shared/quran/branches';
 import { mushafText } from '@shared/quran/mushafText';
 import { normalizeWord } from '@shared/quran/normalize';
@@ -21,13 +21,19 @@ const byKey = () => (indexed ??= new Map(ayat.map(ayah => [ayah.key, ayah])));
 let inventory: ReturnType<typeof branchInventory> | undefined;
 const nameOf = (surah: number) => surahRows.find(row => row.number === surah)?.name ?? '';
 
+/** The unfiltered branches list, as the app's `treeList` and the branches page without filters. */
+export const treeInventory = () => (inventory ??= branchInventory({}, null));
+
+/** One tree drawn small, as the preview sheet and the home feed show it. */
+export const treePreviewOf = (piece: BranchPiece): TreePreview => ({
+  id: piece.id,
+  href: branchesHref(piece.id),
+  ...(piece.group ? groupPresentation(piece.group, byKey()) : phrasePresentation(piece.phrase, ayat, true, true)),
+});
+
 /** The trees that hold an ayah, as the branches list narrowed to it shows them, first few only (the app's treesOfAyah). */
 export function treesOfAyah(key: string): TreePreview[] {
-  return (inventory ??= branchInventory({}, null)).filter(piece => piece.keys.includes(key)).slice(0, PREVIEW_MAX).map(piece => ({
-    id: piece.id,
-    href: branchesHref(piece.id),
-    ...(piece.group ? groupPresentation(piece.group, byKey()) : phrasePresentation(piece.phrase, ayat, true, true)),
-  }));
+  return treeInventory().filter(piece => piece.keys.includes(key)).slice(0, PREVIEW_MAX).map(treePreviewOf);
 }
 
 /**

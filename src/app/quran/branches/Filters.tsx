@@ -157,7 +157,7 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
 /** Shares the tree or matrix as an image, as in the phone app; the dialog also offers the tree's video and the page's address. */
 export function ShareButton({ video = false, href }: { video?: boolean; href?: string }) {
   const growing = useGrowth().total > 0;
-  return <ShareImageButton href={href} onVideo={video && growing && canRecord() ? openVideo : undefined} />;
+  return <ShareImageButton data-share-tree={video || undefined} href={href} onVideo={video && growing && canRecord() ? openVideo : undefined} />;
 }
 
 /** Above the tree while a surah narrows the trees: its chip, which removes the filter. */

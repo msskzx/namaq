@@ -32,7 +32,7 @@ import PairSwipe from './PairSwipe';
 import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
-import ReadVideo, { canRecord } from './ReadVideo';
+import { canRecord, CardVideo, PageVideo } from './CompareVideo';
 import CompareBraid from './CompareBraid';
 import { useNeighbours } from './useNeighbours';
 import { useAroundSetting } from '../branches/Surroundings';
@@ -440,15 +440,18 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   );
 }
 
+/** A side as the video names it: the surah and its ayat. */
+const sideNamer = (plain: (surah: number) => string, ar: boolean) => (side: CardSide) => {
+  const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
+  const show = (n: number) => (ar ? num(n) : n);
+  return `${plain(side.surah)} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`;
+};
+
 /** In place of save under a card: close, a bar per ayah read (a tap reads from there), speed, play or pause, and reset. */
 function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useReadAlong>; ar: boolean; card: PairCard; names: Names }) {
   const [video, setVideo] = useState(false);
   const { plain, title } = useNames(names, ar);
-  const sideLabel = (side: CardSide) => {
-    const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
-    const show = (n: number) => (ar ? num(n) : n);
-    return `${plain(side.surah)} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`;
-  };
+  const sideLabel = sideNamer(plain, ar);
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
@@ -477,15 +480,19 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
       <span className="flex-1" />
       <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
     </div>
-    {video && <ReadVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
+    {video && <CardVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
   </div>;
 }
 
 export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, names, review = false, states, editable = false, todo = false, scope: juz, spans = { juz: {}, page: {} }, view }: { a: number; b: number; lead?: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean; scope?: CompareScope; spans?: SurahSpans; /** The default view from settings: tree or matrix. */ view?: BranchView }) {
   const pairs = juz ? allPairs.filter(pair => pageInScope(pair, spans, juz)) : allPairs;
   const ar = useLanguage().language === 'ar';
-  const { title } = useNames(names, ar);
+  const { plain, title } = useNames(names, ar);
   const sheet = useRef<HTMLDialogElement>(null);
+  const [pageVideo, setPageVideo] = useState(false);
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => setCanShare(canRecord()), []);
+  const pageVideoLabel = ar ? 'مشاركة الصفحة كفيديو' : 'Share the page as video';
   const pane = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [savedOnly, setSavedOnly] = useState(false);
@@ -574,7 +581,11 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-3">
         {/* Where this page sits in the list swiping walks, as on the branches trees. */}
-        {index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}
+        <div className="flex items-center gap-2">
+          <div className="min-w-0 flex-1">{index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}</div>
+          {shown.length > 0 && canShare && <Button size="icon" variant="muted" onClick={() => setPageVideo(true)} aria-label={pageVideoLabel} title={pageVideoLabel}><Clapperboard size={18} aria-hidden /></Button>}
+        </div>
+        {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>

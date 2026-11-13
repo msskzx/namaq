@@ -32,6 +32,10 @@ export function gradedTree(question: ScoredQuestion, typed: string[]) {
   return { matches, tree: { ...tree, children: tree.children.map(align) }, rows: corrections(question, typed, matches) };
 }
 
+/** The checked answer an ayah's row of the matrix shows: the asked node that ends in that ayah, if any. */
+export const correctionOf = (rows: Correction[], key: string) =>
+  rows.find(row => row.node.children.length === 0 && row.node.ayat.includes(key));
+
 const ORDINALS = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة', 'السادسة', 'السابعة', 'الثامنة', 'التاسعة', 'العاشرة'];
 const ordinal = (n: number, ar: boolean) => ar ? (ORDINALS[n - 1] ?? num(n)) : String(n);
 

@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { toggleBookmark } from '@shared/bookmarks';
-import { homeQuranSections } from '@/lib/homeQuranSections';
 import Homepage from './Homepage';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
@@ -18,50 +17,98 @@ const surahs = [
 ];
 const data = {
   surahs,
-  sections: homeQuranSections(surahs),
   bookmarkAyat: { family: ['2:129', '2:151', '3:164', '62:2'] },
   tour: null,
 };
 const bookmark = { id: 'family', text: 'الكتاب والحكمة', href: '/quran/branches?o=family', savedAt: 1 };
 
-afterEach(() => { cleanup(); localStorage.clear(); state.language = 'ar'; });
+const side = (surah: number, number: number, words: string[]) => ({ surah, ayah: number, ayat: [{ number, words, marks: { 0: { kind: 'exact' as const } } }] });
+const pairs = [{ id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] }, { id: '2:48|2:123', sides: [side(2, 48, ['واتقوا', 'يوما']), side(3, 9, ['ربنا', 'إنك'])] }];
+const fetched: string[] = [];
+// The feed's API (src/app/api/home/feed/route.ts): two pairs and no trees, and page slices.
+const fetchMock = vi.fn(async (url: string) => {
+  fetched.push(url);
+  const query = new URL(url, 'http://localhost').searchParams;
+  const body = query.has('page') ? { surah: 18, words: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }
+    : query.has('p') ? { pairs: query.get('p')!.split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
+    : { pairs: pairs.map(pair => pair.id), trees: [null, null] };
+  return { ok: true, json: async () => body } as Response;
+});
+vi.stubGlobal('fetch', fetchMock);
 
-describe('release homepage', () => {
-  it('opens on today\'s pair with its compare link and Hijri date', async () => {
-    const side = (surah: number, number: number, words: string[]) => ({ surah, ayah: number, ayat: [{ number, words, marks: { 0: { kind: 'exact' as const } } }] });
-    render(<Homepage data={{ ...data, daily: { id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] } }} />);
-    const today = screen.getByRole('region', { name: 'اليوم' });
-    expect(within(today).getByRole('link', { name: 'افتحها في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-35-7-19');
-    expect(today.textContent).toContain('وقلنا يا');
-    await waitFor(() => expect(today.textContent).toContain('هـ'));
-    fireEvent.click(within(today).getByRole('button', { name: 'احفظ' }));
-    expect(within(today).getByRole('button', { name: 'أزلها من المحفوظات' })).toBeTruthy();
+afterEach(() => { cleanup(); localStorage.clear(); state.language = 'ar'; fetched.length = 0; });
+
+describe('home', () => {
+  it('puts reading and the feed first, then the tools: prayer times, saved cards and quizzes', async () => {
+    render(<Homepage data={data} />);
+    const stories = screen.getByRole('navigation', { name: 'اختصارات' });
+    const reading = screen.getByRole('region', { name: 'ابدأ القراءة' });
+    const feed = screen.getByRole('region', { name: 'للتأمل اليوم' });
+    const saved = screen.getByRole('region', { name: 'المحفوظات' });
+    const quizzes = screen.getByRole('region', { name: 'اختبارات القرآن' });
+    for (const [a, b] of [[stories, reading], [reading, feed], [feed, saved], [saved, quizzes]]) expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'مواقيت الصلاة' }).getAttribute('href')).toBe('/utilities');
+    expect(within(stories).getByRole('link', { name: 'الأنبياء' }).getAttribute('href')).toBe('/quran/prophets');
+    expect(within(quizzes).getByRole('link', { name: 'بمفردك' }).getAttribute('href')).toBe('/quizzes');
+    expect(within(quizzes).getByRole('link', { name: 'مع غيرك' }).getAttribute('href')).toBe('/quizzes/party');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('نمق');
+    expect(screen.queryByRole('region', { name: 'ما نسيته' })).toBeNull();
+    await waitFor(() => expect(screen.getAllByRole('article').length).toBeGreaterThan(0));
   });
 
-  it('shows the notes shelf only when there are notes', () => {
+  it('continues reading on the page the mushaf was left on', async () => {
+    localStorage.setItem('quran-reader-page', '294');
     render(<Homepage data={data} />);
-    expect(screen.queryByRole('region', { name: 'تأملاتي' })).toBeNull();
-    cleanup();
-    localStorage.setItem('ayah-notes', JSON.stringify({ '2:255': { text: 'تأمل', at: 1 } }));
-    render(<Homepage data={data} />);
-    expect(within(screen.getByRole('region', { name: 'تأملاتي' })).getByRole('button').textContent).toBe('البقرة ٢٥٥تأمل');
+    const reading = await screen.findByRole('region', { name: 'تابع القراءة' });
+    expect(within(reading).getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/294');
+    await waitFor(() => expect(reading.textContent).toContain('ٱلۡحَمۡدُ'));
+    expect(fetched).toContain('/api/home/feed?page=294');
   });
 
-  it.each(['ar', 'en'])('places saved material between the Quran widget and quizzes in %s', language => {
-    state.language = language;
+  it('shows today\'s pair as a post with its compare link, saves it, and remembers it was seen', async () => {
     render(<Homepage data={data} />);
-    const ar = language === 'ar';
-    const quran = screen.getByRole('region', { name: ar ? 'القرآن الكريم' : 'Quran' });
-    const saved = screen.getByRole('region', { name: ar ? 'المحفوظات' : 'Saved' });
-    const quizzes = screen.getByRole('region', { name: ar ? 'اختبارات القرآن' : 'Quran quizzes' });
-    expect(quran.compareDocumentPosition(saved) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(saved.compareDocumentPosition(quizzes) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(within(quizzes).getByRole('link', { name: ar ? 'بمفردك' : 'Solo' }).getAttribute('href')).toBe('/quizzes');
-    expect(within(quizzes).getByRole('link', { name: ar ? 'مع غيرك' : 'Party' }).getAttribute('href')).toBe('/quizzes/party');
-    const prophets = screen.getByRole('region', { name: ar ? 'قصص الأنبياء' : 'Prophets’ stories' });
-    expect(within(prophets).getByRole('link').getAttribute('href')).toBe('/quran/prophets');
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(ar ? 'نمق' : 'Namaq');
-    expect(screen.getByRole('heading', { level: 1 }).querySelector('svg')).toBeNull();
+    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));
+    const post = screen.getAllByRole('article')[0];
+    expect(within(post).getByRole('link', { name: 'افتحها في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-35-7-19');
+    fireEvent.click(within(post).getByRole('button', { name: 'احفظ' }));
+    expect(within(post).getByRole('button', { name: 'أزلها من المحفوظات' })).toBeTruthy();
+    await waitFor(() => expect(Object.keys(JSON.parse(localStorage.getItem('feed-seen') ?? '{}'))).toContain('2:35|7:19'));
+  });
+
+  it('skips a pair seen on an earlier visit and loads more on request', async () => {
+    localStorage.setItem('feed-seen', JSON.stringify({ '2:35|7:19': 1 }));
+    render(<Homepage data={data} />);
+    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
+    const feed = screen.getByRole('region', { name: 'للتأمل اليوم' });
+    expect(feed.textContent).not.toContain('وقلنا يا');
+    fireEvent.click(screen.getByRole('button', { name: 'المزيد للتأمل' }));
+    // Everything was seen: the feed starts again from the seen pair.
+    await waitFor(() => expect(feed.textContent).toContain('وقلنا يا'));
+  });
+
+  it('asks to recall a due forgotten ayah: first words, the rest hidden, and remembered takes it away', async () => {
+    quranContexts.mockResolvedValue([{ ayah: { key: '2:255', words: ['الله', 'لا', 'إله', 'إلا', 'هو'] } }]);
+    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
+    render(<Homepage data={data} />);
+    const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
+    await waitFor(() => expect(post.textContent).toContain('الله لا إله'));
+    expect(post.textContent).not.toContain('هو');
+    fireEvent.click(within(post).getByRole('button', { name: /أظهرها/ }));
+    expect(post.textContent).toContain('هو');
+    expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
+    fireEvent.click(within(post).getByRole('button', { name: /تذكّرتها/ }));
+    expect(screen.queryByText('هل تذكرها؟')).toBeNull();
+  });
+
+  it('lights a story ring while it holds something new, until it is opened', async () => {
+    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
+    quranContexts.mockResolvedValue([]);
+    render(<Homepage data={data} />);
+    const story = screen.getByRole('link', { name: 'ما نسيته' });
+    await waitFor(() => expect(story.querySelector('[data-lit]')).toBeTruthy());
+    expect(screen.getByRole('link', { name: 'المحفوظات' }).querySelector('[data-lit]')).toBeNull();
+    fireEvent.click(story);
+    await waitFor(() => expect(story.querySelector('[data-lit]')).toBeNull());
   });
 
   it('shows the kind, grouped references and saved text as one card without action labels', () => {
@@ -122,25 +169,6 @@ describe('release homepage', () => {
     expect(screen.queryByRole('button', { name: /الكتاب والحكمة/ })).toBeNull();
   });
 
-  it('shows the forgotten ayat, the most forgotten first, each with its words and its icons', async () => {
-    quranContexts.mockResolvedValue([{ ayah: { key: '2:255', words: ['الله', 'لا', 'إله'] } }, { ayah: { key: '3:164', words: ['لقد', 'من'] } }]);
-    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 }, '3:164': { forgot: 1, at: 9 } }));
-    render(<Homepage data={data} />);
-    const forgotten = screen.getByRole('region', { name: 'ما نسيته' });
-    const cards = within(forgotten).getAllByRole('button');
-    expect(cards[0].textContent).toMatch(/^آل عمران ١٦٤/);
-    expect(cards[1].textContent).toMatch(/^البقرة ٢٥٥/);
-    await waitFor(() => expect(cards[1].textContent).toContain('الله لا إله'));
-    expect(within(forgotten).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
-    expect(within(screen.getByRole('region', { name: 'اختبارات القرآن' })).queryByRole('link', { name: /راجع ما نسيت/ })).toBeNull();
-    fireEvent.click(cards[0]);
-    const menu = screen.getByRole('dialog', { name: 'آية نسيتها' });
-    expect(within(menu).getByRole('link', { name: 'سمّع من هذه الآية' }).getAttribute('href')).toBe('/quran/read/ayah/3/164?recite=3:164&review=1');
-    expect(within(menu).getByRole('link', { name: 'في المصحف' }).getAttribute('href')).toBe('/quran/read/ayah/3/164');
-    fireEvent.click(within(menu).getByRole('button', { name: 'تذكّرتها' }));
-    expect(within(forgotten).getAllByRole('button')).toHaveLength(1);
-  });
-
   it('closes the icons on Escape and gives the focus back to the card', () => {
     localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
     render(<Homepage data={data} />);
@@ -153,22 +181,12 @@ describe('release homepage', () => {
     expect(document.activeElement).toBe(card);
   });
 
-  it('hides the forgotten shelf when nothing is forgotten', () => {
-    render(<Homepage data={data} />);
-    expect(screen.queryByRole('region', { name: 'ما نسيته' })).toBeNull();
-  });
-
-  it('keeps the latest five cards on each shelf, with «عرض الكل» to the library page only when there are more', () => {
-    quranContexts.mockResolvedValue([]);
+  it('keeps the latest five saved cards, with «عرض الكل» to the library page only when there are more', () => {
     const many = Array.from({ length: 6 }, (_, at) => ({ id: `ayah:2:${at + 1}`, text: `آية ${at + 1}`, href: `/quran/read/ayah/2/${at + 1}`, savedAt: at }));
     localStorage.setItem('bookmarks', JSON.stringify(many));
-    localStorage.setItem('ayah-forgot', JSON.stringify(Object.fromEntries(Array.from({ length: 5 }, (_, at) => [`2:${at + 1}`, { forgot: 1, at }])))); 
     render(<Homepage data={data} />);
     const saved = screen.getByRole('region', { name: 'المحفوظات' });
     expect(within(saved).getAllByRole('button')).toHaveLength(5);
     expect(within(saved).getByRole('link', { name: 'عرض الكل' }).getAttribute('href')).toBe('/library?tab=saved');
-    const forgotten = screen.getByRole('region', { name: 'ما نسيته' });
-    expect(within(forgotten).getAllByRole('button')).toHaveLength(5);
-    expect(within(forgotten).queryByRole('link', { name: 'عرض الكل' })).toBeNull();
   });
 });

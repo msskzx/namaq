@@ -32,13 +32,15 @@ describe('launch navigation', () => {
     expect(back.getAttribute('href')).toBe('/quran');
   });
 
-  it('puts the settings gear in the homepage top bar only, as in the app', () => {
+  it('puts the settings gear and the search in the homepage top bar only, as in the app', () => {
     render(<NavBar />);
     expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Settings' })).toBeTruthy();
+    expect(within(screen.getByRole('navigation')).getByRole('link', { name: 'Search' }).getAttribute('href')).toBe('/search');
     cleanup();
     state.path = '/quran/compare';
     render(<NavBar />);
     expect(within(screen.getByRole('navigation')).queryByRole('button', { name: 'Settings' })).toBeNull();
+    expect(within(screen.getByRole('navigation')).queryByRole('link', { name: 'Search' })).toBeNull();
   });
 
   it('marks the quizzes section on solo and party routes', () => {
@@ -51,6 +53,7 @@ describe('launch navigation', () => {
     expect(activeSection('/quran/tajwid/tuhfat-al-atfal')).toBe('/quran');
     expect(activeSection('/quran')).toBe('/quran');
     expect(activeSection('/')).toBe('/');
+    expect(activeSection('/search')).toBe('/');
     expect(activeSection('/quran/words')).toBeUndefined();
     expect(activeSection('/graphs')).toBeUndefined();
     expect(activeSection('/experiments')).toBeUndefined();
@@ -89,7 +92,7 @@ describe('launch navigation', () => {
     expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(400);
     expect(bar.className).toMatch(/scrolledAway/);
-    act(() => { within(bar).getByRole('link').focus(); });
+    act(() => { within(bar).getAllByRole('link')[0].focus(); });
     expect(bar.className).not.toMatch(/scrolledAway/);
     scroll(20);
     expect(bar.className).not.toMatch(/scrolledAway/);

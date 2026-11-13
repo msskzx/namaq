@@ -20,3 +20,18 @@ export function dailyPair(stored: StoredCards, words: WordsOf, day: number): Pai
   }
   return undefined;
 }
+
+/** The fewest and most ayat a feed tree may hold: big enough to be worth a look, small enough to fit a phone. */
+export const FEED_TREE_AYAT = [3, 8] as const;
+
+/** The trees that suit the home feed: mid-sized ones. */
+export const feedTrees = <T extends { keys: string[] }>(pieces: T[]) => pieces.filter(piece => {
+  const count = new Set(piece.keys).size;
+  return count >= FEED_TREE_AYAT[0] && count <= FEED_TREE_AYAT[1];
+});
+
+/** The feed's tree for a day, the same all day; `offset` walks on to the next ones when the feed loads more. */
+export function dailyTree<T extends { keys: string[] }>(pieces: T[], day: number, offset = 0): T | undefined {
+  const fits = feedTrees(pieces);
+  return fits.length ? fits[(dailyIndex(day, fits.length) + offset) % fits.length] : undefined;
+}

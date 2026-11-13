@@ -27,7 +27,9 @@ type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: 
   /** Told when a swipe moved off the ayah column to the ayah before or after. */
   onColumn?: () => void;
   /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
-  alongside?: GestureType };
+  alongside?: GestureType;
+  /** Shown under an ayah's text in the middle column, by the row's first ayah (a checked quiz answer). */
+  note?: (key: string) => React.ReactNode };
 
 type Host = ComponentRef<typeof View>;
 /** Where each word of the middle column registers itself, keyed `ayah:index` as the group's positions are. */
@@ -77,7 +79,7 @@ function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Pale
   </>;
 }
 
-function Cell({ cell, at, palette, width, current, onPress, light, still }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; still?: boolean }) {
+function Cell({ cell, at, palette, width, current, onPress, light, note, still }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note']; still?: boolean }) {
   if (!cell) return <View style={{ width }} />;
   const first = cell.ayat[0];
   const last = cell.ayat[cell.ayat.length - 1];
@@ -107,6 +109,7 @@ function Cell({ cell, at, palette, width, current, onPress, light, still }: { ce
           {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}
         </Text>}
       {at === 'before' && basmala}
+      {at === 'ayah' && note?.(first.key)}
     </Pressable>
   );
 }
@@ -125,7 +128,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn, alongside }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn, alongside, note }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -214,7 +217,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
             {matrix.rows.map((row, r) => (
               <View key={r} style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
                 {matrix.columns.map((name, i) => (
-                  <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light}
+                  <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light} note={note}
                     onPress={() => (i === column ? onTap(keysOf(row[name])) : goTo(i))} />
                 ))}
               </View>

@@ -18,7 +18,7 @@ import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import { shareCard } from '@/lib/shareImage';
 import TreeIcon from './TreeIcon';
-import { compareRecorderPage, compareVideoInput } from '@/lib/compareVideo';
+import { cardVideoPage } from '@/lib/compareVideo';
 import { WEBSITE } from '@/lib/branches';
 import { compareHref } from '@shared/quran/compare';
 
@@ -27,7 +27,7 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** The card's first words and a link to its two passages on the website. */
-function cardLink(card: PairCard) {
+export function cardLink(card: PairCard) {
   const [a, b] = card.sides;
   const range = (side: CardSide) => {
     const numbers = side.ayat.length ? side.ayat.map(ayah => ayah.number) : [side.ayah];
@@ -163,7 +163,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   const step = read.step;
   // Share as video: the card read along in a story frame, from the studio or from the share sheet.
   const [video, setVideo] = useState<((font: string) => string) | null>(null);
-  const record = () => { read.reset(); const input = compareVideoInput(card, read.plan, read.speed, palette); setVideo(() => (font: string) => compareRecorderPage(input, font)); };
+  const record = () => { read.reset(); setVideo(() => cardVideoPage(card, read.plan, read.speed, palette)); };
   const [tapped, setTapped] = useState<string | null>(null);
   const [picked, setPicked] = useState(0);
   const lit = step ? step.link ?? null : tapped;

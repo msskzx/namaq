@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import surahs from '../data/quran/surahs.json';
-import { ayahWords, mushafPages, pageGroups, type MushafPage } from './readerPage';
+import { ayahWords, mushafPages, pageGroups, pageStart, type MushafPage } from './readerPage';
 
 const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
 const top = (n: number) => surahs.findLast(row => row.page != null && row.page < n)?.number;
@@ -23,5 +23,13 @@ describe('ayahWords', () => {
       const first = pageGroups(page(n).items, top(n)).find(line => line?.length)![0];
       expect(starts.get(`${first.surah}:${first.ayah}`), `page ${n}`).toBe(n);
     }
+  });
+
+  it('starts a page with its first lines and the surah running on it', () => {
+    const start = pageStart(page(294), 18);
+    expect(start.surah).toBe(18);
+    expect(start.words.filter(word => typeof word === 'string').length).toBeGreaterThan(10);
+    expect(pageStart(page(293), 17).surah).toBe(17);
+    expect(pageStart(page(282), 16).surah).toBe(17);
   });
 });

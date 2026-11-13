@@ -52,8 +52,9 @@ The reasoning and lessons from building Namaq live in
   explains why source pages belong to the book rather than to a reader or claim.
 - [A check that exists but doesn't run](https://distillate-kappa.vercel.app/text-to-evidence/0003-a-check-that-exists-but-doesnt-run)
   examines failures in verification.
-- [Namaq records](https://distillate-kappa.vercel.app/records?project=namaq)
-  collect challenges, decisions, and findings from the project.
+
+Challenges met while building Namaq, with their fixes, are recorded in
+[docs/records](docs/records/README.md).
 
 ## License and source rights
 

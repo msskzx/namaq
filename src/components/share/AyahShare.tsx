@@ -17,7 +17,7 @@ export default function AyahShare({ ayah, name, note }: { ayah: string; name?: s
     quranContexts([ayah]).then(([context]) => { if (live && context) setWords(context.ayah.words.join(' ')); }).catch(() => {});
     return () => { live = false; };
   }, [ayah]);
-  return <div dir="rtl" lang="ar" className="flex flex-col gap-1.5 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] p-3.5 text-[var(--home-ink)]">
+  return <div dir="rtl" lang="ar" data-share-pending={words ? undefined : true} className="flex flex-col gap-1.5 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] p-3.5 text-[var(--home-ink)]">
     <p className="text-sm text-[var(--home-muted)]">{name ?? surah} <bdi>{num(number)}</bdi></p>
     <p className="font-[family-name:var(--font-quran)] text-[1.375rem] leading-[2]"><MushafText>{words}</MushafText></p>
     {note && <p className="whitespace-pre-line border-t border-[var(--home-rule)] pt-2 text-[1.0625rem] leading-relaxed">{note}</p>}
