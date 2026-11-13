@@ -1,41 +1,34 @@
 'use client';
 
-import { Bookmark, EyeOff, Feather, Library, LightbulbOff, NotebookPen, ScrollText, Users } from 'lucide-react';
+import { Bookmark, EyeOff, Feather, Library, Users } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import type { HomepageData } from '@/lib/homepageData';
 import styles from './Homepage.module.css';
-import HomeQuranWidget from './HomeQuranWidget';
-import DailyCard from './DailyCard';
 import Tour from './Tour';
-import { reviewHref, SeeAll, useHomeCards } from './HomeCards';
+import { SeeAll, useHomeCards } from './HomeCards';
+import { ContinueReading, Divider, Feed, PrayerRow, Stories } from './HomeFeed';
 
 /** A shelf shows the latest few cards; «عرض الكل» opens the library page with all of them. */
 export const SHELF = 5;
 
+/**
+ * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. Story circles, the page the
+ * mushaf was left on, a feed to reflect on that loads more on request, then the tools: prayer times, saved cards, quizzes.
+ */
 export default function Homepage({ data }: { data: HomepageData }) {
-  const { ar, saved, forgotten, recent, noted, names, savedCard, forgottenCard, noteCard, menu } = useHomeCards(data, SHELF);
+  const { ar, saved, names, savedCard, menu } = useHomeCards(data, 0);
   const trees = saved.filter(item => !isCompareBookmark(item) && !item.id.startsWith('ayah:'));
-  const reviewLabel = ar ? 'راجع ما نسيت' : 'Review what you forgot';
-  return <div className={styles.page} dir={ar ? 'rtl' : 'ltr'}>
+  return <div className={`${styles.page} ${styles.home}`} dir="rtl">
     <h1 className="sr-only">{ar ? 'نمق' : 'Namaq'}</h1>
     {(data.tour || data.tourStory || data.tourRecite) && <Tour tour={data.tour} story={data.tourStory} recite={data.tourRecite} names={Object.fromEntries(names)} />}
 
-    <DailyCard pair={data.daily} names={names} ar={ar} />
-    <HomeQuranWidget sections={data.sections} />
+    <Stories />
+    <ContinueReading />
+    <Feed />
 
-    {recent.length > 0 && <section aria-labelledby="forgotten-title">
-      <div className={styles.sectionHeading}>
-        <h2 id="forgotten-title"><LightbulbOff size={18} aria-hidden />{ar ? 'ما نسيته' : 'Forgotten'}</h2>
-        <div className="flex items-center gap-2">
-          <Button href={reviewHref(forgotten[0])} aria-label={reviewLabel} title={reviewLabel}><EyeOff size={18} aria-hidden /><span>{ar ? 'راجع' : 'Review'}</span></Button>
-          {recent.length > SHELF && <SeeAll tab="forgotten" />}
-        </div>
-      </div>
-      <div className={styles.shelf}>
-        {recent.slice(0, SHELF).map(key => forgottenCard(key))}
-      </div>
-    </section>}
+    <Divider label="أدوات" />
+    <PrayerRow />
 
     <section aria-labelledby="saved-title">
       <div className={styles.sectionHeading}>
@@ -49,23 +42,9 @@ export default function Homepage({ data }: { data: HomepageData }) {
         {saved.slice(0, SHELF).map(item => savedCard(item))}
       </div> : <p className={styles.empty}>{ar ? 'احفظ شجرة أو بطاقة مقارنة أو آية بزر' : 'Save a tree, compare card or ayah with'} <Bookmark size={18} aria-label={ar ? 'الحفظ' : 'Bookmark'} /> {ar ? 'لتجدها هنا.' : 'to find it here.'}</p>}
     </section>
-    {noted.length > 0 && <section aria-labelledby="notes-title">
-      <div className={styles.sectionHeading}>
-        <h2 id="notes-title"><NotebookPen size={18} aria-hidden />{ar ? 'تأملاتي' : 'My notes'}</h2>
-        {noted.length > SHELF && <SeeAll tab="notes" />}
-      </div>
-      <div className={styles.shelf}>
-        {noted.slice(0, SHELF).map(key => noteCard(key))}
-      </div>
-    </section>}
-    <section className={styles.quiz} aria-labelledby="prophets-title">
-      <ScrollText size={26} aria-hidden />
-      <div><h2 id="prophets-title">{ar ? 'قصص الأنبياء' : 'Prophets’ stories'}</h2><p>{ar ? 'أحداث كل قصة، وأين ذُكر كل حدث في السور.' : 'The events of each story, and where each one is told in the surahs.'}</p></div>
-      <div className={styles.quizActions}><Button href="/quran/prophets"><ScrollText size={18} aria-hidden />{ar ? 'افتح' : 'Open'}</Button></div>
-    </section>
     <section className={styles.quiz} aria-labelledby="quiz-title">
       <Feather size={26} aria-hidden />
-      <div><h2 id="quiz-title">{ar ? 'اختبارات القرآن' : 'Quran quizzes'}</h2><p>{ar ? 'تأمّل الآيات، ثم اختبر مواضع التشابه، أو سمّع حفظك آيةً آية.' : 'Read the ayat, then try a question on their shared wording, or recite from memory ayah by ayah.'}</p></div>
+      <div><h2 id="quiz-title">{ar ? 'اختبارات القرآن' : 'Quran quizzes'}</h2></div>
       <div className={styles.quizActions}><Button href="/quizzes"><Feather size={18} aria-hidden />{ar ? 'بمفردك' : 'Solo'}</Button><Button href="/quizzes/party"><Users size={18} aria-hidden />{ar ? 'مع غيرك' : 'Party'}</Button><Button href="/quran/read/recite"><EyeOff size={18} aria-hidden />{ar ? 'تسميع' : 'Recite'}</Button></div>
     </section>
     {menu}

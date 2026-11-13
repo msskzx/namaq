@@ -27,7 +27,13 @@ const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(
 export const listedPairs = stored.listed;
 
 /** The homepage's look-alike pair for the server's calendar day, the same card the app shows that day. */
-export const todaysPair = (date = new Date()) => dailyPair(stored, key => words.get(key), dayNumber(date));
+export const todaysPair = (date = new Date()) => pairOfDay(dayNumber(date));
+const pairs = new Map<number, PairCard | undefined>();
+/** The look-alike pair for a day number (`dayNumber`); the home feed walks on to the next days' pairs when it loads more. */
+export function pairOfDay(day: number) {
+  if (!pairs.has(day)) pairs.set(day, dailyPair(stored, key => words.get(key), day));
+  return pairs.get(day);
+}
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = stored.review;
 

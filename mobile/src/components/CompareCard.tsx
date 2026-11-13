@@ -26,7 +26,7 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** The card's first words and a link to its two passages on the website. */
-function shareCard(card: PairCard) {
+export function shareCard(card: PairCard) {
   const [a, b] = card.sides;
   const range = (side: CardSide) => {
     const numbers = side.ayat.length ? side.ayat.map(ayah => ayah.number) : [side.ayah];

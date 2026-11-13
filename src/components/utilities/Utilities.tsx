@@ -19,9 +19,9 @@ const parse = <T,>(valid: (value: unknown) => value is T, fallback: T) => (raw: 
   try { const value: unknown = raw ? JSON.parse(raw) : null; return valid(value) ? value : fallback; } catch { return fallback; }
 };
 // The same keys as the app's settings (mobile/src/lib/settings.ts).
-const placeStore = keyStore<Place | null>('prayer-place', parse((value): value is Place | null => value === null || isPlace(value), null));
-const settingsStore = keyStore<PrayerSettings>('prayer-settings', parse(isPrayerSettings, DEFAULT_PRAYER_SETTINGS));
-const viewStore = keyStore<View>('utilities-view', parse((value): value is View => value === 'times' || value === 'qibla' || value === 'calendar', 'times'));
+export const placeStore = keyStore<Place | null>('prayer-place', parse((value): value is Place | null => value === null || isPlace(value), null));
+export const settingsStore = keyStore<PrayerSettings>('prayer-settings', parse(isPrayerSettings, DEFAULT_PRAYER_SETTINGS));
+export const viewStore = keyStore<View>('utilities-view', parse((value): value is View => value === 'times' || value === 'qibla' || value === 'calendar', 'times'));
 
 function useStore<T>(store: { read(): T; subscribe(listener: () => void): () => void; write(raw: string): void }, server: T) {
   const value = useSyncExternalStore(store.subscribe, store.read, () => server);
