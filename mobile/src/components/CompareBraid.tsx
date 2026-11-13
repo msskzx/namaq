@@ -70,7 +70,7 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 type Row = { kind: 'shared' | 'split' | 'around'; a: BraidWord[]; b: BraidWord[]; near?: (AroundAyah | null)[] };
 
 /** A node drawn as the branches tree draws one: a filled box, a thin rule-coloured frame, two round corners and two square ones. */
-function Node({ children, palette }: { children: React.ReactNode; palette: Palette; shared?: boolean }) {
+function Node({ children, palette }: { children: React.ReactNode; palette: Palette }) {
   return (
     <View style={{ borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, borderTopStartRadius: 14, borderBottomEndRadius: 14, borderTopEndRadius: 4, borderBottomStartRadius: 4,
       paddingHorizontal: 12, paddingVertical: 2, alignSelf: 'center', maxWidth: '100%' }}>
@@ -99,7 +99,7 @@ export default function CompareBraid({ sides, palette, around, labels, empty }: 
         <View key={r}>
           {r > 0 && <Link from={rows[r - 1].kind} to={row.kind} palette={palette} />}
           {row.kind === 'shared'
-            ? <Node palette={palette} shared><Words words={row.a} other={row.b} palette={palette} bold /></Node>
+            ? <Node palette={palette}><Words words={row.a} other={row.b} palette={palette} bold /></Node>
             : (
               // Columns with no gap, so their centres sit exactly at the links' 25% and 75%. Each strand runs on under a
               // shorter node to the row's foot, so the next link starts where the line ends.
