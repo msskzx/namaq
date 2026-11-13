@@ -9,8 +9,8 @@
   justify-content: center;
   padding: 0.75rem;
 }
-/* While reciting, the page leaves room under it for the recite bar instead of hiding lines behind it. */
-.reader[data-reciting] .stage { padding-bottom: calc(0.75rem + 2.75rem + 1px); }
+/* While reciting, the page leaves room under it for the recite pill instead of hiding lines behind it. */
+.reader[data-reciting] .stage { padding-bottom: calc(var(--recite-pill) + 16px); }
 
 .page {
   --count: 1;
@@ -198,8 +198,8 @@
   .strip { display: flex; }
   .head { align-items: center; }
   .strip .badge { padding: 0 0.6em; font-size: 11px; line-height: 1.6; }
-  /* While reciting, the page leaves room under it for the recite bar (one button tall) instead of hiding lines behind it. */
-  .reader[data-reciting] .stage { padding-bottom: calc(env(safe-area-inset-bottom) + 2.75rem + 1px); }
+  /* While reciting, the page leaves room under it for the recite pill instead of hiding lines behind it. */
+  .reader[data-reciting] .stage { padding-bottom: calc(max(8px, env(safe-area-inset-bottom) - 10px) + var(--recite-pill) + 8px); }
 }
 
 /* Recite mode (تسميع): hidden words keep their place; the next ayah is tinted. */
@@ -212,12 +212,23 @@
 
 .ayahActions { position: fixed; z-index: 30; display: flex; gap: 0.5rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
 .ayahChoices { flex-direction: column; align-items: stretch; gap: 0.125rem; width: 18rem; max-width: calc(100vw - 2rem); }
-/* The recite buttons sit in a slim bar flush with the bottom edge, like a video app's bottom bar; the page above keeps all the room left. */
-.reciteBar { position: fixed; z-index: 20; inset-inline: var(--app-rail, 0px) 0; bottom: var(--app-tabbar, 0px); display: flex; align-items: center; justify-content: center; gap: 2rem; padding-bottom: var(--app-safe-bottom, 0px); border-top: 1px solid var(--home-rule); background: var(--home-paper); }
+/* The recite buttons sit in a see-through pill floating low over the page, like the tab bar (NavBar.module.css .tabs)
+   and the app's recite pill (mobile/src/components/Reader.tsx); just above the tab pill when that shows. */
+.reader { --recite-pill: 52px; }
+.reciteBar { position: fixed; z-index: 20; inset-inline: var(--app-rail, 0px) 0; bottom: max(var(--app-tabbar, 0px), 8px, calc(env(safe-area-inset-bottom) - 10px)); display: flex; justify-content: center; padding-inline: calc(20px + env(safe-area-inset-left)) calc(20px + env(safe-area-inset-right)); pointer-events: none; }
+.recitePill {
+  pointer-events: auto; display: flex; align-items: center; justify-content: space-evenly; width: 100%; max-width: 26rem; height: var(--recite-pill); padding-inline: 6px; border-radius: 999px;
+  background: color-mix(in srgb, var(--home-paper) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--home-ink) 12%, transparent);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
+}
 /* On touch screens a long press on the page is a gesture, not a text selection; a mouse can still select. */
 @media (pointer: coarse) {
   .stage[data-gestures] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 }
 @media (max-width: 640px) {
-  .reciteBar { inset-inline: 0; bottom: 0; justify-content: space-evenly; gap: 0; padding-bottom: env(safe-area-inset-bottom); }
+  /* With the reading tools hidden the tab pill is hidden too, so the recite pill drops to the bottom edge. */
+  .reciteBar { inset-inline: 0; }
+  .reader[data-reader-immersive="true"] .reciteBar { bottom: max(8px, calc(env(safe-area-inset-bottom) - 10px)); }
 }
