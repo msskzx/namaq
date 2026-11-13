@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router, type Href } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, ChevronLeft, EyeOff, Feather, Layers, Library, LightbulbOff, List, Search, Users, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, ChevronLeft, EyeOff, Feather, Layers, Library, LightbulbOff, List, NotebookPen, Search, Users, type LucideProps } from 'lucide-react-native';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { searchSurahs } from '@shared/quran/surahSearch';
 import { num } from '@shared/quran/arabicNumber';
@@ -11,9 +11,10 @@ import { useTabBarSpace } from '@/components/tabBarSpace';
 import TreeIcon from '@/components/TreeIcon';
 import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
+import DailyCard from '@/components/DailyCard';
 import { surahs } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
-import { FORGOTTEN_LABEL, REVIEW_LABEL, reviewForgotten, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
+import { FORGOTTEN_LABEL, NOTE_LABEL, REVIEW_LABEL, reviewForgotten, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { openIntent as go } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
@@ -104,14 +105,14 @@ function QuranPicker({ palette }: { palette: Palette }) {
   );
 }
 
-function SeeAll({ tab }: { tab: 'saved' | 'forgotten' }) {
+function SeeAll({ tab }: { tab: 'saved' | 'forgotten' | 'notes' }) {
   return <Button Icon={ChevronLeft} accessibilityLabel="عرض الكل" onPress={() => router.push({ pathname: '/library', params: { tab } })} />;
 }
 
 /** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
 export default function HomeScreen() {
   const palette = usePalette();
-  const { cards, forgotten, forgottenCards, savedMenu, forgottenMenu, menus } = useHomeCards(palette);
+  const { cards, forgotten, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus } = useHomeCards(palette);
   const hasTrees = cards.some(card => card.kind === 'tree' && card.open);
   const push = (href: Href) => router.push(href);
   const onScroll = useShrinkOnScroll();
@@ -121,6 +122,7 @@ export default function HomeScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings hideOnScroll />
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 28 }}>
+        <DailyCard palette={palette} />
         <QuranPicker palette={palette} />
 
         {forgottenCards.length > 0 && (
@@ -152,6 +154,15 @@ export default function HomeScreen() {
             </View>
           )}
         </View>
+
+        {noteCards.length > 0 && (
+          <View style={{ gap: 10 }}>
+            <Heading Icon={NotebookPen} title="تأملاتي" palette={palette}>
+              {noteCards.length > SHELF && <SeeAll tab="notes" />}
+            </Heading>
+            <Shelf cards={noteCards.slice(0, SHELF)} render={card => <ShelfCard note card={card} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} onPress={at => noteMenu(card, at)} />} />
+          </View>
+        )}
 
         <View style={{ gap: 12, padding: 12, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>

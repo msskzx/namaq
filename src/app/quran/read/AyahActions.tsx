@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, Bookmark, Check, LightbulbOff } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, Check, LightbulbOff, NotebookPen } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
@@ -10,20 +10,22 @@ import styles from './Mushaf.module.css';
 import type { AyahLink } from './ayahLinks';
 
 /**
- * The icons for one ayah: forgot (with how often, and a check to clear it), save, and where else it is:
+ * The icons for one ayah: forgot (with how often, and a check to clear it), save, the reader's note, and where else it is:
  * its compare cards (a short list when several surahs hold one) and the trees that hold it. Those two show only when there are any.
  */
-export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onForgot, onClear, onSave, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
   forgot: number;
   saved: boolean;
+  noted?: boolean;
   ar: boolean;
   links?: AyahLink;
   onForgot: () => void;
   onClear: () => void;
   onSave: () => void;
+  onNote?: () => void;
   onClose: () => void;
   /** A press outside closes the buttons; the page then ignores that press. */
   onDismiss?: () => void;
@@ -50,11 +52,12 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onFo
   const label = ar ? `الآية ${num(number)} من السورة ${num(surah)}` : `Ayah ${surah}:${number}`;
   const forgotLabel = forgot ? (ar ? 'نسيتها مرة أخرى' : 'Forgot again') : (ar ? 'نسيتها' : 'I forgot it');
   const saveLabel = saved ? (ar ? 'أزلها من المحفوظات' : 'Remove from saved') : (ar ? 'احفظ الآية' : 'Save ayah');
+  const noteLabel = noted ? (ar ? 'تأملك في الآية' : 'Your note') : (ar ? 'اكتب تأملًا' : 'Write a note');
   const clearLabel = ar ? 'تذكّرتها' : 'I remember it now';
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
   const treesLabel = ar ? 'أشجار هذه الآية' : 'Trees of this ayah';
   const compare = links?.compare ?? [];
-  const half = choosing ? 150 : 130;
+  const half = choosing ? 150 : 155;
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
   if (choosing) return (
     <div ref={box} role="dialog" aria-label={compareLabel} className={`${styles.ayahActions} ${styles.ayahChoices}`} style={{ left, top: Math.max(64, y) }}>
@@ -71,6 +74,9 @@ export default function AyahActions({ ayah, x, y, forgot, saved, ar, links, onFo
       <Button size="lg" variant={saved ? 'primary' : 'muted'} aria-label={saveLabel} title={saveLabel} aria-pressed={saved} onClick={() => { onSave(); onClose(); }}>
         <Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} />
       </Button>
+      {onNote && <Button size="lg" variant={noted ? 'primary' : 'muted'} aria-label={noteLabel} title={noteLabel} aria-pressed={noted} onClick={() => { onNote(); onClose(); }}>
+        <NotebookPen aria-hidden />
+      </Button>}
       {compare.length === 1 && <Button size="lg" variant="muted" href={compare[0].href} aria-label={compareLabel} title={compareLabel} onClick={onClose}><ArrowLeftRight aria-hidden /></Button>}
       {compare.length > 1 && <Button size="lg" variant="muted" aria-label={compareLabel} title={compareLabel} aria-haspopup="dialog" onClick={() => setChoosing(true)}><ArrowLeftRight aria-hidden /></Button>}
       {links?.trees && <Button size="lg" variant="muted" href={links.trees} aria-label={treesLabel} title={treesLabel} onClick={onClose}><TreeIcon aria-hidden /></Button>}

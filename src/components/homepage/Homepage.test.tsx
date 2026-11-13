@@ -27,6 +27,26 @@ const bookmark = { id: 'family', text: 'الكتاب والحكمة', href: '/qu
 afterEach(() => { cleanup(); localStorage.clear(); state.language = 'ar'; });
 
 describe('release homepage', () => {
+  it('opens on today\'s pair with its compare link and Hijri date', async () => {
+    const side = (surah: number, number: number, words: string[]) => ({ surah, ayah: number, ayat: [{ number, words, marks: { 0: { kind: 'exact' as const } } }] });
+    render(<Homepage data={{ ...data, daily: { id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] } }} />);
+    const today = screen.getByRole('region', { name: 'اليوم' });
+    expect(within(today).getByRole('link', { name: 'افتحها في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-35-7-19');
+    expect(today.textContent).toContain('وقلنا يا');
+    await waitFor(() => expect(today.textContent).toContain('هـ'));
+    fireEvent.click(within(today).getByRole('button', { name: 'احفظ' }));
+    expect(within(today).getByRole('button', { name: 'أزلها من المحفوظات' })).toBeTruthy();
+  });
+
+  it('shows the notes shelf only when there are notes', () => {
+    render(<Homepage data={data} />);
+    expect(screen.queryByRole('region', { name: 'تأملاتي' })).toBeNull();
+    cleanup();
+    localStorage.setItem('ayah-notes', JSON.stringify({ '2:255': { text: 'تأمل', at: 1 } }));
+    render(<Homepage data={data} />);
+    expect(within(screen.getByRole('region', { name: 'تأملاتي' })).getByRole('button').textContent).toBe('البقرة ٢٥٥تأمل');
+  });
+
   it.each(['ar', 'en'])('places saved material between the Quran widget and quizzes in %s', language => {
     state.language = language;
     render(<Homepage data={data} />);

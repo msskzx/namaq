@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
+import { notesByDate, readAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -10,9 +11,10 @@ import { num } from '@shared/quran/arabicNumber';
 import TreeIcon from './TreeIcon';
 import CardMenu, { type MenuAt, type MenuItem } from './CardMenu';
 import CompareTargetsSheet from './CompareTargetsSheet';
+import NoteSheet from './NoteSheet';
 import { ayahText, surahNames } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
-import { cardWays, forgottenCard, forgottenWays, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
 import { QURAN_FONT, type Palette, CARD } from '@/lib/theme';
 
@@ -26,10 +28,11 @@ const WAYS: Record<CardWay['to'], { label: string; Icon: (props: LucideProps) =>
 };
 
 export const FORGOTTEN_LABEL = 'آية نسيتها';
+export const NOTE_LABEL = 'تأمل';
 
-/** A saved or forgotten card: on a shelf it is a fixed-width book with five lines; wide, it fills the row and shows the whole text. */
-export function ShelfCard({ card, palette, onPress, wide = false, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
-  card: SavedCard; palette: Palette; onPress: (at: MenuAt) => void; wide?: boolean; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
+/** A saved or forgotten card, or a note: on a shelf it is a fixed-width book with five lines; wide, it fills the row and shows the whole text. A note's text is the reader's own words, so it is not in the mushaf font. */
+export function ShelfCard({ card, palette, onPress, wide = false, note = false, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
+  card: SavedCard; palette: Palette; onPress: (at: MenuAt) => void; wide?: boolean; note?: boolean; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
 }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   // A screen reader's tap often carries no point: the menu then opens over the card's top.
@@ -52,7 +55,9 @@ export function ShelfCard({ card, palette, onPress, wide = false, Icon = KIND_IC
           </View>
         )}
       </View>
-      <Text numberOfLines={wide ? undefined : 5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>
+      {note
+        ? <Text numberOfLines={wide ? undefined : 6} style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
+        : <Text numberOfLines={wide ? undefined : 5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>}
     </Pressable>
   );
 }
@@ -81,6 +86,9 @@ export function useHomeCards(palette: Palette) {
   const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
   const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
+  const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
+  const noteCards = useMemo(() => notesByDate(notes).map(key => noteCard(key, notes[key].text)), [notes]);
+  const [noting, setNoting] = useState<string | null>(null);
   /** Every other view of a card's ayat; compare across several surahs is picked next. */
   const wayItems = (ways: CardWay[]): MenuItem[] => ways.map(way => ({
     id: way.to, ...WAYS[way.to],
@@ -99,12 +107,18 @@ export function useHomeCards(palette: Palette) {
     ...wayItems(forgottenWays(card.id)),
     { id: 'clear', Icon: Check, label: 'تذكّرتها', onPress: () => rememberAyah(card.id) },
   ] });
+  const noteMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: NOTE_LABEL, items: [
+    { id: 'edit', Icon: NotebookPen, label: 'عدّل التأمل', onPress: () => setNoting(card.id) },
+    ...wayItems(forgottenWays(card.id)),
+    { id: 'delete', Icon: Trash2, label: 'احذف التأمل', onPress: () => writeAyahNote(card.id, '') },
+  ] });
   const menus = (<>
     <CardMenu at={menu?.at ?? null} items={menu?.items ?? []} label={menu?.label ?? ''} onClose={() => setMenu(null)} palette={palette} />
     <CompareTargetsSheet targets={choosing?.targets ?? null} palette={palette}
       onPick={target => { const way = choosing!.way; setChoosing(null); followWay(way, target); }} onClose={() => setChoosing(null)} />
+    <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
   </>);
-  return { cards, forgotten, forgottenCards, savedMenu, forgottenMenu, menus };
+  return { cards, forgotten, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus };
 }
 
 /** The review button: the reader in recite mode on the first forgotten ayah in mushaf order, stepping through the rest. */

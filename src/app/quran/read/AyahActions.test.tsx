@@ -27,4 +27,14 @@ describe("the reader's ayah buttons", () => {
     expect(screen.getByRole('link', { name: 'الأعراف ١٤١' }).getAttribute('href')).toBe(one.href);
     expect(screen.getByRole('link', { name: 'إبراهيم ٦' }).getAttribute('href')).toBe(two.href);
   });
+
+  it('opens the note, filled when the ayah has one', () => {
+    const onNote = vi.fn();
+    render(<AyahActions {...props} onNote={onNote} />);
+    fireEvent.click(screen.getByLabelText('اكتب تأملًا'));
+    expect(onNote).toHaveBeenCalled();
+    cleanup();
+    render(<AyahActions {...props} noted onNote={onNote} />);
+    expect(screen.getByLabelText('تأملك في الآية').getAttribute('aria-pressed')).toBe('true');
+  });
 });
