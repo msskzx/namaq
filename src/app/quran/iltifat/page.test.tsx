@@ -5,6 +5,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import QuranIltifatPage from './page';
 
 vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
 describe('QuranIltifatPage', () => {

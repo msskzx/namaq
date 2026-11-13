@@ -2,16 +2,18 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Send } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { letterDiff, rangeLabel, shareText, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
+import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
 export const VOICE_COLOR: Record<Voice, string> = { he: 'var(--home-slot-1)', we: 'var(--home-green)', you: 'var(--home-root)' };
 const VOICE_NAME: Record<Voice, string> = { he: 'غيبة', we: 'تكلم', you: 'خطاب' };
 const ICON = 'flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
+const DASH = 'h-0 flex-1 border-t-[1.5px] border-dashed border-[var(--home-rule)]';
 const QURAN = 'font-quran text-[1.45rem] leading-[2.1] text-[var(--home-ink)]';
 
 function Words({ lines }: { lines: Line[] }) {
@@ -72,7 +74,9 @@ function Dialog({ turns }: { turns: TurnView[] }) {
     <div className="flex flex-col gap-2">
       {turns.map((turn, i) => {
         if ('cut' in turn) return (
-          <p key={i} className="flex items-center gap-2 text-sm text-[var(--home-muted)] before:flex-1 before:border-t-[1.5px] before:border-dashed before:border-[var(--home-rule)] after:flex-1 after:border-t-[1.5px] after:border-dashed after:border-[var(--home-rule)]">{turn.cut}</p>
+          <p key={i} className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
+            <span aria-hidden className={DASH} />{turn.cut}<span aria-hidden className={DASH} />
+          </p>
         );
         if ('narration' in turn) return <p key={i} className={`${QURAN} text-center text-[var(--home-muted)]`}><Words lines={turn.narration} /></p>;
         return (
@@ -87,18 +91,10 @@ function Dialog({ turns }: { turns: TurnView[] }) {
   );
 }
 
-async function share(view: ExampleView) {
-  const text = mushafText(shareText(view));
-  try {
-    if (navigator.share) await navigator.share({ text });
-    else await navigator.clipboard.writeText(text);
-  } catch {}
-}
-
 function ExampleCard({ view }: { view: ExampleView }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
-    <article id={view.key} aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 rounded-[var(--card-radius)] bg-[var(--home-card)] px-4 pt-3.5 pb-1.5">
+    <article id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 rounded-[var(--card-radius)] bg-[var(--home-card)] px-4 pt-3.5 pb-1.5">
       <h2 className="text-base text-[var(--home-muted)]">{title}</h2>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} />
@@ -106,9 +102,9 @@ function ExampleCard({ view }: { view: ExampleView }) {
       </>}
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} />}
-      <div className="flex gap-1">
+      <div data-share-skip className="flex gap-1">
         <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
-        <button type="button" onClick={() => void share(view)} aria-label={`شارك ${title}`} title="شارك" className={ICON}><Send size={20} strokeWidth={1.6} aria-hidden /></button>
+        <ShareImageButton size="icon" iconSize={20} href={`/quran/iltifat#${view.key}`} />
       </div>
     </article>
   );

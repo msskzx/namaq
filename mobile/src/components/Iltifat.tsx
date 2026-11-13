@@ -1,12 +1,13 @@
 import { Fragment } from 'react';
-import { Pressable, Share, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Svg, { Line as SvgLine, Path } from 'react-native-svg';
 import { BookOpen, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { letterDiff, rangeLabel, shareText, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
+import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 import { Text } from '@/components/Text';
 import { readAyah } from '@/lib/openReader';
+import { shareCard } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 // The app lays out right to left (direction: 'rtl' in app/_layout.tsx), so a row starts on the right.
@@ -113,8 +114,8 @@ function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
   );
 }
 
-/** One example's card: its place, its own picture, then the mushaf and share buttons on the right. */
-export function IltifatCard({ view, palette }: { view: ExampleView; palette: Palette }) {
+/** One example's card: its place, its own picture, then the mushaf and share buttons on the right (left out of the shared image). */
+export function IltifatCard({ view, palette, image }: { view: ExampleView; palette: Palette; image?: boolean }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
     <View style={{ backgroundColor: palette.card, ...CARD, paddingHorizontal: 16, paddingTop: 14, paddingBottom: 4, gap: 10 }} accessibilityLabel={title}>
@@ -125,14 +126,14 @@ export function IltifatCard({ view, palette }: { view: ExampleView; palette: Pal
       </>}
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
-      <View style={{ flexDirection: 'row' }}>
+      {image ? <View style={{ height: 10 }} /> : <View style={{ flexDirection: 'row' }}>
         <Pressable onPress={() => readAyah(`${view.surah}:${view.from}`)} accessibilityRole="button" accessibilityLabel={`افتح ${title} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
           <BookOpen size={21} color={palette.muted} />
         </Pressable>
-        <Pressable onPress={() => void Share.share({ message: mushafText(shareText(view)) })} accessibilityRole="button" accessibilityLabel={`شارك ${title}`} hitSlop={6} style={{ padding: 8 }}>
+        <Pressable onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} accessibilityRole="button" accessibilityLabel={`شارك ${title}`} hitSlop={6} style={{ padding: 8 }}>
           <Send size={21} color={palette.muted} />
         </Pressable>
-      </View>
+      </View>}
     </View>
   );
 }

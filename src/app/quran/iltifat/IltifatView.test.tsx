@@ -7,6 +7,7 @@ import { mushafText } from '@shared/quran/mushafText';
 import IltifatView, { IltifatHelp, VOICE_COLOR } from './IltifatView';
 
 vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
 const views = examples();
@@ -18,7 +19,8 @@ describe('IltifatView', () => {
     expect(screen.getAllByRole('article').map(a => a.getAttribute('aria-label'))).toEqual(['الفاتحة ٢–٧', 'يونس ٢٢', 'يوسف ٨٠–٨٣', 'الإسراء ١', 'فاطر ٩', 'الزخرف ٢٢–٢٣', 'الفتح ٨–٩']);
     const fatiha = card('الفاتحة ٢–٧');
     expect(within(fatiha).getByRole('link', { name: /المصحف/ }).getAttribute('href')).toBe('/quran/read/ayah/1/2');
-    expect(within(fatiha).getByRole('button', { name: /شارك/ })).toBeTruthy();
+    expect(within(fatiha).getByRole('button', { name: 'مشاركة' }).closest('[data-share-skip]')).toBeTruthy();
+    expect(fatiha.hasAttribute('data-share-card')).toBe(true);
   });
 
   it('draws the pronoun chips of al-Isra in order: he, we, he', () => {

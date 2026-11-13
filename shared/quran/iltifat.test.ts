@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/iltifat.json';
-import { EXAMPLES, examples, letterDiff, resolve, shareText, type Line, type Voice } from './iltifat';
+import { EXAMPLES, examples, letterDiff, resolve, type Line, type Voice } from './iltifat';
 import { ayahWords } from './normalize';
 
 const views = examples();
@@ -75,11 +75,5 @@ describe('iltifat examples', () => {
     expect(() => resolve(norm, ['قال', 'he'])).toThrow();
     expect(resolve(norm, ['قال', 'he', 'لهم قال'])).toEqual([2]);
     expect(() => resolve(norm, ['ليس', 'he'])).toThrow();
-  });
-
-  it('shares the ayat and the place, with no link', () => {
-    const text = shareText(view(17));
-    expect(text).toContain('الإسراء ١');
-    expect(text).not.toMatch(/https?:/);
   });
 });

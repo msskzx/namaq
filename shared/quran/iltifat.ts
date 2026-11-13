@@ -163,10 +163,3 @@ export function letterDiff(a: string, b: string): [before: string, differ: strin
   const split = (l: string[]) => [l.slice(0, start).join(''), l.slice(start, l.length - end).join(''), l.slice(l.length - end).join('')] as [string, string, string];
   return [split(x), split(y)];
 }
-
-/** The share text: the example's place and its ayat, with no link (owner, #704). */
-export function shareText(view: ExampleView): string {
-  const ayah = (n: number) => ayat[`${view.surah}:${n}`];
-  const body = Array.from({ length: view.to - view.from + 1 }, (_, k) => ayah(view.from + k)).join(' ');
-  return `${body}\n${view.name} ${rangeLabel(view)}`;
-}
