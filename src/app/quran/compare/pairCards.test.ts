@@ -508,3 +508,16 @@ describe('story part marks next to an engine card', () => {
     expect(link(0, 52, 'وَٱشْهَدْ')).toBe(link(1, 111, 'وَٱشْهَدْ'));
   });
 });
+
+describe('story part phrases across rows', () => {
+  it('links a shared phrase in different rows («الناس في المهد وكهلا» in 3:46 and 5:110), not a lone common word', () => {
+    const card = pairCards(3, 5).find(c => c.sides[0].ayat.some(a => a.number === 46) && c.sides[1].ayat.some(a => a.number === 110))!;
+    const link = (s: 0 | 1, n: number, word: string) => {
+      const ayah = card.sides[s].ayat.find(a => a.number === n)!;
+      return ayah.marks?.[ayah.words.findIndex(w => normalizeWord(w) === normalizeWord(word))]?.link;
+    };
+    expect(link(0, 46, 'وَكَهْلًا')).toBeDefined();
+    expect(link(0, 46, 'وَكَهْلًا')).toBe(link(1, 110, 'وَكَهْلًا'));
+    expect(link(0, 46, 'ٱلْمَهْدِ')).toBe(link(1, 110, 'ٱلْمَهْدِ'));
+  });
+});

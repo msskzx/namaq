@@ -106,6 +106,37 @@ function partMarks(surahs: [number, number], sides: [number[], number[]]) {
   return marks;
 }
 
+/**
+ * A phrase of two or more words that two ayat in different rows of one part share word for word, with a word of a root
+ * rarer than «قال», so «قال» and «قال رب» alone stay apart («يكلم الناس في المهد وكهلا» in 3:46 and 5:110). Each word links to its partner; words already marked keep their mark.
+ */
+function crossRowMarks(surahs: [number, number], rows: [number[], number[]][], marks: Map<number, Record<number, CardMark>>[]) {
+  weights ??= rootWeights([...quran.values()]);
+  const norm = (s: number, n: number) => (words.get(`${surahs[s]}:${n}`) ?? []).map(normalizeWord);
+  rows.forEach(([as], r) => rows.forEach(([, bs], q) => {
+    if (q === r) return;
+    for (const a of as) for (const b of bs) {
+      const [x, y] = [norm(0, a), norm(1, b)];
+      const rare = (i: number) => (weights!.get(quran.get(`${surahs[0]}:${a}`)?.roots?.[i] ?? '') ?? 0) >= RARE;
+      x.forEach((_, i) => y.forEach((__, j) => {
+        if (i > 0 && j > 0 && x[i - 1] === y[j - 1]) return;
+        let length = 0;
+        while (i + length < x.length && j + length < y.length && x[i + length] === y[j + length]) length++;
+        if (length < 2 || !Array.from({ length }, (___, k) => i + k).some(rare)) return;
+        for (let k = 0; k < length; k++) {
+          const link = `row-${a}-${i + k}-${b}-${j + k}`;
+          const [own, other] = [marks[0].get(a) ?? {}, marks[1].get(b) ?? {}];
+          if (own[i + k] || other[j + k]) continue;
+          own[i + k] = { kind: 'exact', link };
+          other[j + k] = { kind: 'exact', link };
+          marks[0].set(a, own);
+          marks[1].set(b, other);
+        }
+      }));
+    }
+  }));
+}
+
 /** One card of a story told in two surahs: rows that line up across the sides, each the ayah numbers of one stretch; a side with none in a row is silent there. */
 type Part = { rows: [number[], number[]][] };
 type StoryPages = { storyParts?: { parts: (string | string[])[] }[]; timelineStories?: { story: string; surahs: number[] }[] };
@@ -225,6 +256,7 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
       const sides = sideAyat[p];
       const marks = [new Map<number, Record<number, CardMark>>(), new Map<number, Record<number, CardMark>>()];
       for (const row of part.rows) if (row[0].length && row[1].length) partMarks(surahs, row).forEach((side, s) => side.forEach((ayah, n) => marks[s].set(n, ayah)));
+      crossRowMarks(surahs, part.rows, marks);
       // Engine marks win on the words they cover and the part's own marks stay on the rest of the ayah. A part link whose
       // word an engine mark takes is renamed to that engine link, so its partner on the other side still lights with it.
       const renamed = new Map<string, string>();
