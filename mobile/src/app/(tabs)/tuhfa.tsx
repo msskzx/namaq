@@ -32,9 +32,12 @@ export default function TuhfaScreen() {
   useTabRetap('tuhfa', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
-    const y = event.nativeEvent.contentOffset.y + 40;
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+    const y = contentOffset.y + 40;
     let at = 0;
     tops.current.forEach((top, i) => { if (top <= y) at = i; });
+    // The last chapter is too short to reach the top: at the end of the page it is the one being read.
+    if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 2) at = chapters.length - 1;
     if (at !== chapter) setChapter(at);
   };
   const jump = (i: number) => {
