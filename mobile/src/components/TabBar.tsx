@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { ArrowLeftRight, BookOpen, Feather, ScrollText, type LucideProps } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
-import { TAB_BAR } from './tabBarSpace';
+import { TAB_BAR, tabBarBottom } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 
@@ -40,7 +40,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const reading = state.routes[state.index]?.name === 'read';
   if (reading && immersive) return null;
   return (
-    <View pointerEvents="box-none" style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: insets.bottom + TAB_BAR.lift,
+    <View pointerEvents="box-none" style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tabBarBottom(insets.bottom),
       borderRadius: 999, boxShadow: '0 6px 24px rgba(0, 0, 0, 0.3)' }}>
       <Animated.View style={[{ flexDirection: 'row', paddingHorizontal: 6, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }, row]}>
         <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />

@@ -23,7 +23,7 @@ type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClos
  */
 export default function BranchSearch({ state, bookmarks, palette, onClose, onApply }: Props) {
   const insets = useSafeAreaInsets();
-  // The floating tab bar lies over this screen's bottom; with the keyboard up the keyboard covers it instead.
+  // The see-through tab bar lies over this screen's bottom; with the keyboard up the keyboard covers it instead.
   const tabBarSpace = useTabBarSpace();
   const typing = useKeyboardShown();
   const [query, setQuery] = useState(state.query);
