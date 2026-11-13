@@ -1,6 +1,6 @@
 import { Linking, Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
+import { BookOpen, ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
 import Sheet from './Sheet';
 import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
@@ -14,10 +14,11 @@ import type { Palette } from '@/lib/theme';
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
-/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About and Privacy. */
+/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About, the sources and their licences, and Privacy. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const links = [
     { href: '/about', label: 'عن نمق', icon: <Logo size={22} /> },
+    { href: '/attributions', label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
     { href: '/privacy', label: 'سياسة الخصوصية', icon: <ShieldCheck size={20} color={palette.ink} /> },
   ];
   return (
