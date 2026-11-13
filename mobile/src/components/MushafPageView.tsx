@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/components/Text';
@@ -46,7 +46,9 @@ type Props = {
   checked?: Checked | null;
 };
 
-export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void };
+export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
+  /** Where the box being written is on the screen (its top and height), so the page can scroll it into sight above the keyboard. */
+  onActive?: (y: number, height: number) => void };
 export type Checked = { key: string; right: number[]; wrong: number[] };
 
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
@@ -77,9 +79,14 @@ function Veil({ text, size, palette, next, faint = false }: { text: string; size
  * A word to write, in write mode: the hidden word's own box in its place on the line, holding what was typed.
  * The box being written has the accent border.
  */
-function WriteBox({ text, size, palette, typed, active, onPress }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void }) {
+function WriteBox({ text, size, palette, typed, active, onPress, onActive }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void; onActive?: (y: number, height: number) => void }) {
+  const box = useRef<ComponentRef<typeof View>>(null);
+  useEffect(() => {
+    // Again on each change of the page around it (the keyboard rising, a scroll), so the box stays in sight.
+    if (active) box.current?.measureInWindow((_x: number, y: number, _w: number, h: number) => onActive?.(y, h));
+  }, [active, onActive]);
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
+    <Pressable ref={box} onPress={onPress} accessibilityRole="button" accessibilityLabel={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, backgroundColor: palette.paper, borderWidth: active ? 2 : 1, borderColor: active ? palette.accent : palette.rule }}>
       <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
@@ -274,7 +281,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
-                          ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} />
+                          ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? (marked ? palette.accent : palette.ink) }}>
                           {wordHidden ? '' : group.word}
