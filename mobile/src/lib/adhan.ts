@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { AppState, Linking, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as adhan from 'adhan';
@@ -50,10 +51,13 @@ export function syncAlerts(force = false): Promise<void> {
     const key = planKey(alerts, place, settings, now);
     if (!force && key === lastKey) return;
     try {
-      await Notifications.cancelAllScheduledNotificationsAsync();
+      // Only the adhan alerts: other notifications the app may add later stay.
+      const waiting = await Notifications.getAllScheduledNotificationsAsync();
+      await Promise.all(waiting.filter(item => item.content.data?.prayer).map(item => Notifications.cancelScheduledNotificationAsync(item.identifier)));
       lastKey = key;
       if (!place || !anyAlert(alerts)) return;
-      if (!(await Notifications.getPermissionsAsync()).granted) return;
+      // Blocked now, maybe allowed in the phone's settings later today: check again next time.
+      if (!(await Notifications.getPermissionsAsync()).granted) { lastKey = ''; return; }
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync(CHANNEL, {
           name: 'الأذان', importance: Notifications.AndroidImportance.HIGH, sound: 'default', vibrationPattern: [0, 250, 250, 250],
@@ -84,4 +88,14 @@ export function startAlerts() {
   prayerPlace.subscribe(again);
   prayerSettings.subscribe(again);
   AppState.addEventListener('change', state => { if (state === 'active') syncAlerts(); });
+}
+
+/** Counts each return to the app, so a screen can check the permission again after the phone's settings. */
+export function useForeground() {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') setCount(n => n + 1); });
+    return () => listener.remove();
+  }, []);
+  return count;
 }

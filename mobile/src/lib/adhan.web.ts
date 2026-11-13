@@ -5,3 +5,4 @@ export const alertsAllowed = async () => false;
 export const openPhoneSettings = () => {};
 export const syncAlerts = async () => {};
 export const startAlerts = () => {};
+export const useForeground = () => 0;

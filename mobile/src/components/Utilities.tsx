@@ -9,7 +9,7 @@ import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPr
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
-import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings } from '@/lib/adhan';
+import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette, CARD } from '@/lib/theme';
 
@@ -108,19 +108,20 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [alerts, setAlerts] = adhanAlerts.use();
   // Switched on but the phone blocks notifications: say so under the card.
   const [blocked, setBlocked] = useState(false);
+  const back = useForeground();
   useEffect(() => {
     if (!ALERTS_SUPPORTED || !anyAlert(alerts)) { setBlocked(false); return; }
     let gone = false;
     alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
     return () => { gone = true; };
-  }, [alerts, dayKey]);
+  }, [alerts, dayKey, back]);
   const toggle = async (key: Exclude<PrayerKey, 'sunrise'>) => {
     buzz();
-    if (alerts[key]) { setAlerts({ ...alerts, [key]: false }); return; }
+    if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }
     // The permission is asked for only here, the first time a prayer is switched on.
     const ok = await allowAlerts();
     setBlocked(!ok);
-    if (ok) setAlerts({ ...alerts, [key]: true });
+    if (ok) setAlerts({ ...adhanAlerts.get(), [key]: true });
   };
   return (
     <>
@@ -134,15 +135,16 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
           const faint = key === 'sunrise';
           const color = on ? palette.onAccent : faint ? palette.muted : palette.ink;
           return (
-            <View key={key} accessible={!ALERTS_SUPPORTED} accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
-              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                {ALERTS_SUPPORTED && (key === 'sunrise'
-                  ? <View style={{ width: BELL }} />
-                  : <BellButton on={alerts[key]} color={on ? palette.onAccent : alerts[key] ? palette.accent : palette.muted} name={PRAYER_NAMES[key]} onPress={() => toggle(key)} />)}
+            <View key={key}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
+              {ALERTS_SUPPORTED && (key === 'sunrise'
+                ? <View style={{ width: BELL }} />
+                : <BellButton on={alerts[key]} color={on ? palette.onAccent : alerts[key] ? palette.accent : palette.muted} name={PRAYER_NAMES[key]} onPress={() => toggle(key)} />)}
+              <View accessible accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color, fontSize: faint ? 16 : 20 }}>{PRAYER_NAMES[key]}</Text>
+                <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
               </View>
-              <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
             </View>
           );
         })}
