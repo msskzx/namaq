@@ -3,7 +3,7 @@ import { Pressable, Share, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, Send, Tags } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, RotateCwSquare, Send, Tags } from 'lucide-react-native';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -48,7 +48,7 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare, onRotate }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
   const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
@@ -69,16 +69,20 @@ function Actions({ piece, palette, pop, current, onVideo, onEvidence, onCompare 
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
         <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
-      <Pressable onPress={share} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-        <Send size={24} color={palette.ink} />
-      </Pressable>
       <StudioButton palette={palette} />
+      {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
+        <RotateCwSquare size={24} color={palette.ink} />
+      </Pressable>}
       {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
         <BookOpen size={24} color={palette.ink} />
       </Pressable>}
       {targets.length > 0 && <Pressable onPress={() => onCompare(targets)} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
         <ArrowLeftRight size={24} color={palette.ink} />
       </Pressable>}
+      {/* Share is always the last button (the left end). */}
+      <Pressable onPress={share} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
+        <Send size={24} color={palette.ink} />
+      </Pressable>
     </View>
   );
 }
@@ -106,7 +110,7 @@ function ConnectionChips({ group, selected, onToggle, palette }: { group: Group;
   );
 }
 
-type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean; rotated: boolean;
+type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
   start?: number; onIndex?: (index: number) => void;
   /** A downward swipe on the open tree. */
@@ -115,7 +119,9 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
   onOpen?: (piece: BranchPiece) => void };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, rotated, start, onIndex, onPull, onOpen }: Props) {
+export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen }: Props) {
+  /** The one tree drawn the other way, by its id: rotating belongs to that tree, not to the page. */
+  const [rotatedId, setRotatedId] = useState<string | null>(null);
   const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => onOpen?.(piece) }), [onOpen]);
   const place = useMemo(() => readJson<Place>(PLACE), []);
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
@@ -252,7 +258,8 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                 <View style={{ height: FOOT }}>
                   {current && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare} />
+                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onEvidence={setEvidence} onCompare={compare}
+                    onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined} />
                 </View>
                 {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
@@ -265,7 +272,7 @@ export default function TreePager({ pieces, list, palette, mode, around, rotated
                   connections={linked ? { group: linked, tags: current && growth.studio ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind === 'matrix' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
-                  rotated={at === index && rotated} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
+                  rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
                   onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips />}
             </View>

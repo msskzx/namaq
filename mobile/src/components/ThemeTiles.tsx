@@ -26,14 +26,15 @@ function Mini({ mode, card, small }: { mode: CardMode; card: string; small?: boo
 function Tile({ name, on, onPress, palette, children, big }: { name: string; on: boolean; onPress: () => void; palette: Palette; children: React.ReactNode; big?: boolean }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={name}
-      style={({ pressed }) => ({ width: big ? '100%' : '31%', gap: 5, alignItems: 'center', opacity: pressed ? 0.7 : 1 })}>
-      <View style={{ width: '100%', aspectRatio: 3 / 2, borderRadius: 12, borderWidth: 2, borderColor: on ? palette.accent : 'transparent', padding: 2 }}>
+      style={({ pressed }) => ({ width: big ? '100%' : '31%', flex: big ? 1 : undefined, maxHeight: big ? 260 : undefined, gap: 5, alignItems: 'center', opacity: pressed ? 0.7 : 1 })}>
+      {/* Big (the tour): the tiles share the height there is, so both fit a small phone, and carry no name. */}
+      <View style={{ width: '100%', ...(big ? { flex: 1 } : { aspectRatio: 3 / 2 }), borderRadius: 12, borderWidth: 2, borderColor: on ? palette.accent : 'transparent', padding: 2 }}>
         <View style={{ flex: 1, flexDirection: 'row', borderRadius: 9, borderWidth: 1, borderColor: palette.rule, overflow: 'hidden' }}>{children}</View>
         {on && <View style={{ position: 'absolute', top: 6, right: 6, width: big ? 24 : 16, height: big ? 24 : 16, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
           <Check size={big ? 15 : 10} strokeWidth={3} color={palette.onAccent} />
         </View>}
       </View>
-      <Text style={{ color: on ? palette.ink : palette.muted, fontSize: big ? 17 : 13, fontWeight: on ? '600' : '400' }}>{name}</Text>
+      {!big && <Text style={{ color: on ? palette.ink : palette.muted, fontSize: 13, fontWeight: on ? '600' : '400' }}>{name}</Text>}
     </Pressable>
   );
 }
@@ -73,9 +74,9 @@ export function ViewTiles({ palette, onPick, big }: { palette: Palette; onPick?:
   const label = 'العرض الافتراضي للمتشابه';
   const options: { key: BranchView; name: string }[] = [{ key: 'tree', name: 'شجرة' }, { key: 'matrix', name: 'مصفوفة' }];
   return (
-    <View style={{ gap: 8 }}>
+    <View style={{ gap: 8, flex: big ? 1 : undefined }}>
       {!big && <Text style={{ color: palette.muted, fontSize: 14 }}>{label}</Text>}
-      <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: big ? 'column' : 'row', flexWrap: 'wrap', gap: big ? 18 : 10 }}>
+      <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: big ? 'column' : 'row', flexWrap: big ? 'nowrap' : 'wrap', gap: big ? 18 : 10, flex: big ? 1 : undefined, justifyContent: 'center' }}>
         {(big ? [...options].reverse() : options).map(option => {
           return (
             <Tile key={option.key} name={option.name} on={view === option.key} onPress={() => { closeStudio(); setView(option.key); onPick?.(); }} palette={palette} big={big}>

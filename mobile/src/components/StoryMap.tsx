@@ -1,4 +1,5 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { counted } from '@shared/quran/arabicNumber';
@@ -33,6 +34,10 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
     .map(g => ({ ...g, cell: Math.max(CELL, Math.ceil((g.name.length * LETTER + 8) / g.events.length)) }));
   const rule = { borderBottomWidth: 1, borderColor: palette.rule };
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);
+  // More events wait on the left until the user has scrolled there: the left edge fades out to say so.
+  const [more, setMore] = useState(false);
+  const box = useRef(0);
+  const wide = useRef(0);
   return (
     <View style={{ flexDirection: 'row' }}>
       <View>
@@ -43,8 +48,11 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
           </View>
         ))}
       </View>
-      <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
+      <View style={{ flex: 1 }}>
+      <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }} scrollEventThrottle={32}
+        onLayout={e => { box.current = e.nativeEvent.layout.width; setMore(wide.current > box.current + 4); }}
+        onScroll={e => setMore(e.nativeEvent.contentOffset.x > 4)}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={width => { wide.current = width; if (box.current) setMore(width > box.current + 4); sideways.current?.scrollToEnd({ animated: false }); }}>
         <View style={{ direction: 'rtl' }}>
           <View style={{ flexDirection: 'row', height: BAND, gap: GAP }}>
             {groups.map(g => (
@@ -93,6 +101,11 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
           ))}
         </View>
       </ScrollView>
+      {more && <Svg pointerEvents="none" width={36} height="100%" style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}>
+        <Defs><LinearGradient id="more" x1="0" y1="0" x2="1" y2="0"><Stop offset="0" stopColor={palette.paper} stopOpacity={1} /><Stop offset="1" stopColor={palette.paper} stopOpacity={0} /></LinearGradient></Defs>
+        <Rect x="0" y="0" width="36" height="100%" fill="url(#more)" />
+      </Svg>}
+      </View>
     </View>
   );
 }
