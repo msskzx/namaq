@@ -37,6 +37,7 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
   // More events wait on the left until the user has scrolled there: the left edge fades out to say so.
   const [more, setMore] = useState(false);
   const box = useRef(0);
+  const wide = useRef(0);
   return (
     <View style={{ flexDirection: 'row' }}>
       <View>
@@ -49,9 +50,9 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
       </View>
       <View style={{ flex: 1 }}>
       <ScrollView ref={sideways as never} horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1, direction: 'ltr' }} scrollEventThrottle={32}
-        onLayout={e => { box.current = e.nativeEvent.layout.width; }}
+        onLayout={e => { box.current = e.nativeEvent.layout.width; setMore(wide.current > box.current + 4); }}
         onScroll={e => setMore(e.nativeEvent.contentOffset.x > 4)}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={width => { setMore(width > box.current + 4); sideways.current?.scrollToEnd({ animated: false }); }}>
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} onContentSizeChange={width => { wide.current = width; if (box.current) setMore(width > box.current + 4); sideways.current?.scrollToEnd({ animated: false }); }}>
         <View style={{ direction: 'rtl' }}>
           <View style={{ flexDirection: 'row', height: BAND, gap: GAP }}>
             {groups.map(g => (

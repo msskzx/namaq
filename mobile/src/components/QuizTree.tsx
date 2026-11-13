@@ -56,7 +56,7 @@ function Scroller({ header, children, onOverflow, fit = false }: { header?: Reac
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);
   const [view, setView] = useState(0);
   const [natural, setNatural] = useState<Size | null>(null);
-  useEffect(() => { if (onOverflow && view && natural && natural.width > view + 1) onOverflow(); }, [onOverflow, view, natural]);
+  useEffect(() => { if (onOverflow && view && natural && natural.width > view) onOverflow(); }, [onOverflow, view, natural]);
   const scale = fit && view && natural && natural.width > view ? Math.max(FIT_MIN, view / natural.width) : 1;
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
@@ -65,12 +65,12 @@ function Scroller({ header, children, onOverflow, fit = false }: { header?: Reac
         <ScrollView ref={sideways as never} horizontal style={{ direction: 'ltr' }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled"
           onLayout={event => setView(event.nativeEvent.layout.width)}
           onContentSizeChange={() => sideways.current?.scrollToEnd({ animated: false })}>
-          {/* The tree at its own size, measured, then scaled from its top right corner into a box of the scaled size. */}
-          <View style={{ width: natural ? natural.width * scale : undefined, height: natural ? natural.height * scale : undefined }}>
-            <View onLayout={event => { const { width, height } = event.nativeEvent.layout; setNatural(old => old && old.width === width && old.height === height ? old : { width, height }); }}
-              style={{ position: natural ? 'absolute' : 'relative', top: 0, right: 0, transform: [{ scale }], transformOrigin: 'top right' }}>
-              {children}
-            </View>
+          {/* The tree laid out at its own size (so it is always measured whole), scaled from its top right corner, its
+              footprint shrunk to the scaled size with negative margins. */}
+          <View onLayout={event => { const { width, height } = event.nativeEvent.layout; setNatural(old => old && old.width === width && old.height === height ? old : { width, height }); }}
+            style={{ alignSelf: 'flex-start', transform: [{ scale }], transformOrigin: 'top right',
+              marginLeft: natural ? -natural.width * (1 - scale) : 0, marginBottom: natural ? -natural.height * (1 - scale) : 0 }}>
+            {children}
           </View>
         </ScrollView>
       </View>

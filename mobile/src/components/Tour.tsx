@@ -156,7 +156,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
     <View style={{ flex: 1 }}>
       {/* No textAlign: in a right-to-left row the title starts on the right by itself. */}
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, minHeight: 44 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, fontWeight: '700' }}>{title[which]}</Text>
+        {title[which] ? <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, fontWeight: '700' }}>{title[which]}</Text> : null}
       </View>
       <View style={{ flex: 1, paddingHorizontal: which === 'tree' ? 0 : 12, paddingTop: 8 }}>
         {which === 'matrix' && card && (
