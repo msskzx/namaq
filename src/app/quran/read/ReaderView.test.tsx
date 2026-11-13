@@ -300,7 +300,22 @@ describe('Recite mode', () => {
     expect(color('ٱلۡكِتَٰبُ')).toMatch(/right/);
     expect(color('رَيۡبَۛ')).not.toMatch(/right|wrong/);
     expect(color('لِّلۡمُتَّقِينَ')).toMatch(/wrong/);
+    expect(screen.getByLabelText('كتبت: للمتقون')).toBeTruthy();
+    expect(screen.queryByLabelText(/^كتبت: ذلك/)).toBeNull();
+    expect(Object.keys(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}'))).toContain('2:2');
     expect(localStorage.getItem('quran-reader-write')).toBe('on');
+  });
+
+  it('leaves an ayah written right off the forgotten shelf', () => {
+    const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
+    const field = screen.getByLabelText('اكتب الكلمة');
+    fireEvent.change(field, { target: { value: 'ذلك ' } });
+    fireEvent.change(field, { target: { value: 'الكتاب ' } });
+    expect(veiled(container)).toEqual([]);
+    expect(screen.queryByRole('note')).toBeNull();
+    expect(localStorage.getItem('ayah-forgot')).toBeNull();
   });
 
   it('goes back a box with backspace in an empty box', () => {

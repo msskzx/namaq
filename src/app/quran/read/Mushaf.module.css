@@ -213,6 +213,9 @@
 .typed { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; white-space: nowrap; font-family: var(--font-amiri), serif; font-size: 0.72em; color: var(--home-ink); }
 .right { color: var(--home-green); }
 .wrong { color: var(--home-amber); }
+.mistake { position: relative; }
+/* What was typed for a wrong word, struck through just above it. */
+.mistyped { position: absolute; bottom: 90%; inset-inline: -2em; text-align: center; font-family: var(--font-amiri), serif; font-size: 0.55em; line-height: 1; white-space: nowrap; text-decoration: line-through; pointer-events: none; user-select: none; }
 /* A forgotten ayah is highlighted as one band: each word after the first fills the gap back to the word before it. */
 .forgot { position: relative; background: color-mix(in srgb, var(--home-accent) 16%, var(--home-card)); }
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }

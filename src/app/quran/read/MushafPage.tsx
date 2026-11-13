@@ -81,7 +81,8 @@ function fit(body: HTMLElement, centred: boolean) {
 
 /** `before`: the ayah's words on the shown pages before this one, so places count from the ayah's first word. */
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; before: number; onBox: (word: number) => void };
-export type Checked = { key: string; right: number[]; wrong: number[]; before: number };
+/** A checked ayah: its right and wrong words, and what was typed for each wrong one (shown struck through above it). */
+export type Checked = { key: string; right: number[]; wrong: number[]; typed: Record<number, string>; before: number };
 
 /**
  * A word to write, in write mode (the app's WriteBox): the hidden word's own box in its place on the line, so it is as wide
@@ -194,13 +195,16 @@ export default function MushafPage({
                     const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                     const writing = !!group.word && veiled && write?.key === key;
                     const graded = !veiled && checked?.key === key ? (checked.right.includes(rel + checked.before) ? styles.right : checked.wrong.includes(rel + checked.before) ? styles.wrong : '') : '';
+                    const mistyped = graded === styles.wrong && group.word ? checked!.typed[rel + checked!.before] : '';
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
                         className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : '', graded].join(' ').trim() || undefined}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel + write.before)
                           ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />
-                          : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span> : group.word}
+                          : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span>
+                          // A wrong word keeps what was typed, struck through above it, so the reader sees the mistake.
+                          : mistyped ? <span className={styles.mistake}>{group.word}<span role="note" aria-label={`كتبت: ${mistyped}`} className={styles.mistyped}>{mistyped}</span></span> : group.word}
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
