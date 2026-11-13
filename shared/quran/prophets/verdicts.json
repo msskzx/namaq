@@ -2781,10 +2781,6 @@
    "why": "If you are prevented, the offering: Ka'b ibn Ujra at al-Hudaybiya (Bukhari).",
    "ask": "Only part of 2:196 (the fidya) is tied to al-Hudaybiya. Keep the whole ayah here?"
   },
-  "muhammad/60:10": {
-   "keep": true,
-   "why": "Believing women who emigrate: after the treaty (Bukhari, al-Miswar and Marwan)."
-  },
   "muhammad/110:1": {
    "keep": true,
    "why": "When the victory of Allah comes: the conquest of Makkah.",
@@ -2859,6 +2855,10 @@
   "muhammad/33:28": {
    "keep": true,
    "why": "Say to your wives: if you want this world's life, come, I will provide for you: the choice (Bukhari, Aisha)."
+  },
+  "muhammad/60:8": {
+   "keep": true,
+   "why": "Kindness to non-fighting kin (60:8-9, Asma's mother in the truce, Bukhari) and the believing women who emigrate after the treaty (60:10-11, Bukhari)."
   }
  }
 }
