@@ -32,6 +32,7 @@
     "quran:passage-pairs": "tsx scripts/quran/buildPassagePairs.ts",
     "quran:compare-cards": "tsx scripts/quran/buildCompareCards.ts",
     "quran:compare-apply": "tsx scripts/quran/applyCompareReviewLog.ts",
+    "quran:missing-roots": "tsx scripts/quran/missingRoots.ts",
     "quran:story-apply": "tsx scripts/quran/applyStoryReviewLog.ts",
     "quran:branches": "tsx scripts/quran/buildBranches.ts",
     "quran:similar": "tsx scripts/quran/buildSimilar.ts",
