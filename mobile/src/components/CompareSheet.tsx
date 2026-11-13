@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Modal, Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -11,6 +11,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
 import { applyDraft, draftOf, type FilterDraft } from '@/lib/branchList';
 import { FilterFields } from './FilterFields';
+import Toggle from './Toggle';
+import { isMemorizedScope, memorizedScope, readMemorized, subscribeMemorized, type Memorized } from '@shared/memorized';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 
@@ -23,11 +25,12 @@ type Row =
   | { kind: 'pair'; key: string; pair: SurahPair; lead: number; nested: boolean };
 
 /** What the filter keeps, in a few words for the filter row. */
-function scopeText(filter: PairFilter) {
+function scopeText(filter: PairFilter, memorized: Memorized | null) {
   const scope = filter.scope;
   const parts: string[] = [];
   if (filter.savedOnly) parts.push('المحفوظة');
-  if (scope && 'list' in scope) parts.push(scope.unit === 'surahs' ? `${num(scope.list.length)} سور` : `${num(scope.list.length)} أجزاء`);
+  if (isMemorizedScope(scope, memorized)) parts.push('ما أحفظه');
+  else if (scope && 'list' in scope) parts.push(scope.unit === 'surahs' ? `${num(scope.list.length)} سور` : `${num(scope.list.length)} أجزاء`);
   else if (scope) parts.push(`${scope.unit === 'juz' ? 'الأجزاء' : scope.unit === 'surah' ? 'السور' : 'الصفحات'} ${num(scope.from)} إلى ${num(scope.to)}`);
   return parts.length ? parts.join(' · ') : 'كل القرآن';
 }
@@ -52,6 +55,14 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
     if (list && (list.saved || Object.keys(list.filters).length || list.range || !(next.unit === 'surahs' || next.unit === 'juzs'))) onFilter(filterOfList(list));
   };
   const filtered = !!(filter.scope || filter.savedOnly);
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const mine = memorizedScope(memorized);
+  // «ما أحفظه»: one tap narrows the pairs to the juz or surahs said in settings, and off again to the whole Quran.
+  const pickMemorized = (on: boolean) => {
+    const next = { ...filter, scope: on ? mine : undefined };
+    onFilter(next);
+    setDraftState(draftOf(listOfFilter(next)));
+  };
   useEffect(() => setExpanded(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
   const rows = useMemo(() => {
     const list: Row[] = [];
@@ -144,10 +155,10 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
             ))}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Pressable onPress={() => setFiltering(!filtering)} accessibilityRole="button" accessibilityLabel={`تصفية: ${scopeText(filter)}`} accessibilityState={{ expanded: filtering }}
+            <Pressable onPress={() => setFiltering(!filtering)} accessibilityRole="button" accessibilityLabel={`تصفية: ${scopeText(filter, memorized)}`} accessibilityState={{ expanded: filtering }}
               style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 10, height: 44, borderWidth: 1, borderColor: filtering || filtered ? palette.accent : palette.rule, borderRadius: 10 }}>
               <Funnel size={16} color={filtered ? palette.accent : palette.muted} />
-              <Text numberOfLines={1} style={{ flex: 1, fontSize: 15, color: filtered ? palette.accent : palette.ink, textAlign: 'right' }}>{scopeText(filter)}</Text>
+              <Text numberOfLines={1} style={{ flex: 1, fontSize: 15, color: filtered ? palette.accent : palette.ink, textAlign: 'right' }}>{scopeText(filter, memorized)}</Text>
               <View style={{ transform: [{ rotate: filtering ? '180deg' : '0deg' }] }}><ChevronDown size={16} color={palette.muted} /></View>
             </Pressable>
             {filtered && <Pressable onPress={() => { onFilter({}); setDraftState(draftOf(listOfFilter({}))); }} accessibilityRole="button" accessibilityLabel="إعادة ضبط" hitSlop={4}
@@ -155,6 +166,10 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
           </View>
           {filtering
             ? <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 8, gap: 18 }} keyboardShouldPersistTaps="handled">
+                {!(memorized && 'all' in memorized) && <View>
+                  <Toggle on={isMemorizedScope(filter.scope, memorized)} onChange={pickMemorized} label="ما أحفظه" palette={palette} disabled={!mine} />
+                  {!mine && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>اختر ما تحفظه من الإعدادات أولًا.</Text>}
+                </View>}
                 <FilterFields compare draft={draft} setDraft={setDraft} palette={palette} />
                 <Pressable onPress={() => setFiltering(false)} accessibilityRole="button"
                   style={{ alignSelf: 'center', paddingHorizontal: 20, height: 44, justifyContent: 'center', borderRadius: 22, backgroundColor: palette.accent }}>
