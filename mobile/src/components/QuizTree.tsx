@@ -8,7 +8,7 @@ import { branchesHref, keys, type Branch, type Variant } from '@shared/quran/bra
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import { givenAnswer } from '@shared/quiz/branchAnswers';
-import { gradedTree, neededCut, verdict, type Correction } from '@shared/quiz/feedback';
+import { correctionOf, gradedTree, neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
 import BranchTree, { type Paths, type RenderNode } from './BranchTree';
 import { litPaths, togglePath } from '@shared/quran/pathHighlight';
@@ -170,11 +170,36 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
   );
 }
 
+/** What was typed for a wrong answer: the right words green, the rest struck through. */
+function Typed({ row, palette }: { row: Correction; palette: Palette }) {
+  const typed = row.typed ? row.typed.split(/\s+/) : [];
+  return (
+    <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
+      {'كتبتَ: '}
+      {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
+        <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+      ))}</Text>}
+    </Text>
+  );
+}
+
+/** A checked answer under its ayah in the matrix: the same mark and verdict as in the tree, and what was typed when wrong. */
+function MatrixMark({ row, palette }: { row: Correction; palette: Palette }) {
+  return (
+    <View style={{ direction: 'rtl', gap: 2, marginTop: 6, paddingTop: 6, borderTopWidth: 1, borderColor: palette.rule }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Badge row={row} palette={palette} />
+        <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
+      </View>
+      {!row.correct && <Typed row={row} palette={palette} />}
+    </View>
+  );
+}
+
 /** One asked node after checking: verdict, the node's words with the ones enough to type underlined, what was typed when wrong, and its ayat. */
 function Graded({ row, palette, names }: { row: Correction; palette: Palette; names: Record<number, string> }) {
   const references = row.node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`; }).join(' · ');
   const cut = neededCut(row.node.words, row.needed);
-  const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
     <View style={{ maxWidth: 220, gap: 2 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -185,14 +210,7 @@ function Graded({ row, palette, names }: { row: Correction; palette: Palette; na
         <Text style={{ textDecorationLine: 'underline', textDecorationColor: palette.accent }}>{quranText(row.node.words.slice(0, cut).join(' '))}</Text>
         {cut < row.node.words.length ? ` ${quranText(row.node.words.slice(cut).join(' '))}` : ''}
       </Text>
-      {!row.correct && (
-        <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
-          {'كتبتَ: '}
-          {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
-            <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
-          ))}</Text>}
-        </Text>
-      )}
+      {!row.correct && <Typed row={row} palette={palette} />}
       {references !== '' && <Text style={{ fontSize: 12, color: palette.muted, textAlign: 'right' }}>{references}</Text>}
     </View>
   );
@@ -288,7 +306,8 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header }:
       <View style={{ flex: 1 }}>
         {matrix
           ? <>{header}<View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-            {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} />}
+            {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}}
+              note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} /> : null; }} />}
           </View></>
           : <Scroller header={header} fit onOverflow={!down && chosen === null ? overflow : undefined}><BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={tap} paths={paths} renderNode={renderNode}
             direction={down ? 'down' : 'side'} around={surrounding} growth={treeGrowth} sceneRef={sceneRef} /></Scroller>}

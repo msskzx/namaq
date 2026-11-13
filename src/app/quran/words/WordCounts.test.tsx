@@ -96,3 +96,12 @@ describe('WordCounts chart', () => {
     expect(within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' }).getAttribute('aria-pressed')).toBe('false');
   });
 });
+
+describe('a word opened from the search', () => {
+  it('adds the word in ?w= to the chart with its places open', () => {
+    window.history.replaceState(null, '', `/quran/words?w=${encodeURIComponent('بَقَرَة')}`);
+    render(<WordCounts lemmas={[['مِن', 3226, 'من'], ['بَقَرَة', 9, 'بقر']]} />);
+    expect(screen.getByRole('button', { name: 'مواضع «بَقَرَة»' }).getAttribute('aria-pressed')).toBe('true');
+    window.history.replaceState(null, '', '/');
+  });
+});

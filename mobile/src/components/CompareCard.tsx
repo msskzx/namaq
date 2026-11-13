@@ -17,7 +17,7 @@ import { QURAN_FONT, blend, type Palette, CARD } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import TreeIcon from './TreeIcon';
-import { compareRecorderPage, compareVideoInput } from '@/lib/compareVideo';
+import { cardVideoPage } from '@/lib/compareVideo';
 import { WEBSITE } from '@/lib/branches';
 import { compareHref } from '@shared/quran/compare';
 
@@ -124,7 +124,7 @@ const lightFor = (lit: string | null, step: ReadStep | undefined, side: number, 
 
 function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>; palette: Palette; card: PairCard }) {
   const [video, setVideo] = useState<((font: string) => string) | null>(null);
-  const record = () => { read.reset(); const input = compareVideoInput(card, read.plan, read.speed, palette); setVideo(() => (font: string) => compareRecorderPage(input, font)); };
+  const record = () => { read.reset(); setVideo(() => cardVideoPage(card, read.plan, read.speed, palette)); };
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
   const active = playing || read.status === 'paused';

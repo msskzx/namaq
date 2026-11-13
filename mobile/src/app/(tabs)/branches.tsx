@@ -80,7 +80,8 @@ export default function BranchesScreen() {
   const openPart = useCallback((piece: BranchPiece) => change({ ...list, query: piece.text }, { id: piece.id, query: piece.text }), [change, list]);
   useIntent('branches', intent => {
     setJumps(value => value + 1);
-    if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
+    if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query });
+    else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
     else if (intent.ayah) change({ ...EMPTY_LIST, ayah: intent.ayah });
     else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
     else if (intent.juz) change({ ...EMPTY_LIST, range: { from: intent.juz, to: intent.juz } });

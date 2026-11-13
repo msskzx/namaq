@@ -1,5 +1,5 @@
 import { useRef, type ComponentRef } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { Bookmark, ChevronLeft, EyeOff, Feather, Library, Users, type LucideProps } from 'lucide-react-native';
@@ -9,7 +9,7 @@ import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { ContinueReading, Divider, Feed, PrayerRow, Stories } from '@/components/HomeFeed';
 import { Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
-import { openIntent as go } from '@/lib/ways';
+import { openIntent as go, toTab } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -52,7 +52,7 @@ export default function HomeScreen() {
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar settings hideOnScroll />
+      <TopBar settings search={() => toTab('/search')} hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <Stories palette={palette} />
         <ContinueReading palette={palette} />
