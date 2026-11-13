@@ -49,7 +49,8 @@ type Props = {
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
   /** Where the box being written is on the screen (its top and height), so the page can scroll it into sight above the keyboard. */
   onActive?: (y: number, height: number) => void };
-export type Checked = { key: string; right: number[]; wrong: number[] };
+/** A checked ayah: its right and wrong words, and what was typed for each wrong one (shown struck through above it). */
+export type Checked = { key: string; right: number[]; wrong: number[]; typed: Record<number, string> };
 
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
@@ -277,6 +278,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       const marked = mark === key;
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
+                      const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
                         <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
@@ -285,6 +287,12 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         {writing && write.targets.includes(rel)
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
+                        {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
+                        {mistyped ? (
+                          <View pointerEvents="none" style={{ position: 'absolute', bottom: '100%', left: -size, right: -size, alignItems: 'center' }}>
+                            <Text numberOfLines={1} accessibilityLabel={`كتبت: ${mistyped}`} style={{ fontSize: size * 0.6, lineHeight: size * 0.85, color: palette.amber, textDecorationLine: 'line-through' }}>{mistyped}</Text>
+                          </View>
+                        ) : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? (marked ? palette.accent : palette.ink) }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (

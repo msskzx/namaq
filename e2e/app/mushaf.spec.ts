@@ -85,4 +85,15 @@ test.describe('the write quiz', () => {
     await expect(written).toHaveCount(4);
     await expect(written.first()).toHaveAccessibleName('كلمة مكتوبة: بسم');
   });
+
+  test('a wrong word keeps what was typed above it and puts the ayah on the forgotten shelf', async ({ page }) => {
+    await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة' }).first()).toBeVisible();
+    await page.getByLabel('اكتب الكلمة').focus();
+    // A space ends a word whose box takes more letters than were typed.
+    await page.keyboard.type('بساالله', { delay: 20 });
+    await page.keyboard.type('الرحمن الرحيم', { delay: 20 });
+    await expect(page.getByLabel('كتبت: بسا')).toBeVisible();
+    await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:1');
+  });
 });

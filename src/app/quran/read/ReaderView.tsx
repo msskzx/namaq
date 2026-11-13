@@ -223,7 +223,10 @@ export default function ReaderView({
   const check = (filled: Record<number, string>) => {
     if (!writeKey || !position) return;
     const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)), before: 0 });
+    const wrong = asked.filter(at => !right.includes(at));
+    setChecked({ key: writeKey, right, wrong, typed: Object.fromEntries(wrong.map(at => [at, filled[at] ?? ''])), before: 0 });
+    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
+    if (wrong.length) markForgotten(writeKey);
     setPosition(revealAyah(position, writeKey));
   };
   const moveOn = (filled: Record<number, string>) => {

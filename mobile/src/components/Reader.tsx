@@ -141,7 +141,10 @@ export default function Reader() {
   const check = (filled: Record<number, string>) => {
     if (!writeKey || !position) return;
     const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)) });
+    const wrong = asked.filter(at => !right.includes(at));
+    setChecked({ key: writeKey, right, wrong, typed: Object.fromEntries(wrong.map(at => [at, filled[at] ?? ''])) });
+    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
+    if (wrong.length) markForgotten(writeKey);
     setPosition(revealAyah(position, writeKey));
   };
   const moveOn = (filled: Record<number, string>) => {
@@ -337,7 +340,7 @@ export default function Reader() {
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={pageHeight}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
-        write={at === page ? write : null} checked={position ? checked : null} />
+        write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );
   };
 
