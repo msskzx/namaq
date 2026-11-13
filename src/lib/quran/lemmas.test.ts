@@ -3,7 +3,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import built from '@/app/quran/words/lemmas.json';
 import builtPlaces from '@/app/quran/words/places.json';
-import { countLemmas, countPairs, fromBuckwalter, lemmaPlaces } from './lemmas';
+import builtWords from '@shared/data/quran/words.json';
+import { countLemmas, countPairs, fromBuckwalter, lemmaPlaces, wordLemmas } from './lemmas';
 import { OPPOSITES } from './opposites';
 
 const MORPHOLOGY = join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt');
@@ -49,15 +50,15 @@ describe('countLemmas', () => {
     ]);
   });
 
-  it('numbers lemmas that share a spelling, as the corpus does, so they stay apart', () => {
+  it('names lemmas that share a spelling by what each is, so they stay apart', () => {
     const homographs = [
       '(7:73:5:1)\tSa`liHFA\tPN\tSTEM|POS:PN|LEM:Sa`liH2|ROOT:SlH|ACC',
       '(2:62:16:1)\tSa`liHFA\tADJ\tSTEM|POS:ADJ|LEM:Sa`liH|ROOT:SlH|MS|ACC',
       '(2:25:5:1)\tS~a`liHa`ti\tN\tSTEM|POS:N|LEM:Sa`liH|ROOT:SlH|FP|GEN',
     ];
     expect(countLemmas([...lines, ...homographs].join('\n')).lemmas.filter(([, , root]) => root === 'صلح')).toEqual([
-      ['صَٰلِح ١', 2, 'صلح'],
-      ['صَٰلِح ٢', 1, 'صلح'],
+      ['صَٰلِح (الصالح)', 2, 'صلح'],
+      ['صَٰلِح عليه السلام', 1, 'صلح'],
     ]);
   });
 
@@ -83,6 +84,15 @@ describe('countLemmas', () => {
     expect(Object.keys(places).sort()).toEqual(built.lemmas.map(([lemma]) => lemma).sort());
     expect(places['أَرْض'].split(' ')).toHaveLength(461);
     expect(builtPlaces.notice).toBe(built.notice);
+  });
+
+  it('lists the lemmas of each word by their place in the count list, for the app', () => {
+    const { ayat } = wordLemmas(lines.join('\n'));
+    expect(ayat[0]).toEqual(['4 0', ' 0']);
+    expect([ayat[1][0], ayat[1][22], ayat[1][60]]).toEqual(['', '    3+1', '  2']);
+    const fromFile = wordLemmas(readFileSync(MORPHOLOGY, 'utf8'));
+    expect(fromFile).toEqual({ lemmas: builtWords.lemmas, ayat: builtWords.ayat });
+    expect(builtWords.notice).toBe(built.notice);
   });
 
   it('counts a pair side by lemma, or by one form of it', () => {

@@ -19,6 +19,28 @@ export type LemmaCounts = { lemmas: LemmaCount[]; unlemmatized: number };
 export type Side = { label: string; lemma: string; form?: string };
 export type CountedSide = { label: string; lemma: string; form: boolean; count: number };
 
+/**
+ * Names for the corpus lemmas that share a spelling, which the corpus tells apart only by a number («عصا ١» was the verb
+ * "disobey", «عصا ٢» the staff). Each says which word it is. docs/plans/word-counts-app.md
+ */
+export const SHARED_SPELLINGS: Record<string, string> = {
+  'ma`lik': 'مَٰلِك (المالك)', 'ma`lik2': 'مَٰلِك (خازن النار)',
+  '<i*aA': 'إِذَا (الظرفية)', '<i*aA2': 'إِذَا (الفجائية)',
+  maE: 'مَع (ظرف)', maE2: 'مَع (حرف)',
+  Hayov: 'حَيْث (ظرف)', Hayov2: 'حَيْث (شرط)',
+  '>awofaY`': 'أَوْفَىٰ (فعل)', '>awofaY`2': 'أَوْفَىٰ (اسم تفضيل)',
+  EaSaA: 'عَصَىٰ (فعل)', EaSaA2: 'عَصَا (العصا)',
+  'Sa`liH': 'صَٰلِح (الصالح)', 'Sa`liH2': 'صَٰلِح عليه السلام',
+  huwd: 'هُود عليه السلام', huwd2: 'هُود (اليهود)',
+  EaAd: 'عَاد (المعتدي)', EaAd2: 'عَاد (القوم)',
+  baEol: 'بَعْل (الزوج)', baEol2: 'بَعْل (الصنم)',
+  'ja`hiliy~ap': 'جَٰهِلِيَّة (اسم)', 'ja`hiliy~ap2': 'جَٰهِلِيَّة (علم)',
+  jawaAb: 'جَوَاب (الرد)', jawaAb2: 'جَوَاب (الأحواض)',
+  yugaAvu: 'يُغَاث (من الغوث)', yugaAvu2: 'يُغَاث (من الغيث)',
+  '>aHoSaY`': 'أَحْصَىٰ (فعل)', '>aHoSaY`2': 'أَحْصَىٰ (اسم تفضيل)',
+  EaSof: 'عَصْف (التبن)', EaSof2: 'عَصْف (الهبوب)',
+};
+
 function* segments(morphology: string) {
   for (const line of morphology.split(/\r?\n/)) {
     if (!line.startsWith('(')) continue;
@@ -40,7 +62,9 @@ function lemmaNames(lemmas: Iterable<string>) {
   }
   const names = new Map<string, string>();
   for (const [word, group] of spellings) {
-    for (const lemma of group) names.set(lemma, group.length > 1 ? `${word} ${num(Number(/\d+$/.exec(lemma)?.[0] ?? 1))}` : word);
+    for (const lemma of group) {
+      names.set(lemma, group.length === 1 ? word : SHARED_SPELLINGS[lemma] ?? `${word} ${num(Number(/\d+$/.exec(lemma)?.[0] ?? 1))}`);
+    }
   }
   return names;
 }
@@ -90,4 +114,25 @@ export function countPairs(morphology: string, pairs: [Side, Side][]): [CountedS
     return { label: s.label, lemma: names.get(s.lemma)!, form: s.form !== undefined, count: found };
   };
   return pairs.map(([a, b]) => [count(a), count(b)]);
+}
+
+/**
+ * The app's word data: the counted lemmas as countLemmas gives them, and for each ayah (surah by surah) one entry per
+ * corpus word, the places in that list of the lemmas the word holds, joined by "+" ("" for a word with none).
+ */
+export function wordLemmas(morphology: string): { lemmas: LemmaCount[]; ayat: string[][] } {
+  const { lemmas } = countLemmas(morphology);
+  const ids = new Map<string, number>();
+  const names = lemmaNames(new Set([...segments(morphology)].flatMap(({ lemma }) => (lemma ? [lemma] : []))));
+  lemmas.forEach(([name], i) => ids.set(name, i));
+  const ayat: string[][][] = [];
+  for (const { word, lemma } of segments(morphology)) {
+    const [surah, ayah, at] = word.split(':').map(Number);
+    const words = ((ayat[surah - 1] ??= [])[ayah - 1] ??= []);
+    words[at - 1] ??= '';
+    if (!lemma) continue;
+    const id = String(ids.get(names.get(lemma)!));
+    if (!words[at - 1].split('+').includes(id)) words[at - 1] = words[at - 1] ? `${words[at - 1]}+${id}` : id;
+  }
+  return { lemmas, ayat: ayat.map(surah => surah.map(words => words.join(' '))) };
 }

@@ -38,8 +38,8 @@ type Props = {
   recite?: Recite | null;
   forgot: Readonly<Record<string, unknown>>;
   saved: ReadonlySet<string>;
-  /** A touch on a word gives its ayah; a touch elsewhere on the page (or on a hidden word) gives null. */
-  onTouch: (touch: Touch, key: string | null, x: number, y: number) => void;
+  /** A touch on a word gives its ayah and the word's place in it (from 0, the ۞ mark not counted); a touch elsewhere on the page (or on a hidden word) gives null. */
+  onTouch: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
   write?: Write | null;
   /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
@@ -155,9 +155,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
   const upcoming = { backgroundColor: tint(palette.accent, 0.22) } as const;
   const small = Math.max(11, width * 0.026);
-  const press = (key: string | null) => ({
-    onPress: (event: GestureResponderEvent) => onTouch('tap', key, event.nativeEvent.pageX, event.nativeEvent.pageY),
-    onLongPress: (event: GestureResponderEvent) => onTouch('long', key, event.nativeEvent.pageX, event.nativeEvent.pageY),
+  const press = (key: string | null, word?: number) => ({
+    onPress: (event: GestureResponderEvent) => onTouch('tap', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),
+    onLongPress: (event: GestureResponderEvent) => onTouch('long', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),
     delayLongPress: 500,
   });
 
@@ -192,6 +192,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
   const counts: Record<string, number> = {};
   titled?.forEach((steps, surah) => { counts[`${surah}:1`] = steps - 1; });
+  const plain: Record<string, number> = {};
   let surahHere = top;
 
   return (
@@ -260,9 +261,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 const key = `${group.surah}:${group.ayah}`;
                 const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                 const wordHidden = !!hidden?.(key, word);
+                const at = group.word && group.word !== '۞' ? (plain[key] = (plain[key] ?? -1) + 1) : undefined;
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
-                return { group, key, wordHidden, rel, lit: !wordHidden && !!forgot[key] };
+                return { group, key, wordHidden, rel, at, lit: !wordHidden && !!forgot[key] };
               });
               return (
                 <View key={index} style={{ height: oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred || oval ? 'center' : 'flex-start' }}>
@@ -270,14 +272,14 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                     ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
                     {bands(index, cells)}
-                    {cells.map(({ group, key, wordHidden, rel, lit }, at) => {
+                    {cells.map(({ group, key, wordHidden, rel, at: wordAt, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                       const marked = mark === key;
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
-                        <Word key={at} press={wordHidden ? undefined : press(key)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
+                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
