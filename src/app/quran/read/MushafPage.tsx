@@ -79,6 +79,24 @@ function fit(body: HTMLElement, centred: boolean) {
   });
 }
 
+/** `before`: the ayah's words on the shown pages before this one, so places count from the ayah's first word. */
+export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; before: number; onBox: (word: number) => void };
+export type Checked = { key: string; right: number[]; wrong: number[]; before: number };
+
+/**
+ * A word to write, in write mode (the app's WriteBox): the hidden word's own box in its place on the line, so it is as wide
+ * as the word, holding what was typed. The box being written has the accent border.
+ */
+function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
+  return (
+    <button type="button" data-write-active={active || undefined} aria-pressed={active} aria-label={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'}
+      className={styles.writeBox} onPointerDown={event => event.preventDefault()} onClick={onPick}>
+      <span aria-hidden className={styles.writeWord}>{word}</span>
+      <span aria-hidden className={styles.typed}>{typed}</span>
+    </button>
+  );
+}
+
 export default function MushafPage({
   page,
   data,
@@ -90,6 +108,8 @@ export default function MushafPage({
   forgot,
   saved,
   titled,
+  write,
+  checked,
 }: {
   page: number;
   data: MushafPageData;
@@ -105,6 +125,10 @@ export default function MushafPage({
   saved?: ReadonlySet<string>;
   /** Surahs whose title (and basmala, 2 steps) are recite steps of their own: they count as the first words of the surah's first ayah. */
   titled?: ReadonlyMap<number, number>;
+  /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a click on a box picks it. */
+  write?: Write | null;
+  /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
+  checked?: Checked | null;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -166,11 +190,17 @@ export default function MushafPage({
                     const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                     const veiled = !!hidden?.(key, word);
                     const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
+                    // The word's place in its ayah, past a titled surah's title and basmala steps and the ayah's words on the page before (write mode counts words only).
+                    const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
+                    const writing = !!group.word && veiled && write?.key === key;
+                    const graded = !veiled && checked?.key === key ? (checked.right.includes(rel + checked.before) ? styles.right : checked.wrong.includes(rel + checked.before) ? styles.wrong : '') : '';
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
-                        className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : ''].join(' ').trim() || undefined}>
+                        className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : '', graded].join(' ').trim() || undefined}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
-                        {veiled ? <span className={[styles.veiled, next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span> : group.word}
+                        {writing && write.targets.includes(rel + write.before)
+                          ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />
+                          : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span> : group.word}
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}

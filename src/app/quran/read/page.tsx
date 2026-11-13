@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import OpenLastPage from './OpenLastPage';
 
@@ -6,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function QuranReadPage() {
-  return <OpenLastPage />;
+  return <Suspense><OpenLastPage /></Suspense>;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { LAST_PAGE_KEY } from './ReaderView';
 
@@ -11,13 +11,14 @@ export function lastPage(stored: string | null) {
   return Number.isInteger(page) && page >= 1 && page <= 604 ? page : 1;
 }
 
-/** The mushaf tab opens straight on the mushaf; the surah index is the list button in the reader. */
+/** The mushaf tab opens straight on the mushaf; the surah index is the list button in the reader. ?write=1 (the quizzes page's write card) starts writing there. */
 export default function OpenLastPage() {
   const router = useRouter();
+  const writing = useSearchParams().get('write') === '1';
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(LAST_PAGE_KEY); } catch {}
-    router.replace(`/quran/read/${lastPage(stored)}`);
-  }, [router]);
+    router.replace(`/quran/read/${lastPage(stored)}${writing ? '?write=1' : ''}`);
+  }, [router, writing]);
   return <LoadingSpinner className="py-24" />;
 }

@@ -278,6 +278,49 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual([]);
   });
 
+  it('writes the first and last words of the next ayah in its boxes, moving on by itself, then grades it', () => {
+    const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ', 'فِيهِۛ', 'هُدٗى', 'لِّلۡمُتَّقِينَ', 2] });
+    const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
+    const boxes = () => screen.getAllByRole('button', { name: /اكتب هذه الكلمة|كلمة مكتوبة/ });
+    expect(boxes()).toHaveLength(6);
+    expect(container.querySelectorAll('[data-write-active]')).toHaveLength(1);
+    const field = screen.getByLabelText('اكتب الكلمة');
+    const write = (text: string) => fireEvent.change(field, { target: { value: text } });
+    write('ذلك ');
+    write('الكتاب');
+    write('لا');
+    write('فيه');
+    write('هدي ');
+    expect(screen.getByRole('button', { name: 'كلمة مكتوبة: هدي' })).toBeTruthy();
+    write('للمتقون ');
+    expect(veiled(container)).toEqual([]);
+    const color = (word: string) => [...container.querySelectorAll('[data-ayah="2:2"]')].find(span => span.textContent?.startsWith(word))!.className;
+    expect(color('ذَٰلِكَ')).toMatch(/right/);
+    expect(color('ٱلۡكِتَٰبُ')).toMatch(/right/);
+    expect(color('رَيۡبَۛ')).not.toMatch(/right|wrong/);
+    expect(color('لِّلۡمُتَّقِينَ')).toMatch(/wrong/);
+    expect(localStorage.getItem('quran-reader-write')).toBe('on');
+  });
+
+  it('goes back a box with backspace in an empty box', () => {
+    const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
+    const field = screen.getByLabelText('اكتب الكلمة');
+    fireEvent.change(field, { target: { value: 'ذلك ' } });
+    expect(screen.getAllByRole('button', { pressed: true, name: /اكتب هذه الكلمة/ })).toHaveLength(1);
+    fireEvent.keyDown(field, { key: 'Backspace' });
+    expect(screen.getByRole('button', { pressed: true, name: 'كلمة مكتوبة: ذلك' })).toBeTruthy();
+  });
+
+  it('starts writing from the top of the page from the quizzes card', () => {
+    const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} write />);
+    expect(screen.getByRole('button', { name: 'أوقف الكتابة' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(2);
+  });
+
   it('starts reciting full screen on a phone, hiding the app bars and tools', () => {
     vi.useFakeTimers();
     media(false, true);
