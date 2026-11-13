@@ -5,6 +5,7 @@ import { GalleryHorizontal, Search, UnfoldHorizontal, X, type LucideProps } from
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
+import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import { toQuranHub } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -80,7 +81,10 @@ export default function BranchesScreen() {
   const openPart = useCallback((piece: BranchPiece) => change({ ...list, query: piece.text }, { id: piece.id, query: piece.text }), [change, list]);
   useIntent('branches', intent => {
     setJumps(value => value + 1);
+    // A tree opens among the saved ones when it is saved (the homepage's shelf), else in the first list that holds it.
+    const found = intent.open && !intent.saved && !intent.query ? listShowing({ ...EMPTY_LIST, saved: true }, intent.open, bookmarks) : null;
     if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query });
+    else if (found) change(found.list, { id: found.piece.id });
     else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
     else if (intent.ayah) change({ ...EMPTY_LIST, ayah: intent.ayah });
     else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
@@ -126,6 +130,7 @@ export default function BranchesScreen() {
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
         onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}
       <HelpSheet topic={help ? 'branches' : null} onClose={() => setHelp(false)} palette={palette} />
+      <TabHint id="branches" palette={palette} hidden={searching} />
     </View>
   );
 }

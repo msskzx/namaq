@@ -6,12 +6,12 @@ import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
-import { connectors, haptics, tourSeen } from '@/lib/settings';
+import { connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import { MemorizedSetting } from './Memorized';
 import type { Palette } from '@/lib/theme';
 
-/** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. */
+/** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
 /** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About and Privacy. */
@@ -31,7 +31,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <GestureSettings palette={palette} mode="read" />
         <HapticsSetting palette={palette} />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
-          <Pressable onPress={() => { onClose(); setTimeout(() => tourSeen.set(false), REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
+          <Pressable onPress={() => { onClose(); setTimeout(() => { hintsSeen.set([]); tourSeen.set(false); }, REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
             <Play size={20} color={palette.ink} />
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>

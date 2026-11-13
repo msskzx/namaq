@@ -490,3 +490,21 @@ describe('compare pair cards', () => {
     expect(a[9]?.link).toBe(b[2]?.link);
   });
 });
+
+describe('story part marks next to an engine card', () => {
+  it('keeps the part’s own marks on an ayah an engine card also marks («مسلمون» in 3:52 and 5:111)', () => {
+    const card = pairCards(3, 5).find(c => c.sides[0].ayat.some(a => a.number === 52) && c.sides[1].ayat.some(a => a.number === 111))!;
+    const marked = (s: 0 | 1, n: number) => {
+      const ayah = card.sides[s].ayat.find(a => a.number === n)!;
+      return ayah.words.filter((_, i) => ayah.marks?.[i]).map(normalizeWord);
+    };
+    expect(marked(0, 52)).toContain(normalizeWord('مُسْلِمُونَ'));
+    expect(marked(1, 111)).toContain(normalizeWord('مُسْلِمُونَ'));
+    const link = (s: 0 | 1, n: number, word: string) => {
+      const ayah = card.sides[s].ayat.find(a => a.number === n)!;
+      return ayah.marks?.[ayah.words.findIndex(w => normalizeWord(w) === normalizeWord(word))]?.link;
+    };
+    expect(link(0, 52, 'وَٱشْهَدْ')).toBeDefined();
+    expect(link(0, 52, 'وَٱشْهَدْ')).toBe(link(1, 111, 'وَٱشْهَدْ'));
+  });
+});

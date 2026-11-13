@@ -225,7 +225,17 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
       const sides = sideAyat[p];
       const marks = [new Map<number, Record<number, CardMark>>(), new Map<number, Record<number, CardMark>>()];
       for (const row of part.rows) if (row[0].length && row[1].length) partMarks(surahs, row).forEach((side, s) => side.forEach((ayah, n) => marks[s].set(n, ayah)));
-      engineMarks.forEach((side, s) => side.forEach((ayah, n) => { if (sides[s].includes(n)) marks[s].set(n, ayah); }));
+      // Engine marks win on the words they cover and the part's own marks stay on the rest of the ayah. A part link whose
+      // word an engine mark takes is renamed to that engine link, so its partner on the other side still lights with it.
+      const renamed = new Map<string, string>();
+      engineMarks.forEach((side, s) => side.forEach((ayah, n) => {
+        if (sides[s].includes(n)) for (const [word, mark] of Object.entries(ayah)) {
+          const own = marks[s].get(n)?.[Number(word)]?.link;
+          if (own && mark.link) renamed.set(own, mark.link);
+        }
+      }));
+      for (const side of marks) for (const ayah of side.values()) for (const mark of Object.values(ayah)) if (mark.link && renamed.has(mark.link)) mark.link = renamed.get(mark.link);
+      engineMarks.forEach((side, s) => side.forEach((ayah, n) => { if (sides[s].includes(n)) marks[s].set(n, { ...marks[s].get(n), ...ayah }); }));
       const firstIds = sides.map((numbers, s) => `${surahs[s]}:${numbers[0]}`).join('|');
       // A pair goes with the part that shows both its ayat, else with the part holding its first.
       const holds = (q: number, id: string) => id.split('|').every((key, s) => sideAyat[q][s].includes(ayahOfKey(key)));

@@ -6,6 +6,7 @@ import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
+import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import { toQuranHub } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -105,6 +106,7 @@ export default function CompareScreen() {
       <CompareSheet open={sheet} onClose={() => setSheet(false)} pairs={pairs} filter={filter} onFilter={changeFilter}
         lead={visit?.lead ?? 0} other={visit?.other ?? 0} onPick={pick} palette={palette} />
       <HelpSheet topic={help ? 'compare' : null} onClose={() => setHelp(false)} palette={palette} />
+      <TabHint id="compare" palette={palette} />
     </View>
   );
 }
