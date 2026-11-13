@@ -306,7 +306,8 @@ export default function Reader() {
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
   const [preview, setPreview] = useState<Preview | null>(null);
   const buttons = 3 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
-  const barWidth = buttons * 48 + 12;
+  // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
+  const barWidth = Math.min(buttons * 48 + 12, (size?.width ?? 360) - 16);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} scrollEnabled={!!keyboard} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
@@ -326,7 +327,7 @@ export default function Reader() {
       )}
       {actions && (
         <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), flexDirection: 'row', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
           <Pressable accessibilityRole="button" accessibilityLabel={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'}
             onPress={() => { markForgotten(actions.key); setActions(null); }}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>

@@ -30,7 +30,8 @@ export default function WordsScreen() {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<number[] | null>(null);
   const [help, setHelp] = useState(false);
-  useTabRetap('words', () => { scroll.current?.scrollTo({ y: 0, animated: true }); setQuery(''); });
+  const top = useRef(0);
+  useTabRetap('words', () => { if (top.current > 4) scroll.current?.scrollTo({ y: 0, animated: true }); else setQuery(''); });
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -44,7 +45,7 @@ export default function WordsScreen() {
           {query !== '' && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
         </View>
       </View>
-      <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom }}>
+      <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom }}>
         {found.length === 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', marginTop: 24 }}>لا كلمة تطابق البحث.</Text>}
         {found.map(id => {
           const [name, count, root] = words.lemmas[id];
