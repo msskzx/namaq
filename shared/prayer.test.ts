@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as adhan from 'adhan';
-import { clock, CITIES, DEFAULT_PRAYER_SETTINGS, hijriMonth, inRamadan, isPlace, nextPrayer, prayerDay, qiblaBearing, searchPlaces, turnTo, type Adhan, type Place, type PrayerSettings } from './prayer';
+import { clock, CITIES, DEFAULT_PRAYER_SETTINGS, hijriMonth, inRamadan, isPlace, nextPrayer, prayerDay, qiblaBearing, qiblaLabel, searchPlaces, turnTo, type Adhan, type Place, type PrayerSettings } from './prayer';
 
 const lib = adhan as unknown as Adhan;
 const city = (name: string) => CITIES.find(place => place.name === name)!;
@@ -121,5 +121,16 @@ describe('searchPlaces', () => {
     expect(searchPlaces('اسكندرية').map(p => p.name)).toEqual(['الإسكندرية']);
     expect(searchPlaces('مكة').map(p => p.name)).toEqual(['مكة المكرمة']);
     expect(searchPlaces('').length).toBe(CITIES.length);
+  });
+});
+
+describe('edge cases', () => {
+  it('shows a dash where the day has no such time', () => {
+    expect(clock(new Date(Number.NaN))).toBe('—');
+  });
+  it('tells a screen reader the bearing and the turn', () => {
+    expect(qiblaLabel(136.1, null)).toBe('القبلة ١٣٦° من الشمال');
+    expect(qiblaLabel(136, 30)).toBe('القبلة ١٣٦° من الشمال، استدر يمينًا ٣٠°');
+    expect(qiblaLabel(136, -2)).toBe('القبلة ١٣٦° من الشمال، أنت متجه إليها');
   });
 });

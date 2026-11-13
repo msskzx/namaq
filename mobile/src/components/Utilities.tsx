@@ -5,7 +5,7 @@ import { CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Com
 import { Text, TextInput } from './Text';
 import Sheet from './Sheet';
 import { hijriDate } from '@shared/hijri';
-import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, searchPlaces, turnTo, type Place } from '@shared/prayer';
+import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place } from '@shared/prayer';
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { prayerPlace, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
@@ -115,7 +115,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
           const faint = key === 'sunrise';
           const color = on ? palette.onAccent : faint ? palette.muted : palette.ink;
           return (
-            <View key={key} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}`}
+            <View key={key} accessible accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
               style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
               <Text style={{ color, fontSize: faint ? 16 : 20 }}>{PRAYER_NAMES[key]}</Text>
               <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
@@ -221,7 +221,7 @@ function Qibla({ place, palette, on, onPlace }: { place: Place; palette: Palette
   return (
     <View style={{ alignItems: 'center', gap: 14 }}>
       <View style={{ alignSelf: 'stretch' }}><PlaceChip place={place} palette={palette} onPress={onPlace} /></View>
-      <Svg width={DIAL} height={DIAL} viewBox={`${-DIAL / 2} ${-DIAL / 2} ${DIAL} ${DIAL}`} accessibilityLabel="بوصلة القبلة">
+      <Svg width={DIAL} height={DIAL} viewBox={`${-DIAL / 2} ${-DIAL / 2} ${DIAL} ${DIAL}`} accessible accessibilityRole="image" accessibilityLabel={qiblaLabel(bearing, turn)}>
         <G rotation={spin}>
           <Circle r={R} fill={palette.card} stroke={palette.rule} strokeWidth={1.5} />
           {ticks.map(deg => {
@@ -245,7 +245,9 @@ function Qibla({ place, palette, on, onPlace }: { place: Place; palette: Palette
           <Text style={{ color: palette.green, fontSize: 18 }}>أنت متجه إلى القبلة</Text>
         </View>
       )}
-      {heading === 'none'
+      {heading === 'denied'
+        ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>تعمل البوصلة بإذن الموقع، فاسمح به من إعدادات الجوال.</Text>
+        : heading === 'none'
         ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center' }}>لا بوصلة في هذا الجهاز، فالشمال في أعلى الدائرة.</Text>
         : (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, marginTop: 16 }}>
@@ -287,7 +289,7 @@ function Calendar({ palette }: { palette: Palette }) {
         {cells.map((cell, i) => (
           <View key={i} style={{ width: `${100 / 7}%`, alignItems: 'center' }}>
             {cell && (
-              <View accessibilityLabel={`${dayDigits(cell.day)}، ${cell.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' })}`}
+              <View accessible accessibilityState={{ selected: cell.today }} accessibilityLabel={`${dayDigits(cell.day)}، ${cell.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' })}`}
                 style={{ alignItems: 'center', minWidth: 40, paddingVertical: 3, borderRadius: 10, backgroundColor: cell.today ? palette.accent : 'transparent' }}>
                 <Text style={{ color: cell.today ? palette.onAccent : palette.ink, fontSize: 18, lineHeight: 26 }}>{dayDigits(cell.day)}</Text>
                 <Text style={{ color: cell.today ? palette.onAccent : palette.muted, fontSize: 11, lineHeight: 14 }}>{dayDigits(cell.gregorian.getDate())}</Text>

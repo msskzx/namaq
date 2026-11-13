@@ -40,21 +40,27 @@ export function useMinute() {
  */
 const NO_COMPASS_MS = 4000;
 
-export function useHeading(on: boolean): number | null | 'none' {
-  const [heading, setHeading] = useState<number | null | 'none'>(null);
+export function useHeading(on: boolean): number | null | 'none' | 'denied' {
+  const [heading, setHeading] = useState<number | null | 'none' | 'denied'>(null);
   useEffect(() => {
     if (!on) return;
     let sub: Location.LocationSubscription | undefined;
     let gone = false;
     let heard = false;
     // A browser or a phone without a compass may never answer: after a few seconds, say so.
-    const quiet = setTimeout(() => { if (!heard) setHeading('none'); }, NO_COMPASS_MS);
-    Location.watchHeadingAsync(reading => {
-      const value = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading;
-      if (value < 0) return;
-      heard = true;
-      setHeading(value);
-    }).then(watch => { if (gone) watch.remove(); else sub = watch; }).catch(() => setHeading('none'));
+    let quiet: ReturnType<typeof setTimeout> | undefined;
+    // The phone's compass comes through the location module, which needs the location permission even for a picked city.
+    Location.requestForegroundPermissionsAsync().then(({ granted }) => {
+      if (gone) return;
+      if (!granted) { setHeading('denied'); return; }
+      quiet = setTimeout(() => { if (!heard) setHeading('none'); }, NO_COMPASS_MS);
+      return Location.watchHeadingAsync(reading => {
+        const value = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading;
+        if (value < 0) return;
+        heard = true;
+        setHeading(value);
+      }).then(watch => { if (gone) watch.remove(); else sub = watch; });
+    }).catch(() => { if (!gone) setHeading('none'); });
     return () => { gone = true; clearTimeout(quiet); sub?.remove(); };
   }, [on]);
   return heading;

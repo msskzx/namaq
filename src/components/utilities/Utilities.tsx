@@ -8,7 +8,7 @@ import { keyStore } from '@shared/storage';
 import { hijriDate } from '@shared/hijri';
 import {
   ALL, clock, dayDigits, DEFAULT_PRAYER_SETTINGS, FACING, hijriMonth, isPlace, isPrayerSettings, METHODS, MY_LOCATION, nextPrayer,
-  prayerDay, PRAYER_NAMES, qiblaBearing, searchPlaces, turnTo, type Adhan, type MethodId, type Place, type PrayerSettings,
+  prayerDay, PRAYER_NAMES, qiblaBearing, qiblaLabel, searchPlaces, turnTo, type Adhan, type MethodId, type Place, type PrayerSettings,
 } from '@shared/prayer';
 import styles from './Utilities.module.css';
 
@@ -235,7 +235,7 @@ function Qibla({ place, onPlace }: { place: Place; onPlace: () => void }) {
   return (
     <div className={styles.qibla}>
       <PlaceChip place={place} onPress={onPlace} />
-      <svg width={DIAL} height={DIAL} viewBox={`${-DIAL / 2} ${-DIAL / 2} ${DIAL} ${DIAL}`} role="img" aria-label="بوصلة القبلة">
+      <svg width={DIAL} height={DIAL} viewBox={`${-DIAL / 2} ${-DIAL / 2} ${DIAL} ${DIAL}`} role="img" aria-label={qiblaLabel(bearing, live ? turnTo(heading, bearing) : null)}>
         <g transform={`rotate(${live ? -heading : 0})`}>
           <circle r={R} fill="var(--home-card)" stroke="var(--home-rule)" strokeWidth={1.5} />
           {Array.from({ length: 72 }, (_, i) => i * 5).map(deg => {
@@ -286,7 +286,7 @@ function Calendar() {
         {Array.from({ length: month.lead }, (_, i) => <span key={`lead-${i}`} />)}
         {month.days.map(day => (
           <span key={day.day} className={`${styles.day} ${day.today ? styles.today : ''}`} aria-current={day.today ? 'date' : undefined}
-            title={day.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' })}>
+            aria-label={`${dayDigits(day.day)}، ${day.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' })}`}>
             <b>{dayDigits(day.day)}</b><small>{dayDigits(day.gregorian.getDate())}</small>
           </span>
         ))}

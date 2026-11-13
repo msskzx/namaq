@@ -88,7 +88,7 @@ export function prayerDay(adhan: Adhan, place: Place, date: Date, settings: Pray
 
 /** The next of the five prayers today, or null after Isha (the row then shades nothing). */
 export function nextPrayer(day: PrayerDay, now: Date): Exclude<PrayerKey, 'sunrise'> | null {
-  return FIVE.find(key => day[key].getTime() > now.getTime()) ?? null;
+  return FIVE.find(key => day[key].getTime() > now.getTime()) ?? null; // an invalid time compares false, so it is never shaded
 }
 
 /** The qibla's bearing from true north, in degrees clockwise. */
@@ -99,6 +99,8 @@ const arabic = (text: string) => text.replace(/\d/g, digit => DIGITS[Number(digi
 
 /** «٥:٠٠» in the phone's own clock, twelve-hour; with `half`, «٥:٠٠ م». Done by hand: Intl differs between phones. */
 export function clock(date: Date, half = false) {
+  // Near the poles some days have no sunrise or sunset, and adhan gives no time.
+  if (Number.isNaN(date.getTime())) return '—';
   const hours = date.getHours();
   const text = `${hours % 12 || 12}:${String(date.getMinutes()).padStart(2, '0')}`;
   return arabic(text) + (half ? (hours < 12 ? ' ص' : ' م') : '');
@@ -107,6 +109,13 @@ export function clock(date: Date, half = false) {
 /** Turn from where the phone points to the qibla, in -180…180 (positive = turn right). */
 export function turnTo(heading: number, bearing: number) {
   return ((bearing - heading + 540) % 360) - 180;
+}
+/** What a screen reader says for the compass: the bearing, and which way to turn while the compass runs. */
+export function qiblaLabel(bearing: number, turn: number | null) {
+  const base = `القبلة ${arabic(String(Math.round(bearing)))}° من الشمال`;
+  if (turn === null) return base;
+  if (Math.abs(turn) <= FACING) return `${base}، أنت متجه إليها`;
+  return `${base}، استدر ${turn > 0 ? 'يمينًا' : 'يسارًا'} ${arabic(String(Math.round(Math.abs(turn))))}°`;
 }
 /** Close enough to say «أنت متجه إلى القبلة». */
 export const FACING = 5;
