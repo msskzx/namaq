@@ -268,8 +268,8 @@ export type PartyView = {
 export function viewFor(state: PartyState, playerId: string, now: number): PartyView {
   const revealed = state.phase === 'reveal';
   const question = state.phase === 'question' || revealed ? state.questions[state.current] : null;
-  // A choice question's ayah and look-alikes name its surah, so they wait for the reveal too.
-  const hidden = question && !revealed ? { ...question, correctAnswer: '', evidence: undefined, ayahKey: undefined, alike: undefined, note: undefined } : question;
+  // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too.
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: undefined, alike: undefined, note: undefined } : question;
   return {
     code: state.code,
     you: playerId,

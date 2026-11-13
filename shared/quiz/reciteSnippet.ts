@@ -8,11 +8,8 @@ import { normalizeWord } from '../quran/normalize';
 import { num } from '../quran/arabicNumber';
 import type { Difficulty } from './difficulty';
 import { shuffle } from './random';
-import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
+import { FORGOT, RECITE_SNIPPET, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
 
-export const RECITE_SNIPPET = 'RECITE';
-export const RECITED = '1';
-export const FORGOT = '0';
 /** The opening shows at least this many words, and leaves at least this many to recite. */
 const MIN_SHOWN = 3;
 const MIN_LEFT = 3;

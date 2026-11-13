@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { normalizeWord } from '../quran/normalize';
 import corpus from '../data/quran/trees.json';
-import { FORGOT, RECITED, reciteSnippet } from './reciteSnippet';
+import { reciteSnippet } from './reciteSnippet';
+import { FORGOT, RECITED } from './choiceKinds';
 
 const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 const text = (words: string[]) => words.map(normalizeWord).join(' ');

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mixQuestions } from './choiceKinds';
+import { mixQuestions, questionAyat } from './choiceKinds';
 
 describe('mixQuestions', () => {
   it('takes from each list in turn, so a big list does not crowd out a small one', () => {
@@ -9,5 +9,10 @@ describe('mixQuestions', () => {
 
   it('stops when the lists run out', () => {
     expect(mixQuestions([['a'], ['b']], 5, Math.random)).toHaveLength(2);
+  });
+
+  it('skips a question about an ayah already asked', () => {
+    const mixed = mixQuestions([[{ id: 'a', ayahKey: '2:34' }], [{ id: 'b', ayahKey: '2:34' }, { id: 'c', ayahKey: '2:35' }]], 5, () => 0.5, questionAyat);
+    expect(mixed.map(item => item.id).sort()).toEqual(['a', 'c']);
   });
 });

@@ -246,9 +246,9 @@ describe('party helpers', () => {
     expect(quizQuery(cleanSettings({ topics: ['SURAH', 'RECITE'], juzFrom: 30, juzTo: 30 }))).toBe('topic=SURAH&length=5&juzFrom=30&juzTo=30&leaves=3');
     const asked = { ...choice('SURAH:2:34', '2'), ayahKey: '2:34', alike: { 17: { key: '17:61', words: [] } } };
     let state = playing([asked, choice('q2')]);
-    expect(viewFor(state, 'p1', 0).question).toMatchObject({ correctAnswer: '', ayahKey: undefined, alike: undefined });
+    expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'q0', correctAnswer: '', ayahKey: undefined, alike: undefined });
     state = run(state, ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'b' }) as Action));
-    expect(viewFor(state, 'p1', 0).question).toMatchObject({ correctAnswer: '2', ayahKey: '2:34' });
+    expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'SURAH:2:34', correctAnswer: '2', ayahKey: '2:34' });
   });
 
   it('expires an idle party', () => {

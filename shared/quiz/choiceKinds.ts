@@ -3,10 +3,16 @@
 import type { JuzRange } from '../quran/juz';
 import { normalizeWord } from '../quran/normalize';
 import { wordDiff } from '../quran/wordDiff';
+import { keys, type Branch } from '../quran/branches';
 import type { Difficulty } from './difficulty';
 import type { Random } from './random';
 import type { ScopeFilters } from './scopeParams';
 import type { QuizTopic } from './settings';
+
+/** A recited snippet's kind and its two answers (reciteSnippet.ts), here so screens need not load the Quran's text. */
+export const RECITE_SNIPPET = 'RECITE';
+export const RECITED = '1';
+export const FORGOT = '0';
 
 export type ChoiceQuestion = {
   key: string;
@@ -44,13 +50,25 @@ export type ChoiceKind = {
 
 /**
  * One quiz from several kinds: each list in turn gives its next question until the quiz is full, so a kind with
- * thousands of questions does not crowd out one with a few. Lists come ordered (difficulty first); the quiz is shuffled.
+ * thousands of questions does not crowd out one with a few. A question about an ayah another question already asks is
+ * skipped, since one could give the other away (a recited snippet names its surah). Lists come ordered (difficulty
+ * first); the quiz is shuffled.
  */
-export function mixQuestions<T>(lists: T[][], length: number, random: Random): T[] {
+export function mixQuestions<T>(lists: T[][], length: number, random: Random, ayatOf: (item: T) => string[] = () => []): T[] {
   const picked: T[] = [];
+  const asked = new Set<string>();
   const queues = lists.filter(list => list.length).map(list => [...list]);
   while (picked.length < length && queues.some(queue => queue.length)) {
-    for (const queue of queues) if (queue.length && picked.length < length) picked.push(queue.shift()!);
+    for (const queue of queues) {
+      while (queue.length && picked.length < length) {
+        const item = queue.shift()!;
+        const ayat = ayatOf(item);
+        if (ayat.some(key => asked.has(key))) continue;
+        ayat.forEach(key => asked.add(key));
+        picked.push(item);
+        break;
+      }
+    }
   }
   for (let i = picked.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
@@ -58,6 +76,9 @@ export function mixQuestions<T>(lists: T[][], length: number, random: Random): T
   }
   return picked;
 }
+
+/** The ayat a question asks about: a tree's places, or a choice question's ayah. */
+export const questionAyat = (question: { tree?: Branch; ayahKey?: string }) => question.tree ? keys(question.tree) : question.ayahKey ? [question.ayahKey] : [];
 
 /** The words where the asked ayah and a picked look-alike part, by index in each. */
 export const alikeDiff = (asked: string[], alike: string[]) => wordDiff(asked.map(normalizeWord), alike.map(normalizeWord));

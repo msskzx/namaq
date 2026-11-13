@@ -41,7 +41,7 @@ import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
 import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 import { RANGED_TOPICS } from "@shared/quiz/settings";
-import { FORGOT, RECITE_SNIPPET } from "@shared/quiz/reciteSnippet";
+import { FORGOT, RECITE_SNIPPET } from "@shared/quiz/choiceKinds";
 import { markForgotten } from "@shared/ayahMarks";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
 import { mushafText } from '@shared/quran/mushafText';

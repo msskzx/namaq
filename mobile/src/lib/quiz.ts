@@ -13,7 +13,7 @@ import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 import type { JuzRange } from '@shared/quran/juz';
 import { quizTrees } from '@shared/quiz/treeScope';
 import { isCompareBookmark } from '@shared/compareBookmarks';
-import { mixQuestions, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 
@@ -101,8 +101,8 @@ export type SoloRun = {
 
 export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
   const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty) : [];
-  const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings.list), settings.difficulty, random, settings.length));
-  const questions = mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random);
+  const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings.list), settings.difficulty, random, settings.length * 3));
+  const questions = mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat);
   return { settings, questions, typed: questions.map(question => isTree(question) ? emptyBranchAnswers(question) : []), checked: questions.map(() => false), current: 0, submitted: false };
 }
 

@@ -15,7 +15,7 @@ import { check, cleanSolo, clearAnswers, goTo, hasTyped, isTree, pick, questionS
 import QuizChoice from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
-import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/reciteSnippet';
+import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';

@@ -8,7 +8,7 @@ import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } 
 import { shuffle, type Random } from '@shared/quiz/random';
 import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
-import { mixQuestions, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS } from '@shared/quiz/settings';
 import { DEFAULT_LEAVES } from './types';
@@ -107,9 +107,9 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   // Trees of the chosen difficulty first; within each, trees big enough for the leaves asked first (see biggerFirst).
   const bigger = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length);
   const trees: AssembledQuestion[] = byDifficulty(bigger, difficulty, question => question.level).slice(0, length);
-  const kinds = kindsOf(topics).map((kind) => kind.questions(choiceScope(juz, scope), difficulty, random, length) as AssembledQuestion[]);
-  // Each kind gets its share of the quiz (choiceKinds.ts mixQuestions).
-  return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random).map((question) => ({
+  const kinds = kindsOf(topics).map((kind) => kind.questions(choiceScope(juz, scope), difficulty, random, length * 3) as AssembledQuestion[]);
+  // Each kind gets its share of the quiz, never two questions on one ayah (choiceKinds.ts mixQuestions); extra are drawn for those skipped.
+  return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat).map((question) => ({
     ...question,
     choices: question.reveal ? question.choices : shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),
