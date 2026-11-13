@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CircleHelp, Compass, Feather, House, Play, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Compass, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -163,6 +163,14 @@ export function SettingsButton({ className, children }: { className: string; chi
   );
 }
 
+/** The one search (/search): in the side rail on desktop, and beside the gear in the homepage's top bar on phones, as in the app. */
+export function SearchButton({ className, children }: { className: string; children?: (icon: React.ReactNode) => React.ReactNode }) {
+  const { language } = useLanguage();
+  const label = language === 'ar' ? 'البحث' : 'Search';
+  const icon = <Search size={children ? 24 : 22} strokeWidth={1.75} aria-hidden />;
+  return <Link href="/search" className={className} aria-label={label} title={label}>{children ? children(icon) : icon}</Link>;
+}
+
 /** Keeps page content clear of the phone tab bar; render it after the page. */
 export function TabSpacer() {
   return <div className={styles.tabSpacer} />;
@@ -193,6 +201,7 @@ export default function TabBar() {
           );
         })}
         <div ref={setRailSlot} className={styles.railActions} />
+        <SearchButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SearchButton>
         <HelpButton className={`${styles.tab} ${styles.railOnly}`} />
         <SettingsButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SettingsButton>
       </nav>

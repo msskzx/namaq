@@ -1,0 +1,20 @@
+.page { width: 100%; max-width: 42rem; margin: 0 auto; padding: 0.25rem 1rem 6rem; display: flex; flex-direction: column; gap: 0.9rem; color: var(--home-ink); }
+.box { flex: 1; display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--home-rule); border-radius: 10px; padding: 0 0.6rem; background: var(--home-card); min-width: 0; }
+.box input { flex: 1; min-width: 0; height: 40px; border: 0; background: transparent; font-size: 16px; color: var(--home-ink); outline: none; }
+.box input::-webkit-search-cancel-button { display: none; }
+.icon { color: var(--home-muted); flex: none; }
+.clear { display: flex; color: var(--home-muted); }
+.heading { display: flex; align-items: center; justify-content: space-between; min-height: 40px; width: 100%; color: var(--home-ink); }
+.heading h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 700; }
+.heading svg { color: var(--home-accent); }
+.row { display: flex; align-items: center; gap: 0.6rem; min-height: 48px; padding: 0.35rem 0.4rem; border-bottom: 1px solid color-mix(in srgb, var(--home-rule) 40%, transparent); text-align: start; width: 100%; color: var(--home-ink); }
+.row:hover { background: color-mix(in srgb, var(--home-rule) 25%, transparent); }
+.grow { flex: 1; min-width: 0; }
+.muted { color: var(--home-muted); font-size: 0.85rem; }
+.count { color: var(--home-accent); }
+.quran { font-family: var(--font-quran, inherit); font-size: 1.25rem; line-height: 2.2; }
+.ayah { display: block; border: 1px solid var(--home-rule); border-radius: 14px; background: var(--home-card); padding: 0.4rem 0.75rem; margin-bottom: 0.5rem; text-align: justify; text-align-last: right; }
+.hit { color: var(--home-accent); }
+.verse { display: flex; flex-direction: column; }
+.verse span:last-child { text-align: left; }
+.empty { color: var(--home-muted); text-align: center; margin-top: 1.5rem; }

@@ -29,8 +29,9 @@ describe('TabBar', () => {
     state.language = language;
     state.path = '/quizzes/party';
     render(<TabBar />);
-    const [logo, ...tabs] = within(screen.getByRole('navigation')).getAllByRole('link');
+    const [logo, ...links] = within(screen.getByRole('navigation')).getAllByRole('link');
     expect(logo.getAttribute('href')).toBe('/');
+    const tabs = links.filter(link => link.getAttribute('href') !== '/search');
     // The app's five buttons, first on the right.
     expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran', '/quran/read', '/', '/quizzes', '/utilities']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
@@ -78,7 +79,7 @@ describe('TabBar', () => {
     state.loaded = false;
     render(<TabBar />);
     expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran', '/quran/read', '/', '/quizzes', '/utilities']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran', '/quran/read', '/', '/quizzes', '/utilities', '/search']);
   });
 
   it('closes the desktop settings panel on a press outside it, but not inside', () => {

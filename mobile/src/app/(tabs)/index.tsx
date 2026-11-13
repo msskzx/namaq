@@ -15,7 +15,7 @@ import DailyCard from '@/components/DailyCard';
 import { surahs } from '@/lib/mushaf';
 import { listedPairs } from '@/lib/compare';
 import { FORGOTTEN_LABEL, NOTE_LABEL, REVIEW_LABEL, reviewForgotten, Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
-import { openIntent as go } from '@/lib/ways';
+import { openIntent as go, toTab } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -124,7 +124,7 @@ export default function HomeScreen() {
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar settings hideOnScroll />
+      <TopBar settings search={() => toTab('/search')} hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 28 }}>
         <DailyCard palette={palette} />
         <QuranPicker palette={palette} />

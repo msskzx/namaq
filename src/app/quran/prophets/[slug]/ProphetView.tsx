@@ -8,6 +8,7 @@ import { SettingsHelp } from '@/components/common/SettingsHelp';
 import { PROPHETS, prophetName } from '@shared/quran/prophets';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
+import { STORIES } from '@shared/quran/prophets/stories';
 import type { CompareLink } from '../../compare/pairCards';
 import EventPlaces from './EventPlaces';
 import { useReviewMode } from './PlaceReview';
@@ -34,6 +35,14 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
       target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
+
+  // The search opens an event with ?event=<its place in the story>: shown open, scrolled to. The kept story can drop events, so it is found by title.
+  useEffect(() => {
+    const asked = Number(new URLSearchParams(window.location.search).get('event') ?? NaN);
+    const title = Number.isInteger(asked) ? STORIES[slug]?.events[asked]?.title : undefined;
+    const at = title ? events.findIndex(event => event.title === title) : -1;
+    if (at >= 0) read(at);
+  }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col gap-6">

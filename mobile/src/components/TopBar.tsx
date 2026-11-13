@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Settings, CircleHelp } from 'lucide-react-native';
+import { ChevronRight, Settings, CircleHelp, Search } from 'lucide-react-native';
 import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
@@ -22,7 +22,9 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * With back (the Quran button's tools) a back arrow takes the logo's place and returns to the Quran hub (owner, 2026-11-13).
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
-export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, back }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, back, search }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+  /** The one search across the app, beside the gear (home, owner 2026-11-13). */
+  search?: () => void;
   /** A back arrow in the logo's place. */
   back?: () => void;
   /** The page's help (rules and colour legend), in the gear's place at the bar's far end. */
@@ -53,6 +55,10 @@ export default function TopBar({ children, settings: withSettings = false, hideO
         {help && <Pressable onPress={help} accessibilityRole="button" accessibilityLabel="مساعدة" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <CircleHelp size={22} color={palette.muted} />
+        </Pressable>}
+        {search && <Pressable onPress={search} accessibilityRole="button" accessibilityLabel="البحث" hitSlop={4}
+          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
+          <Search size={22} color={palette.muted} />
         </Pressable>}
         {withSettings && <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
