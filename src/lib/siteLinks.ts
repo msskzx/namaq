@@ -28,6 +28,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: language === 'ar' ? 'تحفة الأطفال' : 'Tuhfat al-Atfal' },
-  { href: '/quran/prophets/musa', label: language === 'ar' ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran' },
+  { href: '/quran/prophets', label: language === 'ar' ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran' },
   { href: '/attributions', label: language === 'ar' ? 'العزو' : 'Attributions' },
 ];

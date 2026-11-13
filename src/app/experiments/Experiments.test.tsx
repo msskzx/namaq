@@ -35,7 +35,7 @@ describe('experiments directory', () => {
       const item = chip.closest('li');
       return (item ? item.querySelector('a') : chip.closest('section')!.querySelector('h2 a'))!.getAttribute('href');
     });
-    expect(marked.sort()).toEqual(['/quizzes', '/quran/branches', '/quran/compare', '/quran/read']);
+    expect(marked.sort()).toEqual(['/quizzes', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/read']);
   });
 
   it('requests exclusion from indexing and link following', () => {

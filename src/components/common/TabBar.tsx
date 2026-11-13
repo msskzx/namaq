@@ -3,7 +3,7 @@
 import React, { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Play, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Play, ScrollText, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -21,6 +21,7 @@ export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/branches': TreeIcon,
   '/quran/compare': ArrowLeftRight,
   '/quran/read': BookOpen,
+  '/quran/prophets': ScrollText,
   '/quizzes': Feather,
 };
 

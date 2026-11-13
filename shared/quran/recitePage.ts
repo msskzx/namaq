@@ -1,5 +1,5 @@
-import { pageGroups, type MushafPage, type WordGroup } from '@shared/quran/readerPage';
-import { isHidden, nextAyah, revealAyah, revealWord, type RecitePosition } from '@shared/quran/recite';
+import { pageGroups, type MushafPage, type WordGroup } from './readerPage';
+import { isHidden, nextAyah, revealAyah, revealWord, type RecitePosition } from './recite';
 
 /** One mushaf page as the reader needs it while reading and reciting (the website's ReaderView, for one page). */
 export type PageModel = {

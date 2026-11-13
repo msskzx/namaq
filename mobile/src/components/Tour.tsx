@@ -19,7 +19,7 @@ import Button from './Button';
 import { cardOf } from '@/lib/branches';
 import { EMPTY_LIST } from '@/lib/branchList';
 import { pageData, surahBefore, surahNames as mushafNames } from '@/lib/mushaf';
-import { pageModel, reciteView } from '@/lib/recitePage';
+import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { RECITE_AYAH, RECITE_PAGE, TOUR_STEPS, tourPiece, type TourStep } from '@/lib/tour';
 import { branchView } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';

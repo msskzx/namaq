@@ -6,7 +6,7 @@ import type { MushafPage } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
-import type { PageModel, reciteView } from '@/lib/recitePage';
+import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';

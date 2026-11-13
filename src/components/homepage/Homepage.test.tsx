@@ -38,6 +38,8 @@ describe('release homepage', () => {
     expect(saved.compareDocumentPosition(quizzes) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(within(quizzes).getByRole('link', { name: ar ? 'بمفردك' : 'Solo' }).getAttribute('href')).toBe('/quizzes');
     expect(within(quizzes).getByRole('link', { name: ar ? 'مع غيرك' : 'Party' }).getAttribute('href')).toBe('/quizzes/party');
+    const prophets = screen.getByRole('region', { name: ar ? 'قصص الأنبياء' : 'Prophets’ stories' });
+    expect(within(prophets).getByRole('link').getAttribute('href')).toBe('/quran/prophets');
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(ar ? 'نمق' : 'Namaq');
     expect(screen.getByRole('heading', { level: 1 }).querySelector('svg')).toBeNull();
   });
@@ -134,5 +136,19 @@ describe('release homepage', () => {
   it('hides the forgotten shelf when nothing is forgotten', () => {
     render(<Homepage data={data} />);
     expect(screen.queryByRole('region', { name: 'ما نسيته' })).toBeNull();
+  });
+
+  it('keeps the latest five cards on each shelf, with «عرض الكل» to the library page only when there are more', () => {
+    quranContexts.mockResolvedValue([]);
+    const many = Array.from({ length: 6 }, (_, at) => ({ id: `ayah:2:${at + 1}`, text: `آية ${at + 1}`, href: `/quran/read/ayah/2/${at + 1}`, savedAt: at }));
+    localStorage.setItem('bookmarks', JSON.stringify(many));
+    localStorage.setItem('ayah-forgot', JSON.stringify(Object.fromEntries(Array.from({ length: 5 }, (_, at) => [`2:${at + 1}`, { forgot: 1, at }])))); 
+    render(<Homepage data={data} />);
+    const saved = screen.getByRole('region', { name: 'المحفوظات' });
+    expect(within(saved).getAllByRole('button')).toHaveLength(5);
+    expect(within(saved).getByRole('link', { name: 'عرض الكل' }).getAttribute('href')).toBe('/library?tab=saved');
+    const forgotten = screen.getByRole('region', { name: 'ما نسيته' });
+    expect(within(forgotten).getAllByRole('button')).toHaveLength(5);
+    expect(within(forgotten).queryByRole('link', { name: 'عرض الكل' })).toBeNull();
   });
 });

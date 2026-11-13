@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, CircleHelp } from 'lucide-react';
 import { PROPHETS } from '@shared/quran/prophets';
@@ -10,12 +10,14 @@ import type { CompareLink } from '../../compare/pairCards';
 import EventPlaces from './EventPlaces';
 import { useReviewMode } from './PlaceReview';
 import StoryMap from './StoryMap';
+import { rememberProphet } from '../OpenLastProphet';
 
 // docs/plans/quran-prophet-timelines.md
 /** `verdicts` comes only on the owner's machine, with every dot in `events`; readers get the story already cut. */
 export default function ProphetView({ slug, title, intro, phases, events: all, verdicts, compare }: { slug: string; title: string; intro: string; phases: readonly string[]; events: EventView[]; verdicts?: PlaceVerdicts; compare: Record<string, CompareLink[]> }) {
   const [help, setHelp] = useState(false);
   const router = useRouter();
+  useEffect(() => rememberProphet(slug), [slug]);
   const review = useReviewMode() && verdicts !== undefined;
   // Dropped dots show only in review.
   const events = useMemo(() => (review || !verdicts ? all : keptViews(slug, all, verdicts)), [review, all, slug, verdicts]);
