@@ -2,7 +2,6 @@
 // Every answer comes from the poem itself: its verses, and the letters it names for each rule.
 import { num } from '../quran/arabicNumber';
 import type { ChoiceQuestion } from '../quiz/choiceKinds';
-import type { Difficulty } from '../quiz/difficulty';
 import { shuffle, type Random } from '../quiz/random';
 import { numberVerses, type NumberedVerse, type Poem } from './poem';
 import poemData from './tuhfat-al-atfal.json';
@@ -36,25 +35,31 @@ export const LAM_RULES = [
 
 type Rules = readonly { rule: string; letters: string; verse: number }[];
 
+/** A half's rhyme: its last letter, past the vowels and a long vowel that only draws the rhyme out (الْجَمْزُورِي, الطُّلَّابَا). */
+export const rhyme = (text: string) => {
+  const bare = text.replace(/[ً-ْٰ]/g, '').trim();
+  return (bare.length > 1 ? bare.replace(/[اىوي]$/, '') : bare).slice(-1);
+};
+
 /**
- * Three wrong verse halves beside the right one: easy takes them from verses far away, medium and hard from the
- * verses nearest it (hard the very nearest), which sound most like it.
+ * Three wrong verse halves beside the right one. Both halves of a verse rhyme, so the wrong ones share its rhyme where
+ * the poem has enough, else they come from the nearest verses; the verse shown in the prompt is never offered.
  */
-function halfChoices(right: string, near: number, half: 'first' | 'second', difficulty: Difficulty, random: Random) {
-  const away = (item: NumberedVerse) => Math.abs(item.number - near);
-  const pool = verses.filter(item => item[half] !== right).sort((a, b) => away(a) - away(b));
-  const others = difficulty === 'easy' ? pool.filter(item => away(item) > 10) : pool.slice(0, difficulty === 'hard' ? 4 : 8);
-  const wrong = shuffle(others, random).slice(0, 3).map(item => item[half]);
+function halfChoices(right: string, near: number, half: 'first' | 'second', shown: number, random: Random) {
+  const pool = verses.filter(item => item[half] !== right && item.number !== shown);
+  const rhyming = shuffle(pool.filter(item => rhyme(item[half]) === rhyme(right)), random);
+  const nearest = shuffle([...pool].sort((a, b) => Math.abs(a.number - near) - Math.abs(b.number - near)).slice(0, 6), random);
+  const wrong = [...new Set([...rhyming, ...nearest].map(item => item[half]))].slice(0, 3);
   return shuffle([right, ...wrong], random).map(text => ({ value: text, labelArabic: text }));
 }
 
 /** Complete the verse: its first half is shown, its second half picked. */
-export function completeQuestions(difficulty: Difficulty, random: Random): ChoiceQuestion[] {
+export function completeQuestions(random: Random): ChoiceQuestion[] {
   return verses.map(({ number, first, second }) => ({
     key: `tuhfa:complete:${number}`,
     family: TUHFA_COMPLETE,
     promptArabic: `أَكْمِلِ الْبَيْتَ: ${first} …`,
-    choices: halfChoices(second, number, 'second', difficulty, random),
+    choices: halfChoices(second, number, 'second', number, random),
     correctAnswer: second,
     note: noteOf(number),
     evidence: { claimKeys: [] },
@@ -62,12 +67,12 @@ export function completeQuestions(difficulty: Difficulty, random: Random): Choic
 }
 
 /** The next verse: a verse is shown, the first half of the one after it picked. */
-export function nextQuestions(difficulty: Difficulty, random: Random): ChoiceQuestion[] {
+export function nextQuestions(random: Random): ChoiceQuestion[] {
   return verses.slice(0, -1).map(({ number }) => ({
     key: `tuhfa:next:${number}`,
     family: TUHFA_NEXT,
     promptArabic: `مَا الْبَيْتُ الَّذِي بَعْدَ: ${whole(number)}؟`,
-    choices: halfChoices(verse(number + 1).first, number + 1, 'first', difficulty, random),
+    choices: halfChoices(verse(number + 1).first, number + 1, 'first', number, random),
     correctAnswer: verse(number + 1).first,
     note: noteOf(number + 1),
     evidence: { claimKeys: [] },

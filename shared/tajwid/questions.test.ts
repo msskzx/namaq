@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { completeQuestions, LAM_RULES, MEEM_RULES, NOON_RULES, nextQuestions, ruleQuestions, verses } from './questions';
+import { completeQuestions, rhyme, LAM_RULES, MEEM_RULES, NOON_RULES, nextQuestions, ruleQuestions, verses } from './questions';
 
 const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآ]/g, 'ا');
 const text = (number: number) => bare(`${verses[number - 1].first} ${verses[number - 1].second}`);
@@ -33,7 +33,7 @@ describe('the letters the poem names for each rule', () => {
 });
 
 describe('Tuhfa questions', () => {
-  const all = [...completeQuestions('medium', seeded()), ...nextQuestions('medium', seeded(2)), ...ruleQuestions(seeded(3))];
+  const all = [...completeQuestions(seeded()), ...nextQuestions(seeded(2)), ...ruleQuestions(seeded(3))];
 
   it('asks every verse, every next verse and every letter once', () => {
     expect(all).toHaveLength(61 + 60 + 28 * 3);
@@ -50,14 +50,25 @@ describe('Tuhfa questions', () => {
     }
   });
 
-  it('gives three wrong halves at every difficulty', () => {
-    for (const level of ['easy', 'medium', 'hard'] as const) {
-      for (const question of [...completeQuestions(level, seeded()), ...nextQuestions(level, seeded())]) expect(question.choices).toHaveLength(4);
+  it('rhymes every verse\'s two halves, so a choice cannot give itself away by its rhyme', () => {
+    for (const { first, second } of verses) expect(rhyme(first)).toBe(rhyme(second));
+    for (const question of completeQuestions(seeded())) {
+      const right = rhyme(question.correctAnswer);
+      const rhyming = verses.filter(item => rhyme(item.second) === right).length - 1;
+      expect(question.choices.filter(choice => rhyme(choice.value) === right).length).toBe(1 + Math.min(3, rhyming));
+    }
+  });
+
+  it('never offers the verse shown in the prompt', () => {
+    for (const question of [...completeQuestions(seeded()), ...nextQuestions(seeded())]) {
+      const shown = Number(question.key.split(':')[2]);
+      const { first, second } = verses[shown - 1];
+      for (const choice of question.choices) if (choice.value !== question.correctAnswer) expect([first, second]).not.toContain(choice.value);
     }
   });
 
   it('completes a verse with its own second half', () => {
-    const question = completeQuestions('medium', seeded()).find(item => item.key === 'tuhfa:complete:14')!;
+    const question = completeQuestions(seeded()).find(item => item.key === 'tuhfa:complete:14')!;
     expect(question.promptArabic).toContain(verses[13].first);
     expect(question.correctAnswer).toBe(verses[13].second);
   });
