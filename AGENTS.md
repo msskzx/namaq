@@ -64,11 +64,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - The skills `pr-cycle`, `blind-test-brief`, `review-brief` and
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
   steps and the subagent briefs for this cycle.
-- What work here teaches lives in Distillate (github.com/msskzx/distillate), not in
-  this repo. Search its records before planning and after a first fix fails, and
-  record challenges, obstacles and detours as they happen, with `capture-record`.
-  Write a lesson with `write-lesson`. These Distillate records are a different thing
-  from the historical records under `data/history/`.
+- Lessons from past work live in [docs/lessons](docs/lessons/README.md). Before
+  starting a task, and again after a first fix fails, search them (`rg` over
+  `docs/lessons`) and read the ones that match. When you solve a real challenge
+  in a way the code alone does not show, add a lesson in the same PR, in the
+  format the README there gives. Name every lesson you used in the PR
+  description (for example "Lessons used: 0019, 0021"), or write "Lessons used:
+  none". Keep no read or usage log beyond that line.
 
 ## Quiz questions
 
@@ -392,8 +394,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   and link to it. Remove stale or duplicated narration when changing an area.
 - Read [docs/palette.md](docs/palette.md) before changing the theme or UI.
   Palette values belong only in `src/app/theme.css`.
-- Put reusable engineering lessons in Distillate when warranted. Keep Namaq
-  decisions needed by contributors in this repository.
+- Put engineering lessons in [docs/lessons](docs/lessons/README.md). Keep Namaq
+  decisions needed by contributors in ADRs and docs in this repository.
 - Audit affected frontend tests as keep, rewrite or remove. Protect important
   behavior against plausible regressions, including navigation, input, error
   recovery and accessibility. Remove incidental styling assertions and
