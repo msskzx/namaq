@@ -1,4 +1,4 @@
-export type Prophet = { slug: string; name: string; nameEn: string; /** The name after «قصة» where it changes case: ذو → ذي. */ of?: string };
+export type Prophet = { slug: string; name: string; nameEn: string; /** The name after «قصة» where it changes case: ذو → ذي. */ of?: string; /** The page heading, where «قصة … عليه السلام» does not fit. */ title?: string };
 
 export const PROPHETS: Prophet[] = [
   { slug: 'adam', name: 'آدم', nameEn: 'Adam' },
@@ -23,9 +23,10 @@ export const PROPHETS: Prophet[] = [
   { slug: 'yahya', name: 'يحيى', nameEn: 'Yahya' },
   { slug: 'isa', name: 'عيسى', nameEn: 'Isa' },
   { slug: 'yunus', name: 'يونس', nameEn: 'Yunus' },
+  { slug: 'muhammad', name: 'محمد ﷺ', nameEn: 'Muhammad', title: 'سيرة النبي ﷺ في القرآن' },
 ];
 
 export const findProphet = (slug: string) => PROPHETS.find(p => p.slug === slug);
 
 /** The story page's heading. */
-export const storyTitle = (prophet: Prophet) => `قصة ${prophet.of ?? prophet.name} عليه السلام في القرآن`;
+export const storyTitle = (prophet: Prophet) => prophet.title ?? `قصة ${prophet.of ?? prophet.name} عليه السلام في القرآن`;

@@ -2599,6 +2599,266 @@
   "musa/10:76": {
    "keep": true,
    "why": "They called the truth magic; bring every learned magician; what you brought is magic (76-82)."
+  },
+  "muhammad/96:1": {
+   "keep": true,
+   "why": "Iqra: the first ayat revealed in the cave of Hira (Bukhari, Aisha)."
+  },
+  "muhammad/74:1": {
+   "keep": true,
+   "why": "Ya ayyuha al-muddaththir: revealed after the pause (Bukhari, Jabir).",
+   "ask": "Jabir's report calls al-Muddaththir the first revelation; most join both reports: Iqra first, al-Muddaththir first after the pause. Keep both in one event?"
+  },
+  "muhammad/53:1": {
+   "keep": true,
+   "why": "He saw Jibril on the high horizon (53:1-12).",
+   "ask": "Aisha: he saw Jibril in his true form; Ibn Abbas: he saw his Lord with his heart. The event title follows Aisha's reading. Keep?"
+  },
+  "muhammad/81:19": {
+   "keep": true,
+   "why": "He saw him on the clear horizon (81:23), Jibril the noble messenger."
+  },
+  "muhammad/93:1": {
+   "keep": true,
+   "why": "Your Lord has not left you: after revelation paused (Bukhari, Jundub)."
+  },
+  "muhammad/26:214": {
+   "keep": true,
+   "why": "Warn your nearest kin: he called Quraysh from al-Safa (Bukhari, Ibn Abbas)."
+  },
+  "muhammad/15:94": {
+   "keep": true,
+   "why": "Proclaim what you are commanded: the call made open (Ibn Ishaq)."
+  },
+  "muhammad/111:1": {
+   "keep": true,
+   "why": "Abu Lahab's answer at al-Safa, 'may you perish' (Bukhari, Ibn Abbas)."
+  },
+  "muhammad/80:1": {
+   "keep": true,
+   "why": "He frowned when the blind man came: Ibn Umm Maktum (Tirmidhi, Aisha)."
+  },
+  "muhammad/17:90": {
+   "keep": true,
+   "why": "Quraysh demand a spring, a garden, a house of gold."
+  },
+  "muhammad/25:7": {
+   "keep": true,
+   "why": "Why does this messenger eat food and walk the markets?"
+  },
+  "muhammad/11:12": {
+   "keep": true,
+   "why": "Why was a treasure not sent down to him or an angel come with him?"
+  },
+  "muhammad/6:8": {
+   "keep": true,
+   "why": "Why was an angel not sent down to him?",
+   "ask": "Al-Humaydan lists 6:8 among Quraysh's demands, as 25:7 and 11:12; it is a general reply rather than one dated event. Keep in this event?"
+  },
+  "muhammad/54:1": {
+   "keep": true,
+   "why": "The moon split (Bukhari, Ibn Mas'ud and Anas)."
+  },
+  "muhammad/28:56": {
+   "keep": true,
+   "why": "You cannot guide whom you love: Abu Talib's death (Muslim, Abu Hurayra)."
+  },
+  "muhammad/9:113": {
+   "keep": true,
+   "why": "Not for the Prophet to ask forgiveness for the mushrikin: Abu Talib (Bukhari, al-Musayyab).",
+   "ask": "9:113 is in a Medinan surah; other reports tie it to his mother's grave or to Muslims asking for their parents. Keep under Abu Talib?"
+  },
+  "muhammad/46:29": {
+   "keep": true,
+   "why": "A company of jinn listened to the Quran (Muslim, Ibn Mas'ud; Bukhari, Ibn Abbas).",
+   "ask": "46:30 also sits in Musa's story (the Book given to Musa), so that ayah is in two timelines. Fine?"
+  },
+  "muhammad/72:1": {
+   "keep": true,
+   "why": "Say: it was revealed to me that a company of jinn listened.",
+   "ask": "Ibn Abbas: they listened at Nakhla while he led the dawn prayer; Ibn Mas'ud: a second night he went out to them. Is al-Jinn the same event as al-Ahqaf 29-32, and does it run to 72:19?"
+  },
+  "muhammad/17:1": {
+   "keep": true,
+   "why": "The night journey from al-Masjid al-Haram to al-Masjid al-Aqsa."
+  },
+  "muhammad/53:13": {
+   "keep": true,
+   "why": "He saw him another time at the Lote Tree of the Utmost Boundary (Muslim, Ibn Mas'ud)."
+  },
+  "muhammad/8:30": {
+   "keep": true,
+   "why": "The disbelievers plotted to hold him, kill him or drive him out."
+  },
+  "muhammad/17:76": {
+   "keep": true,
+   "why": "They nearly drove you from the land.",
+   "ask": "Most tie 17:76 to Quraysh before the hijra; a report ties it to the Jews of Madinah urging him to go to Syria. Keep under the hijra?"
+  },
+  "muhammad/47:13": {
+   "keep": true,
+   "why": "Your town that drove you out.",
+   "ask": "Ibn Abbas: revealed as he left Makkah looking back at it (weak chain per some). Keep?"
+  },
+  "muhammad/9:40": {
+   "keep": true,
+   "why": "The second of two in the cave (Bukhari, Abu Bakr)."
+  },
+  "muhammad/17:80": {
+   "keep": true,
+   "why": "Lord, let me enter with truth and leave with truth: said of the hijra (Tirmidhi, Ibn Abbas).",
+   "ask": "Al-Hasan and Qatada read 17:80 as the hijra; others as entering Makkah or the grave. Keep?"
+  },
+  "muhammad/28:85": {
+   "keep": true,
+   "why": "He will return you to the place of return: revealed at al-Juhfa on the hijra (Ibn Abbas).",
+   "ask": "Bukhari has Ibn Abbas: 'to Makkah'; others say the Hereafter. Keep under the hijra?"
+  },
+  "muhammad/2:217": {
+   "keep": true,
+   "why": "Fighting in the sacred month: Abdullah ibn Jahsh's raid at Nakhla."
+  },
+  "muhammad/8:1": {
+   "keep": true,
+   "why": "Al-Anfal was revealed about Badr (Bukhari, Ibn Abbas)."
+  },
+  "muhammad/3:13": {
+   "keep": true,
+   "why": "A sign in the two hosts that met (3:13), and Allah gave you victory at Badr when you were few (3:123-127).",
+   "ask": "Most read 3:13 as Badr; some say it is general. Keep 3:13 with 3:123-127 under Badr?"
+  },
+  "muhammad/22:19": {
+   "keep": true,
+   "why": "These two adversaries: Abu Dharr swore it was revealed about the duel at Badr (Bukhari).",
+   "ask": "Others read it as all believers against all disbelievers. Keep under Badr?"
+  },
+  "muhammad/54:45": {
+   "keep": true,
+   "why": "The host will be routed: the Prophet recited it on the day of Badr (Bukhari, Ibn Abbas).",
+   "ask": "A Makkan ayah fulfilled at Badr, not revealed about it. Keep under Badr?"
+  },
+  "muhammad/3:121": {
+   "keep": true,
+   "why": "When you went out early to place the believers: Uhud."
+  },
+  "muhammad/4:88": {
+   "keep": true,
+   "why": "Two parties about the hypocrites: those who turned back at Uhud (Bukhari, Zayd ibn Thabit).",
+   "ask": "Other reports tie 4:88 to hypocrites of Makkah. Keep under Uhud?"
+  },
+  "muhammad/3:172": {
+   "keep": true,
+   "why": "Those who answered Allah after the wound: Hamra al-Asad (Bukhari, Aisha)."
+  },
+  "muhammad/59:1": {
+   "keep": true,
+   "why": "Surat al-Hashr is Surat Bani al-Nadir (Bukhari, Ibn Abbas)."
+  },
+  "muhammad/5:11": {
+   "keep": true,
+   "why": "A people meant to stretch their hands against you.",
+   "ask": "Mujahid and Ibn Ishaq: Banu al-Nadir's plot to drop a stone on him; others say Dhat al-Riqa' or a Bedouin. Keep under Banu al-Nadir?"
+  },
+  "muhammad/33:9": {
+   "keep": true,
+   "why": "The armies came against you: al-Khandaq (Bukhari, Aisha on 33:10)."
+  },
+  "muhammad/33:26": {
+   "keep": true,
+   "why": "He brought down those of the People of the Book who backed them: Banu Qurayza."
+  },
+  "muhammad/63:1": {
+   "keep": true,
+   "why": "The hypocrites; Ibn Ubayy's 'the mightier will expel the weaker' (Bukhari, Zayd ibn Arqam).",
+   "ask": "Ibn Ishaq places it at Banu al-Mustaliq; the hadith only says 'on a campaign'. Keep the title?"
+  },
+  "muhammad/48:1": {
+   "keep": true,
+   "why": "Al-Fath was revealed on the return from al-Hudaybiya (Bukhari, Umar)."
+  },
+  "muhammad/2:196": {
+   "keep": true,
+   "why": "If you are prevented, the offering: Ka'b ibn Ujra at al-Hudaybiya (Bukhari).",
+   "ask": "Only part of 2:196 (the fidya) is tied to al-Hudaybiya. Keep the whole ayah here?"
+  },
+  "muhammad/60:10": {
+   "keep": true,
+   "why": "Believing women who emigrate: after the treaty (Bukhari, al-Miswar and Marwan)."
+  },
+  "muhammad/110:1": {
+   "keep": true,
+   "why": "When the victory of Allah comes: the conquest of Makkah.",
+   "ask": "Ibn Abbas and Umar read al-Nasr as the sign of his death. Keep under the conquest?"
+  },
+  "muhammad/60:1": {
+   "keep": true,
+   "why": "Do not take My enemy as allies: Hatib's letter before the conquest (Bukhari, Ali)."
+  },
+  "muhammad/9:25": {
+   "keep": true,
+   "why": "The day of Hunayn, when your numbers pleased you."
+  },
+  "muhammad/9:38": {
+   "keep": true,
+   "why": "Why, when told to march out, do you cling to the earth: Tabuk."
+  },
+  "muhammad/9:107": {
+   "keep": true,
+   "why": "The mosque built for harm (masjid al-dirar)."
+  },
+  "muhammad/9:117": {
+   "keep": true,
+   "why": "The three who were left behind (Bukhari, Ka'b ibn Malik)."
+  },
+  "muhammad/2:142": {
+   "keep": true,
+   "why": "The fools will say what turned them from their qibla (Bukhari, al-Bara')."
+  },
+  "muhammad/58:1": {
+   "keep": true,
+   "why": "She who disputed with you about her husband: Khawla (Bukhari, Aisha, ta'liq)."
+  },
+  "muhammad/24:11": {
+   "keep": true,
+   "why": "Those who brought the lie: the ten ayat on Aisha (Bukhari, Aisha).",
+   "ask": "Aisha names ten ayat (24:11-20); 24:22 (Abu Bakr and Mistah) and 24:23-26 follow. Keep 24:11-26 as one event?"
+  },
+  "muhammad/49:1": {
+   "keep": true,
+   "why": "Those who call you from behind the rooms: the delegation of Banu Tamim (Bukhari, Ibn al-Zubayr)."
+  },
+  "muhammad/9:1": {
+   "keep": true,
+   "why": "Immunity from Allah: proclaimed at the hajj of 9 AH (Bukhari, Abu Hurayra)."
+  },
+  "muhammad/9:80": {
+   "keep": true,
+   "why": "Ask forgiveness for them or not: Ibn Ubayy (Bukhari, Ibn Umar and Umar)."
+  },
+  "muhammad/5:3": {
+   "keep": true,
+   "why": "This day I have perfected your religion: revealed at Arafa on the farewell hajj (Bukhari, Umar)."
+  },
+  "muhammad/33:36": {
+   "keep": true,
+   "why": "Zayd and Zaynab; Muhammad is not the father of any of your men."
+  },
+  "muhammad/33:6": {
+   "keep": true,
+   "why": "The Prophet is closer to the believers; his wives are their mothers."
+  },
+  "muhammad/66:1": {
+   "keep": true,
+   "why": "Why do you forbid what Allah made lawful: the honey (Bukhari, Aisha).",
+   "ask": "Another report ties 66:1 to Mariya. The event joins it with the choice given to his wives (Bukhari, Umar's long hadith). Keep?"
+  },
+  "muhammad/47:2": {
+   "keep": true,
+   "why": "Believe in what was sent down to Muhammad: one of four ayat that name him."
+  },
+  "muhammad/33:28": {
+   "keep": true,
+   "why": "Say to your wives: if you want this world's life, come, I will provide for you: the choice (Bukhari, Aisha)."
   }
  }
 }

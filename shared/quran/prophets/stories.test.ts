@@ -12,6 +12,7 @@ import { ILYAS } from './ilyas';
 import { ISA } from './isa';
 import { ADAM } from './adam';
 import { LUT } from './lut';
+import { MUHAMMAD } from './muhammad';
 import { MUSA } from './musa';
 import { NUH } from './nuh';
 import { SALIH } from './salih';
@@ -447,6 +448,19 @@ describe('HUD', () => {
   });
 });
 
+
+describe('Muhammad', () => {
+  const keys = storyKeys(MUHAMMAD.events);
+
+  it('holds every ayah that names him Muhammad', () => {
+    expect(['3:144', '33:40', '47:2', '48:29'].filter(k => !keys.includes(k))).toEqual([]);
+  });
+
+  it('leaves the name Ahmad to Isa, who gives the good news of him', () => {
+    expect(keys).not.toContain('61:6');
+    expect(storyKeys(ISA.events)).toContain('61:6');
+  });
+});
 
 describe('STORIES', () => {
   it('gives every prophet a story', () => {
