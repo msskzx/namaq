@@ -70,7 +70,8 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
     : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
   return (
     <>
-      {savedOnly && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label={!draft.saved && !saved ? `احفظ ${compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها أولًا` : 'المحفوظة فقط'} palette={palette} disabled={!draft.saved && !saved} />}
+      {savedOnly && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label="المحفوظة فقط" palette={palette} disabled={!draft.saved && !saved} />}
+      {savedOnly && !draft.saved && !saved && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -6 }}>لا محفوظات بعد: احفظ {compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها.</Text>}
       <Group title="النطاق" palette={palette}>
         {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
           onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}

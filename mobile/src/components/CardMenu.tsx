@@ -19,7 +19,8 @@ export default function CardMenu({ at, items, label, onClose, palette }: { at: M
   const above = at ? at.y - BUTTON - 28 : 0;
   return (
     <Modal visible={!!at} transparent statusBarTranslucent animationType="none" onRequestClose={onClose}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="أغلق" accessibilityRole="button" />
+      {/* A light dim, so the card under the menu reads as behind it. */}
+      <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.18)' }]} onPress={onClose} accessibilityLabel="أغلق" accessibilityRole="button" />
       {at && (
           <View accessibilityRole="toolbar" accessibilityLabel={label}
             style={{ position: 'absolute', top: above < insets.top + 8 ? at.y + 20 : above, left: Math.min(width - barWidth - 8, Math.max(8, at.x - barWidth / 2)), flexDirection: 'row', gap: 0, padding: 6, borderRadius: 999, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>

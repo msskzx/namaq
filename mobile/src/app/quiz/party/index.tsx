@@ -50,6 +50,7 @@ export default function PartyStart() {
         </Section>
         <Section title="ابدأ اختبارًا" palette={palette}>
           {error ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{error}</Text> : null}
+          {!name.trim() ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>اكتب اسمك أولًا.</Text> : null}
           <View style={{ alignItems: 'flex-start' }}>
             <Button variant="primary" Icon={ArrowLeft} label={busy ? 'يبدأ…' : 'ابدأ'} disabled={!name.trim() || busy} onPress={start} />
           </View>

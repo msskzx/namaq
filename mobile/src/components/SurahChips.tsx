@@ -5,7 +5,7 @@ import { treeSurahs } from '@shared/quran/treeSurahs';
 import { surahNames } from '@/lib/branches';
 import type { Palette } from '@/lib/theme';
 
-export const CHIPS_HEIGHT = 36;
+export const CHIPS_HEIGHT = 40;
 /** How far the chips rise into the bookmark row's spare room (kept for the studio's bar, which hides them). */
 export const TUCK = 30;
 
@@ -19,9 +19,9 @@ export default function SurahChips({ ayahKeys, palette, lit, onToggle, tuck }: {
           const on = lit?.(surah, keys) ?? false;
           const name = surahNames[surah] ?? num(surah);
           return (
-            <Pressable key={surah} disabled={!onToggle} onPress={() => onToggle?.(surah, keys)} hitSlop={4} accessibilityRole={onToggle ? 'button' : 'text'} accessibilityState={onToggle ? { selected: on } : undefined} accessibilityLabel={`سورة ${name}`}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 5, height: 26, paddingHorizontal: 9, borderRadius: 13, borderWidth: 1, borderColor: on ? palette.path : palette.rule, backgroundColor: on ? palette.paperDeep : 'transparent' }}>
-              <Text style={{ color: on ? palette.path : palette.ink, fontSize: 13 }}>{name}</Text>
+            <Pressable key={surah} disabled={!onToggle} onPress={() => onToggle?.(surah, keys)} hitSlop={6} accessibilityRole={onToggle ? 'button' : 'text'} accessibilityState={onToggle ? { selected: on } : undefined} accessibilityLabel={`سورة ${name}`}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 5, height: 32, paddingHorizontal: 12, borderRadius: 16, borderWidth: 1, borderColor: on ? palette.path : palette.rule, backgroundColor: on ? palette.paperDeep : 'transparent' }}>
+              <Text style={{ color: on ? palette.path : palette.ink, fontSize: 14 }}>{name}</Text>
               {keys.length > 1 && <Text style={{ color: on ? palette.path : palette.muted, fontSize: 11 }}>{num(keys.length)}</Text>}
             </Pressable>
           );

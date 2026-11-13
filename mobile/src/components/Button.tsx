@@ -20,8 +20,9 @@ type Props = {
 /** The app's button: a filled terracotta primary, an outlined one, or a plain icon button. */
 export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow }: Props) {
   const palette = usePalette();
-  const filled = variant === 'primary' || active;
-  const color = filled ? palette.onAccent : variant === 'plain' ? palette.ink : palette.ink;
+  // A disabled button is never filled: faded text on the accent was hard to read.
+  const filled = !disabled && (variant === 'primary' || active);
+  const color = filled ? palette.onAccent : disabled ? palette.muted : palette.ink;
   return (
     <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ disabled, selected: active }} hitSlop={6}
@@ -30,7 +31,7 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
         minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : grow ? 10 : 14) : 8, borderRadius: 10, flexGrow: grow ? 1 : 0,
         backgroundColor: filled ? palette.accent : 'transparent',
         borderWidth: variant === 'plain' ? 0 : 1, borderColor: filled ? palette.accent : palette.rule,
-        opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
+        opacity: disabled ? 0.6 : pressed ? 0.7 : 1,
       })}>
       {Icon && <Icon size={big ? 22 : 20} color={color} />}
       {label ? <Text style={{ color, fontSize: big ? 18 : 16, fontWeight: variant === 'primary' ? '600' : '400' }}>{label}</Text> : null}
