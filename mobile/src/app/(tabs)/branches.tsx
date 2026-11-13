@@ -80,7 +80,10 @@ export default function BranchesScreen() {
   const openPart = useCallback((piece: BranchPiece) => change({ ...list, query: piece.text }, { id: piece.id, query: piece.text }), [change, list]);
   useIntent('branches', intent => {
     setJumps(value => value + 1);
+    // A tree opens among the saved ones when it is saved (the homepage's shelf), else in the first list that holds it.
+    const found = intent.open && !intent.saved && !intent.query ? listShowing({ ...EMPTY_LIST, saved: true }, intent.open, bookmarks) : null;
     if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query });
+    else if (found) change(found.list, { id: found.piece.id });
     else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
     else if (intent.ayah) change({ ...EMPTY_LIST, ayah: intent.ayah });
     else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
