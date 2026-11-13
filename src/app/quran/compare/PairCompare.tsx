@@ -9,6 +9,7 @@ import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
 import { NavActions } from '@/components/common/NavBar';
+import { SettingsHelp } from '@/components/common/SettingsHelp';
 import { useRouter } from 'next/navigation';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -109,12 +110,22 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
   </form>;
 }
 
+/** The compare page's help, the app's (mobile/src/components/HelpSheet.tsx), with its colour legend. */
+const COMPARE_HELP = <>
+  <p>كل صفحة تجمع سورتين، وكل بطاقة تضع آية من كل سورة جنبًا إلى جنب. اختيرت البطاقات لأن الآيتين في المشهد نفسه أو تشتركان في عبارة نادرة، لا لعدد الكلمات المشتركة. اضغط كلمة ملوّنة لتضيء نظيرتها في الآية الأخرى. النص برواية حفص.</p>
+  <ul className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2">
+    {([['ٱلْكِتَٰبَ', 'var(--home-accent)', 'كلمة مشتركة بلفظها'], ['يُؤْمِنُونَ', 'var(--home-root)', 'نفس اللفظ بصيغة أخرى'], ['بَيَانٌ', 'color-mix(in srgb, var(--home-root) 45%, var(--home-muted))', 'من جذر مشترك بلفظ مختلف، وقد يختلف المعنى']] as const).map(([word, color, text]) => (
+      <li key={word} className="flex items-center gap-3"><span className="min-w-16 text-center font-quran text-xl" style={{ color }}>{word}</span><span>{text}</span></li>
+    ))}
+  </ul>
+</>;
+
 /** A chevron beside the pair title: previous on the reading side's start, next on its end. Greyed out at either end of the list. */
-function StepLink({ step, forward, ar }: { step?: { href: string; label: string }; forward: boolean; ar: boolean }) {
+function StepLink({ step, forward, ar, className = '' }: { step?: { href: string; label: string }; forward: boolean; ar: boolean; className?: string }) {
   const label = `${forward ? (ar ? 'التالي' : 'Next') : (ar ? 'السابق' : 'Previous')}${step ? `: ${step.label}` : ''}`;
   const Icon = forward ? ChevronRight : ChevronLeft;
   const icon = <Icon size={20} aria-hidden className="rtl:rotate-180" />;
-  const box = 'flex size-9 shrink-0 items-center justify-center rounded-full';
+  const box = `flex size-9 shrink-0 items-center justify-center rounded-full ${className}`;
   return step
     ? <Link href={step.href} aria-label={label} title={label} className={`${box} text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]`}>{icon}</Link>
     : <span role="link" aria-disabled="true" aria-label={label} title={label} className={`${box} text-[var(--home-muted)] opacity-40`}>{icon}</span>;
@@ -380,7 +391,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
   return (
     <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
-        {tree ? <div className="flex flex-col gap-2 border-4 border-double border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
+        {tree ? <div className="flex flex-col gap-2 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
             {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
               className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
@@ -543,16 +554,18 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
     <div dir={ar ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-7xl p-4 text-[var(--home-ink)]">
       <NavActions>
         <span className="flex min-w-0 max-w-[calc(100%-6rem)] items-center justify-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
-          <StepLink step={previousStep} forward={false} ar={ar} />
+          {/* Phones change pair by swiping, as in the app; the arrows are for PC. */}
+          <StepLink step={previousStep} forward={false} ar={ar} className="max-lg:hidden" />
           <Button variant="neutral" onClick={choose} aria-expanded={open} aria-label={`${label}: ${title(lead, other)}`} className="min-w-0 max-w-full">
             <ArrowLeftRight size={16} aria-hidden className="shrink-0" />
             <span className="truncate">{title(lead, other)}</span>
             <span className="shrink-0 text-sm tabular-nums text-[var(--home-accent)]">{ar ? num(cards.length) : cards.length}</span>
             <ChevronDown size={14} aria-hidden className="shrink-0" />
           </Button>
-          <StepLink step={nextStep} forward ar={ar} />
+          <StepLink step={nextStep} forward ar={ar} className="max-lg:hidden" />
         </span>
       </NavActions>
+      <SettingsHelp label={ar ? 'كيف نقارن؟' : 'How compare works'}>{COMPARE_HELP}</SettingsHelp>
       <h1 className="sr-only">{story ? `${title(lead, other)} - ${ar ? story.name.voweled : story.name.en}` : title(lead, other)}</h1>
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-3">
@@ -564,7 +577,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} />)}</ol>}
         </PairSwipe>
         {/* At the end of the cards, step on without scrolling back up. */}
-        {(previousStep || nextStep) && <nav aria-label={ar ? 'السابق والتالي' : 'Previous and next pair'} className="flex items-center justify-between">
+        {(previousStep || nextStep) && <nav aria-label={ar ? 'السابق والتالي' : 'Previous and next pair'} className="flex items-center justify-between max-lg:hidden">
           <StepLink step={previousStep} forward={false} ar={ar} />
           <StepLink step={nextStep} forward ar={ar} />
         </nav>}

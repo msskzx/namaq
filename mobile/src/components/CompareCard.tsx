@@ -13,7 +13,7 @@ import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLab
 import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
 import CompareBraid from './CompareBraid';
 import { Gap, PartRule, Silent } from './StoryParts';
-import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
+import { QURAN_FONT, blend, type Palette, CARD } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import TreeIcon from './TreeIcon';
@@ -252,7 +252,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   return (
     <View style={{ gap: 4 }}>
       <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ"
-        style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, gap: 10 }}>
+        style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, gap: 10 }}>
         {tree ? <>
           {pickers}
           {parts ? rowSides(sides).map((row, r) => (

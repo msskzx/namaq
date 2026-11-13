@@ -72,7 +72,7 @@ export default function PairSwipe({ previous, next, ar, children }: { previous?:
     if (!step || sign(forward) !== toward || (!x && !settling)) return null;
     // Bounded to the page's height, so a long neighbour never adds scroll below this page.
     return <div aria-hidden inert data-pair-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 w-full overflow-hidden" style={{ ...side(forward), paddingTop: top }}>
-      {step.preview ?? <div className="flex flex-col items-center gap-2 rounded-lg border border-[var(--home-rule)] bg-[var(--home-card,var(--home-paper))] px-4 py-6 text-center">
+      {step.preview ?? <div className="flex flex-col items-center gap-2 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-6 text-center">
         <ArrowLeftRight size={20} aria-hidden className="text-[var(--home-muted)]" />
         <span className="text-lg text-[var(--home-accent)]">{step.label}</span>
       </div>}

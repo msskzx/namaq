@@ -10,6 +10,7 @@ import translations from '../language/translations';
 import Button from './Button';
 import Emblem from './Emblem';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
+import { HelpButton, SettingsButton } from './TabBar';
 import styles from './NavBar.module.css';
 
 export { NAV_SECTIONS, activeSection } from '@/lib/navigation';
@@ -105,6 +106,9 @@ export default function NavBar() {
           }
           <div ref={setPageSlot} className={styles.pageActions} />
           <div ref={actions} className={styles.actions}>
+            {/* As in the app: the page's help, and the settings gear on the homepage only. Desktop keeps both in the rail. */}
+            {!menuOnly && <HelpButton className={`${styles.topButton} ${styles.phoneOnly}`} />}
+            {!menuOnly && path === '/' && <SettingsButton className={`${styles.topButton} ${styles.phoneOnly}`} />}
             {menuOnly && <Button size="icon" className={styles.menuButton}
               onClick={() => setMenuOpen(open => !open)}
               aria-expanded={menuOpen} aria-controls={menuId}

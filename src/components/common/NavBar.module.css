@@ -3,14 +3,20 @@
   inset-inline: var(--app-rail, 0px) 0;
   top: 0;
   z-index: 50;
-  background: var(--home-paper);
+  /* See-through with no line under it, like the app's top bar. */
+  background: color-mix(in srgb, var(--home-paper) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
   color: var(--home-ink);
-  border-bottom: 1px solid var(--home-rule);
   padding-top: env(safe-area-inset-top);
   transition: transform 0.22s ease;
 }
 .band { position: relative; max-width: var(--home-width); min-height: 48px; margin-inline: auto; padding-inline: max(var(--home-gutter), env(safe-area-inset-left)) max(var(--home-gutter), env(safe-area-inset-right)); display: flex; align-items: center; gap: 0.75rem; }
-.spacer { height: calc(49px + env(safe-area-inset-top)); }
+.spacer { height: calc(48px + env(safe-area-inset-top)); }
+/* The help and settings buttons in the top bar (phones), muted icons as in the app. */
+.topButton { width: 2.5rem; height: 2.5rem; flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: var(--home-muted); }
+.topButton:hover, .topButton[aria-expanded="true"] { color: var(--home-ink); }
+.tabs .railOnly { display: none; }
+@media (min-width: 1024px) { .phoneOnly { display: none; } .tabs .railOnly { display: flex; } }
 .scrolledAway { transform: translateY(calc(-100% + env(safe-area-inset-top))); }
 @media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
 
@@ -53,27 +59,31 @@
 .railActions, .railLogo { display: none; }
 @media (max-width: 1023.98px) {
   .tabSpacer { display: block; height: calc(var(--app-tabbar)); }
+  /* A see-through pill floating over the page, low like the app's (mobile/src/components/TabBar.tsx). */
   .tabs {
-    position: fixed; inset-inline: 0; bottom: 0; z-index: 50; display: flex;
-    background: var(--home-paper); border-top: 1px solid var(--home-rule);
-    padding: 0.25rem max(0.25rem, env(safe-area-inset-right)) calc(0.25rem + env(safe-area-inset-bottom)) max(0.25rem, env(safe-area-inset-left));
+    position: fixed; inset-inline: calc(20px + env(safe-area-inset-left)) calc(20px + env(safe-area-inset-right)); bottom: var(--tabbar-bottom); z-index: 50; display: flex;
+    height: 56px; padding-inline: 6px; border-radius: 999px;
+    background: color-mix(in srgb, var(--home-paper) 72%, transparent);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    border: 1px solid color-mix(in srgb, var(--home-ink) 12%, transparent);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
   }
   /* Page buttons sent to the bottom bar (NavButtons bottom) sit as one more tab. */
   .railActions:not(:empty) { display: flex; flex: 1; align-items: center; justify-content: center; }
 }
 .tab { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 3rem; color: var(--home-muted); -webkit-tap-highlight-color: transparent; }
-.tabPill { display: flex; padding: 0.375rem 1.25rem; border-radius: 999px; transition: background-color 0.15s, transform 0.1s; }
+.tabPill { display: flex; padding: 0.375rem 1.25rem; border-radius: 999px; transition: transform 0.1s; }
 .tab:active .tabPill { transform: scale(0.92); }
-.tab[aria-current], .tab[aria-expanded="true"] { color: var(--home-ink); }
-.tab[aria-current] .tabPill, .tab[aria-expanded="true"] .tabPill { background: var(--home-paper-deep); }
+/* The open tab is the accent colour, with no box behind it, as in the app. */
+.tab[aria-current], .tab[aria-expanded="true"] { color: var(--home-accent); }
 .tab:focus-visible { outline: 2px solid var(--home-accent); outline-offset: -4px; }
 
 .shade { position: fixed; inset: 0; z-index: 51; background: #0006; animation: shade-in 0.2s ease-out; }
 .sheet {
-  position: fixed; inset-inline: 0; bottom: var(--app-tabbar); z-index: 52;
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 52; padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
   background: var(--home-paper); color: var(--home-ink); border-top: 1px solid var(--home-rule); border-radius: 1rem 1rem 0 0;
   padding: 0.5rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.75rem;
-  max-height: calc(100dvh - var(--app-tabbar, 0px) - 1rem); overflow-y: auto; overscroll-behavior: contain;
+  max-height: 85dvh; overflow-y: auto; overscroll-behavior: contain;
   animation: sheet-up 0.22s ease-out;
 }
 .grab { width: 2.5rem; height: 0.3rem; border-radius: 999px; background: var(--home-rule); margin: 0 auto 0.25rem; }

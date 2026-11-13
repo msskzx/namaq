@@ -13,7 +13,7 @@ import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
-import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette } from '@/lib/theme';
+import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
@@ -184,11 +184,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
           borderColor: growing ? (growth.now.has(id) ? palette.path : palette.accent) : pressed ? palette.accent : muted ? palette.muted : selected ? palette.path : palette.rule,
-          backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.paperDeep,
-          borderTopStartRadius: 14,
-          borderBottomEndRadius: 14,
-          borderTopEndRadius: 4,
-          borderBottomStartRadius: 4,
+          backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.card,
+          ...CARD,
         })}>
         {/* The video draws the box from this part: the words and references, not the buttons. */}
         <View ref={register} collapsable={false} style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}>{children}</View>

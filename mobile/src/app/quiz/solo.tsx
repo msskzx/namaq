@@ -14,7 +14,7 @@ import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchL
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { availability, cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
-import { usePalette } from '@/lib/theme';
+import { usePalette, CARD } from '@/lib/theme';
 
 /** The solo quiz setup: which trees (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
@@ -54,7 +54,7 @@ export default function SoloSetup() {
       <BackBar title="اختبار فردي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
         {resumable && (
-          <View style={{ borderWidth: 1, borderColor: palette.accent, borderRadius: 14, padding: 14, gap: 10 }}>
+          <View style={{ borderWidth: 1, borderColor: palette.accent, ...CARD, padding: 14, gap: 10 }}>
             <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>
               {`لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(resumable.current + 1)} من ${num(resumable.questions.length)}.`}
             </Text>

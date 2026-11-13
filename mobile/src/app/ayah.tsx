@@ -6,7 +6,7 @@ import { ChevronRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { ayahOf, surahNames } from '@/lib/branches';
-import { QURAN_FONT, usePalette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, CARD } from '@/lib/theme';
 
 /** The ayat under a tree node, opened by tapping it; the native back swipe returns to the same tree and zoom. */
 export default function AyahScreen() {
@@ -27,7 +27,7 @@ export default function AyahScreen() {
         {ayat.map(ayah => {
           const [surah, number] = ayah.key.split(':').map(Number);
           return (
-            <View key={ayah.key} style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 14 }}>
+            <View key={ayah.key} style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 14 }}>
               <Text style={{ color: palette.muted, fontSize: 13, marginBottom: 4 }}>{surahNames[surah]} {num(number)}</Text>
               <Text style={{ fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 48, color: palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
                 {mushafText(ayah.words.join(' '))} <Text style={{ color: palette.accent }}>{num(number)}</Text>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowLeftRight, BookOpen, CircleHelp, Feather, Play, ScrollText, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
@@ -59,7 +60,6 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
     wide?.addEventListener?.('change', onWide);
     return () => { document.removeEventListener('pointerdown', onPointer); window.removeEventListener('keydown', onKey, true); wide?.removeEventListener?.('change', onWide); };
   }, [onClose, toggle]);
-  const help = usePageHelp();
   const links = [
     { href: '/?tour=1', icon: <Play size={20} aria-hidden />, label: ar ? 'الجولة التعريفية' : 'Tour' },
     { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
@@ -86,12 +86,6 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <BranchConnectorSetting />
         <ReaderGestureSetting />
         <div className={styles.sheetLinks}>
-          {help && <details className="group">
-            <summary className={`${styles.sheetLink} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
-              <CircleHelp size={20} aria-hidden /><span>{help.label}</span>
-            </summary>
-            <div data-page-help className="flex flex-col gap-2 px-3 pb-3 text-sm text-[var(--home-muted)]">{help.content}</div>
-          </details>}
           {links.map(({ href, icon, label }) => (
             <Link key={href} href={href} className={styles.sheetLink} onClick={onClose}>
               {icon}<span>{label}</span>
@@ -99,6 +93,72 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
           ))}
         </div>
       </div>
+    </>
+  );
+}
+
+/** The page's help (its rules and colour legend), opened from the question mark in the top bar, as in the app. */
+function HelpSheet({ id, onClose, help }: { id: string; onClose: () => void; help: { label: string; content: React.ReactNode } }) {
+  const { language } = useLanguage();
+  const sheet = useRef<HTMLDivElement>(null);
+  useSwipeClose(sheet, true, { direction: 'down', onClose });
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose(); } };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [onClose]);
+  return (
+    <>
+      <div className={styles.shade} onClick={onClose} aria-hidden />
+      <div ref={sheet} id={id} role="dialog" aria-modal="true" aria-label={help.label} className={styles.sheet} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className={styles.grab} aria-hidden />
+        <h2 className="text-lg font-bold">{help.label}</h2>
+        <div data-page-help className="flex flex-col gap-2 text-[var(--home-ink)] leading-7">{help.content}</div>
+      </div>
+    </>
+  );
+}
+
+/** A question mark that opens the page's help; shows only on pages that have one. */
+export function HelpButton({ className }: { className: string }) {
+  const help = usePageHelp();
+  const { language } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const path = usePathname();
+  useEffect(() => setOpen(false), [path]);
+  const close = useCallback(() => setOpen(false), []);
+  if (!help) return null;
+  const label = language === 'ar' ? 'مساعدة' : 'Help';
+  return (
+    <>
+      <button type="button" className={className} aria-label={label} title={label} aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => setOpen(value => !value)}>
+        <CircleHelp size={22} strokeWidth={1.75} aria-hidden />
+      </button>
+      {/* On the body: the see-through top bar's blur would otherwise hold a fixed sheet inside the bar. */}
+      {open && createPortal(<HelpSheet id={id} onClose={close} help={help} />, document.body)}
+    </>
+  );
+}
+
+/** The settings gear and its sheet: in the side rail on desktop, and in the homepage's top bar on phones, as in the app. */
+export function SettingsButton({ className, children }: { className: string; children?: (icon: React.ReactNode) => React.ReactNode }) {
+  const { language } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const sheetId = useId();
+  const toggle = useRef<HTMLButtonElement>(null);
+  const path = usePathname();
+  useEffect(() => setOpen(false), [path]);
+  const close = useCallback(() => { setOpen(false); toggle.current?.focus(); }, []);
+  const settings = language === 'ar' ? 'الإعدادات' : 'Settings';
+  const icon = <Settings size={children ? 24 : 22} strokeWidth={1.75} aria-hidden />;
+  return (
+    <>
+      {open && createPortal(<SettingsSheet id={sheetId} onClose={close} toggle={toggle} />, document.body)}
+      <button ref={toggle} type="button" className={className} aria-label={settings} title={settings}
+        aria-expanded={open} aria-controls={open ? sheetId : undefined} onClick={() => setOpen(value => !value)}>
+        {children ? children(icon) : icon}
+      </button>
     </>
   );
 }
@@ -116,17 +176,10 @@ export default function TabBar() {
   const language = languageLoaded ? chosen : 'ar';
   const path = usePathname() ?? '/';
   const active = activeSection(path);
-  const [open, setOpen] = useState(false);
-  const sheetId = useId();
-  const toggle = useRef<HTMLButtonElement>(null);
-  useEffect(() => setOpen(false), [path]);
-  const close = useCallback(() => { setOpen(false); toggle.current?.focus(); }, []);
   const setRailSlot = useContext(RailSlotContext);
   const ar = language === 'ar';
-  const settings = ar ? 'الإعدادات' : 'Settings';
   return (
     <>
-      {open && <SettingsSheet id={sheetId} onClose={close} toggle={toggle} />}
       <nav className={styles.tabs} aria-label={ar ? 'شريط التبويب' : 'Tab bar'} dir={ar ? 'rtl' : 'ltr'}>
         <Link href="/" className={styles.railLogo} aria-label={ar ? 'نمق' : 'Namaq'} title={ar ? 'نمق' : 'Namaq'}><Emblem className={styles.railEmblem} /></Link>
         {NAV_SECTIONS.map(section => {
@@ -135,15 +188,13 @@ export default function TabBar() {
           return (
             <Link key={section.href} href={section.href} className={styles.tab} aria-label={label} title={label}
               aria-current={section.href === active ? 'page' : undefined}>
-              <span className={styles.tabPill}><Icon size={24} strokeWidth={1.75} aria-hidden /></span>
+              <span className={styles.tabPill}><Icon size={24} strokeWidth={section.href === active ? 2.25 : 1.75} aria-hidden /></span>
             </Link>
           );
         })}
         <div ref={setRailSlot} className={styles.railActions} />
-        <button ref={toggle} type="button" className={styles.tab} aria-label={settings} title={settings}
-          aria-expanded={open} aria-controls={open ? sheetId : undefined} onClick={() => setOpen(value => !value)}>
-          <span className={styles.tabPill}><Settings size={24} strokeWidth={1.75} aria-hidden /></span>
-        </button>
+        <HelpButton className={`${styles.tab} ${styles.railOnly}`} />
+        <SettingsButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SettingsButton>
       </nav>
     </>
   );
