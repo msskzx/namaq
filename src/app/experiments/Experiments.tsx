@@ -10,6 +10,7 @@ type Text = NavItem['label'];
 
 /** Features that are built and open to everyone, in the order a reader meets them. */
 export const LIVE: NavItem[] = [
+  { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, purpose: { ar: 'أدوات القرآن الرئيسية في بطاقات', en: 'The main Quran tools as tiles' } },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'The mushaf' }, purpose: { ar: 'مصحف المدينة صفحةً صفحة، مع أزرار كل آية', en: 'The Madinah mushaf page by page, with buttons on each ayah' } },
   { href: '/quran/read/recite', label: { ar: 'التسميع', en: 'Recite' }, purpose: { ar: 'سمّع حفظك كلمةً كلمة، وراجع ما نسيته', en: 'Recite from memory word by word, and review what you forgot' } },
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, purpose: { ar: 'آيات تبدأ بالكلمات نفسها، شجرةً أو جدولًا، وأين تتفرع', en: 'Ayat that open with the same words, as a tree or a matrix, and where they branch' } },
@@ -27,6 +28,9 @@ export const LIVE: NavItem[] = [
   { href: '/library?tab=notes', label: { ar: 'تأملاتي', en: 'My notes' }, purpose: { ar: 'خواطرك على الآيات، تكتبها من المصحف', en: 'Your reflections on ayat, written from the mushaf' } },
   { href: '/quran/words', label: { ar: 'عدّ الكلمات', en: 'Word counts' }, purpose: { ar: 'كم مرة ترد كل كلمة، وأين', en: 'How often each word occurs, and where' } },
   { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: 'أنواع الافتتاح العشرة، والسور التي تتشابه أوائلها جنبًا إلى جنب', en: 'The ten kinds of opening, and surahs whose openings look alike side by side' } },
+  { href: '/quran/qiraat', label: { ar: 'القراءات', en: 'Readings' }, purpose: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
+  { href: '/quran/order', label: { ar: 'ترتيب السور', en: 'Surah order' }, purpose: { ar: 'أوائل السور من فصلت إلى الناس ومقاصدها، وما يصل كل سورة بالتي قبلها، منقولًا من البقاعي والسيوطي وابن الزبير', en: 'The openings and aims of the surahs from Fussilat to al-Nas, and what joins each to the one before, quoted from al-Biqa\'i, al-Suyuti and Ibn al-Zubayr' } },
+  { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
   { href: '/search', label: { ar: 'البحث', en: 'Search' }, purpose: { ar: 'بحث واحد في السور والآيات والشجرات والكلمات', en: 'One search across surahs, ayat, trees and words' } },
   { href: '/', label: { ar: 'بطاقة اليوم', en: "Today's card" }, purpose: { ar: 'التاريخ الهجري وجزء اليوم وآيتان متشابهتان كل يوم', en: 'The Hijri date, today\'s juz and a look-alike pair each day' } },
   { href: '/utilities', label: { ar: 'مواقيت الصلاة والقبلة', en: 'Prayer times and qibla' }, purpose: { ar: 'مواقيت اليوم، واتجاه القبلة، والتقويم الهجري', en: 'Today\'s prayer times, the qibla direction and the Hijri calendar' } },
@@ -66,7 +70,7 @@ export default function Experiments() {
   const sections = EXPERIMENT_SECTIONS.map(section => ({
     ...section,
     groups: section.groups.map(group => ({ ...group, items: group.items.filter(item => !LIVE_PATHS.has(item.href)) })).filter(group => group.items.length),
-  }));
+  })).filter(section => section.groups.length || section.href === '/quizzes');
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className={`${styles.page} mx-auto max-w-[var(--home-width)] px-[var(--home-gutter)] py-6`}>
       <section aria-labelledby="experiment-live" className={`mb-8 grid gap-x-8 ${COMING.length ? 'sm:grid-cols-2' : ''}`}>

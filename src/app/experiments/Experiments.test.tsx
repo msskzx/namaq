@@ -31,7 +31,9 @@ describe('experiments directory', () => {
     const live = screen.getByRole('heading', { level: 2, name: 'Live' }).closest('section')!;
     const hrefs = [...live.querySelectorAll('a')].map(link => link.getAttribute('href'));
     expect(hrefs).toEqual(LIVE.map(item => item.href));
-    for (const href of ['/quran/read', '/quran/branches', '/quran/compare', '/quran/prophets']) expect(hrefs).toContain(href);
+    for (const href of ['/quran/read', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/qiraat', '/quran/order', '/quran/tajwid/tuhfat-al-atfal']) expect(hrefs).toContain(href);
+    // Every Quran page is live, so the Quran section of experiments is gone.
+    expect(screen.queryByRole('heading', { level: 2, name: 'Quran' })).toBeNull();
   });
 
   it('marks every live feature in green, with the features that live inside other pages', () => {

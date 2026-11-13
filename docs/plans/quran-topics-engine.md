@@ -1,5 +1,9 @@
 # Per-ayah-range Quran topics: engine, order badges, themes comparison
 
+> 2026-11-13: `/quran/order` no longer shows topics or hops. Its page quotes the books on surah order instead
+> ([quran-order-sources.md](quran-order-sources.md)), and `src/lib/quran/surahOrder.ts` with its tests was removed.
+> The order parts below are history.
+
 ## Context
 
 `/quran/order` (surahs 41-114, [surahOrder.ts](src/lib/quran/surahOrder.ts)) tags each surah

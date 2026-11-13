@@ -19,7 +19,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "quran:iltifat": "tsx --env-file=.env scripts/quran/buildIltifat.ts",
-    "quran:order": "tsx --env-file=.env scripts/quran/buildOrder.ts",
+    "quran:order": "tsx scripts/quran/buildOrder.ts",
     "quran:topics:sync": "tsx --env-file=.env scripts/quran/syncTopics.ts",
     "quran:oaths": "tsx scripts/quran/buildOaths.ts",
     "quran:qiraat": "tsx scripts/quran/buildQiraat.ts",
