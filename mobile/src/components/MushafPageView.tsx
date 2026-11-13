@@ -40,7 +40,14 @@ type Props = {
   saved: ReadonlySet<string>;
   /** A touch on a word gives its ayah; a touch elsewhere on the page (or on a hidden word) gives null. */
   onTouch: (touch: Touch, key: string | null, x: number, y: number) => void;
+  /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
+  write?: Write | null;
+  /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
+  checked?: Checked | null;
 };
+
+export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void };
+export type Checked = { key: string; right: number[]; wrong: number[] };
 
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
@@ -56,19 +63,35 @@ type Cell = { lit: boolean };
  * A background on the text would cover the font's whole line (the Quran font's is very tall), so boxes overlapped the
  * lines above and below and the surah titles; this box is clipped to the letters.
  */
-function Veil({ text, size, palette, next }: { text: string; size: number; palette: Palette; next: boolean }) {
+function Veil({ text, size, palette, next, faint = false }: { text: string; size: number; palette: Palette; next: boolean; faint?: boolean }) {
   return (
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden
-      style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5,
-      backgroundColor: next ? tint(palette.accent, 0.22) : tint(palette.muted, 0.1), borderWidth: 1, borderColor: next ? palette.accent : palette.rule }}>
+      style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, opacity: faint ? 0.55 : 1, borderStyle: faint ? 'dashed' : 'solid',
+      backgroundColor: faint ? 'transparent' : next ? tint(palette.accent, 0.22) : tint(palette.muted, 0.1), borderWidth: 1, borderColor: next && !faint ? palette.accent : palette.rule }}>
       <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
     </View>
   );
 }
 
+/**
+ * A word to write, in write mode: the hidden word's own box in its place on the line, holding what was typed.
+ * The box being written has the accent border.
+ */
+function WriteBox({ text, size, palette, typed, active, onPress }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void }) {
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
+      style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, backgroundColor: palette.paper, borderWidth: active ? 2 : 1, borderColor: active ? palette.accent : palette.rule }}>
+      <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
+      <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+        <Text numberOfLines={1} style={{ fontSize: size * 0.72, lineHeight: size * 1.1, color: palette.ink }}>{typed}</Text>
+      </View>
+    </Pressable>
+  );
+}
+
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch, write, checked }: Props) {
   const [body, setBody] = useState<{ width: number; height: number } | null>(null);
   const [measured, setMeasured] = useState(() => naturals.get(page));
   const lineAt = useMemo(() => data.items.flatMap((item, at) => ('line' in item ? [at] : [])), [data]);
@@ -230,7 +253,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 const key = `${group.surah}:${group.ayah}`;
                 const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                 const wordHidden = !!hidden?.(key, word);
-                return { group, key, wordHidden, lit: !wordHidden && !!forgot[key] };
+                // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
+                const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
+                return { group, key, wordHidden, rel, lit: !wordHidden && !!forgot[key] };
               });
               return (
                 <View key={index} style={{ height: oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred || oval ? 'center' : 'flex-start' }}>
@@ -238,16 +263,20 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                     ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
                     {bands(index, cells)}
-                    {cells.map(({ group, key, wordHidden, lit }, at) => {
+                    {cells.map(({ group, key, wordHidden, rel, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                       const marked = mark === key;
+                      const writing = !!group.word && wordHidden && write?.key === key;
+                      const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
                         <Word key={at} press={wordHidden ? undefined : press(key)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
-                        {wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
-                        <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: marked ? palette.accent : palette.ink }}>
+                        {writing && write.targets.includes(rel)
+                          ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} />
+                          : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
+                        <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? (marked ? palette.accent : palette.ink) }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
                             <Text key={end}>

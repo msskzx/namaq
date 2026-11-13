@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, Modal, Platform, Pressable, View, useWindowDimensions } from 'react-native';
+import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
+import { useKeyboardHeight } from '@/lib/keyboard';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -8,19 +9,6 @@ import type { Palette } from '@/lib/theme';
 
 const OPEN_MS = 260;
 const CLOSE_MS = 220;
-
-/** How far the keyboard covers the bottom of the screen, so a sheet with a search box can sit above it. */
-function useKeyboardHeight(active: boolean) {
-  const [height, setHeight] = useState(0);
-  useEffect(() => {
-    if (!active) { setHeight(0); return; }
-    const ios = Platform.OS === 'ios';
-    const show = Keyboard.addListener(ios ? 'keyboardWillShow' : 'keyboardDidShow', event => setHeight(event.endCoordinates.height));
-    const hide = Keyboard.addListener(ios ? 'keyboardWillHide' : 'keyboardDidHide', () => setHeight(0));
-    return () => { show.remove(); hide.remove(); };
-  }, [active]);
-  return height;
-}
 
 /**
  * The website's phone sheet: rises from the bottom over a dimmed page; a tap outside or a swipe down closes it.
