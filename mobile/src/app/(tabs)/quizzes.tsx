@@ -15,9 +15,9 @@ const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title:
   { href: '/quiz/solo', Icon: User, title: 'اختبار فردي', text: 'أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها.' },
   { href: '/quiz/party', Icon: Users, title: 'اختبار جماعي', text: 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' },
   { href: '/read', Icon: EyeOff, title: 'تسميع', text: 'تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه.' },
-  // Recite with writing on, from the top of the page the mushaf is open at (owner, 2026-11-13).
   // A surah's name, and its first ayah to write in the mushaf (owner, 2026-11-13).
   { href: '/quiz/openings', Icon: BookOpenText, title: 'أوائل السور', text: 'ترى اسم السورة، وتكتب أول آية منها في مكانها من المصحف.' },
+  // Recite with writing on, from the top of the page the mushaf is open at (owner, 2026-11-13).
   { href: '/read', Icon: PenLine, title: 'اكتب أول الآية وآخرها', text: 'كلمات الآية صناديق في مكانها من المصحف، تكتب أول كلماتها وآخرها، ثم تظهر الآية.', intent: { tab: 'read', recite: true, write: true } },
 ];
 

@@ -10,6 +10,7 @@ import surahRows from "@shared/data/quran/surahs.json";
 import { ayahHref } from "@shared/ayahMarks";
 import { num } from "@shared/quran/arabicNumber";
 import { JUZ_STARTS, type JuzRange } from "@shared/quran/juz";
+import { WRITE_KEY } from "@/app/quran/read/writeKey";
 import { openingKeys, openingRound, OPENINGS_KEY, type Openings } from "@shared/quran/openings";
 
 /** The last juz range chosen, kept for next time (the app's openings-range). */
@@ -39,7 +40,7 @@ export default function OpeningsPage() {
     const round: Openings = { range: whole ? null : range, keys: openingRound(whole ? null : range, Math.random), at: 0 };
     try {
       sessionStorage.setItem(OPENINGS_KEY, JSON.stringify(round));
-      localStorage.setItem("quran-reader-write", "on");
+      localStorage.setItem(WRITE_KEY, "on");
     } catch {}
     const key = round.keys[0];
     router.push(`${ayahHref(key)}?recite=${key}&openings=1`);

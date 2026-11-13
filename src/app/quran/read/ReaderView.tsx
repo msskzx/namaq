@@ -11,6 +11,7 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, se
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { WRITE_KEY } from './writeKey';
 import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
@@ -43,8 +44,6 @@ const SPREAD_KEY = 'quran-reader-spread';
 export const LAST_PAGE_KEY = 'quran-reader-page';
 const BAR_KEY = 'quran-reader-bar';
 export const LAST_RECITE_KEY = 'quran-recite-last';
-/** Whether recite mode asks to write each ayah's first and last words (the app's reader-write setting). */
-const WRITE_KEY = 'quran-reader-write';
 const WIDE = '(min-width: 1024px) and (orientation: landscape)';
 const PHONE = '(max-width: 640px)';
 
@@ -164,7 +163,9 @@ export default function ReaderView({
     if (!openingsOn || !recite) { setOpenings(null); return; }
     try {
       const round = JSON.parse(sessionStorage.getItem(OPENINGS_KEY) ?? 'null') as Openings | null;
-      setOpenings(round && round.keys[round.at] === recite.start ? round : { range: null, keys: [recite.start], at: 0 });
+      // Back or a reload lands on an earlier surah of the round: the round goes on from there.
+      const at = round ? round.keys.indexOf(recite.start) : -1;
+      setOpenings(round && at >= 0 ? { ...round, at } : { range: null, keys: [recite.start], at: 0 });
     } catch { setOpenings({ range: null, keys: [recite.start], at: 0 }); }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- follows the URL's recite start
   }, [openingsOn, sameRecite]);

@@ -14,7 +14,7 @@ export const parseDifficulty = (value: unknown): Difficulty => DIFFICULTIES.incl
 const PER_AYAH = 0.05;
 /**
  * Where easy ends and hard begins: the thirds of the 819 quiz trees of the whole Quran (all kinds) on 2026-11-13,
- * so each level holds about a third of them. Fixed, so a tree keeps its level whatever the kinds filtered.
+ * so each level holds about a third of them. With a juz range, only the ayat inside it are scored.
  */
 const EASY_BELOW = 0.308;
 const HARD_FROM = 0.468;
