@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, Clapperboard, Link2, Send, X } from 'lucide-react';
+import { Check, Clapperboard, Link2, ListVideo, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Emblem from '@/components/common/Emblem';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -48,9 +48,9 @@ async function shareBlob(blob: Blob, title: string) {
 
 /**
  * Share as image, as in the phone app: the card on the page colour, the logo and «نمق» under it.
- * The big button shares the image; beside it the card's video (where it has one) and its link.
+ * The big button shares the image; beside it the card's video (where it has one), the whole page's video (compare) and its link.
  */
-export function ShareImageDialog({ source, link, onVideo, onClose }: { source: ShareSource; link?: string; onVideo?: () => void; onClose: () => void }) {
+export function ShareImageDialog({ source, link, onVideo, onPageVideo, onClose }: { source: ShareSource; link?: string; onVideo?: () => void; onPageVideo?: () => void; onClose: () => void }) {
   const ar = useLanguage().language === 'ar';
   const dialog = useRef<HTMLDialogElement>(null);
   const frame = useRef<HTMLDivElement>(null);
@@ -89,8 +89,8 @@ export function ShareImageDialog({ source, link, onVideo, onClose }: { source: S
     } catch {}
   };
   const labels = ar
-    ? { title: 'مشاركة', close: 'إغلاق', image: 'مشاركة كصورة', video: 'مشاركة كفيديو', link: 'مشاركة الرابط', copied: 'نُسخ الرابط', failed: 'تعذّر تجهيز الصورة.', wait: 'جارٍ تجهيز الصورة' }
-    : { title: 'Share', close: 'Close', image: 'Share as image', video: 'Share as video', link: 'Share link', copied: 'Link copied', failed: 'Could not make the image.', wait: 'Making the image' };
+    ? { title: 'مشاركة', close: 'إغلاق', image: 'مشاركة كصورة', video: 'مشاركة كفيديو', pageVideo: 'مشاركة الصفحة كفيديو', link: 'مشاركة الرابط', copied: 'نُسخ الرابط', failed: 'تعذّر تجهيز الصورة.', wait: 'جارٍ تجهيز الصورة' }
+    : { title: 'Share', close: 'Close', image: 'Share as image', video: 'Share as video', pageVideo: 'Share the page as video', link: 'Share link', copied: 'Link copied', failed: 'Could not make the image.', wait: 'Making the image' };
   // Kept to this dialog: React passes a dialog's close event on to its parents, and would close a note dialog this one opened from.
   return <dialog ref={dialog} aria-label={labels.title} onClose={event => { event.stopPropagation(); onClose(); }} onClick={event => { if (event.target === dialog.current) close(); }} dir={ar ? 'rtl' : 'ltr'}
     className="m-auto mb-0 open:flex max-h-[92dvh] w-full max-w-md flex-col rounded-t-2xl bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-black/45 md:mb-auto md:rounded-2xl">
@@ -111,6 +111,7 @@ export function ShareImageDialog({ source, link, onVideo, onClose }: { source: S
     <div className="flex items-center justify-center gap-3 py-4">
       <Button size="lg" variant="primary" onClick={() => void send()} disabled={!ready || busy || failed} aria-label={labels.image} title={labels.image}><Send aria-hidden /></Button>
       {onVideo && <Button size="lg" variant="muted" aria-label={labels.video} title={labels.video} onClick={() => { close(); onVideo(); }}><Clapperboard aria-hidden /></Button>}
+      {onPageVideo && <Button size="lg" variant="muted" aria-label={labels.pageVideo} title={labels.pageVideo} onClick={() => { close(); onPageVideo(); }}><ListVideo aria-hidden /></Button>}
       {link && <Button size="lg" variant="muted" aria-label={copied ? labels.copied : labels.link} title={copied ? labels.copied : labels.link} onClick={() => void shareLink()}>{copied ? <Check aria-hidden /> : <Link2 aria-hidden />}</Button>}
     </div>
   </dialog>;
@@ -120,8 +121,8 @@ export function ShareImageDialog({ source, link, onVideo, onClose }: { source: S
  * The paper airplane: opens share as image on its card. With `content` it shares that; otherwise the card it sits in,
  * the nearest `[data-share-card]` (its `[data-share-image]` part if it marks one), leaving out anything marked `data-share-skip`.
  */
-export function ShareImageButton({ content, href, onVideo, size = 'lg', className, iconSize, ...rest }: {
-  content?: React.ReactNode; href?: string; onVideo?: () => void; size?: 'lg' | 'icon'; className?: string; iconSize?: number; 'data-share-tree'?: boolean;
+export function ShareImageButton({ content, href, onVideo, onPageVideo, size = 'lg', className, iconSize, ...rest }: {
+  content?: React.ReactNode; href?: string; onVideo?: () => void; onPageVideo?: () => void; size?: 'lg' | 'icon'; className?: string; iconSize?: number; 'data-share-tree'?: boolean;
 }) {
   const ar = useLanguage().language === 'ar';
   const [source, setSource] = useState<ShareSource | null>(null);
@@ -136,6 +137,6 @@ export function ShareImageButton({ content, href, onVideo, size = 'lg', classNam
       <Send aria-hidden size={iconSize} />
     </Button>
     {/* On the page's body: inside the card, a part left out of the image would take the dialog with it. */}
-    {source && createPortal(<ShareImageDialog source={source} link={shareUrl(href)} onVideo={onVideo} onClose={() => setSource(null)} />, document.body)}
+    {source && createPortal(<ShareImageDialog source={source} link={shareUrl(href)} onVideo={onVideo} onPageVideo={onPageVideo} onClose={() => setSource(null)} />, document.body)}
   </>;
 }

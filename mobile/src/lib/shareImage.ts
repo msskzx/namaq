@@ -1,8 +1,8 @@
 import { useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
 
-/** What a card's share button hands the share sheet: the card drawn for the image at the width given, its link, and its video where it has one. */
-export type ShareRequest = { content: (width: number) => ReactNode; link?: string; onVideo?: () => void };
+/** What a card's share button hands the share sheet: the card drawn for the image at the width given, its link, its video where it has one, and its whole page's video (compare). */
+export type ShareRequest = { content: (width: number) => ReactNode; link?: string; onVideo?: () => void; onPageVideo?: () => void };
 
 /** iOS shows one modal at a time: what opens after another sheet closes waits this long for it to go. */
 export const MODAL_GAP = 350;

@@ -11,7 +11,7 @@ export default function PageProgress({ at, count, label, palette }: { at: number
       <View style={{ height: 2, backgroundColor: palette.rule }}>
         <View style={{ height: 2, width: `${(at / count) * 100}%`, alignSelf: 'flex-start', backgroundColor: palette.muted }} />
       </View>
-      <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 12, paddingTop: 2, color: palette.muted, fontSize: 11, lineHeight: 14 }}>{num(at)} / {num(count)}</Text>
+      <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 12, paddingTop: 2, color: palette.muted, fontSize: 11 }}>{num(at)} / {num(count)}</Text>
     </View>
   );
 }
