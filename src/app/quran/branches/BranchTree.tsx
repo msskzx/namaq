@@ -61,7 +61,7 @@ function ReferenceHeader({ children }: { children: React.ReactNode }) {
 function SubtreeButton({ href }: { href: string }) {
   const { language } = useLanguage();
   const label = language === 'ar' ? 'عرض هذا الجزء وحده' : 'Show only this part of the tree';
-  return <Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button>;
+  return <span data-share-skip className="contents"><Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button></span>;
 }
 
 export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {
@@ -491,7 +491,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 
   const zoomVariant = rail ? 'muted' : 'outline';
   const zoom = (
-    <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} aria-orientation={rail ? 'vertical' : undefined} className={`flex items-center gap-2 ${rail ? 'flex-col' : 'flex-wrap max-sm:hidden'}`}>
+    <div role="toolbar" data-share-skip aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} aria-orientation={rail ? 'vertical' : undefined} className={`flex items-center gap-2 ${rail ? 'flex-col' : 'flex-wrap max-sm:hidden'}`}>
       <Button size="lg" variant={zoomVariant} aria-pressed={!manual} onClick={() => paintCamera(null)} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
       <div dir="ltr" className={`flex items-center ${rail ? 'flex-col gap-2' : 'gap-1'}`}>
         <Button size="lg" variant={zoomVariant} onClick={() => zoomBy(-SCALE_STEP)} disabled={!manual} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>

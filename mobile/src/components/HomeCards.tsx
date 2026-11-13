@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Trash2, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
 import { notesByDate, readAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -10,6 +10,7 @@ import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
 import TreeIcon from './TreeIcon';
 import CardMenu, { type MenuAt, type MenuItem } from './CardMenu';
+import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
 import { ayahText, surahNames } from '@/lib/mushaf';
@@ -111,6 +112,7 @@ export function useHomeCards(palette: Palette) {
     { id: 'edit', Icon: NotebookPen, label: 'عدّل التأمل', onPress: () => setNoting(card.id) },
     ...wayItems(forgottenWays(card.id)),
     { id: 'delete', Icon: Trash2, label: 'احذف التأمل', onPress: () => writeAyahNote(card.id, '') },
+    { id: 'share', Icon: Send, label: 'مشاركة', onPress: () => shareAyah(card.id, palette, card.text, true) },
   ] });
   const menus = (<>
     <CardMenu at={menu?.at ?? null} items={menu?.items ?? []} label={menu?.label ?? ''} onClose={() => setMenu(null)} palette={palette} />

@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, NotebookPen, PenLine, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, NotebookPen, PenLine, Send, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -22,6 +22,7 @@ import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import TreeIcon from './TreeIcon';
+import { shareAyah } from './AyahShare';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
@@ -368,6 +369,8 @@ export default function Reader() {
           {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
           {actions.lemmas.length > 0 && <IconButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
+          {/* Share is always the last button. */}
+          <IconButton Icon={Send} label="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
         </View>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}

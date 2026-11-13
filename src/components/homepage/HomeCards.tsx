@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState, useSyncExternalStore, type MouseEvent } from 'react';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronRight, EyeOff, LightbulbOff, NotebookPen, Trash2 } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronRight, EyeOff, LightbulbOff, NotebookPen, Send, Trash2 } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
@@ -17,6 +17,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { quranContexts } from '@/lib/quran/quranText';
 import CardMenu, { type MenuItem } from './CardMenu';
+import { AyahShareDialog } from '@/components/share/AyahShare';
 import styles from './Homepage.module.css';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
@@ -66,6 +67,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const noted = notesByDate(notes);
   const [noting, setNoting] = useState<string | null>(null);
+  const [sharing, setSharing] = useState<string | null>(null);
   const [menu, setMenu] = useState<Menu | null>(null);
   const closeMenu = useCallback(() => setMenu(null), []);
   const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
@@ -92,6 +94,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
     { id: 'edit', Icon: NotebookPen, label: ar ? 'عدّل التأمل' : 'Edit note', onClick: () => setNoting(key) },
     { id: 'mushaf', Icon: BookOpen, label: ar ? 'في المصحف' : 'In the mushaf', href: ayahHref(key) },
     { id: 'delete', Icon: Trash2, label: ar ? 'احذف التأمل' : 'Delete note', onClick: () => writeAyahNote(key, '') },
+    { id: 'share', Icon: Send, label: ar ? 'مشاركة' : 'Share', onClick: () => setSharing(key) },
   ] });
 
   const savedCard = (item: Saved, wide = false) => {
@@ -133,7 +136,8 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   };
   const menuElement = menu && <CardMenu x={menu.x} y={menu.y} label={menu.label} items={menu.items} onClose={closeMenu} />;
   const noteElement = noting && <NoteDialog ayah={noting} name={names.get(Number(noting.split(':')[0]))} ar={ar} onClose={() => setNoting(null)} />;
-  return { ar, saved, forgotten, recent, noted, names, savedCard, forgottenCard, noteCard, menu: <>{menuElement}{noteElement}</> };
+  const shareElement = sharing && <AyahShareDialog ayah={sharing} name={names.get(Number(sharing.split(':')[0]))} note={notes[sharing]?.text} onClose={() => setSharing(null)} />;
+  return { ar, saved, forgotten, recent, noted, names, savedCard, forgottenCard, noteCard, menu: <>{menuElement}{noteElement}{shareElement}</> };
 }
 
 /** A home shelf's way to the full list on the library page. */

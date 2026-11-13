@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { ArrowLeftRight, Bookmark, Check, LightbulbOff, NotebookPen } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, Check, LightbulbOff, NotebookPen, Send } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
@@ -12,7 +12,7 @@ import type { AyahLink } from './ayahLinks';
  * The icons for one ayah: forgot (with how often, and a check to clear it), save, the reader's note, and where else it is:
  * its compare cards and the trees that hold it, each previewed in a sheet (AyahPreviewSheet). Those two show only when there are any.
  */
-export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onPreview, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onPreview, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
@@ -27,6 +27,8 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   onNote?: () => void;
   /** The tree and compare buttons preview in place rather than leaving the mushaf (owner, 2026-11-13). */
   onPreview?: (kind: 'trees' | 'compare') => void;
+  /** Share as image, always the last button. */
+  onShare?: () => void;
   onClose: () => void;
   /** A press outside closes the buttons; the page then ignores that press. */
   onDismiss?: () => void;
@@ -55,6 +57,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const clearLabel = ar ? 'تذكّرتها' : 'I remember it now';
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
   const treesLabel = ar ? 'أشجار هذه الآية' : 'Trees of this ayah';
+  const shareLabel = ar ? 'مشاركة' : 'Share';
   const half = 155;
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
   const preview = (kind: 'trees' | 'compare') => () => { onPreview?.(kind); onClose(); };
@@ -72,6 +75,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
       </Button>}
       {!!links?.compare.length && <Button size="lg" variant="muted" aria-label={compareLabel} title={compareLabel} aria-haspopup="dialog" onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Button>}
       {links?.trees && <Button size="lg" variant="muted" aria-label={treesLabel} title={treesLabel} aria-haspopup="dialog" onClick={preview('trees')}><TreeIcon aria-hidden /></Button>}
+      {onShare && <Button size="lg" variant="muted" aria-label={shareLabel} title={shareLabel} aria-haspopup="dialog" onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Button>}
     </div>
   );
 }

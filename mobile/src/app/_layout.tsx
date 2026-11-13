@@ -8,6 +8,7 @@ import { SplashScreen, Stack, ThemeProvider, DarkTheme, DefaultTheme } from 'exp
 import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette, dark } from '@/lib/theme';
 import '@/lib/storage';
 import { startAlerts } from '@/lib/adhan';
+import ShareSheet from '@/components/ShareSheet';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +37,7 @@ export default function RootLayout() {
               <Stack.Screen name="library" />
               <Stack.Screen name="prophets/[slug]" />
             </Stack>
+            <ShareSheet />
           </View>
           <StatusBar style={palette.paper === dark.paper ? 'light' : 'dark'} />
         </ThemeProvider>

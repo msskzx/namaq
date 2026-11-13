@@ -5,11 +5,12 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { scheduleOnRN } from 'react-native-worklets';
 import { Text } from '@/components/Text';
 import { router } from 'expo-router';
-import { ArrowLeftRight, BookOpen } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpen, Send } from 'lucide-react-native';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import { readAyah } from '@/lib/openReader';
+import { shareCard } from '@/lib/shareImage';
 import { CARD, type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
@@ -62,6 +63,17 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
       x.value = withTiming(0, { duration: 200 });
       if (far && (forward ? hasNext : hasPrev)) scheduleOnRN(step, forward);
     });
+  const share = (place: Place, k: number) => shareCard({ content: width => (
+    <View style={{ width, gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+      <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{phase}</Text>
+      <Text style={{ color: palette.ink, fontSize: 19, fontWeight: '700', lineHeight: 30 }}>{event.title}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
+        <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
+      </View>
+      <PlaceText place={place} shared={shared[k]} palette={palette} />
+    </View>
+  ) });
   const moved = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
     <GestureDetector gesture={pan}>
@@ -85,7 +97,11 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
             {readable && <><Pressable onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} accessibilityRole="button" accessibilityLabel={`افتح ${place.name} في المصحف`} hitSlop={8} style={{ padding: 4 }}>
               <BookOpen size={18} color={palette.muted} />
             </Pressable>
-            <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} /></>}
+            <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
+            {/* Share is always the last button: this place as an image, under the event's title. */}
+            <Pressable onPress={() => share(place, k)} accessibilityRole="button" accessibilityLabel={`شارك ${place.name}`} hitSlop={8} style={{ padding: 4 }}>
+              <Send size={18} color={palette.muted} />
+            </Pressable></>}
           </View>
           <PlaceText place={place} shared={shared[k]} palette={palette} />
         </View>

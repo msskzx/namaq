@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, Share, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
 import { Bookmark, GalleryHorizontal, Lightbulb, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
@@ -13,7 +13,8 @@ import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/s
 import { addHint, hintsOf, type Hints } from '@shared/quiz/hints';
 import BranchTree, { type Paths, type RenderNode } from './BranchTree';
 import { litPaths, togglePath } from '@shared/quran/pathHighlight';
-import MatrixCard from './MatrixCard';
+import MatrixCard, { MatrixShare } from './MatrixCard';
+import { shareCard } from '@/lib/shareImage';
 import TreeIcon from './TreeIcon';
 import VideoSheet from './VideoSheet';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
@@ -235,7 +236,7 @@ function Bar({ label, onPress, Icon, palette, on, fill }: { label: string; onPre
 }
 
 /** Save, share and open the tree, as under a branches card; by its phrase, or the branches tree that carries it. */
-function TreeActions({ phrase, text, palette }: { phrase: string; text: string; palette: Palette }) {
+function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text: string; palette: Palette; onShare: (link: string) => void }) {
   // Finding the branches tree can take a moment, so the answer shows first.
   const [piece, setPiece] = useState<BranchPiece | undefined>(undefined);
   useEffect(() => {
@@ -246,7 +247,7 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = piece ? isSaved(piece, bookmarks) : bookmarks.some(bookmark => bookmark.id === phrase);
   const save = () => piece ? toggleSaved(piece) : toggleBookmark({ id: phrase, text, href: branchesHref(phrase) });
-  const share = () => void Share.share({ message: `${text}\n${WEBSITE}${branchesHref(piece?.id ?? phrase)}` });
+  const share = () => onShare(`${text}\n${WEBSITE}${branchesHref(piece?.id ?? phrase)}`);
   return <>
     <Bar label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} Icon={Bookmark} palette={palette} fill={saved} />
     <Bar label="مشاركة" onPress={share} Icon={Send} palette={palette} />
@@ -309,6 +310,11 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header, h
     const row = rows.get(index);
     return row ? <Graded row={row} palette={palette} names={names} hinted={!!hints?.[index]} /> : undefined;
   };
+  // Share as image: the graded answer as it shows, tree or matrix; the tree's video from the share sheet too.
+  const share = (link: string) => shareCard(matrix
+    ? { content: width => <MatrixShare presentation={presentation} palette={palette} width={width} />, link }
+    : { content: () => <BranchTree presentation={presentation} matches={NO_MATCHES} names={names} palette={palette} onTap={() => {}} paths={paths} renderNode={renderNode} direction={down ? 'down' : 'side'} around={surrounding} />,
+      link, onVideo: () => void openVideo() });
   const studio = growth.studio && !matrix;
   const treeGrowth = studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;
   const switchView = (next: () => void) => { closeStudio(); next(); };
@@ -330,7 +336,7 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header, h
         </View>
       ) : (
         <View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
-          {question.phrase && <TreeActions phrase={question.phrase} text={question.tree.words.join(' ')} palette={palette} />}
+          {question.phrase && <TreeActions phrase={question.phrase} text={question.tree.words.join(' ')} palette={palette} onShare={share} />}
           {!matrix && <StudioButton palette={palette} />}
           <View style={{ flex: 1 }} />
           <Bar label={matrix ? 'عرض الشجرة' : 'عرض المصفوفة'} onPress={() => switchView(() => setMatrix(!matrix))} Icon={matrix ? TreeIcon : GalleryHorizontal} palette={palette} />

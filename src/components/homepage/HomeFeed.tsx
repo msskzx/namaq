@@ -4,7 +4,8 @@ import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 're
 import Link from 'next/link';
 import useSWR from 'swr';
 import * as adhan from 'adhan';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Moon, NotebookPen, ScrollText, Send } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -133,15 +134,6 @@ function Ayah({ ayah }: { ayah: CardAyah }) {
   </p>;
 }
 
-/** Shares a link with the phone's share sheet, or copies it where there is none. */
-async function shareLink(text: string, path: string) {
-  const url = `${location.origin}${path}`;
-  try {
-    if (navigator.share) await navigator.share({ text, url });
-    else await navigator.clipboard.writeText(`${text}\n${url}`);
-  } catch {}
-}
-
 function PairPost({ pair }: { pair: PairCard }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const [a, b] = pair.sides;
@@ -150,20 +142,21 @@ function PairPost({ pair }: { pair: PairCard }) {
   const href = `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}#${compareAnchor(a, b)}`;
   const label = (side: PairCard['sides'][number]) => `${names[side.surah]} ${num(side.ayat[0].number)}`;
   const first = `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …`;
-  return <article className={styles.post} dir="rtl">
-    <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${label(a)} · ${label(b)}`} />
+  return <article className={styles.post} dir="rtl" data-share-card>
+    {/* The image shows the two ayat alone: the post's head and buttons are left out. */}
+    <div data-share-skip><PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${label(a)} · ${label(b)}`} /></div>
     <div className="px-3">
       {pair.sides.map(side => <div key={side.surah} className={styles.dailySide}>
         <p className={styles.dailyLabel} lang="ar">{label(side)}</p>
         <Ayah ayah={side.ayat[0]} />
       </div>)}
     </div>
-    <div className={styles.actions}>
+    <div className={styles.actions} data-share-skip>
       <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saved ? 'أزلها من المحفوظات' : 'احفظ'} title={saved ? 'أزلها من المحفوظات' : 'احفظ'} className={saved ? 'text-[var(--home-accent)]' : undefined}
         onClick={() => toggleBookmark({ id: compareBookmarkId(pair.id), text: first, href }, savedIds)}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Button>
       <Button size="lg" variant="muted" href={ayahHref(`${a.surah}:${a.ayat[0].number}`)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
       <Button size="lg" variant="muted" href={href} aria-label="افتحها في المقارنة" title="افتحها في المقارنة"><ArrowLeftRight aria-hidden /></Button>
-      <Button size="lg" variant="muted" onClick={() => void shareLink(first, href)} aria-label="شارك" title="شارك"><Send aria-hidden /></Button>
+      <ShareImageButton href={href} />
     </div>
   </article>;
 }
@@ -207,7 +200,7 @@ function TreePost({ tree }: { tree: TreePreview & { text: string } }) {
         <BranchTree tree={tree.tree} ayat={tree.ayat} prefixes={tree.prefixes} offsets={tree.offsets} names={names} zoomable={false} viewportHeight={null} surround={{ on: false, sync: true }} />
       </div>
     </Link>
-    <div className={styles.actions}>
+    <div className={styles.actions} data-share-skip>
       <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saved ? 'أزلها من المحفوظات' : 'احفظ'} title={saved ? 'أزلها من المحفوظات' : 'احفظ'} className={saved ? 'text-[var(--home-accent)]' : undefined}
         onClick={() => toggleBookmark({ id: tree.id, text: tree.text, href: tree.href })}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Button>
       <Button size="lg" variant="muted" href={tree.href} aria-label="افتح الشجرة" title="افتح الشجرة"><TreeIcon aria-hidden /></Button>

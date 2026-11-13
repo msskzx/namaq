@@ -1,5 +1,5 @@
 import { Fragment, memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, Share, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -16,6 +16,7 @@ import { Gap, PartRule, Silent } from './StoryParts';
 import { QURAN_FONT, blend, type Palette, CARD } from '@/lib/theme';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
+import { shareCard } from '@/lib/shareImage';
 import TreeIcon from './TreeIcon';
 import { cardVideoPage } from '@/lib/compareVideo';
 import { WEBSITE } from '@/lib/branches';
@@ -26,7 +27,7 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** The card's first words and a link to its two passages on the website. */
-export function shareCard(card: PairCard) {
+export function cardLink(card: PairCard) {
   const [a, b] = card.sides;
   const range = (side: CardSide) => {
     const numbers = side.ayat.length ? side.ayat.map(ayah => ayah.number) : [side.ayah];
@@ -34,7 +35,7 @@ export function shareCard(card: PairCard) {
   };
   // A one-to-many card links to its two surahs, since its far side is one of several ayat.
   const href = card.many ? `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}` : compareHref(a.surah, range(a), b.surah, range(b));
-  void Share.share({ message: `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}` });
+  return `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}`;
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
@@ -122,9 +123,7 @@ function SideHead({ label, keys, palette, group }: { label: string; keys: string
 const lightFor = (lit: string | null, step: ReadStep | undefined, side: number, number: number, onWord: (link: string) => void): Light =>
   ({ lit, reading: step && step.side === side && step.ayah === number ? step.word : undefined, onWord });
 
-function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>; palette: Palette; card: PairCard }) {
-  const [video, setVideo] = useState<((font: string) => string) | null>(null);
-  const record = () => { read.reset(); setVideo(() => cardVideoPage(card, read.plan, read.speed, palette)); };
+function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlong>; palette: Palette; record: () => void }) {
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
   const active = playing || read.status === 'paused';
@@ -152,7 +151,6 @@ function Studio({ read, palette, card }: { read: ReturnType<typeof useReadAlong>
         <View style={{ flex: 1 }} />
         <Pressable onPress={read.close} accessibilityRole="button" accessibilityLabel="إغلاق الاستوديو" style={button}><X size={22} color={palette.muted} /></Pressable>
       </View>
-      <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
 }
@@ -163,6 +161,9 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
   const step = read.step;
+  // Share as video: the card read along in a story frame, from the studio or from the share sheet.
+  const [video, setVideo] = useState<((font: string) => string) | null>(null);
+  const record = () => { read.reset(); setVideo(() => cardVideoPage(card, read.plan, read.speed, palette)); };
   const [tapped, setTapped] = useState<string | null>(null);
   const [picked, setPicked] = useState(0);
   const lit = step ? step.link ?? null : tapped;
@@ -263,31 +264,36 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
     </View>
   );
 
+  const body = (
+      tree ? <>
+        {pickers}
+        {parts ? rowSides(sides).map((row, r) => (
+          <View key={r} style={{ gap: 4 }}>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {sides.map((cardSide, i) => (
+                <View key={i} style={{ flex: 1 }}>
+                  <PartRule label={folded.includes(r) && row[i].ayat.length ? runsLabel(cardSide.rows![r]) : undefined} folded={folded.includes(r)} onToggle={() => toggle(r)} name={partName(cardSide, r)} palette={palette} />
+                </View>
+              ))}
+            </View>
+            {!folded.includes(r) && <CompareBraid sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
+          </View>
+        )) : <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />}
+      </> : <>
+        {side(card.sides[0], 0)}
+        <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
+        {side(card.sides[1], 1)}
+      </>
+  );
+  // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
+  const cardBox = { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, gap: 10 };
+  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record });
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ"
-        style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, gap: 10 }}>
-        {tree ? <>
-          {pickers}
-          {parts ? rowSides(sides).map((row, r) => (
-            <View key={r} style={{ gap: 4 }}>
-              <View style={{ flexDirection: 'row', gap: 8 }}>
-                {sides.map((cardSide, i) => (
-                  <View key={i} style={{ flex: 1 }}>
-                    <PartRule label={folded.includes(r) && row[i].ayat.length ? runsLabel(cardSide.rows![r]) : undefined} folded={folded.includes(r)} onToggle={() => toggle(r)} name={partName(cardSide, r)} palette={palette} />
-                  </View>
-                ))}
-              </View>
-              {!folded.includes(r) && <CompareBraid sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
-            </View>
-          )) : <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />}
-        </> : <>
-          {side(card.sides[0], 0)}
-          <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
-          {side(card.sides[1], 1)}
-        </>}
+      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={cardBox}>
+        {body}
       </Pressable>
-      {read.studio ? <Studio read={read} palette={palette} card={card} /> : (
+      {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
           <Pressable onPress={() => toggleCardSaved(card)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: saved }} accessibilityLabel={saved ? 'إزالة من المحفوظة' : 'حفظ'} style={{ padding: 8 }}>
             <Animated.View style={popped}><Bookmark size={22} color={saved ? palette.accent : palette.muted} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
@@ -307,11 +313,12 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
             <TreeIcon size={22} color={palette.muted} />
           </Pressable>}
           {/* Share is always the last button (the left end), as on the branches tab. */}
-          <Pressable onPress={() => shareCard(card)} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
+          <Pressable onPress={() => share()} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
             <Send size={22} color={palette.muted} />
           </Pressable>
         </View>
       )}
+      <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
 }

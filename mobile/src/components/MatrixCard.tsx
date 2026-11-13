@@ -79,7 +79,7 @@ function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Pale
   </>;
 }
 
-function Cell({ cell, at, palette, width, current, onPress, light, note }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note'] }) {
+function Cell({ cell, at, palette, width, current, onPress, light, note, still }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note']; still?: boolean }) {
   if (!cell) return <View style={{ width }} />;
   const first = cell.ayat[0];
   const last = cell.ayat[cell.ayat.length - 1];
@@ -97,7 +97,7 @@ function Cell({ cell, at, palette, width, current, onPress, light, note }: { cel
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{lastSurah !== surah ? `الآية ${num(number)} ثم سورة ${surahNames[lastSurah]} ${num(lastNumber)}` : `${first === last ? 'الآية' : 'الآيات'} ${range}`}</Text>
-        {current && <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel="قراءة الآية" style={{ position: 'absolute', end: -4, top: -4, padding: 4 }}>
+        {current && !still && <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel="قراءة الآية" style={{ position: 'absolute', end: -4, top: -4, padding: 4 }}>
           <BookOpen size={18} color={palette.muted} />
         </Pressable>}
       </View>
@@ -111,6 +111,16 @@ function Cell({ cell, at, palette, width, current, onPress, light, note }: { cel
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(first.key)}
     </Pressable>
+  );
+}
+
+/** The matrix as share as image draws it: the ayah column only, one card per row. */
+export function MatrixShare({ presentation, palette, width }: { presentation: Presentation; palette: Palette; width: number }) {
+  const matrix = useMemo(() => matrixOf(presentation, false), [presentation]);
+  return (
+    <View style={{ width, gap: 10 }}>
+      {matrix.rows.map((row, r) => <Cell key={r} cell={row.ayah} at="ayah" palette={palette} width={width} current still onPress={() => {}} />)}
+    </View>
   );
 }
 

@@ -12,6 +12,7 @@ import { NavActions } from '@/components/common/NavBar';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
 import { useRouter } from 'next/navigation';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -389,7 +390,8 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
     };
   };
   return (
-    <li id={anchor} className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
+    <li id={anchor} data-share-card className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
+      <div data-share-image>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
         {tree ? <div className="flex flex-col gap-2 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
@@ -412,6 +414,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
           ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined), i)).map(foldPage)} />
         </div>}
       </DoubleTapSave>
+      </div>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
         {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
@@ -424,6 +427,7 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree' }: {
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
+        <ShareImageButton size="icon" iconSize={18} href={`#${anchor}`} onVideo={canRecord() ? read.open : undefined} />
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}

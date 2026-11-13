@@ -15,7 +15,8 @@ import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { Text } from './Text';
-import { AyahText, shareCard } from './CompareCard';
+import { AyahText, cardLink } from './CompareCard';
+import { shareCard } from '@/lib/shareImage';
 import BranchTree from './BranchTree';
 import TreeIcon from './TreeIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
@@ -181,22 +182,28 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
   const saved = savedIdsOf(pair, bookmarks).length > 0;
   const [a, b] = pair.sides;
   const compare = () => openIntent({ tab: 'compare', lead: a.surah, other: b.surah, ayat: [...sideKeys(a), ...sideKeys(b)] });
+  const sides = (
+    <View style={{ paddingHorizontal: 12 }}>
+      {pair.sides.map((side, i) => (
+        <View key={side.surah} style={{ gap: 2, paddingVertical: 8, borderTopWidth: i ? 1 : 0, borderStyle: 'dashed', borderColor: palette.rule }}>
+          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sideLabel(side)}</Text>
+          <AyahText ayah={side.ayat[0]} palette={palette} />
+        </View>
+      ))}
+    </View>
+  );
+  // Share as image: the two ayat alone in a card, without the post's head and buttons.
+  const share = () => shareCard({ content: width => <View style={{ ...cardStyle(palette), width }}>{sides}</View>, link: cardLink(pair) });
   return (
     <View style={cardStyle(palette)}>
       <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${sideLabel(a)} · ${sideLabel(b)}`} palette={palette} />
-      <View style={{ paddingHorizontal: 12 }}>
-        {pair.sides.map((side, i) => (
-          <View key={side.surah} style={{ gap: 2, paddingVertical: 8, borderTopWidth: 1, borderStyle: i ? 'dashed' : 'solid', borderColor: palette.rule }}>
-            <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sideLabel(side)}</Text>
-            <AyahText ayah={side.ayat[0]} palette={palette} />
-          </View>
-        ))}
-      </View>
+      <View style={{ borderTopWidth: 1, borderColor: palette.rule, marginHorizontal: 12 }} />
+      {sides}
       <Actions>
         <Action Icon={Bookmark} label={saved ? 'أزلها من المحفوظات' : 'احفظ'} on={saved} onPress={() => toggleCardSaved(pair)} palette={palette} />
         <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: sideKeys(a)[0] })} palette={palette} />
         <Action Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={compare} palette={palette} />
-        <Action Icon={Send} label="شارك" onPress={() => shareCard(pair)} palette={palette} />
+        <Action Icon={Send} label="شارك" onPress={share} palette={palette} />
       </Actions>
     </View>
   );

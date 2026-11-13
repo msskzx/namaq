@@ -78,7 +78,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   const id = question.phrase ?? question.tree.words.join(' ');
   const label = matrix ? (ar ? 'اعرض الشجرة' : 'Show tree') : (ar ? 'اعرض بطاقات الآيات' : 'Show ayah cards');
   return (
-    <div className="flex flex-col gap-3" dir="rtl">
+    <div className="flex flex-col gap-3" dir="rtl" data-share-card>
       {controls && <NavButtons>
         <Button size="lg" variant="muted" onClick={() => setMatrix(value => !value)} aria-label={label} title={label}>
           {matrix ? <TreeIcon aria-hidden /> : <GalleryHorizontal aria-hidden />}
@@ -86,6 +86,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
         {!matrix && <RotateButton />}
         <AroundButton />
       </NavButtons>}
+      <div data-share-image>
       {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} note={key => {
         const row = correctionOf(rows, key);
         return row && <div className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2" data-answer={row.correct ? "correct" : "incorrect"}>
@@ -107,6 +108,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
             </div>
           );
         }} />}
+      </div>
       {controls && <CardActions id={id} text={question.tree.words.join(' ')} href={branchesHref(id)} />}
     </div>
   );

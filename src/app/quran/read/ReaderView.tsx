@@ -35,6 +35,7 @@ import styles from '@/components/homepage/Home.module.css';
 import mushaf from './Mushaf.module.css';
 import type { IndexSurah } from '@shared/quran/juzIndex';
 import SurahIndex from './SurahIndex';
+import { AyahShareDialog } from '@/components/share/AyahShare';
 import MushafPage, { type Checked, type Write } from './MushafPage';
 
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
@@ -262,6 +263,8 @@ export default function ReaderView({
   const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
+  const [sharing, setSharing] = useState<string | null>(null);
+  const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
   const [preview, setPreview] = useState<Preview | null>(null);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const closeActions = useCallback(() => setActions(null), []);
@@ -541,10 +544,11 @@ export default function ReaderView({
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
-        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)}
+        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onPreview={kind => setPreview({ kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
-      {noting && <NoteDialog ayah={noting} name={plainName(names[Number(noting.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined} ar={ar} onClose={() => setNoting(null)} />}
+      {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
+      {sharing && <AyahShareDialog ayah={sharing} name={surahName(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
       {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
           ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`
