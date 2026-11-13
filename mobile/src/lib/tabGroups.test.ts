@@ -3,7 +3,7 @@ import { buttonOf, isRetap, noteRoute, pageOf } from './tabGroups';
 
 describe('tab groups', () => {
   it('lights the Quran button on its hub and on every tool it opens', () => {
-    for (const route of ['quran', 'branches', 'compare', 'prophets', 'tuhfa', 'words', 'oaths', 'iltifat']) expect(buttonOf(route)).toBe('quran');
+    for (const route of ['quran', 'branches', 'compare', 'prophets', 'tuhfa', 'words', 'oaths', 'iltifat', 'openings']) expect(buttonOf(route)).toBe('quran');
     for (const route of ['index', 'read', 'quizzes', 'utilities']) expect(buttonOf(route)).toBe(route);
     expect(buttonOf('search')).toBe('index');
   });

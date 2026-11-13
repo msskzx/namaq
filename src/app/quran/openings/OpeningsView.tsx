@@ -1,109 +1,111 @@
-import React from 'react';
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { ChevronDown, PenLine } from 'lucide-react';
+import { SettingsHelp } from '@/components/common/SettingsHelp';
+import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
-import { ANSWER_SRC, DISPUTE, NOTES, TASBIH_NOTES, TASBIH_SRC, type OpeningView, type Role, type TasbihRole, type TasbihView } from '@/lib/quran/openings';
 import { mushafText } from '@shared/quran/mushafText';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP, OPENING_KINDS, inKind, kindLabel, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 
-const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
-const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
+export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
-const ROLES: Record<Role, { label: string; block: string; chip: string }> = {
-  condition: { label: 'الشرط', block: 'bg-sky-100 dark:bg-sky-950 border-sky-500', chip: 'bg-sky-500' },
-  answer: { label: 'الجواب', block: 'bg-emerald-100 dark:bg-emerald-950 border-emerald-500', chip: 'bg-emerald-500' },
-  disputed: { label: 'موضع الخلاف في الجواب', block: 'bg-gray-200 dark:bg-gray-800 border-gray-500', chip: 'bg-gray-500' },
+const icon = 'inline-flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-ink)]';
+const ROLE: Record<ConditionRole, string> = {
+  condition: 'border-[var(--home-rule)]',
+  answer: 'border-[var(--home-green)] text-[var(--home-green)]',
+  disputed: 'border-dashed border-[var(--home-muted)]',
 };
 
-const TASBIH_ROLES: Record<TasbihRole, { label: string; mark: string; chip: string }> = {
-  verb: { label: 'لفظ التسبيح', mark: 'bg-violet-200 dark:bg-violet-900', chip: 'bg-violet-500' },
-  scope: { label: 'المسبَّح ومن يسبّح', mark: 'bg-amber-200 dark:bg-amber-900', chip: 'bg-amber-500' },
-  closing: { label: 'الختم بالأسماء والصفات', mark: 'bg-rose-200 dark:bg-rose-900', chip: 'bg-rose-500' },
-};
-
-function runs(words: TasbihView['words']): { role?: TasbihRole; text: string }[] {
-  return words.reduce<{ role?: TasbihRole; text: string }[]>((acc, w) => {
-    const last = acc[acc.length - 1];
-    if (last && last.role === w.role) last.text += ` ${w.text}`;
-    else acc.push({ role: w.role, text: w.text });
-    return acc;
-  }, []);
+function Words({ words }: { words: OpeningWord[] }) {
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-own={word.own || undefined} className={word.own ? 'text-[var(--home-accent)]' : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
 }
 
-function Legend({ label, items }: { label: string; items: { label: string; chip: string }[] }) {
+function Conditions({ lines }: { lines: ConditionText[string] }) {
   return (
-    <ul className="flex flex-wrap gap-4" aria-label={label}>
-      {items.map(i => (
-        <li key={i.label} className="flex items-center gap-2">
-          <span className={`inline-block w-4 h-4 rounded ${i.chip}`} aria-hidden />
-          {i.label}
-        </li>
+    <div className="flex flex-col gap-1 pt-1">
+      {lines.map(line => (
+        <p key={line.key} data-role={line.role} className={`font-quran text-xl leading-[2.1] border-s-2 ps-2 ${ROLE[line.role]}`}>
+          {mushafText(line.words.join(' '))} {num(Number(line.key.split(':')[1]))}
+          {line.role !== 'condition' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</span>}
+        </p>
       ))}
-    </ul>
+    </div>
   );
 }
 
-const link = (s: { title: string; url: string }) => (
-  <li key={s.url}>
-    <a className="underline" href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
-  </li>
-);
-
-export default function OpeningsView({ items, tasbih }: { items: OpeningView[]; tasbih: TasbihView[] }) {
+function Card({ card, names, conditions }: { card: OpeningCard; names: Record<number, string>; conditions: ConditionText }) {
+  const [open, setOpen] = useState(false);
+  const expandable = card.rows.some(row => conditions[row.surah]);
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-2xl">الشرط وجوابه</h2>
-      <Legend label="دلالة الألوان" items={(Object.keys(ROLES) as Role[]).map(r => ROLES[r])} />
-      <div className="grid md:grid-cols-3 gap-4">
-        {items.map(({ surah, lines }) => (
-          <section key={surah.number} className={PANEL} aria-label={`${num(surah.number)} ${surah.plain}`}>
-            <h2 className="text-xl text-amber-600 dark:text-amber-400 mb-2">{`${num(surah.number)} ${surah.plain}`}</h2>
-            {lines.map(l => (
-              <p key={l.ayah} data-role={l.role} className={`text-2xl leading-[2.2] font-quran border-s-4 rounded px-2 mb-1 ${ROLES[l.role].block}`}>
-                <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
-                {mushafText(l.text)}
-                {l.role === 'answer' && !l.sourced && <span className={`${NOTE} ms-2 font-sans`}>قراءتنا</span>}
-              </p>
-            ))}
-          </section>
+    <article id={card.id} data-share-card data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
+      <h2 className="text-xl text-[var(--home-accent)]">{card.title}</h2>
+      {card.rows.map(row => (
+        <div key={row.surah} className="border-t border-[var(--home-rule)]/40 first-of-type:border-t-0 py-1.5">
+          <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
+            <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
+            {row.guest && <span className="rounded-full border border-[var(--home-rule)] px-2 text-xs">{kindLabel(row.guest)}</span>}
+          </div>
+          {open && conditions[row.surah]
+            ? <Conditions lines={conditions[row.surah]} />
+            : <p className="font-quran text-2xl leading-[2.1] text-justify"><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</p>}
+        </div>
+      ))}
+      <div data-share-skip className="flex items-center gap-1">
+        {expandable && <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'إخفاء الشرط وجوابه' : 'الشرط وجوابه'} title="الشرط وجوابه" className={icon}>
+          <ChevronDown size={18} aria-hidden className={open ? 'rotate-180' : undefined} />
+        </button>}
+        <ShareImageButton size="icon" iconSize={16} href={`/quran/openings?kind=${card.kind}#${card.id}`} />
+      </div>
+    </article>
+  );
+}
+
+/** The ten kinds of opening as an inline filter, and the cards of the chosen kind (all of them with none chosen). */
+export default function OpeningsView({ cards, names, conditions }: { cards: OpeningCard[]; names: Record<number, string>; conditions: ConditionText }) {
+  const [kind, setKind] = useState<OpeningKindId | null>(null);
+  const [ready, setReady] = useState(false);
+  const scrolled = useRef(false);
+  useEffect(() => {
+    const asked = new URLSearchParams(window.location.search).get('kind');
+    if (OPENING_KINDS.some(k => k.id === asked)) setKind(asked as OpeningKindId);
+    setReady(true);
+  }, []);
+  // The linked card is scrolled to once the kind in the link has filtered the list.
+  useEffect(() => {
+    if (!ready || scrolled.current) return;
+    scrolled.current = true;
+    if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ block: 'start' });
+  }, [ready]);
+  const choose = (next: OpeningKindId) => {
+    const chosen = kind === next ? null : next;
+    setKind(chosen);
+    window.history.replaceState(window.history.state, '', chosen ? `?kind=${chosen}` : window.location.pathname);
+  };
+  return (
+    <>
+      <SettingsHelp label="ما أنواع الافتتاح؟">
+        {OPENINGS_HELP.map(p => <p key={p}>{p}</p>)}
+        <p className="font-semibold">الشرط وجوابه</p>
+        {CONDITION_NOTES.map(p => <p key={p}>{p}</p>)}
+        <ul className="text-sm text-[var(--home-muted)]">
+          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(s => <li key={s.url}><a className="underline" href={s.url} target="_blank" rel="noreferrer">{s.title}</a></li>)}
+        </ul>
+      </SettingsHelp>
+      <header className="flex items-center gap-2">
+        <h1 className="text-3xl font-bold">افتتاح السور</h1>
+        <Link href="/quizzes/openings" aria-label="اختبار أوائل السور" title="اختبار أوائل السور" className={`ms-auto ${icon}`}><PenLine size={18} aria-hidden /></Link>
+      </header>
+      <div role="group" aria-label="أنواع الافتتاح" className="flex gap-2 overflow-x-auto pb-1">
+        {OPENING_KINDS.map(k => (
+          <button key={k.id} type="button" aria-pressed={kind === k.id} onClick={() => choose(k.id)}
+            className={`shrink-0 rounded-full border px-3.5 py-1 text-base ${kind === k.id ? 'border-[var(--home-action)] bg-[var(--home-action)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
+            {k.label}
+          </button>
         ))}
       </div>
-      <section className={PANEL}>
-        <h2 className="text-lg text-amber-600 dark:text-amber-400 mb-2">ما يجمعها وما يفرقها</h2>
-        <ul className="list-disc ps-5 flex flex-col gap-1">
-          {NOTES.map(n => <li key={n}>{n}</li>)}
-        </ul>
-        <ul className={`${NOTE} mt-2`} aria-label="مصدر الجواب">{link(ANSWER_SRC)}</ul>
-      </section>
-      <section className={PANEL}>
-        <h2 className="text-lg text-amber-600 dark:text-amber-400 mb-2">{DISPUTE.title}</h2>
-        <ul className="list-disc ps-5 flex flex-col gap-1">
-          {DISPUTE.views.map(v => <li key={v}>{v}</li>)}
-        </ul>
-        <ul className={`${NOTE} mt-2`} aria-label="مصدر الخلاف">{DISPUTE.src.map(link)}</ul>
-      </section>
-      <h2 className="text-2xl mt-4">الافتتاح بالتسبيح</h2>
-      <Legend label="دلالة ألوان التسبيح" items={(Object.keys(TASBIH_ROLES) as TasbihRole[]).map(r => TASBIH_ROLES[r])} />
-      <div className="grid md:grid-cols-2 gap-4">
-        {tasbih.map(({ surah, ayah, words }) => (
-          <section key={surah.number} className={PANEL} aria-label={`${num(surah.number)} ${surah.plain}`}>
-            <h3 className="text-xl text-amber-600 dark:text-amber-400 mb-2">{`${num(surah.number)} ${surah.plain}`}</h3>
-            <p className="text-2xl leading-[2.2] font-quran">
-              <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(ayah)}</span>
-              {runs(words).map((r, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && ' '}
-                  {r.role ? <mark data-role={r.role} className={`rounded px-1 text-inherit ${TASBIH_ROLES[r.role].mark}`}>{mushafText(r.text)}</mark> : mushafText(r.text)}
-                </React.Fragment>
-              ))}
-            </p>
-          </section>
-        ))}
-      </div>
-      <section className={PANEL}>
-        <h2 className="text-lg text-amber-600 dark:text-amber-400 mb-2">ما يجمع المسبّحات وما يفرقها</h2>
-        <ul className="list-disc ps-5 flex flex-col gap-1">
-          {TASBIH_NOTES.map(n => <li key={n}>{n}</li>)}
-        </ul>
-        <ul className={`${NOTE} mt-2`} aria-label="مصدر المسبحات">{link(TASBIH_SRC)}</ul>
-      </section>
-    </div>
+      {cards.filter(card => !kind || inKind(card, kind)).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
+    </>
   );
 }

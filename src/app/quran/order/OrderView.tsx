@@ -7,7 +7,7 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import { num } from '@shared/quran/arabicNumber';
-import { OPENING_GROUPS, TASBIH_SURAHS } from '@/lib/quran/openings';
+import { openingHref, openingLike } from '@shared/quran/openingKinds';
 import { THEMES, TOPICS_SRC, type ChipView, type HopView, type TopicView } from '@/lib/quran/surahOrder';
 import { RAIL_COLORS, RailCell, type RailColor, type RailSpan } from '@/components/quran/Rail';
 import { SLOT_COLORS } from '@/components/quran/slotColors';
@@ -225,17 +225,17 @@ export default function OrderView({ chips, hops, juzBySurah }: { chips: ChipView
       <ol className="flex flex-col" aria-label="ترتيب السور">
         {visibleChips.map(s => {
           const hop = hops.find(h => h.hop.from === s.number);
-          const like = (OPENING_GROUPS.find(g => g.includes(s.number)) ?? []).filter(n => n !== s.number);
+          const like = openingLike(s.number);
           return (
             <li key={s.number} className="flex gap-1">
               <div className="min-w-0 flex-1 pb-2">
                 <div className={`${PANEL} flex flex-col gap-2`}>
                   <div className="flex flex-wrap items-center gap-3">
                     <h2 className="text-xl">{`${num(s.number)} ${s.plain}`}</h2>
-                    {like.length > 0 && (
-                      <Button size="sm" variant="outline" href="/quran/openings">
+                    {like && (
+                      <Button size="sm" variant="outline" href={openingHref(like.card, like.kind)}>
                         <FontAwesomeIcon icon={faTableColumns} />
-                        {TASBIH_SURAHS.includes(s.number) ? 'افتتاحها بالتسبيح كالمسبّحات' : `افتتاحها كافتتاح ${like.map(n => num(n)).join(' و')}`}
+                        {`افتتاحها كافتتاح ${like.surahs.map(n => num(n)).join(' و')}`}
                       </Button>
                     )}
                   </div>
