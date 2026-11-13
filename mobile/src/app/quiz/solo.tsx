@@ -12,6 +12,7 @@ import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { memorizedQuestions, readMemorized, withMemorizedScope } from '@shared/memorized';
 import { availability, cleanSolo, startSolo, type SoloSettings } from '@/lib/quiz';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette, CARD } from '@/lib/theme';
@@ -19,7 +20,12 @@ import { usePalette, CARD } from '@/lib/theme';
 /** The solo quiz setup: which trees (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
   const palette = usePalette();
-  const [settings, setSettings] = useState<SoloSettings>(readSettings);
+  // «الأسئلة مما أحفظ فقط» on: the setup opens on what is memorized (settings, «ما أحفظه»); the range can still be changed here.
+  const [settings, setSettings] = useState<SoloSettings>(() => {
+    const saved = readSettings();
+    const memorized = readMemorized();
+    return memorized && memorizedQuestions.read() && !saved.list.saved ? { ...saved, list: { ...saved.list, filters: withMemorizedScope(saved.list.filters, memorized), range: null } } : saved;
+  });
   const [building, setBuilding] = useState(false);
   const unfinished = useRun();
   const change = (next: Partial<SoloSettings>) => {

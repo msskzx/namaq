@@ -75,6 +75,22 @@ describe('TabBar', () => {
     expect(document.activeElement).toBe(toggle);
   });
 
+  it('keeps what is memorized and its two settings in the settings sheet', () => {
+    render(<TabBar />);
+    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    const sheet = screen.getByRole('dialog', { name: 'Settings' });
+    const row = within(sheet).getByRole('button', { name: 'ما أحفظه: لم تختر بعد' });
+    fireEvent.click(row);
+    fireEvent.click(within(sheet).getByRole('button', { name: 'السور' }));
+    fireEvent.click(within(sheet).getByRole('checkbox', { name: 'الملك' }));
+    expect(within(sheet).getByRole('button', { name: 'ما أحفظه: السور الملك' })).toBeTruthy();
+    const questions = within(sheet).getByRole('switch', { name: 'الأسئلة مما أحفظ فقط' }) as HTMLInputElement;
+    expect(questions.checked).toBe(true);
+    fireEvent.click(questions);
+    expect(localStorage.getItem('memorized-questions')).toBe('0');
+    localStorage.clear();
+  });
+
   it('renders the Arabic tabs before the language loads, as the server does', () => {
     state.loaded = false;
     render(<TabBar />);

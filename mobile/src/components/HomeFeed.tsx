@@ -3,7 +3,8 @@ import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Moon, NotebookPen, ScrollText, Send, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
-import { mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, type StoryId } from '@shared/feedSeen';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -214,11 +215,20 @@ const boxWidth = (word: string) => 10 + 6 * word.replace(/[ً-ٰٟۖ-ۭ]/g, '').
 const SHOWN_WORDS = 3;
 
 /** A forgotten ayah that is due: its first words, the rest hidden as boxes, to recall before showing it. */
-function ForgottenPost({ ayah, review, palette }: { ayah: string; review: () => void; palette: Palette }) {
+/** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until tomorrow. */
+const recalled = new Set<string>();
+
+/**
+ * An ayah to recall: its first words, the rest hidden as boxes. A forgotten ayah that is due comes with the review button and
+ * «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» to mark it forgotten instead.
+ */
+function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () => void; palette: Palette }) {
+  const [, setGone] = useState(0);
   const [shown, setShown] = useState(false);
   useEffect(() => setShown(false), [ayah]);
   const words = useMemo(() => ayahText(ayah).split(' ').filter(Boolean), [ayah]);
   const [surah, number] = ayah.split(':').map(Number);
+  if (!review && recalled.has(ayah)) return null;
   return (
     <View style={cardStyle(palette)}>
       <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
@@ -233,13 +243,18 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review: () => 
           {shown ? <EyeOff size={18} color={palette.ink} /> : <Eye size={18} color={palette.ink} />}
           <Text style={{ color: palette.ink, fontSize: 16 }}>{shown ? 'أخفها' : 'أظهرها'}</Text>
         </Pressable>
-        <Pressable onPress={() => rememberAyah(ayah)} accessibilityRole="button" accessibilityLabel="تذكّرتها"
+        <Pressable onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} accessibilityRole="button" accessibilityLabel="تذكّرتها"
           style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 10, borderWidth: 1, borderColor: palette.green, opacity: pressed ? 0.7 : 1 })}>
           <Check size={18} color={palette.green} />
           <Text style={{ color: palette.green, fontSize: 16 }}>تذكّرتها</Text>
         </Pressable>
+        {!review && <Pressable onPress={() => { recalled.add(ayah); markForgotten(ayah); }} accessibilityRole="button" accessibilityLabel="نسيتها"
+          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
+          <LightbulbOff size={18} color={palette.ink} />
+          <Text style={{ color: palette.ink, fontSize: 16 }}>نسيتها</Text>
+        </Pressable>}
         <View style={{ flex: 1 }} />
-        <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />
+        {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
         <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
       </View>
     </View>
@@ -284,18 +299,26 @@ export function Feed({ palette }: { palette: Palette }) {
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
+  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
+  const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
+  const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
   // Back after a long time in the background: a new visit, so what was shown before counts as seen (shared/feedSeen.ts).
   useEffect(() => {
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
   }, []);
-  const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches), [day, batches, seen]);
-  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches), [day, batches, seen]);
+  const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
+    { prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized]);
+  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
+    { prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized]);
   useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
     if (pairs[i]) posts.push(<PairPost key={`p${pairs[i].id}`} pair={pairs[i]} palette={palette} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key="forgotten" ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
+    else if (i === 0 && recall) posts.push(<ForgottenPost key={`recall${recall}`} ayah={recall} palette={palette} />);
     if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
   }
   return (

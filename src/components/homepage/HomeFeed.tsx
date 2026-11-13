@@ -17,7 +17,8 @@ import { placeStore, settingsStore, viewStore } from '@/components/utilities/Uti
 import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { compareAnchor, compareBookmarkId, savedAs } from '@shared/compareBookmarks';
-import { ayahHref, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -29,6 +30,7 @@ import { dayNumber } from '@shared/dailyPick';
 import { clock, FIVE, nextPrayer, prayerDay, PRAYER_NAMES, type Adhan } from '@shared/prayer';
 import surahRows from '@shared/data/quran/surahs.json';
 import { reviewHref, useAyahTexts } from './HomeCards';
+import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 
 /**
@@ -165,12 +167,21 @@ const SHOWN_WORDS = 3;
 /** Rough width of a hidden word's box, from its letters. */
 const boxWidth = (word: string) => `${0.6 + 0.38 * word.replace(/[ً-ٰٟۖ-ۭ]/g, '').length}rem`;
 
-function ForgottenPost({ ayah, review }: { ayah: string; review: string }) {
+/** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until the page reloads. */
+const recalled = new Set<string>();
+
+/**
+ * An ayah to recall: its first words, the rest hidden as boxes. A forgotten ayah that is due comes with the review link and
+ * «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» to mark it forgotten instead.
+ */
+function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
+  const [, setGone] = useState(0);
   const [shown, setShown] = useState(false);
   useEffect(() => setShown(false), [ayah]);
   const text = useAyahTexts([ayah])[ayah];
   const words = text ? text.split(' ') : [];
   const [surah, number] = ayah.split(':').map(Number);
+  if (!review && recalled.has(ayah)) return null;
   return <article className={styles.post} dir="rtl">
     <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${names[surah]} ${num(number)}`} />
     <p className={styles.recall} lang="ar">
@@ -179,9 +190,10 @@ function ForgottenPost({ ayah, review }: { ayah: string; review: string }) {
     </p>
     <div className={styles.recallActions}>
       <button type="button" className={styles.pill} onClick={() => setShown(value => !value)}>{shown ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}{shown ? 'أخفها' : 'أظهرها'}</button>
-      <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => rememberAyah(ayah)}><Check size={18} aria-hidden />تذكّرتها</button>
+      <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }}><Check size={18} aria-hidden />تذكّرتها</button>
+      {!review && <button type="button" className={styles.pill} onClick={() => { recalled.add(ayah); markForgotten(ayah); }}><LightbulbOff size={18} aria-hidden />نسيتها</button>}
       <span className="flex-1" />
-      <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>
+      {review && <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>}
       <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
     </div>
   </article>;
@@ -210,7 +222,7 @@ function TreePost({ tree }: { tree: TreePreview & { text: string } }) {
 
 /** Posts per batch: one pair and one tree; «المزيد للتأمل» adds this many batches. */
 const MORE = 3;
-type Ids = { pairs: (string | null)[]; trees: (string | null)[] };
+type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
 type Content = { pairs: PairCard[]; trees: (TreePreview & { text: string })[] };
 
 /** The feed «للتأمل اليوم»: pairs and trees not seen before, a forgotten ayah that is due, and more on request. */
@@ -221,6 +233,11 @@ export function Feed() {
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
+  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
+  const memorized = useMemorized();
+  const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read, memorizedQuestions.server);
+  const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read, memorizedPrefer.server);
+  const recall = useMemo(() => (memorized && day ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
   // A tab hidden for long and shown again starts a new visit (shared/feedSeen.ts).
   useEffect(() => {
     const change = () => (document.hidden ? leftVisit() : backToVisit());
@@ -231,9 +248,10 @@ export function Feed() {
   // The offsets picked: fresh ids first, in the day's order.
   const picked = useMemo(() => {
     if (!ids) return null;
-    const pick = (list: (string | null)[]) => freshPicks(offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, batches, { tries: list.length });
-    return { pairs: pick(ids.pairs), trees: pick(ids.trees) };
-  }, [ids, seen, batches]);
+    const pick = (list: (string | null)[], keys?: string[][]) => freshPicks(offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, batches,
+      { tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
+    return { pairs: pick(ids.pairs, ids.pairKeys), trees: pick(ids.trees, ids.treeKeys) };
+  }, [ids, seen, batches, prefer, memorized]);
   const { data: content } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, { revalidateOnFocus: false, keepPreviousData: true });
   useEffect(() => { if (content) markFeedSeen([...content.pairs.map(pair => pair.id), ...content.trees.map(tree => tree.id)]); }, [content]);
   const posts: React.ReactNode[] = [];
@@ -242,6 +260,7 @@ export function Feed() {
     const tree = content?.trees[i];
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key="forgotten" ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
+    else if (i === 0 && recall) posts.push(<ForgottenPost key={`recall${recall}`} ayah={recall} />);
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
   }
   return <section className={styles.feed} aria-labelledby="feed-title">

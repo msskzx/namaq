@@ -15,6 +15,7 @@ import TreeIcon from './TreeIcon';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
+import { MemorizedSetting } from '@/components/homepage/Memorized';
 import { useSwipeClose } from './useSwipeClose';
 import PageHint, { resetHints } from './PageHint';
 import styles from './NavBar.module.css';
@@ -82,6 +83,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
             ))}
           </div>
         </div>
+        <MemorizedSetting />
         <ThemeTiles />
         <BranchViewSetting />
         <BranchConnectorSetting />

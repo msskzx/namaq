@@ -31,7 +31,7 @@ const fetchMock = vi.fn(async (url: string) => {
   const query = new URL(url, 'http://localhost').searchParams;
   const body = query.has('page') ? { surah: 18, words: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }
     : query.has('p') ? { pairs: query.get('p')!.split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
-    : { pairs: pairs.map(pair => pair.id), trees: [null, null] };
+    : { pairs: pairs.map(pair => pair.id), trees: [null, null], pairKeys: pairs.map(pair => pair.sides.map(side => `${side.surah}:${side.ayah}`)), treeKeys: [[], []] };
   return { ok: true, json: async () => body } as Response;
 });
 vi.stubGlobal('fetch', fetchMock);
@@ -98,6 +98,41 @@ describe('home', () => {
     expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
     fireEvent.click(within(post).getByRole('button', { name: /تذكّرتها/ }));
     expect(screen.queryByText('هل تذكرها؟')).toBeNull();
+  });
+
+  it('asks once what is memorized: × closes it for good, «اختر» picks in the card', async () => {
+    const { unmount } = render(<Homepage data={data} />);
+    const card = screen.getByRole('region', { name: 'ما الذي تحفظه؟' });
+    fireEvent.click(within(card).getByRole('button', { name: 'اختر ما تحفظه' }));
+    const picking = screen.getByRole('region', { name: 'ما أحفظه' });
+    fireEvent.click(within(picking).getByRole('checkbox', { name: 'الجزء ٣٠' }));
+    expect(JSON.parse(localStorage.getItem('memorized')!)).toEqual({ unit: 'juz', picked: [30] });
+    fireEvent.click(within(picking).getByRole('button', { name: 'تم' }));
+    expect(screen.queryByRole('region', { name: 'ما أحفظه' })).toBeNull();
+    unmount();
+    localStorage.clear();
+    render(<Homepage data={data} />);
+    fireEvent.click(within(screen.getByRole('region', { name: 'ما الذي تحفظه؟' })).getByRole('button', { name: 'إغلاق' }));
+    expect(screen.queryByRole('region', { name: 'ما الذي تحفظه؟' })).toBeNull();
+    expect(localStorage.getItem('memorized-asked')).toBe('1');
+  });
+
+  it('asks about an ayah of the day from what is memorized when nothing forgotten is due, with «نسيتها»', async () => {
+    quranContexts.mockImplementation(async (keys: string[]) => keys.map(key => ({ ayah: { key, words: ['أول', 'ثاني', 'ثالث', 'رابع'] } })));
+    localStorage.setItem('memorized', JSON.stringify({ unit: 'surah', picked: [1] }));
+    render(<Homepage data={data} />);
+    expect(screen.queryByRole('region', { name: 'ما الذي تحفظه؟' })).toBeNull();
+    const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
+    expect(post.textContent).toContain('الفاتحة');
+    expect(within(post).queryByRole('link', { name: 'راجع ما نسيت' })).toBeNull();
+    fireEvent.click(within(post).getByRole('button', { name: /نسيتها/ }));
+    expect(Object.keys(JSON.parse(localStorage.getItem('ayah-forgot')!))[0]).toMatch(/^1:/);
+  });
+
+  it('puts first a pair touching what is memorized, while that setting is on', async () => {
+    localStorage.setItem('memorized', JSON.stringify({ unit: 'surah', picked: [3] }));
+    render(<Homepage data={data} />);
+    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
   });
 
   it('lights a story ring while it holds something new, until it is opened', async () => {

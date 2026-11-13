@@ -20,6 +20,7 @@ import styles from "@/components/common/PaperPage.module.css";
 import NumberInput from "@/components/common/NumberInput";
 import TreeFilters from "./TreeFilters";
 import { QUIZ_CATEGORIES, quizFilters, SCOPE_KEYS, treeScopeParams } from "@shared/quiz/scopeParams";
+import { memorizedFilters, memorizedQuestions, readMemorized } from "@shared/memorized";
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from "@shared/bookmarks";
 import { isCompareBookmark } from "@shared/compareBookmarks";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
@@ -215,6 +216,21 @@ export default function QuizzesPage() {
     pendingParams.current = next.toString();
     router.push(`${pathname}?${next.toString()}`, { scroll: Boolean(changes.length) });
   }, [pathname, router]);
+
+  // «الأسئلة مما أحفظ فقط» (shared/memorized.ts): a trees quiz set up with no range opens on what is memorized, once per visit.
+  const memorizedDefault = useRef(false);
+  useEffect(() => {
+    if (memorizedDefault.current || !topics.includes("BRANCHES") || length) return;
+    memorizedDefault.current = true;
+    const memorized = readMemorized();
+    if (!memorized || !memorizedQuestions.read() || ["saved", "juzFrom", "juzTo", "surahs", "juz", "surahFrom", "surahTo", "pageFrom", "pageTo"].some((key) => searchParams.has(key))) return;
+    const scope = memorizedFilters(memorized);
+    if (!Object.keys(scope).length) return;
+    const next = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(scope)) next.set(key, value);
+    pendingParams.current = next.toString();
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+  }, [topics, length, searchParams, pathname, router]);
 
   const reset = useCallback(() => {
     setCurrent(0);

@@ -8,6 +8,7 @@ import { useTabBarSpace } from '@/components/tabBarSpace';
 import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { ContinueReading, Divider, Feed, PrayerRow, Stories } from '@/components/HomeFeed';
+import { MemorizedPrompt } from '@/components/Memorized';
 import { Shelf, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { openIntent as go, toTab } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -56,6 +57,7 @@ export default function HomeScreen() {
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <Stories palette={palette} />
         <ContinueReading palette={palette} />
+        <MemorizedPrompt palette={palette} />
         <Feed palette={palette} />
 
         <Divider label="أدوات" palette={palette} />
