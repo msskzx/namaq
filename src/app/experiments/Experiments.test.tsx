@@ -1,9 +1,8 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import Experiments from './Experiments';
+import Experiments, { LIVE } from './Experiments';
 import { metadata } from './page';
-import { EXPERIMENT_SECTIONS } from '@/lib/navigation';
 import { getAllNavLinks } from '@/lib/siteLinks';
 
 const { language } = vi.hoisted(() => ({ language: { current: 'en' as 'en' | 'ar' } }));
@@ -11,31 +10,28 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(() => { cleanup(); language.current = 'en'; });
 
 describe('experiments directory', () => {
-  it.each(['en', 'ar'] as const)('lists existing pages in the former navbar order with an experimental notice in %s', current => {
+  it.each(['en', 'ar'] as const)('lists live features first, then every other page, with no page title in %s', current => {
     language.current = current;
     render(<Experiments />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(current === 'ar' ? 'تجارب' : 'Experiments');
-    expect(document.body.textContent).toContain(current === 'ar' ? 'تجريبية وغير مكتملة' : 'experimental and incomplete');
-    expect(screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent)).toEqual(EXPERIMENT_SECTIONS.map(section => section.label[current]));
+    expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
+    expect(document.body.textContent).not.toContain(current === 'ar' ? 'تجريبية' : 'experimental');
     const hrefs = screen.getAllByRole('link').map(link => link.getAttribute('href'));
     for (const { href } of getAllNavLinks(current)) {
       if (href === '/people/prophet-muhammad') continue;
       expect(hrefs, href).toContain(href);
     }
-    expect(hrefs).toContain('/quizzes/party');
-    expect(hrefs).toContain('/quizzes/questions');
+    for (const href of ['/quizzes/party', '/quizzes/questions', '/library?tab=saved', '/library?tab=forgotten', '/quran/read/recite', '/quran/prophets/muhammad']) expect(hrefs).toContain(href);
     expect(hrefs).not.toContain('/experiments');
+    // A live page leaves the experiments list, so it is listed once.
+    for (const { href } of LIVE) expect(hrefs.filter(h => h === href), href).toHaveLength(1);
   });
 
-  it.each(['en', 'ar'] as const)('marks exactly the launched pages as live in %s', current => {
-    language.current = current;
+  it('lists the live features in the first section', () => {
     render(<Experiments />);
-    const live = current === 'ar' ? 'متاح' : 'Live';
-    const marked = screen.getAllByText(live).map(chip => {
-      const item = chip.closest('li');
-      return (item ? item.querySelector('a') : chip.closest('section')!.querySelector('h2 a'))!.getAttribute('href');
-    });
-    expect(marked.sort()).toEqual(['/quizzes', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/read']);
+    const live = screen.getByRole('heading', { level: 2, name: 'Live' }).closest('section')!;
+    const hrefs = [...live.querySelectorAll('a')].map(link => link.getAttribute('href'));
+    expect(hrefs).toEqual(LIVE.map(item => item.href));
+    for (const href of ['/quran/read', '/quran/branches', '/quran/compare', '/quran/prophets']) expect(hrefs).toContain(href);
   });
 
   it('requests exclusion from indexing and link following', () => {
