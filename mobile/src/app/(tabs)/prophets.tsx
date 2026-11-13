@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { Check, ChevronDown } from 'lucide-react-native';
-import { findProphet, PROPHETS } from '@shared/quran/prophets';
+import { findProphet, PROPHETS, prophetName } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';
 import Sheet from '@/components/Sheet';
 import TopBar from '@/components/TopBar';
@@ -16,7 +16,8 @@ export default function ProphetsTab() {
   const palette = usePalette();
   const [slug, setSlug] = useState(() => findProphet(readJson<string>(PICKED) ?? '')?.slug ?? 'musa');
   const [picking, setPicking] = useState(false);
-  const name = findProphet(slug)?.name ?? '';
+  const prophet = findProphet(slug);
+  const name = prophet ? prophetName(prophet) : '';
   const pick = (next: string) => {
     setPicking(false);
     setSlug(next);
@@ -34,15 +35,16 @@ export default function ProphetsTab() {
         </TopBar>
       )} />
       <Sheet open={picking} onClose={() => setPicking(false)} palette={palette}>
-        <View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
+        {/* All the prophets are taller than the sheet on a phone, so the list scrolls. */}
+        <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 16 }}>
           {PROPHETS.map(p => (
             <Pressable key={p.slug} onPress={() => pick(p.slug)} accessibilityRole="button" accessibilityState={{ selected: p.slug === slug }}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 48, borderRadius: 10, backgroundColor: p.slug === slug ? palette.paperDeep : 'transparent' }}>
-              <Text style={{ flex: 1, color: palette.ink, fontSize: 17 }}>{p.name}</Text>
+              <Text style={{ flex: 1, color: palette.ink, fontSize: 17 }}>{prophetName(p)}</Text>
               {p.slug === slug && <Check size={18} color={palette.accent} />}
             </Pressable>
           ))}
-        </View>
+        </ScrollView>
       </Sheet>
     </View>
   );
