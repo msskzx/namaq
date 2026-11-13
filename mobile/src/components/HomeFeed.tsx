@@ -149,14 +149,13 @@ export function ContinueReading({ palette }: { palette: Palette }) {
         <Text style={{ color: palette.muted, fontSize: 14 }}>{shortNames[surah] ?? ''}</Text>
       </View>
       <Pressable onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`}
-        style={{ height: 124, overflow: 'hidden', borderRadius: 10, borderWidth: 1, borderColor: palette.paperDeep, backgroundColor: palette.paper, paddingHorizontal: 12, paddingVertical: 6 }}>
-        <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+        style={{ borderRadius: 10, borderWidth: 1, borderColor: palette.paperDeep, backgroundColor: palette.paper, paddingHorizontal: 12, paddingVertical: 6 }}>
+        {/* Three lines, ended by the text's own ellipsis. A fixed-height box squeezed the text on iOS, which then crammed the rest onto its last line and clipped it mid-word. */}
+        <Text numberOfLines={3} style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
           {words.map((word, i) => typeof word === 'number'
             ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{` ${num(word)} `}</Text>
             : <Text key={i} style={{ fontFamily: QURAN_FONT }}>{`${word} `}</Text>)}
         </Text>
-        {/* The slice fades into the page, as a peek of what comes next. */}
-        <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 40, backgroundColor: palette.paper, opacity: 0.7 }} />
       </Pressable>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <Pressable onPress={read} accessibilityRole="button" accessibilityLabel="اقرأ"
