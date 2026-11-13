@@ -1,8 +1,13 @@
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import type { CompareTarget } from './compare';
 import type { CardWay } from './home';
-import { setIntent } from './intent';
+import { setIntent, type Intent } from './intent';
 import { branchView } from './settings';
+
+const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/compare', read: '/read' };
+
+/** Opens the tab an intent is for, which then takes it. */
+export const openIntent = (intent: Intent) => { setIntent(intent); router.navigate(TAB_OF[intent.tab]); };
 
 /** Opens a compare page on its surah pair, scrolled to the card of the target's two ayat. */
 export function openCompare(target: CompareTarget) {
