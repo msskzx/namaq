@@ -4,6 +4,9 @@ import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, Search, Undo2, X } from 'lucide-react';
+import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
+import { plainName } from '@shared/quran/normalize';
+import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
@@ -150,6 +153,8 @@ export default function ReaderView({
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
+  const [noting, setNoting] = useState<string | null>(null);
+  const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const closeActions = useCallback(() => setActions(null), []);
   /** When the ayah buttons were last closed by a press elsewhere: that press only closes them. */
   const dismissed = useRef(-Infinity);
@@ -270,7 +275,7 @@ export default function ReaderView({
     const onKey = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.defaultPrevented) return;
       if (event.shiftKey && event.key.startsWith('Arrow')) return;
-      if (event.target instanceof Element && event.target.closest('input, textarea, select, [popover], [contenteditable]:not([contenteditable="false"])')) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, [popover], dialog[open], [contenteditable]:not([contenteditable="false"])')) return;
       if (event.key === 'ArrowLeft') go(1);
       else if (event.key === 'ArrowRight') go(-1);
       else if (event.key.toLowerCase() === 'd' && !phone) chooseSpread(!spread);
@@ -401,8 +406,9 @@ export default function ReaderView({
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} />
         ))}
       </article>
-      {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} links={links[actions.key]}
-        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
+      {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
+        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onClose={closeActions} onDismiss={dismissActions} />}
+      {noting && <NoteDialog ayah={noting} name={plainName(names[Number(noting.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined} ar={ar} onClose={() => setNoting(null)} />}
       {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
         {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
           ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`

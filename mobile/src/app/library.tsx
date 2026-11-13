@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, ChevronDown, LightbulbOff } from 'lucide-react-native';
+import { Check, ChevronDown, LightbulbOff, NotebookPen } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import BackBar from '@/components/BackBar';
 import Sheet from '@/components/Sheet';
 import { toTab } from '@/lib/ways';
-import { FORGOTTEN_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
+import { FORGOTTEN_LABEL, NOTE_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { usePalette, type Palette } from '@/lib/theme';
 
-type Tab = 'saved' | 'forgotten';
-const TABS: { tab: Tab; label: string }[] = [{ tab: 'saved', label: 'المحفوظات' }, { tab: 'forgotten', label: 'ما نسيته' }];
+type Tab = 'saved' | 'forgotten' | 'notes';
+const TABS: { tab: Tab; label: string }[] = [{ tab: 'saved', label: 'المحفوظات' }, { tab: 'forgotten', label: 'ما نسيته' }, { tab: 'notes', label: 'تأملاتي' }];
 
 /** The open list's name with a chevron, as the prophets tab's picker; it opens a sheet with both lists. */
 function Picker({ tab, onTab, palette }: { tab: Tab; onTab: (tab: Tab) => void; palette: Palette }) {
@@ -44,9 +44,9 @@ export default function LibraryScreen() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ tab?: string }>();
-  const [tab, setTab] = useState<Tab>(params.tab === 'forgotten' ? 'forgotten' : 'saved');
-  const { cards, forgottenCards, savedMenu, forgottenMenu, menus } = useHomeCards(palette);
-  const shown = tab === 'saved' ? cards : forgottenCards;
+  const [tab, setTab] = useState<Tab>(params.tab === 'forgotten' || params.tab === 'notes' ? params.tab : 'saved');
+  const { cards, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus } = useHomeCards(palette);
+  const shown = tab === 'saved' ? cards : tab === 'notes' ? noteCards : forgottenCards;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {/* A back button, as on the quiz pages: this page is opened from the homepage and has no tab bar. */}
@@ -57,8 +57,9 @@ export default function LibraryScreen() {
       <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 12 }}
         renderItem={({ item }) => tab === 'saved'
           ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />
+          : tab === 'notes' ? <ShelfCard wide note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} onPress={at => noteMenu(item, at)} />
           : <ShelfCard wide card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(item, at)} />}
-        ListEmptyComponent={<Text style={{ paddingVertical: 24, color: palette.muted, fontSize: 15, textAlign: 'center' }}>{tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية بزر الحفظ لتجدها هنا.' : 'لا آيات منسية.'}</Text>} />
+        ListEmptyComponent={<Text style={{ paddingVertical: 24, color: palette.muted, fontSize: 15, textAlign: 'center' }}>{tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية بزر الحفظ لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'}</Text>} />
       {menus}
     </View>
   );

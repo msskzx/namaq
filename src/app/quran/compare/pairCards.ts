@@ -14,6 +14,7 @@ import { STORIES } from '@shared/quran/prophets/stories';
 import type { Story, StoryEvent } from '@shared/quran/prophets/story';
 import links from '@/lib/quran/curation/compareLinks.json';
 import { rootWeights, similarAyahPair } from '@/lib/quran/mutashabih/similar';
+import { dailyPair, dayNumber } from '@shared/dailyPick';
 
 export type { CardSide, ManyOption, PairCard } from '@shared/quran/compareCards';
 export type ReviewState = 'checked' | 'ask' | 'dropped';
@@ -24,6 +25,9 @@ const stored = generated as unknown as StoredCards;
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
 
 export const listedPairs = stored.listed;
+
+/** The homepage's look-alike pair for the server's calendar day, the same card the app shows that day. */
+export const todaysPair = (date = new Date()) => dailyPair(stored, key => words.get(key), dayNumber(date));
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
 export const reviewPairs = stored.review;
 

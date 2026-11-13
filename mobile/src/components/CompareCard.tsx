@@ -38,7 +38,7 @@ function shareCard(card: PairCard) {
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
+export function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
   return (
     <Text style={inline ? { color: plain ? palette.muted : palette.ink } : { fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>

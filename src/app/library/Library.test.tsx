@@ -17,7 +17,7 @@ describe('the saved and forgotten page', () => {
   it('lists every saved card under the Saved switch, each opening the card menu', () => {
     localStorage.setItem('bookmarks', JSON.stringify(saved));
     render(<Library data={data} tab="saved" />);
-    const switcher = screen.getByRole('navigation', { name: 'المحفوظات وما نسيته' });
+    const switcher = screen.getByRole('navigation', { name: 'المحفوظات وما نسيته وتأملاتي' });
     expect(within(switcher).getByRole('link', { name: 'المحفوظات' }).getAttribute('aria-current')).toBe('page');
     expect(within(switcher).getByRole('link', { name: 'ما نسيته' }).getAttribute('href')).toBe('/library?tab=forgotten');
     expect(screen.getAllByRole('button', { name: /آية/ })).toHaveLength(7);
@@ -32,6 +32,21 @@ describe('the saved and forgotten page', () => {
     const cards = screen.getAllByRole('button', { name: /البقرة/ });
     expect(cards.map(card => card.textContent?.slice(0, 8))).toEqual(['البقرة ٢', 'البقرة ١']);
     await waitFor(() => expect(cards[0].textContent).toContain('نص 2:2'));
+  });
+
+  it('lists the notes, newest first, and edits one from its menu', async () => {
+    quranContexts.mockResolvedValue([]);
+    localStorage.setItem('ayah-notes', JSON.stringify({ '2:1': { text: 'أول', at: 1 }, '2:2': { text: 'ثان', at: 2 } }));
+    render(<Library data={data} tab="notes" />);
+    const cards = screen.getAllByRole('button', { name: /البقرة/ });
+    expect(cards.map(card => card.textContent)).toEqual(['البقرة ٢ثان', 'البقرة ١أول']);
+    fireEvent.click(cards[0]);
+    fireEvent.click(within(screen.getByRole('dialog', { name: 'تأمل' })).getByRole('button', { name: 'عدّل التأمل' }));
+    const box = await screen.findByRole('textbox', { name: 'تأملك في هذه الآية' });
+    expect((box as HTMLTextAreaElement).value).toBe('ثان');
+    fireEvent.change(box, { target: { value: 'ثالث' } });
+    await waitFor(() => expect(JSON.parse(localStorage.getItem('ayah-notes')!)['2:2'].text).toBe('ثالث'));
+    expect(document.activeElement).not.toBe(box);
   });
 
   it('says when a list is empty', () => {
