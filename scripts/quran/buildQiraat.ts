@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
+import corrections from './qiraatCorrections.json';
 import type { MushafPage } from '../../shared/quran/readerPage';
 import { farshGroups, sameForm, type DumpReading } from './qiraatFarsh';
 
@@ -138,6 +139,14 @@ for (const [key, list] of Object.entries(ayat)) {
   for (const w of clash) review.push(`- ${key} «${w.readings[0].text}»: listed twice with different readings, left out`);
   ayat[key] = unique.filter(w => !clash.includes(w));
   if (!ayat[key].length) delete ayat[key];
+}
+
+// docs/qiraat-source-audit.md
+for (const correction of corrections) {
+  const list = ayat[correction.ayah];
+  const index = list?.findIndex(word => word.at[0] === correction.at) ?? -1;
+  if (index < 0) throw new Error(`Missing corrected qira'at position ${correction.ayah}:${correction.at}`);
+  list[index] = correction.replacement as Out;
 }
 
 const order = (key: string) => key.split(':').map(Number);
