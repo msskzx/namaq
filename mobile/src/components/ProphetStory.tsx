@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '@/components/Text';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTabBarSpace } from './tabBarSpace';
 import { storyMap } from '@shared/quran/prophets/story';
 import EventPlaces from '@/components/EventPlaces';
 import HelpSheet from '@/components/HelpSheet';
@@ -18,6 +19,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 export default function ProphetStory({ slug, header, inTab = false }: { slug: string; header: (help: () => void) => React.ReactNode; inTab?: boolean }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
+  const tabBarSpace = useTabBarSpace();
   const prophet = useMemo(() => prophetStory(slug), [slug]);
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : undefined), [prophet]);
   const [open, setOpen] = useState<{ event: number; surah?: number }>();
@@ -43,7 +45,7 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {header(() => setHelp(true))}
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: (inTab ? 0 : insets.bottom) + 32, gap: 20 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingVertical: 20, paddingBottom: inTab ? tabBarSpace : insets.bottom + 32, gap: 20 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, fontWeight: '700', lineHeight: 36, paddingHorizontal: 16 }}>{title}</Text>
         <StoryMap map={map} events={events} phases={story.phases} picked={open} palette={palette}
           onPick={(event, surah) => read(event, surah)} onTitle={event => read(event)} />

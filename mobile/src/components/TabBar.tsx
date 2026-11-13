@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { ArrowLeftRight, BookOpen, Feather, ScrollText, type LucideProps } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
+import { TAB_BAR } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 
@@ -19,8 +21,8 @@ const TABS: Record<string, { label: string; Icon: (props: LucideProps) => React.
 };
 
 // Instagram-style (owner, 2026-11-10): while a page scrolls down the bar gets a little smaller, and it comes back on the way up.
-const FULL = 54;
-const SMALL = 42;
+const FULL = TAB_BAR.height;
+const SMALL = 44;
 const ICON_SMALL = 0.8;
 
 export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
@@ -34,12 +36,15 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   useEffect(() => { setCompact(false); }, [state.index]);
   const row = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [FULL, SMALL]) }));
   const icon = useAnimatedStyle(() => ({ transform: [{ scale: interpolate(shrink.value, [0, 1], [1, ICON_SMALL]) }] }));
-  // On the mushaf the bar floats over the page, so showing it does not move the lines; it hides while reading.
+  // A see-through pill floating over the page (owner, 2026-11-13); pages leave room for it with useTabBarSpace. On the mushaf it hides while reading.
   const reading = state.routes[state.index]?.name === 'read';
   if (reading && immersive) return null;
   return (
-    <View style={{ ...(reading ? { position: 'absolute', left: 0, right: 0, bottom: 0 } : null), paddingBottom: insets.bottom, backgroundColor: palette.paper, borderTopWidth: 1, borderColor: palette.rule }}>
-      <Animated.View style={[{ flexDirection: 'row' }, row]}>
+    <View pointerEvents="box-none" style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: insets.bottom + TAB_BAR.lift,
+      borderRadius: 999, boxShadow: '0 6px 24px rgba(0, 0, 0, 0.3)' }}>
+      <Animated.View style={[{ flexDirection: 'row', paddingHorizontal: 6, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }, row]}>
+        <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+        <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
         {state.routes.map((route, i) => {
           const tab = TABS[route.name];
           if (!tab) return null;
