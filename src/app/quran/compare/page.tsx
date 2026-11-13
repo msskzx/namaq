@@ -12,6 +12,7 @@ import SimilarAyat, { similarSurahPairs } from './SimilarAyat';
 import { SurahPairs } from './SurahPairs';
 import { prisma } from '@/lib/prisma';
 import { surahList } from '@/lib/quran/surahList';
+import { surahLabel } from '@/lib/quran/surahLabel';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahInRange, parseCompareRange, surahInRange } from '@/lib/quran/compareRange';
 import { plainName } from '@shared/quran/normalize';
@@ -44,7 +45,8 @@ const surahOf = (value: string | string[] | undefined) => {
 /** `lead` is the surah being browsed (first in the address), when it is the larger one. */
 async function pairPage(a: number, b: number, review = false, todo = false, scope?: CompareScope, lead = a) {
   const surahs = await surahList();
-  const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surah.name, en: surah.nameTransliterated ?? undefined }]));
+  // Surah names as plain labels («البقرة»), as the app writes them on the cards.
+  const names = Object.fromEntries(surahs.map(surah => [surah.number, { ar: surahLabel(surah), en: surah.nameTransliterated ?? undefined }]));
   // Cards open in the default view chosen in settings (tree or matrix), as the branches page does.
   const view = parseBranchView((await cookies()).get(BRANCH_VIEW_COOKIE)?.value);
   return <PairCompare view={view} a={a} b={b} lead={lead} cards={pairCards(a, b, review)} pairs={review ? reviewPairs : listedPairs} names={names} scope={scope} spans={surahSpans} review={review} {...(review ? { states: reviewStates(), editable: process.env.NODE_ENV === 'development', todo } : {})} />;

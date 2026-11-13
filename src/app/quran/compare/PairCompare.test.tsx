@@ -116,7 +116,7 @@ describe('PairCompare', () => {
 
   it('says «سورة» once per surah when the names already start with it', () => {
     render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={{ ...names, 52: { ar: 'سُورَةُ الطُّورِ' } }} />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سُورَةُ الطُّورِ وَسُورَةُ الْقَلَمِ');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سورة الطور وسورة القلم');
   });
 
   it('opens each ayah of a card in the reader', () => {
