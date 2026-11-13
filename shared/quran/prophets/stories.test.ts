@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PROPHETS } from '.';
+import { PROPHETS, prophetName } from '.';
 import { ALYASA } from './alyasa';
 import { AYYUB } from './ayyub';
 import { DAWUD } from './dawud';
@@ -459,6 +459,13 @@ describe('Muhammad', () => {
   it('leaves the name Ahmad to Isa, who gives the good news of him', () => {
     expect(keys).not.toContain('61:6');
     expect(storyKeys(ISA.events)).toContain('61:6');
+  });
+});
+
+describe('PROPHETS', () => {
+  it('names each prophet with «عليه السلام», and the Prophet Muhammad with ﷺ', () => {
+    expect(PROPHETS.map(prophetName)[0]).toBe('آدم عليه السلام');
+    expect(prophetName(PROPHETS[PROPHETS.length - 1])).toBe('محمد ﷺ');
   });
 });
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { NavActions } from '@/components/common/NavBar';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
-import { PROPHETS } from '@shared/quran/prophets';
+import { PROPHETS, prophetName } from '@shared/quran/prophets';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { storyMap, type EventView } from '@shared/quran/prophets/story';
 import type { CompareLink } from '../../compare/pairCards';
@@ -71,13 +71,14 @@ const STORY_HELP = <>
 
 /** Which prophet's story the page shows: the prophet's name and a dropdown, in the top bar as in the app. */
 function ProphetPicker({ slug, onPick }: { slug: string; onPick: (slug: string) => void }) {
-  const name = PROPHETS.find(p => p.slug === slug)?.name;
+  const prophet = PROPHETS.find(p => p.slug === slug);
+  const name = prophet && prophetName(prophet);
   return (
     <label className="relative inline-flex items-center gap-1.5 rounded-[10px] border border-[var(--home-rule)] px-3 py-1.5 text-[0.9375rem] text-[var(--home-ink)]" title="قصة نبي آخر">
       <span className="truncate">{name}</span>
       <ChevronDown size={14} aria-hidden />
       <select value={slug} onChange={e => onPick(e.target.value)} aria-label="قصة نبي آخر" className="absolute inset-0 cursor-pointer opacity-0 text-base">
-        {PROPHETS.map(p => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+        {PROPHETS.map(p => <option key={p.slug} value={p.slug}>{prophetName(p)}</option>)}
       </select>
     </label>
   );
