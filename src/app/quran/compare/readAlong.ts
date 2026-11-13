@@ -19,6 +19,9 @@ export function setReadSpeed(speed: number) {
   try { localStorage.setItem(SPEED_KEY, String(speed)); } catch {}
 }
 
+/** The read-along speed every card and the page video share. */
+export const useReadSpeed = () => useShared().speed;
+
 export type ReadStatus = 'idle' | 'playing' | 'paused' | 'done';
 
 /** A card's read-along. Only one card plays at a time: starting one stops the others. */

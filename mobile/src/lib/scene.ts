@@ -1,4 +1,7 @@
 import type { Beat } from './growth';
+import { PAUSE, READY } from '@shared/video/recorder';
+
+export { VIDEO_TYPES } from '@shared/video/recorder';
 
 /** A box's words and labels, as the video draws them. */
 export type SceneText = { size: number; words: { text: string; color: string }[]; header?: string; footer?: string; muted?: boolean; bare?: boolean; keys?: string[] };
@@ -41,8 +44,6 @@ export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { plac
 export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; font: string; logo: string };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[] };
 
-/** The types tried in order: MP4 shares everywhere; WebM is the fallback some Android phones record. */
-export const VIDEO_TYPES = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
 
 /**
  * The page that records the video: it grows the tree on a canvas with the beats the studio plays, records it,
@@ -60,28 +61,6 @@ ${RECORDER}
 </script></body></html>`;
 }
 
-/**
- * Pausing while it records, for both recorders: the app sends {type: 'pause'} or {type: 'resume'} into the page,
- * the clock (start) skips the paused time and the recorder leaves it out, as on the website.
- */
-export const PAUSE = String.raw`
-var pausedAt = 0;
-function control(event) {
-  var data; try { data = JSON.parse(event.data); } catch (e) { return; }
-  if (data.type === 'pause' && !pausedAt && recorder.state === 'recording') { pausedAt = performance.now(); recorder.pause(); }
-  if (data.type === 'resume' && pausedAt) { start += performance.now() - pausedAt; pausedAt = 0; recorder.resume(); }
-}
-window.addEventListener('message', control); document.addEventListener('message', control);
-`;
-
-/** Starts once the Quran font and the emblem have loaded, so the first frame already has both. */
-export const READY = String.raw`
-function ready(logo, font, go) {
-  var left = 2, once = function () { if (--left === 0) go(); };
-  if (logo.complete) once(); else { logo.onload = once; logo.onerror = once; }
-  if (document.fonts && document.fonts.load) document.fonts.load('40px ' + font).then(once, once); else once();
-}
-`;
 
 const RECORDER = String.raw`
 var FRAME = { width: 1080, height: 1920 };
@@ -257,6 +236,6 @@ else {
     requestAnimationFrame(tick);
   }
   ${PAUSE}
-  ready(logo, look.font, function () { start = performance.now(); recorder.start(); enter(0, 0); requestAnimationFrame(tick); });
+  ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); });
 }
 `;
