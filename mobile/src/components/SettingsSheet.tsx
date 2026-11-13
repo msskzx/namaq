@@ -6,7 +6,7 @@ import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
-import { connectors, tourSeen } from '@/lib/settings';
+import { connectors, haptics, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import type { Palette } from '@/lib/theme';
 
@@ -27,6 +27,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <ViewTiles palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
+        <HapticsSetting palette={palette} />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
           <Pressable onPress={() => { onClose(); setTimeout(() => tourSeen.set(false), REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
@@ -56,4 +57,9 @@ function ConnectorsSetting({ palette }: { palette: Palette }) {
       <Text style={{ color: palette.muted, fontSize: 13 }}>إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.</Text>
     </View>
   );
+}
+
+function HapticsSetting({ palette }: { palette: Palette }) {
+  const [on, setOn] = haptics.use();
+  return <Toggle on={on} onChange={setOn} label="اهتزاز خفيف عند فتح أزرار البطاقة أو الآية" palette={palette} />;
 }

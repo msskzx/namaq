@@ -65,6 +65,12 @@ export function pageGroups(items: (ReaderItem | MushafItem)[], top?: number): (W
 }
 
 
+/** One ayah's words on the page it starts on; every page of this mushaf ends where an ayah ends. `top` is the surah running at the top of that page. */
+export function ayahWords(key: string, page: { items: MushafItem[] }, top?: number): string[] {
+  const [surah, ayah] = key.split(':').map(Number);
+  return pageGroups(page.items, top).flatMap(line => line?.filter(group => group.word && group.surah === surah && group.ayah === ayah).map(group => group.word) ?? []);
+}
+
 export async function pageOfAyah(
   surah: number,
   ayah: number,

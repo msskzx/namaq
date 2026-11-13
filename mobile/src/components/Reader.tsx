@@ -23,6 +23,7 @@ import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from
 import { pageModel, reciteView } from '@/lib/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
+import { buzz } from '@/lib/haptics';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -168,7 +169,7 @@ export default function Reader() {
     else if (action === 'next-ayah') revealNextAyah();
     else if (action === 'next-word') revealNextWord();
     else if (action === 'back') stepBackOne();
-    else if (key && action === 'actions') setActions({ key, x, y });
+    else if (key && action === 'actions') { buzz(); setActions({ key, x, y }); }
     else if (key && action === 'forgot') markForgotten(key);
     else if (key && action === 'save') toggleSaved(key);
   };
