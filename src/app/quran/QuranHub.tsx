@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, BookMarked, ListStart, MessagesSquare, ScrollText, SunMoon, type LucideIcon } from 'lucide-react';
+import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, type LucideIcon } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { QURAN_TOOLS } from '@/lib/navigation';
@@ -19,6 +19,7 @@ const ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/oaths': SunMoon,
   '/quran/iltifat': MessagesSquare,
   '/quran/openings': ListStart,
+  '/quran/order': ListOrdered,
 };
 
 /** The Quran tab, as in the app (owner, 2026-11-13): its tools as tiles, two to a row on a phone. The mushaf has its own tab. */

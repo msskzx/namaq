@@ -5,6 +5,7 @@ import path from 'node:path';
 
 const root = path.resolve(process.argv[2] ?? 'mobile/dist');
 const port = Number(process.argv[3] ?? 8082);
+if (!fs.existsSync(path.join(root, 'index.html'))) throw new Error('Missing web export entrypoint: ' + path.join(root, 'index.html'));
 const types = {
   '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json',
   '.ttf': 'font/ttf', '.otf': 'font/otf', '.woff2': 'font/woff2', '.png': 'image/png', '.svg': 'image/svg+xml',

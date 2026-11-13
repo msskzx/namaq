@@ -4,10 +4,11 @@ import { OATHS_HELP } from '@shared/quran/oaths';
 import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
 import { VOICE_NAME, voiceColor } from './Iltifat';
+import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings' | 'order';
 
 /** A coloured sample word and what its colour means. */
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
@@ -19,7 +20,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -42,6 +43,9 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
             {examples().map(view => <Text key={view.key} style={[paragraph, { color: palette.muted, fontSize: 14, lineHeight: 22 }]}>{view.name} {rangeLabel(view)}: {view.source}</Text>)}
           </View>
           <Text style={[paragraph, { color: palette.muted, fontSize: 14 }]}>النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</Text>
+        </> : topic === 'order' ? <>
+          {ORDER_HELP.map((text, i) => <Text key={i} style={i === ORDER_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
+          {Object.values(BOOKS).map(book => <Text key={book.shamela} accessibilityRole="link" style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]} onPress={() => Linking.openURL(`https://shamela.ws/book/${book.shamela}`)}>{book.title}</Text>)}
         </> : topic === 'openings' ? <>
           {OPENINGS_HELP.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
           <Text style={[paragraph, { fontWeight: '700' }]}>الشرط وجوابه</Text>
