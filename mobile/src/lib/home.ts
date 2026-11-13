@@ -30,6 +30,12 @@ export function referencesOf(keys: string[], range = false): Reference[] {
   return [...bySurah].map(([surah, ayat]) => ({ surah, ayat, ...(range && ayat.length > 1 ? { range: true } : {}) }));
 }
 
+/**
+ * The saved items the app can still show. A saved tree the data review removed has nothing to open, so it is left
+ * out quietly; it stays in storage, so it comes back if the tree returns.
+ */
+export const shownBookmarks = (items: Bookmark[]) => items.filter(item => bookmarkKind(item) !== 'tree' || !!keysOfTree(item.id));
+
 /** A homepage shelf card: what it is, which ayat it holds, and where in the app it opens. */
 export function savedCard(item: Bookmark): SavedCard {
   const kind = bookmarkKind(item);

@@ -7,12 +7,15 @@ import { deviceStorage } from './deviceStorage';
 const PLAYER_KEY = 'namaq-party-player';
 const NAME_KEY = 'namaq-party-name';
 
+/** The live worker, the website's NEXT_PUBLIC_PARTY_URL. Public, so a published build never depends on an Expo env setting. */
+const PUBLISHED_PARTY_URL = 'https://namaq.msskzx.workers.dev';
+
 /**
- * The worker's address, set at build time (EXPO_PUBLIC_PARTY_URL), the same value as the website's NEXT_PUBLIC_PARTY_URL.
- * Only the dev server falls back to a local worker; a published build without it has no party server (null).
+ * The worker's address: EXPO_PUBLIC_PARTY_URL when set at build time, else a local worker on the dev server
+ * and the live worker in a published build (the trial updates and store builds).
  */
 export const partyUrl = (): string | null => {
-  const url = process.env.EXPO_PUBLIC_PARTY_URL ?? (__DEV__ ? 'http://localhost:8787' : null);
+  const url = process.env.EXPO_PUBLIC_PARTY_URL ?? (__DEV__ ? 'http://localhost:8787' : PUBLISHED_PARTY_URL);
   return url ? url.replace(/\/$/, '') : null;
 };
 

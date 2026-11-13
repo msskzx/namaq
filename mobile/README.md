@@ -30,7 +30,7 @@ npm run typecheck
 npx expo export --platform web   # a web build of the app, used to check screens in a browser
 ```
 
-The party quiz talks to the same Cloudflare worker as the website, `https://namaq.msskzx.workers.dev`. Its address is the EAS environment variable `EXPO_PUBLIC_PARTY_URL`, set in the **production** environment on expo.dev, so builds and updates must use `--environment production`. Without it the app looks for a local worker on `http://localhost:8787` (`npm run dev` in `party/`).
+The party quiz talks to the same Cloudflare worker as the website, `https://namaq.msskzx.workers.dev`. A published build (the `trial` updates and store builds) uses that address unless the build sets `EXPO_PUBLIC_PARTY_URL`; the dev server uses a local worker on `http://localhost:8787` (`npm run dev` in `party/`).
 
 The phone keeps its state (bookmarks, the open tree and its zoom) in `expo-sqlite/kv-store`. The web build keeps it in localStorage.
 

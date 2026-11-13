@@ -17,7 +17,7 @@ import Button, { Row } from '@/components/Button';
 import Tour from '@/components/Tour';
 import { ayahText, surahs, surahNames } from '@/lib/mushaf';
 import { listedPairs, type CompareTarget } from '@/lib/compare';
-import { cardWays, forgottenCard, forgottenWays, savedCard, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import { cardWays, forgottenCard, forgottenWays, savedCard, shelfText, shownBookmarks, type CardWay, type SavedCard } from '@/lib/home';
 import CardMenu, { type MenuAt, type MenuItem } from '@/components/CardMenu';
 import CompareTargetsSheet from '@/components/CompareTargetsSheet';
 import { followWay } from '@/lib/ways';
@@ -163,7 +163,8 @@ function Shelf({ cards, render }: { cards: SavedCard[]; render: (card: SavedCard
 /** The website's homepage on the phone: the Quran box, the saved shelf, and the quizzes. The logo in the top bar opens it. */
 export default function HomeScreen() {
   const palette = usePalette();
-  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const allBookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const bookmarks = useMemo(() => shownBookmarks(allBookmarks), [allBookmarks]);
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
   const [menu, setMenu] = useState<{ at: MenuAt; label: string; items: MenuItem[] } | null>(null);
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
