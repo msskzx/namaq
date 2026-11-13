@@ -1,11 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { MushafPage } from '@shared/quran/readerPage';
-import type { RecitePosition } from '@shared/quran/recite';
+import type { MushafPage } from './readerPage';
+import type { RecitePosition } from './recite';
 import { pageModel, reciteView } from './recitePage';
 
-const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../../../shared/data/quran/mushaf', `${n}.json`), 'utf8'));
+const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
 
 /** Steps a recitation forward with the main button until the page is done. */
 function steps(model: ReturnType<typeof pageModel>, from: RecitePosition) {

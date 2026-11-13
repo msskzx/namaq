@@ -115,6 +115,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  localStorage.clear();
 });
 
 describe('QuizzesPage', () => {
@@ -246,6 +247,54 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Question 1 - incorrect' }));
     expect(screen.getByText('Incorrect')).toBeTruthy();
     expect(screen.getByText('Correct')).toBeTruthy();
+  });
+
+  it('offers an unfinished quiz at the setup and continues it where it stopped, with its own questions', () => {
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    cleanup();
+
+    const original = questions[0];
+    questions[0] = { ...original, promptArabic: 'سؤال جديد؟' };
+    try {
+      nav.reset('/quizzes?topic=PEOPLE');
+      render(<QuizzesPage />);
+      expect(screen.getByText('You have an unfinished quiz, at question 2 of 5.')).toBeTruthy();
+      expect(screen.getByRole('link', { name: /Continue it/ }).getAttribute('href')).toBe('/quizzes?topic=PEOPLE&length=5');
+      cleanup();
+
+      nav.reset('/quizzes?topic=PEOPLE&length=5');
+      render(<QuizzesPage />);
+      expect(screen.getByText('السؤال العربي 2؟')).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Question 1 - incorrect' }));
+      expect(screen.getByText('السؤال العربي 1؟')).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('lets go of an unfinished quiz on «Leave it», on a new start and once submitted', () => {
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+    cleanup();
+
+    nav.reset('/quizzes?topic=PEOPLE');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Leave it' }));
+    expect(screen.queryByText(/unfinished quiz/)).toBeNull();
+    expect(localStorage.getItem('quiz-solo-run')).toBeNull();
+    cleanup();
+
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(localStorage.getItem('quiz-solo-run')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'New quiz' }));
+    expect(screen.queryByText(/unfinished quiz/)).toBeNull();
   });
 
   it('opens the quiz reference overlay from a locked question', () => {

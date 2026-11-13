@@ -21,7 +21,7 @@ import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah, type CompareTarget } from '@/lib/compare';
 import { openCompare, openTreesOf } from '@/lib/ways';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
-import { pageModel, reciteView } from '@/lib/recitePage';
+import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';

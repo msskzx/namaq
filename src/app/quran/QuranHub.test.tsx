@@ -15,7 +15,7 @@ afterEach(() => {
 const routes = [
   '/quran/read', '/quran/compare', '/quran/words', '/quran/branches',
   '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings',
-  '/quran/oaths', '/quran/tajwid/tuhfat-al-atfal', '/quran/prophets/musa',
+  '/quran/oaths', '/quran/tajwid/tuhfat-al-atfal', '/quran/prophets',
 ];
 
 describe('QuranHub', () => {
@@ -31,7 +31,7 @@ describe('QuranHub', () => {
     render(<QuranHub />);
     expect(screen.getByRole('heading', { level: 1, name: 'القرآن' })).toBeTruthy();
     expect(within(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('article')!).getByRole('link', { name: 'قراءة القرآن' }).getAttribute('href')).toBe('/quran/read');
-    expect(within(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('article')!).getByRole('link', { name: 'قصص الأنبياء في القرآن' }).getAttribute('href')).toBe('/quran/prophets/musa');
+    expect(within(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('article')!).getByRole('link', { name: 'قصص الأنبياء في القرآن' }).getAttribute('href')).toBe('/quran/prophets');
   });
 
   it('writes the titles and descriptions in English', () => {

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { mushafPages, type MushafPage } from '@shared/quran/readerPage';
 import surahs from '@shared/data/quran/surahs.json';
-import { pageModel, reciteView } from './recitePage';
+import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { cardOf } from './branches';
 import { RECITE_AYAH, RECITE_PAGE, TOUR_AYAH, tourPiece } from './tour';
 

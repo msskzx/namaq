@@ -19,7 +19,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
       quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
     ] },
     { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
-      { href: '/quran/prophets/musa', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
+      { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
       quran('/quran/iltifat', { ar: 'الالتفات', en: 'Iltifat' }),
       quran('/quran/openings', { ar: 'افتتاح السور', en: 'Surah openings' }),
       quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
@@ -57,6 +57,7 @@ export const NAV_SECTIONS: NavSection[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
   { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, groups: [] },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
+  { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, groups: [] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];
 

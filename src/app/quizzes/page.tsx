@@ -40,6 +40,7 @@ import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
 import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
+import { readRun, writeRun, type SoloRun } from "./soloRun";
 import QuestionReview from "./QuestionReview";
 import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -72,6 +73,8 @@ function QuizModes({ ar }: { ar: boolean }) {
     </div>
   );
 }
+
+type QuizData = { questions: QuizQuestionView[]; surahNames?: Record<number, string> };
 
 interface QuizQuestionView {
   key: string;
@@ -129,15 +132,22 @@ export default function QuizzesPage() {
     ? `/api/quiz/availability?${topicQuery}${scopeQuery}`
     : null;
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(availabilityQuery, fetcher);
-  const started = Boolean(topics.length && length && availability?.lengths.includes(length) && (!topics.includes("PERSON_CIRCLE") || person));
-  const query = started
+  // undefined until this browser's unfinished quiz is read, so a quiz it holds is not fetched anew first.
+  const [stored, setStored] = useState<SoloRun<QuizData> | null | undefined>(undefined);
+  useEffect(() => setStored(readRun<QuizData>()), []);
+  const search = searchParams.toString();
+  const restored = stored && stored.search === search ? stored : null;
+  const started = Boolean(topics.length && length && stored !== undefined && (restored || availability?.lengths.includes(length)) && (!topics.includes("PERSON_CIRCLE") || person));
+  const query = started && !restored
     ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&leaves=${leaves}` : ""}`
     : null;
-  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[]; surahNames?: Record<number, string> }>(query, fetcher, {
+  const { data: fetched, error, isLoading: fetching } = useSWR<QuizData>(query, fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
   });
+  const data = restored?.data ?? fetched;
+  const isLoading = !restored && fetching;
   useHideFooter(started);
   const [chosenLength, setChosenLength] = useState(5);
   const [current, setCurrent] = useState(0);
@@ -155,6 +165,21 @@ export default function QuizzesPage() {
     setReviewing(false);
     setReferenceIndex(null);
   }, [query]);
+  useEffect(() => {
+    if (!restored) return;
+    setCurrent(Math.min(restored.current, restored.data.questions.length - 1));
+    setAnswers(restored.answers);
+    setTyped(restored.typed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per quiz taken from storage
+  }, [restored?.search]);
+  // Every step of an unfinished quiz is kept; a submitted one is let go.
+  useEffect(() => {
+    if (!started || !data?.questions.length) return;
+    if (submitted) { writeRun(null); return; }
+    const run = { search, data, current, answers, typed };
+    writeRun(run);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `search` names the quiz `data` belongs to
+  }, [started, data, current, answers, typed, submitted]);
 
   const pendingParams = useRef(searchParams.toString());
   useEffect(() => { pendingParams.current = searchParams.toString(); }, [searchParams]);
@@ -176,10 +201,13 @@ export default function QuizzesPage() {
     setSubmitted(false);
     setReviewing(false);
     setReferenceIndex(null);
+    // Back at the setup, an unfinished quiz is offered to continue; a submitted one is gone.
+    setStored(readRun<QuizData>());
     router.push(`${pathname}?${topicQuery || "solo=1"}`);
   }, [pathname, router, topicQuery]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
+  const leave = () => { writeRun(null); setStored(null); };
   const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree ? typed[index] : answers[index])), [questions, answers, typed]);
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
@@ -216,6 +244,13 @@ export default function QuizzesPage() {
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
+          {stored && <section className={`mb-6 flex flex-col gap-3 border-[var(--home-accent)] ${styles.panel}`} aria-label={ar ? "اختبار لم تُنهه" : "Unfinished quiz"}>
+            <p>{ar ? `لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(stored.current + 1)} من ${num(stored.data.questions.length)}.` : `You have an unfinished quiz, at question ${stored.current + 1} of ${stored.data.questions.length}.`}</p>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="primary" href={`${pathname}?${stored.search}`}><FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />{ar ? "أكمله" : "Continue it"}</Button>
+              <Button onClick={leave}>{ar ? "اتركه" : "Leave it"}</Button>
+            </div>
+          </section>}
           <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
             <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {TOPIC_GROUPS.map((group) => (
@@ -273,7 +308,7 @@ export default function QuizzesPage() {
                     value={availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]}
                     min={availability.lengths[0]} max={availability.lengths[availability.lengths.length - 1]} step={5} steppers={false}
                     onChange={setChosenLength} />
-                  <Button variant="primary" onClick={() => setParam({ length: String(availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]) })}>
+                  <Button variant="primary" onClick={() => { leave(); setParam({ length: String(availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]) }); }}>
                     <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
                     {ar ? "ابدأ الاختبار" : "Start quiz"}
                   </Button>
