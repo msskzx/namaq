@@ -225,7 +225,8 @@ function withStoryParts(cards: PairCard[], x: number, y: number, verdicts?: Reco
       const sides = sideAyat[p];
       const marks = [new Map<number, Record<number, CardMark>>(), new Map<number, Record<number, CardMark>>()];
       for (const row of part.rows) if (row[0].length && row[1].length) partMarks(surahs, row).forEach((side, s) => side.forEach((ayah, n) => marks[s].set(n, ayah)));
-      engineMarks.forEach((side, s) => side.forEach((ayah, n) => { if (sides[s].includes(n)) marks[s].set(n, ayah); }));
+      // Engine marks win on the words they cover; the part's own marks stay on the rest of the ayah.
+      engineMarks.forEach((side, s) => side.forEach((ayah, n) => { if (sides[s].includes(n)) marks[s].set(n, { ...marks[s].get(n), ...ayah }); }));
       const firstIds = sides.map((numbers, s) => `${surahs[s]}:${numbers[0]}`).join('|');
       // A pair goes with the part that shows both its ayat, else with the part holding its first.
       const holds = (q: number, id: string) => id.split('|').every((key, s) => sideAyat[q][s].includes(ayahOfKey(key)));
