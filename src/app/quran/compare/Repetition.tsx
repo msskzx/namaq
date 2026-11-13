@@ -40,10 +40,6 @@ export function RepetitionProvider({ children }: { children: React.ReactNode }) 
   return <RepetitionContext.Provider value={{ data, failed }}>{children}</RepetitionContext.Provider>;
 }
 
-export function useRepetition() {
-  return useContext(RepetitionContext).data;
-}
-
 function Status() {
   const { failed } = useContext(RepetitionContext);
   return failed ? <p role="alert" className={NOTE}>تعذر تحميل البيانات.</p> : <LoadingSpinner />;

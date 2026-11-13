@@ -2,6 +2,7 @@ import { keyStore } from './storage';
 import { juzOf } from './quran/juz';
 import surahRows from './data/quran/surahs.json';
 import { dailyIndex } from './dailyPick';
+import type { CompareScope } from './quran/compareScope';
 
 /**
  * What the reader says they have memorized (owner, 2026-11-13), kept on this device only and never shown or counted:
@@ -83,4 +84,16 @@ export function withMemorizedScope<T extends Record<string, string | undefined>>
   const next: Record<string, string | undefined> = { ...filters };
   SCOPE.forEach(key => delete next[key]);
   return { ...next, ...memorizedFilters(memorized) } as T;
+}
+
+/** The compare filter's scope for what is memorized (the one-tap «ما أحفظه»), or none when nothing or the whole Quran is said. */
+export function memorizedScope(memorized: Memorized | null): CompareScope | undefined {
+  if (!memorized || 'all' in memorized) return undefined;
+  return { unit: memorized.unit === 'juz' ? 'juzs' : 'surahs', list: memorized.picked };
+}
+
+/** Whether a compare scope is exactly what is memorized, so the «ما أحفظه» switch shows on. */
+export function isMemorizedScope(scope: CompareScope | undefined, memorized: Memorized | null): boolean {
+  const mine = memorizedScope(memorized);
+  return !!scope && !!mine && 'list' in scope && scope.unit === mine.unit && [...scope.list].sort((a, b) => a - b).join() === mine.list.join();
 }
