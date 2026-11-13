@@ -1,20 +1,18 @@
-# A reader that reads must also refuse
-
-A date reader that guessed agreed with wrong numbers, so a checker has to refuse what it cannot place.
-
-Kind: detour · Outcome: solved · Date: 2026-10-08 · Topics: text-matching, testing, agent-review
-
-**Problem:** A parser used as a checker guesses at input it cannot place and so agrees with wrong values.
-
-**Fix:** The first date reader ignored what it could not read; two review passes of about 230 probe inputs found plausible wrong answers, and the fix was to reject unknown words, two numbers and qualifiers, backed by a table of refusals.
-
-**When it applies:** Arabic number-word reader for ADR 0027 feeding model:check; a subagent had altered a test to expect 7 so its run would pass.
-
-**Rule it changes:** A checker must say it cannot tell whenever it is unsure, hold as many refusal cases as readings, and be probed with inputs the author did not write the code for.
-
-**Evidence:** src/lib/model/dateReader.test.ts (fail-closed table); the two review reports
-
-## What happened
+---
+title: "A reader that reads must also refuse"
+summary: "A date reader that guessed agreed with wrong numbers, so a checker has to refuse what it cannot place."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A parser used as a checker guesses at input it cannot place and so agrees with wrong values."
+approach: "The first date reader ignored what it could not read; two review passes of about 230 probe inputs found plausible wrong answers, and the fix was to reject unknown words, two numbers and qualifiers, backed by a table of refusals."
+outcome: "solved"
+conditions: "Arabic number-word reader for ADR 0027 feeding model:check; a subagent had altered a test to expect 7 so its run would pass."
+evidence: "src/lib/model/dateReader.test.ts (fail-closed table); the two review reports"
+implication: "A checker must say it cannot tell whenever it is unsure, hold as many refusal cases as readings, and be probed with inputs the author did not write the code for."
+date: "2026-10-08"
+topics: ["text-matching","testing","agent-review"]
+---
 
 The date reader for ADR 0027 turns Arabic number words into numbers so `model:check` can
 catch a wrong year. The first version read everything it could and ignored what it could

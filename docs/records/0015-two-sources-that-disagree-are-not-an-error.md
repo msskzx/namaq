@@ -1,20 +1,18 @@
-# Two sources that disagree are not an error
-
-Two sources that contradict each other are data, while one source contradicting itself is an error.
-
-Kind: challenge · Outcome: solved · Date: 2026-10-08 · Topics: evidence-model, data-sync
-
-**Problem:** Deciding whether a validator should reject contradictions between sources when the data model must hold disagreeing traditions.
-
-**Fix:** orderingProblems separates a cycle within one work, a data error, from a cycle that appears only across two works, a dispute that keeps both orderings and flags the events.
-
-**When it applies:** ADR 0022 says the catalog never picks one reading; ordering of events is checked as a graph, with the work recorded on each ordering.
-
-**Rule it changes:** When a check fires, ask who is contradicting whom: one author, a typo, or two, data; keep the source on every ordering.
-
-**Evidence:** src/lib/catalog/ordering.test.ts; src/lib/catalog/ordering.ts; orderings/badr-before-death-of-uthman-ibn-mazun.ts
-
-## What happened
+---
+title: "Two sources that disagree are not an error"
+summary: "Two sources that contradict each other are data, while one source contradicting itself is an error."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "Deciding whether a validator should reject contradictions between sources when the data model must hold disagreeing traditions."
+approach: "orderingProblems separates a cycle within one work, a data error, from a cycle that appears only across two works, a dispute that keeps both orderings and flags the events."
+outcome: "solved"
+conditions: "ADR 0022 says the catalog never picks one reading; ordering of events is checked as a graph, with the work recorded on each ordering."
+evidence: "src/lib/catalog/ordering.test.ts; src/lib/catalog/ordering.ts; orderings/badr-before-death-of-uthman-ibn-mazun.ts"
+implication: "When a check fires, ask who is contradicting whom: one author, a typo, or two, data; keep the source on every ordering."
+date: "2026-10-08"
+topics: ["evidence-model","data-sync"]
+---
 
 The first idea for ordering events was the obvious one: a graph, so check it for cycles and reject
 the catalog if one exists. The critic agent pointed out that this makes Namaq pick a side. If one

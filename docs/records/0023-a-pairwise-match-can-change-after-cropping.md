@@ -1,22 +1,19 @@
-# A pairwise match can change after cropping
-
-Candidate pairs passed the matching policy, but selecting shorter spans required checking those exact spans again.
-
-Kind: challenge · Outcome: solved · Date: 2026-11-04 · Topics: testing, text-matching, evidence-model
-
-**Problem:** A group passes a pairwise predicate before its inputs are transformed, then publishes transformed members without repeating the predicate.
-
-**Fix:** Build groups whose every pair matches, select the word spans, then compare every selected pair again. Retain valid groups and recover qualifying pairs when a larger cropped group fails. Rank closeness using the original complete ayat.
-
-**When it applies:** Quran comparisons over 6,236 ayat, with local spans, morphology-aware matching, retained book cases and tree/matrix views.
-
-**Rule it changes:** Recheck an invariant after the transformation that produces the published inputs, and define the denominator of a user-facing similarity score.
-
-**Evidence:** Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b; engine.ts final clipped-span validation and wholePlace coverage, engine.test.ts automatic-pair and ranking regressions.
-
-**Builds on:** [0021](0021-absorbing-a-phrase-must-preserve-its-entry-points.md), [0022](0022-shared-forms-do-not-pair-word-occurrences.md)
-
-## What happened
+---
+title: "A pairwise match can change after cropping"
+summary: "Candidate pairs passed the matching policy, but selecting shorter spans required checking those exact spans again."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "A group passes a pairwise predicate before its inputs are transformed, then publishes transformed members without repeating the predicate."
+approach: "Build groups whose every pair matches, select the word spans, then compare every selected pair again. Retain valid groups and recover qualifying pairs when a larger cropped group fails. Rank closeness using the original complete ayat."
+outcome: "solved"
+conditions: "Quran comparisons over 6,236 ayat, with local spans, morphology-aware matching, retained book cases and tree/matrix views."
+evidence: "Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b; engine.ts final clipped-span validation and wholePlace coverage, engine.test.ts automatic-pair and ranking regressions."
+implication: "Recheck an invariant after the transformation that produces the published inputs, and define the denominator of a user-facing similarity score."
+date: "2026-11-04"
+topics: ["testing","text-matching","evidence-model"]
+buildsOn: ["namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points","namaq/0022-shared-forms-do-not-pair-word-occurrences"]
+---
 
 The new comparison inventory first compared complete ayat and built groups whose
 members all matched one another. It then chose shorter word spans for the card.

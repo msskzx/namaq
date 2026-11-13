@@ -1,22 +1,20 @@
-# Shared forms do not pair repeated word occurrences
-
-A repeated ما inherited another occurrence's exact match, while similarity-search keys omitted the preposition needed for مِنْ and مِنْهَا.
-
-Kind: challenge · Outcome: solved · Date: 2026-11-04 · Topics: testing, text-matching, ui-state
-
-**Problem:** Text comparison reuses matches between repeated occurrences and treats a search index's omitted tokens as absent evidence.
-
-**Fix:** Keep the existing LCS occurrence selection, compare corresponding selected occurrences, and reuse complete stem roots and lemmas. Apply the same matcher to tree segments without crossing ayah boundaries.
-
-**When it applies:** Quran branch comparison over 6,236 ayat and 5,174 multi-ayah tree groups, using corpus morphology and original reader words.
-
-**Rule it changes:** Select concrete occurrences before classifying their forms, and check whether an index intentionally drops information before using it as comparison evidence.
-
-**Evidence:** Namaq PR #512; regressions for 2:35/7:19, 2:170/31:21, tree offsets and default-view navigation; 3,502 tests, lint, typecheck and build passed.
-
-**Builds on:** [0019](0019-fixing-the-example-broke-the-ayah-next-door.md), [0021](0021-absorbing-a-phrase-must-preserve-its-entry-points.md)
-
-## What happened
+---
+title: "Shared forms do not pair repeated word occurrences"
+summary: "A repeated ما inherited another occurrence's exact match, while similarity-search keys omitted the preposition needed for مِنْ and مِنْهَا."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "Text comparison reuses matches between repeated occurrences and treats a search index's omitted tokens as absent evidence."
+approach: "Keep the existing LCS occurrence selection, compare corresponding selected occurrences, and reuse complete stem roots and lemmas. Apply the same matcher to tree segments without crossing ayah boundaries."
+outcome: "solved"
+conditions: "Quran branch comparison over 6,236 ayat and 5,174 multi-ayah tree groups, using corpus morphology and original reader words."
+evidence: "Namaq PR #512; regressions for 2:35/7:19, 2:170/31:21, tree offsets and default-view navigation; 3,502 tests, lint, typecheck and build passed."
+implication: "Select concrete occurrences before classifying their forms, and check whether an index intentionally drops information before using it as comparison evidence."
+date: "2026-11-04"
+topics: ["testing","text-matching","ui-state"]
+buildsOn: ["namaq/0019-fixing-the-example-broke-the-ayah-next-door","namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points"]
+lesson: "text-to-evidence/0010-comparing-word-occurrences"
+---
 
 In 2:170 and 31:21, the first ما pair agreed, but the second pair differed in its marks. The matcher collected every form under the shared key and used that collection to classify each occurrence. The first pair's shared form therefore made the second occurrence in 2:170 look exact. Selecting concrete occurrences and comparing their corresponding forms made the second pair purple on both sides.
 

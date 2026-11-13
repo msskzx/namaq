@@ -1,20 +1,19 @@
-# Checks that don't re-derive pass exactly the inputs that should fail them
-
-Checks that only test shape pass exactly the values that are shaped right and mean the wrong thing.
-
-Kind: obstacle · Outcome: solved · Date: 2026-09-30 · Topics: testing, evidence-model
-
-**Problem:** Validators that check only shape or consistency pass values that are well-formed and wrong.
-
-**Fix:** Found two cases: an anchor check that counted paragraphs, and a dangling Prisma relation silently patched back by prisma format. Deriving the expected value independently and comparing found both.
-
-**When it applies:** Page-store migration (namaq PRs #220-222); 1,701 mocked tests, lint and tsc all passed; the second bug was caught only by a live query on the real database.
-
-**Rule it changes:** When writing a validator, require it to re-derive and compare the checked value, and where that is not possible say the static checks do not cover it and a runtime smoke test is owed.
-
-**Evidence:** docs/lessons/lessons/0002-who-owns-a-page.html decision, realized in PRs #220-222; history:validate anchor check
-
-## What happened
+---
+title: "Checks that don't re-derive pass exactly the inputs that should fail them"
+summary: "Checks that only test shape pass exactly the values that are shaped right and mean the wrong thing."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "obstacle"
+problem: "Validators that check only shape or consistency pass values that are well-formed and wrong."
+approach: "Found two cases: an anchor check that counted paragraphs, and a dangling Prisma relation silently patched back by prisma format. Deriving the expected value independently and comparing found both."
+outcome: "solved"
+conditions: "Page-store migration (namaq PRs #220-222); 1,701 mocked tests, lint and tsc all passed; the second bug was caught only by a live query on the real database."
+evidence: "docs/lessons/lessons/0002-who-owns-a-page.html decision, realized in PRs #220-222; history:validate anchor check"
+implication: "When writing a validator, require it to re-derive and compare the checked value, and where that is not possible say the static checks do not cover it and a runtime smoke test is owed."
+date: "2026-09-30"
+topics: ["testing","evidence-model"]
+lesson: "text-to-evidence/0003-a-check-that-exists-but-doesnt-run"
+---
 
 Found two instances of the same failure mode while building the page store
 migration (source: `docs/lessons/lessons/0002-who-owns-a-page.html`'s

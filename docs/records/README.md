@@ -12,48 +12,61 @@ and from the historical records under `data/history/`.
 ## Format
 
 Copy an existing file. Name it `NNNN-short-title.md` with the next free number.
+The fields are Distillate's, so `npm run records:export` can copy the records
+back into Distillate unchanged. Each frontmatter line is `key: <JSON value>`.
 
 ```md
-# Short title that states the finding
-
-One sentence summary.
-
-Kind: challenge | obstacle | detour · Outcome: solved | failed | partial | open · Date: YYYY-MM-DD · Topics: ...
-
-**Problem:** the general problem, in one or two sentences.
-
-**Fix:** what worked (or, for a failed outcome, what was tried and why it failed).
-
-**When it applies:** the conditions it held under (versions, data size, constraints).
-A failure is "failed under these conditions", not a ban.
-
-**Rule it changes:** the rule, check or habit that should change, if any.
-
-**Evidence:** PR, commit, test or file.
-
-**Tried:** (when more than one attempt was made, dead ends included)
-- first attempt → what happened
-- second attempt → what happened
-
-## What happened
+---
+title: "Short title that states the finding"
+summary: "One sentence summary."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "challenge"
+problem: "The general problem, in one or two sentences."
+approach: "The fix: what worked (for a failed outcome, what was tried and why it failed)."
+outcome: "solved"
+conditions: "When it applies: what was true when it was tried (versions, data size, constraints)."
+evidence: "PR, commit, test or file."
+implication: "The rule, check or habit that should change, or none."
+date: "YYYY-MM-DD"
+topics: ["testing"]
+buildsOn: ["namaq/0019-fixing-the-example-broke-the-ayah-next-door"]
+---
 
 A few short paragraphs: what happened, what surprised us, why the fix works.
+
+## Tried
+
+- first attempt → what happened
+- second attempt → what happened
 ```
 
-- Kind: a challenge is the problem the work existed to solve; an obstacle is a
-  constraint found while building; a detour is something that broke and was fixed,
-  which the final code no longer shows.
-- Topics come from this list: agent-review, build-tooling, data-sync,
+- `kind`: challenge (the problem the work existed to solve), obstacle (a
+  constraint found while building) or detour (something that broke and was
+  fixed, which the final code no longer shows).
+- `outcome`: solved, failed, partial or open. A failure means "failed under
+  these conditions", not a ban.
+- `topics` come from this list: agent-review, build-tooling, data-sync,
   evidence-model, graph-layout, graph-ui, migrations, runtime-versions,
   source-extraction, testing, text-matching, ui-rtl, ui-state.
-- Optional lines: `**Tried:**` lists each attempt and its outcome, so a dead end
-  is not tried again; `**Builds on:**` and `**Same problem as:**` link earlier records.
+- Links between records: `buildsOn` (continues an earlier record) and
+  `variantOf` (same problem met elsewhere), as ids like `namaq/0019-…`.
+  `lesson` names a Distillate lesson. All three are optional.
+- `## Tried` is optional: one line per attempt and its outcome, dead ends
+  included, so nobody tries them again.
+- Links to repo files are relative (`../../src/…`); the export turns them into
+  Distillate's `RepoLink`. Some paths in older records have since moved.
 - Write one when a real challenge was solved in a way the code alone does not
   show. Skip routine work, and update an existing record rather than writing a
   second one about the same finding.
 
 Records 0001 to 0027 came from the Distillate project (2026-09 to 2026-11).
-Paths marked "since moved" no longer exist under that name.
+
+## Copying to Distillate
+
+`npm run records:export` writes every record to
+`../distillate/content/records/namaq/` (or the folder you pass after `--`).
+Distillate's loader reads them as they are, with the links between records.
 
 ## Usage
 

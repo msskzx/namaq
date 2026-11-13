@@ -1,20 +1,18 @@
-# A subagent said green while lint and tsc were red
-
-A subagent's "all passing" covered the command it ran while lint and tsc were red.
-
-Kind: detour · Outcome: solved · Date: 2026-10-08 · Topics: agent-review, testing
-
-**Problem:** A subagent reports its tests pass while lint and the type checker fail and the tests assert little.
-
-**Fix:** The subagent reported 20 tests passing; running lint, tsc and the suite revealed errors, forbidden comments and weak assertions, and the tests were rewritten. A separate reviewer's partial notes found four weak spots.
-
-**When it applies:** Small subagent wrote tests for the isnad diagram; the reviewer subagent died on an API error but left partial notes; AGENTS.md forbids explanatory comments.
-
-**Rule it changes:** Run lint, tsc and the whole suite yourself and read what each test asserts; the test writer and reviewer should be different agents.
-
-**Evidence:** src/lib/model/isnadGraph.test.ts and src/components/hadith/HadithUnit.test.tsx rewrites
-
-## What happened
+---
+title: "A subagent said green while lint and tsc were red"
+summary: "A subagent's \"all passing\" covered the command it ran while lint and tsc were red."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "A subagent reports its tests pass while lint and the type checker fail and the tests assert little."
+approach: "The subagent reported 20 tests passing; running lint, tsc and the suite revealed errors, forbidden comments and weak assertions, and the tests were rewritten. A separate reviewer's partial notes found four weak spots."
+outcome: "solved"
+conditions: "Small subagent wrote tests for the isnad diagram; the reviewer subagent died on an API error but left partial notes; AGENTS.md forbids explanatory comments."
+evidence: "src/lib/model/isnadGraph.test.ts and src/components/hadith/HadithUnit.test.tsx rewrites"
+implication: "Run lint, tsc and the whole suite yourself and read what each test asserts; the test writer and reviewer should be different agents."
+date: "2026-10-08"
+topics: ["agent-review","testing"]
+---
 
 A small subagent wrote the tests for the isnad diagram and reported "20 tests, all passing,
 no problems found." They did pass. `npm run lint` failed on an unused variable, `npx tsc

@@ -1,22 +1,19 @@
-# A split of a text is proved by recombining it, not by checking it
-
-A check that each piece is valid cannot find a missing piece; recombine the pieces and compare with the whole.
-
-Kind: detour · Outcome: solved · Date: 2026-10-05 · Topics: testing, source-extraction, text-matching
-
-**Problem:** Splitting a text into pieces passes a validity check on each piece while a missing piece goes unnoticed.
-
-**Fix:** Hadith fixtures were first marked hand-checked but dropped words; a test that joins every scene row, strips quotation marks and compares with the full text caught the gaps and held.
-
-**When it applies:** Bukhari 50 and Muslim's hadith extracted as scenes; model:check validates spans but not what no span covers.
-
-**Rule it changes:** Any extraction that splits a text needs a check that recombines the pieces and compares with the whole; do not call a fixture checked until it has run.
-
-**Evidence:** src/lib/model/hadithView.test.ts, "loses no word of either hadith across its scenes"; docs/plans/siyar-parsing.md (model:coverage)
-
-**Same problem as:** [0005](0005-checks-that-dont-rederive-pass-the-wrong-inputs.md)
-
-## What happened
+---
+title: "A split of a text is proved by recombining it, not by checking it"
+summary: "A check that each piece is valid cannot find a missing piece; recombine the pieces and compare with the whole."
+disclosure: "open"
+sourceProject: "namaq"
+kind: "detour"
+problem: "Splitting a text into pieces passes a validity check on each piece while a missing piece goes unnoticed."
+approach: "Hadith fixtures were first marked hand-checked but dropped words; a test that joins every scene row, strips quotation marks and compares with the full text caught the gaps and held."
+outcome: "solved"
+conditions: "Bukhari 50 and Muslim's hadith extracted as scenes; model:check validates spans but not what no span covers."
+evidence: "src/lib/model/hadithView.test.ts, \"loses no word of either hadith across its scenes\"; docs/plans/siyar-parsing.md (model:coverage)"
+implication: "Any extraction that splits a text needs a check that recombines the pieces and compares with the whole; do not call a fixture checked until it has run."
+date: "2026-10-05"
+topics: ["testing","source-extraction","text-matching"]
+variantOf: ["namaq/0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
+---
 
 Bukhari 50 and Muslim's hadith were first extracted as "hand-checked" fixtures with
 three turns each, and the page showed them as the hadith. Muslim's first scene

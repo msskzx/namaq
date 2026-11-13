@@ -64,6 +64,7 @@
     "catalog:quoted-report": "tsx scripts/data/quotedValueReport.ts",
     "quiz:generate": "tsx scripts/quiz/generateQuestions.ts",
     "quiz:review": "tsx scripts/quiz/reviewQuestion.ts",
+    "records:export": "tsx scripts/records/toDistillate.ts",
     "records:used": "tsx scripts/records/countUsed.ts",
     "quiz:validate": "tsx scripts/quiz/validateQuestions.ts",
     "quiz:project": "tsx scripts/quiz/projectQuestions.ts",
