@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, NotebookPen, PenLine, Send, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, NotebookPen, PenLine, Send, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -24,6 +24,7 @@ import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import TreeIcon from './TreeIcon';
 import { shareAyah } from './AyahShare';
+import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
@@ -69,6 +70,18 @@ function IconButton({ Icon, label, onPress, palette, on = false, disabled = fals
     </Pressable>
   );
 }
+
+/** A long-press button: the icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is). */
+function ActButton({ Icon, label, name, onPress, palette, on = false, color }: { Icon: (props: LucideProps) => React.ReactNode; label: string; name: string; onPress: () => void; palette: Palette; on?: boolean; color?: string }) {
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }}
+      style={{ width: ACT_WIDTH, alignItems: 'center', gap: 3, paddingTop: 7, paddingBottom: 5, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
+      <Icon size={22} color={on ? palette.onAccent : color ?? palette.ink} />
+      <Text numberOfLines={1} style={{ fontSize: 11, color: on ? palette.onAccent : palette.muted }}>{name}</Text>
+    </Pressable>
+  );
+}
+const ACT_WIDTH = 56;
 
 /** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
 export default function Reader() {
@@ -330,13 +343,16 @@ export default function Reader() {
 
   const actionKey = actions?.key;
   const forgotCount = actionKey ? (forgot[actionKey]?.forgot ?? 0) : 0;
-  // Where else the ayah is: its compare cards and the trees that hold it, each shown only when there are any.
+  // Where else the ayah is: its compare cards, the trees that hold it and its readings, each shown only when there are any.
   const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
+  const readings = !!actionKey && hasQiraat(actionKey);
   const [preview, setPreview] = useState<Preview | null>(null);
-  const buttons = 3 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
+  const buttons = 4 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
-  const barWidth = Math.min(buttons * 48 + 12, (size?.width ?? 360) - 16);
+  const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
+  // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
+  const barRows = Math.ceil(buttons / Math.max(1, Math.floor((barWidth - 10) / (ACT_WIDTH + 2))));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} scrollEnabled={!!keyboard} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
@@ -356,22 +372,19 @@ export default function Reader() {
       )}
       {actions && (
         <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
-          <Pressable accessibilityRole="button" accessibilityLabel={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'}
-            onPress={() => { markForgotten(actions.key); setActions(null); }}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>
-            <LightbulbOff size={24} color={forgotCount ? palette.onAccent : palette.ink} />
-          </Pressable>
-          {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
-          <IconButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
-          <IconButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
-          {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" palette={palette}
+          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
+          {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
+          <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
+          <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} name="تأمّل" palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
+          {targets.length > 0 && <ActButton Icon={ArrowLeftRight} label="في المقارنة" name="المقارنة" palette={palette}
             onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'compare', key }); }} />}
-          {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
-          {actions.lemmas.length > 0 && <IconButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} palette={palette}
+          {trees && <ActButton Icon={TreeIcon} label="الأشجار التي فيها الآية" name="الأشجار" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
+          {readings && <ActButton Icon={Layers} label="القراءات العشر في كلمات الآية" name="القراءات" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'readings', key }); }} />}
+          {actions.lemmas.length > 0 && <ActButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} name="المواضع" palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
           {/* Share is always the last button. */}
-          <IconButton Icon={Send} label="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
+          <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
         </View>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}

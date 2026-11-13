@@ -1,16 +1,30 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { ArrowLeftRight, Bookmark, Check, LightbulbOff, NotebookPen, Send } from 'lucide-react';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { ArrowLeftRight, Bookmark, Check, Layers, LightbulbOff, NotebookPen, Send } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
 import type { AyahLink } from './ayahLinks';
 
+type Kind = 'trees' | 'compare' | 'readings';
+
+/** An icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is). */
+function Act({ label, name, on = false, pressed, popup = false, onClick, children }: { label: string; name: string; on?: boolean; pressed?: boolean; popup?: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <Button size="lg" variant={on ? 'primary' : 'muted'} aria-label={label} title={label} aria-pressed={pressed} aria-haspopup={popup ? 'dialog' : undefined} onClick={onClick}
+      className="!h-auto !w-[3.25rem] flex-col !gap-1 py-1.5 text-[0.6875rem] leading-none">
+      {children}
+      <span aria-hidden className="whitespace-nowrap">{name}</span>
+    </Button>
+  );
+}
+
 /**
  * The icons for one ayah: forgot (with how often, and a check to clear it), save, the reader's note, and where else it is:
- * its compare cards and the trees that hold it, each previewed in a sheet (AyahPreviewSheet). Those two show only when there are any.
+ * its compare cards, the trees that hold it and how the ten readers differ in its words, each previewed in a sheet
+ * (AyahPreviewSheet). Those three show only when there are any.
  */
 export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onPreview, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
@@ -26,7 +40,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   onSave: () => void;
   onNote?: () => void;
   /** The tree and compare buttons preview in place rather than leaving the mushaf (owner, 2026-11-13). */
-  onPreview?: (kind: 'trees' | 'compare') => void;
+  onPreview?: (kind: Kind) => void;
   /** Share as image, always the last button. */
   onShare?: () => void;
   onClose: () => void;
@@ -58,24 +72,22 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
   const treesLabel = ar ? 'أشجار هذه الآية' : 'Trees of this ayah';
   const shareLabel = ar ? 'مشاركة' : 'Share';
-  const half = 155;
+  const readingsLabel = ar ? 'القراءات العشر في كلمات الآية' : 'The ten readings of its words';
+  const count = 2 + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onShare ? 1 : 0);
+  // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
+  const half = typeof window === 'undefined' ? 0 : Math.min(count * 27 + 8, window.innerWidth / 2 - 8);
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
-  const preview = (kind: 'trees' | 'compare') => () => { onPreview?.(kind); onClose(); };
+  const preview = (kind: Kind) => () => { onPreview?.(kind); onClose(); };
   return (
     <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
-      <Button size="lg" variant={forgot ? 'primary' : 'muted'} aria-label={forgotLabel} title={forgotLabel} onClick={() => { onForgot(); onClose(); }}>
-        <LightbulbOff aria-hidden />
-      </Button>
-      {forgot > 0 && <Button size="lg" variant="muted" aria-label={clearLabel} title={clearLabel} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Button>}
-      <Button size="lg" variant={saved ? 'primary' : 'muted'} aria-label={saveLabel} title={saveLabel} aria-pressed={saved} onClick={() => { onSave(); onClose(); }}>
-        <Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} />
-      </Button>
-      {onNote && <Button size="lg" variant={noted ? 'primary' : 'muted'} aria-label={noteLabel} title={noteLabel} aria-pressed={noted} onClick={() => { onNote(); onClose(); }}>
-        <NotebookPen aria-hidden />
-      </Button>}
-      {!!links?.compare.length && <Button size="lg" variant="muted" aria-label={compareLabel} title={compareLabel} aria-haspopup="dialog" onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Button>}
-      {links?.trees && <Button size="lg" variant="muted" aria-label={treesLabel} title={treesLabel} aria-haspopup="dialog" onClick={preview('trees')}><TreeIcon aria-hidden /></Button>}
-      {onShare && <Button size="lg" variant="muted" aria-label={shareLabel} title={shareLabel} aria-haspopup="dialog" onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Button>}
+      <Act label={forgotLabel} name={ar ? 'نسيتها' : 'Forgot'} on={!!forgot} onClick={() => { onForgot(); onClose(); }}><LightbulbOff aria-hidden /></Act>
+      {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
+      <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
+      {onNote && <Act label={noteLabel} name={ar ? 'تأمّل' : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
+      {!!links?.compare.length && <Act label={compareLabel} name={ar ? 'المقارنة' : 'Compare'} popup onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Act>}
+      {links?.trees && <Act label={treesLabel} name={ar ? 'الأشجار' : 'Trees'} popup onClick={preview('trees')}><TreeIcon aria-hidden /></Act>}
+      {links?.qiraat && <Act label={readingsLabel} name={ar ? 'القراءات' : 'Readings'} popup onClick={preview('readings')}><Layers aria-hidden /></Act>}
+      {onShare && <Act label={shareLabel} name={ar ? 'مشاركة' : 'Share'} popup onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Act>}
     </div>
   );
 }

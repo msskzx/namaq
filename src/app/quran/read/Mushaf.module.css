@@ -218,7 +218,7 @@
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 .saved { color: var(--home-root); }
 
-.ayahActions { position: fixed; z-index: 30; display: flex; gap: 0.5rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
+.ayahActions { position: fixed; z-index: 30; display: flex; flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 1rem); gap: 0.125rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
 /* The recite buttons sit in a see-through pill floating low over the page, like the tab bar (NavBar.module.css .tabs)
    and the app's recite pill (mobile/src/components/Reader.tsx); just above the tab pill when that shows. */
 .reader { --recite-pill: 52px; }

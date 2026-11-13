@@ -1,45 +1,8 @@
 // docs/plans/quran-qiraat.md
 import { normalizeWord } from '@shared/quran/normalize';
+import { READERS, RIWAYAT, type ReaderId, type RiwayaId } from '@shared/quran/qiraat';
 
-export const READERS = [
-  { id: 'nafi', name: 'نافع' },
-  { id: 'ibn-kathir', name: 'ابن كثير' },
-  { id: 'abu-amr', name: 'أبو عمرو' },
-  { id: 'ibn-amir', name: 'ابن عامر' },
-  { id: 'asim', name: 'عاصم' },
-  { id: 'hamza', name: 'حمزة' },
-  { id: 'kisai', name: 'الكسائي' },
-  { id: 'abu-jafar', name: 'أبو جعفر' },
-  { id: 'yaqub', name: 'يعقوب' },
-  { id: 'khalaf', name: 'خلف العاشر' },
-] as const;
-
-export type ReaderId = (typeof READERS)[number]['id'];
-
-export const RIWAYAT = [
-  { id: 'qalun', name: 'قالون', reader: 'nafi' },
-  { id: 'warsh', name: 'ورش', reader: 'nafi' },
-  { id: 'bazzi', name: 'البزي', reader: 'ibn-kathir' },
-  { id: 'qunbul', name: 'قنبل', reader: 'ibn-kathir' },
-  { id: 'duri-abu-amr', name: 'الدوري عن أبي عمرو', reader: 'abu-amr' },
-  { id: 'susi', name: 'السوسي', reader: 'abu-amr' },
-  { id: 'hisham', name: 'هشام', reader: 'ibn-amir' },
-  { id: 'ibn-dhakwan', name: 'ابن ذكوان', reader: 'ibn-amir' },
-  { id: 'shuba', name: 'شعبة', reader: 'asim' },
-  { id: 'hafs', name: 'حفص', reader: 'asim' },
-  { id: 'khalaf-hamza', name: 'خلف عن حمزة', reader: 'hamza' },
-  { id: 'khallad', name: 'خلاد', reader: 'hamza' },
-  { id: 'abu-al-harith', name: 'أبو الحارث', reader: 'kisai' },
-  { id: 'duri-kisai', name: 'الدوري عن الكسائي', reader: 'kisai' },
-  { id: 'ibn-wardan', name: 'ابن وردان', reader: 'abu-jafar' },
-  { id: 'ibn-jammaz', name: 'ابن جمّاز', reader: 'abu-jafar' },
-  { id: 'ruways', name: 'رويس', reader: 'yaqub' },
-  { id: 'rawh', name: 'روح', reader: 'yaqub' },
-  { id: 'ishaq', name: 'إسحاق', reader: 'khalaf' },
-  { id: 'idris', name: 'إدريس', reader: 'khalaf' },
-] as const satisfies readonly { id: string; name: string; reader: ReaderId }[];
-
-export type RiwayaId = (typeof RIWAYAT)[number]['id'];
+export { READERS, RIWAYAT, type ReaderId, type RiwayaId };
 
 export type Reading = {
   text?: string;

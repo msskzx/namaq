@@ -201,3 +201,42 @@ quoted from al-Tabari).
 
 Publishing the dump itself as a downloadable file would need to credit
 quranpedia.net with the dump version; using it inside the app does not.
+
+## Per-ayah readings in the reader (2026-11-13)
+
+The owner asked for the qira'at per ayah first, whole riwaya mushafs later, and
+only for differences in letters or vowels (farsh), not performance (usul).
+
+- Source: Quranpedia's qira'at dump (`https://quranpedia.net/dumps/qiraat.json.gz`,
+  version 2026-11-07), 20 riwayat numbered as `RIWAYAT` in
+  `shared/quran/qiraat.ts`. Free to use in apps; republishing the data credits
+  Quranpedia with a link and the dump version, so the sheet shows the source.
+- Build: `npm run quran:qiraat` writes `shared/data/quran/qiraat.json` and a
+  review list (`/mnt/project-files/qiraat-per-ayah/review.md` for the first
+  run). Each ayah key holds the differing words by Hafs word index (`at`), Hafs's
+  reading first with the mushaf's own words, then the others.
+- Farsh only (`scripts/quran/qiraatFarsh.ts`): set aside as performance are hamza
+  treatment (tahqiq, tashil, ibdal, naql), sila and silence of the plural mim,
+  ya' zawa'id and ya' idafa, merging when the reading says ادغام, the article's
+  alif, and the last vowel of a particle of one or two letters. Vowel-only
+  differences (5:6 أرجلكم) are farsh.
+- The King Fahd Complex texts of seven riwayat correct the dump only narrowly
+  (docs/records/0028).
+- Checked: 37 of the page's sourced examples agree with the data; the six left
+  out are listed in `src/app/quran/qiraat/data/qiraatData.test.ts`.
+- Known gaps: some of al-Susi's long merging phrases and a few dump typos are
+  left out (see the review list); a word whose readings differ only in hamza
+  (لؤلؤ) can be lost; 2:85 تعملون does not name Abu Ja'far.
+- Left out on purpose: a word where one reading names all twenty riwayat (the
+  other is a neighbouring word or a note, 7:6), and a word the dump lists twice
+  with different readings (4:11). A riwaya that reads a word two ways (Ibn
+  Dhakwan's إبراهيم and إبراهام) is named under both.
+- A silent ذ ث د ت ط ظ merged into the ت د ط after it (اتخذتم، عذت) is
+  performance; other doubled letters (اسطّاعوا، هاتينّ) are farsh.
+- UI: the long-press buttons now carry a word under each icon (owner chose this
+  over a grouped menu). A readings button (layers icon) shows only on ayat with
+  differences and opens a sheet of word cards: Hafs's reading, then the others
+  in the accent colour, each with who reads it (a reader when both his riwayat
+  agree, «الباقون» for the biggest group when all twenty are named).
+- Whole mushafs later: only 8 of the 20 riwayat have open texts, their fonts
+  need permission, and some count ayat differently.
