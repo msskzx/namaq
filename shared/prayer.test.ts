@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as adhan from 'adhan';
-import { clock, CITIES, DEFAULT_PRAYER_SETTINGS, hijriMonth, inRamadan, isPlace, nextPrayer, prayerDay, qiblaBearing, turnTo, type Adhan, type Place, type PrayerSettings } from './prayer';
+import { clock, CITIES, DEFAULT_PRAYER_SETTINGS, hijriMonth, inRamadan, isPlace, nextPrayer, prayerDay, qiblaBearing, searchPlaces, turnTo, type Adhan, type Place, type PrayerSettings } from './prayer';
 
 const lib = adhan as unknown as Adhan;
 const city = (name: string) => CITIES.find(place => place.name === name)!;
@@ -113,5 +113,13 @@ describe('Hijri calendar', () => {
     expect(hijriMonth(today, -1)!.title).toBe('جمادى الأولى ١٤٤٨ هـ');
     expect(hijriMonth(today, -1)!.days.every(d => !d.today)).toBe(true);
     expect(hijriMonth(today, 12)!.title).toBe('جمادى الآخرة ١٤٤٩ هـ');
+  });
+});
+
+describe('searchPlaces', () => {
+  it('finds cities without the article or hamza', () => {
+    expect(searchPlaces('اسكندرية').map(p => p.name)).toEqual(['الإسكندرية']);
+    expect(searchPlaces('مكة').map(p => p.name)).toEqual(['مكة المكرمة']);
+    expect(searchPlaces('').length).toBe(CITIES.length);
   });
 });

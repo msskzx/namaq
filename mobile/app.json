@@ -29,7 +29,13 @@
       "expo-font",
       "expo-sqlite",
       "expo-sharing",
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "يستعمل نمق موقعك لحساب مواقيت الصلاة واتجاه القبلة على جهازك فقط."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": false

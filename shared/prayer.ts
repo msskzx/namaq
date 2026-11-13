@@ -233,3 +233,10 @@ export const CITIES: Place[] = [
   { name: 'تورونتو', lat: 43.6532, lng: -79.3832 },
   { name: 'سيدني', lat: -33.8688, lng: 151.2093 },
 ];
+
+/** Arabic letters folded so «اسكندرية» finds «الإسكندرية». */
+const fold = (text: string) => text.replace(/[ً-ٰٟـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/^ال/, '').trim();
+export function searchPlaces(query: string, places: Place[] = CITIES) {
+  const needle = fold(query);
+  return needle ? places.filter(place => fold(place.name).includes(needle) || place.name.includes(query.trim())) : places;
+}
