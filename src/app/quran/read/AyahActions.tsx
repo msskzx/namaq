@@ -62,7 +62,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
   const preview = (kind: 'trees' | 'compare') => () => { onPreview?.(kind); onClose(); };
   return (
-    <div ref={box} role="dialog" aria-label={label} className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
+    <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
       <Button size="lg" variant={forgot ? 'primary' : 'muted'} aria-label={forgotLabel} title={forgotLabel} onClick={() => { onForgot(); onClose(); }}>
         <LightbulbOff aria-hidden />
       </Button>

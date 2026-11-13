@@ -4,7 +4,9 @@ import { BlurView } from 'expo-blur';
 import { useIsFocused } from 'expo-router';
 import { Pointer, X } from 'lucide-react-native';
 import { Text } from './Text';
-import { TAB_BAR, useTabBarSpace } from './tabBarSpace';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TAB_BAR, tabBarBottom, useTabBarSpace } from './tabBarSpace';
+import { useImmersive } from '@/lib/chrome';
 import { hintsSeen, tourSeen, type HintId } from '@/lib/settings';
 import { HINTS } from '@shared/tabHints';
 import type { Palette } from '@/lib/theme';
@@ -18,7 +20,10 @@ export default function TabHint({ id, palette, hidden }: { id: HintId; palette: 
   const [seen, setSeen] = hintsSeen.use();
   const [toured] = tourSeen.use();
   const focused = useIsFocused();
-  const bottom = useTabBarSpace();
+  const space = useTabBarSpace();
+  const insets = useSafeAreaInsets();
+  // The mushaf hides the tab bar while reading: the tip then drops to where the bar would sit.
+  const bottom = useImmersive() && id === 'read' ? tabBarBottom(insets.bottom) : space;
   if (hidden || !toured || !focused || seen.includes(id)) return null;
   const close = () => setSeen([...hintsSeen.get().filter(item => item !== id), id]);
   return (

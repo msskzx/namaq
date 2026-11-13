@@ -16,7 +16,11 @@
 @media (min-width: 1024px) {
   .hint { inset-inline: calc(var(--app-rail) + 1rem) auto; bottom: 1rem; width: 24rem; }
 }
-/* The mushaf's tip names the reading touches: not while reciting, nor over the immersive page. */
-:global(body):has(:global([data-reciting])) .hint { display: none; }
+/* The mushaf's tip names the reading touches: not while reciting, and it steps aside while an ayah's buttons are open. */
+:global(body):has(:global(:is([data-reciting], [data-ayah-actions]))) .hint { display: none; }
+/* While reading, the phone hides the tab bar: the tip drops to where the bar would sit, as the recite bar does. */
+@media (max-width: 1023.98px) {
+  :global(body):has(:global([data-reader-immersive="true"])) .hint { bottom: var(--tabbar-bottom, 8px); }
+}
 @keyframes hint-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .hint { animation: none; } }

@@ -401,8 +401,8 @@ export default function Reader() {
           autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off" blurOnSubmit={false} onSubmitEditing={() => moveOn(typed)}
           accessibilityLabel="اكتب الكلمة" style={{ position: 'absolute', opacity: 0, width: 1, height: 1, top: 0, left: 0 }} />
       )}
-      {/* The first visit's tip names the reading touches, so it waits out recite mode. */}
-      <TabHint id="read" palette={palette} hidden={reciting} />
+      {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
+      <TabHint id="read" palette={palette} hidden={reciting || !!actions} />
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
         last={last?.position ? () => { setReviewing(false); setOpenings(null); setPosition(last.position!); setPage(last.page); } : null} />
     </View>
