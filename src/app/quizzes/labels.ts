@@ -1,3 +1,4 @@
+import { DIFFICULTY_NAMES, type Difficulty } from "@shared/quiz/difficulty";
 import type { QuizTopic } from "@/lib/quiz/types";
 
 export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
@@ -14,7 +15,12 @@ export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Quran", ar: "القرآن", topics: ["BRANCHES"] },
 ];
 
-export const LEAF_LEVELS: Record<number, { en: string; ar: string }> = {
-  1: { en: "easy", ar: "سهل" },
-  10: { en: "hard", ar: "صعب" },
+export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> = {
+  easy: { en: "Easy", ar: DIFFICULTY_NAMES.easy },
+  medium: { en: "Medium", ar: DIFFICULTY_NAMES.medium },
+  hard: { en: "Hard", ar: DIFFICULTY_NAMES.hard },
+};
+export const DIFFICULTY_NOTE = {
+  ar: "سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.",
+  en: "Easy: ayat that part soon. Hard: ayat alike but for a word or two.",
 };

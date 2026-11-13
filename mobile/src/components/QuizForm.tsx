@@ -2,10 +2,9 @@ import { View } from 'react-native';
 import { Text } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { QUIZ_LEAVES } from '@shared/quiz/settings';
+import { DIFFICULTIES, DIFFICULTY_NAMES, type Difficulty } from '@shared/quiz/difficulty';
 import Button, { Row } from './Button';
 import { CARD, type Palette } from '@/lib/theme';
-
-const LEVELS: Record<number, string> = { 1: 'سهل', 10: 'صعب' };
 
 export function Section({ title, palette, children }: { title: string; palette: Palette; children: React.ReactNode }) {
   return (
@@ -16,19 +15,26 @@ export function Section({ title, palette, children }: { title: string; palette: 
   );
 }
 
-/** How many leaves to type in each tree, 1 (easy) to 10 (hard). */
+/** How many leaves to type in each tree, 1 to 10. */
 export function LeavesPicker({ value, onChange, palette }: { value: number; onChange: (value: number) => void; palette: Palette }) {
   return (
     <>
       <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600', textAlign: 'right', marginTop: 4 }}>عدد الإجابات في كل شجرة</Text>
       <Row>
         {QUIZ_LEAVES.map(leaves => (
-          <View key={leaves} style={{ alignItems: 'center', gap: 2 }}>
-            <Button label={num(leaves)} active={value === leaves} onPress={() => onChange(leaves)} accessibilityLabel={`${num(leaves)}${LEVELS[leaves] ? ` ${LEVELS[leaves]}` : ''}`} />
-            {LEVELS[leaves] ? <Text style={{ color: palette.muted, fontSize: 12 }}>{LEVELS[leaves]}</Text> : null}
-          </View>
+          <Button key={leaves} label={num(leaves)} active={value === leaves} onPress={() => onChange(leaves)} />
         ))}
       </Row>
+    </>
+  );
+}
+
+/** Easy, medium or hard trees (shared/quiz/difficulty.ts): how alike the tree's ayat are. */
+export function DifficultyPicker({ value, onChange, palette }: { value: Difficulty; onChange: (value: Difficulty) => void; palette: Palette }) {
+  return (
+    <>
+      <Row>{DIFFICULTIES.map(level => <Button key={level} label={DIFFICULTY_NAMES[level]} active={value === level} onPress={() => onChange(level)} />)}</Row>
+      <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.</Text>
     </>
   );
 }

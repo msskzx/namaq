@@ -15,7 +15,8 @@ import LoadingDots from '@/components/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
 import QrCode from '@/components/QrCode';
 import QuizExplainer from '@/components/QuizExplainer';
-import { LeavesPicker, Section } from '@/components/QuizForm';
+import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
+import { DEFAULT_DIFFICULTY, DIFFICULTY_NAMES } from '@shared/quiz/difficulty';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTree';
@@ -153,7 +154,7 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   if (!editable) {
     const rows: [string, string][] = [
       ['عدد الأسئلة', num(settings.length)],
-      ...(branches ? [['الأشجار', scopeSummary(settings, true)], ['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
+      ...(branches ? [['الأشجار', scopeSummary(settings, true)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]], ['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
     return (
@@ -179,6 +180,8 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
       {branches && (
         <>
           <PartyFilters settings={settings} change={change} palette={palette} />
+          <Label palette={palette}>الصعوبة</Label>
+          <DifficultyPicker value={settings.difficulty ?? DEFAULT_DIFFICULTY} onChange={difficulty => change({ difficulty })} palette={palette} />
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
           <Label palette={palette}>وقت سؤال الشجرة</Label>

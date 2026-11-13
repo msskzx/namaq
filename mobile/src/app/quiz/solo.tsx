@@ -8,7 +8,7 @@ import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
-import { LeavesPicker, Section } from '@/components/QuizForm';
+import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -66,6 +66,9 @@ export default function SoloSetup() {
         )}
         <Section title="الأشجار" palette={palette}>
           <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} />
+        </Section>
+        <Section title="الصعوبة" palette={palette}>
+          <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} />
         </Section>
         <Section title="الإجابات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />

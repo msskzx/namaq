@@ -20,8 +20,10 @@ function typeRight(run: SoloRun) {
 
 describe('solo quiz on the phone', () => {
   it('keeps settings in range, and turns an older juz range into the filters', () => {
-    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, leaves: 6, length: 10 });
-    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, leaves: 3, length: 5 });
+    expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, difficulty: 'medium', leaves: 6, length: 10 });
+    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ difficulty: 'hard' }).difficulty).toBe('hard');
+    expect(cleanSolo({ difficulty: 'nope' as never }).difficulty).toBe('medium');
   });
 
   it('counts the questions the filters hold, as the website does', () => {

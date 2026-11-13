@@ -37,7 +37,8 @@ import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions"
 import { parseJuzRange } from "@shared/quran/juz";
 import type { Branch, Variant } from "@shared/quran/branches";
 import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
-import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { DIFFICULTY_LABELS, DIFFICULTY_NOTE, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
 import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
 import { readRun, writeRun, type SoloRun } from "./soloRun";
@@ -117,6 +118,7 @@ export default function QuizzesPage() {
   const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
   const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
   const leaves = parseLeaves(searchParams.get("leaves"));
+  const difficulty = parseDifficulty(searchParams.get("difficulty"));
   const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
   // The branches page's filters for the trees; saved only sends this browser's saved trees.
@@ -149,7 +151,7 @@ export default function QuizzesPage() {
   const restored = stored && stored.search === search ? stored : null;
   const started = Boolean(topics.length && length && stored !== undefined && (restored || availability?.lengths.includes(length)) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started && !restored
-    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&leaves=${leaves}` : ""}`
+    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&difficulty=${difficulty}&leaves=${leaves}` : ""}`
     : null;
   const { data: fetched, error, isLoading: fetching } = useSWR<QuizData>(query, fetcher, {
     revalidateOnFocus: false,
@@ -292,17 +294,26 @@ export default function QuizzesPage() {
                     saved: saved ? "1" : undefined, length: undefined,
                   })} />
                 </div>
+              <div role="group" aria-labelledby="quiz-difficulty">
+                <p id="quiz-difficulty" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "الصعوبة" : "Difficulty"}</p>
+                <div className="flex flex-wrap items-start gap-2">
+                  {DIFFICULTIES.map((value) => (
+                    <Button key={value} active={difficulty === value} aria-pressed={difficulty === value}
+                      onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })}>
+                      {DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}
+                    </Button>
+                  ))}
+                </div>
+                <p className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTE[ar ? "ar" : "en"]}</p>
+              </div>
               <div role="group" aria-labelledby="quiz-leaves">
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
-                    <div key={value} className="flex flex-col items-center gap-0.5">
-                      <Button size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
-                        onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
-                        {ar ? num(value) : value}
-                      </Button>
-                      {LEAF_LEVELS[value] && <span className="text-xs text-[var(--home-muted)]">{LEAF_LEVELS[value][ar ? "ar" : "en"]}</span>}
-                    </div>
+                    <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
+                      onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
+                      {ar ? num(value) : value}
+                    </Button>
                   ))}
                 </div>
               </div>

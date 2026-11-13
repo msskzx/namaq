@@ -10,7 +10,8 @@ import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@shared/party/rules";
-import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
+import { DIFFICULTY_LABELS, DIFFICULTY_NOTE, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
+import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@shared/quiz/difficulty";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";
 
@@ -36,6 +37,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
   const scope = new URLSearchParams(quizQuery(settings));
   scope.delete("length");
   scope.delete("leaves");
+  scope.delete("difficulty");
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(editable && ready ? `/api/quiz/availability?${scope}` : null, fetcher);
   const toggle = (topic: QuizTopic) => onChange({ topics: settings.topics.includes(topic) ? settings.topics.filter((item) => item !== topic) : [...settings.topics, topic] });
 
@@ -45,6 +47,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       [ar ? "عدد الأسئلة" : "Questions", n(settings.length, ar)],
       ...(branches ? [
         [ar ? "الأشجار" : "Trees", scopeSummary(settings, ar)] as [string, string],
+        [ar ? "الصعوبة" : "Difficulty", DIFFICULTY_LABELS[settings.difficulty ?? DEFAULT_DIFFICULTY][ar ? "ar" : "en"]] as [string, string],
         [ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string],
         [ar ? "وقت سؤال الشجرة" : "Time per tree", duration(settings.treeSeconds, ar)] as [string, string],
       ] : []),
@@ -82,12 +85,13 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
               <TreeFilters savedOnly={false} choice={{ range: settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo }, filters: settings.filters ?? {}, saved: false }}
                 onChange={({ range, filters }) => onChange({ juzFrom: range?.from ?? 1, juzTo: range?.to ?? 30, filters })} />
             </div>
+          <Row label={ar ? "الصعوبة" : "Difficulty"}>
+            {DIFFICULTIES.map((value) => <Button key={value} active={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} aria-pressed={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })}>{DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}</Button>)}
+            <p className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTE[ar ? "ar" : "en"]}</p>
+          </Row>
           <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
             {QUIZ_LEAVES.map((value) => (
-              <div key={value} className="flex flex-col items-center gap-0.5">
-                <Button size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
-                {LEAF_LEVELS[value] && <span className="text-xs text-[var(--home-muted)]">{LEAF_LEVELS[value][ar ? "ar" : "en"]}</span>}
-              </div>
+              <Button key={value} size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
             ))}
           </Row>
           </div>
