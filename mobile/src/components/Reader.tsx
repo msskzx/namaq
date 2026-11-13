@@ -15,11 +15,10 @@ import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
-import CompareTargetsSheet from './CompareTargetsSheet';
+import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import TreeIcon from './TreeIcon';
 import { hasTrees } from '@/lib/branchList';
-import { compareTargetsOfAyah, type CompareTarget } from '@/lib/compare';
-import { openCompare, openTreesOf } from '@/lib/ways';
+import { compareTargetsOfAyah } from '@/lib/compare';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { readJson, writeJson } from '@/lib/storage';
@@ -225,7 +224,7 @@ export default function Reader() {
   // Where else the ayah is: its compare cards and the trees that hold it, each shown only when there are any.
   const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
-  const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
+  const [preview, setPreview] = useState<Preview | null>(null);
   const buttons = 2 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0);
   const barWidth = buttons * 48 + 12;
   return (
@@ -254,11 +253,12 @@ export default function Reader() {
           {forgotCount > 0 && <IconButton Icon={Check} label="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <IconButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
           {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" palette={palette}
-            onPress={() => { setActions(null); if (targets.length === 1) openCompare(targets[0]); else setChoosing(targets); }} />}
-          {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); openTreesOf(key); }} />}
+            onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'compare', key }); }} />}
+          {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
         </View>
       )}
-      <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
+      {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
+      <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
