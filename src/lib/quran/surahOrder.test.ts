@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/order/ayat.json';
 import type { TopicInstance, TopicRecord } from './topicTypes';
-import { resolve } from './curatedShifts';
+import { resolve } from './passage';
 import { ayahWords } from '@shared/quran/normalize';
 import { buildOrder, HOPS, sharedThemes, THEMES, TOPICS, TOPICS_SRC, type SurahTopics } from './surahOrder';
 

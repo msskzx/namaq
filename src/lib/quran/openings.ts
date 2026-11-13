@@ -1,4 +1,4 @@
-import { resolve, type Data, type Surah } from './curatedShifts';
+import { resolve, type Data, type Surah } from './passage';
 import { ayahWords, plainName } from '@shared/quran/normalize';
 
 export const SPANS: Record<number, { to: number; answer?: number; sourced?: boolean }> = {

@@ -22,6 +22,7 @@ export const LIVE: NavItem[] = [
   { href: '/library?tab=forgotten', label: { ar: 'ما نسيته', en: 'Forgotten' }, purpose: { ar: 'الآيات التي نسيتها، تعود إليك حتى تثبت', en: 'The ayat you forgot, coming back until they stick' } },
   { href: '/quran/read?write=1', label: { ar: 'اكتب أول الآية وآخرها', en: 'Write the first and last words' }, purpose: { ar: 'كلمات الآية صناديق في مكانها من المصحف، تكتب أولها وآخرها', en: 'Each ayah\'s words are boxes on the mushaf page; write its first and last words' } },
   { href: '/library?tab=notes', label: { ar: 'تأملاتي', en: 'My notes' }, purpose: { ar: 'خواطرك على الآيات، تكتبها من المصحف', en: 'Your reflections on ayat, written from the mushaf' } },
+  { href: '/quran/iltifat', label: { ar: 'الالتفات', en: 'Iltifat' }, purpose: { ar: 'تحوّل الكلام بين الغائب والمتكلم والمخاطب، لكل مثال صورته', en: 'Speech turning between he, we and you, each example with its own picture' } },
   { href: '/quran/words', label: { ar: 'عدّ الكلمات', en: 'Word counts' }, purpose: { ar: 'كم مرة ترد كل كلمة، وأين', en: 'How often each word occurs, and where' } },
   { href: '/search', label: { ar: 'البحث', en: 'Search' }, purpose: { ar: 'بحث واحد في السور والآيات والشجرات والكلمات', en: 'One search across surahs, ayat, trees and words' } },
   { href: '/', label: { ar: 'بطاقة اليوم', en: "Today's card" }, purpose: { ar: 'التاريخ الهجري وجزء اليوم وآيتان متشابهتان كل يوم', en: 'The Hijri date, today\'s juz and a look-alike pair each day' } },

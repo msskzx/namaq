@@ -9,7 +9,7 @@ export const QURAN_CARDS: { href: string; desc: Text }[] = [
   { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },
   { href: '/quran/words', desc: { ar: 'كم مرة ترد كل كلمة، وكلمات متقابلة جنبًا إلى جنب', en: 'How often each word occurs, and opposite words side by side' } },
   { href: '/quran/branches', desc: { ar: 'آيات تبدأ بالكلمات نفسها، وأين تتفرع', en: 'Ayat that open with the same words, and where they branch apart' } },
-  { href: '/quran/iltifat', desc: { ar: 'تحولات مختارة في الخطاب بين الغائب والمتكلم والمخاطب', en: 'Hand-picked shifts of address between third, first and second person' } },
+  { href: '/quran/iltifat', desc: { ar: 'أمثلة لتحوّل الكلام بين الغائب والمتكلم والمخاطب، لكل مثال صورته', en: 'Examples of speech turning between he, we and you, each with its own picture' } },
   { href: '/quran/qiraat', desc: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
   { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بمواضيعها، وما يصل كل سورة بالتي تليها', en: 'The surahs of juz 25 to 30 with their themes, and how each joins the next' } },
   { href: '/quran/openings', desc: { ar: 'كيف تبدأ السور: الشرط وجوابه، والتسبيح', en: 'How surahs open: conditions and their answers, and tasbih' } },
@@ -73,6 +73,7 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/iltifat', label: { ar: 'الالتفات', en: 'Iltifat' }, purpose: { ar: '', en: '' } },
 ];
 
 /** Utilities (prayer times, qibla, Hijri calendar) shows once the first of them lands, as in the app (SHOW_UTILITIES there). */
