@@ -12,6 +12,14 @@ test('the Quran hub links to every tool', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'متشابهات القرآن' })).toBeVisible();
 });
 
+test('the surah order narrows to a juz and cites its books', async ({ page }) => {
+  await open(page, '/order');
+  await expect(page.getByRole('heading', { name: 'فصلت' })).toBeVisible();
+  await page.getByRole('button', { name: '٣٠', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'النبأ' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();
+});
+
 test.describe('branches', () => {
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');

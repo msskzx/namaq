@@ -1,6 +1,6 @@
 import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookMarked, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import TopBar from '@/components/TopBar';
 import TreeIcon from '@/components/TreeIcon';
@@ -20,6 +20,7 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/oaths', label: 'الأقسام', Icon: SunMoon },
   { route: '/iltifat', label: 'الالتفات', Icon: MessagesSquare },
   { route: '/openings', label: 'افتتاح السور', Icon: ListStart },
+  { route: '/order', label: 'ترتيب السور', Icon: ListOrdered },
 ];
 
 /** The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row. The mushaf has its own button. */
