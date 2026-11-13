@@ -48,8 +48,8 @@ const writeSort = (count: boolean) => { try { localStorage.setItem(SORT_KEY, cou
 function useNames(names: Names, ar: boolean) {
   const plain = (n: number) => (ar ? plainName(names[n]?.ar ?? '') : names[n]?.en ?? String(n));
   // Names from the database already start with «سُورَةُ»; say it once either way.
-  const surah = (n: number) => { const name = names[n]?.ar ?? ''; return plainName(name).startsWith('سورة ') ? name : `سُورَةُ ${name}`; };
-  const title = (a: number, b: number) => a === b ? (ar ? `${surah(a)} مع نفسها` : `${plain(a)} with itself`) : ar ? `${surah(a)} وَ${surah(b)}` : `${plain(a)} and ${plain(b)}`;
+  const surah = (n: number) => `سورة ${plainName(names[n]?.ar ?? '').replace(/^سورة\s+/, '')}`;
+  const title = (a: number, b: number) => a === b ? (ar ? `${surah(a)} مع نفسها` : `${plain(a)} with itself`) : ar ? `${surah(a)} و${surah(b)}` : `${plain(a)} and ${plain(b)}`;
   return { plain, title };
 }
 
