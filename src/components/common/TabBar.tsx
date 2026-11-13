@@ -16,6 +16,7 @@ import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
 import { useSwipeClose } from './useSwipeClose';
+import PageHint, { resetHints } from './PageHint';
 import styles from './NavBar.module.css';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
@@ -87,7 +88,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <ReaderGestureSetting />
         <div className={styles.sheetLinks}>
           {links.map(({ href, icon, label }) => (
-            <Link key={href} href={href} className={styles.sheetLink} onClick={onClose}>
+            <Link key={href} href={href} className={styles.sheetLink} onClick={() => { if (href === '/?tour=1') resetHints(); onClose(); }}>
               {icon}<span>{label}</span>
             </Link>
           ))}
@@ -205,6 +206,7 @@ export default function TabBar() {
         <HelpButton className={`${styles.tab} ${styles.railOnly}`} />
         <SettingsButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SettingsButton>
       </nav>
+      <PageHint />
     </>
   );
 }

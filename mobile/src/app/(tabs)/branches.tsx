@@ -5,6 +5,7 @@ import { GalleryHorizontal, Search, UnfoldHorizontal, X, type LucideProps } from
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
+import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import { toQuranHub } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -126,6 +127,7 @@ export default function BranchesScreen() {
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
         onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}
       <HelpSheet topic={help ? 'branches' : null} onClose={() => setHelp(false)} palette={palette} />
+      <TabHint id="branches" palette={palette} hidden={searching} />
     </View>
   );
 }

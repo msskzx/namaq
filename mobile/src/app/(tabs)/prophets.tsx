@@ -5,6 +5,7 @@ import { Check, ChevronDown } from 'lucide-react-native';
 import { findProphet, PROPHETS, prophetName } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';
 import Sheet from '@/components/Sheet';
+import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import { toQuranHub } from '@/lib/ways';
 import { readJson, writeJson } from '@/lib/storage';
@@ -47,6 +48,7 @@ export default function ProphetsTab() {
           ))}
         </ScrollView>
       </Sheet>
+      <TabHint id="prophets" palette={palette} />
     </View>
   );
 }

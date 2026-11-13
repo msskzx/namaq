@@ -1,6 +1,7 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useIsFocused } from 'expo-router';
+import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import Utilities, { UtilityPicker } from '@/components/Utilities';
 import { useTabBarSpace } from '@/components/tabBarSpace';
@@ -21,6 +22,7 @@ export default function UtilitiesTab() {
       <ScrollView ref={scroll} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
         <Utilities palette={palette} focused={focused} />
       </ScrollView>
+      <TabHint id="utilities" palette={palette} />
     </View>
   );
 }

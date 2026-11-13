@@ -1,0 +1,26 @@
+/* See-through like the tab bar (NavBar.module.css .tabs), just above it on phones. */
+.hint {
+  position: fixed; z-index: 49; display: flex; align-items: center; gap: 0.625rem;
+  inset-inline: calc(20px + env(safe-area-inset-left)) calc(20px + env(safe-area-inset-right)); bottom: max(1rem, var(--app-tabbar));
+  padding: 0.75rem 0.875rem; border-radius: 14px; text-align: start; color: var(--home-ink);
+  background: color-mix(in srgb, var(--home-paper) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--home-ink) 12%, transparent);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+  animation: hint-in 0.4s ease-out 0.6s both;
+}
+.hint:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
+.icon { flex: none; color: var(--home-accent); }
+.text { flex: 1; font-size: 15px; line-height: 1.6; }
+.close { flex: none; color: var(--home-muted); }
+@media (min-width: 1024px) {
+  .hint { inset-inline: calc(var(--app-rail) + 1rem) auto; bottom: 1rem; width: 24rem; }
+}
+/* The mushaf's tip names the reading touches: not while reciting, and it steps aside while an ayah's buttons are open. */
+:global(body):has(:global(:is([data-reciting], [data-ayah-actions]))) .hint { display: none; }
+/* While reading, the phone hides the tab bar: the tip drops to where the bar would sit, as the recite bar does. */
+@media (max-width: 1023.98px) {
+  :global(body):has(:global([data-reader-immersive="true"])) .hint { bottom: var(--tabbar-bottom, 8px); }
+}
+@keyframes hint-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hint { animation: none; } }
