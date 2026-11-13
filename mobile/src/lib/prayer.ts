@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 import * as adhan from 'adhan';
 import * as Location from 'expo-location';
 import { MY_LOCATION, prayerDay, qiblaBearing, type Adhan, type Place, type PrayerDay, type PrayerSettings } from '@shared/prayer';
@@ -42,8 +43,15 @@ const NO_COMPASS_MS = 4000;
 
 export function useHeading(on: boolean): number | null | 'none' | 'denied' {
   const [heading, setHeading] = useState<number | null | 'none' | 'denied'>(null);
+  // Back from the phone's settings (where the permission may have been given): start again.
+  const [wake, setWake] = useState(0);
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') setWake(count => count + 1); });
+    return () => listener.remove();
+  }, []);
   useEffect(() => {
     if (!on) return;
+    setHeading(null);
     let sub: Location.LocationSubscription | undefined;
     let gone = false;
     let heard = false;
@@ -62,6 +70,6 @@ export function useHeading(on: boolean): number | null | 'none' | 'denied' {
       }).then(watch => { if (gone) watch.remove(); else sub = watch; });
     }).catch(() => { if (!gone) setHeading('none'); });
     return () => { gone = true; clearTimeout(quiet); sub?.remove(); };
-  }, [on]);
+  }, [on, wake]);
   return heading;
 }

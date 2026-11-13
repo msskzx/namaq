@@ -285,9 +285,9 @@ function Calendar() {
         {WEEK.map(day => <span key={day} className={styles.week}>{day}</span>)}
         {Array.from({ length: month.lead }, (_, i) => <span key={`lead-${i}`} />)}
         {month.days.map(day => (
-          <span key={day.day} className={`${styles.day} ${day.today ? styles.today : ''}`} aria-current={day.today ? 'date' : undefined}
-            aria-label={`${dayDigits(day.day)}، ${day.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' })}`}>
-            <b>{dayDigits(day.day)}</b><small>{dayDigits(day.gregorian.getDate())}</small>
+          <span key={day.day} className={`${styles.day} ${day.today ? styles.today : ''}`} aria-current={day.today ? 'date' : undefined}>
+            <b aria-hidden>{dayDigits(day.day)}</b><small aria-hidden>{dayDigits(day.gregorian.getDate())}</small>
+            <span className="sr-only">{`${dayDigits(day.day)}، ${day.gregorian.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' })}`}</span>
           </span>
         ))}
       </div>
