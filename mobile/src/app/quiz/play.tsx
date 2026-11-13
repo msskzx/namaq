@@ -11,7 +11,7 @@ import Button, { Row } from '@/components/Button';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { surahNames } from '@/lib/branches';
-import { check, cleanSolo, clearAnswers, goTo, hasTyped, questionState, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, questionState, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -31,7 +31,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
           {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
         </Text>
-        <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} />
+        <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} hints={run.hints?.[review]} />
         <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule }}>
           <Button label="العودة للنتيجة" onPress={() => setReview(null)} />
         </View>
@@ -93,8 +93,9 @@ export default function QuizPlay() {
         <>
           <View style={{ flex: 1 }}>
             {checked
-              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} header={top} />
-              : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top} />}
+              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} header={top} hints={run.hints?.[current]} />
+              : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top}
+                hints={run.hints?.[current] ?? {}} onHints={hints => update(setHints(run, hints))} />}
           </View>
           {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
           {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>

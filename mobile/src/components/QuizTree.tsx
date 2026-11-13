@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { Pressable, ScrollView, Share, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
-import { Bookmark, GalleryHorizontal, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
+import { Bookmark, GalleryHorizontal, Lightbulb, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { branchesHref, keys, type Branch, type Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
@@ -10,6 +10,7 @@ import { quranText } from '@/lib/quranText';
 import { givenAnswer } from '@shared/quiz/branchAnswers';
 import { correctionOf, gradedTree, neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
+import { addHint, hintsOf, type Hints } from '@shared/quiz/hints';
 import BranchTree, { type Paths, type RenderNode } from './BranchTree';
 import { litPaths, togglePath } from '@shared/quran/pathHighlight';
 import MatrixCard from './MatrixCard';
@@ -85,9 +86,9 @@ function Tree({ question, tree, palette, names, renderNode, down }: { question: 
 }
 
 /** The input for one asked node: the same box in the tree and in the matrix, so an answer typed in one shows in the other. */
-function blank(question: TreeQuestion, index: number, value: string, onType: (node: number, text: string) => void, palette: Palette, width = 150) {
+function blank(question: TreeQuestion, index: number, value: string, onType: (node: number, text: string) => void, palette: Palette, width = 150, hint = '') {
   const asked = question.asked ?? [];
-  return <TextInput value={value} onChangeText={text => onType(index, text)}
+  return <TextInput value={value} onChangeText={text => onType(index, text)} placeholder={hint} placeholderTextColor={palette.muted}
     accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
     autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
     style={{ width, minHeight: 40, fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
@@ -108,7 +109,7 @@ function rowsOf(tree: Branch): { leaf: Branch; path: number[] }[] {
 }
 
 /** The matrix view of a question: one row per ayah, the shared start in colour, an empty box where a node is asked. */
-function MatrixInputs({ question, values, onType, palette, names }: { question: TreeQuestion; values: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string> }) {
+function MatrixInputs({ question, values, hints, onType, palette, names }: { question: TreeQuestion; values: string[]; hints: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string> }) {
   const rows = useMemo(() => rowsOf(question.tree), [question.tree]);
   const text = { fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, writingDirection: 'rtl' as const };
   return (
@@ -121,7 +122,7 @@ function MatrixInputs({ question, values, onType, palette, names }: { question: 
             <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
               <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>
               {path.map(index => isAsked(question, index)
-                ? <View key={index}>{blank(question, index, values[index], onType, palette, 130)}</View>
+                ? <View key={index}>{blank(question, index, values[index], onType, palette, 130, hints[index])}</View>
                 : <Text key={index} style={text}>{quranText(values[index])}</Text>)}
             </View>
           </View>
@@ -135,11 +136,17 @@ function MatrixInputs({ question, values, onType, palette, names }: { question: 
  * The question with an empty box in each asked node; the other nodes are given. Shown as a tree (it can rotate, and turns
  * top down by itself when it is wider than the phone, so no box starts off the screen) or, per question, as the matrix.
  */
-export function QuizInputs({ question, typed, onType, palette, names, header }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode }) {
+export function QuizInputs({ question, typed, onType, palette, names, header, hints: kept, onHints }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode;
+  /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
+  hints?: Hints; onHints?: (hints: Hints) => void }) {
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
+  const [own, setOwn] = useState<Hints>({});
+  const hints = kept ?? own;
+  const shown = useMemo(() => hintsOf(question, hints), [question, hints]);
+  const hint = () => (onHints ?? setOwn)(addHint(question, values, hints));
   const renderNode: RenderNode = (node, index) => !isAsked(question, index)
     ? <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>{quranText(givenAnswer(node))}</Text>
-    : blank(question, index, values[index], onType, palette);
+    : blank(question, index, values[index], onType, palette, 150, shown[index]);
   // null until the user rotates: then the tree is drawn the way that fits, sideways first.
   const [chosen, setChosen] = useState<boolean | null>(null);
   const [fits, setFits] = useState(true);
@@ -150,13 +157,14 @@ export function QuizInputs({ question, typed, onType, palette, names, header }: 
   return (
     <View style={{ flex: 1 }}>
       {matrix
-        ? <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} onType={onType} palette={palette} names={names} /></ScrollView>
+        ? <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} onType={onType} palette={palette} names={names} /></ScrollView>
         : <Scroller header={header} fit onOverflow={!down && chosen === null ? overflow : undefined}>
           <Tree question={question} tree={question.tree} palette={palette} names={names} renderNode={renderNode} down={down} />
         </Scroller>}
       {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 8 }}>
         <Bar label={matrix ? 'عرض الشجرة' : 'عرض المصفوفة'} onPress={() => setMatrix(!matrix)} Icon={matrix ? TreeIcon : GalleryHorizontal} palette={palette} />
         {!matrix && <Bar label="تدوير الشجرة" onPress={() => setChosen(!down)} Icon={RotateCwSquare} palette={palette} />}
+        <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={Lightbulb} palette={palette} />
       </View>}
     </View>
   );
@@ -197,7 +205,7 @@ function MatrixMark({ row, palette }: { row: Correction; palette: Palette }) {
 }
 
 /** One asked node after checking: verdict, the node's words with the ones enough to type underlined, what was typed when wrong, and its ayat. */
-function Graded({ row, palette, names }: { row: Correction; palette: Palette; names: Record<number, string> }) {
+function Graded({ row, palette, names, hinted }: { row: Correction; palette: Palette; names: Record<number, string>; hinted?: boolean }) {
   const references = row.node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`; }).join(' · ');
   const cut = neededCut(row.node.words, row.needed);
   return (
@@ -205,6 +213,7 @@ function Graded({ row, palette, names }: { row: Correction; palette: Palette; na
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Badge row={row} palette={palette} />
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
+        {hinted && <Lightbulb size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
       </View>
       <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
         <Text style={{ textDecorationLine: 'underline', textDecorationColor: palette.accent }}>{quranText(row.node.words.slice(0, cut).join(' '))}</Text>
@@ -249,7 +258,9 @@ function TreeActions({ phrase, text, palette }: { phrase: string; text: string; 
  * The answer tree: each asked node shows how it was graded; tapping a node lights its path (the matrix opens its ayat).
  * As on the website, it can turn to the matrix, rotate, show the surrounding ayat, grow in the studio, and be saved, shared or opened.
  */
-export function QuizFeedback({ question, typed, palette, names, onTap, header }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode }) {
+export function QuizFeedback({ question, typed, palette, names, onTap, header, hints }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
+  /** The hints used on this question, marked with a small bulb. */
+  hints?: Hints }) {
   // Graded once per question and answer: a party sends a new copy of the same question with every update, and an
   // unanswered question comes with a new empty answer each render, which must not rebuild the tree (and stop the studio).
   const snapshot = JSON.stringify({ question, typed });
@@ -296,7 +307,7 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header }:
   };
   const renderNode: RenderNode = (_, index) => {
     const row = rows.get(index);
-    return row ? <Graded row={row} palette={palette} names={names} /> : undefined;
+    return row ? <Graded row={row} palette={palette} names={names} hinted={!!hints?.[index]} /> : undefined;
   };
   const studio = growth.studio && !matrix;
   const treeGrowth = studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;

@@ -7,6 +7,7 @@ import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@s
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
 import { DEFAULT_DIFFICULTY, parseDifficulty, type Difficulty } from '@shared/quiz/difficulty';
 import type { Random } from '@shared/quiz/random';
+import type { Hints } from '@shared/quiz/hints';
 import { readBookmarks, type Bookmark } from '@shared/bookmarks';
 import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 import type { JuzRange } from '@shared/quran/juz';
@@ -75,6 +76,8 @@ export type SoloRun = {
   typed: string[][];
   /** A question is checked once its answer was graded, or its answer shown. */
   checked: boolean[];
+  /** The hints shown in each question (older runs have none). */
+  hints?: Hints[];
   current: number;
   submitted: boolean;
 };
@@ -88,6 +91,9 @@ const at = <T,>(list: T[], index: number, value: T) => list.map((item, i) => i =
 
 export const typeAnswer = (run: SoloRun, node: number, text: string): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, at(run.typed[run.current], node, text)) };
+
+export const setHints = (run: SoloRun, hints: Hints): SoloRun =>
+  run.checked[run.current] ? run : { ...run, hints: run.questions.map((_, i) => i === run.current ? hints : run.hints?.[i] ?? {}) };
 
 export const clearAnswers = (run: SoloRun): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, emptyBranchAnswers(run.questions[run.current])) };

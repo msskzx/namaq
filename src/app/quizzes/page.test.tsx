@@ -202,7 +202,7 @@ describe('QuizzesPage', () => {
     render(<QuizzesPage />);
     const modes = screen.getByRole('navigation', { name: 'Quiz mode' });
     const links = within(modes).getAllByRole('link');
-    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party', '/quran/read/recite', '/quran/read?write=1']);
+    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party', '/quran/read/recite', '/quizzes/openings', '/quran/read?write=1']);
     expect(within(links[2]).getByText('Recite')).toBeTruthy();
     expect(within(links[0]).getByText('Solo quiz')).toBeTruthy();
     expect(within(links[1]).getByText('Party quiz')).toBeTruthy();

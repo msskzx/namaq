@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Eraser, GalleryHorizontal } from "lucide-react";
+import { Eraser, GalleryHorizontal, Lightbulb } from "lucide-react";
 import TreeIcon from "@/components/common/TreeIcon";
 import AyahCards from "@/app/quran/branches/AyahCards";
 import { CardActions } from "@/app/quran/branches/Filters";
@@ -16,6 +16,7 @@ import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers";
 import { correctionOf, gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
+import { addHint, hintsOf, type Hints } from "@shared/quiz/hints";
 import { branchesHref, keys, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
 import example from "@shared/data/quiz/example.json";
@@ -58,7 +59,9 @@ function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   </React.Fragment>)}</span>;
 }
 
-export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean }) {
+export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true, hints }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean;
+  /** The hints used on this question, marked with a small bulb. */
+  hints?: Hints }) {
   const [matrix, setMatrix] = React.useState(false);
   const snapshot = JSON.stringify({ question: givenQuestion, typed: givenTyped });
   const feedback = React.useMemo(() => {
@@ -98,7 +101,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           if (!row) return marked(<span className="font-quran text-lg leading-loose"><TreeWords words={answer.words} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} /></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />);
           return (
             <div className="flex max-w-60 flex-col gap-1" data-answer={row.correct ? "correct" : "incorrect"}>
-              <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
+              <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}{hints?.[index] ? <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} /> : null}</p>
               {marked(<NeededWords words={answer.words} needed={row.needed} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />)}
               {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
             </div>
@@ -109,9 +112,15 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   );
 }
 
-export function BranchInputs({ question, typed, onChange, onCheck, ar }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean }) {
+export function BranchInputs({ question, typed, onChange, onCheck, ar, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
+  /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
+  hints?: Hints; onHints?: (hints: Hints) => void }) {
+  const [own, setOwn] = React.useState<Hints>({});
   if (!question.tree) return null;
   const values = emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value);
+  const hints = kept ?? own;
+  const shown = hintsOf(question, hints);
+  const hintLabel = ar ? "تلميح: حرف آخر من كل طرف فارغ" : "Hint: one more letter in each empty leaf";
   const started = values.some((value, index) => isAsked(question, index) && value.trim());
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => {
@@ -120,13 +129,16 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
     }}>
       {!question.asked && <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>}
       <div dir="rtl">
-        <NavButtons><RotateButton /></NavButtons>
+        <NavButtons>
+          <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
+          <RotateButton />
+        </NavButtons>
         <BranchTree organic tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
           <span className="font-quran text-lg leading-loose text-[var(--home-muted)]"><MushafText>{givenAnswer(node)}</MushafText></span>
         ) : (
           <label className="flex w-36 max-w-full flex-col gap-1">
             <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
-            <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]}
+            <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]} placeholder={shown[index] || undefined}
               onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
               className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
           </label>
