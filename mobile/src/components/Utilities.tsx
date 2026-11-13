@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
+import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
 import { Text, TextInput } from './Text';
 import Sheet from './Sheet';
 import { hijriDate } from '@shared/hijri';
-import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place } from '@shared/prayer';
+import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
-import { prayerPlace, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
+import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
+import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette, CARD } from '@/lib/theme';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
@@ -103,6 +105,24 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const date = useMemo(() => hijriDate(now), [dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const next = nextPrayer(times, now);
   const method = METHODS.find(item => item.id === settings.method)!;
+  const [alerts, setAlerts] = adhanAlerts.use();
+  // Switched on but the phone blocks notifications: say so under the card.
+  const [blocked, setBlocked] = useState(false);
+  const back = useForeground();
+  useEffect(() => {
+    if (!ALERTS_SUPPORTED || !anyAlert(alerts)) { setBlocked(false); return; }
+    let gone = false;
+    alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
+    return () => { gone = true; };
+  }, [alerts, dayKey, back]);
+  const toggle = async (key: Exclude<PrayerKey, 'sunrise'>) => {
+    buzz();
+    if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }
+    // The permission is asked for only here, the first time a prayer is switched on.
+    const ok = await allowAlerts();
+    setBlocked(!ok);
+    if (ok) setAlerts({ ...adhanAlerts.get(), [key]: true });
+  };
   return (
     <>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
@@ -115,14 +135,27 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
           const faint = key === 'sunrise';
           const color = on ? palette.onAccent : faint ? palette.muted : palette.ink;
           return (
-            <View key={key} accessible accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
-              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
-              <Text style={{ color, fontSize: faint ? 16 : 20 }}>{PRAYER_NAMES[key]}</Text>
-              <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
+            <View key={key}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
+              {ALERTS_SUPPORTED && (key === 'sunrise'
+                ? <View style={{ width: BELL }} />
+                : <BellButton on={alerts[key]} color={on ? palette.onAccent : alerts[key] ? palette.accent : palette.muted} name={PRAYER_NAMES[key]} onPress={() => toggle(key)} />)}
+              <View accessible accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ color, fontSize: faint ? 16 : 20 }}>{PRAYER_NAMES[key]}</Text>
+                <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
+              </View>
             </View>
           );
         })}
       </View>
+      {blocked && (
+        <Pressable onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
+          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'center', paddingVertical: 4, opacity: pressed ? 0.7 : 1 })}>
+          <BellOff size={16} color={palette.muted} />
+          <Text style={{ color: palette.muted, fontSize: 15 }}>التنبيهات موقوفة، فاسمح بها من إعدادات الجوال</Text>
+        </Pressable>
+      )}
       <View style={{ gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: 14 }}>طريقة الحساب</Text>
         <Pressable onPress={() => setMethods(true)} accessibilityRole="button" accessibilityLabel={`طريقة الحساب: ${method.label}`}
@@ -152,6 +185,19 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
         </ScrollView>
       </Sheet>
     </>
+  );
+}
+
+const BELL = 20;
+
+/** The adhan switch on a prayer's row: a bell when it rings, a struck bell when it doesn't. */
+function BellButton({ on, color, name, onPress }: { on: boolean; color: string; name: string; onPress: () => void }) {
+  const Icon = on ? Bell : BellOff;
+  return (
+    <Pressable onPress={onPress} accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={`تنبيه أذان ${name}`} hitSlop={12}
+      style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
+      <Icon size={BELL} color={color} strokeWidth={on ? 2 : 1.6} />
+    </Pressable>
   );
 }
 
