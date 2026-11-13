@@ -77,6 +77,15 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `Records used: 0019, 0021`) or `none`; `npm run records:used` counts them.
   Distillate lessons are long write-ups written only when the owner asks.
 
+## Sources and attributions
+
+- Every book, text, data set, font and library Namaq draws on is listed once in
+  `shared/sources.ts`, with its licence and the pages that use it. The website's
+  `/sources` (books) and `/attributions` (everything) render that list, and the
+  app's settings link to it. **A PR that adds a data source or book adds it
+  there in the same PR**, with the licence as the source states it; one that
+  stops using a source removes it. Link out; never host a book in full.
+
 ## Quiz questions
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and

@@ -65,6 +65,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
   const links = [
     { href: '/?tour=1', icon: <Play size={20} aria-hidden />, label: ar ? 'الجولة التعريفية' : 'Tour' },
     { href: '/about', icon: <Emblem className={styles.sheetEmblem} />, label: ar ? 'عن نمق' : 'About Namaq' },
+    { href: '/attributions', icon: <BookOpen size={20} aria-hidden />, label: ar ? 'المصادر والتراخيص' : 'Sources and licences' },
     { href: '/privacy', icon: <ShieldCheck size={20} aria-hidden />, label: ar ? 'سياسة الخصوصية' : 'Privacy policy' },
   ];
   return (
