@@ -36,7 +36,7 @@ const menuAt = (event: MouseEvent<HTMLElement>) => {
 };
 
 /** The words of the forgotten ayat, fetched once per list. */
-function useAyahTexts(keys: string[]) {
+export function useAyahTexts(keys: string[]) {
   const [texts, setTexts] = useState<Record<string, string>>({});
   const wanted = keys.join(',');
   useEffect(() => {

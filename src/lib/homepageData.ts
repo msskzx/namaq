@@ -1,11 +1,9 @@
 import { surahList } from './quran/surahList';
 import { surahLabel } from './quran/surahLabel';
-import { homeQuranSections } from './homeQuranSections';
 import treeData from '@shared/data/quran/trees.json';
 import { buildPhraseGroups } from '@shared/quran/phraseTrees';
 import { tourRecitePage, tourStory, tourTree, TOUR_RECITE } from './tourTree';
 import { groups } from '@shared/quran/mutashabih/data';
-import { listedPairs, todaysPair } from '@/app/quran/compare/pairCards';
 
 const phrases = buildPhraseGroups(treeData.ayat);
 
@@ -30,11 +28,9 @@ export async function getHomepageData() {
     tour: tourTree(),
     tourStory: tourStory(),
     tourRecite: { ...TOUR_RECITE, data: await tourRecitePage(), names: Object.fromEntries(surahs.filter(surah => surah.number >= TOUR_RECITE.top).map(surah => [surah.number, surah.name])) },
-    daily: todaysPair() ?? null,
-    sections: homeQuranSections(surahs.map(surah => ({ ...surah, name: surahLabel(surah) })), new Set(listedPairs.flatMap(pair => [pair.a, pair.b]))),
   };
 }
 
 type Loaded = Awaited<ReturnType<typeof getHomepageData>>;
 /** The tour's story and recite steps are left out where a page has no use for them (tests). */
-export type HomepageData = Omit<Loaded, 'tourStory' | 'tourRecite' | 'daily'> & Partial<Pick<Loaded, 'tourStory' | 'tourRecite' | 'daily'>>;
+export type HomepageData = Omit<Loaded, 'tourStory' | 'tourRecite'> & Partial<Pick<Loaded, 'tourStory' | 'tourRecite'>>;
