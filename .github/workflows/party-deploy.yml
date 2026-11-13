@@ -1,0 +1,48 @@
+# Deploys the party quiz server (party/) to Cloudflare after every merge to main that changes it.
+# The server bundles shared/party, shared/quiz and shared/quran, so changes there redeploy it too.
+# Needs the repository secrets CLOUDFLARE_API_TOKEN ("Edit Cloudflare Workers" template)
+# and CLOUDFLARE_ACCOUNT_ID. It can also be run by hand from the Actions tab.
+name: party deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'party/**'
+      - 'shared/party/**'
+      - 'shared/quiz/**'
+      - 'shared/quran/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: party-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # wrangler 4 needs Node 22 or newer.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: party/package-lock.json
+
+      - run: npm ci
+        working-directory: party
+
+      - run: npm run typecheck
+        working-directory: party
+
+      - name: Deploy to Cloudflare
+        working-directory: party
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
