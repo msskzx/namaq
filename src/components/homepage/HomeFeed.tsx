@@ -13,7 +13,7 @@ import BranchTree from '@/app/quran/branches/BranchTree';
 import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
-import { placeStore, settingsStore, viewStore } from '@/components/utilities/Utilities';
+import { placeStore, settingsStore, useNow, viewStore } from '@/components/utilities/Utilities';
 import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { compareAnchor, compareBookmarkId, savedAs } from '@shared/compareBookmarks';
@@ -51,12 +51,8 @@ const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_IND
 
 /** The reader's own day, worked out in the browser (null while the page is drawn on the server). */
 function useToday() {
-  const [today, setToday] = useState<{ day: number; date: string | null; juz: number[] | null } | null>(null);
-  useEffect(() => {
-    const now = new Date();
-    setToday({ day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now) });
-  }, []);
-  return today;
+  const now = useNow();
+  return useMemo(() => now ? { day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now) } : null, [now]);
 }
 
 const STORY: Record<StoryId, { label: string; Icon: typeof BookOpen | typeof TreeIcon; href: string }> = {
