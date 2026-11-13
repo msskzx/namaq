@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { backToVisit, leftVisit, visitStart } from '@shared/feedSeen';
 import { toggleBookmark } from '@shared/bookmarks';
 import Homepage from './Homepage';
 
@@ -84,6 +85,27 @@ describe('home', () => {
     fireEvent.click(screen.getByRole('button', { name: 'المزيد للتأمل' }));
     // Everything was seen: the feed starts again from the seen pair.
     await waitFor(() => expect(feed.textContent).toContain('وقلنا يا'));
+  });
+
+  it('replaces seen posts after returning from a long time away', async () => {
+    render(<Homepage data={data} />);
+    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));
+    const start = visitStart();
+    const clock = vi.spyOn(Date, 'now');
+    try {
+      clock.mockReturnValue(start + 1000);
+      vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      fireEvent(document, new Event('visibilitychange'));
+      clock.mockReturnValue(start + 31 * 60_000);
+      vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+      fireEvent(document, new Event('visibilitychange'));
+      await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
+    } finally {
+      cleanup();
+      vi.restoreAllMocks();
+      leftVisit(start - 31 * 60_000);
+      backToVisit(start);
+    }
   });
 
   it('asks to recall a due forgotten ayah: first words, the rest hidden, and remembered takes it away', async () => {

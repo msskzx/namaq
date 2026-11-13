@@ -32,6 +32,12 @@ export const FEED_AHEAD = 60;
 /** Away this long (app in the background, tab hidden), coming back starts a new visit. */
 const AWAY_MS = 30 * 60_000;
 let visit = Date.now();
+const visitListeners = new Set<() => void>();
+export const subscribeVisit = (listener: () => void) => {
+  visitListeners.add(listener);
+  return () => { visitListeners.delete(listener); };
+};
+export const serverVisit = () => 0;
 let leftAt: number | null = null;
 /** When this visit began: what was first shown after it still counts as new, so the open feed holds still. */
 export const visitStart = () => visit;
@@ -39,7 +45,10 @@ export const visitStart = () => visit;
 export function leftVisit(now = Date.now()) { leftAt = now; }
 /** Back again: after a long time away, a new visit begins, and what was shown before counts as seen. */
 export function backToVisit(now = Date.now()) {
-  if (leftAt !== null && now - leftAt >= AWAY_MS) visit = now;
+  if (leftAt !== null && now - leftAt >= AWAY_MS) {
+    visit = now;
+    visitListeners.forEach(listener => listener());
+  }
   leftAt = null;
 }
 
