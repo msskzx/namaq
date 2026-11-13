@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { GalleryHorizontal, RotateCwSquare, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
@@ -6,6 +6,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/components/TopBar';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
@@ -84,7 +85,14 @@ export default function BranchesScreen() {
     else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
     else if (intent.juz) change({ ...EMPTY_LIST, range: { from: intent.juz, to: intent.juz } });
   });
-  const onIndex = useCallback(() => setRotated(false), []);
+  const at = useRef(0);
+  const onIndex = useCallback((index: number) => { at.current = index; setRotated(false); }, []);
+  // The branches tab tapped again: back to the first tree, then (tapped again there) the filters and search cleared.
+  useTabRetap('branches', () => {
+    if (searching) return;
+    if (at.current > 0 && pieces?.length) { writeJson('branches-place', { id: pieces[0].id }); setStart({ id: pieces[0].id }); setJumps(value => value + 1); }
+    else if (list.query || list.surah || list.ayah || isFiltered(list)) change(EMPTY_LIST);
+  });
   const openSearch = useCallback(() => setSearching(true), []);
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
   const { tree } = useLocalSearchParams<{ tree?: string }>();

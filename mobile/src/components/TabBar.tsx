@@ -8,6 +8,7 @@ import { ArrowLeftRight, BookOpen, Feather, ScrollText, type LucideProps } from 
 import TreeIcon from './TreeIcon';
 import { TAB_BAR, tabBarBottom } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
+import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 
 // The website's phone tabs (src/lib/navigation.ts NAV_SECTIONS), icon only, plus the prophets timeline (owner, 2026-11-10).
@@ -49,7 +50,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
           const tab = TABS[route.name];
           if (!tab) return null;
           const active = state.index === i;
-          const press = () => { if (!active) navigateToTab(route.key); };
+          const press = () => { if (active) retapTab(route.name); else navigateToTab(route.key); };
           return (
             <Pressable key={route.key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: active }} accessibilityLabel={tab.label}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

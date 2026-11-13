@@ -1,3 +1,4 @@
+import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
@@ -6,6 +7,7 @@ import TopBar from '@/components/TopBar';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabRetap } from '@/lib/tabRetap';
 
 // The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes).
 const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title: string; text: string }[] = [
@@ -18,10 +20,13 @@ export default function QuizzesScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  // The quizzes tab tapped again: back to the top.
+  useTabRetap('quizzes', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         {MODES.map(({ href, Icon, title, text }) => (
           <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
             style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, borderRadius: 14, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>

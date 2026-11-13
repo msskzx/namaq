@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '@/components/Text';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from './tabBarSpace';
 import { storyMap } from '@shared/quran/prophets/story';
 import EventPlaces from '@/components/EventPlaces';
@@ -29,6 +30,8 @@ export default function ProphetStory({ slug, header, inTab = false }: { slug: st
   const placeY = useRef<Record<number, number>>({});
   const pending = useRef<number | undefined>(undefined);
   const onScroll = useShrinkOnScroll();
+  // The prophets tab tapped again: back to the top of the story.
+  useTabRetap('prophets', () => { if (inTab) requestAnimationFrame(() => scroll.current?.scrollTo({ y: 0, animated: true })); });
 
   if (!prophet || !map) return <View style={{ flex: 1, backgroundColor: palette.paper }}>{header(() => setHelp(true))}</View>;
 
