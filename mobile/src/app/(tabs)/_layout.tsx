@@ -19,6 +19,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="words" />
       <Tabs.Screen name="oaths" />
       <Tabs.Screen name="openings" />
+      <Tabs.Screen name="order" />
       <Tabs.Screen name="search" />
     </Tabs>
   );

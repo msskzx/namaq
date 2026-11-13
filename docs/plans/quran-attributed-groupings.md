@@ -181,7 +181,8 @@ flowchart LR
   either way.
 - Whether new work stops building on the existing 12 themes (`themeId`, the 589
   range rows under `data/quran/topics/`, [quran-topics-engine.md](quran-topics-engine.md)
-  and the hops table in `src/lib/quran/surahOrder.ts`). They are groupings
+  and the hops table that was in `src/lib/quran/surahOrder.ts`, removed on 2026-11-13 by
+  [quran-order-sources.md](quran-order-sources.md)). They are groupings
   Namaq wrote, so they conflict with R2. This plan does not touch them and
   shares no table, ID or colour scale with them, so retiring them later is a
   deletion.
