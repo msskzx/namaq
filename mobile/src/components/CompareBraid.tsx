@@ -11,6 +11,8 @@ import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { Silent } from './StoryParts';
 
 const LINK = 26;
+/** The branches tree's line width. */
+const LINE = 2;
 
 /** The ayah numbers ending at this word: in a shared node both sides' numbers, when they differ. */
 const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
@@ -22,7 +24,8 @@ function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: P
     <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, writingDirection: 'rtl', textAlign: 'center', fontWeight: bold ? '600' : 'normal' }}>
       {words.map((word, i) => {
         const differs = other && other[i] && mushafText(other[i].text) !== mushafText(word.text) && normalizeWord(other[i].text) === normalizeWord(word.text);
-        const color = differs ? palette.amber : other ? undefined : word.mark?.kind === 'root' ? palette.root : word.mark?.kind === 'related' ? related : word.mark ? palette.accent : undefined;
+        // A shared node's words are the same on both sides: the accent, as a branches tree's trunk.
+        const color = differs ? palette.amber : other ? palette.accent : word.mark?.kind === 'root' ? palette.root : word.mark?.kind === 'related' ? related : word.mark ? palette.accent : undefined;
         return (
           <Text key={i}>
             {i > 0 ? ' ' : ''}
@@ -40,13 +43,13 @@ function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: P
 function Link({ from, to, palette }: { from: Row['kind']; to: Row['kind']; palette: Palette }) {
   if (from !== 'shared' && to !== 'shared') return (
     <View style={{ flexDirection: 'row', height: LINK }}>
-      {[0, 1].map(i => <View key={i} style={{ flex: 1, alignItems: 'center' }}><View style={{ flex: 1, width: 1.5, backgroundColor: palette.muted }} /></View>)}
+      {[0, 1].map(i => <View key={i} style={{ flex: 1, alignItems: 'center' }}><View style={{ flex: 1, width: LINE, backgroundColor: palette.rule }} /></View>)}
     </View>
   );
   const d = to === 'shared' ? 'M75 0 C75 16 50 10 50 26 M25 0 C25 16 50 10 50 26' : 'M50 0 C50 16 75 10 75 26 M50 0 C50 16 25 10 25 26';
   return (
     <Svg width="100%" height={LINK} viewBox={`0 0 100 ${LINK}`} preserveAspectRatio="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Path d={d} stroke={palette.muted} strokeWidth={1.5} fill="none" vectorEffect="non-scaling-stroke" />
+      <Path d={d} stroke={palette.rule} strokeWidth={LINE} fill="none" vectorEffect="non-scaling-stroke" />
     </Svg>
   );
 }
@@ -66,16 +69,18 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 
 type Row = { kind: 'shared' | 'split' | 'around'; a: BraidWord[]; b: BraidWord[]; near?: (AroundAyah | null)[] };
 
-function Node({ children, palette, shared }: { children: React.ReactNode; palette: Palette; shared?: boolean }) {
+/** A node drawn as the branches tree draws one: a filled box, a thin rule-coloured frame, two round corners and two square ones. */
+function Node({ children, palette }: { children: React.ReactNode; palette: Palette; shared?: boolean }) {
   return (
-    <View style={{ borderWidth: shared ? 2 : 1.5, borderColor: shared ? palette.green : palette.rule, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 2, alignSelf: 'center', maxWidth: '100%' }}>
+    <View style={{ borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, borderTopStartRadius: 14, borderBottomEndRadius: 14, borderTopEndRadius: 4, borderBottomStartRadius: 4,
+      paddingHorizontal: 12, paddingVertical: 2, alignSelf: 'center', maxWidth: '100%' }}>
       {children}
     </View>
   );
 }
 
 /**
- * The tree of a compare card: a braid. Where the two sides say the same words they run as one node (green frame);
+ * The tree of a compare card: a braid, in the branches tree's boxes, lines and colours. Where the two sides say the same words they run as one node (words in the accent);
  * where they part, each side has its own node (the first side on the right), and they rejoin on the next common stretch.
  */
 export default function CompareBraid({ sides, palette, around, labels, empty }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around; labels?: [string, string]; empty?: [string, string] }) {
@@ -104,13 +109,13 @@ export default function CompareBraid({ sides, palette, around, labels, empty }: 
                   const near = row.near?.[i];
                   return (
                     <View key={i} style={{ flex: 1, alignItems: 'center', paddingHorizontal: 4 }}>
-                      {row.kind === 'around' && r > 0 && near && <View style={{ height: 8, width: 1.5, backgroundColor: palette.muted }} />}
+                      {row.kind === 'around' && r > 0 && near && <View style={{ height: 8, width: LINE, backgroundColor: palette.rule }} />}
                       {row.kind === 'around'
                         ? (near ? <Neighbour ayah={near} palette={palette} /> : <View style={{ flex: 1, minHeight: 16 }} />)
                         : words.length ? <Node palette={palette}><Words words={words} palette={palette} /></Node>
                           : empty && !sides[i].ayat.length ? <Silent note={empty[i]} palette={palette} />
                           : <View accessibilityLabel="لا كلمات هنا" style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: palette.rule }} />}
-                      {r < rows.length - 1 && (row.kind !== 'around' || near) && <View style={{ flex: 1, minHeight: words.length || near ? 8 : 16, width: 1.5, backgroundColor: palette.muted }} />}
+                      {r < rows.length - 1 && (row.kind !== 'around' || near) && <View style={{ flex: 1, minHeight: words.length || near ? 8 : 16, width: LINE, backgroundColor: palette.rule }} />}
                     </View>
                   );
                 })}

@@ -51,6 +51,20 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 type Box = { x: number; y: number; w: number; h: number };
 type Cell = { lit: boolean };
 
+/**
+ * A hidden word: a box the word's width and about one line of letters tall, the word itself invisible inside it.
+ * A background on the text would cover the font's whole line (the Quran font's is very tall), so boxes overlapped the
+ * lines above and below and the surah titles; this box is clipped to the letters.
+ */
+function Veil({ text, size, palette, next }: { text: string; size: number; palette: Palette; next: boolean }) {
+  return (
+    <View style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, alignSelf: 'center',
+      backgroundColor: next ? tint(palette.accent, 0.22) : tint(palette.muted, 0.1), borderWidth: 1, borderColor: next ? palette.accent : palette.rule }}>
+      <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
+    </View>
+  );
+}
+
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
 function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch }: Props) {
@@ -107,7 +121,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const basmalaHidden = (surah: number) => titled?.get(surah) === 2 && !!hidden?.(`${surah}:1`, 1);
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const badges = data.items.flatMap(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter).join(' ')] : []), ...('line' in item && isSajda(item.line) ? ['سجدة'] : [])]);
-  const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
+  const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4, borderWidth: 1, borderColor: palette.rule } as const;
   const upcoming = { backgroundColor: tint(palette.accent, 0.22) } as const;
   const small = Math.max(11, width * 0.026);
   const press = (key: string | null) => ({
@@ -220,8 +234,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               return (
                 <View key={index} style={{ height: oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred || oval ? 'center' : 'flex-start' }}>
                   <View style={centred
-                    ? { flexDirection: 'row', gap: GAP * size }
-                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
+                    ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
+                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
                     {bands(index, cells)}
                     {cells.map(({ group, key, wordHidden, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
@@ -229,11 +243,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
                         <Word key={at} press={wordHidden ? undefined : press(key)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
+                        {wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: marked ? palette.accent : palette.ink }}>
-                          {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
-                          {wordHidden
-                            ? <Text style={[veiled, next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? upcoming : null]}>{group.word}</Text>
-                            : group.word}
+                          {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}
@@ -245,6 +259,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                             </Text>
                           ))}
                         </Text>
+                        </View>
                         </Word>
                       );
                     })}
