@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, NotebookPen, PenLine, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, LightbulbOff, List, NotebookPen, PenLine, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -19,11 +19,14 @@ import MushafPageView, { type Checked, type Touch, type Write } from './MushafPa
 import { IndexSheet, type Jump } from './ReaderSheets';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import NoteSheet from './NoteSheet';
+import WordSheet from './WordSheet';
 import TreeIcon from './TreeIcon';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
+import { lemmasAtMushafWord } from '@shared/quran/words';
+import { words } from '@/lib/words';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';
@@ -76,7 +79,8 @@ export default function Reader() {
   const [mark, setMark] = useState<{ key: string; page: number } | null>(null);
   const [tools, setTools] = useState(false);
   const [sheet, setSheet] = useState<'index' | null>(null);
-  const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
+  const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[] } | null>(null);
+  const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
   const zoomTo = useCallback((next: number) => { setZoom(next); writeJson(ZOOM, next); }, []);
@@ -222,12 +226,12 @@ export default function Reader() {
   const ayahText = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []).join(' ');
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
 
-  const run = (action: GestureAction, key: string | null, x: number, y: number) => {
+  const run = (action: GestureAction, key: string | null, x: number, y: number, word?: number) => {
     if (action === 'tools') setTools(on => !on);
     else if (action === 'next-ayah') revealNextAyah();
     else if (action === 'next-word') revealNextWord();
     else if (action === 'back') stepBackOne();
-    else if (key && action === 'actions') { buzz(); setActions({ key, x, y }); }
+    else if (key && action === 'actions') { buzz(); setActions({ key, x, y, lemmas: word === undefined ? [] : lemmasAtMushafWord(words, key, word) }); }
     else if (key && action === 'forgot') markForgotten(key);
     else if (key && action === 'save') toggleSaved(key);
   };
@@ -249,7 +253,7 @@ export default function Reader() {
   const openIndex = useCallback(() => { setActions(null); setSheet('index'); }, []);
   const writingNow = useRef(false);
   writingNow.current = !!writeKey;
-  const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number) => {
+  const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
     if (Date.now() - moved.current < 350) return;
     // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
     if (writingNow.current) { input.current?.focus(); return; }
@@ -258,15 +262,15 @@ export default function Reader() {
     // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
     if (mode === 'read') setMark(key ? { key, page: shown.current } : null);
     const set = readGestures()[mode];
-    if (touch === 'long') { latest.current(set.long, key, x, y); return; }
+    if (touch === 'long') { latest.current(set.long, key, x, y, word); return; }
     if (pending.current) {
       clearTimeout(pending.current.timer);
       pending.current = null;
-      latest.current(set.double, key, x, y);
+      latest.current(set.double, key, x, y, word);
       return;
     }
-    if (set.double === 'none') { latest.current(set.tap, key, x, y); return; }
-    pending.current = { timer: setTimeout(() => { pending.current = null; latest.current(set.tap, key, x, y); }, DOUBLE_TAP) };
+    if (set.double === 'none') { latest.current(set.tap, key, x, y, word); return; }
+    pending.current = { timer: setTimeout(() => { pending.current = null; latest.current(set.tap, key, x, y, word); }, DOUBLE_TAP) };
   }, [mode]);
 
   // While reciting the page ends above the recite pill, so it never covers a line.
@@ -301,8 +305,9 @@ export default function Reader() {
   const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
   const [preview, setPreview] = useState<Preview | null>(null);
-  const buttons = 3 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0);
-  const barWidth = buttons * 48 + 12;
+  const buttons = 3 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
+  // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
+  const barWidth = Math.min(buttons * 48 + 12, (size?.width ?? 360) - 16);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} scrollEnabled={!!keyboard} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
@@ -322,7 +327,7 @@ export default function Reader() {
       )}
       {actions && (
         <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), flexDirection: 'row', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 70), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 6, padding: 6, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
           <Pressable accessibilityRole="button" accessibilityLabel={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'}
             onPress={() => { markForgotten(actions.key); setActions(null); }}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, padding: 9, borderRadius: 10, backgroundColor: forgotCount ? palette.accent : 'transparent' }}>
@@ -334,11 +339,15 @@ export default function Reader() {
           {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" palette={palette}
             onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'compare', key }); }} />}
           {trees && <IconButton Icon={TreeIcon} label="الأشجار التي فيها الآية" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
+          {actions.lemmas.length > 0 && <IconButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} palette={palette}
+            onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
         </View>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
       <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
+      {/* The word long-pressed: its count and the ayat it is in (owner, 2026-11-13). */}
+      <WordSheet lemmas={wordLemmas} onClose={() => setWordLemmas(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
