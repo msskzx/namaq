@@ -1,5 +1,6 @@
 # Deploys the party quiz server (party/) to Cloudflare after every merge to main that changes it.
-# The server bundles shared/party, shared/quiz and shared/quran, so changes there redeploy it too.
+# The server bundles shared/party, shared/quiz and shared/quran/normalize.ts, so changes there redeploy it too.
+# If the worker starts importing another shared file, add it below.
 # Needs the repository secrets CLOUDFLARE_API_TOKEN ("Edit Cloudflare Workers" template)
 # and CLOUDFLARE_ACCOUNT_ID. It can also be run by hand from the Actions tab.
 name: party deploy
@@ -11,7 +12,7 @@ on:
       - 'party/**'
       - 'shared/party/**'
       - 'shared/quiz/**'
-      - 'shared/quran/**'
+      - 'shared/quran/normalize.ts'
   workflow_dispatch:
 
 permissions:
