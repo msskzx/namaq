@@ -127,6 +127,11 @@ test.describe('branches', () => {
       for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(part.tab ? 11 : 13);
     }
     expect(boxes.some(item => item.parts!.some(part => part.tab))).toBe(true);
+    // Every box ending an ayah closes with the sign: its number, which the Quran font draws as the sign.
+    for (const item of boxes.filter(item => item.parts!.some(part => part.tab))) {
+      const words = item.parts!.flatMap(part => (part.words ?? []) as { text: string }[]);
+      expect(words.at(-1)?.text).toMatch(/^[٠-٩]+$/);
+    }
     expect(scene.look.ui).toContain('Amiri');
   });
 

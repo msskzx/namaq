@@ -367,11 +367,13 @@ describe('BranchTree', () => {
     const pin = screen.getByRole('button', { name: 'إظهار المسار: جَنَّـٰتٍۢ وَعُيُونٍ' });
     fireEvent.click(pin);
     expect(pin.getAttribute('aria-pressed')).toBe('true');
-    expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'جَنَّـٰتٍۢ وَعُيُونٍ']);
+    // A box ending ayat with different numbers closes with the bare sign; a leaf, with its own ayah's number.
+    expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'جَنَّـٰتٍۢ وَعُيُونٍ ۝']);
+    expect(leaf.querySelector('[data-end]')?.textContent).toMatch(/﴿.+﴾/);
     fireEvent.click(screen.getByRole('button', { name: 'إظهار المسار: مَقَامٍ أَمِينٍۢ' }));
     expect(lit()).toHaveLength(3);
     fireEvent.click(pin);
-    expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'مَقَامٍ أَمِينٍۢ']);
+    expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'مَقَامٍ أَمِينٍۢ ﴿٥١﴾']);
   });
 
   it('lights a node\'s path when the node itself is tapped, and turns it off on a second tap', () => {
