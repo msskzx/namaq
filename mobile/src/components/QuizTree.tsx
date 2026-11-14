@@ -4,7 +4,7 @@ import { Text, TextInput } from '@/components/Text';
 import { router } from 'expo-router';
 import { Bookmark, GalleryHorizontal, Lightbulb, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { branchesHref, keys, type Branch, type Variant } from '@shared/quran/branches';
+import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import { givenAnswer } from '@shared/quiz/branchAnswers';
@@ -96,16 +96,16 @@ function blank(question: TreeQuestion, index: number, value: string, onType: (no
 }
 
 /** The question's nodes in branchNodes order (each child, then its own children), each with the nodes above it. */
-function rowsOf(tree: Branch): { leaf: Branch; path: number[] }[] {
-  const rows: { leaf: Branch; path: number[] }[] = [];
+function rowsOf(tree: Branch): { leaf: Branch; path: number[]; words: string[] }[] {
+  const rows: { leaf: Branch; path: number[]; words: string[] }[] = [];
   let next = 0;
-  const walk = (node: Branch, path: number[]) => node.children.forEach(child => {
+  const walk = (node: Branch, path: number[], words: string[]) => node.children.forEach(child => {
     const index = next++;
     const here = [...path, index];
-    if (!child.children.length) rows.push({ leaf: child, path: here });
-    walk(child, here);
+    if (!child.children.length) rows.push({ leaf: child, path: here, words });
+    walk(child, here, [...words, ...child.words]);
   });
-  walk(tree, []);
+  walk(tree, [], tree.words);
   return rows;
 }
 
@@ -115,11 +115,12 @@ function MatrixInputs({ question, values, hints, onType, palette, names }: { que
   const text = { fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, writingDirection: 'rtl' as const };
   return (
     <View style={{ gap: 10, paddingHorizontal: 12, paddingVertical: 8 }}>
-      {rows.map(({ leaf, path }) => {
-        const [surah, ayah] = (leaf.ayat[0] ?? '').split(':').map(Number);
+      {rows.map(({ leaf, path, words }) => {
+        // Named as on the tree: a row that runs on into the next ayah or surah names that one too.
+        const label = leaf.ayat[0] ? ayatLabel(shownAyat(leaf, words)[leaf.ayat[0]], names) : '';
         return (
           <View key={path.join('-')} style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
-            {surah ? <Text style={{ color: palette.muted, fontSize: 13 }}>{`${names[surah] ?? num(surah)} ${num(ayah)}`}</Text> : null}
+            {label ? <Text style={{ color: palette.muted, fontSize: 13 }}>{label}</Text> : null}
             <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
               <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>
               {path.map(index => isAsked(question, index)
@@ -206,8 +207,9 @@ function MatrixMark({ row, palette }: { row: Correction; palette: Palette }) {
 }
 
 /** One asked node after checking: verdict, the node's words with the ones enough to type underlined, what was typed when wrong, and its ayat. */
-function Graded({ row, palette, names, hinted }: { row: Correction; palette: Palette; names: Record<number, string>; hinted?: boolean }) {
-  const references = row.node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`; }).join(' · ');
+function Graded({ row, path, palette, names, hinted }: { row: Correction; path: string[]; palette: Palette; names: Record<number, string>; hinted?: boolean }) {
+  const spans = shownAyat(row.node, path);
+  const references = row.node.ayat.map(key => ayatLabel(spans[key], names)).join(' · ');
   const cut = neededCut(row.node.words, row.needed);
   return (
     <View style={{ maxWidth: 220, gap: 2 }}>
@@ -306,9 +308,9 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header, h
     const scene = await sceneRef.current?.();
     if (scene && beats.current) setVideo(treeVideo(scene, beats.current, palette));
   };
-  const renderNode: RenderNode = (_, index) => {
+  const renderNode: RenderNode = (_, index, path) => {
     const row = rows.get(index);
-    return row ? <Graded row={row} palette={palette} names={names} hinted={!!hints?.[index]} /> : undefined;
+    return row ? <Graded row={row} path={path} palette={palette} names={names} hinted={!!hints?.[index]} /> : undefined;
   };
   // Share as image: the graded answer as it shows, tree or matrix; the tree's video from the share sheet too.
   const share = (link: string) => shareCard(matrix

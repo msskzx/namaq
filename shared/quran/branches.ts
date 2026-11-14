@@ -342,6 +342,30 @@ export function linkId(words: string[], conjs: string[]) {
 
 export const PIECE_MAX = 6;
 
+const isAyahEnd = (word: string) => word === '۝' || word.startsWith('﴿');
+
+/**
+ * The ayat a node's label names, for each ayah ending at the node: that ayah and, when the node's words run on past
+ * its end, the ayah its last word is in. A grown branch can end in another surah (al-Saffat 182 runs on into the
+ * basmala and Sad 1), so the label names both rather than the first alone.
+ */
+export function shownAyat(node: Branch, path: string[] = []): Record<string, string[]> {
+  const words = [...path, ...node.words];
+  const ends = ayahEnds({ ...node, children: [] }, path);
+  // The ayat ending here end at this node, so its last word is in the last ayah of their run (`ayahEnds`).
+  const runsOn = words.slice(0, words.findLastIndex(word => !isAyahEnd(word))).some(isAyahEnd);
+  return Object.fromEntries(node.ayat.map(key => [key, runsOn && ends[key] !== key ? [key, ends[key]] : [key]]));
+}
+
+/** A label for the ayat `shownAyat` gives: «البقرة ٣», «البقرة ٣–٤», or «الصافات ١٨٢ ثم ص ١» into another surah. */
+export function ayatLabel(ayat: string[], names: Record<number, string>) {
+  const [surah, ayah] = ayat[0].split(':').map(Number);
+  const named = (s: number, a: number) => names[s] ? `${names[s]} ${num(a)}` : `${num(s)}:${num(a)}`;
+  if (ayat.length < 2) return named(surah, ayah);
+  const [lastSurah, lastAyah] = ayat[ayat.length - 1].split(':').map(Number);
+  return lastSurah === surah ? `${named(surah, ayah)}–${num(lastAyah)}` : `${named(surah, ayah)} ثم ${named(lastSurah, lastAyah)}`;
+}
+
 export function ayahEnds(node: Branch, path: string[] = []): Record<string, string> {
   const words = [...path, ...node.words];
   const grownPast = words.some(word => word.startsWith('﴿'));

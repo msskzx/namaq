@@ -4,7 +4,7 @@ import { Text } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { keys, type Branch } from '@shared/quran/branches';
+import { ayatLabel, keys, shownAyat, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { num } from '@shared/quran/arabicNumber';
@@ -30,9 +30,13 @@ export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: st
 const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
-export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
+/** Draws a node's box in place of its words; `path` is the words above it. */
+export type RenderNode = (node: Branch, index: number, path: string[]) => React.ReactNode | undefined;
 type Shared = { spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string> };
-const isLit = (shared: Shared, ayahKeys: string[]) => !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
+/** A lit path: the ayah growing while the studio is open, else the paths a tap or a search lit. */
+const isLit = (shared: Shared, growth: TreeGrowth, ayahKeys: string[]) => growth !== NO_GROWTH
+  ? growth.lit !== null && ayahKeys.includes(growth.lit)
+  : !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
 /** The ayat whose paths were lit by a tap (not by a search), as the website names them on the box the path starts from. */
 const tapped = (shared: Shared, ayahKeys: string[]) => !shared.paths ? [] : ayahKeys.filter(key => [...shared.paths!.pinned].some(([id, lit]) => id !== 'search' && lit.includes(key)));
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
@@ -56,11 +60,7 @@ function Fade({ id, children, style }: { id: string; children: React.ReactNode; 
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
 
-function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: Shared; center?: boolean }) {
-  const text = ayahKeys.map(key => {
-    const [surah, ayah] = key.split(':').map(Number);
-    return shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  }).join(' · ');
+function References({ text, shared, center }: { text: string; shared: Shared; center?: boolean }) {
   return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
@@ -169,9 +169,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { ...text, muted: !!muted, keys: ayahKeys } }); };
   const asked = growth.ask?.id === id ? growth.ask : undefined;
-  const growing = growth.now.has(id) || !!asked || (growth.lit !== null && ayahKeys.includes(growth.lit));
-  // A lit path tints its boxes blue, and the box tapped is outlined, as on the website.
-  const onPath = isLit(shared, ayahKeys);
+  // A lit path tints its boxes blue, and the box tapped (or just grown) is outlined, as on the website.
+  const onPath = isLit(shared, growth, ayahKeys);
   const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
   return (
     <Fade id={id}>
@@ -183,7 +182,7 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
           maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
-          borderColor: growing ? (growth.now.has(id) ? palette.path : palette.accent) : pressed ? palette.accent : muted ? palette.muted : selected ? palette.path : palette.rule,
+          borderColor: asked ? palette.accent : growth.now.has(id) ? palette.path : pressed ? palette.accent : muted ? palette.muted : selected ? palette.path : palette.rule,
           backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.card,
           ...CARD,
         })}>
@@ -210,25 +209,28 @@ function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }
  * a lit child lights only its own line and, at an end, its curve. The lit stretch of spine up to the parent is drawn by the fan
  * on top, so a lit path is exactly the lines it runs along and never the spine past the parent's line.
  */
-function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolean; color: string; lit?: string; down: boolean }) {
+function Elbow({ first, last, color, lit, down, spine: whole = true }: { first: boolean; last: boolean; color: string; lit?: string; down: boolean;
+  /** Off while the tree grows: the fan draws the spine itself, only as far as the children shown. */
+  spine?: boolean }) {
   const only = first && last;
   const into = lit ?? color;
+  const spine = whole ? LINE : 0;
   if (down) {
     // Children sit in a row under the parent: a bus along the top, a drop into each child.
     return (
       <View style={{ height: 16, alignSelf: 'stretch', flexDirection: 'row' }}>
         {last && !only
           ? <View style={{ flex: 1, flexDirection: 'row' }}>
-              <View style={{ flex: 1, borderTopWidth: LINE, borderColor: color }} />
+              <View style={{ flex: 1, borderTopWidth: spine, borderColor: color }} />
               <View style={{ width: CURVE, borderColor: into, borderTopWidth: LINE, borderTopEndRadius: CURVE, borderEndWidth: LINE }} />
             </View>
-          : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderTopWidth: LINE }) }} />}
+          : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderTopWidth: spine }) }} />}
         {first && !only
           ? <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={{ width: CURVE, borderColor: into, borderTopWidth: LINE, borderTopStartRadius: CURVE, borderStartWidth: LINE }} />
-              <View style={{ flex: 1, borderTopWidth: LINE, borderColor: color }} />
+              <View style={{ flex: 1, borderTopWidth: spine, borderColor: color }} />
             </View>
-          : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderTopWidth: LINE }) }} />}
+          : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderTopWidth: spine }) }} />}
         {(only || (!first && !last)) && <View style={{ position: 'absolute', left: '50%', marginLeft: -LINE / 2, top: 0, bottom: 0, borderStartWidth: LINE, borderColor: into }} />}
       </View>
     );
@@ -237,16 +239,16 @@ function Elbow({ first, last, color, lit, down }: { first: boolean; last: boolea
     <View style={{ width: 16, alignSelf: 'stretch' }}>
       {last && !only
         ? <View style={{ flex: 1 }}>
-            <View style={{ flex: 1, borderStartWidth: LINE, borderColor: color }} />
+            <View style={{ flex: 1, borderStartWidth: spine, borderColor: color }} />
             <View style={{ height: CURVE, borderColor: into, borderStartWidth: LINE, borderBottomWidth: LINE, borderBottomStartRadius: CURVE }} />
           </View>
-        : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderStartWidth: LINE }) }} />}
+        : <View style={{ flex: 1, borderColor: color, ...(only || first ? {} : { borderStartWidth: spine }) }} />}
       {first && !only
         ? <View style={{ flex: 1 }}>
             <View style={{ height: CURVE, borderColor: into, borderStartWidth: LINE, borderTopWidth: LINE, borderTopStartRadius: CURVE }} />
-            <View style={{ flex: 1, borderStartWidth: LINE, borderColor: color }} />
+            <View style={{ flex: 1, borderStartWidth: spine, borderColor: color }} />
           </View>
-        : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderStartWidth: LINE }) }} />}
+        : <View style={{ flex: 1, borderColor: color, ...(only || last ? {} : { borderStartWidth: spine }) }} />}
       {(only || (!first && !last)) && <View style={{ position: 'absolute', top: '50%', marginTop: -LINE / 2, start: 0, end: 0, borderTopWidth: LINE, borderColor: into }} />}
     </View>
   );
@@ -256,33 +258,43 @@ type Entry = { id: string; keys: string[]; item: React.ReactNode };
 
 function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const { palette, down } = shared;
-  const lit = entries.map(entry => isLit(shared, entry.keys));
+  const growth = useContext(Growth);
+  const lit = entries.map(entry => isLit(shared, growth, entry.keys));
+  // While the tree grows, the spine reaches only the children already drawn, not the places the hidden ones keep.
+  const shown = entries.map(entry => !growth.hidden.has(lineId(entry.id)));
+  const growing = shown.some(on => !on);
   const [spans, setSpans] = useState<Span[]>([]);
   const [whole, setWhole] = useState(0);
-  const spine = lit.some(Boolean) ? litSpine(spans, lit, whole) : null;
+  // A lit child still hidden lights nothing yet.
+  const litShown = lit.map((on, i) => on && shown[i]);
+  const spine = litShown.some(Boolean) ? litSpine(spans, litShown, whole) : null;
+  const drawn = growing && shown.some(Boolean) ? litSpine(spans, shown, whole) : null;
+  const along = (range: [number, number], color: string) => <View pointerEvents="none" style={down
+    ? { position: 'absolute', top: 0, left: range[0], width: range[1] - range[0], borderTopWidth: LINE, borderColor: color }
+    : { position: 'absolute', start: 0, top: range[0], height: range[1] - range[0], borderStartWidth: LINE, borderColor: color }} />;
   return (
     <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
       {entries.map((entry, i) => (
         <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}
           onLayout={event => { const { x, y, width, height } = event.nativeEvent.layout; const span = down ? { at: x, size: width } : { at: y, size: height }; setSpans(old => { const next = [...old]; next[i] = span; return next; }); }}>
           <Fade id={lineId(entry.id)} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
-            <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.path : undefined} down={down} />
+            <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.path : undefined} down={down} spine={!growing} />
           </Fade>
           <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
         </View>
       ))}
-      {spine && <View pointerEvents="none" style={down
-        ? { position: 'absolute', top: 0, left: spine[0], width: spine[1] - spine[0], borderTopWidth: LINE, borderColor: palette.path }
-        : { position: 'absolute', start: 0, top: spine[0], height: spine[1] - spine[0], borderStartWidth: LINE, borderColor: palette.path }} />}
+      {drawn && along(drawn, palette.rule)}
+      {spine && along(spine, palette.path)}
     </View>
   );
 }
 
 /** The connector between a box and its fan; shown once anything in the fan is, lit when a path runs through it. */
 function Stub({ shared, entries }: { shared: Shared; entries: Entry[] }) {
-  const { hidden } = useContext(Growth);
+  const growth = useContext(Growth);
+  const { hidden } = growth;
   const visible = entries.some(entry => !hidden.has(lineId(entry.id)));
-  const color = entries.some(entry => isLit(shared, entry.keys)) ? shared.palette.path : shared.palette.rule;
+  const color = entries.some(entry => !hidden.has(lineId(entry.id)) && isLit(shared, growth, entry.keys)) ? shared.palette.path : shared.palette.rule;
   return <View style={[shared.down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
 }
 
@@ -326,7 +338,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   const all = keys(node);
   const words = node.words;
   const id = nodeId(shared.indices.get(node)!);
-  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!);
+  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!, path);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
@@ -337,7 +349,8 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   });
   const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   entries.forEach(entry => edge(shared, id, entry.id));
-  const references = node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ');
+  const spans = shownAyat(node, path);
+  const references = node.ayat.map(key => ayatLabel(spans[key], shared.names)).join(' · ');
   const shownWords = { words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined };
   const start = starts && startLabel(shared, starts, node.ayat);
   const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
@@ -349,9 +362,9 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
           tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           <StartReference label={start} shared={shared} />
-          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
+          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References text={references} shared={shared} center /></View>}
           <Words {...shownWords} />
-          {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
+          {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
           </>}
         </Box>
       )}

@@ -1,6 +1,7 @@
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { ExternalLink, Tags } from 'lucide-react-native';
+import { Tags } from 'lucide-react-native';
+import ExternalLink from './ExternalLink';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import Sheet from './Sheet';
 import type { Palette } from '@/lib/theme';
@@ -39,11 +40,9 @@ export default function EvidenceSheet({ group, onClose, palette }: { group: Grou
               <Text style={{ writingDirection: 'ltr' }}>{arabicDigits(citation.places.join(' ↔ '))}</Text>
             </Text>
             <Text style={{ color: palette.ink, fontSize: 15, lineHeight: 24, textAlign: 'right', writingDirection: 'rtl' }}>{`«${citation.quote}»`}</Text>
-            <Pressable onPress={() => void Linking.openURL(citation.url)} accessibilityRole="link" accessibilityLabel={`افتح ${citation.book} ${arabicDigits(citation.locator)}`} hitSlop={6}
-              style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', opacity: pressed ? 0.6 : 1 })}>
-              <ExternalLink size={14} color={palette.accent} />
-              <Text style={{ color: palette.accent, fontSize: 14 }}>{arabicDigits(citation.locator)}</Text>
-            </Pressable>
+            <ExternalLink url={citation.url} color={palette.accent} accessibilityLabel={`افتح ${citation.book} ${arabicDigits(citation.locator)}`} style={{ textAlign: 'right', paddingVertical: 4 }}>
+              {arabicDigits(citation.locator)}
+            </ExternalLink>
           </View>
         ))}
       </ScrollView>}

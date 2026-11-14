@@ -7,6 +7,7 @@ import { ArrowLeftRight, ChevronLeft, Layers, X } from 'lucide-react';
 import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
+import ExternalLink from '@/components/common/ExternalLink';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
@@ -95,7 +96,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
             </Link>
           ))}
         </div>
-        {shown.kind === 'readings' ? <a href={QIRAAT_SOURCE.url} target="_blank" rel="noreferrer" className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</a> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
+        {shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
           <Icon size={20} aria-hidden />
           {trees ? 'افتح في المتشابهات' : `كل مقارنات ${names[surah] ?? ''}`}
           <ChevronLeft size={18} aria-hidden className="text-[var(--home-muted)]" />

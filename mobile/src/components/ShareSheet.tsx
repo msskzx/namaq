@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ComponentRef, type ReactNode } from '
 import { Image, Modal, Platform, Pressable, Share, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { captureRef } from 'react-native-view-shot';
-import { Clapperboard, Link, Send, X } from 'lucide-react-native';
+import { Clapperboard, Link, ListVideo, Send, X } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import Logo from './Logo';
 import LoadingDots from './LoadingDots';
@@ -34,7 +34,7 @@ function Fit({ width, children, onReady }: { width: number; children: ReactNode;
 /**
  * Share as image: the card on the page colour, with the logo and the name under it. The image is drawn once out of sight
  * (behind the preview, never in a scroll view, so nothing of it is cut), captured, and the preview shows that very file.
- * The big button shares it; beside it the card's video (where it has one) and its link.
+ * The big button shares it; beside it the card's video (where it has one), the whole page's video (compare) and its link.
  */
 export default function ShareSheet() {
   const request = useShareRequest();
@@ -65,8 +65,7 @@ export default function ShareSheet() {
   const fit = shot && box ? Math.min(box.width / shot.width, box.height / shot.height, frameWidth / shot.width) : 0;
   // Another sheet can open only once this one has gone: on iOS when it says so (onDismiss), elsewhere after a wait.
   const pending = useRef<(() => void) | null>(null);
-  const video = () => {
-    const onVideo = request?.onVideo;
+  const video = (onVideo?: () => void) => {
     closeShare();
     if (!onVideo) return;
     if (Platform.OS === 'ios') pending.current = onVideo;
@@ -103,7 +102,8 @@ export default function ShareSheet() {
             style={{ width: 64, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent, opacity: shot ? 1 : 0.5 }}>
             <Send size={26} color={palette.onAccent} />
           </Pressable>
-          {request?.onVideo && <IconButton label="مشاركة كفيديو" onPress={video} Icon={Clapperboard} color={palette.ink} />}
+          {request?.onVideo && <IconButton label="مشاركة كفيديو" onPress={() => video(request.onVideo)} Icon={Clapperboard} color={palette.ink} />}
+          {request?.onPageVideo && <IconButton label="مشاركة الصفحة كفيديو" onPress={() => video(request.onPageVideo)} Icon={ListVideo} color={palette.ink} />}
           {request?.link && <IconButton label="مشاركة الرابط" onPress={link} Icon={Link} color={palette.ink} />}
         </View>
       </View>

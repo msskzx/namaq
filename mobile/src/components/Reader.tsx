@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,7 +11,8 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, su
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
-import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { wordTargets } from '@shared/quran/writeAyah';
+import { useWriteBoxes } from '@/lib/useWriteBoxes';
 import { nextOpening, openingRound, type Openings } from '@shared/quran/openings';
 import TabHint from './TabHint';
 import TopBar from './TopBar';
@@ -43,8 +44,9 @@ import { usePalette, type Palette } from '@/lib/theme';
 const PLACE = 'reader-place';
 /** Where the last recitation (not a review) stopped, to continue it later. */
 const LAST_RECITE = 'reader-recite-last';
-type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean };
-/** How big the page is drawn, kept from one visit to the next. */
+/** `y`: how far down the page the reader had scrolled, when the text is bigger than the printed page. */
+type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean; y?: number };
+/** The text size (1 is the printed page), kept on this phone from one visit to the next. */
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
 const WRITE = 'reader-write';
@@ -99,7 +101,14 @@ export default function Reader() {
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
-  const zoomTo = useCallback((next: number) => { setZoom(next); writeJson(ZOOM, next); }, []);
+  const flowing = zoom > 1;
+  /** Each page's drawn height: with bigger text a page runs past the screen and the reader scrolls down it. */
+  const [heights, setHeights] = useState<Record<number, number>>({});
+  const onHeight = useCallback((at: number, h: number) => setHeights(prev => (Math.abs((prev[at] ?? 0) - h) < 1 ? prev : { ...prev, [at]: h })), []);
+  /** After a pinch, the share of the page's height that was between the fingers, and how far below the screen's top. */
+  const anchor = useRef<{ share: number; screen: number; from: number } | null>(null);
+  /** Until when keeping an ayah in sight waits, so it doesn't undo where a pinch left the page. */
+  const quietUntil = useRef(0);
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
@@ -119,10 +128,7 @@ export default function Reader() {
   // and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
-  const [typed, setTyped] = useState<Record<number, string>>({});
-  const [current, setCurrent] = useState<number | null>(null);
   const [checked, setChecked] = useState<Checked | null>(null);
-  const input = useRef<ComponentRef<typeof TextInput>>(null);
   // A review or the openings quiz asks one ayah at a time: once it shows, nothing more is written until the next one.
   const reviewDone = (reviewing || !!openings) && !!position?.shown;
   const writeKey = writing && view?.upcoming && !reviewDone ? view.upcoming : null;
@@ -130,39 +136,16 @@ export default function Reader() {
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && view ? wordTargets(writeWords).filter(at => view.hidden(writeKey, at + offset)) : [];
-  const askedKey = asked.join(',');
-  useEffect(() => {
-    setTyped({});
-    setCurrent(writeKey ? (askedKey ? Number(askedKey.split(',')[0]) : null) : null);
-    if (writeKey) setTimeout(() => input.current?.focus(), 50);
-  }, [writeKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const keyboard = useKeyboardHeight(reciting && writing);
-  const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); input.current?.blur(); };
-  const check = (filled: Record<number, string>) => {
+  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
     if (!writeKey || !position) return;
-    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)) });
+    setChecked({ key: writeKey, ...graded });
+    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
+    if (graded.wrong.length) markForgotten(writeKey);
     setPosition(revealAyah(position, writeKey));
-  };
-  const moveOn = (filled: Record<number, string>) => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
-    else check(filled);
-  };
-  const onWrite = (text: string) => {
-    if (current === null) return;
-    const done = /\s/.test(text) && !keepsSpace(text, writeWords[current]);
-    const letters = typedLetters(text);
-    const filled = { ...typed, [current]: letters };
-    setTyped(filled);
-    if (done || letters.length >= maxLetters(writeWords[current])) moveOn(filled);
-  };
-  const onWriteKey = (key: string) => {
-    if (key !== 'Backspace' || current === null || typed[current]) return;
-    const at = asked.indexOf(current);
-    if (at > 0) setCurrent(asked[at - 1]);
-  };
-  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed, current, onBox: at => { setCurrent(at); input.current?.focus(); }, onActive: (y, h) => follow.current(y, h) } : null;
+  } });
+  const keyboard = useKeyboardHeight(reciting && writing);
+  const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); boxes.blur(); };
+  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick, onActive: (y, h) => follow.current(y, h) } : null;
   // Scrolls the box being written into the part of the screen above the pill and keyboard.
   const follow = useRef((_y: number, _h: number) => {});
 
@@ -177,10 +160,12 @@ export default function Reader() {
     if (reciting) { setTools(false); setActions(null); }
   }, [reciting]);
 
+  const scrollY = useRef(place?.y ?? 0);
+  const keep = () => writeJson(PLACE, { page, position, reviewing, y: flowing ? Math.round(scrollY.current) : 0 } satisfies Place);
   useEffect(() => {
-    writeJson(PLACE, { page, position, reviewing } satisfies Place);
+    keep();
     if (position && !reviewing && !openings) writeJson(LAST_RECITE, { page, position } satisfies Place);
-  }, [page, position, reviewing, openings]);
+  }, [page, position, reviewing, openings]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const turnTo = useCallback((next: number) => {
     setPage(next);
@@ -241,7 +226,7 @@ export default function Reader() {
     setReviewing(false);
     setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
   };
-  const stopRecite = () => { setActions(null); setReviewing(false); setOpenings(null); setPosition(null); setChecked(null); input.current?.blur(); };
+  const stopRecite = () => { setActions(null); setReviewing(false); setOpenings(null); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -289,6 +274,8 @@ export default function Reader() {
   shown.current = page;
   const onMove = useCallback(() => {
     moved.current = Date.now();
+    // A neighbour about to slide in shows its top where the reader is now, however the page got scrolled there.
+    setScrollTop(scrolled.current);
     if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
   }, []);
   useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
@@ -298,7 +285,7 @@ export default function Reader() {
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
     if (Date.now() - moved.current < 350) return;
     // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
-    if (writingNow.current) { input.current?.focus(); return; }
+    if (writingNow.current) { boxes.focus(); return; }
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
     // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
@@ -323,21 +310,65 @@ export default function Reader() {
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   const scrolled = useRef(0);
-  useEffect(() => { if (!keyboard) { scroller.current?.scrollTo({ y: 0, animated: false }); scrolled.current = 0; } }, [keyboard]);
+  const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
+  useEffect(() => { if (!keyboard && !flowing) scrollTo(0); }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
+  // With bigger text the row of pages is as tall as the current page; a neighbour sliding in shows its top where the reader is.
+  const pagerHeight = flowing ? Math.max(height, heights[page] ?? 0) : height;
+  const [scrollTop, setScrollTop] = useState(0);
+  const restoring = useRef(flowing && !!place?.y);
+  // Another page opens at its top.
+  const shownPage = useRef(page);
+  useLayoutEffect(() => {
+    if (shownPage.current === page) return;
+    shownPage.current = page;
+    restoring.current = false;
+    scrollTo(0);
+    setScrollTop(0);
+  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Once the page is drawn at its size: back where the reader left it, or after a pinch, the same words under the fingers.
+  const drawnHeight = heights[page];
+  useEffect(() => {
+    if (!drawnHeight) return;
+    let y: number | null = null;
+    // The first height told is the screen's, before the words are set; the page has its own height once it grows past it.
+    if (restoring.current && drawnHeight > height + 1) {
+      restoring.current = false;
+      y = Math.min(place?.y ?? 0, drawnHeight - height);
+    } else if (anchor.current && (!flowing || drawnHeight !== anchor.current.from)) {
+      // Only once the page has been set again at the new size.
+      const { share, screen } = anchor.current;
+      anchor.current = null;
+      y = flowing ? Math.max(0, Math.min(drawnHeight - height, share * drawnHeight - screen)) : 0;
+    }
+    if (y === null) return;
+    // A frame later, once the scroll view has grown to the page's new height.
+    const frame = requestAnimationFrame(() => { scrollTo(y); setScrollTop(y); });
+    return () => cancelAnimationFrame(frame);
+  }, [drawnHeight, zoom]); // eslint-disable-line react-hooks/exhaustive-deps
+  const zoomTo = useCallback((next: number, focalY: number) => {
+    anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - scrolled.current, from: heights[page] ?? 0 };
+    restoring.current = false;
+    quietUntil.current = Date.now() + 800;
+    setZoom(next);
+    writeJson(ZOOM, next);
+  }, [pagerHeight, heights, page]);
+  const onFocus = useCallback((y: number, h: number) => follow.current(y, h), []);
   follow.current = (y, h) => {
-    if (!keyboard || !size) return;
+    if (!size || (!keyboard && (!flowing || Date.now() < quietUntil.current))) return;
     const top = insets.top + 8;
-    const bottom = size.height - pillBottom - RECITE_BAR - 12;
+    const bottom = keyboard ? size.height - pillBottom - RECITE_BAR - 12 : size.height - pageInsets.bottom - 8;
     if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
     else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
   };
-  const render = (at: number, width: number, pageHeight: number) => {
+  const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
+  const render = (at: number) => {
     const atModel = modelOf(at);
     return (
-      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={pageHeight}
+      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
+        zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
-        write={at === page ? write : null} checked={position ? checked : null} />
+        write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );
   };
 
@@ -355,11 +386,12 @@ export default function Reader() {
   const barRows = Math.ceil(buttons / Math.max(1, Math.floor((barWidth - 10) / (ACT_WIDTH + 2))));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-      <ScrollView ref={scroller} scrollEnabled={!!keyboard} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
-        onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; }}
+      <ScrollView ref={scroller} scrollEnabled={!!keyboard || flowing} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
+        onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}
+        onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={height} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} />
+          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop} />
         )}
       </ScrollView>
       {tools && (
@@ -409,11 +441,7 @@ export default function Reader() {
         </View>
       )}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
-      {writeKey && (
-        <TextInput ref={input} value={current === null ? '' : typed[current] ?? ''} onChangeText={onWrite} onKeyPress={event => onWriteKey(event.nativeEvent.key)}
-          autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off" blurOnSubmit={false} onSubmitEditing={() => moveOn(typed)}
-          accessibilityLabel="اكتب الكلمة" style={{ position: 'absolute', opacity: 0, width: 1, height: 1, top: 0, left: 0 }} />
-      )}
+      {boxes.field}
       {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
       <TabHint id="read" palette={palette} hidden={reciting || !!actions} />
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}

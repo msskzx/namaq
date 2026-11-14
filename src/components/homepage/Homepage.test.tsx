@@ -86,8 +86,10 @@ describe('home', () => {
     await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));
     const post = screen.getAllByRole('article')[0];
     expect(within(post).getByRole('link', { name: 'افتحها في المقارنة' }).getAttribute('href')).toBe('/quran/compare?a=2&b=7#c-2-35-7-19');
-    fireEvent.click(within(post).getByRole('button', { name: 'احفظ' }));
-    expect(within(post).getByRole('button', { name: 'أزلها من المحفوظات' })).toBeTruthy();
+    // The compare page's own card and buttons.
+    expect(within(post).getByRole('button', { name: 'استوديو القراءة' })).toBeTruthy();
+    fireEvent.click(within(post).getByRole('button', { name: 'حفظ' }));
+    expect(within(post).getByRole('button', { name: 'إزالة من المحفوظة' })).toBeTruthy();
     await waitFor(() => expect(Object.keys(JSON.parse(localStorage.getItem('feed-seen') ?? '{}'))).toContain('2:35|7:19'));
   });
 
@@ -123,16 +125,19 @@ describe('home', () => {
     }
   });
 
-  it('asks to recall a due forgotten ayah: first words, the rest hidden, and remembered takes it away', async () => {
+  it('asks to recall a due forgotten ayah in the reader\'s write boxes, grades what is typed, and remembered takes it away', async () => {
     quranContexts.mockResolvedValue([{ ayah: { key: '2:255', words: ['الله', 'لا', 'إله', 'إلا', 'هو'] } }]);
     localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
     render(<Homepage data={data} />);
     const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
-    await waitFor(() => expect(post.textContent).toContain('الله لا إله'));
-    expect(post.textContent).not.toContain('هو');
-    fireEvent.click(within(post).getByRole('button', { name: /أظهرها/ }));
-    expect(post.textContent).toContain('هو');
+    await waitFor(() => expect(within(post).getAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(5));
     expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
+    const field = within(post).getByLabelText('اكتب الكلمة');
+    for (const word of ['الله ', 'لا ', 'إله ', 'الا ', 'هي ']) fireEvent.change(field, { target: { value: word } });
+    // The last word was wrong: amber, what was typed struck through above it, and the ayah forgotten again.
+    expect(within(post).getByRole('note', { name: 'كتبت: هي' })).toBeTruthy();
+    expect(within(post).queryAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(0);
+    expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:255'].forgot).toBe(2);
     fireEvent.click(within(post).getByRole('button', { name: /تذكّرتها/ }));
     expect(screen.queryByText('هل تذكرها؟')).toBeNull();
   });

@@ -51,6 +51,45 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('the home tree card is the branches tree: it swipes to the next tree and opens it', async ({ page }) => {
+    await page.goto('/');
+    const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' });
+    await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
+    await expect(card.getByText(/^الشجرة ١ من /)).toBeAttached();
+    // The arrow keys step the trees as on the branches page; until the page has hydrated a key does nothing.
+    await expect(async () => {
+      await page.keyboard.press('ArrowLeft');
+      await expect(card.getByText(/^الشجرة ٢ من /)).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).click();
+    await expect(page).toHaveURL(/\/quran\/branches/);
+    await noErrorPage(page);
+  });
+
+  test('the home recall card takes typed words in the write boxes and grades them', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
+    await page.goto('/');
+    const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
+    await expect(boxes.first()).toBeVisible();
+    const count = await boxes.count();
+    await expect(async () => {
+      await boxes.first().click();
+      await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة' }).first()).toHaveAttribute('aria-pressed', 'true', { timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    for (let i = 0; i < count; i++) await page.keyboard.type('خطا ');
+    await expect(page.getByRole('note', { name: 'كتبت: خطا' }).first()).toBeVisible();
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')['18:10']?.forgot)).toBe(2);
+    await noErrorPage(page);
+  });
+
+  test('the home pair card is the compare card and opens the compare page', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
+    await page.getByRole('link', { name: 'افتحها في المقارنة' }).first().click();
+    await expect(page).toHaveURL(/\/quran\/compare/);
+    await noErrorPage(page);
+  });
+
   test('branches shows the first tree', async ({ page }) => {
     await page.goto('/quran/branches');
     await expect(page.getByRole('progressbar', { name: 'التقدم بين الأشجار' })).toBeAttached();

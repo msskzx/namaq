@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
+import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
@@ -12,16 +13,16 @@ import { BOOKS, citeLabel, citeUrl, ORDER_HELP, ORDER_JUZ, orderInJuz, type Cite
 const HELP = [
   ...ORDER_HELP.map((text, i) => <p key={i} className={i === ORDER_HELP.length - 1 ? 'text-[var(--home-muted)]' : undefined}>{text}</p>),
   <ul key="books" className="text-[var(--home-muted)]">
-    {Object.values(BOOKS).map(book => <li key={book.shamela}><a href={`https://shamela.ws/book/${book.shamela}`} target="_blank" rel="noreferrer" className="underline underline-offset-4">{book.title}</a></li>)}
+    {Object.values(BOOKS).map(book => <li key={book.shamela}><ExternalLink href={`https://shamela.ws/book/${book.shamela}`} className="underline underline-offset-4">{book.title}</ExternalLink></li>)}
   </ul>,
 ];
 const ICON_BUTTON = 'inline-flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
 function Source({ cite }: { cite: Cite }) {
   return (
-    <a href={citeUrl(cite)} target="_blank" rel="noreferrer" className="text-sm text-[var(--home-muted)] underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]">
+    <ExternalLink href={citeUrl(cite)} className="text-sm text-[var(--home-muted)] underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]">
       {citeLabel(cite, num)}
-    </a>
+    </ExternalLink>
   );
 }
 

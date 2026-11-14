@@ -50,13 +50,27 @@ function fitOpening(body: HTMLElement, natural: number[], lines: HTMLElement[]) 
   body.style.setProperty('--oval', `ellipse ${rx}px ${ry}px at 50% ${centre}px`);
 }
 
-function fit(body: HTMLElement, centred: boolean) {
+/**
+ * Reader text size: 1 is the printed page, 15 lines fitted to the screen; bigger sets the page's words as flowing lines
+ * that wrap at the page's width, and the page grows taller (the app's mobile/src/lib/pageZoom.ts, owner 2026-11-13).
+ */
+export const MAX_TEXT_SIZE = 2.2;
+export const settleTextSize = (size: number) => (size < 1.1 ? 1 : Math.min(MAX_TEXT_SIZE, Math.round(size * 20) / 20));
+
+function fit(body: HTMLElement, centred: boolean, zoom: number) {
   body.style.fontSize = '100px';
+  body.style.removeProperty('--oval');
   const lines = [...body.querySelectorAll<HTMLElement>('[data-line]')];
   lines.forEach(line => {
     line.style.width = '';
     line.style.transform = '';
+    line.removeAttribute('data-centred');
   });
+  // Flowing text: about the printed page's size at 1, the same on every page; the lines are the browser's.
+  if (zoom > 1) {
+    body.style.fontSize = `${body.clientWidth * 0.063 * zoom}px`;
+    return;
+  }
   const natural = lines.map(line => {
     const words = [...line.children] as HTMLElement[];
     return Math.max(1, words.reduce((sum, word) => sum + word.offsetWidth, 0) + (words.length - 1) * GAP * 100);
@@ -81,13 +95,14 @@ function fit(body: HTMLElement, centred: boolean) {
 
 /** `before`: the ayah's words on the shown pages before this one, so places count from the ayah's first word. */
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; before: number; onBox: (word: number) => void };
-export type Checked = { key: string; right: number[]; wrong: number[]; before: number };
+/** A checked ayah: its right and wrong words, and what was typed for each wrong one (shown struck through above it). */
+export type Checked = { key: string; right: number[]; wrong: number[]; typed: Record<number, string>; before: number };
 
 /**
  * A word to write, in write mode (the app's WriteBox): the hidden word's own box in its place on the line, so it is as wide
  * as the word, holding what was typed. The box being written has the accent border.
  */
-function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
+export function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
   return (
     <button type="button" data-write-active={active || undefined} aria-pressed={active} aria-label={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'}
       className={styles.writeBox} onPointerDown={event => event.preventDefault()} onClick={onPick}>
@@ -96,6 +111,16 @@ function WriteBox({ word, typed, active, onPick }: { word: string; typed: string
     </button>
   );
 }
+
+/** A word written in write mode, once checked: green when right, amber when wrong with what was typed struck through above it. */
+export function WrittenWord({ word, right, mistyped }: { word: string; right: boolean; mistyped?: string }) {
+  return mistyped !== undefined && !right
+    ? <span className={`${styles.wrong} ${styles.mistake}`}>{word}{mistyped ? <span role="note" aria-label={`كتبت: ${mistyped}`} className={styles.mistyped}>{mistyped}</span> : null}</span>
+    : <span className={right ? styles.right : undefined}>{word}</span>;
+}
+
+/** A hidden word that is not written, beside the write boxes: a faint dashed box its width. */
+export const FaintWord = ({ word }: { word: string }) => <span className={`${styles.veiled} ${styles.faint}`}>{word}</span>;
 
 export default function MushafPage({
   page,
@@ -110,6 +135,7 @@ export default function MushafPage({
   titled,
   write,
   checked,
+  zoom = 1,
 }: {
   page: number;
   data: MushafPageData;
@@ -129,6 +155,8 @@ export default function MushafPage({
   write?: Write | null;
   /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
   checked?: Checked | null;
+  /** The text size: 1 is the printed page; bigger wraps the words at the page's width and the page runs as long as they need. */
+  zoom?: number;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -148,15 +176,16 @@ export default function MushafPage({
   useLayoutEffect(() => {
     const element = body.current;
     if (!element) return;
-    const run = () => fit(element, page <= 2);
+    const run = () => fit(element, page <= 2, zoom);
     run();
     document.fonts?.ready.then(run);
     const observer = new ResizeObserver(run);
     observer.observe(element);
     return () => observer.disconnect();
-  }, [page, data]);
+  }, [page, data, zoom]);
+  const flow = zoom > 1;
   return (
-    <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} className={styles.page}>
+    <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
       <div className={styles.head}>
         <span>الجزء {juzName(data.juz)}</span>
         {badges.some(list => list.length > 0) && (
@@ -171,7 +200,7 @@ export default function MushafPage({
         <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
-        <div ref={body} className={`${styles.body} ${page <= 2 ? styles.opening : ''}`} style={{ gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
+        <div ref={body} className={`${styles.body} ${page <= 2 && !flow ? styles.opening : ''}`} style={flow ? undefined : { gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
           {data.items.map((item, index) => (
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
@@ -194,13 +223,16 @@ export default function MushafPage({
                     const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                     const writing = !!group.word && veiled && write?.key === key;
                     const graded = !veiled && checked?.key === key ? (checked.right.includes(rel + checked.before) ? styles.right : checked.wrong.includes(rel + checked.before) ? styles.wrong : '') : '';
+                    const mistyped = graded === styles.wrong && group.word ? checked!.typed[rel + checked!.before] : '';
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
                         className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : '', graded].join(' ').trim() || undefined}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel + write.before)
                           ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />
-                          : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span> : group.word}
+                          : veiled ? <span className={[styles.veiled, writing ? styles.faint : next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah)) ? styles.upcoming : ''].join(' ').trim()}>{group.word}</span>
+                          // A wrong word keeps what was typed, struck through above it, so the reader sees the mistake.
+                          : mistyped ? <WrittenWord word={group.word} right={false} mistyped={mistyped} /> : group.word}
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
@@ -212,7 +244,7 @@ export default function MushafPage({
                         ))}
                       </span>
                     );
-                  })}
+                  }).flatMap((word, at) => (at ? [' ', word] : [word]))}
                 </p>
               )}
               {badges[index].map(label => (

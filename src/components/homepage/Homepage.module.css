@@ -44,14 +44,6 @@ a.hijri { color: var(--home-accent); text-decoration: none; }
 a.hijri:hover { text-decoration: underline; }
 .hijri { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; }
 .hijri svg { color: var(--home-accent); }
-.dailySide { padding-top: 0.5rem; border-top: 1px solid var(--home-rule); }
-.dailySide + .dailySide { border-top-style: dashed; }
-.dailyLabel { color: var(--home-muted); font-size: 0.8125rem; }
-.dailyAyah { font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.1; text-align: center; }
-.dailySame { color: var(--home-accent); }
-.dailyRoot { color: var(--home-root); }
-.dailyRelated { color: color-mix(in srgb, var(--home-root) 55%, var(--home-muted)); }
-@media(max-width: 767px) { .dailyAyah { font-size: 1.3rem; } }
 /* The home feed (HomeFeed.tsx), as the app's home. */
 .muted { display: inline-flex; align-items: center; gap: 0.375rem; color: var(--home-muted); font-size: 0.875rem; }
 .accent { color: var(--home-accent); }
@@ -66,8 +58,9 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .readHead { display: flex; align-items: center; gap: 0.5rem; }
 .readHead > svg { color: var(--home-accent); }
 .readHead h2 { flex: 1; font-size: 1.125rem; }
-.pageSlice { position: relative; display: block; height: 7.75rem; overflow: hidden; padding: 0.375rem 0.75rem; border: 1px solid var(--home-paper-deep); border-radius: 10px; background: var(--home-paper); font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.3rem; line-height: 2.5rem; text-align: justify; color: var(--home-ink); text-decoration: none; }
-.pageSlice::after { content: ''; position: absolute; inset: auto 0 0 0; height: 2.5rem; background: linear-gradient(transparent, var(--home-paper)); }
+.pageSlice { display: block; padding: 0.375rem 0.75rem; border: 1px solid var(--home-paper-deep); border-radius: 10px; background: var(--home-paper); font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.3rem; line-height: 2.5rem; text-align: justify; color: var(--home-ink); text-decoration: none; }
+/* Three whole lines, ended by an ellipsis; clamped inside the padding so the next line's marks don't show under it. The minimum height holds the space while the page loads. */
+.pageLines { min-height: 7.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .readFoot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.875rem; }
 .postHead { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem 0.375rem; }
 .postHead h3 { font-size: 1rem; font-weight: 700; }
@@ -77,7 +70,6 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .divider { display: flex; align-items: center; gap: 0.625rem; color: var(--home-muted); font-size: 0.9375rem; font-weight: 700; }
 .divider::after { content: ''; flex: 1; border-top: 1px solid var(--home-rule); }
 .recall { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; padding: 0 0.75rem; font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.3rem; line-height: 2.5rem; }
-.hiddenWord { display: inline-block; height: 1.625rem; border: 1.5px solid var(--home-rule); border-radius: 6px; }
 .recallActions { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; }
 .pill { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.5rem; padding-inline: 0.875rem; border: 1px solid var(--home-rule); border-radius: 10px; color: var(--home-ink); font-size: 1rem; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }
@@ -93,4 +85,3 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .home { gap: 1.5rem; }
 .home .book { flex-basis: 45%; }
 @media(max-width: 767px) { .home { gap: 1.25rem; } .home .book { flex-basis: 68%; } }
-.post .dailyAyah { text-align: justify; text-align-last: right; }

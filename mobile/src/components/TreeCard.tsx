@@ -54,6 +54,8 @@ type Props = {
   chips?: boolean;
   /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
   alongside?: GestureType;
+  /** Inside a page that scrolls up and down (the home feed): an unzoomed tree takes only sideways drags, so the page still scrolls. */
+  inScroll?: boolean;
 };
 
 const BIG = 20000;
@@ -62,7 +64,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -116,6 +118,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const mode = useSharedValue<'idle' | 'pending' | 'move' | 'swipe' | 'none'>('idle');
   const from = useSharedValue(0);
   const restored = useRef(initialCamera);
+  const [zoomed, setZoomed] = useState(false);
 
   useEffect(() => {
     viewSize.value = view;
@@ -130,6 +133,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     const saved = restored.current;
     restored.current = undefined;
     camera.value = saved ? settleCamera(saved, size, view) : fitCamera(size, view);
+    setZoomed(false);
     setContent(size);
   }, [camera, contentSize, view]);
 
@@ -149,11 +153,11 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       const settled = settleCamera(camera.value, contentSize.value, viewSize.value);
       camera.value = withTiming(settled, SETTLE);
       if (report) scheduleOnRN(report, settled);
+      scheduleOnRN(setZoomed, isZoomed(settled, contentSize.value, viewSize.value));
     });
 
   const pan = Gesture.Pan()
     .maxPointers(1)
-    .minDistance(8)
     .onStart(() => {
       start.value = camera.value;
       mode.value = isZoomed(camera.value, contentSize.value, viewSize.value) ? 'move' : 'pending';
@@ -192,6 +196,8 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       mode.value = 'idle';
     });
 
+  if (inScroll && !zoomed) pan.activeOffsetX([-10, 10]).failOffsetY([-10, 10]);
+  else pan.minDistance(8);
   if (alongside) pan.simultaneousWithExternalGesture(alongside);
   const gesture = Gesture.Simultaneous(pinch, pan);
   // Under the tree's last row: it moves with the tree when it is zoomed or moved.

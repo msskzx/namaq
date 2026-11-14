@@ -10,7 +10,8 @@ import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
-import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { wordTargets } from '@shared/quran/writeAyah';
+import { useWriteBoxes } from './useWriteBoxes';
 import { WRITE_KEY } from './writeKey';
 import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings';
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
@@ -36,11 +37,13 @@ import mushaf from './Mushaf.module.css';
 import type { IndexSurah } from '@shared/quran/juzIndex';
 import SurahIndex from './SurahIndex';
 import { AyahShareDialog } from '@/components/share/AyahShare';
-import MushafPage, { type Checked, type Write } from './MushafPage';
+import MushafPage, { settleTextSize, type Checked, type Write } from './MushafPage';
 
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
 const SPREAD_KEY = 'quran-reader-spread';
+/** The text size (1 is the printed page), kept on this device. */
+const TEXT_SIZE_KEY = 'quran-reader-text-size';
 /** The last page read: /quran/read opens there. */
 export const LAST_PAGE_KEY = 'quran-reader-page';
 const BAR_KEY = 'quran-reader-bar';
@@ -110,7 +113,10 @@ export default function ReaderView({
   const [spread, setSpread] = useState(false);
   const [phone, setPhone] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const two = spread && !phone;
+  const [zoom, setZoom] = useState(1);
+  const flow = zoom > 1;
+  // Bigger text flows down one page at a time.
+  const two = spread && !phone && !flow;
   const shown = two ? pages.filter(entry => spreadOf(page).includes(entry.page)) : pages.filter(entry => entry.page === page);
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
@@ -181,23 +187,19 @@ export default function ReaderView({
   // first and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(false);
-  const [typed, setTyped] = useState<Record<number, string>>({});
-  const [current, setCurrent] = useState<number | null>(null);
   const [checked, setChecked] = useState<Checked | null>(null);
-  const input = useRef<HTMLInputElement>(null);
   const writeKey = writing && upcoming && !reviewDone ? upcoming : null;
   const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && position ? wordTargets(writeWords).filter(at => at + titleSteps >= position.words) : [];
-  const askedKey = asked.join(',');
-  // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
-  const [writeFor, setWriteFor] = useState(writeKey);
-  if (writeFor !== writeKey) {
-    setWriteFor(writeKey);
-    setTyped({});
-    setCurrent(writeKey && askedKey ? Number(askedKey.split(',')[0]) : null);
-  }
-  useEffect(() => { if (writeKey) input.current?.focus({ preventScroll: true }); }, [writeKey]);
+  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
+    if (!writeKey || !position) return;
+    setChecked({ key: writeKey, ...graded, before: 0 });
+    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
+    if (graded.wrong.length) markForgotten(writeKey);
+    setPosition(revealAyah(position, writeKey));
+  } });
+  const { input, typed, current } = boxes;
   // On a phone the keyboard covers the page's lower part: the recite pill rises above it, and the page (kept at its size)
   // moves up just enough to show the box being written (the app scrolls it, #691).
   const [keyboard, setKeyboard] = useState(0);
@@ -214,52 +216,46 @@ export default function ReaderView({
     const element = stage.current;
     if (!element) return;
     element.style.transform = '';
+    // Flowing text scrolls: the box being written scrolls into the part of the page above the keyboard.
+    if (flow) {
+      const active = element.querySelector<HTMLElement>('[data-write-active]');
+      const box = active?.getBoundingClientRect();
+      const room = window.innerHeight - keyboard - 52 - 24;
+      if (box && (box.bottom > room || box.top < 0)) element.scrollTop += box.bottom > room ? box.bottom - room : box.top - 16;
+      return;
+    }
     const box = keyboard ? element.querySelector('[data-write-active]')?.getBoundingClientRect() : null;
     const room = window.innerHeight - keyboard - 52 - 24;
     if (box && box.bottom > room) element.style.transform = `translateY(${room - box.bottom}px)`;
-  }, [keyboard, current, writeKey]);
+  }, [keyboard, current, writeKey, flow]);
+  // Flowing text runs past the screen: the next ayah to recite, or the one selected, scrolls into sight.
+  const focusKey = flow ? (position ? upcoming : mark ? `${mark.surah}:${mark.ayah}` : null) : null;
+  useEffect(() => {
+    const element = stage.current;
+    if (!element || !focusKey) return;
+    const reveal = () => {
+      if (performance.now() - pinchedAt.current < 800) return;
+      const word = element.querySelector<HTMLElement>(`[data-ayah="${focusKey}"]`);
+      if (!word) return;
+      const box = word.getBoundingClientRect();
+      const frame = element.getBoundingClientRect();
+      const bottom = frame.bottom - (reciting ? 76 : 16);
+      // Out of sight, it comes to a third of the way down, with the lines before it above.
+      if (box.top < frame.top + 8 || box.bottom > bottom) element.scrollTop += box.top - frame.top - frame.height / 3;
+    };
+    reveal();
+    // Again once the page is set at its size (fonts load, the text is fitted).
+    const observer = new ResizeObserver(reveal);
+    element.querySelectorAll('section[data-side]').forEach(page => observer.observe(page));
+    return () => observer.disconnect();
+  }, [focusKey, zoom, reciting]);
   /** The ayah's words on the shown pages before each one, so a box's place counts from the ayah's first word. */
   const before = (index: number, key: string) => shown.slice(0, index).reduce((sum, _, at) => sum + (wordCounts[at][key] ?? 0), 0);
-  const check = (filled: Record<number, string>) => {
-    if (!writeKey || !position) return;
-    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    setChecked({ key: writeKey, right, wrong: asked.filter(at => !right.includes(at)), before: 0 });
-    setPosition(revealAyah(position, writeKey));
-  };
-  const moveOn = (filled: Record<number, string>) => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
-    else check(filled);
-  };
-  // A word revealed by the next-word button while its box was being written has no box any more.
-  if (current !== null && asked.length && !asked.includes(current)) setCurrent(asked[0]);
-  const onWrite = (text: string, composing = false) => {
-    if (current === null) return;
-    const letters = typedLetters(text);
-    const filled = { ...typed, [current]: letters };
-    setTyped(filled);
-    if (!composing && ((/\s/.test(text) && !keepsSpace(text, writeWords[current])) || letters.length >= maxLetters(writeWords[current]))) moveOn(filled);
-  };
-  const back = () => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at > 0) setCurrent(asked[at - 1]);
-    return at > 0;
-  };
-  const onWriteKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') { event.preventDefault(); moveOn(typed); return; }
-    if (event.key !== 'Backspace' || current === null || typed[current]) return;
-    if (back()) event.preventDefault();
-  };
-  // Android keyboards often send no Backspace key for an empty field, only a delete input.
-  const onWriteInput = (event: React.FormEvent<HTMLInputElement>) => {
-    const native = event.nativeEvent as InputEvent;
-    if (native.inputType === 'deleteContentBackward' && current !== null && !typed[current] && back()) event.preventDefault();
-  };
   const toggleWriting = () => {
     setWriting(on => { write(WRITE_KEY, on ? 'off' : 'on'); return !on; });
     setChecked(null);
   };
-  const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: at => { setCurrent(at); input.current?.focus({ preventScroll: true }); } } : null;
+  const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: boxes.pick } : null;
   const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
   const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
@@ -284,6 +280,83 @@ export default function ReaderView({
     [page, two, router, position, reviewing, groups, ayahCounts],
   );
   useEffect(() => { write(LAST_PAGE_KEY, String(page)); }, [page]);
+  useEffect(() => { setZoom(settleTextSize(Number(read(TEXT_SIZE_KEY)) || 1)); }, []);
+  const sizeTo = useCallback((next: number) => { setZoom(next); write(TEXT_SIZE_KEY, String(next)); }, []);
+  // A pinch (two fingers, or a trackpad's pinch, which browsers send as a wheel with ctrl) changes the text size, not the
+  // picture: while the fingers move the page is only stretched as a preview, and set again at the new size when they lift.
+  const zoomRef = useRef(zoom);
+  /** When the last pinch ended: keeping an ayah in sight waits a moment, so it doesn't undo where the pinch left the page. */
+  const pinchedAt = useRef(-Infinity);
+  zoomRef.current = zoom;
+  useEffect(() => {
+    const element = stage.current;
+    if (!element) return;
+    let pinch: { distance: number; page: HTMLElement; x: number; y: number; k: number } | null = null;
+    const apart = (event: TouchEvent) => Math.hypot(event.touches[0].clientX - event.touches[1].clientX, event.touches[0].clientY - event.touches[1].clientY);
+    const start = (event: TouchEvent) => {
+      if (event.touches.length !== 2) return;
+      const page = (event.target as Element).closest<HTMLElement>('section[data-side]') ?? element.querySelector<HTMLElement>('section[data-side]');
+      if (!page) return;
+      const box = page.getBoundingClientRect();
+      const x = (event.touches[0].clientX + event.touches[1].clientX) / 2 - box.left;
+      const y = (event.touches[0].clientY + event.touches[1].clientY) / 2 - box.top;
+      pinch = { distance: apart(event), page, x, y, k: 1 };
+      page.style.transformOrigin = `${x}px ${y}px`;
+      page.toggleAttribute('data-pinching', true);
+    };
+    const move = (event: TouchEvent) => {
+      if (!pinch || event.touches.length !== 2) return;
+      event.preventDefault();
+      const from = zoomRef.current;
+      pinch.k = Math.min(2.2, Math.max(0.9, (from * apart(event)) / pinch.distance)) / from;
+      pinch.page.style.transform = `scale(${pinch.k})`;
+    };
+    const end = () => {
+      if (!pinch) return;
+      const { page, k, y } = pinch;
+      pinch = null;
+      page.style.transform = '';
+      page.style.transformOrigin = '';
+      page.removeAttribute('data-pinching');
+      const next = settleTextSize(zoomRef.current * k);
+      if (next === zoomRef.current) return;
+      // The words that were between the fingers stay in sight.
+      const share = y / Math.max(1, page.offsetHeight);
+      const screen = y + page.getBoundingClientRect().top - element.getBoundingClientRect().top;
+      pinchedAt.current = performance.now();
+      sizeTo(next);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const after = element.querySelector<HTMLElement>('section[data-side]');
+        if (!after) return;
+        const top = after.getBoundingClientRect().top - element.getBoundingClientRect().top + element.scrollTop;
+        element.scrollTop = next > 1 ? top + share * after.offsetHeight - screen : 0;
+      }));
+    };
+    let wheelTimer: ReturnType<typeof setTimeout> | undefined;
+    let wheelSize = 0;
+    const wheel = (event: WheelEvent) => {
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      wheelSize = Math.min(2.2, Math.max(1, (wheelSize || zoomRef.current) * Math.exp(-event.deltaY / 100)));
+      clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(() => { sizeTo(settleTextSize(wheelSize)); wheelSize = 0; }, 120);
+    };
+    element.addEventListener('touchstart', start, { passive: true });
+    element.addEventListener('touchmove', move, { passive: false });
+    element.addEventListener('touchend', end);
+    element.addEventListener('touchcancel', end);
+    element.addEventListener('wheel', wheel, { passive: false });
+    return () => {
+      clearTimeout(wheelTimer);
+      element.removeEventListener('touchstart', start);
+      element.removeEventListener('touchmove', move);
+      element.removeEventListener('touchend', end);
+      element.removeEventListener('touchcancel', end);
+      element.removeEventListener('wheel', wheel);
+    };
+  }, [sizeTo]);
+  // Another page opens at its top.
+  useLayoutEffect(() => { if (stage.current) stage.current.scrollTop = 0; }, [page]);
   useEffect(() => {
     for (const step of [1, -1] as const) {
       const target = turn(page, two, step);
@@ -533,14 +606,14 @@ export default function ReaderView({
           </div>
         </nav>
       ))}
-      <article ref={stage} dir="rtl" lang="ar" data-gestures={gestures[mode].long !== 'none' || undefined} className={`${mushaf.stage} ${two ? mushaf.spread : ''}`}>
+      <article ref={stage} dir="rtl" lang="ar" data-gestures={gestures[mode].long !== 'none' || undefined} data-flow={flow || undefined} className={`${mushaf.stage} ${two ? mushaf.spread : ''}`}>
         {phone && <Button size="sm" variant="muted" className="sr-only focus:not-sr-only focus:absolute focus:bottom-16 focus:z-10" aria-expanded={phoneTools} onClick={() => setPhoneTools(shown => !shown)}>
           {phoneTools ? <ChevronUp size={16} aria-hidden /> : <ChevronDown size={16} aria-hidden />}
           {toggleTools}
         </Button>}
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
-            write={writeOn(at)} checked={checkedOn(at)} />
+            write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
@@ -565,9 +638,7 @@ export default function ReaderView({
         <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
       </div></div>}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
-      {reciting && writing && <input ref={input} value={current === null ? '' : typed[current] ?? ''} onChange={event => onWrite(event.target.value, (event.nativeEvent as InputEvent).isComposing)} onCompositionEnd={event => onWrite(event.currentTarget.value)} onBeforeInput={onWriteInput} onKeyDown={onWriteKey}
-        dir="rtl" lang="ar" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="next" aria-label={ar ? 'اكتب الكلمة' : 'Write the word'}
-        className="fixed left-0 top-0 h-px w-px text-[16px] opacity-0" />}
+      {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>
   );
 }

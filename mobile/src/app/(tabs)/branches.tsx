@@ -62,7 +62,8 @@ export default function BranchesScreen() {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const frame = requestAnimationFrame(() => { timer = setTimeout(() => setPieces(branchList(list, bookmarks)), 0); });
     return () => { cancelAnimationFrame(frame); clearTimeout(timer); };
-  }, [list, savedKey]); // eslint-disable-line react-hooks/exhaustive-deps
+    // `start` too: change() blanks the list and may set the same list again (the empty list, the list shown), which alone reruns nothing.
+  }, [list, savedKey, start]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const change = useCallback((next: ListState, opening?: { id?: string; query?: string }) => {
     closeStudio();

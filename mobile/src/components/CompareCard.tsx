@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -28,7 +28,7 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** The card's first words and a link to its two passages on the website. */
-export function cardLink(card: PairCard) {
+function cardLink(card: PairCard) {
   const [a, b] = card.sides;
   // The two surahs' page, scrolled to this card; a one-to-many card links to the page alone, since its far side is one of several ayat.
   const href = `${surahPairHref(a.surah, b.surah)}${card.many ? '' : `#${compareAnchor(a, b)}`}`;
@@ -36,7 +36,7 @@ export function cardLink(card: PairCard) {
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-export function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
+function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
   return (
     <Text style={inline ? { color: plain ? palette.muted : palette.ink } : { fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
@@ -153,7 +153,9 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
 }
 
 /** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
-function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
+function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
+  /** Set where the card shows outside the compare tab (the home feed): a button that opens it there. */
+  onOpen?: () => void }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
@@ -284,7 +286,7 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
   );
   // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
   const cardBox = { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 12, gap: 10 };
-  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record });
+  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
   return (
     <View style={{ gap: 4 }}>
       <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={cardBox}>
@@ -308,6 +310,9 @@ function CompareCard({ card, palette }: { card: PairCard; palette: Palette }) {
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
           {tree && card.group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
             <TreeIcon size={22} color={palette.muted} />
+          </Pressable>}
+          {onOpen && <Pressable onPress={onOpen} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتحها في المقارنة" style={{ padding: 8 }}>
+            <ArrowLeftRight size={22} color={palette.muted} />
           </Pressable>}
           {/* Share is always the last button (the left end), as on the branches tab. */}
           <Pressable onPress={() => share()} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>

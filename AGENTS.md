@@ -77,6 +77,15 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `Records used: 0019, 0021`) or `none`; `npm run records:used` counts them.
   Distillate lessons are long write-ups written only when the owner asks.
 
+## Sources and attributions
+
+- Every book, text, data set, font and library Namaq draws on is listed once in
+  `shared/sources.ts`, with its licence and the pages that use it. The website's
+  `/sources` (books) and `/attributions` (everything) render that list, and the
+  app's settings link to it. **A PR that adds a data source or book adds it
+  there in the same PR**, with the licence as the source states it; one that
+  stops using a source removes it. Link out; never host a book in full.
+
 ## Quiz questions
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and
@@ -176,6 +185,16 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   needs no such care.
   A picker whose buttons are short codes, such as the ayah references on the qira'at
   page (`36:35`), carries no icon: the code is the label.
+- Every link that leaves Namaq (a Shamela citation, a source on /sources or
+  /attributions, Quranpedia, archive.org) goes through `ExternalLink`:
+  `src/components/common/ExternalLink.tsx` on the website,
+  `mobile/src/components/ExternalLink.tsx` in the app (or its `openExternal`
+  for a settings row that draws the same mark itself). It ends the text with a
+  small out-of-site mark (lucide `SquareArrowOutUpLeft`, mirrored in English) in
+  the link's own colour, so a reader knows before tapping that the link leaves
+  the app. Internal links stay plain `next/link` or app navigation, with no mark.
+  `ExternalLink.test.tsx` fails on a raw `target="_blank"`, `href="http…"` or
+  `Linking.openURL` anywhere else.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.

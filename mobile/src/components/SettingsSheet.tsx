@@ -1,6 +1,7 @@
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { ExternalLink, Play, ShieldCheck } from 'lucide-react-native';
+import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-native';
+import { openExternal } from './ExternalLink';
 import Sheet from './Sheet';
 import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
@@ -14,10 +15,11 @@ import type { Palette } from '@/lib/theme';
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
-/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About and Privacy. */
+/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About, the sources and their licences, and Privacy. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const links = [
     { href: '/about', label: 'عن نمق', icon: <Logo size={22} /> },
+    { href: '/attributions', label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
     { href: '/privacy', label: 'سياسة الخصوصية', icon: <ShieldCheck size={20} color={palette.ink} /> },
   ];
   return (
@@ -37,11 +39,11 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>
           </Pressable>
           {links.map(link => (
-            <Pressable key={link.href} onPress={() => void Linking.openURL(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
+            <Pressable key={link.href} onPress={() => openExternal(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
               {link.icon}
               <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{link.label}</Text>
-              <ExternalLink size={16} color={palette.muted} />
+              <SquareArrowOutUpLeft size={16} color={palette.muted} />
             </Pressable>
           ))}
         </View>
