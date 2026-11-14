@@ -1,12 +1,12 @@
 import { num } from '../quran/arabicNumber';
 
 /**
- * A video of several cards in a row: a title frame, each card read along, a short slide to the next card, an end frame.
+ * A video of one card or several in a row: each card read along, a short slide to the next card, and the end frame with the emblem.
+ * No title frame (owner, 2026-11-14): the emblem shows only at the end, and the pair's name stays on top while the cards play.
  * The timing lives here so the website and the app record the same video; their recorders only draw what it says.
  */
 
-/** Milliseconds: the title frame, the stay on a card after its last word, the slide to the next card, the end frame. */
-export const TITLE_MS = 3000;
+/** Milliseconds: the stay on a card after its last word, the slide to the next card, the end frame. */
 export const HOLD_MS = 1500;
 export const SLIDE_MS = 700;
 export const END_MS = 3500;
@@ -14,7 +14,7 @@ export const END_MS = 3500;
 export const PART_LIMIT_MS = 180_000;
 
 export type Segment =
-  | { kind: 'title' | 'end'; start: number; end: number }
+  | { kind: 'end'; start: number; end: number }
   /** `ends`: where each step of the card's reading ends, from the card's start. */
   | { kind: 'card'; card: number; start: number; end: number; ends: number[] }
   | { kind: 'slide'; from: number; to: number; start: number; end: number };
@@ -26,17 +26,16 @@ type Unplaced<S = Segment> = S extends Segment ? Omit<S, 'start' | 'end'> : neve
 
 const reading = (ends: number[]) => ends[ends.length - 1] ?? 0;
 
-/** The segments of one video. With `frames` off (a single card's video) it is the card alone, as before. */
-export function videoTimeline(cards: number[][], frames = true): Segment[] {
+/** The segments of one video: the cards in turn, then the end frame. */
+export function videoTimeline(cards: number[][]): Segment[] {
   const segments: Segment[] = [];
   let at = 0;
   const add = (segment: Unplaced, ms: number) => { segments.push({ ...segment, start: at, end: at + ms } as Segment); at += ms; };
-  if (frames) add({ kind: 'title' }, TITLE_MS);
   cards.forEach((ends, card) => {
     if (card > 0) add({ kind: 'slide', from: card - 1, to: card }, SLIDE_MS);
     add({ kind: 'card', card, ends }, reading(ends) + HOLD_MS);
   });
-  if (frames) add({ kind: 'end' }, END_MS);
+  add({ kind: 'end' }, END_MS);
   return segments;
 }
 
@@ -48,16 +47,16 @@ export function segmentAt(segments: Segment[], t: number) {
   return { segment, local: segment ? Math.max(0, t - segment.start) : 0 };
 }
 
-/** The cards in parts, in order, each part's video within `limit` with its title and end frames. A card is never cut; one longer than the limit is a part alone. */
+/** The cards in parts, in order, each part's video within `limit` with its end frame. A card is never cut; one longer than the limit is a part alone. */
 export function videoParts(cards: number[][], limit = PART_LIMIT_MS): number[][] {
   const parts: number[][] = [];
   let part: number[] = [];
   let length = 0;
   cards.forEach((ends, index) => {
     const own = reading(ends) + HOLD_MS;
-    const added = part.length ? SLIDE_MS + own : TITLE_MS + own + END_MS;
+    const added = part.length ? SLIDE_MS + own : own + END_MS;
     if (part.length && length + added > limit) { parts.push(part); part = []; length = 0; }
-    length += part.length ? SLIDE_MS + own : TITLE_MS + own + END_MS;
+    length += part.length ? SLIDE_MS + own : own + END_MS;
     part.push(index);
   });
   if (part.length) parts.push(part);

@@ -74,11 +74,7 @@ export function usePalette(): Palette {
 export const toneOf = (palette: Palette, conj: string | undefined) => conj === 'و' ? palette.green : conj === 'ف' ? palette.root : palette.ink;
 
 /** Halfway between two colours, for marks that share only a root: a faint purple, as on the website. */
-export function blend(a: string, b: string, weight: number) {
-  const parts = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
-  const [x, y] = [parts(a), parts(b)];
-  return `#${x.map((value, i) => Math.round(value * weight + y[i] * (1 - weight)).toString(16).padStart(2, '0')).join('')}`;
-}
+export { blend } from '@shared/quran/compareCardLook';
 
 /** A kind of difference's colour for its connection lines and chip, as on the website. */
 export function toneColor(palette: Palette, tone: ConnectionTone) {

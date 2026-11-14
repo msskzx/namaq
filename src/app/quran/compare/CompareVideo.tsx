@@ -6,7 +6,7 @@ import Button from '@/components/common/Button';
 import LoadingDots from '@/components/common/LoadingDots';
 import { num } from '@shared/quran/arabicNumber';
 import { readPlan, READ_SPEEDS, stepTime, type ReadStep } from '@shared/quran/readPlan';
-import { compareRecorderPage, compareVideoInput, ENGLISH, pageVideoInputs, videoCard, type CompareLook, type CompareVideoInput } from '@shared/video/compareVideo';
+import { compareRecorderPage, compareVideoInput, ENGLISH, markColours, pageVideoInputs, videoCard, type CompareLook, type CompareVideoInput, type VideoNames } from '@shared/video/compareVideo';
 import { clock, partLengths, stepEnds } from '@shared/video/pageVideo';
 import { VIDEO_TYPES } from '@shared/video/recorder';
 import type { CardSide, PairCard } from './pairCards';
@@ -15,20 +15,42 @@ import { setReadSpeed, useReadSpeed } from './readAlong';
 export const canRecord = () => typeof HTMLCanvasElement !== 'undefined' && 'captureStream' in HTMLCanvasElement.prototype
   && typeof MediaRecorder !== 'undefined' && VIDEO_TYPES.some(type => MediaRecorder.isTypeSupported(type));
 
-/** The page's colours, the mushaf font and the emblem, for the recorder (the app's recorder page, shared/video/compareVideo.ts). */
+/** The page's colours, the fonts and the emblem, for the recorder (shared/video/compareVideo.ts), which draws the app's compare card in them. */
 function webLook(): CompareLook {
   const css = getComputedStyle(document.documentElement);
-  const token = (name: string) => css.getPropertyValue(name).trim();
-  const paper = token('--home-paper');
   const probe = document.createElement('canvas').getContext('2d');
-  if (probe) probe.fillStyle = paper;
-  const dark = parseInt(String(probe?.fillStyle ?? '#fff').slice(1, 3), 16) < 128;
+  // As #rrggbb, which the mark colours are blended in.
+  const token = (name: string) => {
+    const value = css.getPropertyValue(name).trim();
+    if (!probe) return value;
+    probe.fillStyle = '#000';
+    probe.fillStyle = value;
+    return String(probe.fillStyle);
+  };
+  const paper = token('--home-paper');
+  const dark = parseInt(paper.slice(1, 3), 16) < 128;
+  const colours = { accent: token('--home-accent'), root: token('--home-root'), muted: token('--home-muted') };
   return {
-    paper, ink: token('--home-ink'), muted: token('--home-muted'), rule: token('--home-rule'), accent: token('--home-accent'), root: token('--home-root'),
-    highlight: token('--home-highlight'), onHighlight: token('--home-on-highlight'), font: '"KFGQPC Hafs"', logo: `${location.origin}/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`,
+    paper, card: token('--home-card'), deep: token('--home-paper-deep'), ink: token('--home-ink'), muted: colours.muted, rule: token('--home-rule'), accent: colours.accent,
+    green: token('--home-green'), highlight: token('--home-highlight'), onHighlight: token('--home-on-highlight'), marks: markColours(colours),
+    font: '"KFGQPC Hafs"', ui: '"Amiri"', logo: `${location.origin}/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`,
   };
 }
-const fontFace = () => `@font-face{font-family:"KFGQPC Hafs";src:url("${location.origin}/fonts/UthmanicHafs1Ver18.ttf") format("truetype");}`;
+
+/** The page's own Amiri faces (self-hosted by next/font under its own family name), renamed "Amiri" for the recorder's frame. */
+function amiriFaces() {
+  const faces: string[] = [];
+  for (const sheet of document.styleSheets) {
+    let rules: CSSRuleList;
+    try { rules = sheet.cssRules; } catch { continue; }
+    for (const rule of rules) {
+      if (!(rule instanceof CSSFontFaceRule) || !/amiri/i.test(rule.style.getPropertyValue('font-family')) || /fallback/i.test(rule.style.getPropertyValue('font-family'))) continue;
+      faces.push(rule.cssText.replace(/font-family:[^;]+;/, 'font-family:"Amiri";').replace(/url\((["']?)\//g, `url($1${location.origin}/`));
+    }
+  }
+  return faces.join('');
+}
+const fontFace = () => `@font-face{font-family:"KFGQPC Hafs";src:url("${location.origin}/fonts/UthmanicHafs1Ver18.ttf") format("truetype");}${amiriFaces()}`;
 const pageOf = (input: CompareVideoInput) => compareRecorderPage(input, fontFace());
 
 const fromBase64 = (data: string, mime: string, name: string) => {
@@ -115,8 +137,8 @@ function RecorderDialog({ pages, title, ar, onClose }: { pages: string[]; title:
 }
 
 /** One card's read-along as a video, from its studio. */
-export function CardVideo({ card, plan, speed, title, label, ar, onClose }: { card: PairCard; plan: ReadStep[]; speed: number; title: string; label: (side: CardSide) => string; ar: boolean; onClose: () => void }) {
-  const [pages] = useState(() => [pageOf(compareVideoInput({ title, cards: [videoCard(card, plan, speed, label)], look: webLook() }))]);
+export function CardVideo({ card, plan, speed, title, names, ar, onClose }: { card: PairCard; plan: ReadStep[]; speed: number; title: string; names: VideoNames; ar: boolean; onClose: () => void }) {
+  const [pages] = useState(() => [pageOf(compareVideoInput({ title, cards: [videoCard(card, plan, speed, names)], look: webLook() }))]);
   return <RecorderDialog pages={pages} title={title} ar={ar} onClose={onClose} />;
 }
 
@@ -124,7 +146,7 @@ export function CardVideo({ card, plan, speed, title, label, ar, onClose }: { ca
  * Share a pair page as video: every card is ticked at first; untick the ones to leave out.
  * A video over about 3 minutes is split into parts (shared/video/pageVideo.ts), recorded one after another.
  */
-export function PageVideo({ cards, title, subtitle, label, ar, onClose }: { cards: PairCard[]; title: string; subtitle?: string; label: (side: CardSide) => string; ar: boolean; onClose: () => void }) {
+export function PageVideo({ cards, title, subtitle, label, names, ar, onClose }: { cards: PairCard[]; title: string; subtitle?: string; label: (side: CardSide) => string; names: VideoNames; ar: boolean; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const speed = useReadSpeed();
   const [off, setOff] = useState<string[]>([]);
@@ -139,7 +161,7 @@ export function PageVideo({ cards, title, subtitle, label, ar, onClose }: { card
   const next = READ_SPEEDS[(READ_SPEEDS.indexOf(speed) + 1) % READ_SPEEDS.length];
   useEffect(() => { dialog.current?.showModal(); }, []);
   const record = () => {
-    const inputs = pageVideoInputs({ title, look: webLook(), cards: picked.map(({ card, plan }) => videoCard(card, plan, speed, label)), ...(subtitle ? { subtitle } : {}), ...(ar ? {} : { words: ENGLISH }) });
+    const inputs = pageVideoInputs({ title, look: webLook(), cards: picked.map(({ card, plan }) => videoCard(card, plan, speed, names)), ...(subtitle ? { subtitle } : {}), ...(ar ? {} : { words: ENGLISH }) });
     setPages(inputs.map(pageOf));
   };
   const toggle = (id: string) => setOff(list => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]));

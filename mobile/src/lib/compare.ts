@@ -8,7 +8,7 @@ import { compareBookmarkId, savedAs, savedSurahPairs } from '@shared/compareBook
 import { readBookmarks, toggleBookmark, type Bookmark } from '@shared/bookmarks';
 import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
-import { num } from '@shared/quran/arabicNumber';
+import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
 export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 import { sharedByAll } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
@@ -39,19 +39,10 @@ export const surahName = (n: number) => surahRows.find(row => row.number === n)?
 export const pairTitle = (lead: number, other: number) => (lead === other ? `سورة ${surahName(lead)} مع نفسها` : `سورة ${surahName(lead)} وسورة ${surahName(other)}`);
 export const visitKey = (visit: Pick<Visit, 'lead' | 'other'>) => `${visit.lead}·${visit.other}`;
 
-/** Ayah numbers in order as unbroken runs: «٣٠–٣٣ · ٣٥» for 30, 31, 32, 33, 35. */
-export function runsLabel(numbers: number[]) {
-  const runs = numbers.reduce<[number, number][]>((list, n) => {
-    const last = list[list.length - 1];
-    if (last && n === last[1] + 1) last[1] = n;
-    else list.push([n, n]);
-    return list;
-  }, []);
-  return runs.map(([from, to]) => `${num(from)}${to > from ? `–${num(to)}` : ''}`).join(' · ');
-}
+export { runsLabel };
 
 /** "البقرة ٢٥٥–٢٦٠" for a card side, each stretch named when a story part skips ayat; a side silent here is its surah alone. */
-export const sideLabel = (side: CardSide) => `${surahName(side.surah)} ${runsLabel(side.ayat.map(ayah => ayah.number))}`.trim();
+export const sideLabel = (side: CardSide) => sideTitle({ surah: side.surah, numbers: side.ayat.map(ayah => ayah.number) }, surahName);
 
 /** What a side says in a story part its surah does not tell. */
 export const silentNote = (surah: number) => `لا تذكر سورة ${surahName(surah)} هذا الجزء`;

@@ -39,6 +39,8 @@ import { useNeighbours } from './useNeighbours';
 import { useAroundSetting } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
+import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
+import type { VideoNames } from '@shared/video/compareVideo';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -468,11 +470,17 @@ const sideNamer = (plain: (surah: number) => string, ar: boolean) => (side: Card
   return `${plain(side.surah)} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`;
 };
 
+/** How the video names a side and a part a surah does not tell, as this page does. */
+const videoNames = (plain: (surah: number) => string, ar: boolean): VideoNames => ({
+  side: name => (ar ? sideTitle(name, plain) : `${plain(name.surah)} ${name.listed ? name.numbers.join(' · ') : englishRuns(name.numbers)}`.trim()),
+  silent: surah => emptyNote(plain(surah), ar),
+});
+const englishRuns = (numbers: number[]) => runsLabel(numbers).replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)));
+
 /** In place of save under a card: close, a bar per ayah read (a tap reads from there), speed, play or pause, and reset. */
 function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useReadAlong>; ar: boolean; card: PairCard; names: Names }) {
   const [video, setVideo] = useState(false);
   const { plain, title } = useNames(names, ar);
-  const sideLabel = sideNamer(plain, ar);
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
   const starts = ayahStarts(read.plan);
   const playing = read.status === 'playing';
@@ -501,7 +509,7 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
       <span className="flex-1" />
       <Button size="icon" variant="muted" onClick={read.close} aria-label={close} title={close}><X size={18} aria-hidden /></Button>
     </div>
-    {video && <CardVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} label={sideLabel} ar={ar} onClose={() => setVideo(false)} />}
+    {video && <CardVideo card={card} plan={read.plan} speed={read.speed} title={title(card.sides[0].surah, card.sides[1].surah)} names={videoNames(plain, ar)} ar={ar} onClose={() => setVideo(false)} />}
   </div>;
 }
 
@@ -603,7 +611,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         <div className="flex min-w-0 flex-col gap-3">
         {/* Where this page sits in the list swiping walks, as on the branches trees. */}
         {index >= 0 && order.length > 1 && <TreeProgress unit="page" steps={{ position: index + 1, total: order.length }} />}
-        {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
+        {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} names={videoNames(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
           {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>

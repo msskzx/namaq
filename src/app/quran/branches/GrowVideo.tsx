@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Download, Pause, Play, RotateCcw, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
+import { END_MS } from '@shared/video/pageVideo';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { askLeft, growRoot, growthState, openStudio, pause, play, stop, useGrowth } from './Grow';
@@ -12,8 +13,9 @@ import { askLeft, growRoot, growthState, openStudio, pause, play, stop, useGrowt
 const WIDTH = 1080;
 const HEIGHT = 1920;
 const FPS = 30;
-/** How long the finished tree stays on screen before the video ends. */
+/** How long the finished tree stays on screen before the end frame, and how long its fade into the emblem takes. */
 const HOLD = 1500;
+const FADE = 400;
 
 type Rect = { x: number; y: number; w: number; h: number };
 type Word = Rect & { text: string; font: string; color: string };
@@ -109,7 +111,6 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   context.direction = 'rtl';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  if (look.logo?.complete && look.logo.naturalWidth) context.drawImage(look.logo, WIDTH / 2 - 70, 70, 140, 140);
   context.fillStyle = look.ask ? look.accent : look.ink;
   context.font = `56px ${look.font}`;
   if (look.ask) context.fillText(look.matrix ? 'تذكّر الرابط' : 'اكمل الايات', WIDTH / 2, 290, WIDTH - 120);
@@ -170,7 +171,7 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.stroke();
     context.setLineDash([]);
     if (box.element.hasAttribute('data-ask')) {
-      drawTimer(context, box.element, box.rect, look.accent);
+      drawTimer(context, box.element, box.rect, look.accent, look.font);
       continue;
     }
     for (const word of box.words) {
@@ -215,7 +216,7 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.roundRect(rect.x, rect.y, rect.w, rect.h, 4);
     context.fill();
     context.stroke();
-    drawTimer(context, prompt, rect, look.accent);
+    drawTimer(context, prompt, rect, look.accent, look.font);
   }
 
   context.restore();
@@ -248,6 +249,19 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   }
 }
 
+/**
+ * The end frame: the tree fades into the page and the emblem fades in. The emblem shows only here,
+ * never over the tree (owner, 2026-11-14), as in the app's videos (shared/video/pageVideo.ts END_MS).
+ */
+function drawEnd(context: CanvasRenderingContext2D, look: Look, alpha: number) {
+  context.save();
+  context.globalAlpha = alpha;
+  context.fillStyle = look.paper;
+  context.fillRect(0, 0, WIDTH, HEIGHT);
+  if (look.logo?.complete && look.logo.naturalWidth) context.drawImage(look.logo, WIDTH / 2 - 130, 700, 260, 260);
+  context.restore();
+}
+
 function layoutChips(context: CanvasRenderingContext2D, chips: Drawing['chips']) {
   let x = WIDTH - 60;
   let y = 0;
@@ -274,7 +288,7 @@ function layoutChips(context: CanvasRenderingContext2D, chips: Drawing['chips'])
   return { entries, height: entries.length ? y + rowHeight + 24 : 0 };
 }
 
-function drawTimer(context: CanvasRenderingContext2D, element: Element, { x, y, w, h }: Rect, accent: string) {
+function drawTimer(context: CanvasRenderingContext2D, element: Element, { x, y, w, h }: Rect, accent: string, font: string) {
   const size = Math.min(24, h - 24, w - 8);
   context.save();
   context.translate(x + (w - size) / 2, y + (h - size - 14) / 2);
@@ -290,7 +304,7 @@ function drawTimer(context: CanvasRenderingContext2D, element: Element, { x, y, 
   context.stroke(new Path2D(sand.stream));
   context.restore();
   context.fillStyle = accent;
-  context.font = '12px system-ui, sans-serif';
+  context.font = `12px ${font}`;
   context.fillText(element.getAttribute('data-left') ?? '', x + w / 2, y + (h + size + 2) / 2);
 }
 
@@ -360,7 +374,9 @@ export default function GrowVideo() {
       look.ask = now.mode === 'ask';
       draw(context, drawing, look, now);
       doneAt = now.status === 'done' ? doneAt || Date.now() : 0;
-      if (doneAt && Date.now() - doneAt > HOLD) { end(true); return; }
+      const after = doneAt ? Date.now() - doneAt - HOLD : -1;
+      if (after >= 0) drawEnd(context, look, Math.min(1, after / FADE));
+      if (after >= END_MS) { end(true); return; }
       current.frame = requestAnimationFrame(tick);
     };
     recorder.start();

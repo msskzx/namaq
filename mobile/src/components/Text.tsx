@@ -2,9 +2,10 @@ import { createContext, useContext, type ComponentProps } from 'react';
 import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type StyleProp, type TextStyle } from 'react-native';
 import { QURAN_FONT, UI_FONT, UI_FONT_BOLD } from '@/lib/theme';
 import { textDirection } from '@/lib/rtl';
+import { UI_SCALE } from '@shared/quran/compareCardLook';
 
 /** Amiri draws smaller than a system font at the same size, so interface sizes grow by this much (the website's type scale does the same). */
-export const UI_SCALE = 1.12;
+export { UI_SCALE };
 const DEFAULT_SIZE = 14;
 
 type Role = 'ui' | 'other';
