@@ -9,6 +9,7 @@ import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
+import { sectionAt, sectionsStartingAt as startsAt, surahTopicsOf } from '@shared/quran/surahTopics';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
@@ -60,7 +61,14 @@ type Props = {
    * so the lines keep the page's size.
    */
   slice?: { from: number; to: number };
+  /**
+   * The surah's sections (docs/plans/surah-topics.md): the page's header names the one the page opens in, and a small
+   * numbered tab over the first word of each section's first ayah marks where one starts. Neither moves a word. A tap on
+   * either gives the surah and the section's place in its list.
+   */
+  onTopic?: (surah: number, section: number) => void;
 };
+
 
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
   /** Where the box being written is on the screen (its top and height), so the page can scroll it into sight above the keyboard. */
@@ -124,7 +132,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -229,6 +237,17 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const surahHidden = (surah: number) => !!titled?.has(surah) && !!hidden?.(`${surah}:1`, 0);
   const basmalaHidden = (surah: number) => titled?.get(surah) === 2 && !!hidden?.(`${surah}:1`, 1);
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
+  // The section the page opens in: the one holding the page's first ayah.
+  const opener = useMemo(() => {
+    if (!onTopic) return null;
+    // An ayah before the surah's first section (al-Fatiha's basmala) passes to the next.
+    for (const at of lineAt) for (const group of model.lines[at] ?? []) {
+      if (group.surah === undefined || group.ayah === undefined) continue;
+      const index = sectionAt(group.surah, group.ayah);
+      if (index >= 0) return { surah: group.surah, index, title: surahTopicsOf(group.surah)!.sections[index].title };
+    }
+    return null;
+  }, [onTopic, lineAt, model]);
   const badges = data.items.flatMap(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter).join(' ')] : []), ...('line' in item && isSajda(item.line) ? ['سجدة'] : [])]);
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
   const upcoming = { backgroundColor: tint(palette.accent, 0.22) } as const;
@@ -280,6 +299,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       {!slice && <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: small }}>الجزء {juzName(data.juz)}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
+          {opener && !recite && (
+            <Pressable onPress={() => onTopic!(opener.surah, opener.index)} accessibilityRole="button" accessibilityLabel={`موضوعات السورة: ${opener.title}`} hitSlop={6} style={{ flexShrink: 1 }}>
+              <Text numberOfLines={1} style={{ borderWidth: 1, borderColor: palette.rule, color: palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>
+                <Text style={{ color: palette.accent }}>{num(opener.index + 1)}</Text>{` ${opener.title}`}
+              </Text>
+            </Pressable>
+          )}
           {badges.map(label => (
             <Text key={label} style={{ borderWidth: 1, borderColor: label === 'سجدة' ? palette.accent : palette.rule, color: label === 'سجدة' ? palette.accent : palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>{label}</Text>
           ))}
@@ -366,6 +392,14 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
                         <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={lit ? place(`${row.id}:${at}`) : undefined}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {onTopic && !recite && wordAt === 0 && group.word && startsAt(group.surah, group.ayah).length > 0 && (
+                          <Pressable onPress={() => onTopic(group.surah!, startsAt(group.surah, group.ayah)[0])} accessibilityRole="button" accessibilityLabel="موضوعات السورة" hitSlop={8}
+                            style={{ position: 'absolute', right: 0, bottom: '62%', zIndex: 1, flexDirection: 'row', gap: 2 }}>
+                            {startsAt(group.surah, group.ayah).map(i => (
+                              <Text key={i} style={{ minWidth: size * 0.42, textAlign: 'center', fontSize: Math.max(9, size * 0.3), lineHeight: Math.max(12, size * 0.42), color: palette.accent, borderWidth: 1, borderColor: palette.rule, borderRadius: 7, paddingHorizontal: 3, backgroundColor: palette.paper, overflow: 'hidden' }}>{num(i + 1)}</Text>
+                            ))}
+                          </Pressable>
+                        )}
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />

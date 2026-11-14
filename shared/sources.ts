@@ -46,6 +46,7 @@ const USE = {
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },
   reader: { ar: 'المصحف', en: 'the mushaf reader', href: '/quran/read' },
   tafsir: { ar: 'التفسير في المصحف', en: 'the tafsir in the mushaf reader', href: '/quran/read' },
+  topics: { ar: 'موضوعات السور في المصحف', en: 'surah topics in the mushaf reader', href: '/quran/read' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -66,12 +67,12 @@ export const SOURCES: Source[] = [
   {
     id: 'nazm-al-durar', group: 'books',
     title: { ar: 'نظم الدرر في تناسب الآيات والسور', en: 'Nazm al-Durar' }, author: { ar: 'برهان الدين البقاعي', en: 'al-Biqa‘i' },
-    edition: 'دار الكتاب الإسلامي، القاهرة (طبعة حيدر آباد)، ٢٢ جزءًا', link: shamela(9098), licence: PUBLIC_DOMAIN, uses: [USE.order],
+    edition: 'دار الكتاب الإسلامي، القاهرة (طبعة حيدر آباد)، ٢٢ جزءًا', link: shamela(9098), licence: PUBLIC_DOMAIN, uses: [USE.order, USE.topics],
   },
   {
     id: 'masaid-al-nazar', group: 'books',
     title: { ar: 'مصاعد النظر للإشراف على مقاصد السور', en: 'Masa‘id al-Nazar' }, author: { ar: 'برهان الدين البقاعي', en: 'al-Biqa‘i' },
-    link: shamela(1404), licence: PUBLIC_DOMAIN, uses: [USE.order],
+    link: shamela(1404), licence: PUBLIC_DOMAIN, uses: [USE.order, USE.topics],
   },
   {
     id: 'tanasuq-al-durar', group: 'books',
@@ -131,6 +132,17 @@ export const SOURCES: Source[] = [
     uses: [USE.tafsir],
   },
   {
+    id: 'tafsir-mawdui', group: 'books',
+    title: { ar: 'التفسير الموضوعي لسور القرآن الكريم', en: 'al-Tafsir al-Mawdu‘i li-Suwar al-Quran al-Karim' },
+    author: { ar: 'نخبة من علماء التفسير وعلوم القرآن، بإشراف مصطفى مسلم', en: 'a group of scholars, ed. Mustafa Muslim' },
+    edition: 'جامعة الشارقة، ١٤٣١هـ/٢٠١٠م، ١٠ مجلدات', link: { url: 'https://archive.org/details/20260607_20260607_1233', label: 'archive.org' },
+    licence: {
+      ar: 'كتاب معاصر. نأخذ منه عناوين أقسام كل سورة ومدى آياتها فقط، مع الجزء والصفحة، ولا ننقل شرحه. أكثرها من ملف السور في الموسوعة القرآنية، والفاتحة والشورى والدخان من الطبعة المصورة.',
+      en: 'A contemporary book. We take only the headings of each surah’s sections and their ayah ranges, with volume and page, and none of its explanation. Most come from Quranpedia’s surahs dump; al-Fatiha, al-Shura and al-Dukhan from the scanned print.',
+    },
+    uses: [USE.topics],
+  },
+  {
     id: 'tuhfat-al-atfal', group: 'books',
     title: { ar: 'تحفة الأطفال والغلمان في تجويد القرآن', en: 'Tuhfat al-Atfal' }, author: { ar: 'سليمان الجمزوري', en: 'Sulayman al-Jamzuri' },
     edition: 'ضبط الشيخ حسن بن مصطفى الوراقي', link: { url: 'https://islamhouse.com/ar/books/2101', label: 'دار الإسلام' },
@@ -184,13 +196,13 @@ export const SOURCES: Source[] = [
   // Data
   {
     id: 'quranpedia', group: 'data',
-    title: { ar: 'الموسوعة القرآنية: ملفا القراءات والتفسير', en: 'Quranpedia: the qira’at and tafsir dumps' },
-    edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
+    title: { ar: 'الموسوعة القرآنية: ملفات القراءات والتفسير والسور', en: 'Quranpedia: the qira’at, tafsir and surahs dumps' },
+    edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠، السور إصدار ٢٠٢٦-١١-١٤', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
     licence: {
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
-    uses: [USE.qiraat, USE.reader, USE.tafsir],
+    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data',

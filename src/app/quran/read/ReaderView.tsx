@@ -17,6 +17,7 @@ import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
+import TopicSheet, { type TopicOpen } from './TopicSheet';
 import type { AyahLinks } from './ayahLinks';
 import { usePageGestures } from './usePageGestures';
 import { createPortal } from 'react-dom';
@@ -262,6 +263,8 @@ export default function ReaderView({
   const [sharing, setSharing] = useState<string | null>(null);
   const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
   const [preview, setPreview] = useState<Preview | null>(null);
+  const [topic, setTopic] = useState<TopicOpen | null>(null);
+  const onTopic = useCallback((surah: number, section: number) => setTopic({ surah, section }), []);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const closeActions = useCallback(() => setActions(null), []);
   /** When the ayah buttons were last closed by a press elsewhere: that press only closes them. */
@@ -613,13 +616,14 @@ export default function ReaderView({
         </Button>}
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
-            write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} />
+            write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} onTopic={onTopic} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
         onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onPreview={kind => setPreview(kind === 'tafsir' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
+      <TopicSheet open={topic} onClose={() => setTopic(null)} />
       {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
       {sharing && <AyahShareDialog ayah={sharing} name={surahName(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
       {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
