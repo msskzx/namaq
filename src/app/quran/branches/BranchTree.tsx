@@ -11,7 +11,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ayatLabel, branchesHref, keys, linkable, linkId, shownAyat, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
@@ -22,7 +22,7 @@ import { growthPlan } from '@shared/quran/growth';
 import { useGrowTarget } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 
-type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode;
   /** Where the tree is not the page's own (the home feed): the swipe steps here instead of following the page's step links. */
@@ -37,17 +37,18 @@ export const TONE: Record<string, string> = {
   ف: 'text-[var(--home-root)]',
 };
 
-type Refs = { keys: string[]; names: Record<number, string>; tags?: Record<string, Variant> };
+type Refs = { keys: string[]; names: Record<number, string>; tags?: Record<string, Variant>;
+  /** The ayat each key's label names, when a branch runs on past its own ayah (see shownAyat). */
+  spans?: Record<string, string[]> };
 
-export function AyahRefs({ keys, names, tags = {}, className = 'mt-1' }: Refs & { className?: string }) {
+export function AyahRefs({ keys, names, tags = {}, spans = {}, className = 'mt-1' }: Refs & { className?: string }) {
   return (
     <span className={`flex flex-wrap gap-1 ${className}`}>
       {keys.map((key, index) => {
-        const [surah, ayah] = key.split(':').map(Number);
         return (
           <span key={key} className="inline-flex items-center gap-1">
             {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-            <span className="text-xs text-[var(--home-muted)]">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</span>
+            <span className="text-xs text-[var(--home-muted)]">{ayatLabel(spans[key] ?? [key], names)}</span>
             {tags[key] && <span className={`text-xs font-quran ${TONE[tags[key].conj]}`}><MushafText>{tags[key].word}</MushafText></span>}
           </span>
         );
@@ -123,7 +124,7 @@ const nodeId = (index: number) => `n${index}`;
 function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   const root = path.length === 0;
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
-  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} className={singleSurah ? 'justify-center' : 'mt-1'} />;
+  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={shownAyat(node, path)} className={singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));
@@ -140,7 +141,7 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
       {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
-        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <>
+        {renderNode && !root ? renderNode(node, indices.get(node)!, tags, path) : <>
           {start}
           {singleSurah && <ReferenceHeader>{references}</ReferenceHeader>}
           <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}

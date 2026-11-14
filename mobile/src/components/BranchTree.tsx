@@ -4,7 +4,7 @@ import { Text } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { keys, type Branch } from '@shared/quran/branches';
+import { ayatLabel, keys, shownAyat, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { num } from '@shared/quran/arabicNumber';
@@ -30,7 +30,8 @@ export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: st
 const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
-export type RenderNode = (node: Branch, index: number) => React.ReactNode | undefined;
+/** Draws a node's box in place of its words; `path` is the words above it. */
+export type RenderNode = (node: Branch, index: number, path: string[]) => React.ReactNode | undefined;
 type Shared = { spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string> };
 const isLit = (shared: Shared, ayahKeys: string[]) => !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
 /** The ayat whose paths were lit by a tap (not by a search), as the website names them on the box the path starts from. */
@@ -56,11 +57,7 @@ function Fade({ id, children, style }: { id: string; children: React.ReactNode; 
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
 
-function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: Shared; center?: boolean }) {
-  const text = ayahKeys.map(key => {
-    const [surah, ayah] = key.split(':').map(Number);
-    return shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  }).join(' · ');
+function References({ text, shared, center }: { text: string; shared: Shared; center?: boolean }) {
   return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
@@ -326,7 +323,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   const all = keys(node);
   const words = node.words;
   const id = nodeId(shared.indices.get(node)!);
-  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!);
+  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!, path);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
@@ -337,7 +334,8 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   });
   const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   entries.forEach(entry => edge(shared, id, entry.id));
-  const references = node.ayat.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ');
+  const spans = shownAyat(node, path);
+  const references = node.ayat.map(key => ayatLabel(spans[key], shared.names)).join(' · ');
   const shownWords = { words, ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined };
   const start = starts && startLabel(shared, starts, node.ayat);
   const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
@@ -349,9 +347,9 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
           tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           <StartReference label={start} shared={shared} />
-          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
+          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References text={references} shared={shared} center /></View>}
           <Words {...shownWords} />
-          {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
+          {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
           </>}
         </Box>
       )}
