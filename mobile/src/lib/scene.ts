@@ -83,6 +83,7 @@ var shownAt = {};
 var now = {}, lit = null, ask = null, step = 0, total = INPUT.beats.length ? INPUT.beats[INPUT.beats.length - 1].step + 1 : 0, done = false;
 var FADE = 250;
 
+function holds(box) { return !!(lit && box.keys && box.keys.indexOf(lit) >= 0); }
 function alpha(id, t) { if (hidden[id]) return 0; var at = shownAt[id]; return at === undefined ? 1 : Math.min(1, (t - at) / FADE); }
 
 function roundRect(x, y, w, h) {
@@ -170,7 +171,7 @@ function draw(t) {
     var a = alpha('l:' + edge.to, t);
     if (!from || !to || !a) return;
     var points = edgePath(from, to, scene.down, edge.back);
-    ctx.globalAlpha = a; ctx.strokeStyle = look.rule; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+    ctx.globalAlpha = a; ctx.strokeStyle = holds(to) ? look.path : look.rule; ctx.lineWidth = 2; ctx.lineJoin = 'round';
     ctx.beginPath(); ctx.moveTo(points[0][0], points[0][1]);
     for (var p = 1; p < points.length; p++) ctx.lineTo(points[p][0], points[p][1]);
     ctx.stroke();
@@ -183,8 +184,9 @@ function draw(t) {
     if (!box.bare) {
       roundRect(box.x, box.y, box.w, box.h);
       if (!box.muted) { ctx.fillStyle = look.deep; ctx.fill(); }
-      var holds = lit && box.keys && box.keys.indexOf(lit) >= 0;
-      ctx.strokeStyle = now[box.id] ? look.path : asked || holds ? look.accent : box.muted ? look.muted : look.rule;
+      // The growing ayah's path is lit as a tap lights it in the app: a blue tint, the box just drawn outlined.
+      if (holds(box)) { ctx.fillStyle = look.path; ctx.globalAlpha = a * 0.14; ctx.fill(); ctx.globalAlpha = a; }
+      ctx.strokeStyle = asked ? look.accent : now[box.id] ? look.path : box.muted ? look.muted : look.rule;
       ctx.lineWidth = now[box.id] || asked ? 2 : 1;
       if (box.muted) ctx.setLineDash([4, 3]);
       ctx.stroke(); ctx.setLineDash([]);

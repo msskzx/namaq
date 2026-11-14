@@ -46,6 +46,19 @@ test.describe('branches', () => {
     await expect(page.getByText('«إن المتقين»')).toBeVisible();
     await expect(page.getByRole('button', { name: 'سورة الدخان' })).toBeVisible();
   });
+
+  test('the studio grows a tree to its end', async ({ page }) => {
+    await open(page, '/branches');
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill('إن المتقين في');
+    await box.press('Enter');
+    await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
+    await page.getByRole('button', { name: 'السرعة 1×' }).click();
+    await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
+    await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 20_000 });
+  });
 });
 
 test('compare shows a pair and its card actions', async ({ page }) => {
