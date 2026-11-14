@@ -37,6 +37,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
             <Words words={question.quran} marked={diff?.a} palette={palette} />
+            {question.number !== undefined && <Text style={{ color: palette.accent }}>{' '}{num(question.number)}</Text>}
             {question.reveal && (revealed ? <Text style={{ color: palette.accent }}>{' '}<Words words={question.reveal} palette={palette} /></Text> : ' …')}
           </Text>
         </View>

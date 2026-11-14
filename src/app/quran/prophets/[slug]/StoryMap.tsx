@@ -20,22 +20,25 @@ const CELL = 'w-[2.375rem] min-w-[2.375rem]';
  * The story as a grid: a column for each event under its group's colour, a row for each surah.
  * A dot's size is how many ayat that surah gives the event; tapping it opens the event's ayat at that surah.
  */
-export default function StoryMap({ map, events, phases, onRead, current, review }: {
+export default function StoryMap({ map, events, phases, onRead, current, review, only }: {
   review?: StoryReview;
   current?: { event: number; surah?: number };
   map: StoryMapData;
   events: EventView[];
   phases: readonly string[];
   onRead: (event: number, surah?: number) => void;
+  /** One group only (the home feed's card), by its phase: drawn in its card, with no sideways scroll. */
+  only?: number;
 }) {
-  const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) })).filter(g => g.events.length > 0);
+  const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) }))
+    .filter(g => g.events.length > 0 && (only === undefined || g.phase === only));
 
   return (
-    <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10">
+    <div className={only === undefined ? '-mx-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10' : 'pb-2'}>
         <table className="border-collapse" aria-label="أحداث القصة في السور">
           <thead>
             <tr>
-              <th className="sticky start-0 z-10 bg-[var(--home-paper)]" />
+              <th className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))]" />
               {groups.map((g, k) => (
                 <Fragment key={g.name}>
                   {k > 0 && <th className="w-4 min-w-4" aria-hidden />}
@@ -46,7 +49,7 @@ export default function StoryMap({ map, events, phases, onRead, current, review 
               ))}
             </tr>
             <tr>
-              <th className="sticky start-0 z-10 bg-[var(--home-paper)]" />
+              <th className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))]" />
               {groups.map((g, k) => (
                 <Fragment key={g.name}>
                   {k > 0 && <th aria-hidden />}
@@ -64,7 +67,7 @@ export default function StoryMap({ map, events, phases, onRead, current, review 
           <tbody>
             {map.surahs.map(({ surah, name }) => (
               <tr key={surah} className="h-9 border-b border-[var(--home-rule)]/50">
-                <th scope="row" className="sticky start-0 z-10 bg-[var(--home-paper)] pe-3 text-start text-sm font-normal whitespace-nowrap">{name}</th>
+                <th scope="row" className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))] pe-3 text-start text-sm font-normal whitespace-nowrap">{name}</th>
                 {groups.map((g, k) => (
                   <Fragment key={g.name}>
                     {k > 0 && <td aria-hidden />}
@@ -113,7 +116,7 @@ const STATE_LABEL = { keep: 'أبقيته', drop: 'حذفته', discuss: 'للن
 function StateMark({ state }: { state: 'keep' | 'drop' | 'discuss' }) {
   const [Icon, color, label] = ({ keep: [Check, 'var(--home-green)', 'أبقيته'], drop: [X, 'var(--home-accent)', 'حذفته'], discuss: [CircleHelp, 'var(--home-accent)', 'للنقاش'] } as const)[state];
   return (
-    <span aria-hidden title={label} className="absolute -top-2.5 -end-3 flex size-3.5 items-center justify-center rounded-full bg-[var(--home-paper)]" style={{ color }}>
+    <span aria-hidden title={label} className="absolute -top-2.5 -end-3 flex size-3.5 items-center justify-center rounded-full bg-[var(--story-map-bg,var(--home-paper))]" style={{ color }}>
       <Icon size={11} strokeWidth={3} aria-hidden />
     </span>
   );

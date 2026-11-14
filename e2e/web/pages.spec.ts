@@ -90,6 +90,70 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('the home feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
+    test.setTimeout(120_000);
+    // Batches take the kinds in turn, one a batch; five batches on the days either side of today hold all seven, well inside
+    // the server's two days.
+    const kinds = ['في أي سورة؟', 'أكمل الشجرة', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    const seen = new Set<string>();
+    for (const days of [-1, 1]) {
+      await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
+      await page.goto('/');
+      await expect(async () => {
+        await page.evaluate(() => window.scrollBy(0, 3000));
+        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(5);
+      }).toPass({ timeout: 40_000 });
+      // The first five question cards, each a kind of its own.
+      const here = new Set<string>();
+      await expect.poll(async () => {
+        for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) here.add(name);
+        return here.size;
+      }, { timeout: 30_000 }).toBeGreaterThanOrEqual(5);
+      here.forEach(name => seen.add(name));
+    }
+    expect([...seen].sort()).toEqual([...kinds].sort());
+    expect(await page.getByRole('link', { name: 'اختبار فردي' }).count()).toBeGreaterThan(2);
+    await noErrorPage(page);
+  });
+
+  test('a home «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
+    test.setTimeout(120_000);
+    const heading = page.getByRole('heading', { name: 'في أي سورة؟', exact: true });
+    for (const days of [-1, 1]) {
+      await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
+      await page.goto('/');
+      await expect(async () => {
+        await page.evaluate(() => window.scrollBy(0, 3000));
+        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(5);
+      }).toPass({ timeout: 40_000 });
+      if (await heading.count() || await heading.first().waitFor({ timeout: 10_000 }).then(() => true, () => false)) break;
+    }
+    const card = page.locator('article').filter({ has: heading }).first();
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
+    await card.locator('button').filter({ hasText: /\S/ }).first().click();
+    await expect(card.getByText(/^(صحيح|خطأ)$/).first()).toBeVisible();
+    await noErrorPage(page);
+  });
+
+  test('the home prophets card is one group of a story map, and a dot opens the story there', async ({ page }) => {
+    await page.goto('/');
+    const story = page.getByRole('heading', { name: /^قصة .* في القرآن$/ }).first();
+    await expect(async () => {
+      await page.evaluate(() => window.scrollBy(0, 3000));
+      await expect(story).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 40_000 });
+    const card = page.locator('article').filter({ has: story }).first();
+    // One group only: its table fits the card, so nothing scrolls sideways.
+    expect(await card.locator('table').evaluate(table => table.scrollWidth <= table.parentElement!.clientWidth + 1)).toBe(true);
+    const dot = card.locator('[data-dot]').first();
+    const label = (await dot.getAttribute('aria-label'))!;
+    await dot.click();
+    await expect(page).toHaveURL(/\/quran\/prophets\/[^/?]+\?event=\d+&surah=\d+/);
+    await expect(page.locator('[data-dot][aria-current="true"]', { hasText: '' }).first()).toHaveAttribute('aria-label', label);
+    await noErrorPage(page);
+  });
+
   test('the home pair card is the compare card and opens the compare page', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();

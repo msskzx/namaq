@@ -36,12 +36,15 @@ export default function ProphetView({ slug, title, intro, phases, events: all, v
     });
   };
 
-  // The search opens an event with ?event=<its place in the story>: shown open, scrolled to. The kept story can drop events, so it is found by title.
+  // The search opens an event with ?event=<its place in the story>, and home's prophets card adds &surah=<the dot's surah>: shown open,
+  // scrolled to. The kept story can drop events, so it is found by title.
   useEffect(() => {
-    const asked = Number(new URLSearchParams(window.location.search).get('event') ?? NaN);
+    const query = new URLSearchParams(window.location.search);
+    const asked = Number(query.get('event') ?? NaN);
+    const surah = Number(query.get('surah') ?? NaN);
     const title = Number.isInteger(asked) ? STORIES[slug]?.events[asked]?.title : undefined;
     const at = title ? events.findIndex(event => event.title === title) : -1;
-    if (at >= 0) read(at);
+    if (at >= 0) read(at, Number.isInteger(surah) && map.places[at].some(place => place.surah === surah) ? surah : undefined);
   }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

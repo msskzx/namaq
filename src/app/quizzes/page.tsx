@@ -8,7 +8,6 @@ import {
   faArrowLeft,
   faArrowRight,
   faBookOpen,
-  faCircle,
   faCircleHalfStroke,
   faCircleCheck,
   faCircleQuestion,
@@ -30,26 +29,20 @@ import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
 import { fetcher } from "@/lib/swr";
-import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/lib/quiz/types";
-import type { QuizReference } from "@/lib/quiz/quizReference";
+import type { QuizLength, QuizTopic } from "@/lib/quiz/types";
 import { DEFAULT_LEAVES, parseLeaves, QUIZ_LEAVES } from "@/lib/quiz/types";
 import { num } from "@shared/quran/arabicNumber";
-import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions";
 import { parseJuzRange } from "@shared/quran/juz";
-import type { Branch, Variant } from "@shared/quran/branches";
-import { BranchExplainer, BranchFeedback, BranchInputs } from "./BranchAnswers";
+import { BranchExplainer } from "./BranchAnswers";
 import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
-import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 import { RANGED_TOPICS } from "@shared/quiz/settings";
-import { FORGOT, RECITE_SNIPPET } from "@shared/quiz/choiceKinds";
-import { markForgotten } from "@shared/ayahMarks";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
-import { mushafText } from '@shared/quran/mushafText';
 import PersonPicker from "./PersonPicker";
 import { readRun, writeRun, type SoloRun } from "./soloRun";
 import type { Hints } from "@shared/quiz/hints";
 import QuestionReview from "./QuestionReview";
-import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@shared/quiz/score";
+import QuizAnswer, { type QuizData } from "./QuizAnswer";
+import { branchesCorrect, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
@@ -84,39 +77,6 @@ function QuizModes({ ar }: { ar: boolean }) {
         ))}
       </nav>
     </div>
-  );
-}
-
-type QuizData = { questions: QuizQuestionView[]; surahNames?: Record<number, string> };
-
-interface QuizQuestionView {
-  key: string;
-  family: QuestionFamily | BranchQuestion["family"] | QuizTopic;
-  promptArabic: string;
-  choices: QuestionChoice[];
-  phrase?: string;
-  branches?: BranchAnswer[];
-  tree?: Branch;
-  variants?: Variant[];
-  prefixes?: Variant[];
-  asked?: number[];
-  quran?: ChoiceParts["quran"];
-  reveal?: ChoiceParts["reveal"];
-  ayahKey?: string;
-  alike?: ChoiceParts["alike"];
-  note?: ChoiceParts["note"];
-  ayah?: { text: string; reference: string } | null;
-  choiceDetails: Record<string, { text: string; reference: string }>;
-  correctAnswer: string;
-  evidence: { reference: QuizReference | null };
-}
-
-function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
-  return (
-    <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-      <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(ayah.text)}</p>
-      <p className="text-sm text-[var(--home-muted)]">{ayah.reference}</p>
-    </blockquote>
   );
 }
 
@@ -277,13 +237,6 @@ export default function QuizzesPage() {
   const stateLabel = (state: ReturnType<typeof questionState>) =>
     ar ? ({ correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
       : ({ correct: 'correct', partial: 'partly correct', incorrect: 'incorrect', unanswered: 'unanswered' } as const)[state];
-  const answerContent = (question: QuizQuestionView, value: string | undefined) => {
-    const choice = question.choices.find((item) => item.value === value);
-    if (!choice) return null;
-    const detail = question.choiceDetails?.[choice.value];
-    if (!detail) return choice.labelArabic;
-    return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
-  };
 
   if (!searchParams.get("topic") && !searchParams.get("solo")) return <QuizModes ar={ar} />;
 
@@ -437,59 +390,12 @@ export default function QuizzesPage() {
             </div>
             <div className={styles.panel}>
               <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
-              {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
-              <ChoiceQuran question={questions[current]} given={answers[current]} revealed={Boolean(revealed[current] || answers[current] !== undefined)}
-                onReveal={() => setRevealed((previous) => ({ ...previous, [current]: true }))} ar={ar} />
-              {questions[current].branches ? (
-                answers[current] !== undefined ? (
-                  <BranchFeedback key={questions[current].key} question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} hints={hints[current]} />
-                ) : (
-                  <BranchInputs key={questions[current].key}
-                    question={questions[current]}
-                    typed={typed[current] ?? emptyBranchAnswers(questions[current])}
-                    onChange={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
-                    hints={hints[current] ?? {}} onHints={(value) => setHints((previous) => ({ ...previous, [current]: value }))}
-                    onCheck={() => {
-                      const value = typed[current] ?? emptyBranchAnswers(questions[current]);
-                      setAnswers((previous) => ({ ...previous, [current]: branchesCorrect(questions[current], value) ? questions[current].correctAnswer : "" }));
-                    }}
-                    ar={ar}
-                  />
-                )
-              ) : questions[current].reveal && !revealed[current] && answers[current] === undefined ? null : <div className="flex flex-col gap-2">
-                {questions[current].choices.map((choice) => {
-                  const locked = answers[current] !== undefined;
-                  const isAnswer = choice.value === questions[current].correctAnswer;
-                  const isGiven = answers[current] === choice.value;
-                  return (
-                    <Button
-                      key={choice.value}
-                      variant="outline"
-                      active={isGiven}
-                      onClick={() => {
-                        if (answers[current] !== undefined) return;
-                        const question = questions[current];
-                        if (question.family === RECITE_SNIPPET && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
-                        setAnswers((previous) => ({ ...previous, [current]: choice.value }));
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}
-                        className={locked && isAnswer && !isGiven ? 'text-[var(--home-green)]' : undefined}
-                      />
-                      {answerContent(questions[current], choice.value)}
-                      {locked && isAnswer ? <span className={`text-xs font-semibold ${isGiven ? '' : 'text-[var(--home-green)]'}`}>{ar ? 'صحيح' : 'Correct'}</span> : null}
-                      {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
-                    </Button>
-                  );
-                })}
-              </div>}
-              {answers[current] !== undefined && <ChoiceAfter question={questions[current]} given={answers[current]} ar={ar}
-                surahName={(value) => questions[current].choices.find((choice) => choice.value === value)?.labelArabic} />}
-              {answers[current] === undefined && !questions[current].reveal && <Button className="mt-3" size="sm" onClick={() => {
-                if (questions[current].tree) setTyped(previous => ({ ...previous, [current]: emptyBranchAnswers(questions[current]) }));
-                setAnswers(previous => ({ ...previous, [current]: "" }));
-              }}><Eye size={16} aria-hidden />{ar ? "إظهار الإجابة" : "Show answer"}</Button>}
+              <QuizAnswer question={questions[current]} given={answers[current]} typed={typed[current]} hints={hints[current]} revealed={Boolean(revealed[current])}
+                names={data?.surahNames ?? {}} ar={ar}
+                onReveal={() => setRevealed((previous) => ({ ...previous, [current]: true }))}
+                onType={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
+                onHints={(value) => setHints((previous) => ({ ...previous, [current]: value }))}
+                onAnswer={(value) => setAnswers((previous) => ({ ...previous, [current]: value }))} />
               {answers[current] !== undefined && questions[current].evidence.reference && (
                 <Button className="mt-3" size="sm" variant="outline" onClick={() => setReferenceIndex(current)}>
                   <FontAwesomeIcon icon={faBookOpen} />

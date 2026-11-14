@@ -21,7 +21,7 @@ const LETTER = 7.5;
  * The website's story map (src/app/quran/prophets/[slug]/StoryMap.tsx): a column for each event under its group's colour,
  * a row for each surah, the surah names kept on the right while the events scroll sideways, opening at the first group (QuizTree's pattern).
  */
-export default function StoryMap({ map, events, phases, picked, onPick, onTitle, palette }: {
+export default function StoryMap({ map, events, phases, picked, onPick, onTitle, palette, only }: {
   map: StoryMapData;
   events: EventView[];
   phases: readonly string[];
@@ -29,8 +29,10 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
   onPick: (event: number, surah: number) => void;
   onTitle: (event: number) => void;
   palette: Palette;
+  /** One group only (the home feed's card), by its phase. */
+  only?: number;
 }) {
-  const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) })).filter(g => g.events.length > 0)
+  const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) })).filter(g => g.events.length > 0 && (only === undefined || g.phase === only))
     .map(g => ({ ...g, cell: Math.max(CELL, Math.ceil((g.name.length * LETTER + 8) / g.events.length)) }));
   const rule = { borderBottomWidth: 1, borderColor: palette.rule };
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void } | null>(null);

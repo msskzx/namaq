@@ -87,6 +87,7 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     family: WHICH_SURAH,
     promptArabic: 'في أي سورة هذه الآية؟',
     quran: ayah.words,
+    number: Number(ayah.key.split(':')[1]),
     choices: shuffle([surah, ...wrong], random).map(n => ({ value: String(n), labelArabic: names[n] })),
     correctAnswer: String(surah),
     ayahKey: ayah.key,
