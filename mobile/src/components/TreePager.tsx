@@ -17,7 +17,7 @@ import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import SurahChips from './SurahChips';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
-import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, toggleSaved, WEBSITE } from '@/lib/branches';
+import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, matrixReading, toggleSaved, WEBSITE } from '@/lib/branches';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
@@ -29,7 +29,7 @@ import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { connectionBeats, growthBeats } from '@/lib/growth';
 import { wordConnections } from '@shared/quran/mutashabih/connections';
-import { answer, claimTarget, growthState, stop, useGrowth, type Growth } from '@/lib/growPlayer';
+import { answer, claimTarget, closeStudio, growthState, studioOwner, stop, useGrowth, type Growth } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
@@ -52,9 +52,11 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onView }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
+function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onView, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
   /** Set on a pager embedded elsewhere (the home feed), which has no top bar: no studio, and the tree/matrix switch here instead. */
-  onView?: { mode: BranchView; toggle: () => void } }) {
+  onView?: { mode: BranchView; toggle: () => void };
+  /** A book matrix's studio plays its connections or the read-along: the switch between them. */
+  choice?: { connections: boolean; toggle: () => void } }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
   const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
@@ -67,7 +69,7 @@ function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, o
     if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
   }, [pop, current, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  if (studio && current && !onView) return <StudioControls palette={palette} onVideo={onVideo} />;
+  if (studio && current && !onView) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
@@ -182,7 +184,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     if (width) offset.value = (pieces.length - 1) * width;
   }, [pieces.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The open tree is the one the studio grows; a matrix has nothing to grow.
+  // The open tree is the one the studio grows.
   const piece = pieces[Math.min(index, pieces.length - 1)];
   // A book group's matrix grows its word connections instead (the website's connections studio).
   const matrixGroup = useMemo(() => (mode === 'matrix' && piece ? evidenceOf(piece) : null), [mode, piece]);
@@ -192,21 +194,33 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
   useEffect(() => {
     if (growth.studio && growth.kind === 'matrix' && matrixGroup?.tags.length && piece && !tagsOf(piece, matrixGroup).length) setPicked({ id: piece.id, tags: matrixGroup.tags });
   }, [growth.studio, growth.kind, matrixGroup, piece]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Every matrix reads along word by word, as the compare tab does; a book matrix's studio switches between that and its connections.
+  const reading = useMemo(() => (mode === 'matrix' && piece ? matrixReading(cardOf(piece, list).presentation) : null), [mode, piece, list]);
+  const [play, setPlay] = useState<'connections' | 'read'>('connections');
+  // A book matrix whose tags draw no lines has only the read-along.
+  const lines = useMemo(() => (matrixGroup ? studioTags.reduce((sum, tag) => sum + wordConnections(matrixGroup, tag).length, 0) : 0), [matrixGroup, studioKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const connecting = lines > 0 && play === 'connections';
+  // The studio's target is swapped in place (no letting go in between), so switching what a matrix plays keeps the studio open.
   useEffect(() => {
     if (embedded) return;
-    if (mode === 'matrix' && matrixGroup && studioTags.length) {
-      const count = studioTags.reduce((sum, tag) => sum + wordConnections(matrixGroup, tag).length, 0);
-      claimTarget('branches', { kind: 'matrix', watch: connectionBeats(count), ask: connectionBeats(count, true) });
-      return () => claimTarget('branches', null);
+    if (mode === 'matrix' && matrixGroup && connecting) {
+      claimTarget('branches', { kind: 'matrix', watch: connectionBeats(lines), ask: connectionBeats(lines, true) });
+      return;
     }
+    if (mode === 'matrix' && reading?.length) { claimTarget('branches', { kind: 'read', watch: reading, ask: reading }); return; }
     if (mode !== 'tree' || !piece) { claimTarget('branches', null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
     const options = { ...parts, prefixes: presentation.prefixes, paths: true };
     beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
     claimTarget('branches', beatsRef.current);
-    return () => claimTarget('branches', null);
-  }, [piece, list, mode, around, studioKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [piece, list, mode, around, studioKey, reading, connecting, lines]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => { if (!embedded) claimTarget('branches', null); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Another tree closes the studio, as it always has, unless another screen (a quiz) owns it; a book matrix opens on its connections again.
+  useEffect(() => {
+    setPlay('connections');
+    if (!embedded && growthState().studio && studioOwner() === 'branches') closeStudio();
+  }, [piece]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const arrive = useCallback((next: number) => {
     restore.current = undefined;
@@ -289,7 +303,8 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
-                    onView={embedded ? { mode, toggle: embedded.toggleView } : undefined} />
+                    onView={embedded ? { mode, toggle: embedded.toggleView } : undefined}
+                    choice={current && mode === 'matrix' && lines > 0 ? { connections: connecting, toggle: () => setPlay(connecting ? 'read' : 'connections') } : undefined} />
                 </View>
                 {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
@@ -299,8 +314,9 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {mode === 'matrix'
                 ? <MatrixCard key={String(around)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer}
-                  connections={linked ? { group: linked, tags: current && growth.studio ? studioTags : tagsOf(pieces[at], linked) } : undefined}
-                  growth={current && growth.studio && growth.kind === 'matrix' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined} />
+                  connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
+                  growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
+                  reading={current && growth.studio && growth.kind === 'read'} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { Clapperboard, Pause, Play, RotateCcw, Timer, X } from 'lucide-react';
+import { Clapperboard, Pause, Play, RotateCcw, Spline, Timer, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
@@ -14,7 +14,14 @@ export type GrowMode = 'watch' | 'ask';
 type Status = 'idle' | 'playing' | 'paused' | 'done';
 type Prefs = { mode: GrowMode; speed: number; timer: number };
 /** `studio` is the card's animation state: its controls replace save and share until it is closed. */
-type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean; kind: 'tree' | 'matrix' };
+/** `kind`: a tree grows, a book matrix draws its connections, or any matrix reads along word by word (as on compare).
+ *  `choice`: the open matrix has connections, so its studio switches between them and the read-along (`play`). */
+type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean; kind: 'tree' | 'matrix' | 'read'; choice: boolean; play: MatrixPlay;
+  /** How many connection lines the open book matrix draws: with none, it has only the read-along. */
+  lines: number };
+export type MatrixPlay = 'connections' | 'read';
+/** One word the matrix read-along stops on: its row (the progress bar it belongs to) and its time at 1×. */
+export type MatrixReadStep = { row: number; ms: number };
 
 export const SPEEDS = [1, 1.5, 2, 0.5];
 /** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
@@ -27,8 +34,21 @@ const LEAF = 700;
 
 const PREFS = 'branches-grow';
 const listeners = new Set<() => void>();
-let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, kind: 'tree' };
-let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void; matrix?: { root: HTMLElement; enable: () => void } } | null = null;
+let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, kind: 'tree', choice: false, play: 'connections', lines: 0 };
+let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void; matrix?: { root: HTMLElement; enable: () => void };
+  read?: { steps: MatrixReadStep[]; onStep: (i: number | null) => void } } | null = null;
+/** Set while a book matrix's studio switches what it plays: the one target hands over to the other and the studio stays open. */
+let switching = false;
+const studioAfterSwitch = () => switching && state.studio;
+
+/** A book matrix's studio plays its connections or the read-along. */
+export function setMatrixPlay(play: MatrixPlay) {
+  if (play === state.play) return;
+  stop();
+  switching = true;
+  set({ play });
+  setTimeout(() => { switching = false; });
+}
 let run = 0;
 let reveal: (() => void) | null = null;
 /** The share of the asked box's timer still left. */
@@ -206,6 +226,7 @@ export const growRoot = () => target?.matrix?.root ?? (target ? rootOf(target.ca
 export async function play(from = 0, { video = false } = {}) {
   if (!target) return;
   if (target.matrix) return playMatrix(from, video);
+  if (target.read) return playRead(from);
   const { card, plan } = target;
   const root = rootOf(card);
   if (!root || plan.length === 0) return;
@@ -326,6 +347,7 @@ export function stop() {
   const root = growRoot();
   if (root) clear(root);
   target?.light(null);
+  target?.read?.onStep(null);
   set({ status: 'idle', at: 0 });
 }
 
@@ -348,20 +370,57 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
   return lit;
 }
 
-export function useMatrixGrowTarget(root: React.RefObject<HTMLDivElement | null>, total: number, revision: unknown, enable: () => void) {
+export function useMatrixGrowTarget(root: React.RefObject<HTMLDivElement | null>, total: number, revision: unknown, enable: () => void, enabled = true) {
+  useEffect(() => { set({ lines: total }); return () => set({ lines: 0 }); }, [total]);
   useEffect(() => {
-    if (!root.current || !total) return;
+    if (!root.current || !total || !enabled) return;
     loadPrefs();
     const mine = { card: root.current, plan: [], light: () => {}, matrix: { root: root.current, enable } };
     target = mine;
-    set({ status: 'idle', at: 0, total, studio: false, kind: 'matrix' });
+    set({ status: 'idle', at: 0, total, studio: studioAfterSwitch(), kind: 'matrix' });
     return () => {
       if (target !== mine) return;
       stop();
       target = null;
-      set({ total: 0, studio: false });
+      set({ total: 0, studio: studioAfterSwitch() });
     };
-  }, [root, total, revision, enable]);
+  }, [root, total, revision, enable, enabled]);
+}
+
+/** Any matrix's read-along: `onStep` lights the word read (null when nothing is). `choice` tells the studio the matrix also has connections. */
+export function useMatrixReadTarget(root: React.RefObject<HTMLDivElement | null>, steps: MatrixReadStep[] | null, onStep: (i: number | null) => void, enabled: boolean, choice: boolean, mounted: boolean) {
+  useEffect(() => { set({ choice }); return () => set({ choice: false }); }, [choice]);
+  // Another tree opens on its connections again.
+  useEffect(() => { if (state.play !== 'connections') set({ play: 'connections' }); }, [steps]);
+  useEffect(() => {
+    if (!root.current || !steps?.length || !enabled) return;
+    loadPrefs();
+    const mine = { card: root.current, plan: [], light: () => {}, read: { steps, onStep } };
+    target = mine;
+    set({ status: 'idle', at: 0, total: steps[steps.length - 1].row + 1, studio: studioAfterSwitch(), kind: 'read' });
+    return () => {
+      if (target !== mine) return;
+      stop();
+      target = null;
+      set({ total: 0, studio: studioAfterSwitch() });
+    };
+  }, [root, steps, onStep, enabled, mounted]);
+}
+
+/** Reads the matrix from a row, word by word at compare's pace; pause and speed apply as in the other studios. */
+async function playRead(from: number) {
+  const read = target?.read;
+  if (!read) return;
+  const token = ++run;
+  const first = Math.max(0, read.steps.findIndex(step => step.row >= from));
+  set({ status: 'playing', at: from });
+  for (let i = first; i < read.steps.length; i++) {
+    set({ at: read.steps[i].row });
+    read.onStep(i);
+    if (!(await wait(read.steps[i].ms / state.speed, token))) return;
+  }
+  read.onStep(null);
+  set({ status: 'done', at: state.total });
 }
 
 async function playMatrix(from: number, video: boolean) {
@@ -420,17 +479,20 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
   if (growth.total === 0) return null;
   const chip = 'h-11 min-w-11 px-2 text-sm tabular-nums';
   if (!growth.studio) {
-    const label = growth.kind === 'matrix' ? (ar ? 'استوديو الروابط' : 'Connector studio') : (ar ? 'استوديو النمو' : 'Growth studio');
+    const label = growth.kind === 'read' ? (ar ? 'استوديو القراءة' : 'Reading studio') : growth.kind === 'matrix' ? (ar ? 'استوديو الروابط' : 'Connector studio') : (ar ? 'استوديو النمو' : 'Growth studio');
     return <Button size="lg" variant="muted" onClick={openStudio} aria-label={label} title={label}><Clapperboard aria-hidden /></Button>;
   }
   const active = growth.status === 'playing' || growth.status === 'paused';
   const playing = growth.status === 'playing';
-  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : growth.kind === 'matrix' ? (ar ? 'شاهد الروابط' : 'Watch the connections') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
+  const label = playing ? (ar ? 'إيقاف مؤقت' : 'Pause') : growth.status === 'paused' ? (ar ? 'متابعة' : 'Resume') : growth.status === 'done' ? (ar ? 'إعادة' : 'Replay') : growth.kind === 'read' ? (ar ? 'اقرأ مع التظليل' : 'Read along') : growth.kind === 'matrix' ? (ar ? 'شاهد الروابط' : 'Watch the connections') : (ar ? 'شاهد الشجرة تنمو' : 'Watch the tree grow');
   const press = () => {
     if (active) pause(playing);
     else void play();
   };
-  const ask = growth.mode === 'ask';
+  // The read-along has no ask mode, as on compare.
+  const ask = growth.kind !== 'read' && growth.mode === 'ask';
+  const connections = growth.play === 'connections';
+  const switchLabel = ar ? 'الروابط' : 'Connections';
   const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
   const close = ar ? 'إغلاق الاستوديو' : 'Close the studio';
   const resetLabel = ar ? 'إعادة ضبط' : 'Reset';
@@ -442,14 +504,17 @@ export function GrowControls({ share }: { share?: React.ReactNode } = {}) {
     {ask && <Button size="md" variant={growth.timer ? 'ghost' : 'muted'} className={chip} onClick={() => setPrefs({ timer: next(TIMERS, growth.timer) })} aria-label={`${ar ? 'مهلة السؤال' : 'Time to answer'} ${growth.timer ? `${growth.timer}s` : '∞'}`} title={ar ? 'مهلة السؤال' : 'Time to answer'}>
       <span dir="ltr">{growth.timer ? `${growth.timer}s` : '∞'}</span>
     </Button>}
-    <Button size="lg" variant={ask ? 'ghost' : 'muted'} aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel}>
+    {growth.choice && growth.kind !== 'tree' && <Button size="lg" variant={connections ? 'ghost' : 'muted'} aria-pressed={connections} onClick={() => setMatrixPlay(connections ? 'read' : 'connections')} aria-label={switchLabel} title={switchLabel}>
+      <Spline aria-hidden />
+    </Button>}
+    {growth.kind !== 'read' && <Button size="lg" variant={ask ? 'ghost' : 'muted'} aria-pressed={ask} onClick={() => setPrefs({ mode: ask ? 'watch' : 'ask' })} aria-label={askLabel} title={askLabel}>
       <Timer aria-hidden />
-    </Button>
+    </Button>}
     <Button size="lg" variant="muted" onClick={press} aria-label={label} title={label} className={active ? 'text-[var(--home-accent)]' : undefined}>
       {playing ? <Pause aria-hidden /> : <Play aria-hidden />}
     </Button>
     <Button size="lg" variant="muted" onClick={stop} aria-label={resetLabel} title={resetLabel}><RotateCcw aria-hidden /></Button>
-    {share}
+    {growth.kind !== 'read' && share}
     <span className="flex-1" />
     <Button size="lg" variant="muted" onClick={closeStudio} aria-label={close} title={close}><X aria-hidden /></Button>
   </>;

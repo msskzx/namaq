@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
-import { cardOf, evidenceOf, searchLit, treeList } from './branches';
+import { cardOf, evidenceOf, matrixOf, matrixReading, readId, searchLit, treeList } from './branches';
 
 const order = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
 
@@ -35,5 +35,26 @@ describe('what a tree shows beside it', () => {
     const { presentation } = cardOf(piece);
     expect(searchLit(presentation, 'هم يوقنون')).toEqual(['2:4']);
     expect(searchLit(presentation, 'بما انزل اليك')).toEqual([]);
+  });
+});
+
+describe('the matrix read-along', () => {
+  it('reads every word of every row once, row by row, and lights each matched word with its partners', () => {
+    for (const piece of treeList().slice(0, 30)) {
+      const { presentation } = cardOf(piece);
+      const rows = matrixOf(presentation, false).rows;
+      const beats = matrixReading(presentation);
+      const expected = rows.flatMap((row, r) => row.ayah!.ayat.flatMap(ayah => ayah.words.map((_, i) => readId(r, ayah.key, i))));
+      expect(beats.map(beat => beat.now[0])).toEqual(expected);
+      expect(beats.map(beat => beat.step)).toEqual([...beats.map(beat => beat.step)].sort((a, b) => a - b));
+      expect(beats[beats.length - 1].step).toBe(rows.length - 1);
+      for (const beat of beats) {
+        const [r, surah, ayah, i] = beat.now[0].split(':');
+        const word = rows[Number(r)].ayah!.ayat.find(item => item.key === `${surah}:${ayah}`)!;
+        const link = word.links?.get(Number(i))?.link;
+        expect(beat.now.slice(1)).toEqual(link ? [`link:${link}`] : []);
+        expect(beat.reveal).toEqual([]);
+      }
+    }
   });
 });

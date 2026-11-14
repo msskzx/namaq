@@ -91,6 +91,19 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('the matrix has the read-along studio', async ({ page }) => {
+    await page.goto('/quran/branches?m=cards');
+    const studio = page.getByRole('button', { name: 'استوديو القراءة' });
+    await expect(studio).toHaveCount(1);
+    await expect(async () => {
+      await studio.click();
+      await expect(page.getByRole('button', { name: 'اقرأ مع التظليل' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
+    await expect(page.locator('[data-reading]').first()).toBeVisible();
+    await noErrorPage(page);
+  });
+
   test('the reader opens and a long press on an ayah shows its actions', async ({ page }) => {
     await page.goto('/quran/read/1');
     await expect(page.getByLabel('الصفحة ١', { exact: true })).toBeVisible();

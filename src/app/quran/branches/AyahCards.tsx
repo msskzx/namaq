@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { BookOpen, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -17,6 +17,8 @@ import { usePreload, type Steps } from './TreeSteps';
 import { useAroundSetting } from './Surroundings';
 import styles from './AyahCards.module.css';
 import { ConnectionLines, useGroupConnections } from './GroupConnections';
+import { useGrowth, useMatrixReadTarget, type MatrixReadStep } from './Grow';
+import { stepTime } from '@shared/quran/readPlan';
 
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
@@ -208,8 +210,24 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // The studio's read-along, as on compare: each row in turn, word by word, the word read lighting its matches in the other rows.
+  const reading = useMemo(() => data?.flatMap((passage, row) => passage.flatMap((item, step) => item.ayah.words.map((_, word) => {
+    const linked = item.match?.links?.[word];
+    const link = linked ? `${step}:${linked.link}` : undefined;
+    const last = word === item.ayah.words.length - 1 && step === passage.length - 1;
+    return { row, key: item.ayah.key, word, link, ms: stepTime({ side: 0, ayah: step, word, link, last }, 1) };
+  }))) ?? null, [data]);
+  const readSteps = useMemo<MatrixReadStep[] | null>(() => reading?.map(({ row, ms }) => ({ row, ms })) ?? null, [reading]);
+  const [readAt, setReadAt] = useState<number | null>(null);
+  const onRead = useCallback((i: number | null) => setReadAt(i), []);
   const contexts = data?.map(passage => passage[0]);
   const missing = data?.some((passage, i) => !passage.length || passage.length !== passages[i].length);
+  // A book matrix whose connections draw lines switches between them and the read-along; any other plays only the read-along.
+  const growth = useGrowth();
+  const hasConnections = !!connections?.group?.tags.length && growth.lines > 0;
+  const mounted = !!contexts && (!context || !!around) && !missing;
+  useMatrixReadTarget(lane, readSteps, onRead, !hasConnections || growth.play === 'read', hasConnections, mounted);
+  const now = readAt === null ? undefined : reading?.[readAt];
 
   const marksFor = (at: 'before' | 'after', key: string) => {
     const match = (at === 'before' ? beforeMatch : afterMatch)?.find(item => item.ayah.key === key);
@@ -239,7 +257,8 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           ...(at === 'ayah' ? [data![row].map((item, step) => ({ number: Number(item.ayah.key.split(':')[1]), words: item.ayah.words, current: true,
-            marks: sharedMarks(item, exactLabel, rootLabel, step, lit), wordKey: connections?.group ? item.ayah.key : undefined }))]
+            marks: sharedMarks(item, exactLabel, rootLabel, step, now ? now.link ?? null : lit), wordKey: connections?.group ? item.ayah.key : undefined,
+            ...(now && now.row === row && now.key === item.ayah.key ? { reading: now.word } : {}) }))]
             : [[{ number, words: ayah.words, marks: marksFor(at, ayah.key) }]]),
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
         ],
