@@ -25,6 +25,13 @@ describe("the reader's ayah buttons", () => {
     expect(onPreview).toHaveBeenLastCalledWith('trees');
   });
 
+  it("opens the surah's topics, since the page header names none", () => {
+    const onTopics = vi.fn();
+    render(<AyahActions {...props} onTopics={onTopics} />);
+    fireEvent.click(screen.getByLabelText('موضوع الآية في السورة'));
+    expect(onTopics).toHaveBeenCalled();
+  });
+
   it('opens the note, filled when the ayah has one', () => {
     const onNote = vi.fn();
     render(<AyahActions {...props} onNote={onNote} />);

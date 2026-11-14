@@ -217,9 +217,18 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the reader names the page\'s section and opens the surah\'s topics', async ({ page }) => {
+  test('an ayah\'s buttons open the surah\'s topics', async ({ page }) => {
     await page.goto('/quran/read/582');
-    await page.getByRole('button', { name: 'موضوعات السورة: تساؤل المشركين عن النبأ' }).first().click();
+    const word = page.getByText('عَنِ', { exact: true }).first();
+    await expect(async () => {
+      const box = (await word.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(700);
+      await page.mouse.up();
+      await expect(page.getByRole('button', { name: 'موضوع الآية في السورة' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
     const sheet = page.getByRole('dialog', { name: 'موضوعات سورة النبأ' });
     await expect(sheet.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(sheet.getByRole('link', { name: /البقاعي، نظم الدرر/ })).toBeVisible();
