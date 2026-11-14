@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { tafsirSadiOf } from '@shared/quran/tafsirSadi';
+import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 
 /** Al-Sa'di's passage for one ayah, for the reader's tafsir sheet (src/app/quran/read/AyahPreviewSheet.tsx); the book stays on the server. */
 export async function GET(request: Request) {
