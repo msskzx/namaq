@@ -208,7 +208,7 @@ The owner asked for the qira'at per ayah first, whole riwaya mushafs later, and
 only for differences in letters or vowels (farsh), not performance (usul).
 
 - Source: Quranpedia's qira'at dump (`https://quranpedia.net/dumps/qiraat.json.gz`,
-  version 2026-11-07), 20 riwayat numbered as `RIWAYAT` in
+  version 2026-11-14), 20 riwayat numbered as `RIWAYAT` in
   `shared/quran/qiraat.ts`. Free to use in apps; republishing the data credits
   Quranpedia with a link and the dump version, so the sheet shows the source.
 - Build: `npm run quran:qiraat` writes `shared/data/quran/qiraat.json` and a

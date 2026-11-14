@@ -1,0 +1,15 @@
+# Mobile startup and bundle audit
+
+Baseline: `origin/main` at `d27195a8` (#722), Expo 58, Node v22.5.1 on macOS. From `mobile/`, run `./node_modules/.bin/expo export --platform ios --output-dir /private/tmp/namaq-mobile-baseline --source-maps external --max-workers 2`. The export succeeded and reported 4,844 Metro modules. The Hermes bytecode file is 16,573,688 bytes (5,898,669 bytes when gzipped); its source map is 15,472,409 bytes and is not shipped as app code. The three bundled font files total about 1.09 MB. Export compilation took 34.3 seconds, which is build time, not phone startup time.
+
+No iOS simulator (`xcrun simctl`) or Android bridge (`adb`) is installed, so no genuine device cold-start timing or native alert behavior was measured. In particular, #694's alert behavior remains unverified on a device. The code statically registers a notification handler at module load and calls `startAlerts()` after the root layout mounts; this does not establish whether alerts fire on a phone.
+
+Ranked opportunities, using source bytes and a Node module-evaluation proxy, not predicted Hermes savings:
+
+1. `shared/data/quran/trees.json`: 6,469,485 raw bytes, 1,291,720 gzip, 6,236 ayat. Warm in-memory `JSON.parse` median 38.6 ms over 30 runs. The home feed, branch inventory, saved cards, and pair word lookup reach this file on first render. A smaller startup slice needs a data-shape and home-flow decision, with exact-content tests.
+2. `shared/data/quran/mutashabih.json` and `branchVerdicts.json`: 5,286,906 raw bytes together, 818,819 gzip. Parse medians 32.7 and 7.0 ms. The daily tree calls `treeList()`, which builds the inventory on the home route. Deferring these files requires a different first-tree source or a changed home loading flow.
+3. `shared/data/quran/compareCards.js`: 1,143,890 raw bytes, 216,586 gzip. Module evaluation median 8.8 ms. The first home feed pair uses it immediately. Splitting cards by pair or changing the initial feed data is a larger generated-data change.
+
+The parse proxy ran on Node v22.5.1 on this Mac, 30 warm in-memory evaluations per file. It excludes Metro/Hermes loading, React render, storage, native module startup, and disk I/O; the medians must not be added into a cold-start estimate. The 6,236-entry `positions` map in `mobile/src/lib/branches.ts` is used only by matrix view but built on import; its creation median was 0.52 ms over 1,000 Node runs. Lazy initialization would be safe but negligible. Dynamically loading the root share sheet would defer some module evaluation but leave the single native Hermes bundle essentially intact and could pause the first share. Neither change has a measured device benefit, so this audit makes no code change.
+
+Doubts to resolve before a larger change: which home content may appear after the first frame, whether feed data may be split into generated per-day or per-pair assets, and what cold-start target and devices should gate the change. Measure on a release build with a phone or simulator before attributing startup improvement to any of these source sizes.
