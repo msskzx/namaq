@@ -24,7 +24,7 @@ test.describe('branches', () => {
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    // Each card has its own switch (the next card is drawn beside it): the open card's comes first.
+    // Each card has its own switch, under it.
     await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();

@@ -473,8 +473,8 @@ describe('BranchTree', () => {
 
     it('opens on the default from the settings and follows its card\'s own switch, leaving the default and other cards alone', async () => {
       localStorage.setItem('branches-surround', '1');
-      const { container } = render(<><AroundButton card="a" /><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'a' }} />
-        <div data-other><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'b' }} /></div></>);
+      const { container } = render(<><AroundButton card="own-a" /><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'own-a' }} />
+        <div data-other><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'own-b' }} /></div></>);
       expect(screen.queryByRole('switch', { name: 'الآيات المحيطة' })).toBeNull();
       await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(10));
       fireEvent.click(screen.getByRole('button', { name: 'الآيات المحيطة' }));

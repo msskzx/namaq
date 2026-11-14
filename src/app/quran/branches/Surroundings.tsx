@@ -42,19 +42,20 @@ export function useAroundSetting() {
   return [on, set] as const;
 }
 
-// The one card switched away from the default, by its id: the next card opens on the default again (owner, 2026-11-14).
-let switched: { card: string; on: boolean } | null = null;
+// The cards switched away from the default, by id (the compare page lists many); any other card opens on the default (owner, 2026-11-14).
+let switched: ReadonlyMap<string, boolean> = new Map();
+const NONE: ReadonlyMap<string, boolean> = new Map();
 const cardListeners = new Set<() => void>();
 const subscribeCard = (listener: () => void) => { cardListeners.add(listener); return () => { cardListeners.delete(listener); }; };
 
 /** A card's own surrounding-ayat switch, opening on the settings' default. Without a card it is the default alone. */
 export function useCardAround(card?: string) {
   const [fallback] = useAroundSetting();
-  const own = useSyncExternalStore(subscribeCard, () => switched, () => null);
-  const on = card && own?.card === card ? own.on : fallback;
+  const own = useSyncExternalStore(subscribeCard, () => switched, () => NONE);
+  const on = card ? own.get(card) ?? fallback : fallback;
   const set = (next: boolean) => {
     if (!card) return;
-    switched = { card, on: next };
+    switched = new Map(switched).set(card, next);
     cardListeners.forEach(listener => listener());
   };
   return [on, set] as const;

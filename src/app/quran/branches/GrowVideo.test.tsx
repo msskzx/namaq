@@ -118,14 +118,14 @@ it('exports curved tree links at their SVG origins, tracks growth, and omits hid
 it('draws a node\'s ayah tab as a rounded frame in the node\'s fill, and leaves the top-down header bare', () => {
   const { context, colors, tick } = setupVideo();
   render(<><div data-tree-content>
-    <div data-node="n-1" style={{ opacity: 1, backgroundColor: 'rgb(20, 30, 40)' }}><span data-tab style={{ border: '1px solid rgb(7, 7, 7)', borderRadius: '8px' }} /></div>
+    <div data-node="n-1" style={{ opacity: 1, backgroundColor: 'rgb(20, 30, 40)' }}><span data-tab style={{ border: '1px solid rgb(7, 7, 7)', borderRadius: '9px', borderTopLeftRadius: '9px' }} /></div>
     <div data-node="n-2" style={{ opacity: 1 }}><span data-tab style={{ borderBottom: '1px solid rgb(6, 6, 6)' }} /></div>
   </div><GrowVideo /></>);
   act(() => openVideo());
   tick(0);
   expect(colors).toContain('rgb(7, 7, 7)');
   expect(colors).not.toContain('rgb(6, 6, 6)');
-  expect(context.roundRect.mock.calls.some(call => call[4] === 8)).toBe(true);
+  expect(context.roundRect.mock.calls.some(call => call[4] === 9)).toBe(true);
 });
 
 it('exports only the current matrix column, draws its live SVG curves and countdown, and renders its timer', () => {
