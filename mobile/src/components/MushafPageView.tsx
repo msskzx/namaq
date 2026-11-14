@@ -85,8 +85,13 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 }
 
 type Box = { x: number; y: number; w: number; h: number };
-/** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
-type Band = 'mark' | 'forgot' | null;
+/** A band behind the words: the selected ayah (neutral), its long-pressed word (the accent), or a forgotten ayah (the accent, faint). */
+type Band = 'mark' | 'word' | 'forgot' | null;
+const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
+  mark: palette => tint(palette.ink, 0.1),
+  word: palette => tint(palette.accent, 0.3),
+  forgot: palette => tint(palette.accent, 0.16),
+};
 type Cell = { band: Band };
 
 /**
@@ -275,7 +280,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const right = Math.max(...found.map(box => box.x + box.w));
       const top = Math.min(...found.map(box => box.y));
       const bottom = Math.max(...found.map(box => box.y + box.h));
-      return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: cells[run[0]].band === 'mark' ? tint(palette.ink, 0.1) : tint(palette.accent, 0.16) }} />;
+      return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
     });
   };
 
@@ -359,7 +364,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                const band: Band = wordHidden ? null : mark === key ? (markWord !== null && at === markWord ? 'word' : 'mark') : forgot[key] ? 'forgot' : null;
                 return { group, key, wordHidden, rel, at, band };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
@@ -372,14 +377,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                     {bands(row.id, cells)}
                     {cells.map(({ group, key, wordHidden, rel, at: wordAt, band }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
-                      const marked = mark === key;
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
-                        // A word that gains a band is drawn afresh, so it tells its place and the band is laid behind it.
-                        <Word key={band ? `${at}:${band}` : at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={band ? place(`${row.id}:${at}`) : undefined}>
+                        // Every word tells its place, so a band that appears later (a tap) is laid at once where the words are now.
+                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {onTopic && !recite && wordAt === 0 && group.word && startsAt(group.surah, group.ayah).length > 0 && (
                           <Pressable onPress={() => onTopic(group.surah!, startsAt(group.surah, group.ayah)[0])} accessibilityRole="button" accessibilityLabel="موضوعات السورة" hitSlop={8}
@@ -396,8 +400,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
-                          {wordHidden ? '' : marked && markWord !== null && wordAt === markWord
-                            ? <Text style={{ backgroundColor: tint(palette.accent, 0.3), borderRadius: 4 }}>{group.word}</Text> : group.word}
+                          {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}

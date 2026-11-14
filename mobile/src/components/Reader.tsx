@@ -396,7 +396,7 @@ export default function Reader() {
   const [preview, setPreview] = useState<Preview | null>(null);
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
-  const topics = !!actionKey && !!surahTopicsOf(actionSurah);
+  const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
   const buttons = 5 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);

@@ -225,7 +225,7 @@ export default function MushafPage({
                     const starts = topics && group.word && group.word !== '۞' && !firstWord[key] && (firstWord[key] = true) ? sectionsStartingAt(group.surah, group.ayah) : [];
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
-                        className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
+                        className={[!veiled && on ? styles.marked : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
                         {starts.length > 0 && (
                           <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
                             {/* The number is drawn by CSS, so it is no text of the line (copying, finding an ayah's number). */}
