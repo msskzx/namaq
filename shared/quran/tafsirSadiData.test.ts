@@ -31,8 +31,11 @@ describe('tafsirSadiOf', () => {
     expect(tafsirSadiOf('5:109')).toMatchObject({ from: 109, to: 110 });
     // An ayah he takes without a marker of its own belongs to the passage it is in.
     expect(tafsirSadiOf('2:121')).toMatchObject({ from: 120, to: 123 });
+    // A marker that starts inside a wider one cuts it: «{١ - ٥١}» then «{٣٠ - ٥١}».
+    expect(tafsirSadiOf('28:35')).toMatchObject({ from: 30, to: 51 });
+    expect(tafsirSadiOf('28:1')).toMatchObject({ from: 1, to: 29 });
     // Where he splits an ayah, both halves come.
-    expect(tafsirSadiOf('2:219')).toMatchObject({ from: 219, to: 220 });
+    expect(tafsirSadiOf('2:219')).toMatchObject({ from: 219, to: 219 });
     expect(text('2:219')).toContain('الخمر');
     expect(text('2:219')).toContain('مَاذَا يُنْفِقُونَ');
   });
@@ -44,7 +47,8 @@ describe('tafsirSadiOf', () => {
     const nas = tafsirSadiOf('114:1')!;
     expect(nas.pages).toEqual([937, 937]);
     expect(nas.text).not.toMatch(/مقدمة|ملحق|أصول وكليات/);
-    for (const key of keys) expect(text(key), key).not.toMatch(/(?:^|\n)تفسير سورة [^\n]*$/);
+    for (const key of keys) expect(text(key), key).not.toMatch(/(?:^|\n)تفسير سورة [^\n]*$|المجلد \S+ من/);
+    expect(text('3:128')).toMatch(/والحمد لله رب العالمين\.$/);
   });
 
   it('has no footnote marks, page or range markers, or HTML, and marks the pages the dump lacks', () => {

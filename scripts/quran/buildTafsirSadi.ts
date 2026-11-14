@@ -75,24 +75,26 @@ if (surah !== 114) throw new Error(`found ${surah} surahs, expected 114`);
 
 // Every ayah of every surah sits in a passage; two passages share an ayah only where one ends and the next begins.
 const counts = JSON.parse(readFileSync(join(__dirname, '../../shared/data/quran/surahs.json'), 'utf8')) as { number: number; numberOfAyat: number }[];
-// Al-Sa'di takes some ayat inside a passage without a marker of their own ("ثم قال: ﴿…﴾"): a passage runs on to the
-// ayah before the next marker, or to the end of its surah.
+// Al-Sa'di takes some ayat inside a passage without a marker of their own ("ثم قال: ﴿…﴾"): a passage runs to the ayah
+// before the next marker, or to the end of its surah.
 passages.forEach((p, i) => {
   const next = passages[i + 1];
-  const end = next?.surah === p.surah ? next.from - 1 : counts.find(c => c.number === p.surah)!.numberOfAyat;
-  p.to = Math.max(p.to, end);
+  // A marker that starts inside the passage's own range cuts it there; they share an ayah only when the next starts on
+  // the passage's first ayah (2:219: «{٢١٩}» then «{٢١٩ - ٢٢٠}»).
+  p.to = next?.surah === p.surah ? Math.max(p.from, next.from - 1) : Math.max(p.to, counts.find(c => c.number === p.surah)!.numberOfAyat);
 });
 const problems: string[] = [];
 for (const { number, numberOfAyat } of counts) {
   const seen = new Array<number>(numberOfAyat + 1).fill(0);
   for (const p of passages.filter(p => p.surah === number)) for (let a = p.from; a <= p.to; a++) seen[a]++;
-  for (let a = 1; a <= numberOfAyat; a++) if (!seen[a] || seen[a] > 2) problems.push(`${number}:${a} in ${seen[a]} passages`);
+  for (let a = 1; a <= numberOfAyat; a++) if (seen[a] !== 1 && !(seen[a] === 2 && passages.some(p => p.surah === number && p.from === a && p.to === a))) problems.push(`${number}:${a} in ${seen[a]} passages`);
   if (seen.length > numberOfAyat + 1) problems.push(`${number}: range past the end`);
 }
 if (problems.length) throw new Error(`passages do not tile the surahs:\n${problems.join('\n')}`);
 
-// A full stop left over from the passage before, and one next-surah heading the cleaner can't see ("… سورة فصلت / مكية").
-const tidy = (text: string) => text.replace(/^[.\s]+/, '').replace(/\s*سورة [^\n]{1,30}\n(?:\[?وهي\]? ?)?(?:مكية|مدنية)[^\n]{0,20}$/, '');
+// A full stop left over from the passage before, the title page of the next manuscript volume ("المجلد الثاني من تيسير
+// الكريم …"), and one next-surah heading the cleaner can't see ("… سورة فصلت / مكية").
+const tidy = (text: string) => text.replace(/^[.\s]+/, '').replace(/(?:^|\n|\s)المجلد \S+ من [\s\S]*$/, '').replace(/\s*سورة [^\n]{1,30}\n(?:\[?وهي\]? ?)?(?:مكية|مدنية)[^\n]{0,20}$/, '');
 
 writeFileSync(OUT, `${JSON.stringify({
   source: { version: dump.license.version, edition: dump.book.edition, publisher: dump.book.nasher, editor: dump.book.mohaqeq },
