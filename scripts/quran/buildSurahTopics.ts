@@ -19,8 +19,18 @@ const counts = JSON.parse(readFileSync(join(DATA, 'surahs.json'), 'utf8')) as { 
 
 // Surahs the dump leaves empty, read by hand from the same book's printed headings (vol. 7; the archive.org scan
 // https://archive.org/details/20260607_20260607_1233, PDF pages 3771-3864). Each range is the one the book's running
-// head gives for the pages under that heading. Al-Fatiha stays out: the book treats it by aims, not by ranges of ayat.
+// head gives for the pages under that heading. Al-Fatiha's are the book's «موضوعات سورة الفاتحة» (vol. 1 pp. 12-14),
+// seven topics each taken from the words it names, so ayat 5 and 7 hold two and the basmala none.
 const PRINTED: Record<number, SurahTopics> = {
+  1: { volume: 1, page: 12, sections: [
+    { title: 'الألوهية', from: 2, to: 3 },
+    { title: 'اليوم الآخر', from: 4, to: 4 },
+    { title: 'عبادة الله سبحانه وتعالى، والإخلاص لله تعالى فيها', from: 5, to: 5 },
+    { title: 'الاستعانة بالله وحده', from: 5, to: 5 },
+    { title: 'الالتزام بالصراط المستقيم', from: 6, to: 6 },
+    { title: 'صراط المنعم عليهم', from: 7, to: 7 },
+    { title: 'تجنب صراط المغضوب عليهم والضالين', from: 7, to: 7 },
+  ] },
   42: { volume: 7, page: 61, sections: [
     { title: 'تنزيل الوحي وبيان جلال الله تعالى وعظمته', from: 1, to: 6 },
     { title: 'مقاصد الوحي الإلهي', from: 7, to: 12 },
@@ -48,6 +58,7 @@ const report: string[] = [];
 for (const { number, numberOfAyat } of counts) {
   const note = dump.data.find(row => row.surah === number)?.information.topics?.value ?? '';
   const topics = parseSurahTopics(note) ?? PRINTED[number] ?? null;
+  if (topics && PRINTED[number] && topics !== PRINTED[number]) throw new Error(`${number}: the dump now has a list; drop the printed one`);
   if (!topics) { report.push(`${number}: no Sharjah list${noteLines(note).length ? ' (the note cites another book)' : ' (empty note)'}`); continue; }
   if (!topics.sections.length) throw new Error(`${number}: cites the book but no heading parsed`);
   const outside = JSON.stringify(topics).match(/"to":(\d+)/g)?.map(m => Number(m.slice(5))).filter(n => n > numberOfAyat);

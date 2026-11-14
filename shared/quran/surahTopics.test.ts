@@ -5,9 +5,9 @@ import { surahTopicsCredit, surahTopicsOf, topicsStartingAt, type TopicSection }
 const flat = (list: TopicSection[]): TopicSection[] => list.flatMap(s => [s, ...flat(s.parts ?? [])]);
 
 describe('surah topics', () => {
-  it('cover every surah but al-Fatiha, which the book treats by aims, each with its volume and page', () => {
+  it('cover every surah, each with its volume and page', () => {
     const missing = surahRows.filter(s => !surahTopicsOf(s.number)).map(s => s.number);
-    expect(missing).toEqual([1]);
+    expect(missing).toEqual([]);
     for (const { number } of surahRows.filter(s => !missing.includes(s.number))) {
       const topics = surahTopicsOf(number)!;
       expect(topics.volume).toBeGreaterThanOrEqual(1);
@@ -23,6 +23,8 @@ describe('surah topics', () => {
     expect(surahTopicsOf(44)).toMatchObject({ volume: 7, page: 140 });
     expect(surahTopicsOf(44)!.sections.map(s => [s.from, s.to])).toEqual([[1, 9], [10, 16], [17, 33], [34, 39], [40, 50], [51, 59]]);
     expect(surahTopicsOf(44)!.sections[0].title).toBe('إعجاز القرآن وإنزاله في ليلة مباركة');
+    // Al-Fatiha's seven topics sit on the words they come from: two on ayah 5, two on ayah 7.
+    expect(surahTopicsOf(1)!.sections.map(s => s.from)).toEqual([2, 4, 5, 5, 6, 7, 7]);
   });
 
   it('keeps the book’s headings and ranges', () => {
