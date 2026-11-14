@@ -32,7 +32,7 @@ const fetchMock = vi.fn(async (url: string) => {
   fetched.push(url);
   const query = new URL(url, 'http://localhost').searchParams;
   const body = query.has('page') ? { surah: 18, words: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }
-    : query.has('p') ? { pairs: query.get('p')!.split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
+    : query.has('p') || query.has('t') ? { pairs: (query.get('p') ?? '').split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
     : { pairs: pairs.map(pair => pair.id), trees: [null, null], pairKeys: pairs.map(pair => pair.sides.map(side => `${side.surah}:${side.ayah}`)), treeKeys: [[], []] };
   return { ok: true, json: async () => body } as Response;
 });

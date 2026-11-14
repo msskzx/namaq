@@ -19,22 +19,13 @@ test.describe('a new user', () => {
     expect(await readerPage(page)).toBe(300);
   });
 
-  test('the tree card is the branches tree: it swipes to the next tree and opens it on the branches tab', async ({ page }) => {
+  test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
     await open(page, '/');
-    await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first().scrollIntoViewIfNeeded();
-    await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    const tree = page.getByLabel(/^الشجرة ١ من /).locator('xpath=../..');
-    const box = (await tree.boundingBox())!;
-    const y = box.y + box.height / 2;
-    // Arabic order: the next tree waits on the left, so a drag to the right brings it in.
-    await page.mouse.move(box.x + 60, y);
-    await page.mouse.down();
-    for (let step = 1; step <= 10; step++) await page.mouse.move(box.x + 60 + step * 25, y);
-    await page.mouse.up();
-    await expect(page.getByLabel(/^الشجرة ٢ من /)).toBeAttached();
-    // The card's head names the tree shown; the branches tab opens on that same tree.
-    const title = (await page.getByText('من متشابهات القرآن').locator('xpath=preceding-sibling::*[1]').textContent())!.trim();
-    await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).nth(1).click();
+    const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
+    await button.scrollIntoViewIfNeeded();
+    // The card's head names the tree; the branches tab opens on that same tree.
+    const title = (await page.getByText('من متشابهات القرآن').first().locator('xpath=preceding-sibling::*[1]').textContent())!.trim();
+    await button.click();
     await expect(page).toHaveURL(/\/branches/);
     await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
     await expect(page.getByText(title, { exact: true }).first()).toBeVisible();

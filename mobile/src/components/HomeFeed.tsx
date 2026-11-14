@@ -16,6 +16,7 @@ import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { Text } from './Text';
+import { quranText } from '@/lib/quranText';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { EMPTY_LIST } from '@/lib/branchList';
@@ -49,18 +50,22 @@ function Action({ Icon, label, on, onPress, palette }: { Icon: IconType; label: 
 const cardStyle = (palette: Palette) => ({ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card });
 
 /** A feed card's head: a round icon, a title and a line under it, like a post's author. */
-function PostHead({ Icon, title, sub, palette, quran }: { Icon: IconType; title: string; sub?: string; palette: Palette; quran?: boolean }) {
-  return (
+function PostHead({ Icon, title, sub, palette, quran, open }: { Icon: IconType; title: string; sub?: string; palette: Palette; quran?: boolean;
+  /** A tap on the head opens the post's own page; `label` names it for a screen reader. */
+  open?: { onPress: () => void; label: string } }) {
+  const head = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6 }}>
       <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, alignItems: 'center', justifyContent: 'center' }}>
         <Icon size={18} color={palette.accent} />
       </View>
       <View style={{ flex: 1 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: quran ? 18 : 16, fontWeight: quran ? undefined : '700', fontFamily: quran ? QURAN_FONT : undefined, textAlign: 'right' }}>{title}</Text>
+        {/* A Quran title as the branches search draws a phrase: the mushaf's text and the Hafs font's own line height, so its marks are not cut off. */}
+        <Text accessibilityRole="header" style={quran ? { color: palette.ink, fontSize: 20, lineHeight: 38, fontFamily: QURAN_FONT, textAlign: 'right' } : { color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{quran ? quranText(title) : title}</Text>
         {sub ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sub}</Text> : null}
       </View>
     </View>
   );
+  return open ? <Pressable onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Pressable> : head;
 }
 
 /** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
@@ -254,30 +259,27 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   );
 }
 
-/** How many of the day's trees the tree card holds to swipe through. */
-const TREES = 20;
-/** The tree card's height: room for the branches page's tree, its progress line and its buttons. */
-const TREE_HEIGHT = 480;
+/** The tree card's height: room for the branches page's tree and its buttons. */
+const TREE_HEIGHT = 440;
 
 /**
- * The day's trees as one card: the branches tab's own pager (TreePager), so a tree zooms, pans, lights a path on a tap,
- * saves on a double tap and swipes sideways to the next tree, as there. The open button takes it to the branches tab.
+ * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
+ * a tap and saves on a double tap, as there. The open button takes it to the branches tab.
  */
-const TreePost = memo(function TreePost({ pieces, palette }: { pieces: BranchPiece[]; palette: Palette }) {
-  const [mode] = branchView.use();
+const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
+  // Opens in the view set on the branches tab; the card's own switch changes only this card.
+  const [mode, setMode] = useState(branchView.get);
   const [around] = aroundSetting.use();
-  const [index, setIndex] = useState(0);
-  const onIndex = useCallback((at: number) => {
-    setIndex(at);
-    if (pieces[at]) markFeedSeen([pieces[at].id]);
-  }, [pieces]);
-  const embedded = useMemo(() => ({ open: (piece: BranchPiece) => toTab({ pathname: '/branches', params: { tree: piece.id } }) }), []);
-  const piece = pieces[Math.min(index, pieces.length - 1)];
+  const pieces = useMemo(() => [piece], [piece]);
+  const embedded = useMemo(() => ({
+    open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }),
+    toggleView: () => setMode(current => (current === 'tree' ? 'matrix' : 'tree')),
+  }), []);
   return (
     <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
-      <PostHead Icon={TreeIcon} title={piece.text} sub="من متشابهات القرآن" palette={palette} quran />
+      <PostHead Icon={TreeIcon} title={piece.text} sub="من متشابهات القرآن" palette={palette} quran open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
       <View style={{ height: TREE_HEIGHT }}>
-        <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} onIndex={onIndex} embedded={embedded} />
+        <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
     </View>
   );
@@ -292,8 +294,10 @@ const MORE = 3;
  */
 export function Feed({ palette }: { palette: Palette }) {
   const { day } = useToday();
-  const [batches, setBatches] = useState(1);
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
+  // A new visit (pulled to refresh, or back after long away) starts again from one batch, in the same render that picks it.
+  const [more, setMore] = useState({ visit, batches: 1 });
+  const batches = more.visit === visit ? more.batches : 1;
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
@@ -309,22 +313,21 @@ export function Feed({ palette }: { palette: Palette }) {
   }, []);
   const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
     { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
-  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, TREES,
-    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, seen, prefer, memorized, visit]);
-  // A tree counts as seen when its card shows it (TreePost), not when it waits further along the card.
-  useEffect(() => { markFeedSeen(pairs.map(pair => pair.id)); }, [pairs]);
+  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
+  useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
     if (pairs[i]) posts.push(<PairPost key={`p${pairs[i].id}`} pair={pairs[i]} palette={palette} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} palette={palette} />);
-    if (i === 0 && trees.length) posts.push(<TreePost key="trees" pieces={trees} palette={palette} />);
+    if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
   }
   return (
     <View style={{ gap: 14 }}>
       <Divider label="للتأمل اليوم" palette={palette} />
       {posts}
-      {batches < FEED_AHEAD && <Pressable onPress={() => setBatches(count => Math.min(FEED_AHEAD, count + MORE))} accessibilityRole="button" accessibilityLabel="المزيد للتأمل"
+      {batches < FEED_AHEAD && <Pressable onPress={() => setMore({ visit, batches: Math.min(FEED_AHEAD, batches + MORE) })} accessibilityRole="button" accessibilityLabel="المزيد للتأمل"
         style={({ pressed }) => ({ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
         <ChevronLeft size={18} color={palette.ink} />
         <Text style={{ color: palette.ink, fontSize: 16 }}>المزيد للتأمل</Text>

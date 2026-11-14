@@ -3,7 +3,8 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, Maximize2, RotateCwSquare, Send, Tags } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags } from 'lucide-react-native';
+import TreeIcon from './TreeIcon';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -51,9 +52,9 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onOpen }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
-  /** Set on a pager embedded elsewhere (the home feed): no studio, and a button that opens the tree on the branches tab. */
-  onOpen?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onView }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
+  /** Set on a pager embedded elsewhere (the home feed), which has no top bar: no studio, and the tree/matrix switch here instead. */
+  onView?: { mode: BranchView; toggle: () => void } }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
   const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
@@ -66,16 +67,16 @@ function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, o
     if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
   }, [pop, current, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  if (studio && current && !onOpen) return <StudioControls palette={palette} onVideo={onVideo} />;
+  if (studio && current && !onView) return <StudioControls palette={palette} onVideo={onVideo} />;
   const save = () => toggleSaved(piece);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
         <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
-      {!onOpen && <StudioButton palette={palette} />}
-      {onOpen && <Pressable onPress={onOpen} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح الشجرة في متشابهات القرآن" style={{ padding: 8 }}>
-        <Maximize2 size={24} color={palette.ink} />
+      {!onView && <StudioButton palette={palette} />}
+      {onView && <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+        {onView.mode === 'tree' ? <GalleryHorizontal size={24} color={palette.ink} /> : <TreeIcon size={24} color={palette.ink} />}
       </Pressable>}
       {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
         <RotateCwSquare size={24} color={palette.ink} />
@@ -128,7 +129,7 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
    * The pager embedded in another page (the home feed's tree card): it keeps no place or zoom for the branches tab, has no
    * studio, lets vertical drags on an unzoomed tree scroll the page, and `open` takes the tree to the branches tab.
    */
-  embedded?: { open: (piece: BranchPiece) => void } };
+  embedded?: { open: (piece: BranchPiece) => void; toggleView: () => void } };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
 export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen, embedded }: Props) {
@@ -273,7 +274,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
 
   return (
     <View style={{ flex: 1 }}>
-      <PageProgress at={index + 1} count={count} label="الشجرة" palette={palette} />
+      {!embedded && <PageProgress at={index + 1} count={count} label="الشجرة" palette={palette} />}
       <View style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setView({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
           {shown.map(at => {
@@ -288,7 +289,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
-                    onOpen={embedded ? () => embedded.open(pieces[at]) : undefined} />
+                    onView={embedded ? { mode, toggle: embedded.toggleView } : undefined} />
                 </View>
                 {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
