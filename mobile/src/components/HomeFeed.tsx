@@ -404,18 +404,19 @@ const STORY_HEIGHT = 460;
 
 /**
  * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
- * sideways at the day's group; the surahs scroll up and down inside the card. A dot or an event's title opens the story there.
+ * sideways at the day's group; the surahs scroll up and down inside the card. Any tap opens the story page at its top, not scrolled
+ * to an event, so a new reader sees where they landed (owner, 2026-11-14).
  */
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
   const prophet = useMemo(() => prophetStory(slug), [slug]);
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : null), [prophet]);
   if (!prophet || !map) return null;
-  const open = (event?: number, surah?: number) => router.push({ pathname: '/prophets/[slug]', params: { slug, ...(event === undefined ? {} : { event: String(event) }), ...(surah === undefined ? {} : { surah: String(surah) }) } });
+  const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
       actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
       <ScrollView nestedScrollEnabled style={{ maxHeight: STORY_HEIGHT }} contentContainerStyle={{ paddingVertical: 8 }}>
-        <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={(event, surah) => open(event, surah)} onTitle={event => open(event)} />
+        <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
     </Post>
   );

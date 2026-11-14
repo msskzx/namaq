@@ -260,12 +260,13 @@ function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized |
 
 /**
  * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
- * sideways at the day's group; the map scrolls both ways inside the card. A dot or an event's title opens the story there.
+ * sideways at the day's group; the map scrolls both ways inside the card. Any tap opens the story page at its top, not scrolled
+ * to an event, so a new reader sees where they landed (owner, 2026-11-14).
  */
 function StoryPost({ card }: { card: StoryCard }) {
   const router = useRouter();
   const href = `/quran/prophets/${card.slug}`;
-  const read = (event: number, surah?: number) => router.push(`${href}?event=${card.story[event]}${surah === undefined ? '' : `&surah=${surah}`}`);
+  const read = () => router.push(href);
   return <article className={styles.post} dir="rtl">
     <Link href={href} aria-label="افتح القصة" className="block hover:opacity-80"><PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} /></Link>
     <div className={styles.story} data-story-scroll>
