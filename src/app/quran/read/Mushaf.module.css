@@ -280,7 +280,9 @@
   line-height: 1.4;
   color: var(--home-accent);
   cursor: pointer;
+  user-select: none;
 }
+.topicTab > span::before { content: attr(data-n); }
 .topicTab > span {
   min-width: 1.4em;
   border: 1px solid var(--home-rule);
@@ -304,3 +306,4 @@
   cursor: pointer;
 }
 .topicNumber { color: var(--home-accent); }
+.topicNumber::before { content: attr(data-n); }

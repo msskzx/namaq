@@ -13,12 +13,22 @@ export const SURAH_TOPICS_VERSION = data.version;
 
 export const surahTopicsOf = (surah: number): SurahTopics | null => surahs[surah] ?? null;
 
+/** Where a section starts: its own first ayah, or for a heading that only groups smaller ones (al-Anfal), its first part's. */
+export const sectionStart = (section: TopicSection): number | undefined => section.from ?? (section.parts?.length ? sectionStart(section.parts[0]) : undefined);
+
 /** The top-level sections that start at an ayah, by place in the surah's list, so the reader can mark them above it. */
 export const sectionsStartingAt = (surah: number | undefined, ayah: number | undefined): number[] =>
-  surah === undefined || ayah === undefined ? [] : (surahTopicsOf(surah)?.sections ?? []).flatMap((section, i) => (section.from === ayah ? [i] : []));
+  surah === undefined || ayah === undefined ? [] : (surahTopicsOf(surah)?.sections ?? []).flatMap((section, i) => (sectionStart(section) === ayah ? [i] : []));
 
-/** The top-level section an ayah falls in (the last that starts at or before it), by place in the list. */
-export const sectionAt = (surah: number, ayah: number): number => (surahTopicsOf(surah)?.sections ?? []).findLastIndex(section => section.from !== undefined && section.from <= ayah);
+/**
+ * The top-level section an ayah falls in, by place in the list: the first of those starting at the latest start at or
+ * before it (several sections can start at one ayah). -1 before the first section.
+ */
+export const sectionAt = (surah: number, ayah: number): number => {
+  const starts = (surahTopicsOf(surah)?.sections ?? []).map(sectionStart);
+  const latest = Math.max(-1, ...starts.filter((from): from is number => from !== undefined && from <= ayah));
+  return latest < 0 ? -1 : starts.indexOf(latest);
+};
 
 /** Where to read the list on Quranpedia, and the book's volume and page it cites. */
 export const surahTopicsCredit = (topics: SurahTopics) =>

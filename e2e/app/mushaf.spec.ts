@@ -78,10 +78,10 @@ test.describe('surah topics', () => {
   test('the header names the page\'s section; its list opens with al-Biqa\'i\'s aim and jumps to a section', async ({ page }) => {
     await open(page, '/read');
     await page.getByRole('button', { name: 'موضوعات السورة: تساؤل المشركين عن النبأ' }).click();
-    await expect(page.getByRole('header', { name: 'موضوعات سورة النبأ' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'موضوعات سورة النبأ' })).toBeVisible();
     await expect(page.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(page.getByText('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤')).toBeVisible();
-    await page.getByRole('button', { name: /جزاء المتقين/ }).click();
+    await page.getByRole('button', { name: /^٤\. جزاء المتقين/ }).click();
     await expect.poll(() => readerPage(page)).toBe(583);
   });
 });

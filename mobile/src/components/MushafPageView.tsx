@@ -240,11 +240,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   // The section the page opens in: the one holding the page's first ayah.
   const opener = useMemo(() => {
     if (!onTopic) return null;
-    for (const at of lineAt) {
-      const group = (model.lines[at] ?? []).find(g => g.surah !== undefined && g.ayah !== undefined);
-      if (!group) continue;
-      const index = sectionAt(group.surah!, group.ayah!);
-      return index < 0 ? null : { surah: group.surah!, index, title: surahTopicsOf(group.surah!)!.sections[index].title };
+    // An ayah before the surah's first section (al-Fatiha's basmala) passes to the next.
+    for (const at of lineAt) for (const group of model.lines[at] ?? []) {
+      if (group.surah === undefined || group.ayah === undefined) continue;
+      const index = sectionAt(group.surah, group.ayah);
+      if (index >= 0) return { surah: group.surah, index, title: surahTopicsOf(group.surah)!.sections[index].title };
     }
     return null;
   }, [onTopic, lineAt, model]);
@@ -394,7 +394,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {onTopic && !recite && wordAt === 0 && group.word && startsAt(group.surah, group.ayah).length > 0 && (
                           <Pressable onPress={() => onTopic(group.surah!, startsAt(group.surah, group.ayah)[0])} accessibilityRole="button" accessibilityLabel="موضوعات السورة" hitSlop={8}
-                            style={{ position: 'absolute', right: 0, bottom: '82%', zIndex: 1, flexDirection: 'row', gap: 2 }}>
+                            style={{ position: 'absolute', right: 0, bottom: '62%', zIndex: 1, flexDirection: 'row', gap: 2 }}>
                             {startsAt(group.surah, group.ayah).map(i => (
                               <Text key={i} style={{ minWidth: size * 0.42, textAlign: 'center', fontSize: Math.max(9, size * 0.3), lineHeight: Math.max(12, size * 0.42), color: palette.accent, borderWidth: 1, borderColor: palette.rule, borderRadius: 7, paddingHorizontal: 3, backgroundColor: palette.paper, overflow: 'hidden' }}>{num(i + 1)}</Text>
                             ))}

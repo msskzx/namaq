@@ -6,7 +6,7 @@ import { List, X } from 'lucide-react';
 import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahHref } from '@shared/ayahMarks';
-import { surahTopicsCredit, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
+import { sectionStart, surahTopicsCredit, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
 import { surahAim } from '@shared/quran/surahAims';
 import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
 import ExternalLink from '@/components/common/ExternalLink';
@@ -34,16 +34,17 @@ export default function TopicSheet({ open, onClose }: { open: TopicOpen | null; 
   useSwipeClose(sheet, !!open, { direction: 'down', onClose: () => sheet.current?.close() });
   const topics = shown ? surahTopicsOf(shown.surah) : null;
   const aim = shown ? surahAim(shown.surah) : undefined;
-  const rows = (list: TopicSection[], depth: number): React.ReactNode[] => list.flatMap((section, i) => {
+  const rows = (list: TopicSection[], depth: number, prefix = ''): React.ReactNode[] => list.flatMap((section, i) => {
+    const start = sectionStart(section);
     const on = !depth && shown?.section === i;
     const label = depth ? section.title : `${num(i + 1)}. ${section.title}`;
     const style = `flex gap-3 ${depth ? 'py-1 text-[0.9375rem] leading-6' : 'py-2 text-[1.0625rem] leading-7'} ${on ? 'text-[var(--home-accent)]' : depth ? 'text-[var(--home-muted)]' : ''}`;
     const body = <><span className="flex-1">{label}</span><span className={on ? '' : 'text-[var(--home-muted)]'}>{range(section)}</span></>;
     return [
-      section.from === undefined
-        ? <div key={`${depth}-${i}-${section.title}`} className={style} style={{ paddingInlineStart: depth * 18 }}>{body}</div>
-        : <Link key={`${depth}-${i}-${section.title}`} href={ayahHref(`${shown!.surah}:${section.from}`)} onClick={() => sheet.current?.close()} className={style} style={{ paddingInlineStart: depth * 18 }}>{body}</Link>,
-      ...rows(section.parts ?? [], depth + 1),
+      start === undefined
+        ? <div key={`${prefix}${i}`} className={style} style={{ paddingInlineStart: depth * 18 }}>{body}</div>
+        : <Link key={`${prefix}${i}`} href={ayahHref(`${shown!.surah}:${start}`)} onClick={() => sheet.current?.close()} className={style} style={{ paddingInlineStart: depth * 18 }}>{body}</Link>,
+      ...rows(section.parts ?? [], depth + 1, `${prefix}${i}.`),
     ];
   });
   return (

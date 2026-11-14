@@ -43,6 +43,10 @@ describe('surah topics', () => {
     expect(sectionsStartingAt(1, 5)).toEqual([2, 3]);
     expect(sectionAt(78, 20)).toBe(2);
     expect(sectionAt(1, 1)).toBe(-1);
+    // Several sections at one ayah: the first of them. A heading that only groups parts starts at its first part.
+    expect(sectionAt(1, 5)).toBe(2);
+    expect(sectionAt(8, 1)).toBe(0);
+    expect(sectionsStartingAt(8, 1)).toEqual([0]);
     expect(surahTopicsCredit(surahTopicsOf(78)!)).toBe('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤');
   });
 });

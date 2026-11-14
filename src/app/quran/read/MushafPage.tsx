@@ -189,11 +189,11 @@ export default function MushafPage({
   // The section the page opens in: the one holding the page's first ayah.
   const opener = useMemo(() => {
     if (!topics) return null;
-    for (const row of Object.values(lines)) {
-      const group = row?.find(g => g.surah !== undefined && g.ayah !== undefined);
-      if (!group) continue;
-      const index = sectionAt(group.surah!, group.ayah!);
-      return index < 0 ? null : { surah: group.surah!, index, title: surahTopicsOf(group.surah!)!.sections[index].title };
+    // An ayah before the surah's first section (al-Fatiha's basmala) passes to the next.
+    for (const row of Object.values(lines)) for (const group of row ?? []) {
+      if (group.surah === undefined || group.ayah === undefined) continue;
+      const index = sectionAt(group.surah, group.ayah);
+      if (index >= 0) return { surah: group.surah, index, title: surahTopicsOf(group.surah)!.sections[index].title };
     }
     return null;
   }, [topics, lines]);
@@ -239,7 +239,8 @@ export default function MushafPage({
                         className={[on ? styles.marked : '', !veiled && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
                         {starts.length > 0 && (
                           <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
-                            {starts.map(i => <span key={i}>{num(i + 1)}</span>)}
+                            {/* The number is drawn by CSS, so it is no text of the line (copying, finding an ayah's number). */}
+                            {starts.map(i => <span key={i} data-n={num(i + 1)} />)}
                           </button>
                         )}
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
@@ -281,7 +282,7 @@ export default function MushafPage({
         <span>الجزء {juzName(data.juz)}</span>
         {opener && (
           <button type="button" className={styles.topicChip} aria-label={`موضوعات السورة: ${opener.title}`} onClick={() => onTopic!(opener.surah, opener.index)}>
-            <span className={styles.topicNumber}>{num(opener.index + 1)}</span> {opener.title}
+            <span className={styles.topicNumber} data-n={num(opener.index + 1)} /> {opener.title}
           </button>
         )}
         {badges.some(list => list.length > 0) && (
