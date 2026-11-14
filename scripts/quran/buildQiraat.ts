@@ -8,7 +8,7 @@ import { farshGroups, sameForm, type DumpReading } from './qiraatFarsh';
 
 // docs/plans/quran-qiraat.md: the word differences (farsh) of the ten readers per ayah, from Quranpedia's qira'at dump,
 // anchored to the words of the bundled Hafs mushaf. Writes shared/data/quran/qiraat.json and a review list.
-const VERSION = '2026-11-07';
+const VERSION = '2026-11-14';
 const URL = 'https://quranpedia.net/dumps/qiraat.json.gz';
 const DATA = join(__dirname, '../../shared/data/quran');
 const OUT = join(DATA, 'qiraat.json');
@@ -57,6 +57,7 @@ function anchor(s: number, a: number, phrase: string): { key: string; at: [numbe
       const words = [...own, ...(hafs.get(`${s}:${n + 1}`) ?? [])];
       const letters = words.map(skeleton);
       for (let i = 0; i < own.length; i++) {
+        if (!letters[i]) continue;
         let text = '';
         for (let j = i; j < words.length && text.length < joined.length; j++) {
           text += letters[j];
@@ -141,7 +142,7 @@ for (const [key, list] of Object.entries(ayat)) {
   if (!ayat[key].length) delete ayat[key];
 }
 
-// docs/qiraat-source-audit.md
+// docs/audits/qiraat-source-audit.md
 for (const correction of corrections) {
   const list = ayat[correction.ayah];
   const index = list?.findIndex(word => word.at[0] === correction.at) ?? -1;

@@ -1,6 +1,6 @@
 # Qira'at source audit
 
-This audit checks 50 existing word positions from the per-ayah dataset introduced in PR #720. It changes seven definite errors and leaves four doubtful positions unchanged. No UI code changes.
+This audit checks 50 existing word positions from the per-ayah dataset introduced in PR #720. It fixes seven definite errors, settles four doubtful positions as correct for the dataset's routes, and fixes how the generator anchors a word after a rub marker. No UI code changes.
 
 ## Method and limits
 
@@ -8,7 +8,7 @@ The sample is the first 50 eligible stored word positions in al-Baqara, in ayah 
 
 Exclude Ibrahim spellings, including their overlapping phrase entry, so repetitions of one rule do not dominate the sample. Also exclude the stored performance positions 2:14 مستهزئون, 2:34 للملائكة اسجدوا, 2:62 الصابئين, 2:67 and 2:169 يأمركم, 2:136 النبيون and 2:142 صراط. Retain 2:173 اضطر because Abu Jafar's ta vowel is a word difference, while the preceding particle's joining vowel is performance. The last sampled position is 2:177 البر. The anchor column below records the original zero-based start, including the incorrect anchor being fixed.
 
-Definite errors before correction: **7/50, or 14%**. Doubtful positions: **4/50, or 8%**, reported separately rather than called correct or wrong. The other **39/50** agree within this audit's scope. These counts describe this sample only. Several rows apply the same book rule to separate ayat.
+Definite errors before correction: **7/50, or 14%**. The other **43/50** agree within this audit's scope, including four positions first marked doubtful and later settled by route scope (see below). These counts describe this sample only. Several rows apply the same book rule to separate ayat.
 
 ## Source
 
@@ -42,10 +42,10 @@ Every page in this table belongs to volume 2 of *al-Nashr*.
 | 2:96 | 24 | يعملون | 219 | Yaqub alone uses تعملون. | Matches |
 | 2:97 | 4 | جبريل | 219 | Ibn Kathir opens jim without hamza; Shuba has two hamzated forms. | Fixed Shuba |
 | 2:98 | 6 | جبريل | 219 | The same Gabriel rule applies in both Baqara positions. | Fixed Shuba |
-| 2:98 | 7 | ميكال | 219 | Both Basrans and Hafs omit hamza; the Medinans have hamza without ya; Qunbul has two routes. | Doubtful |
+| 2:98 | 7 | ميكال | 219 | Both Basrans and Hafs omit hamza; the Medinans have hamza without ya; Qunbul has two routes. | Matches for the dataset's routes |
 | 2:102 | 10 | ولكن | 219 | Ibn Amir, Hamza, Kisai and Khalaf lighten nun and raise the following noun. | Matches |
 | 2:105 | 9 | ينزل | 218-219 | Ibn Kathir and both Basrans lighten the zay. | Matches |
-| 2:106 | 2 | ننسخ | 219-220 | Ibn Amir raises the first nun and lowers sin, except Hisham's Dajuni route. | Doubtful |
+| 2:106 | 2 | ننسخ | 219-220 | Ibn Amir raises the first nun and lowers sin, except Hisham's Dajuni route. | Matches for the dataset's routes |
 | 2:106 | 6 | ننسها | 220 | Ibn Kathir and Abu Amr have ننسأها; the others ننسها. | Matches |
 | 2:111 | 11 | أمانيهم | 217-218 | Abu Jafar lightens ya, silences it here and lowers ha. | Matches |
 | 2:112 | 11 | خوف | 211 | Yaqub opens the fa without tanwin, as at 2:38. | Matches |
@@ -62,33 +62,34 @@ Every page in this table belongs to volume 2 of *al-Nashr*.
 | 2:149 | 16 | تعملون | 223 | Abu Amr alone uses يعملون. | Matches |
 | 2:158 | 18 | تطوع | 223 | Hamza, Kisai, Khalaf and Yaqub use يطوع with doubled ta and jussive ayn. | Matches |
 | 2:164 | 34 | الرياح | 223 | Hamza, Kisai and Khalaf use the singular here. | Matches |
-| 2:165 | 17 | يرى | 224 | Nafi, Ibn Amir and Yaqub address the reader; Ibn Wardan has a route with that form too. | Doubtful |
+| 2:165 | 17 | يرى | 224 | Nafi, Ibn Amir and Yaqub address the reader; Ibn Wardan has a route with that form too. | Matches for the dataset's routes |
 | 2:165 | 21 | يرون | 224 | Ibn Amir alone raises ya. | Matches |
 | 2:165 | 23 | أن القوة | 224 | Abu Jafar and Yaqub lower the opening hamza. | Matches |
 | 2:165 | 26 | وأن | 224 | Abu Jafar and Yaqub lower the hamza; all others open it. | Fixed Khalaf an Hamza |
-| 2:168 | 10 | خطوات | 216 | Nafi, Abu Amr, Hamza, Khalaf and Shuba silence ta; Bazzi has both routes. | Doubtful |
+| 2:168 | 10 | خطوات | 216 | Nafi, Abu Amr, Hamza, Khalaf and Shuba silence ta; Bazzi has both routes. | Matches for the dataset's routes |
 | 2:173 | 3 | الميتة | 224-225 | Abu Jafar alone doubles ya here. | Matches |
 | 2:173 | 12 | اضطر | 225-226 | Abu Jafar lowers ta; all others raise it. The particle's joining vowel is performance. | Fixed missing riwayat |
 | 2:177 | 0 | البر | 226 | Hamza and Hafs use accusative البر; all others raise it. | Fixed anchor |
 
 ## Corrections and regression coverage
 
-Each changed position has its book, volume, page and replacement in `scripts/quran/qiraatCorrections.json`. `buildQiraat.ts` applies that table after the dump conversion and before writing the bundled data. A missing original position fails the build rather than silently discarding its correction. `shared/quran/qiraatData.test.ts` has one regression test per changed position.
+Each changed position has its book, volume, page and replacement in `scripts/quran/qiraatCorrections.json`. `buildQiraat.ts` applies that table after the dump conversion and before writing the bundled data. The table finds each position by the first word index the generator now gives it (2:177 is found at 1, since the generator skips the rub marker), and a missing position fails the build rather than silently discarding its correction. `shared/quran/qiraatData.test.ts` has one regression test per changed position.
 
 - 2:37, p. 211: replace the instruction "raise the ta" with the actual reading كَلِمَاتٌ. Ibn Kathir's nominative is explicit.
 - 2:85, p. 218: add both Abu Jafar riwayat to تعملون. The book enumerates the five readers or narrators who use يعملون and assigns the address form to the remainder.
-- 2:97 and 2:98, p. 219: remove Shuba from Ibn Kathir's unhamzated جَبْرِيل and retain both Shuba routes, جَبْرَئِيل and جَبْرَئِل. The book gives al-Ulaymi the former and Yahya ibn Adam the latter. Both are retained; the correction selects neither route.
-- 2:165 وأن, p. 224: move Khalaf an Hamza to the open hamza group. The book restricts the lowered hamza to Abu Jafar and Yaqub.
-- 2:173, pp. 225-226: add the ten omitted riwayat to the raised ta group of اضطر. All readers other than Abu Jafar raise ta. Particle joining vowels do not create separate farsh groups.
+- 2:97 and 2:98, p. 219: remove Shuba from Ibn Kathir's unhamzated جَبْرِيل and give him جَبْرَئِل only. The book gives al-Ulaymi جَبْرَئِيل and Yahya ibn Adam جَبْرَئِل. The dataset's twenty riwayat follow the routes of al-Shatibiyya and al-Durra, where Shuba is read through Yahya ibn Adam (al-Shatibiyya: «وَالْيَاءُ يَحْذِفُ شُعْبَةٌ»), and the King Fahd Complex Shuba mushaf prints لِّـجَبۡرَئِلَ and وَجَبۡرَئِلَ.
+- 2:165 وأن, p. 224: move Khalaf an Hamza to the open hamza group. The book restricts the lowered hamza to Abu Jafar and Yaqub. The lowered reading's text gets its missing shadda, وَإِنَّ.
+- 2:173, pp. 225-226: add the ten omitted riwayat to the raised ta group of اضطر. All readers other than Abu Jafar raise ta. Particle joining vowels do not create separate farsh groups. Abu Jafar's text becomes فَمَنِ اضْطِرَّ: the dump's damma on the nun follows a damma on ta, which he does not read, and the ra lacked its shadda.
 - 2:177, p. 226: anchor البر itself at token 2. The previous span included the rub marker and ليس and omitted the word whose case differs. Keep Hafs and Hamza on the accusative and the rest on the nominative.
+- The generator no longer starts a match on a word with no letters (the rub marker ۞, or أو once long vowels are dropped). Seven more ayat lost a leading ۞ in the Hafs text (3:133, 7:142, 10:53, 22:19, 23:36, 33:51, 43:24), and 9:57 now marks مدخلا alone instead of أو مدخلا. A test checks that no stored word starts with ۞.
 
-## Doubtful positions left unchanged
+## Route scope settles the four doubtful positions
 
-These need a decision about the dataset's route scope before adding readings. They are excluded from the definite-error numerator.
+The dataset's twenty riwayat follow al-Shatibiyya and al-Durra. *Al-Nashr* adds routes from al-Tayyiba, so it can give a riwaya a second reading that the dataset rightly leaves out. All four doubtful positions are of this kind, and the stored readings match the Shatibiyya and Durra routes:
 
-- 2:98 ميكائيل, p. 219: the book gives Qunbul both hamza-with-ya and hamza-without-ya routes. The dump stores only the former. Do not silently expand its route scope.
-- 2:106 ننسخ, pp. 219-220: the book exempts Hisham's Dajuni route from the raised-nun, lowered-sin form. The dataset stores only that form for Hisham.
-- 2:165 يرى, p. 224: a specified Ibn Wardan route has ترى, while the dataset names him only for يرى.
-- 2:168 خطوات, p. 216: Bazzi has both silenced and raised ta routes in the book; the dataset names him only for silenced ta.
+- 2:98 ميكائيل, p. 219: Qunbul's reading without ya is a Tayyiba route. The King Fahd Qunbul mushaf prints وَمِيكَٰٓـِٔيلَ, as stored.
+- 2:106 ننسخ, pp. 219-220: Hisham's Dajuni route is a Tayyiba route.
+- 2:165 يرى, p. 224: Ibn Wardan's ترى comes from a Tayyiba route.
+- 2:168 خطوات, p. 216: Bazzi's raised ta is a Tayyiba route. The King Fahd Bazzi mushaf prints خُطۡوَٰتِ with a silent ta, as stored.
 
-`docs/records/` was absent in the starting checkout and present in the fetched-main audit worktree. Records 0009, 0010 and 0026-0028 were read there before opening the PR. Record 0028 prompted an explicit comparison confirming that all four doubtful entries, including Qunbul and Bazzi route assignments, remain unchanged. Distillate record `namaq/0015-two-sources-that-disagree-are-not-an-error` was also read; it did not change the implementation or checks. Its first activity-log append failed with a sandbox permission error; a later authorized append succeeded. The marker/anchor detour is recorded locally in Distillate as `namaq/0029-empty-normalized-tokens-can-steal-word-anchors`.
+Records read: 0009, 0010, 0026, 0027 and 0028. Record 0028 kept the King Fahd texts to confirming what they print, not to moving groups. Record 0033 states the route-scope rule.

@@ -174,7 +174,7 @@ export const SOURCES: Source[] = [
   {
     id: 'quranpedia', group: 'data',
     title: { ar: 'الموسوعة القرآنية: ملف القراءات', en: 'Quranpedia: the qira’at dump' },
-    edition: 'إصدار ٢٠٢٦-١١-٠٧', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
+    edition: 'إصدار ٢٠٢٦-١١-١٤', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
     licence: {
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',

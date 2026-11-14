@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import data from '../data/quran/qiraat.json';
 import { qiraatOf } from './qiraatData';
 
 const word = (key: string, at: number) => qiraatOf(key).find(w => w.at[0] === at)!;
 
 describe('al-Nashr source corrections', () => {
+  it('no word starts on a rub marker', () => {
+    for (const list of Object.values(data.ayat)) {
+      for (const w of list) expect(w.readings[0].text).not.toMatch(/^۞/);
+    }
+    expect(word('9:57', 6).at).toEqual([6, 6]);
+  });
+
   it("2:37 prints Ibn Kathir's raised كلمات as a word", () => {
     expect(word('2:37', 4).readings[1]).toEqual({ text: 'كَلِمَاتٌ', rawis: [3, 4] });
   });
@@ -16,12 +24,10 @@ describe('al-Nashr source corrections', () => {
   });
 
   for (const [key, at, prefix] of [['2:97', 4, 'لِ'], ['2:98', 6, 'وَ']] as const) {
-    it(`${key} gives Shuba both hamzated Gabriel forms and keeps Ibn Kathir separate`, () => {
+    it(`${key} gives Shuba only the Shatibiyya جبرئل and keeps Ibn Kathir separate`, () => {
       const readings = word(key, at).readings;
       expect(readings[1].rawis).toEqual([3, 4]);
-      expect(readings.filter(r => r.rawis.includes(9)).map(r => r.text)).toEqual([
-        key === '2:97' ? 'لِجَبْرَئِيلَ' : 'وجَبْرَئيلَ', `${prefix}جَبْرَئِلَ`,
-      ]);
+      expect(readings.filter(r => r.rawis.includes(9)).map(r => r.text)).toEqual([`${prefix}جَبْرَئِلَ`]);
     });
   }
 
@@ -32,7 +38,7 @@ describe('al-Nashr source corrections', () => {
     ]);
   });
 
-  it('2:173 assigns the open ta of اضطر to all readers except Abu Jafar', () => {
+  it('2:173 assigns the raised ta of اضطر to all readers except Abu Jafar', () => {
     expect(word('2:173', 12).readings.map(r => r.rawis)).toEqual([
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20], [15, 16],
     ]);
