@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { ArrowLeftRight, ChevronLeft, Layers } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpen, ChevronLeft, Layers } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import ExternalLink from '@/components/ExternalLink';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
+import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
+import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { compareOfAyah, treesOfAyah } from '@/lib/ayahPreview';
 import { surahNames } from '@/lib/branches';
 import { surahName } from '@/lib/compare';
@@ -15,7 +17,7 @@ import BranchTree from './BranchTree';
 import Sheet from './Sheet';
 import TreeIcon from './TreeIcon';
 
-export type Preview = { kind: 'trees' | 'compare' | 'readings'; key: string };
+export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: string };
 
 const noTap = () => {};
 
@@ -27,6 +29,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   const trees = useMemo(() => (preview?.kind === 'trees' ? treesOfAyah(preview.key) : []), [preview]);
   const pairs = useMemo(() => (preview?.kind === 'compare' ? compareOfAyah(preview.key) : []), [preview]);
   const qiraat = useMemo(() => (preview?.kind === 'readings' ? qiraatOf(preview.key) : []), [preview]);
+  const tafsir = useMemo(() => (preview?.kind === 'tafsir' ? tafsirSadiOf(preview.key) : null), [preview]);
   const go = (open: () => void) => { onClose(); open(); };
   const [surah, number] = (preview?.key ?? '0:0').split(':').map(Number);
   const card = { ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card };
@@ -34,10 +37,19 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
     <Sheet open={!!preview} onClose={onClose} palette={palette}>
       {preview && <View style={{ flexShrink: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
-          {preview.kind === 'trees' ? <TreeIcon size={20} color={palette.muted} /> : preview.kind === 'readings' ? <Layers size={20} color={palette.muted} /> : <ArrowLeftRight size={20} color={palette.muted} />}
-          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>{`${surahNames[surah] ?? num(surah)} ${num(number)}`}</Text>
+          {preview.kind === 'trees' ? <TreeIcon size={20} color={palette.muted} /> : preview.kind === 'readings' ? <Layers size={20} color={palette.muted} />
+            : preview.kind === 'tafsir' ? <BookOpen size={20} color={palette.muted} /> : <ArrowLeftRight size={20} color={palette.muted} />}
+          {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
+          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>
+            {`${surahNames[surah] ?? num(surah)} ${tafsir && tafsir.from !== tafsir.to ? `${num(tafsir.from)}–${num(tafsir.to)}` : num(number)}`}
+          </Text>
         </View>
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 4 }}>
+          {tafsir && (
+            <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
+              {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
+            </Text>
+          )}
           {preview.kind === 'trees' && trees.map(tree => (
             // A tap opens that tree; a wide tree scrolls sideways inside its card.
             <Pressable key={tree.piece.id} onPress={() => go(() => openIntent({ tab: 'branches', open: tree.piece.id }))} accessibilityRole="button" accessibilityLabel="افتح هذه الشجرة"
@@ -79,7 +91,13 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
             );
           })}
         </ScrollView>
-        {preview.kind === 'readings' ? (
+        {tafsir ? (
+          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
+            <ExternalLink url={tafsirSadiPage(tafsir)} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>
+              {tafsirSadiCredit(tafsir)}
+            </ExternalLink>
+          </View>
+        ) : preview.kind === 'readings' ? (
           <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
             <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
           </View>

@@ -104,6 +104,11 @@ test.describe('pages with the database', () => {
       await page.mouse.up();
       await expect(page.getByRole('button', { name: 'أشجار هذه الآية' })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
+    await page.getByRole('button', { name: 'تفسير السعدي' }).click();
+    const sheet = page.getByRole('dialog', { name: 'تفسير السعدي' });
+    await expect(sheet.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
+    await expect(sheet.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
+    await expect(sheet.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
     await noErrorPage(page);
   });
 

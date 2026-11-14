@@ -63,6 +63,15 @@ test('the compare preview sheet opens the compare card', async ({ page }) => {
   await expect(page).toHaveURL(/\/compare/);
 });
 
+test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its page', async ({ page }) => {
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'تفسير السعدي' }).click();
+  await expect(page.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
+  await expect(page.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
+});
+
 test('a word long press shows where else it comes', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
