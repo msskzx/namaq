@@ -21,6 +21,7 @@ import ReaderPager from './ReaderPager';
 import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
+import TopicSheet, { type TopicOpen } from './TopicSheet';
 import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import TreeIcon from './TreeIcon';
@@ -360,6 +361,13 @@ export default function Reader() {
     if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
     else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
   };
+  const [topic, setTopic] = useState<TopicOpen | null>(null);
+  const onTopic = useCallback((surah: number, section: number) => setTopic({ surah, section }), []);
+  const jumpToAyah = useCallback((surah: number, ayah: number) => {
+    const key = `${surah}:${ayah}`;
+    const to = pageOfAyah(key) ?? 1;
+    jump({ page: to, key, mark: true });
+  }, [jump]);
   const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
   const render = (at: number) => {
     const atModel = modelOf(at);
@@ -368,7 +376,7 @@ export default function Reader() {
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
-        write={at === page ? write : null} checked={position && at === page ? checked : null} />
+        write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
     );
   };
 
@@ -422,6 +430,7 @@ export default function Reader() {
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
+      <TopicSheet open={topic} onClose={() => setTopic(null)} onJump={jumpToAyah} palette={palette} />
       <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
       {/* The word long-pressed: its count and the ayat it is in (owner, 2026-11-13). */}
       <WordSheet lemmas={wordLemmas} onClose={() => setWordLemmas(null)} palette={palette} />

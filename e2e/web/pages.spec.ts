@@ -217,6 +217,17 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('the reader names the page\'s section and opens the surah\'s topics', async ({ page }) => {
+    await page.goto('/quran/read/582');
+    await page.getByRole('button', { name: 'موضوعات السورة: تساؤل المشركين عن النبأ' }).first().click();
+    const sheet = page.getByRole('dialog', { name: 'موضوعات سورة النبأ' });
+    await expect(sheet.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
+    await expect(sheet.getByRole('link', { name: /البقاعي، نظم الدرر/ })).toBeVisible();
+    await sheet.getByRole('link', { name: /جزاء المتقين/ }).click();
+    await expect(page).toHaveURL(/\/quran\/read\/ayah\/78\/31$/);
+    await noErrorPage(page);
+  });
+
   test('compare shows a surah pair', async ({ page }) => {
     await page.goto('/quran/compare');
     await expect(page.getByRole('button', { name: /^اختر سورتين:/ })).toBeVisible();
