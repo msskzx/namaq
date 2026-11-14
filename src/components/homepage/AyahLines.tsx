@@ -39,10 +39,11 @@ export default function AyahLines({ ayah, pages, write, checked, shown }: { ayah
     const slice = ayahSlice(model.lines, pages.data.items, ayah);
     return slice && { model, slice };
   }, [pages, ayah]);
+  const previous = useMemo(() => (pages.previous ? pageEnd(pages.previous.data.items) : null), [pages]);
   const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: 0 }) : null), [parts, ayah, shown]);
   if (!parts || !view) return null;
   return <div lang="ar">
-    {parts.slice.before && pages.previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={pageEnd(pages.previous.data.items)} />}
+    {parts.slice.before && pages.previous && previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={previous} />}
     <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} slice={parts.slice} hidden={view.hidden} titled={view.titled} next={view.upcoming}
       write={shown ? null : { ...write, before: 0 }} checked={shown && checked ? { ...checked, before: 0 } : null} />
   </div>;

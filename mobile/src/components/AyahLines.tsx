@@ -35,7 +35,7 @@ function AyahLines({ ayah, palette, write, checked, shown }: { ayah: string; pal
     const model = pageModel(data, surahBefore(page));
     const slice = ayahSlice(model.lines, data.items, ayah);
     if (!slice) return null;
-    const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)) } : null;
+    const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
   const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: 0 }) : null), [parts, ayah, shown]);
@@ -45,7 +45,7 @@ function AyahLines({ ayah, palette, write, checked, shown }: { ayah: string; pal
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
       {width > 0 && parts.previous && (
         <MushafPageView page={parts.previous.page} data={parts.previous.data} model={parts.previous.model} palette={palette} width={width} height={height}
-          top={surahBefore(parts.previous.page)} names={surahNames} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={pageEnd(parts.previous.data.items)} />
+          top={surahBefore(parts.previous.page)} names={surahNames} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={parts.previous.slice} />
       )}
       {width > 0 && (
         <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={height} top={surahBefore(page)}

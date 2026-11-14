@@ -80,8 +80,9 @@ function fit(body: HTMLElement, centred: boolean, zoom: number, sliced = false) 
   const width = body.clientWidth;
   const sorted = [...natural].sort((a, b) => a - b);
   const typical = sorted[Math.floor(sorted.length * 0.6)] ?? 1;
-  // A slice has no page height to fit: its lines take the width, each as tall as a printed line of that size.
-  const tall = sliced ? Infinity : (body.clientHeight / Math.max(1, body.children.length)) * 0.72;
+  // A slice has no page height to fit: its lines take the width, each as tall as a printed line of that size, never bigger
+  // than a full page's text (as the app's slice), so short lines (pages 1, 2, a surah's end) are not blown up and two slices match.
+  const tall = sliced ? width * 0.072 : (body.clientHeight / Math.max(1, body.children.length)) * 0.72;
   const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), tall));
   body.style.fontSize = `${size}px`;
   if (sliced) body.style.setProperty('--one-line', `${size * 1.9}px`);

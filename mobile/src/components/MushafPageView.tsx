@@ -144,10 +144,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const flowing = zoom > 1;
 
   const itemCount = data.items.length;
-  const rowHeight = body ? body.height / itemCount : 0;
   // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
+  // A slice's lines are always a full page's lines, so a slice of a short page (1, 2) is not drawn bigger.
   const oneLine = body ? body.height / 15 : 0;
-  const lineHeight = body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
+  const rowHeight = body ? (slice ? oneLine : body.height / itemCount) : 0;
+  const lineHeight = slice ? oneLine : body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
   // Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height (the website's fitOpening()).
   const opening = page <= 2;
   const oval = useMemo(() => {
