@@ -3,6 +3,10 @@
 > 2026-11-13: `/quran/order` no longer shows topics or hops. Its page quotes the books on surah order instead
 > ([quran-order-sources.md](quran-order-sources.md)), and `src/lib/quran/surahOrder.ts` with its tests was removed.
 > The order parts below are history.
+>
+> 2026-11-14: the AI-labelled topic files (`data/quran/topics/`), their sync and add scripts and `topicEngine.ts` are
+> removed; nothing read them. Surah sections now come from a book: see [surah-topics.md](surah-topics.md). The
+> `QuranTopic` table stays in the schema until a migration drops it.
 
 ## Context
 
