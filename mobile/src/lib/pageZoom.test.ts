@@ -1,18 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { landingPage, MAX_ZOOM, settleZoom, splitDrag } from './pageZoom';
+import { breakLines, landingPage, MAX_ZOOM, settleZoom } from './pageZoom';
 
-describe('mushaf page zoom', () => {
-  it('snaps a pinch near the whole page back to it and stops at the most zoom', () => {
+describe('mushaf text size', () => {
+  it('snaps a pinch near the printed page back to it and stops at the biggest size', () => {
     expect(settleZoom(0.7)).toBe(1);
-    expect(settleZoom(1.03)).toBe(1);
+    expect(settleZoom(1.06)).toBe(1);
     expect(settleZoom(1.8)).toBe(1.8);
     expect(settleZoom(9)).toBe(MAX_ZOOM);
   });
 
-  it('moves the zoomed page until its edge shows, then spills the rest of the drag', () => {
-    expect(splitDrag(-100, -400)).toEqual({ offset: -100, spill: 0 });
-    expect(splitDrag(30, -400)).toEqual({ offset: 0, spill: 30 });
-    expect(splitDrag(-450, -400)).toEqual({ offset: -400, spill: -50 });
+  it('wraps whole words onto lines no wider than the page', () => {
+    expect(breakLines([30, 30, 30, 30], 100, 5)).toEqual([0, 3]);
+    expect(breakLines([30, 30, 30], 100, 5)).toEqual([0]);
+    // A word wider than the line stands alone.
+    expect(breakLines([40, 120, 40], 100, 5)).toEqual([0, 1, 2]);
+    expect(breakLines([], 100, 5)).toEqual([]);
   });
 
   it('turns the page only on a far drag or a flick, and not past the ends', () => {

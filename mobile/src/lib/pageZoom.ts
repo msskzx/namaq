@@ -1,20 +1,36 @@
-/** How far the mushaf page can be zoomed: the same 15 lines and page break, drawn bigger, moved inside the page's frame. */
-export const MAX_ZOOM = 3;
+/**
+ * Reader text size. 1 is the printed page: 15 lines fitted to the screen. Bigger is a bigger font, not a bigger picture:
+ * the page's words wrap onto more lines at the screen's width and the page grows taller, read by scrolling down
+ * (owner, 2026-11-13: a pinch had scaled the page as a picture, blurry and cut off at the sides).
+ */
+export const MAX_ZOOM = 2.2;
 
-/** A pinch that ends near the whole page snaps back to it. */
+/** A pinch that ends near the printed page snaps back to it. */
 export function settleZoom(zoom: number) {
   'worklet';
-  return zoom < 1.05 ? 1 : Math.min(MAX_ZOOM, zoom);
+  return zoom < 1.1 ? 1 : Math.min(MAX_ZOOM, Math.round(zoom * 20) / 20);
 }
 
+/** The font size of a page set as flowing text, from the page body's width: about the printed page's size at 1, the same on every page. */
+export const flowSize = (bodyWidth: number, zoom: number) => bodyWidth * 0.063 * zoom;
+
+/** The height of one flowing line, for the font size: the Hafs font's marks sit far above and below its letters. */
+export const FLOW_LINE = 1.7;
+
 /**
- * One drag coordinate split between the zoomed page and what lies past its edge: the page moves until its edge shows
- * (offset between `min` and 0), and the rest of the drag spills over to the row of pages or the pull-down.
+ * Breaks a run of words into lines no wider than `width`. `widths` are the words' widths at the drawn size and `gap` the
+ * least space between two words. A word wider than the line gets a line of its own. Returns the index of each line's first word.
  */
-export function splitDrag(drag: number, min: number) {
-  'worklet';
-  const offset = Math.min(0, Math.max(min, drag));
-  return { offset, spill: drag - offset };
+export function breakLines(widths: number[], width: number, gap: number) {
+  const starts: number[] = [];
+  let used = Infinity;
+  widths.forEach((w, at) => {
+    if (used + gap + w > width) {
+      starts.push(at);
+      used = w;
+    } else used += gap + w;
+  });
+  return starts;
 }
 
 /** The page a drag lands on: a flick turns the way it went, a slow drag turns once it went far enough. Pages are 0-based here. */
