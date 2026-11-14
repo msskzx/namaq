@@ -33,7 +33,9 @@ const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
 /** Draws a node's box in place of its words; `path` is the words above it. */
 export type RenderNode = (node: Branch, index: number, path: string[]) => React.ReactNode | undefined;
-type Shared = { spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
+/** A node's whole content, the root's too, in place of its words, references and buttons (a compare card's tree); `tab` names it over its edge. */
+export type NodeContent = (node: Branch) => { content: React.ReactNode; text: SceneText; tab?: string; width?: number } | undefined;
+type Shared = { spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; content?: NodeContent; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
   /** The ayat whose ayah before the one before is drawn too (a mixed tree with the surrounding ayat on, see `required`). */
   earlier: Set<string> };
 /** A lit path: the ayah growing while the studio is open, else the paths a tap or a search lit. */
@@ -223,7 +225,9 @@ function Tools({ shared, subtree, inTree }: { shared: Shared; subtree?: BranchPi
   );
 }
 
-function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; tools?: React.ReactNode; children: React.ReactNode }) {
+function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; tools?: React.ReactNode;
+  /** The widest the box may grow, in place of the tree's own limits. */
+  width?: number; children: React.ReactNode }) {
   const { palette, down, paths } = shared;
   const growth = useContext(Growth);
   const registry = useContext(Boxes);
@@ -239,7 +243,7 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
         accessibilityRole="button"
         accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}
         style={({ pressed }) => ({
-          maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
+          maxWidth: width ?? (down ? (leaf ? 176 : 384) : leaf ? 208 : 192),
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
           borderColor: asked ? palette.accent : growth.now.has(id) || onPath || selected ? palette.path : pressed ? palette.accent : muted ? palette.muted : palette.rule,
@@ -342,7 +346,13 @@ function Elbow({ first, last, color, lit, down, spine: whole = true }: { first: 
 
 type Entry = { id: string; keys: string[]; item: React.ReactNode };
 
-function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
+function Fan({ entries, shared, join, bare, onSpans }: { entries: Entry[]; shared: Shared;
+  /** The children's paths meet again after them (`rejoin`): each runs on to the fan's far edge, where `Join` gathers them. */
+  join?: boolean;
+  /** No line into the fan: a compare tree that opens apart has no box before it. */
+  bare?: boolean;
+  /** Hears where each child sits along the fan, for `Join`. */
+  onSpans?: (spans: Span[]) => void }) {
   const { palette, down } = shared;
   const growth = useContext(Growth);
   const lit = entries.map(entry => isLit(shared, growth, entry.keys));
@@ -355,19 +365,21 @@ function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const litShown = lit.map((on, i) => on && shown[i]);
   const spine = litShown.some(Boolean) ? litSpine(spans, litShown, whole) : null;
   const drawn = growing && shown.some(Boolean) ? litSpine(spans, shown, whole) : null;
+  useEffect(() => { if (onSpans && spans.length === entries.length && spans.every(Boolean)) onSpans(spans); }, [spans]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
+    <View style={{ flexDirection: down ? 'row' : 'column', alignItems: join ? 'stretch' : 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
       {entries.map((entry, i) => (
         <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}
           onLayout={event => { const { x, y, width, height } = event.nativeEvent.layout; const span = down ? { at: x, size: width } : { at: y, size: height }; setSpans(old => { const next = [...old]; next[i] = span; return next; }); }}>
-          <Fade id={lineId(entry.id)} delay={growing ? REACH : 0} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
+          {!bare && <Fade id={lineId(entry.id)} delay={growing ? REACH : 0} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
             <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.path : undefined} down={down} spine={!growing} />
-          </Fade>
+          </Fade>}
           <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
+          {join && <Fade id={lineId(entry.id)} style={{ flex: 1, alignSelf: 'center', ...(down ? { width: LINE } : { height: LINE }), backgroundColor: lit[i] ? palette.path : palette.rule }}><View /></Fade>}
         </View>
       ))}
-      {drawn && <Spine key={down ? 'drawn-down' : 'drawn-side'} range={drawn} color={palette.rule} down={down} from={whole / 2} />}
-      {spine && <Spine key={down ? 'lit-down' : 'lit-side'} range={spine} color={palette.path} down={down} from={whole / 2} grow={growing} />}
+      {!bare && drawn && <Spine key={down ? 'drawn-down' : 'drawn-side'} range={drawn} color={palette.rule} down={down} from={whole / 2} />}
+      {!bare && spine && <Spine key={down ? 'lit-down' : 'lit-side'} range={spine} color={palette.path} down={down} from={whole / 2} grow={growing} />}
     </View>
   );
 }
@@ -411,6 +423,15 @@ function BackFan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   );
 }
 
+/** Where a fan's paths meet again: the fan's lines mirrored, each child's place kept by an empty box of its size. */
+function Join({ entries, spans, shared }: { entries: Entry[]; spans: Span[]; shared: Shared }) {
+  const flip = shared.down ? { transform: [{ scaleY: -1 }] } : { transform: [{ scaleX: -1 }] };
+  if (spans.length !== entries.length) return null;
+  // The fan pads each child by 5 on either side; the empty box takes the rest of its span.
+  const places = entries.map((entry, i) => ({ ...entry, item: <View style={shared.down ? { width: spans[i].size - 10 } : { height: spans[i].size - 10 }} /> }));
+  return <View style={flip}><Fan shared={shared} entries={places} /></View>;
+}
+
 function NeighbourBox({ id, beside, of, shared, tab }: { id: string; beside: Beside; of: string; shared: Shared;
   /** The last box of its ayah's path carries the path's one tab, naming the whole run it shows. */
   tab?: string }) {
@@ -444,37 +465,53 @@ function befores(ayahKeys: string[], shared: Shared): Entry[] {
 function Node({ node, path, shared, starts }: { node: Branch; path: string[]; shared: Shared;
   /** On the root: the ayat that start here rather than in a box of words before the phrase. */
   starts?: string[] }) {
-  const root = path.length === 0;
+  // The tree's own root (index -1): a compare tree's first children have no words above them either.
+  const root = shared.indices.get(node) === -1;
   const all = keys(node);
   const words = node.words;
   const id = nodeId(shared.indices.get(node)!);
-  const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!, path);
+  const custom = shared.content?.(node);
+  const own = root || custom ? undefined : shared.render?.(node, shared.indices.get(node)!, path);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const shown = !boundary && (!root || words.length > 0 || node.ayat.length > 0);
+  // A compare tree that opens apart has no box before its first boxes, so no line into them.
+  const bare = !!shared.content && root && words.length === 0;
+  const [spans, setSpans] = useState<Span[]>([]);
+  const rejoinId = node.rejoin && nodeId(shared.indices.get(node.rejoin)!);
   const { around } = shared;
-  const spans = shownAyat(node, path);
+  const ayatSpans = shownAyat(node, path);
   // With the surrounding ayat on, each ayah's path is named once, on its last box: the whole run from the ayah before to the one after.
   const runs = !!around && !shared.down;
   const runOf = (key: string) => {
     const first = runs ? ((shared.earlier.has(key) ? around!.earlier[key] : null) ?? around!.before[key])?.key : undefined;
     const after = runs ? around!.after[around!.ends[key]]?.key : undefined;
-    return ayatLabel([first ?? spans[key][0], ...(first ? [spans[key][spans[key].length - 1]] : spans[key].slice(1)), ...(after ? [after] : [])], shared.names);
+    return ayatLabel([first ?? ayatSpans[key][0], ...(first ? [ayatSpans[key][ayatSpans[key].length - 1]] : ayatSpans[key].slice(1)), ...(after ? [after] : [])], shared.names);
   };
   const afters: Entry[] = !around ? [] : node.ayat.flatMap(key => {
     const beside = around.after[around.ends[key]];
     return beside ? [{ id: `a${key}`, keys: [key], item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} tab={runOf(key)} /> }] : [];
   });
   const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
-  entries.forEach(entry => edge(shared, id, entry.id));
-  const references = node.ayat.map(key => ayatLabel(spans[key], shared.names)).join(' · ');
-  const shownWords = { words: [...words, ...(isMark(words[words.length - 1] ?? '') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1])))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined };
+  if (!bare) entries.forEach(entry => edge(shared, id, entry.id));
+  if (rejoinId) node.children.forEach(child => edge(shared, nodeId(shared.indices.get(child)!), rejoinId));
+  const references = node.ayat.map(key => ayatLabel(ayatSpans[key], shared.names)).join(' · ');
+  const shownWords = { words: [...words, ...(isMark(words[words.length - 1] ?? '') ? [] : endSign(node.ayat.map(key => ayatSpans[key][ayatSpans[key].length - 1])))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined };
   const start = starts && startLabel(shared, starts, node.ayat);
-  const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
+  const text: SceneText = custom ? custom.text : { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
   return (
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
-      {shown && (() => {
+      {shown && custom && (() => {
+        const box = (
+          <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text} width={custom.width}>
+            {custom.tab && <NodeTab id={id} ayahKeys={all} label={custom.tab} shared={shared} />}
+            {custom.content}
+          </Box>
+        );
+        return custom.tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
+      })()}
+      {shown && !custom && (() => {
         // A node ending one ayah carries it on a tab over its edge (owner, 2026-11-14); a node ending several, or a tree drawn top
         // down (where the line into a node runs through its top edge), keeps its references inside.
         const tab = own === undefined && node.ayat.length === 1 && !shared.down && !afters.length;
@@ -495,8 +532,13 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
         return tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
       })()}
       {entries.length > 0 && <>
-        <Stub shared={shared} entries={entries} />
-        <Fan shared={shared} entries={entries} />
+        {!bare && <Stub shared={shared} entries={entries} />}
+        <Fan shared={shared} entries={entries} bare={bare} join={!!node.rejoin} onSpans={node.rejoin ? setSpans : undefined} />
+      </>}
+      {node.rejoin && <>
+        {entries.length > 0 && <Join shared={shared} entries={entries} spans={spans} />}
+        <Stub shared={shared} entries={[{ id: rejoinId!, keys: keys(node.rejoin), item: null }]} />
+        <Node node={node.rejoin} path={[...path, ...words]} shared={shared} />
       </>}
     </View>
   );
@@ -509,16 +551,18 @@ type Props = { presentation: Presentation; matches: Matches; names: Record<numbe
   /** Filled with a function that measures the drawn tree for the video. */
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
   /** Draws a node's own content, e.g. a quiz input or a graded answer. */
-  renderNode?: RenderNode };
+  renderNode?: RenderNode;
+  /** Draws every node's whole content (a compare card's tree). */
+  nodeContent?: NodeContent };
 
 /**
  * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
  * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
  */
-function BranchTree({ presentation: given, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions }: Props) {
+function BranchTree({ presentation: given, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, nodeContent, paths, actions }: Props) {
   const presentation = { ...given, prefixes: withStarts(given.prefixes, keys(given.tree)) };
   const down = direction === 'down';
-  const shared: Shared = { spellings: !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)), earlier: new Set() };
+  const shared: Shared = { spellings: !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, content: nodeContent, paths, actions, inTree: new Set(keys(presentation.tree)), earlier: new Set() };
   const registry = useRef<Registry>(new Map()).current;
   const parts = useRef<Parts>(new Map()).current;
   const rootView = useRef<Host>(null);

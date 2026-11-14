@@ -16,6 +16,7 @@ export function nodeIndices(tree: Branch) {
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
     node.children.forEach(visit);
+    if (node.rejoin) visit(node.rejoin);
   };
   visit(tree);
   return indices;

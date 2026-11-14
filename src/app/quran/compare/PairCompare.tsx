@@ -34,7 +34,7 @@ import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
 import type { CardSide, PairCard, ReviewState } from './pairCards';
 import { canRecord, CardVideo, PageVideo } from './CompareVideo';
-import CompareBraid from './CompareBraid';
+import CompareTree from './CompareTree';
 import { useNeighbours } from './useNeighbours';
 import { useCardAround } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
@@ -426,7 +426,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
               <div className="absolute start-0 top-0 z-10 -translate-y-1/2 bg-[var(--home-card)]">{foldButton(row, side)}</div>
               {side.rows![row].length > 0 && folded.includes(row) && <span aria-hidden className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[var(--home-card)] px-2 font-[family-name:var(--font-amiri)] text-xs text-[var(--home-muted)]">{ayatOf(row, side)}</span>}
             </div>)}</div>}
-            {!folded.includes(row) && <CompareBraid sides={sides} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : neighbours}
+            {!folded.includes(row) && <CompareTree sides={sides} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : neighbours}
               empty={sides.map(side => emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar))} />}
           </div>)}
         </div> : <div onClick={event => pick(event.target)}>

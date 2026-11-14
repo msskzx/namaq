@@ -3,7 +3,7 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { branchesHref, type BranchAyah } from '@shared/quran/branches';
+import { branchesHref, type Branch, type BranchAyah } from '@shared/quran/branches';
 import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
@@ -110,6 +110,22 @@ describe('BranchTree', () => {
     expect(screen.getAllByText('إِنَّ ٱلْمُتَّقِينَ فِى')).toHaveLength(1);
     expect(screen.getByText('جَنَّـٰتٍۢ وَعُيُونٍ')).toBeTruthy();
     expect(screen.getByText('مَقَامٍ أَمِينٍۢ')).toBeTruthy();
+  });
+
+  it('draws where paths meet again after parting, and lights a side\'s path through both', () => {
+    // A compare card's tree: one opening, a box for each side, then the words both close with.
+    const close: Branch = { words: ['ج'], ayat: [], children: [], via: ['1:1', '2:2'] };
+    const parted: Branch = { words: ['أ'], ayat: [], via: ['1:1', '2:2'], rejoin: close, children: [
+      { words: ['ب'], ayat: [], children: [], via: ['1:1'] },
+      { words: ['د'], ayat: [], children: [], via: ['2:2'] },
+    ] };
+    const { container } = render(<BranchTree tree={parted} names={{}} direction="down" zoomBar={false} nodeContent={node => ({ content: <span>{node.words.join(' ')}</span> })} />);
+    expect([...container.querySelectorAll('[data-node]')].map(node => node.textContent)).toEqual(['أ', 'ب', 'د', 'ج']);
+    // Each side runs on past its box to where the two meet.
+    expect(container.querySelectorAll('[data-fan="start"] > ul > li > [data-line]')).toHaveLength(2 * 3);
+    fireEvent.click(screen.getByText('ب'));
+    expect([...container.querySelectorAll('[data-node]')].map(node => node.hasAttribute('data-lit'))).toEqual([true, true, false, true]);
+    expect(screen.queryByRole('toolbar', { name: 'تكبير الشجرة' })).toBeNull();
   });
 
   it('fits the complete tree by default and switches between fit and manual zoom', () => {
