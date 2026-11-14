@@ -9,7 +9,9 @@ import { PathBox, PathButton } from './Paths';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { sharedByAll, type Neighbour, type Surrounding } from '@shared/quran/ayahContext';
+import { likenessOf, sharedByAll, type Neighbour, type Surrounding } from '@shared/quran/ayahContext';
+import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
+import { MARK_CLASS } from '@/lib/markMode';
 import { endSign } from '@shared/quran/branches';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -143,8 +145,8 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId, quiet, tab }
       <span className="block font-quran leading-loose">
         {side === 'after' && basmala}
         <span className="block"><span>{neighbour.words.map((word, i) => {
-          const kind = match?.rooted.includes(i) ? 'root' : match?.exact.includes(i) ? 'exact' : undefined;
-          return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
+          const kind = likenessOf(match, i);
+          return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
         })}</span>{endSign([neighbour.key]).map(sign => <React.Fragment key="end">{' '}<span data-end><MushafText>{sign}</MushafText></span></React.Fragment>)}</span>
         {side === 'before' && basmala}
       </span>

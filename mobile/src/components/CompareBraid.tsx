@@ -5,9 +5,11 @@ import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { endMark } from '@shared/quran/braid';
-import { normalizeWord } from '@shared/quran/normalize';
+import { likeness } from '@shared/quran/wordMatch';
+import { markColour } from '@shared/quran/compareCardLook';
+import { likenessAt } from '@/lib/branches';
 import { braidOf, sideLabel, type Around, type AroundAyah, type BraidWord } from '@/lib/compare';
-import { QURAN_FONT, blend, CARD, type Palette } from '@/lib/theme';
+import { QURAN_FONT, CARD, type Palette } from '@/lib/theme';
 import { Silent } from './StoryParts';
 
 const LINK = 26;
@@ -17,15 +19,15 @@ const LINE = 2;
 /** The ayah numbers ending at this word: in a shared node both sides' numbers, when they differ. */
 const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
 
-/** Words of one node: the card's colours (same words accent, same root purple), amber where a shared node's two spellings differ. */
+/** Words of one node: the card's colours (markColour), the written colour where a shared node's two spellings differ. */
 function Words({ words, palette, other, bold }: { words: BraidWord[]; palette: Palette; other?: BraidWord[]; bold?: boolean }) {
-  const related = blend(palette.root, palette.muted, 0.45);
+
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, writingDirection: 'rtl', textAlign: 'center', fontWeight: bold ? '600' : 'normal' }}>
       {words.map((word, i) => {
-        const differs = other && other[i] && mushafText(other[i].text) !== mushafText(word.text) && normalizeWord(other[i].text) === normalizeWord(word.text);
-        // A shared node's words are the same on both sides: the accent, as a branches tree's trunk.
-        const color = differs ? palette.amber : other ? palette.accent : word.mark?.kind === 'root' ? palette.root : word.mark?.kind === 'related' ? related : word.mark ? palette.accent : undefined;
+        const differs = !!other?.[i] && likeness([other[i].text, word.text]) === 'written';
+        // A shared node's words are the same on both sides: the exact colour, as a branches tree's trunk.
+        const color = other ? markColour('exact', palette, differs) : markColour(word.mark?.kind, palette);
         return (
           <Text key={i}>
             {i > 0 ? ' ' : ''}
@@ -59,7 +61,8 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: 17, lineHeight: 32, color: palette.muted, writingDirection: 'rtl', textAlign: 'center' }}>
       {ayah.words.map((word, i) => {
-        const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
+        const kind = likenessAt(ayah, i);
+        const color = kind && palette.marks[kind];
         return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
       })}
       <Text> {num(ayah.number)}</Text>

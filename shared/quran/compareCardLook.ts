@@ -1,6 +1,7 @@
 import { num } from './arabicNumber';
 import type { CardAyah, MarkKind, PairCard } from './compareCards';
 import { isRefrain } from './readPlan';
+import { likeness, type Likeness } from './wordMatch';
 
 /**
  * How a compare card is drawn, in the app's points. The app's CompareCard lays itself out with these,
@@ -45,13 +46,39 @@ export function blend(a: string, b: string, weight: number) {
   return `#${x.map((value, i) => Math.round(value * weight + y[i] * (1 - weight)).toString(16).padStart(2, '0')).join('')}`;
 }
 
-export type MarkColours = { accent: string; root: string; muted: string };
+/** Each likeness's colour under the colour setting (shared/quran/wordMatch.ts); `muted` fades a related word's root colour. */
+export type MarkColours = { marks: Partial<Record<Likeness, string>>; muted: string };
 
-/** A marked word's colour: the same word in the accent, the same root in purple, a related word in a faded purple; none for a plain word. */
-export function markColour(kind: MarkKind | undefined, colours: MarkColours): string | undefined {
-  if (kind === 'root') return colours.root;
-  if (kind === 'related') return blend(colours.root, colours.muted, 0.45);
-  return kind ? colours.accent : undefined;
+/**
+ * A marked word's colour: the same word in the exact colour, the same letters written differently in the written colour
+ * (`written`: its link is in writtenLinks), the same root in the root colour, a related word that colour faded; none for a plain word.
+ */
+export function markColour(kind: MarkKind | undefined, colours: MarkColours, written = false): string | undefined {
+  const { marks } = colours;
+  if (kind === 'root') return marks.root;
+  if (kind === 'related') return marks.root && blend(marks.root, colours.muted, 0.45);
+  if (!kind) return undefined;
+  return written ? marks.written : marks.exact;
+}
+
+/**
+ * The links of a card's exact marks whose words the two sides write differently, by the one rule (shared/quran/wordMatch.ts).
+ * A one-to-many card's partners reuse link ids, so only the partner `option` picked counts.
+ */
+export function writtenLinks(card: Pick<PairCard, 'sides' | 'many'>, option = 0): Set<string> {
+  const words = new Map<string, [string[], string[]]>();
+  const add = (side: number, ayah: CardAyah) => {
+    for (const [i, mark] of Object.entries(ayah.marks ?? {})) {
+      if (mark.kind !== 'exact' || !mark.link) continue;
+      const entry = words.get(mark.link) ?? [[], []];
+      entry[side].push(ayah.words[Number(i)]);
+      words.set(mark.link, entry);
+    }
+  };
+  const partner = card.many?.options[option];
+  if (card.many && partner) { add(card.many.side, partner.ayah); add(1 - card.many.side, partner.shared); }
+  else card.sides.forEach((side, n) => side.ayat.forEach(ayah => add(n, ayah)));
+  return new Set([...words].flatMap(([link, [a, b]]) => a.some(x => b.some(y => likeness([x, y]) === 'written')) ? [link] : []));
 }
 
 /** Ayah numbers in order as unbroken runs: «٣٠–٣٣ · ٣٥» for 30, 31, 32, 33, 35. */

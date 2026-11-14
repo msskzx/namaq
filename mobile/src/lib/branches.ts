@@ -1,7 +1,8 @@
 import corpus from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
-import { ayahContexts, sharedByAll, surrounding, treeContexts, type Neighbour } from '@shared/quran/ayahContext';
+import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
+import type { Likeness } from '@shared/quran/wordMatch';
 import { ayahEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
@@ -14,8 +15,14 @@ import type { Beat } from './growth';
 import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
-/** For each ayah in a tree, which of its word positions every ayah shares exactly or by root. */
-export type Matches = Record<string, { exact: Set<number>; rooted: Set<number> }>;
+/** Which word positions of an ayah every ayah shares, by how alike they are (shared/quran/wordMatch.ts). */
+export type Shared = { exact: Set<number>; written: Set<number>; rooted: Set<number> };
+export const sharedOf = (match?: AyahContext['match']): Shared => ({ exact: new Set(match?.exact), written: new Set(match?.written), rooted: new Set(match?.rooted) });
+export const NOTHING_SHARED: Shared = sharedOf();
+export const likenessAt = (shared: Shared, i: number): Likeness | undefined =>
+  shared.rooted.has(i) ? 'root' : shared.written.has(i) ? 'written' : shared.exact.has(i) ? 'exact' : undefined;
+/** For each ayah in a tree, which of its word positions every ayah shares. */
+export type Matches = Record<string, Shared>;
 export type TreeCard = { piece: BranchPiece; presentation: Presentation; matches: Matches };
 
 export const surahs = surahRows;
@@ -51,7 +58,7 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
   const presentation: Presentation = piece.group
     ? groupPresentation(piece.group, byKey(), state.range, state.filters)
     : phrasePresentation(piece.phrase, all, true, !state.range, key => visible.has(key));
-  const matches: Matches = Object.fromEntries(treeContexts(presentation.ayat).map(context => [context.ayah.key, { exact: new Set(context.match?.exact), rooted: new Set(context.match?.rooted) }]));
+  const matches: Matches = Object.fromEntries(treeContexts(presentation.ayat).map(context => [context.ayah.key, sharedOf(context.match)]));
   const card = { piece, presentation, matches };
   if (cards.size > 40) cards.delete(cards.keys().next().value!);
   cards.set(id, card);
@@ -59,7 +66,7 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
 }
 
 /** An ayah drawn beside a tree with the surrounding-ayat switch on, with the words it shares with the others on its side. */
-export type Beside = Neighbour & { exact: Set<number>; rooted: Set<number> };
+export type Beside = Neighbour & Shared;
 /**
  * The ayat around a tree, as the website draws them: `before` each ayah's start, `after` each ayah's end,
  * `earlier` one more before an ayah whose ayah before is already drawn (see `required`).
@@ -69,7 +76,7 @@ export type Around = { before: Record<string, Beside | null>; after: Record<stri
 const marked = (list: (Neighbour | null)[]): Map<string, Beside> => {
   const unique = [...new Map(list.flatMap(ayah => ayah ? [[ayah.key, ayah] as const] : [])).values()];
   const contexts = sharedByAll(unique.map(ayah => ({ ayah: { ...ayah, page: ayah.page }, before: null, after: null })));
-  return new Map(contexts.map((context, i) => [unique[i].key, { ...unique[i], exact: new Set(context.match?.exact), rooted: new Set(context.match?.rooted) }]));
+  return new Map(contexts.map((context, i) => [unique[i].key, { ...unique[i], ...sharedOf(context.match) }]));
 };
 
 const aroundCache = new Map<Branch, Around>();
@@ -103,12 +110,12 @@ export function aroundOf(presentation: Presentation): Around {
 export const mixedBefore = (presentation: Presentation) => presentation.prefixes.some(prefix => prefix.word);
 
 /** A word only some rows share (`some`), or any shared word's link: the same link in every row that has the word. */
-export type MatrixLink = { link: string; exact: boolean; some: boolean };
+export type MatrixLink = { link: string; kind: Likeness; some: boolean };
 /**
  * One cell of the matrix: an ayah (or a passage running over several) with the words every row shares at that step, and
  * `links` for every shared word, those only some rows share too, so a tap lights the word in each row that has it.
  */
-export type MatrixAyah = { key: string; page: number; words: string[]; exact: Set<number>; rooted: Set<number>; links?: Map<number, MatrixLink>; basmala?: string[] };
+export type MatrixAyah = Shared & { key: string; page: number; words: string[]; links?: Map<number, MatrixLink>; basmala?: string[] };
 export type MatrixCell = { ayat: MatrixAyah[] } | null;
 export type MatrixColumn = 'before' | 'ayah' | 'after';
 export type Matrix = { columns: MatrixColumn[]; rows: Record<MatrixColumn, MatrixCell>[] };
@@ -121,22 +128,22 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
   const starts = presentation.ayat.map(ayah => ayah.key);
   const passages = starts.map(key => all.slice(positions.get(key)!, positions.get(ends[key] ?? key)! + 1));
   const steps = Math.max(0, ...passages.map(passage => passage.length));
-  const matched = new Map<string, { exact: Set<number>; rooted: Set<number>; links: Map<number, MatrixLink> }>();
+  const matched = new Map<string, Shared & { links: Map<number, MatrixLink> }>();
   for (let step = 0; step < steps; step++) {
     const wanted = passages.flatMap(passage => passage[step] ? [passage[step].key] : []);
     const rows = new Set(wanted).size;
     sharedByAll(ayahContexts(all, wanted)).forEach(context => matched.set(`${step}:${context.ayah.key}`, {
-      exact: new Set(context.match?.exact), rooted: new Set(context.match?.rooted),
-      links: new Map(Object.entries(context.match?.links ?? {}).map(([i, item]) => [Number(i), { link: `${step}:${item.link}`, exact: item.exact, some: item.rows < rows }])),
+      ...sharedOf(context.match),
+      links: new Map(Object.entries(context.match?.links ?? {}).map(([i, item]) => [Number(i), { link: `${step}:${item.link}`, kind: item.kind, some: item.rows < rows }])),
     }));
   }
   const around = withAround ? aroundOf(presentation) : undefined;
-  const cellOf = (beside: Beside | null | undefined): MatrixCell => beside ? { ayat: [{ key: beside.key, page: beside.page, words: beside.words, exact: beside.exact, rooted: beside.rooted, basmala: beside.basmala }] } : null;
+  const cellOf = (beside: Beside | null | undefined): MatrixCell => beside ? { ayat: [{ key: beside.key, page: beside.page, words: beside.words, exact: beside.exact, written: beside.written, rooted: beside.rooted, basmala: beside.basmala }] } : null;
   return {
     columns: withAround ? ['before', 'ayah', 'after'] : ['ayah'],
     rows: passages.map((passage, row) => ({
       before: cellOf(around?.before[starts[row]]),
-      ayah: { ayat: passage.map((ayah, step) => ({ key: ayah.key, page: ayah.page, words: ayah.words, ...(matched.get(`${step}:${ayah.key}`) ?? { exact: new Set<number>(), rooted: new Set<number>() }) })) },
+      ayah: { ayat: passage.map((ayah, step) => ({ key: ayah.key, page: ayah.page, words: ayah.words, ...(matched.get(`${step}:${ayah.key}`) ?? NOTHING_SHARED) })) },
       after: cellOf(around?.after[passage[passage.length - 1].key]),
     })),
   };

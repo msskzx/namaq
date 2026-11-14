@@ -29,9 +29,11 @@ function webLook(): CompareLook {
   };
   const paper = token('--home-paper');
   const dark = parseInt(paper.slice(1, 3), 16) < 128;
-  const colours = { accent: token('--home-accent'), root: token('--home-root'), muted: token('--home-muted') };
+  // Under the colour setting a mark may have no colour of its own (src/app/theme.css --mark-*): it keeps the text's.
+  const mark = (name: string) => (/currentcolor/i.test(css.getPropertyValue(name)) ? undefined : token(name));
+  const colours = { marks: { exact: mark('--mark-exact'), written: mark('--mark-written'), root: mark('--mark-root') }, muted: token('--home-muted') };
   return {
-    paper, card: token('--home-card'), deep: token('--home-paper-deep'), ink: token('--home-ink'), muted: colours.muted, rule: token('--home-rule'), accent: colours.accent,
+    paper, card: token('--home-card'), deep: token('--home-paper-deep'), ink: token('--home-ink'), muted: colours.muted, rule: token('--home-rule'), accent: token('--home-accent'),
     green: token('--home-green'), highlight: token('--home-highlight'), onHighlight: token('--home-on-highlight'), marks: markColours(colours),
     font: '"KFGQPC Hafs"', ui: '"Amiri"', logo: `${location.origin}/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`,
   };

@@ -13,6 +13,7 @@ export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 import { sharedByAll } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
 import { EMPTY_LIST, type ListState } from './branchList';
+import { sharedOf, type Shared } from './branches';
 
 /** The website's compare cards, as built by `npm run quran:compare-cards`: only the cards a reader kept. */
 const stored = generated as unknown as StoredCards;
@@ -256,7 +257,7 @@ let ayahByKey: Map<string, BranchAyah> | undefined;
 const ayahAt = (key: string) => (ayahByKey ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]))).get(key);
 
 /** An ayah around a card side, with the words the other side's ayah there shares (exact) or shares a root with. */
-export type AroundAyah = { key: string; number: number; words: string[]; exact: Set<number>; rooted: Set<number> };
+export type AroundAyah = Shared & { key: string; number: number; words: string[] };
 export type Around = { before: (AroundAyah | null)[]; after: (AroundAyah | null)[] };
 
 /** The matrix's ayah before and after each side, coloured where the two sides' neighbours share words. */
@@ -274,7 +275,7 @@ export function aroundOf(sides: [CardSide, CardSide]): Around {
       : new Map();
     return ayat.map(ayah => ayah && {
       key: ayah.key, number: Number(ayah.key.split(':')[1]), words: ayah.words,
-      exact: new Set<number>(shared.get(ayah.key)?.exact), rooted: new Set<number>(shared.get(ayah.key)?.rooted),
+      ...sharedOf(shared.get(ayah.key)),
     });
   };
   return { before: pair(-1), after: pair(1) };

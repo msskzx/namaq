@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { sharedByAll, type Neighbour } from '@shared/quran/ayahContext';
+import { likenessOf, sharedByAll, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
 import type { CardSide } from '@shared/quran/compareCards';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
@@ -9,19 +9,19 @@ import { quranSurrounding } from '@/lib/quran/quranText';
 
 export type Neighbours = { before: (SpreadAyah | null)[]; after: (SpreadAyah | null)[] };
 
-/** The two neighbours at one end, as muted rows marked where they share words (same word, or same root). */
+/** The two neighbours at one end, as muted rows marked where they share words (shared/quran/wordMatch.ts). */
 function marked(pair: (Neighbour | null)[]): (SpreadAyah | null)[] {
   const present = pair.filter((ayah): ayah is Neighbour => !!ayah);
   const shared = present.length === 2 && present[0].key !== present[1].key
     ? new Map(sharedByAll(present.map(ayah => ({ ayah: ayah as BranchAyah, before: null, after: null }))).map(context => [context.ayah.key, context.match]))
-    : new Map<string, { exact: number[]; rooted: number[] } | undefined>();
+    : new Map<string, AyahContext['match']>();
   return pair.map(ayah => {
     if (!ayah) return null;
     const match = shared.get(ayah.key);
-    const marks = Object.fromEntries([
-      ...(match?.exact ?? []).map(i => [i, { kind: 'exact' as const }]),
-      ...(match?.rooted ?? []).map(i => [i, { kind: 'root' as const }]),
-    ]);
+    const marks = Object.fromEntries(ayah.words.flatMap((_, i) => {
+      const kind = likenessOf(match, i);
+      return kind ? [[i, { kind }]] : [];
+    }));
     return { number: Number(ayah.key.split(':')[1]), words: ayah.words, marks, muted: true };
   });
 }

@@ -11,7 +11,7 @@ import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writt
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
-import { aroundOf, mixedBefore, subtreeOf } from '@/lib/branches';
+import { aroundOf, likenessAt, mixedBefore, NOTHING_SHARED, subtreeOf, type Shared as SharedWords } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
 import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
@@ -118,23 +118,25 @@ function Ruled({ label, shared, children }: { label: string; shared: Shared; chi
   );
 }
 
-type Marks = { exact: Set<number>; rooted: Set<number> };
+type Marks = SharedWords;
 
-/** A word is coloured when it is the same (accent) or shares its root (purple) in every ayah through this node; amber when voiced differently. */
+/** A word's colour by how alike it is in every ayah through this node (shared/quran/wordMatch.ts); written differently when the node's ayat write it apart. */
 function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks, forms?: Branch['forms'], differs?: number[]) {
   const { palette, matches, offsets } = shared;
   return words.map((word, i) => {
-    const kinds = marks ? [marks.rooted.has(i) ? 'root' : marks.exact.has(i) ? 'exact' : undefined] : ayahKeys.map(key => {
-      const index = (offsets[key] ?? 0) + at + i;
+    const kinds = marks ? [likenessAt(marks, i)] : ayahKeys.map(key => {
       const match = matches[key];
-      return match?.rooted.has(index) ? 'root' : match?.exact.has(index) ? 'exact' : undefined;
+      return match && likenessAt(match, (offsets[key] ?? 0) + at + i);
     });
-    const kind = !isMark(word) && kinds.length > 0 && kinds.every(Boolean) ? (kinds.includes('root') ? 'root' : 'exact') : undefined;
+    const all = !isMark(word) && kinds.length > 0 && kinds.every(Boolean);
+    const kind = all ? (kinds.includes('root') ? 'root' : kinds.includes('written') ? 'written' : 'exact') : undefined;
     // A root match already says the forms differ, so it keeps its purple.
     const written = writtenForms({ forms }, i, word, shared.paths?.lit);
-    // A word moved here from a neighbour because the ayat write it differently: amber, over its root match.
-    if (differs?.includes(i)) return palette.amber;
-    return kind === 'root' && written.length === 1 ? palette.root : written.length > 1 || (written[0].word !== word && !isMark(word)) ? palette.amber : kind === 'exact' ? palette.accent : undefined;
+    // A word moved here from a neighbour because the ayat write it differently, over its root match.
+    if (differs?.includes(i)) return palette.marks.written;
+    if (kind === 'root' && written.length === 1) return palette.marks.root;
+    if (written.length > 1 || (written[0].word !== word && !isMark(word))) return palette.marks.written;
+    return kind && palette.marks[kind];
   });
 }
 
@@ -175,7 +177,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
               <View style={{ gap: 4, paddingVertical: 4 }}>
                 {strands.map(strand => (
                   <View key={strand.words.join(' ')} testID="strand" style={{ alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 8 }}>
-                    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: palette.amber, writingDirection: 'rtl' }}>{quranText(strand.words.join(' '))}</Text>
+                    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: palette.marks.written, writingDirection: 'rtl' }}>{quranText(strand.words.join(' '))}</Text>
                     <Text style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 200, textAlign: 'center' }}>{strand.keys.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ')}</Text>
                   </View>
                 ))}
@@ -416,16 +418,16 @@ function NeighbourBox({ id, beside, of, shared, tab }: { id: string; beside: Bes
   const quiet = !!shared.around && !shared.down;
   const [surah, ayah] = beside.key.split(':').map(Number);
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: { exact: new Set(), rooted: new Set() }, color: shared.palette.muted }).words : [];
+  const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
   const closed = [...beside.words, ...endSign([beside.key])];
   const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 17, marks: beside, color: shared.palette.muted });
   const text: SceneText = { size: 17, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], ...(quiet ? {} : { footer: ref }) };
   const box = (
     <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
       {quiet && tab && <NodeTab id={id} ayahKeys={[of]} label={tab} shared={shared} muted />}
-      {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
+      {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
       <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
-      {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
+      {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
       {!quiet && <References text={ref} shared={shared} center />}
     </Box>
   );

@@ -9,6 +9,7 @@ import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
+import { LIKENESS_TITLE, type Likeness } from '@shared/quran/wordMatch';
 import { num } from '@shared/quran/arabicNumber';
 import type { AyahContext, Surrounding } from '@shared/quran/ayahContext';
 import { quranContexts, quranSurrounding } from '@/lib/quran/quranText';
@@ -23,11 +24,10 @@ import { stepTime } from '@shared/quran/readPlan';
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
 
-const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس اللفظ أو الجذر' } : { exact: 'Same word', root: 'Same lemma or root' };
+const matchTitles = (ar: boolean) => Object.fromEntries(Object.entries(LIKENESS_TITLE).map(([kind, title]) => [kind, ar ? title.ar : title.en])) as Record<Likeness, string>;
 
 export function CardsLegend() {
-  const { exact, root } = matchLabels(useLanguage().language === 'ar');
-  return <MatchLegend exact={exact} root={root} />;
+  return <MatchLegend ar={useLanguage().language === 'ar'} />;
 }
 
 type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<number, string>; steps?: Steps;
@@ -70,7 +70,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
   const sideKey = (keys?: string[]) => keys && keys.length > 1 ? ['quran-context', ...keys.slice(0, MAX_KEYS)] : null;
   const { data: beforeMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('before')), loadContexts, { revalidateOnFocus: false });
   const { data: afterMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('after')), loadContexts, { revalidateOnFocus: false });
-  const { exact: exactLabel, root: rootLabel } = matchLabels(ar);
+  const titles = matchTitles(ar);
   const read = ar ? 'قراءة الآية' : 'Read ayah';
 
   const track = useRef<HTMLDivElement>(null);
@@ -237,7 +237,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
 
   const marksFor = (at: 'before' | 'after', key: string) => {
     const match = (at === 'before' ? beforeMatch : afterMatch)?.find(item => item.ayah.key === key);
-    return match && sharedMarks(match, exactLabel, rootLabel);
+    return match && sharedMarks(match, titles);
   };
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
     const ayah = at === 'ayah' ? context.ayah : around?.[at][at === 'after' ? ends[row] : context.ayah.key];
@@ -263,7 +263,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
           ...(at === 'ayah' ? [data![row].map((item, step) => ({ number: Number(item.ayah.key.split(':')[1]), words: item.ayah.words, current: true,
-            marks: sharedMarks(item, exactLabel, rootLabel, step, now ? now.link ?? null : lit), wordKey: connections?.group ? item.ayah.key : undefined,
+            marks: sharedMarks(item, titles, step, now ? now.link ?? null : lit), wordKey: connections?.group ? item.ayah.key : undefined,
             ...(now && now.row === row && now.key === item.ayah.key ? { reading: now.word } : {}) }))]
             : [[{ number, words: ayah.words, marks: marksFor(at, ayah.key) }]]),
           ...(at === 'before' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),

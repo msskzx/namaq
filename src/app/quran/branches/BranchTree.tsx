@@ -15,7 +15,9 @@ import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, sho
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
-import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
+import { likenessOf, treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
+import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
+import { MARK_CLASS } from '@/lib/markMode';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useCardAround, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@shared/quran/growth';
@@ -114,13 +116,13 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
     const matches = ayahKeys.map(key => {
       const match = contexts.find(context => context.ayah.key === key)?.match;
       const index = (prefix ? 0 : offsets[key] ?? 0) + at + i;
-      return match?.rooted.includes(index) ? 'root' : match?.exact.includes(index) ? 'exact' : undefined;
+      return likenessOf(match, index);
     });
-    const kind = shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : 'exact' : undefined;
+    const kind = shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : matches.includes('written') ? 'written' : 'exact' : undefined;
     const moved = !!written.differs?.includes(at + i - written.offset);
     const shown = forms[i][0].word.replace(/^﴿(.+)﴾$/, shared.startsWith('﴿') ? '$&' : '$1');
-    if (moved || (forms[i][0].word !== shared && kind !== 'root' && shared !== '۝')) return <span data-differs className="text-[var(--home-amber)]" title={title}><MushafText>{shown}</MushafText></span>;
-    return kind ? <mark data-match={kind} className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
+    if (moved || (forms[i][0].word !== shared && kind !== 'root' && shared !== '۝')) return <span data-differs className={MARK_CLASS.written} title={title}><MushafText>{shown}</MushafText></span>;
+    return kind ? <mark data-match={kind} className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
   };
   // docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
   return writtenPieces(words.length, i => forms[i].length > 1).map((piece, n) => {
@@ -132,7 +134,7 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
         <span className="flex flex-col gap-1 py-1">
           {strands.map(strand => (
             <span key={strand.words.join(' ')} data-strand className="flex flex-col items-center rounded-[10px] border border-[var(--home-rule)] px-2">
-              <span className="whitespace-nowrap text-[var(--home-amber)]"><MushafText>{strand.words.join(' ')}</MushafText></span>
+              <span className={`whitespace-nowrap ${MARK_CLASS.written}`}><MushafText>{strand.words.join(' ')}</MushafText></span>
               <span style={{ fontFamily: 'var(--font-amiri), serif' }}><AyahRefs keys={strand.keys} names={written.names} className="-mt-1 justify-center pb-0.5" /></span>
             </span>
           ))}

@@ -1,10 +1,12 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '../data/quran/wordKeys.json';
-import { spell, type BranchAyah } from './branches';
+import type { BranchAyah } from './branches';
+import { likeness, type Likeness } from './wordMatch';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
-export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[]; links?: Record<number, WordLink> } };
+/** `written`: words every ayah has in the same letters but writes differently; `rooted`: the rest every ayah shares by root. */
+export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; written?: number[]; rooted: number[]; links?: Record<number, WordLink> } };
 
 export function isAyahKey(key: string) {
   const [surah, ayah] = key.split(':').map(Number);
@@ -45,7 +47,7 @@ function alignedPairs(a: string[], b: string[]) {
 }
 
 type Lined = { forms: string[]; lined: Map<number, number>[] };
-type Match = { indices: (number | undefined)[]; rows: number; exact: boolean };
+type Match = { indices: (number | undefined)[]; rows: number; kind: Likeness };
 
 /** Matches for a word with no root: each occurrence in a pivot row, with the occurrences the LCS lines up with it in the other rows. */
 function particleMatches(lists: number[][], all: Lined[]): Match[] {
@@ -61,13 +63,13 @@ function particleMatches(lists: number[][], all: Lined[]): Match[] {
     const forms = indices.flatMap((at, n) => at === undefined ? [] : [all[n].forms[at]]);
     if (forms.length < 2) return;
     indices.forEach((at, n) => at !== undefined && used[n].add(at));
-    matches.push({ indices, rows: forms.length, exact: new Set(forms).size === 1 });
+    matches.push({ indices, rows: forms.length, kind: likeness(forms) });
   }));
   return matches;
 }
 
-/** A word's partners in the other rows: words lined up together share a `link`; `rows` counts the rows that have it, `exact` says they are all spelled alike. */
-export type WordLink = { link: string; rows: number; exact: boolean };
+/** A word's partners in the other rows: words lined up together share a `link`; `rows` counts the rows that have it, `kind` says how alike they are and `exact` that they are all written alike. */
+export type WordLink = { link: string; rows: number; exact: boolean; kind: Likeness };
 
 /**
  * Words the ayat share, lined up across them. `exact` and `rooted` are the words every ayah has (spelled alike, or only the
@@ -86,7 +88,7 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   }));
   const all = contexts.map((context, n) => {
     const keys = tokenised[n];
-    const forms = context.ayah.words.map(spell);
+    const forms = context.ayah.words;
     const byKey = new Map<string, number[]>();
     keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
     // Lined up with every other ayah: where a word repeats, these occurrences are the ones the ayat share.
@@ -108,25 +110,25 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     return Array.from({ length: Math.max(...lists.map(list => list.length)) }, (_, at) => {
       const indices = ordered.map(list => list[at]);
       const forms = indices.flatMap((i, n) => i === undefined ? [] : [all[n].forms[i]]);
-      return { indices, rows: forms.length, exact: new Set(forms).size === 1 };
+      return { indices, rows: forms.length, kind: likeness(forms) };
     }).filter(match => match.rows > 1);
   });
   return contexts.map((context, n) => {
-    const exact: number[] = [];
-    const rooted: number[] = [];
+    const lists: Record<Likeness, number[]> = { exact: [], written: [], root: [] };
     const links: Record<number, WordLink> = {};
     shared.forEach((match, link) => {
       const i = match.indices[n];
       if (i === undefined) return;
-      links[i] = { link: String(link), rows: match.rows, exact: match.exact };
-      if (match.rows === contexts.length) (match.exact ? exact : rooted).push(i);
+      links[i] = { link: String(link), rows: match.rows, exact: match.kind === 'exact', kind: match.kind };
+      if (match.rows === contexts.length) lists[match.kind].push(i);
     });
-    return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y), links } };
+    const sorted = (list: number[]) => list.sort((x, y) => x - y);
+    return { ...context, match: { exact: sorted(lists.exact), written: sorted(lists.written), rooted: sorted(lists.root), links } };
   });
 }
 
 export function treeContexts(ayat: BranchAyah[]): AyahContext[] {
-  const contexts = ayat.map(ayah => ({ ayah, before: null, after: null, match: { exact: [] as number[], rooted: [] as number[] } }));
+  const contexts = ayat.map(ayah => ({ ayah, before: null, after: null, match: { exact: [] as number[], written: [] as number[], rooted: [] as number[] } }));
   const runs = ayat.map(ayah => {
     const boundaries = [-1, ...ayah.words.flatMap((word, i) => word === '۝' || word.startsWith('﴿') ? [i] : []), ayah.words.length];
     return boundaries.slice(1).flatMap((end, i) => {
@@ -139,7 +141,7 @@ export function treeContexts(ayat: BranchAyah[]): AyahContext[] {
     const matches = sharedByAll(selected.map(({ ayah }) => ({ ayah, before: null, after: null })));
     matches.forEach((context, i) => {
       const { index, start } = selected[i];
-      for (const kind of ['exact', 'rooted'] as const) {
+      for (const kind of ['exact', 'written', 'rooted'] as const) {
         contexts[index].match[kind].push(...(context.match?.[kind] ?? []).map(at => start + at));
       }
     });
@@ -175,4 +177,10 @@ export function surrounding(all: BranchAyah[], before: string[], after: string[]
     before: Object.fromEntries(before.map(key => [key, neighbour(key, -1)])),
     after: Object.fromEntries(after.map(key => [key, neighbour(key, 1)])),
   };
+}
+
+/** How alike word `i` is in every ayah, from a context's match; none when not every ayah has it. */
+export function likenessOf(match: AyahContext['match'], i: number): Likeness | undefined {
+  if (!match) return undefined;
+  return match.rooted.includes(i) ? 'root' : match.written?.includes(i) ? 'written' : match.exact.includes(i) ? 'exact' : undefined;
 }

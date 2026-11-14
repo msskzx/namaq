@@ -4,7 +4,7 @@ import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-
 import { openExternal } from './ExternalLink';
 import Sheet from './Sheet';
 import Logo from './Logo';
-import ThemeTiles, { ViewTiles } from './ThemeTiles';
+import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
 import { around, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
@@ -29,6 +29,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <MemorizedSetting palette={palette} />
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />
+        <MarkTiles palette={palette} />
         <AroundSetting palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />

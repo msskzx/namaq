@@ -57,7 +57,7 @@ describe('loadReaderAyat', () => {
   });
 });
 
-const pick = (context: AyahContext) => ({ exact: context.match?.exact, rooted: context.match?.rooted });
+const pick = (context: AyahContext) => ({ exact: context.match?.exact, ...(context.match?.written?.length ? { written: context.match.written } : {}), rooted: context.match?.rooted });
 
 describe('sharedByAll', () => {
   it('links words only some ayat share, and the words every ayah shares to each other', async () => {
@@ -74,11 +74,11 @@ describe('sharedByAll', () => {
     expect(link(naml, at(naml, 'ٱلدُّعَآءَ')).rows).toBe(2);
     expect(Object.values(yunus.match!.links!).map(item => item.link)).not.toContain(link(naml, at(naml, 'ٱلدُّعَآءَ')).link);
     // لَا: «إنك لا تسمع» in النمل and الروم pair; يونس's «لا يعقلون» comes after «تسمع الصم», out of order, so it stays unpaired.
-    expect(link(rum, 1)).toEqual({ link: link(naml, 1).link, rows: 2, exact: true });
+    expect(link(rum, 1)).toEqual({ link: link(naml, 1).link, rows: 2, exact: true, kind: 'exact' });
     expect(link(yunus, at(yunus, 'لَا'))).toBeUndefined();
-    // A word every row shares is still the only kind in exact and rooted.
+    // A word every row shares is still the only kind in exact, written and rooted.
     for (const context of [yunus, naml, rum, zukhruf]) {
-      expect([...context.match!.exact, ...context.match!.rooted].sort((x, y) => x - y)).toEqual(Object.entries(context.match!.links!).flatMap(([i, item]) => item.rows === 4 ? [Number(i)] : []));
+      expect([...context.match!.exact, ...context.match!.written!, ...context.match!.rooted].sort((x, y) => x - y)).toEqual(Object.entries(context.match!.links!).flatMap(([i, item]) => item.rows === 4 ? [Number(i)] : []));
     }
   });
 
@@ -99,8 +99,9 @@ describe('sharedByAll', () => {
     const all = await loadReaderAyat();
     for (const context of sharedByAll(ayahContexts(all, ['2:170', '31:21']))) {
       expect(context.match!.exact).toContain(4);
+      // مَآ and مَا: the same letters, written differently.
       expect(context.match!.exact).not.toContain(10);
-      expect(context.match!.rooted).toContain(10);
+      expect(context.match!.written).toContain(10);
     }
   });
 
@@ -112,9 +113,10 @@ describe('sharedByAll', () => {
     expect(pick(third)).toEqual({ exact: [], rooted: [0] });
   });
 
-  it('marks words differing only in tashkeel by root, and every word exact when all ayat agree', async () => {
+  it('marks words written differently as written (docs/adr/0037), and every word exact when all ayat agree', async () => {
     const all = await loadReaderAyat();
-    expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(pick)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
+    // يُسْرًا and يُسْرًۭا differ in the tanween's shape, which the tree draws apart too (docs/adr/0035).
+    expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(pick)).toEqual([{ exact: [1, 2], written: [3], rooted: [0] }, { exact: [1, 2], written: [3], rooted: [0] }]);
     expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact)).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
   });
 
@@ -234,7 +236,7 @@ describe('treeContexts', () => {
       { key: '2:1', page: 2, words: ['قَالَ'], roots: ['qwl'], next: ['رَبِّ'], nextRoots: ['rbb'] },
     ];
     expect(treeContexts(grown(ayat)).map(context => context.match)).toEqual([
-      { exact: [0, 2], rooted: [] }, { exact: [0, 2], rooted: [] },
+      { exact: [0, 2], written: [], rooted: [] }, { exact: [0, 2], written: [], rooted: [] },
     ]);
   });
 
@@ -244,8 +246,8 @@ describe('treeContexts', () => {
     const matrix = sharedByAll(contexts);
     const tree = treeContexts(grown(contexts.map(context => context.ayah)));
     tree.forEach((context, i) => {
-      for (const kind of ['exact', 'rooted'] as const) {
-        expect(context.match![kind].filter(at => at < matrix[i].ayah.words.length)).toEqual(matrix[i].match![kind]);
+      for (const kind of ['exact', 'written', 'rooted'] as const) {
+        expect(context.match![kind]!.filter(at => at < matrix[i].ayah.words.length)).toEqual(matrix[i].match![kind]);
       }
       expect(context.match!.exact).not.toContain(matrix[i].ayah.words.length);
     });
