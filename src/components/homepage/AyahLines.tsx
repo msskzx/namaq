@@ -5,10 +5,10 @@ import useSWR from 'swr';
 import surahRows from '@shared/data/quran/surahs.json';
 import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/readerPage';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { ayahSlice, pageEnd } from '@shared/quran/ayahSlice';
+import { ayahSlice, pageEnd, pageTop } from '@shared/quran/ayahSlice';
 import MushafPage, { type Checked, type Write } from '@/app/quran/read/MushafPage';
 
-type Page = { page: number; top?: number; data: MushafPageData };
+export type Page = { page: number; top?: number; data: MushafPageData };
 type Pages = Page & { previous: Page | null };
 
 const NAMES: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.title]));
@@ -49,4 +49,10 @@ export default function AyahLines({ ayah, pages, write, checked, shown, whole = 
     <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} slice={parts.slice} hidden={whole ? undefined : view.hidden} titled={whole ? undefined : view.titled} next={whole ? undefined : view.upcoming}
       write={shown || !write ? null : { ...write, before: 0 }} checked={shown && checked ? { ...checked, before: 0 } : null} />
   </div>;
+}
+
+/** A page's first lines exactly as the reader draws them (the reading card on home, owner 2026-11-14). */
+export function PageTop({ page }: { page: Page }) {
+  const slice = useMemo(() => pageTop(page.data.items), [page]);
+  return <div lang="ar"><MushafPage page={page.page} data={page.data} top={page.top} names={NAMES} slice={slice} /></div>;
 }

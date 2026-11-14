@@ -33,3 +33,9 @@ export function pageEnd(items: readonly Item[]): { from: number; to: number } {
   const lineRows = items.flatMap((item, at) => ('line' in item ? [at] : []));
   return { from: lineRows[Math.max(0, lineRows.length - CONTEXT_LINES)] ?? 0, to: items.length - 1 };
 }
+
+/** A page's first rows, as the home page's reading card shows them: `count` ayah lines, with any surah title or basmala among them. */
+export function pageTop(items: readonly Item[], count = 3): { from: number; to: number } {
+  const lineRows = items.flatMap((item, at) => ('line' in item ? [at] : []));
+  return { from: 0, to: lineRows[Math.min(count, lineRows.length) - 1] ?? items.length - 1 };
+}

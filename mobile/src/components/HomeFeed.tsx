@@ -31,7 +31,7 @@ import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
-import AyahLines, { pageWords } from './AyahLines';
+import AyahLines, { pageWords, PageTop } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
@@ -156,7 +156,7 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const [page, setPage] = useState(lastPage);
   // Back on home after reading: show the page reached.
   useFocusEffect(useCallback(() => { setPage(lastPage()); }, []));
-  const { surah, words } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
+  const { surah } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
   const { date, juz } = useToday();
   const read = () => openIntent({ tab: 'read', page });
   return (
@@ -168,12 +168,8 @@ export function ContinueReading({ palette }: { palette: Palette }) {
       </View>
       <Pressable onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`}
         style={{ borderRadius: 10, borderWidth: 1, borderColor: palette.paperDeep, backgroundColor: palette.paper, paddingHorizontal: 12, paddingVertical: 6 }}>
-        {/* Three lines, ended by the text's own ellipsis. A fixed-height box squeezed the text on iOS, which then crammed the rest onto its last line and clipped it mid-word. */}
-        <Text numberOfLines={3} style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-          {words.map((word, i) => typeof word === 'number'
-            ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{` ${num(word)} `}</Text>
-            : <Text key={i} style={{ fontFamily: QURAN_FONT }}>{`${word} `}</Text>)}
-        </Text>
+        {/* The page's first lines as the reader draws them (owner, 2026-11-14: an exact snippet of the page). */}
+        <PageTop page={page} palette={palette} />
       </Pressable>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <Pressable onPress={read} accessibilityRole="button" accessibilityLabel="اقرأ"

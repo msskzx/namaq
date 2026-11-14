@@ -38,7 +38,7 @@ vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
 const fetchMock = vi.fn(async (url: string) => {
   fetched.push(url);
   const query = new URL(url, 'http://localhost').searchParams;
-  const body = query.has('page') ? { surah: 18, words: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }
+  const body = query.has('page') ? { surah: 18, page: Number(query.get('page')), top: 17, data: { juz: 15, items: [{ surah: 18 }, { line: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }] } }
     : query.has('ayah') ? ayahPage(query.get('ayah')!)
     // No prophets cards and no question cards here: they have tests of their own in the browser (e2e/web/pages.spec.ts).
     : query.has('s') ? []
