@@ -9,7 +9,9 @@ import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
-import type { StoryCard } from '@/lib/homeFeed';
+import type { SavedContent, StoryCard } from '@/lib/homeFeed';
+import { bookmarkKind } from '@shared/bookmarkKind';
+import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import AyahCards from '@/app/quran/branches/AyahCards';
@@ -31,7 +33,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, ty
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -255,6 +257,34 @@ function StoryPost({ card }: { card: StoryCard }) {
 }
 
 type Tree = TreePreview & { text: string };
+
+/** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
+function SavedAyahPost({ ayah }: { ayah: string }) {
+  const { pages } = useAyahPage(ayah);
+  const [surah, number] = ayah.split(':').map(Number);
+  return <article className={styles.post} dir="rtl">
+    <PostHead Icon={Bookmark} title={`${names[surah]} ${num(number)}`} sub="من المحفوظات" />
+    <div className={styles.recall}>
+      {pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
+    </div>
+    <div className={styles.recallActions}>
+      <span className="flex-1" />
+      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
+    </div>
+  </article>;
+}
+
+/**
+ * A saved item as its own card (owner, 2026-11-14): a tree as the tree card, a compare card as the pair card, an ayah in the
+ * mushaf's lines. One that the data no longer holds is skipped.
+ */
+function SavedPost({ item }: { item: SavedItem }) {
+  const kind = bookmarkKind(item);
+  const { data } = useSWR(kind === 'ayah' ? null : `/api/home/feed?saved=${encodeURIComponent(item.id)}`, fetchJson<SavedContent>, { revalidateOnFocus: false });
+  if (kind === 'ayah') { const ayah = item.id.slice('ayah:'.length); return /^\d+:\d+$/.test(ayah) && names[Number(ayah.split(':')[0])] ? <SavedAyahPost ayah={ayah} /> : null; }
+  if (data?.tree) return <TreePost tree={data.tree} />;
+  return data?.pair ? <PairPost pair={data.pair} /> : null;
+}
 /** The tree card's height, as the branches page's on a phone. */
 const TREE_HEIGHT = '24rem';
 
@@ -297,6 +327,11 @@ export function Feed() {
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
+  const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
+  if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
+  const saved = savedAtVisit.current.list;
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -355,6 +390,8 @@ export function Feed() {
     }
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
+    const savedItem = savedOfSlot(saved, day ?? 0, i);
+    if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
     const story = stories?.find(card => card.slot === i);
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }
