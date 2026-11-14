@@ -14,6 +14,7 @@ import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, 
 import type { Palette } from '@/lib/theme';
 import PathAyat from './PathAyat';
 import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
+import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 
 /** What the pager lends the card that has the focus, so one finger either moves the zoomed tree or the row of cards. */
 export type Lane = {
@@ -170,6 +171,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     });
 
   const pan = Gesture.Pan()
+    .hitSlop(BACK_EDGE_SLOP)
     .maxPointers(1)
     .onStart(() => {
       start.value = camera.value;

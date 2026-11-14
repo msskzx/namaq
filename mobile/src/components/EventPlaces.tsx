@@ -15,6 +15,7 @@ import { CARD, type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
 import { groupColor } from './StoryMap';
+import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -50,6 +51,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
   const step = (forward: boolean) => onStep(forward ? 1 : -1);
   // In the tour a sideways swipe turns the tour's own step instead.
   const pan = Gesture.Pan()
+    .hitSlop(BACK_EDGE_SLOP)
     .enabled(readable)
     .activeOffsetX([-16, 16])
     .failOffsetY([-12, 12])

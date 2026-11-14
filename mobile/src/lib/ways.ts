@@ -6,14 +6,25 @@ import { branchView } from './settings';
 
 const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/compare', read: '/read' };
 
-/** Opens a tab. From a page stacked over the tabs (the saved and forgotten list) it closes that page first, so the tabs are not opened a second time over it. */
+let overTabs = false;
+
+/** The root stack names the page in front (app/_layout.tsx): the tabs, or a page stacked over them. */
+export const noteRootPage = (name: string) => { overTabs = name !== '(tabs)'; };
+
+/**
+ * Opens a tab. From a page stacked over the tabs (the saved and forgotten list) it closes that page first, so the tabs are not opened a second time over it.
+ * Inside the tabs it only opens the page, so the home and Quran stacks keep the way back (a tree's compare goes back to the tree).
+ */
 export function toTab(href: Href) {
-  if (router.canDismiss()) router.dismissAll();
+  if (overTabs && router.canDismiss()) router.dismissAll();
   router.navigate(href);
 }
 
-/** Back from a Quran tool (trees, compare, prophets, Tuhfa) to the Quran hub. */
-export const toQuranHub = () => toTab('/quran');
+/**
+ * The back arrow of a page in the home or Quran stack: one page back, as the swipe from the right edge goes (lib/stackOptions.ts).
+ * Each stack keeps its first page (home, the Quran hub) under the rest, so a tool opened from anywhere goes back to the Quran hub.
+ */
+export const back = () => router.back();
 
 /** Opens the tab an intent is for, which then takes it. */
 export const openIntent = (intent: Intent) => { setIntent(intent); toTab(TAB_OF[intent.tab]); };

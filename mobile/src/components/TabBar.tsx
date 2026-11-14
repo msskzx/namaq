@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { BookOpen, Compass, Feather, House, type LucideProps } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
@@ -10,7 +11,7 @@ import { TAB_BAR, tabBarBottom } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
-import { buttonOf, isRetap, noteRoute, pageOf } from '@/lib/tabGroups';
+import { openPage, tapOnOpen } from '@/lib/tabGroups';
 
 /**
  * Utilities shows once its first tool lands (owner, 2026-11-13): the bar never opens an empty page.
@@ -19,11 +20,11 @@ import { buttonOf, isRetap, noteRoute, pageOf } from '@/lib/tabGroups';
 export const SHOW_UTILITIES = true;
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
-// read left to right they are utilities, quizzes, home, mushaf, Quran. The Quran button holds the Quran hub and its tools (lib/tabGroups.ts).
+// read left to right they are utilities, quizzes, home, mushaf, Quran. Keys are the tab routes; home and Quran hold page stacks (lib/tabGroups.ts).
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode; hidden?: boolean }[] = [
-  { key: 'quran', label: 'القرآن', Icon: TreeIcon },
+  { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
   { key: 'read', label: 'المصحف', Icon: BookOpen },
-  { key: 'index', label: 'الرئيسية', Icon: House },
+  { key: '(home)', label: 'الرئيسية', Icon: House },
   { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
   { key: 'utilities', label: 'الأدوات', Icon: Compass, hidden: !SHOW_UTILITIES },
 ];
@@ -41,12 +42,14 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const shrink = useSharedValue(0);
   useEffect(() => { shrink.value = withTiming(compact ? 1 : 0, { duration: 180 }); }, [compact, shrink]);
   // A new tab starts with the bar at full size.
-  const current = state.routes[state.index]?.name ?? 'index';
-  useEffect(() => { setCompact(false); noteRoute(current); }, [current]);
+  const segments = useSegments();
+  const open = state.routes[state.index]?.name ?? '(home)';
+  const { page } = openPage(segments);
+  useEffect(() => { setCompact(false); }, [page]);
   const row = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [FULL, SMALL]) }));
   const icon = useAnimatedStyle(() => ({ transform: [{ scale: interpolate(shrink.value, [0, 1], [1, ICON_SMALL]) }] }));
   // A see-through pill floating over the page (owner, 2026-11-13); pages leave room for it with useTabBarSpace. On the mushaf it hides while reading.
-  const reading = state.routes[state.index]?.name === 'read';
+  const reading = page === 'read';
   if (reading && immersive) return null;
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tabBarBottom(insets.bottom),
@@ -55,11 +58,16 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
         <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
         <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
         {BUTTONS.filter(button => !button.hidden).map(({ key, label, Icon }) => {
-          const active = buttonOf(current) === key;
-          // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts).
+          const active = open === key;
+          // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts); from the search it goes home.
+          // Another button opens its tab on the page that was open there last.
           const press = () => {
-            if (isRetap(current, key)) { retapTab(current); return; }
-            const route = state.routes.find(item => item.name === pageOf(key));
+            if (active) {
+              if (tapOnOpen(page) === 'retap') retapTab(page);
+              else router.back();
+              return;
+            }
+            const route = state.routes.find(item => item.name === key);
             if (route) navigateToTab(route.key);
           };
           return (
