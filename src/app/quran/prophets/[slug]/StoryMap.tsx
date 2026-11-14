@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { Check, CircleHelp, X } from 'lucide-react';
 import { placeState } from './PlaceReview';
 import { counted } from '@shared/quran/arabicNumber';
@@ -20,29 +20,38 @@ const CELL = 'w-[2.375rem] min-w-[2.375rem]';
  * The story as a grid: a column for each event under its group's colour, a row for each surah.
  * A dot's size is how many ayat that surah gives the event; tapping it opens the event's ayat at that surah.
  */
-export default function StoryMap({ map, events, phases, onRead, current, review, only }: {
+export default function StoryMap({ map, events, phases, onRead, current, review, at }: {
   review?: StoryReview;
   current?: { event: number; surah?: number };
   map: StoryMapData;
   events: EventView[];
   phases: readonly string[];
   onRead: (event: number, surah?: number) => void;
-  /** One group only (the home feed's card), by its phase: drawn in its card, with no sideways scroll. */
-  only?: number;
+  /** The group it opens at, by its phase (the home feed's card, which scrolls it both ways itself). */
+  at?: number;
 }) {
   const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) }))
-    .filter(g => g.events.length > 0 && (only === undefined || g.phase === only));
+    .filter(g => g.events.length > 0);
+  // The card's scroll box moves sideways until the opening group starts just left of the surah names.
+  const opening = useRef<HTMLTableCellElement>(null);
+  const names = useRef<HTMLTableCellElement>(null);
+  useEffect(() => {
+    const cell = opening.current;
+    const box = cell?.closest<HTMLElement>('[data-story-scroll]');
+    if (!cell || !box || !names.current) return;
+    box.scrollLeft += cell.getBoundingClientRect().right - (box.getBoundingClientRect().right - names.current.getBoundingClientRect().width);
+  }, [at]);
 
   return (
-    <div className={only === undefined ? '-mx-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10' : 'pb-2'}>
+    <div className={at === undefined ? '-mx-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10' : 'pb-2'}>
         <table className="border-collapse" aria-label="أحداث القصة في السور">
           <thead>
             <tr>
-              <th className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))]" />
+              <th ref={names} className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))]" />
               {groups.map((g, k) => (
                 <Fragment key={g.name}>
                   {k > 0 && <th className="w-4 min-w-4" aria-hidden />}
-                  <th colSpan={g.events.length} scope="colgroup" className="border-b-[3px] pb-1 text-sm font-bold whitespace-nowrap" style={{ color: groupColor(g.phase), borderColor: groupColor(g.phase) }}>
+                  <th ref={g.phase === at ? opening : undefined} colSpan={g.events.length} scope="colgroup" className="border-b-[3px] pb-1 text-sm font-bold whitespace-nowrap" style={{ color: groupColor(g.phase), borderColor: groupColor(g.phase) }}>
                     {g.name}
                   </th>
                 </Fragment>
@@ -66,7 +75,7 @@ export default function StoryMap({ map, events, phases, onRead, current, review,
           </thead>
           <tbody>
             {map.surahs.map(({ surah, name }) => (
-              <tr key={surah} className="h-9 border-b border-[var(--home-rule)]/50">
+              <tr key={surah} className="h-9 border-b first:border-t border-[var(--home-rule)]/50">
                 <th scope="row" className="sticky start-0 z-10 bg-[var(--story-map-bg,var(--home-paper))] pe-3 text-start text-sm font-normal whitespace-nowrap">{name}</th>
                 {groups.map((g, k) => (
                   <Fragment key={g.name}>

@@ -165,12 +165,14 @@ it('keeps focus in the keyboard-scrollable matrix when the focused column change
 });
 
 /** Columns 100px wide, column i's left edge at -100 * i in the lane (RTL), the lane 100px wide. */
-const sideways = (track: HTMLElement) => {
+/** The lane is one card as wide as its three columns, each as wide as the frame here, and right to left it overflows the frame to the left. */
+const sideways = (track: HTMLElement, frame = 100) => {
   const lane = track.firstElementChild as HTMLElement;
-  Object.defineProperty(lane, 'clientWidth', { configurable: true, value: 100 });
+  Object.defineProperty(track, 'clientWidth', { configurable: true, value: frame });
+  Object.defineProperty(lane, 'offsetWidth', { configurable: true, value: 3 * frame });
   document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
-    Object.defineProperty(cell, 'offsetLeft', { configurable: true, value: -100 * Number(cell.dataset.col) });
-    Object.defineProperty(cell, 'offsetWidth', { configurable: true, value: 100 });
+    Object.defineProperty(cell, 'offsetLeft', { configurable: true, value: frame * (2 - Number(cell.dataset.col)) });
+    Object.defineProperty(cell, 'offsetWidth', { configurable: true, value: frame });
   });
   return lane;
 };
@@ -200,13 +202,11 @@ it('keeps the current column centred when the frame changes width', async () => 
   await screen.findByLabelText('الشرح ٥');
   const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
   const lane = sideways(track);
-  Object.defineProperty(track, 'clientWidth', { configurable: true, value: 100 });
   act(() => observers.forEach(run => run()));
   expect(moved(lane)).toBe('100');
-  Object.defineProperty(lane, 'clientWidth', { configurable: true, value: 300 });
-  Object.defineProperty(track, 'clientWidth', { configurable: true, value: 300 });
+  sideways(track, 300);
   act(() => observers.forEach(run => run()));
-  expect(moved(lane)).toBe('200');
+  expect(moved(lane)).toBe('300');
   expect(lane.hasAttribute('data-sliding')).toBe(false);
 });
 

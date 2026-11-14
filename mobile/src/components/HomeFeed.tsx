@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, PenLine, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -20,7 +20,6 @@ import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { Text } from './Text';
-import { quranText } from '@/lib/quranText';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -29,44 +28,57 @@ import { shownBookmarks } from '@/lib/home';
 import TreeIcon from './TreeIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
-import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
 import AyahLines, { pageWords, PageTop } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
 import { pageData, PAGES, surahBefore } from '@/lib/mushaf';
-import { readJson } from '@/lib/storage';
+import { readJson, writeJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
 import { around as aroundSetting, branchView } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
 import { useMinute } from '@/lib/prayer';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
+import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
-import QuizChoice from './QuizChoice';
+import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { QuizFeedback, QuizInputs } from './QuizTree';
-import Button from './Button';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { CARD, type Palette } from '@/lib/theme';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
-/** A small icon button, as on the daily card: muted, or filled in the accent when on. */
-function Action({ Icon, label, on, onPress, palette }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette }) {
+/** A post's icon button, as the compare card's row has them: muted, or in the accent when on. */
+function Action({ Icon, label, on, onPress, palette, color, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; color?: string; disabled?: boolean }) {
   return (
-    <Pressable onPress={onPress} hitSlop={6} accessibilityRole="button" accessibilityLabel={label} accessibilityState={on === undefined ? undefined : { selected: on }} style={{ padding: 7 }}>
-      <Icon size={21} color={on ? palette.accent : palette.muted} fill={on ? palette.accent : 'none'} />
+    <Pressable onPress={onPress} disabled={disabled} hitSlop={6} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ ...(on === undefined ? {} : { selected: on }), ...(disabled ? { disabled } : {}) }} style={{ padding: 8, opacity: disabled ? 0.4 : 1 }}>
+      <Icon size={22} color={on ? palette.accent : color ?? palette.muted} />
     </Pressable>
   );
 }
 
 const cardStyle = (palette: Palette) => ({ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card });
 
+/**
+ * Every feed post's one shape (owner, 2026-11-14), the compare card's: the head, the body in one card, and a row of icon
+ * buttons under the card, starting on the right.
+ */
+function Post({ head, actions, palette, children }: { head: React.ReactNode; actions?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
+  return (
+    <View style={{ gap: 4 }}>
+      {head}
+      <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>{children}</View>
+      {actions && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>{actions}</View>}
+    </View>
+  );
+}
+
 /** A feed card's head: a round icon, a title and a line under it, like a post's author. */
-function PostHead({ Icon, title, sub, palette, quran, open }: { Icon: IconType; title: string; sub?: string; palette: Palette; quran?: boolean;
+function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: string; sub?: string; palette: Palette;
   /** A tap on the head opens the post's own page; `label` names it for a screen reader. */
   open?: { onPress: () => void; label: string } }) {
   const head = (
@@ -75,14 +87,16 @@ function PostHead({ Icon, title, sub, palette, quran, open }: { Icon: IconType; 
         <Icon size={18} color={palette.accent} />
       </View>
       <View style={{ flex: 1 }}>
-        {/* A Quran title as the branches search draws a phrase: the mushaf's text and the Hafs font's own line height, so its marks are not cut off. */}
-        <Text accessibilityRole="header" style={quran ? { color: palette.ink, fontSize: 20, lineHeight: 38, fontFamily: QURAN_FONT, textAlign: 'right' } : { color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{quran ? quranText(title) : title}</Text>
-        {sub ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sub}</Text> : null}
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+        {sub ? <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sub}</Text> : null}
       </View>
     </View>
   );
   return open ? <Pressable onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Pressable> : head;
 }
+
+/** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
+const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
 /** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
 export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);
@@ -159,34 +173,20 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const { surah } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
   const { date, juz } = useToday();
   const read = () => openIntent({ tab: 'read', page });
+  const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
-    <View style={{ ...cardStyle(palette), padding: 12, gap: 10 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <BookOpen size={20} color={palette.accent} />
-        <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{shortNames[surah] ?? ''}</Text>
-      </View>
-      <Pressable onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`}
-        style={{ borderRadius: 10, borderWidth: 1, borderColor: palette.paperDeep, backgroundColor: palette.paper, paddingHorizontal: 12, paddingVertical: 6 }}>
-        {/* The page's first lines as the reader draws them (owner, 2026-11-14: an exact snippet of the page). */}
-        <PageTop page={page} palette={palette} />
-      </Pressable>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-        <Pressable onPress={read} accessibilityRole="button" accessibilityLabel="اقرأ"
-          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 40, borderRadius: 10, backgroundColor: palette.accent, opacity: pressed ? 0.8 : 1 })}>
-          <BookOpen size={18} color={palette.onAccent} />
-          <Text style={{ color: palette.onAccent, fontSize: 16 }}>اقرأ</Text>
-        </Pressable>
-        <View style={{ flex: 1 }} />
-        {date && <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Moon size={16} color={palette.accent} />
-          <Text accessibilityLabel={`اليوم ${date}`} style={{ color: palette.muted, fontSize: 14 }}>{date.replace(/ هـ$/, '')}</Text>
-        </View>}
-        {juz && <Pressable onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`}>
+    <Post palette={palette} head={<PostHead Icon={BookOpen} title={page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
+      actions={<>
+        <Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />
+        {juz && <Pressable onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ padding: 8 }}>
           <Text style={{ color: palette.accent, fontSize: 14 }}>{juzLabel(juz)}</Text>
         </Pressable>}
-      </View>
-    </View>
+      </>}>
+      <Pressable onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+        {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
+        <PageTop page={page} palette={palette} />
+      </Pressable>
+    </Post>
   );
 }
 
@@ -204,71 +204,70 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
 
 /** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until tomorrow. */
 const recalled = new Set<string>();
-/** The recall card's letter size: the mushaf's write boxes at a card's size. */
+/** Whether the recall card asks to write the whole ayah (on) or reveals it word by word (off). */
+const RECALL_WRITE = 'recall-write';
 
 /**
- * An ayah to recall, asked as the reader's write mode asks it, in the mushaf's own lines (AyahLines, owner 2026-11-14): what
- * comes before it shows, its words are hidden in their places, its first and last words are write boxes (the same boxes,
- * keyboard rules and grading, lib/useWriteBoxes). The last box shows the ayah with the written words
- * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
- * review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
+ * An ayah to recall in the mushaf's own lines (AyahLines), asked as recite mode asks it (owner, 2026-11-14): what comes
+ * before it shows, its words are hidden in their places, and recite mode's buttons reveal the next word or the whole ayah.
+ * The pen switches to writing the whole ayah in write boxes (lib/useWriteBoxes); the last box shows the ayah with the
+ * written words green or amber, and a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due
+ * comes with the review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
   const [, setGone] = useState(0);
-  const [shown, setShown] = useState(false);
-  const [graded, setGraded] = useState<Graded | null>(null);
-  useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
+  const [writing, setWriting] = useState(() => readJson<boolean>(RECALL_WRITE) === true);
+  const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
+  if (!review && recalled.has(ayah)) return null;
+  const marks = <>
+    <Action Icon={Check} label="تذكّرتها" color={palette.green} palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
+    {!review && <Action Icon={LightbulbOff} label="نسيتها" palette={palette} onPress={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
+    {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
+    <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
+  </>;
+  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
+}
+
+/** The recall card itself, drawn afresh for each way of asking (`writing`), so the boxes start empty. */
+function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
   const words = useMemo(() => pageWords(ayah), [ayah]);
-  const asked = useMemo(() => wordTargets(words), [words]);
+  const [revealed, setRevealed] = useState(0);
+  const [graded, setGraded] = useState<Graded | null>(null);
+  const asked = useMemo(() => (writing ? words.map((_, at) => at) : []), [writing, words]);
   const boxes = useWriteBoxes({ ayah, words, asked, onDone: result => {
     setGraded(result);
     if (result.wrong.length) markForgotten(ayah);
   } });
+  const shown = revealed >= words.length || !!graded;
   const [surah, number] = ayah.split(':').map(Number);
-  if (!review && recalled.has(ayah)) return null;
-  const open = shown || !!graded;
   return (
-    <View style={cardStyle(palette)}>
-      <PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
-      <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
-        <AyahLines ayah={ayah} palette={palette} shown={open} checked={graded ? { key: ayah, ...graded } : null}
-          write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />
-        {!open && boxes.field}
+    <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
+      actions={<>
+        {/* Recite mode's buttons first, in its order: the next word, the whole ayah, the pen (Reader.tsx). */}
+        {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onPress={() => setRevealed(n => Math.min(words.length, n + 1))} palette={palette} />}
+        <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onPress={() => setRevealed(words.length)} palette={palette} />
+        <Action Icon={PenLine} label="اكتب الآية كاملة" on={writing} onPress={onWriting} palette={palette} />
+        {marks}
+      </>}>
+      <View style={{ padding: 12 }}>
+        <AyahLines ayah={ayah} palette={palette} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null}
+          write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : null} />
+        {writing && !shown && boxes.field}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
-        {!graded && <Pressable onPress={() => setShown(value => !value)} accessibilityRole="button" accessibilityLabel={shown ? 'أخفها' : 'أظهرها'}
-          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
-          {shown ? <EyeOff size={18} color={palette.ink} /> : <Eye size={18} color={palette.ink} />}
-          <Text style={{ color: palette.ink, fontSize: 16 }}>{shown ? 'أخفها' : 'أظهرها'}</Text>
-        </Pressable>}
-        <Pressable onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} accessibilityRole="button" accessibilityLabel="تذكّرتها"
-          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 10, borderWidth: 1, borderColor: palette.green, opacity: pressed ? 0.7 : 1 })}>
-          <Check size={18} color={palette.green} />
-          <Text style={{ color: palette.green, fontSize: 16 }}>تذكّرتها</Text>
-        </Pressable>
-        {!review && <Pressable onPress={() => { recalled.add(ayah); markForgotten(ayah); }} accessibilityRole="button" accessibilityLabel="نسيتها"
-          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
-          <LightbulbOff size={18} color={palette.ink} />
-          <Text style={{ color: palette.ink, fontSize: 16 }}>نسيتها</Text>
-        </Pressable>}
-        <View style={{ flex: 1 }} />
-        <QuizActions review={review} palette={palette} />
-        <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
-      </View>
-    </View>
+    </Post>
   );
 }
 
 /**
  * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
- * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ * and recite.
  */
-export function QuizActions({ review, palette }: { review?: () => void; palette: Palette }) {
+export function QuizActions({ palette }: { palette: Palette }) {
   return (
     <>
       <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
       <Action Icon={Users} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
-      {review ? <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} /> : <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
+      <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />
     </>
   );
 }
@@ -294,12 +293,18 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   if (!run) return null;
   const question = run.questions[0];
   const checked = run.checked[0];
-  const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text> : undefined;
+  const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
-    <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
-      <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />
+    <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />}
+      actions={<>
+        {isTree(question) && !checked && <>
+          <Action Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} palette={palette} />
+          <Action Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} palette={palette} />
+        </>}
+        <QuizActions palette={palette} />
+      </>}>
       {!isTree(question)
-        ? <View style={{ paddingBottom: 4 }}>
+        ? <View style={{ paddingBottom: 12 }}>
           <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} onOpen={readAyah} scroll={false}
             onReveal={() => setRun(reveal(run))}
             onPick={value => {
@@ -312,15 +317,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
             ? <QuizFeedback question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
             : <QuizInputs question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
         </View>}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
-        {isTree(question) && !checked && <>
-          <Button variant="primary" Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} />
-          <Button Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} />
-        </>}
-        <View style={{ flex: 1 }} />
-        <QuizActions palette={palette} />
-      </View>
-    </View>
+    </Post>
   );
 });
 
@@ -337,8 +334,11 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
 const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) =>
   kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
 
-/** The tree card's height: room for the branches page's tree and its buttons. */
-const TREE_HEIGHT = 440;
+/**
+ * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
+ * so the tree keeps its size (owner, 2026-11-14).
+ */
+const TREE_HEIGHT = 470;
 
 /**
  * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
@@ -350,11 +350,13 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const mode = showsOtherView(piece.id) ? (preferred === 'tree' ? 'matrix' : 'tree') : preferred;
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
-  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }) }), []);
+  const [room, setRoom] = useState(0);
+  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom } }), [room]);
+  // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
-    <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
-      <PostHead Icon={TreeIcon} title={piece.text} sub="من متشابهات القرآن" palette={palette} quran open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
-      <View style={{ height: TREE_HEIGHT }}>
+    <View style={{ gap: 4 }}>
+      <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={placesOf(piece.keys)} palette={palette} open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
+      <View style={{ height: TREE_HEIGHT + room }}>
         <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
     </View>
@@ -365,15 +367,12 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
 function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   const [surah, number] = ayah.split(':').map(Number);
   return (
-    <View style={cardStyle(palette)}>
-      <PostHead Icon={Bookmark} title={`${shortNames[surah] ?? ''} ${num(number)}`} sub="من المحفوظات" palette={palette} />
-      <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
+    <Post palette={palette} head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
+      actions={<Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />}>
+      <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 12 }}>
-        <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
-      </View>
-    </View>
+    </Post>
   );
 }
 
@@ -394,31 +393,26 @@ function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
 }
 
-/** The prophets card's height: the group's surahs scroll inside it, never sideways. */
+/** The prophets card's height: the surahs scroll up and down inside it, the events sideways. */
 const STORY_HEIGHT = 460;
 
 /**
- * One group of a prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap) showing just that
- * group, with every surah that tells part of it; the surahs scroll up and down inside the card. A dot or an event's title opens
- * the story there.
+ * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
+ * sideways at the day's group; the surahs scroll up and down inside the card. Any tap opens the story page at its top, not scrolled
+ * to an event, so a new reader sees where they landed (owner, 2026-11-14).
  */
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
   const prophet = useMemo(() => prophetStory(slug), [slug]);
-  const map = useMemo(() => {
-    if (!prophet) return null;
-    const whole = storyMap(prophet.events);
-    const inGroup = new Set(prophet.events.flatMap((event, i) => (event.phase === phase ? whole.places[i].map(place => place.surah) : [])));
-    return { ...whole, surahs: whole.surahs.filter(row => inGroup.has(row.surah)) };
-  }, [prophet, phase]);
+  const map = useMemo(() => (prophet ? storyMap(prophet.events) : null), [prophet]);
   if (!prophet || !map) return null;
-  const open = (event?: number, surah?: number) => router.push({ pathname: '/prophets/[slug]', params: { slug, ...(event === undefined ? {} : { event: String(event) }), ...(surah === undefined ? {} : { surah: String(surah) }) } });
+  const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug } });
   return (
-    <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
-      <PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />
-      <ScrollView nestedScrollEnabled style={{ maxHeight: STORY_HEIGHT }} contentContainerStyle={{ paddingBottom: 8 }}>
-        <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} only={phase} palette={palette} onPick={(event, surah) => open(event, surah)} onTitle={event => open(event)} />
+    <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
+      actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
+      <ScrollView nestedScrollEnabled style={{ maxHeight: STORY_HEIGHT }} contentContainerStyle={{ paddingVertical: 8 }}>
+        <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
-    </View>
+    </Post>
   );
 });
 

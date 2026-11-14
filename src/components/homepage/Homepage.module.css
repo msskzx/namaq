@@ -44,27 +44,26 @@ a.hijri:hover { text-decoration: underline; }
 .ring[data-lit] { border-color: var(--home-accent); }
 .ring > span { width: 100%; height: 100%; border-radius: 999px; background: var(--home-card); color: var(--home-accent); display: flex; align-items: center; justify-content: center; }
 .storyLabel { font-size: 0.8125rem; white-space: nowrap; }
+.postWrap { display: flex; flex-direction: column; gap: 0.25rem; }
+.postActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+.action { display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; min-height: 2.5rem; padding: 0.5rem; border-radius: 10px; color: var(--home-muted); background: none; text-decoration: none; }
+.action:hover:not(:disabled) { color: var(--home-ink); background: var(--home-paper-deep); }
+.action:disabled { opacity: 0.4; }
+.actionOn { color: var(--home-accent); }
+.oneLine { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .post { border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); overflow: hidden; }
-section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
-.readHead { display: flex; align-items: center; gap: 0.5rem; }
-.readHead > svg { color: var(--home-accent); }
-.readHead h2 { flex: 1; font-size: 1.125rem; }
-.pageSlice { display: block; padding: 0.375rem 0.75rem; border: 1px solid var(--home-paper-deep); border-radius: 10px; background: var(--home-paper); color: var(--home-ink); text-decoration: none; }
-/* Three whole lines, ended by an ellipsis; clamped inside the padding so the next line's marks don't show under it. The minimum height holds the space while the page loads. */
-.pageLines { min-height: 7.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.readFoot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.875rem; }
+.pageSlice { display: block; padding: 0.375rem 0.75rem; color: var(--home-ink); text-decoration: none; }
+/* The minimum height holds the half page's space while it loads. */
+.pageLines { min-height: 19rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .postHead { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem 0.375rem; }
 .postHead h3 { font-size: 1rem; font-weight: 700; }
 .avatar { width: 2.25rem; height: 2.25rem; flex-shrink: 0; border-radius: 999px; border: 1px solid var(--home-rule); background: var(--home-paper); color: var(--home-accent); display: flex; align-items: center; justify-content: center; }
-.actions { display: flex; align-items: center; padding: 0 0.375rem 0.375rem; }
 .feed { display: flex; flex-direction: column; gap: 0.875rem; }
 .divider { display: flex; align-items: center; gap: 0.625rem; color: var(--home-muted); font-size: 0.9375rem; font-weight: 700; }
 .divider::after { content: ''; flex: 1; border-top: 1px solid var(--home-rule); }
 .story { --story-map-bg: var(--home-card); max-height: 28rem; overflow: auto; padding: 0 0.75rem 0.25rem; overscroll-behavior: contain; }
 .question { padding: 0.25rem 0.75rem 0.5rem; }
 .recall { padding: 0.25rem 0.75rem 0; }
-.recallActions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.75rem; }
-.pill { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.5rem; padding-inline: 0.875rem; border: 1px solid var(--home-rule); border-radius: 10px; color: var(--home-ink); font-size: 1rem; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }
 .prayers { display: grid; gap: 0.5rem; padding: 0.625rem; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); color: var(--home-ink); text-decoration: none; }
 .prayerHead { display: flex; align-items: center; gap: 0.5rem; }

@@ -11,7 +11,7 @@ import { aroundOf, cardOf, searchLit, surahNames } from '@/lib/branches';
 import { saveSizes, sizesOf, type Sized } from '@/lib/treeSizes';
 import type { ListState } from '@/lib/branchList';
 import { clampCamera, fitCamera, isZoomed, pickDirection, settleCamera, zoomAt, type Camera, type Size } from '@/lib/camera';
-import type { Palette } from '@/lib/theme';
+import { CARD, type Palette } from '@/lib/theme';
 import PathAyat from './PathAyat';
 import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
@@ -64,6 +64,13 @@ type Props = {
   fixed?: boolean;
   /** Ayat whose paths open lit, as a search lights them (the reader's ayah in its trees sheet). */
   lit?: string[];
+  /**
+   * In a feed (home): the room under the chips for a lit path's ayat is added below by the page (`height`, asked for with
+   * `set`) instead of kept empty, so the card is short until a path is lit and the tree never changes size.
+   */
+  ayatRoom?: { height: number; set: (height: number) => void };
+  /** The tree in a card's own frame (home), its buttons under the frame, as the compare card has them. */
+  framed?: boolean;
 };
 
 /** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
@@ -76,7 +83,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false, lit }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false, lit, ayatRoom, framed = false }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -98,7 +105,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const readKeys = growth ? (touring ? [growth.lit!] : []) : tappedKeys;
-  const strip = fixed ? AYAH_SPACE : readKeys.length ? stripHeight : 0;
+  const strip = fixed ? ayatRoom?.height ?? AYAH_SPACE : readKeys.length ? stripHeight : 0;
+  const askRoom = ayatRoom?.set;
+  useEffect(() => { askRoom?.(readKeys.length ? AYAH_SPACE : 0); }, [askRoom, readKeys.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -233,7 +242,8 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     <View style={{ width: full.width, height: full.height }}>
     <GestureDetector gesture={gesture}>
       <View collapsable={false} style={{ width: full.width, height: full.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
-        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, top: 0, width: full.width, height: fixed ? view.height : full.height, overflow: 'hidden' }}>
+        <View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: full.width, height: fixed ? view.height : full.height, overflow: 'hidden' },
+          framed && { borderWidth: 1, borderColor: palette.rule, borderRadius: CARD.borderRadius, backgroundColor: palette.card }]}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content ? 1 : 0 }, style]}>
           <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured} paths={paths} actions={actions}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />

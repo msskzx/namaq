@@ -16,8 +16,9 @@ import AyahCards from './AyahCards';
  * opening in the view chosen in the settings (the branches page's cookie). The home feed and the reader's trees sheet use it.
  * `mixed`: one tree in ten opens the other view, as the home feed does.
  */
-export default function TreeViewCard({ tree, height, names, mixed = false, actionsClassName }: {
-  tree: TreePreview; height: string; names: Record<number, string>; mixed?: boolean; actionsClassName?: string;
+/** `frameClassName` draws the tree in a card of its own (home's posts); the matrix is a card already, so it goes without. */
+export default function TreeViewCard({ tree, height, names, mixed = false, actionsClassName, frameClassName }: {
+  tree: TreePreview; height: string; names: Record<number, string>; mixed?: boolean; actionsClassName?: string; frameClassName?: string;
 }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const saved = bookmarks.some(item => item.id === tree.id);
@@ -27,7 +28,7 @@ export default function TreeViewCard({ tree, height, names, mixed = false, actio
   });
   const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
   return <>
-    <div className="px-2">
+    <div className={view === 'tree' && frameClassName ? frameClassName : 'px-2'}>
       {view === 'cards'
         ? <AyahCards ayahKeys={tree.ayat?.map(ayah => ayah.key) ?? []} names={names} />
         : <BranchTree tree={tree.tree} ayat={tree.ayat} prefixes={tree.prefixes} offsets={tree.offsets} names={names} surround={{ on: false, sync: true }} viewportHeight={height} direction="auto" zoomInRail />}
