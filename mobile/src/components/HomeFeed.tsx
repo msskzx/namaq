@@ -96,7 +96,7 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
 }
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
-export const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
+const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
 /** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
 export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);
@@ -246,7 +246,7 @@ function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: str
         {/* Recite mode's buttons first, in its order: the next word, the whole ayah, the pen (Reader.tsx). */}
         {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onPress={() => setRevealed(n => Math.min(words.length, n + 1))} palette={palette} />}
         <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onPress={() => setRevealed(words.length)} palette={palette} />
-        <Action Icon={PenLine} label={writing ? 'أوقف الكتابة' : 'اكتب الآية كاملة'} on={writing} onPress={onWriting} palette={palette} />
+        <Action Icon={PenLine} label="اكتب الآية كاملة" on={writing} onPress={onWriting} palette={palette} />
         {marks}
       </>}>
       <View style={{ padding: 12 }}>
@@ -260,14 +260,14 @@ function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: str
 
 /**
  * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
- * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ * and recite.
  */
-export function QuizActions({ review, palette }: { review?: () => void; palette: Palette }) {
+export function QuizActions({ palette }: { palette: Palette }) {
   return (
     <>
       <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
       <Action Icon={Users} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
-      {review ? <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} /> : <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
+      <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />
     </>
   );
 }

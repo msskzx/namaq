@@ -174,10 +174,10 @@ const recalled = new Set<string>();
 const RECALL_WRITE = 'recall-write';
 
 /**
- * An ayah to recall, asked as the reader's write mode asks it: its words hidden, its first and last words as write boxes
- * (the same boxes, keyboard rules and grading, read/useWriteBoxes). The last box shows the ayah with the written words
- * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
- * review link and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
+ * An ayah to recall in the mushaf's own lines, asked as recite mode asks it (owner, 2026-11-14): its words hidden, recite
+ * mode's buttons reveal the next word or the whole ayah, and the pen asks for the whole ayah in write boxes (read/useWriteBoxes);
+ * a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the review link and
+ * «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
   const [, setGone] = useState(0);
@@ -209,7 +209,7 @@ function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: stri
   } });
   const count = words?.length ?? 0;
   const shown = (!!words && revealed >= count) || !!graded;
-  const pen = writing ? 'أوقف الكتابة' : 'اكتب الآية كاملة';
+  const pen = 'اكتب الآية كاملة';
   return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />}
     actions={<>
       {/* Recite mode's buttons first, in its order: the next word, the whole ayah, the pen; then the marks. */}
@@ -229,13 +229,13 @@ function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: stri
 
 /**
  * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
- * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ * and recite.
  */
-export function QuizActions({ review }: { review?: string }) {
+export function QuizActions() {
   return <>
     <Action Icon={Feather} label="اختبار فردي" href="/quizzes" />
     <Action Icon={Users} label="اختبار جماعي" href="/quizzes/party" />
-    {review ? <Action Icon={EyeOff} label="راجع ما نسيت" href={review} /> : <Action Icon={EyeOff} label="تسميع" href="/quran/read/recite" />}
+    <Action Icon={EyeOff} label="تسميع" href="/quran/read/recite" />
   </>;
 }
 

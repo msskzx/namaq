@@ -260,7 +260,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
               </View>
               </Fragment>
             ))}
-            {lines.routes.length > 0 && <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: count * step - GAP, height: '100%' }}>
+            {lines.routes.length > 0 && <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: count * step - GAP + 2 * PAD, height: '100%' }}>
               {lines.routes.filter(route => !growth?.hidden.has(route.id)).map(route => (
                 <Fragment key={route.id}>
                   <Path d={route.d} stroke={toneColor(palette, connectionTone(route.tag))} strokeWidth={1.25} fill="none" />

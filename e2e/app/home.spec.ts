@@ -111,7 +111,7 @@ test.describe('a new user', () => {
       await expect(story).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
     const card = story.locator('xpath=ancestor::div[.//*[@aria-label="افتح القصة"]][1]');
-    // A dot is labelled by its event, its surah and its ayat; the card draws one group, so every dot is on screen sideways.
+    // A dot is labelled by its event, its surah and its ayat.
     const dots = card.getByRole('button', { name: /، .*، .*آي/ });
     expect(await dots.count()).toBeGreaterThan(1);
     await dots.first().click();

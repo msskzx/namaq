@@ -53,7 +53,7 @@ a.hijri:hover { text-decoration: underline; }
 .oneLine { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .post { border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); overflow: hidden; }
 .pageSlice { display: block; padding: 0.375rem 0.75rem; color: var(--home-ink); text-decoration: none; }
-/* Three whole lines, ended by an ellipsis; clamped inside the padding so the next line's marks don't show under it. The minimum height holds the space while the page loads. */
+/* The minimum height holds the half page's space while it loads. */
 .pageLines { min-height: 19rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .postHead { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem 0.375rem; }
 .postHead h3 { font-size: 1rem; font-weight: 700; }

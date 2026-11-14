@@ -355,14 +355,14 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
             return (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {atMode === 'matrix'
-                ? <MatrixCard key={String(atAround)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround} onTap={tap} onMove={move} footer={footer} pinFooter={!!embedded}
+                ? <MatrixCard key={String(atAround)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround} onTap={tap} onMove={move} footer={footer} pinFooter={!!embedded?.ayatRoom}
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed lit={embedded?.lit ? [embedded.lit] : undefined} ayatRoom={embedded?.ayatRoom} framed={!!embedded?.ayatRoom} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed={!embedded || !!embedded.ayatRoom} lit={embedded?.lit ? [embedded.lit] : undefined} ayatRoom={embedded?.ayatRoom} framed={!!embedded?.ayatRoom} />}
             </View>
             );
           })}
