@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ComponentType } from 'react';
-import { View } from 'react-native';
+import { View, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -25,6 +25,7 @@ function Loaded(props: { onReady: () => void }) {
  */
 export default function RootLayout() {
   const palette = usePalette();
+  const scheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
     [QURAN_FONT]: require('../../assets/fonts/UthmanicHafs1Ver18.ttf'),
     [UI_FONT]: require('../../assets/fonts/Amiri-Regular.ttf'),
@@ -52,7 +53,8 @@ export default function RootLayout() {
           {App && <App onReady={onReady} />}
           {loading && <LoadingScreen words={fonts} done={ready} onLayout={() => SplashScreen.hideAsync()} onGone={onGone} />}
         </View>
-        <StatusBar style={palette.paper === dark.paper ? 'light' : 'dark'} />
+        {/* While loading, the bar sits on the loading screen, which follows the phone's scheme like the splash. */}
+        <StatusBar style={(loading ? scheme === 'dark' : palette.paper === dark.paper) ? 'light' : 'dark'} />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
