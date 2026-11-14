@@ -1,5 +1,6 @@
 import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
+import type { Branch } from './branches';
 import type { CardAyah, CardMark, CardSide } from './compareCards';
 
 /** Word ranges [start, end) on each of the two sides. */
@@ -63,6 +64,42 @@ export function braidOf(sides: [CardSide, CardSide]): BraidStrand[] {
   const b = flat(sides[1].ayat);
   return braid(a.map(word => word.text), b.map(word => word.text))
     .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) }));
+}
+
+/** A compare tree's node words, each with its mark on the card; `other`: the second side's words on a node both sides share. */
+export type CompareNode = { side?: 0 | 1; words: BraidWord[]; other?: BraidWord[] };
+export type CompareTree = { tree: Branch; nodes: Map<Branch, CompareNode> };
+
+/** The path key of a card side: its surah and first ayah. */
+export const sideKey = (side: CardSide) => `${side.surah}:${side.ayah}`;
+
+/**
+ * A card's two sides as one tree for the branches tree to draw: a node where both say the same words, a child for each side where
+ * they part (the first side first), and `rejoin` where they meet again. Every node names the sides through it in `via`, so tapping
+ * a box lights its side's path. A card that opens apart has a root with no words.
+ */
+export function compareTree(sides: [CardSide, CardSide]): CompareTree {
+  const strands = braidOf(sides);
+  const ends = sides.map(sideKey);
+  const both = [...new Set(ends)];
+  const nodes = new Map<Branch, CompareNode>();
+  const make = (words: BraidWord[], via: string[], node: CompareNode): Branch => {
+    const branch: Branch = { words: words.map(word => word.text), ayat: [], children: [], via };
+    nodes.set(branch, node);
+    return branch;
+  };
+  const root = strands[0]?.kind === 'shared' ? make(strands[0].a, both, { words: strands[0].a, other: strands[0].b }) : make([], both, { words: [] });
+  let at = root;
+  for (const strand of strands.slice(strands[0]?.kind === 'shared' ? 1 : 0)) {
+    if (strand.kind === 'split') {
+      at.children = [make(strand.a, [ends[0]], { side: 0, words: strand.a }), make(strand.b, [ends[1]], { side: 1, words: strand.b })];
+      continue;
+    }
+    const next = make(strand.a, both, { words: strand.a, other: strand.b });
+    at.rejoin = next;
+    at = next;
+  }
+  return { tree: root, nodes };
 }
 
 /**

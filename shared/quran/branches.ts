@@ -13,8 +13,10 @@ export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page
 /**
  * `differs`: indices of words moved here from a neighbouring node because its ayat write them differently, drawn amber.
  * `spelled`: the node's words before any moved (see `foldForms`), which a node's tree id and links are made from.
+ * `rejoin`: where the children's paths meet again, drawn after them (a compare card's tree, shared/quran/braid.ts `compareTree`);
+ * `via`: then the ayat whose paths run through the node, in place of those found from `ayat` and the children.
  */
-export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[] };
+export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[]; rejoin?: Branch; via?: string[] };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
 export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string; differs?: number[] };
 
@@ -267,7 +269,7 @@ export function textIs(text: string, query: string): boolean {
   return wanted.strict.length === words.length && (['strict', 'seat', 'loose'] as const).some(field => words.every((word, at) => word[field].includes(wanted[field][at])));
 }
 
-export const keys = (node: Branch): string[] => [...node.ayat, ...node.children.flatMap(keys)];
+export const keys = (node: Branch): string[] => node.via ?? [...node.ayat, ...node.children.flatMap(keys)];
 
 const continues = (ayah: BranchAyah, ayat: BranchAyah[]) => (!!chapterOpening(ayah) && ayah.words.length === 1) || ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((_, i) => sameWord(ayah, i, other, i)));
 

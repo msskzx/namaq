@@ -6,7 +6,7 @@ import { Stories } from './HomeFeed';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
-vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => children }));
+vi.mock('@/components/common/NavBar', () => ({ NavActions: ({ children }: { children: React.ReactNode }) => children, useDesktopRail: () => null }));
 const { quranContexts } = vi.hoisted(() => ({ quranContexts: vi.fn() }));
 vi.mock('@/lib/quran/quranText', () => ({ quranContexts }));
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));

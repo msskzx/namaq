@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from '../data/quran/trees.json';
-import { braid } from './braid';
+import { braid, compareTree } from './braid';
+import { keys } from './branches';
 
 const words = (key: string) => corpus.ayat.find(ayah => ayah.key === key)!.words;
 const text = (list: string[], [start, end]: [number, number]) => list.slice(start, end).join(' ').normalize('NFC');
@@ -50,5 +51,20 @@ describe('endMark', () => {
     expect(endMark([15, 186], true)).toBe('۝');
     expect(endMark([7], true)).toBe('٧');
     expect(endMark([], true)).toBe('');
+  });
+
+  it('makes a compare tree that parts and rejoins, each box naming the sides through it', () => {
+    const side = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return { surah, ayah, ayat: [{ number: ayah, words: words(key) }] }; };
+    const { tree, nodes } = compareTree([side('2:35'), side('7:19')]);
+    // It opens apart: a root with no words, a child for each side, then the shared «اسكن انت وزوجك الجنة».
+    expect(tree.words).toEqual([]);
+    expect(tree.children.map(keys)).toEqual([['2:35'], ['7:19']]);
+    expect(keys(tree)).toEqual(['2:35', '7:19']);
+    const middle = tree.rejoin!;
+    expect(middle.words).toHaveLength(4);
+    expect(nodes.get(middle)!.other).toHaveLength(4);
+    expect(middle.children.map(child => nodes.get(child)!.side)).toEqual([0, 1]);
+    expect(middle.rejoin!.rejoin).toBeUndefined();
+    expect(nodes.get(middle.rejoin!)!.words.at(-1)!.end).toBe(35);
   });
 });

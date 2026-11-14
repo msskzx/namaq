@@ -11,7 +11,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
 import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
-import CompareBraid from './CompareBraid';
+import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent } from './StoryParts';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
@@ -257,9 +257,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
                 </View>
               ))}
             </View>
-            {!folded.includes(r) && <CompareBraid sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
+            {!folded.includes(r) && <CompareTree sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
           </View>
-        )) : <CompareBraid sides={sides} palette={palette} around={around} labels={refrainLabels} />}
+        )) : <CompareTree sides={sides} palette={palette} around={around} labels={refrainLabels} />}
       </> : <>
         {side(card.sides[0], 0)}
         <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />

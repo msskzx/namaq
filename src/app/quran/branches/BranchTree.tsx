@@ -24,14 +24,18 @@ import { growthPlan } from '@shared/quran/growth';
 import { useGrowTarget } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 
-type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding;
+type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto' | 'down';
+  /** Every node's whole content, the root's too, in place of its words, references and buttons (a compare card's tree); `tab` names it over its edge. */
+  nodeContent?: (node: Branch) => { content: React.ReactNode; tab?: string } | undefined;
+  /** Off: no row of zoom buttons (a pinch or ctrl+wheel still zooms). */
+  zoomBar?: boolean; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding;
   /** With `sync`: the card whose own surrounding-ayat switch (in its row of buttons) the tree follows; none follows the settings' default. */
   card?: string } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode;
   /** Where the tree is not the page's own (the home feed): the swipe steps here instead of following the page's step links. */
   onStep?: (forward: boolean) => void };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[];
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable' | 'zoomBar'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[];
   /** The words above this node as its tree id spells them, before foldForms moved any (`Branch.spelled`). */
   spelledPath?: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
@@ -147,8 +151,12 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
 
 const nodeId = (index: number) => `n${index}`;
 
-function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
-  const root = path.length === 0;
+function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, juz, renderNode, nodeContent, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
+  // The tree's own root (index -1): a compare tree's first children have no words above them either.
+  const root = indices.get(node) === -1;
+  const custom = nodeContent?.(node);
+  // A compare tree that opens apart has no box before its first boxes, so no line into them.
+  const bare = !!nodeContent && root && node.words.length === 0;
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const own = !!renderNode && !root;
   // The ayah this node ends sits on a small tab over its top edge, at the start (owner, 2026-11-14), as in the app: the node holds
@@ -183,11 +191,15 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
   const last = shownWords[shownWords.length - 1] ?? '';
   const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1]));
   const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(spelled) ? branchesHref(linkId(spelled, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
-  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
+  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
-      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'} ${tabbed ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
+      {custom && (!root || shownWords.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`max-w-full text-lg ${custom.tab ? 'mt-3.5' : ''}`}>
+        {custom.tab && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center whitespace-nowrap rounded-lg border border-solid bg-inherit px-1.5 text-[11px] leading-[14px] text-[var(--home-muted)] [border-color:inherit] [border-width:1px]">{custom.tab}</span>}
+        {custom.content}
+      </PathBox>}
+      {!custom && !boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'} ${tabbed ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {/* In the node's flow, so the node is never narrower than it, and pulled up over the top border with no height of its own. */}
         {tabbed && <span data-tab className={`-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center rounded-lg border border-solid bg-inherit px-1.5 [border-color:inherit] [border-width:1px] ${runs ? 'whitespace-nowrap text-[11px] leading-[14px] text-[var(--home-muted)] [[data-down]_&]:hidden' : `[[data-down]_&]:m-0 [[data-down]_&]:mb-1 [[data-down]_&]:h-auto [[data-down]_&]:w-auto [[data-down]_&]:justify-center [[data-down]_&]:rounded-none [[data-down]_&]:border-x-0 [[data-down]_&]:border-t-0 [[data-down]_&]:bg-transparent [[data-down]_&]:py-0.5 [[data-down]_&]:[border-color:var(--home-rule)]`}`}>{runs ? runOf(node.ayat[0]) : references}</span>}
@@ -203,8 +215,12 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
         </>}
       </PathBox>}
       {entries.length > 0 && <>
-        <Stub keys={entries.flatMap(entry => entry.keys)} />
-        <Fan side="start" entries={entries} />
+        {!bare && <Stub keys={entries.flatMap(entry => entry.keys)} />}
+        <Fan side="start" entries={entries} join={!!node.rejoin} bare={bare} />
+      </>}
+      {node.rejoin && <>
+        <Stub keys={keys(node.rejoin)} />
+        <Node node={node.rejoin} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} />
       </>}
     </div>
   );
@@ -236,14 +252,16 @@ const NEIGHBOUR_GAP = '2rem';
 
 const interactive = 'a, button, input, textarea, select, label, [contenteditable]';
 
-function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane, auto = false, flip = false, zoomInRail = false, hideArrows = false }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null>; auto?: boolean; flip?: boolean; zoomInRail?: boolean | 'preview'; hideArrows?: boolean }) {
+function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbours, lane, auto = false, down: fixedDown = false, zoomBar = true, flip = false, zoomInRail = false, hideArrows = false }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void; neighbours?: Neighbours; lane: React.RefObject<HTMLDivElement | null>; auto?: boolean;
+  /** Always top down (a compare card's tree), when not `auto`. */
+  down?: boolean; zoomBar?: boolean; flip?: boolean; zoomInRail?: boolean | 'preview'; hideArrows?: boolean }) {
   const desktopRail = useDesktopRail();
   const rail = zoomInRail ? desktopRail : null;
   const viewport = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
-  const [down, setDown] = useState(false);
+  const [down, setDown] = useState(fixedDown);
 
   // Measured before the first paint, so a tree opens at its fit size rather than growing into it.
   useLayoutEffect(() => {
@@ -267,7 +285,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
         const pick = side.width > 0 && (fit(top) > fit(side) * DOWN_GAIN) !== flip;
         box = drawn(pick);
         setDown(pick);
-      }
+      } else if (fixedDown) box = drawn(true);
       const next = { ...box, ...available };
       if (!next.width || !next.height || !next.availableWidth) return;
       setSize(previous => previous && Object.keys(next).every(key => previous[key as keyof DiagramSize] === next[key as keyof DiagramSize]) ? previous : next);
@@ -278,7 +296,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
     observer.observe(outer);
     observer.observe(inner);
     return () => observer.disconnect();
-  }, [enabled, height, auto, flip]);
+  }, [enabled, height, auto, flip, fixedDown]);
 
   // The tree is placed with a transform, never by scrolling, so a pinch can keep any point of the tree under
   // the fingers, and each finger move only writes one transform (no re-render, no flicker).
@@ -555,9 +573,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 
   return <>
     {rail && zoomInRail !== 'preview' && createPortal(zoom, rail)}
-    {(controls || !rail) && <div dir={ar ? 'rtl' : 'ltr'} className={`mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 ${controls ? '' : 'max-sm:hidden'}`}>
+    {(controls || (!rail && zoomBar)) && <div dir={ar ? 'rtl' : 'ltr'} className={`mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 ${controls ? '' : 'max-sm:hidden'}`}>
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
-      {!rail && zoom}
+      {!rail && zoomBar && zoom}
     </div>}
     {onStep && !hideArrows && peek(false)}
     {onStep && !hideArrows && peek(true)}
@@ -574,7 +592,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 // docs/plans/quran-shared-openings.md
 const NO_VARIANTS: Variant[] = [];
 
-export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, organic = false }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, organic = false, nodeContent, zoomBar = true }: Props) {
   const prefixes = useMemo(() => listed && withStarts(listed, keys(tree)), [listed, tree]);
   const id = useId();
   const group = useGroupConnections()?.group;
@@ -625,6 +643,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
     node.children.forEach(visit);
+    if (node.rejoin) visit(node.rejoin);
   };
   visit(tree);
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
@@ -673,7 +692,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport lane={lane} hideArrows={hideArrows} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} flip={rotatable && rotated}>
+        <TreeViewport lane={lane} hideArrows={hideArrows} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} down={direction === 'down'} zoomBar={zoomBar} flip={rotatable && rotated}>
           {beforeEntries.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={beforeEntries} />
             <Stub keys={all} />
@@ -691,7 +710,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
             </> }))} />
             <Stub keys={all} />
           </> : <BeforeFan ayahKeys={all} around={around} />}
-          <Node node={tree} path={[]} start={startReference(all.filter(key => !prefixed.has(key)), tree.ayat)} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
+          <Node node={tree} path={[]} start={startReference(all.filter(key => !prefixed.has(key)), tree.ayat)} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
         </TreeViewport>
       </div>
   );
