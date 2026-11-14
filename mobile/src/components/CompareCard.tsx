@@ -23,6 +23,7 @@ import { cardVideoPage } from '@/lib/compareVideo';
 import { WEBSITE } from '@/lib/branches';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
+import { toTab } from '@/lib/ways';
 
 const DOUBLE_TAP = 280;
 
@@ -93,7 +94,7 @@ function SideHead({ label, keys, palette, group }: { label: string; keys: string
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'right' }}>{label}</Text>
-      {group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
+      {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
         <TreeIcon size={18} color={palette.muted} />
       </Pressable>}
       <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={read} style={{ padding: 6 }}>
@@ -285,7 +286,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
           </Pressable>
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
-          {tree && card.group && <Pressable onPress={() => router.navigate({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
+          {tree && card.group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
             <TreeIcon size={22} color={palette.muted} />
           </Pressable>}
           {onOpen && <Pressable onPress={onOpen} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتحها في المقارنة" style={{ padding: 8 }}>

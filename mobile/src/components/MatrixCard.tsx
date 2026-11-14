@@ -16,6 +16,7 @@ import Hourglass from './Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
 import type { Group, Tag } from '@shared/quran/mutashabih/types';
+import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 
 type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
@@ -180,6 +181,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   };
 
   const pan = Gesture.Pan()
+    .hitSlop(BACK_EDGE_SLOP)
     .activeOffsetX([-12, 12])
     .failOffsetY([-12, 12])
     .onStart(event => {

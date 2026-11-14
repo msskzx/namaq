@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, CircleHelp } from 'lucide-react-native';
 import ProphetStory from '@/components/ProphetStory';
 import { usePalette } from '@/lib/theme';
+import { toTab } from '@/lib/ways';
 
 /** A prophet's story opened by link (/prophets/[slug]), under a back bar. */
 export default function ProphetScreen() {
@@ -13,7 +14,7 @@ export default function ProphetScreen() {
   const back = (help: () => void) => (
     <View style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
       <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
-        <Pressable onPress={() => router.canGoBack() ? router.back() : router.navigate('/prophets')} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ padding: 6 }}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : toTab('/prophets')} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ padding: 6 }}>
           <ChevronRight size={28} color={palette.ink} />
         </Pressable>
         <View style={{ flex: 1 }} />
