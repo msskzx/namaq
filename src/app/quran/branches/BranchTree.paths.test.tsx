@@ -28,7 +28,7 @@ describe('path toggles across tree nodes', () => {
     const start = box('وسط');
     const end = box('طرف أول');
     expect(start.querySelector('header')).toBeNull();
-    expect(end.querySelector('header')?.textContent).toBe('الفاتحة ١');
+    expect(end.querySelector('[data-tab]')?.textContent).toBe('الفاتحة ١');
     fireEvent.click(button('طرف أول'));
     expect(start.querySelector('header')?.textContent).toBe('الفاتحة ١');
     fireEvent.click(button('طرف ثان'));

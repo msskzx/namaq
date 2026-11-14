@@ -124,7 +124,12 @@ const nodeId = (index: number) => `n${index}`;
 function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   const root = path.length === 0;
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
-  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={shownAyat(node, path)} className={singleSurah ? 'justify-center' : 'mt-1'} />;
+  const own = !!renderNode && !root;
+  // The ayah this node ends sits on a small tab over its top edge, at the start (owner, 2026-11-14), as in the app: the node holds
+  // only its words. A node ending several ayat keeps them inside; top down (the line into a node runs through its top edge) the tab
+  // turns back into the ruled header.
+  const tabbed = node.ayat.length === 1 && !own;
+  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={shownAyat(node, path)} className={tabbed ? 'flex-nowrap whitespace-nowrap [&_span]:!text-[11px] [&_span]:!leading-[14px]' : singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));
@@ -139,13 +144,15 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
-      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
+      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'} ${tabbed ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
-        {renderNode && !root ? renderNode(node, indices.get(node)!, tags, path) : <>
+        {/* In the node's flow, so the node is never narrower than it, and pulled up over the top border with no height of its own. */}
+        {tabbed && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center rounded-lg border border-solid bg-inherit px-1.5 [border-color:inherit] [border-width:1px] [[data-down]_&]:m-0 [[data-down]_&]:mb-1 [[data-down]_&]:h-auto [[data-down]_&]:w-auto [[data-down]_&]:justify-center [[data-down]_&]:rounded-none [[data-down]_&]:border-x-0 [[data-down]_&]:border-t-0 [[data-down]_&]:bg-transparent [[data-down]_&]:py-0.5 [[data-down]_&]:[border-color:var(--home-rule)]">{references}</span>}
+        {own ? renderNode(node, indices.get(node)!, tags, path) : <>
           {start}
-          {singleSurah && <ReferenceHeader>{references}</ReferenceHeader>}
+          {!tabbed && singleSurah && <ReferenceHeader>{references}</ReferenceHeader>}
           <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
-            references={!singleSurah && references}
+            references={!tabbed && !singleSurah && references}
             before={<PathButton id={id} keys={keys(node)} subject={subject} />}
             after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
             <span className="block font-quran leading-loose"><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} /></span>
