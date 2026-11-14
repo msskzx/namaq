@@ -51,6 +51,12 @@ export function backToVisit(now = Date.now()) {
   }
   leftAt = null;
 }
+/** A new visit now, asked for (home pulled down to refresh): what was shown before counts as seen. */
+export function newVisit(now = Date.now()) {
+  visit = now;
+  leftAt = null;
+  visitListeners.forEach(listener => listener());
+}
 
 /** Notes the ids as shown now; ids shown before keep their first time. */
 export function markFeedSeen(ids: string[], now = Date.now()) {

@@ -1,5 +1,6 @@
-import { useRef, type ComponentRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import { useRef, useState, type ComponentRef } from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
+import { newVisit } from '@shared/feedSeen';
 import { Text } from '@/components/Text';
 import { router, type Href } from 'expo-router';
 import { Bookmark, ChevronLeft, EyeOff, Feather, Library, Users, type LucideProps } from 'lucide-react-native';
@@ -49,12 +50,17 @@ export default function HomeScreen() {
   const bottom = useTabBarSpace();
   const [seen, setSeen] = tourSeen.use();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  // Pulled down at the top, as in a social app: a new visit, so the feed shows what was not seen yet.
+  const [refreshing, setRefreshing] = useState(false);
+  const refresh = () => { setRefreshing(true); newVisit(); setTimeout(() => setRefreshing(false), 400); };
   // The home button tapped again: back to the top.
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings search={() => toTab('/search')} hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={palette.accent} colors={[palette.accent]} progressBackgroundColor={palette.card} />}
+        contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <Stories palette={palette} />
         <ContinueReading palette={palette} />
         <MemorizedPrompt palette={palette} />

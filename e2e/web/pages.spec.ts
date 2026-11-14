@@ -51,16 +51,10 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the home tree card is the branches tree: it swipes to the next tree and opens it', async ({ page }) => {
+  test('the home tree card is the branches tree and opens it', async ({ page }) => {
     await page.goto('/');
-    const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' });
+    const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' }).first();
     await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
-    await expect(card.getByText(/^الشجرة ١ من /)).toBeAttached();
-    // The arrow keys step the trees as on the branches page; until the page has hydrated a key does nothing.
-    await expect(async () => {
-      await page.keyboard.press('ArrowLeft');
-      await expect(card.getByText(/^الشجرة ٢ من /)).toBeAttached({ timeout: 1000 });
-    }).toPass({ timeout: 20_000 });
     await card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).click();
     await expect(page).toHaveURL(/\/quran\/branches/);
     await noErrorPage(page);

@@ -4,11 +4,14 @@ import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 're
 import Link from 'next/link';
 import useSWR from 'swr';
 import * as adhan from 'adhan';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Maximize2, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, GalleryHorizontal, MapPin, Moon, NotebookPen, ScrollText } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
+import Cookies from 'js-cookie';
 import BranchTree from '@/app/quran/branches/BranchTree';
+import AyahCards from '@/app/quran/branches/AyahCards';
+import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
 import { FaintWord, WriteBox, WrittenWord } from '@/app/quran/read/MushafPage';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
@@ -121,7 +124,7 @@ export function ContinueReading() {
 function PostHead({ Icon, title, sub, quran }: { Icon: typeof BookOpen | typeof TreeIcon; title: string; sub?: string; quran?: boolean }) {
   return <div className={styles.postHead}>
     <span className={styles.avatar}><Icon size={18} aria-hidden /></span>
-    <div><h3 className={quran ? 'font-quran text-lg font-normal' : undefined}>{title}</h3>{sub && <p className={styles.muted}>{sub}</p>}</div>
+    <div><h3 className={quran ? 'font-quran text-xl font-normal leading-[2]' : undefined}>{quran ? mushafText(title) : title}</h3>{sub && <p className={styles.muted}>{sub}</p>}</div>
   </div>;
 }
 
@@ -135,7 +138,7 @@ function PairPost({ pair }: { pair: PairCard }) {
   return <article dir="rtl">
     <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${label(a)} · ${label(b)}`} />
     <ul className="list-none p-0">
-      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} />
+      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} />
     </ul>
   </article>;
 }
@@ -186,46 +189,34 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   </article>;
 }
 
-/** How many of the day's trees the tree card holds to swipe through. */
-const TREES = 20;
 type Tree = TreePreview & { text: string };
-const treeProps = (tree: Tree) => ({ tree: tree.tree, ayat: tree.ayat, prefixes: tree.prefixes, offsets: tree.offsets, names, surround: { on: false, sync: true } });
+/** The tree card's height, as the branches page's on a phone. */
+const TREE_HEIGHT = '24rem';
 
 /**
- * The day's trees as one card: the branches page's own tree (BranchTree), so it zooms, pans, lights a path on a click,
- * and swipes sideways to the next tree, as there. The open button takes it to the branches page.
+ * One tree as a post: the branches page's own tree (BranchTree), so it zooms, pans and lights a path on a click, as there.
+ * The open button takes it to the branches page.
  */
-function TreePost({ day, offsets, ids }: { day: number; offsets: number[]; ids: (string | null)[] }) {
-  const [index, setIndex] = useState(0);
-  const at = Math.min(index, offsets.length - 1);
-  const around = [at - 1, at, at + 1].filter(i => i >= 0 && i < offsets.length);
-  const { data } = useSWR(`/api/home/feed?day=${day}&t=${around.map(i => offsets[i]).join(',')}`, fetchJson<Content>, { revalidateOnFocus: false, keepPreviousData: true });
-  const byId = useMemo(() => new Map(data?.trees.map(tree => [tree.id, tree]) ?? []), [data]);
-  const treeAt = (i: number) => (i >= 0 && i < offsets.length ? byId.get(ids[offsets[i]] ?? '') : undefined);
-  const tree = treeAt(at);
-  const previous = treeAt(at - 1);
-  const next = treeAt(at + 1);
-  useEffect(() => { if (tree) markFeedSeen([tree.id]); }, [tree]);
+function TreePost({ tree }: { tree: Tree }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
-  if (!tree) return <article className={styles.post}><p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p></article>;
   const saved = bookmarks.some(item => item.id === tree.id);
-  const neighbour = (other?: Tree) => other && <BranchTree {...treeProps(other)} viewportHeight={TREE_HEIGHT} direction="auto" zoomInRail="preview" />;
+  // Opens in the view chosen in the settings (the branches page's cookie); the card's own switch changes only this card.
+  const [view, setView] = useState<BranchView>(() => parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree');
+  const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
   return <article className={styles.post} dir="rtl">
-    <PostHead Icon={TreeIcon} title={tree.text} sub="من متشابهات القرآن" quran />
-    <p className="sr-only" aria-live="polite">{`الشجرة ${num(at + 1)} من ${num(offsets.length)}`}</p>
+    <Link href={tree.href} aria-label="افتح الشجرة في متشابهات القرآن" className="block hover:opacity-80"><PostHead Icon={TreeIcon} title={tree.text} sub="من متشابهات القرآن" quran /></Link>
     <div className="px-2">
-      <BranchTree key={tree.id} {...treeProps(tree)} viewportHeight={TREE_HEIGHT} direction="auto" zoomInRail
-        steppable={{ next: at + 1 < offsets.length, previous: at > 0, nextCard: neighbour(next), previousCard: neighbour(previous), onStep: forward => setIndex(at + (forward ? 1 : -1)) }} />
+      {view === 'cards'
+        ? <AyahCards ayahKeys={tree.ayat?.map(ayah => ayah.key) ?? []} names={names} />
+        : <BranchTree tree={tree.tree} ayat={tree.ayat} prefixes={tree.prefixes} offsets={tree.offsets} names={names} surround={{ on: false, sync: true }} viewportHeight={TREE_HEIGHT} direction="auto" zoomInRail />}
     </div>
     <div className={styles.actions} data-share-skip>
       <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saved ? 'أزلها من المحفوظات' : 'احفظ'} title={saved ? 'أزلها من المحفوظات' : 'احفظ'} className={saved ? 'text-[var(--home-accent)]' : undefined}
         onClick={() => toggleBookmark({ id: tree.id, text: tree.text, href: tree.href })}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Button>
-      <Button size="lg" variant="muted" href={tree.href} aria-label="افتح الشجرة في متشابهات القرآن" title="افتح الشجرة في متشابهات القرآن"><Maximize2 aria-hidden /></Button>
+      <Button size="lg" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>{view === 'tree' ? <GalleryHorizontal aria-hidden /> : <TreeIcon aria-hidden />}</Button>
     </div>
   </article>;
 }
-/** The tree card's height, as the branches page's on a phone. */
-const TREE_HEIGHT = '24rem';
 
 /** Posts per batch: one pair and one tree; «المزيد للتأمل» adds this many batches. */
 const MORE = 3;
@@ -258,18 +249,23 @@ export function Feed() {
     if (!ids) return null;
     const pick = (list: (string | null)[], keys: string[][] | undefined, count: number) => freshPicks(offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, count,
       { since: visit, tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
-    return { pairs: pick(ids.pairs, ids.pairKeys, batches), trees: pick(ids.trees, ids.treeKeys, TREES) };
+    return { pairs: pick(ids.pairs, ids.pairKeys, batches), trees: pick(ids.trees, ids.treeKeys, batches) };
   }, [ids, seen, batches, prefer, memorized, visit]);
-  const { data: content } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}&t=` : null, fetchJson<Content>, { revalidateOnFocus: false, keepPreviousData: true });
-  // A tree counts as seen when its card shows it (TreePost), not when it waits further along the card.
-  useEffect(() => { if (content) markFeedSeen(content.pairs.map(pair => pair.id)); }, [content]);
+  // Pairs and trees load apart, so the pairs show while the trees are still being worked out.
+  const swr = { revalidateOnFocus: false, keepPreviousData: true };
+  const { data: pairContent } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
+  const { data: treeContent } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
+  const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
+  useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
+  useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
     const pair = content?.pairs[i];
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
-    if (i === 0 && day && picked?.trees.length) posts.push(<TreePost key="trees" day={day} offsets={picked.trees} ids={ids!.trees} />);
+    const tree = content?.trees[i];
+    if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
   }
   return <section className={styles.feed} aria-labelledby="feed-title">
     <Divider id="feed-title" label="للتأمل اليوم" />
