@@ -7,7 +7,7 @@ import Logo from './Logo';
 import ThemeTiles, { ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
-import { connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
+import { around, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import { MemorizedSetting } from './Memorized';
 import type { Palette } from '@/lib/theme';
@@ -29,6 +29,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <MemorizedSetting palette={palette} />
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />
+        <AroundSetting palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
         <HapticsSetting palette={palette} />
@@ -61,6 +62,12 @@ function ConnectorsSetting({ palette }: { palette: Palette }) {
       <Text style={{ color: palette.muted, fontSize: 13 }}>إظهار خطوط بين الكلمات المشتركة تلقائيًا عند فتح المصفوفة.</Text>
     </View>
   );
+}
+
+/** The website's BranchAroundSetting: how a card opens; each card's own button switches it there. */
+function AroundSetting({ palette }: { palette: Palette }) {
+  const [on, setOn] = around.use();
+  return <Toggle on={on} onChange={setOn} label="إظهار الآيات المحيطة افتراضيًا" palette={palette} />;
 }
 
 function HapticsSetting({ palette }: { palette: Palette }) {

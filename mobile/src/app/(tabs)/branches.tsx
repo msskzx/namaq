@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { GalleryHorizontal, Search, UnfoldHorizontal, X, type LucideProps } from 'lucide-react-native';
+import { Search, X, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -12,7 +12,6 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
-import TreeIcon from '@/components/TreeIcon';
 import LoadingDots from '@/components/LoadingDots';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
@@ -48,8 +47,9 @@ export default function BranchesScreen() {
   const bottom = useTabBarSpace();
   const [help, setHelp] = useState(false);
   const [list, setList] = listState.use();
-  const [mode, setMode] = branchView.use();
-  const [around, setAround] = aroundSetting.use();
+  // The settings' defaults: each card switches its own view and surrounding ayat.
+  const [mode] = branchView.use();
+  const [around] = aroundSetting.use();
   const [searching, setSearching] = useState(false);
   /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. */
   const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
@@ -114,8 +114,6 @@ export default function BranchesScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={toQuranHub} help={() => setHelp(true)}>
         <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
-        <BarButton label={mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => { closeStudio(); setMode(mode === 'tree' ? 'matrix' : 'tree'); }} Icon={mode === 'tree' ? GalleryHorizontal : TreeIcon} palette={palette} />
-        <BarButton label="الآيات المحيطة" onPress={() => { closeStudio(); setAround(!around); }} Icon={UnfoldHorizontal} palette={palette} on={around} />
       </TopBar>
       {(list.query || list.surah || list.ayah) ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
         {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}

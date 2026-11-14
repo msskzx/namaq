@@ -158,8 +158,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   // The read-along studio lights words in the matrix, so it shows the matrix while open.
   const tree = view === 'tree' && !read.studio;
   const sides = shownAyat(card, selected);
-  // The surrounding-ayat switch is the branches tab's: one setting for every tree and matrix.
-  const [aroundOn, setAround] = aroundSetting.use();
+  // The card's own switches, opening on the settings' defaults.
+  const [aroundOn, setAround] = useState(aroundSetting.get);
   const around = aroundOn ? aroundOf(sides) : undefined;
   // A story card lines its parts up in rows; any part folds to its ayah range, both sides at once.
   const parts = card.many ? undefined : card.sides[0].rows;

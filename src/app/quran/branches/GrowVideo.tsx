@@ -20,7 +20,8 @@ const FADE = 400;
 
 type Rect = { x: number; y: number; w: number; h: number };
 type Word = Rect & { text: string; font: string; color: string };
-type Shape = { element: HTMLElement; rect: Rect; words: Word[] };
+/** `tab`: the small tab over the box's top edge that carries its ayah (BranchTree's `[data-tab]`), when it is drawn as one. */
+type Shape = { element: HTMLElement; rect: Rect; words: Word[]; tab?: Rect & { radius: number; border: string } };
 type Segment = [number, number, number, number, number];
 type Line = { element: HTMLElement; segments: Segment[] };
 type Curve = { element: SVGPathElement; x: number; y: number };
@@ -53,7 +54,11 @@ function measure(root: HTMLElement): Drawing | null {
         words.push({ ...place(box), text: match[0], font: `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`, color: style.color });
       }
     }
-    return { element, rect: place(element.getBoundingClientRect()), words };
+    // Top down the tab turns back into a ruled header (no top border), which the words alone draw.
+    const tab = element.querySelector<HTMLElement>(':scope > [data-tab]');
+    const tabStyle = tab && getComputedStyle(tab);
+    const tabbed = tab && tabStyle && parseFloat(tabStyle.borderTopWidth) > 0 ? { ...place(tab.getBoundingClientRect()), radius: parseFloat(tabStyle.borderTopLeftRadius) || 8, border: tabStyle.borderTopColor } : undefined;
+    return { element, rect: place(element.getBoundingClientRect()), words, tab: tabbed };
   });
   const group = content.closest<HTMLElement>('[data-connection-group]')?.dataset.connectionGroup ?? content.querySelector<SVGElement>('[data-connection-group]')?.dataset.connectionGroup;
   const legend = group ? [...document.querySelectorAll<HTMLElement>('[data-connection-legend]')].find(element => element.dataset.connectionLegend === group) : undefined;
@@ -171,6 +176,13 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.fill();
     context.stroke();
     context.setLineDash([]);
+    if (box.tab) {
+      context.strokeStyle = box.tab.border;
+      context.beginPath();
+      context.roundRect(box.tab.x + 0.5, box.tab.y + 0.5, box.tab.w - 1, box.tab.h - 1, box.tab.radius);
+      context.fill();
+      context.stroke();
+    }
     if (box.element.hasAttribute('data-ask')) {
       drawTimer(context, box.element, box.rect, look.accent, look.font);
       continue;
