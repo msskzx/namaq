@@ -157,7 +157,7 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   const text = useAyahTexts([ayah])[ayah];
   const words = useMemo(() => (text ? text.split(' ') : []), [text]);
   const asked = useMemo(() => wordTargets(words), [words]);
-  const boxes = useWriteBoxes({ ayah: text && !shown && !graded ? ayah : null, words, asked, onDone: result => {
+  const boxes = useWriteBoxes({ ayah: text ? ayah : null, words, asked, onDone: result => {
     setGraded(result);
     if (result.wrong.length) markForgotten(ayah);
   } });
@@ -195,15 +195,16 @@ const treeProps = (tree: Tree) => ({ tree: tree.tree, ayat: tree.ayat, prefixes:
  * The day's trees as one card: the branches page's own tree (BranchTree), so it zooms, pans, lights a path on a click,
  * and swipes sideways to the next tree, as there. The open button takes it to the branches page.
  */
-function TreePost({ day, offsets }: { day: number; offsets: number[] }) {
+function TreePost({ day, offsets, ids }: { day: number; offsets: number[]; ids: (string | null)[] }) {
   const [index, setIndex] = useState(0);
   const at = Math.min(index, offsets.length - 1);
   const around = [at - 1, at, at + 1].filter(i => i >= 0 && i < offsets.length);
   const { data } = useSWR(`/api/home/feed?day=${day}&t=${around.map(i => offsets[i]).join(',')}`, fetchJson<Content>, { revalidateOnFocus: false, keepPreviousData: true });
-  const byOffset = useMemo(() => new Map(data?.trees.map((tree, i) => [offsets[around[i]], tree]) ?? []), [data]); // eslint-disable-line react-hooks/exhaustive-deps
-  const tree = byOffset.get(offsets[at]);
-  const previous = at > 0 ? byOffset.get(offsets[at - 1]) : undefined;
-  const next = byOffset.get(offsets[at + 1]);
+  const byId = useMemo(() => new Map(data?.trees.map(tree => [tree.id, tree]) ?? []), [data]);
+  const treeAt = (i: number) => (i >= 0 && i < offsets.length ? byId.get(ids[offsets[i]] ?? '') : undefined);
+  const tree = treeAt(at);
+  const previous = treeAt(at - 1);
+  const next = treeAt(at + 1);
   useEffect(() => { if (tree) markFeedSeen([tree.id]); }, [tree]);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   if (!tree) return <article className={styles.post}><p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p></article>;
@@ -268,7 +269,7 @@ export function Feed() {
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
-    if (i === 0 && day && picked?.trees.length) posts.push(<TreePost key="trees" day={day} offsets={picked.trees} />);
+    if (i === 0 && day && picked?.trees.length) posts.push(<TreePost key="trees" day={day} offsets={picked.trees} ids={ids!.trees} />);
   }
   return <section className={styles.feed} aria-labelledby="feed-title">
     <Divider id="feed-title" label="للتأمل اليوم" />

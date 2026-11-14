@@ -133,6 +133,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     const saved = restored.current;
     restored.current = undefined;
     camera.value = saved ? settleCamera(saved, size, view) : fitCamera(size, view);
+    setZoomed(false);
     setContent(size);
   }, [camera, contentSize, view]);
 

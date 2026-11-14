@@ -203,7 +203,7 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
   const words = useMemo(() => ayahText(ayah).split(' ').filter(Boolean), [ayah]);
   const asked = useMemo(() => wordTargets(words), [words]);
-  const boxes = useWriteBoxes({ ayah: shown || graded ? null : ayah, words, asked, onDone: result => {
+  const boxes = useWriteBoxes({ ayah, words, asked, onDone: result => {
     setGraded(result);
     if (result.wrong.length) markForgotten(ayah);
   } });
@@ -228,7 +228,7 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
             ? <WriteBox key={i} text={word} size={RECALL_SIZE} palette={palette} typed={boxes.typed[i] ?? ''} active={boxes.current === i} onPress={() => boxes.pick(i)} />
             : <Veil key={i} text={word} size={RECALL_SIZE} palette={palette} next={false} faint />;
         })}
-        {boxes.field}
+        {!open && boxes.field}
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
         {!graded && <Pressable onPress={() => setShown(value => !value)} accessibilityRole="button" accessibilityLabel={shown ? 'أخفها' : 'أظهرها'}
@@ -310,7 +310,7 @@ export function Feed({ palette }: { palette: Palette }) {
   const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
     { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
   const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, TREES,
-    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, seen, prefer, memorized, visit]);
   // A tree counts as seen when its card shows it (TreePost), not when it waits further along the card.
   useEffect(() => { markFeedSeen(pairs.map(pair => pair.id)); }, [pairs]);
   const posts: React.ReactNode[] = [];

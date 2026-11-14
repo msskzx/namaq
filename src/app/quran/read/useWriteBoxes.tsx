@@ -16,10 +16,11 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
   if (writeFor !== ayah) {
     setWriteFor(ayah);
     setBoxes(freshBoxes(asked));
+  } else if (boxes.current !== null && asked.length && !asked.includes(boxes.current)) {
+    // A word revealed by the next-word button while its box was being written has no box any more.
+    setBoxes({ ...boxes, current: asked[0] });
   }
   useEffect(() => { if (ayah && autoFocus) input.current?.focus({ preventScroll: true }); }, [ayah, autoFocus]);
-  // A word revealed by the next-word button while its box was being written has no box any more.
-  if (boxes.current !== null && asked.length && !asked.includes(boxes.current)) setBoxes({ ...boxes, current: asked[0] });
   const step = ({ boxes: next, finished }: { boxes: Boxes; finished: boolean }) => {
     setBoxes(next);
     if (finished) onDone(gradeWritten(asked, next.typed, words));

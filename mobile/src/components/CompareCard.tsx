@@ -28,7 +28,7 @@ const DOUBLE_TAP = 280;
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
 
 /** The card's first words and a link to its two passages on the website. */
-export function cardLink(card: PairCard) {
+function cardLink(card: PairCard) {
   const [a, b] = card.sides;
   // The two surahs' page, scrolled to this card; a one-to-many card links to the page alone, since its far side is one of several ayat.
   const href = `${surahPairHref(a.surah, b.surah)}${card.many ? '' : `#${compareAnchor(a, b)}`}`;
@@ -36,7 +36,7 @@ export function cardLink(card: PairCard) {
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-export function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
+function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const related = blend(palette.root, palette.muted, 0.45);
   return (
     <Text style={inline ? { color: plain ? palette.muted : palette.ink } : { fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: plain ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>

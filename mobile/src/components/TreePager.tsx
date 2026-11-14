@@ -134,7 +134,8 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
 export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen, embedded }: Props) {
   /** The one tree drawn the other way, by its id: rotating belongs to that tree, not to the page. */
   const [rotatedId, setRotatedId] = useState<string | null>(null);
-  const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => onOpen?.(piece) }), [onOpen]);
+  // Embedded, «show only this part» opens that part on the branches tab.
+  const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => (embedded ? embedded.open(piece) : onOpen?.(piece)) }), [onOpen, embedded]);
   const place = useMemo(() => (embedded ? undefined : readJson<Place>(PLACE)), []); // eslint-disable-line react-hooks/exhaustive-deps
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
@@ -283,7 +284,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
               // Taps between the buttons stay here, so they are not read as taps on the tree.
               <View style={{ direction: 'rtl' }} onStartShouldSetResponder={() => true}>
                 <View style={{ height: FOOT }}>
-                  {current && <StudioProgress palette={palette} />}
+                  {current && !embedded && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}

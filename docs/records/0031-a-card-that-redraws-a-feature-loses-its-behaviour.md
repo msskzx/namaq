@@ -11,7 +11,7 @@ conditions: "Expo app (RN gesture handler pan inside a vertical ScrollView) and 
 evidence: "mobile/src/components/HomeFeed.tsx, mobile/src/lib/useWriteBoxes.tsx, src/components/homepage/HomeFeed.tsx, src/app/quran/read/useWriteBoxes.tsx; e2e/app/home.spec.ts and e2e/web/pages.spec.ts tests per card"
 implication: "A card, preview or widget that shows an existing feature renders that feature's component, adding props for the new place (embedded, onOpen, page) instead of drawing it again. Before building one, find the component the feature's own page uses. Each such card gets a UI test that uses it (zoom or swipe, typing, the tap that opens its page), not a screenshot."
 date: "2026-11-13"
-topics: ["ui-state", "graph-ui"]
+topics: ["ui-state","graph-ui"]
 buildsOn: ["namaq/0018-a-test-against-the-shared-list-misses-a-menu-that-keeps-its-own"]
 ---
 
