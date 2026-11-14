@@ -45,4 +45,12 @@ describe("the reader's ayah buttons", () => {
     fireEvent.click(screen.getByLabelText('القراءات العشر في كلمات الآية'));
     expect(onPreview).toHaveBeenLastCalledWith('readings');
   });
+
+  it('opens al-Sa\'di\'s tafsir for every ayah in a sheet', () => {
+    const onPreview = vi.fn();
+    render(<AyahActions {...props} onPreview={onPreview} />);
+    expect(screen.getByLabelText('تفسير السعدي').textContent).toBe('التفسير');
+    fireEvent.click(screen.getByLabelText('تفسير السعدي'));
+    expect(onPreview).toHaveBeenLastCalledWith('tafsir');
+  });
 });

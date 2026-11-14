@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, ChevronLeft, Layers, X } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, X } from 'lucide-react';
 import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
+import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
 import ExternalLink from '@/components/common/ExternalLink';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -14,12 +15,12 @@ import { useSwipeClose } from '@/components/common/useSwipeClose';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { AyahPreview } from './ayahPreview';
 
-/** Trees and compare load their preview; readings come with the page (ayahLinks.ts) and have no page of their own. */
-export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] };
+/** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
+export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string };
 
 const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
-const load = async (key: string): Promise<AyahPreview> => {
-  const response = await fetch(`/api/quran/ayah-preview?k=${encodeURIComponent(key)}`);
+const load = async <T,>(api: string, key: string): Promise<T> => {
+  const response = await fetch(`/api/quran/${api}?k=${encodeURIComponent(key)}`);
   if (!response.ok) throw new Error('preview');
   return response.json();
 };
@@ -56,24 +57,33 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
     if (!preview && dialog.open) dialog.close();
   }, [preview]);
   useSwipeClose(sheet, !!preview, { direction: 'down', onClose: () => sheet.current?.close() });
-  const { data, error } = useSWR(shown && shown.kind !== 'readings' ? ['ayah-preview', shown.key] : null, ([, key]) => load(key), { revalidateOnFocus: false });
+  const tafsirKey = shown?.kind === 'tafsir' ? shown.key : null;
+  const { data, error: previewError } = useSWR(shown && shown.kind !== 'readings' && !tafsirKey ? ['ayah-preview', shown.key] : null, ([api, key]) => load<AyahPreview>(api, key), { revalidateOnFocus: false });
+  const { data: tafsir, error: tafsirError } = useSWR(tafsirKey ? ['tafsir', tafsirKey] : null, ([api, key]) => load<TafsirPassage>(api, key), { revalidateOnFocus: false });
+  const error = tafsirKey ? tafsirError : previewError;
   const [surah, number] = (shown?.key ?? '0:0').split(':').map(Number);
   const trees = shown?.kind === 'trees';
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
-  const Icon = trees ? TreeIcon : readings ? Layers : ArrowLeftRight;
+  const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : ArrowLeftRight;
   return (
-    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
+    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
       dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
         <div className="flex shrink-0 items-center gap-2 px-4 pb-2 pt-1 text-[var(--home-muted)]">
           <Icon size={20} aria-hidden />
-          <h2 className="flex-1 text-base font-normal">{`${names[surah] ?? num(surah)} ${num(number)}`}</h2>
+          {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
+          <h2 className="flex-1 text-base font-normal">{`${names[surah] ?? num(surah)} ${tafsir && tafsirKey && tafsir.from !== tafsir.to ? `${num(tafsir.from)}–${num(tafsir.to)}` : num(number)}`}</h2>
           <button type="button" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق" className="flex size-9 items-center justify-center rounded-full"><X size={18} aria-hidden /></button>
         </div>
         <div className="flex min-h-0 flex-col gap-2.5 overflow-y-auto px-4 pb-1">
           {readings && <Readings qiraat={readings} />}
-          {!readings && !data && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
+          {tafsirKey && tafsir && (
+            <p className="whitespace-pre-line px-0.5 text-[1.1875rem] leading-[1.9]">
+              {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <span key={i} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
+            </p>
+          )}
+          {!readings && !(tafsirKey ? tafsir : data) && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
           {error && <p role="alert" className="py-6 text-center text-sm text-[var(--home-muted)]">تعذّر التحميل.</p>}
           {trees && data?.trees.map(tree => (
             // A tap opens that tree; a wide tree scrolls sideways inside its card. Trees draw top-down and left to right inside, as on the branches page.
@@ -83,7 +93,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
               </div>
             </Link>
           ))}
-          {!trees && !readings && data?.compare.map(item => (
+          {shown.kind === 'compare' && data?.compare.map(item => (
             <Link key={item.href} href={item.href} aria-label={`${item.page}، ${item.partner}`} className={`${CARD} shrink-0 px-3.5 py-2.5`}>
               <span className="flex items-center gap-1.5 text-sm text-[var(--home-muted)]">
                 <span className="flex-1">{item.page}</span>
@@ -96,7 +106,8 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
             </Link>
           ))}
         </div>
-        {shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
+        {shown.kind === 'tafsir' ? tafsir && <ExternalLink href={tafsirSadiPage(tafsir)} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink>
+          : shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
           <Icon size={20} aria-hidden />
           {trees ? 'افتح في المتشابهات' : `كل مقارنات ${names[surah] ?? ''}`}
           <ChevronLeft size={18} aria-hidden className="text-[var(--home-muted)]" />

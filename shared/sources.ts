@@ -45,6 +45,7 @@ const USE = {
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },
   reader: { ar: 'المصحف', en: 'the mushaf reader', href: '/quran/read' },
+  tafsir: { ar: 'التفسير في المصحف', en: 'the tafsir in the mushaf reader', href: '/quran/read' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -120,6 +121,16 @@ export const SOURCES: Source[] = [
     link: { url: 'https://quran.ksu.edu.sa', label: 'مصحف جامعة الملك سعود' }, licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
   },
   {
+    id: 'tafsir-sadi', group: 'books',
+    title: { ar: 'تيسير الكريم الرحمن في تفسير كلام المنان', en: 'Taysir al-Karim al-Rahman' }, author: { ar: 'عبد الرحمن بن ناصر السعدي', en: 'al-Sa‘di' },
+    edition: 'مؤسسة الرسالة، الطبعة الأولى ١٤٢٠هـ/٢٠٠٠م، تحقيق عبد الرحمن بن معلا اللويحق', link: { url: 'https://quranpedia.net/book/3', label: 'الموسوعة القرآنية' },
+    licence: {
+      ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها.',
+      en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link.',
+    },
+    uses: [USE.tafsir],
+  },
+  {
     id: 'tuhfat-al-atfal', group: 'books',
     title: { ar: 'تحفة الأطفال والغلمان في تجويد القرآن', en: 'Tuhfat al-Atfal' }, author: { ar: 'سليمان الجمزوري', en: 'Sulayman al-Jamzuri' },
     edition: 'ضبط الشيخ حسن بن مصطفى الوراقي', link: { url: 'https://islamhouse.com/ar/books/2101', label: 'دار الإسلام' },
@@ -173,13 +184,13 @@ export const SOURCES: Source[] = [
   // Data
   {
     id: 'quranpedia', group: 'data',
-    title: { ar: 'الموسوعة القرآنية: ملف القراءات', en: 'Quranpedia: the qira’at dump' },
-    edition: 'إصدار ٢٠٢٦-١١-١٤', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
+    title: { ar: 'الموسوعة القرآنية: ملفا القراءات والتفسير', en: 'Quranpedia: the qira’at and tafsir dumps' },
+    edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
     licence: {
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
-    uses: [USE.qiraat, USE.reader],
+    uses: [USE.qiraat, USE.reader, USE.tafsir],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data',
