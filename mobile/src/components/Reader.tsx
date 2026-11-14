@@ -105,7 +105,9 @@ export default function Reader() {
   const [heights, setHeights] = useState<Record<number, number>>({});
   const onHeight = useCallback((at: number, h: number) => setHeights(prev => (Math.abs((prev[at] ?? 0) - h) < 1 ? prev : { ...prev, [at]: h })), []);
   /** After a pinch, the share of the page's height that was between the fingers, and how far below the screen's top. */
-  const anchor = useRef<{ share: number; screen: number } | null>(null);
+  const anchor = useRef<{ share: number; screen: number; from: number } | null>(null);
+  /** Until when keeping an ayah in sight waits, so it doesn't undo where a pinch left the page. */
+  const quietUntil = useRef(0);
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
@@ -300,6 +302,8 @@ export default function Reader() {
   shown.current = page;
   const onMove = useCallback(() => {
     moved.current = Date.now();
+    // A neighbour about to slide in shows its top where the reader is now, however the page got scrolled there.
+    setScrollTop(scrolled.current);
     if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
   }, []);
   useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
@@ -358,7 +362,8 @@ export default function Reader() {
     if (restoring.current && drawnHeight > height + 1) {
       restoring.current = false;
       y = Math.min(place?.y ?? 0, drawnHeight - height);
-    } else if (anchor.current) {
+    } else if (anchor.current && (!flowing || drawnHeight !== anchor.current.from)) {
+      // Only once the page has been set again at the new size.
       const { share, screen } = anchor.current;
       anchor.current = null;
       y = flowing ? Math.max(0, Math.min(drawnHeight - height, share * drawnHeight - screen)) : 0;
@@ -369,13 +374,15 @@ export default function Reader() {
     return () => cancelAnimationFrame(frame);
   }, [drawnHeight, zoom]); // eslint-disable-line react-hooks/exhaustive-deps
   const zoomTo = useCallback((next: number, focalY: number) => {
-    anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - scrolled.current };
+    anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - scrolled.current, from: heights[page] ?? 0 };
+    restoring.current = false;
+    quietUntil.current = Date.now() + 800;
     setZoom(next);
     writeJson(ZOOM, next);
-  }, [pagerHeight]);
+  }, [pagerHeight, heights, page]);
   const onFocus = useCallback((y: number, h: number) => follow.current(y, h), []);
   follow.current = (y, h) => {
-    if (!size || (!keyboard && !flowing)) return;
+    if (!size || (!keyboard && (!flowing || Date.now() < quietUntil.current))) return;
     const top = insets.top + 8;
     const bottom = keyboard ? size.height - pillBottom - RECITE_BAR - 12 : size.height - pageInsets.bottom - 8;
     if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
@@ -409,7 +416,7 @@ export default function Reader() {
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} scrollEnabled={!!keyboard || flowing} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
         onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}
-        onScrollEndDrag={() => setScrollTop(scrolled.current)} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
+        onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
           <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop} />

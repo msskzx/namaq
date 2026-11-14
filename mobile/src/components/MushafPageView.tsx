@@ -176,7 +176,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const starts = breakLines(run.map(cell => (cell.width * size) / BASE), body.width, GAP * size);
       starts.forEach((start, n) => {
         const part = run.slice(start, starts[n + 1] ?? run.length);
-        out.push({ id: `f${out.length}`, groups: part.map(cell => cell.group), natural: lineWidth(part.map(cell => cell.width)), last: n === starts.length - 1, single: part.length === 1 });
+        out.push({ id: `f${zoom}-${out.length}`, groups: part.map(cell => cell.group), natural: lineWidth(part.map(cell => cell.width)), last: n === starts.length - 1, single: part.length === 1 });
       });
       run = [];
     };
@@ -190,7 +190,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     });
     flush();
     return out;
-  }, [measured, flowing, data, model, body, size]);
+  }, [measured, flowing, data, model, body, size, zoom]);
 
   // With bigger text the page runs past the screen: the row holding the ayah to keep in sight says where it is.
   const focused = { taken: false };

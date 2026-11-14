@@ -11,7 +11,7 @@ conditions: "Expo SDK app on iOS, Hafs font at 21/40, justified rtl text made of
 evidence: "mobile/src/components/HomeFeed.tsx ContinueReading; src/components/homepage/Homepage.module.css .pageLines"
 implication: "Never limit a text's lines by the height of its container on native: use numberOfLines. Web-export screenshots can't show this; reason from how iOS lays out text, or check on the phone."
 date: "2026-11-13"
-topics: ["mobile", "ios", "text"]
+topics: ["mobile","ios","text"]
 buildsOn: []
 ---
 

@@ -237,6 +237,7 @@ export default function ReaderView({
     const element = stage.current;
     if (!element || !focusKey) return;
     const reveal = () => {
+      if (performance.now() - pinchedAt.current < 800) return;
       const word = element.querySelector<HTMLElement>(`[data-ayah="${focusKey}"]`);
       if (!word) return;
       const box = word.getBoundingClientRect();
@@ -325,6 +326,8 @@ export default function ReaderView({
   // A pinch (two fingers, or a trackpad's pinch, which browsers send as a wheel with ctrl) changes the text size, not the
   // picture: while the fingers move the page is only stretched as a preview, and set again at the new size when they lift.
   const zoomRef = useRef(zoom);
+  /** When the last pinch ended: keeping an ayah in sight waits a moment, so it doesn't undo where the pinch left the page. */
+  const pinchedAt = useRef(-Infinity);
   zoomRef.current = zoom;
   useEffect(() => {
     const element = stage.current;
@@ -354,16 +357,20 @@ export default function ReaderView({
       const { page, k, y } = pinch;
       pinch = null;
       page.style.transform = '';
+      page.style.transformOrigin = '';
       page.removeAttribute('data-pinching');
       const next = settleTextSize(zoomRef.current * k);
       if (next === zoomRef.current) return;
       // The words that were between the fingers stay in sight.
-      const share = (y + element.scrollTop - page.offsetTop) / Math.max(1, page.offsetHeight);
+      const share = y / Math.max(1, page.offsetHeight);
       const screen = y + page.getBoundingClientRect().top - element.getBoundingClientRect().top;
+      pinchedAt.current = performance.now();
       sizeTo(next);
       requestAnimationFrame(() => requestAnimationFrame(() => {
         const after = element.querySelector<HTMLElement>('section[data-side]');
-        if (after) element.scrollTop = next > 1 ? after.offsetTop + share * after.offsetHeight - screen : 0;
+        if (!after) return;
+        const top = after.getBoundingClientRect().top - element.getBoundingClientRect().top + element.scrollTop;
+        element.scrollTop = next > 1 ? top + share * after.offsetHeight - screen : 0;
       }));
     };
     let wheelTimer: ReturnType<typeof setTimeout> | undefined;
