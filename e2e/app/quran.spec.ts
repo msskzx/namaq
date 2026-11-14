@@ -135,6 +135,31 @@ test.describe('branches', () => {
     expect(scene.look.ui).toContain('Amiri');
   });
 
+  test('any box only one path runs through toggles that path, however quickly the boxes are tapped', async ({ page }) => {
+    await open(page, '/branches');
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill('بدت لهما سوآتهما وطفقا يخصفان');
+    await box.press('Enter');
+    // Two roots (al-A'raf 22, Taha 121) meet in one box, then part again into two leaves.
+    const node = (name: RegExp) => page.getByRole('button', { name }).first();
+    const rootA = node(/^فَدَلَّىٰهُمَا /), leafA = node(/^الأعراف ٢٢ وَنَادَىٰهُمَا /), rootB = node(/فَأَكَلَا /), leafB = node(/^طه ١٢١/);
+    const litA = page.getByRole('button', { name: 'قارن الأعراف ٢٢' }), litB = page.getByRole('button', { name: 'قارن طه ١٢١' });
+    await rootA.click();
+    await expect(litA).toBeVisible();
+    await leafA.click();
+    await expect(litA).toBeHidden();
+    await leafB.click();
+    await expect(litB).toBeVisible();
+    await rootB.click();
+    await expect(litB).toBeHidden();
+    // Two quick taps on two boxes are not a double tap: each lights its own path.
+    await leafA.click();
+    await leafB.click();
+    await expect(litA).toBeVisible();
+    await expect(litB).toBeVisible();
+  });
+
   test('the tree card keeps its buttons in place when a path is lit', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'ابحث' }).click();
