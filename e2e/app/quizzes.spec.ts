@@ -82,8 +82,8 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
 });
 
 test('recite mode on the mushaf shows the next ayah on a tap', async ({ page }) => {
-  await open(page, '/');
-  await page.getByRole('button', { name: 'تسميع', exact: true }).click();
+  await open(page, '/quizzes');
+  await page.getByRole('link', { name: /^تسميع/ }).click();
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   const before = await stored<{ position: { shown: string | null } }>(page, 'reader-place');
   await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();

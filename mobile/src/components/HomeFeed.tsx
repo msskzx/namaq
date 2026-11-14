@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
@@ -11,7 +11,6 @@ import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
-import { clock, FIVE, nextPrayer, PRAYER_NAMES } from '@shared/prayer';
 import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
@@ -25,15 +24,16 @@ import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
-import { Mistyped, Veil, WriteBox } from './MushafPageView';
+import AyahLines, { pageWords } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
-import { ayahText, pageData, PAGES, surahBefore } from '@/lib/mushaf';
+import { pageData, PAGES, surahBefore } from '@/lib/mushaf';
 import { readJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
-import { around as aroundSetting, branchView, prayerPlace, prayerSettings, utilityView } from '@/lib/settings';
-import { timesFor, useMinute } from '@/lib/prayer';
+import { around as aroundSetting, branchView } from '@/lib/settings';
+import { showsOtherView } from '@shared/quran/branchView';
+import { useMinute } from '@/lib/prayer';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 type IconType = (props: LucideProps) => React.ReactNode;
@@ -193,11 +193,11 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
 /** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until tomorrow. */
 const recalled = new Set<string>();
 /** The recall card's letter size: the mushaf's write boxes at a card's size. */
-const RECALL_SIZE = 21;
 
 /**
- * An ayah to recall, asked as the reader's write mode asks it: its words hidden, its first and last words as write boxes
- * (the same boxes, keyboard rules and grading, lib/useWriteBoxes). The last box shows the ayah with the written words
+ * An ayah to recall, asked as the reader's write mode asks it, in the mushaf's own lines (AyahLines, owner 2026-11-14): what
+ * comes before it shows, its words are hidden in their places, its first and last words are write boxes (the same boxes,
+ * keyboard rules and grading, lib/useWriteBoxes). The last box shows the ayah with the written words
  * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
  * review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
  */
@@ -206,7 +206,7 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
   useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
-  const words = useMemo(() => ayahText(ayah).split(' ').filter(Boolean), [ayah]);
+  const words = useMemo(() => pageWords(ayah), [ayah]);
   const asked = useMemo(() => wordTargets(words), [words]);
   const boxes = useWriteBoxes({ ayah, words, asked, onDone: result => {
     setGraded(result);
@@ -218,21 +218,9 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   return (
     <View style={cardStyle(palette)}>
       <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
-      <View style={{ paddingHorizontal: 12, paddingTop: 10, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6, rowGap: 14 }}>
-        {words.map((word, i) => {
-          if (open) {
-            const color = graded?.right.includes(i) ? palette.green : graded?.wrong.includes(i) ? palette.amber : palette.ink;
-            return (
-              <View key={i}>
-                {graded?.wrong.includes(i) && graded.typed[i] ? <Mistyped text={graded.typed[i]} size={RECALL_SIZE} palette={palette} /> : null}
-                <Text style={{ fontFamily: QURAN_FONT, fontSize: RECALL_SIZE, lineHeight: 40, color }}>{word}</Text>
-              </View>
-            );
-          }
-          return asked.includes(i)
-            ? <WriteBox key={i} text={word} size={RECALL_SIZE} palette={palette} typed={boxes.typed[i] ?? ''} active={boxes.current === i} onPress={() => boxes.pick(i)} />
-            : <Veil key={i} text={word} size={RECALL_SIZE} palette={palette} next={false} faint />;
-        })}
+      <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
+        <AyahLines ayah={ayah} palette={palette} shown={open} checked={graded ? { key: ayah, ...graded } : null}
+          write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />
         {!open && boxes.field}
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
@@ -252,10 +240,24 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
           <Text style={{ color: palette.ink, fontSize: 16 }}>نسيتها</Text>
         </Pressable>}
         <View style={{ flex: 1 }} />
-        {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
+        <QuizActions review={review} palette={palette} />
         <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
       </View>
     </View>
+  );
+}
+
+/**
+ * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
+ * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ */
+export function QuizActions({ review, palette }: { review?: () => void; palette: Palette }) {
+  return (
+    <>
+      <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
+      <Action Icon={Users} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
+      {review ? <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} /> : <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
+    </>
   );
 }
 
@@ -268,7 +270,7 @@ const TREE_HEIGHT = 440;
  */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
   // Opens in the view set on the branches tab; the card's own switch changes only this card.
-  const [mode, setMode] = useState(branchView.get);
+  const [mode, setMode] = useState(() => { const pref = branchView.get(); return showsOtherView(piece.id) ? (pref === 'tree' ? 'matrix' : 'tree') : pref; });
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const embedded = useMemo(() => ({
@@ -285,19 +287,22 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   );
 });
 
-/** Posts per batch: one pair and one tree; «المزيد للتأمل» adds this many batches. */
+/** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 
 /**
- * The home feed «للتأمل اليوم»: today's pair, a forgotten ayah that is due, today's tree, then more on request.
+ * The home feed: today's pair, a forgotten ayah that is due, today's tree, then more each time the page nears its end (`nearEnd` changes).
  * What was shown before is skipped for good (shared/feedSeen.ts); once all was seen it starts again from the seen ones.
  */
-export function Feed({ palette }: { palette: Palette }) {
+export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }) {
   const { day } = useToday();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // A new visit (pulled to refresh, or back after long away) starts again from one batch, in the same render that picks it.
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
+  useEffect(() => {
+    if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+  }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
@@ -325,56 +330,7 @@ export function Feed({ palette }: { palette: Palette }) {
   }
   return (
     <View style={{ gap: 14 }}>
-      <Divider label="للتأمل اليوم" palette={palette} />
       {posts}
-      {batches < FEED_AHEAD && <Pressable onPress={() => setMore({ visit, batches: Math.min(FEED_AHEAD, batches + MORE) })} accessibilityRole="button" accessibilityLabel="المزيد للتأمل"
-        style={({ pressed }) => ({ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
-        <ChevronLeft size={18} color={palette.ink} />
-        <Text style={{ color: palette.ink, fontSize: 16 }}>المزيد للتأمل</Text>
-      </Pressable>}
     </View>
-  );
-}
-
-/** A section label with a rule running beside it. */
-export function Divider({ label, palette }: { label: string; palette: Palette }) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, fontWeight: '700' }}>{label}</Text>
-      <View style={{ flex: 1, height: 1, backgroundColor: palette.rule }} />
-    </View>
-  );
-}
-
-/** Today's five prayers in one row, the next one shaded; a tap opens the utilities tab. Without a place yet, a button to pick one there. */
-export function PrayerRow({ palette }: { palette: Palette }) {
-  const [place] = prayerPlace.use();
-  const [settings] = prayerSettings.use();
-  const now = useMinute();
-  const dayKey = now.toDateString();
-  const times = useMemo(() => (place ? timesFor(place, now, settings) : null), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const next = times ? nextPrayer(times, now) : null;
-  const open = () => { utilityView.set('times'); router.navigate('/utilities'); };
-  return (
-    <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="مواقيت الصلاة" style={({ pressed }) => ({ ...cardStyle(palette), padding: 10, gap: 8, opacity: pressed ? 0.8 : 1 })}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <MapPin size={18} color={palette.accent} />
-        <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>مواقيت الصلاة</Text>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{place ? place.name : 'اختر مكانك'}</Text>
-        <ChevronLeft size={16} color={palette.muted} />
-      </View>
-      {times && <View style={{ flexDirection: 'row', gap: 4 }}>
-        {FIVE.map(key => {
-          const on = key === next;
-          return (
-            <View key={key} accessible accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
-              style={{ flex: 1, alignItems: 'center', paddingVertical: 6, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
-              <Text style={{ color: on ? palette.onAccent : palette.muted, fontSize: 13 }}>{PRAYER_NAMES[key]}</Text>
-              <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 15 }}>{clock(times[key], true)}</Text>
-            </View>
-          );
-        })}
-      </View>}
-    </Pressable>
   );
 }

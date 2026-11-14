@@ -1,7 +1,7 @@
 import { dailyIndex, feedTrees } from '@shared/dailyPick';
 import { FEED_AHEAD } from '@shared/feedSeen';
 export { FEED_AHEAD };
-import { pageStart, type MushafPage } from '@shared/quran/readerPage';
+import { pageOfAyah, pageStart, type MushafPage } from '@shared/quran/readerPage';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pairOfDay, type PairCard } from '@/app/quran/compare/pairCards';
@@ -42,4 +42,21 @@ export async function pageSlice(page: number) {
   const data = (await import(`../../shared/data/quran/mushaf/${page}.json`)).default as MushafPage;
   const before = surahRows.findLast(row => row.page != null && row.page < page)?.number;
   return pageStart(data, before);
+}
+
+const loadPage = async (page: number) => (await import(`../../shared/data/quran/mushaf/${page}.json`)).default as MushafPage;
+const surahBefore = (page: number) => surahRows.findLast(row => row.page != null && row.page < page)?.number;
+
+/**
+ * The home recall card's page (owner, 2026-11-14: the mushaf around the ayah): the page an ayah is on and the page before it,
+ * each with the surah running at its top, for MushafPage to draw a few of their lines.
+ */
+export async function ayahPages(key: string) {
+  const [surah, ayah] = key.split(':').map(Number);
+  const start = surahRows.find(row => row.number === surah)?.page;
+  if (!start) return null;
+  const page = await pageOfAyah(surah, ayah, start, loadPage);
+  if (!page) return null;
+  const at = async (number: number) => ({ page: number, top: surahBefore(number), data: await loadPage(number) });
+  return { ...(await at(page)), previous: page > 1 ? await at(page - 1) : null };
 }

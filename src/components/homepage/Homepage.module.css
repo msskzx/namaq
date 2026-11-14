@@ -69,8 +69,8 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .feed { display: flex; flex-direction: column; gap: 0.875rem; }
 .divider { display: flex; align-items: center; gap: 0.625rem; color: var(--home-muted); font-size: 0.9375rem; font-weight: 700; }
 .divider::after { content: ''; flex: 1; border-top: 1px solid var(--home-rule); }
-.recall { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; padding: 0 0.75rem; font-family: var(--font-quran), var(--font-amiri), serif; font-size: 1.3rem; line-height: 2.5rem; }
-.recallActions { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; }
+.recall { padding: 0.25rem 0.75rem 0; }
+.recallActions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.75rem; }
 .pill { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.5rem; padding-inline: 0.875rem; border: 1px solid var(--home-rule); border-radius: 10px; color: var(--home-ink); font-size: 1rem; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }
 .prayers { display: grid; gap: 0.5rem; padding: 0.625rem; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); color: var(--home-ink); text-decoration: none; }

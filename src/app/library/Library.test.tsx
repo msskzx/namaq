@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { toggleBookmark } from '@shared/bookmarks';
 import Library from './Library';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
@@ -56,4 +57,83 @@ describe('the saved and forgotten page', () => {
     render(<Library data={data} tab="forgotten" />);
     expect(screen.getByText('لا آيات منسية.')).toBeTruthy();
   });
+});
+
+// Saved cards, moved here from home when its shelf went (owner, 2026-11-14): the library page shows the same cards.
+const homeData = {
+  surahs: [{ number: 2, name: 'البقرة' }, { number: 3, name: 'آل عمران' }, { number: 62, name: 'الجمعة' }],
+  bookmarkAyat: { family: ['2:129', '2:151', '3:164', '62:2'] },
+};
+const bookmark = { id: 'family', text: 'الكتاب والحكمة', href: '/quran/branches?o=family', savedAt: 1 };
+
+describe('saved cards', () => {
+  it('shows the kind, grouped references and saved text as one card without action labels', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
+    render(<Library data={homeData} tab="saved" />);
+    const card = screen.getByRole('button', { name: /الكتاب والحكمة/ });
+    expect(card.textContent).toContain('البقرة ١٢٩، ١٥١');
+    expect(card.textContent).toContain('آل عمران ١٦٤');
+    expect(card.textContent).toContain('الجمعة ٢');
+    expect(card.getAttribute('data-kind')).toBe('tree');
+    expect(card.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('شجرة');
+    expect(card.textContent).toMatch(/^البقرة/);
+    expect(card.textContent).not.toMatch(/عائلة|فتح للمقارنة|فتح للاستكشاف/);
+  });
+
+  it('labels compare cards and mushaf ayat with their own kind', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([
+      { id: 'compare:2:154|16:21', text: 'ولا تقولوا', href: '/quran/compare?a=2&b=16', savedAt: 2 },
+      { id: 'ayah:2:255', text: 'الله لا إله إلا هو', href: '/quran/read/42', savedAt: 3 },
+    ]));
+    render(<Library data={homeData} tab="saved" />);
+    const compare = screen.getByRole('button', { name: /ولا تقولوا/ });
+    const ayah = screen.getByRole('button', { name: /الله لا إله إلا هو/ });
+    expect(compare.getAttribute('data-kind')).toBe('compare');
+    expect(compare.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('مقارنة');
+    expect(compare.textContent).not.toContain('مقارنة');
+    expect(ayah.getAttribute('data-kind')).toBe('ayah');
+    expect(ayah.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('آية');
+    expect(ayah.textContent).not.toContain('آية');
+  });
+
+  it('reacts to saves and removals made through the existing bookmark API', () => {
+    render(<Library data={homeData} tab="saved" />);
+    expect(screen.queryByRole('button', { name: /الكتاب والحكمة/ })).toBeNull();
+    act(() => { toggleBookmark(bookmark); });
+    expect(screen.getByRole('button', { name: /الكتاب والحكمة/ })).toBeTruthy();
+    act(() => { toggleBookmark(bookmark); });
+    expect(screen.queryByRole('button', { name: /الكتاب والحكمة/ })).toBeNull();
+  });
+
+  it('keeps old bookmarks readable and navigable when their inventory entry is unknown', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([{ ...bookmark, id: 'old-tree', text: 'عبارة محفوظة' }]));
+    render(<Library data={homeData} tab="saved" />);
+    fireEvent.click(screen.getByRole('button', { name: /عبارة محفوظة/ }));
+    expect(within(screen.getByRole('dialog')).getByRole('link', { name: 'افتحها' }).getAttribute('href')).toBe(bookmark.href);
+  });
+
+  it('opens a saved card’s icons on a click: open it, its first ayah in the mushaf, and remove it', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
+    render(<Library data={homeData} tab="saved" />);
+    fireEvent.click(screen.getByRole('button', { name: /الكتاب والحكمة/ }));
+    const menu = screen.getByRole('dialog', { name: 'شجرة' });
+    expect(within(menu).getByRole('link', { name: 'افتحها' }).getAttribute('href')).toBe(bookmark.href);
+    expect(within(menu).getByRole('link', { name: 'في المصحف' }).getAttribute('href')).toBe('/quran/read/ayah/2/129');
+    fireEvent.click(within(menu).getByRole('button', { name: 'أزلها من المحفوظات' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.queryByRole('button', { name: /الكتاب والحكمة/ })).toBeNull();
+  });
+
+  it('closes the icons on Escape and gives the focus back to the card', () => {
+    localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
+    render(<Library data={homeData} tab="saved" />);
+    const card = screen.getByRole('button', { name: /الكتاب والحكمة/ });
+    card.focus();
+    fireEvent.click(card);
+    expect(document.activeElement?.closest('[role="dialog"]')).toBeTruthy();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(document.activeElement).toBe(card);
+  });
+
 });

@@ -70,11 +70,12 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
   });
 
-  test('a tree is saved and shows on the home shelf', async ({ page }) => {
+  test('a tree is saved and shows behind the saved circle on home', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
-    await expect(page.getByRole('button', { name: 'افتح المحفوظات' })).toBeVisible();
+    await page.getByRole('button', { name: 'المحفوظات', exact: true }).click();
+    await expect(page.getByRole('button', { name: /^شجرة: / }).first()).toBeVisible();
   });
 
   test('the search narrows the trees to a phrase', async ({ page }) => {

@@ -45,10 +45,24 @@ test.describe('pages with the database', () => {
   test('home shows the shortcuts and the daily card, and opens the mushaf', async ({ page }) => {
     await page.goto('/');
     for (const name of ['ما نسيته', 'المحفوظات', 'تأملاتي', 'الأنبياء']) await expect(page.getByRole('link', { name, exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'افتحها في المقارنة' })).toBeVisible();
+    // The first test to load home also builds the feed's API in the dev server, which can take longer than a check's usual wait.
+    await expect(page.getByRole('link', { name: 'افتحها في المقارنة' })).toBeVisible({ timeout: 30_000 });
     await page.getByRole('link', { name: 'افتح المصحف حيث توقفت' }).click();
     await expect(page).toHaveURL(/\/quran\/read/);
     await noErrorPage(page);
+  });
+
+  test('the home feed has no tools or «more» button, and loads more as the page nears its end', async ({ page }) => {
+    await page.goto('/');
+    const posts = page.getByRole('region', { name: 'للتأمل اليوم' }).locator('article');
+    await expect(posts.first()).toBeVisible();
+    for (const name of ['مواقيت الصلاة', 'بمفردك']) await expect(page.getByRole('link', { name })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'المزيد للتأمل' })).toHaveCount(0);
+    const first = await posts.count();
+    await expect(async () => {
+      await page.mouse.wheel(0, 4000);
+      expect(await posts.count()).toBeGreaterThan(first);
+    }).toPass({ timeout: 30_000 });
   });
 
   test('the home tree card is the branches tree and opens it', async ({ page }) => {

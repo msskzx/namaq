@@ -38,13 +38,22 @@ test.describe('a new user', () => {
     await expect(page).toHaveURL(/\/compare/);
   });
 
-  test('the story circles and the tools open their pages', async ({ page }) => {
+  test('the story circles open their pages', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'الأنبياء', exact: true }).click();
     await expect(page).toHaveURL(/\/prophets/);
+  });
+
+  test('the feed has no tools or «more» button, and loads the next trees as the page nears its end', async ({ page }) => {
     await open(page, '/');
-    await page.getByRole('button', { name: 'مواقيت الصلاة' }).click();
-    await expect(page).toHaveURL(/\/utilities/);
+    const trees = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' });
+    await expect(trees.first()).toBeAttached();
+    for (const name of ['مواقيت الصلاة', 'المزيد للتأمل', 'افتح المحفوظات']) await expect(page.getByRole('button', { name })).toHaveCount(0);
+    await page.mouse.move(195, 500);
+    await expect(async () => {
+      await page.mouse.wheel(0, 3000);
+      expect(await trees.count()).toBeGreaterThan(2);
+    }).toPass({ timeout: 20_000 });
   });
 
   test('the search finds a surah and opens it', async ({ page }) => {
@@ -67,6 +76,7 @@ test.describe('a returning user', () => {
 
   test('a saved ayah opens on its mushaf page from the card menu', async ({ page }) => {
     await open(page, '/');
+    await page.getByRole('button', { name: 'المحفوظات', exact: true }).click();
     await page.getByRole('button', { name: /^آية: ٱللَّهُ لَآ إِلَٰهَ/ }).click();
     await menu(page).getByRole('button', { name: 'في المصحف' }).click();
     await expect.poll(() => readerPage(page)).toBe(42);
@@ -82,6 +92,7 @@ test.describe('a returning user', () => {
   test('the recall card takes typed words in the write boxes and grades them', async ({ page }) => {
     await open(page, '/');
     const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
+    await expect(boxes.first()).toBeVisible();
     const count = await boxes.count();
     expect(count).toBeGreaterThan(0);
     await boxes.first().click();
