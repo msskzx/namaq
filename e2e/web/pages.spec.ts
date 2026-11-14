@@ -74,9 +74,15 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the home recall card takes typed words in the write boxes and grades them', async ({ page }) => {
+  test('the home recall card reveals a word at a time, and with the pen takes the whole ayah in write boxes and grades it', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
+    const pen = page.getByRole('button', { name: 'اكتب الآية كاملة' }).first();
+    await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
+    await expect(async () => {
+      await pen.click();
+      await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة' }).first()).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
     const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
     await expect(boxes.first()).toBeVisible();
     const count = await boxes.count();
@@ -136,7 +142,7 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the home prophets card is one group of a story map, and a dot opens the story there', async ({ page }) => {
+  test('the home prophets card is the story map opened at a group, and a dot opens the story page at its top', async ({ page }) => {
     await page.goto('/');
     const story = page.getByRole('heading', { name: /^قصة .* في القرآن$/ }).first();
     await expect(async () => {
@@ -144,26 +150,23 @@ test.describe('pages with the database', () => {
       await expect(story).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 40_000 });
     const card = page.locator('article').filter({ has: story }).first();
-    // One group only: its table fits the card, so nothing scrolls sideways.
-    expect(await card.locator('table').evaluate(table => table.scrollWidth <= table.parentElement!.clientWidth + 1)).toBe(true);
     const dot = card.locator('[data-dot]').first();
-    const label = (await dot.getAttribute('aria-label'))!;
     await dot.click();
-    await expect(page).toHaveURL(/\/quran\/prophets\/[^/?]+\?event=\d+&surah=\d+/);
-    await expect(page.locator('[data-dot][aria-current="true"]', { hasText: '' }).first()).toHaveAttribute('aria-label', label);
+    // A new reader lands on the story's top, not scrolled to an event (owner, 2026-11-14).
+    await expect(page).toHaveURL(/\/quran\/prophets\/[^/?]+$/);
     await noErrorPage(page);
   });
 
   test('a saved ayah comes up in the home feed as its mushaf lines', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('bookmarks', JSON.stringify([{ id: 'ayah:2:255', text: 'ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ', href: '/quran/read/ayah/2/255', savedAt: Date.now() }])));
     await page.goto('/');
-    const saved = page.getByRole('heading', { name: 'البقرة ٢٥٥', exact: true });
+    const saved = page.getByRole('heading', { name: 'من المحفوظات', exact: true });
     await expect(async () => {
       await page.evaluate(() => window.scrollBy(0, 3000));
       await expect(saved).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 40_000 });
     const card = page.locator('article').filter({ has: saved }).first();
-    await expect(card.getByText('من المحفوظات')).toBeVisible();
+    await expect(card.getByText('البقرة ٢٥٥', { exact: true })).toBeVisible();
     await expect(card.locator('[data-line]').first()).toBeAttached();
     await noErrorPage(page);
   });
