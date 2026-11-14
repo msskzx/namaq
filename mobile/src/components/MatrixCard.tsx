@@ -21,6 +21,8 @@ import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
   footer?: React.ReactNode;
+  /** The footer stays under the scrolling rows instead of after them, as on home's tree card, so its buttons are always in sight; the rows then scroll inside one framed card. */
+  pinFooter?: boolean;
   /** A book group's word connections (the website's GroupConnections): drawn for the tags given, between the ayat in the middle column. */
   connections?: { group: Group; tags: Tag[] };
   /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. The read-along lights what `now` names (matrixReading). */
@@ -42,6 +44,9 @@ type Route = { id: string; tag: Tag; d: string; from: { x: number; y: number }; 
 /** A column is most of the card wide, so the next one peeks in beside it (the website's 86%). */
 const SHARE = 0.86;
 const GAP = 8;
+/** The matrix card's inner margin, round all its columns. */
+const PAD = 12;
+const EDGE = 16;
 const SWIPE = 0.2;
 const FLICK = 500;
 
@@ -93,7 +98,9 @@ function Ayah({ ayah, palette, muted, light, read }: { ayah: MatrixAyah; palette
 }
 
 /** One ayah card of the matrix; the tree's lit-path card under the tree is this card too (owner, 2026-11-14). */
-export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+  /** One row of the matrix's single card (owner, 2026-11-14): no card of its own, the rows parted by rules, as the compare card stacks its sides. */
+  stacked?: boolean;
   /** Left out where the card is only read (under the tree): it is then no button, so its own buttons stay reachable. */
   onPress?: () => void; light?: Light; note?: Props['note']; still?: boolean; read?: Read;
   /** More buttons beside the read button. */
@@ -111,23 +118,24 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
-      style={{ width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
-      {/* The surah's name comes first, read from the right (owner, 2026-11-14), in any host: the row is set left to right and filled from its right end. */}
-      <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
-        <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
-        <Text style={{ color: palette.muted, fontSize: 13 }}>{lastSurah !== surah ? `الآية ${num(number)} ثم سورة ${surahNames[lastSurah]} ${num(lastNumber)}` : `${first === last ? 'الآية' : 'الآيات'} ${range}`}</Text>
-        {current && !still && <View style={{ position: 'absolute', end: -4, top: -4, flexDirection: 'row' }}>
+      style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
+      {/* As the compare card heads a side: the surah's name and number on the right, the mushaf button on the left. The row is set left to right and filled from its right end, in any host. */}
+      <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', alignItems: 'center', gap: 4, marginBottom: 4, minHeight: 26 }}>
+        <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>
+          {lastSurah !== surah ? `${surahNames[surah]} ${num(number)} ثم ${surahNames[lastSurah]} ${num(lastNumber)}` : `${surahNames[surah]} ${range}`}{at === 'before' ? ' · قبلها' : at === 'after' ? ' · بعدها' : ''}
+        </Text>
+        {current && !still && <>
+          {tools}
           <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[surah]} ${range}`} style={{ padding: 4 }}>
             <BookOpen size={18} color={palette.muted} />
           </Pressable>
-          {tools}
-        </View>}
+        </>}
       </View>
       {at === 'after' && basmala}
       {wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}</View>
-        : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}</View>
+        : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
           {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}
         </Text>}
       {at === 'before' && basmala}
@@ -150,13 +158,15 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, reading, onColumn, alongside, note }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
-  const width = Math.round(view.width * SHARE);
+  // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
+  // On home the card's frame is the view's edge; on the branches page it keeps a margin from the screen's.
+  const width = count === 1 ? view.width - 2 * PAD - (pinFooter ? 0 : 2 * EDGE) : Math.round(view.width * SHARE);
   const step = width + GAP;
   // Columns run right to left like the text: the ayah before on the right, the ayah after on the left.
-  const xOf = (i: number) => (count - 1 - i) * step;
+  const xOf = (i: number) => PAD + (count - 1 - i) * step;
   const shiftOf = (i: number) => view.width / 2 - (xOf(i) + width / 2);
   const start = matrix.columns.indexOf('ayah');
   const [column, setColumn] = useState(start);
@@ -234,17 +244,21 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
-        <ScrollView contentContainerStyle={{ paddingVertical: 12 }} showsVerticalScrollIndicator={false}>
+        <ScrollView nestedScrollEnabled style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
           <Words.Provider value={connections ? lines.registry : null}>
-          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP, gap: 10 }, lanes]}>
+          {/* One card as wide as all its columns (owner, 2026-11-14): the rows parted by rules, solid between surahs and dashed within one. */}
+          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, !pinFooter && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
             {matrix.rows.map((row, r) => (
-              <View key={r} style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
+              <Fragment key={r}>
+              {r > 0 && <RowRule dashed={surahOf(row.ayah) === surahOf(matrix.rows[r - 1].ayah)} color={palette.rule} />}
+              <View style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
                 {matrix.columns.map((name, i) => (
-                  <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light} note={note}
+                  <Cell key={name} stacked cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light} note={note}
                     read={reading && growth ? { row: r, now: growth.now } : undefined}
                     onPress={() => (i === column ? onTap(keysOf(row[name])) : goTo(i))} />
                 ))}
               </View>
+              </Fragment>
             ))}
             {lines.routes.length > 0 && <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: count * step - GAP, height: '100%' }}>
               {lines.routes.filter(route => !growth?.hidden.has(route.id)).map(route => (
@@ -260,11 +274,20 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
             </View>}
           </Animated.View>
           </Words.Provider>
-          {footer}
+          {!pinFooter && footer}
         </ScrollView>
+        {pinFooter && footer}
       </View>
     </GestureDetector>
   );
+}
+
+const surahOf = (cell: MatrixCell) => cell?.ayat[0]?.key.split(':')[0];
+
+/** A rule across the matrix card between two rows; iOS draws no dashed border on one edge only, so a dashed box is clipped to its top edge. */
+function RowRule({ dashed, color }: { dashed: boolean; color: string }) {
+  if (!dashed) return <View style={{ height: 1, backgroundColor: color }} />;
+  return <View style={{ height: 1, overflow: 'hidden' }}><View style={{ height: 3, borderWidth: 1, borderColor: color, borderStyle: 'dashed' }} /></View>;
 }
 
 type Box = { left: number; right: number; top: number; bottom: number };

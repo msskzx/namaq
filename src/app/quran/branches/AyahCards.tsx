@@ -96,7 +96,11 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
   const shiftOf = (i: number) => {
     const element = lane.current;
     const cell = head(i);
-    return element && cell ? element.clientWidth / 2 - (cell.offsetLeft + cell.offsetWidth / 2) : shift.current;
+    if (COLUMNS.length === 1) return 0;
+    if (!element || !cell) return shift.current;
+    // The lane is wider than the frame and, right to left, overflows to the left: its own left edge sits at frame - lane.
+    const frame = element.parentElement!.clientWidth;
+    return frame / 2 - (frame - element.offsetWidth + cell.offsetLeft + cell.offsetWidth / 2);
   };
   const flush = () => {
     const slide = sliding.current;
@@ -239,7 +243,8 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
     const ayah = at === 'ayah' ? context.ayah : around?.[at][at === 'after' ? ends[row] : context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'aria-hidden': !current, className: styles.cell, style: { gridColumn: i + 1, gridRow: row + 1 }, onClick: current ? undefined : () => goTo(i) };
+    const sameSurah = row > 0 && contexts![row - 1]?.ayah.key.split(':')[0] === context.ayah.key.split(':')[0];
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-same': sameSurah || undefined, 'data-current': current || undefined, 'aria-hidden': !current, className: styles.cell, style: { gridColumn: i + 1, gridRow: row + 1 }, onClick: current ? undefined : () => goTo(i) };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const end = at === 'ayah' ? ends[row] : ayah.key;
@@ -251,10 +256,9 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
     const name = nameOf(surah);
     return <div key={key} {...props}>
       <PageSpread pages={[{
-        title: name,
-        // An ayah that runs into the next surah names that surah after a «ثم», not inside a dash range.
-        subtitle: lastSurah !== surah ? (ar ? `الآية ${first} ثم ${names[lastSurah] ? `سورة ${names[lastSurah]}` : nameOf(lastSurah)} ${last}` : `Ayah ${first}, then ${nameOf(lastSurah)} ${last}`)
-          : ar ? `${end === ayah.key ? 'الآية' : 'الآيات'} ${range}` : `${end === ayah.key ? 'Ayah' : 'Ayat'} ${range}`,
+        // As the compare card heads a side (owner, 2026-11-14): the surah and number on one line, the mushaf button at its end. An ayah
+        // that runs into the next surah names that surah after a «ثم», not inside a dash range.
+        title: `${lastSurah !== surah ? `${name} ${first} ${ar ? 'ثم' : 'then'} ${nameOf(lastSurah)} ${last}` : `${name} ${range}`}${at === 'before' ? (ar ? ' · قبلها' : ' · before') : at === 'after' ? (ar ? ' · بعدها' : ' · after') : ''}`,
         label: `${name} ${range}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
@@ -287,7 +291,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track}>
-        <div ref={lane} data-matrix-content onClick={light} className={styles.lane} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
+        <div ref={lane} data-matrix-content onClick={light} className={styles.lane} data-columns={COLUMNS.length} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>
           {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
           <ConnectionLines lane={lane} column={column} ready={ready} />
         </div>
