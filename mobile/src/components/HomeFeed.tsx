@@ -37,6 +37,10 @@ import { openIntent, toTab } from '@/lib/ways';
 import { around as aroundSetting, branchView } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
 import { useMinute } from '@/lib/prayer';
+import { prophetStory } from '@/lib/prophets';
+import StoryMap from './StoryMap';
+import { storyMap } from '@shared/quran/prophets/story';
+import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
 import QuizChoice from './QuizChoice';
@@ -359,6 +363,34 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   );
 });
 
+/** The prophets card's height: the group's surahs scroll inside it, never sideways. */
+const STORY_HEIGHT = 460;
+
+/**
+ * One group of a prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap) showing just that
+ * group, with every surah that tells part of it; the surahs scroll up and down inside the card. A dot or an event's title opens
+ * the story there.
+ */
+const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
+  const prophet = useMemo(() => prophetStory(slug), [slug]);
+  const map = useMemo(() => {
+    if (!prophet) return null;
+    const whole = storyMap(prophet.events);
+    const inGroup = new Set(prophet.events.flatMap((event, i) => (event.phase === phase ? whole.places[i].map(place => place.surah) : [])));
+    return { ...whole, surahs: whole.surahs.filter(row => inGroup.has(row.surah)) };
+  }, [prophet, phase]);
+  if (!prophet || !map) return null;
+  const open = (event?: number, surah?: number) => router.push({ pathname: '/prophets/[slug]', params: { slug, ...(event === undefined ? {} : { event: String(event) }), ...(surah === undefined ? {} : { surah: String(surah) }) } });
+  return (
+    <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
+      <PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />
+      <ScrollView nestedScrollEnabled style={{ maxHeight: STORY_HEIGHT }} contentContainerStyle={{ paddingBottom: 8 }}>
+        <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} only={phase} palette={palette} onPick={(event, surah) => open(event, surah)} onTitle={event => open(event)} />
+      </ScrollView>
+    </View>
+  );
+});
+
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 
@@ -401,6 +433,7 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     // A question card in every batch after the first (whose question is the recall card), each kind in turn.
     if (i > 0) posts.push(<FeedQuiz key={`q${day}-${i}`} kind={feedQuizKind(day, i)} seed={feedQuizSeed(day, i)} palette={palette} />);
     if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
+    if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
   }
   return (
     <View style={{ gap: 14 }}>

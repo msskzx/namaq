@@ -126,3 +126,6 @@ export function storyTimes({ due, saved, notes, now = Date.now() }: { due: Recor
     prophets: 1,
   };
 }
+
+/** The batches that carry a prophets card (shared/quran/prophets/storyGroup.ts): every other one after the first. */
+export const hasStoryCard = (slot: number) => slot % 2 === 1;

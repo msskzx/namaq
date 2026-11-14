@@ -8,6 +8,9 @@ import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
+import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
+import type { StoryCard } from '@/lib/homeFeed';
+import { useRouter } from 'next/navigation';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import AyahCards from '@/app/quran/branches/AyahCards';
 import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
@@ -28,7 +31,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, ty
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -205,7 +208,7 @@ export function QuizActions({ review }: { review?: string }) {
  * turn, the same question all day (`seed`). With «الأسئلة مما أحفظ فقط» on, it asks from what is memorized, as the quiz page does.
  */
 function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Record<string, string> }) {
-  const query = new URLSearchParams({ topic: kind, length: '5', seed: String(seed), ...scope });
+  const query = new URLSearchParams({ topic: kind, length: '1', seed: String(seed), ...scope });
   const { data } = useSWR(`/api/quiz?${query}`, fetchJson<QuizData>, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [given, setGiven] = useState<string>();
   const [typed, setTyped] = useState<string[]>();
@@ -232,6 +235,23 @@ function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized |
   const surah = useMemo(() => openingSurah(seed, memorized && !('all' in memorized)
     ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized]);
   return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} /> : null;
+}
+
+/**
+ * One group of a prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap) showing just that
+ * group, with every surah that tells part of it; the surahs scroll up and down inside the card, never sideways. A dot or an
+ * event's title opens the story there.
+ */
+function StoryPost({ card }: { card: StoryCard }) {
+  const router = useRouter();
+  const href = `/quran/prophets/${card.slug}`;
+  const read = (event: number, surah?: number) => router.push(`${href}?event=${card.story[event]}${surah === undefined ? '' : `&surah=${surah}`}`);
+  return <article className={styles.post} dir="rtl">
+    <Link href={href} aria-label="افتح القصة" className="block hover:opacity-80"><PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} /></Link>
+    <div className={styles.story}>
+      <StoryMap map={card.map} events={card.events} phases={card.phases} only={card.phase} onRead={read} />
+    </div>
+  </article>;
 }
 
 type Tree = TreePreview & { text: string };
@@ -302,6 +322,9 @@ export function Feed() {
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
   const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
   const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
+  // The prophets cards of the batches shown, worked out on the server (the stories' ayat stay there).
+  const storySlots = Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard);
+  const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null, fetchJson<StoryCard[]>, swr);
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
   useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
@@ -328,10 +351,12 @@ export function Feed() {
       const seed = feedQuizSeed(day, i);
       posts.push(kind === OPENINGS
         ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
-        : <QuizPost key={`q${day}-${i}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
+        : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
     }
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
+    const story = stories?.find(card => card.slot === i);
+    if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

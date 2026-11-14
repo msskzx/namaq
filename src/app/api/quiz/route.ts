@@ -43,7 +43,8 @@ export async function GET(request: Request) {
   const seed = searchParams.get('seed');
   const random = seed && /^\d{1,9}$/.test(seed) ? seededRandom(Number(seed)) : Math.random;
   if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) return NextResponse.json({ error: 'Unknown topic', topics: QUIZ_TOPICS }, { status: 400 });
-  if (!QUIZ_LENGTHS.includes(length as QuizLength)) return NextResponse.json({ error: 'Unknown length', lengths: QUIZ_LENGTHS }, { status: 400 });
+  // The home feed's question cards ask one question (with a seed); a quiz has one of the quiz lengths.
+  if (!QUIZ_LENGTHS.includes(length as QuizLength) && !(length === 1 && random !== Math.random)) return NextResponse.json({ error: 'Unknown length', lengths: QUIZ_LENGTHS }, { status: 400 });
   if (topics.includes('PERSON_CIRCLE') && !person) return NextResponse.json({ error: 'This topic needs a person' }, { status: 400 });
 
   try {

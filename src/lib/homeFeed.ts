@@ -6,6 +6,14 @@ import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pairOfDay, type PairCard } from '@/app/quran/compare/pairCards';
 import { treeInventory, treePreviewOf, type TreePreview } from '@/app/quran/read/ayahPreview';
+import { findProphet, storyTitle } from '@shared/quran/prophets';
+import { buildStory, storedText, storyMap, type EventView, type StoryMap } from '@shared/quran/prophets/story';
+import { STORIES } from '@shared/quran/prophets/stories';
+import verdictData from '@shared/quran/prophets/verdicts.json';
+import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
+import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
+import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
+import { AYAT } from '@/app/quran/prophets/ayat';
 
 
 let fits: BranchPiece[] | undefined;
@@ -59,4 +67,29 @@ export async function ayahPages(key: string) {
   if (!page) return null;
   const at = async (number: number) => ({ page: number, top: surahBefore(number), data: await loadPage(number) });
   return { ...(await at(page)), previous: page > 1 ? await at(page - 1) : null };
+}
+
+/** The prophets card's story, as the prophets page shows it to readers (kept places only), cut to what its map needs. */
+export type StoryCard = { slot: number; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
+
+export function storyCards(day: number, slots: number[]): StoryCard[] {
+  const all = withUnappliedStoryReviews(verdictData.places as PlaceVerdicts);
+  return slots.filter(hasStoryCard).flatMap(slot => {
+    const { slug, phase } = storyGroupOfDay(day, slot);
+    const prophet = findProphet(slug);
+    if (!prophet) return [];
+    const story = STORIES[slug];
+    const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${slug}/`)));
+    const events = keptViews(slug, buildStory(story.events, storedText(AYAT[slug])), verdicts);
+    const whole = storyMap(events);
+    const inGroup = new Set(events.flatMap((event, i) => (event.phase === phase ? whole.places[i].map(place => place.surah) : [])));
+    // The words stay behind: the map needs only each place's count.
+    const map = { ...whole, surahs: whole.surahs.filter(row => inGroup.has(row.surah)), places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
+    return [{
+      slot, slug, title: storyTitle(prophet), phase, phases: story.phases, map,
+      events: events.map(event => ({ ...event, segments: [] })),
+      // Each event's place in the whole story (the kept story can drop events), for the page's ?event=.
+      story: events.map(event => story.events.findIndex(at => at.title === event.title)),
+    }];
+  });
 }

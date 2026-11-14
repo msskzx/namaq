@@ -60,6 +60,7 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .feed { display: flex; flex-direction: column; gap: 0.875rem; }
 .divider { display: flex; align-items: center; gap: 0.625rem; color: var(--home-muted); font-size: 0.9375rem; font-weight: 700; }
 .divider::after { content: ''; flex: 1; border-top: 1px solid var(--home-rule); }
+.story { --story-map-bg: var(--home-card); max-height: 28rem; overflow: auto; padding: 0 0.75rem 0.25rem; overscroll-behavior: contain; }
 .question { padding: 0.25rem 0.75rem 0.5rem; }
 .recall { padding: 0.25rem 0.75rem 0; }
 .recallActions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.75rem; }

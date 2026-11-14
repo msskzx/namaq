@@ -22,6 +22,8 @@ export interface QuizQuestionView {
   key: string;
   family: QuestionFamily | BranchQuestion["family"] | QuizTopic;
   promptArabic: string;
+  /** The asked ayah's number («في أي سورة؟»). */
+  number?: number;
   choices: QuestionChoice[];
   phrase?: string;
   branches?: BranchAnswer[];

@@ -68,7 +68,13 @@ test.describe('a new user', () => {
         await page.mouse.wheel(0, 3000);
         expect(await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(3);
       }).toPass({ timeout: 20_000 });
-      for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) seen.add(name);
+      // The day's three question cards, each a kind of its own; a card draws once its question is worked out.
+      const here = new Set<string>();
+      await expect.poll(async () => {
+        for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) here.add(name);
+        return here.size;
+      }, { timeout: 20_000 }).toBeGreaterThanOrEqual(3);
+      here.forEach(name => seen.add(name));
     }
     expect([...seen].sort()).toEqual([...kinds].sort());
     expect(await page.getByRole('button', { name: 'اختبار فردي' }).count()).toBeGreaterThan(2);
@@ -83,7 +89,7 @@ test.describe('a new user', () => {
         await page.mouse.wheel(0, 3000);
         expect(await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(3);
       }).toPass({ timeout: 20_000 });
-      if (await page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).count()) break;
+      if (await page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().waitFor({ timeout: 10_000 }).then(() => true, () => false)) break;
     }
     const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
     await card.scrollIntoViewIfNeeded();
@@ -92,6 +98,24 @@ test.describe('a new user', () => {
     const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
     await choice.click();
     await expect(choice).toBeDisabled();
+  });
+
+  test('the prophets card is one group of a story map, and a dot opens the story there', async ({ page }) => {
+    await open(page, '/');
+    await page.mouse.move(380, 500);
+    const story = page.getByRole('heading', { name: /^قصة .* في القرآن$/ }).first();
+    await expect(async () => {
+      await page.mouse.wheel(0, 3000);
+      await expect(story).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    const card = story.locator('xpath=ancestor::div[.//*[@aria-label="افتح القصة"]][1]');
+    // A dot is labelled by its event, its surah and its ayat; the card draws one group, so every dot is on screen sideways.
+    const dots = card.getByRole('button', { name: /، .*، .*آي/ });
+    expect(await dots.count()).toBeGreaterThan(1);
+    const label = (await dots.first().getAttribute('aria-label'))!;
+    await dots.first().click();
+    await expect(page).toHaveURL(/\/prophets\/[^/?]+\?.*event=\d+.*surah=\d+/);
+    await expect(page.getByRole('button', { name: label }).first()).toBeAttached();
   });
 
   test('the search finds a surah and opens it', async ({ page }) => {
@@ -122,8 +146,11 @@ test.describe('a returning user', () => {
 
   test('a remembered ayah leaves the feed until its review is due', async ({ page }) => {
     await open(page, '/');
-    await page.getByRole('button', { name: 'تذكّرتها' }).click();
-    await expect(page.getByRole('button', { name: 'تذكّرتها' })).toHaveCount(0);
+    // The recall card, by its title: an openings card further down has the same buttons.
+    const recall = page.getByRole('heading', { name: 'هل تذكرها؟', exact: true });
+    await expect(recall).toHaveCount(1);
+    await page.getByRole('button', { name: 'تذكّرتها' }).first().click();
+    await expect(recall).toHaveCount(0);
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 
