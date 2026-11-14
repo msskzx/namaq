@@ -327,7 +327,7 @@ describe('BranchTree', () => {
     ] };
     const { container } = render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} />);
     expect([...container.querySelectorAll('[data-braid]')].map(word => [...word.querySelectorAll('[data-strand] > span:first-child')].map(form => form.textContent))).toEqual([['نُوحًۭا', 'نُوحًا']]);
-    expect(container.querySelector('[data-strand] > span')!.className).toContain('home-amber');
+    expect(container.querySelector('[data-strand] > span')!.className).toContain('mark-written');
   });
 
   it('writes a differently voiced first word in each form, apart from the shared root', () => {

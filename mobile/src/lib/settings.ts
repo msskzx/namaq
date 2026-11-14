@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './listState';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
+import { isMarkMode, type MarkMode } from '@shared/quran/wordMatch';
 import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';
 import { isAdhanAlerts, NO_ALERTS, type AdhanAlerts } from '@shared/adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
@@ -42,6 +43,9 @@ export const haptics = setting('haptics', true, isBoolean);
 /** Tree or matrix: the website's default-view setting. */
 export type BranchView = 'tree' | 'matrix';
 export const branchView = setting<BranchView>('branches-view', 'tree', (value): value is BranchView => value === 'tree' || value === 'matrix');
+
+/** How words the ayat share are coloured: by how alike they are, one colour, or none (owner, 2026-11-14). */
+export const markMode = setting<MarkMode>('word-marks', 'kinds', isMarkMode);
 
 /** The website's «ربط الكلمات المتشابهة بخطوط تلقائيًا»: a matrix of a book group opens with its word connections drawn. */
 export const connectors = setting('branches-connectors', false, isBoolean);

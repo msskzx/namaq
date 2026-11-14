@@ -4,7 +4,8 @@ import { VIDEO_TYPES, type TreeScene, type VideoAyah, type VideoInput } from './
 import { logoUrl } from './logo';
 import type { Palette } from './theme';
 import { QURAN_FONT, UI_FONT } from './fonts';
-import { ayahOf, matrixOf, surahNames, type MatrixAyah, type Presentation } from './branches';
+import { ayahOf, matrixOf, NOTHING_SHARED, surahNames, type MatrixAyah, type Presentation } from './branches';
+import { sharedTone } from './marks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 
@@ -15,18 +16,17 @@ const mix = (a: string, b: string, t: number) => {
 
 /**
  * The tree's ayat in the order they grow, as the chips and the ayah card show them. The card's words are the matrix's row for the
- * ayah, coloured as MatrixCard colours them (same root purple, same word in the accent, words only some rows share faded).
+ * ayah, coloured as MatrixCard colours them (sharedTone).
  */
 export function videoAyat(beats: Beat[], presentation: Presentation | undefined, palette: Palette): VideoAyah[] {
   const matrix = presentation && matrixOf(presentation, false);
   const starts = presentation?.ayat.map(ayah => ayah.key) ?? [];
   return [...new Set(beats.map(beat => beat.key).filter(Boolean))].map(key => {
     const [surah, number] = key.split(':').map(Number);
-    const row: MatrixAyah[] = matrix?.rows[starts.indexOf(key)]?.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], exact: new Set(), rooted: new Set() }];
+    const row: MatrixAyah[] = matrix?.rows[starts.indexOf(key)]?.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], ...NOTHING_SHARED }];
     const words = row.flatMap(ayah => [
       ...ayah.words.map((word, i) => {
-        const link = ayah.links?.get(i);
-        const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : link?.some ? mix(link.exact ? palette.accent : palette.root, palette.card, 0.55) : palette.ink;
+        const color = sharedTone(palette, ayah, i) ?? palette.ink;
         return { text: mushafText(word), color };
       }),
       { text: num(Number(ayah.key.split(':')[1])), color: palette.accent },

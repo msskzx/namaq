@@ -14,6 +14,7 @@ import { RailSlotContext } from './NavBar';
 import TreeIcon from './TreeIcon';
 import BranchAroundSetting from '@/components/quran/BranchAroundSetting';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
+import MarkModeSetting from '@/components/quran/MarkModeSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
 import { MemorizedSetting } from '@/components/homepage/Memorized';
@@ -88,6 +89,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <MemorizedSetting />
         <ThemeTiles />
         <BranchViewSetting />
+        <MarkModeSetting />
         <BranchAroundSetting />
         <BranchConnectorSetting />
         <ReaderGestureSetting />

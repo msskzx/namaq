@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
@@ -14,7 +14,8 @@ import { around as aroundSetting, branchView, type BranchView } from '@/lib/sett
 import CompareBraid from './CompareBraid';
 import { Gap, PartRule, Silent } from './StoryParts';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
-import { COMPARE_CARD, markColour, sideTitle, sideView } from '@shared/quran/compareCardLook';
+import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
+import { likenessAt } from '@/lib/branches';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
 import { shareCard } from '@/lib/shareImage';
@@ -27,7 +28,8 @@ import { toTab } from '@/lib/ways';
 
 const DOUBLE_TAP = 280;
 
-type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void };
+/** `written`: links whose words the sides write differently (writtenLinks). */
+type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void; written?: Set<string> };
 
 /** The card's first words and a link to its two passages on the website. */
 function cardLink(card: PairCard) {
@@ -45,7 +47,7 @@ function AyahText({ ayah, palette, light, plain = false, inline = false }: { aya
         const mark = plain ? undefined : ayah.marks?.[i];
         const lit = !!mark?.link && mark.link === light?.lit;
         const reading = light?.reading === i;
-        const color = lit ? palette.onHighlight : markColour(mark?.kind, palette);
+        const color = lit ? palette.onHighlight : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
         const link = mark?.link;
         return (
           <Text key={i}>
@@ -67,7 +69,8 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   return (
     <Text style={{ fontSize: 18, color: palette.muted }}>
       {ayah.words.map((word, i) => {
-        const color = ayah.rooted.has(i) ? palette.root : ayah.exact.has(i) ? palette.accent : undefined;
+        const kind = likenessAt(ayah, i);
+        const color = kind && palette.marks[kind];
         return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
       })}
       <Text>{"\u00A0"}{num(ayah.number)}</Text>
@@ -104,8 +107,8 @@ function SideHead({ label, keys, palette, group }: { label: string; keys: string
   );
 }
 
-const lightFor = (lit: string | null, step: ReadStep | undefined, side: number, number: number, onWord: (link: string) => void): Light =>
-  ({ lit, reading: step && step.side === side && step.ayah === number ? step.word : undefined, onWord });
+const lightFor = (lit: string | null, step: ReadStep | undefined, side: number, number: number, onWord: (link: string) => void, written: Set<string>): Light =>
+  ({ lit, reading: step && step.side === side && step.ayah === number ? step.word : undefined, onWord, written });
 
 function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlong>; palette: Palette; record: () => void }) {
   const starts = ayahStarts(read.plan);
@@ -162,6 +165,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   // The card's own switches, opening on the settings' defaults.
   const [aroundOn, setAround] = useState(aroundSetting.get);
   const around = aroundOn ? aroundOf(sides) : undefined;
+  const written = useMemo(() => writtenLinks(card, selected), [card, selected]);
   // A story card lines its parts up in rows; any part folds to its ayah range, both sides at once.
   const parts = card.many ? undefined : card.sides[0].rows;
   const [closed, setFolded] = useState<number[]>([]);
@@ -188,7 +192,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const side = (cardSide: CardSide, i: 0 | 1) => {
     const view = sideView(card, i, selected, folded);
     const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
-    const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord);
+    const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord, written);
     const many = card.many && card.many.side === i && !view.refrain;
     return (
       <View key={i} style={{ gap: many ? COMPARE_CARD.optionsGap : COMPARE_CARD.sideGap }}>

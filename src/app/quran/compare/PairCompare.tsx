@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { useLanguage } from '@/components/language/LanguageContext';
-import PageSpread, { type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
+import PageSpread, { MatchLegend, type SpreadAyah, type SpreadPage } from '@/components/quran/PageSpread';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { isMemorizedScope, memorizedScope, readMemorized, serverMemorized, subscribeMemorized } from '@shared/memorized';
 import { pageInScope, scopeParam, SCOPE_MAX, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';
@@ -39,7 +39,7 @@ import { useNeighbours } from './useNeighbours';
 import { useCardAround } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
-import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
+import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLook';
 import type { VideoNames } from '@shared/video/compareVideo';
 
 export type SurahName = { ar: string; en?: string };
@@ -117,11 +117,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
 /** The compare page's help, the app's (mobile/src/components/HelpSheet.tsx), with its colour legend. */
 const COMPARE_HELP = <>
   <p>كل صفحة تجمع سورتين، وكل بطاقة تضع آية من كل سورة جنبًا إلى جنب. اختيرت البطاقات لأن الآيتين في المشهد نفسه أو تشتركان في عبارة نادرة، لا لعدد الكلمات المشتركة. اضغط كلمة ملوّنة لتضيء نظيرتها في الآية الأخرى. النص برواية حفص.</p>
-  <ul className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2">
-    {([['ٱلْكِتَٰبَ', 'var(--home-accent)', 'كلمة مشتركة بلفظها'], ['يُؤْمِنُونَ', 'var(--home-root)', 'نفس اللفظ بصيغة أخرى'], ['بَيَانٌ', 'color-mix(in srgb, var(--home-root) 45%, var(--home-muted))', 'من جذر مشترك بلفظ مختلف، وقد يختلف المعنى']] as const).map(([word, color, text]) => (
-      <li key={word} className="flex items-center gap-3"><span className="min-w-16 text-center font-quran text-xl" style={{ color }}>{word}</span><span>{text}</span></li>
-    ))}
-  </ul>
+  <MatchLegend ar extra={<li className="flex items-center gap-3 [:root[data-marks=none]_&]:hidden"><span className="min-w-16 text-center font-quran text-xl text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]">بَيَانٌ</span><span>من جذر مشترك بلفظ مختلف، وقد يختلف المعنى</span></li>} />
 </>;
 
 /** A chevron beside the pair title: previous on the reading side's start, next on its end. Greyed out at either end of the list. */
@@ -276,14 +272,16 @@ const pairHref = (a: number, b: number, review: boolean, todo = false, scope?: C
 
 const ICON = 'flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
-/** `reading` is the read-along's word when it is on this side. */
-const lightMarks = (lit: string | null, reading?: ReadStep) => (ayah: SpreadAyah): SpreadAyah => ({
+/** `reading` is the read-along's word when it is on this side; `written`, the links the card's sides write differently (writtenLinks). */
+const lightMarks = (lit: string | null, reading?: ReadStep, written?: Set<string>) => (ayah: SpreadAyah): SpreadAyah => ({
   ...ayah,
-  marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, { ...mark, lit: !!lit && mark.link === lit }])),
+  marks: Object.fromEntries(Object.entries(ayah.marks ?? {}).map(([index, mark]) => [index, {
+    ...mark, lit: !!lit && mark.link === lit, ...(mark.kind === 'exact' && mark.link && written?.has(mark.link) ? { kind: 'written' as const } : {}),
+  }])),
   ...(reading && reading.ayah === ayah.number ? { reading: reading.word } : {}),
 });
 
-function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick' | 'footer'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep): SpreadPage {
+function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick' | 'footer'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep, written?: Set<string>): SpreadPage {
   const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   const show = (n: number) => (ar ? num(n) : n);
@@ -301,7 +299,7 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
     ...(side.rows ? { empty: emptyNote(name, ar) } : {}),
     // Story cards run in the first surah's order, so this side's surah tells this part before the last card's.
     ...(side.back ? { subtitle: ar ? 'قبلُ في السورة' : 'Earlier in the surah' } : {}),
-    rows: partners?.ayat ?? (side.rows ?? [side.ayat.map(ayah => ayah.number)]).map(row => side.ayat.filter(ayah => row.includes(ayah.number)).map(lightMarks(lit, reading))),
+    rows: partners?.ayat ?? (side.rows ?? [side.ayat.map(ayah => ayah.number)]).map(row => side.ayat.filter(ayah => row.includes(ayah.number)).map(lightMarks(lit, reading, written))),
     ...(partners ? { pick: partners.pick, footer: partners.footer } : {}),
   };
 }
@@ -354,6 +352,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
   const studioLabel = ar ? 'استوديو القراءة' : 'Read-along studio';
   const [picked, setSelected] = useState(0);
   const selected = step?.option ?? picked;
+  const written = useMemo(() => writtenLinks(card, selected), [card, selected]);
   const option = card.many?.options[selected];
   const shownSides = card.sides.map((side, i) => !option ? side : i === card.many!.side ? { ...side, ayah: option.ayah.number, ayat: [option.ayah] } : { ...side, ayat: [option.shared] });
   const [view, setView] = useState<BranchView>(preferred);
@@ -402,12 +401,12 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
     const options = card.many!.options;
     if (isRefrain(options)) return {
       numbers: [],
-      ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined)(options[0].ayah)]],
+      ayat: [[lightMarks(lit, step?.side === card.many!.side ? step : undefined, written)(options[0].ayah)]],
       footer: <p className="mt-1 text-center text-sm text-[var(--home-muted)]">{name} {options.map((item, i) => <React.Fragment key={item.id}>{i > 0 && ' · '}<Link href={`/quran/read/ayah/${side.surah}/${item.ayah.number}`} className="underline-offset-2 hover:text-[var(--home-accent)] hover:underline">{ar ? num(item.ayah.number) : item.ayah.number}</Link></React.Fragment>)}</p>,
     };
     return {
       numbers: options.map(item => item.ayah.number),
-      ayat: options.map((item, i) => [i === selected ? lightMarks(lit, step?.side === card.many!.side ? step : undefined)(item.ayah) : { ...item.ayah, marks: undefined }]),
+      ayat: options.map((item, i) => [i === selected ? lightMarks(lit, step?.side === card.many!.side ? step : undefined, written)(item.ayah) : { ...item.ayah, marks: undefined }]),
       pick: { selected, labels: options.map(item => `${name} ${ar ? num(item.ayah.number) : item.ayah.number}`), onPick: (row: number) => { if (step) return; if (row !== selected) { setSelected(row); setLit(null); } } },
     };
   };
@@ -433,7 +432,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined), i)).map(foldPage)} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage)} />
         </div>}
       </DoubleTapSave>
       </div>

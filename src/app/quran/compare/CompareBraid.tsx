@@ -4,7 +4,7 @@ import Rope from '@/components/common/Rope';
 import { braidOf, endMark, type BraidWord } from '@shared/quran/braid';
 import type { CardSide } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
-import { normalizeWord } from '@shared/quran/normalize';
+import { likeness } from '@shared/quran/wordMatch';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 
 const LINK = 26;
@@ -13,12 +13,12 @@ const LINK = 26;
 const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
 
 const colourOf = (word: BraidWord, other?: BraidWord) => {
-  if (other) return other.text !== word.text && normalizeWord(other.text) === normalizeWord(word.text) ? 'var(--home-amber)' : undefined;
+  if (other) return likeness([other.text, word.text]) === 'written' ? 'var(--mark-written)' : undefined;
   if (!word.mark) return undefined;
-  return word.mark.kind === 'root' ? 'var(--home-root)' : word.mark.kind === 'related' ? 'color-mix(in srgb, var(--home-root) 45%, var(--home-muted))' : 'var(--home-accent)';
+  return word.mark.kind === 'root' ? 'var(--mark-root)' : word.mark.kind === 'related' ? 'color-mix(in srgb, var(--mark-root) 45%, var(--home-muted))' : 'var(--mark-exact)';
 };
 
-/** Words of one node: the card's colours, or amber in a shared node where the two spellings differ in tashkeel. */
+/** Words of one node: the card's colours, or the written colour in a shared node where the two spellings differ (shared/quran/wordMatch.ts). */
 function Words({ words, other, ar }: { words: BraidWord[]; other?: BraidWord[]; ar: boolean }) {
   return words.map((word, i) => {
     const colour = colourOf(word, other?.[i]);
@@ -51,7 +51,7 @@ function Neighbour({ ayah, ar }: { ayah: SpreadAyah; ar: boolean }) {
       const kind = ayah.marks?.[i]?.kind;
       return <Fragment key={i}>
         {i > 0 && ' '}
-        <span style={kind ? { color: kind === 'root' ? 'var(--home-root)' : 'var(--home-accent)', opacity: 0.8 } : undefined}><MushafText>{word}</MushafText></span>
+        <span style={kind ? { color: `var(--mark-${kind === 'related' ? 'root' : kind})` } : undefined} className={kind ? 'opacity-80 [:root[data-marks=none]_&]:opacity-100' : undefined}><MushafText>{word}</MushafText></span>
       </Fragment>;
     })}
     {' '}{ar ? num(ayah.number) : ayah.number}

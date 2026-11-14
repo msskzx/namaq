@@ -112,6 +112,12 @@
   --story-4: #c3afd5;
 }
 
+/* Words the ayat share, by how alike they are (shared/quran/wordMatch.ts), under the colour setting (src/lib/markMode.ts).
+   With none, a mark keeps its text's own colour. */
+:root { --mark-exact: var(--home-accent); --mark-written: var(--home-amber); --mark-root: var(--home-root); }
+:root[data-marks="one"] { --mark-written: var(--home-accent); --mark-root: var(--home-accent); }
+:root[data-marks="none"] { --mark-exact: currentColor; --mark-written: currentColor; --mark-root: currentColor; }
+
 /* Card colour setting (src/lib/cardTint.ts): paper and dark are the defaults above. */
 :root:not(.dark)[data-card-light="cream"]:has([data-feature-theme]) { --home-card: #faf5ea; }
 :root.dark[data-card-dark="black"]:has([data-feature-theme]) { --home-card: #0b0b0b; }

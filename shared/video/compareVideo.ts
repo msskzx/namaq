@@ -2,12 +2,12 @@ import type { CardAyah, MarkKind, PairCard } from '../quran/compareCards';
 import { num } from '../quran/arabicNumber';
 import { mushafText } from '../quran/mushafText';
 import { ayahStarts, stepTime, type ReadStep } from '../quran/readPlan';
-import { COMPARE_CARD, markColour, sideView, UI_SCALE, type CardPiece, type SideName } from '../quran/compareCardLook';
+import { COMPARE_CARD, markColour, sideView, UI_SCALE, writtenLinks, type CardPiece, type MarkColours, type SideName } from '../quran/compareCardLook';
 import { stepEnds, videoParts, videoTimeline, type Segment } from './pageVideo';
 import { OUTRO, PAUSE, READY, VIDEO_TYPES } from './recorder';
 
 /** One word as the video draws it: its text, which ayah and word it is (-1 for the ayah number), its mark. */
-export type VideoWord = { text: string; ayah: number; word: number; kind?: MarkKind; link?: string; seal?: boolean };
+export type VideoWord = { text: string; ayah: number; word: number; kind?: MarkKind | 'written'; link?: string; seal?: boolean };
 /** A card piece as the video draws it (CardPiece in shared/quran/compareCardLook.ts, with words for the ayat and text for the notes). */
 export type VideoPiece =
   | { kind: 'ayat'; words: VideoWord[]; plain?: boolean; picked?: boolean }
@@ -20,7 +20,7 @@ export type VideoCard = { options: [VideoSide, VideoSide][]; same: boolean; step
 /** The screen's colours and fonts. `marks` holds the colour of each kind of mark, from markColour as the app's card colours them. */
 export type CompareLook = {
   paper: string; card: string; deep: string; ink: string; muted: string; rule: string; accent: string; green: string; highlight: string; onHighlight: string;
-  marks: Record<MarkKind, string>; font: string; ui: string; logo: string;
+  marks: Partial<Record<MarkKind | 'written', string>>; font: string; ui: string; logo: string;
 };
 /**
  * What the compare recorder needs: the pair's name on top (with the story's name, the part and which card of how many under it),
@@ -42,23 +42,24 @@ export type CompareVideoInput = {
 };
 
 /** The look's mark colours, from the same rule the app's card uses. */
-export const markColours = (colours: { accent: string; root: string; muted: string }): Record<MarkKind, string> =>
-  ({ exact: markColour('exact', colours)!, root: markColour('root', colours)!, related: markColour('related', colours)! });
+export const markColours = (colours: MarkColours): CompareLook['marks'] =>
+  ({ exact: markColour('exact', colours), written: markColour('exact', colours, true), root: markColour('root', colours), related: markColour('related', colours) });
 
 /** How the video names things: a side («الطور ١٧–٢٠»), and a story part a surah does not tell. */
 export type VideoNames = { side: (name: SideName) => string; silent: (surah: number) => string };
 
-const videoWords = (ayat: CardAyah[], plain?: boolean): VideoWord[] => ayat.flatMap(ayah => [
+const videoWords = (ayat: CardAyah[], written: Set<string>, plain?: boolean): VideoWord[] => ayat.flatMap(ayah => [
   ...ayah.words.map((word, index) => {
     const mark = plain ? undefined : ayah.marks?.[index];
-    return { text: mushafText(word), ayah: ayah.number, word: index, ...(mark ? { kind: mark.kind, ...(mark.link ? { link: mark.link } : {}) } : {}) };
+    const kind: VideoWord['kind'] = mark && (mark.link && written.has(mark.link) ? 'written' : mark.kind);
+    return { text: mushafText(word), ayah: ayah.number, word: index, ...(mark ? { kind, ...(mark.link ? { link: mark.link } : {}) } : {}) };
   }),
   { text: num(ayah.number), ayah: ayah.number, word: -1, seal: true },
 ]);
 
-const videoPiece = (piece: CardPiece, names: VideoNames): VideoPiece | null => {
+const videoPiece = (piece: CardPiece, names: VideoNames, written: Set<string>): VideoPiece | null => {
   switch (piece.kind) {
-    case 'ayat': return { kind: 'ayat', words: videoWords(piece.ayat, piece.plain), ...(piece.plain ? { plain: true } : {}), ...(piece.picked ? { picked: true } : {}) };
+    case 'ayat': return { kind: 'ayat', words: videoWords(piece.ayat, written, piece.plain), ...(piece.plain ? { plain: true } : {}), ...(piece.picked ? { picked: true } : {}) };
     case 'part': return { kind: 'part', ...(piece.label ? { label: piece.label } : {}) };
     case 'gap': case 'range': return { kind: piece.kind, label: piece.label };
     case 'dash': return { kind: 'dash' };
@@ -71,11 +72,12 @@ const videoPiece = (piece: CardPiece, names: VideoNames): VideoPiece | null => {
 /** A side as the card shows it in the studio (every story part open), with the partner `option` picked. */
 function videoSide(card: PairCard, i: 0 | 1, option: number, names: VideoNames): VideoSide {
   const view = sideView(card, i, option);
+  const written = writtenLinks(card, option);
   return {
     label: names.side(view.name),
     ...(view.back ? { back: true } : {}),
     ...(card.many?.side === i && !view.refrain ? { many: true } : {}),
-    pieces: view.pieces.map(piece => videoPiece(piece, names)).filter((piece): piece is VideoPiece => !!piece),
+    pieces: view.pieces.map(piece => videoPiece(piece, names, written)).filter((piece): piece is VideoPiece => !!piece),
   };
 }
 
@@ -304,7 +306,7 @@ function drawAyat(row, x0, y, step, size) {
     var reading = !piece.plain && step && step.side === row.side && step.ayah === t.ayah && step.word === t.word;
     var lit = !piece.plain && step && step.link && t.link === step.link;
     if (lit || reading) { ctx.fillStyle = lit ? look.highlight : look.deep; ctx.fillRect(x - word.w, baseline - size * 1.05, word.w, size * 1.55); }
-    ctx.fillStyle = t.seal ? look.accent : lit ? look.onHighlight : t.kind ? look.marks[t.kind] : base;
+    ctx.fillStyle = t.seal ? look.accent : lit ? look.onHighlight : t.kind ? (look.marks[t.kind] || base) : base;
     ctx.fillText(t.text, x, baseline);
     if (reading) { ctx.fillStyle = look.accent; ctx.fillRect(x - word.w, baseline + size * 0.3, word.w, Math.max(2, size / 22)); }
   });

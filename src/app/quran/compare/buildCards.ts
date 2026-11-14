@@ -3,8 +3,7 @@ import { groups } from '@shared/quran/mutashabih/data';
 import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahPairs, surahOf, type AyahPair } from '@/lib/quran/mutashabih/pairs';
 import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { compareVerdicts, keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
-import type { SpreadAyah } from '@/components/quran/PageSpread';
-import { encodeAyat, type CardSide, type PairCard } from '@shared/quran/compareCards';
+import { encodeAyat, type CardSide, type MarkKind, type PairCard } from '@shared/quran/compareCards';
 import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
@@ -60,7 +59,7 @@ const listedPairs = surahPairs(bySurah);
 const reviewPairs = surahPairs(foundBySurah);
 
 const LEVELS = ['exact', 'letters', 'lemma', 'root'];
-const kindOf = (level: string) => (level === 'root' ? 'related' : level === 'lemma' ? 'root' : 'exact') as NonNullable<SpreadAyah['marks']>[number]['kind'];
+const kindOf = (level: string): MarkKind => (level === 'root' ? 'related' : level === 'lemma' ? 'root' : 'exact');
 
 /** A word matched in two pairs of a range keeps one link, so tapping any of its partners lights them all. Strongest matches come first. */
 function wordMarks(pairs: AyahPair[]) {

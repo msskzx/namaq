@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CardAyah, PairCard } from './compareCards';
-import { COMPARE_CARD, markColour, runsLabel, sideTitle, sideView } from './compareCardLook';
+import { COMPARE_CARD, markColour, runsLabel, sideTitle, sideView, writtenLinks } from './compareCardLook';
 import { compareVideoInput, markColours, videoCard } from '../video/compareVideo';
 import { readPlan } from './readPlan';
 
@@ -34,8 +34,8 @@ describe('the compare card shared by the app and its video', () => {
   });
 
   it("gives the video the app's measures and mark colours, and ends every video on the emblem", () => {
-    const colours = { accent: '#783d49', root: '#665177', muted: '#62645e' };
-    expect(markColours(colours)).toEqual({ exact: '#783d49', root: '#665177', related: markColour('related', colours) });
+    const colours = { marks: { exact: '#783d49', written: '#806239', root: '#665177' }, muted: '#62645e' };
+    expect(markColours(colours)).toEqual({ exact: '#783d49', written: '#806239', root: '#665177', related: markColour('related', colours) });
     const card: PairCard = { id: 'p', sides: [{ surah: 2, ayah: 1, ayat: [ayah(1)] }, { surah: 7, ayah: 1, ayat: [ayah(1)] }] };
     const look = { paper: '', card: '', deep: '', ink: '', muted: '', rule: '', accent: '', green: '', highlight: '', onHighlight: '', marks: markColours(colours), font: '', ui: '', logo: '' };
     const input = compareVideoInput({ title: 't', cards: [videoCard(card, readPlan(card), 1, names)], look });
@@ -53,7 +53,29 @@ describe('the end frame', () => {
     expect(OUTRO).toContain(JSON.stringify(APP_NAME));
     expect(OUTRO).toContain(JSON.stringify(SLOGAN));
     const card: PairCard = { id: 'p', sides: [{ surah: 2, ayah: 1, ayat: [ayah(1)] }, { surah: 7, ayah: 1, ayat: [ayah(1)] }] };
-    const look = { paper: '', card: '', deep: '', ink: '', muted: '', rule: '', accent: '', green: '', highlight: '', onHighlight: '', marks: markColours({ accent: '#000000', root: '#000000', muted: '#000000' }), font: '', ui: '', logo: '' };
+    const look = { paper: '', card: '', deep: '', ink: '', muted: '', rule: '', accent: '', green: '', highlight: '', onHighlight: '', marks: markColours({ marks: { exact: '#000000', written: '#000000', root: '#000000' }, muted: '#000000' }), font: '', ui: '', logo: '' };
     expect(compareRecorderPage(compareVideoInput({ title: 't', cards: [videoCard(card, readPlan(card), 1, names)], look }))).toContain('function outro(');
+  });
+});
+
+describe('written differently', () => {
+  it('colours a pair the sides write differently in the written colour, under every colour setting', () => {
+    const side = (word: string) => ({ ayat: [{ number: 1, words: [word, 'ٱللَّهِ'], marks: { 0: { kind: 'exact' as const, link: '1' }, 1: { kind: 'exact' as const, link: '2' } } }] });
+    expect([...writtenLinks({ sides: [{ surah: 2, ayah: 1, ...side('لَعْنَةُ') }, { surah: 3, ayah: 1, ...side('لَعْنَةَ') }] })]).toEqual(['1']);
+    // A one-to-many card: only the partner picked counts, since partners reuse link ids.
+    const many = { side: 1 as const, options: [
+      { id: 'a', ayah: side('ٱللَّهِ').ayat[0], shared: side('ٱللَّهِ').ayat[0] },
+      { id: 'b', ayah: { number: 2, words: ['مَآ'], marks: { 0: { kind: 'exact' as const, link: '7' } } }, shared: { number: 1, words: ['مَا'], marks: { 0: { kind: 'exact' as const, link: '7' } } } },
+    ] };
+    const manyCard = { sides: [{ surah: 2, ayah: 1, ayat: [] }, { surah: 3, ayah: 1, ayat: [] }] as PairCard['sides'], many };
+    expect(writtenLinks(manyCard, 1).has('7')).toBe(true);
+    expect(writtenLinks(manyCard, 0).has('7')).toBe(false);
+    // The same id on two partners: one written alike, one not.
+    const reused = { ...manyCard, many: { ...many, options: [{ ...many.options[1], ayah: { ...many.options[1].ayah, words: ['مَا'] } }, many.options[1]] } };
+    expect(writtenLinks(reused, 0).has('7')).toBe(false);
+    expect(writtenLinks(reused, 1).has('7')).toBe(true);
+    const colours = { marks: { exact: 'E', written: 'W', root: 'R' }, muted: '#000000' };
+    expect(markColour('exact', colours, true)).toBe('W');
+    expect(markColour('exact', { marks: {}, muted: '#000000' }, true)).toBeUndefined();
   });
 });

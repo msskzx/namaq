@@ -3,17 +3,18 @@ import MushafText from '@/components/common/MushafText';
 import Rope from '@/components/common/Rope';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './PageSpread.module.css';
+import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */
 /** `some`: a word only some of the rows share, drawn faded. */
-export type SpreadMark = { kind: 'exact' | 'root' | 'related'; slot?: number; title?: string; link?: string; lit?: boolean; some?: boolean };
+export type SpreadMark = { kind: 'exact' | 'written' | 'root' | 'related'; slot?: number; title?: string; link?: string; lit?: boolean; some?: boolean };
 /** `muted`: an ayah shown only for context (the ayah before or after), drawn quieter. */
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; wordKey?: string; current?: boolean; bare?: boolean; reading?: number; muted?: boolean };
 /** `empty`: what a row this page has no ayat for says, so the gap reads as the text's own and not a failed load. `heads`: a control sitting on a row's top rule, and `ruleLabels` a name in the rule's middle. `bare`: a folded row, showing only those. */
 export type RowHead = React.ReactNode | undefined;
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][]; empty?: string; heads?: RowHead[]; ruleLabels?: (string | undefined)[]; bare?: boolean[]; gaps?: boolean; gapsLabel?: string; footer?: React.ReactNode; action?: React.ReactNode; pick?: { selected: number; labels: string[]; onPick: (row: number) => void } };
 
-const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.some && styles.some, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
+const markClass = (mark: SpreadMark) => [mark.kind === 'written' && styles.written, mark.kind === 'root' && styles.root, mark.kind === 'related' && styles.related, mark.some && styles.some, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.link && styles.linkable, mark.lit && styles.lit].filter(Boolean).join(' ') || undefined;
 
 function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;
@@ -44,12 +45,21 @@ function RowAyat({ ayat, gaps = false, onRule = false, label = '' }: { ayat: Spr
   });
 }
 
-export function MatchLegend({ exact, root }: { exact?: string; root?: string }) {
+/** The colour of each likeness (MARK_LEGEND) under the colour setting, with the kind of difference the books name for it. */
+export function MatchLegend({ ar, extra }: { ar: boolean; extra?: React.ReactNode }) {
   return (
-    <p className={styles.legend}>
-      {exact && <span><mark>{exact}</mark></span>}
-      {root && <span><mark className={styles.root}>{root}</mark></span>}
-    </p>
+    <div className={styles.legend}>
+      <ul>
+        {MARK_LEGEND.map(item => (
+          <li key={item.kind}>
+            {item.kind === 'plain' ? <span className={styles.legendWord}>{item.word}</span> : <mark className={`${styles[item.kind] ?? ''} ${styles.legendWord}`}>{item.word}</mark>}
+            <span>{ar ? item.ar : item.en}</span>
+          </li>
+        ))}
+        {extra}
+      </ul>
+      <p>{ar ? LEGEND_SOURCE.ar : LEGEND_SOURCE.en}</p>
+    </div>
   );
 }
 

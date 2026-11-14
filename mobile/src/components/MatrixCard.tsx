@@ -10,8 +10,9 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
 import { matrixOf, readId, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
+import { sharedTone } from '@/lib/marks';
 import type { Size } from '@/lib/camera';
-import { QURAN_FONT, blend, toneColor, type Palette, CARD } from '@/lib/theme';
+import { QURAN_FONT, toneColor, type Palette, CARD } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
@@ -58,10 +59,8 @@ type Read = { row: number; now: Set<string> };
 function toneOf(ayah: MatrixAyah, i: number, palette: Palette, light?: Light) {
   const link = ayah.links?.get(i);
   if (link && light?.lit === link.link) return { color: palette.onHighlight, backgroundColor: palette.highlight };
-  if (ayah.rooted.has(i)) return { color: palette.root };
-  if (ayah.exact.has(i)) return { color: palette.accent };
-  if (link?.some) return { color: blend(link.exact ? palette.accent : palette.root, palette.card, 0.55) };
-  return undefined;
+  const color = sharedTone(palette, ayah, i);
+  return color ? { color } : undefined;
 }
 
 /** The word the read-along is on, and the words matched with it in the other rows, lit as a tap lights them. */

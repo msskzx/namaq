@@ -2,7 +2,8 @@ import { useColorScheme } from 'react-native';
 import { useMemo } from 'react';
 import { cardColour } from '@shared/cardTint';
 import type { ConnectionTone } from '@shared/quran/mutashabih/connections';
-import { cardTints, themeChoice } from './settings';
+import { markTones, type Likeness } from '@shared/quran/wordMatch';
+import { cardTints, markMode, themeChoice } from './settings';
 
 // The branches pages' palette on the website (src/app/theme.css, docs/palette.md).
 export const light = {
@@ -29,6 +30,8 @@ export const light = {
   glass: '#f8f6f0b8',
   glassEdge: '#202c351f',
   scheme: 'light' as 'light' | 'dark',
+  /** Words the ayat share, by how alike they are (shared/quran/wordMatch.ts); the colour setting can leave some out. */
+  marks: { exact: '#783d49', written: '#806239', root: '#665177' } as Partial<Record<Likeness, string>>,
 };
 
 export type Palette = typeof light;
@@ -53,6 +56,7 @@ export const dark: Palette = {
   glass: '#242727b3',
   glassEdge: '#edeae21a',
   scheme: 'dark',
+  marks: { exact: '#d9a6b0', written: '#dcc5a0', root: '#c3afd5' },
 };
 
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
@@ -64,10 +68,14 @@ export function usePalette(): Palette {
   const scheme = useColorScheme();
   const [choice] = themeChoice.use();
   const [tints] = cardTints.use();
+  const [mode] = markMode.use();
   const isDark = choice === 'system' ? scheme === 'dark' : choice === 'dark';
   const card = isDark ? cardColour('dark', tints.dark) : cardColour('light', tints.light);
   // Cards and reading areas take the tint chosen on the theme tiles; the page stays as it is.
-  return useMemo(() => ({ ...(isDark ? dark : light), card }), [isDark, card]);
+  return useMemo(() => {
+    const base = isDark ? dark : light;
+    return { ...base, card, marks: markTones(mode, { exact: base.accent, written: base.amber, root: base.root }) };
+  }, [isDark, card, mode]);
 }
 
 /** Joined و is green and joined ف purple, as on the website's trees. */

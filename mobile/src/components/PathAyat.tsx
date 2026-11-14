@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { ArrowLeftRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahOf, matrixOf, surahNames, type Presentation } from '@/lib/branches';
+import { ayahOf, matrixOf, NOTHING_SHARED, surahNames, type Presentation } from '@/lib/branches';
 import { compareTargetsOfAyah, type CompareTarget } from '@/lib/compare';
 import { openCompare } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
@@ -27,7 +27,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
       <ScrollView scrollEnabled={!!maxHeight} style={{ maxHeight }} contentContainerStyle={{ gap: 8 }} showsVerticalScrollIndicator={false}>
         {ayahKeys.map(key => {
           const ayah = ayahOf(key);
-          const cell = matrix.rows[starts.indexOf(key)]?.ayah ?? (ayah ? { ayat: [{ key, page: ayah.page, words: ayah.words, exact: new Set<number>(), rooted: new Set<number>() }] } : null);
+          const cell = matrix.rows[starts.indexOf(key)]?.ayah ?? (ayah ? { ayat: [{ key, page: ayah.page, words: ayah.words, ...NOTHING_SHARED }] } : null);
           if (!cell) return null;
           const [surah, number] = key.split(':').map(Number);
           const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;

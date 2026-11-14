@@ -8,10 +8,19 @@ import { VOICE_NAME, voiceColor } from './Iltifat';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
+import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
 
 export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings' | 'order';
 
 /** A coloured sample word and what its colour means. */
+/** The colour of each likeness (MARK_LEGEND), as the colour setting draws it, with the kind of difference the books name for it. */
+function Legend({ palette }: { palette: Palette }) {
+  return <>
+    {MARK_LEGEND.map(item => <Key key={item.kind} word={item.word} color={(item.kind !== 'plain' && palette.marks[item.kind]) || palette.ink} text={item.ar} palette={palette} />)}
+    <Text style={{ color: palette.muted, fontSize: 13 }}>{LEGEND_SOURCE.ar}</Text>
+  </>;
+}
+
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -64,16 +73,13 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
           <Text style={paragraph}>تجمع كل بطاقة آياتٍ تتشابه ألفاظها، فتراها شجرةً أو مصفوفة. ما جمعته كتب المتشابه يبقى كما ورد فيها، وزر المصادر تحت بطاقته يعرض نص كل كتاب وموضعه. الرمز ∅ يعني كلمة محذوفة.</Text>
           <Text style={paragraph}>العبارات الكثيرة التكرار لا تظهر بطاقاتٍ، لكنك تجدها بالبحث. والنص برواية حفص كما في المصحف.</Text>
           <View style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>
-            <Key word="ٱلْكِتَٰبَ" color={palette.accent} text="نفس الكلمة في كل الآيات" palette={palette} />
-            <Key word="يُؤْمِنُونَ" color={palette.root} text="نفس اللفظ أو الجذر بصيغة أخرى" palette={palette} />
-            <Key word="إِنْ" color={palette.amber} text="الكلمة نفسها بضبط مختلف بين الآيات؛ المصفوفة تعرض ضبط كل آية" palette={palette} />
+            <Legend palette={palette} />
           </View>
         </> : <>
           <Text style={paragraph}>كل صفحة تجمع سورتين، وكل بطاقة تضع آية من كل سورة جنبًا إلى جنب. اختيرت البطاقات لأن الآيتين في المشهد نفسه أو تشتركان في عبارة نادرة، لا لعدد الكلمات المشتركة. اضغط كلمة ملوّنة لتضيء نظيرتها في الآية الأخرى. النص برواية حفص.</Text>
           <View style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>
-            <Key word="ٱلْكِتَٰبَ" color={palette.accent} text="كلمة مشتركة بلفظها" palette={palette} />
-            <Key word="يُؤْمِنُونَ" color={palette.root} text="نفس اللفظ بصيغة أخرى" palette={palette} />
-            <Key word="بَيَانٌ" color={blend(palette.root, palette.muted, 0.45)} text="من جذر مشترك بلفظ مختلف، وقد يختلف المعنى" palette={palette} />
+            <Legend palette={palette} />
+            {palette.marks.root && <Key word="بَيَانٌ" color={blend(palette.marks.root, palette.muted, 0.45)} text="من جذر مشترك بلفظ مختلف، وقد يختلف المعنى" palette={palette} />}
           </View>
         </>}
       </ScrollView>}

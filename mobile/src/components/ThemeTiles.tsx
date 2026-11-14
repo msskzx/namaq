@@ -5,7 +5,8 @@ import { Check } from 'lucide-react-native';
 import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';
 import { SAMPLE_AYAH, SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import { closeStudio } from '@/lib/growPlayer';
-import { branchView, cardTints, themeChoice, type BranchView } from '@/lib/settings';
+import { branchView, cardTints, markMode, themeChoice, type BranchView } from '@/lib/settings';
+import { MARK_LEGEND, MARK_MODE_NAMES, MARK_MODES, MARK_SETTING_LABEL, markTones, type Likeness } from '@shared/quran/wordMatch';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
 /** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
@@ -97,7 +98,7 @@ function ViewPreview({ view, palette, big }: { view: BranchView; palette: Palett
     <View style={{ flex: 1, justifyContent: 'center', gap: big ? 8 : 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
       {SAMPLE_TREE.endings.map(ending => (
         <View key={ending.words} style={{ borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, paddingHorizontal: 3 }}>
-          <Text numberOfLines={1} style={text}><Text style={{ color: palette.accent, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</Text>
+          <Text numberOfLines={1} style={text}><Text style={{ color: palette.marks.exact ?? palette.ink, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</Text>
         </View>
       ))}
     </View>
@@ -109,13 +110,37 @@ function ViewPreview({ view, palette, big }: { view: BranchView; palette: Palett
         {TREE_LINES.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
       </Svg>
       <View style={[box, { right: `${trunk.right}%`, top: `${trunk.top}%`, width: `${trunk.width}%`, height: `${trunk.height}%` }]}>
-        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={[text, { color: palette.accent, fontWeight: '700' }]}>{line}</Text>)}
+        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={[text, { color: palette.marks.exact ?? palette.ink, fontWeight: '700' }]}>{line}</Text>)}
       </View>
       {SAMPLE_TREE.endings.map((leaf, index) => (
         <View key={leaf.words} style={[box, { left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` }]}>
           <Text numberOfLines={1} style={text}>{leaf.words}</Text>
         </View>
       ))}
+    </View>
+  );
+}
+
+/** How words the ayat share are coloured: each tile draws the legend's words as that choice colours them. */
+export function MarkTiles({ palette }: { palette: Palette }) {
+  const [mode, setMode] = markMode.use();
+  const tones = { exact: palette.accent, written: palette.amber, root: palette.root };
+  const words = MARK_LEGEND.filter((item): item is typeof item & { kind: Likeness } => item.kind !== 'plain');
+  return (
+    <View style={{ gap: 8 }}>
+      <Text style={{ color: palette.muted, fontSize: 14 }}>{MARK_SETTING_LABEL.ar}</Text>
+      <View accessibilityRole="radiogroup" accessibilityLabel={MARK_SETTING_LABEL.ar} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
+        {MARK_MODES.map(option => {
+          const shown = markTones(option, tones);
+          return (
+            <Tile key={option} name={MARK_MODE_NAMES[option].ar} on={mode === option} onPress={() => setMode(option)} palette={palette}>
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.card }}>
+                {words.map(item => <Text key={item.kind} style={{ fontFamily: QURAN_FONT, fontSize: 12, lineHeight: 20, color: shown[item.kind] ?? palette.ink }}>{item.word}</Text>)}
+              </View>
+            </Tile>
+          );
+        })}
+      </View>
     </View>
   );
 }

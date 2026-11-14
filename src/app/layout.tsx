@@ -10,6 +10,7 @@ import CookieConsent from "@/components/cookies/CookieConsent";
 import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
 import { CARD_TINT_SCRIPT } from "@/lib/cardTint";
+import { MARK_MODE_SCRIPT } from "@/lib/markMode";
 import CustomThemeProvider from "@/components/theme/CustomThemeProvider";
 import { SITE_URL } from "@/lib/siteUrl";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/siteMeta";
@@ -52,7 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" data-tabbar="" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: CARD_TINT_SCRIPT }} /></head>
+      <head><script dangerouslySetInnerHTML={{ __html: CARD_TINT_SCRIPT + MARK_MODE_SCRIPT }} /></head>
       <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
         <CustomThemeProvider>
           <LanguageProvider>
