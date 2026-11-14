@@ -11,7 +11,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ayatLabel, branchesHref, keys, linkable, linkId, shownAyat, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
@@ -37,17 +37,18 @@ export const TONE: Record<string, string> = {
   ف: 'text-[var(--home-root)]',
 };
 
-type Refs = { keys: string[]; names: Record<number, string>; tags?: Record<string, Variant> };
+type Refs = { keys: string[]; names: Record<number, string>; tags?: Record<string, Variant>;
+  /** The ayat each key's label names, when a branch runs on past its own ayah (see shownAyat). */
+  spans?: Record<string, string[]> };
 
-export function AyahRefs({ keys, names, tags = {}, className = 'mt-1' }: Refs & { className?: string }) {
+export function AyahRefs({ keys, names, tags = {}, spans = {}, className = 'mt-1' }: Refs & { className?: string }) {
   return (
     <span className={`flex flex-wrap gap-1 ${className}`}>
       {keys.map((key, index) => {
-        const [surah, ayah] = key.split(':').map(Number);
         return (
           <span key={key} className="inline-flex items-center gap-1">
             {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-            <span className="text-xs text-[var(--home-muted)]">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</span>
+            <span className="text-xs text-[var(--home-muted)]">{ayatLabel(spans[key] ?? [key], names)}</span>
             {tags[key] && <span className={`text-xs font-quran ${TONE[tags[key].conj]}`}><MushafText>{tags[key].word}</MushafText></span>}
           </span>
         );
@@ -123,7 +124,7 @@ const nodeId = (index: number) => `n${index}`;
 function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   const root = path.length === 0;
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
-  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} className={singleSurah ? 'justify-center' : 'mt-1'} />;
+  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={shownAyat(node, path)} className={singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));

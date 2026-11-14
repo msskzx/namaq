@@ -27,6 +27,7 @@ import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
 import { mushafText } from '@shared/quran/mushafText';
+import { surahList } from '@/lib/quran/surahList';
 
 const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
@@ -510,6 +511,14 @@ describe('branches review', () => {
     render(await open({ ...paramsOf(landing), review: '' }));
     expect(screen.queryByRole('button', { name: 'حذف البطاقة' })).toBeNull();
     expect(document.querySelector('[data-draft]')).toBeNull();
+  }, 30000);
+
+  it('names the surah a leaf runs on into: al-Saffat 182 into Sad 1 on the الحمد لله رب العالمين tree', async () => {
+    vi.mocked(surahList).mockResolvedValueOnce([{ number: 1, name: 'الفاتحة' }, { number: 37, name: 'الصافات' }, { number: 38, name: 'ص' }] as Awaited<ReturnType<typeof surahList>>);
+    render(await open({ o: 'cmp:0oc27w50449cxf' }));
+    const label = (key: string) => document.querySelector(`[data-node][data-keys="${key}"]:has(header) header`)?.textContent;
+    expect(label('1:2')).toBe('الفاتحة ٢–٣');
+    expect(label('37:182')).toBe('الصافات ١٨٢ ثم ص ١');
   }, 30000);
 
   it('reviews every kind of tree up to 35 ayat and names the trees a tree sits inside', async () => {

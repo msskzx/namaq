@@ -17,7 +17,7 @@ import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers"
 import { correctionOf, gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
 import { addHint, hintsOf, type Hints } from "@shared/quiz/hints";
-import { branchesHref, keys, type Branch, type Variant } from "@shared/quran/branches";
+import { branchesHref, keys, shownAyat, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
 import example from "@shared/data/quiz/example.json";
 
@@ -36,6 +36,13 @@ function nodeOffsets(tree: Branch) {
   };
   visit(tree, 0);
   return { offsets, parents };
+}
+
+/** The words above a node, from the root down. */
+function wordsAbove(node: Branch, parents: Map<Branch, Branch>) {
+  const words: string[] = [];
+  for (let above = parents.get(node); above; above = parents.get(above)) words.unshift(...above.words);
+  return words;
 }
 
 function Badge({ row, ar }: { row: Correction; ar: boolean }) {
@@ -99,11 +106,11 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
           const row = byIndex.get(index);
           const marked = (text: React.ReactNode, references: React.ReactNode) => <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} before={<PathButton id={`n${index}`} keys={keys(node)} subject={context.subject} />} references={references}>{text}</Marked>;
-          if (!row) return marked(<span className="font-quran text-lg leading-loose"><TreeWords words={answer.words} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} /></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />);
+          if (!row) return marked(<span className="font-quran text-lg leading-loose"><TreeWords words={answer.words} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} /></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} spans={shownAyat(answer, wordsAbove(answer, parents))} />);
           return (
             <div className="flex max-w-60 flex-col gap-1" data-answer={row.correct ? "correct" : "incorrect"}>
               <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}{hints?.[index] ? <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} /> : null}</p>
-              {marked(<NeededWords words={answer.words} needed={row.needed} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />)}
+              {marked(<NeededWords words={answer.words} needed={row.needed} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} spans={shownAyat(answer, wordsAbove(answer, parents))} />)}
               {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
             </div>
           );
