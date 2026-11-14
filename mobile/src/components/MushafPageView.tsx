@@ -85,14 +85,14 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 }
 
 type Box = { x: number; y: number; w: number; h: number };
-/** A band behind the words: the selected ayah (neutral), its long-pressed word (the accent), or a forgotten ayah (the accent, faint). */
-type Band = 'mark' | 'word' | 'forgot' | null;
+/** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
+type Band = 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
   mark: palette => tint(palette.ink, 0.1),
-  word: palette => tint(palette.accent, 0.3),
   forgot: palette => tint(palette.accent, 0.16),
 };
-type Cell = { band: Band };
+/** `word`: the long-pressed word, a stronger box laid over the ayah's unbroken band. */
+type Cell = { band: Band; word?: boolean };
 
 /**
  * A hidden word: a box the word's width and about one line of letters tall, the word itself invisible inside it.
@@ -281,7 +281,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const top = Math.min(...found.map(box => box.y));
       const bottom = Math.max(...found.map(box => box.y + box.h));
       return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
-    });
+    }).concat(cells.map((cell, at) => {
+      const box = cell.word ? boxes[`${line}:${at}`] : undefined;
+      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: tint(palette.accent, 0.3) }} /> : null;
+    }));
   };
 
   // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
@@ -364,8 +367,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : mark === key ? (markWord !== null && at === markWord ? 'word' : 'mark') : forgot[key] ? 'forgot' : null;
-                return { group, key, wordHidden, rel, at, band };
+                const band: Band = wordHidden ? null : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
               return (
