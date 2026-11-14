@@ -73,30 +73,32 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   if (studio && current && !embedded) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
+  // Embedded in a feed, the buttons look like the compare card's row beside it.
+  const icon = embedded ? { size: 22, color: palette.muted } : { size: 24, color: palette.ink };
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: embedded ? 0 : 4, paddingHorizontal: embedded ? 0 : 8 }}>
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
-        <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
+        <Animated.View style={popped}><Bookmark size={embedded ? 22 : 26} color={saved ? palette.accent : icon.color} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
       {!embedded && <StudioButton palette={palette} />}
       <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
-        {onView.mode === 'tree' ? <GalleryHorizontal size={24} color={palette.ink} /> : <TreeIcon size={24} color={palette.ink} />}
+        {onView.mode === 'tree' ? <GalleryHorizontal {...icon} /> : <TreeIcon {...icon} />}
       </Pressable>
       <Pressable onPress={onAround.toggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ selected: onAround.on }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
-        <UnfoldHorizontal size={24} color={onAround.on ? palette.accent : palette.ink} />
+        <UnfoldHorizontal size={icon.size} color={onAround.on ? palette.accent : icon.color} />
       </Pressable>
       {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
-        <RotateCwSquare size={24} color={palette.ink} />
+        <RotateCwSquare {...icon} />
       </Pressable>}
       {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
-        <BookOpen size={24} color={palette.ink} />
+        <BookOpen {...icon} />
       </Pressable>}
       {targets.length > 0 && <Pressable onPress={() => onCompare(targets)} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
-        <ArrowLeftRight size={24} color={palette.ink} />
+        <ArrowLeftRight {...icon} />
       </Pressable>}
       {/* Share is always the last button (the left end). */}
       <Pressable onPress={onShare} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-        <Send size={24} color={palette.ink} />
+        <Send {...icon} />
       </Pressable>
     </View>
   );
@@ -145,7 +147,9 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     lit?: string;
     /** Called before the pager takes the reader to another tab (compare), so a sheet holding it closes first. */
     onLeave?: () => void;
-  } };
+    /** In a feed: the tree in a card's frame, and the room for a lit path's ayat added by the page below (TreeCard `ayatRoom`). */
+    ayatRoom?: { height: number; set: (height: number) => void };
+  }; };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
 export default function TreePager({ pieces, list, palette, mode: defaultMode, around: defaultAround, start, onIndex, onPull, onOpen, embedded }: Props) {
@@ -358,7 +362,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed={!embedded} lit={embedded?.lit ? [embedded.lit] : undefined} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed lit={embedded?.lit ? [embedded.lit] : undefined} ayatRoom={embedded?.ayatRoom} framed={!!embedded?.ayatRoom} />}
             </View>
             );
           })}

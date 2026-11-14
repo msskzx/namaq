@@ -12,7 +12,7 @@ import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { surahNames } from '@/lib/branches';
 import { check, cleanSolo, clearAnswers, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
-import QuizChoice from '@/components/QuizChoice';
+import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
 import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
@@ -39,7 +39,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
           <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} hints={run.hints?.[review]} />
         </> : <View style={{ flex: 1 }}>
           <QuizChoice key={question.key} question={question} picked={run.typed[review][0] ?? ''} shown palette={palette} onOpen={readAyah}
-            header={<Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text>} />
+            header={<QuizPrompt text={question.promptArabic} palette={palette} />} />
         </View>}
         <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule }}>
           <Button label="العودة للنتيجة" onPress={() => setReview(null)} />
@@ -90,7 +90,7 @@ export default function QuizPlay() {
   const top = (
     <>
       <QuestionDots states={run.questions.map((_, i) => questionState(run, i))} current={current} onPick={i => update(goTo(run, i))} palette={palette} />
-      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text>
+      <QuizPrompt text={question.promptArabic} palette={palette} />
     </>
   );
   return (

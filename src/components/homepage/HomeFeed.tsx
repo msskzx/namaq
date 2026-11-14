@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, Eye, EyeOff, LightbulbOff, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Feather, Users, EyeOff, LightbulbOff, Moon, NotebookPen, PenLine, ScrollText } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -17,7 +17,6 @@ import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import { BRANCH_VIEW_COOKIE, parseBranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
-import { wordTargets } from '@shared/quran/writeAyah';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
@@ -151,6 +150,8 @@ function PairPost({ pair }: { pair: PairCard }) {
 
 /** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until the page reloads. */
 const recalled = new Set<string>();
+/** Whether the recall card asks to write the whole ayah (on) or reveals it word by word (off). */
+const RECALL_WRITE = 'recall-write';
 
 /**
  * An ayah to recall, asked as the reader's write mode asks it: its words hidden, its first and last words as write boxes
@@ -160,35 +161,53 @@ const recalled = new Set<string>();
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
   const [, setGone] = useState(0);
-  const [shown, setShown] = useState(false);
+  const [writing, setWriting] = useState(false);
+  useEffect(() => { try { setWriting(localStorage.getItem(RECALL_WRITE) === 'true'); } catch {} }, []);
+  const toggleWriting = () => setWriting(on => { try { localStorage.setItem(RECALL_WRITE, String(!on)); } catch {} return !on; });
+  const [surah, number] = ayah.split(':').map(Number);
+  if (!review && recalled.has(ayah)) return null;
+  return <article className={styles.post} dir="rtl">
+    <PostHead Icon={LightbulbOff} title={title} sub={`${names[surah]} ${num(number)}`} />
+    <Recall key={`${ayah}-${writing}`} ayah={ayah} writing={writing} onWriting={toggleWriting}>
+      <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }}><Check size={18} aria-hidden />تذكّرتها</button>
+      {!review && <button type="button" className={styles.pill} onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }}><LightbulbOff size={18} aria-hidden />نسيتها</button>}
+      <span className="flex-1" />
+      {review && <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>}
+      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
+    </Recall>
+  </article>;
+}
+
+/**
+ * The recall card's ayah and buttons (the app's Recall): recite mode's next word and whole ayah, and the pen that asks for the
+ * whole ayah in write boxes. Drawn afresh for each way of asking (`writing`), so the boxes start empty.
+ */
+function Recall({ ayah, writing, onWriting, children }: { ayah: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
+  const [revealed, setRevealed] = useState(0);
   const [graded, setGraded] = useState<Graded | null>(null);
-  useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
   const { pages, words } = useAyahPage(ayah);
-  const asked = useMemo(() => wordTargets(words ?? []), [words]);
+  const asked = useMemo(() => (writing ? (words ?? []).map((_, at) => at) : []), [writing, words]);
   const boxes = useWriteBoxes({ ayah: words ? ayah : null, words: words ?? [], asked, onDone: result => {
     setGraded(result);
     if (result.wrong.length) markForgotten(ayah);
   } });
-  const [surah, number] = ayah.split(':').map(Number);
-  if (!review && recalled.has(ayah)) return null;
-  const open = shown || !!graded;
-  return <article className={styles.post} dir="rtl">
-    <PostHead Icon={LightbulbOff} title={title} sub={`${names[surah]} ${num(number)}`} />
+  const count = words?.length ?? 0;
+  const shown = (!!words && revealed >= count) || !!graded;
+  const pen = writing ? 'أوقف الكتابة' : 'اكتب الآية كاملة';
+  return <>
     <div className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
-      {pages && <AyahLines ayah={ayah} pages={pages} shown={open} checked={graded ? { key: ayah, ...graded } : null}
-        write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />}
+      {pages && <AyahLines ayah={ayah} pages={pages} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null}
+        write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : undefined} />}
     </div>
-    {words && !open && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
-    <div className={styles.recallActions}>
-      {!graded && <button type="button" className={styles.pill} onClick={() => setShown(value => !value)}>{shown ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}{shown ? 'أخفها' : 'أظهرها'}</button>}
-      <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }}><Check size={18} aria-hidden />تذكّرتها</button>
-      {!review && <button type="button" className={styles.pill} onClick={() => { recalled.add(ayah); markForgotten(ayah); }}><LightbulbOff size={18} aria-hidden />نسيتها</button>}
-      <span className="flex-1" />
-      <QuizActions review={review} />
-      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
+    {words && writing && !shown && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
+    <div className={styles.recallTools} role="toolbar" aria-label="أدوات التسميع">
+      {!writing && <Button size="lg" variant="muted" aria-label="أظهر الكلمة التالية" title="أظهر الكلمة التالية" disabled={shown} onClick={() => setRevealed(n => Math.min(count, n + 1))}><ChevronLeft aria-hidden /></Button>}
+      <Button size="lg" variant="muted" aria-label="أظهر الآية" title="أظهر الآية" disabled={shown} onClick={() => setRevealed(count)}><ChevronsLeft aria-hidden /></Button>
+      <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} aria-label={pen} title={pen} onClick={onWriting}><PenLine aria-hidden /></Button>
     </div>
-  </article>;
+    <div className={styles.recallActions}>{children}</div>
+  </>;
 }
 
 /**
@@ -221,7 +240,7 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   return <article className={styles.post} dir="rtl">
     <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />
     <div className={styles.question} lang="ar">
-      {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 text-base leading-relaxed">{question.promptArabic}</p>}
+      {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 pt-2 text-base leading-loose">{question.promptArabic}</p>}
       <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar
         onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
     </div>
@@ -240,9 +259,8 @@ function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized |
 }
 
 /**
- * One group of a prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap) showing just that
- * group, with every surah that tells part of it; the surahs scroll up and down inside the card, never sideways. A dot or an
- * event's title opens the story there.
+ * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
+ * sideways at the day's group; the map scrolls both ways inside the card. A dot or an event's title opens the story there.
  */
 function StoryPost({ card }: { card: StoryCard }) {
   const router = useRouter();
@@ -250,8 +268,8 @@ function StoryPost({ card }: { card: StoryCard }) {
   const read = (event: number, surah?: number) => router.push(`${href}?event=${card.story[event]}${surah === undefined ? '' : `&surah=${surah}`}`);
   return <article className={styles.post} dir="rtl">
     <Link href={href} aria-label="افتح القصة" className="block hover:opacity-80"><PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} /></Link>
-    <div className={styles.story}>
-      <StoryMap map={card.map} events={card.events} phases={card.phases} only={card.phase} onRead={read} />
+    <div className={styles.story} data-story-scroll>
+      <StoryMap map={card.map} events={card.events} phases={card.phases} at={card.phase} onRead={read} />
     </div>
   </article>;
 }

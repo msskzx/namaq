@@ -51,7 +51,7 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .readHead h2 { flex: 1; font-size: 1.125rem; }
 .pageSlice { display: block; padding: 0.375rem 0.75rem; border: 1px solid var(--home-paper-deep); border-radius: 10px; background: var(--home-paper); color: var(--home-ink); text-decoration: none; }
 /* Three whole lines, ended by an ellipsis; clamped inside the padding so the next line's marks don't show under it. The minimum height holds the space while the page loads. */
-.pageLines { min-height: 7.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pageLines { min-height: 19rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .readFoot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.875rem; }
 .postHead { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.75rem 0.375rem; }
 .postHead h3 { font-size: 1rem; font-weight: 700; }
@@ -63,6 +63,7 @@ section.post { padding: 0.75rem; display: grid; gap: 0.625rem; }
 .story { --story-map-bg: var(--home-card); max-height: 28rem; overflow: auto; padding: 0 0.75rem 0.25rem; overscroll-behavior: contain; }
 .question { padding: 0.25rem 0.75rem 0.5rem; }
 .recall { padding: 0.25rem 0.75rem 0; }
+.recallTools { display: flex; justify-content: space-evenly; align-items: center; margin: 0.5rem 0.75rem 0; border: 1px solid var(--home-rule); border-radius: 999px; }
 .recallActions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.75rem; }
 .pill { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.5rem; padding-inline: 0.875rem; border: 1px solid var(--home-rule); border-radius: 10px; color: var(--home-ink); font-size: 1rem; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }

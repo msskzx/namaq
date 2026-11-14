@@ -9,6 +9,10 @@ import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 const SIZE = 24;
 
+/** A question's own line over its choices: tall enough lines and room above for the marks of a vowelled verse (the Tuhfa's). */
+export const QuizPrompt = ({ text, palette }: { text: string; palette: Palette }) =>
+  <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 32, textAlign: 'right', paddingHorizontal: 16, paddingTop: 8 }}>{text}</Text>;
+
 function Words({ words, marked, palette }: { words: string[]; marked?: number[]; palette: Palette }) {
   return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
 }

@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { ayahSlice, pageEnd, pageTop } from '@shared/quran/ayahSlice';
+import { ayahSlice, pageEnd, pageTop, READING_LINES } from '@shared/quran/ayahSlice';
 import MushafPageView, { type Checked, type Write } from './MushafPageView';
 import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
@@ -26,7 +26,9 @@ export function pageWords(ayah: string): string[] {
  * title), the ayah and what follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals the
  * ayah, with `checked` colouring what was written.
  */
-function AyahLines({ ayah, palette, write, checked, shown, whole = false }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = false }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+  /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
+  words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
   whole?: boolean }) {
   const [width, setWidth] = useState(0);
@@ -40,7 +42,7 @@ function AyahLines({ ayah, palette, write, checked, shown, whole = false }: { ay
     const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
-  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: 0 }) : null), [parts, ayah, shown]);
+  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words]);
   if (!page || !parts) return null;
   const height = width * PAGE_TEXT_RATIO;
   return (
@@ -64,7 +66,7 @@ export const PageTop = memo(function PageTop({ page, palette }: { page: number; 
   const [width, setWidth] = useState(0);
   const parts = useMemo(() => {
     const data = pageData(page);
-    return { data, model: pageModel(data, surahBefore(page)), slice: pageTop(data.items) };
+    return { data, model: pageModel(data, surahBefore(page)), slice: pageTop(data.items, READING_LINES) };
   }, [page]);
   return (
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">

@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import surahRows from '@shared/data/quran/surahs.json';
 import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/readerPage';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { ayahSlice, pageEnd, pageTop } from '@shared/quran/ayahSlice';
+import { ayahSlice, pageEnd, pageTop, READING_LINES } from '@shared/quran/ayahSlice';
 import MushafPage, { type Checked, type Write } from '@/app/quran/read/MushafPage';
 
 export type Page = { page: number; top?: number; data: MushafPageData };
@@ -33,7 +33,9 @@ export function useAyahPage(ayah: string) {
  * (MushafPage) cut to the lines around the ayah, words in their places. What comes before it shows, the ayah and what
  * follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals it, `checked` colouring what was written.
  */
-export default function AyahLines({ ayah, pages, write, checked, shown, whole = false }: { ayah: string; pages: Pages; write?: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean;
+export default function AyahLines({ ayah, pages, write, checked, shown, words = 0, whole = false }: { ayah: string; pages: Pages; write?: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean;
+  /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
+  words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
   whole?: boolean }) {
   const parts = useMemo(() => {
@@ -42,7 +44,7 @@ export default function AyahLines({ ayah, pages, write, checked, shown, whole = 
     return slice && { model, slice };
   }, [pages, ayah]);
   const previous = useMemo(() => (pages.previous ? pageEnd(pages.previous.data.items) : null), [pages]);
-  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: 0 }) : null), [parts, ayah, shown]);
+  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words]);
   if (!parts || !view) return null;
   return <div lang="ar">
     {parts.slice.before && pages.previous && previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={previous} />}
@@ -53,6 +55,6 @@ export default function AyahLines({ ayah, pages, write, checked, shown, whole = 
 
 /** A page's first lines exactly as the reader draws them (the reading card on home, owner 2026-11-14). */
 export function PageTop({ page }: { page: Page }) {
-  const slice = useMemo(() => pageTop(page.data.items), [page]);
+  const slice = useMemo(() => pageTop(page.data.items, READING_LINES), [page]);
   return <div lang="ar"><MushafPage page={page.page} data={page.data} top={page.top} names={NAMES} slice={slice} /></div>;
 }

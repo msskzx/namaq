@@ -10,7 +10,7 @@ import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
 import { QUIZ_LENGTHS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import type { ChoiceQuestion } from '@shared/quiz/choiceKinds';
-import QuizChoice from '@/components/QuizChoice';
+import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
 import BackBar from '@/components/BackBar';
@@ -285,7 +285,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const typing = useKeyboardShown();
   const question = view.question as Question;
   // On a tree the prompt scrolls away with it; the countdown stays.
-  const prompt = question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text> : null;
+  const prompt = question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null;
   const revealed = view.phase === 'reveal';
   const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
   const sent = view.answer !== null;
@@ -303,7 +303,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   );
   if (revealed) return (
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24, gap: 12 }}>
-      {question.promptArabic ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right', paddingHorizontal: 16, paddingTop: 12 }}>{question.promptArabic}</Text> : null}
+      {question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null}
       {isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />

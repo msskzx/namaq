@@ -84,9 +84,8 @@ export function storyCards(day: number, slots: number[]): StoryCard[] {
     const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${slug}/`)));
     const events = keptViews(slug, buildStory(story.events, storedText(AYAT[slug])), verdicts);
     const whole = storyMap(events);
-    const inGroup = new Set(events.flatMap((event, i) => (event.phase === phase ? whole.places[i].map(place => place.surah) : [])));
     // The words stay behind: the map needs only each place's count.
-    const map = { ...whole, surahs: whole.surahs.filter(row => inGroup.has(row.surah)), places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
+    const map = { ...whole, places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
     return [{
       slot, slug, title: storyTitle(prophet), phase, phases: story.phases, map,
       events: events.map(event => ({ ...event, segments: [] })),
