@@ -31,7 +31,7 @@ describe('the video frame', () => {
 
 describe('the recorder page', () => {
   const look = { paper: '#f4ecdb', ink: '#2e2219', muted: '#6b5a4a', rule: '#ccc', accent: '#9c3b22', path: '#5e4689', green: '#4b644a', deep: '#eee', font: 'serif', logo: logoUrl('#2e2219', '#9c3b22') };
-  const page = (ask: boolean) => recorderPage({ scene: { width: 100, height: 100, down: false, boxes: [], edges: [] }, beats: [], look, speed: 1, ask, timer: 3, types: [] });
+  const page = (ask: boolean) => recorderPage({ scene: { width: 100, height: 100, down: false, boxes: [], edges: [] }, beats: [], look, speed: 1, ask, timer: 3, types: [], ayat: [] });
 
   it('carries the emblem, and can be paused', () => {
     const html = page(false);

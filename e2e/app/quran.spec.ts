@@ -57,7 +57,23 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'السرعة 1×' }).click();
     await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
     await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 20_000 });
+    // Once grown, each ayah's path is lit in turn and the ayah is read in full under the tree.
+    await expect(page.getByRole('button', { name: 'افتح الحجر ٤٥ في المصحف' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 30_000 });
+  });
+
+  test('the tree card keeps its buttons in place when a path is lit', async ({ page }) => {
+    await open(page, '/branches');
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill('إن المتقين في');
+    await box.press('Enter');
+    const save = page.getByRole('button', { name: 'حفظ الشجرة' }).first();
+    await expect(save).toBeVisible();
+    const before = await save.boundingBox();
+    await page.getByRole('button', { name: 'سورة الحجر' }).click();
+    await expect(page.getByRole('button', { name: 'افتح الحجر ٤٥ في المصحف' })).toBeVisible();
+    expect(await save.boundingBox()).toEqual(before);
   });
 });
 

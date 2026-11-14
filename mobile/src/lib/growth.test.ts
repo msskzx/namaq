@@ -26,6 +26,16 @@ describe('a tree growing in the studio', () => {
     expect(beats.map(beat => beat.step)).toEqual([...beats.map(beat => beat.step)].sort((a, b) => a - b));
   });
 
+  it('ends by lighting the path of each ayah once, in the order the ayat grew, revealing nothing more', () => {
+    const grown = growthBeats(presentation.tree);
+    const beats = growthBeats(presentation.tree, { paths: true });
+    expect(beats.slice(0, grown.length)).toEqual(grown);
+    const tour = beats.slice(grown.length);
+    expect(tour.every(beat => beat.path && !beat.reveal.length && !beat.now.length)).toBe(true);
+    expect(tour.map(beat => beat.key)).toEqual([...new Set(grown.map(beat => beat.key))]);
+    expect(new Set(tour.map(beat => beat.step))).toEqual(new Set([grown[grown.length - 1].step]));
+  });
+
   it('asks for the first new box of each ayah before showing it, and never for one already drawn', () => {
     const beats = growthBeats(presentation.tree, { ask: true });
     const asks = beats.filter(beat => beat.ask);

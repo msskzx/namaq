@@ -19,7 +19,9 @@ export const FRAME = { width: 1080, height: 1920 };
  * Plain JavaScript, since the recorder runs it inside a web view (the phone's engine cannot hand a function's source over).
  */
 const GEOMETRY = String.raw`
-var AREA = { x: 60, y: 380, width: 960, height: 1300 }, MAX_SCALE = 3, STUB = 14;
+var AREA = { x: 60, y: 270, width: 960, height: 1030 }, MAX_SCALE = 3, STUB = 14;
+// Under the tree, at fixed places: the bubbles of the tree's ayat (surah:ayah), then the card with the lit ayah in full.
+var BUBBLES = { y: 1325, rows: 2, row: 78, gap: 12 }, CARD = { x: 60, y: 1500, width: 960, height: 300 };
 function placeTree(scene) {
   var scale = Math.min(MAX_SCALE, AREA.width / scene.width, AREA.height / scene.height);
   return { scale: scale, x: AREA.x + (AREA.width - scene.width * scale) / 2, y: AREA.y + (AREA.height - scene.height * scale) / 2 };
@@ -42,7 +44,9 @@ type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>) => { s
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
 export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; font: string; logo: string };
-export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[] };
+/** An ayah of the tree as the video's bubbles and card show it: its surah:ayah, its text with its number, its surah's name. */
+export type VideoAyah = { key: string; bubble: string; text: string; place: string };
+export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[]; ayat: VideoAyah[] };
 
 
 /**
@@ -80,7 +84,7 @@ scene.boxes.forEach(function (box) { byId[box.id] = box; });
 var hidden = {};
 INPUT.beats.forEach(function (beat) { beat.reveal.forEach(function (id) { hidden[id] = true; }); });
 var shownAt = {};
-var now = {}, lit = null, ask = null, step = 0, total = INPUT.beats.length ? INPUT.beats[INPUT.beats.length - 1].step + 1 : 0, done = false;
+var now = {}, lit = null, ask = null, tour = false, step = 0, total = INPUT.beats.length ? INPUT.beats[INPUT.beats.length - 1].step + 1 : 0, done = false;
 var FADE = 250;
 
 function holds(box) { return !!(lit && box.keys && box.keys.indexOf(lit) >= 0); }
@@ -111,7 +115,8 @@ function wrap(words, width, size) {
 
 function drawText(box) {
   var size = box.size, lineHeight = size * 1.9, label = 12;
-  var lines = wrap(box.words, Math.max(10, box.w - (box.bare ? 4 : 24)), size);
+  // The box is exactly as wide as its longest line: a pixel of slack keeps rounding from breaking that line in two.
+  var lines = wrap(box.words, Math.max(10, box.w - (box.bare ? 4 : 24)) + 2, size);
   var block = lines.length * lineHeight + (box.header ? label + 8 : 0) + (box.footer ? label + 6 : 0);
   var y = box.y + (box.h - block) / 2;
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -153,18 +158,81 @@ function drawHourglass(box, left, seconds) {
   ctx.fillText(String(Math.max(1, Math.ceil(left * seconds))).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }), cx, cy + 16);
 }
 
+// The bubbles keep to their two rows: a tree with many ayat gets smaller bubbles.
+var bubbleSize = 30, bubbleRows;
+function layBubbles(size) {
+  ctx.font = size + 'px sans-serif';
+  var rows = [[]], used = 0, max = FRAME.width - 120, height = size * 2.1;
+  INPUT.ayat.forEach(function (ayah) {
+    var w = Math.max(height, ctx.measureText(ayah.bubble).width + size * 1.2);
+    if (rows[rows.length - 1].length && used + BUBBLES.gap + w > max) { rows.push([]); used = 0; }
+    used += (rows[rows.length - 1].length ? BUBBLES.gap : 0) + w;
+    rows[rows.length - 1].push({ ayah: ayah, w: w });
+  });
+  return rows;
+}
+for (;;) { bubbleRows = layBubbles(bubbleSize); if (bubbleRows.length <= BUBBLES.rows || bubbleSize <= 12) break; bubbleSize -= 2; }
+
+// Right to left, centred: the first ayah to grow is on the right.
+function drawBubbles() {
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'ltr'; ctx.font = bubbleSize + 'px sans-serif';
+  var h = bubbleSize * 2.1, step = Math.min(BUBBLES.row, h + 10);
+  var top = BUBBLES.y + (BUBBLES.rows * BUBBLES.row - Math.min(bubbleRows.length, BUBBLES.rows) * step) / 2;
+  bubbleRows.slice(0, BUBBLES.rows).forEach(function (row, r) {
+    var width = row.reduce(function (sum, item, i) { return sum + item.w + (i ? BUBBLES.gap : 0); }, 0);
+    var x = FRAME.width / 2 + width / 2, y = top + r * step;
+    row.forEach(function (item) {
+      x -= item.w;
+      var on = lit === item.ayah.key;
+      ctx.beginPath(); ctx.moveTo(x + h / 2, y); ctx.lineTo(x + item.w - h / 2, y); ctx.arc(x + item.w - h / 2, y + h / 2, h / 2, -Math.PI / 2, Math.PI / 2);
+      ctx.lineTo(x + h / 2, y + h); ctx.arc(x + h / 2, y + h / 2, h / 2, Math.PI / 2, Math.PI * 1.5); ctx.closePath();
+      if (on) { ctx.fillStyle = look.path; ctx.globalAlpha = 0.18; ctx.fill(); ctx.globalAlpha = 1; }
+      ctx.strokeStyle = on ? look.path : look.rule; ctx.lineWidth = on ? 3 : 2; ctx.stroke();
+      ctx.fillStyle = on ? look.path : look.ink; ctx.fillText(item.ayah.bubble, x + item.w / 2, y + h / 2 + 1);
+      x -= BUBBLES.gap;
+    });
+  });
+}
+
+// The lit ayah in full, its number in its own mark, its surah's name under it; a long ayah gets smaller letters.
+function drawCard(key) {
+  var ayah = INPUT.ayat.filter(function (item) { return item.key === key; })[0];
+  if (!ayah) return;
+  var top = CARD.y, height = CARD.height;
+  roundRect(CARD.x, top, CARD.width, height);
+  ctx.fillStyle = look.deep; ctx.fill(); ctx.strokeStyle = look.rule; ctx.lineWidth = 2; ctx.stroke();
+  var words = ayah.text.split(' ').map(function (text) { return { text: text, color: look.ink }; });
+  // The surah's name keeps its line at the foot; the ayah takes the rest, smaller when long, and the card clips the longest.
+  var room = height - 24 - 44, size = 46, lines;
+  for (;;) { lines = wrap(words, CARD.width - 60, size); if (lines.length * size * 1.8 <= room || size <= 14) break; size -= 2; }
+  var lineHeight = size * 1.8, y = top + 12 + Math.max(0, (room - lines.length * lineHeight) / 2);
+  ctx.save(); ctx.beginPath(); ctx.rect(CARD.x, top, CARD.width, 12 + room); ctx.clip();
+  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  var space = ctx.measureText(' ').width;
+  lines.forEach(function (line) {
+    var x = FRAME.width / 2 + line.width / 2;
+    line.words.forEach(function (word) { x -= word.width; ctx.fillStyle = word.color; ctx.fillText(word.text, x, y + lineHeight / 2); x -= space; });
+    y += lineHeight;
+  });
+  ctx.restore();
+  ctx.font = '26px sans-serif'; ctx.fillStyle = look.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl';
+  ctx.fillText(ayah.place, FRAME.width / 2, top + height - 34);
+}
+
 function draw(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
   // As the website's frame: the emblem on top, and in ask mode the call to finish the ayat under it.
-  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 70, 70, 140, 140);
-  if (INPUT.ask) { ctx.fillStyle = look.accent; ctx.font = '56px ' + look.font; ctx.fillText(ASK_HEADING, FRAME.width / 2, 290, FRAME.width - 120); }
+  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 60, 50, 120, 120);
+  if (INPUT.ask) { ctx.fillStyle = look.accent; ctx.font = '50px ' + look.font; ctx.fillText(ASK_HEADING, FRAME.width / 2, 225, FRAME.width - 120); }
   var bar = (FRAME.width - 120 - (total - 1) * 10) / Math.max(1, total);
   for (var i = 0; i < total; i++) {
     ctx.fillStyle = done || i <= step ? look.green : look.rule;
-    ctx.fillRect(FRAME.width - 60 - (i + 1) * bar - i * 10, 1740, bar, 8);
+    ctx.fillRect(FRAME.width - 60 - (i + 1) * bar - i * 10, 1840, bar, 8);
   }
+  drawBubbles();
+  if (tour && lit) drawCard(lit);
   ctx.setTransform(place.scale, 0, 0, place.scale, place.x, place.y);
   scene.edges.forEach(function (edge) {
     var from = byId[edge.from], to = byId[edge.to];
@@ -213,7 +281,7 @@ else {
   function enter(index, t) {
     var current = INPUT.beats[index];
     if (!current) return;
-    step = current.step; lit = current.key; ask = null;
+    step = current.step; lit = current.key; ask = null; tour = !!current.path;
     if (current.ask) { ask = { id: current.ask, left: 1, seconds: INPUT.timer || 3 }; now = {}; return; }
     current.reveal.forEach(function (id) { delete hidden[id]; shownAt[id] = t; });
     if (current.now.length) { now = {}; current.now.forEach(function (id) { now[id] = true; }); }
@@ -229,7 +297,7 @@ else {
       var ended = INPUT.beats[beat];
       if (!ended.reveal.length && !ended.now.length && !ended.ask) now = {};
       beatStart += length(beat); beat++;
-      if (beat < INPUT.beats.length) enter(beat, beatStart); else { done = true; finishedAt = t; now = {}; lit = null; ask = null; }
+      if (beat < INPUT.beats.length) enter(beat, beatStart); else { done = true; finishedAt = t; now = {}; lit = null; ask = null; tour = false; }
     }
     if (ask && !done) ask.left = Math.max(0, 1 - (t - beatStart) / length(beat));
     draw(t);

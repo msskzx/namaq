@@ -38,7 +38,7 @@ import { toneColor, type Palette } from '@/lib/theme';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
-const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, kind: 'tree' };
+const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, tour: false, kind: 'tree' };
 type Place = { id: string; camera?: Camera };
 
 /** A second tap within this time is a double tap: it saves the tree instead of opening the ayat. */
@@ -202,7 +202,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     if (mode !== 'tree' || !piece) { claimTarget('branches', null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
-    const options = { ...parts, prefixes: presentation.prefixes };
+    const options = { ...parts, prefixes: presentation.prefixes, paths: true };
     beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
     claimTarget('branches', beatsRef.current);
     return () => claimTarget('branches', null);
@@ -270,7 +270,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [index - 1, index, index + 1].filter(at => at >= 0 && at < count);
-  const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit } : undefined;
+  const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit, tour: growth.tour } : undefined;
 
   return (
     <View style={{ flex: 1 }}>
@@ -304,7 +304,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded} fixed={!embedded} />}
             </View>
             );
           })}
