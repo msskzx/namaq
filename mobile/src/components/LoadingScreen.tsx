@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Text } from '@/components/Text';
 import Logo from './Logo';
-import { usePalette } from '@/lib/theme';
+import { dark, light } from '@/lib/theme';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
 
 /** The native splash draws the logo this wide (app.json, expo-splash-screen imageWidth), centred on the whole screen. */
@@ -17,7 +17,8 @@ export const SPLASH_LOGO = 150;
  * (`done`) the whole screen fades away slowly and calls `onGone`.
  */
 export default function LoadingScreen({ words, done, onLayout, onGone }: { words: boolean; done: boolean; onLayout?: () => void; onGone: () => void }) {
-  const palette = usePalette();
+  // The phone's own scheme, as the native splash uses, not the app's theme setting: the hand-over must not change colour.
+  const palette = useColorScheme() === 'dark' ? dark : light;
   const opacity = useSharedValue(1);
   useEffect(() => {
     if (done) opacity.value = withTiming(0, { duration: 500 }, finished => { if (finished) scheduleOnRN(onGone); });
@@ -26,7 +27,7 @@ export default function LoadingScreen({ words, done, onLayout, onGone }: { words
   return (
     <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: palette.paper }, fade]} onLayout={onLayout} pointerEvents={done ? 'none' : 'auto'}>
       <View style={styles.centre}>
-        <Logo size={SPLASH_LOGO} />
+        <Logo size={SPLASH_LOGO} palette={palette} />
       </View>
       {/* Hangs under the logo so the logo itself never moves from where the splash put it. */}
       {words && (

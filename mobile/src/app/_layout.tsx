@@ -13,17 +13,25 @@ SplashScreen.preventAutoHideAsync();
 
 type Shell = ComponentType<{ onReady: () => void }>;
 
+/** Requires the app while rendering, so an error in it (or in home's data) reaches the error screen below. */
+function Loaded(props: { onReady: () => void }) {
+  const App = require('@/components/AppShell').default as Shell;
+  return <App {...props} />;
+}
+
 /**
  * Keep this file's imports light: they all load before the first frame. The app itself (AppShell, and through it home and
  * home's data) is required only after the loading screen has been drawn, so the phone shows the logo, not a blank screen.
  */
 export default function RootLayout() {
   const palette = usePalette();
-  const [fonts] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     [QURAN_FONT]: require('../../assets/fonts/UthmanicHafs1Ver18.ttf'),
     [UI_FONT]: require('../../assets/fonts/Amiri-Regular.ttf'),
     [UI_FONT_BOLD]: require('../../assets/fonts/Amiri-Bold.ttf'),
   });
+  // A font that fails to load falls back to the system font rather than holding the loading screen forever.
+  const fonts = fontsLoaded || !!fontError;
   const [App, setApp] = useState<Shell>();
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,7 +39,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (!fonts) return;
     let frame = requestAnimationFrame(() => {
-      frame = requestAnimationFrame(() => setApp(() => require('@/components/AppShell').default as Shell));
+      frame = requestAnimationFrame(() => setApp(() => Loaded));
     });
     return () => cancelAnimationFrame(frame);
   }, [fonts]);
