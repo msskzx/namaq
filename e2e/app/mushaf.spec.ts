@@ -46,8 +46,8 @@ test('the trees preview sheet lists trees and opens one', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-  await expect(page.getByRole('button', { name: 'افتح هذه الشجرة' }).first()).toBeVisible();
-  await page.getByRole('button', { name: 'افتح هذه الشجرة' }).first().click();
+  await expect(page.getByRole('button', { name: 'افتح في المتشابهات' }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'افتح في المتشابهات' }).first().click();
   await expect(page).toHaveURL(/\/branches/);
   // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
   await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();

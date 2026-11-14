@@ -11,9 +11,9 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
-import { writtenForms } from '@shared/quran/writtenForms';
+import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useCardAround, useRotated, useSurrounding, type Around } from './Surroundings';
@@ -29,7 +29,9 @@ type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; pre
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode;
   /** Where the tree is not the page's own (the home feed): the swipe steps here instead of following the page's step links. */
   onStep?: (forward: boolean) => void };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steppable' | 'surround' | 'growable'> & { start?: React.ReactNode; around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[];
+  /** The words above this node as its tree id spells them, before foldForms moved any (`Branch.spelled`). */
+  spelledPath?: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
 const LIT = 'border-[var(--home-accent)]';
@@ -79,51 +81,71 @@ export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {
 }
 
 /** The node whose words are being drawn: how each of its ayat writes them, and where the node starts in the ayah. */
-const Written = createContext<{ forms?: Branch['forms']; offset: number; names: Record<number, string> }>({ offset: 0, names: {} });
+const Written = createContext<{ forms?: Branch['forms']; differs?: number[]; offset: number; names: Record<number, string> }>({ offset: 0, names: {} });
 
-export function Marked({ node, children, offset = 0, enabled = true, references, before, after, names = {} }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys?: string[]; subject?: string; siblings?: string[]; skip?: number; offset?: number; before?: React.ReactNode; after?: React.ReactNode; names?: Record<number, string>; children: React.ReactNode }) {
+export function Marked({ node, children, offset = 0, enabled = true, references, before, after, names = {} }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms' | 'differs'>; ayahKeys?: string[]; subject?: string; siblings?: string[]; skip?: number; offset?: number; before?: React.ReactNode; after?: React.ReactNode; names?: Record<number, string>; children: React.ReactNode }) {
   const buttons = (before || after) && <span data-node-buttons className="mt-1 flex flex-wrap items-center justify-center gap-2" dir="rtl">{before}{after}</span>;
   if (!enabled) return <>{children}{references}</>;
-  return <><Written.Provider value={{ forms: node.forms, offset, names }}>{children}</Written.Provider>{references}{buttons}</>;
+  return <><Written.Provider value={{ forms: node.forms, differs: node.differs, offset, names }}>{children}</Written.Provider>{references}{buttons}</>;
 }
 
 const Comparison = createContext<{ contexts: AyahContext[]; offsets: Record<string, number> }>({ contexts: [], offsets: {} });
 
-/** A node's words: shared-word colours when the tree compares ayat, and amber for a word its ayat voice differently (inside `Marked`). */
+/** The lines into and out of a braid: one strand parting into one per way of writing, or those strands meeting again. */
+function BraidEdge({ count, join = false }: { count: number; join?: boolean }) {
+  const d = Array.from({ length: count }, (_, i) => {
+    const y = ((i + 0.5) / count) * 100;
+    return join ? `M12 ${y} C6 ${y} 6 50 0 50` : `M12 50 C6 50 6 ${y} 0 ${y}`;
+  }).join(' ');
+  return <svg aria-hidden viewBox="0 0 12 100" preserveAspectRatio="none" className="w-4 shrink-0 self-stretch overflow-visible"><path d={d} fill="none" stroke="var(--home-rule)" strokeWidth={2} vectorEffect="non-scaling-stroke" /></svg>;
+}
+
+/** A node's words: shared-word colours when the tree compares ayat, amber for a word its ayat voice differently (inside `Marked`), and
+ * a braid where neighbouring words differ together: one strand per way of writing them, with the ayat that write it so. */
 export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: string[]; ayahKeys: string[]; at?: number; prefix?: boolean }) {
   const { contexts, offsets } = useContext(Comparison);
   const written = useContext(Written);
   const lit = useOuterPaths()?.lit;
   const ar = useLanguage().language === 'ar';
-  return words.map((word, i) => {
+  const title = ar ? 'تختلف حركاتها بين الآيات' : 'Voiced differently across the ayat';
+  const forms = words.map((word, i) => writtenForms(written, at + i - written.offset, word, lit));
+  const word = (i: number) => {
+    const shared = words[i];
     const matches = ayahKeys.map(key => {
       const match = contexts.find(context => context.ayah.key === key)?.match;
       const index = (prefix ? 0 : offsets[key] ?? 0) + at + i;
       return match?.rooted.includes(index) ? 'root' : match?.exact.includes(index) ? 'exact' : undefined;
     });
-    const kind = word !== '۝' && !word.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : 'exact' : undefined;
-    const forms = writtenForms(written, at + i - written.offset, word, lit);
-    const differs = forms.length > 1 || forms[0].word !== word;
-    const shown = forms[0].word.replace(/^﴿(.+)﴾$/, word.startsWith('﴿') ? '$&' : '$1');
-    const text = kind ? <mark data-match={kind} className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
-    const title = ar ? 'تختلف حركاتها بين الآيات' : 'Voiced differently across the ayat';
-    // docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md
-    return <React.Fragment key={i}>{i > 0 && ' '}{forms.length > 1 ? (
-      <span data-forms title={title} className="mx-1 inline-flex flex-col rounded-md border-x-2 border-[var(--home-amber)] px-1.5 align-middle leading-normal">
-        {forms.map(form => (
-          <span key={form.word} data-form className="flex flex-col items-center border-dashed border-[var(--home-rule)] [&+&]:border-t">
-            <span className="text-[var(--home-amber)]"><MushafText>{form.word}</MushafText></span>
-            <span style={{ fontFamily: 'var(--font-amiri), serif' }}><AyahRefs keys={form.keys} names={written.names} className="-mt-1 justify-center pb-0.5" /></span>
-          </span>
-        ))}
+    const kind = shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : 'exact' : undefined;
+    const moved = !!written.differs?.includes(at + i - written.offset);
+    const shown = forms[i][0].word.replace(/^﴿(.+)﴾$/, shared.startsWith('﴿') ? '$&' : '$1');
+    if (moved || (forms[i][0].word !== shared && kind !== 'root' && shared !== '۝')) return <span data-differs className="text-[var(--home-amber)]" title={title}><MushafText>{shown}</MushafText></span>;
+    return kind ? <mark data-match={kind} className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
+  };
+  // docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
+  return writtenPieces(words.length, i => forms[i].length > 1).map((piece, n) => {
+    if (piece.kind === 'word') return <React.Fragment key={n}>{n > 0 && ' '}{word(piece.index)}</React.Fragment>;
+    const strands = writtenStrands(written, at + piece.from - written.offset, at + piece.to - written.offset, lit);
+    return <React.Fragment key={n}>{n > 0 && ' '}
+      <span data-braid dir="rtl" title={title} className="mx-0.5 inline-flex items-stretch align-middle leading-normal">
+        <BraidEdge count={strands.length} />
+        <span className="flex flex-col gap-1 py-1">
+          {strands.map(strand => (
+            <span key={strand.words.join(' ')} data-strand className="flex flex-col items-center rounded-[10px] border border-[var(--home-rule)] px-2">
+              <span className="whitespace-nowrap text-[var(--home-amber)]"><MushafText>{strand.words.join(' ')}</MushafText></span>
+              <span style={{ fontFamily: 'var(--font-amiri), serif' }}><AyahRefs keys={strand.keys} names={written.names} className="-mt-1 justify-center pb-0.5" /></span>
+            </span>
+          ))}
+        </span>
+        <BraidEdge count={strands.length} join />
       </span>
-    ) : differs && kind !== 'root' && word !== '۝' ? <span data-differs className="text-[var(--home-amber)]" title={title}><MushafText>{shown}</MushafText></span> : text}</React.Fragment>;
+    </React.Fragment>;
   });
 }
 
 const nodeId = (index: number) => `n${index}`;
 
-function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
+function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   const root = path.length === 0;
   const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
   const own = !!renderNode && !root;
@@ -150,6 +172,7 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
   const small = tabbed && !runs;
   const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={spans} className={small ? 'flex-nowrap whitespace-nowrap [&_span]:!text-[11px] [&_span]:!leading-[14px]' : singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
+  const spelled = [...spelledPath, ...(node.spelled ?? node.words)];
   const shownWords = node.words.slice(root ? lead : 0);
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));
   const id = nodeId(indices.get(node)!);
@@ -157,8 +180,8 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
   // Every box that ends an ayah closes with its sign, as the mushaf writes it (owner, 2026-11-14).
   const last = shownWords[shownWords.length - 1] ?? '';
   const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1]));
-  const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(words) ? branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
-  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
+  const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(spelled) ? branchesHref(linkId(spelled, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
+  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
@@ -549,7 +572,8 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 // docs/plans/quran-shared-openings.md
 const NO_VARIANTS: Variant[] = [];
 
-export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, organic = false }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, organic = false }: Props) {
+  const prefixes = useMemo(() => listed && withStarts(listed, keys(tree)), [listed, tree]);
   const id = useId();
   const group = useGroupConnections()?.group;
   const ar = useLanguage().language === 'ar';
