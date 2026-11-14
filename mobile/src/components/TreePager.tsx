@@ -159,12 +159,16 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
   const offset = useSharedValue(0);
-  const lastTap = useRef(0);
+  // When and where the last tap landed: a double tap is two quick taps on the same box (or both on the card), so quick taps on
+  // two boxes of one path still light it and clear it.
+  const lastTap = useRef({ at: 0, on: '' });
   const moved = useRef(0);
   const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const waiting = useRef<(() => void) | undefined>(undefined);
   const move = useCallback(() => {
     moved.current = Date.now();
     clearTimeout(pending.current);
+    waiting.current = undefined;
   }, []);
   useEffect(() => () => clearTimeout(pending.current), []);
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
@@ -264,18 +268,25 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
     const now = Date.now();
     if (now - moved.current < 350) return;
     clearTimeout(pending.current);
+    const on = ayahKeys?.join(' ') ?? '';
+    // A quick tap on another box doesn't cancel the first: its path lights (or clears) now.
+    if (waiting.current && lastTap.current.on !== on) waiting.current();
+    waiting.current = undefined;
     const state = embedded ? IDLE : growthState();
     if (state.ask) { answer(); return; }
     if (state.studio && ayahKeys) return;
-    if (now - lastTap.current < DOUBLE_TAP) {
-      lastTap.current = 0;
+    if (now - lastTap.current.at < DOUBLE_TAP && lastTap.current.on === on) {
+      lastTap.current = { at: 0, on: '' };
       if (!isSaved(pieces[index])) toggleSaved(pieces[index]);
       setPop(value => value + 1);
       return;
     }
-    lastTap.current = now;
+    lastTap.current = { at: now, on };
     // As on the website, a tap on a node lights its path (after the wait that tells it from a double tap).
-    if (lightPath) pending.current = setTimeout(lightPath, DOUBLE_TAP);
+    if (lightPath) {
+      waiting.current = lightPath;
+      pending.current = setTimeout(() => { waiting.current = undefined; lightPath(); }, DOUBLE_TAP);
+    }
   }, [pieces, index]);
 
   const openVideo = async () => {
