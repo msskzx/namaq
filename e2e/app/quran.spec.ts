@@ -102,6 +102,29 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 30_000 });
   });
 
+  test('the tree video draws each box from where the app laid out its labels and words', async ({ page }) => {
+    await open(page, '/branches');
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill('إن المتقين في');
+    await box.press('Enter');
+    await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
+    await page.getByRole('button', { name: 'مشاركة كفيديو' }).click();
+    await expect.poll(() => page.frames().length).toBeGreaterThan(1);
+    const recorder = page.frames().find(frame => frame !== page.mainFrame())!;
+    await expect.poll(() => recorder.evaluate(() => typeof (window as unknown as { INPUT?: unknown }).INPUT)).toBe('object');
+    const scene = await recorder.evaluate(() => (window as unknown as { INPUT: { scene: { boxes: { bare?: boolean; parts?: { label?: string; words?: unknown[]; size: number }[] }[] }; look: { ui: string } } }).INPUT);
+    const boxes = scene.scene.boxes.filter(item => !item.bare);
+    expect(boxes.length).toBeGreaterThan(5);
+    // Every box carries its words and references at the places the app drew them, the references in the app's font size.
+    for (const item of boxes) {
+      expect(item.parts?.some(part => part.words?.length)).toBe(true);
+      for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(13);
+    }
+    expect(boxes.some(item => item.parts!.some(part => part.label))).toBe(true);
+    expect(scene.look.ui).toContain('Amiri');
+  });
+
   test('the tree card keeps its buttons in place when a path is lit', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'ابحث' }).click();

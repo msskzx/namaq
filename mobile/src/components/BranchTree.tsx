@@ -1,6 +1,6 @@
-import { createContext, memo, useContext, useEffect, useRef, useState, type ComponentRef } from 'react';
+import { createContext, memo, useContext, useEffect, useId, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type LayoutChangeEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text, UI_SCALE } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
@@ -16,7 +16,7 @@ import { CURVE, litSpine, type Span } from '@/lib/litSpine';
 import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
 import Hourglass from './Hourglass';
 import TreeIcon from './TreeIcon';
-import type { SceneBox, SceneEdge, SceneText, TreeScene } from '@/lib/scene';
+import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib/scene';
 
 /** A tap on a box; `lightPath` lights its path, which the host runs unless the tap meant something else (a double tap). */
 type Tap = (ayahKeys: string[], lightPath?: () => void) => void;
@@ -44,6 +44,22 @@ const Growth = createContext<TreeGrowth>(NO_GROWTH);
 type Host = ComponentRef<typeof View>;
 type Registry = Map<string, { view: Host | null; text: SceneText }>;
 const Boxes = createContext<Registry | null>(null);
+/** Each label and line of words inside a box, where the app laid it out, so the video draws it in the same place. */
+type PartSpec = Omit<ScenePart, 'x' | 'y' | 'w' | 'h'>;
+type Parts = Map<string, { box: string; view: Host | null; spec: PartSpec }>;
+const PartsOf = createContext<Parts | null>(null);
+const BoxId = createContext<string | null>(null);
+/** The video's label size: the app's interface text at 12 points, as Text scales it. */
+const LABEL = Math.round(12 * UI_SCALE);
+function usePart(spec: PartSpec) {
+  const parts = useContext(PartsOf);
+  const box = useContext(BoxId);
+  const slot = useId();
+  return (view: Host | null) => {
+    if (!parts || !box) return;
+    if (view) parts.set(slot, { box, view, spec }); else parts.delete(slot);
+  };
+}
 const edge = (shared: Shared, from: string, to: string, back = false) => { if (!shared.edges.some(item => item.from === from && item.to === to)) shared.edges.push({ from, to, back }); };
 
 const LINE = 2;
@@ -65,8 +81,11 @@ function Fade({ id, children, style, delay = 0 }: { id: string; children: React.
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
 
-function References({ text, shared, center }: { text: string; shared: Shared; center?: boolean }) {
-  return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
+function References({ text, shared, center, ruled }: { text: string; shared: Shared; center?: boolean;
+  /** Inside a Ruled header, which hands the video its place. */
+  ruled?: boolean }) {
+  const part = usePart({ label: text, size: LABEL, align: center ? 'center' : 'right' });
+  return <Text ref={ruled ? undefined : part} style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
 /**
@@ -83,9 +102,15 @@ function startLabel(shared: Shared, ayahKeys: string[], ending: string[] = []) {
 
 function StartReference({ label, shared }: { label?: string; shared: Shared }) {
   if (!label) return null;
+  return <Ruled label={label} shared={shared}><Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{label}</Text></Ruled>;
+}
+
+/** A label over a thin rule, at the top of a box. */
+function Ruled({ label, shared, children }: { label: string; shared: Shared; children: React.ReactNode }) {
+  const part = usePart({ label, size: LABEL, align: 'center', rule: true });
   return (
-    <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}>
-      <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{label}</Text>
+    <View ref={part} collapsable={false} style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}>
+      {children}
     </View>
   );
 }
@@ -114,8 +139,9 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms }: Words
   const tones = tonesOf(words, ayahKeys, at, shared, marks, forms);
   const { palette } = shared;
   const bracketed = words.some((word, i) => writtenForms({ forms }, i, word, shared.paths?.lit).length > 1);
+  const part = usePart({ ...sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms }), ...(bracketed ? {} : { lineHeight: size * 1.9 }) });
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: bracketed ? undefined : size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+    <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: bracketed ? undefined : size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
       {words.map((word, i) => {
         const written = writtenForms({ forms }, i, word, shared.paths?.lit);
         if (written.length === 1) return <Text key={i} style={tones[i] ? { color: tones[i] } : undefined}>{i > 0 ? ' ' : ''}{quranText(written[0].word)}</Text>;
@@ -179,7 +205,7 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
   const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
   return (
     <Fade id={id}>
-      <Pressable
+      <Pressable ref={register}
         onPress={() => shared.onTap(ayahKeys, paths ? () => paths.pin(id, ayahKeys) : undefined)}
         accessibilityRole="button"
         accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}
@@ -191,8 +217,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
           backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.card,
           ...CARD,
         })}>
-        {/* The video draws the box from this part: the words and references, not the buttons. */}
-        <View ref={register} collapsable={false} style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}>{children}</View>
+        {/* The video draws the whole box, buttons' room included, and in it the words and references, not the buttons. */}
+        <View style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}><BoxId.Provider value={id}>{children}</BoxId.Provider></View>
         {tools && <View style={{ opacity: asked ? 0 : 1 }}>{tools}</View>}
         {asked && <View style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
           {asked.seconds ? <Hourglass left={asked.left} seconds={asked.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
@@ -341,7 +367,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
       <Words words={beside.words} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={{ exact: new Set(), rooted: new Set() }} color={shared.palette.muted} />}
-      <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{ref}</Text>
+      <References text={ref} shared={shared} center />
     </Box>
   );
 }
@@ -384,7 +410,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
           tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           <StartReference label={start} shared={shared} />
-          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References text={references} shared={shared} center /></View>}
+          {singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
           <Words {...shownWords} />
           {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
           </>}
@@ -415,6 +441,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
   const down = direction === 'down';
   const shared: Shared = { spellings: !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)) };
   const registry = useRef<Registry>(new Map()).current;
+  const parts = useRef<Parts>(new Map()).current;
   const rootView = useRef<Host>(null);
   const rootId = nodeId(-1);
   const all = keys(presentation.tree);
@@ -436,9 +463,10 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
     return mixed ? required(prefix.keys, shared, around ?? aroundOf(presentation)) : befores(prefix.keys, shared);
   });
   before.forEach(entry => edge(shared, rootId, entry.id, true));
-  if (sceneRef) sceneRef.current = () => measureScene(rootView.current, registry, shared.edges, down);
+  if (sceneRef) sceneRef.current = () => measureScene(rootView.current, registry, parts, shared.edges, down);
   return (
     <Boxes.Provider value={sceneRef ? registry : null}>
+    <PartsOf.Provider value={sceneRef ? parts : null}>
     <Growth.Provider value={growth}>
       {/* dir: the web build reads start/end from it, not from the direction style, so it draws the tree as the phone does. */}
       <View {...({ dir: 'rtl' } as object)} ref={rootView} onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
@@ -449,22 +477,34 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
         <Node node={presentation.tree} path={[]} shared={shared} starts={all.filter(key => !presentation.prefixes.some(prefix => prefix.word && prefix.keys.includes(key)))} />
       </View>
     </Growth.Provider>
+    </PartsOf.Provider>
     </Boxes.Provider>
   );
 }
 
-/** Where every box sits in the tree, in the tree's own points, with its words: what the video draws. */
-function measureScene(root: Host | null, registry: Registry, edges: SceneEdge[], down: boolean): Promise<TreeScene | null> {
+/**
+ * Where every box sits in the tree, in the tree's own points, with its words and where each of its labels and lines of words was laid
+ * out: what the video draws.
+ */
+function measureScene(root: Host | null, registry: Registry, parts: Parts, edges: SceneEdge[], down: boolean): Promise<TreeScene | null> {
   if (!root) return Promise.resolve(null);
+  type Rect = { x: number; y: number; w: number; h: number };
   const entries = [...registry].filter(([, item]) => item.view);
-  const place = (view: Host) => new Promise<{ x: number; y: number; w: number; h: number } | null>(resolve => {
+  const pieces = [...parts.values()].filter(item => item.view);
+  const place = (view: Host) => new Promise<Rect | null>(resolve => {
     try { view.measureLayout(root, (x: number, y: number, w: number, h: number) => resolve({ x, y, w, h }), () => resolve(null)); } catch { resolve(null); }
   });
   const size = new Promise<{ w: number; h: number }>(resolve => root.measure((_x: number, _y: number, w: number, h: number) => resolve({ w, h })));
-  return Promise.all([size, ...entries.map(([, item]) => place(item.view!))]).then(([whole, ...rects]) => {
-    const { w, h } = whole as { w: number; h: number };
-    const boxes: SceneBox[] = entries.flatMap(([id, item], i) => { const rect = rects[i] as { x: number; y: number; w: number; h: number } | null; return rect ? [{ ...item.text, ...rect, id }] : []; });
-    return { width: w, height: h, down, boxes, edges };
+  return Promise.all([size, Promise.all(entries.map(([, item]) => place(item.view!))), Promise.all(pieces.map(item => place(item.view!)))]).then(([whole, rects, placed]) => {
+    const own = new Map<string, ScenePart[]>();
+    pieces.forEach((item, i) => { const rect = placed[i]; if (rect) own.set(item.box, [...own.get(item.box) ?? [], { ...item.spec, ...rect }]); });
+    const boxes: SceneBox[] = entries.flatMap(([id, item], i) => {
+      const rect = rects[i];
+      if (!rect) return [];
+      const inside = own.get(id)?.sort((a, b) => a.y - b.y);
+      return [{ ...item.text, ...(inside ? { parts: inside } : {}), ...rect, id }];
+    });
+    return { width: whole.w, height: whole.h, down, boxes, edges };
   });
 }
 
