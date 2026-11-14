@@ -103,7 +103,7 @@ describe('complete branch tree answers', () => {
       const { container } = render(<BranchFeedback question={own} typed={['ام كنتم', 'نبئوني بعلم']} names={{}} ar />);
       const first = container.querySelector('[data-answer]')!.closest('[data-node]')!;
       expect(first.getAttribute('data-keys')).toBe('6:144');
-      fireEvent.click(within(screen.getByRole('banner')).getByRole('button', { name: 'الآيات المحيطة' }));
+      fireEvent.click(screen.getByRole('button', { name: 'الآيات المحيطة' }));
       const following = await screen.findByText('السياق الثاني');
       expect(first.parentElement!.contains(following)).toBe(true);
       expect(first.parentElement!.textContent).not.toContain('السياق الأول');
@@ -120,7 +120,7 @@ describe('complete branch tree answers', () => {
       expect(within(screen.getByRole('banner')).queryByRole('button', { name: 'الآيات المحيطة' })).toBeNull();
       expect(within(screen.getByRole('banner')).getByRole('button', { name: 'تدوير الشجرة' })).toBeTruthy();
       rerender(<BranchFeedback question={question} typed={typed} names={{}} ar />);
-      const toggle = within(screen.getByRole('banner')).getByRole('button', { name: 'الآيات المحيطة' });
+      const toggle = screen.getByRole('button', { name: 'الآيات المحيطة' });
       expect(screen.queryByRole('link', { name: 'شجرة العبارة' })).toBeNull();
       expect(toggle.getAttribute('aria-pressed')).toBe('false');
       expect(fetchContext).not.toHaveBeenCalled();

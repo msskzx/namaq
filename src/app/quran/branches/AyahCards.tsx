@@ -14,7 +14,7 @@ import type { AyahContext, Surrounding } from '@shared/quran/ayahContext';
 import { quranContexts, quranSurrounding } from '@/lib/quran/quranText';
 import { MAX_KEYS, sharedMarks } from './AyahContext';
 import { usePreload, type Steps } from './TreeSteps';
-import { useAroundSetting } from './Surroundings';
+import { useCardAround } from './Surroundings';
 import styles from './AyahCards.module.css';
 import { ConnectionLines, useGroupConnections } from './GroupConnections';
 import { useGrowth, useMatrixReadTarget, type MatrixReadStep } from './Grow';
@@ -31,11 +31,13 @@ export function CardsLegend() {
 }
 
 type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<number, string>; steps?: Steps;
+  /** The card whose own surrounding-ayat switch the matrix follows; none follows the settings' default. */
+  card?: string;
   /** Shown under an ayah in the middle column, by its first ayah (a checked quiz answer). */
   note?: (key: string) => React.ReactNode };
 
 export default function AyahCards(props: Props) {
-  const [context] = useAroundSetting();
+  const [context] = useCardAround(props.card);
   return <Matrix key={String(context)} context={context} {...props} />;
 }
 

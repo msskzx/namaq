@@ -26,7 +26,7 @@ import { searchSharedPhrases } from '@shared/quran/branchSearch';
 import { branchInventory, distinctBranchPieces, reviewFilters, reviewPool } from '@shared/quran/branchInventory';
 import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';
-import { NavActions, NavButtons } from '@/components/common/NavBar';
+import { NavActions } from '@/components/common/NavBar';
 import NavSearch from '@/components/common/NavSearch';
 import { AroundButton, RotateButton } from './Surroundings';
 import PathAyat from './PathAyat';
@@ -191,7 +191,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const parentId = built.subtrees?.byId.get(resolved?.id ?? id)?.parent;
   const parent = parentId && piecesFor(built).find(piece => piece.legacyId === parentId)?.id;
   const position = tree ? cut.findIndex(piece => piece.id === id || piece.id === parent) : -1;
-  const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { ...state, occurrences: undefined, card });
+  // Each card opens on the settings' default view: a card's own switch does not carry to the next (owner, 2026-11-14).
+  const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { ...state, occurrences: undefined, mode: undefined, card });
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const neighbourAt = (index: number) => {
     const phrase = steps && !cards && cut[index]?.phrase;
@@ -222,7 +223,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <PreloadQuranText />
       <BranchHeading />
       {/* Search and filter are one control in the site's top bar: the filter button sits inside the search box
-          (on phones, inside the search bar the search icon opens). The page's buttons are in the side rail (the top bar on phones). */}
+          (on phones, inside the search bar the search icon opens). Each card's own switches sit in its row of buttons, under it. */}
       <NavActions>
         <NavSearch active={!!query || !!(range || state.saved?.length || hasGroupFilters(state.filters ?? {}) || state.filters?.sort)}>
           <div className="flex items-center gap-1">
@@ -233,11 +234,6 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           </div>
         </NavSearch>
       </NavActions>
-      <NavButtons>
-        {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}
-        {!cards && tree && <RotateButton />}
-        <AroundButton />
-      </NavButtons>
       <MatchingRules>{tree && <CardsLegend />}</MatchingRules>
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { ...state, surah: undefined })} />}
       {ayah && names[surahOf(ayah)] && <SurahChip surah={names[surahOf(ayah)]} ayah={Number(ayah.split(':')[1])} clear={branchesHref(id, juz, { ...state, ayah: undefined })} />}
@@ -249,8 +245,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <PathScope key={`${id}:${marked.join(' ')}`} lit={marked} organic>
       <div data-share-image>
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''} aliases={bookmarkAliases}>
-        {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
-          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
+        {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} card={id} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
+          : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true, card: id }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </DoubleTapSave>
       </div>
       {review && process.env.NODE_ENV === 'development' && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
@@ -258,7 +254,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {review && related.length > 0 && <ul data-related dir="ltr" className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
         {related.map(({ piece, inside }) => <li key={piece.id}>{inside ? 'Inside' : 'Holds'} <Link href={branchesHref(piece.id, juz, { review: true, mode: state.mode, filters: asked })} className="underline" dir="rtl">{piece.text}</Link> ({piece.keys.length})</li>)}
       </ul>}
-      {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
+      {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} toggles={<>
+        {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}
+        {!cards && tree && <RotateButton />}
+        <AroundButton card={id} />
+      </>} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       {treeGroup && presentation && <SurahChips ayahKeys={presentation.ayat.map(ayah => ayah.key)} names={names} interactive={!cards} />}
       {!cards && tree && presentation && <PathAyat ayat={presentation.ayat.map(ayah => ({ key: ayah.key, words: ayah.words }))} names={names} compare={Object.fromEntries(presentation.ayat.map(ayah => [ayah.key, compareLinksOfAyah(ayah.key)]))} />}
       </PathScope>

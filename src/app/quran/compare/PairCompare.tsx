@@ -36,7 +36,7 @@ import type { CardSide, PairCard, ReviewState } from './pairCards';
 import { canRecord, CardVideo, PageVideo } from './CompareVideo';
 import CompareBraid from './CompareBraid';
 import { useNeighbours } from './useNeighbours';
-import { useAroundSetting } from '../branches/Surroundings';
+import { useCardAround } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
@@ -384,8 +384,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
   };
   // The read-along studio lights words in the matrix, so it shows the matrix while open.
   const tree = view === 'tree' && !read.studio;
-  // The surrounding-ayat switch is the branches page's: one setting for every tree and matrix.
-  const [aroundOn, setAround] = useAroundSetting();
+  // The card's own surrounding-ayat switch, opening on the settings' default.
+  const [aroundOn, setAround] = useCardAround(anchorOf(card));
   const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   const neighbours = useNeighbours(shownSides, aroundOn && !card.many);
   const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');

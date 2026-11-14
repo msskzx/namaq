@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -52,9 +52,11 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onView, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
-  /** Set on a pager embedded elsewhere (the home feed), which has no top bar: no studio, and the tree/matrix switch here instead. */
-  onView?: { mode: BranchView; toggle: () => void };
+function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onEvidence, onCompare, onRotate, onView, onAround, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
+  /** A pager embedded elsewhere (the home feed): no studio. */
+  embedded?: boolean;
+  /** Each card's own switches (owner, 2026-11-14): tree or matrix, and the surrounding ayat; the settings only give their defaults. */
+  onView: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
   /** A book matrix's studio plays its connections or the read-along: the switch between them. */
   choice?: { connections: boolean; toggle: () => void } }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
@@ -69,17 +71,20 @@ function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, o
     if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
   }, [pop, current, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  if (studio && current && !onView) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
+  if (studio && current && !embedded) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
         <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
-      {!onView && <StudioButton palette={palette} />}
-      {onView && <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+      {!embedded && <StudioButton palette={palette} />}
+      <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
         {onView.mode === 'tree' ? <GalleryHorizontal size={24} color={palette.ink} /> : <TreeIcon size={24} color={palette.ink} />}
-      </Pressable>}
+      </Pressable>
+      <Pressable onPress={onAround.toggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ selected: onAround.on }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
+        <UnfoldHorizontal size={24} color={onAround.on ? palette.accent : palette.ink} />
+      </Pressable>
       {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
         <RotateCwSquare size={24} color={palette.ink} />
       </Pressable>}
@@ -120,6 +125,7 @@ function ConnectionChips({ group, selected, onToggle, palette }: { group: Group;
   );
 }
 
+/** `mode` and `around`: the defaults from the settings, which each card can switch for itself. */
 type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
   start?: number; onIndex?: (index: number) => void;
@@ -131,12 +137,20 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
    * The pager embedded in another page (the home feed's tree card): it keeps no place or zoom for the branches tab, has no
    * studio, lets vertical drags on an unzoomed tree scroll the page, and `open` takes the tree to the branches tab.
    */
-  embedded?: { open: (piece: BranchPiece) => void; toggleView: () => void } };
+  embedded?: { open: (piece: BranchPiece) => void } };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen, embedded }: Props) {
+export default function TreePager({ pieces, list, palette, mode: defaultMode, around: defaultAround, start, onIndex, onPull, onOpen, embedded }: Props) {
   /** The one tree drawn the other way, by its id: rotating belongs to that tree, not to the page. */
   const [rotatedId, setRotatedId] = useState<string | null>(null);
+  /** What each card switched for itself, by its id; a card it does not name opens on the settings' defaults. */
+  const [own, setOwn] = useState<Record<string, { mode?: BranchView; around?: boolean }>>({});
+  const modeOf = (at: BranchPiece) => own[at.id]?.mode ?? defaultMode;
+  const surroundOf = (at: BranchPiece) => own[at.id]?.around ?? defaultAround;
+  const switchCard = (at: BranchPiece, change: { mode?: BranchView; around?: boolean }) => {
+    if (!embedded) closeStudio();
+    setOwn(current => ({ ...current, [at.id]: { ...current[at.id], ...change } }));
+  };
   // Embedded, «show only this part» opens that part on the branches tab.
   const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => (embedded ? embedded.open(piece) : onOpen?.(piece)) }), [onOpen, embedded]);
   const place = useMemo(() => (embedded ? undefined : readJson<Place>(PLACE)), []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -186,6 +200,8 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
 
   // The open tree is the one the studio grows.
   const piece = pieces[Math.min(index, pieces.length - 1)];
+  const mode = piece ? modeOf(piece) : defaultMode;
+  const around = piece ? surroundOf(piece) : defaultAround;
   // A book group's matrix grows its word connections instead (the website's connections studio).
   const matrixGroup = useMemo(() => (mode === 'matrix' && piece ? evidenceOf(piece) : null), [mode, piece]);
   const studioTags = matrixGroup?.tags.length ? (tagsOf(piece, matrixGroup).length ? tagsOf(piece, matrixGroup) : matrixGroup.tags) : [];
@@ -273,7 +289,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
   // Share as image: the open tree as it is drawn, or the matrix's ayah column; the tree's video from here too.
   const share = (at: BranchPiece) => {
     const link = `${at.text}\n${WEBSITE}${branchesHref(at.id)}`;
-    if (mode === 'matrix') {
+    if (modeOf(at) === 'matrix') {
       const { presentation } = cardOf(at, list);
       shareCard({ content: width => <MatrixShare presentation={presentation} palette={palette} width={width} />, link });
       return;
@@ -293,7 +309,9 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
         {view && <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width: view.width, height: view.height, direction: 'ltr' }, track]}>
           {shown.map(at => {
             const current = at === index;
-            const group = mode === 'matrix' ? evidenceOf(pieces[at]) : null;
+            const atMode = modeOf(pieces[at]);
+            const atAround = surroundOf(pieces[at]);
+            const group = atMode === 'matrix' ? evidenceOf(pieces[at]) : null;
             const linked = group?.tags.length ? group : null;
             const footer = (
               // Taps between the buttons stay here, so they are not read as taps on the tree.
@@ -301,23 +319,24 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                 <View style={{ height: FOOT }}>
                   {current && !embedded && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                    onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
-                    onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
-                    onView={embedded ? { mode, toggle: embedded.toggleView } : undefined}
-                    choice={current && mode === 'matrix' && lines > 0 ? { connections: connecting, toggle: () => setPlay(connecting ? 'read' : 'connections') } : undefined} />
+                    embedded={!!embedded} onVideo={atMode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
+                    onRotate={atMode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
+                    onView={{ mode: atMode, toggle: () => switchCard(pieces[at], { mode: atMode === 'tree' ? 'matrix' : 'tree' }) }}
+                    onAround={{ on: atAround, toggle: () => switchCard(pieces[at], { around: !atAround }) }}
+                    choice={current && atMode === 'matrix' && lines > 0 ? { connections: connecting, toggle: () => setPlay(connecting ? 'read' : 'connections') } : undefined} />
                 </View>
-                {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
+                {atMode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
               </View>
             );
             return (
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
-              {mode === 'matrix'
-                ? <MatrixCard key={String(around)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={around} onTap={tap} onMove={move} footer={footer}
+              {atMode === 'matrix'
+                ? <MatrixCard key={String(atAround)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround} onTap={tap} onMove={move} footer={footer}
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} />
-                : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
+                : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
                   onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded} fixed={!embedded} />}

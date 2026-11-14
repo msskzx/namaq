@@ -471,14 +471,16 @@ describe('BranchTree', () => {
     });
 
 
-    it('follows the one surrounding-ayat setting from the side rail, on every synced tree, with no switch of its own', async () => {
+    it('opens on the default from the settings and follows its card\'s own switch, leaving the default and other cards alone', async () => {
       localStorage.setItem('branches-surround', '1');
-      const { container } = render(<><AroundButton /><BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} /></>);
+      const { container } = render(<><AroundButton card="a" /><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'a' }} />
+        <div data-other><BranchTree tree={tree} names={names} surround={{ on: false, sync: true, card: 'b' }} /></div></>);
       expect(screen.queryByRole('switch', { name: 'الآيات المحيطة' })).toBeNull();
-      await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
+      await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(10));
       fireEvent.click(screen.getByRole('button', { name: 'الآيات المحيطة' }));
-      expect(localStorage.getItem('branches-surround')).toBe('0');
-      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(0);
+      expect(localStorage.getItem('branches-surround')).toBe('1');
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+      expect(container.querySelectorAll('[data-other] [data-ctx]')).toHaveLength(5);
       expect(replace).not.toHaveBeenCalled();
       localStorage.clear();
     });

@@ -45,3 +45,17 @@
 @media (prefers-reduced-motion: reduce) {
   .page :global([data-node]) { transition: none; }
 }
+
+/* The app's box: its padding and the tree's line weight (mobile/src/components/BranchTree.tsx). */
+.page :global([data-node]) { padding: 4px 12px; }
+
+/* A tap on a box lights its path (PathBox), as in the app: the box's own path button stays for the keyboard only. */
+.page :global([data-node] [data-path-toggle]:not(:focus-visible)) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.page :global([data-node-buttons]:not(:has(> :not([data-path-toggle]))):not(:focus-within)) { margin: 0; }

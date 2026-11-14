@@ -269,14 +269,12 @@ const TREE_HEIGHT = 440;
  * a tap and saves on a double tap, as there. The open button takes it to the branches tab.
  */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
-  // Opens in the view set on the branches tab; the card's own switch changes only this card.
-  const [mode, setMode] = useState(() => { const pref = branchView.get(); return showsOtherView(piece.id) ? (pref === 'tree' ? 'matrix' : 'tree') : pref; });
+  // Opens on the settings' default view (one tree in ten the other view); the card's own switches change only this card.
+  const [preferred] = branchView.use();
+  const mode = showsOtherView(piece.id) ? (preferred === 'tree' ? 'matrix' : 'tree') : preferred;
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
-  const embedded = useMemo(() => ({
-    open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }),
-    toggleView: () => setMode(current => (current === 'tree' ? 'matrix' : 'tree')),
-  }), []);
+  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }) }), []);
   return (
     <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
       <PostHead Icon={TreeIcon} title={piece.text} sub="من متشابهات القرآن" palette={palette} quran open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />

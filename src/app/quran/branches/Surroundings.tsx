@@ -32,7 +32,7 @@ const subscribeAround = (listener: () => void) => {
   return () => { listeners.delete(listener); window.removeEventListener('storage', listener); };
 };
 
-/** One setting for every tree and matrix on the branches page, kept in this browser. */
+/** The default every card opens with, kept in this browser and set in the settings sheet; each card switches its own (useCardAround). */
 export function useAroundSetting() {
   const on = useSyncExternalStore(subscribeAround, readAround, () => false);
   const set = (next: boolean) => {
@@ -42,10 +42,28 @@ export function useAroundSetting() {
   return [on, set] as const;
 }
 
-/** The surrounding-ayat switch in the side rail (the top bar on phones). */
-export function AroundButton() {
+// The one card switched away from the default, by its id: the next card opens on the default again (owner, 2026-11-14).
+let switched: { card: string; on: boolean } | null = null;
+const cardListeners = new Set<() => void>();
+const subscribeCard = (listener: () => void) => { cardListeners.add(listener); return () => { cardListeners.delete(listener); }; };
+
+/** A card's own surrounding-ayat switch, opening on the settings' default. Without a card it is the default alone. */
+export function useCardAround(card?: string) {
+  const [fallback] = useAroundSetting();
+  const own = useSyncExternalStore(subscribeCard, () => switched, () => null);
+  const on = card && own?.card === card ? own.on : fallback;
+  const set = (next: boolean) => {
+    if (!card) return;
+    switched = { card, on: next };
+    cardListeners.forEach(listener => listener());
+  };
+  return [on, set] as const;
+}
+
+/** The card's surrounding-ayat switch, in its row of buttons. */
+export function AroundButton({ card }: { card: string }) {
   const ar = useLanguage().language === 'ar';
-  const [on, set] = useAroundSetting();
+  const [on, set] = useCardAround(card);
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return <Button size="lg" variant="muted" aria-pressed={on} onClick={() => set(!on)} aria-label={label} title={label}
     className="aria-pressed:border-[var(--home-accent)] aria-pressed:text-[var(--home-accent)]">
@@ -68,7 +86,7 @@ export function useRotated() {
   return [on, setRotatedValue] as const;
 }
 
-/** Turns the open tree between right to left and top down; beside the surrounding-ayat switch. */
+/** Turns the open tree between right to left and top down; in the card's row of buttons. */
 export function RotateButton() {
   const ar = useLanguage().language === 'ar';
   const [on, set] = useRotated();
@@ -122,7 +140,7 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?:
         {side === 'before' && basmala}
       </span>
       <span className="mt-1 block text-xs">{ref}</span>
-      <span className="mt-1 flex flex-wrap items-center gap-2">
+      <span data-node-buttons className="mt-1 flex flex-wrap items-center gap-2">
         <PathButton id={id} keys={[of]} subject={ref} />
         {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`} aria-label={ar ? 'في هذه الشجرة' : 'In this tree'} title={ar ? 'في هذه الشجرة' : 'In this tree'}>
           <LocateFixed size={16} aria-hidden />
