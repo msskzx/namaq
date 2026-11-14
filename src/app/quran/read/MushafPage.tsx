@@ -5,7 +5,7 @@ import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/rea
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
-import { sectionAt, sectionsStartingAt, surahTopicsOf } from '@shared/quran/surahTopics';
+import { sectionsStartingAt } from '@shared/quran/surahTopics';
 import styles from './Mushaf.module.css';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
@@ -152,7 +152,7 @@ export default function MushafPage({
   hidden?: (key: string, word: number) => boolean;
   /** Recite mode: the ayah the next reveal shows. */
   next?: string | null;
-  /** Ayat the reader forgot (highlighted) and saved (ayah number in purple). */
+  /** Ayat the reader forgot (highlighted, ayah number in the accent) and saved (ayah number in purple). */
   forgot?: Readonly<Record<string, unknown>>;
   saved?: ReadonlySet<string>;
   /** Surahs whose title (and basmala, 2 steps) are recite steps of their own: they count as the first words of the surah's first ayah. */
@@ -166,8 +166,8 @@ export default function MushafPage({
   /** Only these rows (item indexes, both ends kept), sized by the page's width: a few lines around an ayah, as the home recall card shows them. */
   slice?: { from: number; to: number };
   /**
-   * The surah's sections (docs/plans/surah-topics.md): the header names the one the page opens in, and a small numbered
-   * tab over the first word of each section's first ayah marks where one starts; neither moves a word. Not while reciting.
+   * The surah's sections (docs/plans/surah-topics.md): a small number over the first word of each section's first ayah
+   * marks where one starts, moving no word; the header names no topic (owner, 2026-11-14). Not while reciting.
    */
   onTopic?: (surah: number, section: number) => void;
 }) {
@@ -186,17 +186,6 @@ export default function MushafPage({
   const surahOf = data.items.map((_, at) => data.items.slice(0, at + 1).reduceRight<number | undefined>((found, item) => found ?? ('surah' in item ? item.surah : undefined), undefined));
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const topics = onTopic && !hidden;
-  // The section the page opens in: the one holding the page's first ayah.
-  const opener = useMemo(() => {
-    if (!topics) return null;
-    // An ayah before the surah's first section (al-Fatiha's basmala) passes to the next.
-    for (const row of Object.values(lines)) for (const group of row ?? []) {
-      if (group.surah === undefined || group.ayah === undefined) continue;
-      const index = sectionAt(group.surah, group.ayah);
-      if (index >= 0) return { surah: group.surah, index, title: surahTopicsOf(group.surah)!.sections[index].title };
-    }
-    return null;
-  }, [topics, lines]);
   const firstWord: Record<string, boolean> = {};
   const badges = data.items.map(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
   useLayoutEffect(() => {
@@ -252,7 +241,7 @@ export default function MushafPage({
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
-                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, !endHidden(end) && saved?.has(`${group.surah}:${end}`) ? styles.saved : ''].join(' ').trim()}>
+                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, endHidden(end) ? '' : saved?.has(`${group.surah}:${end}`) ? styles.saved : forgot?.[`${group.surah}:${end}`] ? styles.forgotEnd : ''].join(' ').trim()}>
                               {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                               {endHidden(end) ? EMPTY_END : num(end)}
                             </span>
@@ -280,11 +269,6 @@ export default function MushafPage({
     <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
       <div className={styles.head}>
         <span>الجزء {juzName(data.juz)}</span>
-        {opener && (
-          <button type="button" className={styles.topicChip} aria-label={`موضوعات السورة: ${opener.title}`} onClick={() => onTopic!(opener.surah, opener.index)}>
-            <span className={styles.topicNumber} data-n={num(opener.index + 1)} /> {opener.title}
-          </button>
-        )}
         {badges.some(list => list.length > 0) && (
           <div className={styles.strip}>
             {badges.flat().map(label => (
