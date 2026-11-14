@@ -1,9 +1,10 @@
 import { Asset } from 'expo-asset';
-import { QURAN_FONT } from './theme';
+import { QURAN_FONT, UI_FONT } from './theme';
 
 export async function fontFace() {
-  const asset = Asset.fromModule(require('../../assets/fonts/UthmanicHafs1Ver18.ttf'));
-  return `@font-face{font-family:"${QURAN_FONT}";src:url("${new URL(asset.uri, window.location.href).href}") format("truetype");}`;
+  const face = (family: string, module: number, weight = 'normal') => `@font-face{font-family:"${family}";font-weight:${weight};src:url("${new URL(Asset.fromModule(module).uri, window.location.href).href}") format("truetype");}`;
+  return face(QURAN_FONT, require('../../assets/fonts/UthmanicHafs1Ver18.ttf')) + face(UI_FONT, require('../../assets/fonts/Amiri-Regular.ttf'))
+    + face(UI_FONT, require('../../assets/fonts/Amiri-Bold.ttf'), 'bold');
 }
 
 /** The browser's share sheet with the file, or a download where it cannot share files. */

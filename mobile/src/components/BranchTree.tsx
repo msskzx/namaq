@@ -174,7 +174,7 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { ...text, muted: !!muted, keys: ayahKeys } }); };
   const asked = growth.ask?.id === id ? growth.ask : undefined;
-  // A lit path tints its boxes blue, and the box tapped (or just grown) is outlined, as on the website.
+  // A lit path tints its boxes blue and outlines them in the colour of its lines; the box tapped (or just grown) is tinted deeper.
   const onPath = isLit(shared, growth, ayahKeys);
   const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
   return (
@@ -187,7 +187,7 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
           maxWidth: down ? (leaf ? 176 : 384) : leaf ? 208 : 192,
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
-          borderColor: asked ? palette.accent : growth.now.has(id) ? palette.path : pressed ? palette.accent : muted ? palette.muted : selected ? palette.path : palette.rule,
+          borderColor: asked ? palette.accent : growth.now.has(id) || onPath || selected ? palette.path : pressed ? palette.accent : muted ? palette.muted : palette.rule,
           backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.card,
           ...CARD,
         })}>

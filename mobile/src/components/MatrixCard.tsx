@@ -91,7 +91,12 @@ function Ayah({ ayah, palette, muted, light, read }: { ayah: MatrixAyah; palette
   </>;
 }
 
-function Cell({ cell, at, palette, width, current, onPress, light, note, still, read }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note']; still?: boolean; read?: Read }) {
+/** One ayah card of the matrix; the tree's lit-path card under the tree is this card too (owner, 2026-11-14). */
+export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+  /** Left out where the card is only read (under the tree): it is then no button, so its own buttons stay reachable. */
+  onPress?: () => void; light?: Light; note?: Props['note']; still?: boolean; read?: Read;
+  /** More buttons beside the read button. */
+  tools?: React.ReactNode }) {
   if (!cell) return <View style={{ width }} />;
   const first = cell.ayat[0];
   const last = cell.ayat[cell.ayat.length - 1];
@@ -101,17 +106,20 @@ function Cell({ cell, at, palette, width, current, onPress, light, note, still, 
   const muted = at !== 'ayah';
   const wordViews = !!useContext(Words);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
-  const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress(); } } : undefined;
+  const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress?.(); } } : undefined;
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${surahNames[surah]} ${range}`}
+    <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
       style={{ width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{lastSurah !== surah ? `الآية ${num(number)} ثم سورة ${surahNames[lastSurah]} ${num(lastNumber)}` : `${first === last ? 'الآية' : 'الآيات'} ${range}`}</Text>
-        {current && !still && <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel="قراءة الآية" style={{ position: 'absolute', end: -4, top: -4, padding: 4 }}>
-          <BookOpen size={18} color={palette.muted} />
-        </Pressable>}
+        {current && !still && <View style={{ position: 'absolute', end: -4, top: -4, flexDirection: 'row' }}>
+          <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[surah]} ${range}`} style={{ padding: 4 }}>
+            <BookOpen size={18} color={palette.muted} />
+          </Pressable>
+          {tools}
+        </View>}
       </View>
       {at === 'after' && basmala}
       {wordViews && !muted

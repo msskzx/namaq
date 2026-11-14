@@ -58,10 +58,7 @@ export const dark: Palette = {
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
 export const CARD = { borderRadius: 14 } as const;
 
-export const QURAN_FONT = 'KFGQPC Hafs';
-/** Every other text (labels, buttons, titles) is in Amiri, as on the website. Bold is its own file: custom fonts don't synthesise weights the same way on every phone. */
-export const UI_FONT = 'Amiri';
-export const UI_FONT_BOLD = 'Amiri-Bold';
+export { QURAN_FONT, UI_FONT, UI_FONT_BOLD } from './fonts';
 
 export function usePalette(): Palette {
   const scheme = useColorScheme();

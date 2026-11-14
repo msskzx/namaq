@@ -19,9 +19,10 @@ export const FRAME = { width: 1080, height: 1920 };
  * Plain JavaScript, since the recorder runs it inside a web view (the phone's engine cannot hand a function's source over).
  */
 const GEOMETRY = String.raw`
-var AREA = { x: 60, y: 270, width: 960, height: 1030 }, MAX_SCALE = 3, STUB = 14;
-// Under the tree, at fixed places: the bubbles of the tree's ayat (surah:ayah), then the card with the lit ayah in full.
-var BUBBLES = { y: 1325, rows: 2, row: 78, gap: 12 }, CARD = { x: 60, y: 1500, width: 960, height: 300 };
+var AREA = { x: 60, y: 90, width: 960, height: 1160 }, MAX_SCALE = 3, STUB = 14;
+// Under the tree, at fixed places and drawn as the app draws them: a chip per ayah (its surah and number), then the lit ayah's card.
+// K scales the app's points to the frame (a phone's card is about 366 points wide, the frame's 960).
+var K = 2.6, CHIPS = { y: 1285, rows: 2, gap: 5 * K, row: 32 * K + 12 }, CARD = { x: 60, y: 1470, width: 960, height: 340 };
 function placeTree(scene) {
   var scale = Math.min(MAX_SCALE, AREA.width / scene.width, AREA.height / scene.height);
   return { scale: scale, x: AREA.x + (AREA.width - scene.width * scale) / 2, y: AREA.y + (AREA.height - scene.height * scale) / 2 };
@@ -43,9 +44,12 @@ type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>) => { s
 /** The recorder's geometry, run here for the tests. */
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
-export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; font: string; logo: string };
-/** An ayah of the tree as the video's bubbles and card show it: its surah:ayah, its text with its number, its surah's name. */
-export type VideoAyah = { key: string; bubble: string; text: string; place: string };
+export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; font: string; ui: string; logo: string };
+/**
+ * An ayah of the tree as the video's chip and card show it, as the matrix's ayah card does in the app: the chip's surah and number,
+ * the card's surah name and «الآية …» line, and its words coloured as the matrix colours them, each ayah's number at its end.
+ */
+export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string }[] };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[]; ayat: VideoAyah[] };
 
 
@@ -158,65 +162,90 @@ function drawHourglass(box, left, seconds) {
   ctx.fillText(String(Math.max(1, Math.ceil(left * seconds))).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }), cx, cy + 16);
 }
 
-// The bubbles keep to their two rows: a tree with many ayat gets smaller bubbles.
-var bubbleSize = 30, bubbleRows;
-function layBubbles(size) {
-  ctx.font = size + 'px sans-serif';
-  var rows = [[]], used = 0, max = FRAME.width - 120, height = size * 2.1;
+// The chips keep to their two rows: a tree with many ayat gets smaller chips.
+var chipScale = K, chipRows;
+function layChips(k) {
+  ctx.font = (14 * k) + 'px ' + look.ui;
+  var rows = [[]], used = 0, max = FRAME.width - 120;
   INPUT.ayat.forEach(function (ayah) {
-    var w = Math.max(height, ctx.measureText(ayah.bubble).width + size * 1.2);
-    if (rows[rows.length - 1].length && used + BUBBLES.gap + w > max) { rows.push([]); used = 0; }
-    used += (rows[rows.length - 1].length ? BUBBLES.gap : 0) + w;
+    var w = ctx.measureText(ayah.chip).width + 24 * k + 2;
+    if (rows[rows.length - 1].length && used + CHIPS.gap + w > max) { rows.push([]); used = 0; }
+    used += (rows[rows.length - 1].length ? CHIPS.gap : 0) + w;
     rows[rows.length - 1].push({ ayah: ayah, w: w });
   });
   return rows;
 }
-for (;;) { bubbleRows = layBubbles(bubbleSize); if (bubbleRows.length <= BUBBLES.rows || bubbleSize <= 12) break; bubbleSize -= 2; }
+function fitChips() { for (chipScale = K; ; chipScale -= 0.1) { chipRows = layChips(chipScale); if (chipRows.length <= CHIPS.rows || chipScale <= 1) return; } }
+fitChips();
 
-// Right to left, centred: the first ayah to grow is on the right.
-function drawBubbles() {
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'ltr'; ctx.font = bubbleSize + 'px sans-serif';
-  var h = bubbleSize * 2.1, step = Math.min(BUBBLES.row, h + 10);
-  var top = BUBBLES.y + (BUBBLES.rows * BUBBLES.row - Math.min(bubbleRows.length, BUBBLES.rows) * step) / 2;
-  bubbleRows.slice(0, BUBBLES.rows).forEach(function (row, r) {
-    var width = row.reduce(function (sum, item, i) { return sum + item.w + (i ? BUBBLES.gap : 0); }, 0);
+function pill(x, y, w, h) {
+  var r = h / 2;
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arc(x + w - r, y + r, r, -Math.PI / 2, Math.PI / 2);
+  ctx.lineTo(x + r, y + h); ctx.arc(x + r, y + r, r, Math.PI / 2, Math.PI * 1.5); ctx.closePath();
+}
+
+// As SurahChips: a thin rule border, the lit one outlined in the path's blue on deeper paper. Right to left, the first ayah to grow on the right.
+function drawChips() {
+  var k = chipScale, h = 32 * k, step = Math.min(CHIPS.row, h + 12);
+  var top = CHIPS.y + (CHIPS.rows * CHIPS.row - Math.min(chipRows.length, CHIPS.rows) * step) / 2;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.font = (14 * k) + 'px ' + look.ui;
+  chipRows.slice(0, CHIPS.rows).forEach(function (row, r) {
+    var width = row.reduce(function (sum, item, i) { return sum + item.w + (i ? CHIPS.gap : 0); }, 0);
     var x = FRAME.width / 2 + width / 2, y = top + r * step;
     row.forEach(function (item) {
       x -= item.w;
       var on = lit === item.ayah.key;
-      ctx.beginPath(); ctx.moveTo(x + h / 2, y); ctx.lineTo(x + item.w - h / 2, y); ctx.arc(x + item.w - h / 2, y + h / 2, h / 2, -Math.PI / 2, Math.PI / 2);
-      ctx.lineTo(x + h / 2, y + h); ctx.arc(x + h / 2, y + h / 2, h / 2, Math.PI / 2, Math.PI * 1.5); ctx.closePath();
-      if (on) { ctx.fillStyle = look.path; ctx.globalAlpha = 0.18; ctx.fill(); ctx.globalAlpha = 1; }
-      ctx.strokeStyle = on ? look.path : look.rule; ctx.lineWidth = on ? 3 : 2; ctx.stroke();
-      ctx.fillStyle = on ? look.path : look.ink; ctx.fillText(item.ayah.bubble, x + item.w / 2, y + h / 2 + 1);
-      x -= BUBBLES.gap;
+      pill(x, y, item.w, h);
+      if (on) { ctx.fillStyle = look.deep; ctx.fill(); }
+      ctx.strokeStyle = on ? look.path : look.rule; ctx.lineWidth = Math.max(1, k); ctx.stroke();
+      ctx.fillStyle = on ? look.path : look.ink; ctx.fillText(item.ayah.chip, x + item.w / 2, y + h / 2 + 2);
+      x -= CHIPS.gap;
     });
   });
 }
 
-// The lit ayah in full, its number in its own mark, its surah's name under it; a long ayah gets smaller letters.
+function cardRect(x, y, w, h) {
+  var r = 14 * K;
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+// As the matrix's ayah card: the surah's name and «الآية …» on top, the ayah under it from the right, coloured as the matrix colours
+// its words, its number in the accent. A long ayah gets smaller letters, and the card clips the longest.
 function drawCard(key) {
   var ayah = INPUT.ayat.filter(function (item) { return item.key === key; })[0];
   if (!ayah) return;
-  var top = CARD.y, height = CARD.height;
-  roundRect(CARD.x, top, CARD.width, height);
-  ctx.fillStyle = look.deep; ctx.fill(); ctx.strokeStyle = look.rule; ctx.lineWidth = 2; ctx.stroke();
-  var words = ayah.text.split(' ').map(function (text) { return { text: text, color: look.ink }; });
-  // The surah's name keeps its line at the foot; the ayah takes the rest, smaller when long, and the card clips the longest.
-  var room = height - 24 - 44, size = 46, lines;
-  for (;;) { lines = wrap(words, CARD.width - 60, size); if (lines.length * size * 1.8 <= room || size <= 14) break; size -= 2; }
-  var lineHeight = size * 1.8, y = top + 12 + Math.max(0, (room - lines.length * lineHeight) / 2);
-  ctx.save(); ctx.beginPath(); ctx.rect(CARD.x, top, CARD.width, 12 + room); ctx.clip();
-  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  var x = CARD.x, top = CARD.y, width = CARD.width, height = CARD.height, pad = 12 * K;
+  cardRect(x, top, width, height);
+  ctx.fillStyle = look.card; ctx.fill(); ctx.strokeStyle = look.rule; ctx.lineWidth = K * 0.8; ctx.stroke();
+  ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+  var head = top + 8 * K + 12 * K;
+  ctx.font = 'bold ' + (16 * K) + 'px ' + look.ui; var nameWidth = ctx.measureText(ayah.name).width;
+  ctx.font = (13 * K) + 'px ' + look.ui; var labelWidth = ctx.measureText(ayah.label).width;
+  var gap = 10 * K, start = FRAME.width / 2 + (nameWidth + gap + labelWidth) / 2;
+  ctx.textAlign = 'right';
+  ctx.font = 'bold ' + (16 * K) + 'px ' + look.ui; ctx.fillStyle = look.ink; ctx.fillText(ayah.name, start, head);
+  ctx.font = (13 * K) + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.fillText(ayah.label, start - nameWidth - gap, head);
+  var room = top + height - 8 * K - (head + 12 * K), size = 21 * K, lines;
+  for (;;) { lines = wrap(ayah.words, width - 2 * pad, size); if (lines.length * size * 44 / 21 <= room || size <= 14) break; size -= 2; }
+  var lineHeight = size * 44 / 21, y = head + 12 * K;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, width, room); ctx.clip();
+  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left';
   var space = ctx.measureText(' ').width;
   lines.forEach(function (line) {
-    var x = FRAME.width / 2 + line.width / 2;
-    line.words.forEach(function (word) { x -= word.width; ctx.fillStyle = word.color; ctx.fillText(word.text, x, y + lineHeight / 2); x -= space; });
+    var at = x + width - pad;
+    line.words.forEach(function (word) { at -= word.width; ctx.fillStyle = word.color; ctx.fillText(word.text, at, y + lineHeight / 2); at -= space; });
     y += lineHeight;
   });
   ctx.restore();
-  ctx.font = '26px sans-serif'; ctx.fillStyle = look.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl';
-  ctx.fillText(ayah.place, FRAME.width / 2, top + height - 34);
+}
+
+function drawOutro(shown) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
+  ctx.globalAlpha = Math.max(0, Math.min(1, shown));
+  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 160, FRAME.height / 2 - 160, 320, 320);
+  ctx.globalAlpha = 1;
 }
 
 function draw(t) {
@@ -224,14 +253,13 @@ function draw(t) {
   ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
   // As the website's frame: the emblem on top, and in ask mode the call to finish the ayat under it.
-  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 60, 50, 120, 120);
-  if (INPUT.ask) { ctx.fillStyle = look.accent; ctx.font = '50px ' + look.font; ctx.fillText(ASK_HEADING, FRAME.width / 2, 225, FRAME.width - 120); }
+  if (INPUT.ask) { ctx.fillStyle = look.accent; ctx.font = '50px ' + look.font; ctx.fillText(ASK_HEADING, FRAME.width / 2, 60, FRAME.width - 120); }
   var bar = (FRAME.width - 120 - (total - 1) * 10) / Math.max(1, total);
   for (var i = 0; i < total; i++) {
     ctx.fillStyle = done || i <= step ? look.green : look.rule;
     ctx.fillRect(FRAME.width - 60 - (i + 1) * bar - i * 10, 1840, bar, 8);
   }
-  drawBubbles();
+  drawChips();
   if (tour && lit) drawCard(lit);
   ctx.setTransform(place.scale, 0, 0, place.scale, place.x, place.y);
   scene.edges.forEach(function (edge) {
@@ -254,7 +282,7 @@ function draw(t) {
       if (!box.muted) { ctx.fillStyle = look.deep; ctx.fill(); }
       // The growing ayah's path is lit as a tap lights it in the app: a blue tint, the box just drawn outlined.
       if (holds(box)) { ctx.fillStyle = look.path; ctx.globalAlpha = a * 0.14; ctx.fill(); ctx.globalAlpha = a; }
-      ctx.strokeStyle = asked ? look.accent : now[box.id] ? look.path : box.muted ? look.muted : look.rule;
+      ctx.strokeStyle = asked ? look.accent : now[box.id] || holds(box) ? look.path : box.muted ? look.muted : look.rule;
       ctx.lineWidth = now[box.id] || asked ? 2 : 1;
       if (box.muted) ctx.setLineDash([4, 3]);
       ctx.stroke(); ctx.setLineDash([]);
@@ -277,7 +305,8 @@ else {
     reader.onload = function () { send({ type: 'video', mime: blob.type, data: String(reader.result).split(',')[1] }); };
     reader.readAsDataURL(blob);
   };
-  var beat = 0, beatStart = 0, finishedAt = 0, HOLD = 1500, start = performance.now();
+  // After the last beat the grown tree holds a moment, then the emblem alone closes the video (owner: an outro, no intro).
+  var beat = 0, beatStart = 0, finishedAt = 0, HOLD = 1500, OUTRO = 2200, start = performance.now();
   function enter(index, t) {
     var current = INPUT.beats[index];
     if (!current) return;
@@ -300,12 +329,14 @@ else {
       if (beat < INPUT.beats.length) enter(beat, beatStart); else { done = true; finishedAt = t; now = {}; lit = null; ask = null; tour = false; }
     }
     if (ask && !done) ask.left = Math.max(0, 1 - (t - beatStart) / length(beat));
-    draw(t);
+    if (done && t - finishedAt > HOLD) drawOutro((t - finishedAt - HOLD) / 600); else draw(t);
     send({ type: 'progress', at: done ? total : step, total: total });
-    if (done && t - finishedAt > HOLD) { recorder.stop(); stream.getTracks().forEach(function (track) { track.stop(); }); return; }
+    if (done && t - finishedAt > HOLD + OUTRO) { recorder.stop(); stream.getTracks().forEach(function (track) { track.stop(); }); return; }
     requestAnimationFrame(tick);
   }
   ${PAUSE}
-  ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); });
+  var uiFont = document.fonts && document.fonts.load ? document.fonts.load('40px ' + look.ui).catch(function () {}) : Promise.resolve();
+  // The chips are measured again once the app's font has loaded.
+  uiFont.then(function () { fitChips(); ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); }); });
 }
 `;

@@ -25,7 +25,7 @@ test.describe('branches', () => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
     await page.getByRole('button', { name: 'عرض المصفوفة' }).click();
-    await expect(page.getByRole('button', { name: 'قراءة الآية' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await page.getByRole('button', { name: 'عرض الشجرة' }).click();
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
   });
@@ -98,7 +98,7 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
     await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
     // Once grown, each ayah's path is lit in turn and the ayah is read in full under the tree.
-    await expect(page.getByRole('button', { name: 'افتح الحجر ٤٥ في المصحف' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible({ timeout: 20_000 });
     await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 30_000 });
   });
 
@@ -112,7 +112,7 @@ test.describe('branches', () => {
     await expect(save).toBeVisible();
     const before = await save.boundingBox();
     await page.getByRole('button', { name: 'سورة الحجر' }).click();
-    await expect(page.getByRole('button', { name: 'افتح الحجر ٤٥ في المصحف' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible();
     expect(await save.boundingBox()).toEqual(before);
   });
 });
