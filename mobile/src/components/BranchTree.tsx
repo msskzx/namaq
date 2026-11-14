@@ -3,7 +3,7 @@ import { Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { ayatLabel, keys, shownAyat, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { writtenForms } from '@shared/quran/writtenForms';
@@ -47,15 +47,20 @@ const Boxes = createContext<Registry | null>(null);
 const edge = (shared: Shared, from: string, to: string, back = false) => { if (!shared.edges.some(item => item.from === from && item.to === to)) shared.edges.push({ from, to, back }); };
 
 const LINE = 2;
+const FADE = 250;
+/** How long a growing spine takes to reach a new child. */
+const REACH = 150;
 const isMark = (word: string) => word === '۝' || word.startsWith('﴿');
 
 /** Fades a box or connector in and out as the tree grows. */
-function Fade({ id, children, style }: { id: string; children: React.ReactNode; style?: object }) {
+function Fade({ id, children, style, delay = 0 }: { id: string; children: React.ReactNode; style?: object;
+  /** A connector waits for the spine to reach it. */
+  delay?: number }) {
   const growth = useContext(Growth);
   // The box waiting for an answer shows, empty, with its timer.
   const hidden = growth.hidden.has(id) && growth.ask?.id !== id;
   const opacity = useSharedValue(hidden ? 0 : 1);
-  useEffect(() => { opacity.value = hidden ? 0 : withTiming(1, { duration: 250 }); }, [hidden, opacity]);
+  useEffect(() => { opacity.value = hidden ? 0 : withDelay(delay, withTiming(1, { duration: FADE })); }, [hidden, opacity, delay]);
   const faded = useAnimatedStyle(() => ({ opacity: opacity.value }));
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
@@ -262,31 +267,48 @@ function Fan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const lit = entries.map(entry => isLit(shared, growth, entry.keys));
   // While the tree grows, the spine reaches only the children already drawn, not the places the hidden ones keep.
   const shown = entries.map(entry => !growth.hidden.has(lineId(entry.id)));
-  const growing = shown.some(on => !on);
+  const growing = growth.hidden.size > 0;
   const [spans, setSpans] = useState<Span[]>([]);
   const [whole, setWhole] = useState(0);
   // A lit child still hidden lights nothing yet.
   const litShown = lit.map((on, i) => on && shown[i]);
   const spine = litShown.some(Boolean) ? litSpine(spans, litShown, whole) : null;
   const drawn = growing && shown.some(Boolean) ? litSpine(spans, shown, whole) : null;
-  const along = (range: [number, number], color: string) => <View pointerEvents="none" style={down
-    ? { position: 'absolute', top: 0, left: range[0], width: range[1] - range[0], borderTopWidth: LINE, borderColor: color }
-    : { position: 'absolute', start: 0, top: range[0], height: range[1] - range[0], borderStartWidth: LINE, borderColor: color }} />;
   return (
     <View style={{ flexDirection: down ? 'row' : 'column', alignItems: 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
       {entries.map((entry, i) => (
         <View key={entry.id} style={{ flexDirection: down ? 'column' : 'row', alignItems: 'center' }}
           onLayout={event => { const { x, y, width, height } = event.nativeEvent.layout; const span = down ? { at: x, size: width } : { at: y, size: height }; setSpans(old => { const next = [...old]; next[i] = span; return next; }); }}>
-          <Fade id={lineId(entry.id)} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
+          <Fade id={lineId(entry.id)} delay={growing ? REACH : 0} style={down ? { alignSelf: 'stretch' } : { alignSelf: 'stretch', flexDirection: 'row' }}>
             <Elbow first={i === 0} last={i === entries.length - 1} color={palette.rule} lit={lit[i] ? palette.path : undefined} down={down} spine={!growing} />
           </Fade>
           <View style={down ? { paddingHorizontal: 5 } : { paddingVertical: 5 }}>{entry.item}</View>
         </View>
       ))}
-      {drawn && along(drawn, palette.rule)}
-      {spine && along(spine, palette.path)}
+      {drawn && <Spine key={down ? 'drawn-down' : 'drawn-side'} range={drawn} color={palette.rule} down={down} from={whole / 2} />}
+      {spine && <Spine key={down ? 'lit-down' : 'lit-side'} range={spine} color={palette.path} down={down} from={whole / 2} grow={growing} />}
     </View>
   );
+}
+
+/**
+ * A stretch of a fan's spine. While the tree grows it runs out from the parent's line toward the new child,
+ * in step with the child's connector fading in, so a line never reaches a place before its curve and box.
+ */
+function Spine({ range, color, down, from, grow = true }: { range: [number, number]; color: string; down: boolean; from: number; grow?: boolean }) {
+  const start = grow && from > range[0] && from < range[1];
+  const low = useSharedValue(start ? from : range[0]);
+  const high = useSharedValue(start ? from : range[1]);
+  useEffect(() => {
+    // Only a spine that reaches further runs out; one that shrinks (a replay from a later ayah) or moves jumps.
+    const reach = grow && range[0] <= low.value && range[1] >= high.value;
+    low.value = reach ? withTiming(range[0], { duration: REACH }) : range[0];
+    high.value = reach ? withTiming(range[1], { duration: REACH }) : range[1];
+  }, [range[0], range[1], grow]); // eslint-disable-line react-hooks/exhaustive-deps
+  const style = useAnimatedStyle(() => down ? { left: low.value, width: high.value - low.value } : { top: low.value, height: high.value - low.value });
+  return <Animated.View pointerEvents="none" style={[down
+    ? { position: 'absolute', top: 0, borderTopWidth: LINE, borderColor: color }
+    : { position: 'absolute', start: 0, borderStartWidth: LINE, borderColor: color }, style]} />;
 }
 
 /** The connector between a box and its fan; shown once anything in the fan is, lit when a path runs through it. */
