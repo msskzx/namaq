@@ -181,7 +181,7 @@
   .stage {
     align-items: stretch;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    touch-action: pan-y pinch-zoom;
+    touch-action: pan-y;
   }
   .page { --width: 100cqw; height: 100%; aspect-ratio: auto; border: 0; }
   .tools { display: none; }
@@ -244,3 +244,20 @@
 }
 /* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */
 .reader[data-keyboard] .reciteBar { bottom: calc(var(--keyboard) + 8px); }
+
+/* Bigger text (ReaderView's text size): the page's words flow as one paragraph between titles, wrapped by the browser at
+   the page's width, every line but a paragraph's last spread edge to edge; the page grows and the stage scrolls down. */
+.stage[data-flow] { overflow-y: auto; align-items: flex-start; overscroll-behavior: contain; }
+.page[data-flow] { height: auto; min-height: 100%; aspect-ratio: auto; }
+.page[data-flow] .body { display: block; flex: none; line-height: 1.7; text-align: justify; text-align-last: start; }
+.page[data-flow] .row { display: inline; }
+.page[data-flow] .titleRow { display: flex; height: 1.7em; }
+.page[data-flow] .title { font-size: 0.8em; }
+.page[data-flow] .basmala { display: block; font-size: 1em; line-height: 1.7; }
+.page[data-flow] .line { display: inline; white-space: normal; line-height: inherit; }
+.page[data-flow] .line::after { content: ' '; }
+.page[data-flow] .line > span { white-space: nowrap; }
+.page[data-flow] .row .badge { display: none; }
+.page[data-flow] .strip { display: flex; }
+/* While a pinch changes the size, the page is only stretched as a preview; it is set again, sharp, when the fingers lift. */
+.page[data-pinching] { transition: none; will-change: transform; }

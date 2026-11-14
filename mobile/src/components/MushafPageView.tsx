@@ -2,12 +2,13 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState, type Component
 import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/components/Text';
-import type { MushafPage } from '@shared/quran/readerPage';
+import type { MushafPage, WordGroup } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
@@ -18,8 +19,10 @@ const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 
-/** Natural width of each line at BASE, per page; the same on every screen, so measured once per page. */
-const naturals = new Map<number, Record<number, number>>();
+/** Natural width of each word group at BASE, by line, per page; the same on every screen, so measured once per page. */
+const naturals = new Map<number, Record<number, number[]>>();
+/** A line's natural width at BASE: its groups and the gaps between them. */
+const lineWidth = (groups: number[] | undefined) => (groups ? groups.reduce((sum, w) => sum + w, 0) + Math.max(0, groups.length - 1) * GAP * BASE : 0);
 
 export type Touch = 'tap' | 'long';
 export type Recite = ReturnType<typeof reciteView>;
@@ -44,6 +47,13 @@ type Props = {
   write?: Write | null;
   /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
   checked?: Checked | null;
+  /** The text size: 1 is the printed page, fitted to `height`; bigger sets the words as flowing lines and the page runs as long as they need. */
+  zoom?: number;
+  /** The page's drawn height, told whenever it changes (a page with bigger text is taller than the screen). */
+  onHeight?: (page: number, height: number) => void;
+  /** With bigger text: an ayah to keep in sight (the one selected, or the next to recite), and where its first line is on the screen. */
+  focus?: string | null;
+  onFocus?: (y: number, height: number) => void;
 };
 
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
@@ -108,29 +118,33 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch, write, checked }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus }: Props) {
   const [body, setBody] = useState<{ width: number; height: number } | null>(null);
   const [measured, setMeasured] = useState(() => naturals.get(page));
   const lineAt = useMemo(() => data.items.flatMap((item, at) => ('line' in item ? [at] : [])), [data]);
-  const pending = useMemo<Record<number, number>>(() => ({}), []);
-  const measure = useCallback((at: number) => (event: LayoutChangeEvent) => {
-    pending[at] = event.nativeEvent.layout.width;
-    if (Object.keys(pending).length === lineAt.length) {
-      naturals.set(page, { ...pending });
+  const pending = useMemo<{ widths: Record<number, number[]>; count: number }>(() => ({ widths: {}, count: 0 }), []);
+  const groupCount = useMemo(() => lineAt.reduce((sum, at) => sum + (model.lines[at]?.length ?? 0), 0), [lineAt, model]);
+  const measure = useCallback((at: number, i: number) => (event: LayoutChangeEvent) => {
+    const row = (pending.widths[at] ??= []);
+    if (row[i] === undefined) pending.count += 1;
+    row[i] = event.nativeEvent.layout.width;
+    if (pending.count === groupCount) {
+      naturals.set(page, { ...pending.widths });
       setMeasured(naturals.get(page));
     }
-  }, [page, pending, lineAt]);
+  }, [page, pending, groupCount]);
+  const flowing = zoom > 1;
 
-  const rows = data.items.length;
-  const rowHeight = body ? body.height / rows : 0;
+  const itemCount = data.items.length;
+  const rowHeight = body ? body.height / itemCount : 0;
   // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
   const oneLine = body ? body.height / 15 : 0;
-  const lineHeight = body && lineAt.length ? (body.height - oneLine * (rows - lineAt.length)) / lineAt.length : rowHeight;
+  const lineHeight = body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
   // Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height (the website's fitOpening()).
   const opening = page <= 2;
   const oval = useMemo(() => {
-    if (!opening || !body) return null;
-    const count = rows - 1;
+    if (!opening || !body || flowing) return null;
+    const count = itemCount - 1;
     const top = (body.height - oneLine * (count + 2.6)) / 2 + oneLine * 2.6;
     const centre = top + (count * oneLine) / 2;
     const ry = (count / 2 + 0.7) * oneLine;
@@ -143,15 +157,59 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       chords[at] = 2 * textRx * Math.sqrt(Math.max(0, 1 - (y / textRy) ** 2));
     });
     return { top, centre, rx, ry, chords };
-  }, [opening, body, rows, oneLine, lineAt]);
+  }, [opening, body, itemCount, oneLine, lineAt, flowing]);
   const size = useMemo(() => {
     if (!body || !measured) return 0;
-    if (oval) return Math.max(1, Math.min(oneLine * 0.72, ...lineAt.map(at => (BASE * oval.chords[at]) / (measured[at] ?? 1))));
-    const widths = lineAt.map(at => measured[at] ?? 1);
+    if (flowing) return flowSize(body.width, zoom);
+    if (oval) return Math.max(1, Math.min(oneLine * 0.72, ...lineAt.map(at => (BASE * oval.chords[at]) / (lineWidth(measured[at]) || 1))));
+    const widths = lineAt.map(at => lineWidth(measured[at]) || 1);
     const widest = Math.max(1, ...widths);
     const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
     return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
-  }, [body, measured, lineAt, page, rowHeight, oval, oneLine]);
+  }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom]);
+  // A surah title or basmala row: one of the page's 15 lines, or with flowing text one flowing line.
+  const titleLine = flowing ? size * FLOW_LINE : oneLine;
+
+  // The rows drawn: the page's own lines, or with bigger text its words wrapped again at the page's width, each run
+  // of lines between two titles one paragraph.
+  type Row = { id: string; item: number } | { id: string; groups: WordGroup[]; natural: number; index?: number; last?: boolean; single?: boolean };
+  const rows = useMemo<Row[]>(() => {
+    if (!measured) return [];
+    if (!flowing) return data.items.map((item, index) => ('line' in item
+      ? { id: `${index}`, groups: model.lines[index] ?? [], natural: lineWidth(measured[index]), index }
+      : { id: `${index}`, item: index }));
+    if (!body || !size) return [];
+    const out: Row[] = [];
+    let run: { group: WordGroup; width: number }[] = [];
+    const flush = () => {
+      const starts = breakLines(run.map(cell => (cell.width * size) / BASE), body.width, GAP * size);
+      starts.forEach((start, n) => {
+        const part = run.slice(start, starts[n + 1] ?? run.length);
+        out.push({ id: `f${zoom}-${out.length}`, groups: part.map(cell => cell.group), natural: lineWidth(part.map(cell => cell.width)), last: n === starts.length - 1, single: part.length === 1 });
+      });
+      run = [];
+    };
+    data.items.forEach((item, index) => {
+      if ('line' in item) {
+        (model.lines[index] ?? []).forEach((group, i) => run.push({ group, width: measured[index]?.[i] ?? 0 }));
+        return;
+      }
+      flush();
+      out.push({ id: `i${index}`, item: index });
+    });
+    flush();
+    return out;
+  }, [measured, flowing, data, model, body, size, zoom]);
+
+  // With bigger text the page runs past the screen: the row holding the ayah to keep in sight says where it is.
+  const focused = { taken: false };
+  const focusRow = useRef<ComponentRef<typeof View>>(null);
+  const findFocus = useCallback(() => {
+    focusRow.current?.measureInWindow((_x: number, y: number, _w: number, h: number) => onFocus?.(y, h));
+  }, [onFocus]);
+  useEffect(() => {
+    if (flowing && focus) findFocus();
+  }, [flowing, focus, findFocus, rows]);
 
   const first = data.items[0];
   const current = first && 'surah' in first ? first.surah : top;
@@ -180,7 +238,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       return old && old.x === x && old.y === y && old.w === w && old.h === h ? prev : { ...prev, [id]: { x, y, w, h } };
     });
   };
-  const bands = (line: number, cells: Cell[]) => {
+  const bands = (line: string, cells: Cell[]) => {
     const runs: number[][] = [];
     cells.forEach((cell, at) => {
       if (!cell.lit) return;
@@ -206,7 +264,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   let surahHere = top;
 
   return (
-    <View style={{ width, height, backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
+    <View onLayout={onHeight ? event => onHeight(page, event.nativeEvent.layout.height) : undefined}
+      style={{ width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
       {/* One height on every page, chip or not, so facing pages' frames line up. */}
       <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: small }}>الجزء {juzName(data.juz)}</Text>
@@ -220,14 +279,14 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       {/* The double rule around the text. */}
       <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule }}>
         <View style={{ flex: 1, margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
-          <Pressable {...press(null)} style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+          <Pressable {...press(null)} style={flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
                 {lineAt.map(at => {
                   const item = data.items[at];
                   return 'line' in item && (
-                    <View key={at} onLayout={measure(at)} style={{ flexDirection: 'row', alignSelf: 'flex-start', gap: GAP * BASE }}>
-                      {(model.lines[at] ?? []).map((group, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, fontSize: BASE }}>{groupText(group.word, group.marks)}</Text>)}
+                    <View key={at} style={{ flexDirection: 'row', alignSelf: 'flex-start', gap: GAP * BASE }}>
+                      {(model.lines[at] ?? []).map((group, i) => <Text key={i} onLayout={measure(at, i)} style={{ fontFamily: QURAN_FONT, fontSize: BASE }}>{groupText(group.word, group.marks)}</Text>)}
                     </View>
                   );
                 })}
@@ -240,34 +299,37 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               </Svg>
             )}
             {oval && <View style={{ height: oval.top - oneLine * 2.6 }} />}
-            {size > 0 && data.items.map((item, index) => {
-              if ('surah' in item) {
-                surahHere = item.surah;
-                const veil = surahHidden(item.surah);
-                return (
-                  <View key={index} style={{ height: oneLine * (oval ? 2.6 : 1), justifyContent: oval ? 'flex-start' : 'center' }}>
-                    <View style={{ height: oneLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
-                      <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, oneLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
+            {size > 0 && rows.map(row => {
+              if ('item' in row) {
+                const item = data.items[row.item];
+                if ('surah' in item) {
+                  surahHere = item.surah;
+                  const veil = surahHidden(item.surah);
+                  return (
+                    <View key={row.id} style={{ height: titleLine * (oval ? 2.6 : 1), justifyContent: oval ? 'flex-start' : 'center' }}>
+                      <View style={{ height: titleLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
+                        <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
+                          <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, titleLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                );
-              }
-              if ('basmala' in item) {
+                  );
+                }
                 const surah = surahHere;
                 const veil = surah !== undefined && basmalaHidden(surah);
                 return (
-                  <View key={index} style={{ height: oneLine, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size, oneLine * 0.58), color: palette.ink }, veil ? veiled : null, veil && surah !== undefined && !surahHidden(surah) && next === `${surah}:1` ? upcoming : null]}>{BASMALA}</Text>
+                  <View key={row.id} style={{ height: titleLine, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size, titleLine * 0.58), color: palette.ink }, veil ? veiled : null, veil && surah !== undefined && !surahHidden(surah) && next === `${surah}:1` ? upcoming : null]}>{BASMALA}</Text>
                   </View>
                 );
               }
-              const drawn = ((measured?.[index] ?? 0) * size) / BASE;
-              const width = oval ? oval.chords[index] : body!.width;
-              const centred = drawn < width * 0.7;
-              const scale = centred ? 1 : Math.min(STRETCH, Math.max(oval ? 0 : SQUEEZE, width / drawn));
-              const cells = (model.lines[index] ?? []).map(group => {
+              // A printed line is fitted to the page's width, squeezed or stretched a little; a flowing line spreads its
+              // words across the page's width, all but a paragraph's last line, which starts at the right.
+              const drawn = (row.natural * size) / BASE;
+              const width = oval && row.index !== undefined ? oval.chords[row.index] : body!.width;
+              const centred = flowing ? !!row.last && !row.single : drawn < width * 0.7;
+              const scale = flowing ? Math.min(1, width / drawn) : centred ? 1 : Math.min(STRETCH, Math.max(oval ? 0 : SQUEEZE, width / drawn));
+              const cells = row.groups.map(group => {
                 const key = `${group.surah}:${group.ayah}`;
                 const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                 const wordHidden = !!hidden?.(key, word);
@@ -276,12 +338,14 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 return { group, key, wordHidden, rel, at, lit: !wordHidden && !!forgot[key] };
               });
+              const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
               return (
-                <View key={index} style={{ height: oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: centred || oval ? 'center' : 'flex-start' }}>
+                <View key={row.id} ref={holdsFocus ? focusRow : undefined} onLayout={holdsFocus ? findFocus : undefined}
+                  style={{ height: flowing ? size * FLOW_LINE : oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: (centred && !flowing) || oval || (flowing && opening) ? 'center' : 'flex-start' }}>
                   <View style={centred
                     ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
-                    {bands(index, cells)}
+                    {bands(row.id, cells)}
                     {cells.map(({ group, key, wordHidden, rel, at: wordAt, lit }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                       const marked = mark === key;
@@ -290,7 +354,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
-                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={lit ? place(`${index}:${at}`) : undefined}>
+                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={lit ? place(`${row.id}:${at}`) : undefined}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
