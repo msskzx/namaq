@@ -9,7 +9,12 @@ export const PREVIEW_MAX = 10;
 
 /** The trees that hold an ayah, as the branches list narrowed to it shows them, first few only. */
 export function treesOfAyah(key: string) {
-  return branchList({ ...EMPTY_LIST, ayah: key }).slice(0, PREVIEW_MAX).map(piece => cardOf(piece));
+  return treePiecesOfAyah(key).map(piece => cardOf(piece));
+}
+
+/** The same trees as the branches pager takes them. */
+export function treePiecesOfAyah(key: string) {
+  return branchList({ ...EMPTY_LIST, ayah: key }).slice(0, PREVIEW_MAX);
 }
 
 /**

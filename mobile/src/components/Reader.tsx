@@ -290,7 +290,8 @@ export default function Reader() {
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
     // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
-    if (mode === 'read') setMark(key ? { key, page: shown.current } : null);
+    // A second tap on the marked ayah lets it go (owner, 2026-11-14); a long press keeps it marked.
+    if (mode === 'read') setMark(current => (key && !(touch === 'tap' && current?.key === key) ? { key, page: shown.current } : null));
     const set = readGestures()[mode];
     if (touch === 'long') { latest.current(set.long, key, x, y, word); return; }
     if (pending.current) {

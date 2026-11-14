@@ -137,7 +137,13 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
    * The pager embedded in another page (the home feed's tree card): it keeps no place or zoom for the branches tab, has no
    * studio, lets vertical drags on an unzoomed tree scroll the page, and `open` takes the tree to the branches tab.
    */
-  embedded?: { open: (piece: BranchPiece) => void } };
+  embedded?: {
+    open: (piece: BranchPiece) => void;
+    /** Off when the pager does not sit in a page that scrolls (the reader's trees sheet): every drag moves the tree. */
+    inScroll?: boolean;
+    /** An ayah whose path opens lit on every tree (the reader's ayah). */
+    lit?: string;
+  } };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
 export default function TreePager({ pieces, list, palette, mode: defaultMode, around: defaultAround, start, onIndex, onPull, onOpen, embedded }: Props) {
@@ -350,7 +356,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded} fixed={!embedded} />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed={!embedded} lit={embedded?.lit ? [embedded.lit] : undefined} />}
             </View>
             );
           })}

@@ -62,6 +62,8 @@ type Props = {
    * fixed places under it, so zooming or lighting a path moves nothing but the tree.
    */
   fixed?: boolean;
+  /** Ayat whose paths open lit, as a search lights them (the reader's ayah in its trees sheet). */
+  lit?: string[];
 };
 
 /** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
@@ -74,12 +76,12 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false, lit }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
   const [pinned, setPinned] = useState(() => {
-    const found = searchLit(card.presentation, list.query);
+    const found = lit?.length ? lit : searchLit(card.presentation, list.query);
     return new Map<string, string[]>(found.length ? [['search', found]] : []);
   });
   const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
