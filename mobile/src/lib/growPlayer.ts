@@ -22,12 +22,14 @@ export type Growth = Prefs & {
   ask?: { id: string; left: number; seconds: number };
   /** The ayah whose path is lit. */
   lit: string | null;
+  /** Once the tree has grown: each ayah's path is lit in turn and its ayah read in full. */
+  tour: boolean;
   /** What the studio grows: a tree, or a matrix's word connections. */
   kind: 'tree' | 'matrix';
 };
 
 const NONE = new Set<string>();
-let state: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: NONE, now: NONE, lit: null, kind: 'tree' };
+let state: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: NONE, now: NONE, lit: null, tour: false, kind: 'tree' };
 const listeners = new Set<() => void>();
 const set = (next: Partial<Growth>) => {
   state = { ...state, ...next };
@@ -119,9 +121,9 @@ export async function play(from = 0, { video = false } = {}) {
   const first = beats.findIndex(beat => beat.step >= from);
   const hidden = new Set(all);
   beats.slice(0, Math.max(0, first)).forEach(beat => beat.reveal.forEach(id => hidden.delete(id)));
-  set({ status: 'playing', at: from, hidden, now: NONE, ask: undefined, lit: null });
+  set({ status: 'playing', at: from, hidden, now: NONE, ask: undefined, lit: null, tour: false });
   for (const beat of beats.slice(Math.max(0, first))) {
-    set({ at: beat.step, lit: beat.key });
+    set({ at: beat.step, lit: beat.key, tour: !!beat.path });
     if (beat.ask) {
       const seconds = state.timer || (video ? TIMERS[0] : 0);
       set({ ask: { id: beat.ask, left: 1, seconds }, now: NONE });
@@ -136,7 +138,7 @@ export async function play(from = 0, { video = false } = {}) {
     if (!(await wait(beat.ms / state.speed, token))) return;
     if (!beat.reveal.length && !beat.now.length) set({ now: NONE });
   }
-  set({ status: 'done', at: totalOf(beats), hidden: NONE, now: NONE, lit: null });
+  set({ status: 'done', at: totalOf(beats), hidden: NONE, now: NONE, lit: null, tour: false });
 }
 
 /** A tap on the box waiting for an answer shows it. */
@@ -151,7 +153,7 @@ export function stop() {
   run++;
   clearTimeout(timer);
   reveal = null;
-  set({ status: 'idle', at: 0, hidden: NONE, now: NONE, ask: undefined, lit: null });
+  set({ status: 'idle', at: 0, hidden: NONE, now: NONE, ask: undefined, lit: null, tour: false });
 }
 
 /** Opens the card's studio: its controls show, the tree waits for play. */

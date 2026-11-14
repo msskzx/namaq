@@ -26,7 +26,7 @@ export type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin: (id:
 export type NodeActions = { onSubtree: (piece: BranchPiece) => void };
 export type Direction = 'side' | 'down';
 /** What a growing tree hides and lights; empty when nothing grows. */
-export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null };
+export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null; tour?: boolean };
 const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */

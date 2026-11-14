@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, type LayoutChangeEvent } from 'react-native';
+import { ScrollView, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -56,7 +56,15 @@ type Props = {
   alongside?: GestureType;
   /** Inside a page that scrolls up and down (the home feed): an unzoomed tree takes only sideways drags, so the page still scrolls. */
   inScroll?: boolean;
+  /**
+   * A fixed frame (owner, 2026-11-14): the tree fits a box that never changes size, the buttons, chips and ayah card sit at
+   * fixed places under it, so zooming or lighting a path moves nothing but the tree.
+   */
+  fixed?: boolean;
 };
+
+/** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
+export const AYAH_SPACE = 132;
 
 const BIG = 20000;
 const PULL = 70;
@@ -64,7 +72,7 @@ const PULL_FLICK = 600;
 const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
-export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false }: Props) {
+export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false }: Props) {
   // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
   // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
@@ -79,10 +87,14 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     return card.presentation.ayat.map(ayah => ayah.key).filter(key => lit.has(key));
   }, [pinned, card]);
   const ayahKeys = useMemo(() => card.presentation.ayat.map(ayah => ayah.key), [card]);
-  const showChips = chips && !growth;
-  const footHeight = rowHeight + (showChips ? CHIPS_HEIGHT - TUCK : 0);
+  // In the studio the chips and the ayah card show once the tree has grown, for the ayah whose path is lit.
+  const touring = !!growth?.tour && !!growth.lit;
+  const showChips = chips && (!growth || touring);
+  // The fixed frame keeps the chips' whole row, since the studio's bar has no room for them to rise into.
+  const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
-  const strip = tappedKeys.length && !growth ? stripHeight : 0;
+  const readKeys = growth ? (touring ? [growth.lit!] : []) : tappedKeys;
+  const strip = fixed ? AYAH_SPACE : readKeys.length ? stripHeight : 0;
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -206,17 +218,30 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     transform: [{ translateX: camera.value.x }, { translateY: camera.value.y }, { scale: camera.value.s }],
   }));
 
+  // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
+  const ayahCard = fixed && (
+    <ScrollView style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight, height: AYAH_SPACE, direction: 'ltr', opacity: content ? 1 : 0 }}
+      contentContainerStyle={{ paddingTop: 18 }} showsVerticalScrollIndicator={false}>
+      <PathAyat ayahKeys={readKeys} palette={palette} />
+    </ScrollView>
+  );
   return (
+    <View style={{ width: full.width, height: full.height }}>
     <GestureDetector gesture={gesture}>
       <View collapsable={false} style={{ width: full.width, height: full.height, overflow: 'hidden', direction: 'ltr' }} onStartShouldSetResponder={() => true} onResponderRelease={() => onTap(null)}>
+        <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, top: 0, width: full.width, height: fixed ? view.height : full.height, overflow: 'hidden' }}>
         <Animated.View pointerEvents="box-none" style={[{ position: 'absolute', left: 0, top: 0, width: BIG, height: BIG, alignItems: 'flex-start', transformOrigin: 'left top', opacity: content ? 1 : 0 }, style]}>
           <BranchTree key={direction} presentation={card.presentation} matches={card.matches} names={surahNames} palette={palette} onTap={onTap} onLayout={measured} paths={paths} actions={actions}
             direction={direction} around={surrounding} growth={growth} sceneRef={sceneRef} />
         </Animated.View>
-        {(footer || showChips || tappedKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, foot]}>
+        </View>
+        {(footer || showChips || readKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, fixed ? { transform: [{ translateY: view.height }] } : foot]}>
           {footer && <View style={{ height: rowHeight }}>{footer}</View>}
-          {showChips && <SurahChips tuck ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />}
-          {!growth && <PathAyat ayahKeys={tappedKeys} palette={palette} onLayout={setStripHeight} />}
+          {showChips && (growth
+            ? <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
+            : <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
+          {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
+          {!fixed && <PathAyat ayahKeys={readKeys} palette={palette} onLayout={setStripHeight} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
@@ -225,5 +250,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
         ))}
       </View>
     </GestureDetector>
+    {ayahCard}
+    </View>
   );
 }

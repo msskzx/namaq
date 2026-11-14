@@ -22,13 +22,17 @@ export function nodeIndices(tree: Branch) {
 }
 
 /** One beat of a growing tree: what it reveals, what it lights as just drawn, how long it lasts at 1×; an ask beat waits for the answer. */
-export type Beat = { step: number; key: string; ms: number; reveal: string[]; now: string[]; ask?: string };
+export type Beat = { step: number; key: string; ms: number; reveal: string[]; now: string[]; ask?: string;
+  /** After the tree has grown: the ayah's path lit on its own, with its ayah read in full. */
+  path?: boolean };
 
 // Milliseconds at 1×, as on the website: a connector, a box fading in, a box an earlier ayah drew lighting again, the pause at an ayah's end.
 export const LINE = 200;
 export const BOX = 300;
 export const RELIGHT = 140;
 export const LEAF = 700;
+/** How long each ayah's path stays lit once the tree has grown. */
+export const PATH = 2500;
 
 /** The boxes drawn before the root for each ayah: words before the phrase, and the ayat before it with the surrounding switch. */
 export type Starts = { id: string; keys: string[] }[];
@@ -39,7 +43,9 @@ export type Afters = Record<string, string>;
  * The website's growth (Grow.tsx) as data: each ayah walks from the root to its end, reusing what earlier ayat drew
  * and growing its own branch from where it splits. In ask mode the first new box of each ayah waits, empty, for the answer.
  */
-export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = false, prefixes = [] }: { starts?: Starts; afters?: Afters; ask?: boolean; prefixes?: Variant[] } = {}): Beat[] {
+export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = false, prefixes = [], paths = false }: { starts?: Starts; afters?: Afters; ask?: boolean; prefixes?: Variant[];
+  /** Ends by lighting each ayah's path in turn, in the order the ayat grew. */
+  paths?: boolean } = {}): Beat[] {
   const plan = growthPlan(tree, prefixes.map(prefix => prefix.keys));
   const beats: Beat[] = [];
   const shown = new Set<string>();
@@ -64,6 +70,7 @@ export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = fals
     if (after && !shown.has(after)) { beat(LINE, [lineId(after)]); beat(BOX, [after], [after]); }
     beat(LEAF, []);
   });
+  if (paths) plan.forEach(step => beats.push({ step: plan.length - 1, key: step.key, ms: PATH, reveal: [], now: [], path: true }));
   return beats;
 }
 
