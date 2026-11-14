@@ -13,6 +13,7 @@ implication: "A drawing that copies a screen (a video, an image, a widget) takes
 date: "2026-11-14"
 topics: ["ui-state","graph-ui"]
 buildsOn: ["namaq/0031-a-card-that-redraws-a-feature-loses-its-behaviour"]
+variantOf: ["namaq/0036-a-video-that-copies-the-app-drifts-from-it"]
 ---
 
 The video's canvas cannot hold React Native views, so "reuse the component" here

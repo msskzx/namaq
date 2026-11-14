@@ -11,7 +11,7 @@ conditions: "Expo app, canvas recorder in a WebView, 2026-11-14. Recording the r
 evidence: "mobile/src/components/BranchTree.tsx usePart and measureScene; mobile/src/lib/scene.ts drawText, strokeEdge, layout; e2e/app/quran.spec.ts 'the tree video draws each box from where the app laid out its labels and words'"
 implication: "When a video or image redraws an app screen, feed it the app's measured layout rather than copied numbers, and when you change the look of a tree, card or chip, check the video frame beside the app screen."
 date: "2026-11-14"
-topics: ["video", "ui-consistency"]
+topics: ["video","ui-consistency"]
 buildsOn: []
 ---
 
