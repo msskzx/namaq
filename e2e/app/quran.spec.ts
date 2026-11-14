@@ -137,6 +137,11 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'سورة الحجر' }).click();
     await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible();
     expect(await save.boundingBox()).toEqual(before);
+    // The surah's name comes first, on the right, then «الآيات …».
+    const label = page.getByText('الآيات ٤٥–٤٦', { exact: true });
+    const name = label.locator('xpath=preceding-sibling::*[1]');
+    await expect(name).toHaveText('الحجر');
+    expect((await name.boundingBox())!.x).toBeGreaterThan((await label.boundingBox())!.x);
   });
 });
 
