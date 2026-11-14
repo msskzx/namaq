@@ -57,7 +57,7 @@ function fitOpening(body: HTMLElement, natural: number[], lines: HTMLElement[]) 
 export const MAX_TEXT_SIZE = 2.2;
 export const settleTextSize = (size: number) => (size < 1.1 ? 1 : Math.min(MAX_TEXT_SIZE, Math.round(size * 20) / 20));
 
-function fit(body: HTMLElement, centred: boolean, zoom: number) {
+function fit(body: HTMLElement, centred: boolean, zoom: number, sliced = false) {
   body.style.fontSize = '100px';
   body.style.removeProperty('--oval');
   const lines = [...body.querySelectorAll<HTMLElement>('[data-line]')];
@@ -75,13 +75,16 @@ function fit(body: HTMLElement, centred: boolean, zoom: number) {
     const words = [...line.children] as HTMLElement[];
     return Math.max(1, words.reduce((sum, word) => sum + word.offsetWidth, 0) + (words.length - 1) * GAP * 100);
   });
-  body.style.setProperty('--one-line', `${body.clientHeight / 15}px`);
+  if (!sliced) body.style.setProperty('--one-line', `${body.clientHeight / 15}px`);
   if (centred) return fitOpening(body, natural, lines);
   const width = body.clientWidth;
   const sorted = [...natural].sort((a, b) => a - b);
   const typical = sorted[Math.floor(sorted.length * 0.6)] ?? 1;
-  const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), (body.clientHeight / Math.max(1, body.children.length)) * 0.72));
+  // A slice has no page height to fit: its lines take the width, each as tall as a printed line of that size.
+  const tall = sliced ? Infinity : (body.clientHeight / Math.max(1, body.children.length)) * 0.72;
+  const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), tall));
   body.style.fontSize = `${size}px`;
+  if (sliced) body.style.setProperty('--one-line', `${size * 1.9}px`);
   lines.forEach((line, at) => {
     const drawn = (natural[at] * size) / 100;
     const centre = centred || drawn < width * 0.7;
@@ -120,7 +123,6 @@ export function WrittenWord({ word, right, mistyped }: { word: string; right: bo
 }
 
 /** A hidden word that is not written, beside the write boxes: a faint dashed box its width. */
-export const FaintWord = ({ word }: { word: string }) => <span className={`${styles.veiled} ${styles.faint}`}>{word}</span>;
 
 export default function MushafPage({
   page,
@@ -136,6 +138,7 @@ export default function MushafPage({
   write,
   checked,
   zoom = 1,
+  slice,
 }: {
   page: number;
   data: MushafPageData;
@@ -157,6 +160,8 @@ export default function MushafPage({
   checked?: Checked | null;
   /** The text size: 1 is the printed page; bigger wraps the words at the page's width and the page runs as long as they need. */
   zoom?: number;
+  /** Only these rows (item indexes, both ends kept), sized by the page's width: a few lines around an ayah, as the home recall card shows them. */
+  slice?: { from: number; to: number };
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -176,32 +181,15 @@ export default function MushafPage({
   useLayoutEffect(() => {
     const element = body.current;
     if (!element) return;
-    const run = () => fit(element, page <= 2, zoom);
+    const run = () => fit(element, page <= 2 && !slice, zoom, !!slice);
     run();
     document.fonts?.ready.then(run);
     const observer = new ResizeObserver(run);
     observer.observe(element);
     return () => observer.disconnect();
-  }, [page, data, zoom]);
+  }, [page, data, zoom, slice]);
   const flow = zoom > 1;
-  return (
-    <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
-      <div className={styles.head}>
-        <span>الجزء {juzName(data.juz)}</span>
-        {badges.some(list => list.length > 0) && (
-          <div className={styles.strip}>
-            {badges.flat().map(label => (
-              <span key={label.join()} className={`${styles.badge} ${label[0] === 'سجدة' ? styles.sajda : ''}`}>
-                {label.join(' ')}
-              </span>
-            ))}
-          </div>
-        )}
-        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
-      </div>
-      <div className={styles.frame}>
-        <div ref={body} className={`${styles.body} ${page <= 2 && !flow ? styles.opening : ''}`} style={flow ? undefined : { gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
-          {data.items.map((item, index) => (
+  const rows = data.items.map((item, index) => (slice && (index < slice.from || index > slice.to) ? null :
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
                 <h2 className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
@@ -257,7 +245,27 @@ export default function MushafPage({
                 </span>
               ))}
             </div>
-          ))}
+          ));
+  // A slice: only these rows, sized by the page's width, with no frame, header or page number.
+  if (slice) return <div ref={body} className={`${styles.body} ${styles.slice}`}>{rows}</div>;
+  return (
+    <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
+      <div className={styles.head}>
+        <span>الجزء {juzName(data.juz)}</span>
+        {badges.some(list => list.length > 0) && (
+          <div className={styles.strip}>
+            {badges.flat().map(label => (
+              <span key={label.join()} className={`${styles.badge} ${label[0] === 'سجدة' ? styles.sajda : ''}`}>
+                {label.join(' ')}
+              </span>
+            ))}
+          </div>
+        )}
+        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
+      </div>
+      <div className={styles.frame}>
+        <div ref={body} className={`${styles.body} ${page <= 2 && !flow ? styles.opening : ''}`} style={flow ? undefined : { gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
+          {rows}
         </div>
         <div className={styles.foot}>{num(page)}</div>
       </div>

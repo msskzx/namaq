@@ -76,6 +76,10 @@
 
 .row { position: relative; min-width: 0; }
 
+/* A few rows of a page (MushafPage `slice`): each row one printed line tall, at the size the width gives. */
+.slice { flex: none; grid-auto-rows: var(--one-line, 2.2em); }
+.slice .titleRow { height: var(--one-line, 2.2em); }
+
 .line {
   display: flex;
   justify-content: space-between;

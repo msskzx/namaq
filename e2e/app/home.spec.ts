@@ -92,6 +92,7 @@ test.describe('a returning user', () => {
   test('the recall card takes typed words in the write boxes and grades them', async ({ page }) => {
     await open(page, '/');
     const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
+    await expect(boxes.first()).toBeVisible();
     const count = await boxes.count();
     expect(count).toBeGreaterThan(0);
     await boxes.first().click();

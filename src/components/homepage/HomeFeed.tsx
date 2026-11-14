@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, LightbulbOff, GalleryHorizontal, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, Eye, EyeOff, LightbulbOff, GalleryHorizontal, Moon, NotebookPen, ScrollText } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -12,7 +12,6 @@ import BranchTree from '@/app/quran/branches/BranchTree';
 import AyahCards from '@/app/quran/branches/AyahCards';
 import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
-import { FaintWord, WriteBox, WrittenWord } from '@/app/quran/read/MushafPage';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
@@ -26,7 +25,7 @@ import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, newVisit, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -34,7 +33,8 @@ import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
 import surahRows from '@shared/data/quran/surahs.json';
-import { reviewHref, useAyahTexts } from './HomeCards';
+import { reviewHref } from './HomeCards';
+import AyahLines, { useAyahPage } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 
@@ -155,10 +155,9 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
   useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
-  const text = useAyahTexts([ayah])[ayah];
-  const words = useMemo(() => (text ? text.split(' ') : []), [text]);
-  const asked = useMemo(() => wordTargets(words), [words]);
-  const boxes = useWriteBoxes({ ayah: text ? ayah : null, words, asked, onDone: result => {
+  const { pages, words } = useAyahPage(ayah);
+  const asked = useMemo(() => wordTargets(words ?? []), [words]);
+  const boxes = useWriteBoxes({ ayah: words ? ayah : null, words: words ?? [], asked, onDone: result => {
     setGraded(result);
     if (result.wrong.length) markForgotten(ayah);
   } });
@@ -167,24 +166,35 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   const open = shown || !!graded;
   return <article className={styles.post} dir="rtl">
     <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${names[surah]} ${num(number)}`} />
-    <p className={styles.recall} lang="ar">
-      {!text && <LoadingDots label="جارٍ التحميل" />}
-      {words.map((word, i) => <Fragment key={i}>{i ? ' ' : ''}{open
-        ? <WrittenWord word={mushafText(word)} right={!!graded?.right.includes(i)} mistyped={graded?.wrong.includes(i) ? graded.typed[i] ?? '' : undefined} />
-        : asked.includes(i)
-          ? <WriteBox word={mushafText(word)} typed={boxes.typed[i] ?? ''} active={boxes.current === i} onPick={() => boxes.pick(i)} />
-          : <FaintWord word={mushafText(word)} />}</Fragment>)}
-    </p>
-    {text && !open && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
+    <div className={styles.recall}>
+      {!pages && <LoadingDots label="جارٍ التحميل" />}
+      {pages && <AyahLines ayah={ayah} pages={pages} shown={open} checked={graded ? { key: ayah, ...graded } : null}
+        write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />}
+    </div>
+    {words && !open && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
     <div className={styles.recallActions}>
       {!graded && <button type="button" className={styles.pill} onClick={() => setShown(value => !value)}>{shown ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}{shown ? 'أخفها' : 'أظهرها'}</button>}
       <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }}><Check size={18} aria-hidden />تذكّرتها</button>
       {!review && <button type="button" className={styles.pill} onClick={() => { recalled.add(ayah); markForgotten(ayah); }}><LightbulbOff size={18} aria-hidden />نسيتها</button>}
       <span className="flex-1" />
-      {review && <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>}
+      <QuizActions review={review} />
       <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
     </div>
   </article>;
+}
+
+/**
+ * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
+ * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ */
+export function QuizActions({ review }: { review?: string }) {
+  return <>
+    <Button size="lg" variant="muted" href="/quizzes" aria-label="اختبار فردي" title="اختبار فردي"><Feather aria-hidden /></Button>
+    <Button size="lg" variant="muted" href="/quizzes/party" aria-label="اختبار جماعي" title="اختبار جماعي"><Users aria-hidden /></Button>
+    {review
+      ? <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>
+      : <Button size="lg" variant="muted" href="/quran/read/recite" aria-label="تسميع" title="تسميع"><EyeOff aria-hidden /></Button>}
+  </>;
 }
 
 type Tree = TreePreview & { text: string };
@@ -229,10 +239,6 @@ export function Feed() {
   // «More» counts per visit, so a new visit starts again at one batch in the same render that picks it.
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
-  // A reload, which is a phone browser's pull to refresh, starts a new visit: the feed shows what was not seen yet.
-  useEffect(() => {
-    if ((performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload') newVisit();
-  }, []);
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];

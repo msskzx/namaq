@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, LightbulbOff, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
@@ -24,11 +24,11 @@ import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
-import { Mistyped, Veil, WriteBox } from './MushafPageView';
+import AyahLines, { pageWords } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
-import { ayahText, pageData, PAGES, surahBefore } from '@/lib/mushaf';
+import { pageData, PAGES, surahBefore } from '@/lib/mushaf';
 import { readJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
 import { around as aroundSetting, branchView } from '@/lib/settings';
@@ -193,11 +193,11 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
 /** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until tomorrow. */
 const recalled = new Set<string>();
 /** The recall card's letter size: the mushaf's write boxes at a card's size. */
-const RECALL_SIZE = 21;
 
 /**
- * An ayah to recall, asked as the reader's write mode asks it: its words hidden, its first and last words as write boxes
- * (the same boxes, keyboard rules and grading, lib/useWriteBoxes). The last box shows the ayah with the written words
+ * An ayah to recall, asked as the reader's write mode asks it, in the mushaf's own lines (AyahLines, owner 2026-11-14): what
+ * comes before it shows, its words are hidden in their places, its first and last words are write boxes (the same boxes,
+ * keyboard rules and grading, lib/useWriteBoxes). The last box shows the ayah with the written words
  * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
  * review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
  */
@@ -206,7 +206,7 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
   useEffect(() => { setShown(false); setGraded(null); }, [ayah]);
-  const words = useMemo(() => ayahText(ayah).split(' ').filter(Boolean), [ayah]);
+  const words = useMemo(() => pageWords(ayah), [ayah]);
   const asked = useMemo(() => wordTargets(words), [words]);
   const boxes = useWriteBoxes({ ayah, words, asked, onDone: result => {
     setGraded(result);
@@ -218,21 +218,9 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   return (
     <View style={cardStyle(palette)}>
       <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
-      <View style={{ paddingHorizontal: 12, paddingTop: 10, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6, rowGap: 14 }}>
-        {words.map((word, i) => {
-          if (open) {
-            const color = graded?.right.includes(i) ? palette.green : graded?.wrong.includes(i) ? palette.amber : palette.ink;
-            return (
-              <View key={i}>
-                {graded?.wrong.includes(i) && graded.typed[i] ? <Mistyped text={graded.typed[i]} size={RECALL_SIZE} palette={palette} /> : null}
-                <Text style={{ fontFamily: QURAN_FONT, fontSize: RECALL_SIZE, lineHeight: 40, color }}>{word}</Text>
-              </View>
-            );
-          }
-          return asked.includes(i)
-            ? <WriteBox key={i} text={word} size={RECALL_SIZE} palette={palette} typed={boxes.typed[i] ?? ''} active={boxes.current === i} onPress={() => boxes.pick(i)} />
-            : <Veil key={i} text={word} size={RECALL_SIZE} palette={palette} next={false} faint />;
-        })}
+      <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
+        <AyahLines ayah={ayah} palette={palette} shown={open} checked={graded ? { key: ayah, ...graded } : null}
+          write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />
         {!open && boxes.field}
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
@@ -252,10 +240,24 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
           <Text style={{ color: palette.ink, fontSize: 16 }}>نسيتها</Text>
         </Pressable>}
         <View style={{ flex: 1 }} />
-        {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
+        <QuizActions review={review} palette={palette} />
         <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
       </View>
     </View>
+  );
+}
+
+/**
+ * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
+ * and recite (or, for a forgotten ayah that is due, the review of the forgotten ones).
+ */
+export function QuizActions({ review, palette }: { review?: () => void; palette: Palette }) {
+  return (
+    <>
+      <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
+      <Action Icon={Users} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
+      {review ? <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} /> : <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
+    </>
   );
 }
 

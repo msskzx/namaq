@@ -25,11 +25,21 @@ const data = {
 const side = (surah: number, number: number, words: string[]) => ({ surah, ayah: number, ayat: [{ number, words, marks: { 0: { kind: 'exact' as const } } }] });
 const pairs = [{ id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] }, { id: '2:48|2:123', sides: [side(2, 48, ['واتقوا', 'يوما']), side(3, 9, ['ربنا', 'إنك'])] }];
 const fetched: string[] = [];
+// The recall card's page (?ayah=): one made-up line holding the ayah before and the ayah, or its surah's title then the ayah.
+const ayahWordsOf: Record<string, string[]> = { '2:255': ['الله', 'لا', 'إله', 'إلا', 'هو'] };
+const ayahPage = (key: string) => {
+  const [surah, ayah] = key.split(':').map(Number);
+  const words = ayahWordsOf[key] ?? ['أول', 'ثاني', 'ثالث', 'رابع'];
+  const items = ayah === 1 ? [{ surah }, { line: [...words, 1] }] : [{ line: ['قبل', ayah - 1, ...words, ayah] }];
+  return { page: 2, top: surah, data: { juz: 1, items }, previous: null };
+};
+vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
 // The feed's API (src/app/api/home/feed/route.ts): two pairs and no trees, and page slices.
 const fetchMock = vi.fn(async (url: string) => {
   fetched.push(url);
   const query = new URL(url, 'http://localhost').searchParams;
   const body = query.has('page') ? { surah: 18, words: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }
+    : query.has('ayah') ? ayahPage(query.get('ayah')!)
     : query.has('p') || query.has('t') ? { pairs: (query.get('p') ?? '').split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
     : { pairs: pairs.map(pair => pair.id), trees: [null, null], pairKeys: pairs.map(pair => pair.sides.map(side => `${side.surah}:${side.ayah}`)), treeKeys: [[], []] };
   return { ok: true, json: async () => body } as Response;
@@ -129,7 +139,6 @@ describe('home', () => {
   });
 
   it('asks to recall a due forgotten ayah in the reader\'s write boxes, grades what is typed, and remembered takes it away', async () => {
-    quranContexts.mockResolvedValue([{ ayah: { key: '2:255', words: ['الله', 'لا', 'إله', 'إلا', 'هو'] } }]);
     localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
     render(<Homepage data={data} />);
     const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
@@ -163,7 +172,6 @@ describe('home', () => {
   });
 
   it('asks about an ayah of the day from what is memorized when nothing forgotten is due, with «نسيتها»', async () => {
-    quranContexts.mockImplementation(async (keys: string[]) => keys.map(key => ({ ayah: { key, words: ['أول', 'ثاني', 'ثالث', 'رابع'] } })));
     localStorage.setItem('memorized', JSON.stringify({ unit: 'surah', picked: [1] }));
     render(<Homepage data={data} />);
     expect(screen.queryByRole('region', { name: 'ما الذي تحفظه؟' })).toBeNull();

@@ -10,7 +10,7 @@ import { MemorizedPrompt } from './Memorized';
 /**
  * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. Story circles, the page the
  * mushaf was left on, then a feed that loads more as it nears its end (owner, 2026-11-14: no tools below; prayer times live on the
- * utilities page, saved cards behind their story circle). A reload, as a phone browser's pull to refresh, starts a new visit.
+ * utilities page, saved cards behind their story circle). A reload (a phone browser's pull to refresh) starts a new visit, as every page load does (shared/feedSeen.ts).
  */
 export default function Homepage({ data }: { data: HomepageData }) {
   const { ar, names } = useHomeCards(data, 0);

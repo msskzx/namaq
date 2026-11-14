@@ -26,26 +26,32 @@ export default function HomeScreen() {
   // Near the end of the feed: ask it for the next batch, once for each new length of the page.
   const [nearEnd, setNearEnd] = useState(0);
   const askedAt = useRef(0);
+  const seenTo = useRef({ y: 0, height: 0 });
+  const check = (contentHeight: number) => {
+    if (contentHeight !== askedAt.current && seenTo.current.height + seenTo.current.y > contentHeight - NEAR_END) {
+      askedAt.current = contentHeight;
+      setNearEnd(n => n + 1);
+    }
+  };
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-    if (contentSize.height !== askedAt.current && layoutMeasurement.height + contentOffset.y > contentSize.height - NEAR_END) {
-      askedAt.current = contentSize.height;
-      setNearEnd(n => n + 1);
-    }
+    seenTo.current = { y: contentOffset.y, height: layoutMeasurement.height };
+    check(contentSize.height);
   };
   const bottom = useTabBarSpace();
   const [seen, setSeen] = tourSeen.use();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   // Pulled down at the top, as in a social app: a new visit, so the feed shows what was not seen yet.
   const [refreshing, setRefreshing] = useState(false);
-  const refresh = () => { setRefreshing(true); newVisit(); setTimeout(() => setRefreshing(false), 400); };
+  const refresh = () => { setRefreshing(true); askedAt.current = 0; newVisit(); setTimeout(() => setRefreshing(false), 400); };
   // The home button tapped again: back to the top.
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings search={() => toTab('/search')} hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets
+      <ScrollView ref={scroll} onScroll={onScroll} onLayout={event => { seenTo.current.height = event.nativeEvent.layout.height; }}
+        onContentSizeChange={(_w, h) => check(h)} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={palette.accent} colors={[palette.accent]} progressBackgroundColor={palette.card} />}
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <Stories palette={palette} />
