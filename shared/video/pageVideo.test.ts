@@ -1,25 +1,24 @@
 import { describe, expect, it } from 'vitest';
-import { clock, END_MS, HOLD_MS, PART_LIMIT_MS, partLengths, segmentAt, SLIDE_MS, stepEnds, TITLE_MS, videoLength, videoParts, videoTimeline } from './pageVideo';
+import { clock, END_MS, HOLD_MS, PART_LIMIT_MS, partLengths, segmentAt, SLIDE_MS, stepEnds, videoLength, videoParts, videoTimeline } from './pageVideo';
 
 const card = (seconds: number) => [seconds * 1000];
 
 describe('the page video', () => {
-  it('opens on the title, reads each card, slides between them and ends on the link', () => {
+  it('reads each card, slides between them and ends on the emblem, with no title frame first', () => {
     const segments = videoTimeline([card(10), card(20)]);
-    expect(segments.map(segment => segment.kind)).toEqual(['title', 'card', 'slide', 'card', 'end']);
-    expect(videoLength(segments)).toBe(TITLE_MS + 10_000 + HOLD_MS + SLIDE_MS + 20_000 + HOLD_MS + END_MS);
+    expect(segments.map(segment => segment.kind)).toEqual(['card', 'slide', 'card', 'end']);
+    expect(videoLength(segments)).toBe(10_000 + HOLD_MS + SLIDE_MS + 20_000 + HOLD_MS + END_MS);
     segments.slice(1).forEach((segment, i) => expect(segment.start).toBe(segments[i].end));
   });
 
-  it("keeps a single card's video as before: the card alone", () => {
-    const segments = videoTimeline([card(10)], false);
-    expect(segments).toEqual([{ kind: 'card', card: 0, ends: [10_000], start: 0, end: 10_000 + HOLD_MS }]);
+  it("ends a single card's video on the emblem too", () => {
+    const segments = videoTimeline([card(10)]);
+    expect(segments).toEqual([{ kind: 'card', card: 0, ends: [10_000], start: 0, end: 10_000 + HOLD_MS }, { kind: 'end', start: 10_000 + HOLD_MS, end: 10_000 + HOLD_MS + END_MS }]);
   });
 
   it('finds the segment playing at a time', () => {
     const segments = videoTimeline([card(10), card(20)]);
-    expect(segmentAt(segments, 0).segment.kind).toBe('title');
-    expect(segmentAt(segments, TITLE_MS + 500)).toMatchObject({ segment: { kind: 'card', card: 0 }, local: 500 });
+    expect(segmentAt(segments, 500)).toMatchObject({ segment: { kind: 'card', card: 0 }, local: 500 });
     expect(segmentAt(segments, 10 ** 9).segment.kind).toBe('end');
   });
 

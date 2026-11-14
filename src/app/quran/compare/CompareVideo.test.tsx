@@ -10,6 +10,7 @@ import type { CardSide, PairCard } from './pairCards';
 const side = (surah: number, ayah: number, words: string[]): CardSide => ({ surah, ayah, ayat: [{ number: ayah, words, marks: { 0: { kind: 'exact', link: '0' } } }] });
 const card = (id: string, ayah: number, length: number): PairCard => ({ id, sides: [side(2, ayah, Array(length).fill('قال')), side(7, ayah, Array(length).fill('قال'))] });
 const label = (s: CardSide) => `${s.surah}:${s.ayah}`;
+const names = { side: (name: { surah: number; numbers: number[] }) => `${name.surah}:${name.numbers[0]}`, silent: () => '' };
 
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) { this.open = true; });
@@ -17,7 +18,7 @@ beforeEach(() => {
 });
 afterEach(cleanup);
 
-const open = (cards: PairCard[]) => render(<PageVideo cards={cards} title="البقرة والأعراف" label={label} ar onClose={() => {}} />);
+const open = (cards: PairCard[]) => render(<PageVideo cards={cards} title="البقرة والأعراف" label={label} names={names} ar onClose={() => {}} />);
 
 describe('the page video', () => {
   it('lists every card ticked, and unticking leaves a card out', () => {
@@ -34,7 +35,7 @@ describe('the page video', () => {
     expect((screen.getByRole('button', { name: 'مشاركة كفيديو' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
-  it('splits a long page into parts and records the first with the title and end frames', () => {
+  it('splits a long page into parts and records the first with no title frame and the emblem only at the end', () => {
     // About 80 seconds a card at 1×: six cards don't fit in 3 minutes.
     open(Array.from({ length: 6 }, (_, i) => card(String(i), i + 1, 100)));
     expect(screen.getByText(/^الأجزاء ٣/)).toBeTruthy();
@@ -45,7 +46,8 @@ describe('the page video', () => {
     expect(input.part).toBe('الجزء ١ من ٣');
     expect(input.next).toBe('يتبع في الجزء ٢');
     expect(page).not.toContain('vercel');
-    expect(input.timeline[0].kind).toBe('title');
+    expect(input.timeline[0].kind).toBe('card');
+    expect(input.timeline.filter((segment: { kind: string }) => segment.kind === 'end')).toHaveLength(1);
     expect(input.timeline.at(-1).kind).toBe('end');
     expect(input.counters).toEqual(['١ من ٦', '٢ من ٦']);
   });

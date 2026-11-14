@@ -26,11 +26,12 @@ document.addEventListener('visibilitychange', function () {
 });
 `;
 
-/** Starts once the Quran font and the emblem have loaded, so the first frame already has both. */
+/** Starts once the fonts (one name or several: the Quran font, the interface font) and the emblem have loaded, so the first frame already has them. */
 export const READY = String.raw`
-function ready(logo, font, go) {
-  var left = 2, once = function () { if (--left === 0) go(); };
+function ready(logo, fonts, go) {
+  fonts = [].concat(fonts);
+  var left = 1 + fonts.length, once = function () { if (--left === 0) go(); };
   if (logo.complete) once(); else { logo.onload = once; logo.onerror = once; }
-  if (document.fonts && document.fonts.load) document.fonts.load('40px ' + font).then(once, once); else once();
+  fonts.forEach(function (font) { if (document.fonts && document.fonts.load) document.fonts.load('40px ' + font).then(once, once); else once(); });
 }
 `;
