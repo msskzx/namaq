@@ -4,7 +4,8 @@ import { Text } from '@/components/Text';
 import ExternalLink from '@/components/ExternalLink';
 import { num } from '@shared/quran/arabicNumber';
 import { surahTopicsCredit, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
-import { citeLabel, citeUrl, ORDER_AIMS } from '@shared/quran/surahOrder';
+import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
+import { surahAim } from '@shared/quran/surahAims';
 import { surahNames } from '@/lib/branches';
 import type { Palette } from '@/lib/theme';
 import Sheet from './Sheet';
@@ -19,7 +20,7 @@ const range = (s: TopicSection) => (s.from === undefined ? '' : s.from === s.to 
  */
 export default function TopicSheet({ open, onClose, onJump, palette }: { open: TopicOpen | null; onClose: () => void; onJump: (surah: number, ayah: number) => void; palette: Palette }) {
   const topics = open ? surahTopicsOf(open.surah) : null;
-  const aim = open ? ORDER_AIMS[open.surah] : undefined;
+  const aim = open ? surahAim(open.surah) : undefined;
   const row = (section: TopicSection, label: string, on: boolean, depth: number) => (
     <Pressable key={label} disabled={section.from === undefined} onPress={() => { onClose(); onJump(open!.surah, section.from!); }} accessibilityRole="button"
       style={{ flexDirection: 'row', gap: 12, paddingVertical: depth ? 5 : 8, paddingRight: depth * 18 }}>
