@@ -280,7 +280,8 @@ export function QuizFeedback({ question, typed, palette, names, onTap, header, h
   const [fits, setFits] = useState(true);
   const down = chosen ?? !fits;
   const overflow = useCallback(() => setFits(false), []);
-  const [around, setAround] = aroundSetting.use();
+  // This card's own switch, opening on the settings' default.
+  const [around, setAround] = useState(aroundSetting.get);
   const surrounding = useMemo(() => around ? aroundOf(presentation) : undefined, [around, presentation]);
   const [size, setSize] = useState<Size | null>(null);
   const growth = useGrowth();

@@ -80,21 +80,14 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   const label = matrix ? (ar ? 'اعرض الشجرة' : 'Show tree') : (ar ? 'اعرض بطاقات الآيات' : 'Show ayah cards');
   return (
     <div className="flex flex-col gap-3" dir="rtl" data-share-card>
-      {controls && <NavButtons>
-        <Button size="lg" variant="muted" onClick={() => setMatrix(value => !value)} aria-label={label} title={label}>
-          {matrix ? <TreeIcon aria-hidden /> : <GalleryHorizontal aria-hidden />}
-        </Button>
-        {!matrix && <RotateButton />}
-        <AroundButton />
-      </NavButtons>}
       <div data-share-image>
-      {matrix && controls ? <AyahCards ayahKeys={keys(solutionTree)} names={names} note={key => {
+      {matrix && controls ? <AyahCards card={id} ayahKeys={keys(solutionTree)} names={names} note={key => {
         const row = correctionOf(rows, key);
         return row && <div className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2" data-answer={row.correct ? "correct" : "incorrect"}>
           <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
           {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
         </div>;
-      }} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
+      }} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls, card: id }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
         renderNode={(node, index, tags, path) => {
           const answer = matches[index]?.node ?? node;
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
@@ -110,7 +103,13 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           );
         }} />}
       </div>
-      {controls && <CardActions id={id} text={question.tree.words.join(' ')} href={branchesHref(id)} />}
+      {controls && <CardActions id={id} text={question.tree.words.join(' ')} href={branchesHref(id)} toggles={<>
+        <Button size="lg" variant="muted" onClick={() => setMatrix(value => !value)} aria-label={label} title={label}>
+          {matrix ? <TreeIcon aria-hidden /> : <GalleryHorizontal aria-hidden />}
+        </Button>
+        {!matrix && <RotateButton />}
+        <AroundButton card={id} />
+      </>} />}
     </div>
   );
 }

@@ -16,13 +16,15 @@ import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
-import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useAroundSetting, useRotated, useSurrounding, type Around } from './Surroundings';
+import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useCardAround, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { growthPlan } from '@shared/quran/growth';
 import { useGrowTarget } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 
-type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { organic?: boolean; hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto'; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding;
+  /** With `sync`: the card whose own surrounding-ayat switch (in its row of buttons) the tree follows; none follows the settings' default. */
+  card?: string } };
 /** Which neighbouring trees exist; `true` means both. */
 type Neighbours = { next: boolean; previous: boolean; nextCard?: React.ReactNode; previousCard?: React.ReactNode;
   /** Where the tree is not the page's own (the home feed): the swipe steps here instead of following the page's step links. */
@@ -80,7 +82,7 @@ export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {
 const Written = createContext<{ forms?: Branch['forms']; offset: number; names: Record<number, string> }>({ offset: 0, names: {} });
 
 export function Marked({ node, children, offset = 0, enabled = true, references, before, after, names = {} }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys?: string[]; subject?: string; siblings?: string[]; skip?: number; offset?: number; before?: React.ReactNode; after?: React.ReactNode; names?: Record<number, string>; children: React.ReactNode }) {
-  const buttons = (before || after) && <span className="mt-1 flex flex-wrap items-center justify-center gap-2" dir="rtl">{before}{after}</span>;
+  const buttons = (before || after) && <span data-node-buttons className="mt-1 flex flex-wrap items-center justify-center gap-2" dir="rtl">{before}{after}</span>;
   if (!enabled) return <>{children}{references}</>;
   return <><Written.Provider value={{ forms: node.forms, offset, names }}>{children}</Written.Provider>{references}{buttons}</>;
 }
@@ -536,11 +538,11 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const group = useGroupConnections()?.group;
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
-  const [global] = useAroundSetting();
+  const [synced] = useCardAround(surround?.card);
   const [rotated, setRotated] = useRotated();
   // The rotate button turns only the open tree: the next tree opens in its own best direction again.
   useEffect(() => { if (rotatable) return () => setRotated(false); }, [rotatable, setRotated]);
-  const on = surround?.sync ? global : local;
+  const on = surround?.sync ? synced : local;
   const view = given;
   const outer = useOuterPaths();
   const own = usePaths([], organic);

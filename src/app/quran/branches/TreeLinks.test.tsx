@@ -3,6 +3,7 @@ import React from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Fan, PathBox, PathButton, PathScope } from './Paths';
+import { elbow } from './TreeLinks';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
@@ -35,11 +36,12 @@ function draw({ organic = true, side = 'start', dir = 'rtl' }: { organic?: boole
 }
 
 describe('organic branch links', () => {
+  // Elbows with the app's round corners (owner, 2026-11-14).
   it.each([
-    ['rtl', 'start', 'M 600 100 C 588 100, 588 50, 576 50'],
-    ['ltr', 'start', 'M 0 100 C 12 100, 12 50, 24 50'],
-    ['rtl', 'end', 'M 0 100 C 12 100, 12 50, 24 50'],
-    ['ltr', 'end', 'M 600 100 C 588 100, 588 50, 576 50'],
+    ['rtl', 'start', 'M 600 100 L 598 100 Q 588 100 588 90 L 588 60 Q 588 50 578 50 L 576 50'],
+    ['ltr', 'start', 'M 0 100 L 2 100 Q 12 100 12 90 L 12 60 Q 12 50 22 50 L 24 50'],
+    ['rtl', 'end', 'M 0 100 L 2 100 Q 12 100 12 90 L 12 60 Q 12 50 22 50 L 24 50'],
+    ['ltr', 'end', 'M 600 100 L 598 100 Q 588 100 588 90 L 588 60 Q 588 50 578 50 L 576 50'],
   ] as const)('joins the parent to each branch in %s from %s', (dir, side, first) => {
     const { container } = draw({ dir, side });
     const links = container.querySelectorAll('[data-tree-links] path');
@@ -54,8 +56,12 @@ describe('organic branch links', () => {
     await act(async () => { container.firstElementChild!.setAttribute('data-down', ''); });
     const links = [...container.querySelectorAll('[data-tree-links] path')];
     expect(links.map(link => link.getAttribute('d'))).toEqual(side === 'start'
-      ? ['M 300 0 C 300 12, 150 12, 150 24', 'M 300 0 C 300 12, 450 12, 450 24']
-      : ['M 300 200 C 300 188, 150 188, 150 176', 'M 300 200 C 300 188, 450 188, 450 176']);
+      ? ['M 300 0 L 300 2 Q 300 12 290 12 L 160 12 Q 150 12 150 22 L 150 24', 'M 300 0 L 300 2 Q 300 12 310 12 L 440 12 Q 450 12 450 22 L 450 24']
+      : ['M 300 200 L 300 198 Q 300 188 290 188 L 160 188 Q 150 188 150 178 L 150 176', 'M 300 200 L 300 198 Q 300 188 310 188 L 440 188 Q 450 188 450 178 L 450 176']);
+  });
+
+  it('runs a branch level with its parent as one straight line', () => {
+    expect(elbow(0, 100, 12, 24, 100, false)).toBe('M 0 100 L 24 100');
   });
 
   it('keeps the selected node distinct from the rest of its illuminated path and toggles it off', () => {

@@ -126,8 +126,8 @@ function ComparePicker({ links, label, ar }: { links: CompareLink[]; label: stri
   </details>;
 }
 
-/** Under the tree or matrix, as on a post: save, with share right beside it. */
-export function CardActions({ id, text, href, aliases = [], details, compareLinks = [] }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[] }) {
+/** Under the tree or matrix, as on a post: save, the card's own switches (`toggles`), share, then compare. */
+export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -143,6 +143,7 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
       <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
       </Button>
+      {toggles}
       <ShareButton video href={href} />
     </>}
     <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />

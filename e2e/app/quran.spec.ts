@@ -24,9 +24,10 @@ test.describe('branches', () => {
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    await page.getByRole('button', { name: 'عرض المصفوفة' }).click();
+    // Each card has its own switch, under it.
+    await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
-    await page.getByRole('button', { name: 'عرض الشجرة' }).click();
+    await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
   });
 
@@ -49,7 +50,7 @@ test.describe('branches', () => {
     };
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    await page.getByRole('button', { name: 'عرض المصفوفة' }).click();
+    await (await onScreen('عرض المصفوفة'))[0].click();
     await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
     expect(await onScreen('استوديو الروابط')).toHaveLength(0);
     await (await onScreen('استوديو القراءة'))[0].click();
@@ -61,6 +62,9 @@ test.describe('branches', () => {
       await swipe();
       await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
     }
+    // A card opens on the default view: this one is switched to its matrix by its own button.
+    await expect.poll(async () => (await onScreen('عرض المصفوفة')).length).toBe(1);
+    await (await onScreen('عرض المصفوفة'))[0].click();
     await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
     expect(await onScreen('استوديو القراءة')).toHaveLength(0);
     await (await onScreen('استوديو الروابط'))[0].click();

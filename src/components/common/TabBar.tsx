@@ -12,6 +12,7 @@ import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
 import { RailSlotContext } from './NavBar';
 import TreeIcon from './TreeIcon';
+import BranchAroundSetting from '@/components/quran/BranchAroundSetting';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
@@ -87,6 +88,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <MemorizedSetting />
         <ThemeTiles />
         <BranchViewSetting />
+        <BranchAroundSetting />
         <BranchConnectorSetting />
         <ReaderGestureSetting />
         <div className={styles.sheetLinks}>
