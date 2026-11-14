@@ -141,10 +141,17 @@ describe('home', () => {
     }
   });
 
-  it('asks to recall a due forgotten ayah in the reader\'s write boxes, grades what is typed, and remembered takes it away', async () => {
+  it('asks to recall a due forgotten ayah word by word, or in the reader\'s write boxes with the pen, grades what is typed, and remembered takes it away', async () => {
     localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
     render(<Homepage data={data} />);
-    const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
+    const reciting = (await screen.findByText('هل تذكرها؟')).closest('article')!;
+    // Recite mode's way first: the words hidden, the next word or the whole ayah on a click.
+    await waitFor(() => expect(within(reciting).getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeTruthy());
+    expect(within(reciting).queryAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(0);
+    fireEvent.click(within(reciting).getByRole('button', { name: 'اكتب الآية كاملة' }));
+    expect(localStorage.getItem('recall-write')).toBe('true');
+    // The card is drawn afresh for the pen, with empty boxes.
+    const post = screen.getByText('هل تذكرها؟').closest('article')!;
     await waitFor(() => expect(within(post).getAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(5));
     expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
     const field = within(post).getByLabelText('اكتب الكلمة');

@@ -3,8 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Feather, Users, EyeOff, LightbulbOff, Moon, NotebookPen, PenLine, ScrollText } from 'lucide-react';
-import Button from '@/components/common/Button';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Feather, Users, EyeOff, LightbulbOff, NotebookPen, PenLine, ScrollText } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -22,7 +21,6 @@ import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
 import { useNow } from '@/components/utilities/Utilities';
-import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -37,6 +35,7 @@ import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
+import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { dayNumber } from '@shared/dailyPick';
 import surahRows from '@shared/data/quran/surahs.json';
 import { reviewHref } from './HomeCards';
@@ -107,30 +106,51 @@ export function ContinueReading() {
   }, []);
   const { data } = useSWR(page ? `/api/home/feed?page=${page}` : null, fetchJson<Page & { surah: number }>, { revalidateOnFocus: false });
   const href = `/quran/read/${page ?? 1}`;
-  return <section className={styles.post} aria-labelledby="reading-title" dir="rtl">
-    <div className={styles.readHead}>
-      <BookOpen size={20} aria-hidden />
-      <h2 id="reading-title">{page && page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'}</h2>
-      {data && <span className={styles.muted}>{names[data.surah]}</span>}
-    </div>
+  const where = [data && names[data.surah], today?.date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
+  return <Post labelledBy="reading-title" head={<PostHead Icon={BookOpen} id="reading-title" title={page && page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where || undefined} />}
+    actions={<>
+      <Action Icon={BookOpen} label="اقرأ" href={href} />
+      {today?.juz && <Link href={juzHref(today.juz[0])} onClick={() => markStoryOpened('juz')} className={`${styles.action} ${styles.accent} text-sm`} aria-label={`اقرأ ${juzLabel(today.juz)}، جزء اليوم`}>{juzLabel(today.juz)}</Link>}
+    </>}>
     <Link href={href} className={styles.pageSlice} aria-label="افتح المصحف حيث توقفت" lang="ar">
-      {/* The page's first lines as the reader draws them (owner, 2026-11-14: an exact snippet of the page). */}
+      {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
       {data ? <PageTop page={data} /> : <span className={styles.pageLines} />}
     </Link>
-    <div className={styles.readFoot}>
-      <Button href={href} variant="primary" className="min-h-10 rounded-[10px] px-4 text-base"><BookOpen size={18} aria-hidden />اقرأ</Button>
-      <span className="flex-1" />
-      {today?.date && <span className={styles.muted}><Moon size={16} aria-hidden className={styles.accent} />{today.date.replace(/ هـ$/, '')}</span>}
-      {today?.juz && <Link href={juzHref(today.juz[0])} onClick={() => markStoryOpened('juz')} className={styles.accent} aria-label={`اقرأ ${juzLabel(today.juz)}، جزء اليوم`}>{juzLabel(today.juz)}</Link>}
-    </div>
-  </section>;
+  </Post>;
 }
 
-function PostHead({ Icon, title, sub, quran }: { Icon: typeof BookOpen | typeof TreeIcon; title: string; sub?: string; quran?: boolean }) {
-  return <div className={styles.postHead}>
+/** A feed card's head: a round icon, a title and a line under it, like a post's author. With `href`, a click opens the post's own page. */
+function PostHead({ Icon, title, sub, href, label, id }: { Icon: typeof BookOpen | typeof TreeIcon; title: string; sub?: string; href?: string; label?: string; id?: string }) {
+  const head = <div className={styles.postHead}>
     <span className={styles.avatar}><Icon size={18} aria-hidden /></span>
-    <div><h3 className={quran ? 'font-quran text-xl font-normal leading-[2]' : undefined}>{quran ? mushafText(title) : title}</h3>{sub && <p className={styles.muted}>{sub}</p>}</div>
+    <div className="min-w-0"><h3 id={id}>{title}</h3>{sub && <p className={`${styles.muted} ${styles.oneLine}`}>{sub}</p>}</div>
   </div>;
+  return href ? <Link href={href} aria-label={label} className="block hover:opacity-80">{head}</Link> : head;
+}
+
+/**
+ * Every feed post's one shape (owner, 2026-11-14), the compare card's and the app's (mobile HomeFeed's Post): the head,
+ * the body in one card, and a row of icon buttons under the card, starting on the right.
+ */
+function Post({ head, actions, labelledBy, children }: { head: React.ReactNode; actions?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
+  const body = <>
+    {head}
+    <div className={styles.post}>{children}</div>
+    {actions && <div className={styles.postActions} data-share-skip>{actions}</div>}
+  </>;
+  // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
+  return labelledBy
+    ? <section className={styles.postWrap} dir="rtl" aria-labelledby={labelledBy}>{body}</section>
+    : <article className={styles.postWrap} dir="rtl">{body}</article>;
+}
+
+/** One icon button of a post's row: a link with `href`, else a button; `on` lights it, `tone` colours it. */
+function Action({ Icon, label, href, onClick, on, tone, disabled }: { Icon: typeof BookOpen; label: string; href?: string; onClick?: () => void; on?: boolean; tone?: 'green'; disabled?: boolean }) {
+  const className = [styles.action, on && styles.actionOn, tone === 'green' && styles.green].filter(Boolean).join(' ');
+  const icon = <Icon size={22} aria-hidden />;
+  return href
+    ? <Link href={href} onClick={onClick} aria-label={label} title={label} className={className}>{icon}</Link>
+    : <button type="button" onClick={onClick} disabled={disabled} aria-label={label} title={label} aria-pressed={on} className={className}>{icon}</button>;
 }
 
 const compareNames = Object.fromEntries(surahRows.map(row => [row.number, { ar: row.title, en: row.nameTransliterated }]));
@@ -166,23 +186,19 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: 
   const toggleWriting = () => setWriting(on => { try { localStorage.setItem(RECALL_WRITE, String(!on)); } catch {} return !on; });
   const [surah, number] = ayah.split(':').map(Number);
   if (!review && recalled.has(ayah)) return null;
-  return <article className={styles.post} dir="rtl">
-    <PostHead Icon={LightbulbOff} title={title} sub={`${names[surah]} ${num(number)}`} />
-    <Recall key={`${ayah}-${writing}`} ayah={ayah} writing={writing} onWriting={toggleWriting}>
-      <button type="button" className={`${styles.pill} ${styles.green}`} onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }}><Check size={18} aria-hidden />تذكّرتها</button>
-      {!review && <button type="button" className={styles.pill} onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }}><LightbulbOff size={18} aria-hidden />نسيتها</button>}
-      <span className="flex-1" />
-      {review && <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>}
-      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
-    </Recall>
-  </article>;
+  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
+    <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
+    {!review && <Action Icon={LightbulbOff} label="نسيتها" onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
+    {review && <Action Icon={EyeOff} label="راجع ما نسيت" href={review} />}
+    <Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />
+  </Recall>;
 }
 
 /**
  * The recall card's ayah and buttons (the app's Recall): recite mode's next word and whole ayah, and the pen that asks for the
  * whole ayah in write boxes. Drawn afresh for each way of asking (`writing`), so the boxes start empty.
  */
-function Recall({ ayah, writing, onWriting, children }: { ayah: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
+function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: string; title: string; sub: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
   const [revealed, setRevealed] = useState(0);
   const [graded, setGraded] = useState<Graded | null>(null);
   const { pages, words } = useAyahPage(ayah);
@@ -194,20 +210,21 @@ function Recall({ ayah, writing, onWriting, children }: { ayah: string; writing:
   const count = words?.length ?? 0;
   const shown = (!!words && revealed >= count) || !!graded;
   const pen = writing ? 'أوقف الكتابة' : 'اكتب الآية كاملة';
-  return <>
+  return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />}
+    actions={<>
+      {/* Recite mode's buttons first, in its order: the next word, the whole ayah, the pen; then the marks. */}
+      {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onClick={() => setRevealed(n => Math.min(count, n + 1))} />}
+      <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onClick={() => setRevealed(count)} />
+      <Action Icon={PenLine} label={pen} on={writing} onClick={onWriting} />
+      {children}
+    </>}>
     <div className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
       {pages && <AyahLines ayah={ayah} pages={pages} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null}
         write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : undefined} />}
+      {words && writing && !shown && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
     </div>
-    {words && writing && !shown && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
-    <div className={styles.recallTools} role="toolbar" aria-label="أدوات التسميع">
-      {!writing && <Button size="lg" variant="muted" aria-label="أظهر الكلمة التالية" title="أظهر الكلمة التالية" disabled={shown} onClick={() => setRevealed(n => Math.min(count, n + 1))}><ChevronLeft aria-hidden /></Button>}
-      <Button size="lg" variant="muted" aria-label="أظهر الآية" title="أظهر الآية" disabled={shown} onClick={() => setRevealed(count)}><ChevronsLeft aria-hidden /></Button>
-      <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} aria-label={pen} title={pen} onClick={onWriting}><PenLine aria-hidden /></Button>
-    </div>
-    <div className={styles.recallActions}>{children}</div>
-  </>;
+  </Post>;
 }
 
 /**
@@ -216,11 +233,9 @@ function Recall({ ayah, writing, onWriting, children }: { ayah: string; writing:
  */
 export function QuizActions({ review }: { review?: string }) {
   return <>
-    <Button size="lg" variant="muted" href="/quizzes" aria-label="اختبار فردي" title="اختبار فردي"><Feather aria-hidden /></Button>
-    <Button size="lg" variant="muted" href="/quizzes/party" aria-label="اختبار جماعي" title="اختبار جماعي"><Users aria-hidden /></Button>
-    {review
-      ? <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>
-      : <Button size="lg" variant="muted" href="/quran/read/recite" aria-label="تسميع" title="تسميع"><EyeOff aria-hidden /></Button>}
+    <Action Icon={Feather} label="اختبار فردي" href="/quizzes" />
+    <Action Icon={Users} label="اختبار جماعي" href="/quizzes/party" />
+    {review ? <Action Icon={EyeOff} label="راجع ما نسيت" href={review} /> : <Action Icon={EyeOff} label="تسميع" href="/quran/read/recite" />}
   </>;
 }
 
@@ -237,18 +252,13 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const [revealed, setRevealed] = useState(false);
   const question = data?.questions?.[0];
   if (!question) return null;
-  return <article className={styles.post} dir="rtl">
-    <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />
+  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} actions={<QuizActions />}>
     <div className={styles.question} lang="ar">
       {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 pt-2 text-base leading-loose">{question.promptArabic}</p>}
       <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar
         onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
     </div>
-    <div className={styles.recallActions}>
-      <span className="flex-1" />
-      <QuizActions />
-    </div>
-  </article>;
+  </Post>;
 }
 
 /** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
@@ -267,12 +277,12 @@ function StoryPost({ card }: { card: StoryCard }) {
   const router = useRouter();
   const href = `/quran/prophets/${card.slug}`;
   const read = () => router.push(href);
-  return <article className={styles.post} dir="rtl">
-    <Link href={href} aria-label="افتح القصة" className="block hover:opacity-80"><PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} /></Link>
+  return <Post head={<PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} href={href} label="افتح القصة" />}
+    actions={<Action Icon={BookOpen} label="افتح القصة" href={href} />}>
     <div className={styles.story} data-story-scroll>
       <StoryMap map={card.map} events={card.events} phases={card.phases} at={card.phase} onRead={read} />
     </div>
-  </article>;
+  </Post>;
 }
 
 type Tree = TreePreview & { text: string };
@@ -281,16 +291,12 @@ type Tree = TreePreview & { text: string };
 function SavedAyahPost({ ayah }: { ayah: string }) {
   const { pages } = useAyahPage(ayah);
   const [surah, number] = ayah.split(':').map(Number);
-  return <article className={styles.post} dir="rtl">
-    <PostHead Icon={Bookmark} title={`${names[surah]} ${num(number)}`} sub="من المحفوظات" />
+  return <Post head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${names[surah]} ${num(number)}`} />}
+    actions={<Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />}>
     <div className={styles.recall}>
       {pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
     </div>
-    <div className={styles.recallActions}>
-      <span className="flex-1" />
-      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
-    </div>
-  </article>;
+  </Post>;
 }
 
 /**
@@ -312,9 +318,9 @@ const TREE_HEIGHT = '24rem';
  * The open button takes it to the branches page.
  */
 function TreePost({ tree }: { tree: Tree }) {
-  return <article className={styles.post} dir="rtl">
-    <Link href={tree.href} aria-label="افتح الشجرة في متشابهات القرآن" className="block hover:opacity-80"><PostHead Icon={TreeIcon} title={tree.text} sub="من متشابهات القرآن" quran /></Link>
-    <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed actionsClassName={styles.actions} />
+  return <article className={styles.postWrap} dir="rtl">
+    <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={ayahPlaces(tree.ayat?.map(ayah => ayah.key) ?? [], names)} href={tree.href} label="افتح الشجرة في متشابهات القرآن" />
+    <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed frameClassName={styles.post} actionsClassName={styles.postActions} />
   </article>;
 }
 

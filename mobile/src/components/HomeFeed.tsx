@@ -41,6 +41,7 @@ import { showsOtherView } from '@shared/quran/branchView';
 import { useMinute } from '@/lib/prayer';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
+import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
@@ -94,15 +95,8 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
   return open ? <Pressable onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Pressable> : head;
 }
 
-/** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢», surah first, in the mushaf's order. */
-export function placesOf(keys: string[]) {
-  const bySurah = new Map<number, number[]>();
-  for (const key of keys) {
-    const [surah, ayah] = key.split(':').map(Number);
-    bySurah.set(surah, [...(bySurah.get(surah) ?? []), ayah]);
-  }
-  return [...bySurah].sort(([a], [b]) => a - b).map(([surah, ayat]) => `${shortNames[surah] ?? num(surah)} ${[...new Set(ayat)].sort((a, b) => a - b).map(num).join('، ')}`).join(' · ');
-}
+/** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
+export const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
 /** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
 export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);
