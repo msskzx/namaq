@@ -1,5 +1,5 @@
 import type { Beat } from './growth';
-import { PAUSE, READY } from '@shared/video/recorder';
+import { OUTRO, PAUSE, READY } from '@shared/video/recorder';
 
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
@@ -75,6 +75,7 @@ export function recorderPage(input: VideoInput, fontFace = '') {
 var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
 ${GEOMETRY}
 ${READY}
+${OUTRO}
 ${RECORDER}
 </script></body></html>`;
 }
@@ -307,12 +308,11 @@ function strokeEdge(points, curve) {
   ctx.stroke();
 }
 
+// The end frame (shared OUTRO): the emblem, the app's name and its slogan, as the app's opening screen.
 function drawOutro(shown) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
   ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
-  ctx.globalAlpha = Math.max(0, Math.min(1, shown));
-  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 160, FRAME.height / 2 - 160, 320, 320);
-  ctx.globalAlpha = 1;
+  outro(ctx, logo, { width: FRAME.width, height: FRAME.height, k: FRAME.width / 390, alpha: Math.max(0, Math.min(1, shown)), paper: look.paper, ink: look.ink, muted: look.muted, ui: look.ui });
 }
 
 function draw(t) {

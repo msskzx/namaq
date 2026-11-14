@@ -25,6 +25,7 @@ import { RECITE_AYAH, RECITE_PAGE, TOUR_STEPS, tourPiece, type TourStep } from '
 import { branchView } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 import type { RecitePosition } from '@shared/quran/recite';
+import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
 
 type Size = { width: number; height: number };
 const noop = () => {};
@@ -51,11 +52,11 @@ function Fit({ children }: { children: (size: Size) => React.ReactNode }) {
 
 function Opening({ palette, onStart }: { palette: Palette; onStart: () => void }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-      <GrowingLogo size={130} />
-      <Animated.View entering={FadeIn.delay(1300).duration(600)} style={{ alignItems: 'center', gap: 6 }}>
-        <Text style={{ color: palette.ink, fontSize: 34, fontWeight: '700' }}>نمق</Text>
-        <Text style={{ color: palette.muted, fontSize: 18 }}>تدبّر القرآن</Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: OPENING.gap }}>
+      <GrowingLogo size={OPENING.logo} />
+      <Animated.View entering={FadeIn.delay(1300).duration(600)} style={{ alignItems: 'center', gap: OPENING.nameGap }}>
+        <Text style={{ color: palette.ink, fontSize: OPENING.name, fontWeight: '700' }}>{APP_NAME}</Text>
+        <Text style={{ color: palette.muted, fontSize: OPENING.slogan }}>{SLOGAN}</Text>
       </Animated.View>
       <Animated.View entering={FadeIn.delay(2000).duration(500)} style={{ marginTop: 36 }}>
         <Button variant="primary" big label="ابدأ" onPress={onStart} />
