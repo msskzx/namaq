@@ -57,11 +57,7 @@ function Fade({ id, children, style }: { id: string; children: React.ReactNode; 
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
 
-function References({ ayahKeys, shared, center }: { ayahKeys: string[]; shared: Shared; center?: boolean }) {
-  const text = ayahKeys.map(key => {
-    const [surah, ayah] = key.split(':').map(Number);
-    return shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  }).join(' · ');
+function References({ text, shared, center }: { text: string; shared: Shared; center?: boolean }) {
   return <Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
@@ -351,9 +347,9 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
           tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
           {own !== undefined ? own : <>
           <StartReference label={start} shared={shared} />
-          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References ayahKeys={node.ayat} shared={shared} center /></View>}
+          {singleSurah && <View style={{ borderBottomWidth: 1, borderColor: shared.palette.rule, paddingVertical: 2, marginBottom: 2 }}><References text={references} shared={shared} center /></View>}
           <Words {...shownWords} />
-          {!singleSurah && node.ayat.length > 0 && <References ayahKeys={node.ayat} shared={shared} />}
+          {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
           </>}
         </Box>
       )}

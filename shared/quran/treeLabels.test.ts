@@ -46,7 +46,7 @@ describe('tree labels', () => {
         const ayat = labels[key];
         if (ayat[0] !== key) wrong.push(`${id} ${key} labelled from ${ayat[0]}`);
         if (ayat.length > 1 && surahOf(ayat[1]) !== surahOf(key)) grown++;
-        const own = node.forms?.[key]?.slice(path.length) ?? node.words;
+        const own = node.forms?.[key] ?? node.words;
         const last = ayat[ayat.length - 1];
         // All the node's words lie between the two ayat named, and the words after its last ayah end lie in the last one.
         const tail = own.slice(own.findLastIndex(isEnd) + 1);

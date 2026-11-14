@@ -344,16 +344,6 @@ export const PIECE_MAX = 6;
 
 const isAyahEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 
-/** The ayah `step` ayah ends on from `key`, in a reading that reaches `end` after `steps` ayah ends. */
-function stepped(key: string, end: string, steps: number, step: number) {
-  if (step <= 0) return key;
-  if (step >= steps) return end;
-  const [surah, ayah] = key.split(':').map(Number);
-  const [endSurah, endAyah] = end.split(':').map(Number);
-  // A reading that crosses into the next surah reaches it at its first ayah, so the last `endAyah` steps are in it.
-  return endSurah !== surah && step > steps - endAyah ? `${endSurah}:${endAyah - (steps - step)}` : `${surah}:${ayah + step}`;
-}
-
 /**
  * The ayat a node's label names, for each ayah ending at the node: that ayah and, when the node's words run on past
  * its end, the ayah its last word is in. A grown branch can end in another surah (al-Saffat 182 runs on into the
@@ -362,11 +352,9 @@ function stepped(key: string, end: string, steps: number, step: number) {
 export function shownAyat(node: Branch, path: string[] = []): Record<string, string[]> {
   const words = [...path, ...node.words];
   const ends = ayahEnds({ ...node, children: [] }, path);
-  const lastWord = words.findLastIndex(word => !isAyahEnd(word));
-  const steps = words.slice(0, lastWord + 1).filter(isAyahEnd).length;
-  const ownLast = path.length + node.words.findLastIndex(word => !isAyahEnd(word));
-  const last = ownLast < path.length ? steps : words.slice(0, ownLast).filter(isAyahEnd).length;
-  return Object.fromEntries(node.ayat.map(key => [key, last === 0 ? [key] : [key, stepped(key, ends[key], steps, last)]]));
+  // The ayat ending here end at this node, so its last word is in the last ayah of their run (`ayahEnds`).
+  const runsOn = words.slice(0, words.findLastIndex(word => !isAyahEnd(word))).some(isAyahEnd);
+  return Object.fromEntries(node.ayat.map(key => [key, runsOn && ends[key] !== key ? [key, ends[key]] : [key]]));
 }
 
 /** A label for the ayat `shownAyat` gives: «البقرة ٣», «البقرة ٣–٤», or «الصافات ١٨٢ ثم ص ١» into another surah. */
