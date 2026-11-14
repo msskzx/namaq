@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, MapPin, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, LightbulbOff, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
@@ -11,7 +11,6 @@ import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
-import { clock, FIVE, nextPrayer, PRAYER_NAMES } from '@shared/prayer';
 import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
@@ -32,8 +31,9 @@ import { surahNames as shortNames } from '@/lib/branches';
 import { ayahText, pageData, PAGES, surahBefore } from '@/lib/mushaf';
 import { readJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
-import { around as aroundSetting, branchView, prayerPlace, prayerSettings, utilityView } from '@/lib/settings';
-import { timesFor, useMinute } from '@/lib/prayer';
+import { around as aroundSetting, branchView } from '@/lib/settings';
+import { showsOtherView } from '@shared/quran/branchView';
+import { useMinute } from '@/lib/prayer';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 type IconType = (props: LucideProps) => React.ReactNode;
@@ -268,7 +268,7 @@ const TREE_HEIGHT = 440;
  */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
   // Opens in the view set on the branches tab; the card's own switch changes only this card.
-  const [mode, setMode] = useState(branchView.get);
+  const [mode, setMode] = useState(() => { const pref = branchView.get(); return showsOtherView(piece.id) ? (pref === 'tree' ? 'matrix' : 'tree') : pref; });
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const embedded = useMemo(() => ({
@@ -285,19 +285,22 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   );
 });
 
-/** Posts per batch: one pair and one tree; «المزيد للتأمل» adds this many batches. */
+/** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 
 /**
- * The home feed «للتأمل اليوم»: today's pair, a forgotten ayah that is due, today's tree, then more on request.
+ * The home feed: today's pair, a forgotten ayah that is due, today's tree, then more each time the page nears its end (`nearEnd` changes).
  * What was shown before is skipped for good (shared/feedSeen.ts); once all was seen it starts again from the seen ones.
  */
-export function Feed({ palette }: { palette: Palette }) {
+export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }) {
   const { day } = useToday();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // A new visit (pulled to refresh, or back after long away) starts again from one batch, in the same render that picks it.
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
+  useEffect(() => {
+    if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+  }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
@@ -325,56 +328,7 @@ export function Feed({ palette }: { palette: Palette }) {
   }
   return (
     <View style={{ gap: 14 }}>
-      <Divider label="للتأمل اليوم" palette={palette} />
       {posts}
-      {batches < FEED_AHEAD && <Pressable onPress={() => setMore({ visit, batches: Math.min(FEED_AHEAD, batches + MORE) })} accessibilityRole="button" accessibilityLabel="المزيد للتأمل"
-        style={({ pressed }) => ({ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.7 : 1 })}>
-        <ChevronLeft size={18} color={palette.ink} />
-        <Text style={{ color: palette.ink, fontSize: 16 }}>المزيد للتأمل</Text>
-      </Pressable>}
     </View>
-  );
-}
-
-/** A section label with a rule running beside it. */
-export function Divider({ label, palette }: { label: string; palette: Palette }) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, fontWeight: '700' }}>{label}</Text>
-      <View style={{ flex: 1, height: 1, backgroundColor: palette.rule }} />
-    </View>
-  );
-}
-
-/** Today's five prayers in one row, the next one shaded; a tap opens the utilities tab. Without a place yet, a button to pick one there. */
-export function PrayerRow({ palette }: { palette: Palette }) {
-  const [place] = prayerPlace.use();
-  const [settings] = prayerSettings.use();
-  const now = useMinute();
-  const dayKey = now.toDateString();
-  const times = useMemo(() => (place ? timesFor(place, now, settings) : null), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const next = times ? nextPrayer(times, now) : null;
-  const open = () => { utilityView.set('times'); router.navigate('/utilities'); };
-  return (
-    <Pressable onPress={open} accessibilityRole="button" accessibilityLabel="مواقيت الصلاة" style={({ pressed }) => ({ ...cardStyle(palette), padding: 10, gap: 8, opacity: pressed ? 0.8 : 1 })}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <MapPin size={18} color={palette.accent} />
-        <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>مواقيت الصلاة</Text>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{place ? place.name : 'اختر مكانك'}</Text>
-        <ChevronLeft size={16} color={palette.muted} />
-      </View>
-      {times && <View style={{ flexDirection: 'row', gap: 4 }}>
-        {FIVE.map(key => {
-          const on = key === next;
-          return (
-            <View key={key} accessible accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
-              style={{ flex: 1, alignItems: 'center', paddingVertical: 6, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
-              <Text style={{ color: on ? palette.onAccent : palette.muted, fontSize: 13 }}>{PRAYER_NAMES[key]}</Text>
-              <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 15 }}>{clock(times[key], true)}</Text>
-            </View>
-          );
-        })}
-      </View>}
-    </Pressable>
   );
 }

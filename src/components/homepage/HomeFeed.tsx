@@ -1,17 +1,16 @@
 'use client';
 
-import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import * as adhan from 'adhan';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, Eye, EyeOff, LightbulbOff, GalleryHorizontal, MapPin, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, LightbulbOff, GalleryHorizontal, Moon, NotebookPen, ScrollText } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import AyahCards from '@/app/quran/branches/AyahCards';
-import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/quran/branchView';
+import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
 import { FaintWord, WriteBox, WrittenWord } from '@/app/quran/read/MushafPage';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
@@ -20,21 +19,20 @@ import { surahPairHref } from '@shared/quran/curatedComparisons';
 import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
-import { placeStore, settingsStore, useNow, viewStore } from '@/components/utilities/Utilities';
+import { useNow } from '@/components/utilities/Utilities';
 import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, newVisit, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
-import { clock, FIVE, nextPrayer, prayerDay, PRAYER_NAMES, type Adhan } from '@shared/prayer';
 import surahRows from '@shared/data/quran/surahs.json';
 import { reviewHref, useAyahTexts } from './HomeCards';
 import { useMemorized } from './Memorized';
@@ -201,7 +199,7 @@ function TreePost({ tree }: { tree: Tree }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const saved = bookmarks.some(item => item.id === tree.id);
   // Opens in the view chosen in the settings (the branches page's cookie); the card's own switch changes only this card.
-  const [view, setView] = useState<BranchView>(() => parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree');
+  const [view, setView] = useState<BranchView>(() => { const pref = parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree'; return showsOtherView(tree.id) ? (pref === 'tree' ? 'cards' : 'tree') : pref; });
   const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
   return <article className={styles.post} dir="rtl">
     <Link href={tree.href} aria-label="افتح الشجرة في متشابهات القرآن" className="block hover:opacity-80"><PostHead Icon={TreeIcon} title={tree.text} sub="من متشابهات القرآن" quran /></Link>
@@ -218,17 +216,23 @@ function TreePost({ tree }: { tree: Tree }) {
   </article>;
 }
 
-/** Posts per batch: one pair and one tree; «المزيد للتأمل» adds this many batches. */
+/** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
 type Content = { pairs: PairCard[]; trees: (TreePreview & { text: string })[] };
 
-/** The feed «للتأمل اليوم»: pairs and trees not seen before, a forgotten ayah that is due, and more on request. */
+/** The home feed: pairs and trees not seen before, a forgotten ayah that is due, and more each time the page nears its end. */
 export function Feed() {
   const today = useToday();
   const day = today?.day;
-  const [batches, setBatches] = useState(1);
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
+  // «More» counts per visit, so a new visit starts again at one batch in the same render that picks it.
+  const [more, setMore] = useState({ visit, batches: 1 });
+  const batches = more.visit === visit ? more.batches : 1;
+  // A reload, which is a phone browser's pull to refresh, starts a new visit: the feed shows what was not seen yet.
+  useEffect(() => {
+    if ((performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload') newVisit();
+  }, []);
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
@@ -253,11 +257,22 @@ export function Feed() {
   }, [ids, seen, batches, prefer, memorized, visit]);
   // Pairs and trees load apart, so the pairs show while the trees are still being worked out.
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
-  const { data: pairContent } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
-  const { data: treeContent } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
+  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
+  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
   useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
+  // A mark below the posts: when it comes near the screen, the next batch is added.
+  const end = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const mark = end.current;
+    if (!mark) return;
+    const watch = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+    }, { rootMargin: '0px 0px 1200px 0px' });
+    watch.observe(mark);
+    return () => watch.disconnect();
+  }, [visit, batches, pairsLoading, treesLoading]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
     const pair = content?.pairs[i];
@@ -267,43 +282,9 @@ export function Feed() {
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
   }
-  return <section className={styles.feed} aria-labelledby="feed-title">
-    <Divider id="feed-title" label="للتأمل اليوم" />
+  return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}
     {!content && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
-    {batches < FEED_AHEAD && <button type="button" className={`${styles.pill} self-center`} onClick={() => setBatches(count => Math.min(FEED_AHEAD, count + MORE))}><ChevronLeft size={18} aria-hidden />المزيد للتأمل</button>}
+    {content && !pairsLoading && !treesLoading && batches < FEED_AHEAD && <div ref={end} aria-hidden className="h-px" />}
   </section>;
-}
-
-export function Divider({ id, label }: { id?: string; label: string }) {
-  return <h2 id={id} className={styles.divider}>{label}</h2>;
-}
-
-const lib = adhan as unknown as Adhan;
-
-/** Today's five prayers in one row, the next one shaded; a click opens the utilities page. Without a place, a link to pick one there. */
-export function PrayerRow() {
-  const place = useSyncExternalStore(placeStore.subscribe, placeStore.read, () => null);
-  const settings = useSyncExternalStore(settingsStore.subscribe, settingsStore.read, settingsStore.read);
-  const [now, setNow] = useState<Date | null>(null);
-  useEffect(() => {
-    setNow(new Date());
-    const tick = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(tick);
-  }, []);
-  const times = place && now ? prayerDay(lib, place, now, settings) : null;
-  const next = times && now ? nextPrayer(times, now) : null;
-  return <Link href="/utilities" onClick={() => viewStore.write(JSON.stringify('times'))} className={styles.prayers} aria-label="مواقيت الصلاة" dir="rtl">
-    <span className={styles.prayerHead}>
-      <MapPin size={18} aria-hidden className={styles.accent} />
-      <strong className="flex-1">مواقيت الصلاة</strong>
-      <span className={styles.muted}>{place ? place.name : 'اختر مكانك'}</span>
-      <ChevronLeft size={16} aria-hidden className={styles.muted} />
-    </span>
-    {times && <span className={styles.prayerRow}>
-      {FIVE.map(key => <span key={key} data-next={key === next || undefined} aria-label={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${key === next ? '، التالية' : ''}`}>
-        <small>{PRAYER_NAMES[key]}</small><b>{clock(times[key], true)}</b>
-      </span>)}
-    </span>}
-  </Link>;
 }
