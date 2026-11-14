@@ -28,6 +28,7 @@ export interface AssembledQuestion {
   prefixes?: Variant[];
   asked?: number[];
   quran?: ChoiceQuestion['quran'];
+  number?: ChoiceQuestion['number'];
   reveal?: ChoiceQuestion['reveal'];
   ayahKey?: string;
   alike?: ChoiceQuestion['alike'];

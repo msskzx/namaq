@@ -26,7 +26,9 @@ export function pageWords(ayah: string): string[] {
  * title), the ayah and what follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals the
  * ayah, with `checked` colouring what was written.
  */
-function AyahLines({ ayah, palette, write, checked, shown }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean }) {
+function AyahLines({ ayah, palette, write, checked, shown, whole = false }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+  /** The lines as the page sets them, nothing hidden (a saved ayah). */
+  whole?: boolean }) {
   const [width, setWidth] = useState(0);
   const page = pageOfAyah(ayah);
   const parts = useMemo(() => {
@@ -49,7 +51,7 @@ function AyahLines({ ayah, palette, write, checked, shown }: { ayah: string; pal
       )}
       {width > 0 && (
         <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={height} top={surahBefore(page)}
-          names={surahNames} recite={recite} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} write={shown ? null : write} checked={shown ? checked : null} slice={parts.slice} />
+          names={surahNames} recite={whole ? undefined : recite} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} write={shown ? null : write} checked={shown ? checked : null} slice={parts.slice} />
       )}
     </View>
   );

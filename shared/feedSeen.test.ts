@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { backToVisit, freshPicks, isFresh, leftVisit, storyIsNew, storyTimes, visitStart } from './feedSeen';
+import { hasSavedCard, savedOfSlot, backToVisit, freshPicks, isFresh, leftVisit, storyIsNew, storyTimes, visitStart } from './feedSeen';
 
 describe('feed seen', () => {
   const items = ['a', 'b', 'c', 'd', 'e'];
@@ -56,5 +56,18 @@ describe('feed seen', () => {
     leftVisit(start + 3000);
     backToVisit(start + 3000 + 31 * 60_000);
     expect(visitStart()).toBe(start + 3000 + 31 * 60_000);
+  });
+});
+
+describe('saved cards in the feed', () => {
+  const items = [{ id: 'a', savedAt: 1 }, { id: 'b', savedAt: 3 }, { id: 'c', savedAt: 2 }];
+  it('come in every other batch from the third', () => {
+    expect([0, 1, 2, 3, 4].map(hasSavedCard)).toEqual([false, false, true, false, true]);
+    expect(savedOfSlot(items, 10, 1)).toBeUndefined();
+    expect(savedOfSlot([], 10, 2)).toBeUndefined();
+  });
+  it('take each saved item once, newest first, starting further on each day', () => {
+    expect([2, 4, 6, 8].map(slot => savedOfSlot(items, 0, slot)?.id)).toEqual(['b', 'c', 'a', undefined]);
+    expect([2, 4, 6].map(slot => savedOfSlot(items, 1, slot)?.id)).toEqual(['c', 'a', 'b']);
   });
 });

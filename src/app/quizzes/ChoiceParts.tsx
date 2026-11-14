@@ -7,7 +7,7 @@ import { alikeDiff, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
 import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "reveal" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
@@ -22,6 +22,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, ar }: { quest
   return <div className="mb-4" dir="rtl" lang="ar">
     <p className="rounded-[14px] border border-[var(--home-rule)] bg-[var(--home-card)] p-4 text-justify font-quran text-2xl leading-loose text-[var(--home-ink)] [text-align-last:right]">
       <Words words={question.quran} marked={marked} />
+      {question.number !== undefined && <span className="text-[var(--home-accent)]"> {num(question.number)}</span>}
       {question.reveal && (revealed ? <span className="text-[var(--home-accent)]"> <Words words={question.reveal} /></span> : " …")}
     </p>
     {question.reveal && !revealed && onReveal && <Button className="mt-3" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}

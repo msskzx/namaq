@@ -357,6 +357,12 @@ export function shownAyat(node: Branch, path: string[] = []): Record<string, str
   return Object.fromEntries(node.ayat.map(key => [key, runsOn && ends[key] !== key ? [key, ends[key]] : [key]]));
 }
 
+/** The ayah-end sign a box closes with: ﴿n﴾ for the ayah it ends (owner, 2026-11-14: every box that ends an ayah shows it), the bare ۝ when ayat with different numbers end there, nothing when none does. */
+export function endSign(ayat: string[]) {
+  const numbers = [...new Set(ayat.map(key => Number(key.split(':')[1])))];
+  return numbers.length === 0 ? [] : numbers.length === 1 ? [`﴿${num(numbers[0])}﴾`] : [END];
+}
+
 /** A label for the ayat `shownAyat` gives: «البقرة ٣», «البقرة ٣–٤», or «الصافات ١٨٢ ثم ص ١» into another surah. */
 export function ayatLabel(ayat: string[], names: Record<number, string>) {
   const [surah, ayah] = ayat[0].split(':').map(Number);

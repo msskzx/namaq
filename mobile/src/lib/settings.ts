@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { EMPTY_LIST, type ListState } from './branchList';
+import { EMPTY_LIST, type ListState } from './listState';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
 import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';

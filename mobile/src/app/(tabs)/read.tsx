@@ -1,7 +1,5 @@
-import Reader from '@/components/Reader';
+import { lazyScreen } from '@/lib/lazyScreen';
 
-export default function ReadScreen() {
-  return <Reader />;
-}
-
+// The screen itself loads on its first visit, or in the background once home is up (lib/lazyScreen.ts).
+export default lazyScreen(() => require('@/screens/read'));
 export { ErrorBoundary } from '@/components/CrashScreen';

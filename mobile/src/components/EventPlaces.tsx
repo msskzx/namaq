@@ -4,7 +4,6 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Text } from '@/components/Text';
-import { router } from 'expo-router';
 import { ArrowLeftRight, BookOpen, Send } from 'lucide-react-native';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
@@ -15,6 +14,8 @@ import { CARD, type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
 import { groupColor } from './StoryMap';
+import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
+import { toTab } from '@/lib/ways';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -22,7 +23,7 @@ const FLICK = 600;
 
 const openCompare = (target: CompareTarget) => {
   setIntent({ tab: 'compare', lead: target.lead, other: target.other, ayat: [`${target.lead}:${target.ayat[0]}`, `${target.other}:${target.ayat[1]}`] });
-  router.navigate('/compare');
+  toTab('/compare');
 };
 
 /**
@@ -50,6 +51,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
   const step = (forward: boolean) => onStep(forward ? 1 : -1);
   // In the tour a sideways swipe turns the tour's own step instead.
   const pan = Gesture.Pan()
+    .hitSlop(BACK_EDGE_SLOP)
     .enabled(readable)
     .activeOffsetX([-16, 16])
     .failOffsetY([-12, 12])

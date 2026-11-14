@@ -7,7 +7,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
-import { toQuranHub } from '@/lib/ways';
+import { back } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
@@ -112,7 +112,7 @@ export default function BranchesScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={toQuranHub} help={() => setHelp(true)}>
+      <TopBar back={back} help={() => setHelp(true)}>
         <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
       </TopBar>
       {(list.query || list.surah || list.ayah) ? <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 12, paddingTop: 8 }}>
@@ -134,4 +134,3 @@ export default function BranchesScreen() {
   );
 }
 
-export { ErrorBoundary } from '@/components/CrashScreen';

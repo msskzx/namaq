@@ -7,10 +7,8 @@ import { matchesSurah } from '@shared/quran/surahSearch';
 import type { JuzRange } from '@shared/quran/juz';
 import type { Bookmark } from '@shared/bookmarks';
 
-/** What narrows the trees on the branches tab: the filter sheet, the search box and a picked surah. Kept on the phone. */
-/** `ayah`: only the trees holding this ayah (the reader's ayah menu). */
-export type ListState = { filters: GroupFilters; range: JuzRange | null; query: string; surah?: number; ayah?: string; saved: boolean };
-export const EMPTY_LIST: ListState = { filters: {}, range: null, query: '', saved: false };
+import { EMPTY_LIST, type ListState } from './listState';
+export { EMPTY_LIST, type ListState };
 
 const surahOf = (key: string) => Number(key.split(':')[0]);
 

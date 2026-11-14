@@ -49,4 +49,3 @@ export default function QuranHub() {
   );
 }
 
-export { ErrorBoundary } from '@/components/CrashScreen';

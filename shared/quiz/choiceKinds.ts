@@ -21,6 +21,8 @@ export type ChoiceQuestion = {
   promptArabic: string;
   /** Quran words shown in the mushaf's font under the prompt. */
   quran?: string[];
+  /** The ayah's number, shown after its words as the mushaf's end mark (owner, 2026-11-14, «في أي سورة؟»). */
+  number?: number;
   /** Quran words hidden until the reader asks for them (a recited snippet's rest); the choices come after. */
   reveal?: string[];
   choices: { value: string; labelArabic: string }[];

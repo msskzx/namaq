@@ -11,7 +11,7 @@ import TopBar from '@/components/TopBar';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
-import { toQuranHub } from '@/lib/ways';
+import { back } from '@/lib/ways';
 import { usePalette } from '@/lib/theme';
 
 const poem = poemData as Poem;
@@ -70,7 +70,7 @@ export default function TuhfaScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={toQuranHub} hideOnScroll center>
+      <TopBar back={back} hideOnScroll center>
         <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel={`اختر بابًا: ${chapters[chapter].title}`}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 6, maxWidth: '100%', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 7 }}>
           <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 15 }}>{chapters[chapter].title}</Text>
@@ -113,4 +113,3 @@ export default function TuhfaScreen() {
   );
 }
 
-export { ErrorBoundary } from '@/components/CrashScreen';

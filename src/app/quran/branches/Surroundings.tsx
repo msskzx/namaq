@@ -10,10 +10,13 @@ import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { sharedByAll, type Neighbour, type Surrounding } from '@shared/quran/ayahContext';
+import { endSign } from '@shared/quran/branches';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
 
-export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string };
+export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string;
+  /** The first ayah drawn before each ayah with no words before the phrase (see BranchTree), where its path's one tab starts. */
+  first?: Record<string, string> };
 
 export const anchorOf = (tree: string, key: string) => `${tree}-${key.replace(':', '-')}`;
 
@@ -121,7 +124,11 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
 
 export const SurroundToggle = SurroundSwitch;
 
-export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around }) {
+export function NeighbourBox({ neighbour, of, side, around, nodeId, quiet, tab }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around;
+  /** With the surrounding ayat on, side by side the box holds only its text: its path is named once, on the tab at its end (owner, 2026-11-14). */
+  quiet?: boolean;
+  /** The last box of its ayah's path carries that one tab, naming the whole run the path shows. */
+  tab?: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const [surah, ayah] = neighbour.key.split(':').map(Number);
@@ -131,16 +138,17 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?:
   const match = sharedByAll(others.map(ayah => ({ ayah, before: null, after: null }))).find(context => context.ayah.key === neighbour.key)?.match;
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
   return (
-    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-muted)] text-[var(--home-muted)]" className="w-52 max-w-[70vw] text-lg [[data-down]_&]:w-44">
+    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-muted)] text-[var(--home-muted)]" className={`w-52 max-w-[70vw] text-lg [[data-down]_&]:w-44 ${quiet && tab ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
+      {quiet && tab && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center whitespace-nowrap rounded-lg border border-dashed bg-inherit px-1.5 text-[11px] leading-[14px] [border-color:inherit] [border-width:1px] [[data-down]_&]:hidden">{tab}</span>}
       <span className="block font-quran leading-loose">
         {side === 'after' && basmala}
-        <span className="block">{neighbour.words.map((word, i) => {
+        <span className="block"><span>{neighbour.words.map((word, i) => {
           const kind = match?.rooted.includes(i) ? 'root' : match?.exact.includes(i) ? 'exact' : undefined;
           return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${kind === 'root' ? 'text-[var(--home-root)]' : 'text-[var(--home-accent)]'}`} title={kind === 'root' ? (ar ? 'نفس اللفظ أو الجذر' : 'Same lemma or root') : (ar ? 'نفس الكلمة' : 'Same word')}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
-        })}</span>
+        })}</span>{endSign([neighbour.key]).map(sign => <React.Fragment key="end">{' '}<span data-end><MushafText>{sign}</MushafText></span></React.Fragment>)}</span>
         {side === 'before' && basmala}
       </span>
-      <span className="mt-1 block text-xs">{ref}</span>
+      <span className={`mt-1 text-xs ${quiet ? 'hidden [[data-down]_&]:block' : 'block'}`}>{ref}</span>
       <span data-node-buttons className="mt-1 flex flex-wrap items-center gap-2">
         <PathButton id={id} keys={[of]} subject={ref} />
         {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`} aria-label={ar ? 'في هذه الشجرة' : 'In this tree'} title={ar ? 'في هذه الشجرة' : 'In this tree'}>

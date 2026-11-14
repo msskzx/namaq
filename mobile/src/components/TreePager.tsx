@@ -5,7 +5,6 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import { scheduleOnRN } from 'react-native-worklets';
 import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
-import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
@@ -35,6 +34,7 @@ import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
+import { toTab } from '@/lib/ways';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
@@ -159,12 +159,16 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
   const offset = useSharedValue(0);
-  const lastTap = useRef(0);
+  // When and where the last tap landed: a double tap is two quick taps on the same box (or both on the card), so quick taps on
+  // two boxes of one path still light it and clear it.
+  const lastTap = useRef({ at: 0, on: '' });
   const moved = useRef(0);
   const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const waiting = useRef<(() => void) | undefined>(undefined);
   const move = useCallback(() => {
     moved.current = Date.now();
     clearTimeout(pending.current);
+    waiting.current = undefined;
   }, []);
   useEffect(() => () => clearTimeout(pending.current), []);
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
@@ -186,7 +190,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   };
   // A tree across two surahs opens its compare page at once; across more, a sheet lists the pairs to pick from.
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
-  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); router.navigate('/compare'); };
+  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); toTab('/compare'); };
   const compare = (targets: CompareTarget[]) => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets));
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -264,18 +268,25 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
     const now = Date.now();
     if (now - moved.current < 350) return;
     clearTimeout(pending.current);
+    const on = ayahKeys?.join(' ') ?? '';
+    // A quick tap on another box doesn't cancel the first: its path lights (or clears) now.
+    if (waiting.current && lastTap.current.on !== on) waiting.current();
+    waiting.current = undefined;
     const state = embedded ? IDLE : growthState();
     if (state.ask) { answer(); return; }
     if (state.studio && ayahKeys) return;
-    if (now - lastTap.current < DOUBLE_TAP) {
-      lastTap.current = 0;
+    if (now - lastTap.current.at < DOUBLE_TAP && lastTap.current.on === on) {
+      lastTap.current = { at: 0, on: '' };
       if (!isSaved(pieces[index])) toggleSaved(pieces[index]);
       setPop(value => value + 1);
       return;
     }
-    lastTap.current = now;
+    lastTap.current = { at: now, on };
     // As on the website, a tap on a node lights its path (after the wait that tells it from a double tap).
-    if (lightPath) pending.current = setTimeout(lightPath, DOUBLE_TAP);
+    if (lightPath) {
+      waiting.current = lightPath;
+      pending.current = setTimeout(() => { waiting.current = undefined; lightPath(); }, DOUBLE_TAP);
+    }
   }, [pieces, index]);
 
   const openVideo = async () => {

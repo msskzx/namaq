@@ -11,7 +11,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahEnds, ayatLabel, branchesHref, keys, linkable, linkId, shownAyat, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
@@ -59,8 +59,8 @@ export function AyahRefs({ keys, names, tags = {}, spans = {}, className = 'mt-1
   );
 }
 
-function ReferenceHeader({ children }: { children: React.ReactNode }) {
-  return <header className="mb-1 border-b border-[var(--home-rule)] py-0.5 text-center text-xs leading-normal text-[var(--home-muted)]">{children}</header>;
+function ReferenceHeader({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <header className={`${className} mb-1 border-b border-[var(--home-rule)] py-0.5 text-center text-xs leading-normal text-[var(--home-muted)]`}>{children}</header>;
 }
 
 function SubtreeButton({ href }: { href: string }) {
@@ -130,18 +130,34 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
   // The ayah this node ends sits on a small tab over its top edge, at the start (owner, 2026-11-14), as in the app: the node holds
   // only its words. A node ending several ayat keeps them inside; top down (the line into a node runs through its top edge) the tab
   // turns back into the ruled header.
-  const tabbed = node.ayat.length === 1 && !own;
-  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={shownAyat(node, path)} className={tabbed ? 'flex-nowrap whitespace-nowrap [&_span]:!text-[11px] [&_span]:!leading-[14px]' : singleSurah ? 'justify-center' : 'mt-1'} />;
+  const spans = shownAyat(node, path);
+  const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
+    const neighbour = around.data.after[around.ends[key]];
+    return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} quiet tab={runOf(key)} /> }] : [];
+  });
+  // With the surrounding ayat on, side by side, each ayah's path is named once, on the tab of its last box: the whole run from the
+  // first ayah drawn before it to the one after (owner, 2026-11-14). Top down every box keeps its own reference, as before.
+  function runOf(key: string) {
+    const first = around ? (around.first?.[key] ?? around.data.before[key]?.key) : undefined;
+    const after = around?.data.after[around.ends[key]]?.key;
+    return ayatLabel([first ?? spans[key][0], ...(first ? [spans[key][spans[key].length - 1]] : spans[key].slice(1)), ...(after ? [after] : [])], names);
+  }
+  const runs = !!around;
+  const tabbed = node.ayat.length === 1 && !own && !nexts.length;
+  // Run tabs are side by side only; top down the node's references come back inside.
+  // An ayah with no ayah after it (the mushaf's last) has no after box to carry its tab, so its node keeps its references.
+  const inside = runs && (tabbed || nexts.length === node.ayat.length) ? 'hidden [[data-down]_&]:block' : '';
+  const small = tabbed && !runs;
+  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={spans} className={small ? 'flex-nowrap whitespace-nowrap [&_span]:!text-[11px] [&_span]:!leading-[14px]' : singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const boundary = node.ayat.length === 0 && shownWords.length > 0 && shownWords.every(word => word === '۝' || word.startsWith('﴿'));
   const id = nodeId(indices.get(node)!);
   const subject = (root ? shownWords : node.words).join(' ');
+  // Every box that ends an ayah closes with its sign, as the mushaf writes it (owner, 2026-11-14).
+  const last = shownWords[shownWords.length - 1] ?? '';
+  const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1]));
   const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(words) ? branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
-  const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
-    const neighbour = around.data.after[around.ends[key]];
-    return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} /> }] : [];
-  });
   const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
@@ -149,15 +165,15 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
       {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'} ${tabbed ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {/* In the node's flow, so the node is never narrower than it, and pulled up over the top border with no height of its own. */}
-        {tabbed && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center rounded-lg border border-solid bg-inherit px-1.5 [border-color:inherit] [border-width:1px] [[data-down]_&]:m-0 [[data-down]_&]:mb-1 [[data-down]_&]:h-auto [[data-down]_&]:w-auto [[data-down]_&]:justify-center [[data-down]_&]:rounded-none [[data-down]_&]:border-x-0 [[data-down]_&]:border-t-0 [[data-down]_&]:bg-transparent [[data-down]_&]:py-0.5 [[data-down]_&]:[border-color:var(--home-rule)]">{references}</span>}
+        {tabbed && <span data-tab className={`-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center rounded-lg border border-solid bg-inherit px-1.5 [border-color:inherit] [border-width:1px] ${runs ? 'whitespace-nowrap text-[11px] leading-[14px] text-[var(--home-muted)] [[data-down]_&]:hidden' : `[[data-down]_&]:m-0 [[data-down]_&]:mb-1 [[data-down]_&]:h-auto [[data-down]_&]:w-auto [[data-down]_&]:justify-center [[data-down]_&]:rounded-none [[data-down]_&]:border-x-0 [[data-down]_&]:border-t-0 [[data-down]_&]:bg-transparent [[data-down]_&]:py-0.5 [[data-down]_&]:[border-color:var(--home-rule)]`}`}>{runs ? runOf(node.ayat[0]) : references}</span>}
         {own ? renderNode(node, indices.get(node)!, tags, path) : <>
           {start}
-          {!tabbed && singleSurah && <ReferenceHeader>{references}</ReferenceHeader>}
+          {(!tabbed || runs) && singleSurah && <ReferenceHeader className={inside}>{references}</ReferenceHeader>}
           <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
-            references={!tabbed && !singleSurah && references}
+            references={(!tabbed || runs) && !singleSurah && references && (runs ? <span className={inside}>{references}</span> : references)}
             before={<PathButton id={id} keys={keys(node)} subject={subject} />}
             after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
-            <span className="block font-quran leading-loose"><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} /></span>
+            <span className="block font-quran leading-loose"><span><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} /></span>{sign.map(end => <React.Fragment key="end">{' '}<span data-end><MushafText>{end}</MushafText></span></React.Fragment>)}</span>
           </Marked>
         </>}
       </PathBox>}
@@ -170,7 +186,7 @@ function Node({ node, parent, path, start, names, tags, lead, juz, renderNode, i
 }
 
 function BeforeFan({ ayahKeys, around }: { ayahKeys: string[]; around?: Around }) {
-  const boxes = !around ? [] : ayahKeys.flatMap(key => (around.data.before[key] ? [{ key, keys: [key], item: <NeighbourBox neighbour={around.data.before[key]!} of={key} side="before" around={around} /> }] : []));
+  const boxes = !around ? [] : ayahKeys.flatMap(key => (around.data.before[key] ? [{ key, keys: [key], item: <NeighbourBox neighbour={around.data.before[key]!} of={key} side="before" around={around} quiet /> }] : []));
   if (boxes.length === 0) return null;
   return <>
     <Fan side="end" label="الآيات السابقة" entries={boxes} />
@@ -571,6 +587,14 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const { data, isLoading, error } = useSurrounding(!!surround && on, optionalKeys, ends, preloaded);
   const around: Around | undefined = surround && on && (data ?? surround.data) ? { data: (data ?? surround.data)!, ends, inTree: new Set(all), names, tree: id } : undefined;
   const mandatoryAround: Around | undefined = mandatory.data ? { data: mandatory.data, ends, inTree: new Set(all), names, tree: id } : undefined;
+  const mixedEarlier = !(surround?.sync && !mixedBefore);
+  // Where an ayah's path starts, for the one tab naming it: an ayah with no words before the phrase starts at the box drawn for the
+  // ayah before it (or the one before that, when drawn), not at what the switch would add before the phrase.
+  if (around) around.first = Object.fromEntries((prefixes ?? []).flatMap(prefix => prefix.word ? [] : prefix.keys.flatMap(key => {
+    const previous = mandatoryAround?.data.before[key]?.key;
+    const earlier = previous && mixedEarlier ? around.data.before[previous]?.key : undefined;
+    return earlier ?? previous ? [[key, (earlier ?? previous)!]] : [];
+  })));
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
@@ -607,10 +631,10 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
               const previous = neighbour?.key;
               if (!neighbour || !previous || !mandatoryAround) return [];
               // The switch adds one more ayah before, except on the branches page when the ayah before is itself what the switch shows.
-              const earlier = surround?.sync && !mixedBefore ? undefined : around?.data.before[previous];
+              const earlier = mixedEarlier ? around?.data.before[previous] : undefined;
               return [{ key, keys: [key], item: <>
-                {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} nodeId={`earlier${key}`} /><Stub keys={[key]} /></>}
-                <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} />
+                {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} nodeId={`earlier${key}`} quiet /><Stub keys={[key]} /></>}
+                <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} quiet={!!around} />
               </> }];
             }));
   const lane = useRef<HTMLDivElement>(null);

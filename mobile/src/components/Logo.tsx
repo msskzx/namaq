@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 import { BERRIES, BOWL, BRANCHES } from '@/lib/logo';
-import { usePalette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
 
 // The website's emblem (src/components/common/Emblem.tsx): the tree grown from a dotless ن, its berries in the accent colour.
-export default function Logo({ size = 32 }: { size?: number }) {
-  const palette = usePalette();
+export default function Logo({ size = 32, palette: given }: { size?: number; palette?: Pick<Palette, 'ink' | 'accent'> }) {
+  const theme = usePalette();
+  const palette = given ?? theme;
   return (
     <Svg width={size} height={size} viewBox="12 24.7 76 76">
       <Path d={BOWL} fill={palette.ink} />

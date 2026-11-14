@@ -1,28 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { buttonOf, isRetap, noteRoute, pageOf } from './tabGroups';
+import { openPage, tapOnOpen } from './tabGroups';
 
 describe('tab groups', () => {
-  it('lights the Quran button on its hub and on every tool it opens', () => {
-    for (const route of ['quran', 'branches', 'compare', 'prophets', 'tuhfa', 'words', 'oaths', 'iltifat', 'openings', 'order']) expect(buttonOf(route)).toBe('quran');
-    for (const route of ['index', 'read', 'quizzes', 'utilities']) expect(buttonOf(route)).toBe(route);
-    expect(buttonOf('search')).toBe('index');
+  it('names the open tab and the page on top of it', () => {
+    expect(openPage(['(tabs)', '(quran)', 'branches'])).toEqual({ tab: '(quran)', page: 'branches' });
+    expect(openPage(['(tabs)', '(quran)', 'quran'])).toEqual({ tab: '(quran)', page: 'quran' });
+    expect(openPage(['(tabs)', '(home)', 'search'])).toEqual({ tab: '(home)', page: 'search' });
+    expect(openPage(['(tabs)', 'read'])).toEqual({ tab: 'read', page: 'read' });
   });
 
-  it('takes home from the search page as a way home, not a re-tap', () => {
-    expect(isRetap('search', 'index')).toBe(false);
-    expect(isRetap('index', 'index')).toBe(true);
-    noteRoute('branches');
-    expect(isRetap('branches', 'quran')).toBe(true);
-    noteRoute('quran');
+  it('takes a stack with no page named as its first page', () => {
+    expect(openPage(['(tabs)', '(home)'])).toEqual({ tab: '(home)', page: 'index' });
+    expect(openPage(['(tabs)', '(quran)'])).toEqual({ tab: '(quran)', page: 'quran' });
+    expect(openPage(['(tabs)'])).toEqual({ tab: '(home)', page: 'index' });
   });
 
-  it('brings the Quran button back to the Quran page open last', () => {
-    expect(pageOf('quran')).toBe('quran');
-    noteRoute('compare');
-    noteRoute('read');
-    expect(pageOf('quran')).toBe('compare');
-    expect(pageOf('read')).toBe('read');
-    noteRoute('quran');
-    expect(pageOf('quran')).toBe('quran');
+  it('takes home from the search page as a way back home, not a re-tap', () => {
+    expect(tapOnOpen('search')).toBe('back');
+    expect(tapOnOpen('index')).toBe('retap');
+    expect(tapOnOpen('branches')).toBe('retap');
   });
 });

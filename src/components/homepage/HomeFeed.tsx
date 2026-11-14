@@ -8,6 +8,11 @@ import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
+import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
+import type { SavedContent, StoryCard } from '@/lib/homeFeed';
+import { bookmarkKind } from '@shared/bookmarkKind';
+import type { Bookmark as SavedItem } from '@shared/bookmarks';
+import { useRouter } from 'next/navigation';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import AyahCards from '@/app/quran/branches/AyahCards';
 import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
@@ -23,9 +28,12 @@ import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
-import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
+import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
+import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
+import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -150,7 +158,7 @@ const recalled = new Set<string>();
  * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
  * review link and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
  */
-function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
+function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
   const [, setGone] = useState(0);
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
@@ -165,7 +173,7 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   if (!review && recalled.has(ayah)) return null;
   const open = shown || !!graded;
   return <article className={styles.post} dir="rtl">
-    <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${names[surah]} ${num(number)}`} />
+    <PostHead Icon={LightbulbOff} title={title} sub={`${names[surah]} ${num(number)}`} />
     <div className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
       {pages && <AyahLines ayah={ayah} pages={pages} shown={open} checked={graded ? { key: ayah, ...graded } : null}
@@ -197,7 +205,86 @@ export function QuizActions({ review }: { review?: string }) {
   </>;
 }
 
+/**
+ * One question of the solo quiz as a post (owner, 2026-11-14): the quiz page's own question (QuizAnswer), one kind a card in
+ * turn, the same question all day (`seed`). With «الأسئلة مما أحفظ فقط» on, it asks from what is memorized, as the quiz page does.
+ */
+function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Record<string, string> }) {
+  const query = new URLSearchParams({ topic: kind, length: '1', seed: String(seed), ...scope });
+  const { data } = useSWR(`/api/quiz?${query}`, fetchJson<QuizData>, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const [given, setGiven] = useState<string>();
+  const [typed, setTyped] = useState<string[]>();
+  const [hints, setHints] = useState<Hints>();
+  const [revealed, setRevealed] = useState(false);
+  const question = data?.questions?.[0];
+  if (!question) return null;
+  return <article className={styles.post} dir="rtl">
+    <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />
+    <div className={styles.question} lang="ar">
+      {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 text-base leading-relaxed">{question.promptArabic}</p>}
+      <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar
+        onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
+    </div>
+    <div className={styles.recallActions}>
+      <span className="flex-1" />
+      <QuizActions />
+    </div>
+  </article>;
+}
+
+/** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
+function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized | null }) {
+  const surah = useMemo(() => openingSurah(seed, memorized && !('all' in memorized)
+    ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized]);
+  return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} /> : null;
+}
+
+/**
+ * One group of a prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap) showing just that
+ * group, with every surah that tells part of it; the surahs scroll up and down inside the card, never sideways. A dot or an
+ * event's title opens the story there.
+ */
+function StoryPost({ card }: { card: StoryCard }) {
+  const router = useRouter();
+  const href = `/quran/prophets/${card.slug}`;
+  const read = (event: number, surah?: number) => router.push(`${href}?event=${card.story[event]}${surah === undefined ? '' : `&surah=${surah}`}`);
+  return <article className={styles.post} dir="rtl">
+    <Link href={href} aria-label="افتح القصة" className="block hover:opacity-80"><PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} /></Link>
+    <div className={styles.story}>
+      <StoryMap map={card.map} events={card.events} phases={card.phases} only={card.phase} onRead={read} />
+    </div>
+  </article>;
+}
+
 type Tree = TreePreview & { text: string };
+
+/** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
+function SavedAyahPost({ ayah }: { ayah: string }) {
+  const { pages } = useAyahPage(ayah);
+  const [surah, number] = ayah.split(':').map(Number);
+  return <article className={styles.post} dir="rtl">
+    <PostHead Icon={Bookmark} title={`${names[surah]} ${num(number)}`} sub="من المحفوظات" />
+    <div className={styles.recall}>
+      {pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
+    </div>
+    <div className={styles.recallActions}>
+      <span className="flex-1" />
+      <Button size="lg" variant="muted" href={ayahHref(ayah)} aria-label="في المصحف" title="في المصحف"><BookOpen aria-hidden /></Button>
+    </div>
+  </article>;
+}
+
+/**
+ * A saved item as its own card (owner, 2026-11-14): a tree as the tree card, a compare card as the pair card, an ayah in the
+ * mushaf's lines. One that the data no longer holds is skipped.
+ */
+function SavedPost({ item }: { item: SavedItem }) {
+  const kind = bookmarkKind(item);
+  const { data } = useSWR(kind === 'ayah' ? null : `/api/home/feed?saved=${encodeURIComponent(item.id)}`, fetchJson<SavedContent>, { revalidateOnFocus: false });
+  if (kind === 'ayah') { const ayah = item.id.slice('ayah:'.length); return /^\d+:\d+$/.test(ayah) && names[Number(ayah.split(':')[0])] ? <SavedAyahPost ayah={ayah} /> : null; }
+  if (data?.tree) return <TreePost tree={data.tree} />;
+  return data?.pair ? <PairPost pair={data.pair} /> : null;
+}
 /** The tree card's height, as the branches page's on a phone. */
 const TREE_HEIGHT = '24rem';
 
@@ -240,6 +327,11 @@ export function Feed() {
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
+  const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
+  if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
+  const saved = savedAtVisit.current.list;
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -265,6 +357,9 @@ export function Feed() {
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
   const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
   const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
+  // The prophets cards of the batches shown, worked out on the server (the stories' ayat stay there).
+  const storySlots = Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard);
+  const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null, fetchJson<StoryCard[]>, swr);
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
   useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
@@ -285,8 +380,20 @@ export function Feed() {
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
+    // A question card in every batch after the first (whose question is the recall card), each kind in turn.
+    if (i > 0 && day) {
+      const kind = feedQuizKind(day, i);
+      const seed = feedQuizSeed(day, i);
+      posts.push(kind === OPENINGS
+        ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
+        : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
+    }
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
+    const savedItem = savedOfSlot(saved, day ?? 0, i);
+    if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
+    const story = stories?.find(card => card.slot === i);
+    if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

@@ -8,7 +8,7 @@ import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
-import { toQuranHub } from '@/lib/ways';
+import { back } from '@/lib/ways';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
@@ -91,7 +91,7 @@ export default function CompareScreen() {
   const count = visit ? (filter.savedOnly ? cardsFor(visit.lead, visit.other).filter(card => savedIds(card.id)).length : cardsFor(visit.lead, visit.other).length) : 0;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper, paddingBottom: bottom }}>
-      <TopBar back={toQuranHub} center help={() => setHelp(true)}>
+      <TopBar back={back} center help={() => setHelp(true)}>
         <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
           style={{ maxWidth: '100%', flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
           <ArrowLeftRight size={16} color={palette.ink} />
@@ -111,4 +111,3 @@ export default function CompareScreen() {
   );
 }
 
-export { ErrorBoundary } from '@/components/CrashScreen';

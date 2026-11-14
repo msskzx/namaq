@@ -15,7 +15,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
-import { openIntent as go, toTab } from '@/lib/ways';
+import { back, openIntent as go, toTab } from '@/lib/ways';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 /** Results a group shows until its arrow opens the rest. */
@@ -158,7 +158,7 @@ export default function SearchScreen() {
   const waiting = query.trim() !== found.query;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={() => (open ? setOpen(null) : toTab('/'))}>
+      <TopBar back={() => (open ? setOpen(null) : back())}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
           <Search size={18} color={palette.muted} />
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
@@ -196,4 +196,3 @@ export default function SearchScreen() {
   );
 }
 
-export { ErrorBoundary } from '@/components/CrashScreen';
