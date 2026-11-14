@@ -33,10 +33,14 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   const [mode] = branchView.use();
   const [around] = aroundSetting.use();
   const [treeAt, setTreeAt] = useState(0);
+  // Another ayah's trees start counting from the first.
+  const [counted, setCounted] = useState(preview);
+  if (preview !== counted) { setCounted(preview); setTreeAt(0); }
   const embedded = useMemo(() => ({
     open: (piece: BranchPiece) => { onClose(); openIntent({ tab: 'branches', open: piece.id }); },
     inScroll: false,
     lit: preview?.key,
+    onLeave: onClose,
   }), [preview, onClose]);
   const pairs = useMemo(() => (preview?.kind === 'compare' ? compareOfAyah(preview.key) : []), [preview]);
   const qiraat = useMemo(() => (preview?.kind === 'readings' ? qiraatOf(preview.key) : []), [preview]);

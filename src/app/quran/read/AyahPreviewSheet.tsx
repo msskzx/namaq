@@ -85,7 +85,8 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           {error && <p role="alert" className="py-6 text-center text-sm text-[var(--home-muted)]">تعذّر التحميل.</p>}
           {/* Each tree is the branches page's own card (owner, 2026-11-14): zoom, pan, a path lit on a click, its own tree/matrix switch, opening in the settings' view. */}
           {trees && data?.trees.map(tree => (
-            <div key={tree.id} className={`${CARD} shrink-0 overflow-hidden`}>
+            // A drag on the tree pans it; it never slides the sheet away.
+            <div key={tree.id} data-no-swipe-close className={`${CARD} shrink-0 overflow-hidden`}>
               <TreeViewCard tree={tree} height="min(24rem, 55dvh)" names={names} />
             </div>
           ))}

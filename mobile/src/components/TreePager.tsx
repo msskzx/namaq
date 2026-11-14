@@ -143,6 +143,8 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     inScroll?: boolean;
     /** An ayah whose path opens lit on every tree (the reader's ayah). */
     lit?: string;
+    /** Called before the pager takes the reader to another tab (compare), so a sheet holding it closes first. */
+    onLeave?: () => void;
   } };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
@@ -196,7 +198,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   };
   // A tree across two surahs opens its compare page at once; across more, a sheet lists the pairs to pick from.
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
-  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); toTab('/compare'); };
+  const openCompare = (target: CompareTarget) => { embedded?.onLeave?.(); setIntent({ tab: 'compare', lead: target.lead, other: target.other }); toTab('/compare'); };
   const compare = (targets: CompareTarget[]) => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets));
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
