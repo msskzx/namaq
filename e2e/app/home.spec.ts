@@ -1,4 +1,4 @@
-import { expect, open, readerPage, returningUser, stored, tab, test } from './fixtures';
+import { expect, open, readerPage, returningUser, stored, test } from './fixtures';
 
 const menu = (page: import('@playwright/test').Page) => page.getByRole('toolbar');
 
@@ -54,6 +54,44 @@ test.describe('a new user', () => {
       await page.mouse.wheel(0, 3000);
       expect(await trees.count()).toBeGreaterThan(2);
     }).toPass({ timeout: 20_000 });
+  });
+
+  test('the feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
+    // Three batches a day take three kinds in turn; three days apart, the seven kinds all come up.
+    const kinds = ['في أي سورة؟', 'أكمل الشجرة', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    const seen = new Set<string>();
+    for (const days of [0, 3, 6]) {
+      await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
+      await open(page, '/');
+      await page.mouse.move(195, 500);
+      await expect(async () => {
+        await page.mouse.wheel(0, 3000);
+        expect(await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(3);
+      }).toPass({ timeout: 20_000 });
+      for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) seen.add(name);
+    }
+    expect([...seen].sort()).toEqual([...kinds].sort());
+    expect(await page.getByRole('button', { name: 'اختبار فردي' }).count()).toBeGreaterThan(2);
+  });
+
+  test('a «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
+    for (const days of [0, 3, 6]) {
+      await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
+      await open(page, '/');
+      await page.mouse.move(195, 500);
+      await expect(async () => {
+        await page.mouse.wheel(0, 3000);
+        expect(await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(3);
+      }).toPass({ timeout: 20_000 });
+      if (await page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).count()) break;
+    }
+    const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
+    // The choices are the card's buttons with words; the quiz buttons are icons.
+    const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
+    await choice.click();
+    await expect(choice).toBeDisabled();
   });
 
   test('the search finds a surah and opens it', async ({ page }) => {

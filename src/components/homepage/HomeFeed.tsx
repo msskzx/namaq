@@ -23,7 +23,10 @@ import { mushafText } from '@shared/quran/mushafText';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
-import { memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized } from '@shared/memorized';
+import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
+import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
+import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -150,7 +153,7 @@ const recalled = new Set<string>();
  * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
  * review link and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
  */
-function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
+function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
   const [, setGone] = useState(0);
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
@@ -165,7 +168,7 @@ function ForgottenPost({ ayah, review }: { ayah: string; review?: string }) {
   if (!review && recalled.has(ayah)) return null;
   const open = shown || !!graded;
   return <article className={styles.post} dir="rtl">
-    <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${names[surah]} ${num(number)}`} />
+    <PostHead Icon={LightbulbOff} title={title} sub={`${names[surah]} ${num(number)}`} />
     <div className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
       {pages && <AyahLines ayah={ayah} pages={pages} shown={open} checked={graded ? { key: ayah, ...graded } : null}
@@ -195,6 +198,40 @@ export function QuizActions({ review }: { review?: string }) {
       ? <Button size="lg" variant="muted" href={review} aria-label="راجع ما نسيت" title="راجع ما نسيت"><EyeOff aria-hidden /></Button>
       : <Button size="lg" variant="muted" href="/quran/read/recite" aria-label="تسميع" title="تسميع"><EyeOff aria-hidden /></Button>}
   </>;
+}
+
+/**
+ * One question of the solo quiz as a post (owner, 2026-11-14): the quiz page's own question (QuizAnswer), one kind a card in
+ * turn, the same question all day (`seed`). With «الأسئلة مما أحفظ فقط» on, it asks from what is memorized, as the quiz page does.
+ */
+function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Record<string, string> }) {
+  const query = new URLSearchParams({ topic: kind, length: '5', seed: String(seed), ...scope });
+  const { data } = useSWR(`/api/quiz?${query}`, fetchJson<QuizData>, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const [given, setGiven] = useState<string>();
+  const [typed, setTyped] = useState<string[]>();
+  const [hints, setHints] = useState<Hints>();
+  const [revealed, setRevealed] = useState(false);
+  const question = data?.questions?.[0];
+  if (!question) return null;
+  return <article className={styles.post} dir="rtl">
+    <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />
+    <div className={styles.question} lang="ar">
+      {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 text-base leading-relaxed">{question.promptArabic}</p>}
+      <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar
+        onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
+    </div>
+    <div className={styles.recallActions}>
+      <span className="flex-1" />
+      <QuizActions />
+    </div>
+  </article>;
+}
+
+/** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
+function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized | null }) {
+  const surah = useMemo(() => openingSurah(seed, memorized && !('all' in memorized)
+    ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized]);
+  return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} /> : null;
 }
 
 type Tree = TreePreview & { text: string };
@@ -285,6 +322,14 @@ export function Feed() {
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
+    // A question card in every batch after the first (whose question is the recall card), each kind in turn.
+    if (i > 0 && day) {
+      const kind = feedQuizKind(day, i);
+      const seed = feedQuizSeed(day, i);
+      posts.push(kind === OPENINGS
+        ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
+        : <QuizPost key={`q${day}-${i}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
+    }
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
   }

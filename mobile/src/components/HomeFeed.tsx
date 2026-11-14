@@ -4,7 +4,10 @@ import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
-import { memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized } from '@shared/memorized';
+import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
+import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
+import type { QuizTopic } from '@shared/quiz/settings';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -34,6 +37,11 @@ import { openIntent, toTab } from '@/lib/ways';
 import { around as aroundSetting, branchView } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
 import { useMinute } from '@/lib/prayer';
+import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { readAyah } from '@/lib/openReader';
+import QuizChoice from './QuizChoice';
+import { QuizFeedback, QuizInputs } from './QuizTree';
+import Button from './Button';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 type IconType = (props: LucideProps) => React.ReactNode;
@@ -201,7 +209,7 @@ const recalled = new Set<string>();
  * green or amber; a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the
  * review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» instead.
  */
-function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () => void; palette: Palette }) {
+function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
   const [, setGone] = useState(0);
   const [shown, setShown] = useState(false);
   const [graded, setGraded] = useState<Graded | null>(null);
@@ -217,7 +225,7 @@ function ForgottenPost({ ayah, review, palette }: { ayah: string; review?: () =>
   const open = shown || !!graded;
   return (
     <View style={cardStyle(palette)}>
-      <PostHead Icon={LightbulbOff} title="هل تذكرها؟" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
+      <PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
       <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
         <AyahLines ayah={ayah} palette={palette} shown={open} checked={graded ? { key: ayah, ...graded } : null}
           write={{ key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick }} />
@@ -260,6 +268,70 @@ export function QuizActions({ review, palette }: { review?: () => void; palette:
     </>
   );
 }
+
+/** The tree question's room in a card: the quiz's own tree, scrolling inside it, and its buttons. */
+const QUIZ_TREE_HEIGHT = 380;
+const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
+
+/**
+ * One question of the solo quiz as a post (owner, 2026-11-14): the quiz's own question, drawn by its own parts (QuizChoice,
+ * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
+ * فقط» on, it asks from what is memorized, as the solo quiz does.
+ */
+const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
+  const [run, setRun] = useState<SoloRun | null>(null);
+  useEffect(() => {
+    const list = memorized && questions ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
+    const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
+    setRun(started.questions.length ? started : null);
+  }, [kind, seed, memorized, questions]);
+  if (!run) return null;
+  const question = run.questions[0];
+  const checked = run.checked[0];
+  const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 24, textAlign: 'right', paddingHorizontal: 16 }}>{question.promptArabic}</Text> : undefined;
+  return (
+    <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>
+      <PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />
+      {!isTree(question)
+        ? <View style={{ paddingBottom: 4 }}>
+          <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} onOpen={readAyah} scroll={false}
+            onReveal={() => setRun(reveal(run))}
+            onPick={value => {
+              if (question.family === RECITE_SNIPPET && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+              setRun(pick(run, value));
+            }} />
+        </View>
+        : <View style={{ height: QUIZ_TREE_HEIGHT }}>
+          {checked
+            ? <QuizFeedback question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
+            : <QuizInputs question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
+        </View>}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, flexWrap: 'wrap' }}>
+        {isTree(question) && !checked && <>
+          <Button variant="primary" Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} />
+          <Button Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} />
+        </>}
+        <View style={{ flex: 1 }} />
+        <QuizActions palette={palette} />
+      </View>
+    </View>
+  );
+});
+
+/** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
+function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
+  const surah = useMemo(() => openingSurah(seed, memorized && questions && !('all' in memorized)
+    ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized, questions]);
+  return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} palette={palette} /> : null;
+}
+
+/** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
+const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) =>
+  kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
 
 /** The tree card's height: room for the branches page's tree and its buttons. */
 const TREE_HEIGHT = 440;
@@ -326,6 +398,8 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     if (pairs[i]) posts.push(<PairPost key={`p${pairs[i].id}`} pair={pairs[i]} palette={palette} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} palette={palette} />);
+    // A question card in every batch after the first (whose question is the recall card), each kind in turn.
+    if (i > 0) posts.push(<FeedQuiz key={`q${day}-${i}`} kind={feedQuizKind(day, i)} seed={feedQuizSeed(day, i)} palette={palette} />);
     if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
   }
   return (
