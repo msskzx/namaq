@@ -1,15 +1,15 @@
 import { mushafText } from '@shared/quran/mushafText';
 import { normalizeWord } from '@shared/quran/normalize';
 import { branchList, EMPTY_LIST } from './branchList';
-import { ayahOf, cardOf } from './branches';
+import { ayahOf } from './branches';
 import { compareTargetsOfAyah, type CompareTarget } from './compare';
 
 /** At most this many trees or compare cards in the sheet; the button at its end opens them all. */
 export const PREVIEW_MAX = 10;
 
 /** The trees that hold an ayah, as the branches list narrowed to it shows them, first few only. */
-export function treesOfAyah(key: string) {
-  return branchList({ ...EMPTY_LIST, ayah: key }).slice(0, PREVIEW_MAX).map(piece => cardOf(piece));
+export function treePiecesOfAyah(key: string) {
+  return branchList({ ...EMPTY_LIST, ayah: key }).slice(0, PREVIEW_MAX);
 }
 
 /**

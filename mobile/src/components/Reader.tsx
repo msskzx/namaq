@@ -289,18 +289,23 @@ export default function Reader() {
     if (writingNow.current) { boxes.focus(); return; }
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
-    // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
-    if (mode === 'read') setMark(key ? { key, page: shown.current } : null);
+    // While reading, a tap, double tap or long press selects the ayah, and a tap on the page clears it. A second single
+    // tap on the marked ayah lets it go (owner, 2026-11-14); it is read once the tap is known not to be a double tap.
+    const at = shown.current;
+    const select = (toggle: boolean) => {
+      if (mode === 'read') setMark(current => (key && !(toggle && current?.key === key) ? { key, page: at } : null));
+    };
     const set = readGestures()[mode];
-    if (touch === 'long') { latest.current(set.long, key, x, y, word); return; }
+    if (touch === 'long') { select(false); latest.current(set.long, key, x, y, word); return; }
     if (pending.current) {
       clearTimeout(pending.current.timer);
       pending.current = null;
+      select(false);
       latest.current(set.double, key, x, y, word);
       return;
     }
-    if (set.double === 'none') { latest.current(set.tap, key, x, y, word); return; }
-    pending.current = { timer: setTimeout(() => { pending.current = null; latest.current(set.tap, key, x, y, word); }, DOUBLE_TAP) };
+    if (set.double === 'none') { select(true); latest.current(set.tap, key, x, y, word); return; }
+    pending.current = { timer: setTimeout(() => { pending.current = null; select(true); latest.current(set.tap, key, x, y, word); }, DOUBLE_TAP) };
   }, [mode]);
 
   // While reciting the page ends above the recite pill, so it never covers a line.

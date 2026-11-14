@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, Eye, EyeOff, LightbulbOff, GalleryHorizontal, Moon, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, Eye, EyeOff, LightbulbOff, Moon, NotebookPen, ScrollText } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -13,9 +13,8 @@ import type { SavedContent, StoryCard } from '@/lib/homeFeed';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
-import BranchTree from '@/app/quran/branches/BranchTree';
-import AyahCards from '@/app/quran/branches/AyahCards';
-import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
+import TreeViewCard from '@/app/quran/branches/TreeViewCard';
+import { BRANCH_VIEW_COOKIE, parseBranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
 import { wordTargets } from '@shared/quran/writeAyah';
@@ -25,7 +24,7 @@ import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
 import { useNow } from '@/components/utilities/Utilities';
 import { mushafText } from '@shared/quran/mushafText';
-import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
+import { readBookmarks, serverBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
@@ -290,27 +289,13 @@ function SavedPost({ item }: { item: SavedItem }) {
 const TREE_HEIGHT = '24rem';
 
 /**
- * One tree as a post: the branches page's own tree (BranchTree), so it zooms, pans and lights a path on a click, as there.
+ * One tree as a post: the branches page's own tree (TreeViewCard), so it zooms, pans and lights a path on a click, as there.
  * The open button takes it to the branches page.
  */
 function TreePost({ tree }: { tree: Tree }) {
-  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
-  const saved = bookmarks.some(item => item.id === tree.id);
-  // Opens in the view chosen in the settings (the branches page's cookie); the card's own switch changes only this card.
-  const [view, setView] = useState<BranchView>(() => { const pref = parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree'; return showsOtherView(tree.id) ? (pref === 'tree' ? 'cards' : 'tree') : pref; });
-  const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
   return <article className={styles.post} dir="rtl">
     <Link href={tree.href} aria-label="افتح الشجرة في متشابهات القرآن" className="block hover:opacity-80"><PostHead Icon={TreeIcon} title={tree.text} sub="من متشابهات القرآن" quran /></Link>
-    <div className="px-2">
-      {view === 'cards'
-        ? <AyahCards ayahKeys={tree.ayat?.map(ayah => ayah.key) ?? []} names={names} />
-        : <BranchTree tree={tree.tree} ayat={tree.ayat} prefixes={tree.prefixes} offsets={tree.offsets} names={names} surround={{ on: false, sync: true }} viewportHeight={TREE_HEIGHT} direction="auto" zoomInRail />}
-    </div>
-    <div className={styles.actions} data-share-skip>
-      <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saved ? 'أزلها من المحفوظات' : 'احفظ'} title={saved ? 'أزلها من المحفوظات' : 'احفظ'} className={saved ? 'text-[var(--home-accent)]' : undefined}
-        onClick={() => toggleBookmark({ id: tree.id, text: tree.text, href: tree.href })}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Button>
-      <Button size="lg" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>{view === 'tree' ? <GalleryHorizontal aria-hidden /> : <TreeIcon aria-hidden />}</Button>
-    </div>
+    <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed actionsClassName={styles.actions} />
   </article>;
 }
 

@@ -12,7 +12,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
-import BranchTree from '@/app/quran/branches/BranchTree';
+import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import type { AyahPreview } from './ayahPreview';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
@@ -24,8 +24,6 @@ const load = async <T,>(api: string, key: string): Promise<T> => {
   if (!response.ok) throw new Error('preview');
   return response.json();
 };
-/** A wide tree opens at its middle, where its top-down root is. */
-const centre = (card: HTMLElement | null) => { if (card) card.scrollLeft = (card.scrollWidth - card.clientWidth) / 2 * (getComputedStyle(card).direction === 'rtl' ? -1 : 1); };
 const CARD = 'block rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)]';
 
 /** Each differing word of the ayah in a card: Hafs's reading first, then the others in the accent colour, each with who reads it. */
@@ -85,13 +83,12 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           )}
           {!readings && !(tafsirKey ? tafsir : data) && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
           {error && <p role="alert" className="py-6 text-center text-sm text-[var(--home-muted)]">تعذّر التحميل.</p>}
+          {/* Each tree is the branches page's own card (owner, 2026-11-14): zoom, pan, a path lit on a click, its own tree/matrix switch, opening in the settings' view. */}
           {trees && data?.trees.map(tree => (
-            // A tap opens that tree; a wide tree scrolls sideways inside its card. Trees draw top-down and left to right inside, as on the branches page.
-            <Link key={tree.id} href={tree.href} aria-label="افتح هذه الشجرة" ref={centre} className={`${CARD} shrink-0 overflow-x-auto overscroll-x-contain`}>
-              <div inert data-down dir="ltr" className="mx-auto w-max min-w-full p-1 [&_[data-tree-content]]:mx-auto [&_[data-tree-content]]:flex-col [&_[data-tree]]:overflow-visible [&_[data-tree]]:border-0 [&_[data-tree]]:bg-transparent [&_[data-tree]]:p-2">
-                <BranchTree tree={tree.tree} ayat={tree.ayat} prefixes={tree.prefixes} offsets={tree.offsets} names={names} zoomable={false} viewportHeight={null} surround={{ on: false, sync: true }} />
-              </div>
-            </Link>
+            // A drag on the tree pans it; it never slides the sheet away.
+            <div key={tree.id} data-no-swipe-close className={`${CARD} shrink-0 overflow-hidden`}>
+              <TreeViewCard tree={tree} height="min(24rem, 55dvh)" names={names} />
+            </div>
           ))}
           {shown.kind === 'compare' && data?.compare.map(item => (
             <Link key={item.href} href={item.href} aria-label={`${item.page}، ${item.partner}`} className={`${CARD} shrink-0 px-3.5 py-2.5`}>
