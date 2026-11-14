@@ -144,6 +144,17 @@ test.describe('a returning user', () => {
     await expect.poll(() => readerPage(page)).toBe(42);
   });
 
+  test('a saved ayah comes up in the feed as its mushaf lines', async ({ page }) => {
+    await open(page, '/');
+    await page.mouse.move(380, 500);
+    const saved = page.getByRole('heading', { name: 'البقرة ٢٥٥', exact: true });
+    await expect(async () => {
+      await page.mouse.wheel(0, 3000);
+      await expect(saved).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await expect(page.getByText('من المحفوظات').first()).toBeAttached();
+  });
+
   test('a remembered ayah leaves the feed until its review is due', async ({ page }) => {
     await open(page, '/');
     // The recall card, by its title: an openings card further down has the same buttons.

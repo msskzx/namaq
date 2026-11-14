@@ -2,14 +2,16 @@ import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore }
 import { AppState, Pressable, ScrollView, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, Moon, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
-import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
+import { bookmarkKind } from '@shared/bookmarkKind';
+import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
@@ -21,7 +23,9 @@ import { Text } from './Text';
 import { quranText } from '@/lib/quranText';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
-import { EMPTY_LIST } from '@/lib/branchList';
+import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
+import { treeList } from '@/lib/branches';
+import { shownBookmarks } from '@/lib/home';
 import TreeIcon from './TreeIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -29,7 +33,7 @@ import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
 import AyahLines, { pageWords } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
-import { sideKeys, sideLabel } from '@/lib/compare';
+import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
 import { pageData, PAGES, surahBefore } from '@/lib/mushaf';
 import { readJson } from '@/lib/storage';
@@ -361,6 +365,39 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   );
 });
 
+/** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
+function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
+  const [surah, number] = ayah.split(':').map(Number);
+  return (
+    <View style={cardStyle(palette)}>
+      <PostHead Icon={Bookmark} title={`${shortNames[surah] ?? ''} ${num(number)}`} sub="من المحفوظات" palette={palette} />
+      <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
+        <AyahLines ayah={ayah} palette={palette} shown write={null} checked={null} />
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 12 }}>
+        <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
+      </View>
+    </View>
+  );
+}
+
+/**
+ * A saved item as its own card (owner, 2026-11-14): a tree as the tree card, a compare card as the pair card, an ayah in the
+ * mushaf's lines. One that the data no longer holds is skipped.
+ */
+function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
+  const found = useMemo(() => {
+    const kind = bookmarkKind(item);
+    if (kind === 'ayah') return { ayah: item.id.slice('ayah:'.length) };
+    if (kind === 'tree') return { piece: treeList().find(piece => piece.id === item.id || aliasesOf(piece).includes(item.id)) };
+    const surahs = [...new Set(compareBookmarkAyat(item).map(key => Number(key.split(':')[0])))].sort((a, b) => a - b);
+    return { pair: surahs.length ? cardsFor(surahs[0], surahs[1] ?? surahs[0]).find(card => savedAs(card.id, [item]).length) : undefined };
+  }, [item]);
+  if ('ayah' in found) return found.ayah && /^\d+:\d+$/.test(found.ayah) ? <SavedAyahPost ayah={found.ayah} palette={palette} /> : null;
+  if ('piece' in found) return found.piece ? <TreePost piece={found.piece} palette={palette} /> : null;
+  return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
+}
+
 /** The prophets card's height: the group's surahs scroll inside it, never sideways. */
 const STORY_HEIGHT = 460;
 
@@ -406,6 +443,8 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const saved = useMemo(() => shownBookmarks(bookmarks), [bookmarks]);
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -431,6 +470,8 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     // A question card in every batch after the first (whose question is the recall card), each kind in turn.
     if (i > 0) posts.push(<FeedQuiz key={`q${day}-${i}`} kind={feedQuizKind(day, i)} seed={feedQuizSeed(day, i)} palette={palette} />);
     if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
+    const savedItem = savedOfSlot(saved, day, i);
+    if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} palette={palette} />);
     if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
   }
   return (

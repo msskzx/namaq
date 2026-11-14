@@ -129,3 +129,13 @@ export function storyTimes({ due, saved, notes, now = Date.now() }: { due: Recor
 
 /** The batches that carry a prophets card (shared/quran/prophets/storyGroup.ts): every other one after the first. */
 export const hasStoryCard = (slot: number) => slot % 2 === 1;
+
+/** The batches that carry a saved card (owner, 2026-11-14: saved cards come up in the feed now and then): every other one from the third. */
+export const hasSavedCard = (slot: number) => slot > 0 && slot % 2 === 0;
+
+/** The saved item the card in batch `slot` shows on a day: the saved items newest first, taken in turn by day and batch. */
+export function savedOfSlot<T extends { savedAt: number }>(items: readonly T[], day: number, slot: number): T | undefined {
+  if (!items.length || !hasSavedCard(slot)) return undefined;
+  const newest = [...items].sort((a, b) => b.savedAt - a.savedAt);
+  return newest[(((day + slot / 2 - 1) % newest.length) + newest.length) % newest.length];
+}

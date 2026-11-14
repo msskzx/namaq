@@ -33,7 +33,7 @@ export function useAyahPage(ayah: string) {
  * (MushafPage) cut to the lines around the ayah, words in their places. What comes before it shows, the ayah and what
  * follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals it, `checked` colouring what was written.
  */
-export default function AyahLines({ ayah, pages, write, checked, shown }: { ayah: string; pages: Pages; write: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean }) {
+export default function AyahLines({ ayah, pages, write, checked, shown }: { ayah: string; pages: Pages; write?: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean }) {
   const parts = useMemo(() => {
     const model = pageModel(pages.data, pages.top);
     const slice = ayahSlice(model.lines, pages.data.items, ayah);
@@ -45,6 +45,6 @@ export default function AyahLines({ ayah, pages, write, checked, shown }: { ayah
   return <div lang="ar">
     {parts.slice.before && pages.previous && previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={previous} />}
     <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} slice={parts.slice} hidden={view.hidden} titled={view.titled} next={view.upcoming}
-      write={shown ? null : { ...write, before: 0 }} checked={shown && checked ? { ...checked, before: 0 } : null} />
+      write={shown || !write ? null : { ...write, before: 0 }} checked={shown && checked ? { ...checked, before: 0 } : null} />
   </div>;
 }

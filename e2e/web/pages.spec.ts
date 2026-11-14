@@ -154,6 +154,20 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('a saved ayah comes up in the home feed as its mushaf lines', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('bookmarks', JSON.stringify([{ id: 'ayah:2:255', text: 'ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ', href: '/quran/read/ayah/2/255', savedAt: Date.now() }])));
+    await page.goto('/');
+    const saved = page.getByRole('heading', { name: 'البقرة ٢٥٥', exact: true });
+    await expect(async () => {
+      await page.evaluate(() => window.scrollBy(0, 3000));
+      await expect(saved).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 40_000 });
+    const card = page.locator('article').filter({ has: saved }).first();
+    await expect(card.getByText('من المحفوظات')).toBeVisible();
+    await expect(card.locator('[data-line]').first()).toBeAttached();
+    await noErrorPage(page);
+  });
+
   test('the home pair card is the compare card and opens the compare page', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
