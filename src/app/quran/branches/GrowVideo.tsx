@@ -5,6 +5,7 @@ import { Download, Pause, Play, RotateCcw, Send, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
 import { END_MS } from '@shared/video/pageVideo';
+import { outroDrawer } from '@shared/video/recorder';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { askLeft, growRoot, growthState, openStudio, pause, play, stop, useGrowth } from './Grow';
@@ -249,17 +250,12 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   }
 }
 
-/**
- * The end frame: the tree fades into the page and the emblem fades in. The emblem shows only here,
- * never over the tree (owner, 2026-11-14), as in the app's videos (shared/video/pageVideo.ts END_MS).
- */
+/** The end frame shared by every video (shared/video/recorder.ts OUTRO): the emblem, the app's name and its slogan, fading in over the tree. */
+let drawOutro: ReturnType<typeof outroDrawer> | null = null;
 function drawEnd(context: CanvasRenderingContext2D, look: Look, alpha: number) {
-  context.save();
-  context.globalAlpha = alpha;
-  context.fillStyle = look.paper;
-  context.fillRect(0, 0, WIDTH, HEIGHT);
-  if (look.logo?.complete && look.logo.naturalWidth) context.drawImage(look.logo, WIDTH / 2 - 130, 700, 260, 260);
-  context.restore();
+  drawOutro ??= outroDrawer();
+  const css = getComputedStyle(document.documentElement);
+  drawOutro(context, look.logo, { width: WIDTH, height: HEIGHT, k: WIDTH / 390, alpha, paper: look.paper, ink: look.ink, muted: css.getPropertyValue('--home-muted').trim(), ui: look.font });
 }
 
 function layoutChips(context: CanvasRenderingContext2D, chips: Drawing['chips']) {
@@ -352,6 +348,8 @@ export default function GrowVideo() {
     const logo = new Image();
     logo.src = `/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`;
     const look: Look = { paper: token('--home-paper'), ink: token('--home-ink'), rule: token('--home-rule'), accent: token('--home-accent'), green: token('--home-green'), font: getComputedStyle(root).fontFamily || 'serif', logo, ask: false, matrix: !!drawing.matrix };
+    // The end frame writes the app's name in bold Amiri, which the page may not have loaded yet.
+    void document.fonts?.load?.(`bold 40px ${look.font}`)?.catch(() => {});
     const stream = element.captureStream(FPS);
     const recorder = new MediaRecorder(stream, { mimeType: type });
     const chunks: Blob[] = [];

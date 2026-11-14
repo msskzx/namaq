@@ -4,7 +4,7 @@ import { mushafText } from '../quran/mushafText';
 import { ayahStarts, stepTime, type ReadStep } from '../quran/readPlan';
 import { COMPARE_CARD, markColour, sideView, UI_SCALE, type CardPiece, type SideName } from '../quran/compareCardLook';
 import { stepEnds, videoParts, videoTimeline, type Segment } from './pageVideo';
-import { PAUSE, READY, VIDEO_TYPES } from './recorder';
+import { OUTRO, PAUSE, READY, VIDEO_TYPES } from './recorder';
 
 /** One word as the video draws it: its text, which ayah and word it is (-1 for the ayah number), its mark. */
 export type VideoWord = { text: string; ayah: number; word: number; kind?: MarkKind; link?: string; seal?: boolean };
@@ -125,6 +125,7 @@ export function compareRecorderPage(input: CompareVideoInput, fontFace = '') {
 <body><canvas width="1080" height="1920"></canvas><script>
 var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
 ${READY}
+${OUTRO}
 ${RECORDER}
 </script></body></html>`;
 }
@@ -323,12 +324,9 @@ function heading(card) {
   if (under) uiText(under, WIDTH / 2, TOP + h + 40, ui(13), look.muted);
 }
 
-// The emblem shows only here, at the end (owner, 2026-11-14), with where the next part goes on.
+// The end frame (shared OUTRO): the emblem, the app's name and slogan, and where the next part goes on.
 function endFrame(alpha) {
-  ctx.globalAlpha = alpha;
-  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, WIDTH / 2 - 130, 700, 260, 260);
-  if (INPUT.next) uiText(INPUT.next, WIDTH / 2, 1060, ui(16), look.accent);
-  ctx.globalAlpha = 1;
+  outro(ctx, logo, { width: WIDTH, height: HEIGHT, k: K, alpha: alpha, paper: look.paper, ink: look.ink, muted: look.muted, ui: look.ui }, INPUT.next, look.accent);
 }
 
 var SCROLL = 450;
