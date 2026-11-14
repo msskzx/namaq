@@ -80,7 +80,8 @@ export function ConnectionLines({ lane, column, ready }: { lane: RefObject<HTMLD
     window.addEventListener('resize', draw);
     return () => { active = false; observer?.disconnect(); window.removeEventListener('resize', draw); };
   }, [lane, column, ready, state?.group, selected]);
-  useMatrixGrowTarget(lane, routes.length, routes, state?.enable ?? noConnections);
+  // The studio plays these lines, or the read-along when it is switched to that.
+  useMatrixGrowTarget(lane, routes.length, routes, state?.enable ?? noConnections, growth.play === 'connections');
   return <svg aria-hidden data-word-connectors data-connection-group={state?.group?.id} style={{ visibility: state?.selected.length || growth.studio && growth.kind === 'matrix' ? undefined : 'hidden' }} className="pointer-events-none absolute inset-0 z-10 h-full w-full overflow-visible" fill="none" strokeWidth="1.25">
     {(state?.selected.length || growth.studio && growth.kind === 'matrix' ? routes : []).map((route, index) => <g key={index} stroke={connectionColor(route.tag)} data-tag={route.tag} data-connection data-to-x={route.to.x} data-to-y={route.to.y}>
       <path d={route.d} pathLength="1" />

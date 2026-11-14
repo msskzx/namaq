@@ -156,7 +156,9 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
 
 /** Shares the tree or matrix as an image, as in the phone app; the dialog also offers the tree's video and the page's address. */
 export function ShareButton({ video = false, href }: { video?: boolean; href?: string }) {
-  const growing = useGrowth().total > 0;
+  // The read-along has no video; the tree and the connections do.
+  const growth = useGrowth();
+  const growing = growth.total > 0 && growth.kind !== 'read';
   return <ShareImageButton data-share-tree={video || undefined} href={href} onVideo={video && growing && canRecord() ? openVideo : undefined} />;
 }
 

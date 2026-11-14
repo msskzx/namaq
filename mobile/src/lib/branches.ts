@@ -9,6 +9,8 @@ import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
 import type { Group } from '@shared/quran/mutashabih/types';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
+import { stepTime } from '@shared/quran/readPlan';
+import type { Beat } from './growth';
 import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
@@ -138,6 +140,26 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
       after: cellOf(around?.after[passage[passage.length - 1].key]),
     })),
   };
+}
+
+/** A word of the matrix's ayah column, by its row, ayah and place: what the read-along lights. */
+export const readId = (row: number, key: string, index: number) => `${row}:${key}:${index}`;
+
+/**
+ * The matrix's read-along studio, as on the compare tab: each row read in turn, word by word, at compare's pace; the word read
+ * lights with its matches in the other rows (`link:<link>`, the same links a tap lights). One step per row, for the progress bars.
+ */
+const readingCache = new WeakMap<Presentation, Beat[]>();
+export function matrixReading(presentation: Presentation): Beat[] {
+  const cached = readingCache.get(presentation);
+  if (cached) return cached;
+  const beats = matrixOf(presentation, false).rows.flatMap((row, r) => (row.ayah?.ayat ?? []).flatMap((ayah, a, ayat) => ayah.words.map((_, i): Beat => {
+    const link = ayah.links?.get(i)?.link;
+    const last = i === ayah.words.length - 1;
+    return { step: r, key: ayah.key, ms: stepTime({ side: 0, ayah: a, word: i, link, last: last && a === ayat.length - 1 }, 1), reveal: [], now: [readId(r, ayah.key, i), ...(link ? [`link:${link}`] : [])] };
+  })));
+  readingCache.set(presentation, beats);
+  return beats;
 }
 
 export const isSaved = (piece: BranchPiece, list = readBookmarks()) => isSavedIn(piece, list);

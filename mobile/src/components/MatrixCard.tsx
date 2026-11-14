@@ -9,7 +9,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
-import { matrixOf, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
+import { matrixOf, readId, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import type { Size } from '@/lib/camera';
 import { QURAN_FONT, blend, toneColor, type Palette, CARD } from '@/lib/theme';
 import Hourglass from './Hourglass';
@@ -22,8 +22,10 @@ type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: 
   footer?: React.ReactNode;
   /** A book group's word connections (the website's GroupConnections): drawn for the tags given, between the ayat in the middle column. */
   connections?: { group: Group; tags: Tag[] };
-  /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. */
+  /** The connections studio playing: lines still hidden (`r<n>`), and the one waiting for an answer. The read-along lights what `now` names (matrixReading). */
   growth?: { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number } };
+  /** The read-along studio is playing: the word read lights with its matches in the other rows. */
+  reading?: boolean;
   /** Told when a swipe moved off the ayah column to the ayah before or after. */
   onColumn?: () => void;
   /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
@@ -43,6 +45,8 @@ const SWIPE = 0.2;
 const FLICK = 500;
 
 type Light = { lit: string | null; onWord: (link: string) => void };
+/** The read-along in one row: the word being read (`row:key:index`) and its link (`link:<link>`), lit together. */
+type Read = { row: number; now: Set<string> };
 
 /** A word's colour: shared by every row in full, by only some rows faded into the card, lit on the highlight. */
 function toneOf(ayah: MatrixAyah, i: number, palette: Palette, light?: Light) {
@@ -54,7 +58,15 @@ function toneOf(ayah: MatrixAyah, i: number, palette: Palette, light?: Light) {
   return undefined;
 }
 
-function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light }) {
+/** The word the read-along is on, and the words matched with it in the other rows, lit as a tap lights them. */
+function readTone(ayah: MatrixAyah, i: number, palette: Palette, read?: Read) {
+  if (!read?.now.size) return undefined;
+  const link = ayah.links?.get(i)?.link;
+  if (!read.now.has(readId(read.row, ayah.key, i)) && !(link && read.now.has(`link:${link}`))) return undefined;
+  return { color: palette.onHighlight, backgroundColor: palette.highlight };
+}
+
+function Ayah({ ayah, palette, muted, light, read }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light; read?: Read }) {
   const [, number] = ayah.key.split(':').map(Number);
   const registry = useContext(Words);
   const press = (i: number) => {
@@ -63,7 +75,7 @@ function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Pale
   };
   if (registry && !muted) return <>
     {ayah.words.map((word, i) => {
-      const tone = toneOf(ayah, i, palette, light);
+      const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
         <Text onPress={press(i)} style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink }, tone]}>{mushafText(word)}</Text>
       </View>;
@@ -72,14 +84,14 @@ function Ayah({ ayah, palette, muted, light }: { ayah: MatrixAyah; palette: Pale
   </>;
   return <>
     {ayah.words.map((word, i) => {
-      const tone = toneOf(ayah, i, palette, light);
+      const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
       return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)} style={tone}>{mushafText(word)}</Text></Text>;
     })}
     <Text style={{ color: muted ? palette.muted : palette.accent }}> {num(number)} </Text>
   </>;
 }
 
-function Cell({ cell, at, palette, width, current, onPress, light, note, still }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note']; still?: boolean }) {
+function Cell({ cell, at, palette, width, current, onPress, light, note, still, read }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean; onPress: () => void; light?: Light; note?: Props['note']; still?: boolean; read?: Read }) {
   if (!cell) return <View style={{ width }} />;
   const first = cell.ayat[0];
   const last = cell.ayat[cell.ayat.length - 1];
@@ -104,9 +116,9 @@ function Cell({ cell, at, palette, width, current, onPress, light, note, still }
       {at === 'after' && basmala}
       {wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}</View>
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}</View>
         : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} />)}
+          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}
         </Text>}
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(first.key)}
@@ -128,7 +140,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, onColumn, alongside, note }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, connections, growth, reading, onColumn, alongside, note }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   const width = Math.round(view.width * SHARE);
@@ -218,6 +230,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
               <View key={r} style={{ flexDirection: 'row-reverse', gap: GAP, alignItems: 'stretch' }}>
                 {matrix.columns.map((name, i) => (
                   <Cell key={name} cell={row[name]} at={name} palette={palette} width={width} current={i === column} light={light} note={note}
+                    read={reading && growth ? { row: r, now: growth.now } : undefined}
                     onPress={() => (i === column ? onTap(keysOf(row[name])) : goTo(i))} />
                 ))}
               </View>
