@@ -275,9 +275,9 @@ describe('BranchTree', () => {
     expect(screen.getByText('١:١').closest('button, a')).toBeNull();
   });
 
-  it('identifies al-Qamar ayah 54 in the node header', () => {
+  it('identifies al-Qamar ayah 54 on the node tab', () => {
     render(<BranchTree tree={{ words: ['إِنَّ', 'ٱلْمُتَّقِينَ'], ayat: ['54:54'], children: [] }} names={{ 54: 'سُورَةُ القَمَرِ' }} />);
-    expect(screen.getByText('سُورَةُ القَمَرِ ٥٤').closest('header')).toBeTruthy();
+    expect(screen.getByText('سُورَةُ القَمَرِ ٥٤').closest('[data-tab]')).toBeTruthy();
     expect(screen.queryByRole('link')).toBeNull();
     expect(screen.queryByText('·')).toBeNull();
   });
@@ -314,7 +314,7 @@ describe('BranchTree', () => {
   it('draws a repeated leaf once with every ayah\'s reference and each way its ayat write a differing word', () => {
     const group = (data.ayat as BranchAyah[]).filter(ayah => ['94:5', '94:6'].includes(ayah.key));
     const { container } = render(<BranchTree {...live(['94:5', '94:6'])} names={{ 94: 'الشرح' }} />);
-    expect(container.querySelectorAll('[data-node] > header span.text-xs, [data-node] > span span.text-xs').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('[data-node] > [data-tab] span.text-xs, [data-node] > span span.text-xs').length).toBeGreaterThan(0);
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
     expect(container.querySelectorAll('[data-forms]').length).toBeGreaterThan(0);
   });
