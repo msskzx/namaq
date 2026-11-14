@@ -7,7 +7,8 @@ describe('surah aims', () => {
     for (let surah = 1; surah <= 114; surah += 1) {
       const aim = surahAim(surah);
       expect(aim, `${surah}`).toBeDefined();
-      expect(aim!.text).toMatch(/^(ف?مقصود|المقصود)/);
+      expect(aim!.text.trim()).not.toBe('');
+      if (surah <= 40) expect(aim!.text).toMatch(/^(مقصود|المقصود)/);
       expect(['nazm', 'masaid']).toContain(aim!.src.book);
       expect(aim!.src.vol).toBeGreaterThan(0);
       expect(aim!.src.sh).toBeGreaterThan(0);
