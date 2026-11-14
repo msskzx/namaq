@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
+import ExternalLink from '@/components/common/ExternalLink';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { reviewStatusLabel, type ClaimWithCitations } from '@/types/provenance';
@@ -79,16 +80,14 @@ export default function SubjectEvidenceAccess({
                   text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']}
                 />
                 {claim.citations.map((citation) => (
-                  <a
+                  <ExternalLink
                     key={citation.id}
                     className="underline"
                     href={citation.extractionUrl}
-                    target="_blank"
-                    rel="noreferrer"
                   >
                     {citation.source.title}
                     {citation.pageReference ? ` — ${citation.pageReference}` : ''}
-                  </a>
+                  </ExternalLink>
                 ))}
               </div>
             </li>

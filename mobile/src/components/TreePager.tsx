@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, RotateCwSquare, Send, Tags } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Maximize2, RotateCwSquare, Send, Tags } from 'lucide-react-native';
 import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -28,7 +28,7 @@ import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { connectionBeats, growthBeats } from '@/lib/growth';
 import { wordConnections } from '@shared/quran/mutashabih/connections';
-import { answer, claimTarget, growthState, stop, useGrowth } from '@/lib/growPlayer';
+import { answer, claimTarget, growthState, stop, useGrowth, type Growth } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
@@ -36,6 +36,8 @@ import { readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
 
 const PLACE = 'branches-place';
+/** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
+const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, kind: 'tree' };
 type Place = { id: string; camera?: Camera };
 
 /** A second tap within this time is a double tap: it saves the tree instead of opening the ayat. */
@@ -49,7 +51,9 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void }) {
+function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, onCompare, onRotate, onOpen }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
+  /** Set on a pager embedded elsewhere (the home feed): no studio, and a button that opens the tree on the branches tab. */
+  onOpen?: () => void }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
   const targets = useMemo(() => compareTargetsFor(piece.keys), [piece]);
   const saved = useSaved(piece);
@@ -62,14 +66,17 @@ function Actions({ piece, palette, pop, current, onVideo, onShare, onEvidence, o
     if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
   }, [pop, current, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-  if (studio && current) return <StudioControls palette={palette} onVideo={onVideo} />;
+  if (studio && current && !onOpen) return <StudioControls palette={palette} onVideo={onVideo} />;
   const save = () => toggleSaved(piece);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 }}>
       <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
         <Animated.View style={popped}><Bookmark size={26} color={saved ? palette.accent : palette.ink} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
-      <StudioButton palette={palette} />
+      {!onOpen && <StudioButton palette={palette} />}
+      {onOpen && <Pressable onPress={onOpen} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح الشجرة في متشابهات القرآن" style={{ padding: 8 }}>
+        <Maximize2 size={24} color={palette.ink} />
+      </Pressable>}
       {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
         <RotateCwSquare size={24} color={palette.ink} />
       </Pressable>}
@@ -116,14 +123,20 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
   /** A downward swipe on the open tree. */
   onPull?: () => void;
   /** A node's «show only this part»: the tree of its own that holds the node's ayat. */
-  onOpen?: (piece: BranchPiece) => void };
+  onOpen?: (piece: BranchPiece) => void;
+  /**
+   * The pager embedded in another page (the home feed's tree card): it keeps no place or zoom for the branches tab, has no
+   * studio, lets vertical drags on an unzoomed tree scroll the page, and `open` takes the tree to the branches tab.
+   */
+  embedded?: { open: (piece: BranchPiece) => void } };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen }: Props) {
+export default function TreePager({ pieces, list, palette, mode, around, start, onIndex, onPull, onOpen, embedded }: Props) {
   /** The one tree drawn the other way, by its id: rotating belongs to that tree, not to the page. */
   const [rotatedId, setRotatedId] = useState<string | null>(null);
-  const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => onOpen?.(piece) }), [onOpen]);
-  const place = useMemo(() => readJson<Place>(PLACE), []);
+  // Embedded, «show only this part» opens that part on the branches tab.
+  const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => (embedded ? embedded.open(piece) : onOpen?.(piece)) }), [onOpen, embedded]);
+  const place = useMemo(() => (embedded ? undefined : readJson<Place>(PLACE)), []); // eslint-disable-line react-hooks/exhaustive-deps
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   const [view, setView] = useState<Size | null>(null);
@@ -139,7 +152,8 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
   useEffect(() => () => clearTimeout(pending.current), []);
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
   const width = view?.width ?? 0;
-  const growth = useGrowth();
+  const shared = useGrowth();
+  const growth = embedded ? IDLE : shared;
   const sceneRef = useRef<(() => Promise<TreeScene | null>) | null>(null);
   const shareRef = useRef<(() => React.ReactNode) | null>(null);
   const beatsRef = useRef<{ watch: ReturnType<typeof growthBeats>; ask: ReturnType<typeof growthBeats> } | null>(null);
@@ -178,6 +192,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     if (growth.studio && growth.kind === 'matrix' && matrixGroup?.tags.length && piece && !tagsOf(piece, matrixGroup).length) setPicked({ id: piece.id, tags: matrixGroup.tags });
   }, [growth.studio, growth.kind, matrixGroup, piece]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
+    if (embedded) return;
     if (mode === 'matrix' && matrixGroup && studioTags.length) {
       const count = studioTags.reduce((sum, tag) => sum + wordConnections(matrixGroup, tag).length, 0);
       claimTarget('branches', { kind: 'matrix', watch: connectionBeats(count), ask: connectionBeats(count, true) });
@@ -195,10 +210,10 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
   const arrive = useCallback((next: number) => {
     restore.current = undefined;
     setIndex(next);
-    writeJson(PLACE, { id: pieces[next].id });
-  }, [pieces]);
+    if (!embedded) writeJson(PLACE, { id: pieces[next].id });
+  }, [pieces, embedded]);
 
-  const remember = useCallback((camera: Camera) => writeJson(PLACE, { id: pieces[index].id, camera }), [pieces, index]);
+  const remember = useCallback((camera: Camera) => { if (!embedded) writeJson(PLACE, { id: pieces[index].id, camera }); }, [pieces, index, embedded]);
 
   const count = pieces.length;
   const settle = (from: number, dx: number, velocity: number) => {
@@ -218,7 +233,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     const now = Date.now();
     if (now - moved.current < 350) return;
     clearTimeout(pending.current);
-    const state = growthState();
+    const state = embedded ? IDLE : growthState();
     if (state.ask) { answer(); return; }
     if (state.studio && ayahKeys) return;
     if (now - lastTap.current < DOUBLE_TAP) {
@@ -249,7 +264,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
       return;
     }
     const draw = shareRef.current;
-    if (draw) shareCard({ content: () => draw(), link, onVideo: () => void openVideo() });
+    if (draw) shareCard({ content: () => draw(), link, onVideo: embedded ? undefined : () => void openVideo() });
   };
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
@@ -269,10 +284,11 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
               // Taps between the buttons stay here, so they are not read as taps on the tree.
               <View style={{ direction: 'rtl' }} onStartShouldSetResponder={() => true}>
                 <View style={{ height: FOOT }}>
-                  {current && <StudioProgress palette={palette} />}
+                  {current && !embedded && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     onVideo={mode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
-                    onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined} />
+                    onRotate={mode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
+                    onOpen={embedded ? () => embedded.open(pieces[at]) : undefined} />
                 </View>
                 {mode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
@@ -287,7 +303,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={around}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips />}
+                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded} />}
             </View>
             );
           })}

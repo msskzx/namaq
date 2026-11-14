@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,7 +11,8 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, su
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
-import { keepsSpace, maxLetters, typedLetters, wordTargets, writtenRight } from '@shared/quran/writeAyah';
+import { wordTargets } from '@shared/quran/writeAyah';
+import { useWriteBoxes } from '@/lib/useWriteBoxes';
 import { nextOpening, openingRound, type Openings } from '@shared/quran/openings';
 import TabHint from './TabHint';
 import TopBar from './TopBar';
@@ -127,10 +128,7 @@ export default function Reader() {
   // and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
-  const [typed, setTyped] = useState<Record<number, string>>({});
-  const [current, setCurrent] = useState<number | null>(null);
   const [checked, setChecked] = useState<Checked | null>(null);
-  const input = useRef<ComponentRef<typeof TextInput>>(null);
   // A review or the openings quiz asks one ayah at a time: once it shows, nothing more is written until the next one.
   const reviewDone = (reviewing || !!openings) && !!position?.shown;
   const writeKey = writing && view?.upcoming && !reviewDone ? view.upcoming : null;
@@ -138,42 +136,16 @@ export default function Reader() {
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && view ? wordTargets(writeWords).filter(at => view.hidden(writeKey, at + offset)) : [];
-  const askedKey = asked.join(',');
-  useEffect(() => {
-    setTyped({});
-    setCurrent(writeKey ? (askedKey ? Number(askedKey.split(',')[0]) : null) : null);
-    if (writeKey) setTimeout(() => input.current?.focus(), 50);
-  }, [writeKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const keyboard = useKeyboardHeight(reciting && writing);
-  const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); input.current?.blur(); };
-  const check = (filled: Record<number, string>) => {
+  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
     if (!writeKey || !position) return;
-    const right = asked.filter(at => writtenRight(filled[at] ?? '', writeWords[at]));
-    const wrong = asked.filter(at => !right.includes(at));
-    setChecked({ key: writeKey, right, wrong, typed: Object.fromEntries(wrong.map(at => [at, filled[at] ?? ''])) });
+    setChecked({ key: writeKey, ...graded });
     // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
-    if (wrong.length) markForgotten(writeKey);
+    if (graded.wrong.length) markForgotten(writeKey);
     setPosition(revealAyah(position, writeKey));
-  };
-  const moveOn = (filled: Record<number, string>) => {
-    const at = current === null ? -1 : asked.indexOf(current);
-    if (at + 1 < asked.length) setCurrent(asked[at + 1]);
-    else check(filled);
-  };
-  const onWrite = (text: string) => {
-    if (current === null) return;
-    const done = /\s/.test(text) && !keepsSpace(text, writeWords[current]);
-    const letters = typedLetters(text);
-    const filled = { ...typed, [current]: letters };
-    setTyped(filled);
-    if (done || letters.length >= maxLetters(writeWords[current])) moveOn(filled);
-  };
-  const onWriteKey = (key: string) => {
-    if (key !== 'Backspace' || current === null || typed[current]) return;
-    const at = asked.indexOf(current);
-    if (at > 0) setCurrent(asked[at - 1]);
-  };
-  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed, current, onBox: at => { setCurrent(at); input.current?.focus(); }, onActive: (y, h) => follow.current(y, h) } : null;
+  } });
+  const keyboard = useKeyboardHeight(reciting && writing);
+  const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); boxes.blur(); };
+  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick, onActive: (y, h) => follow.current(y, h) } : null;
   // Scrolls the box being written into the part of the screen above the pill and keyboard.
   const follow = useRef((_y: number, _h: number) => {});
 
@@ -254,7 +226,7 @@ export default function Reader() {
     setReviewing(false);
     setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
   };
-  const stopRecite = () => { setActions(null); setReviewing(false); setOpenings(null); setPosition(null); setChecked(null); input.current?.blur(); };
+  const stopRecite = () => { setActions(null); setReviewing(false); setOpenings(null); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -313,7 +285,7 @@ export default function Reader() {
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
     if (Date.now() - moved.current < 350) return;
     // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
-    if (writingNow.current) { input.current?.focus(); return; }
+    if (writingNow.current) { boxes.focus(); return; }
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
     // While reading, a tap or long press selects the ayah, and a tap on the page clears it.
@@ -469,11 +441,7 @@ export default function Reader() {
         </View>
       )}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
-      {writeKey && (
-        <TextInput ref={input} value={current === null ? '' : typed[current] ?? ''} onChangeText={onWrite} onKeyPress={event => onWriteKey(event.nativeEvent.key)}
-          autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off" blurOnSubmit={false} onSubmitEditing={() => moveOn(typed)}
-          accessibilityLabel="اكتب الكلمة" style={{ position: 'absolute', opacity: 0, width: 1, height: 1, top: 0, left: 0 }} />
-      )}
+      {boxes.field}
       {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
       <TabHint id="read" palette={palette} hidden={reciting || !!actions} />
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}

@@ -3,6 +3,7 @@
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import paper from '@/components/common/PaperPage.module.css';
+import ExternalLink from '@/components/common/ExternalLink';
 import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import styles from './Poem.module.css';
 
@@ -21,7 +22,7 @@ export default function PoemView({ poem }: { poem: Poem }) {
           : <>By <span lang="ar" dir="rtl">{author}</span>. Composed in {composed} AH · {count} verses</>}</p>
         <details className={styles.sources}>
           <summary>{ar ? 'الضبط والمصدر' : 'Edition and source'}</summary>
-          <p>{ar ? 'الضبط: ' : 'Vocalization: '}<a href={edition.url} lang="ar" dir="rtl">{edition.name}</a>{ar ? '، قوبل به كل بيت من ' : '. Compared verse by verse with a '}<a href={transcription}>{ar ? 'نسخة رقمية' : 'digital transcription'}</a>.</p>
+          <p>{ar ? 'الضبط: ' : 'Vocalization: '}<ExternalLink href={edition.url} lang="ar" dir="rtl">{edition.name}</ExternalLink>{ar ? '، قوبل به كل بيت من ' : '. Compared verse by verse with a '}<ExternalLink href={transcription}>{ar ? 'نسخة رقمية' : 'digital transcription'}</ExternalLink>.</p>
         </details>
       </header>
       <div className={styles.layout}>

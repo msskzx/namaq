@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, PenLine } from 'lucide-react';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
+import ExternalLink from '@/components/common/ExternalLink';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
@@ -90,7 +91,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
         <p className="font-semibold">الشرط وجوابه</p>
         {CONDITION_NOTES.map(p => <p key={p}>{p}</p>)}
         <ul className="text-sm text-[var(--home-muted)]">
-          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(s => <li key={s.url}><a className="underline" href={s.url} target="_blank" rel="noreferrer">{s.title}</a></li>)}
+          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(s => <li key={s.url}><ExternalLink className="underline" href={s.url}>{s.title}</ExternalLink></li>)}
         </ul>
       </SettingsHelp>
       <header className="flex items-center gap-2">

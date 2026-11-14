@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { ArrowLeftRight, ChevronLeft, Layers } from 'lucide-react-native';
 import { Text } from '@/components/Text';
+import ExternalLink from '@/components/ExternalLink';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
@@ -79,9 +80,9 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
           })}
         </ScrollView>
         {preview.kind === 'readings' ? (
-          <Pressable onPress={() => { void Linking.openURL(QIRAAT_SOURCE.url).catch(() => {}); }} accessibilityRole="link" hitSlop={8} style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
-            <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</Text>
-          </Pressable>
+          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
+            <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
+          </View>
         ) : <Pressable onPress={() => go(() => (preview.kind === 'trees' ? openTreesOf(preview.key) : openIntent({ tab: 'compare', lead: surah })))} accessibilityRole="button"
           style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 48, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
           {preview.kind === 'trees' ? <TreeIcon size={20} color={palette.ink} /> : <ArrowLeftRight size={20} color={palette.ink} />}

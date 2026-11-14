@@ -19,6 +19,43 @@ test.describe('a new user', () => {
     expect(await readerPage(page)).toBe(300);
   });
 
+  test('the tree card is the branches tree: it swipes to the next tree and opens it on the branches tab', async ({ page }) => {
+    await open(page, '/');
+    await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first().scrollIntoViewIfNeeded();
+    await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
+    const tree = page.getByLabel(/^الشجرة ١ من /).locator('xpath=../..');
+    const box = (await tree.boundingBox())!;
+    const y = box.y + box.height / 2;
+    // Arabic order: the next tree waits on the left, so a drag to the right brings it in.
+    await page.mouse.move(box.x + 60, y);
+    await page.mouse.down();
+    for (let step = 1; step <= 10; step++) await page.mouse.move(box.x + 60 + step * 25, y);
+    await page.mouse.up();
+    await expect(page.getByLabel(/^الشجرة ٢ من /)).toBeAttached();
+    // The card's head names the tree shown; the branches tab opens on that same tree.
+    const title = (await page.getByText('من متشابهات القرآن').locator('xpath=preceding-sibling::*[1]').textContent())!.trim();
+    await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).nth(1).click();
+    await expect(page).toHaveURL(/\/branches/);
+    await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
+    await expect(page.getByText(title, { exact: true }).first()).toBeVisible();
+  });
+
+  test('the pair card is the compare card and opens the compare tab', async ({ page }) => {
+    await open(page, '/');
+    await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeAttached();
+    await page.getByRole('button', { name: 'افتحها في المقارنة' }).first().click();
+    await expect(page).toHaveURL(/\/compare/);
+  });
+
+  test('the story circles and the tools open their pages', async ({ page }) => {
+    await open(page, '/');
+    await page.getByRole('button', { name: 'الأنبياء', exact: true }).click();
+    await expect(page).toHaveURL(/\/prophets/);
+    await open(page, '/');
+    await page.getByRole('button', { name: 'مواقيت الصلاة' }).click();
+    await expect(page).toHaveURL(/\/utilities/);
+  });
+
   test('the search finds a surah and opens it', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'البحث' }).click();
@@ -49,6 +86,17 @@ test.describe('a returning user', () => {
     await page.getByRole('button', { name: 'تذكّرتها' }).click();
     await expect(page.getByRole('button', { name: 'تذكّرتها' })).toHaveCount(0);
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
+  });
+
+  test('the recall card takes typed words in the write boxes and grades them', async ({ page }) => {
+    await open(page, '/');
+    const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
+    const count = await boxes.count();
+    expect(count).toBeGreaterThan(0);
+    await boxes.first().click();
+    for (let i = 0; i < count; i++) await page.keyboard.type('خطا ');
+    await expect(page.getByLabel('كتبت: خطا').first()).toBeVisible();
+    await expect.poll(async () => (await stored<Record<string, { forgot: number }>>(page, 'ayah-forgot'))?.['18:10']?.forgot).toBe(2);
   });
 
   test('the forgotten review opens the mushaf in recite mode', async ({ page }) => {
