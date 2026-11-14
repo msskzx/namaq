@@ -111,7 +111,8 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   return (
     <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
       style={{ width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
+      {/* The surah's name comes first, read from the right (owner, 2026-11-14), in any host: the row is set left to right and filled from its right end. */}
+      <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', justifyContent: 'center', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{surahNames[surah]}</Text>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{lastSurah !== surah ? `الآية ${num(number)} ثم سورة ${surahNames[lastSurah]} ${num(lastNumber)}` : `${first === last ? 'الآية' : 'الآيات'} ${range}`}</Text>
         {current && !still && <View style={{ position: 'absolute', end: -4, top: -4, flexDirection: 'row' }}>

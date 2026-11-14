@@ -1,5 +1,5 @@
 import type { Beat } from './growth';
-import { PAUSE, READY } from '@shared/video/recorder';
+import { OUTRO, PAUSE, READY } from '@shared/video/recorder';
 
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
@@ -7,8 +7,10 @@ export { VIDEO_TYPES } from '@shared/video/recorder';
 export type SceneText = { size: number; words: { text: string; color: string }[]; header?: string; footer?: string; muted?: boolean; bare?: boolean; keys?: string[];
   /** Each label and run of words where the app laid it out in the box; without them the words are centred in the box. */
   parts?: ScenePart[] };
-/** A label (a reference, `rule` when a line runs under it) or the box's words, at its place in the tree, in tree points. */
+/** A label (a reference, `rule` when a line runs under it, `tab` on a tab over the box's edge) or the box's words, at its place in the tree, in tree points. */
 export type ScenePart = { x: number; y: number; w: number; h: number; size: number; label?: string; align?: 'center' | 'right'; rule?: boolean;
+  /** A label on a tab over the box's edge, outlined as the box is. */
+  tab?: boolean;
   words?: { text: string; color: string }[]; lineHeight?: number };
 export type SceneBox = SceneText & { id: string; x: number; y: number; w: number; h: number };
 /** A connector from a box to one in its fan; `back` fans open before the root (words and ayat before the phrase). */
@@ -75,6 +77,7 @@ export function recorderPage(input: VideoInput, fontFace = '') {
 var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
 ${GEOMETRY}
 ${READY}
+${OUTRO}
 ${RECORDER}
 </script></body></html>`;
 }
@@ -143,7 +146,12 @@ function drawWords(words, size, lineHeight, rect) {
 }
 
 // A reference in the app's font and size, centred or from the right; a header's rule runs under it, inside the box's padding.
-function drawLabel(part) {
+function drawLabel(part, lit) {
+  // A tab stands on the box's edge in the card colour, outlined as the box is.
+  if (part.tab) {
+    roundRect(part.x + 0.5, part.y + 0.5, part.w - 1, part.h - 1, 8);
+    ctx.fillStyle = look.card; ctx.fill(); ctx.strokeStyle = lit ? look.path : look.rule; ctx.lineWidth = 1; ctx.stroke();
+  }
   ctx.font = part.size + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.direction = 'rtl'; ctx.textBaseline = 'middle';
   var top = part.rule ? part.y + 2 : part.y, height = part.rule ? part.h - 5 : part.h;
   ctx.textAlign = part.align === 'right' ? 'right' : 'center';
@@ -154,7 +162,7 @@ function drawLabel(part) {
 function drawText(box) {
   // Each label and run of words where the app laid it out.
   if (box.parts) {
-    box.parts.forEach(function (part) { if (part.words) drawWords(part.words, part.size, part.lineHeight, part); else drawLabel(part); });
+    box.parts.forEach(function (part) { if (part.words) drawWords(part.words, part.size, part.lineHeight, part); else drawLabel(part, holds(box) || !!now[box.id]); });
     return;
   }
   // A box drawn by its own content (a quiz's): its words centred, its references above or under them.
@@ -307,12 +315,11 @@ function strokeEdge(points, curve) {
   ctx.stroke();
 }
 
+// The end frame (shared OUTRO): the emblem, the app's name and its slogan, as the app's opening screen.
 function drawOutro(shown) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
   ctx.fillStyle = look.paper; ctx.fillRect(0, 0, FRAME.width, FRAME.height);
-  ctx.globalAlpha = Math.max(0, Math.min(1, shown));
-  if (logo.complete && logo.naturalWidth) ctx.drawImage(logo, FRAME.width / 2 - 160, FRAME.height / 2 - 160, 320, 320);
-  ctx.globalAlpha = 1;
+  outro(ctx, logo, { width: FRAME.width, height: FRAME.height, k: FRAME.width / 390, alpha: Math.max(0, Math.min(1, shown)), paper: look.paper, ink: look.ink, muted: look.muted, ui: look.ui });
 }
 
 function draw(t) {

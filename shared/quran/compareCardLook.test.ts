@@ -44,3 +44,16 @@ describe('the compare card shared by the app and its video', () => {
     expect(runsLabel([3, 4, 5, 9])).toBe('٣–٥ · ٩');
   });
 });
+
+describe('the end frame', () => {
+  it("draws the emblem with the app's name and slogan, in every video's recorder", async () => {
+    const { OUTRO } = await import('../video/recorder');
+    const { compareRecorderPage } = await import('../video/compareVideo');
+    const { APP_NAME, SLOGAN } = await import('../brand');
+    expect(OUTRO).toContain(JSON.stringify(APP_NAME));
+    expect(OUTRO).toContain(JSON.stringify(SLOGAN));
+    const card: PairCard = { id: 'p', sides: [{ surah: 2, ayah: 1, ayat: [ayah(1)] }, { surah: 7, ayah: 1, ayat: [ayah(1)] }] };
+    const look = { paper: '', card: '', deep: '', ink: '', muted: '', rule: '', accent: '', green: '', highlight: '', onHighlight: '', marks: markColours({ accent: '#000000', root: '#000000', muted: '#000000' }), font: '', ui: '', logo: '' };
+    expect(compareRecorderPage(compareVideoInput({ title: 't', cards: [videoCard(card, readPlan(card), 1, names)], look }))).toContain('function outro(');
+  });
+});

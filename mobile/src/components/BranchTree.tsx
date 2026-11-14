@@ -228,6 +228,30 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, children }: { id:
   );
 }
 
+/** The tab's size: the app's interface text at 10 points, as Text scales it, quieter than the node's words. */
+const TAB = Math.round(10 * UI_SCALE);
+const TAB_HEIGHT = 16;
+/** The tab stands on the node's border, its foot 2 points over it: inside the node's own padding, clear of the words' marks. */
+const TAB_RISE = TAB_HEIGHT - 2;
+
+/**
+ * The ayah a node ends, on a small tab over its top edge at the start where reading begins (owner, 2026-11-14), so the node holds
+ * only its words. It sits in the node's own flow, pulled up over the border with no height of its own: the node is never narrower
+ * than its tab, and the tab fades and hides with the node. Side by side only; the node keeps the same room below as above.
+ */
+function NodeTab({ id, ayahKeys, label, shared }: { id: string; ayahKeys: string[]; label: string; shared: Shared }) {
+  const growth = useContext(Growth);
+  const lit = growth.now.has(id) || isLit(shared, growth, ayahKeys) || !!shared.paths?.pinned.has(pathToggleKey(id, ayahKeys));
+  const part = usePart({ label, size: TAB, align: 'center', tab: true });
+  // The box's border (1) and padding (4) are above its content: the tab rises from there to TAB_RISE over the box.
+  return (
+    <View ref={part} collapsable={false}
+      style={{ alignSelf: 'flex-start', marginStart: -4, marginTop: -(5 + TAB_RISE), marginBottom: 5 + TAB_RISE - TAB_HEIGHT, height: TAB_HEIGHT, paddingHorizontal: 6, justifyContent: 'center', borderRadius: 8, borderWidth: 1, borderColor: lit ? shared.palette.path : shared.palette.rule, backgroundColor: shared.palette.card }}>
+      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1}>{label}</Text>
+    </View>
+  );
+}
+
 /** An ayah's end mark between two parts of a branch, drawn without a box. */
 function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }) {
   const registry = useContext(Boxes);
@@ -405,17 +429,24 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   return (
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
-      {shown && (
-        <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
-          tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
-          {own !== undefined ? own : <>
-          <StartReference label={start} shared={shared} />
-          {singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
-          <Words {...shownWords} />
-          {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
-          </>}
-        </Box>
-      )}
+      {shown && (() => {
+        // A node ending one ayah carries it on a tab over its edge (owner, 2026-11-14); a node ending several, or a tree drawn top
+        // down (where the line into a node runs through its top edge), keeps its references inside.
+        const tab = own === undefined && node.ayat.length === 1 && !shared.down;
+        const box = (
+          <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
+            tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
+            {own !== undefined ? own : <>
+            {tab && <NodeTab id={id} ayahKeys={all} label={references} shared={shared} />}
+            <StartReference label={start} shared={shared} />
+            {!tab && singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
+            <Words {...shownWords} />
+            {!tab && !singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
+            </>}
+          </Box>
+        );
+        return tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
+      })()}
       {entries.length > 0 && <>
         <Stub shared={shared} entries={entries} />
         <Fan shared={shared} entries={entries} />

@@ -114,15 +114,15 @@ test.describe('branches', () => {
     await expect.poll(() => page.frames().length).toBeGreaterThan(1);
     const recorder = page.frames().find(frame => frame !== page.mainFrame())!;
     await expect.poll(() => recorder.evaluate(() => typeof (window as unknown as { INPUT?: unknown }).INPUT)).toBe('object');
-    const scene = await recorder.evaluate(() => (window as unknown as { INPUT: { scene: { boxes: { bare?: boolean; parts?: { label?: string; words?: unknown[]; size: number }[] }[] }; look: { ui: string } } }).INPUT);
+    const scene = await recorder.evaluate(() => (window as unknown as { INPUT: { scene: { boxes: { bare?: boolean; parts?: { label?: string; tab?: boolean; words?: unknown[]; size: number }[] }[] }; look: { ui: string } } }).INPUT);
     const boxes = scene.scene.boxes.filter(item => !item.bare);
     expect(boxes.length).toBeGreaterThan(5);
     // Every box carries its words and references at the places the app drew them, the references in the app's font size.
     for (const item of boxes) {
       expect(item.parts?.some(part => part.words?.length)).toBe(true);
-      for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(13);
+      for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(part.tab ? 11 : 13);
     }
-    expect(boxes.some(item => item.parts!.some(part => part.label))).toBe(true);
+    expect(boxes.some(item => item.parts!.some(part => part.tab))).toBe(true);
     expect(scene.look.ui).toContain('Amiri');
   });
 
@@ -138,6 +138,11 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'سورة الحجر' }).click();
     await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible();
     expect(await save.boundingBox()).toEqual(before);
+    // The surah's name comes first, on the right, then «الآيات …».
+    const label = page.getByText('الآيات ٤٥–٤٦', { exact: true });
+    const name = label.locator('xpath=preceding-sibling::*[1]');
+    await expect(name).toHaveText('الحجر');
+    expect((await name.boundingBox())!.x).toBeGreaterThan((await label.boundingBox())!.x);
   });
 });
 
