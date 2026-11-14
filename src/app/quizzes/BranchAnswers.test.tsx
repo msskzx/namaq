@@ -158,7 +158,7 @@ describe('complete branch tree answers', () => {
     const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
     const { container } = render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} ar />);
-    expect([...container.querySelectorAll('[data-form] > span:first-child')].map(word => word.textContent)).toEqual(['مِّنْ', 'مِنْ']);
+    expect([...container.querySelectorAll('[data-strand] > span:first-child')].map(word => word.textContent)).toEqual(['مِّنْ', 'مِنْ']);
     expect(screen.getAllByRole('button', { name: /إظهار المسار/ })).toHaveLength(3);
   });
 

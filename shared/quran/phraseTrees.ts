@@ -1,4 +1,5 @@
 // docs/adr/0034-one-inventory-defines-quran-branch-trees.md
+import { foldForms } from './foldForms';
 import { keys, PIECE_MAX, runOn, spell, type Branch, type BranchAyah, type Variant } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { num } from './arabicNumber';
@@ -160,7 +161,7 @@ function sharedDisplay(forms: string[]) {
 }
 
 export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
-  return createPhrasePresenter(ayat, continueIdentical, followCorpus, within)(group);
+  return foldForms(createPhrasePresenter(ayat, continueIdentical, followCorpus, within)(group));
 }
 
 export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
@@ -262,10 +263,11 @@ export function phraseSubtreeTargets(tree: Branch, groups: PhraseGroup[], ayat: 
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
   const targets: Record<string, PhraseGroup> = {};
   const visit = (node: Branch) => {
-    const end = node.words.findIndex(word => word === '۝' || word.startsWith('﴿'));
+    const words = node.spelled ?? node.words;
+    const end = words.findIndex(word => word === '۝' || word.startsWith('﴿'));
     const memberKeys = keys(node);
     if (end >= 2 && node.children.length > 0) {
-      const id = phraseId(node.words.slice(0, end));
+      const id = phraseId(words.slice(0, end));
       for (const group of groups) {
         if (group.id !== id && !group.id.startsWith(`${id}~`)) continue;
         const wanted = new Set(memberKeys);
@@ -288,7 +290,7 @@ export function phraseSubtreeTargets(tree: Branch, groups: PhraseGroup[], ayat: 
 export function phrasePieces(group: PhraseGroup, ayat: BranchAyah[]): PhraseGroup[] {
   const unique = members(group.occurrences);
   if (unique.length <= PIECE_MAX) return [group];
-  const tree = phrasePresentation(group, ayat).tree;
+  const tree = createPhrasePresenter(ayat)(group).tree;
   const chunks: string[][] = [];
   const under = (node: Branch): string[] => [...node.ayat, ...node.children.flatMap(under)];
   const cut = (keys: string[]) => {

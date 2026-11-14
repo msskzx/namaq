@@ -85,10 +85,11 @@ describe('BranchTree', () => {
     expect(container.querySelector('mark')?.closest('[data-node]')).toBeTruthy();
   });
 
-  it('writes the merged second ما in both forms while keeping the first exact', () => {
+  it('moves the merged second ما into each branch in its own form while keeping the first exact', () => {
     const ayat = (data.ayat as BranchAyah[]).filter(ayah => ['2:170', '31:21'].includes(ayah.key));
     const { container } = render(<BranchTree {...live(['2:170', '31:21'])} names={{}} zoomable={false} />);
-    expect([...container.querySelectorAll('[data-form] > span:first-child')].map(form => form.textContent!.normalize('NFD'))).toEqual(['مَآ', 'مَا'].map(form => form.normalize('NFD')));
+    expect([...container.querySelectorAll('[data-differs]')].map(form => form.textContent!.normalize('NFD')).sort()).toEqual(['مَآ', 'مَا'].map(form => form.normalize('NFD')).sort());
+    expect(container.querySelector('[data-braid]')).toBeNull();
     const red = [...container.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent);
     expect(red.filter(word => word === ayat[0].words[4])).toHaveLength(1);
   });
@@ -316,7 +317,7 @@ describe('BranchTree', () => {
     const { container } = render(<BranchTree {...live(['94:5', '94:6'])} names={{ 94: 'الشرح' }} />);
     expect(container.querySelectorAll('[data-node] > [data-tab] span.text-xs, [data-node] > span span.text-xs').length).toBeGreaterThan(0);
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
-    expect(container.querySelectorAll('[data-forms]').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('[data-braid]').length).toBeGreaterThan(0);
   });
 
   it('writes the differently voiced word of an inner node in each ayah\'s form, at its own offset, and nothing else', () => {
@@ -325,8 +326,8 @@ describe('BranchTree', () => {
       { words: ['يا'], ayat: ['57:26'], children: [] },
     ] };
     const { container } = render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} />);
-    expect([...container.querySelectorAll('[data-forms]')].map(word => [...word.querySelectorAll('[data-form] > span:first-child')].map(form => form.textContent))).toEqual([['نُوحًۭا', 'نُوحًا']]);
-    expect(container.querySelector('[data-form] > span')!.className).toContain('home-amber');
+    expect([...container.querySelectorAll('[data-braid]')].map(word => [...word.querySelectorAll('[data-strand] > span:first-child')].map(form => form.textContent))).toEqual([['نُوحًۭا', 'نُوحًا']]);
+    expect(container.querySelector('[data-strand] > span')!.className).toContain('home-amber');
   });
 
   it('writes a differently voiced first word in each form, apart from the shared root', () => {
@@ -336,8 +337,8 @@ describe('BranchTree', () => {
     ];
     const { container } = render(<BranchTree tree={{ words: ['مِن', 'رب'], ayat: ['1:1', '1:2', '1:3'], children: [] }} variants={variants} names={{}} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
-    expect(firstWords.querySelectorAll('[data-forms]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-forms]')).toHaveLength(1);
+    expect(firstWords.querySelectorAll('[data-braid]')).toHaveLength(1);
+    expect(container.querySelectorAll('[data-braid]')).toHaveLength(1);
   });
 
   it('reads as the tapped ayah alone: its own form of a differing word and its own ayah number', () => {
@@ -346,11 +347,11 @@ describe('BranchTree', () => {
       { words: ['إلا'], ayat: ['3:87'], children: [] },
     ] };
     const { container } = render(<BranchTree tree={{ words: ['عليهم'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{ 2: 'البقرة', 3: 'آل عمران' }} />);
-    const node = container.querySelector('[data-forms]')!.closest('[data-node]')!;
-    expect([...node.querySelectorAll('[data-form]')].map(form => form.textContent)).toEqual(['لَعْنَةُالبقرة ١٦١', 'لَعْنَةَآل عمران ٨٧']);
+    const node = container.querySelector('[data-braid]')!.closest('[data-node]')!;
+    expect([...node.querySelectorAll('[data-strand]')].map(form => form.textContent)).toEqual(['لَعْنَةُالبقرة ١٦١', 'لَعْنَةَآل عمران ٨٧']);
     expect(node.querySelector('span.block')!.textContent).toContain('۝');
     fireEvent.click(screen.getByText('إلا').closest('[data-node]')!);
-    expect(node.querySelector('[data-forms]')).toBeNull();
+    expect(node.querySelector('[data-braid]')).toBeNull();
     expect(node.querySelector('span.block')!.textContent).toBe('لَعْنَةَ ٨٧');
     expect(node.querySelector('[data-differs]')!.textContent).toBe('لَعْنَةَ');
   });

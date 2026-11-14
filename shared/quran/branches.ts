@@ -10,9 +10,13 @@ import type { ReaderPageData } from './readerPage';
 export type WordFeatures = { gender?: string; number?: string; case?: string; pos?: string };
 
 export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
-export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
+/**
+ * `differs`: indices of words moved here from a neighbouring node because its ayat write them differently, drawn amber.
+ * `spelled`: the node's words before any moved (see `foldForms`), which a node's tree id and links are made from.
+ */
+export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[] };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
-export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
+export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string; differs?: number[] };
 
 const OPENING_WORDS = 2;
 
@@ -382,3 +386,14 @@ export function ayahEnds(node: Branch, path: string[] = []): Record<string, stri
   return Object.assign(Object.fromEntries(own), ...node.children.map(child => ayahEnds(child, words)));
 }
 
+
+/**
+ * The words before a tree's trunk, with an empty entry for the ayat that open with the trunk when other ayat have words before
+ * it, so a tree drawn from a list that dropped those ayat (the quiz's) still draws what comes before them.
+ */
+export function withStarts(prefixes: Variant[], ayahKeys: string[]): Variant[] {
+  if (!prefixes.some(prefix => prefix.word)) return prefixes;
+  const covered = new Set(prefixes.flatMap(prefix => prefix.keys));
+  const missing = ayahKeys.filter(key => !covered.has(key));
+  return missing.length ? [...prefixes, { word: '', words: [], conj: '', keys: missing, id: prefixes[0].id }] : prefixes;
+}

@@ -1,12 +1,13 @@
 import { createContext, memo, useContext, useEffect, useId, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type LayoutChangeEvent } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 import { Text, UI_SCALE } from '@/components/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
-import { ayatLabel, endSign, keys, shownAyat, type Branch } from '@shared/quran/branches';
+import { ayatLabel, endSign, keys, shownAyat, withStarts, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
-import { writtenForms } from '@shared/quran/writtenForms';
+import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
@@ -120,7 +121,7 @@ function Ruled({ label, shared, children }: { label: string; shared: Shared; chi
 type Marks = { exact: Set<number>; rooted: Set<number> };
 
 /** A word is coloured when it is the same (accent) or shares its root (purple) in every ayah through this node; amber when voiced differently. */
-function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks, forms?: Branch['forms']) {
+function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks, forms?: Branch['forms'], differs?: number[]) {
   const { palette, matches, offsets } = shared;
   return words.map((word, i) => {
     const kinds = marks ? [marks.rooted.has(i) ? 'root' : marks.exact.has(i) ? 'exact' : undefined] : ayahKeys.map(key => {
@@ -131,31 +132,55 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
     const kind = !isMark(word) && kinds.length > 0 && kinds.every(Boolean) ? (kinds.includes('root') ? 'root' : 'exact') : undefined;
     // A root match already says the forms differ, so it keeps its purple.
     const written = writtenForms({ forms }, i, word, shared.paths?.lit);
+    // A word moved here from a neighbour because the ayat write it differently: amber, over its root match.
+    if (differs?.includes(i)) return palette.amber;
     return kind === 'root' && written.length === 1 ? palette.root : written.length > 1 || (written[0].word !== word && !isMark(word)) ? palette.amber : kind === 'exact' ? palette.accent : undefined;
   });
 }
 
-type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string; forms?: Branch['forms'] };
-// docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md (quiz trees keep one form)
-function Words({ words, ayahKeys, at, shared, size, marks, color, forms }: WordsProps) {
-  const tones = tonesOf(words, ayahKeys, at, shared, marks, forms);
-  const { palette } = shared;
-  const bracketed = words.some((word, i) => writtenForms({ forms }, i, word, shared.paths?.lit).length > 1);
-  const part = usePart({ ...sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms }), ...(bracketed ? {} : { lineHeight: size * 1.9 }) });
+type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string; forms?: Branch['forms']; differs?: number[] };
+/** The lines into and out of a braid: one strand parting into one per way of writing, or those strands meeting again. */
+function BraidEdge({ count, join, palette }: { count: number; join?: boolean; palette: Palette }) {
+  const d = Array.from({ length: count }, (_, i) => {
+    const y = ((i + 0.5) / count) * 100;
+    return join ? `M12 ${y} C6 ${y} 6 50 0 50` : `M12 50 C6 50 6 ${y} 0 ${y}`;
+  }).join(' ');
   return (
-    <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: bracketed ? undefined : size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
-      {words.map((word, i) => {
-        const written = writtenForms({ forms }, i, word, shared.paths?.lit);
-        if (written.length === 1) return <Text key={i} style={tones[i] ? { color: tones[i] } : undefined}>{i > 0 ? ' ' : ''}{quranText(written[0].word)}</Text>;
+    <View style={{ width: 16, alignSelf: 'stretch' }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Svg width="100%" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none"><Path d={d} stroke={palette.rule} strokeWidth={2} fill="none" vectorEffect="non-scaling-stroke" /></Svg>
+    </View>
+  );
+}
+
+// docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md (quiz trees keep one form)
+// docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
+function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs }: WordsProps) {
+  const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs);
+  const { palette } = shared;
+  const pieces = writtenPieces(words.length, i => writtenForms({ forms }, i, words[i], shared.paths?.lit).length > 1);
+  const braided = pieces.some(piece => piece.kind === 'braid');
+  const part = usePart({ ...sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms, differs }), ...(braided ? {} : { lineHeight: size * 1.9 }) });
+  return (
+    <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: braided ? undefined : size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+      {pieces.map((piece, n) => {
+        if (piece.kind === 'word') {
+          const written = writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit);
+          return <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}{quranText(written[0].word)}</Text>;
+        }
+        const strands = writtenStrands({ forms }, piece.from, piece.to, shared.paths?.lit);
         return (
-          <Text key={i}>{i > 0 ? ' ' : ''}
-            <View testID="forms" style={{ borderLeftWidth: 2, borderRightWidth: 2, borderColor: palette.amber, borderRadius: 6, paddingHorizontal: 6, marginHorizontal: 2 }}>
-              {written.map((form, n) => (
-                <View key={form.word} style={{ alignItems: 'center', borderTopWidth: n > 0 ? 1 : 0, borderStyle: 'dashed', borderColor: palette.rule }}>
-                  <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: palette.amber }}>{quranText(form.word)}</Text>
-                  <Text style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 180, textAlign: 'center' }}>{form.keys.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ')}</Text>
-                </View>
-              ))}
+          <Text key={n}>{n > 0 ? ' ' : ''}
+            <View testID="braid" style={{ flexDirection: 'row-reverse', alignItems: 'stretch', marginHorizontal: 2 }}>
+              <BraidEdge count={strands.length} palette={palette} />
+              <View style={{ gap: 4, paddingVertical: 4 }}>
+                {strands.map(strand => (
+                  <View key={strand.words.join(' ')} testID="strand" style={{ alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 8 }}>
+                    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: palette.amber, writingDirection: 'rtl' }}>{quranText(strand.words.join(' '))}</Text>
+                    <Text style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 200, textAlign: 'center' }}>{strand.keys.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ')}</Text>
+                  </View>
+                ))}
+              </View>
+              <BraidEdge count={strands.length} join palette={palette} />
             </View>
           </Text>
         );
@@ -165,8 +190,8 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms }: Words
 }
 
 /** The same words as data, for the video. */
-const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, forms }: WordsProps) => {
-  const tones = tonesOf(words, ayahKeys, at, shared, marks, forms);
+const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, forms, differs }: WordsProps) => {
+  const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs);
   return { size, words: words.map((word, i) => ({ text: writtenForms({ forms }, i, word).map(form => quranText(form.word)).join(' / '), color: tones[i] ?? color ?? shared.palette.ink })) };
 };
 
@@ -441,7 +466,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   entries.forEach(entry => edge(shared, id, entry.id));
   const references = node.ayat.map(key => ayatLabel(spans[key], shared.names)).join(' · ');
-  const shownWords = { words: [...words, ...(isMark(words[words.length - 1] ?? '') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1])))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined };
+  const shownWords = { words: [...words, ...(isMark(words[words.length - 1] ?? '') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1])))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined };
   const start = starts && startLabel(shared, starts, node.ayat);
   const text: SceneText = { ...sceneWords(shownWords), ...(node.ayat.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
   return (
@@ -488,7 +513,8 @@ type Props = { presentation: Presentation; matches: Matches; names: Record<numbe
  * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
  * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
  */
-function BranchTree({ presentation, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions }: Props) {
+function BranchTree({ presentation: given, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions }: Props) {
+  const presentation = { ...given, prefixes: withStarts(given.prefixes, keys(given.tree)) };
   const down = direction === 'down';
   const shared: Shared = { spellings: !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)), earlier: new Set() };
   const registry = useRef<Registry>(new Map()).current;
@@ -502,7 +528,7 @@ function BranchTree({ presentation, matches, names, palette, onTap, onLayout, di
   const before: Entry[] = presentation.prefixes.length === 0 ? befores(all, shared) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
     if (prefix.word) {
       const lead = befores(prefix.keys, shared);
-      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, forms: shared.spellings ? prefix.forms : undefined, color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
+      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, forms: shared.spellings ? prefix.forms : undefined, differs: shared.spellings ? prefix.differs : undefined, color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
       const start = startLabel(shared, prefix.keys);
       const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={{ ...sceneWords(prefixWords), ...(start ? { header: start } : {}) }}>
