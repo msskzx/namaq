@@ -17,7 +17,11 @@ export const noteRootPage = (name: string) => { overTabs = name !== '(tabs)'; };
  */
 export function toTab(href: Href) {
   if (overTabs && router.canDismiss()) router.dismissAll();
-  router.navigate(href);
+  // A stack's first page (home, the Quran hub) is gone back to, not opened again over the pages above it.
+  const path = typeof href === 'string' ? href : href.pathname;
+  // withAnchor puts the stack's first page under a page opened in a stack that has not been drawn yet (lib/stackOptions.ts).
+  router.navigate(href, { withAnchor: true });
+  if (path === '/' || path === '/quran') router.dismissAll();
 }
 
 /**

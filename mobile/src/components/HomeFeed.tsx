@@ -121,7 +121,7 @@ export function Stories({ palette }: { palette: Palette }) {
     forgotten: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }),
     saved: () => router.push({ pathname: '/library', params: { tab: 'saved' } }),
     notes: () => router.push({ pathname: '/library', params: { tab: 'notes' } }),
-    prophets: () => router.navigate('/prophets'),
+    prophets: () => toTab('/prophets'),
   };
   const ids = (Object.keys(STORY) as StoryId[]).filter(id => id !== 'juz' || juz);
   return (

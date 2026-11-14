@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/components/Text';
-import { router } from 'expo-router';
 import { Bookmark, GalleryHorizontal, Lightbulb, RotateCwSquare, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from '@shared/quran/branches';
@@ -29,6 +28,7 @@ import { around as aroundSetting } from '@/lib/settings';
 import { treeVideo } from '@/lib/treeVideo';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { QURAN_FONT, type Palette, CARD } from '@/lib/theme';
+import { toTab } from '@/lib/ways';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
 
@@ -253,7 +253,7 @@ function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text:
   return <>
     <Bar label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} Icon={Bookmark} palette={palette} fill={saved} />
     <Bar label="مشاركة" onPress={share} Icon={Send} palette={palette} />
-    {piece && <Bar label="افتح في متشابهات القرآن" onPress={() => router.navigate({ pathname: '/branches', params: { tree: piece.id } })} Icon={SquareArrowOutUpLeft} palette={palette} />}
+    {piece && <Bar label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: piece.id } })} Icon={SquareArrowOutUpLeft} palette={palette} />}
   </>;
 }
 

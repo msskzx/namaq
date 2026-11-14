@@ -4,7 +4,10 @@
  * the Quran hub with the tools it opens over it. A swipe from the right edge goes back down the stack (lib/stackOptions.ts),
  * and a tap on the button from another tab comes back to the page that was open there last.
  */
-/** The first page of each stacked button. A new Quran tool is a new page in app/(tabs)/(quran) and a tile on the hub. */
+/** The Quran hub's tools. A new tool is a page in app/(tabs)/(quran), a name here and a tile on the hub. */
+export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'words', 'oaths', 'iltifat', 'openings', 'order'] as const;
+
+/** The first page of each stacked button. */
 const ROOT_OF: Record<string, string> = { '(home)': 'index', '(quran)': 'quran' };
 
 /** The open tab and its page, from the route's segments (useSegments): ['(tabs)', '(quran)', 'branches'] is branches under the Quran button. */

@@ -5,7 +5,6 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import { scheduleOnRN } from 'react-native-worklets';
 import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
-import { router } from 'expo-router';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
@@ -35,6 +34,7 @@ import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
+import { toTab } from '@/lib/ways';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
@@ -190,7 +190,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   };
   // A tree across two surahs opens its compare page at once; across more, a sheet lists the pairs to pick from.
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
-  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); router.navigate('/compare'); };
+  const openCompare = (target: CompareTarget) => { setIntent({ tab: 'compare', lead: target.lead, other: target.other }); toTab('/compare'); };
   const compare = (targets: CompareTarget[]) => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets));
 
   useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
