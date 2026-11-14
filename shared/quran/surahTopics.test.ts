@@ -5,9 +5,9 @@ import { surahTopicsCredit, surahTopicsOf, topicsStartingAt, type TopicSection }
 const flat = (list: TopicSection[]): TopicSection[] => list.flatMap(s => [s, ...flat(s.parts ?? [])]);
 
 describe('surah topics', () => {
-  it('cover every surah but the three the book’s list doesn’t reach, each with its volume and page', () => {
+  it('cover every surah but al-Fatiha, which the book treats by aims, each with its volume and page', () => {
     const missing = surahRows.filter(s => !surahTopicsOf(s.number)).map(s => s.number);
-    expect(missing).toEqual([1, 42, 44]);
+    expect(missing).toEqual([1]);
     for (const { number } of surahRows.filter(s => !missing.includes(s.number))) {
       const topics = surahTopicsOf(number)!;
       expect(topics.volume).toBeGreaterThanOrEqual(1);
@@ -15,6 +15,14 @@ describe('surah topics', () => {
       expect(topics.sections.length).toBeGreaterThan(0);
       for (const s of flat(topics.sections)) expect(s.title, `${number}`).toMatch(/^(?![\d.]|\([٠-٩])\S/);
     }
+  });
+
+  it('fills al-Shura and al-Dukhan from the printed book, covering every ayah once', () => {
+    expect(surahTopicsOf(42)).toMatchObject({ volume: 7, page: 61 });
+    expect(surahTopicsOf(42)!.sections.map(s => [s.from, s.to])).toEqual([[1, 6], [7, 12], [13, 14], [15, 19], [20, 26], [27, 35], [36, 43], [44, 46], [47, 50], [51, 53]]);
+    expect(surahTopicsOf(44)).toMatchObject({ volume: 7, page: 140 });
+    expect(surahTopicsOf(44)!.sections.map(s => [s.from, s.to])).toEqual([[1, 9], [10, 16], [17, 33], [34, 39], [40, 50], [51, 59]]);
+    expect(surahTopicsOf(44)!.sections[0].title).toBe('إعجاز القرآن وإنزاله في ليلة مباركة');
   });
 
   it('keeps the book’s headings and ranges', () => {

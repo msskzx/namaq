@@ -3,7 +3,7 @@ import data from '../data/quran/surahTopics.json';
 /**
  * The sections of each surah as al-Tafsir al-Mawdu'i li-Suwar al-Quran al-Karim (University of Sharjah, 2010) lists
  * them, read from Quranpedia's surahs dump (scripts/quran/buildSurahTopics.ts). Headings keep the book's words; a
- * section may hold smaller ones. Surahs the book's list doesn't reach here (1, 42, 44) have none. docs/plans/surah-topics.md
+ * section may hold smaller ones. Al-Fatiha has none: the book treats it by aims, not ranges. docs/plans/surah-topics.md
  */
 export type TopicSection = { title: string; from?: number; to?: number; parts?: TopicSection[] };
 export type SurahTopics = { volume: number; page: number; sections: TopicSection[] };
