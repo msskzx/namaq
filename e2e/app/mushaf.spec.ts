@@ -42,12 +42,13 @@ test('a reflection note is written from the long-press menu', async ({ page }) =
   await expect.poll(async () => (await stored<Record<string, { text: string }>>(page, 'ayah-notes'))?.['1:2']?.text).toBe('الحمد كله لله');
 });
 
-test('the trees preview sheet lists trees and opens one', async ({ page }) => {
+test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-  await expect(page.getByRole('button', { name: 'افتح هذه الشجرة' }).first()).toBeVisible();
-  await page.getByRole('button', { name: 'افتح هذه الشجرة' }).first().click();
+  await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
+  await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
+  await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
   await expect(page).toHaveURL(/\/branches/);
   // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
   await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
@@ -75,9 +76,10 @@ test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its 
 test.describe('surah topics', () => {
   test.use({ seed: { 'reader-place': { page: 582 } } });
 
-  test('the header names the page\'s section; its list opens with al-Biqa\'i\'s aim and jumps to a section', async ({ page }) => {
+  test('an ayah\'s buttons open the surah\'s topics with al-Biqa\'i\'s aim, and a section jumps there', async ({ page }) => {
     await open(page, '/read');
-    await page.getByRole('button', { name: 'موضوعات السورة: تساؤل المشركين عن النبأ' }).click();
+    await pressWord(page, 'عَنِ');
+    await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
     await expect(page.getByRole('heading', { name: 'موضوعات سورة النبأ' })).toBeVisible();
     await expect(page.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(page.getByText('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤')).toBeVisible();

@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, NotebookPen, PenLine, Send, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, NotebookPen, PenLine, Send, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -32,6 +32,7 @@ import { compareTargetsOfAyah } from '@/lib/compare';
 import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
+import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { words } from '@/lib/words';
 import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
@@ -95,11 +96,12 @@ export default function Reader() {
   const [page, setPage] = useState(() => Math.min(PAGES, Math.max(1, place?.page ?? 1)));
   const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
-  const [mark, setMark] = useState<{ key: string; page: number } | null>(null);
+  /** The selected ayah, and after a long press the word it landed on (its place in the ayah). */
+  const [mark, setMark] = useState<{ key: string; page: number; word?: number } | null>(null);
+  const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [tools, setTools] = useState(false);
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[] } | null>(null);
-  const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
   const flowing = zoom > 1;
@@ -292,11 +294,11 @@ export default function Reader() {
     // While reading, a tap, double tap or long press selects the ayah, and a tap on the page clears it. A second single
     // tap on the marked ayah lets it go (owner, 2026-11-14); it is read once the tap is known not to be a double tap.
     const at = shown.current;
-    const select = (toggle: boolean) => {
-      if (mode === 'read') setMark(current => (key && !(toggle && current?.key === key) ? { key, page: at } : null));
+    const select = (toggle: boolean, pressed?: number) => {
+      if (mode === 'read') setMark(current => (key && !(toggle && current?.key === key) ? { key, page: at, word: pressed } : null));
     };
     const set = readGestures()[mode];
-    if (touch === 'long') { select(false); latest.current(set.long, key, x, y, word); return; }
+    if (touch === 'long') { select(false, word); latest.current(set.long, key, x, y, word); return; }
     if (pending.current) {
       clearTimeout(pending.current.timer);
       pending.current = null;
@@ -379,7 +381,7 @@ export default function Reader() {
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
-        top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null}
+        top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
         recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
         write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
     );
@@ -392,7 +394,10 @@ export default function Reader() {
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
   const readings = !!actionKey && hasQiraat(actionKey);
   const [preview, setPreview] = useState<Preview | null>(null);
-  const buttons = 5 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
+  // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
+  const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
+  const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
+  const buttons = 5 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -422,11 +427,14 @@ export default function Reader() {
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
           <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} name="تأمّل" palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
+          {topics && <ActButton Icon={TableOfContents} label="موضوع الآية في السورة" name="الموضوعات" palette={palette}
+            onPress={() => { setActions(null); setTopic({ surah: actionSurah, section: Math.max(0, sectionAt(actionSurah, actionAyah)) }); }} />}
           {targets.length > 0 && <ActButton Icon={ArrowLeftRight} label="في المقارنة" name="المقارنة" palette={palette}
             onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'compare', key }); }} />}
           {trees && <ActButton Icon={TreeIcon} label="الأشجار التي فيها الآية" name="الأشجار" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
           {readings && <ActButton Icon={Layers} label="القراءات العشر في كلمات الآية" name="القراءات" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'readings', key }); }} />}
           <ActButton Icon={BookOpen} label="تفسير السعدي" name="التفسير" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'tafsir', key }); }} />
+          {/* The word's places: its label names the long-pressed word, which is lit on the page. */}
           {actions.lemmas.length > 0 && <ActButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} name="المواضع" palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
           {/* Share is always the last button. */}

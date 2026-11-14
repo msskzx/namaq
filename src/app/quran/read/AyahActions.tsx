@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { ArrowLeftRight, BookOpen, Bookmark, Check, Layers, LightbulbOff, NotebookPen, Send } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Bookmark, Check, Layers, LightbulbOff, NotebookPen, Send, TableOfContents } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
@@ -26,7 +26,7 @@ function Act({ label, name, on = false, pressed, popup = false, onClick, childre
  * its compare cards, the trees that hold it, how the ten readers differ in its words and al-Sa'di's tafsir, each previewed
  * in a sheet (AyahPreviewSheet). The first three show only when there are any; every ayah has its tafsir.
  */
-export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onPreview, onShare, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
@@ -41,6 +41,8 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   onNote?: () => void;
   /** The tree and compare buttons preview in place rather than leaving the mushaf (owner, 2026-11-13). */
   onPreview?: (kind: Kind) => void;
+  /** The surah's topics at the ayah's section (owner, 2026-11-14: the header names no topic). */
+  onTopics?: () => void;
   /** Share as image, always the last button. */
   onShare?: () => void;
   onClose: () => void;
@@ -74,7 +76,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const shareLabel = ar ? 'مشاركة' : 'Share';
   const readingsLabel = ar ? 'القراءات العشر في كلمات الآية' : 'The ten readings of its words';
   const tafsirLabel = ar ? 'تفسير السعدي' : 'Al-Sa‘di’s tafsir';
-  const count = 2 + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
+  const count = 2 + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const half = typeof window === 'undefined' ? 0 : Math.min(count * 27 + 8, window.innerWidth / 2 - 8);
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
@@ -85,6 +87,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
       {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
       <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
       {onNote && <Act label={noteLabel} name={ar ? 'تأمّل' : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
+      {onTopics && <Act label={ar ? 'موضوع الآية في السورة' : 'Topic of this ayah'} name={ar ? 'الموضوعات' : 'Topics'} popup onClick={() => { onTopics(); onClose(); }}><TableOfContents aria-hidden /></Act>}
       {!!links?.compare.length && <Act label={compareLabel} name={ar ? 'المقارنة' : 'Compare'} popup onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Act>}
       {links?.trees && <Act label={treesLabel} name={ar ? 'الأشجار' : 'Trees'} popup onClick={preview('trees')}><TreeIcon aria-hidden /></Act>}
       {links?.qiraat && <Act label={readingsLabel} name={ar ? 'القراءات' : 'Readings'} popup onClick={preview('readings')}><Layers aria-hidden /></Act>}
