@@ -267,7 +267,7 @@ export default function TreePager({ pieces, list, palette, mode, around, start, 
     const scene = await sceneRef.current?.();
     const beats = beatsRef.current;
     if (!scene || !beats) return;
-    setVideo(treeVideo(scene, beats, palette));
+    setVideo(treeVideo(scene, beats, palette, piece ? cardOf(piece, list).presentation : undefined));
   };
 
   // Share as image: the open tree as it is drawn, or the matrix's ayah column; the tree's video from here too.

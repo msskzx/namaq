@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, View, type LayoutChangeEvent } from 'react-native';
+import { View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -64,7 +64,8 @@ type Props = {
 };
 
 /** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
-export const AYAH_SPACE = 132;
+export const AYAH_SPACE = 184;
+const AYAH_GAP = 8;
 
 const BIG = 20000;
 const PULL = 70;
@@ -220,10 +221,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
 
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
-    <ScrollView style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight, height: AYAH_SPACE, direction: 'ltr', opacity: content ? 1 : 0 }}
-      contentContainerStyle={{ paddingTop: 18 }} showsVerticalScrollIndicator={false}>
-      <PathAyat ayahKeys={readKeys} palette={palette} />
-    </ScrollView>
+    <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP, direction: 'ltr', opacity: content ? 1 : 0 }}>
+      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} />
+    </View>
   );
   return (
     <View style={{ width: full.width, height: full.height }}>
@@ -241,7 +241,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
             ? <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
             : <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
           {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
-          {!fixed && <PathAyat ayahKeys={readKeys} palette={palette} onLayout={setStripHeight} />}
+          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>
