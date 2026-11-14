@@ -44,5 +44,5 @@ export function treeVideo(scene: TreeScene, beats: { watch: Beat[]; ask: Beat[] 
   const state = growthState();
   const played = state.mode === 'ask' ? beats.ask : beats.watch;
   return { scene, beats: played, ayat: videoAyat(played, presentation, palette), speed: state.speed, ask: state.mode === 'ask', timer: state.timer, types: VIDEO_TYPES,
-    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, card: palette.card, font: `"${QURAN_FONT}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent) } };
+    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, card: palette.card, lit: mix(palette.path, palette.paper, 0.12), font: `"${QURAN_FONT}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent) } };
 }

@@ -4,7 +4,12 @@ import { PAUSE, READY } from '@shared/video/recorder';
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
 /** A box's words and labels, as the video draws them. */
-export type SceneText = { size: number; words: { text: string; color: string }[]; header?: string; footer?: string; muted?: boolean; bare?: boolean; keys?: string[] };
+export type SceneText = { size: number; words: { text: string; color: string }[]; header?: string; footer?: string; muted?: boolean; bare?: boolean; keys?: string[];
+  /** Each label and run of words where the app laid it out in the box; without them the words are centred in the box. */
+  parts?: ScenePart[] };
+/** A label (a reference, `rule` when a line runs under it) or the box's words, at its place in the tree, in tree points. */
+export type ScenePart = { x: number; y: number; w: number; h: number; size: number; label?: string; align?: 'center' | 'right'; rule?: boolean;
+  words?: { text: string; color: string }[]; lineHeight?: number };
 export type SceneBox = SceneText & { id: string; x: number; y: number; w: number; h: number };
 /** A connector from a box to one in its fan; `back` fans open before the root (words and ayat before the phrase). */
 export type SceneEdge = { from: string; to: string; back: boolean };
@@ -19,13 +24,16 @@ export const FRAME = { width: 1080, height: 1920 };
  * Plain JavaScript, since the recorder runs it inside a web view (the phone's engine cannot hand a function's source over).
  */
 const GEOMETRY = String.raw`
-var AREA = { x: 60, y: 90, width: 960, height: 1160 }, MAX_SCALE = 3, STUB = 14;
-// Under the tree, at fixed places and drawn as the app draws them: a chip per ayah (its surah and number), then the lit ayah's card.
-// K scales the app's points to the frame (a phone's card is about 366 points wide, the frame's 960).
-var K = 2.6, CHIPS = { y: 1285, rows: 2, gap: 5 * K, row: 32 * K + 12 }, CARD = { x: 60, y: 1470, width: 960, height: 340 };
-function placeTree(scene) {
-  var scale = Math.min(MAX_SCALE, AREA.width / scene.width, AREA.height / scene.height);
-  return { scale: scale, x: AREA.x + (AREA.width - scene.width * scale) / 2, y: AREA.y + (AREA.height - scene.height * scale) / 2 };
+// BranchTree's measures: the stub out of a box (14) meets the spine's 2-point line at its middle; the first and last child's
+// lines curve into the spine with a radius of 10. Boxes are round at 14 on every corner, as CARD.
+var AREA = { x: 60, y: 90, width: 960, height: 1720 }, MAX_SCALE = 3, STUB = 15, CURVE = 10, RADIUS = 14;
+// Under the tree, as TreeCard lays them out: the chips (one per ayah, its surah and number), 8 points, then the lit ayah's card.
+// K scales the app's points to the frame (a phone's card is about 366 points wide, the frame's 960); UI is Text's size scale.
+var K = 2.6, UI = 1.12, CHIPS = { rows: 2, gap: 5 * K, height: 32 * K }, CARD = { x: 60, width: 960, gap: 8 * K }, BELOW = 12 * K;
+function placeTree(scene, area) {
+  area = area || AREA;
+  var scale = Math.min(MAX_SCALE, area.width / scene.width, area.height / scene.height);
+  return { scale: scale, x: area.x + (area.width - scene.width * scale) / 2, y: area.y + (area.height - scene.height * scale) / 2 };
 }
 function edgePath(from, to, down, back) {
   if (down) {
@@ -40,11 +48,13 @@ function edgePath(from, to, down, back) {
 `;
 
 type Point = [number, number];
-type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>) => { scale: number; x: number; y: number }; edgePath: (from: SceneBox, to: SceneBox, down: boolean, back: boolean) => Point[] };
+type Area = { x: number; y: number; width: number; height: number };
+type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>, area?: Area) => { scale: number; x: number; y: number }; edgePath: (from: SceneBox, to: SceneBox, down: boolean, back: boolean) => Point[] };
 /** The recorder's geometry, run here for the tests. */
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
-export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; font: string; ui: string; logo: string };
+/** The app's colours; `lit` is a box on the lit path, the path's blue over the paper as BranchTree blends it. */
+export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; lit: string; font: string; ui: string; logo: string };
 /**
  * An ayah of the tree as the video's chip and card show it, as the matrix's ayah card does in the app: the chip's surah and number,
  * the card's surah name and «الآية …» line, and its words coloured as the matrix colours them, each ayah's number at its end.
@@ -94,15 +104,11 @@ var FADE = 250;
 function holds(box) { return !!(lit && box.keys && box.keys.indexOf(lit) >= 0); }
 function alpha(id, t) { if (hidden[id]) return 0; var at = shownAt[id]; return at === undefined ? 1 : Math.min(1, (t - at) / FADE); }
 
-function roundRect(x, y, w, h) {
-  var big = 14, small = 4;
-  ctx.beginPath();
-  ctx.moveTo(x + small, y);
-  ctx.lineTo(x + w - big, y); ctx.quadraticCurveTo(x + w, y, x + w, y + big);
-  ctx.lineTo(x + w, y + h - small); ctx.quadraticCurveTo(x + w, y + h, x + w - small, y + h);
-  ctx.lineTo(x + big, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - big);
-  ctx.lineTo(x, y + small); ctx.quadraticCurveTo(x, y, x + small, y);
-  ctx.closePath();
+// A box as CARD draws it: round at 14 on every corner, the border inside its edge.
+function roundRect(x, y, w, h, r) {
+  r = Math.min(r === undefined ? RADIUS : r, w / 2, h / 2);
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
 }
 
 function wrap(words, width, size) {
@@ -117,35 +123,49 @@ function wrap(words, width, size) {
   return lines;
 }
 
-function drawText(box) {
-  var size = box.size, lineHeight = size * 1.9, label = 12;
-  // The box is exactly as wide as its longest line: a pixel of slack keeps rounding from breaking that line in two.
-  var lines = wrap(box.words, Math.max(10, box.w - (box.bare ? 4 : 24)) + 2, size);
-  var block = lines.length * lineHeight + (box.header ? label + 8 : 0) + (box.footer ? label + 6 : 0);
-  var y = box.y + (box.h - block) / 2;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  if (box.header) {
-    ctx.font = label + 'px sans-serif'; ctx.fillStyle = look.muted; ctx.direction = 'rtl';
-    ctx.fillText(box.header, box.x + box.w / 2, y + label / 2 + 1);
-    y += label + 4;
-    ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(box.x + 12, y); ctx.lineTo(box.x + box.w - 12, y); ctx.stroke();
-    y += 4;
-  }
-  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left';
+// Words centred line by line in their place, as Words sets them (a line every 1.9 of the size).
+function drawWords(words, size, lineHeight, rect) {
+  // The place is exactly as wide as its longest line: a pixel of slack keeps rounding from breaking that line in two.
+  // A line more than the app broke into keeps inside the place, so it never runs onto the box's references.
+  var lines = wrap(words, Math.max(10, rect.w) + 2, size), height = Math.min(lineHeight || Infinity, rect.h / Math.max(1, lines.length));
+  var y = rect.y + (rect.h - lines.length * height) / 2;
+  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
   var space = ctx.measureText(' ').width;
   lines.forEach(function (line) {
-    var x = box.x + box.w / 2 + line.width / 2;
+    var x = rect.x + rect.w / 2 + line.width / 2;
     line.words.forEach(function (word) {
       x -= word.width;
-      ctx.fillStyle = word.color; ctx.fillText(word.text, x, y + lineHeight / 2);
+      ctx.fillStyle = word.color; ctx.fillText(word.text, x, y + height / 2);
       x -= space;
     });
-    y += lineHeight;
+    y += height;
   });
-  if (box.footer) {
-    ctx.font = label + 'px sans-serif'; ctx.fillStyle = look.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl';
-    ctx.fillText(box.footer, box.x + box.w / 2, y + 2 + label / 2);
+}
+
+// A reference in the app's font and size, centred or from the right; a header's rule runs under it, inside the box's padding.
+function drawLabel(part) {
+  ctx.font = part.size + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.direction = 'rtl'; ctx.textBaseline = 'middle';
+  var top = part.rule ? part.y + 2 : part.y, height = part.rule ? part.h - 5 : part.h;
+  ctx.textAlign = part.align === 'right' ? 'right' : 'center';
+  ctx.fillText(part.label, part.align === 'right' ? part.x + part.w : part.x + part.w / 2, top + height / 2);
+  if (part.rule) { ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(part.x, part.y + part.h - 0.5); ctx.lineTo(part.x + part.w, part.y + part.h - 0.5); ctx.stroke(); }
+}
+
+function drawText(box) {
+  // Each label and run of words where the app laid it out.
+  if (box.parts) {
+    box.parts.forEach(function (part) { if (part.words) drawWords(part.words, part.size, part.lineHeight, part); else drawLabel(part); });
+    return;
   }
+  // A box drawn by its own content (a quiz's): its words centred, its references above or under them.
+  var size = box.size, lineHeight = size * 1.9, label = 13, pad = box.bare ? 2 : 12;
+  var lines = wrap(box.words, Math.max(10, box.w - 2 * pad) + 2, size);
+  var block = lines.length * lineHeight + (box.header ? label * 1.8 + 5 : 0) + (box.footer ? label * 1.8 + 4 : 0);
+  var y = box.y + (box.h - block) / 2;
+  if (box.header) { drawLabel({ x: box.x + pad, y: y, w: box.w - 2 * pad, h: label * 1.8 + 5, size: label, label: box.header, align: 'center', rule: true }); y += label * 1.8 + 5; }
+  drawWords(box.words, size, lineHeight, { x: box.x + pad, y: y, w: box.w - 2 * pad, h: lines.length * lineHeight });
+  y += lines.length * lineHeight;
+  if (box.footer) drawLabel({ x: box.x + pad, y: y + 4, w: box.w - 2 * pad, h: label * 1.8, size: label, label: box.footer, align: 'center' });
 }
 
 function drawHourglass(box, left, seconds) {
@@ -162,13 +182,20 @@ function drawHourglass(box, left, seconds) {
   ctx.fillText(String(Math.max(1, Math.ceil(left * seconds))).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }), cx, cy + 16);
 }
 
-// The chips keep to their two rows: a tree with many ayat gets smaller chips.
-var chipScale = K, chipRows;
+// The height of a line of the app's font at a size, as a Text without a line height of its own sets it.
+function lineBox(font, size) {
+  ctx.font = font;
+  var m = ctx.measureText('الآية');
+  return (m.fontBoundingBoxAscent || 0) + (m.fontBoundingBoxDescent || 0) || size * 1.75;
+}
+
+// The chips keep to their two rows: a tree with many ayat gets smaller chips. SurahChips' 14-point name, scaled as Text scales it.
+var chipScale = K, chipRows = [], CHIP_TEXT = Math.round(14 * UI);
 function layChips(k) {
-  ctx.font = (14 * k) + 'px ' + look.ui;
-  var rows = [[]], used = 0, max = FRAME.width - 120;
+  ctx.font = (CHIP_TEXT * k) + 'px ' + look.ui;
+  var rows = [[]], used = 0, max = CARD.width;
   INPUT.ayat.forEach(function (ayah) {
-    var w = ctx.measureText(ayah.chip).width + 24 * k + 2;
+    var w = ctx.measureText(ayah.chip).width + 24 * k + 2 * k;
     if (rows[rows.length - 1].length && used + CHIPS.gap + w > max) { rows.push([]); used = 0; }
     used += (rows[rows.length - 1].length ? CHIPS.gap : 0) + w;
     rows[rows.length - 1].push({ ayah: ayah, w: w });
@@ -176,7 +203,7 @@ function layChips(k) {
   return rows;
 }
 function fitChips() { for (chipScale = K; ; chipScale -= 0.1) { chipRows = layChips(chipScale); if (chipRows.length <= CHIPS.rows || chipScale <= 1) return; } }
-fitChips();
+function chipsHeight() { var rows = Math.min(chipRows.length, CHIPS.rows); return rows ? rows * CHIPS.height * chipScale / K + (rows - 1) * CHIPS.gap : 0; }
 
 function pill(x, y, w, h) {
   var r = h / 2;
@@ -186,58 +213,98 @@ function pill(x, y, w, h) {
 
 // As SurahChips: a thin rule border, the lit one outlined in the path's blue on deeper paper. Right to left, the first ayah to grow on the right.
 function drawChips() {
-  var k = chipScale, h = 32 * k, step = Math.min(CHIPS.row, h + 12);
-  var top = CHIPS.y + (CHIPS.rows * CHIPS.row - Math.min(chipRows.length, CHIPS.rows) * step) / 2;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.font = (14 * k) + 'px ' + look.ui;
+  var k = chipScale, h = CHIPS.height * k / K;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.font = (CHIP_TEXT * k) + 'px ' + look.ui;
   chipRows.slice(0, CHIPS.rows).forEach(function (row, r) {
     var width = row.reduce(function (sum, item, i) { return sum + item.w + (i ? CHIPS.gap : 0); }, 0);
-    var x = FRAME.width / 2 + width / 2, y = top + r * step;
+    var x = FRAME.width / 2 + width / 2, y = frame.chips + r * (h + CHIPS.gap);
     row.forEach(function (item) {
       x -= item.w;
       var on = lit === item.ayah.key;
-      pill(x, y, item.w, h);
+      pill(x + k / 2, y + k / 2, item.w - k, h - k);
       if (on) { ctx.fillStyle = look.deep; ctx.fill(); }
-      ctx.strokeStyle = on ? look.path : look.rule; ctx.lineWidth = Math.max(1, k); ctx.stroke();
-      ctx.fillStyle = on ? look.path : look.ink; ctx.fillText(item.ayah.chip, x + item.w / 2, y + h / 2 + 2);
+      ctx.strokeStyle = on ? look.path : look.rule; ctx.lineWidth = k; ctx.stroke();
+      ctx.fillStyle = on ? look.path : look.ink; ctx.fillText(item.ayah.chip, x + item.w / 2, y + h / 2);
       x -= CHIPS.gap;
     });
   });
 }
 
-function cardRect(x, y, w, h) {
-  var r = 14 * K;
-  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+// As the matrix's ayah card (MatrixCard's Cell): 12 by 8 points of padding, the surah's name (16, bold) and «الآية …» (13) centred
+// on one baseline, 4 points, then the ayah from the right at 21 on lines of 44, coloured as the matrix colours its words.
+// The card is as tall as its ayah, as in the app; a long ayah gets smaller letters so it shows whole.
+var NAME = Math.round(16 * UI), LABEL = Math.round(13 * UI), MAX_CARD = 168 * K, cards = {};
+function cardOf(ayah) {
+  if (cards[ayah.key]) return cards[ayah.key];
+  var pad = 13 * K, head = lineBox('bold ' + NAME * K + 'px ' + look.ui, NAME * K), size = 21 * K, lines, height;
+  for (;;) {
+    lines = wrap(ayah.words, CARD.width - 2 * pad, size);
+    height = K + 8 * K + head + 4 * K + lines.length * size * 44 / 21 + 8 * K + K;
+    if (height <= MAX_CARD || size <= 14 * K) break;
+    size -= 2;
+  }
+  cards[ayah.key] = { lines: lines, size: size, head: head, height: Math.min(height, MAX_CARD) };
+  return cards[ayah.key];
 }
 
-// As the matrix's ayah card: the surah's name and «الآية …» on top, the ayah under it from the right, coloured as the matrix colours
-// its words, its number in the accent. A long ayah gets smaller letters, and the card clips the longest.
 function drawCard(key) {
   var ayah = INPUT.ayat.filter(function (item) { return item.key === key; })[0];
   if (!ayah) return;
-  var x = CARD.x, top = CARD.y, width = CARD.width, height = CARD.height, pad = 12 * K;
-  cardRect(x, top, width, height);
-  ctx.fillStyle = look.card; ctx.fill(); ctx.strokeStyle = look.rule; ctx.lineWidth = K * 0.8; ctx.stroke();
-  ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
-  var head = top + 8 * K + 12 * K;
-  ctx.font = 'bold ' + (16 * K) + 'px ' + look.ui; var nameWidth = ctx.measureText(ayah.name).width;
-  ctx.font = (13 * K) + 'px ' + look.ui; var labelWidth = ctx.measureText(ayah.label).width;
-  var gap = 10 * K, start = FRAME.width / 2 + (nameWidth + gap + labelWidth) / 2;
-  ctx.textAlign = 'right';
-  ctx.font = 'bold ' + (16 * K) + 'px ' + look.ui; ctx.fillStyle = look.ink; ctx.fillText(ayah.name, start, head);
-  ctx.font = (13 * K) + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.fillText(ayah.label, start - nameWidth - gap, head);
-  var room = top + height - 8 * K - (head + 12 * K), size = 21 * K, lines;
-  for (;;) { lines = wrap(ayah.words, width - 2 * pad, size); if (lines.length * size * 44 / 21 <= room || size <= 14) break; size -= 2; }
-  var lineHeight = size * 44 / 21, y = head + 12 * K;
-  ctx.save(); ctx.beginPath(); ctx.rect(x, y, width, room); ctx.clip();
-  ctx.font = size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left';
+  var card = cardOf(ayah), x = CARD.x, top = frame.card, width = CARD.width, pad = 13 * K;
+  roundRect(x + K / 2, top + K / 2, width - K, card.height - K, 14 * K);
+  ctx.fillStyle = look.card; ctx.fill(); ctx.strokeStyle = look.rule; ctx.lineWidth = K; ctx.stroke();
+  ctx.font = 'bold ' + (NAME * K) + 'px ' + look.ui;
+  var name = ctx.measureText(ayah.name), baseline = top + K + 8 * K + (name.fontBoundingBoxAscent || NAME * K);
+  ctx.font = (LABEL * K) + 'px ' + look.ui; var labelWidth = ctx.measureText(ayah.label).width;
+  var gap = 10 * K, start = FRAME.width / 2 + (name.width + gap + labelWidth) / 2;
+  ctx.textBaseline = 'alphabetic'; ctx.direction = 'rtl'; ctx.textAlign = 'right';
+  ctx.font = 'bold ' + (NAME * K) + 'px ' + look.ui; ctx.fillStyle = look.ink; ctx.fillText(ayah.name, start, baseline);
+  ctx.font = (LABEL * K) + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.fillText(ayah.label, start - name.width - gap, baseline);
+  var lineHeight = card.size * 44 / 21, y = top + K + 8 * K + card.head + 4 * K;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, width, top + card.height - K - y); ctx.clip();
+  ctx.font = card.size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
   var space = ctx.measureText(' ').width;
-  lines.forEach(function (line) {
+  card.lines.forEach(function (line) {
     var at = x + width - pad;
     line.words.forEach(function (word) { at -= word.width; ctx.fillStyle = word.color; ctx.fillText(word.text, at, y + lineHeight / 2); at -= space; });
     y += lineHeight;
   });
   ctx.restore();
+}
+
+// The frame as TreeCard stacks it: the tree, the chips 12 points under it, the card 8 under them; the whole stack centred in the
+// frame, the tree as large as the room left allows. The card's room is the tallest ayah's, so nothing moves as the ayat take turns.
+var frame = { chips: 0, card: 0 };
+function layout() {
+  var top = INPUT.ask ? 110 : 60, bottom = 1810, below = 0, chips = 0;
+  if (INPUT.ayat.length) {
+    fitChips(); chips = chipsHeight();
+    var tour = INPUT.beats.some(function (beat) { return beat.path; });
+    var tallest = tour ? Math.max.apply(null, INPUT.ayat.map(function (ayah) { return cardOf(ayah).height; })) : 0;
+    below = BELOW + chips + (tour ? CARD.gap + tallest : 0);
+  }
+  place = placeTree(scene, { x: AREA.x, y: top, width: AREA.width, height: bottom - top - below });
+  var tree = scene.height * place.scale;
+  place.y = top + (bottom - top - tree - below) / 2;
+  frame.chips = place.y + tree + BELOW; frame.card = frame.chips + chips + CARD.gap;
+}
+
+// A fan's first and last child: their lines curve into the spine, as BranchTree's elbows do.
+var fans = {};
+scene.edges.forEach(function (edge) { var key = edge.from + (edge.back ? '<' : '>'); (fans[key] = fans[key] || []).push(edge); });
+function across(id) { var box = byId[id]; return box ? (scene.down ? box.x + box.w / 2 : box.y + box.h / 2) : 0; }
+function atEnd(edge) {
+  var fan = fans[edge.from + (edge.back ? '<' : '>')].filter(function (item) { return byId[item.to]; });
+  if (fan.length < 2) return false;
+  var places = fan.map(function (item) { return across(item.to); }), at = across(edge.to);
+  return at === Math.min.apply(null, places) || at === Math.max.apply(null, places);
+}
+function strokeEdge(points, curve) {
+  ctx.beginPath(); ctx.moveTo(points[0][0], points[0][1]); ctx.lineTo(points[1][0], points[1][1]);
+  var reach = Math.min(Math.abs(points[2][0] - points[1][0]) + Math.abs(points[2][1] - points[1][1]), Math.abs(points[3][0] - points[2][0]) + Math.abs(points[3][1] - points[2][1]));
+  if (curve && reach > 0) ctx.arcTo(points[2][0], points[2][1], points[3][0], points[3][1], Math.min(CURVE, reach)); else ctx.lineTo(points[2][0], points[2][1]);
+  ctx.lineTo(points[3][0], points[3][1]);
+  ctx.stroke();
 }
 
 function drawOutro(shown) {
@@ -262,15 +329,16 @@ function draw(t) {
   drawChips();
   if (tour && lit) drawCard(lit);
   ctx.setTransform(place.scale, 0, 0, place.scale, place.x, place.y);
-  scene.edges.forEach(function (edge) {
-    var from = byId[edge.from], to = byId[edge.to];
-    var a = alpha('l:' + edge.to, t);
-    if (!from || !to || !a) return;
-    var points = edgePath(from, to, scene.down, edge.back);
-    ctx.globalAlpha = a; ctx.strokeStyle = holds(to) ? look.path : look.rule; ctx.lineWidth = 2; ctx.lineJoin = 'round';
-    ctx.beginPath(); ctx.moveTo(points[0][0], points[0][1]);
-    for (var p = 1; p < points.length; p++) ctx.lineTo(points[p][0], points[p][1]);
-    ctx.stroke();
+  // Plain lines first, so the lit path's blue runs whole over any grey it crosses.
+  ctx.lineWidth = 2; ctx.lineJoin = 'miter'; ctx.lineCap = 'butt';
+  [false, true].forEach(function (litPass) {
+    scene.edges.forEach(function (edge) {
+      var from = byId[edge.from], to = byId[edge.to];
+      var a = alpha('l:' + edge.to, t);
+      if (!from || !to || !a || holds(to) !== litPass) return;
+      ctx.globalAlpha = a; ctx.strokeStyle = litPass ? look.path : look.rule;
+      strokeEdge(edgePath(from, to, scene.down, edge.back), atEnd(edge));
+    });
   });
   scene.boxes.forEach(function (box) {
     var a = alpha(box.id, t);
@@ -278,12 +346,11 @@ function draw(t) {
     ctx.globalAlpha = a;
     var asked = ask && ask.id === box.id;
     if (!box.bare) {
-      roundRect(box.x, box.y, box.w, box.h);
-      if (!box.muted) { ctx.fillStyle = look.deep; ctx.fill(); }
-      // The growing ayah's path is lit as a tap lights it in the app: a blue tint, the box just drawn outlined.
-      if (holds(box)) { ctx.fillStyle = look.path; ctx.globalAlpha = a * 0.14; ctx.fill(); ctx.globalAlpha = a; }
+      // As Box: the card colour, or the path's blue over the paper while its path is lit; a one-point border inside the edge.
+      roundRect(box.x + 0.5, box.y + 0.5, box.w - 1, box.h - 1);
+      if (holds(box)) { ctx.fillStyle = look.lit; ctx.fill(); } else if (!box.muted) { ctx.fillStyle = look.card; ctx.fill(); }
       ctx.strokeStyle = asked ? look.accent : now[box.id] || holds(box) ? look.path : box.muted ? look.muted : look.rule;
-      ctx.lineWidth = now[box.id] || asked ? 2 : 1;
+      ctx.lineWidth = 1;
       if (box.muted) ctx.setLineDash([4, 3]);
       ctx.stroke(); ctx.setLineDash([]);
     }
@@ -335,8 +402,10 @@ else {
     requestAnimationFrame(tick);
   }
   ${PAUSE}
-  var uiFont = document.fonts && document.fonts.load ? document.fonts.load('40px ' + look.ui).catch(function () {}) : Promise.resolve();
-  // The chips are measured again once the app's font has loaded.
-  uiFont.then(function () { fitChips(); ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); }); });
+  var uiFont = document.fonts && document.fonts.load
+    ? Promise.all([document.fonts.load('40px ' + look.ui), document.fonts.load('bold 40px ' + look.ui), document.fonts.load('40px ' + look.font)]).catch(function () {})
+    : Promise.resolve();
+  // The chips, the card and the tree's place are measured once the app's fonts have loaded.
+  uiFont.then(function () { layout(); ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); }); });
 }
 `;
