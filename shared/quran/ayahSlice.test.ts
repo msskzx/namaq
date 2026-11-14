@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayahSlice, pageEnd } from './ayahSlice';
+import { ayahSlice, pageTop, pageEnd } from './ayahSlice';
 import { pageGroups, type MushafPage } from './readerPage';
 import page293 from '../data/quran/mushaf/293.json';
 import page294 from '../data/quran/mushaf/294.json';
@@ -28,5 +28,14 @@ describe('the rows that show an ayah with what comes before it', () => {
 
   it('finds no rows for an ayah not on the page', () => {
     expect(slice(page294 as MushafPage, '2:255', 18)).toBeNull();
+  });
+});
+
+describe('a page\'s first rows', () => {
+  it('are three ayah lines, with the titles among them', () => {
+    const items = [{ title: 1 }, { line: 1 }, { line: 2 }, { line: 3 }, { line: 4 }] as never[];
+    expect(pageTop(items)).toEqual({ from: 0, to: 3 });
+    expect(pageTop([{ line: 1 }, { line: 2 }, { line: 3 }, { line: 4 }] as never[])).toEqual({ from: 0, to: 2 });
+    expect(pageTop([{ title: 1 }, { line: 1 }] as never[])).toEqual({ from: 0, to: 1 });
   });
 });

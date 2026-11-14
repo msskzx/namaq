@@ -30,4 +30,3 @@ tool). The swipe itself needs a phone.
 - unstable_settings.initialRouteName alone → a tool opened from home before the Quran tab was ever drawn had no hub under it; navigate needs withAnchor
 - plain navigate to a tool already lower in the stack → a second copy was pushed and the hidden first copy took the intent; one copy per tool (dangerouslySingular, the new name of getId) fixes it
 - dismissTo('/') from another tab → did nothing; navigate then dismissAll goes home and drops the search
-

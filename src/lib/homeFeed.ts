@@ -47,11 +47,11 @@ export function feedContent(day: number, pairOffsets: number[], treeOffsets: num
   };
 }
 
-/** The home page's reading card: a page's first lines and the surah they belong to. */
+/** The home page's reading card: the page (drawn by MushafPage, its first lines only), the surah running at its top, and the surah its first lines belong to. */
 export async function pageSlice(page: number) {
   const data = (await import(`../../shared/data/quran/mushaf/${page}.json`)).default as MushafPage;
   const before = surahRows.findLast(row => row.page != null && row.page < page)?.number;
-  return pageStart(data, before);
+  return { surah: pageStart(data, before).surah, page, top: before, data };
 }
 
 const loadPage = async (page: number) => (await import(`../../shared/data/quran/mushaf/${page}.json`)).default as MushafPage;

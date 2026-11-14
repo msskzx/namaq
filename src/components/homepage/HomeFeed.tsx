@@ -42,7 +42,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
 import surahRows from '@shared/data/quran/surahs.json';
 import { reviewHref } from './HomeCards';
-import AyahLines, { useAyahPage } from './AyahLines';
+import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 
@@ -107,7 +107,7 @@ export function ContinueReading() {
     try { stored = localStorage.getItem(LAST_PAGE_KEY); } catch {}
     setPage(lastPage(stored));
   }, []);
-  const { data } = useSWR(page ? `/api/home/feed?page=${page}` : null, fetchJson<{ surah: number; words: (string | number)[] }>, { revalidateOnFocus: false });
+  const { data } = useSWR(page ? `/api/home/feed?page=${page}` : null, fetchJson<Page & { surah: number }>, { revalidateOnFocus: false });
   const href = `/quran/read/${page ?? 1}`;
   return <section className={styles.post} aria-labelledby="reading-title" dir="rtl">
     <div className={styles.readHead}>
@@ -116,7 +116,8 @@ export function ContinueReading() {
       {data && <span className={styles.muted}>{names[data.surah]}</span>}
     </div>
     <Link href={href} className={styles.pageSlice} aria-label="افتح المصحف حيث توقفت" lang="ar">
-      <span className={styles.pageLines}>{data?.words.map((word, i) => typeof word === 'number' ? <span key={i} className={styles.accent}>{` ${num(word)} `}</span> : `${word} `)}</span>
+      {/* The page's first lines as the reader draws them (owner, 2026-11-14: an exact snippet of the page). */}
+      {data ? <PageTop page={data} /> : <span className={styles.pageLines} />}
     </Link>
     <div className={styles.readFoot}>
       <Button href={href} variant="primary" className="min-h-10 rounded-[10px] px-4 text-base"><BookOpen size={18} aria-hidden />اقرأ</Button>
