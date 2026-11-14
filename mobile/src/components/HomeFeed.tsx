@@ -372,7 +372,7 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
     <View style={cardStyle(palette)}>
       <PostHead Icon={Bookmark} title={`${shortNames[surah] ?? ''} ${num(number)}`} sub="من المحفوظات" palette={palette} />
       <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
-        <AyahLines ayah={ayah} palette={palette} shown write={null} checked={null} />
+        <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 12 }}>
         <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
@@ -393,7 +393,7 @@ function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
     const surahs = [...new Set(compareBookmarkAyat(item).map(key => Number(key.split(':')[0])))].sort((a, b) => a - b);
     return { pair: surahs.length ? cardsFor(surahs[0], surahs[1] ?? surahs[0]).find(card => savedAs(card.id, [item]).length) : undefined };
   }, [item]);
-  if ('ayah' in found) return found.ayah && /^\d+:\d+$/.test(found.ayah) ? <SavedAyahPost ayah={found.ayah} palette={palette} /> : null;
+  if ('ayah' in found) return found.ayah && /^\d+:\d+$/.test(found.ayah) && shortNames[Number(found.ayah.split(':')[0])] ? <SavedAyahPost ayah={found.ayah} palette={palette} /> : null;
   if ('piece' in found) return found.piece ? <TreePost piece={found.piece} palette={palette} /> : null;
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
 }
@@ -443,8 +443,9 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
-  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const saved = useMemo(() => shownBookmarks(bookmarks), [bookmarks]);
+  const bookmarks = readBookmarks();
+  // The saved items as they were when the visit began, so saving or unsaving a card does not move the cards on screen.
+  const saved = useMemo(() => shownBookmarks(bookmarks), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.

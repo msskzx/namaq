@@ -265,7 +265,7 @@ function SavedAyahPost({ ayah }: { ayah: string }) {
   return <article className={styles.post} dir="rtl">
     <PostHead Icon={Bookmark} title={`${names[surah]} ${num(number)}`} sub="من المحفوظات" />
     <div className={styles.recall}>
-      {pages ? <AyahLines ayah={ayah} pages={pages} shown checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
+      {pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
     </div>
     <div className={styles.recallActions}>
       <span className="flex-1" />
@@ -281,7 +281,7 @@ function SavedAyahPost({ ayah }: { ayah: string }) {
 function SavedPost({ item }: { item: SavedItem }) {
   const kind = bookmarkKind(item);
   const { data } = useSWR(kind === 'ayah' ? null : `/api/home/feed?saved=${encodeURIComponent(item.id)}`, fetchJson<SavedContent>, { revalidateOnFocus: false });
-  if (kind === 'ayah') { const ayah = item.id.slice('ayah:'.length); return /^\d+:\d+$/.test(ayah) ? <SavedAyahPost ayah={ayah} /> : null; }
+  if (kind === 'ayah') { const ayah = item.id.slice('ayah:'.length); return /^\d+:\d+$/.test(ayah) && names[Number(ayah.split(':')[0])] ? <SavedAyahPost ayah={ayah} /> : null; }
   if (data?.tree) return <TreePost tree={data.tree} />;
   return data?.pair ? <PairPost pair={data.pair} /> : null;
 }
@@ -328,6 +328,10 @@ export function Feed() {
   const batches = more.visit === visit ? more.batches : 1;
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
+  // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
+  const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
+  if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
+  const saved = savedAtVisit.current.list;
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -386,7 +390,7 @@ export function Feed() {
     }
     const tree = content?.trees[i];
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
-    const savedItem = savedOfSlot(bookmarks, day ?? 0, i);
+    const savedItem = savedOfSlot(saved, day ?? 0, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
     const story = stories?.find(card => card.slot === i);
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);

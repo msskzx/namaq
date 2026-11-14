@@ -133,9 +133,13 @@ export const hasStoryCard = (slot: number) => slot % 2 === 1;
 /** The batches that carry a saved card (owner, 2026-11-14: saved cards come up in the feed now and then): every other one from the third. */
 export const hasSavedCard = (slot: number) => slot > 0 && slot % 2 === 0;
 
-/** The saved item the card in batch `slot` shows on a day: the saved items newest first, taken in turn by day and batch. */
+/**
+ * The saved item the card in batch `slot` shows on a day: each saved item once in a visit, newest first, starting one further
+ * on each day. Pass the list as it was when the visit began, so saving or unsaving does not move the cards on screen.
+ */
 export function savedOfSlot<T extends { savedAt: number }>(items: readonly T[], day: number, slot: number): T | undefined {
-  if (!items.length || !hasSavedCard(slot)) return undefined;
+  const turn = slot / 2 - 1;
+  if (!hasSavedCard(slot) || turn >= items.length) return undefined;
   const newest = [...items].sort((a, b) => b.savedAt - a.savedAt);
-  return newest[(((day + slot / 2 - 1) % newest.length) + newest.length) % newest.length];
+  return newest[(((day + turn) % newest.length) + newest.length) % newest.length];
 }

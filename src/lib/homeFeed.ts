@@ -102,7 +102,8 @@ export type SavedContent = { pair?: PairCard; tree?: TreePreview & { text: strin
 export function savedContent(id: string): SavedContent | null {
   const kind = bookmarkKind({ id });
   if (kind === 'tree') {
-    const piece = treeInventory().find(at => at.id === id);
+    // A tree saved before its id changed is found under its old ids too, as the branches page finds it.
+    const piece = treeInventory().find(at => at.id === id) ?? treeInventory().find(at => [at.legacyId, ...(at.legacyIds ?? []), ...(at.group?.aliases ?? [])].includes(id));
     return piece ? { tree: { ...treePreviewOf(piece), text: piece.text } } : null;
   }
   if (kind !== 'compare') return null;

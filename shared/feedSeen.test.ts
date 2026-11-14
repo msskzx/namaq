@@ -66,8 +66,8 @@ describe('saved cards in the feed', () => {
     expect(savedOfSlot(items, 10, 1)).toBeUndefined();
     expect(savedOfSlot([], 10, 2)).toBeUndefined();
   });
-  it('take the saved items in turn, newest first', () => {
-    expect([2, 4, 6].map(slot => savedOfSlot(items, 0, slot)?.id)).toEqual(['b', 'c', 'a']);
-    expect(savedOfSlot(items, 1, 2)?.id).toBe('c');
+  it('take each saved item once, newest first, starting further on each day', () => {
+    expect([2, 4, 6, 8].map(slot => savedOfSlot(items, 0, slot)?.id)).toEqual(['b', 'c', 'a', undefined]);
+    expect([2, 4, 6].map(slot => savedOfSlot(items, 1, slot)?.id)).toEqual(['c', 'a', 'b']);
   });
 });
