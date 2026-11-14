@@ -265,3 +265,42 @@
 .page[data-flow] .strip { display: flex; }
 /* While a pinch changes the size, the page is only stretched as a preview; it is set again, sharp, when the fingers lift. */
 .page[data-pinching] { transition: none; will-change: transform; }
+
+/* Surah topics (docs/plans/surah-topics.md): a numbered tab over the first word of a section, in the gap above the line,
+   and the section the page opens in, named in the header. Neither moves a word. */
+.topicAt { position: relative; }
+.topicTab {
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 82%;
+  display: flex;
+  gap: 2px;
+  font-family: var(--font-amiri), Georgia, serif;
+  font-size: max(9px, 0.3em);
+  line-height: 1.4;
+  color: var(--home-accent);
+  cursor: pointer;
+}
+.topicTab > span {
+  min-width: 1.4em;
+  border: 1px solid var(--home-rule);
+  border-radius: 7px;
+  padding: 0 0.25em;
+  background: var(--home-paper);
+  text-align: center;
+}
+.topicChip {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--home-rule);
+  border-radius: 0.8em;
+  padding: 0 0.7em;
+  background: var(--home-paper);
+  color: var(--home-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.topicNumber { color: var(--home-accent); }

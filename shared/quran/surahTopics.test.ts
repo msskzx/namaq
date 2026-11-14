@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import surahRows from '../data/quran/surahs.json';
-import { surahTopicsCredit, surahTopicsOf, topicsStartingAt, type TopicSection } from './surahTopics';
+import { surahTopicsCredit, surahTopicsOf, sectionAt, sectionsStartingAt, type TopicSection } from './surahTopics';
 
 const flat = (list: TopicSection[]): TopicSection[] => list.flatMap(s => [s, ...flat(s.parts ?? [])]);
 
@@ -37,9 +37,12 @@ describe('surah topics', () => {
   });
 
   it('finds the section that starts at an ayah, and credits the book', () => {
-    expect(topicsStartingAt(78, 6).map(s => s.title)).toEqual(['الآيات الكونية']);
-    expect(topicsStartingAt(78, 7)).toEqual([]);
-    expect(topicsStartingAt(1, 1)).toEqual([]);
+    expect(sectionsStartingAt(78, 6)).toEqual([1]);
+    expect(sectionsStartingAt(78, 7)).toEqual([]);
+    expect(sectionsStartingAt(1, 1)).toEqual([]);
+    expect(sectionsStartingAt(1, 5)).toEqual([2, 3]);
+    expect(sectionAt(78, 20)).toBe(2);
+    expect(sectionAt(1, 1)).toBe(-1);
     expect(surahTopicsCredit(surahTopicsOf(78)!)).toBe('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤');
   });
 });

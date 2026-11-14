@@ -9,7 +9,7 @@ import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
-import { surahTopicsOf } from '@shared/quran/surahTopics';
+import { sectionAt, sectionsStartingAt as startsAt, surahTopicsOf } from '@shared/quran/surahTopics';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
@@ -69,9 +69,6 @@ type Props = {
   onTopic?: (surah: number, section: number) => void;
 };
 
-/** The top-level sections of a surah that start at an ayah, by place in the list. */
-const startsAt = (surah: number | undefined, ayah: number | undefined) =>
-  surah === undefined || ayah === undefined ? [] : (surahTopicsOf(surah)?.sections ?? []).flatMap((section, i) => (section.from === ayah ? [i] : []));
 
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
   /** Where the box being written is on the screen (its top and height), so the page can scroll it into sight above the keyboard. */
@@ -246,9 +243,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     for (const at of lineAt) {
       const group = (model.lines[at] ?? []).find(g => g.surah !== undefined && g.ayah !== undefined);
       if (!group) continue;
-      const sections = surahTopicsOf(group.surah!)?.sections ?? [];
-      const index = sections.findLastIndex(section => section.from !== undefined && section.from <= group.ayah!);
-      return index < 0 ? null : { surah: group.surah!, index, title: sections[index].title };
+      const index = sectionAt(group.surah!, group.ayah!);
+      return index < 0 ? null : { surah: group.surah!, index, title: surahTopicsOf(group.surah!)!.sections[index].title };
     }
     return null;
   }, [onTopic, lineAt, model]);
