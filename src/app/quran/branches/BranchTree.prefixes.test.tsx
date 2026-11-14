@@ -126,3 +126,22 @@ describe('the ayah before a phrase on the branches page (one switch for every tr
     expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
   });
 });
+
+it('names each path once with the surrounding ayat on: one tab on its last box, from the first ayah drawn before to the one after', async () => {
+  quranSurrounding.mockResolvedValue({ before, after: { '62:4': { key: '62:5', page: 553, words: ['مَثَلُ الَّذِينَ حُمِّلُوا التَّوْرَاةَ'] } } });
+  const { container } = render(<BranchTree tree={{ words: trunk, ayat: ['62:4'], children: [] }} names={{ 62: 'الجمعة' }} prefixes={prefix('62:4')} surround={{ on: true }} />, { wrapper });
+  await screen.findByText(before['62:3'].words[0]);
+  await screen.findByText('مَثَلُ الَّذِينَ حُمِّلُوا التَّوْرَاةَ');
+  // The one tab sits on the ayah after and runs from the ayah two before (drawn here) to it.
+  expect([...container.querySelectorAll('[data-tab]')].map(tab => tab.textContent)).toEqual(['الجمعة ٢–٥']);
+  expect(container.querySelector('[data-node="after62:4"] [data-tab]')).toBeTruthy();
+  // Every box that ends an ayah closes with its sign.
+  expect([...container.querySelectorAll('[data-end]')].map(end => end.textContent).sort()).toEqual(['﴿٢﴾', '﴿٣﴾', '﴿٤﴾', '﴿٥﴾']);
+});
+
+it('keeps the ayah itself in the run when nothing comes after it', async () => {
+  quranSurrounding.mockResolvedValue({ before: { '114:6': { key: '114:5', page: 604, words: ['الَّذِي يُوَسْوِسُ'] } }, after: {} });
+  const { container } = render(<BranchTree tree={{ words: trunk, ayat: ['114:6'], children: [] }} names={{ 114: 'الناس' }} prefixes={prefix('114:6')} surround={{ on: true }} />, { wrapper });
+  await screen.findByText('الَّذِي يُوَسْوِسُ');
+  expect([...container.querySelectorAll('[data-tab]')].map(tab => tab.textContent)).toEqual(['الناس ٥–٦']);
+});
