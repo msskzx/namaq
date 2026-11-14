@@ -16,12 +16,14 @@ export const noteRootPage = (name: string) => { overTabs = name !== '(tabs)'; };
  * Inside the tabs it only opens the page, so the home and Quran stacks keep the way back (a tree's compare goes back to the tree).
  */
 export function toTab(href: Href) {
-  if (overTabs && router.canDismiss()) router.dismissAll();
-  // A stack's first page (home, the Quran hub) is gone back to, not opened again over the pages above it.
-  const path = typeof href === 'string' ? href : href.pathname;
+  const fromOver = overTabs;
+  if (fromOver && router.canDismiss()) router.dismissAll();
   // withAnchor puts the stack's first page under a page opened in a stack that has not been drawn yet (lib/stackOptions.ts).
   router.navigate(href, { withAnchor: true });
-  if (path === '/' || path === '/quran') router.dismissAll();
+  // Home is gone back to, not opened again over the search: the home stack drops back to its first page.
+  // Not from a page over the tabs, where the tabs may not be drawn yet and the pop would close the page just opened.
+  const path = typeof href === 'string' ? href : href.pathname;
+  if (path === '/' && !fromOver) router.dismissAll();
 }
 
 /**

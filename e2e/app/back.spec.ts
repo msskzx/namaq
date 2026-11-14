@@ -82,4 +82,10 @@ test.describe('going back', () => {
     await page.getByRole('button', { name: 'رجوع' }).last().click();
     await expect(page).not.toHaveURL(/\/branches/);
   });
+
+  test('the saved list opened straight away goes home by its arrow', async ({ page }) => {
+    await open(page, '/library');
+    await page.getByRole('button', { name: 'رجوع' }).last().click();
+    await expect(page).toHaveURL(/\/$/);
+  });
 });

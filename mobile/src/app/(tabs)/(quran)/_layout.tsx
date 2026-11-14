@@ -13,7 +13,7 @@ const one = (name: string) => () => name;
 export default function QuranStack() {
   return (
     <Stack screenOptions={useStackOptions()}>
-      {QURAN_TOOLS.map(name => <Stack.Screen key={name} name={name} getId={one(name)} />)}
+      {QURAN_TOOLS.map(name => <Stack.Screen key={name} name={name} dangerouslySingular={one(name)} />)}
     </Stack>
   );
 }
