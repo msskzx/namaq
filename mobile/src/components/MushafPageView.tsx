@@ -66,7 +66,7 @@ type Cell = { lit: boolean };
  * A background on the text would cover the font's whole line (the Quran font's is very tall), so boxes overlapped the
  * lines above and below and the surah titles; this box is clipped to the letters.
  */
-function Veil({ text, size, palette, next, faint = false }: { text: string; size: number; palette: Palette; next: boolean; faint?: boolean }) {
+export function Veil({ text, size, palette, next, faint = false }: { text: string; size: number; palette: Palette; next: boolean; faint?: boolean }) {
   return (
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, opacity: faint ? 0.55 : 1, borderStyle: faint ? 'dashed' : 'solid',
@@ -80,7 +80,7 @@ function Veil({ text, size, palette, next, faint = false }: { text: string; size
  * A word to write, in write mode: the hidden word's own box in its place on the line, holding what was typed.
  * The box being written has the accent border.
  */
-function WriteBox({ text, size, palette, typed, active, onPress, onActive }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void; onActive?: (y: number, height: number) => void }) {
+export function WriteBox({ text, size, palette, typed, active, onPress, onActive }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void; onActive?: (y: number, height: number) => void }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   useEffect(() => {
     // Again on each change of the page around it (the keyboard rising, a scroll), so the box stays in sight.
@@ -94,6 +94,15 @@ function WriteBox({ text, size, palette, typed, active, onPress, onActive }: { t
         <Text numberOfLines={1} style={{ fontSize: size * 0.72, lineHeight: size * 1.1, color: palette.ink }}>{typed}</Text>
       </View>
     </Pressable>
+  );
+}
+
+/** What was typed for a wrong word, struck through above it (place it in a box around the word). */
+export function Mistyped({ text, size, palette }: { text: string; size: number; palette: Palette }) {
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', bottom: '100%', left: -size, right: -size, alignItems: 'center' }}>
+      <Text numberOfLines={1} accessibilityLabel={`كتبت: ${text}`} style={{ fontSize: size * 0.6, lineHeight: size * 0.85, color: palette.amber, textDecorationLine: 'line-through' }}>{text}</Text>
+    </View>
   );
 }
 
@@ -288,11 +297,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
                         {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
-                        {mistyped ? (
-                          <View pointerEvents="none" style={{ position: 'absolute', bottom: '100%', left: -size, right: -size, alignItems: 'center' }}>
-                            <Text numberOfLines={1} accessibilityLabel={`كتبت: ${mistyped}`} style={{ fontSize: size * 0.6, lineHeight: size * 0.85, color: palette.amber, textDecorationLine: 'line-through' }}>{mistyped}</Text>
-                          </View>
-                        ) : null}
+                        {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? (marked ? palette.accent : palette.ink) }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (

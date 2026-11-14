@@ -327,7 +327,11 @@ function rowsOf(sides: CardSide[]): [CardSide, CardSide][] {
 /** One similar ayah pair. Tapping a coloured word lights the word it matches on the other side. */
 const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1]);
 
-function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onPageVideo }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void }) {
+/**
+ * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
+ * address, for an open button and for the shared link.
+ */
+export function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -443,7 +447,8 @@ function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onP
         <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
           {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
         </Button>
-        <ShareImageButton size="icon" iconSize={18} href={`#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
+        {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
+        <ShareImageButton size="icon" iconSize={18} href={`${page ?? ''}#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
