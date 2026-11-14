@@ -9,8 +9,8 @@ export type SceneText = { size: number; words: { text: string; color: string }[]
   parts?: ScenePart[] };
 /** A label (a reference, `rule` when a line runs under it, `tab` on a tab over the box's edge) or the box's words, at its place in the tree, in tree points. */
 export type ScenePart = { x: number; y: number; w: number; h: number; size: number; label?: string; align?: 'center' | 'right'; rule?: boolean;
-  /** A label on a tab over the box's edge, outlined as the box is. */
-  tab?: boolean;
+  /** A label on a tab over the box's edge, outlined as the box is: 'dashed' on a surrounding ayah's box. */
+  tab?: boolean | 'dashed';
   words?: { text: string; color: string }[]; lineHeight?: number };
 export type SceneBox = SceneText & { id: string; x: number; y: number; w: number; h: number };
 /** A connector from a box to one in its fan; `back` fans open before the root (words and ayat before the phrase). */
@@ -149,8 +149,11 @@ function drawWords(words, size, lineHeight, rect) {
 function drawLabel(part, lit) {
   // A tab stands on the box's edge in the card colour, outlined as the box is.
   if (part.tab) {
+    var dashed = part.tab === 'dashed';
     roundRect(part.x + 0.5, part.y + 0.5, part.w - 1, part.h - 1, 8);
-    ctx.fillStyle = look.card; ctx.fill(); ctx.strokeStyle = lit ? look.path : look.rule; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = dashed ? look.paper : look.card; ctx.fill(); ctx.strokeStyle = lit ? look.path : dashed ? look.muted : look.rule; ctx.lineWidth = 1;
+    if (dashed) ctx.setLineDash([4, 3]);
+    ctx.stroke(); ctx.setLineDash([]);
   }
   ctx.font = part.size + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.direction = 'rtl'; ctx.textBaseline = 'middle';
   var top = part.rule ? part.y + 2 : part.y, height = part.rule ? part.h - 5 : part.h;
