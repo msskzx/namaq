@@ -252,10 +252,14 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const [revealed, setRevealed] = useState(false);
   const question = data?.questions?.[0];
   if (!question) return null;
-  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} actions={<QuizActions />}>
+  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} actions={<>
+    {/* After the answer, the ayah's mushaf button sits in the card's row, as in the app (owner, 2026-11-15). */}
+    {given !== undefined && question.ayahKey && <Action Icon={BookOpen} label="في المصحف" href={ayahHref(question.ayahKey)} />}
+    <QuizActions />
+  </>}>
     <div className={styles.question} lang="ar">
       {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 pt-2 text-base leading-loose">{question.promptArabic}</p>}
-      <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar
+      <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar mushaf={false}
         onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
     </div>
   </Post>;

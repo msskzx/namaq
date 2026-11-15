@@ -64,7 +64,9 @@ const answerContent = (question: QuizQuestionView, value: string | undefined) =>
  * «إظهار الإجابة». The quiz page and the home feed's question cards (owner, 2026-11-14) both draw a question with it.
  * `given` is the answer once given (a tree's: its correct answer when all is right, "" otherwise).
  */
-export default function QuizAnswer({ question, given, typed, hints, revealed, names, ar, onReveal, onType, onHints, onAnswer }: {
+export default function QuizAnswer({ question, given, typed, hints, revealed, names, ar, onReveal, onType, onHints, onAnswer, mushaf = true }: {
+  /** The mushaf button after a choice is answered (ChoiceAfter); a home card has it in its own row. */
+  mushaf?: boolean;
   question: QuizQuestionView; given: string | undefined; typed: string[] | undefined; hints: Hints | undefined; revealed: boolean;
   names: Record<number, string>; ar: boolean;
   onReveal: () => void; onType: (value: string[]) => void; onHints: (value: Hints) => void; onAnswer: (value: string) => void;
@@ -103,7 +105,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         );
       })}
     </div>}
-    {locked && <ChoiceAfter question={question} given={given} ar={ar}
+    {locked && <ChoiceAfter question={question} given={given} ar={ar} mushaf={mushaf}
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
     {!locked && !question.reveal && <Button className="mt-3" size="sm" onClick={() => {
       if (question.tree) onType(emptyBranchAnswers(question));

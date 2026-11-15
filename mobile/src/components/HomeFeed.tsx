@@ -301,11 +301,14 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
           <Action Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} palette={palette} />
           <Action Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} palette={palette} />
         </>}
+        {/* After the answer, the ayah's mushaf button joins the card's row, not the card (owner, 2026-11-15). */}
+        {!isTree(question) && question.ayahKey && run.typed[0][0] !== undefined &&
+          <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />}
         <QuizActions palette={palette} />
       </>}>
       {!isTree(question)
         ? <View style={{ paddingBottom: 12 }}>
-          <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} onOpen={readAyah} scroll={false}
+          <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} scroll={false}
             onReveal={() => setRun(reveal(run))}
             onPick={value => {
               if (question.family === RECITE_SNIPPET && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
