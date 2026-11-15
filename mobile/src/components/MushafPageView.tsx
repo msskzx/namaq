@@ -19,6 +19,8 @@ const EMPTY_END = '\u06DD';
 const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
+/** A slice's line height for its text size: about a phone reader's line, and the website's slice (MushafPage `--one-line`). */
+const SLICE_LINE = 1.9;
 
 /** Natural width of each word group at BASE, by line, per page; the same on every screen, so measured once per page. */
 const naturals = new Map<number, Record<number, number[]>>();
@@ -165,7 +167,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   // A slice's lines are always a full page's lines, so a slice of a short page (1, 2) is not drawn bigger.
   const oneLine = body ? body.height / 15 : 0;
   const rowHeight = body ? (slice ? oneLine : body.height / itemCount) : 0;
-  const lineHeight = slice ? oneLine : body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
+  const pageLine = body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
   // Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height (the website's fitOpening()).
   const opening = page <= 2;
   const oval = useMemo(() => {
@@ -194,7 +196,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
   }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom]);
   // A surah title or basmala row: one of the page's 15 lines, or with flowing text one flowing line.
-  const titleLine = flowing ? size * FLOW_LINE : oneLine;
+  // A slice's lines are as tall for their text as the reader's lines on a phone (and the website's slice), so the marks
+  // over the first line are not cut (owner, 2026-11-15); until the words are measured, the most a slice's text can be.
+  const sliceLine = (size || rowHeight * 0.72) * SLICE_LINE;
+  const lineHeight = slice ? sliceLine : pageLine;
+  const titleLine = flowing ? size * FLOW_LINE : slice ? sliceLine : oneLine;
   const sliceHeight = slice ? data.items.slice(slice.from, slice.to + 1).reduce((sum, item) => sum + ('line' in item ? lineHeight : titleLine), 0) : 0;
 
   // The rows drawn: the page's own lines, or with bigger text its words wrapped again at the page's width, each run
