@@ -55,59 +55,114 @@ export function useNow() {
 }
 
 const VIEWS: View[] = ['times', 'qibla', 'calendar'];
+const noop = () => () => {};
 
 /**
- * The three icons at the top, then prayer times, the qibla or the Hijri calendar: the app's utilities tab. A swipe goes from one
- * to the next as in the app (owner, 2026-11-15): the three sit side by side, right to left, and the page snaps to each.
+ * The three icons at the top, then prayer times, the qibla and the Hijri calendar side by side: the app's utilities tab.
+ * A sideways swipe (or trackpad) follows the finger and snaps to the next one (owner, 2026-11-15); the icons jump to one.
+ * In Arabic the first is on the right, so swiping right brings the next from the left, as in the app.
  */
 export default function Utilities() {
   const [view, setView] = useStore(viewStore, 'times');
   const [place] = useStore(placeStore, null);
   const [picking, setPicking] = useState(false);
-  const pager = useRef<HTMLDivElement>(null);
-  const landed = useRef<View | null>(null);
-  const tapped = useRef(false);
-  // A tap on an icon (or the stored choice on the first visit) turns the pager to its page; a swipe that landed there does not.
+  const strip = useRef<HTMLDivElement>(null);
+  const pages = useRef(new Map<View, HTMLElement>());
+  // The page the strip rests on, so a swipe that lands does not scroll it again.
+  const shown = useRef<View | null>(null);
+  // The saved view is known only after hydration; the first one after it jumps without a slide, a tap on an icon slides.
+  const hydrated = useSyncExternalStore(noop, () => true, () => false);
   useEffect(() => {
-    const row = pager.current;
-    if (!row || landed.current === view) return;
-    // Until an icon is tapped (the first draw, and the stored choice arriving after the server's prayer times), it jumps without sliding.
-    const first = !tapped.current;
-    landed.current = view;
-    // Right to left, the first page sits at 0 and the next ones at negative offsets.
-    row.scrollTo({ left: -VIEWS.indexOf(view) * row.clientWidth, behavior: first ? 'instant' : 'smooth' });
+    const page = pages.current.get(view);
+    const element = strip.current;
+    if (!hydrated || !page || !element || shown.current === view) return;
+    const smooth = shown.current !== null && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    shown.current = view;
+    element.scrollTo({ left: element.scrollLeft + page.getBoundingClientRect().left - element.getBoundingClientRect().left, behavior: smooth ? 'smooth' : 'auto' });
+  }, [view, hydrated]);
+  // The strip is as tall as the page on screen, so a short page has no blank space under it.
+  useEffect(() => {
+    const page = pages.current.get(view);
+    const element = strip.current;
+    if (!page || !element) return;
+    const fit = () => { element.style.height = `${page.offsetHeight}px`; };
+    fit();
+    const watch = new ResizeObserver(fit);
+    watch.observe(page);
+    return () => watch.disconnect();
   }, [view]);
   useEffect(() => {
-    const row = pager.current;
-    if (!row) return;
+    const element = strip.current;
+    if (!element) return;
     let quiet: ReturnType<typeof setTimeout> | undefined;
     const settle = () => {
-      const at = Math.round(Math.abs(row.scrollLeft) / row.clientWidth);
-      const next = VIEWS[at];
-      delete row.dataset.swiping;
-      if (next && next !== landed.current) { landed.current = next; setView(next); }
+      const middle = element.getBoundingClientRect().left + element.clientWidth / 2;
+      let best: View | null = null;
+      let gap = Infinity;
+      pages.current.forEach((page, id) => {
+        const box = page.getBoundingClientRect();
+        const off = Math.abs(box.left + box.width / 2 - middle);
+        if (off < gap) { gap = off; best = id; }
+      });
+      if (best && best !== shown.current && gap < element.clientWidth / 4) { shown.current = best; setView(best); }
     };
-    // While a finger is on it or it moves, every page keeps its height, so the next one slides in drawn.
-    const swiping = () => { row.dataset.swiping = ''; };
-    const scrolled = () => { swiping(); clearTimeout(quiet); quiet = setTimeout(settle, 120); };
-    row.addEventListener('scroll', scrolled, { passive: true });
-    // A tap that never scrolls settles too, so the pages fold back.
-    const lifted = () => { clearTimeout(quiet); quiet = setTimeout(settle, 120); };
-    row.addEventListener('touchstart', swiping, { passive: true });
-    row.addEventListener('touchend', lifted, { passive: true });
-    return () => { clearTimeout(quiet); row.removeEventListener('scroll', scrolled); row.removeEventListener('touchstart', swiping); row.removeEventListener('touchend', lifted); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // scrollend is not in every browser yet, so a quiet moment settles too.
+    const scrolled = () => { clearTimeout(quiet); quiet = setTimeout(settle, 150); };
+    element.addEventListener('scroll', scrolled, { passive: true });
+    element.addEventListener('scrollend', settle);
+    return () => { clearTimeout(quiet); element.removeEventListener('scroll', scrolled); element.removeEventListener('scrollend', settle); };
+  }, [setView]);
+  // The highlight on the icons follows the strip as it scrolls (owner, 2026-11-15), moved without a render.
+  const picker = useRef<HTMLDivElement>(null);
+  const [lit, setLit] = useState(() => VIEWS.indexOf(view));
+  useEffect(() => {
+    const element = strip.current;
+    const bar = picker.current;
+    if (!element || !bar) return;
+    const follow = () => {
+      const buttons = [...bar.querySelectorAll<HTMLElement>('button')];
+      const mark = bar.querySelector<HTMLElement>('[data-mark]');
+      if (!mark || buttons.length !== VIEWS.length || !element.clientWidth) return;
+      // In Arabic the strip scrolls from 0 towards the negative, so the size of the offset is the place.
+      const place = Math.min(VIEWS.length - 1, Math.max(0, Math.abs(element.scrollLeft) / element.clientWidth));
+      const from = Math.floor(place);
+      const to = Math.min(from + 1, VIEWS.length - 1);
+      const x = buttons[from].offsetLeft + (buttons[to].offsetLeft - buttons[from].offsetLeft) * (place - from);
+      mark.style.width = `${buttons[from].offsetWidth}px`;
+      mark.style.transform = `translateX(${x}px)`;
+      mark.style.opacity = '1';
+      // While a page slides in, the strip is as tall as the taller of the two, so the incoming one is not cut off.
+      const heights = [VIEWS[from], VIEWS[place > from ? to : from]].map(id => pages.current.get(id)?.offsetHeight ?? 0);
+      element.style.height = `${Math.max(...heights)}px`;
+      setLit(Math.round(place));
+    };
+    follow();
+    element.addEventListener('scroll', follow, { passive: true });
+    window.addEventListener('resize', follow);
+    return () => { element.removeEventListener('scroll', follow); window.removeEventListener('resize', follow); };
+  }, []);
+  const pick = () => setPicking(true);
   const options = ([['times', 'مواقيت الصلاة', <Clock key="t" aria-hidden />], ['qibla', 'القبلة', <Compass key="q" aria-hidden />], ['calendar', 'التقويم الهجري', <CalendarDays key="c" aria-hidden />]] as const)
-    .map(([key, label, icon]) => ({ key, label, icon, current: view === key, onClick: () => { tapped.current = true; setView(key); } }));
-  const page = (pane: View) => pane === 'calendar' ? <Calendar />
-    : !place ? <FirstUse onPick={() => setPicking(true)} />
-    : pane === 'times' ? <Times place={place} onPlace={() => setPicking(true)} />
-    : <Qibla place={place} onPlace={() => setPicking(true)} on={view === 'qibla'} />;
+    .map(([key, label, icon]) => ({ key, label, icon }));
   return (
     <div className={styles.wrap} dir="rtl" lang="ar">
-      <Segmented label="الأدوات" options={options} iconOnly className={styles.picker} />
-      <div ref={pager} className={styles.pager} data-utilities-pager>
-        {VIEWS.map(pane => <section key={pane} className={styles.pane} data-current={pane === view || undefined} aria-label={options.find(option => option.key === pane)!.label} aria-hidden={pane !== view || undefined} inert={pane !== view || undefined}>{page(pane)}</section>)}
+      <div ref={picker} role="group" aria-label="الأدوات" className={styles.picker}>
+        <span data-mark aria-hidden className={styles.mark} />
+        {options.map(({ key, label, icon }, i) => (
+          <button key={key} type="button" aria-pressed={view === key} aria-label={label} title={label} onClick={() => setView(key)}
+            className={`${styles.pick} ${lit === i ? styles.lit : ''}`}>{icon}</button>
+        ))}
+      </div>
+      <div ref={strip} className={styles.strip} data-testid="utilities-strip">
+        {VIEWS.map(id => (
+          <section key={id} ref={node => { if (node) pages.current.set(id, node); else pages.current.delete(id); }} className={styles.page}
+            aria-label={options.find(option => option.key === id)?.label} inert={id !== view}>
+            {id === 'calendar' ? <Calendar />
+              : !place ? <FirstUse onPick={pick} />
+              : id === 'times' ? <Times place={place} onPlace={pick} />
+              : <Qibla place={place} onPlace={pick} on={view === 'qibla'} />}
+          </section>
+        ))}
       </div>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} />
     </div>
@@ -232,7 +287,7 @@ type AskablePermission = { requestPermission?: () => Promise<'granted' | 'denied
  * Chrome gives an absolute alpha. Both are magnetic north, a few degrees off true north in Egypt and Europe.
  * 'none' on a computer or a browser that never answers.
  */
-/** The compass, listened to only while `on` (the qibla's page is the one shown), as the app's. */
+/** The compass heading; it listens only while `on` (its page is on screen). */
 function useHeading(on: boolean): [Heading, () => void] {
   const [heading, setHeading] = useState<Heading>(null);
   const [allowed, setAllowed] = useState(false);

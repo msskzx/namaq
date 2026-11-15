@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
 import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
 import { Text, TextInput } from './Text';
@@ -19,16 +19,38 @@ const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; l
   { id: 'calendar', Icon: CalendarDays, label: 'التقويم الهجري' },
 ];
 
-/** The three icons at the top of the utilities tab. */
-export function UtilityPicker({ palette }: { palette: Palette }) {
+/**
+ * The three icons at the top of the utilities tab. The highlight slides with the pages under it:
+ * `progress` is the pager's place, 0 on the first page and 1 on the second (owner, 2026-11-15).
+ */
+export function UtilityPicker({ palette, progress }: { palette: Palette; progress?: Animated.Value }) {
   const [view, setView] = utilityView.use();
+  const [spots, setSpots] = useState<{ x: number; width: number }[]>([]);
+  // The icon under most of the highlight is drawn light, so it stays readable while the highlight moves.
+  const [lit, setLit] = useState(() => Math.max(0, VIEWS.findIndex(item => item.id === view)));
+  useEffect(() => {
+    if (!progress) { setLit(Math.max(0, VIEWS.findIndex(item => item.id === view))); return; }
+    const id = progress.addListener(({ value }) => setLit(Math.round(value)));
+    return () => progress.removeListener(id);
+  }, [progress, view]);
+  const measured = spots.length === VIEWS.length && spots.every(Boolean);
+  const steps = VIEWS.map((_, i) => i);
+  // Laid out left to right with the order reversed, so the first sits on the right and the highlight's left is the screen's left in either layout direction.
   return (
-    <View accessibilityRole="radiogroup" accessibilityLabel="الأدوات" style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 2, gap: 2 }}>
-      {VIEWS.map(({ id, Icon, label }) => {
-        const on = view === id;
+    <View accessibilityRole="radiogroup" accessibilityLabel="الأدوات"
+      style={{ direction: 'ltr', flexDirection: 'row-reverse', borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 2, gap: 2 }}>
+      {measured && progress && (
+        <Animated.View pointerEvents="none" style={{
+          position: 'absolute', top: 2, bottom: 2, left: -1, width: spots[0].width, borderRadius: 10, backgroundColor: palette.accent,
+          transform: [{ translateX: progress.interpolate({ inputRange: steps, outputRange: spots.map(spot => spot.x), extrapolate: 'clamp' }) }],
+        }} />
+      )}
+      {VIEWS.map(({ id, Icon, label }, i) => {
+        const on = progress ? lit === i : view === id;
         return (
-          <Pressable key={id} onPress={() => setView(id)} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={label} hitSlop={4}
-            style={{ paddingHorizontal: 18, paddingVertical: 7, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
+          <Pressable key={id} onPress={() => setView(id)} accessibilityRole="radio" aria-checked={view === id} accessibilityLabel={label} hitSlop={4}
+            onLayout={event => { const { x, width } = event.nativeEvent.layout; setSpots(all => { const next = [...all]; next[i] = { x, width }; return next; }); }}
+            style={{ paddingHorizontal: 18, paddingVertical: 7, borderRadius: 10, backgroundColor: on && !(measured && progress) ? palette.accent : 'transparent' }}>
             <Icon size={20} color={on ? palette.onAccent : palette.ink} />
           </Pressable>
         );
@@ -37,24 +59,15 @@ export function UtilityPicker({ palette }: { palette: Palette }) {
   );
 }
 
-/** The utilities in the order of the picker's icons, the order a swipe goes through them. */
 export const UTILITY_VIEWS = VIEWS.map(view => view.id);
 
-/** One utility's page: prayer times, the qibla or the Hijri calendar (`view`, else whichever icon is on). */
-export default function Utilities({ palette, focused = true, view: shown }: { palette: Palette; focused?: boolean; view?: UtilityView }) {
-  const [picked] = utilityView.use();
-  const view = shown ?? picked;
+/** One utility's page: prayer times, the qibla or the Hijri calendar. `on` runs the compass only while its page is on screen. */
+export function UtilityPage({ view, palette, on = true, onPlace }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void }) {
   const [place] = prayerPlace.use();
-  const [picking, setPicking] = useState(false);
-  return (
-    <View style={{ gap: 14 }}>
-      {view === 'calendar' ? <Calendar palette={palette} />
-        : !place ? <FirstUse palette={palette} onPick={() => setPicking(true)} />
-        : view === 'times' ? <Times place={place} palette={palette} onPlace={() => setPicking(true)} />
-        : <Qibla place={place} palette={palette} on={focused} onPlace={() => setPicking(true)} />}
-      <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />
-    </View>
-  );
+  return view === 'calendar' ? <Calendar palette={palette} />
+    : !place ? <FirstUse palette={palette} onPick={onPlace} />
+    : view === 'times' ? <Times place={place} palette={palette} onPlace={onPlace} />
+    : <Qibla place={place} palette={palette} on={on} onPlace={onPlace} />;
 }
 
 /** Before any place is known: the two ways to give one. Location is asked for only on a tap. */
@@ -216,7 +229,7 @@ function Radio({ label, on, onPress, palette }: { label: string; on: boolean; on
 }
 
 /** Where the times are for: the phone's place, or a city from the list. */
-function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
+export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const [place] = prayerPlace.use();
   const [query, setQuery] = useState('');
   const [refused, setRefused] = useState(false);

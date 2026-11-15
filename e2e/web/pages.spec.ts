@@ -14,11 +14,17 @@ test.describe('pages without the database', () => {
 
   test('prayer times for a picked city', async ({ page }) => {
     await page.goto('/utilities');
-    await page.getByRole('button', { name: 'اختر مدينة' }).click();
+    // The three utilities sit side by side; the ones off to the side are inert but still in the page.
+    await page.getByRole('region', { name: 'مواقيت الصلاة' }).getByRole('button', { name: 'اختر مدينة' }).click();
     await page.getByLabel('ابحث عن مدينة').fill('القاهرة');
     await page.getByRole('button', { name: 'القاهرة', exact: true }).or(page.getByRole('radio', { name: 'القاهرة' })).first().click();
-    await expect(page.getByRole('button', { name: 'المكان: القاهرة' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'مواقيت الصلاة' }).getByRole('button', { name: 'المكان: القاهرة' })).toBeVisible();
     await expect(page.getByText('الفجر').first()).toBeVisible();
+    // A sideways swipe (the strip scrolling one page; in Arabic it scrolls towards the negative) lands on the qibla and lights its icon.
+    await page.getByTestId('utilities-strip').evaluate(strip => { strip.scrollLeft = -strip.clientWidth; });
+    await expect(page.getByRole('button', { name: 'القبلة', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await page.getByRole('button', { name: 'التقويم الهجري' }).click();
+    await expect(page.getByRole('button', { name: 'الشهر التالي' })).toBeInViewport();
   });
 
   test('a prophet story dot shows its ayat', async ({ page }) => {

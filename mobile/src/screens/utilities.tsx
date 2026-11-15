@@ -1,72 +1,87 @@
 import { useCallback, useEffect, useRef, useState, type ComponentRef } from 'react';
-import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Animated, FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useIsFocused } from 'expo-router';
 import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
-import Utilities, { UTILITY_VIEWS, UtilityPicker } from '@/components/Utilities';
+import { PlaceSheet, UTILITY_VIEWS, UtilityPage, UtilityPicker } from '@/components/Utilities';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import { utilityView, type UtilityView } from '@/lib/settings';
-import { usePalette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
+
+type Scroller = ComponentRef<typeof ScrollView>;
+
+/** One utility, scrolled up and down on its own. */
+function Page({ view, width, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
+  const shrink = useShrinkOnScroll();
+  return (
+    <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={shrink} scrollEventThrottle={16}
+      importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
+      style={{ width, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
+      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} />
+    </ScrollView>
+  );
+}
 
 /**
- * The utilities tab: prayer times, the qibla and the Hijri calendar (owner, 2026-11-13), switched by three icons in the top bar
- * or by a swipe from one to the next (owner, 2026-11-15). Swiping right brings the next utility from the left, as Arabic reads.
+ * The utilities tab: prayer times, the qibla and the Hijri calendar (owner, 2026-11-13), side by side.
+ * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the three icons in the top bar jump to one.
+ * As in the reading order, the first is on the right and swiping right brings the next from the left.
  */
 export default function UtilitiesTab() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
-  // The compass runs only while this tab, and the qibla's page, are on screen.
+  // The compass runs only while this tab and its page are on screen.
   const focused = useIsFocused();
   const [view, setView] = utilityView.use();
   const index = Math.max(0, UTILITY_VIEWS.indexOf(view));
-  const list = useRef<FlatList<UtilityView>>(null);
-  const pages = useRef(new Map<UtilityView, ComponentRef<typeof ScrollView> | null>());
-  const shrink = useShrinkOnScroll();
   const [width, setWidth] = useState(0);
-  useTabRetap('utilities', () => pages.current.get(view)?.scrollTo({ y: 0, animated: true }));
-
-  // A tap on the picker's icon turns the pager to that page.
-  const landed = useRef(index);
+  const [picking, setPicking] = useState(false);
+  const pick = useCallback(() => setPicking(true), []);
+  const list = useRef<FlatList<UtilityView>>(null);
+  // The pager's place, 0 on the first page, which the highlight on the top icons follows.
+  const progress = useRef(new Animated.Value(index)).current;
+  const scrollers = useRef(new Map<UtilityView, Scroller>()).current;
+  // Where the pager rests, so a tap on an icon scrolls it and a swipe that lands does not scroll it again.
+  const shown = useRef(index);
   useEffect(() => {
-    if (!width || landed.current === index) return;
-    landed.current = index;
+    if (!width || shown.current === index) return;
+    shown.current = index;
+    setCompact(false);
     list.current?.scrollToIndex({ index, animated: true });
   }, [index, width]);
-
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!width) return;
     const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
-    if (at === landed.current || at < 0 || at >= UTILITY_VIEWS.length) return;
-    landed.current = at;
+    if (at === shown.current || at < 0 || at >= UTILITY_VIEWS.length) return;
+    shown.current = at;
+    // Each page has its own scroll, so the bars come back with the next one.
     setCompact(false);
     setView(UTILITY_VIEWS[at]);
   }, [width, setView]);
   // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
   const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (Platform.OS !== 'web') return;
     const { nativeEvent } = event;
+    if (width) progress.setValue(Math.abs(nativeEvent.contentOffset.x) / width);
+    if (Platform.OS !== 'web') return;
     clearTimeout(quiet.current);
     quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-  }, [settle]);
-
+  }, [settle, width, progress]);
+  useTabRetap('utilities', () => scrollers.get(view)?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center hideOnScroll><UtilityPicker palette={palette} /></TopBar>
+      <TopBar center hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
       <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setWidth(event.nativeEvent.layout.width)}>
-        {width > 0 && <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
-          keyExtractor={item => item} initialScrollIndex={index} extraData={`${view}${focused}${palette.paper}`}
-          getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
-          onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={32} onScrollToIndexFailed={() => {}}
-          renderItem={({ item }) => (
-            <ScrollView ref={page => { pages.current.set(item, page); }} style={{ width, direction: 'rtl' }} onScroll={shrink} scrollEventThrottle={16}
-              contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
-              <Utilities palette={palette} view={item} focused={focused && item === view} />
-            </ScrollView>
-          )} />}
+        {width > 0 && (
+          <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
+            keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
+            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
+            renderItem={({ item }) => <Page view={item} width={width} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
+        )}
       </View>
+      <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />
       <TabHint id="utilities" palette={palette} />
     </View>
   );
