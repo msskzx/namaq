@@ -23,7 +23,9 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * the words where the two part marked in both.
  */
 export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true }: {
-  question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void; onOpen: (key: string) => void;
+  question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
+  /** The mushaf button under the answer. A card leaves it out and puts it in its own button row (owner, 2026-11-15). */
+  onOpen?: (key: string) => void;
   header?: React.ReactNode; palette: Palette;
   /** Inside a screen that already scrolls, it does not scroll on its own. */
   scroll?: boolean;
@@ -78,7 +80,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{question.note.text}</Text>
         </View>
       )}
-      {answered && question.ayahKey && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
+      {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );
 }

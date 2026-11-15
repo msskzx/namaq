@@ -98,8 +98,15 @@ test.describe('a new user', () => {
     await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
     // The choices are the card's buttons with words; the quiz buttons are icons.
     const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
+    await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(0);
     await choice.click();
     await expect(choice).toBeDisabled();
+    // Answered, the mushaf button joins the row under the card, right before the quiz buttons, and opens the reader.
+    const row = card.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
+    await expect(row.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
+    await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
+    await row.getByRole('button', { name: 'في المصحف' }).click();
+    await expect(page).toHaveURL(/\/read/);
   });
 
   test('the prophets card is the story map opened at a group, and a dot opens the story page at its top', async ({ page }) => {
