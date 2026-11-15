@@ -1,7 +1,7 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Eye } from "lucide-react";
 import Button from "@/components/common/Button";
 import type { QuestionChoice, QuestionFamily, QuizTopic } from "@/lib/quiz/types";
@@ -98,10 +98,8 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
               if (question.family === RECITE_SNIPPET && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
               onAnswer(choice.value);
             }}>
-            <FontAwesomeIcon
-              icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}
-              className={locked && (isAnswer || isGiven) ? undefined : 'text-[var(--home-rule)]'}
-            />
+            {/* No empty circle before a choice (owner, 2026-11-15): the mark comes only with the answer, as in the app. */}
+            {locked && (isAnswer || isGiven) && <FontAwesomeIcon icon={isAnswer ? faCircleCheck : faCircleXmark} />}
             {answerContent(question, choice.value)}
             {locked && isAnswer ? <span className="text-xs font-semibold">{ar ? 'صحيح' : 'Correct'}</span> : null}
             {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
