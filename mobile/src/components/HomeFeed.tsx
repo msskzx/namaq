@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { AppState, Pressable, ScrollView, View } from 'react-native';
+import { AppState, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, PenLine, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
@@ -342,6 +342,9 @@ const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; p
  * so the tree keeps its size (owner, 2026-11-14).
  */
 const TREE_HEIGHT = 470;
+/** On a taller screen the cards grow with it (owner, 2026-11-15): this share of the screen's height, never less than the sizes above. */
+const TREE_SHARE = 0.68;
+const STORY_SHARE = 0.62;
 
 /**
  * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
@@ -354,12 +357,13 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);
+  const { height: screen } = useWindowDimensions();
   const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom } }), [room]);
   // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={placesOf(piece.keys)} palette={palette} open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
-      <View style={{ height: TREE_HEIGHT + room }}>
+      <View style={{ height: Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)) + room }}>
         <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
     </View>
@@ -407,12 +411,13 @@ const STORY_HEIGHT = 460;
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
   const prophet = useMemo(() => prophetStory(slug), [slug]);
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : null), [prophet]);
+  const { height: screen } = useWindowDimensions();
   if (!prophet || !map) return null;
   const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
       actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
-      <ScrollView nestedScrollEnabled style={{ maxHeight: STORY_HEIGHT }} contentContainerStyle={{ paddingVertical: 8 }}>
+      <ScrollView nestedScrollEnabled style={{ maxHeight: Math.max(STORY_HEIGHT, Math.round(screen * STORY_SHARE)) }} contentContainerStyle={{ paddingVertical: 8 }}>
         <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
     </Post>
