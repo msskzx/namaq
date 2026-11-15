@@ -37,20 +37,15 @@ export function UtilityPicker({ palette }: { palette: Palette }) {
   );
 }
 
-/** The utilities tab's body: prayer times, the qibla or the Hijri calendar, whichever icon is on. */
-export default function Utilities({ palette, focused = true }: { palette: Palette; focused?: boolean }) {
-  const [view] = utilityView.use();
+export const UTILITY_VIEWS = VIEWS.map(view => view.id);
+
+/** One utility's page: prayer times, the qibla or the Hijri calendar. `on` runs the compass only while its page is on screen. */
+export function UtilityPage({ view, palette, on = true, onPlace }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void }) {
   const [place] = prayerPlace.use();
-  const [picking, setPicking] = useState(false);
-  return (
-    <View style={{ gap: 14 }}>
-      {view === 'calendar' ? <Calendar palette={palette} />
-        : !place ? <FirstUse palette={palette} onPick={() => setPicking(true)} />
-        : view === 'times' ? <Times place={place} palette={palette} onPlace={() => setPicking(true)} />
-        : <Qibla place={place} palette={palette} on={focused} onPlace={() => setPicking(true)} />}
-      <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />
-    </View>
-  );
+  return view === 'calendar' ? <Calendar palette={palette} />
+    : !place ? <FirstUse palette={palette} onPick={onPlace} />
+    : view === 'times' ? <Times place={place} palette={palette} onPlace={onPlace} />
+    : <Qibla place={place} palette={palette} on={on} onPlace={onPlace} />;
 }
 
 /** Before any place is known: the two ways to give one. Location is asked for only on a tap. */
@@ -212,7 +207,7 @@ function Radio({ label, on, onPress, palette }: { label: string; on: boolean; on
 }
 
 /** Where the times are for: the phone's place, or a city from the list. */
-function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
+export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const [place] = prayerPlace.use();
   const [query, setQuery] = useState('');
   const [refused, setRefused] = useState(false);
