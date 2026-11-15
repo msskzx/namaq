@@ -8,6 +8,7 @@ import type { CardSide } from '@shared/quran/compareCards';
 import type { Branch } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import { likeness } from '@shared/quran/wordMatch';
+import { writtenLinks } from '@shared/quran/compareCardLook';
 import type { SpreadAyah } from '@/components/quran/PageSpread';
 import BranchTree from '../branches/BranchTree';
 
@@ -15,15 +16,17 @@ import BranchTree from '../branches/BranchTree';
 const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
 
 /** A word's colour: on a node both sides share, the exact colour, or the written colour where the two write it differently; else its mark on the card. */
-const colourOf = (word: BraidWord, other?: BraidWord) => {
+const colourOf = (word: BraidWord, other: BraidWord | undefined, written: Set<string>) => {
   if (other) return likeness([other.text, word.text]) === 'written' ? 'var(--mark-written)' : 'var(--mark-exact)';
   if (!word.mark) return undefined;
+  // On a node of one side, a word the other side writes differently (writtenLinks) takes the written colour, as on the card.
+  if (word.mark.kind === 'exact' && word.mark.link && written.has(word.mark.link)) return 'var(--mark-written)';
   return word.mark.kind === 'root' ? 'var(--mark-root)' : word.mark.kind === 'related' ? 'color-mix(in srgb, var(--mark-root) 45%, var(--home-muted))' : 'var(--mark-exact)';
 };
 
-function Words({ words, other, ar }: { words: BraidWord[]; other?: BraidWord[]; ar: boolean }) {
+function Words({ words, other, ar, written }: { words: BraidWord[]; other?: BraidWord[]; ar: boolean; written: Set<string> }) {
   return <span lang="ar" className="block font-quran leading-loose">{words.map((word, i) => {
-    const colour = colourOf(word, other?.[i]);
+    const colour = colourOf(word, other?.[i], written);
     const end = ends(word, other?.[i]);
     return <Fragment key={i}>
       {i > 0 && ' '}
@@ -61,6 +64,7 @@ function Neighbours({ near, ar }: { near: (SpreadAyah | null)[]; ar: boolean }) 
  */
 export default function CompareTree({ sides, titles, ar, around, empty }: { sides: [CardSide, CardSide]; titles: [string, string]; ar: boolean; empty?: string[]; around?: { before: (SpreadAyah | null)[]; after: (SpreadAyah | null)[] } }) {
   const { tree, nodes } = useMemo(() => compareTree(sides), [sides]);
+  const written = useMemo(() => writtenLinks({ sides }), [sides]);
   // The sides' names go on the first boxes where they part; a card that never parts names both on its one box.
   const first = useMemo(() => {
     let node = tree;
@@ -75,7 +79,7 @@ export default function CompareTree({ sides, titles, ar, around, empty }: { side
     const silent = side !== undefined && item.words.length === 0 && !sides[side].ayat.length && empty?.[side];
     return {
       tab,
-      content: item.words.length ? <Words words={item.words} other={item.other} ar={ar} />
+      content: item.words.length ? <Words words={item.words} other={item.other} ar={ar} written={written} />
         : silent ? <span className="flex flex-col items-center gap-1 px-2 text-center font-[family-name:var(--font-amiri)] text-sm leading-relaxed text-[var(--home-muted)]"><Rope className="text-[var(--home-rule)]" />{silent}<Rope className="text-[var(--home-rule)]" /></span>
         : <span aria-label={ar ? 'لا كلمات هنا' : 'No words here'} className="m-2 block size-2 rounded-full bg-[var(--home-rule)]" />,
     };

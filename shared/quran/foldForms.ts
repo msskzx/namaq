@@ -46,16 +46,16 @@ export function foldForms<P extends Presentation>(presentation: P): P {
     const from = signed ? last - 1 : last;
     if (from >= 0 && (from > 0 || !root) && current.ayat.length === 0 && current.children.length > 0 && differs(current, from)) {
       const taken = current.children.map(child => formFor(current, from, keys(child)));
-      // The sign moves as the node drew it; each ayah's own form of it stays in `forms`.
-      const moved = (child: Branch, i: number) => [taken[i]!, ...current.words.slice(from + 1)];
-      const formsOf = (child: Branch, i: number) => [taken[i]!, ...current.words.slice(from + 1).map((word, at) => formFor(current, from + 1 + at, keys(child)) ?? word)];
+      // The sign moves with it: a child whose ayat share one number shows that number; each ayah keeps its own forms.
+      const moved = (child: Branch, i: number) => [taken[i]!, ...current.words.slice(from + 1).map((word, at) => formFor(current, from + 1 + at, keys(child)) ?? word)];
+      const formsOf = (child: Branch, i: number) => sameForms(Object.fromEntries(keys(child).map(key => [key, [...(current.forms?.[key]?.slice(from) ?? moved(child, i)), ...(child.forms?.[key] ?? child.words)]])));
       if (taken.every(Boolean)) {
         const children = current.children.map((child, i) => ({
           ...child,
           spelled: [...(from === 0 ? current.spelled ?? current.words : []), ...(child.spelled ?? child.words)],
           words: [...moved(child, i), ...child.words],
           differs: [0, ...(child.differs ?? []).map(at => at + moved(child, i).length)],
-          forms: sameForms(mapForms(child.forms, own => [...formsOf(child, i), ...own])),
+          forms: formsOf(child, i),
         }));
         if (from === 0) return children.flatMap(child => fold(child, false));
         current = { ...current, spelled: current.spelled ?? current.words, words: current.words.slice(0, from), forms: sameForms(mapForms(current.forms, own => own.slice(0, from))), differs: current.differs?.filter(at => at < from), children };

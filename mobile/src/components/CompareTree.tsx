@@ -6,7 +6,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { compareTree, endMark, type BraidWord } from '@shared/quran/braid';
 import { likeness } from '@shared/quran/wordMatch';
-import { markColour } from '@shared/quran/compareCardLook';
+import { markColour, writtenLinks } from '@shared/quran/compareCardLook';
 import { litPaths, togglePath } from '@shared/quran/pathHighlight';
 import { likenessAt, surahNames } from '@/lib/branches';
 import { sideLabel, type Around, type AroundAyah } from '@/lib/compare';
@@ -20,16 +20,17 @@ const SIZE = 20;
 const ends = (word: BraidWord, other?: BraidWord) => [...new Set([word.end, other?.end].filter((end): end is number => end !== undefined))];
 
 /** A word's colour: on a node both sides share, the exact colour, or the written colour where the two write it differently; else its mark on the card. */
-function colourOf(word: BraidWord, palette: Palette, other?: BraidWord) {
+function colourOf(word: BraidWord, palette: Palette, other: BraidWord | undefined, written: Set<string>) {
   if (other) return markColour('exact', palette, likeness([other.text, word.text]) === 'written');
-  return markColour(word.mark?.kind, palette);
+  // On a node of one side, a word the other side writes differently (writtenLinks) takes the written colour, as on the card.
+  return markColour(word.mark?.kind, palette, !!word.mark?.link && written.has(word.mark.link));
 }
 
-function Words({ words, other, palette }: { words: BraidWord[]; other?: BraidWord[]; palette: Palette }) {
+function Words({ words, other, palette, written }: { words: BraidWord[]; other?: BraidWord[]; palette: Palette; written: Set<string> }) {
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
       {words.map((word, i) => {
-        const color = colourOf(word, palette, other?.[i]);
+        const color = colourOf(word, palette, other?.[i], written);
         const end = ends(word, other?.[i]);
         return (
           <Text key={i}>
@@ -77,6 +78,7 @@ export default function CompareTree({ sides, palette, around, labels, empty }: {
   /** A note for each side in a story part that side does not tell. */
   empty?: [string, string] }) {
   const { tree, nodes } = useMemo(() => compareTree(sides), [sides]);
+  const written = useMemo(() => writtenLinks({ sides }), [sides]);
   // Two boxes side by side share the card's width: the tree's padding (12 each side) and each box's (5 each side) come off it.
   const [room, setRoom] = useState(0);
   const [pinned, setPinned] = useState(() => new Map<string, string[]>());
@@ -93,11 +95,11 @@ export default function CompareTree({ sides, palette, around, labels, empty }: {
     if (!item) return undefined;
     const side = item.side;
     const tab = side !== undefined ? (first.includes(node) ? names[side] : undefined) : first.length === 0 && node === tree ? names.join(' · ') : undefined;
-    const text = { size: SIZE, words: item.words.map((word, i) => ({ text: mushafText(word.text), color: colourOf(word, palette, item.other?.[i]) ?? palette.ink })), ...(tab ? { header: tab } : {}) };
+    const text = { size: SIZE, words: item.words.map((word, i) => ({ text: mushafText(word.text), color: colourOf(word, palette, item.other?.[i], written) ?? palette.ink })), ...(tab ? { header: tab } : {}) };
     const silent = side !== undefined && item.words.length === 0 && empty && !sides[side].ayat.length;
     return {
       tab, text, ...(room ? { width: side === undefined ? room - 34 : (room - 44) / 2 } : {}),
-      content: item.words.length ? <Words words={item.words} other={item.other} palette={palette} />
+      content: item.words.length ? <Words words={item.words} other={item.other} palette={palette} written={written} />
         : silent ? <Silent note={empty[side]} palette={palette} />
         : <View accessibilityLabel="لا كلمات هنا" style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: palette.rule, margin: 8 }} />,
     };

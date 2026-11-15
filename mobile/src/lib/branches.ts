@@ -4,7 +4,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { Likeness } from '@shared/quran/wordMatch';
 import { ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
-import { ayahEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
@@ -49,8 +49,8 @@ export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
 }
 
 const cards = new Map<string, TreeCard>();
-/** The ends of a card the owner keeps two ayat deep (twoAyat), set by cardOf, read by the matrix and the ayat around it. */
-const twoDeep = new WeakMap<Presentation, Record<string, string>>();
+/** The ends of a card the owner curated (twoAyat, ownAyatOnly), set by cardOf, read by the matrix and the ayat around it. */
+const curatedEnds = new WeakMap<Presentation, Record<string, string>>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
 const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
@@ -67,7 +67,8 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
   const presentation: Presentation = ownAyatOnly(piece) ? { ...built, tree: ownAyat(built.tree) } : built;
   const matches: Matches = Object.fromEntries(treeContexts(presentation.ayat).map(context => [context.ayah.key, sharedOf(context.match)]));
   // A card the owner keeps two ayat deep: its matrix rows (and the card under the tree) read each ayah on into the next.
-  if (twoAyat(piece)) twoDeep.set(presentation, twoEnds(presentation.tree, key => positions.has(key)));
+  if (twoAyat(piece)) curatedEnds.set(presentation, twoEnds(presentation.tree, key => positions.has(key)));
+  if (ownAyatOnly(piece)) curatedEnds.set(presentation, ownEnds(presentation.tree));
   const card = { piece, presentation, matches };
   if (cards.size > 40) cards.delete(cards.keys().next().value!);
   cards.set(id, card);
@@ -92,8 +93,23 @@ const aroundCache = new Map<Branch, Around>();
 export function aroundOf(presentation: Presentation): Around {
   const cached = aroundCache.get(presentation.tree);
   if (cached) return cached;
+  const around = aroundWith(presentation, ayahEnds(presentation.tree));
+  if (aroundCache.size > 40) aroundCache.delete(aroundCache.keys().next().value!);
+  aroundCache.set(presentation.tree, around);
+  return around;
+}
+
+/** The ayat around a card's matrix rows: as aroundOf, but after each row's end where the owner keeps the card two ayat deep. */
+const matrixAround = new WeakMap<Presentation, Around>();
+function matrixAroundOf(presentation: Presentation): Around {
+  const ends = curatedEnds.get(presentation);
+  if (!ends) return aroundOf(presentation);
+  if (!matrixAround.has(presentation)) matrixAround.set(presentation, aroundWith(presentation, ends));
+  return matrixAround.get(presentation)!;
+}
+
+function aroundWith(presentation: Presentation, ends: Record<string, string>): Around {
   const inTree = keys(presentation.tree);
-  const ends = twoDeep.get(presentation) ?? ayahEnds(presentation.tree);
   const near = surrounding(all, inTree, [...new Set(Object.values(ends))]);
   const earlierKeys = inTree.flatMap(key => near.before[key] ? [near.before[key]!.key] : []);
   const further = surrounding(all, earlierKeys, []);
@@ -107,8 +123,6 @@ export function aroundOf(presentation: Presentation): Around {
     after: Object.fromEntries(Object.entries(near.after).map(([key, ayah]) => [key, pick(after, ayah)])),
     earlier: Object.fromEntries(inTree.map(key => [key, pick(earlier, further.before[near.before[key]?.key ?? ''])])),
   };
-  if (aroundCache.size > 40) aroundCache.delete(aroundCache.keys().next().value!);
-  aroundCache.set(presentation.tree, around);
   return around;
 }
 
@@ -133,7 +147,7 @@ const positions = new Map(all.map((ayah, i) => [ayah.key, i]));
 
 /** The website's ayah matrix: a row per ayah of the tree, and with the switch on the ayah before and after each. */
 export function matrixOf(presentation: Presentation, withAround: boolean): Matrix {
-  const ends = twoDeep.get(presentation) ?? ayahEnds(presentation.tree);
+  const ends = curatedEnds.get(presentation) ?? ayahEnds(presentation.tree);
   const starts = presentation.ayat.map(ayah => ayah.key);
   const passages = starts.map(key => all.slice(positions.get(key)!, positions.get(ends[key] ?? key)! + 1));
   const steps = Math.max(0, ...passages.map(passage => passage.length));
@@ -146,7 +160,7 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
       links: new Map(Object.entries(context.match?.links ?? {}).map(([i, item]) => [Number(i), { link: `${step}:${item.link}`, kind: item.kind, some: item.rows < rows }])),
     }));
   }
-  const around = withAround ? aroundOf(presentation) : undefined;
+  const around = withAround ? matrixAroundOf(presentation) : undefined;
   const cellOf = (beside: Beside | null | undefined): MatrixCell => beside ? { ayat: [{ key: beside.key, page: beside.page, words: beside.words, exact: beside.exact, written: beside.written, rooted: beside.rooted, basmala: beside.basmala }] } : null;
   return {
     columns: withAround ? ['before', 'ayah', 'after'] : ['ayah'],
