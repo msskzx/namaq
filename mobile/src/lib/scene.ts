@@ -65,7 +65,7 @@ export type Look = { paper: string; ink: string; muted: string; rule: string; ac
  * An ayah of the tree as the video's chip and card show it, as the matrix's ayah card does in the app: the chip's surah and number,
  * the card's surah name and «الآية …» line, and its words coloured as the matrix colours them, each ayah's number at its end.
  */
-export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string }[] };
+export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string; end?: boolean }[] };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[]; ayat: VideoAyah[] };
 
 
@@ -105,7 +105,7 @@ scene.boxes.forEach(function (box) { byId[box.id] = box; });
 var hidden = {};
 INPUT.beats.forEach(function (beat) { beat.reveal.forEach(function (id) { hidden[id] = true; }); });
 var shownAt = {};
-var now = {}, lit = null, ask = null, tour = false, step = 0, total = INPUT.beats.length ? INPUT.beats[INPUT.beats.length - 1].step + 1 : 0, done = false;
+var now = {}, lit = null, ask = null, tour = false, words = null, wordAt = {}, step = 0, total = INPUT.beats.length ? INPUT.beats[INPUT.beats.length - 1].step + 1 : 0, done = false;
 var FADE = 250;
 
 function holds(box) { return !!(lit && box.keys && box.keys.indexOf(lit) >= 0); }
@@ -124,7 +124,7 @@ function wrap(words, width, size) {
   words.forEach(function (word) {
     var w = ctx.measureText(word.text).width;
     if (line.length && used + space + w > width) { lines.push({ words: line, width: used }); line = []; used = 0; }
-    used += (line.length ? space : 0) + w; line.push({ text: word.text, color: word.color, width: w });
+    used += (line.length ? space : 0) + w; line.push({ text: word.text, color: word.color, width: w, end: word.end });
   });
   if (line.length) lines.push({ words: line, width: used });
   return lines;
@@ -286,7 +286,17 @@ function cardOf(ayah) {
   return cards[ayah.key];
 }
 
-function drawCard(key) {
+// While an ayah grows its card shows the words its drawn boxes hold (the beat's words), each fading in as a box does; an
+// ayah's number shows once its words have. Null: every word.
+function wordAlpha(key, i, read, t) {
+  if (words === null || read <= words) {
+    var id = key + ':' + i;
+    if (wordAt[id] === undefined) wordAt[id] = t;
+    return Math.min(1, (t - wordAt[id]) / FADE);
+  }
+  return 0;
+}
+function drawCard(key, t) {
   var ayah = INPUT.ayat.filter(function (item) { return item.key === key; })[0];
   if (!ayah) return;
   var card = cardOf(ayah), x = CARD.x, top = frame.card, width = CARD.width, pad = 13 * K;
@@ -302,10 +312,16 @@ function drawCard(key) {
   var lineHeight = card.size * 44 / 21, y = top + K + 8 * K + card.head + 4 * K;
   ctx.save(); ctx.beginPath(); ctx.rect(x, y, width, top + card.height - K - y); ctx.clip();
   ctx.font = card.size + 'px ' + look.font; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  var space = ctx.measureText(' ').width;
+  var space = ctx.measureText(' ').width, index = 0, read = 0;
   card.lines.forEach(function (line) {
     var at = x + width - pad;
-    line.words.forEach(function (word) { at -= word.width; ctx.fillStyle = word.color; ctx.fillText(word.text, at, y + lineHeight / 2); at -= space; });
+    line.words.forEach(function (word) {
+      at -= word.width;
+      if (!word.end) read++;
+      var a = wordAlpha(key, index++, read, t);
+      if (a > 0) { ctx.globalAlpha = a; ctx.fillStyle = word.color; ctx.fillText(word.text, at, y + lineHeight / 2); ctx.globalAlpha = 1; }
+      at -= space;
+    });
     y += lineHeight;
   });
   ctx.restore();
@@ -313,7 +329,7 @@ function drawCard(key) {
 
 // The frame as TreeCard stacks it: the tree, the chips 12 points under it, the card 8 under them; the whole stack centred in the
 // frame, the tree as large as the room left allows. The card's room is the tallest ayah's, so nothing moves as the ayat take turns.
-var frame = { chips: 0, card: 0 };
+var frame = { chips: 0, card: 0, room: false };
 function layout() {
   var top = INPUT.ask ? 110 : 60, bottom = 1810, below = 0, chips = 0;
   if (INPUT.ayat.length) {
@@ -325,7 +341,7 @@ function layout() {
   place = placeTree(scene, { x: AREA.x, y: top, width: AREA.width, height: bottom - top - below });
   var tree = scene.height * place.scale;
   place.y = top + (bottom - top - tree - below) / 2;
-  frame.chips = place.y + tree + BELOW; frame.card = frame.chips + chips + CARD.gap;
+  frame.chips = place.y + tree + BELOW; frame.card = frame.chips + chips + CARD.gap; frame.room = tour;
 }
 
 // A fan's first and last child: their lines curve into the spine, as BranchTree's elbows do.
@@ -365,7 +381,8 @@ function draw(t) {
     ctx.fillRect(FRAME.width - 60 - (i + 1) * bar - i * 10, 1840, bar, 8);
   }
   drawChips();
-  if (tour && lit) drawCard(lit);
+  // The card has room when the video ends on the ayat's paths: the growing ayah's card from its first box, in full on its path.
+  if (frame.room && lit) drawCard(lit, t);
   ctx.setTransform(place.scale, 0, 0, place.scale, place.x, place.y);
   // Plain lines first, so the lit path's blue runs whole over any grey it crosses.
   ctx.lineWidth = 2; ctx.lineJoin = 'miter'; ctx.lineCap = 'butt';
@@ -415,7 +432,7 @@ else {
   function enter(index, t) {
     var current = INPUT.beats[index];
     if (!current) return;
-    step = current.step; lit = current.key; ask = null; tour = !!current.path;
+    step = current.step; lit = current.key; ask = null; tour = !!current.path; words = tour || current.words === undefined ? null : current.words;
     if (current.ask) { ask = { id: current.ask, left: 1, seconds: INPUT.timer || 3 }; now = {}; return; }
     current.reveal.forEach(function (id) { delete hidden[id]; shownAt[id] = t; });
     if (current.now.length) { now = {}; current.now.forEach(function (id) { now[id] = true; }); }

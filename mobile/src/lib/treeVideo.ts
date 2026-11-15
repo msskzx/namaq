@@ -29,7 +29,7 @@ export function videoAyat(beats: Beat[], presentation: Presentation | undefined,
         const color = sharedTone(palette, ayah, i) ?? palette.ink;
         return { text: mushafText(word), color };
       }),
-      { text: num(Number(ayah.key.split(':')[1])), color: palette.accent },
+      { text: num(Number(ayah.key.split(':')[1])), color: palette.accent, end: true },
     ]);
     const [lastSurah, last] = row[row.length - 1].key.split(':').map(Number);
     const name = surahNames[surah] ?? num(surah);

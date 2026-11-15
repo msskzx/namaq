@@ -245,7 +245,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
     if (mode !== 'tree' || !piece) { claimTarget('branches', null); return; }
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
-    const options = { ...parts, prefixes: presentation.prefixes, paths: true };
+    const options = { ...parts, prefixes: presentation.prefixes, offsets: presentation.offsets, paths: true };
     beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
     claimTarget('branches', beatsRef.current);
   }, [piece, list, mode, around, studioKey, reading, connecting, lines]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -325,7 +325,8 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const shown = [index - 1, index, index + 1].filter(at => at >= 0 && at < count);
-  const treeGrowth = growth.studio ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit, tour: growth.tour } : undefined;
+  // Only the branches tab's own studio: a quiz playing over it grows its own tree, not this card.
+  const treeGrowth = growth.studio && studioOwner() === 'branches' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask, lit: growth.lit, tour: growth.tour, words: growth.words } : undefined;
 
   return (
     <View style={{ flex: 1 }}>

@@ -25,6 +25,8 @@ export type Growth = Prefs & {
   lit: string | null;
   /** Once the tree has grown: each ayah's path is lit in turn and its ayah read in full. */
   tour: boolean;
+  /** While an ayah grows: how many of its words its card under the tree shows (the beat's words). */
+  words?: number;
   /** What the studio grows: a tree, a book matrix's word connections, or a plain matrix read along word by word. */
   kind: StudioKind;
 };
@@ -126,7 +128,7 @@ export async function play(from = 0, { video = false } = {}) {
   beats.slice(0, Math.max(0, first)).forEach(beat => beat.reveal.forEach(id => hidden.delete(id)));
   set({ status: 'playing', at: from, hidden, now: NONE, ask: undefined, lit: null, tour: false });
   for (const beat of beats.slice(Math.max(0, first))) {
-    set({ at: beat.step, lit: beat.key, tour: !!beat.path });
+    set({ at: beat.step, lit: beat.key, tour: !!beat.path, words: beat.words });
     if (beat.ask) {
       const seconds = state.timer || (video ? TIMERS[0] : 0);
       set({ ask: { id: beat.ask, left: 1, seconds }, now: NONE });

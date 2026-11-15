@@ -71,7 +71,9 @@ function readTone(ayah: MatrixAyah, i: number, palette: Palette, read?: Read) {
   return { color: palette.onHighlight, backgroundColor: palette.highlight };
 }
 
-function Ayah({ ayah, palette, muted, light, read }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light; read?: Read }) {
+/** `shown`: how many of this ayah's words show (the studio's growing ayah); the rest keep their place unseen. */
+const UNSEEN = { color: 'transparent' } as const;
+function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light; read?: Read; shown?: number }) {
   const [, number] = ayah.key.split(':').map(Number);
   const registry = useContext(Words);
   const press = (i: number) => {
@@ -82,22 +84,24 @@ function Ayah({ ayah, palette, muted, light, read }: { ayah: MatrixAyah; palette
     {ayah.words.map((word, i) => {
       const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
-        <Text onPress={press(i)} style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink }, tone]}>{mushafText(word)}</Text>
+        <Text onPress={press(i)} style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink }, tone, i >= shown && UNSEEN]}>{mushafText(word)}</Text>
       </View>;
     })}
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.accent }}>{num(number)}</Text>
+    <Text style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.accent }, ayah.words.length > shown && UNSEEN]}>{num(number)}</Text>
   </>;
   return <>
     {ayah.words.map((word, i) => {
       const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
-      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)} style={tone}>{mushafText(word)}</Text></Text>;
+      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)} style={[tone, i >= shown && UNSEEN]}>{mushafText(word)}</Text></Text>;
     })}
-    <Text style={{ color: muted ? palette.muted : palette.accent }}> {num(number)} </Text>
+    <Text style={[{ color: muted ? palette.muted : palette.accent }, ayah.words.length > shown && UNSEEN]}> {num(number)} </Text>
   </>;
 }
 
 /** One ayah card of the matrix; the tree's lit-path card under the tree is this card too (owner, 2026-11-14). */
-export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false, shown }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+  /** The studio's growing ayah: how many words of the cell (its ayat in turn) show; the rest keep their place unseen. */
+  shown?: number;
   /** One row of the matrix's single card (owner, 2026-11-14): no card of its own, the rows parted by rules, as the compare card stacks its sides. */
   stacked?: boolean;
   /** Left out where the card is only read (under the tree): it is then no button, so its own buttons stay reachable. */
@@ -112,6 +116,8 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
   const wordViews = !!useContext(Words);
+  // Each ayah of a passage shows what is left of `shown` after the ayat before it.
+  const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
   const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress?.(); } } : undefined;
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
@@ -133,9 +139,9 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
       {at === 'after' && basmala}
       {wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', columnGap: 6 }}>{cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}</View>
+        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', columnGap: 6 }}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</View>
         : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
-          {cell.ayat.map(ayah => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} />)}
+          {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}
         </Text>}
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(first.key)}
