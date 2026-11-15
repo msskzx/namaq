@@ -162,7 +162,14 @@ function drawLabel(part, lit) {
   ctx.font = part.size + 'px ' + look.ui; ctx.fillStyle = look.muted; ctx.direction = 'rtl'; ctx.textBaseline = 'middle';
   var top = part.rule ? part.y + 2 : part.y, height = part.rule ? part.h - 5 : part.h;
   ctx.textAlign = part.align === 'right' ? 'right' : 'center';
-  ctx.fillText(part.label, part.align === 'right' ? part.x + part.w : part.x + part.w / 2, top + height / 2);
+  // A label the app wrapped (a braid strand's long list of ayat) wraps here too, word by word, in its measured place.
+  var lines = [''];
+  part.label.split(' ').forEach(function (word) {
+    var next = lines[lines.length - 1] ? lines[lines.length - 1] + ' ' + word : word;
+    if (lines[lines.length - 1] && ctx.measureText(next).width > part.w + 2) lines.push(word); else lines[lines.length - 1] = next;
+  });
+  var step = height / lines.length;
+  lines.forEach(function (line, i) { ctx.fillText(line, part.align === 'right' ? part.x + part.w : part.x + part.w / 2, top + step * (i + 0.5)); });
   if (part.rule) { ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(part.x, part.y + part.h - 0.5); ctx.lineTo(part.x + part.w, part.y + part.h - 0.5); ctx.stroke(); }
 }
 
