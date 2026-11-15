@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { noteLines, parseSurahTopics, rangeGaps, type SurahTopics } from './surahTopicsParse';
+import { noteLines, parseSurahTopics, rangeGaps, type Section, type SurahTopics } from './surahTopicsParse';
 
 // docs/plans/surah-topics.md: each surah's sections from Quranpedia's surahs dump, where the note cites al-Tafsir
 // al-Mawdu'i li-Suwar al-Quran al-Karim (University of Sharjah). Writes shared/data/quran/surahTopics.json and prints
@@ -53,7 +53,38 @@ const PRINTED: Record<number, SurahTopics> = {
   ] },
 };
 
+// Ranges the dump mistypes, checked against the printed book. Each keeps what the dump says, so a later dump that
+// fixes it (or changes it) stops the build instead of being overwritten.
+const CORRECTED: { surah: number; title: string; dump: [number, number]; printed: [number, number]; where: string }[] = [
+  // The dump's «(١٠٧-١٢١)» in a surah of 112. The section's page has the running head «سورة الأنبياء/١٠٧-١١٢» and quotes
+  // 21:107-112 (vol. 5 p. 72; archive.org scan PDF page 2560).
+  { surah: 21, title: 'ختام سلسلة الأنبياء رحمةٌ مهداة', dump: [107, 121], printed: [107, 112], where: 'vol. 5 p. 72' },
+];
+
+function correct(number: number, topics: SurahTopics): SurahTopics {
+  const sections = JSON.parse(JSON.stringify(topics.sections)) as Section[];
+  for (const fix of CORRECTED.filter(c => c.surah === number)) {
+    const all = (list: Section[]): Section[] => list.flatMap(s => [s, ...all(s.parts ?? [])]);
+    const found = all(sections).find(s => s.title === fix.title);
+    if (!found || found.from !== fix.dump[0] || found.to !== fix.dump[1]) {
+      throw new Error(`${number}: «${fix.title}» is no longer ${fix.dump.join('-')} in the dump; check the correction against the book`);
+    }
+    [found.from, found.to] = fix.printed;
+  }
+  return { ...topics, sections };
+}
+
+/** Every range must be one that can exist: whole numbers, from ≤ to, inside the surah. */
+function impossible(number: number, numberOfAyat: number, list: Section[]): string[] {
+  return list.flatMap(s => [
+    ...(s.from === undefined ? [] : !Number.isInteger(s.from) || !Number.isInteger(s.to) || s.from < 1 || s.to! < s.from || s.to! > numberOfAyat
+      ? [`${number}: «${s.title}» ${s.from}-${s.to} cannot exist in a surah of ${numberOfAyat} ayat`] : []),
+    ...impossible(number, numberOfAyat, s.parts ?? []),
+  ]);
+}
+
 const surahs: Record<number, SurahTopics> = {};
+const errors: string[] = [];
 const report: string[] = [];
 for (const { number, numberOfAyat } of counts) {
   const note = dump.data.find(row => row.surah === number)?.information.topics?.value ?? '';
@@ -61,11 +92,12 @@ for (const { number, numberOfAyat } of counts) {
   if (topics && PRINTED[number] && topics !== PRINTED[number]) throw new Error(`${number}: the dump now has a list; drop the printed one`);
   if (!topics) { report.push(`${number}: no Sharjah list${noteLines(note).length ? ' (the note cites another book)' : ' (empty note)'}`); continue; }
   if (!topics.sections.length) throw new Error(`${number}: cites the book but no heading parsed`);
-  const outside = JSON.stringify(topics).match(/"to":(\d+)/g)?.map(m => Number(m.slice(5))).filter(n => n > numberOfAyat);
-  // Kept as the source has it (21 ends «١٠٧-١٢١» in a surah of 112), listed for the owner rather than repaired.
-  if (outside?.length) report.push(`${number}: a range runs to ${outside.join(', ')}, past the last ayah ${numberOfAyat}`);
-  surahs[number] = topics;
-  report.push(...rangeGaps(topics.sections, 1, Math.max(numberOfAyat, ...(outside ?? []))).map(gap => `${number}: ${gap}`));
+  const fixed = correct(number, topics);
+  errors.push(...impossible(number, numberOfAyat, fixed.sections));
+  surahs[number] = fixed;
+  report.push(...rangeGaps(fixed.sections, 1, numberOfAyat).map(gap => `${number}: ${gap}`));
 }
+// A range that cannot exist is never published: check it in the printed book and add it to CORRECTED.
+if (errors.length) throw new Error(`impossible ranges:\n${errors.join('\n')}`);
 writeFileSync(join(DATA, 'surahTopics.json'), `${JSON.stringify({ version: dump.license.version, surahs })}\n`);
 console.log(`Wrote ${Object.keys(surahs).length} surahs.\n${report.join('\n')}`);
