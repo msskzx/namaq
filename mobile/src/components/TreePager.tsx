@@ -36,6 +36,7 @@ import type { BranchView } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
+import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
@@ -219,6 +220,10 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   // The open tree is the one the studio grows.
   const piece = pieces[Math.min(index, pieces.length - 1)];
   const mode = piece ? modeOf(piece) : defaultMode;
+  // A matrix's rows scroll, and the top bar slides away while they scroll down (owner, 2026-11-15). A tree sits in a fixed
+  // frame that does not scroll, so another card, or the tree view, brings the bar back.
+  const shrink = useShrinkOnScroll();
+  useEffect(() => { if (!embedded) setCompact(false); }, [index, mode]); // eslint-disable-line react-hooks/exhaustive-deps
   const around = piece ? surroundOf(piece) : defaultAround;
   // A book group's matrix grows its word connections instead (the website's connections studio).
   const matrixGroup = useMemo(() => (mode === 'matrix' && piece ? evidenceOf(piece) : null), [mode, piece]);
@@ -361,7 +366,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                 ? <MatrixCard key={String(atAround)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround} onTap={tap} onMove={move} footer={footer} pinFooter={!!embedded?.ayatRoom}
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
-                  reading={current && growth.studio && growth.kind === 'read'} />
+                  reading={current && growth.studio && growth.kind === 'read'} onScroll={current && !embedded ? shrink : undefined} />
                 : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                   rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
                   initialCamera={at === index ? restore.current : undefined}

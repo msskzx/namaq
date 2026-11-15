@@ -14,7 +14,6 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { useTabRetap } from '@/lib/tabRetap';
-import { back } from '@/lib/ways';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
@@ -91,7 +90,7 @@ export default function OpeningsScreen() {
   const cards = useMemo(() => openingCards(words), []);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll help={() => setHelp(true)}>
+      <TopBar hub hideOnScroll help={() => setHelp(true)}>
         <Pressable onPress={() => router.push('/quiz/openings')} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
           <PenLine size={20} color={palette.muted} />
         </Pressable>

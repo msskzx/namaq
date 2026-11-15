@@ -11,7 +11,6 @@ import WordSheet from '@/components/WordSheet';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
-import { back } from '@/lib/ways';
 import { words } from '@/lib/words';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
 
@@ -35,7 +34,7 @@ export default function WordsScreen() {
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll help={() => setHelp(true)} />
+      <TopBar hub hideOnScroll help={() => setHelp(true)} />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
           <Search size={18} color={palette.muted} />

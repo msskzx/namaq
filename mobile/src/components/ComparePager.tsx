@@ -6,6 +6,7 @@ import { curatedFor } from '@shared/quran/curatedComparisons';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
 import CompareCard from './CompareCard';
+import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import PageVideo from './PageVideo';
 
 const GAP = 14;
@@ -41,13 +42,15 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
     list.current?.scrollToOffset({ offset, animated: false });
   }, []);
   const stop = useCallback(() => { pending.current = -1; landed.current?.(); }, []);
+  // The top bar and the progress slide away while the cards scroll down and come back on the way up.
+  const shrink = useShrinkOnScroll();
   // The whole page's video opens from any card's share sheet, beside that card's own video.
   const [video, setVideo] = useState(false);
   const pageVideo = useCallback(() => setVideo(true), []);
   return (
     <View style={{ width, height, direction: 'rtl' }}>
       <PageVideo lead={visit.lead} other={visit.other} cards={cards} open={video} onClose={() => setVideo(false)} palette={palette} />
-      <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop}
+      <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop} onScroll={shrink} scrollEventThrottle={16}
         contentContainerStyle={{ padding: 12, gap: GAP, paddingBottom: 32 }}
         ListHeaderComponent={cards.length && story ? <View onLayout={event => { head.current = event.nativeEvent.layout.height + GAP; land(); }}>
           <Text style={{ color: palette.accent, fontSize: 16, textAlign: 'right' }}>{story.name.ar}</Text>
@@ -70,7 +73,8 @@ const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; o
     const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!width) return;
       const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
-      if (at !== index && at >= 0 && at < visits.length) onIndex(at);
+      // Another pair opens at its own top, so the bars come back with it.
+      if (at !== index && at >= 0 && at < visits.length) { setCompact(false); onIndex(at); }
     }, [width, index, visits.length, onIndex]);
     // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
     const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
