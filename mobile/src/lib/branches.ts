@@ -3,6 +3,7 @@ import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { Likeness } from '@shared/quran/wordMatch';
+import { ownAyatOnly } from '@shared/quran/branchVerdicts';
 import { ayahEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
@@ -50,14 +51,18 @@ export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
 const cards = new Map<string, TreeCard>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
+const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
+
 export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'range'> = EMPTY_LIST): TreeCard {
   const id = JSON.stringify([piece.id, piece.keys.length, state.filters, state.range]);
   const cached = cards.get(id);
   if (cached) return cached;
   const visible = filteredAyat(byKey(), state.filters, state.range);
-  const presentation: Presentation = piece.group
+  const built: Presentation = piece.group
     ? groupPresentation(piece.group, byKey(), state.range, state.filters)
     : phrasePresentation(piece.phrase, all, true, !state.range, key => visible.has(key));
+  // A card the owner keeps to its own ayat: no ayah reads on into the one after it (the matrix's rows end on their own ayah).
+  const presentation: Presentation = ownAyatOnly(piece) ? { ...built, tree: ownAyat(built.tree) } : built;
   const matches: Matches = Object.fromEntries(treeContexts(presentation.ayat).map(context => [context.ayah.key, sharedOf(context.match)]));
   const card = { piece, presentation, matches };
   if (cards.size > 40) cards.delete(cards.keys().next().value!);

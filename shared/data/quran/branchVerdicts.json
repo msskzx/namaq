@@ -5512,10 +5512,11 @@
   },
   "cmp:138fsj406mr5cc": {
    "keep": true,
-   "why": "owner 2026-11-15: drop the tree, keep the matrix",
+   "why": "owner 2026-11-15: drop the tree, keep the matrix; 94:5 against 94:6 only, not the ayat after",
    "text": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
    "checked": true,
-   "view": "matrix"
+   "view": "matrix",
+   "ayat": "own"
   },
   "cmp:0x9igrs05qtphg": {
    "keep": true,
