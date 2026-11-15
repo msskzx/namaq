@@ -356,7 +356,8 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                     onAround={{ on: atAround, toggle: () => switchCard(pieces[at], { around: !atAround }) }}
                     choice={current && atMode === 'matrix' && lines > 0 ? { connections: connecting, toggle: () => setPlay(connecting ? 'read' : 'connections') } : undefined} />
                 </View>
-                {atMode === 'matrix' && <SurahChips ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
+                {/* With no studio bar in the row (closed, or the home card), the chips rise into its room, as under a tree (#785). */}
+                {atMode === 'matrix' && <SurahChips tuck={!(current && growth.studio)} ayahKeys={cardOf(pieces[at], list).presentation.ayat.map(ayah => ayah.key)} palette={palette} />}
                 {linked && <ConnectionChips group={linked} selected={tagsOf(pieces[at], linked)} onToggle={tag => toggleTag(pieces[at], linked, tag)} palette={palette} />}
               </View>
             );
