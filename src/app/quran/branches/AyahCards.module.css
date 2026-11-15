@@ -9,7 +9,8 @@
 /* One card for the whole matrix (owner, 2026-11-14): rows parted by rules running across every column, solid between surahs, dashed within one. */
 .cell:not([data-first]) { border-top: 1px solid var(--home-rule); }
 .cell[data-same] { border-top-style: dashed; }
-.cell article header { display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem; border-block: 0; }
+/* The title in the middle, the mushaf button at the right edge (PageSpread .action), as on the app (owner, 2026-11-15). */
+.cell article header { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem 2.75rem; border-block: 0; }
 .cell article h3 { font-size: 1rem; font-weight: 400; color: var(--home-muted); }
 .cell article > div { text-align: center; }
 .cell article > div { font-size: 1.25rem; line-height: 2.1; }

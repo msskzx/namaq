@@ -288,11 +288,12 @@ function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null,
   const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
   return {
     title: partners ? `${name} ${partners.numbers.map(show).join(' · ')}`.trim() : side.ayat.length === 0 ? name : side.rows || runsOf(side.ayat.map(ayah => ayah.number)).length > 1 ? `${name} ${runsOf(side.ayat.map(ayah => ayah.number)).map(([from, to]) => `${show(from)}${to > from ? `–${show(to)}` : ''}`).join(' · ')}` : `${name} ${show(side.ayah)}${last > side.ayah ? `–${show(last)}` : ''}`,
+    // The buttons at the right edge, the mushaf first, as on the app (owner, 2026-11-15).
     action: <span className="flex">
-      {extra}
       <Link href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={read} title={read} className={ICON}>
         <BookOpen size={16} aria-hidden />
       </Link>
+      {extra}
     </span>,
     gaps: true,
     gapsLabel: ar ? 'الآيات' : 'Ayat',
