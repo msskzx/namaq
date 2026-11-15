@@ -44,12 +44,20 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
     for (const ayah of matrix.rows[r]?.ayah?.ayat ?? []) for (let i = 0; i < ayah.words.length; i++, at++) if (reading.has(readId(r, ayah.key, i))) return at;
     return undefined;
   }, [reading, matrix, ayahKeys]); // eslint-disable-line react-hooks/exhaustive-deps
+  // With the surrounding ayat on, the card holds them too: the own ayah's words sit after those before it and ahead of those after.
+  const [wordsBefore, wordsAfter] = useMemo(() => {
+    if (!withAround || !matrix || ayahKeys.length !== 1) return [0, 0];
+    const row = matrix.rows[starts.indexOf(ayahKeys[0])];
+    const count = (ayat: { words: unknown[] }[]) => ayat.reduce((sum, ayah) => sum + ayah.words.length, 0);
+    const earlier = mixed ? context?.earlier[ayahKeys[0]] : null;
+    return [count([...(earlier ? [earlier] : []), ...row?.before?.ayat ?? []]), count(row?.after?.ayat ?? [])];
+  }, [withAround, matrix, ayahKeys, mixed, context]); // eslint-disable-line react-hooks/exhaustive-deps
   const place = readAt ?? shown;
   useEffect(() => {
     if (!maxHeight || !total || heights.content <= heights.view) return;
-    const along = place === undefined ? 0 : Math.min(1, place / total);
+    const along = Math.min(1, (wordsBefore + (place ?? 0)) / (wordsBefore + total + wordsAfter));
     scroller.current?.scrollTo({ y: Math.max(0, along * heights.content - heights.view * 0.75), animated: true });
-  }, [place, total, maxHeight, heights]);
+  }, [place, total, wordsBefore, wordsAfter, maxHeight, heights]);
   if (!matrix || ayahKeys.length === 0) return null;
   return (
     // Laid out as the matrix lays its cards out (ltr, its buttons at the end); dir is what the web build reads.

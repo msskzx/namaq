@@ -142,7 +142,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
         </Text>
         {current && !still && <>
           {tools}
-          <Pressable onPress={() => readAyah(own.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[surah]} ${range}`} style={{ padding: 4 }}>
+          <Pressable onPress={() => readAyah(own.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} style={{ padding: 4 }}>
             <BookOpen size={18} color={palette.muted} />
           </Pressable>
         </>}

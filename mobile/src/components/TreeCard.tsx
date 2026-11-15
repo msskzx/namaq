@@ -113,7 +113,8 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // so a long ayah or several read whole and the tree gives up only what they need; more than that scrolls. In the studio it
   // stays AYAH_SPACE, so the tree keeps still while the ayat take turns.
   const [ayatHeight, setAyatHeight] = useState(0);
-  const fitted = Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, full.height * 0.5)));
+  // In a feed the frame already holds the room it asked for, so half is taken of the frame without it, or the room feeds its own cap.
+  const fitted = Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, (full.height - (ayatRoom?.height ?? 0)) * 0.5)));
   const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
   const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
