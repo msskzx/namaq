@@ -78,22 +78,19 @@ if (surah !== 114) throw new Error(`found ${surah} surahs, expected 114`);
 const counts = JSON.parse(readFileSync(join(__dirname, '../../shared/data/quran/surahs.json'), 'utf8')) as { number: number; numberOfAyat: number }[];
 // Al-Sa'di takes some ayat inside a passage without a marker of their own ("ثم قال: ﴿…﴾"): a passage runs to the ayah
 // before the next marker, or to the end of its surah.
-const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/\s+/g, ' ').trim();
-/** Whether the words after the opening quote's last "*" (the next ayah's opening) are quoted again in the passage. */
-function explainsLast(text: string): boolean {
-  const opening = /﴿([^﴾]*)﴾/.exec(text);
-  if (!opening || !opening[1].includes('*')) return false;
-  const last = bare(opening[1].split('*').pop()!).split(' ').slice(0, 3).join(' ');
-  return last.length > 0 && bare(text.slice(opening.index + opening[0].length)).includes(last);
-}
+// Where a passage's marker ends on the ayah the next marker starts on, read by hand (2026-11-15): does al-Sa'di explain
+// that ayah's words in this passage too (it gets both passages), or only quote it up front and stop before it?
+const SPLIT_EXPLAINED = ['2:219', '4:77', '18:32', '30:11', '38:16', '38:48'];
+const SPLIT_QUOTED_ONLY = ['4:29', '9:79', '9:86', '10:94', '10:104', '13:8', '18:37', '72:1', '83:18'];
 passages.forEach((p, i) => {
   const next = passages[i + 1];
   // A marker that starts inside the passage's own range cuts it there (al-Qasas: «{١ - ٥١}» then «{٣٠ - ٥١}»), except
   // where the passage's own marker ends on the ayah the next one starts on: al-Sa'di splits that ayah between them, so
   // both keep it (2:219: «{٢١٩}», then «{٢١٩ - ٢٢٠}» on «في الدنيا والآخرة», then «{٢٢٠}»).
-  // He splits it only when he explains the shared ayah's words in this passage too, quoting them again after the opening
-  // quote; a passage that quotes the next ayah up front but stops before it (4:29–30, 72:1–2) does not get it.
-  const shares = next?.surah === p.surah && p.to === next.from && next.from > p.from && explainsLast(p.parts.join(' '));
+  const touches = next?.surah === p.surah && p.to === next.from && next.from > p.from;
+  const key = `${p.surah}:${p.from}`;
+  if (touches && !SPLIT_EXPLAINED.includes(key) && !SPLIT_QUOTED_ONLY.includes(key)) throw new Error(`${key}-${p.to} ends on the ayah the next passage starts on: read it and add it to SPLIT_EXPLAINED or SPLIT_QUOTED_ONLY`);
+  const shares = touches && SPLIT_EXPLAINED.includes(key);
   p.to = next?.surah === p.surah ? (shares ? p.to : Math.max(p.from, next.from - 1)) : Math.max(p.to, counts.find(c => c.number === p.surah)!.numberOfAyat);
 });
 const problems: string[] = [];

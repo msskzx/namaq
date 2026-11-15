@@ -48,6 +48,8 @@ describe('tafsirSadiOf', () => {
     expect(text('2:220')).not.toContain('الخمر');
     expect(tafsirSadiOf('2:221')).toMatchObject({ from: 221, to: 221 });
     expect(tafsirSadiOf('30:16')).toMatchObject({ from: 11, to: 16 });
+    expect(tafsirSadiOf('38:49')).toMatchObject({ from: 48, to: 54 });
+    expect(tafsirSadiOf('18:34')).toMatchObject({ from: 32 });
     // A passage that quotes the next ayah up front but stops before explaining it keeps to its own ayah.
     expect(tafsirSadiOf('4:30')).toMatchObject({ from: 30 });
     expect(tafsirSadiOf('72:2')).toMatchObject({ from: 2, to: 4 });
@@ -75,6 +77,7 @@ describe('tafsirSadiOf', () => {
     expect(text('48:29')).not.toContain('بقلم');
     // A gap that was only a page break keeps the paragraph break before the next quote.
     expect(text('27:1')).toContain('السفسطة.\n﴿');
+    expect(text('7:103')).toMatch(/ذنوبهم\.\s+وقال موسى/);
   });
 
   it('was built from the version the credit names', () => {
