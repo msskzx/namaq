@@ -1,6 +1,7 @@
 // Which trees a quiz asks, with the branches page's filters: kinds of comparison and difference,
 // part of the Quran beyond a juz range (surahs, pages, chosen juz), and saved trees only.
 import { branchInventory, type BranchPiece } from '../quran/branchInventory';
+import { matrixOnly } from '../quran/branchVerdicts';
 import type { JuzRange } from '../quran/juz';
 import type { TreeGroup } from '../quran/phraseTrees';
 import { quizFilters, type TreeScope } from './scopeParams';
@@ -37,7 +38,8 @@ function merged(pieces: BranchPiece[], categories: string, filters: ReturnType<t
 /** The trees the quiz asks, as the branches page lists them for the same filters and juz range. */
 export function quizTrees(range: JuzRange | null = null, scope: TreeScope = {}): TreeGroup[] {
   const filters = quizFilters(scope.filters);
-  let pieces = merged(branchInventory(filters, range), filters.categories!, filters, range);
+  // A card kept as its matrix only has no tree to ask.
+  let pieces = merged(branchInventory(filters, range), filters.categories!, filters, range).filter(piece => !matrixOnly(piece));
   if (scope.saved) {
     const saved = new Set(scope.saved);
     pieces = pieces.filter(piece => idsOf(piece).some(id => saved.has(id)));

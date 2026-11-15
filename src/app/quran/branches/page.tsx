@@ -35,7 +35,7 @@ import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './
 import { compareLinksFor, compareLinksOfAyah } from '../compare/pairCards';
 import { PathScope } from './Paths';
 import TreeReview from './TreeReview';
-import { branchReviewState, branchVerdictFor, droppedBranch } from '@shared/quran/branchVerdicts';
+import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly } from '@shared/quran/branchVerdicts';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
 
@@ -181,7 +181,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const holding = tree && query ? drawn.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key) : [];
   const marked = holding.length < drawn.length ? holding : [];
   const treeView = { ...state, query: undefined, surah: undefined, ayah: undefined, saved: undefined };
-  const cards = !!tree && state.mode === 'cards';
+  // A card the owner keeps as its matrix only opens as its ayah cards, with no switch to a tree.
+  const onlyMatrix = !!id && (matrixOnly({ id }) || cut.some(piece => piece.id === id && matrixOnly(piece)));
+  const cards = !!tree && (state.mode === 'cards' || onlyMatrix);
   const ends = tree && ayahEnds(tree);
   const passageKeys = cards ? presentation!.ayat.map(ayah => {
     const start = positions.get(ayah.key)!;
@@ -195,7 +197,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const stepTo = (index: number, card?: 'last') => cut[index] && branchesHref(cut[index].id, juz, { ...state, occurrences: undefined, mode: undefined, card });
   const steps = position < 0 ? undefined : { previous: stepTo(position - 1, 'last'), next: stepTo(position + 1), position: position + 1, total: cut.length };
   const neighbourAt = (index: number) => {
-    const phrase = steps && !cards && cut[index]?.phrase;
+    // A neighbour kept as its matrix only opens as cards, so it is not drawn as a tree to swipe to.
+    const phrase = steps && !cards && cut[index] && !matrixOnly(cut[index]) && cut[index].phrase;
     if (!phrase) return undefined;
     const group = matchingGroups.find(group => group.id === phrase.id);
     return group ? groupPresentation(group, allAyat, range, filters) : phrasePresentation(phrase, built.ayat, true, !range, withinScope);
@@ -205,7 +208,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const names = Object.fromEntries(allSurahs.map(row => [row.number, surahLabel(row)]));
   const surahCounts = countSurahs(inventory);
   const surahs = allSurahs.filter(row => surahCounts[row.number]).map(row => ({ number: row.number, name: surahLabel(row), count: surahCounts[row.number] }));
-  const switchTo = id && branchesHref(id, juz, { ...state, mode: cards ? 'tree' : 'cards' });
+  const switchTo = id && !onlyMatrix && branchesHref(id, juz, { ...state, mode: cards ? 'tree' : 'cards' });
   const bookmarkAliases = requestedGroup?.aliases ?? (resolved ? [resolved.id] : []);
   const viewportHeight = 'clamp(18rem, calc(100svh - var(--tree-chrome)), 36rem)';
   // The neighbour's card is drawn exactly as it will be once opened (same height and surrounding-ayat setting), so the swipe lands without a jump.
