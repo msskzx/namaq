@@ -232,7 +232,7 @@ export async function play(from = 0, { video = false } = {}) {
   if (!root || plan.length === 0) return;
   const token = ++run;
   clear(root);
-  if (!video && card.hasAttribute('data-organic') && reducedMotion()) {
+  if (!video && reducedMotion()) {
     set({ status: 'done', at: plan.length, total: plan.length });
     return;
   }

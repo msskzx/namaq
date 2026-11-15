@@ -186,7 +186,7 @@ describe('growing a tree', () => {
   it('shows the complete pilot tree immediately when reduced motion is requested', () => {
     vi.stubGlobal('matchMedia', () => ({ matches: true }));
     try {
-      render(<><PathScope organic><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
+      render(<><PathScope><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
       grow();
       expect(document.querySelectorAll('[data-hide], [inert], [data-ask]')).toHaveLength(0);
       expect(screen.getByRole('button', { name: 'إعادة' })).toBeTruthy();
@@ -197,7 +197,7 @@ describe('growing a tree', () => {
     const width = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(400);
     const height = vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(200);
     try {
-      render(<><PathScope organic><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
+      render(<><PathScope><BranchTree tree={tree} names={{}} growable /></PathScope><GrowControls /></>);
       grow();
       const first = box('جَنَّـٰتٍ وَعُيُونٍ');
       const link = document.querySelector('[data-tree-links] > [data-entry="0"]')!;

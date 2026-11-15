@@ -137,17 +137,18 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   return (
     <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
       style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
-      {/* As the compare card heads a side: the surah's name and number on the right, the mushaf button on the left. The row is set left to right and filled from its right end, in any host. */}
+      {/* As the compare card heads a side (owner, 2026-11-15): the buttons at the right edge, in the thumb's reach, and the surah's
+          name and number in the middle. The row is set left to right and filled from its right end, in any host. */}
       <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', alignItems: 'center', gap: 4, marginBottom: 4, minHeight: 26 }}>
-        <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>
-          {lastSurah !== surah ? `${surahNames[surah]} ${num(number)} ثم ${surahNames[lastSurah]} ${num(lastNumber)}` : `${surahNames[surah]} ${range}`}{at === 'before' ? ' · قبلها' : at === 'after' ? ' · بعدها' : ''}
-        </Text>
-        {current && !still && <>
-          {tools}
+        {current && !still && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, zIndex: 1 }}>
           <Pressable onPress={() => readAyah(own.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} style={{ padding: 4 }}>
             <BookOpen size={18} color={palette.muted} />
           </Pressable>
-        </>}
+          {tools}
+        </View>}
+        <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'center', paddingHorizontal: current && !still ? (tools ? 60 : 30) : 0 }}>
+          {lastSurah !== surah ? `${surahNames[surah]} ${num(number)} ثم ${surahNames[lastSurah]} ${num(lastNumber)}` : `${surahNames[surah]} ${range}`}{at === 'before' ? ' · قبلها' : at === 'after' ? ' · بعدها' : ''}
+        </Text>
       </View>
       {at === 'after' && basmala}
       {around ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>

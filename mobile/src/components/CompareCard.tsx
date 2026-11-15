@@ -95,14 +95,17 @@ const ayahStyle = (palette: Palette) => ({ fontFamily: QURAN_FONT, fontSize: COM
 function SideHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
+    // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-      <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'right' }}>{label}</Text>
-      {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
-        <TreeIcon size={18} color={palette.muted} />
-      </Pressable>}
-      <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={read} style={{ padding: 6 }}>
-        <BookOpen size={18} color={palette.muted} />
-      </Pressable>
+      <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
+        <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={read} style={{ padding: 6 }}>
+          <BookOpen size={18} color={palette.muted} />
+        </Pressable>
+        {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
+          <TreeIcon size={18} color={palette.muted} />
+        </Pressable>}
+      </View>
+      <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
     </View>
   );
 }

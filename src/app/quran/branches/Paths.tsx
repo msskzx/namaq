@@ -8,28 +8,26 @@ import { litPaths, pathToggleKey, togglePath } from '@shared/quran/pathHighlight
 import TreeLinks from './TreeLinks';
 
 // Only the path button lights a path: hover lit paths by accident on phones.
-type Paths = { lit: Set<string>; pinned: Map<string, string[]>; organic: boolean; pin(id: string, keys: string[]): void };
+type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin(id: string, keys: string[]): void };
 
 const PathContext = createContext<Paths | null>(null);
 const LINE = 'border-[var(--home-rule)]';
 const LIT = 'border-[var(--home-accent)]';
 
-export function usePaths(lit: string[] = [], organic = false) {
+export function usePaths(lit: string[] = []) {
   const [pinned, setPinned] = useState(() => new Map<string, string[]>(lit.length ? [['search', lit]] : []));
   return useMemo<Paths>(() => ({
     lit: litPaths(pinned),
     pinned,
-    organic,
     pin: (id, keys) => setPinned(current => togglePath(current, id, keys)),
-  }), [pinned, organic]);
+  }), [pinned]);
 }
 
 export const PathProvider = PathContext.Provider;
 export const useOuterPaths = () => useContext(PathContext);
 
-export function PathScope({ children, lit, organic }: { children: React.ReactNode; lit?: string[]; organic?: boolean }) {
-  const parent = useOuterPaths();
-  return <PathProvider value={usePaths(lit, organic ?? parent?.organic)}>{children}</PathProvider>;
+export function PathScope({ children, lit }: { children: React.ReactNode; lit?: string[] }) {
+  return <PathProvider value={usePaths(lit)}>{children}</PathProvider>;
 }
 
 export function useIsLit() {
@@ -47,7 +45,7 @@ export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id:
     if ((event.target as Element).closest(INTERACTIVE) || window.getSelection()?.toString()) return;
     paths.pin(id, keys);
   } : undefined;
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} data-selected={paths?.pinned.has(pathToggleKey(id, keys)) || undefined} onClick={tap} className={`shrink-0 bg-[var(--home-paper-deep)] px-3 py-1.5 text-center ${ctx ? "border" : "border-4 border-double"} ${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} data-selected={paths?.pinned.has(pathToggleKey(id, keys)) || undefined} onClick={tap} className={`shrink-0 rounded-[var(--card-radius)] border bg-[var(--home-card)] px-3 py-1.5 text-center ${className} ${on ? lit : tone} ${paths ? 'cursor-pointer' : ''}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {
@@ -109,7 +107,6 @@ function Lines({ side, i, count, lit }: { side: 'start' | 'end'; i: number; coun
  * `bare`: no line into the fan, where no box comes before it.
  */
 export function Fan({ side, entries, label, join = false, bare = false }: { side: 'start' | 'end'; entries: FanEntry[]; label?: string; join?: boolean; bare?: boolean }) {
-  const organic = useContext(PathContext)?.organic;
   const isLit = useIsLit();
   const lit = entries.flatMap((entry, i) => (isLit(entry.keys) ? [i] : []));
   const start = side === 'start';
@@ -131,7 +128,7 @@ export function Fan({ side, entries, label, join = false, bare = false }: { side
       </ul>
       {entries.length > 1 && !(start && bare) && <Stem lit={lit} side={side} />}
       {join && entries.length > 1 && <Stem lit={lit} side="end" />}
-      {organic && !join && <TreeLinks key={JSON.stringify(entries.map(entry => entry.key))} side={side} lit={lit} />}
+      {!join && <TreeLinks key={JSON.stringify(entries.map(entry => entry.key))} side={side} lit={lit} />}
     </div>
   );
 }

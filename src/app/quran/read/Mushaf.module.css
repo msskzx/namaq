@@ -211,11 +211,13 @@
 }
 
 /* Recite mode (تسميع): hidden words keep their place; the next ayah is tinted. */
-.veiled { color: transparent; border-radius: 0.2em; background: color-mix(in srgb, var(--home-muted) 10%, transparent); box-shadow: inset 0 0 0 0.12em var(--home-paper); }
-.upcoming { background: color-mix(in srgb, var(--home-accent) 22%, transparent); }
+/* A hidden word, as the app's Veil draws it: a box the word's width and about one line of letters tall, ruled, the word invisible inside. */
+.veiled { color: transparent; border-radius: 5px; background: color-mix(in srgb, var(--home-muted) 10%, transparent); box-shadow: inset 0 0 0 1px var(--home-rule); }
+[data-ayah] > .veiled, .writeBox { display: inline-block; height: 1.25em; line-height: 1.25em; overflow: hidden; vertical-align: middle; }
+.upcoming { background: color-mix(in srgb, var(--home-accent) 22%, transparent); box-shadow: inset 0 0 0 1px var(--home-accent); }
 /* Write mode (the app's WriteBox and faint Veil): the words to write are boxes as wide as the hidden word; the others stay dashed. */
-.faint { background: transparent; box-shadow: none; outline: 1px dashed var(--home-rule); outline-offset: -0.12em; opacity: 0.7; }
-.writeBox { position: relative; display: inline-block; padding: 0; border: 1px solid var(--home-rule); border-radius: 0.2em; background: var(--home-paper); font: inherit; line-height: inherit; color: inherit; cursor: text; vertical-align: baseline; }
+.faint { background: transparent; box-shadow: none; outline: 1px dashed var(--home-rule); outline-offset: -1px; opacity: 0.55; }
+.writeBox { position: relative; padding: 0; border: 1px solid var(--home-rule); border-radius: 5px; background: var(--home-paper); font: inherit; line-height: 1.25em; color: inherit; cursor: text; }
 .writeBox[data-write-active] { border: 2px solid var(--home-accent); }
 .writeWord { color: transparent; }
 .typed { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; white-space: nowrap; font-family: var(--font-amiri), serif; font-size: 0.72em; color: var(--home-ink); }

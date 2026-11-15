@@ -29,13 +29,13 @@
 
 .page :global([data-tree-links] path) {
   stroke: var(--home-rule);
-  stroke-width: 1.5;
+  stroke-width: 2;
   stroke-linecap: round;
 }
 
 .page :global([data-tree-links] path[data-connected]) {
   stroke: var(--branch-blue);
-  stroke-width: 2.5;
+  stroke-width: 2;
 }
 
 .page :global(span[data-line]) { border-color: var(--home-rule); }
