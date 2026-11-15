@@ -145,13 +145,34 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
 type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string; forms?: Branch['forms']; differs?: number[] };
 /** The lines into and out of a braid: one strand parting into one per way of writing, or those strands meeting again. */
 function BraidEdge({ count, join, palette }: { count: number; join?: boolean; palette: Palette }) {
+  const part = usePart({ size: 0, braid: { count, join: !!join } });
   const d = Array.from({ length: count }, (_, i) => {
     const y = ((i + 0.5) / count) * 100;
     return join ? `M12 ${y} C6 ${y} 6 50 0 50` : `M12 50 C6 50 6 ${y} 0 ${y}`;
   }).join(' ');
   return (
-    <View style={{ width: 16, alignSelf: 'stretch' }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+    <View ref={part} style={{ width: 16, alignSelf: 'stretch' }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <Svg width="100%" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none"><Path d={d} stroke={palette.rule} strokeWidth={2} fill="none" vectorEffect="non-scaling-stroke" /></Svg>
+    </View>
+  );
+}
+
+/** One word of a node that holds a braid, in its own place so the video finds it where the app put it. */
+function Word({ text, color, size }: { text: string; color: string; size: number }) {
+  const part = usePart({ size, words: [{ text, color }], lineHeight: size * 1.9 });
+  return <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color, writingDirection: 'rtl' }}>{text}</Text>;
+}
+
+/** One way of writing a braid's words, outlined, with the ayat that write it so; the video draws the outline, words and references. */
+function Strand({ words, refs, size, palette }: { words: string; refs: string; size: number; palette: Palette }) {
+  const frame = usePart({ size: 0, frame: true });
+  const ink = palette.marks.written ?? palette.ink;
+  const text = usePart({ size, words: [{ text: words, color: ink }], lineHeight: size * 1.6 });
+  const label = usePart({ label: refs, size: 11, align: 'center' });
+  return (
+    <View ref={frame} testID="strand" style={{ alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 8 }}>
+      <Text ref={text} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: ink, writingDirection: 'rtl' }}>{words}</Text>
+      <Text ref={label} style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 200, textAlign: 'center' }}>{refs}</Text>
     </View>
   );
 }
@@ -163,40 +184,47 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
   const { palette } = shared;
   const pieces = writtenPieces(words.length, i => writtenForms({ forms }, i, words[i], shared.paths?.lit).length > 1);
   const braided = pieces.some(piece => piece.kind === 'braid');
-  const part = usePart({ ...sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms, differs }), ...(braided ? {} : { lineHeight: size * 1.9 }) });
+  const part = usePart(sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms, differs }));
+  if (!braided) {
+    return (
+      <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+        {pieces.map((piece, n) => piece.kind === 'word' && (
+          <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}{quranText(writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit)[0].word)}</Text>
+        ))}
+      </Text>
+    );
+  }
+  // With a braid the words sit in a row of their own pieces (the app lays out right to left, so a row starts on the
+  // right), wrapping, each measured for the video.
   return (
-    <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: braided ? undefined : size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', columnGap: size * 0.28 }}>
       {pieces.map((piece, n) => {
         if (piece.kind === 'word') {
           const written = writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit);
-          return <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}{quranText(written[0].word)}</Text>;
+          return <Word key={n} text={quranText(written[0].word)} color={tones[piece.index] ?? color ?? palette.ink} size={size} />;
         }
         const strands = writtenStrands({ forms }, piece.from, piece.to, shared.paths?.lit);
         return (
-          <Text key={n}>{n > 0 ? ' ' : ''}
-            <View testID="braid" style={{ flexDirection: 'row-reverse', alignItems: 'stretch', marginHorizontal: 2 }}>
-              <BraidEdge count={strands.length} palette={palette} />
-              <View style={{ gap: 4, paddingVertical: 4 }}>
-                {strands.map(strand => (
-                  <View key={strand.words.join(' ')} testID="strand" style={{ alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 8 }}>
-                    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: palette.marks.written, writingDirection: 'rtl' }}>{quranText(strand.words.join(' '))}</Text>
-                    <Text style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 200, textAlign: 'center' }}>{strand.keys.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ')}</Text>
-                  </View>
-                ))}
-              </View>
-              <BraidEdge count={strands.length} join palette={palette} />
+          <View key={n} testID="braid" style={{ flexDirection: 'row-reverse', alignItems: 'stretch', marginHorizontal: 2 }}>
+            <BraidEdge count={strands.length} palette={palette} />
+            <View style={{ gap: 4, paddingVertical: 4 }}>
+              {strands.map(strand => (
+                <Strand key={strand.words.join(' ')} words={quranText(strand.words.join(' '))} size={size} palette={palette}
+                  refs={strand.keys.map(key => { const [surah, ayah] = key.split(':').map(Number); return `${shared.names[surah] ?? num(surah)} ${num(ayah)}`; }).join(' · ')} />
+              ))}
             </View>
-          </Text>
+            <BraidEdge count={strands.length} join palette={palette} />
+          </View>
         );
       })}
-    </Text>
+    </View>
   );
 }
 
-/** The same words as data, for the video. */
+/** The same words as data, for the video: each word as the node shows it (a braid's words come as their own pieces). */
 const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, forms, differs }: WordsProps) => {
   const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs);
-  return { size, words: words.map((word, i) => ({ text: writtenForms({ forms }, i, word).map(form => quranText(form.word)).join(' / '), color: tones[i] ?? color ?? shared.palette.ink })) };
+  return { size, lineHeight: size * 1.9, words: words.map((word, i) => ({ text: quranText(writtenForms({ forms }, i, word, shared.paths?.lit)[0].word), color: tones[i] ?? color ?? shared.palette.ink })) };
 };
 
 function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (props: LucideProps) => React.ReactNode; onPress: () => void; palette: Palette; on?: boolean }) {

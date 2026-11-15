@@ -135,6 +135,26 @@ test.describe('branches', () => {
     expect(scene.look.ui).toContain('Amiri');
   });
 
+  test('the tree video draws a braid as the app does: each strand outlined with its words, and its curves', async ({ page }) => {
+    await open(page, '/branches');
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill('مع العسر يسرا');
+    await box.press('Enter');
+    await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
+    await page.getByRole('button', { name: 'مشاركة كفيديو' }).click();
+    await expect.poll(() => page.frames().length).toBeGreaterThan(1);
+    const recorder = page.frames().find(frame => frame !== page.mainFrame())!;
+    await expect.poll(() => recorder.evaluate(() => typeof (window as unknown as { INPUT?: unknown }).INPUT)).toBe('object');
+    type Part = { frame?: boolean; braid?: { count: number; join: boolean }; words?: { text: string }[]; label?: string };
+    const parts = await recorder.evaluate(() => (window as unknown as { INPUT: { scene: { boxes: { parts?: Part[] }[] } } }).INPUT.scene.boxes.flatMap(item => item.parts ?? []));
+    // 94:5 and 94:6 write «يسرا» each its own way: two strands, a curve into them and one out, and no «… / …» text.
+    expect(parts.filter(part => part.frame)).toHaveLength(2);
+    expect(parts.filter(part => part.braid).map(part => part.braid)).toEqual([{ count: 2, join: false }, { count: 2, join: true }]);
+    expect(parts.filter(part => part.label?.startsWith('الشرح ٥') || part.label?.startsWith('الشرح ٦')).length).toBeGreaterThanOrEqual(2);
+    expect(parts.flatMap(part => part.words ?? []).some(word => word.text.includes('/'))).toBe(false);
+  });
+
   test('any box only one path runs through toggles that path, however quickly the boxes are tapped', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'ابحث' }).click();
