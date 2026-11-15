@@ -139,7 +139,7 @@ test.describe('branches', () => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('ولا يزكيهم ولهم عذاب أليم');
+    await box.fill('عليكم الميتة والدم ولحم الخنزير وما أهل');
     await box.press('Enter');
     await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
     await page.getByRole('button', { name: 'مشاركة كفيديو' }).click();
@@ -151,7 +151,8 @@ test.describe('branches', () => {
     type Scene = { width: number; height: number; boxes: (Rect & { parts?: Part[] })[] };
     const scene = await recorder.evaluate(() => (window as unknown as { INPUT: { scene: Scene } }).INPUT.scene);
     const parts = scene.boxes.flatMap(item => item.parts ?? []);
-    // 2:174 and 3:77 write a word each its own way: strands each outlined, a curve into them and one out, and no «… / …» text.
+    // al-Ma'ida 3 reads «الميتةُ والدمُ ولحمُ» where al-Baqara 173 and al-Nahl 115 read «الميتةَ والدمَ ولحمَ»:
+    // strands each outlined, a curve into them and one out, and no «… / …» text.
     expect(parts.filter(part => part.frame).length).toBeGreaterThanOrEqual(2);
     expect(parts.some(part => part.braid && !part.braid.join)).toBe(true);
     expect(parts.some(part => part.braid?.join)).toBe(true);
