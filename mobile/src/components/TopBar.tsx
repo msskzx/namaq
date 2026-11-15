@@ -3,12 +3,12 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Settings, CircleHelp, Search } from 'lucide-react-native';
+import { ChevronRight, LayoutGrid, Settings, CircleHelp, Search } from 'lucide-react-native';
 import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
 import { useCompact } from '@/lib/chrome';
-import { toTab } from '@/lib/ways';
+import { toHub, toTab } from '@/lib/ways';
 
 const HEIGHT = 52;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
@@ -19,10 +19,13 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
  * See-through with no line under it, like the see-through tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
- * With back (the Quran button's tools) a back arrow takes the logo's place and returns to the Quran hub (owner, 2026-11-13).
+ * With hub (the Quran button's tools) a grid takes the logo's place and opens the Quran hub, the page of all the Quran's tools
+ * (owner, 2026-11-15: a chevron reads as "back" in a right-to-left app). With back (the search) a back arrow takes it instead.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
-export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, back, search }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, search }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+  /** A grid in the logo's place that opens the Quran hub (the Quran's tools). */
+  hub?: boolean;
   /** The one search across the app, beside the gear (home, owner 2026-11-13). */
   search?: () => void;
   /** A back arrow in the logo's place. */
@@ -41,7 +44,11 @@ export default function TopBar({ children, settings: withSettings = false, hideO
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
       <Animated.View style={[{ overflow: 'hidden', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
-        {back
+        {hub
+          ? <Pressable onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+            <LayoutGrid size={24} color={palette.ink} />
+          </Pressable>
+          : back
           ? <Pressable onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <ChevronRight size={28} color={palette.ink} />
           </Pressable>

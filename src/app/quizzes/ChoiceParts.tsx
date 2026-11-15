@@ -30,7 +30,9 @@ export function ChoiceQuran({ question, given, revealed, onReveal, ar }: { quest
 }
 
 /** After answering: the look-alike in the surah picked, a note, and the ayah in the mushaf. */
-export function ChoiceAfter({ question, given, surahName, ar }: { question: ChoiceParts; given?: string; surahName?: (value: string) => string | undefined; ar: boolean }) {
+export function ChoiceAfter({ question, given, surahName, ar, mushaf = true }: { question: ChoiceParts; given?: string; surahName?: (value: string) => string | undefined; ar: boolean;
+  /** The mushaf button. A home card leaves it out and puts it in its own button row (owner, 2026-11-15). */
+  mushaf?: boolean }) {
   const alike = given !== undefined && given !== question.correctAnswer ? question.alike?.[given] : undefined;
   return <div className="mt-4 flex flex-col gap-3" dir="rtl" lang="ar">
     {alike && question.quran && <div className="border-t border-dashed border-[var(--home-rule)] pt-3">
@@ -38,6 +40,6 @@ export function ChoiceAfter({ question, given, surahName, ar }: { question: Choi
       <p className="text-justify font-quran text-xl leading-loose [text-align-last:right]"><Words words={alike.words} marked={alikeDiff(question.quran, alike.words).b} /></p>
     </div>}
     {question.note && <div><p className="text-sm text-[var(--home-muted)]">{question.note.label}</p><p className="leading-loose">{question.note.text}</p></div>}
-    {question.ayahKey && <Button className="self-start" size="sm" href={ayahHref(question.ayahKey)}><BookOpen size={16} aria-hidden />{ar ? "في المصحف" : "In the mushaf"}</Button>}
+    {mushaf && question.ayahKey && <Button className="self-start" size="sm" href={ayahHref(question.ayahKey)}><BookOpen size={16} aria-hidden />{ar ? "في المصحف" : "In the mushaf"}</Button>}
   </div>;
 }

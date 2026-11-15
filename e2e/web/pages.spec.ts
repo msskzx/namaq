@@ -139,6 +139,8 @@ test.describe('pages with the database', () => {
     await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
     await card.locator('button').filter({ hasText: /\S/ }).first().click();
     await expect(card.getByText(/^(صحيح|خطأ)$/).first()).toBeVisible();
+    // The mushaf button is in the row under the card once, not inside the card too.
+    await expect(card.getByRole('link', { name: 'في المصحف' })).toHaveCount(1);
     await noErrorPage(page);
   });
 

@@ -106,6 +106,9 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const showChips = chips && (!growth || growing);
   const shownWords = growth && !touring ? growth.words : undefined;
   // The fixed frame keeps the chips' whole row, since the studio's bar has no room for them to rise into.
+  // With the studio closed its bar's room is empty, so the chips and the ayah card rise into it (owner, 2026-11-15); the tree's
+  // frame keeps its size either way.
+  const rise = fixed && !growth ? TUCK : 0;
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const readKeys = growth ? (growing ? [growth.lit!] : []) : tappedKeys;
@@ -245,7 +248,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
 
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
-    <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP, direction: 'ltr', opacity: content ? 1 : 0 }}>
+    <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP - rise, direction: 'ltr', opacity: content ? 1 : 0 }}>
       <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={(ayatRoom?.height ?? room) - AYAH_GAP - 8} onContent={setAyatHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
     </View>
   );
@@ -263,8 +266,8 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
         {(footer || showChips || readKeys.length > 0) && <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, opacity: content ? 1 : 0 }, fixed ? { transform: [{ translateY: view.height }] } : foot]}>
           {footer && <View style={{ height: rowHeight }}>{footer}</View>}
           {showChips && (growth
-            ? <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
-            : <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
+            ? <SurahChips tuck={!fixed || rise > 0} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
+            : <SurahChips tuck={!fixed || rise > 0} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
           {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
           {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />}
         </Animated.View>}

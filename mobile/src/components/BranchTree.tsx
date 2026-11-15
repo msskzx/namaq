@@ -310,7 +310,8 @@ function NodeTab({ id, ayahKeys, label, shared, muted }: { id: string; ayahKeys:
   return (
     <View ref={part} collapsable={false}
       style={{ alignSelf: 'flex-start', marginStart: -4, marginTop: -(5 + TAB_RISE), marginBottom: 5 + TAB_RISE - TAB_HEIGHT, height: TAB_HEIGHT, paddingHorizontal: 6, justifyContent: 'center', borderRadius: 8, borderWidth: 1, borderStyle: muted ? 'dashed' : 'solid', borderColor: lit ? shared.palette.path : muted ? shared.palette.muted : shared.palette.rule, backgroundColor: muted ? shared.palette.paper : shared.palette.card }}>
-      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1}>{label}</Text>
+      {/* iOS measured some labels a hair short and cut them to «الأعراف…» (owner, 2026-11-15): such a label shrinks a little instead. */}
+      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>{label}</Text>
     </View>
   );
 }

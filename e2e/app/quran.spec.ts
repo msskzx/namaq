@@ -8,7 +8,7 @@ test('the Quran hub links to every tool', async ({ page }) => {
   }
   await page.getByRole('link', { name: 'تحفة الأطفال' }).click();
   await expect(page.getByRole('button', { name: /^اختر بابًا:/ })).toBeVisible();
-  await page.getByRole('button', { name: 'رجوع' }).click();
+  await page.getByRole('button', { name: 'أدوات القرآن' }).click();
   await expect(page.getByRole('link', { name: 'متشابهات القرآن' })).toBeVisible();
 });
 

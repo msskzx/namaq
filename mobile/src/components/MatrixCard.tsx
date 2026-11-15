@@ -1,5 +1,5 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Text } from '@/components/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
@@ -35,7 +35,9 @@ type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: 
   /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
   alongside?: GestureType;
   /** Shown under an ayah's text in the middle column, by the row's first ayah (a checked quiz answer). */
-  note?: (key: string) => React.ReactNode };
+  note?: (key: string) => React.ReactNode;
+  /** The rows scrolled (the branches tab hides its top bar while they scroll down). */
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void };
 
 type Host = ComponentRef<typeof View>;
 /** Where each word of the middle column registers itself, keyed `ayah:index` as the group's positions are. */
@@ -179,7 +181,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note }: Props) {
+export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, onScroll }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
@@ -265,7 +267,7 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
-        <ScrollView nestedScrollEnabled style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
+        <ScrollView nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
           <Words.Provider value={connections ? lines.registry : null}>
           {/* One card as wide as all its columns (owner, 2026-11-14): the rows parted by rules, solid between surahs and dashed within one. */}
           <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, !pinFooter && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>

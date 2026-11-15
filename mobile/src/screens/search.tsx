@@ -158,7 +158,7 @@ export default function SearchScreen() {
   const waiting = query.trim() !== found.query;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={() => (open ? setOpen(null) : back())}>
+      <TopBar back={() => (open ? setOpen(null) : back())} hideOnScroll>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
           <Search size={18} color={palette.muted} />
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
