@@ -1,5 +1,12 @@
 .wrap { display: grid; gap: 1rem; max-width: 30rem; margin-inline: auto; }
 .picker { justify-self: center; }
+/* The three utilities side by side, one a page: a swipe snaps to the next (the app's pager). Each page holds its own absolute
+   parts (the calendar's sr-only labels), or those off screen would widen the whole document. */
+.pager { display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden; padding-block: 4px; margin-block: -4px; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+.pager::-webkit-scrollbar { display: none; }
+.pane { position: relative; flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; display: grid; gap: 1rem; padding-inline: 4px; }
+/* At rest the row is as tall as the page shown, not the tallest: the others keep their width but no height. */
+.pager:not([data-swiping]) .pane:not([data-current]) { max-height: 0; overflow: hidden; }
 .row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
 .chip { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid var(--home-rule); border-radius: 10px; padding: 0.35rem 0.75rem; font-size: 1.0625rem; color: var(--home-ink); background: transparent; cursor: pointer; }
 .chip svg { color: var(--home-accent); }

@@ -87,7 +87,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
           {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
         </div>;
-      }} /> : <BranchTree organic tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls, card: id }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
+      }} /> : <BranchTree tree={solutionTree} variants={question.variants} prefixes={question.prefixes} names={names} surround={{ on: false, sync: controls, card: id }} label={ar ? "شجرة الإجابة" : "Answer tree"} direction="auto" rotatable={controls} growable={controls}
         renderNode={(node, index, tags, path) => {
           const answer = matches[index]?.node ?? node;
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
@@ -135,7 +135,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, hints: ke
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
           <RotateButton />
         </NavButtons>
-        <BranchTree organic tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
+        <BranchTree tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
           <span className="font-quran text-lg leading-loose text-[var(--home-muted)]"><MushafText>{givenAnswer(node)}</MushafText></span>
         ) : (
           <label className="flex w-36 max-w-full flex-col gap-1">
@@ -163,7 +163,7 @@ export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
   const asked = askedNodes(tree, leaves, () => 0.5);
   return (
     <div dir="rtl">
-      <BranchTree organic tree={tree} variants={example.variants as Variant[]} names={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
+      <BranchTree tree={tree} variants={example.variants as Variant[]} names={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
         if (node.children.length > 0) return <span className="flex flex-col items-start">
           <span className="font-quran leading-loose"><MushafText>{node.words.join(" ")}</MushafText></span>
         </span>;

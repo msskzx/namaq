@@ -24,8 +24,8 @@ const entries = ['أول', 'ثان'].map((word, i) => ({
   </PathBox>,
 }));
 
-function draw({ organic = true, side = 'start', dir = 'rtl' }: { organic?: boolean; side?: 'start' | 'end'; dir?: 'rtl' | 'ltr' } = {}) {
-  const result = render(<div data-tree-content dir={dir}><PathScope organic={organic}><Fan entries={entries} side={side} /></PathScope></div>);
+function draw({ side = 'start', dir = 'rtl' }: { side?: 'start' | 'end'; dir?: 'rtl' | 'ltr' } = {}) {
+  const result = render(<div data-tree-content dir={dir}><PathScope><Fan entries={entries} side={side} /></PathScope></div>);
   const fan = result.container.querySelector('[data-fan]')!;
   Object.defineProperties(fan, { clientWidth: { value: 600 }, clientHeight: { value: 200 } });
   [...fan.querySelector('ul')!.children].forEach((item, i) => Object.defineProperties(item, {
@@ -35,7 +35,7 @@ function draw({ organic = true, side = 'start', dir = 'rtl' }: { organic?: boole
   return result;
 }
 
-describe('organic branch links', () => {
+describe('branch links', () => {
   // Elbows with the app's round corners (owner, 2026-11-14).
   it.each([
     ['rtl', 'start', 'M 600 100 L 598 100 Q 588 100 588 90 L 588 60 Q 588 50 578 50 L 576 50'],
@@ -75,7 +75,7 @@ describe('organic branch links', () => {
 
   it('measures newly added surrounding branches as well as the original entries', () => {
     const { container, rerender } = draw();
-    rerender(<div data-tree-content dir="rtl"><PathScope organic><Fan entries={[...entries, { key: 'after', keys: ['1:3'], item: 'الآية التالية' }]} side="start" /></PathScope></div>);
+    rerender(<div data-tree-content dir="rtl"><PathScope><Fan entries={[...entries, { key: 'after', keys: ['1:3'], item: 'الآية التالية' }]} side="start" /></PathScope></div>);
     expect(container.querySelectorAll('[data-tree-links] path')).toHaveLength(3);
   });
 });

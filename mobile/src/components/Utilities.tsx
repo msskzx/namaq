@@ -37,9 +37,13 @@ export function UtilityPicker({ palette }: { palette: Palette }) {
   );
 }
 
-/** The utilities tab's body: prayer times, the qibla or the Hijri calendar, whichever icon is on. */
-export default function Utilities({ palette, focused = true }: { palette: Palette; focused?: boolean }) {
-  const [view] = utilityView.use();
+/** The utilities in the order of the picker's icons, the order a swipe goes through them. */
+export const UTILITY_VIEWS = VIEWS.map(view => view.id);
+
+/** One utility's page: prayer times, the qibla or the Hijri calendar (`view`, else whichever icon is on). */
+export default function Utilities({ palette, focused = true, view: shown }: { palette: Palette; focused?: boolean; view?: UtilityView }) {
+  const [picked] = utilityView.use();
+  const view = shown ?? picked;
   const [place] = prayerPlace.use();
   const [picking, setPicking] = useState(false);
   return (
