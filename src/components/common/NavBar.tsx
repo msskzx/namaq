@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
-import { ChevronLeft, ChevronRight, X, Menu } from 'lucide-react';
+import { LayoutGrid, X, Menu } from 'lucide-react';
 import translations from '../language/translations';
 import Button from './Button';
 import Emblem from './Emblem';
@@ -101,9 +101,10 @@ export default function NavBar() {
         onFocus={showBar}
         onKeyDown={event => { if (event.key === 'Escape' && menuOpen) { closeMenu(); actions.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus(); } }}>
         <div className={styles.band}>
-          {/* As in the app: a Quran tool (trees, compare, prophets, Tuhfa) shows a back arrow to the Quran hub in the logo's place. */}
+          {/* As in the app: a Quran tool (trees, compare, prophets, Tuhfa) shows a grid to the Quran hub in the logo's place
+              (owner, 2026-11-15: a chevron reads as "back" in a right-to-left page). */}
           {!menuOnly && (isQuranTool(path)
-            ? <Link href="/quran" className={styles.wordmark} aria-label={ar ? 'رجوع' : 'Back'} title={ar ? 'رجوع' : 'Back'}>{ar ? <ChevronRight size={28} aria-hidden /> : <ChevronLeft size={28} aria-hidden />}</Link>
+            ? <Link href="/quran" className={styles.wordmark} aria-label={ar ? 'أدوات القرآن' : 'Quran tools'} title={ar ? 'أدوات القرآن' : 'Quran tools'}><LayoutGrid size={24} aria-hidden /></Link>
             : <Link href="/" className={styles.wordmark} aria-label={translations[language].appName}><Emblem className={styles.emblem} /></Link>)}
           <div ref={setPageSlot} className={styles.pageActions} />
           <div ref={actions} className={styles.actions}>

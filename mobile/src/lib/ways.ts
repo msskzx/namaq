@@ -32,6 +32,9 @@ export function toTab(href: Href) {
  */
 export const back = () => router.back();
 
+/** The grid of a Quran tool: back to the Quran hub, the stack's first page, however many pages lie between (a tree's compare). */
+export const toHub = () => router.dismissTo('/quran');
+
 /** Opens the tab an intent is for, which then takes it. */
 export const openIntent = (intent: Intent) => { setIntent(intent); toTab(TAB_OF[intent.tab]); };
 

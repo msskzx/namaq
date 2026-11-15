@@ -14,7 +14,6 @@ import { WEBSITE } from '@/lib/branches';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { back } from '@/lib/ways';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
@@ -79,7 +78,7 @@ export default function OathsScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll help={() => setHelp(true)} />
+      <TopBar hub hideOnScroll help={() => setHelp(true)} />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
         <View accessibilityRole="tablist" style={{ flexDirection: 'row', padding: 3, borderRadius: 12, backgroundColor: palette.paperDeep }}>
           {KINDS.map(option => {

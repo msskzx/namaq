@@ -13,7 +13,6 @@ import { useTabBarSpace } from '@/components/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { back } from '@/lib/ways';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const SURAHS = orderSurahs(data, num);
@@ -111,7 +110,7 @@ export default function OrderScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll help={() => setHelp(true)} />
+      <TopBar hub hideOnScroll help={() => setHelp(true)} />
       {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
       <View style={{ direction: 'ltr' }}>
         <FlatList data={[null, ...ORDER_JUZ]} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={value => String(value)}
