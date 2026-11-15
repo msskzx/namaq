@@ -4,7 +4,7 @@ import { VIDEO_TYPES, type TreeScene, type VideoAyah, type VideoInput } from './
 import { logoUrl } from './logo';
 import type { Palette } from './theme';
 import { QURAN_FONT, UI_FONT } from './fonts';
-import { ayahOf, matrixOf, NOTHING_SHARED, surahNames, type MatrixAyah, type Presentation } from './branches';
+import { ayahOf, matrixOf, NOTHING_SHARED, readId, surahNames, type MatrixAyah, type Presentation } from './branches';
 import { sharedTone } from './marks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
@@ -23,11 +23,13 @@ export function videoAyat(beats: Beat[], presentation: Presentation | undefined,
   const starts = presentation?.ayat.map(ayah => ayah.key) ?? [];
   return [...new Set(beats.map(beat => beat.key).filter(Boolean))].map(key => {
     const [surah, number] = key.split(':').map(Number);
-    const row: MatrixAyah[] = matrix?.rows[starts.indexOf(key)]?.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], ...NOTHING_SHARED }];
+    const r = starts.indexOf(key);
+    const row: MatrixAyah[] = matrix?.rows[r]?.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], ...NOTHING_SHARED }];
     const words = row.flatMap(ayah => [
       ...ayah.words.map((word, i) => {
         const color = sharedTone(palette, ayah, i) ?? palette.ink;
-        return { text: mushafText(word), color };
+        // The tour's read-along lights the word it reads (withPathReading's ids).
+        return { text: mushafText(word), color, id: readId(r, ayah.key, i) };
       }),
       { text: num(Number(ayah.key.split(':')[1])), color: palette.accent, end: true },
     ]);
@@ -44,5 +46,5 @@ export function treeVideo(scene: TreeScene, beats: { watch: Beat[]; ask: Beat[] 
   const state = growthState();
   const played = state.mode === 'ask' ? beats.ask : beats.watch;
   return { scene, beats: played, ayat: videoAyat(played, presentation, palette), speed: state.speed, ask: state.mode === 'ask', timer: state.timer, types: VIDEO_TYPES,
-    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, card: palette.card, lit: mix(palette.path, palette.paper, 0.12), font: `"${QURAN_FONT}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent) } };
+    look: { paper: palette.paper, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, path: palette.path, green: palette.green, deep: palette.paperDeep, card: palette.card, lit: mix(palette.path, palette.paper, 0.12), highlight: palette.highlight, onHighlight: palette.onHighlight, font: `"${QURAN_FONT}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent) } };
 }

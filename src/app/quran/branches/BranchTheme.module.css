@@ -22,7 +22,6 @@
   outline-offset: 3px;
 }
 
-.page :global([data-node][data-ctx]) { border: 1px dashed var(--home-rule); }
 .page :global([data-node] header) { border-bottom: 0; }
 
 .page :global([data-fan]:has(> [data-tree-links]) > ul > li > span[aria-hidden]),

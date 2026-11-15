@@ -112,9 +112,16 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const readKeys = growth ? (growing ? [growth.lit!] : []) : tappedKeys;
-  const strip = fixed ? ayatRoom?.height ?? AYAH_SPACE : readKeys.length ? stripHeight : 0;
+  // The fixed frame's room for the lit path's ayat (owner, 2026-11-15): as tall as they are, from AYAH_SPACE up to half the frame,
+  // so a long ayah or several read whole and the tree gives up only what they need; more than that scrolls. In the studio it
+  // stays AYAH_SPACE, so the tree keeps still while the ayat take turns.
+  const [ayatHeight, setAyatHeight] = useState(0);
+  // In a feed the frame already holds the room it asked for, so half is taken of the frame without it, or the room feeds its own cap.
+  const fitted = Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, (full.height - (ayatRoom?.height ?? 0)) * 0.5)));
+  const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
+  const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
-  useEffect(() => { askRoom?.(readKeys.length ? AYAH_SPACE : 0); }, [askRoom, readKeys.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { askRoom?.(readKeys.length ? room : 0); }, [askRoom, readKeys.length > 0, room]); // eslint-disable-line react-hooks/exhaustive-deps
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -242,7 +249,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP - rise, direction: 'ltr', opacity: content ? 1 : 0 }}>
-      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} shown={shownWords} />
+      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={(ayatRoom?.height ?? room) - AYAH_GAP - 8} onContent={setAyatHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
     </View>
   );
   return (
@@ -262,7 +269,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
             ? <SurahChips tuck={!fixed || rise > 0} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
             : <SurahChips tuck={!fixed || rise > 0} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
           {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
-          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} />}
+          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>

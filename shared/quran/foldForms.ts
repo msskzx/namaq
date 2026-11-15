@@ -40,18 +40,25 @@ export function foldForms<P extends Presentation>(presentation: P): P {
       }
     }
     const last = current.words.length - 1;
-    if (last >= 0 && (last > 0 || !root) && current.ayat.length === 0 && current.children.length > 0 && differs(current, last)) {
-      const taken = current.children.map(child => formFor(current, last, keys(child)));
+    // A node that ends its ayat ends on the ayah's sign: the word written differently is the one before it, and moves with the sign
+    // (owner, 2026-11-15: «ولهم عذاب أليم», 2:174 and 3:77, where أليم reads into the next ayah differently).
+    const signed = last > 0 && (current.words[last] === '۝' || current.words[last].startsWith('﴿'));
+    const from = signed ? last - 1 : last;
+    if (from >= 0 && (from > 0 || !root) && current.ayat.length === 0 && current.children.length > 0 && differs(current, from)) {
+      const taken = current.children.map(child => formFor(current, from, keys(child)));
+      // The sign moves with it: a child whose ayat share one number shows that number; each ayah keeps its own forms.
+      const moved = (child: Branch, i: number) => [taken[i]!, ...current.words.slice(from + 1).map((word, at) => formFor(current, from + 1 + at, keys(child)) ?? word)];
+      const formsOf = (child: Branch, i: number) => sameForms(Object.fromEntries(keys(child).map(key => [key, [...(current.forms?.[key]?.slice(from) ?? moved(child, i)), ...(child.forms?.[key] ?? child.words)]])));
       if (taken.every(Boolean)) {
         const children = current.children.map((child, i) => ({
           ...child,
-          spelled: [...(last === 0 ? current.spelled ?? current.words : []), ...(child.spelled ?? child.words)],
-          words: [taken[i]!, ...child.words],
-          differs: [0, ...(child.differs ?? []).map(at => at + 1)],
-          forms: sameForms(mapForms(child.forms, own => [taken[i]!, ...own])),
+          spelled: [...(from === 0 ? current.spelled ?? current.words : []), ...(child.spelled ?? child.words)],
+          words: [...moved(child, i), ...child.words],
+          differs: [0, ...(child.differs ?? []).map(at => at + moved(child, i).length)],
+          forms: formsOf(child, i),
         }));
-        if (last === 0) return children.flatMap(child => fold(child, false));
-        current = { ...current, spelled: current.spelled ?? current.words, words: current.words.slice(0, last), forms: sameForms(mapForms(current.forms, own => own.slice(0, last))), differs: current.differs?.filter(at => at < last), children };
+        if (from === 0) return children.flatMap(child => fold(child, false));
+        current = { ...current, spelled: current.spelled ?? current.words, words: current.words.slice(0, from), forms: sameForms(mapForms(current.forms, own => own.slice(0, from))), differs: current.differs?.filter(at => at < from), children };
       }
     }
     return [{ ...current, children: current.children.flatMap(child => fold(child, false)) }];

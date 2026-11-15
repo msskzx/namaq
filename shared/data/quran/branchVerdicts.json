@@ -3417,8 +3417,10 @@
   },
   "cmp:1roljpo0lcp7vu": {
    "keep": true,
-   "why": "mutashabih: the places differ by a word or two, worth a tree",
-   "text": "إِنَّ ٱلْمُتَّقِينَ فِى"
+   "why": "owner 2026-11-15: every row two ayat deep, so the matrix's rows match",
+   "text": "إِنَّ ٱلْمُتَّقِينَ فِى",
+   "checked": true,
+   "ayat": "two"
   },
   "cmp:1p3a0vb1tdl3e7": {
    "keep": true,

@@ -101,7 +101,9 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
 }
 
 /** One ayah card of the matrix; the tree's lit-path card under the tree is this card too (owner, 2026-11-14). */
-export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false, shown }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false, shown, around }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
+  /** The ayat drawn around this one (the card under a tree with the surrounding ayat on): read with it and named in its range. */
+  around?: { before: MatrixAyah[]; after: MatrixAyah[] };
   /** The studio's growing ayah: how many words of the cell (its ayat in turn) show; the rest keep their place unseen. */
   shown?: number;
   /** One row of the matrix's single card (owner, 2026-11-14): no card of its own, the rows parted by rules, as the compare card stacks its sides. */
@@ -111,8 +113,9 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   /** More buttons beside the read button. */
   tools?: React.ReactNode }) {
   if (!cell) return <View style={{ width }} />;
-  const first = cell.ayat[0];
-  const last = cell.ayat[cell.ayat.length - 1];
+  const own = cell.ayat[0];
+  const first = around?.before[0] ?? own;
+  const last = around?.after[around.after.length - 1] ?? cell.ayat[cell.ayat.length - 1];
   const [surah, number] = first.key.split(':').map(Number);
   const [lastSurah, lastNumber] = last.key.split(':').map(Number);
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
@@ -122,6 +125,14 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
   const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress?.(); } } : undefined;
+  // The ayat around this one, drawn as the tree now draws their boxes (as its own), each with the basmala, muted, between it
+  // and the next surah's first ayah.
+  const mutedText = { color: palette.muted };
+  const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.map(ayah => <Text key={ayah.key}>
+    {side === 'after' && ayah.basmala && <Text style={mutedText}>{`${mushafText(ayah.basmala.join(' '))} `}</Text>}
+    <Ayah ayah={ayah} palette={palette} muted={false} />
+    {side === 'before' && ayah.basmala && <Text style={mutedText}>{` ${mushafText(ayah.basmala.join(' '))} `}</Text>}
+  </Text>);
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
     <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
@@ -133,20 +144,25 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
         </Text>
         {current && !still && <>
           {tools}
-          <Pressable onPress={() => readAyah(first.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[surah]} ${range}`} style={{ padding: 4 }}>
+          <Pressable onPress={() => readAyah(own.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} style={{ padding: 4 }}>
             <BookOpen size={18} color={palette.muted} />
           </Pressable>
         </>}
       </View>
       {at === 'after' && basmala}
-      {wordViews && !muted
+      {around ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
+          {aroundOf(around.before, 'before')}
+          {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={false} light={tapped} read={read} shown={shownOf(index)} />)}
+          {aroundOf(around.after, 'after')}
+        </Text>
+      : wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
         ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', columnGap: 6 }}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</View>
         : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
           {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}
         </Text>}
       {at === 'before' && basmala}
-      {at === 'ayah' && note?.(first.key)}
+      {at === 'ayah' && note?.(own.key)}
     </Pressable>
   );
 }

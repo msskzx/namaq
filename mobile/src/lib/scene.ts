@@ -60,12 +60,14 @@ type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>, area?:
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
 /** The app's colours; `lit` is a box on the lit path, the path's blue over the paper as BranchTree blends it. */
-export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; lit: string; font: string; ui: string; logo: string };
+export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; lit: string; font: string; ui: string; logo: string;
+  /** The read-along's highlight, as the app's: the word read on it. */
+  highlight?: string; onHighlight?: string };
 /**
  * An ayah of the tree as the video's chip and card show it, as the matrix's ayah card does in the app: the chip's surah and number,
  * the card's surah name and «الآية …» line, and its words coloured as the matrix colours them, each ayah's number at its end.
  */
-export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string; end?: boolean }[] };
+export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string; end?: boolean; id?: string }[] };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[]; ayat: VideoAyah[] };
 
 
@@ -124,7 +126,7 @@ function wrap(words, width, size) {
   words.forEach(function (word) {
     var w = ctx.measureText(word.text).width;
     if (line.length && used + space + w > width) { lines.push({ words: line, width: used }); line = []; used = 0; }
-    used += (line.length ? space : 0) + w; line.push({ text: word.text, color: word.color, width: w, end: word.end });
+    used += (line.length ? space : 0) + w; line.push({ text: word.text, color: word.color, width: w, end: word.end, id: word.id });
   });
   if (line.length) lines.push({ words: line, width: used });
   return lines;
@@ -163,13 +165,14 @@ function drawLabel(part, lit) {
   var top = part.rule ? part.y + 2 : part.y, height = part.rule ? part.h - 5 : part.h;
   ctx.textAlign = part.align === 'right' ? 'right' : 'center';
   // A label the app wrapped (a braid strand's long list of ayat) wraps here too, word by word, in its measured place.
-  var lines = [''];
-  part.label.split(' ').forEach(function (word) {
+  // A tab keeps to its one line, as the app's does.
+  var lines = part.tab ? [part.label] : [''];
+  if (!part.tab) part.label.split(' ').forEach(function (word) {
     var next = lines[lines.length - 1] ? lines[lines.length - 1] + ' ' + word : word;
     if (lines[lines.length - 1] && ctx.measureText(next).width > part.w + 2) lines.push(word); else lines[lines.length - 1] = next;
   });
   var step = height / lines.length;
-  lines.forEach(function (line, i) { ctx.fillText(line, part.align === 'right' ? part.x + part.w : part.x + part.w / 2, top + step * (i + 0.5)); });
+  lines.forEach(function (line, i) { ctx.fillText(line, part.align === 'right' ? part.x + part.w : part.x + part.w / 2, top + step * (i + 0.5), part.tab ? Math.max(10, part.w - 8) : undefined); });
   if (part.rule) { ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(part.x, part.y + part.h - 0.5); ctx.lineTo(part.x + part.w, part.y + part.h - 0.5); ctx.stroke(); }
 }
 
@@ -319,7 +322,9 @@ function drawCard(key, t) {
       at -= word.width;
       if (!word.end) read++;
       var a = wordAlpha(key, index++, read, t);
-      if (a > 0) { ctx.globalAlpha = a; ctx.fillStyle = word.color; ctx.fillText(word.text, at, y + lineHeight / 2); ctx.globalAlpha = 1; }
+      var reading = word.id && now[word.id] && look.highlight;
+      if (reading) { roundRect(at - 4, y + lineHeight * 0.12, word.width + 8, lineHeight * 0.76, 8); ctx.fillStyle = look.highlight; ctx.fill(); }
+      if (a > 0) { ctx.globalAlpha = a; ctx.fillStyle = reading ? look.onHighlight : word.color; ctx.fillText(word.text, at, y + lineHeight / 2); ctx.globalAlpha = 1; }
       at -= space;
     });
     y += lineHeight;

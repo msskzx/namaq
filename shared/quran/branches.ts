@@ -381,6 +381,13 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
 /** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
 export const ownEnds = (node: Branch): Record<string, string> => Object.fromEntries(keys(node).map(key => [key, key]));
 
+/** Each ayah's end one ayah on, for a card kept two ayat deep (twoAyat); `has` says which ayat exist, so a surah's last ayah ends on itself. */
+export const twoEnds = (node: Branch, has: (key: string) => boolean): Record<string, string> => Object.fromEntries(keys(node).map(key => {
+  const [surah, ayah] = key.split(':').map(Number);
+  const next = `${surah}:${ayah + 1}`;
+  return [key, has(next) ? next : key];
+}));
+
 export function ayahEnds(node: Branch, path: string[] = []): Record<string, string> {
   const words = [...path, ...node.words];
   const grownPast = words.some(word => word.startsWith('﴿'));

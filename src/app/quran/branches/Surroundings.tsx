@@ -140,8 +140,8 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId, quiet, tab }
   const match = sharedByAll(others.map(ayah => ({ ayah, before: null, after: null }))).find(context => context.ayah.key === neighbour.key)?.match;
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
   return (
-    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-muted)] text-[var(--home-muted)]" className={`w-52 max-w-[70vw] text-lg [[data-down]_&]:w-44 ${quiet && tab ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
-      {quiet && tab && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center whitespace-nowrap rounded-lg border border-dashed bg-inherit px-1.5 text-[11px] leading-[14px] [border-color:inherit] [border-width:1px] [[data-down]_&]:hidden">{tab}</span>}
+    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-rule)] text-[var(--home-ink)]" className={`w-52 max-w-[70vw] text-lg [[data-down]_&]:w-44 ${quiet && tab ? 'my-3.5 [[data-down]_&]:my-0' : ''}`}>
+      {quiet && tab && <span data-tab className="-ms-1 me-auto -mt-6 mb-2 flex h-4 w-fit items-center whitespace-nowrap rounded-lg border border-solid bg-inherit text-[var(--home-muted)] px-1.5 text-[11px] leading-[14px] [border-color:inherit] [border-width:1px] [[data-down]_&]:hidden">{tab}</span>}
       <span className="block font-quran leading-loose">
         {side === 'after' && basmala}
         <span className="block"><span>{neighbour.words.map((word, i) => {
