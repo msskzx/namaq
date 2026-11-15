@@ -1,7 +1,7 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Eye } from "lucide-react";
 import Button from "@/components/common/Button";
 import type { QuestionChoice, QuestionFamily, QuizTopic } from "@/lib/quiz/types";
@@ -88,18 +88,20 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         const isAnswer = choice.value === question.correctAnswer;
         const isGiven = given === choice.value;
         return (
-          <Button key={choice.value} variant="outline" active={isGiven}
+          // As the app's choices (QuizChoice): ink on a quiet border until answered, then the right answer green and a wrong
+          // pick accent (owner, 2026-11-15: a correct pick was filled with the accent, and every choice was accent before any).
+          <Button key={choice.value} variant="outline" aria-pressed={isGiven}
+            style={{ borderColor: locked && isAnswer ? 'var(--home-green)' : locked && isGiven ? 'var(--home-accent)' : 'var(--home-rule)',
+              color: locked && isAnswer ? 'var(--home-green)' : locked && isGiven ? 'var(--home-accent)' : 'var(--home-ink)' }}
             onClick={() => {
               if (locked) return;
               if (question.family === RECITE_SNIPPET && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
               onAnswer(choice.value);
             }}>
-            <FontAwesomeIcon
-              icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}
-              className={locked && isAnswer && !isGiven ? 'text-[var(--home-green)]' : undefined}
-            />
+            {/* No empty circle before a choice (owner, 2026-11-15): the mark comes only with the answer, as in the app. */}
+            {locked && (isAnswer || isGiven) && <FontAwesomeIcon icon={isAnswer ? faCircleCheck : faCircleXmark} />}
             {answerContent(question, choice.value)}
-            {locked && isAnswer ? <span className={`text-xs font-semibold ${isGiven ? '' : 'text-[var(--home-green)]'}`}>{ar ? 'صحيح' : 'Correct'}</span> : null}
+            {locked && isAnswer ? <span className="text-xs font-semibold">{ar ? 'صحيح' : 'Correct'}</span> : null}
             {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
           </Button>
         );
