@@ -224,7 +224,7 @@ export default function MushafPage({
                     const mistyped = graded === styles.wrong && group.word ? checked!.typed[rel + checked!.before] : '';
                     const starts = topics && group.word && group.word !== '۞' && !firstWord[key] && (firstWord[key] = true) ? sectionsStartingAt(group.surah, group.ayah) : [];
                     return (
-                      <span key={at} data-marked={on || undefined} data-ayah={key} data-veiled={veiled || undefined}
+                      <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-veiled={veiled || undefined}
                         className={[!veiled && on ? styles.marked : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
                         {starts.length > 0 && (
                           <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
@@ -264,9 +264,9 @@ export default function MushafPage({
             </div>
           ));
   // A slice: only these rows, sized by the page's width, with no frame, header or page number.
-  if (slice) return <div ref={body} className={`${styles.body} ${styles.slice}`}>{rows}</div>;
+  if (slice) return <div ref={body} data-page={page} className={`${styles.body} ${styles.slice}`}>{rows}</div>;
   return (
-    <section aria-label={`الصفحة ${num(page)}`} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
+    <section aria-label={`الصفحة ${num(page)}`} data-page={page} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
       <div className={styles.head}>
         <span>الجزء {juzName(data.juz)}</span>
         {badges.some(list => list.length > 0) && (

@@ -240,6 +240,25 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('a long-pressed word opens its i\'rab with al-\'Ukbari\'s passages', async ({ page }) => {
+    await page.goto('/quran/read/604');
+    const word = page.getByText('كُفُوًا', { exact: true }).first();
+    await expect(async () => {
+      const box = (await word.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(700);
+      await page.mouse.up();
+      await expect(page.getByRole('button', { name: 'إعراب الكلمة' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
+    const sheet = page.getByRole('dialog', { name: 'إعراب الكلمة' });
+    await expect(sheet.getByRole('tab', { name: 'كُفُوًا' })).toHaveAttribute('aria-selected', 'true');
+    await expect(sheet.getByText('خبر يكن')).toBeVisible();
+    await expect(sheet.getByRole('link', { name: /التبيان في إعراب القرآن للعكبري، ص ١٣٠٩/ })).toBeVisible();
+    await noErrorPage(page);
+  });
+
   test('an ayah\'s buttons open the surah\'s topics', async ({ page }) => {
     await page.goto('/quran/read/582');
     const word = page.getByText('عَنِ', { exact: true }).first();

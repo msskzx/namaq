@@ -38,3 +38,16 @@ export function ayahText(key: string): string {
   }
   return '';
 }
+
+/** All of an ayah's words as the mushaf writes them, the ۞ mark left out, across a page turn when the ayah runs over one. */
+export function ayahMushafWords(key: string): string[] {
+  const start = pageOfAyah(key);
+  if (!start) return [];
+  const found: string[] = [];
+  for (let page = start; page <= PAGES; page++) {
+    const words = ayahWords(key, pageData(page), surahBefore(page)).filter(word => word !== '۞');
+    if (!words.length) break;
+    found.push(...words);
+  }
+  return found;
+}

@@ -8,6 +8,8 @@ import { QIRAAT_SOURCE, whoReads } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
 import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
+import { bookState, useBooks } from '@/lib/books';
+import { BookList } from './Books';
 import { compareOfAyah, treePiecesOfAyah } from '@/lib/ayahPreview';
 import { EMPTY_LIST } from '@/lib/branchList';
 import { around as aroundSetting, branchView } from '@/lib/settings';
@@ -44,7 +46,10 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   }), [preview, onClose]);
   const pairs = useMemo(() => (preview?.kind === 'compare' ? compareOfAyah(preview.key) : []), [preview]);
   const qiraat = useMemo(() => (preview?.kind === 'readings' ? qiraatOf(preview.key) : []), [preview]);
-  const tafsir = useMemo(() => (preview?.kind === 'tafsir' ? tafsirSadiOf(preview.key) : null), [preview]);
+  // Al-Sa'di ships with the app; the person may remove him (owner, 2026-11-15), and then the sheet offers the tafsir books.
+  useBooks();
+  const sadi = bookState('sadi') === 'on';
+  const tafsir = useMemo(() => (preview?.kind === 'tafsir' && sadi ? tafsirSadiOf(preview.key) : null), [preview, sadi]);
   const go = (open: () => void) => { onClose(); open(); };
   const [surah, number] = (preview?.key ?? '0:0').split(':').map(Number);
   const card = { ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card };
@@ -66,6 +71,10 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
           </View>
         )}
         {preview.kind !== 'trees' && <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 4 }}>
+          {preview.kind === 'tafsir' && !tafsir && <>
+            <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>لم تبقِ تفسيرًا على هاتفك. اختر ما تريد، ويعمل بلا اتصال.</Text>
+            <BookList kind="tafsir" palette={palette} />
+          </>}
           {tafsir && (
             <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
               {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
@@ -106,7 +115,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
               {tafsirSadiCredit(tafsir)}
             </ExternalLink>
           </View>
-        ) : preview.kind === 'readings' ? (
+        ) : preview.kind === 'tafsir' ? null : preview.kind === 'readings' ? (
           <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
             <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
           </View>

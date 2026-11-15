@@ -47,6 +47,7 @@ const USE = {
   reader: { ar: 'المصحف', en: 'the mushaf reader', href: '/quran/read' },
   tafsir: { ar: 'التفسير في المصحف', en: 'the tafsir in the mushaf reader', href: '/quran/read' },
   topics: { ar: 'موضوعات السور في المصحف', en: 'surah topics in the mushaf reader', href: '/quran/read' },
+  irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -132,6 +133,16 @@ export const SOURCES: Source[] = [
     uses: [USE.tafsir],
   },
   {
+    id: 'tibyan-ukbari', group: 'books',
+    title: { ar: 'التبيان في إعراب القرآن', en: 'al-Tibyan fi I‘rab al-Quran' }, author: { ar: 'أبو البقاء العكبري', en: 'Abu al-Baqa’ al-‘Ukbari' },
+    edition: 'عيسى البابي الحلبي وشركاه', link: { url: 'https://quranpedia.net/book/309', label: 'الموسوعة القرآنية' },
+    licence: {
+      ar: 'توفي المؤلف سنة ٦١٦هـ، فنصه في الملك العام. نقطع كلامه على الكلمات التي يعربها، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died in 1219, so his text is in the public domain. We cut it at the words he parses, from Quranpedia’s dump, with the page number and a link. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.irab],
+  },
+  {
     id: 'tafsir-mawdui', group: 'books',
     title: { ar: 'التفسير الموضوعي لسور القرآن الكريم', en: 'al-Tafsir al-Mawdu‘i li-Suwar al-Quran al-Karim' },
     author: { ar: 'نخبة من علماء التفسير وعلوم القرآن، بإشراف مصطفى مسلم', en: 'a group of scholars, ed. Mustafa Muslim' },
@@ -207,19 +218,26 @@ export const SOURCES: Source[] = [
   {
     id: 'quranpedia', group: 'data',
     title: { ar: 'الموسوعة القرآنية: ملفات القراءات والتفسير والسور', en: 'Quranpedia: the qira’at, tafsir and surahs dumps' },
-    edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠، السور إصدار ٢٠٢٦-١١-١٤', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
+    edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠، السور إصدار ٢٠٢٦-١١-١٤، الصرف والإعراب النحوي إصدار ٢٠٢٦-١١-١٤، التبيان للعكبري إصدار ٢٠٢٦-٠٨-١٠', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
     licence: {
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
-    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics],
+    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data',
     title: { ar: 'المدوّنة القرآنية العربية', en: 'Quranic Arabic Corpus' }, author: { ar: 'Kais Dukes، جامعة ليدز', en: 'Kais Dukes, University of Leeds' },
     edition: 'التحليل الصرفي، الإصدار ٠٫٤', link: { url: 'https://corpus.quran.com', label: 'corpus.quran.com' },
     licence: { ar: 'GNU GPL، مع إبقاء حقوق النشر والرابط دون تغيير.', en: 'GNU GPL, with the copyright notice and link kept unchanged.' },
-    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }],
+    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab],
+  },
+  {
+    id: 'quranic-treebank', group: 'data',
+    title: { ar: 'الشجرة النحوية للقرآن', en: 'The Quranic Treebank' }, author: { ar: 'NoorBayan، على المدوّنة القرآنية', en: 'NoorBayan, built on the Quranic Arabic Corpus' },
+    edition: 'العلاقات النحوية بالعربية، من ملف الموسوعة القرآنية', link: { url: 'https://github.com/NoorBayan/Quranic', label: 'NoorBayan/Quranic' },
+    licence: { ar: 'بترخيص MIT. نأخذ منه موقع كل كلمة من الإعراب (خبر، فاعل، صفة…) والكلمة التي تتعلق بها.', en: 'MIT licensed. We take each word’s grammatical role (khabar, fa‘il, sifa…) and the word it attaches to.' },
+    uses: [USE.irab],
   },
   {
     id: 'quran-qcf4', group: 'data',

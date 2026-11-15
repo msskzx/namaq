@@ -73,6 +73,38 @@ test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its 
   await expect(page.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
 });
 
+test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is downloaded', async ({ page }) => {
+  await page.route('https://namaq.vercel.app/api/books/ukbari', route => route.fulfill({
+    json: { source: { version: '2026-08-10', book: 309 }, entries: [[1, 2, 0, 0, 4, 'قَوْلُهُ تَعَالَى: ﴿الْحَمْدُ﴾ : مُبْتَدَأٌ.']] },
+  }));
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
+  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: HAMD })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText(/اسم مرفوع/).first()).toBeVisible();
+  await page.getByRole('button', { name: 'نزّل التبيان في إعراب القرآن' }).click();
+  await expect(page.getByRole('link', { name: /التبيان في إعراب القرآن للعكبري، ص ٤/ })).toBeVisible();
+  await expect.poll(() => stored<string[]>(page, 'books-saved')).toEqual(['ukbari']);
+  // Another word of the ayah: its own line, and no passage of his on it.
+  await page.getByRole('tablist', { name: 'كلمات الآية' }).getByRole('tab').nth(1).click();
+  await expect(page.getByText('لم يتكلم العكبري على هذه الكلمة ولا على آيتها.')).toBeVisible();
+});
+
+test.describe('a removed default tafsir', () => {
+  test.use({ seed: { 'books-hidden': ['sadi'] } });
+
+  test('the tafsir sheet offers it back, and it works at once', async ({ page }) => {
+    await open(page, '/read');
+    await pressWord(page, HAMD);
+    await page.getByRole('button', { name: 'تفسير السعدي' }).click();
+    await expect(page.getByText('لم تبقِ تفسيرًا على هاتفك', { exact: false })).toBeVisible();
+    await page.getByRole('button', { name: 'أعد تيسير الكريم الرحمن' }).click();
+    await expect(page.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
+    await expect.poll(() => stored<string[]>(page, 'books-hidden')).toEqual([]);
+  });
+});
+
 test.describe('surah topics', () => {
   test.use({ seed: { 'reader-place': { page: 582 } } });
 
