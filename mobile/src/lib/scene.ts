@@ -11,7 +11,11 @@ export type SceneText = { size: number; words: { text: string; color: string }[]
 export type ScenePart = { x: number; y: number; w: number; h: number; size: number; label?: string; align?: 'center' | 'right'; rule?: boolean;
   /** A label on a tab over the box's edge, outlined as the box is: 'dashed' on a surrounding ayah's box. */
   tab?: boolean | 'dashed';
-  words?: { text: string; color: string }[]; lineHeight?: number };
+  words?: { text: string; color: string }[]; lineHeight?: number;
+  /** A braid's strand: its outline, round at 10, in the rule colour (its words and references are parts of their own). */
+  frame?: boolean;
+  /** The lines into (`join` false) or out of a braid, one per strand, as BranchTree's BraidEdge draws them. */
+  braid?: { count: number; join: boolean } };
 export type SceneBox = SceneText & { id: string; x: number; y: number; w: number; h: number };
 /** A connector from a box to one in its fan; `back` fans open before the root (words and ayat before the phrase). */
 export type SceneEdge = { from: string; to: string; back: boolean };
@@ -162,10 +166,27 @@ function drawLabel(part, lit) {
   if (part.rule) { ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(part.x, part.y + part.h - 0.5); ctx.lineTo(part.x + part.w, part.y + part.h - 0.5); ctx.stroke(); }
 }
 
+// BraidEdge's curves, drawn in its 12 by 100 box stretched over the part: from the middle out to each strand, or back.
+function drawBraid(part) {
+  var X = function (x) { return part.x + x / 12 * part.w; }, Y = function (y) { return part.y + y / 100 * part.h; };
+  ctx.strokeStyle = look.rule; ctx.lineWidth = 2; ctx.beginPath();
+  for (var i = 0; i < part.braid.count; i++) {
+    var y = (i + 0.5) / part.braid.count * 100;
+    if (part.braid.join) { ctx.moveTo(X(12), Y(y)); ctx.bezierCurveTo(X(6), Y(y), X(6), Y(50), X(0), Y(50)); }
+    else { ctx.moveTo(X(12), Y(50)); ctx.bezierCurveTo(X(6), Y(50), X(6), Y(y), X(0), Y(y)); }
+  }
+  ctx.stroke();
+}
+
 function drawText(box) {
   // Each label and run of words where the app laid it out.
   if (box.parts) {
-    box.parts.forEach(function (part) { if (part.words) drawWords(part.words, part.size, part.lineHeight, part); else drawLabel(part, holds(box) || !!now[box.id]); });
+    box.parts.forEach(function (part) {
+      if (part.braid) drawBraid(part);
+      else if (part.frame) { roundRect(part.x + 0.5, part.y + 0.5, part.w - 1, part.h - 1, 10); ctx.strokeStyle = look.rule; ctx.lineWidth = 1; ctx.stroke(); }
+      else if (part.words) drawWords(part.words, part.size, part.lineHeight, part);
+      else drawLabel(part, holds(box) || !!now[box.id]);
+    });
     return;
   }
   // A box drawn by its own content (a quiz's): its words centred, its references above or under them.
