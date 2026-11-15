@@ -78,12 +78,22 @@ if (surah !== 114) throw new Error(`found ${surah} surahs, expected 114`);
 const counts = JSON.parse(readFileSync(join(__dirname, '../../shared/data/quran/surahs.json'), 'utf8')) as { number: number; numberOfAyat: number }[];
 // Al-Sa'di takes some ayat inside a passage without a marker of their own ("ثم قال: ﴿…﴾"): a passage runs to the ayah
 // before the next marker, or to the end of its surah.
+const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/\s+/g, ' ').trim();
+/** Whether the words after the opening quote's last "*" (the next ayah's opening) are quoted again in the passage. */
+function explainsLast(text: string): boolean {
+  const opening = /﴿([^﴾]*)﴾/.exec(text);
+  if (!opening || !opening[1].includes('*')) return false;
+  const last = bare(opening[1].split('*').pop()!).split(' ').slice(0, 3).join(' ');
+  return last.length > 0 && bare(text.slice(opening.index + opening[0].length)).includes(last);
+}
 passages.forEach((p, i) => {
   const next = passages[i + 1];
   // A marker that starts inside the passage's own range cuts it there (al-Qasas: «{١ - ٥١}» then «{٣٠ - ٥١}»), except
   // where the passage's own marker ends on the ayah the next one starts on: al-Sa'di splits that ayah between them, so
   // both keep it (2:219: «{٢١٩}», then «{٢١٩ - ٢٢٠}» on «في الدنيا والآخرة», then «{٢٢٠}»).
-  const shares = next?.surah === p.surah && p.to === next.from && next.from > p.from;
+  // He splits it only when he explains the shared ayah's words in this passage too, quoting them again after the opening
+  // quote; a passage that quotes the next ayah up front but stops before it (4:29–30, 72:1–2) does not get it.
+  const shares = next?.surah === p.surah && p.to === next.from && next.from > p.from && explainsLast(p.parts.join(' '));
   p.to = next?.surah === p.surah ? (shares ? p.to : Math.max(p.from, next.from - 1)) : Math.max(p.to, counts.find(c => c.number === p.surah)!.numberOfAyat);
 });
 const problems: string[] = [];

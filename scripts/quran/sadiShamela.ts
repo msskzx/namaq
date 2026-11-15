@@ -111,9 +111,10 @@ export function fillGaps(passage: string, book: Shamela): { text: string; filled
     }
     // The marks the text after the gap opens with ("﴿") are already in it.
     const lead = parts[i].match(/^[^\u0621-\u064A]*/)![0].trim();
-    const space = fill.match(/\s*$/)![0];
     fill = fill.trimEnd();
     if (lead && fill.endsWith(lead)) fill = fill.slice(0, -lead.length);
+    // The break or space Shamela has before the text after the gap (a paragraph break before a new quote).
+    const space = fill.match(/\s*$/)![0];
     // The printed page the fill's last word is on: the last page number before it.
     const end = book.text.lastIndexOf('⦗', from + fill.trimEnd().length);
     const page = /^⦗([٠-٩]+)⦘/.exec(book.text.slice(end));
