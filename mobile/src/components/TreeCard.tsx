@@ -239,7 +239,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP, direction: 'ltr', opacity: content ? 1 : 0 }}>
-      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} shown={shownWords} />
+      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
     </View>
   );
   return (
@@ -259,7 +259,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
             ? <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
             : <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
           {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
-          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} />}
+          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>

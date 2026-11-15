@@ -174,6 +174,21 @@ export function matrixReading(presentation: Presentation): Beat[] {
   return beats;
 }
 
+/**
+ * The studio's tour, read word by word (owner, 2026-11-15): each ayah's path beat becomes the matrix read-along of its row, the
+ * word read lit in the card under the tree, at the read-along's pace. The beats keep the ayah (`key`) whose path is lit.
+ */
+export function withPathReading(presentation: Presentation, beats: Beat[]): Beat[] {
+  const rows = matrixOf(presentation, false).rows;
+  const starts = presentation.ayat.map(ayah => ayah.key);
+  return beats.flatMap(beat => {
+    const r = starts.indexOf(beat.key);
+    const ayat = beat.path ? rows[r]?.ayah?.ayat : undefined;
+    if (!ayat?.length) return [beat];
+    return ayat.flatMap((ayah, a) => ayah.words.map((_, i): Beat => ({ ...beat, ms: stepTime({ side: 0, ayah: a, word: i, link: undefined, last: i === ayah.words.length - 1 && a === ayat.length - 1 }, 1), now: [readId(r, ayah.key, i)] })));
+  });
+}
+
 export const isSaved = (piece: BranchPiece, list = readBookmarks()) => isSavedIn(piece, list);
 export const toggleSaved = (piece: BranchPiece) => toggleBookmark({ id: piece.id, text: piece.text, href: branchesHref(piece.id) }, aliasesOf(piece));
 export const WEBSITE = 'https://namaq.vercel.app';

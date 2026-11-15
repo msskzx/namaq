@@ -17,7 +17,7 @@ import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import SurahChips from './SurahChips';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
-import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, matrixReading, toggleSaved, WEBSITE } from '@/lib/branches';
+import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, matrixReading, toggleSaved, WEBSITE, withPathReading } from '@/lib/branches';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
@@ -246,7 +246,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
     const { presentation } = cardOf(piece, list);
     const parts = growthParts(presentation, around ? aroundOf(presentation) : undefined);
     const options = { ...parts, prefixes: presentation.prefixes, offsets: presentation.offsets, paths: true };
-    beatsRef.current = { watch: growthBeats(presentation.tree, options), ask: growthBeats(presentation.tree, { ...options, ask: true }) };
+    beatsRef.current = { watch: withPathReading(presentation, growthBeats(presentation.tree, options)), ask: withPathReading(presentation, growthBeats(presentation.tree, { ...options, ask: true })) };
     claimTarget('branches', beatsRef.current);
   }, [piece, list, mode, around, studioKey, reading, connecting, lines]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => { if (!embedded) claimTarget('branches', null); }, []); // eslint-disable-line react-hooks/exhaustive-deps

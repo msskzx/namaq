@@ -543,21 +543,24 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
         // A node ending one ayah carries it on a tab over its edge (owner, 2026-11-14); a node ending several, or a tree drawn top
         // down (where the line into a node runs through its top edge), keeps its references inside.
         const tab = own === undefined && node.ayat.length === 1 && !shared.down && !afters.length;
+        // The lit ayah's name on the box its path starts from goes on a tab as well, as every box names its ayah (owner, 2026-11-15).
+        const pill = own === undefined && !shared.down && !!start;
+        const tabLabel = [tab ? (runs ? runOf(node.ayat[0]) : references) : '', pill ? start : ''].filter(Boolean).join(' · ');
         // Side by side with the switch on, each ayah is named on the tab of its after box; one with none keeps its references here.
         const named = runs && node.ayat.length > 0 && afters.length === node.ayat.length;
         const box = (
           <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
             tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
             {own !== undefined ? own : <>
-            {tab && <NodeTab id={id} ayahKeys={all} label={runs ? runOf(node.ayat[0]) : references} shared={shared} />}
-            <StartReference label={start} shared={shared} />
+            {(tab || pill) && <NodeTab id={id} ayahKeys={all} label={tabLabel} shared={shared} />}
+            {!pill && <StartReference label={start} shared={shared} />}
             {!tab && !named && singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
             <Words {...shownWords} />
             {!tab && !named && !singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
             </>}
           </Box>
         );
-        return tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
+        return tab || pill ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
       })()}
       {entries.length > 0 && <>
         {!bare && <Stub shared={shared} entries={entries} />}
