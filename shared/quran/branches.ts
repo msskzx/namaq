@@ -378,6 +378,9 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
   return lastSurah === surah ? `${named(surah, ayah)}–${num(lastAyah)}` : `${named(surah, ayah)} ثم ${named(lastSurah, lastAyah)}`;
 }
 
+/** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
+export const ownEnds = (node: Branch): Record<string, string> => Object.fromEntries(keys(node).map(key => [key, key]));
+
 export function ayahEnds(node: Branch, path: string[] = []): Record<string, string> {
   const words = [...path, ...node.words];
   const grownPast = words.some(word => word.startsWith('﴿'));

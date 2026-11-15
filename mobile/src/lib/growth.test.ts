@@ -165,3 +165,11 @@ describe('connectionBeats', () => {
     expect(beats.filter(beat => beat.ask).map(beat => beat.ask)).toEqual(['r0', 'r1']);
   });
 });
+
+describe('a card the owner keeps to its own ayat', () => {
+  it('reads al-Sharh 94:5 against 94:6 only, not on into 94:6 and 94:7 (owner, 2026-11-15)', () => {
+    const piece = list.find(item => item.id === 'cmp:138fsj406mr5cc')!;
+    const rows = matrixOf(cardOf(piece).presentation, false).rows.map(row => row.ayah!.ayat.map(ayah => ayah.key));
+    expect(rows).toEqual([['94:5'], ['94:6']]);
+  });
+});

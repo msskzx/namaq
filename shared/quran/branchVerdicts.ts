@@ -3,8 +3,9 @@ import data from '../data/quran/branchVerdicts.json';
 /**
  * The owner's verdict on one branches card. `ask` holds an open question; `text` is the tree's phrase, kept so the file reads on its own.
  * `view: 'matrix'` keeps the card as its matrix only: the tree is dropped (no tree view, no tree quiz).
+ * `ayat: 'own'`: each of its rows reads its own ayah only, not grown on into the next (the owner's call for one card, not the rule).
  */
-export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; text?: string; view?: 'matrix' };
+export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; text?: string; view?: 'matrix'; ayat?: 'own' };
 export type BranchVerdicts = Record<string, BranchVerdict>;
 
 export const OWNER_ASK = 'owner: discuss';
@@ -28,6 +29,9 @@ export const matrixOnly = (piece: Identified, verdicts: BranchVerdicts = branchV
   const verdict = branchVerdictFor(piece, verdicts);
   return verdict?.keep === true && verdict.view === 'matrix';
 };
+
+/** A card whose rows the owner keeps to their own ayat: the ayah after each is not read on. */
+export const ownAyatOnly = (piece: Identified, verdicts: BranchVerdicts = branchVerdicts) => branchVerdictFor(piece, verdicts)?.ayat === 'own';
 
 export type BranchReviewState = 'keep' | 'drop' | 'discuss' | null;
 
