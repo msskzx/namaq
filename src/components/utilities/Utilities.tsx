@@ -54,20 +54,61 @@ export function useNow() {
   return now;
 }
 
-/** The three icons at the top, then prayer times, the qibla or the Hijri calendar: the app's utilities tab. */
+const VIEWS: View[] = ['times', 'qibla', 'calendar'];
+
+/**
+ * The three icons at the top, then prayer times, the qibla or the Hijri calendar: the app's utilities tab. A swipe goes from one
+ * to the next as in the app (owner, 2026-11-15): the three sit side by side, right to left, and the page snaps to each.
+ */
 export default function Utilities() {
   const [view, setView] = useStore(viewStore, 'times');
   const [place] = useStore(placeStore, null);
   const [picking, setPicking] = useState(false);
+  const pager = useRef<HTMLDivElement>(null);
+  const landed = useRef<View | null>(null);
+  const tapped = useRef(false);
+  // A tap on an icon (or the stored choice on the first visit) turns the pager to its page; a swipe that landed there does not.
+  useEffect(() => {
+    const row = pager.current;
+    if (!row || landed.current === view) return;
+    // Until an icon is tapped (the first draw, and the stored choice arriving after the server's prayer times), it jumps without sliding.
+    const first = !tapped.current;
+    landed.current = view;
+    // Right to left, the first page sits at 0 and the next ones at negative offsets.
+    row.scrollTo({ left: -VIEWS.indexOf(view) * row.clientWidth, behavior: first ? 'instant' : 'smooth' });
+  }, [view]);
+  useEffect(() => {
+    const row = pager.current;
+    if (!row) return;
+    let quiet: ReturnType<typeof setTimeout> | undefined;
+    const settle = () => {
+      const at = Math.round(Math.abs(row.scrollLeft) / row.clientWidth);
+      const next = VIEWS[at];
+      delete row.dataset.swiping;
+      if (next && next !== landed.current) { landed.current = next; setView(next); }
+    };
+    // While a finger is on it or it moves, every page keeps its height, so the next one slides in drawn.
+    const swiping = () => { row.dataset.swiping = ''; };
+    const scrolled = () => { swiping(); clearTimeout(quiet); quiet = setTimeout(settle, 120); };
+    row.addEventListener('scroll', scrolled, { passive: true });
+    // A tap that never scrolls settles too, so the pages fold back.
+    const lifted = () => { clearTimeout(quiet); quiet = setTimeout(settle, 120); };
+    row.addEventListener('touchstart', swiping, { passive: true });
+    row.addEventListener('touchend', lifted, { passive: true });
+    return () => { clearTimeout(quiet); row.removeEventListener('scroll', scrolled); row.removeEventListener('touchstart', swiping); row.removeEventListener('touchend', lifted); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const options = ([['times', 'مواقيت الصلاة', <Clock key="t" aria-hidden />], ['qibla', 'القبلة', <Compass key="q" aria-hidden />], ['calendar', 'التقويم الهجري', <CalendarDays key="c" aria-hidden />]] as const)
-    .map(([key, label, icon]) => ({ key, label, icon, current: view === key, onClick: () => setView(key) }));
+    .map(([key, label, icon]) => ({ key, label, icon, current: view === key, onClick: () => { tapped.current = true; setView(key); } }));
+  const page = (pane: View) => pane === 'calendar' ? <Calendar />
+    : !place ? <FirstUse onPick={() => setPicking(true)} />
+    : pane === 'times' ? <Times place={place} onPlace={() => setPicking(true)} />
+    : <Qibla place={place} onPlace={() => setPicking(true)} on={view === 'qibla'} />;
   return (
     <div className={styles.wrap} dir="rtl" lang="ar">
       <Segmented label="الأدوات" options={options} iconOnly className={styles.picker} />
-      {view === 'calendar' ? <Calendar />
-        : !place ? <FirstUse onPick={() => setPicking(true)} />
-        : view === 'times' ? <Times place={place} onPlace={() => setPicking(true)} />
-        : <Qibla place={place} onPlace={() => setPicking(true)} />}
+      <div ref={pager} className={styles.pager} data-utilities-pager>
+        {VIEWS.map(pane => <section key={pane} className={styles.pane} data-current={pane === view || undefined} aria-label={options.find(option => option.key === pane)!.label} aria-hidden={pane !== view || undefined} inert={pane !== view || undefined}>{page(pane)}</section>)}
+      </div>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} />
     </div>
   );
@@ -191,7 +232,8 @@ type AskablePermission = { requestPermission?: () => Promise<'granted' | 'denied
  * Chrome gives an absolute alpha. Both are magnetic north, a few degrees off true north in Egypt and Europe.
  * 'none' on a computer or a browser that never answers.
  */
-function useHeading(): [Heading, () => void] {
+/** The compass, listened to only while `on` (the qibla's page is the one shown), as the app's. */
+function useHeading(on: boolean): [Heading, () => void] {
   const [heading, setHeading] = useState<Heading>(null);
   const [allowed, setAllowed] = useState(false);
   useEffect(() => {
@@ -199,6 +241,7 @@ function useHeading(): [Heading, () => void] {
     if (typeof window === 'undefined' || typeof DeviceOrientationEvent === 'undefined' || !window.matchMedia('(pointer: coarse)').matches) { setHeading('none'); return; }
     const askable = (DeviceOrientationEvent as unknown as AskablePermission).requestPermission;
     if (askable && !allowed) { setHeading('ask'); return; }
+    if (!on) return;
     let heard = false;
     const quiet = setTimeout(() => { if (!heard) setHeading('none'); }, 4000);
     const read = (event: Event) => {
@@ -214,7 +257,7 @@ function useHeading(): [Heading, () => void] {
     const kind = 'ondeviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation';
     window.addEventListener(kind, read);
     return () => { clearTimeout(quiet); window.removeEventListener(kind, read); };
-  }, [allowed]);
+  }, [allowed, on]);
   const ask = () => {
     const askable = (DeviceOrientationEvent as unknown as AskablePermission).requestPermission;
     askable?.().then(answer => { if (answer === 'granted') { setHeading(null); setAllowed(true); } else setHeading('none'); }).catch(() => setHeading('none'));
@@ -226,9 +269,9 @@ const DIAL = 280;
 const R = DIAL / 2 - 10;
 const KAABA = '#1d1b19';
 
-function Qibla({ place, onPlace }: { place: Place; onPlace: () => void }) {
+function Qibla({ place, onPlace, on }: { place: Place; onPlace: () => void; on: boolean }) {
   const bearing = useMemo(() => qiblaBearing(lib, place), [place]);
-  const [heading, ask] = useHeading();
+  const [heading, ask] = useHeading(on);
   const live = typeof heading === 'number';
   const facing = live && Math.abs(turnTo(heading, bearing)) <= FACING;
   const tone = facing ? 'var(--home-green)' : 'var(--home-accent)';

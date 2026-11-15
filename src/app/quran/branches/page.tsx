@@ -245,7 +245,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       {steps && <TreeProgress steps={steps} />}
       <GroupConnections key={`${id}:${defaultConnections}`} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} defaultOn={defaultConnections}>
       {/* The paths lit on the tree reach the card under its buttons, which reads their ayat in full. */}
-      <PathScope key={`${id}:${marked.join(' ')}`} lit={marked} organic>
+      <PathScope key={`${id}:${marked.join(' ')}`} lit={marked}>
       <div data-share-image>
       <DoubleTapSave id={id ?? ''} text={treeGroup?.text ?? ''} aliases={bookmarkAliases}>
         {cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} card={id} ayahKeys={presentation!.ayat.map(ayah => ayah.key)} passageKeys={passageKeys} names={names} steps={steps} />
