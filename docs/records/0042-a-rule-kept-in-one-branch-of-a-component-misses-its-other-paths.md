@@ -11,7 +11,7 @@ conditions: "Expo app on iOS (Expo Go), iPhone 17 Pro Max; website and app web e
 evidence: "mobile/src/components/BranchTree.tsx (NodeTab, custom node path); src/app/quran/branches/BranchTree.tsx; e2e/app/home.spec.ts; e2e/web/pages.spec.ts; src/app/quran/branches/treeTabs.test.ts."
 implication: "When a component has more than one way to draw the same thing (default and custom content, own and render props), put a layout rule where every path passes, and check each path when a rule is added. A text-fitting prop that only native honours needs a real-phone check before merge, or not to be used: the web export cannot show it."
 date: "2026-11-15"
-topics: ["graph-ui", "testing"]
+topics: ["graph-ui","testing"]
 ---
 
 The same day a third case of the pattern showed: #785 let the surah chips rise into the studio bar's empty room under a tree (TreeCard), but the matrix view's chips are drawn by TreePager's footer, so on the home card's matrix they kept the whole bar's room and left a gap under the buttons. Fixed by tucking them there too whenever no studio bar is showing.

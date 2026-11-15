@@ -60,4 +60,14 @@ describe("the reader's ayah buttons", () => {
     fireEvent.click(screen.getByLabelText('تفسير السعدي'));
     expect(onPreview).toHaveBeenLastCalledWith('tafsir');
   });
+
+  it('opens a pressed word\'s i\'rab, and has no i\'rab button when no word was pressed', () => {
+    const onPreview = vi.fn();
+    render(<AyahActions {...props} onPreview={onPreview} />);
+    expect(screen.queryByLabelText('إعراب الكلمة')).toBeNull();
+    cleanup();
+    render(<AyahActions {...props} onPreview={onPreview} irab />);
+    fireEvent.click(screen.getByLabelText('إعراب الكلمة'));
+    expect(onPreview).toHaveBeenLastCalledWith('irab');
+  });
 });

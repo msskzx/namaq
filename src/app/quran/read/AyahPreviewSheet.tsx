@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, X } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, ListTree, X } from 'lucide-react';
 import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
@@ -14,9 +14,12 @@ import LoadingDots from '@/components/common/LoadingDots';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import type { AyahPreview } from './ayahPreview';
+import IrabPanel from './IrabPanel';
+import type { IrabAyah } from './irab';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
-export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string };
+export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string }
+  | { kind: 'irab'; key: string; page: number; n: number };
 
 const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
 const load = async <T,>(api: string, key: string): Promise<T> => {
@@ -56,15 +59,19 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   }, [preview]);
   useSwipeClose(sheet, !!preview, { direction: 'down', onClose: () => sheet.current?.close() });
   const tafsirKey = shown?.kind === 'tafsir' ? shown.key : null;
-  const { data, error: previewError } = useSWR(shown && shown.kind !== 'readings' && !tafsirKey ? ['ayah-preview', shown.key] : null, ([api, key]) => load<AyahPreview>(api, key), { revalidateOnFocus: false });
+  const irab = shown?.kind === 'irab' ? shown : null;
+  const { data: irabData, error: irabError } = useSWR(irab ? ['irab', irab.key, irab.page, irab.n] : null,
+    async ([, key, page, n]) => { const response = await fetch(`/api/quran/irab?k=${encodeURIComponent(key)}&p=${page}&n=${n}`); if (!response.ok) throw new Error('irab'); return response.json() as Promise<IrabAyah>; },
+    { revalidateOnFocus: false });
+  const { data, error: previewError } = useSWR(shown && shown.kind !== 'readings' && !tafsirKey && !irab ? ['ayah-preview', shown.key] : null, ([api, key]) => load<AyahPreview>(api, key), { revalidateOnFocus: false });
   const { data: tafsir, error: tafsirError } = useSWR(tafsirKey ? ['tafsir', tafsirKey] : null, ([api, key]) => load<TafsirPassage>(api, key), { revalidateOnFocus: false });
-  const error = tafsirKey ? tafsirError : previewError;
+  const error = tafsirKey ? tafsirError : irab ? irabError : previewError;
   const [surah, number] = (shown?.key ?? '0:0').split(':').map(Number);
   const trees = shown?.kind === 'trees';
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
-  const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : ArrowLeftRight;
+  const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : ArrowLeftRight;
   return (
-    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
+    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
       dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
@@ -81,7 +88,8 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
               {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <span key={i} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
             </p>
           )}
-          {!readings && !(tafsirKey ? tafsir : data) && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
+          {irab && irabData && <IrabPanel key={`${irab.key}/${irab.page}/${irab.n}`} ayah={irab.key} data={irabData} />}
+          {!readings && !(tafsirKey ? tafsir : irab ? irabData : data) && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
           {error && <p role="alert" className="py-6 text-center text-sm text-[var(--home-muted)]">تعذّر التحميل.</p>}
           {/* Each tree is the branches page's own card (owner, 2026-11-14): zoom, pan, a path lit on a click, its own tree/matrix switch, opening in the settings' view. */}
           {trees && data?.trees.map(tree => (
@@ -103,7 +111,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
             </Link>
           ))}
         </div>
-        {shown.kind === 'tafsir' ? tafsir && <ExternalLink href={tafsirSadiPage(tafsir)} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink>
+        {shown.kind === 'irab' ? null : shown.kind === 'tafsir' ? tafsir && <ExternalLink href={tafsirSadiPage(tafsir)} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink>
           : shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
           <Icon size={20} aria-hidden />
           {trees ? 'افتح في المتشابهات' : `كل مقارنات ${names[surah] ?? ''}`}

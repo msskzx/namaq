@@ -10,12 +10,13 @@ import { WEBSITE } from '@/lib/branches';
 import { around, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import { MemorizedSetting } from './Memorized';
+import { BooksSetting } from './Books';
 import type { Palette } from '@/lib/theme';
 
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
-/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, then About, the sources and their licences, and Privacy. */
+/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, the books, then About, the sources and their licences, and Privacy. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const links = [
     { href: '/about', label: 'عن نمق', icon: <Logo size={22} /> },
@@ -34,6 +35,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
         <HapticsSetting palette={palette} />
+        <BooksSetting palette={palette} />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
           <Pressable onPress={() => { onClose(); setTimeout(() => { hintsSeen.set([]); tourSeen.set(false); }, REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>

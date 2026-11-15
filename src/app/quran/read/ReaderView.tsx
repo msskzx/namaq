@@ -259,7 +259,7 @@ export default function ReaderView({
   };
   const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: boxes.pick } : null;
   const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
-  const [actions, setActions] = useState<{ key: string; x: number; y: number } | null>(null);
+  const [actions, setActions] = useState<{ key: string; x: number; y: number; word?: { page: number; n: number } } | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
   const [sharing, setSharing] = useState<string | null>(null);
   const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
@@ -437,7 +437,10 @@ export default function ReaderView({
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
   const openActions = (key: string, element: Element) => {
     const box = element.getBoundingClientRect();
-    setActions({ key, x: box.left + box.width / 2, y: box.top });
+    // The pressed word's place on its page, for the i'rab sheet (src/app/api/quran/irab).
+    const n = (element as HTMLElement).dataset?.word;
+    const page = (element.closest('[data-page]') as HTMLElement | null)?.dataset.page;
+    setActions({ key, x: box.left + box.width / 2, y: box.top, word: n !== undefined && page ? { page: Number(page), n: Number(n) } : undefined });
   };
   const runGesture = (action: GestureAction, target: Element) => {
     const word = target.closest<HTMLElement>('[data-ayah]:not([data-veiled])');
@@ -623,7 +626,7 @@ export default function ReaderView({
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
         onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
-        onPreview={kind => setPreview(kind === 'tafsir' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
+        irab={!!actions.word} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
       <TopicSheet open={topic} onClose={() => setTopic(null)} />
       {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
