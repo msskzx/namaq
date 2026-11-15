@@ -126,8 +126,8 @@ export const SOURCES: Source[] = [
     title: { ar: 'تيسير الكريم الرحمن في تفسير كلام المنان', en: 'Taysir al-Karim al-Rahman' }, author: { ar: 'عبد الرحمن بن ناصر السعدي', en: 'al-Sa‘di' },
     edition: 'مؤسسة الرسالة، الطبعة الأولى ١٤٢٠هـ/٢٠٠٠م، تحقيق عبد الرحمن بن معلا اللويحق', link: { url: 'https://quranpedia.net/book/3', label: 'الموسوعة القرآنية' },
     licence: {
-      ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها.',
-      en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link.',
+      ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
+      en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
     uses: [USE.tafsir],
   },
@@ -194,6 +194,16 @@ export const SOURCES: Source[] = [
     uses: [USE.qiraat],
   },
   // Data
+  {
+    id: 'shamela-sadi', group: 'data',
+    title: { ar: 'المكتبة الشاملة: تفسير السعدي (الكتاب ٤٢)', en: 'Shamela: al-Sa‘di’s tafsir (book 42)' },
+    edition: 'مؤسسة الرسالة ١٤٢٠هـ/٢٠٠٠م، ترقيم الكتاب موافق للمطبوع؛ من نسخة turath.io، ٢٠٢٦-١١-١٥', link: shamela(42),
+    licence: {
+      ar: 'نص السعدي في الملك العام. نأخذ منه فقط ما انقطع من ملف الموسوعة القرآنية في سبعة مواضع، دون الحواشي.',
+      en: 'Al-Sa‘di’s text is in the public domain. We take from it only what Quranpedia’s dump cuts off in seven passages, without the footnotes.',
+    },
+    uses: [USE.tafsir],
+  },
   {
     id: 'quranpedia', group: 'data',
     title: { ar: 'الموسوعة القرآنية: ملفات القراءات والتفسير والسور', en: 'Quranpedia: the qira’at, tafsir and surahs dumps' },

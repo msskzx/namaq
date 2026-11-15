@@ -17,6 +17,17 @@ describe('surah topics', () => {
     }
   });
 
+  it('has only ranges that can exist, with al-Anbiya’s last section as printed (107–112, not the dump’s 107–121)', () => {
+    for (const { number, numberOfAyat } of surahRows) {
+      for (const s of flat(surahTopicsOf(number)?.sections ?? []).filter(s => s.from !== undefined)) {
+        expect(s.from!, `${number} ${s.title}`).toBeGreaterThanOrEqual(1);
+        expect(s.to!, `${number} ${s.title}`).toBeGreaterThanOrEqual(s.from!);
+        expect(s.to!, `${number} ${s.title}`).toBeLessThanOrEqual(numberOfAyat);
+      }
+    }
+    expect(surahTopicsOf(21)!.sections.at(-1)).toMatchObject({ title: 'ختام سلسلة الأنبياء رحمةٌ مهداة', from: 107, to: 112 });
+  });
+
   it('fills al-Shura and al-Dukhan from the printed book, covering every ayah once', () => {
     expect(surahTopicsOf(42)).toMatchObject({ volume: 7, page: 61 });
     expect(surahTopicsOf(42)!.sections.map(s => [s.from, s.to])).toEqual([[1, 6], [7, 12], [13, 14], [15, 19], [20, 26], [27, 35], [36, 43], [44, 46], [47, 50], [51, 53]]);
