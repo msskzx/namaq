@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ComponentRef } from 'react';
-import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Animated, FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useIsFocused } from 'expo-router';
 import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
@@ -13,10 +13,11 @@ import { usePalette, type Palette } from '@/lib/theme';
 type Scroller = ComponentRef<typeof ScrollView>;
 
 /** One utility, scrolled up and down on its own. */
-function Page({ view, width, palette, on, bottom, onPlace, scrollers }: { view: UtilityView; width: number; palette: Palette; on: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
+function Page({ view, width, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
   const shrink = useShrinkOnScroll();
   return (
     <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={shrink} scrollEventThrottle={16}
+      importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
       style={{ width, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
       <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} />
     </ScrollView>
@@ -39,12 +40,15 @@ export default function UtilitiesTab() {
   const [picking, setPicking] = useState(false);
   const pick = useCallback(() => setPicking(true), []);
   const list = useRef<FlatList<UtilityView>>(null);
+  // The pager's place, 0 on the first page, which the highlight on the top icons follows.
+  const progress = useRef(new Animated.Value(index)).current;
   const scrollers = useRef(new Map<UtilityView, Scroller>()).current;
   // Where the pager rests, so a tap on an icon scrolls it and a swipe that lands does not scroll it again.
   const shown = useRef(index);
   useEffect(() => {
     if (!width || shown.current === index) return;
     shown.current = index;
+    setCompact(false);
     list.current?.scrollToIndex({ index, animated: true });
   }, [index, width]);
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -59,21 +63,22 @@ export default function UtilitiesTab() {
   // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
   const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (Platform.OS !== 'web') return;
     const { nativeEvent } = event;
+    if (width) progress.setValue(Math.abs(nativeEvent.contentOffset.x) / width);
+    if (Platform.OS !== 'web') return;
     clearTimeout(quiet.current);
     quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-  }, [settle]);
+  }, [settle, width, progress]);
   useTabRetap('utilities', () => scrollers.get(view)?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center hideOnScroll><UtilityPicker palette={palette} /></TopBar>
+      <TopBar center hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
       <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setWidth(event.nativeEvent.layout.width)}>
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
             keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
-            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={32} onScrollToIndexFailed={() => {}}
-            renderItem={({ item }) => <Page view={item} width={width} palette={palette} on={focused && item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
+            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
+            renderItem={({ item }) => <Page view={item} width={width} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
         )}
       </View>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />

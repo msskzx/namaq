@@ -54,20 +54,116 @@ export function useNow() {
   return now;
 }
 
-/** The three icons at the top, then prayer times, the qibla or the Hijri calendar: the app's utilities tab. */
+const VIEWS: View[] = ['times', 'qibla', 'calendar'];
+const noop = () => () => {};
+
+/**
+ * The three icons at the top, then prayer times, the qibla and the Hijri calendar side by side: the app's utilities tab.
+ * A sideways swipe (or trackpad) follows the finger and snaps to the next one (owner, 2026-11-15); the icons jump to one.
+ * In Arabic the first is on the right, so swiping right brings the next from the left, as in the app.
+ */
 export default function Utilities() {
   const [view, setView] = useStore(viewStore, 'times');
   const [place] = useStore(placeStore, null);
   const [picking, setPicking] = useState(false);
+  const strip = useRef<HTMLDivElement>(null);
+  const pages = useRef(new Map<View, HTMLElement>());
+  // The page the strip rests on, so a swipe that lands does not scroll it again.
+  const shown = useRef<View | null>(null);
+  // The saved view is known only after hydration; the first one after it jumps without a slide, a tap on an icon slides.
+  const hydrated = useSyncExternalStore(noop, () => true, () => false);
+  useEffect(() => {
+    const page = pages.current.get(view);
+    const element = strip.current;
+    if (!hydrated || !page || !element || shown.current === view) return;
+    const smooth = shown.current !== null && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    shown.current = view;
+    element.scrollTo({ left: element.scrollLeft + page.getBoundingClientRect().left - element.getBoundingClientRect().left, behavior: smooth ? 'smooth' : 'auto' });
+  }, [view, hydrated]);
+  // The strip is as tall as the page on screen, so a short page has no blank space under it.
+  useEffect(() => {
+    const page = pages.current.get(view);
+    const element = strip.current;
+    if (!page || !element) return;
+    const fit = () => { element.style.height = `${page.offsetHeight}px`; };
+    fit();
+    const watch = new ResizeObserver(fit);
+    watch.observe(page);
+    return () => watch.disconnect();
+  }, [view]);
+  useEffect(() => {
+    const element = strip.current;
+    if (!element) return;
+    let quiet: ReturnType<typeof setTimeout> | undefined;
+    const settle = () => {
+      const middle = element.getBoundingClientRect().left + element.clientWidth / 2;
+      let best: View | null = null;
+      let gap = Infinity;
+      pages.current.forEach((page, id) => {
+        const box = page.getBoundingClientRect();
+        const off = Math.abs(box.left + box.width / 2 - middle);
+        if (off < gap) { gap = off; best = id; }
+      });
+      if (best && best !== shown.current && gap < element.clientWidth / 4) { shown.current = best; setView(best); }
+    };
+    // scrollend is not in every browser yet, so a quiet moment settles too.
+    const scrolled = () => { clearTimeout(quiet); quiet = setTimeout(settle, 150); };
+    element.addEventListener('scroll', scrolled, { passive: true });
+    element.addEventListener('scrollend', settle);
+    return () => { clearTimeout(quiet); element.removeEventListener('scroll', scrolled); element.removeEventListener('scrollend', settle); };
+  }, [setView]);
+  // The highlight on the icons follows the strip as it scrolls (owner, 2026-11-15), moved without a render.
+  const picker = useRef<HTMLDivElement>(null);
+  const [lit, setLit] = useState(() => VIEWS.indexOf(view));
+  useEffect(() => {
+    const element = strip.current;
+    const bar = picker.current;
+    if (!element || !bar) return;
+    const follow = () => {
+      const buttons = [...bar.querySelectorAll<HTMLElement>('button')];
+      const mark = bar.querySelector<HTMLElement>('[data-mark]');
+      if (!mark || buttons.length !== VIEWS.length || !element.clientWidth) return;
+      // In Arabic the strip scrolls from 0 towards the negative, so the size of the offset is the place.
+      const place = Math.min(VIEWS.length - 1, Math.max(0, Math.abs(element.scrollLeft) / element.clientWidth));
+      const from = Math.floor(place);
+      const to = Math.min(from + 1, VIEWS.length - 1);
+      const x = buttons[from].offsetLeft + (buttons[to].offsetLeft - buttons[from].offsetLeft) * (place - from);
+      mark.style.width = `${buttons[from].offsetWidth}px`;
+      mark.style.transform = `translateX(${x}px)`;
+      mark.style.opacity = '1';
+      // While a page slides in, the strip is as tall as the taller of the two, so the incoming one is not cut off.
+      const heights = [VIEWS[from], VIEWS[place > from ? to : from]].map(id => pages.current.get(id)?.offsetHeight ?? 0);
+      element.style.height = `${Math.max(...heights)}px`;
+      setLit(Math.round(place));
+    };
+    follow();
+    element.addEventListener('scroll', follow, { passive: true });
+    window.addEventListener('resize', follow);
+    return () => { element.removeEventListener('scroll', follow); window.removeEventListener('resize', follow); };
+  }, []);
+  const pick = () => setPicking(true);
   const options = ([['times', 'مواقيت الصلاة', <Clock key="t" aria-hidden />], ['qibla', 'القبلة', <Compass key="q" aria-hidden />], ['calendar', 'التقويم الهجري', <CalendarDays key="c" aria-hidden />]] as const)
-    .map(([key, label, icon]) => ({ key, label, icon, current: view === key, onClick: () => setView(key) }));
+    .map(([key, label, icon]) => ({ key, label, icon }));
   return (
     <div className={styles.wrap} dir="rtl" lang="ar">
-      <Segmented label="الأدوات" options={options} iconOnly className={styles.picker} />
-      {view === 'calendar' ? <Calendar />
-        : !place ? <FirstUse onPick={() => setPicking(true)} />
-        : view === 'times' ? <Times place={place} onPlace={() => setPicking(true)} />
-        : <Qibla place={place} onPlace={() => setPicking(true)} />}
+      <div ref={picker} role="group" aria-label="الأدوات" className={styles.picker}>
+        <span data-mark aria-hidden className={styles.mark} />
+        {options.map(({ key, label, icon }, i) => (
+          <button key={key} type="button" aria-pressed={view === key} aria-label={label} title={label} onClick={() => setView(key)}
+            className={`${styles.pick} ${lit === i ? styles.lit : ''}`}>{icon}</button>
+        ))}
+      </div>
+      <div ref={strip} className={styles.strip} data-testid="utilities-strip">
+        {VIEWS.map(id => (
+          <section key={id} ref={node => { if (node) pages.current.set(id, node); else pages.current.delete(id); }} className={styles.page}
+            aria-label={options.find(option => option.key === id)?.label} inert={id !== view}>
+            {id === 'calendar' ? <Calendar />
+              : !place ? <FirstUse onPick={pick} />
+              : id === 'times' ? <Times place={place} onPlace={pick} />
+              : <Qibla place={place} onPlace={pick} on={view === 'qibla'} />}
+          </section>
+        ))}
+      </div>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} />
     </div>
   );
@@ -191,7 +287,8 @@ type AskablePermission = { requestPermission?: () => Promise<'granted' | 'denied
  * Chrome gives an absolute alpha. Both are magnetic north, a few degrees off true north in Egypt and Europe.
  * 'none' on a computer or a browser that never answers.
  */
-function useHeading(): [Heading, () => void] {
+/** The compass heading; it listens only while `on` (its page is on screen). */
+function useHeading(on: boolean): [Heading, () => void] {
   const [heading, setHeading] = useState<Heading>(null);
   const [allowed, setAllowed] = useState(false);
   useEffect(() => {
@@ -199,6 +296,7 @@ function useHeading(): [Heading, () => void] {
     if (typeof window === 'undefined' || typeof DeviceOrientationEvent === 'undefined' || !window.matchMedia('(pointer: coarse)').matches) { setHeading('none'); return; }
     const askable = (DeviceOrientationEvent as unknown as AskablePermission).requestPermission;
     if (askable && !allowed) { setHeading('ask'); return; }
+    if (!on) return;
     let heard = false;
     const quiet = setTimeout(() => { if (!heard) setHeading('none'); }, 4000);
     const read = (event: Event) => {
@@ -214,7 +312,7 @@ function useHeading(): [Heading, () => void] {
     const kind = 'ondeviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation';
     window.addEventListener(kind, read);
     return () => { clearTimeout(quiet); window.removeEventListener(kind, read); };
-  }, [allowed]);
+  }, [allowed, on]);
   const ask = () => {
     const askable = (DeviceOrientationEvent as unknown as AskablePermission).requestPermission;
     askable?.().then(answer => { if (answer === 'granted') { setHeading(null); setAllowed(true); } else setHeading('none'); }).catch(() => setHeading('none'));
@@ -226,9 +324,9 @@ const DIAL = 280;
 const R = DIAL / 2 - 10;
 const KAABA = '#1d1b19';
 
-function Qibla({ place, onPlace }: { place: Place; onPlace: () => void }) {
+function Qibla({ place, onPlace, on }: { place: Place; onPlace: () => void; on: boolean }) {
   const bearing = useMemo(() => qiblaBearing(lib, place), [place]);
-  const [heading, ask] = useHeading();
+  const [heading, ask] = useHeading(on);
   const live = typeof heading === 'number';
   const facing = live && Math.abs(turnTo(heading, bearing)) <= FACING;
   const tone = facing ? 'var(--home-green)' : 'var(--home-accent)';
