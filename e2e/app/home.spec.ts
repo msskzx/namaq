@@ -40,6 +40,18 @@ test.describe('a new user', () => {
     await expect(page).toHaveURL(/\/compare/);
   });
 
+  test('a top-down tree (the pair card) names its sides inside the boxes, never on tabs; a side-by-side tree\'s tabs keep their size', async ({ page }) => {
+    // docs/records/0042: the compare tree drew tabs on a top-down tree, and iOS shrank tab labels to a speck.
+    await open(page, '/');
+    const pair = page.locator('[aria-label$="شجرةً"]').first();
+    await expect(pair).toBeAttached();
+    await expect(pair.getByTestId('node-tab')).toHaveCount(0);
+    await expect(pair.getByText(/\S+ [٠-٩]+/).first()).toBeAttached();
+    const tabs = page.getByTestId('node-tab');
+    await expect(tabs.first()).toBeAttached();
+    for (const tab of await tabs.all()) expect(parseFloat(await tab.evaluate(element => getComputedStyle(element.firstElementChild!).fontSize))).toBeGreaterThanOrEqual(10);
+  });
+
   test('the story circles open their pages', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'الأنبياء', exact: true }).click();

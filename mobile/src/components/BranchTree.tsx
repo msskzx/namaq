@@ -308,10 +308,11 @@ function NodeTab({ id, ayahKeys, label, shared, muted }: { id: string; ayahKeys:
   const part = usePart({ label, size: TAB, align: 'center', tab: muted ? 'dashed' : true });
   // The box's border (1) and padding (4) are above its content: the tab rises from there to TAB_RISE over the box.
   return (
-    <View ref={part} collapsable={false}
+    <View ref={part} collapsable={false} testID="node-tab"
       style={{ alignSelf: 'flex-start', marginStart: -4, marginTop: -(5 + TAB_RISE), marginBottom: 5 + TAB_RISE - TAB_HEIGHT, height: TAB_HEIGHT, paddingHorizontal: 6, justifyContent: 'center', borderRadius: 8, borderWidth: 1, borderStyle: muted ? 'dashed' : 'solid', borderColor: lit ? shared.palette.path : muted ? shared.palette.muted : shared.palette.rule, backgroundColor: muted ? shared.palette.paper : shared.palette.card }}>
-      {/* iOS measured some labels a hair short and cut them to «الأعراف…» (owner, 2026-11-15): such a label shrinks a little instead. */}
-      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.85}>{label}</Text>
+      {/* iOS measured some labels a hair short and cut them to «الأعراف…» (owner, 2026-11-15), so a label is clipped, never ellipsized.
+          Not adjustsFontSizeToFit: in a tab sized by its own text iOS shrank the label to a speck on the home card (owner, 2026-11-15). */}
+      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1} ellipsizeMode="clip">{label}</Text>
     </View>
   );
 }
@@ -534,13 +535,16 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {shown && custom && (() => {
+        // A tree drawn top down keeps its reference inside the box, over a rule, as the branches tab's do (owner, 2026-11-15).
+        const tab = shared.down ? undefined : custom.tab;
         const box = (
           <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text} width={custom.width}>
-            {custom.tab && <NodeTab id={id} ayahKeys={all} label={custom.tab} shared={shared} />}
+            {tab && <NodeTab id={id} ayahKeys={all} label={tab} shared={shared} />}
+            {shared.down && <StartReference label={custom.tab} shared={shared} />}
             {custom.content}
           </Box>
         );
-        return custom.tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
+        return tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
       })()}
       {shown && !custom && (() => {
         // A node ending one ayah carries it on a tab over its edge (owner, 2026-11-14); a node ending several, or a tree drawn top

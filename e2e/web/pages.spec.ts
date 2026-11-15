@@ -187,6 +187,18 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('a top-down tree (the home pair card) names its sides inside the boxes, over a rule, never on a tab', async ({ page }) => {
+    // docs/records/0042: the compare tree drew tabs on a top-down tree.
+    await page.goto('/');
+    const names = page.locator('[data-down] [data-tab]');
+    await expect(names.first()).toBeVisible();
+    for (const name of await names.all()) {
+      const look = await name.evaluate(element => { const style = getComputedStyle(element); return { top: style.borderTopWidth, size: parseFloat(style.fontSize) }; });
+      expect(look.top).toBe('0px');
+      expect(look.size).toBeGreaterThanOrEqual(11);
+    }
+  });
+
   test('branches shows the first tree', async ({ page }) => {
     await page.goto('/quran/branches');
     await expect(page.getByRole('progressbar', { name: 'التقدم بين الأشجار' })).toBeAttached();
