@@ -30,6 +30,13 @@ describe('foldForms', () => {
     expect([folded.tree.spelled, ...folded.tree.children.map(child => child.spelled)]).toEqual([['يَقُولُونَ', 'رَبَّنَا'], ['ٱصْرِفْ'], ['إِنَّنَآ']]);
   });
 
+  it('moves a differing word before the ayah sign into the children with the sign (owner, 2026-11-15)', () => {
+    const tree: Branch = { words: ['عَذَابٌ', 'أَلِيمٌ', '۝'], ayat: [], forms: { '2:174': ['عَذَابٌ', 'أَلِيمٌ', '۝'], '3:77': ['عَذَابٌ', 'أَلِيمٌۭ', '۝'] }, children: [leaf(['أُو۟لَـٰٓئِكَ'], ['2:174']), leaf(['وَإِنَّ'], ['3:77'])] };
+    const folded = foldForms({ tree, prefixes: [], offsets: {} });
+    expect(folded.tree.words).toEqual(['عَذَابٌ']);
+    expect(folded.tree.children.map(child => child.words)).toEqual([['أَلِيمٌ', '۝', 'أُو۟لَـٰٓئِكَ'], ['أَلِيمٌۭ', '۝', 'وَإِنَّ']]);
+  });
+
   it('dissolves a one-word node into its children, but never the trunk', () => {
     const forms = { '1:1': ['قَالُوا۟'], '1:2': ['قَالُوٓا۟'] };
     const node: Branch = { words: ['قَالُوا۟'], ayat: [], forms, children: [leaf(['أَ'], ['1:1']), leaf(['إِنَّ'], ['1:2'])] };

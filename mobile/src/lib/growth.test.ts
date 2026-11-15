@@ -172,6 +172,13 @@ describe('a card the owner keeps to its own ayat', () => {
     const rows = matrixOf(cardOf(piece).presentation, false).rows.map(row => row.ayah!.ayat.map(ayah => ayah.key));
     expect(rows).toEqual([['94:5'], ['94:6']]);
   });
+
+  it('reads every row of «إن المتقين في» two ayat deep, so the rows match (owner, 2026-11-15)', () => {
+    const piece = list.find(item => item.id === 'cmp:1roljpo0lcp7vu')!;
+    const matrix = matrixOf(cardOf(piece).presentation, true);
+    expect(matrix.rows.map(row => row.ayah!.ayat.map(ayah => ayah.key))).toEqual([['15:45', '15:46'], ['44:51', '44:52'], ['51:15', '51:16'], ['52:17', '52:18'], ['54:54', '54:55'], ['77:41', '77:42']]);
+    expect(matrix.rows.map(row => row.after?.ayat[0].key)).toEqual(['15:47', '44:53', '51:17', '52:19', '55:1', '77:43']);
+  });
 });
 
 describe('the studio tour, read word by word', () => {

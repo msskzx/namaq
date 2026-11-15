@@ -328,12 +328,14 @@ describe('BranchTree', () => {
     expect(screen.getByText('الواقعة ١٧').nextElementSibling?.textContent).toBe('يَطُوفُ');
   });
 
-  it('draws a repeated leaf once with every ayah\'s reference and each way its ayat write a differing word', () => {
+  it('draws a repeated leaf once with every ayah\'s reference, a differing word moved into each branch', () => {
     const group = (data.ayat as BranchAyah[]).filter(ayah => ['94:5', '94:6'].includes(ayah.key));
     const { container } = render(<BranchTree {...live(['94:5', '94:6'])} names={{ 94: 'الشرح' }} />);
     expect(container.querySelectorAll('[data-node] > [data-tab] span.text-xs, [data-node] > span span.text-xs').length).toBeGreaterThan(0);
     expect(screen.queryByText(group[1].words.slice(1).join(' '))).toBeNull();
-    expect(container.querySelectorAll('[data-braid]').length).toBeGreaterThan(0);
+    // يسرا, voiced apart before the ayah sign, moves with the sign into each branch (owner, 2026-11-15), so nothing is braided.
+    expect(container.querySelectorAll('[data-braid]').length).toBe(0);
+    expect(container.querySelectorAll('[data-differs]').length).toBeGreaterThan(0);
   });
 
   it('writes the differently voiced word of an inner node in each ayah\'s form, at its own offset, and nothing else', () => {

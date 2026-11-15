@@ -4,7 +4,7 @@ import { BRANCH_VIEW_COOKIE, BRANCH_CONNECTORS_COOKIE, parseBranchView } from '@
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
 import { surahLabel } from '@/lib/quran/surahLabel';
-import { ayahEnds, ownEnds, branchesHref, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@shared/quran/branches';
+import { ayahEnds, ownEnds, twoEnds, branchesHref, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@shared/quran/branches';
 import { searchQuery } from '@shared/quran/searchText';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@shared/quran/juz';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks as subtreeLinksFor } from '@/lib/quran/branchTreeLinks';
@@ -35,7 +35,7 @@ import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './
 import { compareLinksFor, compareLinksOfAyah } from '../compare/pairCards';
 import { PathScope } from './Paths';
 import TreeReview from './TreeReview';
-import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly, ownAyatOnly } from '@shared/quran/branchVerdicts';
+import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly, ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
 
@@ -184,7 +184,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   // A card the owner keeps as its matrix only opens as its ayah cards, with no switch to a tree.
   const onlyMatrix = !!id && (matrixOnly({ id }) || cut.some(piece => piece.id === id && matrixOnly(piece)));
   const cards = !!tree && (state.mode === 'cards' || onlyMatrix);
-  const ends = tree && (id && ownAyatOnly({ id }) ? ownEnds(tree) : ayahEnds(tree));
+  const ends = tree && (id && ownAyatOnly({ id }) ? ownEnds(tree) : id && twoAyat({ id }) ? twoEnds(tree, key => positions.has(key)) : ayahEnds(tree));
   const passageKeys = cards ? presentation!.ayat.map(ayah => {
     const start = positions.get(ayah.key)!;
     const end = positions.get(ends![ayah.key])!;
