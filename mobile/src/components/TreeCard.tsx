@@ -98,13 +98,17 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     return card.presentation.ayat.map(ayah => ayah.key).filter(key => lit.has(key));
   }, [pinned, card]);
   const ayahKeys = useMemo(() => card.presentation.ayat.map(ayah => ayah.key), [card]);
-  // In the studio the chips and the ayah card show once the tree has grown, for the ayah whose path is lit.
+  // In the studio the chips and the ayah card show for the ayah growing (owner, 2026-11-15): its card's words come with the
+  // boxes that draw them, then once the tree has grown, for the ayah whose path is lit, in full.
   const touring = !!growth?.tour && !!growth.lit;
-  const showChips = chips && (!growth || touring);
+  // Only the fixed frame keeps room for the card while the tree grows; elsewhere the card comes with the tour, so nothing jumps.
+  const growing = !!growth?.lit && (touring || fixed);
+  const showChips = chips && (!growth || growing);
+  const shownWords = growth && !touring ? growth.words : undefined;
   // The fixed frame keeps the chips' whole row, since the studio's bar has no room for them to rise into.
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
-  const readKeys = growth ? (touring ? [growth.lit!] : []) : tappedKeys;
+  const readKeys = growth ? (growing ? [growth.lit!] : []) : tappedKeys;
   const strip = fixed ? ayatRoom?.height ?? AYAH_SPACE : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
   useEffect(() => { askRoom?.(readKeys.length ? AYAH_SPACE : 0); }, [askRoom, readKeys.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -235,7 +239,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP, direction: 'ltr', opacity: content ? 1 : 0 }}>
-      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} />
+      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} shown={shownWords} />
     </View>
   );
   return (
@@ -255,7 +259,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
             ? <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={surah => growth.lit?.split(':')[0] === String(surah)} />
             : <SurahChips tuck={!fixed} ayahKeys={ayahKeys} palette={palette} lit={(surah, keys) => pinned.has(pathToggleKey(`surah:${surah}`, keys))} onToggle={(surah, keys) => paths.pin(`surah:${surah}`, keys)} />)}
           {fixed && chips && !showChips && <View style={{ height: CHIPS_HEIGHT }} />}
-          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} />}
+          {!fixed && <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} onLayout={setStripHeight} shown={shownWords} />}
         </Animated.View>}
         {!sizes && (['side', 'down'] as const).map(side => (
           <View key={`probe-${side}-${probeTag}`} pointerEvents="none" style={[HIDDEN, { width: BIG, alignItems: 'flex-start' }]}>

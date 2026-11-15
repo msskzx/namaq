@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
-import { connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
+import { ALL_WORDS, connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
 import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, treeList } from './branches';
 
 const list = treeList();
@@ -16,6 +16,24 @@ describe('a tree growing in the studio', () => {
     for (const id of ids.filter(id => id !== 'n-1')) {
       expect(revealed.filter(item => item === id), id).toHaveLength(1);
       expect(revealed.indexOf(lineId(id)), id).toBeLessThan(revealed.indexOf(id));
+    }
+  });
+
+  it('shows each growing ayah\'s card word by word with its boxes: the words before the phrase and the root\'s first, all at its end', () => {
+    for (const presentation of list.slice(0, 150).map(piece => cardOf(piece).presentation)) {
+      const beats = growthBeats(presentation.tree, { offsets: presentation.offsets });
+      const passage = new Map(matrixOf(presentation, false).rows.map((row, i) => [presentation.ayat[i].key, row.ayah!.ayat.flatMap(ayah => ayah.words)]));
+      for (const key of new Set(beats.map(beat => beat.key))) {
+        const own = beats.filter(beat => beat.key === key);
+        const counts = own.map(beat => beat.words!);
+        expect(counts, key).toEqual([...counts].sort((a, b) => a - b));
+        // The root's beat shows the words before the phrase and the root's own; the ayah's words are never outrun before its end.
+        const root = own.find(beat => beat.now.includes('n-1'))!;
+        expect(root.words, key).toBe((presentation.offsets[key] ?? 0) + presentation.tree.words.filter(word => word !== '۝' && !word.startsWith('﴿')).length);
+        // By the ayah's last box the card shows every word of its passage; a run into the next surah's basmala is not counted.
+        expect(Math.max(...counts.filter(count => count < ALL_WORDS)), key).toBe(passage.get(key)!.length);
+        expect(counts[counts.length - 1], key).toBe(ALL_WORDS);
+      }
     }
   });
 
