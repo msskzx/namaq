@@ -11,7 +11,7 @@ conditions: "Next.js website, dir=rtl page, Chromium headless with isMobile true
 evidence: "src/components/utilities/Utilities.module.css (.strip); e2e/web/pages.spec.ts (prayer times for a picked city)."
 implication: "Test a sideways scroller at a phone viewport with isMobile on, not only a narrow desktop window. contain: paint also makes the strip the offsetParent of its pages, so measure with getBoundingClientRect rather than offsetLeft."
 date: "2026-11-15"
-topics: ["ui-rtl","ui-layout"]
+topics: ["ui-rtl","testing"]
 ---
 
 The desktop-width probe looked right (strip 358px, grid column 358px), which hid the bug until the phone screenshots.
