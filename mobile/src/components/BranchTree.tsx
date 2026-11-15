@@ -469,13 +469,15 @@ function NeighbourBox({ id, beside, of, shared, tab }: { id: string; beside: Bes
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
   const closed = [...beside.words, ...endSign([beside.key])];
-  const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 17, marks: beside, color: shared.palette.muted });
-  const text: SceneText = { size: 17, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], ...(quiet ? {} : { footer: ref }) };
+  // Drawn as every box is (owner, 2026-11-15: the dashed, muted look drew more attention than it should): same border, card,
+  // text size and ink; only the basmala stays muted, as it is not the ayah's text.
+  const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 20, marks: beside });
+  const text: SceneText = { size: 20, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], ...(quiet ? {} : { footer: ref }) };
   const box = (
-    <Box id={id} ayahKeys={[of]} leaf shared={shared} muted text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
-      {quiet && tab && <NodeTab id={id} ayahKeys={[of]} label={tab} shared={shared} muted />}
+    <Box id={id} ayahKeys={[of]} leaf shared={shared} text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
+      {quiet && tab && <NodeTab id={id} ayahKeys={[of]} label={tab} shared={shared} />}
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
-      <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={17} marks={beside} color={shared.palette.muted} />
+      <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={20} marks={beside} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
       {!quiet && <References text={ref} shared={shared} center />}
     </Box>

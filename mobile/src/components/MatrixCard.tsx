@@ -100,7 +100,7 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
 
 /** One ayah card of the matrix; the tree's lit-path card under the tree is this card too (owner, 2026-11-14). */
 export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false, shown, around }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
-  /** The ayat drawn around this one (the card under a tree with the surrounding ayat on): read with it, muted as the tree's dashed boxes, and named in its range. */
+  /** The ayat drawn around this one (the card under a tree with the surrounding ayat on): read with it and named in its range. */
   around?: { before: MatrixAyah[]; after: MatrixAyah[] };
   /** The studio's growing ayah: how many words of the cell (its ayat in turn) show; the rest keep their place unseen. */
   shown?: number;
@@ -123,12 +123,13 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
   const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress?.(); } } : undefined;
-  // Muted ayat around this one, each with the basmala between it and the next surah's first ayah.
+  // The ayat around this one, drawn as the tree now draws their boxes (as its own), each with the basmala, muted, between it
+  // and the next surah's first ayah.
   const mutedText = { color: palette.muted };
-  const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.map(ayah => <Text key={ayah.key} style={mutedText}>
-    {side === 'after' && ayah.basmala && `${mushafText(ayah.basmala.join(' '))} `}
-    <Ayah ayah={ayah} palette={palette} muted />
-    {side === 'before' && ayah.basmala && ` ${mushafText(ayah.basmala.join(' '))} `}
+  const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.map(ayah => <Text key={ayah.key}>
+    {side === 'after' && ayah.basmala && <Text style={mutedText}>{`${mushafText(ayah.basmala.join(' '))} `}</Text>}
+    <Ayah ayah={ayah} palette={palette} muted={false} />
+    {side === 'before' && ayah.basmala && <Text style={mutedText}>{` ${mushafText(ayah.basmala.join(' '))} `}</Text>}
   </Text>);
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (

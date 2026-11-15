@@ -102,9 +102,9 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'السرعة 1×' }).click();
     await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
     await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
-    // Once grown, each ayah's path is lit in turn and the ayah is read in full under the tree.
+    // Once grown, each ayah's path is lit in turn and its ayah read under the tree word by word, the word read lit.
     await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole('button', { name: 'إعادة', exact: true })).toBeVisible({ timeout: 30_000 });
+    await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('span, div')].some(item => getComputedStyle(item).backgroundColor === 'rgb(220, 197, 160)')), { timeout: 15_000 }).toBe(true);
   });
 
   test('the tree video draws each box from where the app laid out its labels and words', async ({ page }) => {

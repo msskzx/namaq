@@ -13,7 +13,9 @@ import { Cell } from './MatrixCard';
  * The ayat of the paths a tap lit, read in full under the tree, each as the matrix draws it (owner, 2026-11-14): the same card,
  * the tree's shared words coloured, with buttons to open the ayah in the mushaf and in compare.
  */
-export default function PathAyat({ ayahKeys, presentation, palette, width, onLayout, maxHeight, shown, around = false, reading }: {
+export default function PathAyat({ ayahKeys, presentation, palette, width, onLayout, maxHeight, shown, around = false, reading, onContent }: {
+  /** The cards' whole height, scrolled or not: the frame sizes its room from it. */
+  onContent?: (height: number) => void;
   /** The studio's tour: the word it reads now (readId), lit in the card. */
   reading?: Set<string>; ayahKeys: string[]; presentation: Presentation; palette: Palette; width: number;
   /** The surrounding ayat are on: the card reads the whole run the tree draws, from the ayah before to the one after (owner, 2026-11-15). */
@@ -54,7 +56,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
     <View {...({ dir: 'ltr' } as object)} onLayout={event => onLayout?.(event.nativeEvent.layout.height)} style={{ paddingHorizontal: 12, paddingBottom: 8, marginTop: maxHeight ? 0 : -18, direction: 'ltr' }}>
       <ScrollView ref={scroller} scrollEnabled={!!maxHeight} style={{ maxHeight }}
         onLayout={event => { const view = event.nativeEvent.layout.height; setHeights(old => old.view === view ? old : { ...old, view }); }}
-        onContentSizeChange={(_w, content) => setHeights(old => old.content === content ? old : { ...old, content })} contentContainerStyle={{ gap: 8 }} showsVerticalScrollIndicator={false}>
+        onContentSizeChange={(_w, content) => { onContent?.(content); setHeights(old => old.content === content ? old : { ...old, content }); }} contentContainerStyle={{ gap: 8 }} showsVerticalScrollIndicator={false}>
         {ayahKeys.map(key => {
           const ayah = ayahOf(key);
           const row = matrix.rows[starts.indexOf(key)];

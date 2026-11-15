@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
 import { ALL_WORDS, connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
-import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, treeList } from './branches';
+import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, readId, treeList, withPathReading } from './branches';
 
 const list = treeList();
 const presentationOf = (index: number) => cardOf(list[index]).presentation;
@@ -171,5 +171,19 @@ describe('a card the owner keeps to its own ayat', () => {
     const piece = list.find(item => item.id === 'cmp:138fsj406mr5cc')!;
     const rows = matrixOf(cardOf(piece).presentation, false).rows.map(row => row.ayah!.ayat.map(ayah => ayah.key));
     expect(rows).toEqual([['94:5'], ['94:6']]);
+  });
+});
+
+describe('the studio tour, read word by word', () => {
+  it('reads each lit ayah\'s card word by word, keeping the ayah whose path is lit', () => {
+    const presentation = presentationOf(list.findIndex(piece => piece.keys.length >= 3));
+    const grown = growthBeats(presentation.tree, { paths: true });
+    const beats = withPathReading(presentation, grown);
+    expect(beats.filter(beat => !beat.path)).toEqual(grown.filter(beat => !beat.path));
+    const rows = matrixOf(presentation, false).rows;
+    presentation.ayat.forEach((ayah, r) => {
+      const read = beats.filter(beat => beat.path && beat.key === ayah.key).map(beat => beat.now[0]);
+      expect(read).toEqual(rows[r].ayah!.ayat.flatMap(item => item.words.map((_, i) => readId(r, item.key, i))));
+    });
   });
 });

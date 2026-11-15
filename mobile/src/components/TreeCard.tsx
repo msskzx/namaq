@@ -109,9 +109,15 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const readKeys = growth ? (growing ? [growth.lit!] : []) : tappedKeys;
-  const strip = fixed ? ayatRoom?.height ?? AYAH_SPACE : readKeys.length ? stripHeight : 0;
+  // The fixed frame's room for the lit path's ayat (owner, 2026-11-15): as tall as they are, from AYAH_SPACE up to half the frame,
+  // so a long ayah or several read whole and the tree gives up only what they need; more than that scrolls. In the studio it
+  // stays AYAH_SPACE, so the tree keeps still while the ayat take turns.
+  const [ayatHeight, setAyatHeight] = useState(0);
+  const fitted = Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, full.height * 0.5)));
+  const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
+  const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
-  useEffect(() => { askRoom?.(readKeys.length ? AYAH_SPACE : 0); }, [askRoom, readKeys.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { askRoom?.(readKeys.length ? room : 0); }, [askRoom, readKeys.length > 0, room]); // eslint-disable-line react-hooks/exhaustive-deps
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]); // eslint-disable-line react-hooks/exhaustive-deps
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
@@ -239,7 +245,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
   const ayahCard = fixed && (
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP, direction: 'ltr', opacity: content ? 1 : 0 }}>
-      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={AYAH_SPACE - AYAH_GAP - 8} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
+      <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={(ayatRoom?.height ?? room) - AYAH_GAP - 8} onContent={setAyatHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
     </View>
   );
   return (
