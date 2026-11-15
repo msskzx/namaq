@@ -645,8 +645,7 @@ function measureScene(root: Host | null, registry: Registry, parts: Parts, edges
   const place = (view: Host) => new Promise<Rect | null>(resolve => {
     try { view.measureLayout(root, (x: number, y: number, w: number, h: number) => resolve({ x, y, w, h }), () => resolve(null)); } catch { resolve(null); }
   });
-  const size = new Promise<{ w: number; h: number }>(resolve => root.measure((_x: number, _y: number, w: number, h: number) => resolve({ w, h })));
-  return Promise.all([size, Promise.all(entries.map(([, item]) => place(item.view!))), Promise.all(pieces.map(item => place(item.view!)))]).then(([whole, rects, placed]) => {
+  return Promise.all([Promise.all(entries.map(([, item]) => place(item.view!))), Promise.all(pieces.map(item => place(item.view!)))]).then(([rects, placed]) => {
     const own = new Map<string, ScenePart[]>();
     pieces.forEach((item, i) => { const rect = placed[i]; if (rect) own.set(item.box, [...own.get(item.box) ?? [], { ...item.spec, ...rect }]); });
     const boxes: SceneBox[] = entries.flatMap(([id, item], i) => {
@@ -655,7 +654,13 @@ function measureScene(root: Host | null, registry: Registry, parts: Parts, edges
       const inside = own.get(id)?.sort((a, b) => a.y - b.y);
       return [{ ...item.text, ...(inside ? { parts: inside } : {}), ...rect, id }];
     });
-    return { width: whole.w, height: whole.h, down, boxes, edges };
+    // The tree's size from what it holds, in the same measure as the boxes: the root's own measure counts the zoom the card is
+    // shown at on a phone (a tree fitted at half size measured half as big, and the video drew it twice too big), measureLayout not.
+    const rectsIn = [...boxes, ...boxes.flatMap(box => box.parts ?? [])];
+    if (!rectsIn.length) return null;
+    const left = Math.min(...rectsIn.map(r => r.x)), top = Math.min(...rectsIn.map(r => r.y));
+    const right = Math.max(...rectsIn.map(r => r.x + r.w)), bottom = Math.max(...rectsIn.map(r => r.y + r.h));
+    return { width: right + Math.max(0, left), height: bottom + Math.max(0, top), down, boxes, edges };
   });
 }
 

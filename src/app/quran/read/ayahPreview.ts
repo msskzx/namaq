@@ -2,6 +2,7 @@ import treeData from '@shared/data/quran/trees.json';
 import surahRows from '@shared/data/quran/surahs.json';
 import { branchInventory, type BranchPiece } from '@shared/quran/branchInventory';
 import { branchesHref, type BranchAyah } from '@shared/quran/branches';
+import { matrixOnly } from '@shared/quran/branchVerdicts';
 import { mushafText } from '@shared/quran/mushafText';
 import { normalizeWord } from '@shared/quran/normalize';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
@@ -11,7 +12,8 @@ import { compareLinksOfAyah } from '../compare/pairCards';
 /** At most this many trees or compare cards in the sheet; its last button opens them all (the app's PREVIEW_MAX). */
 export const PREVIEW_MAX = 10;
 
-export type TreePreview = { id: string; href: string; text: string } & ReturnType<typeof phrasePresentation>;
+/** `matrixOnly`: the owner keeps this card as its matrix only, so it opens as its ayah cards with no switch to a tree. */
+export type TreePreview = { id: string; href: string; text: string; matrixOnly?: boolean } & ReturnType<typeof phrasePresentation>;
 export type ComparePreview = { href: string; page: string; partner: string; words: { text: string; shared: boolean }[] };
 export type AyahPreview = { trees: TreePreview[]; compare: ComparePreview[] };
 
@@ -29,6 +31,7 @@ export const treePreviewOf = (piece: BranchPiece): TreePreview => ({
   id: piece.id,
   href: branchesHref(piece.id),
   text: piece.text,
+  ...(matrixOnly(piece) ? { matrixOnly: true } : {}),
   ...(piece.group ? groupPresentation(piece.group, byKey()) : phrasePresentation(piece.phrase, ayat, true, true)),
 });
 

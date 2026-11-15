@@ -22,10 +22,11 @@ export default function TreeViewCard({ tree, height, names, mixed = false, actio
 }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const saved = bookmarks.some(item => item.id === tree.id);
-  const [view, setView] = useState<BranchView>(() => {
+  const [chosen, setView] = useState<BranchView>(() => {
     const pref = parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree';
     return mixed && showsOtherView(tree.id) ? (pref === 'tree' ? 'cards' : 'tree') : pref;
   });
+  const view: BranchView = tree.matrixOnly ? 'cards' : chosen;
   const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
   return <>
     <div className={view === 'tree' && frameClassName ? frameClassName : 'px-2'}>
@@ -36,7 +37,7 @@ export default function TreeViewCard({ tree, height, names, mixed = false, actio
     <div className={actionsClassName ?? 'flex items-center gap-1 px-2 py-1'} data-share-skip>
       <Button size="lg" variant="muted" aria-pressed={saved} aria-label={saved ? 'أزلها من المحفوظات' : 'احفظ'} title={saved ? 'أزلها من المحفوظات' : 'احفظ'} className={saved ? 'text-[var(--home-accent)]' : undefined}
         onClick={() => toggleBookmark({ id: tree.id, text: tree.text, href: tree.href })}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Button>
-      <Button size="lg" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>{view === 'tree' ? <GalleryHorizontal aria-hidden /> : <TreeIcon aria-hidden />}</Button>
+      {!tree.matrixOnly && <Button size="lg" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>{view === 'tree' ? <GalleryHorizontal aria-hidden /> : <TreeIcon aria-hidden />}</Button>}
     </div>
   </>;
 }

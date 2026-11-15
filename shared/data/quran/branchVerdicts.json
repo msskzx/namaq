@@ -5512,8 +5512,10 @@
   },
   "cmp:138fsj406mr5cc": {
    "keep": true,
-   "why": "mutashabih: the places differ by a word or two, worth a tree",
-   "text": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا"
+   "why": "owner 2026-11-15: drop the tree, keep the matrix",
+   "text": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+   "checked": true,
+   "view": "matrix"
   },
   "cmp:0x9igrs05qtphg": {
    "keep": true,

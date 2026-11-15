@@ -1,7 +1,10 @@
 import data from '../data/quran/branchVerdicts.json';
 
-/** The owner's verdict on one branches card. `ask` holds an open question; `text` is the tree's phrase, kept so the file reads on its own. */
-export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; text?: string };
+/**
+ * The owner's verdict on one branches card. `ask` holds an open question; `text` is the tree's phrase, kept so the file reads on its own.
+ * `view: 'matrix'` keeps the card as its matrix only: the tree is dropped (no tree view, no tree quiz).
+ */
+export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; text?: string; view?: 'matrix' };
 export type BranchVerdicts = Record<string, BranchVerdict>;
 
 export const OWNER_ASK = 'owner: discuss';
@@ -19,6 +22,12 @@ export const branchVerdictFor = (piece: Identified, verdicts: BranchVerdicts = b
 
 /** A card the owner dropped: hidden everywhere except review. A card with no verdict stays. */
 export const droppedBranch = (piece: Identified, verdicts: BranchVerdicts = branchVerdicts) => branchVerdictFor(piece, verdicts)?.keep === false;
+
+/** A card the owner keeps as its matrix only: the tree view and the tree quiz leave it out. */
+export const matrixOnly = (piece: Identified, verdicts: BranchVerdicts = branchVerdicts) => {
+  const verdict = branchVerdictFor(piece, verdicts);
+  return verdict?.keep === true && verdict.view === 'matrix';
+};
 
 export type BranchReviewState = 'keep' | 'drop' | 'discuss' | null;
 

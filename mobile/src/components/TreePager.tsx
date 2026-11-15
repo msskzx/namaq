@@ -8,6 +8,7 @@ import TreeIcon from './TreeIcon';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
+import { matrixOnly } from '@shared/quran/branchVerdicts';
 import TreeCard, { type Lane } from './TreeCard';
 import type { NodeActions } from './BranchTree';
 import MatrixCard, { MatrixShare } from './MatrixCard';
@@ -56,7 +57,7 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
   /** A pager embedded elsewhere (the home feed): no studio. */
   embedded?: boolean;
   /** Each card's own switches (owner, 2026-11-14): tree or matrix, and the surrounding ayat; the settings only give their defaults. */
-  onView: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
+  onView?: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
   /** A book matrix's studio plays its connections or the read-along: the switch between them. */
   choice?: { connections: boolean; toggle: () => void } }) {
   const evidence = useMemo(() => evidenceOf(piece), [piece]);
@@ -81,9 +82,9 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
         <Animated.View style={popped}><Bookmark size={embedded ? 22 : 26} color={saved ? palette.accent : icon.color} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
       </Pressable>
       {!embedded && <StudioButton palette={palette} />}
-      <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+      {onView && <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
         {onView.mode === 'tree' ? <GalleryHorizontal {...icon} /> : <TreeIcon {...icon} />}
-      </Pressable>
+      </Pressable>}
       <Pressable onPress={onAround.toggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ selected: onAround.on }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
         <UnfoldHorizontal size={icon.size} color={onAround.on ? palette.accent : icon.color} />
       </Pressable>
@@ -157,7 +158,8 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   const [rotatedId, setRotatedId] = useState<string | null>(null);
   /** What each card switched for itself, by its id; a card it does not name opens on the settings' defaults. */
   const [own, setOwn] = useState<Record<string, { mode?: BranchView; around?: boolean }>>({});
-  const modeOf = (at: BranchPiece) => own[at.id]?.mode ?? defaultMode;
+  // A card the owner keeps as its matrix only has no tree to switch to.
+  const modeOf = (at: BranchPiece): BranchView => matrixOnly(at) ? 'matrix' : own[at.id]?.mode ?? defaultMode;
   const surroundOf = (at: BranchPiece) => own[at.id]?.around ?? defaultAround;
   const switchCard = (at: BranchPiece, change: { mode?: BranchView; around?: boolean }) => {
     if (!embedded) closeStudio();
@@ -344,7 +346,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
                     embedded={!!embedded} onVideo={atMode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={atMode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
-                    onView={{ mode: atMode, toggle: () => switchCard(pieces[at], { mode: atMode === 'tree' ? 'matrix' : 'tree' }) }}
+                    onView={matrixOnly(pieces[at]) ? undefined : { mode: atMode, toggle: () => switchCard(pieces[at], { mode: atMode === 'tree' ? 'matrix' : 'tree' }) }}
                     onAround={{ on: atAround, toggle: () => switchCard(pieces[at], { around: !atAround }) }}
                     choice={current && atMode === 'matrix' && lines > 0 ? { connections: connecting, toggle: () => setPlay(connecting ? 'read' : 'connections') } : undefined} />
                 </View>

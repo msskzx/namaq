@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { branchInventory } from './branchInventory';
-import { branchReviewState, branchVerdictFor, droppedBranch } from './branchVerdicts';
+import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly } from './branchVerdicts';
+import { quizTrees } from '../quiz/treeScope';
 
 describe('branch verdicts', () => {
   it('finds a verdict under any id of the card', () => {
@@ -23,5 +24,15 @@ describe('branch verdicts', () => {
     const all = branchInventory({}, null, true);
     const shown = branchInventory({}, null);
     expect(shown.length).toBe(all.filter(piece => !droppedBranch(piece)).length);
+  });
+});
+
+describe('a card kept as its matrix only', () => {
+  it('keeps al-Sharh\'s «فإن مع العسر يسرا» as a matrix, out of the tree quiz (owner, 2026-11-15)', () => {
+    const piece = branchInventory({}, null).find(item => item.id === 'cmp:138fsj406mr5cc');
+    expect(piece).toBeDefined();
+    expect(matrixOnly(piece!)).toBe(true);
+    expect(quizTrees().includes(piece!.phrase)).toBe(false);
+    expect(quizTrees().some(tree => tree.text === piece!.phrase.text)).toBe(false);
   });
 });
