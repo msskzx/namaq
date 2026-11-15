@@ -187,16 +187,12 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('a top-down tree (the home pair card) names its sides inside the boxes, over a rule, never on a tab', async ({ page }) => {
-    // docs/records/0042: the compare tree drew tabs on a top-down tree.
+  test('no tree on home draws tabs: every box names its ayah inside, over a rule', async ({ page }) => {
+    // docs/records/0042; since 2026-11-16 (owner) no tree has tabs at all.
     await page.goto('/');
-    const names = page.locator('[data-down] [data-tab]');
-    await expect(names.first()).toBeVisible();
-    for (const name of await names.all()) {
-      const look = await name.evaluate(element => { const style = getComputedStyle(element); return { top: style.borderTopWidth, size: parseFloat(style.fontSize) }; });
-      expect(look.top).toBe('0px');
-      expect(look.size).toBeGreaterThanOrEqual(11);
-    }
+    await expect(page.locator('[data-ref]').first()).toBeVisible();
+    await expect(page.locator('[data-tab]')).toHaveCount(0);
+    for (const ref of (await page.locator('[data-ref]').all()).slice(0, 6)) expect(parseFloat(await ref.evaluate(element => getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(11);
   });
 
   test('branches shows the first tree', async ({ page }) => {

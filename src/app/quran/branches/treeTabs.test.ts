@@ -16,4 +16,11 @@ describe('tree tabs', () => {
     const offenders = sources(join(ROOT, 'mobile/src')).filter(path => /adjustsFontSizeToFit/.test(readFileSync(path, 'utf8').replace(/\/\/.*|\{\/\*[\s\S]*?\*\/\}/g, '')));
     expect(offenders.map(path => relative(ROOT, path))).toEqual([]);
   });
+
+  // Every box names its ayah inside, over a rule, whichever way a tree is drawn (owner, 2026-11-16): one layout, so no path can
+  // skip a rule about where the tab goes.
+  it('no tree draws a tab', () => {
+    const offenders = [...sources(join(ROOT, 'mobile/src')), ...sources(join(ROOT, 'src'))].filter(path => /\bNodeTab\b|data-tab[\s=>'"\]]/.test(readFileSync(path, 'utf8')));
+    expect(offenders.map(path => relative(ROOT, path))).toEqual([]);
+  });
 });

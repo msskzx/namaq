@@ -289,34 +289,6 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }
   );
 }
 
-/** The tab's size: the app's interface text at 10 points, as Text scales it, quieter than the node's words. */
-const TAB = Math.round(10 * UI_SCALE);
-const TAB_HEIGHT = 16;
-/** The tab stands on the node's border, its foot 2 points over it: inside the node's own padding, clear of the words' marks. */
-const TAB_RISE = TAB_HEIGHT - 2;
-
-/**
- * The ayah a node ends, on a small tab over its top edge at the start where reading begins (owner, 2026-11-14), so the node holds
- * only its words. It sits in the node's own flow, pulled up over the border with no height of its own: the node is never narrower
- * than its tab, and the tab fades and hides with the node. Side by side only; the node keeps the same room below as above.
- */
-function NodeTab({ id, ayahKeys, label, shared, muted }: { id: string; ayahKeys: string[]; label: string; shared: Shared;
-  /** On a surrounding ayah's dashed box: dashed too. */
-  muted?: boolean }) {
-  const growth = useContext(Growth);
-  const lit = growth.now.has(id) || isLit(shared, growth, ayahKeys) || !!shared.paths?.pinned.has(pathToggleKey(id, ayahKeys));
-  const part = usePart({ label, size: TAB, align: 'center', tab: muted ? 'dashed' : true });
-  // The box's border (1) and padding (4) are above its content: the tab rises from there to TAB_RISE over the box.
-  return (
-    <View ref={part} collapsable={false} testID="node-tab"
-      style={{ alignSelf: 'flex-start', marginStart: -4, marginTop: -(5 + TAB_RISE), marginBottom: 5 + TAB_RISE - TAB_HEIGHT, height: TAB_HEIGHT, paddingHorizontal: 6, justifyContent: 'center', borderRadius: 8, borderWidth: 1, borderStyle: muted ? 'dashed' : 'solid', borderColor: lit ? shared.palette.path : muted ? shared.palette.muted : shared.palette.rule, backgroundColor: muted ? shared.palette.paper : shared.palette.card }}>
-      {/* iOS measured some labels a hair short and cut them to «الأعراف…» (owner, 2026-11-15), so a label is clipped, never ellipsized.
-          Not adjustsFontSizeToFit: in a tab sized by its own text iOS shrank the label to a speck on the home card (owner, 2026-11-15). */}
-      <Text style={{ fontSize: 10, lineHeight: 14, color: shared.palette.muted }} numberOfLines={1} ellipsizeMode="clip">{label}</Text>
-    </View>
-  );
-}
-
 /** An ayah's end mark between two parts of a branch, drawn without a box. */
 function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }) {
   const registry = useContext(Boxes);
@@ -462,11 +434,7 @@ function Join({ entries, spans, shared }: { entries: Entry[]; spans: Span[]; sha
   return <View style={flip}><Fan shared={shared} entries={places} /></View>;
 }
 
-function NeighbourBox({ id, beside, of, shared, tab }: { id: string; beside: Beside; of: string; shared: Shared;
-  /** The last box of its ayah's path carries the path's one tab, naming the whole run it shows. */
-  tab?: string }) {
-  // With the surrounding ayat on, a path's ayat are named once, on the tab at its end; these boxes hold only their text.
-  const quiet = !!shared.around && !shared.down;
+function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; of: string; shared: Shared }) {
   const [surah, ayah] = beside.key.split(':').map(Number);
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
@@ -474,17 +442,15 @@ function NeighbourBox({ id, beside, of, shared, tab }: { id: string; beside: Bes
   // Drawn as every box is (owner, 2026-11-15: the dashed, muted look drew more attention than it should): same border, card,
   // text size and ink; only the basmala stays muted, as it is not the ayah's text.
   const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 20, marks: beside });
-  const text: SceneText = { size: 20, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], ...(quiet ? {} : { footer: ref }) };
-  const box = (
+  const text: SceneText = { size: 20, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
+  return (
     <Box id={id} ayahKeys={[of]} leaf shared={shared} text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
-      {quiet && tab && <NodeTab id={id} ayahKeys={[of]} label={tab} shared={shared} />}
       {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
       <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={20} marks={beside} />
       {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
-      {!quiet && <References text={ref} shared={shared} center />}
+      <References text={ref} shared={shared} center />
     </Box>
   );
-  return quiet && tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
 }
 
 /** The ayat before the given ones, opening to the right of what they lead into (or above it, top down). */
@@ -513,16 +479,9 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   const rejoinId = node.rejoin && nodeId(shared.indices.get(node.rejoin)!);
   const { around } = shared;
   const ayatSpans = shownAyat(node, path);
-  // With the surrounding ayat on, each ayah's path is named once, on its last box: the whole run from the ayah before to the one after.
-  const runs = !!around && !shared.down;
-  const runOf = (key: string) => {
-    const first = runs ? ((shared.earlier.has(key) ? around!.earlier[key] : null) ?? around!.before[key])?.key : undefined;
-    const after = runs ? around!.after[around!.ends[key]]?.key : undefined;
-    return ayatLabel([first ?? ayatSpans[key][0], ...(first ? [ayatSpans[key][ayatSpans[key].length - 1]] : ayatSpans[key].slice(1)), ...(after ? [after] : [])], shared.names);
-  };
   const afters: Entry[] = !around ? [] : node.ayat.flatMap(key => {
     const beside = around.after[around.ends[key]];
-    return beside ? [{ id: `a${key}`, keys: [key], item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} tab={runOf(key)} /> }] : [];
+    return beside ? [{ id: `a${key}`, keys: [key], item: <NeighbourBox id={`a${key}`} beside={beside} of={key} shared={shared} /> }] : [];
   });
   const entries: Entry[] = [...node.children.map(child => ({ id: nodeId(shared.indices.get(child)!), keys: keys(child), item: <Node node={child} path={[...path, ...words]} shared={shared} /> })), ...afters];
   if (!bare) entries.forEach(entry => edge(shared, id, entry.id));
@@ -535,39 +494,27 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
     <View style={{ flexDirection: shared.down ? 'column' : 'row', alignItems: 'center' }}>
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {shown && custom && (() => {
-        // A tree drawn top down keeps its reference inside the box, over a rule, as the branches tab's do (owner, 2026-11-15).
-        const tab = shared.down ? undefined : custom.tab;
-        const box = (
+        // Every box names its ayah inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16).
+        return (
           <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text} width={custom.width}>
-            {tab && <NodeTab id={id} ayahKeys={all} label={tab} shared={shared} />}
-            {shared.down && <StartReference label={custom.tab} shared={shared} />}
+            <StartReference label={custom.tab} shared={shared} />
             {custom.content}
           </Box>
         );
-        return tab ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
       })()}
       {shown && !custom && (() => {
-        // A node ending one ayah carries it on a tab over its edge (owner, 2026-11-14); a node ending several, or a tree drawn top
-        // down (where the line into a node runs through its top edge), keeps its references inside.
-        const tab = own === undefined && node.ayat.length === 1 && !shared.down && !afters.length;
-        // The lit ayah's name on the box its path starts from goes on a tab as well, as every box names its ayah (owner, 2026-11-15).
-        const pill = own === undefined && !shared.down && !!start;
-        const tabLabel = [tab ? (runs ? runOf(node.ayat[0]) : references) : '', pill ? start : ''].filter(Boolean).join(' · ');
-        // Side by side with the switch on, each ayah is named on the tab of its after box; one with none keeps its references here.
-        const named = runs && node.ayat.length > 0 && afters.length === node.ayat.length;
-        const box = (
+        // Every box names its ayat inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16).
+        return (
           <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
             tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
             {own !== undefined ? own : <>
-            {(tab || pill) && <NodeTab id={id} ayahKeys={all} label={tabLabel} shared={shared} />}
-            {!pill && <StartReference label={start} shared={shared} />}
-            {!tab && !named && singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
+            <StartReference label={start} shared={shared} />
+            {singleSurah && <Ruled label={references} shared={shared}><References text={references} shared={shared} center ruled /></Ruled>}
             <Words {...shownWords} />
-            {!tab && !named && !singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
+            {!singleSurah && node.ayat.length > 0 && <References text={references} shared={shared} />}
             </>}
           </Box>
         );
-        return tab || pill ? <View style={{ paddingVertical: TAB_RISE }}>{box}</View> : box;
       })()}
       {entries.length > 0 && <>
         {!bare && <Stub shared={shared} entries={entries} />}

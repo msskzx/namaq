@@ -124,11 +124,12 @@ test.describe('branches', () => {
     // Every box carries its words and references at the places the app drew them, the references in the app's font size.
     for (const item of boxes) {
       expect(item.parts?.some(part => part.words?.length)).toBe(true);
-      for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(part.tab ? 11 : 13);
+      for (const part of item.parts!.filter(part => part.label)) expect(part.size).toBe(13);
     }
-    expect(boxes.some(item => item.parts!.some(part => part.tab))).toBe(true);
+    // No tabs: every box names its ayah inside (owner, 2026-11-16).
+    expect(boxes.some(item => item.parts!.some(part => part.tab))).toBe(false);
     // Every box ending an ayah closes with the sign: its number, which the Quran font draws as the sign.
-    for (const item of boxes.filter(item => item.parts!.some(part => part.tab))) {
+    for (const item of boxes.filter(item => item.parts!.some(part => part.label && /[٠-٩]$/.test(part.label)))) {
       const words = item.parts!.flatMap(part => (part.words ?? []) as { text: string }[]);
       expect(words.at(-1)?.text).toMatch(/^[٠-٩]+$/);
     }
