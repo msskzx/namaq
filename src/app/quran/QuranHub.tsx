@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, type LucideIcon } from 'lucide-react';
+import { ArrowLeftRight, BookMarked, LibraryBig, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, type LucideIcon } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { QURAN_TOOLS } from '@/lib/navigation';
@@ -15,6 +15,7 @@ const ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/branches': TreeIcon,
   '/quran/compare': ArrowLeftRight,
   '/quran/prophets': ScrollText,
+  '/quran/books': LibraryBig,
   '/quran/tajwid/tuhfat-al-atfal': BookMarked,
   '/quran/oaths': SunMoon,
   '/quran/balagha': MessagesSquare,

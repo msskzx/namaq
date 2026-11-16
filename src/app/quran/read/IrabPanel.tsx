@@ -5,6 +5,7 @@ import { IRAB_SOURCES, ukbariCredit, ukbariOf, ukbariPage, type UkbariData } fro
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { corpusWords } from '@shared/quran/words';
 import ExternalLink from '@/components/common/ExternalLink';
+import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 
 const CARD = 'block rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)]';
@@ -41,7 +42,10 @@ export default function IrabPanel({ ayah, data }: { ayah: string; data: IrabAyah
       </div>
       {passages.length ? passages.map((passage, i) => (
         <div key={i} className={`${CARD} shrink-0 px-3.5 py-2.5`}>
-          <ExternalLink href={ukbariPage(passage)} className="text-[0.8125rem] text-[var(--home-muted)]">{passage.from >= 0 ? ukbariCredit(passage) : `${ukbariCredit(passage)}، على الآية`}</ExternalLink>
+          <div className="flex items-center gap-3 text-[0.8125rem]">
+            <ExternalLink href={ukbariPage(passage)} className="flex-1 text-[var(--home-muted)]">{passage.from >= 0 ? ukbariCredit(passage) : `${ukbariCredit(passage)}، على الآية`}</ExternalLink>
+            <OpenInBook book="ukbari" ayah={ayah} />
+          </div>
           <p className="mt-1 whitespace-pre-line text-[1.125rem] leading-[1.9]">
             {tafsirRuns(passage.text).map((run, j) => (run.quran ? <span key={j} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
           </p>

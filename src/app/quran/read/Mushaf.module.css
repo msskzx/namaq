@@ -259,8 +259,9 @@
   .reciteBar { inset-inline: 0; }
   .reader[data-reader-immersive="true"] .reciteBar { bottom: max(8px, calc(env(safe-area-inset-bottom) - 10px)); }
 }
+/* The pill back to the «فاصلة», in the recite bar's place. */
+.fasilaPill { pointer-events: auto; border-radius: 999px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: color-mix(in srgb, var(--home-paper) 88%, transparent); border: 1px solid var(--home-rule); color: var(--home-ink); }
 /* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */
-.fasilaPill { pointer-events: auto; border-radius: 999px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: color-mix(in srgb, var(--home-paper) 72%, transparent); }
 .reader[data-keyboard] .reciteBar { bottom: calc(var(--keyboard) + 8px); }
 
 /* Bigger text (ReaderView's text size): the page's words flow as one paragraph between titles, wrapped by the browser at

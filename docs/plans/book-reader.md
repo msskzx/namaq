@@ -20,13 +20,18 @@ The owner's rule:
 - The page last open is kept by itself (`reader-place` in the mushaf, `book-last` for books), so the reader opens where it was left. Peeking at another page moves that and never the فاصلة.
 - Away from the فاصلة's page, a button «عُد إلى فاصلتك» goes back to it. In the mushaf it shows with the bars (a tap), so it never covers the page's last line.
 
-The marks are in `shared/readingMarks.ts`, so the website can keep them the same way.
+The marks are in `shared/readingMarks.ts`, and the website keeps them the same way.
 
 ## Pages
 
 The books' data keeps passages, not pages. `npm run quran:book-pages` reads the same Quranpedia dumps again and finds where each printed page starts inside the passages by its first letters (record R0052). It writes `shared/data/quran/bookPages.json`. Run it after rebuilding any of the three books. `shared/bookReader.ts` lays the pages out, finds a page by place, splits paragraphs and searches.
 
+## Website
+
+`/quran/books` is the shelf and `/quran/books/<book>/<page>` is one printed page, counted from the book's first. The server builds the page (`src/lib/books/`) and reads the books from disk, so `next.config.ts` lists them for file tracing. `/quran/books/<book>?ayah=2:5` opens the page of the passage on an ayah (the tafsir, i'rab and balagha panels link there), and `?spot=entry:at` opens a فاصلة or saved paragraph, lit. A click on a paragraph shows its buttons. Search goes through `/api/books/<book>/search`. The mushaf's فاصلة is set from an ayah's buttons, and its pill shows on any other page.
+
 ## Not yet
 
-- The website's book reader and its mushaf فاصلة.
+- The library as its own tab, with book management moved there from settings (owner, 2026-11-16, sketches in the project files).
+
 - Al-Itqan joins the shelf once its thread adds the book.

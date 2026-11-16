@@ -633,7 +633,7 @@ export default function ReaderView({
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
         irab={!!actions.word} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>
-        <Button size="sm" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
+        <Button size="md" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
           <FasilaIcon aria-hidden className="text-[var(--home-accent)]" width={18} height={18} />
           {ar ? `عُد إلى فاصلتك · ${surahName(fasila.key) ?? ''} ${num(Number(fasila.key.split(':')[1]))}` : `Back to where you stopped · ${fasila.key}`}
         </Button>
