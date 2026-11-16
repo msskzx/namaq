@@ -1,15 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { placesOf } from '@shared/quran/words';
+import { countsBySurah, placesOf } from '@shared/quran/words';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { corpusText, words } from '@/lib/words';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import Sheet from './Sheet';
+import SurahStrip from './SurahStrip';
 
 /** Ayat shown at first, and added by each «المزيد». */
 export const PLACES_STEP = 20;
@@ -34,15 +35,29 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
   const [shown, setShown] = useState(PLACES_STEP);
   const id = lemmas[picked];
   const places = useMemo(() => placesOf(words, id), [id]);
+  const counts = useMemo(() => countsBySurah(places), [places]);
+  const [surah, setSurah] = useState<number | null>(null);
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  const tops = useRef(new Map<string, number>());
+  const pending = useRef<string | null>(null);
   const [name, count, root] = words.lemmas[id];
   const open = (key: string) => { onClose(); readAyah(key); };
+  // Picking a bar shows that surah's first ayah at the top of the list, loading more ayat first if it is further down.
+  const pickSurah = (picked: number) => {
+    setSurah(picked);
+    const first = places.findIndex(place => place.key.startsWith(`${picked + 1}:`));
+    const key = places[first].key;
+    const top = tops.current.get(key);
+    if (first < shown && top !== undefined) scroll.current?.scrollTo({ y: top, animated: false });
+    else { pending.current = key; if (first >= shown) setShown(first + PLACES_STEP); }
+  };
   return (
     <View style={{ flexShrink: 1 }}>
       <View style={{ paddingHorizontal: 18, paddingBottom: 10, gap: 6 }}>
         {lemmas.length > 1
           ? <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {lemmas.map((lemma, i) => (
-              <Pressable key={lemma} onPress={() => { setPicked(i); setShown(PLACES_STEP); }} accessibilityRole="tab" accessibilityState={{ selected: i === picked }}
+              <Pressable key={lemma} onPress={() => { setPicked(i); setShown(PLACES_STEP); setSurah(null); tops.current.clear(); pending.current = null; }} accessibilityRole="tab" accessibilityState={{ selected: i === picked }}
                 style={{ paddingHorizontal: 14, paddingVertical: 2, borderRadius: 999, borderWidth: 1, borderColor: i === picked ? palette.accent : palette.rule, backgroundColor: i === picked ? palette.paperDeep : 'transparent' }}>
                 <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 40, color: i === picked ? palette.accent : palette.ink }}>{mushafText(words.lemmas[lemma][0])}</Text>
               </Pressable>
@@ -51,15 +66,22 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
           : <Text accessibilityRole="header" style={{ fontFamily: QURAN_FONT, fontSize: 26, lineHeight: 46, color: palette.accent, textAlign: 'right' }}>{mushafText(name)}</Text>}
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>
           {`ترد في القرآن ${num(count)} مرة في ${num(places.length)} آية${root ? `، وجذرها «${root}»` : ''}`}
+          {surah !== null && <Text style={{ color: palette.accent, fontSize: 15 }}>{`، منها ${num(counts[surah])} في ${surahNames[surah + 1]}`}</Text>}
         </Text>
+        {places.length > 0 && <SurahStrip counts={counts} picked={surah} onPick={pickSurah} names={surahNames} palette={palette} />}
       </View>
-      <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 16 }}>
+      <ScrollView key={id} ref={scroll} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 16 }}>
         {places.slice(0, shown).map(({ key, words: marked }) => {
           const [surah, number] = key.split(':').map(Number);
           const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;
           const text = corpusText(ayahOf(key)?.words ?? []);
           return (
-            <Pressable key={key} onPress={() => open(key)} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}
+            <Pressable key={key} onPress={() => open(key)}
+              onLayout={event => {
+                const y = event.nativeEvent.layout.y;
+                tops.current.set(key, y);
+                if (pending.current === key) { pending.current = null; scroll.current?.scrollTo({ y, animated: false }); }
+              }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}
               style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 6 }}>
               <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
                 {text.map((word, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: marked.includes(i) ? palette.accent : palette.ink }}>{`${i ? ' ' : ''}${mushafText(word)}`}</Text>)}

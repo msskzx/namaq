@@ -245,6 +245,18 @@ test('the words page finds a word and lists its places', async ({ page }) => {
   await expect(page.getByRole('button', { name: /^افتح .* في المصحف$/ }).first()).toBeVisible();
 });
 
+test('an opened word shows where it gathers: a bar picks a surah, names it with its count and brings its ayat up', async ({ page }) => {
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('موسى');
+  await page.getByRole('button', { name: /، .* مرة$/ }).first().click();
+  const strip = page.getByLabel('عدد مرات ورودها في كل سورة');
+  const box = (await strip.boundingBox())!;
+  // al-A'raf is the seventh surah from the right.
+  await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
+  await expect(page.getByText('، منها ٢١ في الأعراف')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^افتح الأعراف .* في المصحف$/ }).first()).toBeInViewport();
+});
+
 test('the words page shows its source and how it counts behind the books icon', async ({ page }) => {
   await open(page, '/words');
   await expect(page.getByRole('button', { name: 'مساعدة' })).toHaveCount(0);
