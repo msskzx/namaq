@@ -6,11 +6,10 @@ import Sheet from './Sheet';
 import ExternalLink from './ExternalLink';
 import { VOICE_NAME, voiceColor } from './Iltifat';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_GAPS, ITQAN_NOTES, ITQAN_OPENING, ITQAN_QUOTES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings' | 'order';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'order';
 
 /** A coloured sample word and what its colour means. */
 /** The colour of each likeness (MARK_LEGEND), as the colour setting draws it, with the kind of difference the books name for it. */
@@ -30,7 +29,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', order: 'من أين هذا الكلام؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -56,17 +55,6 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
         </> : topic === 'order' ? <>
           {ORDER_HELP.map((text, i) => <Text key={i} style={i === ORDER_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
           {Object.values(BOOKS).map(book => <ExternalLink key={book.shamela} url={`https://shamela.ws/book/${book.shamela}`} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{book.title}</ExternalLink>)}
-        </> : topic === 'openings' ? <>
-          <Text style={paragraph}>{OPENINGS_HELP[0]}</Text>
-          {[ITQAN_OPENING, ...ITQAN_QUOTES, ...ITQAN_NOTES].map(quote => <View key={quote.text} style={{ gap: 2 }}>
-            <Text style={paragraph}>«{quote.text}»</Text>
-            <ExternalLink url={quote.url} color={palette.muted} size={13} style={{ color: palette.muted, textAlign: 'right' }}>{quote.cite}</ExternalLink>
-          </View>)}
-          <Text style={paragraph}>{ITQAN_GAPS}</Text>
-          {OPENINGS_HELP.slice(1).map(text => <Text key={text} style={paragraph}>{text}</Text>)}
-          <Text style={[paragraph, { fontWeight: '700' }]}>الشرط وجوابه</Text>
-          {CONDITION_NOTES.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
-          {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{source.title}</ExternalLink>)}
         </> : topic === 'words' ? <>
           <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
           <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>

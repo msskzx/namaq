@@ -1,6 +1,5 @@
 // The surah openings page (owner, 2026-11-13): every surah under one of the ten kinds of opening that al-Suyuti lists
 // in al-Itqan (النوع الستون, after Abu Shama), and cards of surahs whose openings look alike. docs/plans/quran-openings-kinds.md
-import { normalizeWord } from './normalize';
 import { sharedByAll } from './ayahContext';
 import type { BranchAyah } from './branches';
 import type { Likeness } from './wordMatch';
@@ -55,10 +54,6 @@ export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, { text: string; cit
   prayer: [ITQAN_NOTES[1]],
 };
 
-/** What al-Suyuti leaves unnamed, and how the page fills it in. */
-export const ITQAN_GAPS = 'لم يسمّ السيوطي سور الحروف ولا التحميد ولا تبارك، وسمّى من سور التسبيح ستًا فيما نقله عن الكرماني، وعدّ الاستفهام ستًا وسمّى خمسًا. فالباقي هنا ما يبدأ بذلك من السور: السابعة في التسبيح الصف، والسادسة في الاستفهام «هل أتى على الإنسان».';
-
-export const ITQAN_SOURCE = { title: 'الإتقان في علوم القرآن للسيوطي، تحقيق محمد أبو الفضل إبراهيم، النوع الستون: في فواتح السور ٣/٣٦١–٣٦٣', url: 'https://shamela.ws/book/11728/1125' };
 
 /** A card's surahs: its own kind's, then any from another kind whose opening looks like theirs. `alone` holds the rest of a kind. */
 type CardDef = { id: string; kind: OpeningKindId; title: string; surahs: number[]; alone?: true };
@@ -70,7 +65,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'alif-lam-mim', kind: 'letters', title: 'الم', surahs: [2, 3, 29, 30, 31, 32] },
   { id: 'alif-lam-ra', kind: 'letters', title: 'الر', surahs: [10, 11, 12, 13, 14, 15] },
   { id: 'ta-sin', kind: 'letters', title: 'طسم', surahs: [26, 27, 28] },
-  { id: 'ha-mim', kind: 'letters', title: 'حم', surahs: [39, 40, 41, 42, 43, 44, 45, 46] },
+  { id: 'ha-mim', kind: 'letters', title: 'حم', surahs: [40, 41, 42, 43, 44, 45, 46] },
   { id: 'wal-quran', kind: 'letters', title: 'والقرآن', surahs: [36, 38, 50] },
   { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 19, 20, 68], alone: true },
   { id: 'ya-ayyuha-n-nabi', kind: 'call', title: 'يا أيها النبي', surahs: [33, 65, 66] },
@@ -82,7 +77,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'qad', kind: 'statement', title: 'قد', surahs: [23, 58] },
   { id: 'la-uqsim', kind: 'statement', title: 'لا أقسم', surahs: [75, 90] },
   { id: 'qariah', kind: 'statement', title: 'الحاقة والقارعة', surahs: [69, 101] },
-  { id: 'statement-alone', kind: 'statement', title: 'وحدها', surahs: [8, 9, 16, 24, 47, 55, 70, 80, 98, 102], alone: true },
+  { id: 'statement-alone', kind: 'statement', title: 'وحدها', surahs: [8, 9, 16, 24, 39, 47, 55, 70, 80, 98, 102], alone: true },
   { id: 'saffat', kind: 'oath', title: 'صفة ثم مصدرها', surahs: [37, 51, 77, 79, 100] },
   { id: 'idha', kind: 'oath', title: 'والليل إذا', surahs: [53, 92, 93] },
   { id: 'sama', kind: 'oath', title: 'والسماء', surahs: [85, 86] },
@@ -112,52 +107,42 @@ export function openingKeys(surah: number, words: (key: string) => string[]): st
 const LONG = 16;
 const SHOWN = 12;
 
-export type OpeningWord = { text: string; own: boolean; mark?: { kind: Likeness; some: boolean } } | { end: number };
-export type OpeningRow = { surah: number; guest?: OpeningKindId; words: OpeningWord[]; cut: boolean };
+/** A word's colour, by the rule every view uses (shared/quran/wordMatch.ts): how alike, and whether only `some` rows share it. */
+export type OpeningMark = { kind: Likeness; some: boolean };
+export type OpeningWord = { text: string; mark?: OpeningMark } | { end: number };
+export type OpeningRow = { surah: number; words: OpeningWord[]; cut: boolean };
 export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[] };
 
 /**
- * The cards with their rows. A word is `own` when no other row of the card has it (same letters, marks aside),
- * so it marks what sets that surah's opening apart. Cards whose rows share less than a word on average (alike in form, not in
- * wording, like «والصافات صفا» and «والذاريات ذروا») and the cards of surahs that stand alone mark nothing.
+ * The cards with their rows. Words the rows share are lined up and coloured as in the matrix (`sharedByAll`), one row being
+ * a surah's opening; the cards of surahs that stand alone colour nothing.
  */
-export function openingCards(words: (key: string) => string[], full?: (key: string) => BranchAyah | undefined): OpeningCard[] {
+export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): OpeningCard[] {
+  const words = (key: string) => ayahOf(key)?.words ?? [];
   return OPENING_CARDS.map(card => {
     const parts = card.surahs.map(surah => openingKeys(surah, words).map(key => ({ key, words: words(key) })));
-    const plain = parts.map(ayat => ayat.flatMap(ayah => ayah.words.map(normalizeWord)));
-    const sets = plain.map(row => new Set(row));
-    const pairs = card.surahs.length * (card.surahs.length - 1);
-    const shared = pairs ? sets.reduce((sum, set, r) => sum + sets.reduce((s, other, o) => s + (o === r ? 0 : [...set].filter(w => other.has(w)).length), 0), 0) / pairs : 0;
-    const marks = !card.alone && shared >= 1;
-    const matched = full && !card.alone ? sharedByAll(parts.map((ayat, r) => {
-      const all = ayat.map(ayah => full(ayah.key));
-      return { ayah: { key: `${card.surahs[r]}:1`, page: 0, words: ayat.flatMap(a => a.words), roots: all.flatMap((a, n) => a?.roots ?? ayat[n].words.map(() => null)), lemmas: all.flatMap((a, n) => a?.lemmas ?? ayat[n].words.map(() => null)) }, before: null, after: null };
-    })) : null;
+    const marks = card.alone ? null : sharedByAll(parts.map((ayat, r) => {
+      const known = ayat.map(ayah => ayahOf(ayah.key));
+      const each = (pick: 'roots' | 'lemmas') => known.flatMap((ayah, n) => ayah?.[pick] ?? ayat[n].words.map(() => null));
+      return { ayah: { key: `${card.surahs[r]}:1`, page: 0, words: ayat.flatMap(ayah => ayah.words), roots: each('roots'), lemmas: each('lemmas') }, before: null, after: null };
+    }));
     const rows = parts.map((ayat, r): OpeningRow => {
       const surah = card.surahs[r];
       let at = 0;
       const all: OpeningWord[] = ayat.flatMap(ayah => [
         ...ayah.words.map(text => {
-          const i = at++;
-          const word = plain[r][i];
-          const link = matched?.[r].match?.links?.[i];
-          return { text, own: marks && !sets.some((set, o) => o !== r && set.has(word)), ...(link ? { mark: { kind: link.kind, some: link.rows < card.surahs.length } } : {}) };
+          const link = marks?.[r].match?.links?.[at++];
+          return link ? { text, mark: { kind: link.kind, some: link.rows < card.surahs.length } } : { text };
         }),
         { end: Number(ayah.key.split(':')[1]) },
       ]);
-      const count = plain[r].length;
-      const cut = count > LONG;
-      const guest = kindOf(surah) === card.kind ? undefined : kindOf(surah);
-      return { surah, ...(guest ? { guest } : {}), words: cut ? all.filter(word => 'text' in word).slice(0, SHOWN) : all, cut };
+      const cut = at > LONG;
+      return { surah, words: cut ? all.filter(word => 'text' in word).slice(0, SHOWN) : all, cut };
     });
     return { id: card.id, kind: card.kind, title: card.title, alone: !!card.alone, rows };
   });
 }
 
-/** A kind's cards: its own, and those holding one of its surahs as a guest (الزمر under «الخبر»). */
-export const inKind = (card: OpeningCard, kind: OpeningKindId) => card.kind === kind || card.rows.some(row => row.guest === kind);
-
-export const kindLabel = (id: OpeningKindId) => OPENING_KINDS.find(kind => kind.id === id)!.label;
 
 /** The other surahs whose opening is on the same card (none for a surah that stands alone). */
 export function openingLike(surah: number): { card: string; kind: OpeningKindId; surahs: number[] } | null {
@@ -197,7 +182,4 @@ export const CONDITION_SOURCES = [
   { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
 ];
 
-export const OPENINGS_HELP = [
-  'جمع هذه الأنواع أبو شامة المقدسي، ونقلها الزركشي في البرهان والسيوطي في الإتقان، وعلى قوله تُرتَّب السور هنا. وهذا نصه:',
-  'تجمع البطاقة سورًا تتشابه أوائلها، والكلمة الملوّنة تنفرد بها السورة بين سور البطاقة. وقد تضم البطاقة سورة من نوع آخر فتحمل اسم نوعها. تجميع البطاقات من عملنا، والنص برواية حفص، ولم يراجعه أحد من أهل العلم.',
-];
+export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. تجميع البطاقات من عملنا، والنص برواية حفص.';

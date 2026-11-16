@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, PenLine } from 'lucide-react';
 import ExternalLink from '@/components/common/ExternalLink';
+import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENING_KINDS, inKind, kindLabel, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -18,12 +19,8 @@ const ROLE: Record<ConditionRole, string> = {
   disputed: 'border-dashed border-[var(--home-muted)]',
 };
 
-function Cite({ q }: { q: { cite: string; url: string } }) {
-  return <ExternalLink className="whitespace-nowrap text-sm text-[var(--home-muted)]" href={q.url}>{q.cite}</ExternalLink>;
-}
-
 function Words({ words }: { words: OpeningWord[] }) {
-  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) 45%, var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) 45%, var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
 }
 
 function Conditions({ lines }: { lines: ConditionText[string] }) {
@@ -43,30 +40,31 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
   const [open, setOpen] = useState(false);
   const expandable = card.rows.some(row => conditions[row.surah]);
   return (
-    <article id={card.id} data-share-card data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
+    <div className="flex flex-col gap-1">
+      <article id={card.id} data-share-card data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
       <h2 className="text-xl text-[var(--home-accent)]">{card.title}</h2>
       {card.rows.map(row => (
         <div key={row.surah} className="border-t border-[var(--home-rule)]/40 first-of-type:border-t-0 py-1.5">
           <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
             <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
-            {row.guest && <span className="rounded-full border border-[var(--home-rule)] px-2 text-xs">{kindLabel(row.guest)}</span>}
           </div>
           {open && conditions[row.surah]
             ? <Conditions lines={conditions[row.surah]} />
             : <p className="font-quran text-2xl leading-[2.1] text-justify"><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</p>}
         </div>
       ))}
-      {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">
+        {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">
         {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
         {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}
       </div>}
-      <div data-share-skip className="flex items-center gap-1">
+      </article>
+      <div className="flex items-center gap-1">
         {expandable && <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'إخفاء الشرط وجوابه' : 'الشرط وجوابه'} title="الشرط وجوابه" className={icon}>
           <ChevronDown size={18} aria-hidden className={open ? 'rotate-180' : undefined} />
         </button>}
         <ShareImageButton size="icon" iconSize={16} href={`/quran/openings?kind=${card.kind}#${card.id}`} />
       </div>
-    </article>
+    </div>
   );
 }
 
@@ -105,18 +103,17 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
           </button>
         ))}
       </div>
-      <p className="text-[var(--home-muted)]">«{ITQAN_OPENING.text}» <Cite q={ITQAN_OPENING} /></p>
-      <p className="text-sm text-[var(--home-muted)]">الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. تجميع البطاقات من عملنا، والنص برواية حفص.</p>
+      <Reference title={ITQAN_OPENING.cite} quotes={[ITQAN_OPENING]} />
+      <p className="text-sm text-[var(--home-muted)]">{OPENINGS_LEGEND}</p>
       {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
         const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
         return (
           <section key={k.id} aria-label={k.label} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1 pt-2">
               <h2 className="text-2xl font-bold">{k.label}</h2>
-              <p className="leading-relaxed">«{quote.text}» <Cite q={quote} /></p>
-              {(ITQAN_KIND_NOTES[k.id] ?? []).map(n => <p key={n.text} className="text-sm leading-relaxed text-[var(--home-muted)]">{n.url ? <>«{n.text}» <Cite q={n as { cite: string; url: string }} /></> : n.text}</p>)}
+              <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} />
             </div>
-            {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
+            {cards.filter(card => card.kind === k.id).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
           </section>
         );
       })}
