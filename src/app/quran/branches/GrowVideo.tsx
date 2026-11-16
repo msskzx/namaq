@@ -20,9 +20,8 @@ const FADE = 400;
 
 type Rect = { x: number; y: number; w: number; h: number };
 type Word = Rect & { text: string; font: string; color: string };
-/** `tab`: the small tab over the box's top edge that carries its ayah (BranchTree's `[data-tab]`), when it is drawn as one. */
 /** `strands` and `edges`: a braid's outlined strands and the curves into and out of it (BranchTree's `[data-braid]`). */
-type Shape = { element: HTMLElement; rect: Rect; words: Word[]; tab?: Rect & { radius: number; border: string };
+type Shape = { element: HTMLElement; rect: Rect; words: Word[];
   strands: (Rect & { radius: number; border: string })[]; edges: (Rect & { d: string; stroke: string; width: number })[] };
 type Segment = [number, number, number, number, number];
 type Line = { element: HTMLElement; segments: Segment[] };
@@ -56,10 +55,6 @@ function measure(root: HTMLElement): Drawing | null {
         words.push({ ...place(box), text: match[0], font: `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`, color: style.color });
       }
     }
-    // Top down the tab turns back into a ruled header (no top border), which the words alone draw.
-    const tab = element.querySelector<HTMLElement>(':scope > [data-tab]');
-    const tabStyle = tab && getComputedStyle(tab);
-    const tabbed = tab && tabStyle && parseFloat(tabStyle.borderTopWidth) > 0 ? { ...place(tab.getBoundingClientRect()), radius: parseFloat(tabStyle.borderTopLeftRadius) || 8, border: tabStyle.borderTopColor } : undefined;
     const strands = [...element.querySelectorAll<HTMLElement>('[data-strand]')].map(strand => {
       const style = getComputedStyle(strand);
       return { ...place(strand.getBoundingClientRect()), radius: parseFloat(style.borderTopLeftRadius) || 10, border: style.borderTopColor };
@@ -69,7 +64,7 @@ function measure(root: HTMLElement): Drawing | null {
       const style = getComputedStyle(path);
       return { ...place(svg.getBoundingClientRect()), d: path.getAttribute('d') ?? '', stroke: style.stroke, width: parseFloat(style.strokeWidth) || 2 };
     });
-    return { element, rect: place(element.getBoundingClientRect()), words, tab: tabbed, strands, edges };
+    return { element, rect: place(element.getBoundingClientRect()), words, strands, edges };
   });
   const group = content.closest<HTMLElement>('[data-connection-group]')?.dataset.connectionGroup ?? content.querySelector<SVGElement>('[data-connection-group]')?.dataset.connectionGroup;
   const legend = group ? [...document.querySelectorAll<HTMLElement>('[data-connection-legend]')].find(element => element.dataset.connectionLegend === group) : undefined;
@@ -187,13 +182,6 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     context.fill();
     context.stroke();
     context.setLineDash([]);
-    if (box.tab) {
-      context.strokeStyle = box.tab.border;
-      context.beginPath();
-      context.roundRect(box.tab.x + 0.5, box.tab.y + 0.5, box.tab.w - 1, box.tab.h - 1, box.tab.radius);
-      context.fill();
-      context.stroke();
-    }
     if (box.element.hasAttribute('data-ask')) {
       drawTimer(context, box.element, box.rect, look.accent, look.font);
       continue;

@@ -17,3 +17,5 @@ topics: ["graph-ui","testing"]
 The same day a third case of the pattern showed: #785 let the surah chips rise into the studio bar's empty room under a tree (TreeCard), but the matrix view's chips are drawn by TreePager's footer, so on the home card's matrix they kept the whole bar's room and left a gap under the buttons. Fixed by tucking them there too whenever no studio bar is showing.
 
 The owner asked how the pills got there, not only to remove them. Two separate changes met on one card: #776's tabs on compare trees (the rule's other path), and #783's shrink-to-fit (a native-only prop no test could see).
+
+Follow-up (owner, 2026-11-16): one layout for every tree. Tabs are gone; every box, side by side or top down, names its ayah inside over a rule, so there is no second path left to miss. `treeTabs.test.ts` fails if a tab comes back.

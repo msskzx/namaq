@@ -72,7 +72,7 @@ function Neighbours({ near, palette }: { near: (AroundAyah | null)[]; palette: P
 /**
  * A compare card's tree, drawn by the branches tree (shared/quran/braid.ts `compareTree`): where the two sides say the same words
  * one box, where they part a box for each side (the first on the right), meeting again on the next common stretch. Tapping a box
- * lights its side's path. The first boxes where the sides part carry the sides' names on their tabs.
+ * lights its side's path. The first boxes where the sides part carry the sides' names inside, over a rule.
  */
 export default function CompareTree({ sides, palette, around, labels, empty }: { sides: [CardSide, CardSide]; palette: Palette; around?: Around; labels?: [string, string];
   /** A note for each side in a story part that side does not tell. */
