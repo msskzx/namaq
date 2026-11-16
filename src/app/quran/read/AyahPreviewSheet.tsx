@@ -15,6 +15,7 @@ import { useSwipeClose } from '@/components/common/useSwipeClose';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import type { AyahPreview } from './ayahPreview';
 import IrabPanel from './IrabPanel';
+import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 import BalaghaPanel from './BalaghaPanel';
 import type { BalaghaAyah } from './balagha';
@@ -117,7 +118,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
             </Link>
           ))}
         </div>
-        {shown.kind === 'irab' || shown.kind === 'balagha' ? null : shown.kind === 'tafsir' ? tafsir && <ExternalLink href={tafsirSadiPage(tafsir)} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink>
+        {shown.kind === 'irab' || shown.kind === 'balagha' ? null : shown.kind === 'tafsir' ? tafsir && <div className="mx-4 mt-2.5 flex shrink-0 items-center gap-3 text-sm"><ExternalLink href={tafsirSadiPage(tafsir)} className="flex-1 text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink><OpenInBook book="sadi" ayah={shown.key} /></div>
           : shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
           <Icon size={20} aria-hidden />
           {trees ? 'افتح في المتشابهات' : `كل مقارنات ${names[surah] ?? ''}`}

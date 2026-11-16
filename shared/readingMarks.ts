@@ -18,7 +18,10 @@ const parseObject = <T>(raw: string | null): T => {
   try { const value = raw ? JSON.parse(raw) : {}; return (isObject(value) ? value : {}) as T; } catch { return {} as T; }
 };
 
-const fasilaStore = keyStore<Fasilas>('reading-fasila', parseObject);
+const isSpot = (value: unknown) => isObject(value) && typeof value.entry === 'number' && typeof value.at === 'number' && typeof value.page === 'number';
+// A stored mark of the wrong shape (an older build, a hand edit) is left out rather than sending the reader to no page.
+const fasilaStore = keyStore<Fasilas>('reading-fasila', raw => Object.fromEntries(Object.entries(parseObject<Record<string, unknown>>(raw))
+  .filter(([book, value]) => (book === 'quran' ? isObject(value) && typeof value.key === 'string' && typeof value.page === 'number' && value.page >= 1 && value.page <= 604 : isSpot(value)))) as Fasilas);
 export const readFasilas = fasilaStore.read;
 export const subscribeFasilas = fasilaStore.subscribe;
 const NO_FASILAS: Fasilas = {};

@@ -7,6 +7,7 @@ import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran
 import { KASHSHAF_BOOK, KASHSHAF_EDITION, kashshafCredit, kashshafPage, kashshafRuns, litWords } from '@shared/quran/kashshaf';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import ExternalLink from '@/components/common/ExternalLink';
+import OpenInBook from '@/components/quran/OpenInBook';
 import type { BalaghaAyah } from './balagha';
 
 const CARD = 'block shrink-0 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-3.5 py-2.5';
@@ -94,6 +95,7 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
           <Folded credit={kashshafCredit(passage)}>
             <p>{`${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${data.version}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.`}</p>
             <ExternalLink href={kashshafPage(passage)}>اقرأ الصفحة</ExternalLink>
+            <OpenInBook book="kashshaf" ayah={ayah} />
           </Folded>
         </div>
       ) : <p className="py-6 text-center text-sm text-[var(--home-muted)]">لا كلام للكشاف على هذه الآية.</p>)}

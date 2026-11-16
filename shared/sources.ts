@@ -49,6 +49,7 @@ const USE = {
   tafsir: { ar: 'التفسير في المصحف', en: 'the tafsir in the mushaf reader', href: '/quran/read' },
   topics: { ar: 'موضوعات السور في المصحف', en: 'surah topics in the mushaf reader', href: '/quran/read' },
   irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
+  books: { ar: 'قارئ الكتب', en: 'the book reader', href: '/quran/books' },
   balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
@@ -147,7 +148,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir, USE.oaths],
+    uses: [USE.tafsir, USE.books, USE.oaths],
   },
   {
     id: 'tibyan-ukbari', group: 'books',
@@ -157,7 +158,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٦١٦هـ، فنصه في الملك العام. نقطع كلامه على الكلمات التي يعربها، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
       en: 'The author died in 1219, so his text is in the public domain. We cut it at the words he parses, from Quranpedia’s dump, with the page number and a link. It does not ship with the app; whoever wants it downloads it to their phone.',
     },
-    uses: [USE.irab],
+    uses: [USE.irab, USE.books],
   },
   {
     id: 'kashshaf', group: 'books',
@@ -167,7 +168,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٥٣٨هـ، فنصه في الملك العام. نعرض كلامه كاملًا على كل آية دون حواشي الكتب المطبوعة معه، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. تضاء الجملة التي يسمّي فيها فنًّا من فنون البلاغة بقاعدة ثابتة. وفي الكتاب تأويلات معتزلية لبعض الصفات. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
       en: 'The author died in 1144, so his text is in the public domain. We show his whole passage on each ayah, without the works printed in its margins, from Quranpedia’s dump, with the page number and a link. A fixed rule lights the sentences where he names a rhetorical device. The book carries Mu‘tazili readings of some divine attributes. It does not ship with the app; whoever wants it downloads it to their phone.',
     },
-    uses: [USE.balagha],
+    uses: [USE.balagha, USE.books],
   },
   {
     id: 'tafsir-mawdui', group: 'books',

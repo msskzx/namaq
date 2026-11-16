@@ -18,12 +18,12 @@ describe('QuranHub', () => {
     render(<QuranHub />);
     expect(screen.getByRole('heading', { level: 1, name: language === 'ar' ? 'القرآن' : 'Quran' })).toBeTruthy();
     const links = screen.getAllByRole('link');
-    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal', '/quran/oaths', '/quran/lataif', '/quran/openings', '/quran/order']);
+    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quran/branches', '/quran/compare', '/quran/prophets', '/quran/books', '/quran/tajwid/tuhfat-al-atfal', '/quran/oaths', '/quran/lataif', '/quran/openings', '/quran/order']);
     expect(links.every(link => link.querySelector('svg') && link.textContent)).toBe(true);
   });
 
   it('names the tools as the app does', () => {
     render(<QuranHub />);
-    expect(screen.getAllByRole('link').map(link => link.textContent)).toEqual(['متشابهات القرآن', 'مقارنة السور', 'قصص الأنبياء', 'تحفة الأطفال', 'الأقسام', 'لطائف', 'افتتاح السور', 'ترتيب السور']);
+    expect(screen.getAllByRole('link').map(link => link.textContent)).toEqual(['متشابهات القرآن', 'مقارنة السور', 'قصص الأنبياء', 'الكتب', 'تحفة الأطفال', 'الأقسام', 'لطائف', 'افتتاح السور', 'ترتيب السور']);
   });
 });

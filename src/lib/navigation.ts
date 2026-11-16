@@ -14,6 +14,7 @@ export const QURAN_CARDS: { href: string; desc: Text }[] = [
   { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بأوائلها ومقاصدها، وما يصل كل سورة بالتي قبلها من كتب التناسب', en: 'The surahs of juz 25 to 30 with their openings and aims, and what joins each to the one before, from the books on surah order' } },
   { href: '/quran/openings', desc: { ar: 'أنواع افتتاح السور العشرة، ومقارنة الأوائل المتشابهة', en: 'The ten kinds of surah opening, with look-alike openings side by side' } },
   { href: '/quran/oaths', desc: { ar: 'كل قسم في القرآن وما أُقسم به، من الله ومن غيره', en: 'Every oath in the Quran and what is sworn by, Allah’s and others’' } },
+  { href: '/quran/books', desc: { ar: 'كتب التفسير والإعراب والبلاغة صفحة صفحة كما طُبعت، بفاصلة تضعها حيث توقفت', en: 'The tafsir, i‘rab and balagha books page by printed page, with a stop mark where you left off' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', desc: { ar: 'منظومة الجمزوري في أحكام النون والميم والمد، مضبوطة بالشكل', en: 'Al-Jamzuri’s poem on the rules of nun, mim and madd, fully vowelled' } },
   { href: '/quran/prophets', desc: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
 ];
@@ -70,6 +71,7 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, purpose: { ar: '', en: '' } },
   { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, purpose: { ar: '', en: '' } },
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/books', label: { ar: 'الكتب', en: 'Books' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
   { href: '/quran/lataif', label: { ar: 'لطائف', en: "Lata'if" }, purpose: { ar: '', en: '' } },
