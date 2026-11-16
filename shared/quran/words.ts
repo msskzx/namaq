@@ -11,6 +11,16 @@ export type WordsData = {
   ayat: string[][];
 };
 
+/** The source the counts come from (shared/sources.ts), shown from the words page's books icon. */
+export const WORDS_SOURCE = 'quranic-arabic-corpus';
+
+/** How the words page counts, under its source. */
+export const WORDS_COUNTING = [
+  'تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.',
+  'لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.',
+  'وإذا اتفقت كلمتان في الرسم واختلفتا في المعنى عُدّت كل منهما وحدها، وبجانبها ما يميّزها، مثل «عصا» و«عصى».',
+];
+
 export type WordPlace = { key: string; words: number[] };
 
 /** Lemma ids of one corpus word (from 0) of an ayah. */

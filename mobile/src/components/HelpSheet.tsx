@@ -9,6 +9,10 @@ import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_GAPS, ITQAN_NOTES, ITQAN_OPENING, ITQAN_QUOTES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
+import { WORDS_COUNTING, WORDS_SOURCE } from '@shared/quran/words';
+import { sourceById } from '@shared/sources';
+
+const WEBSITE = 'https://namaq.vercel.app';
 
 export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings' | 'order';
 
@@ -30,7 +34,20 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
+/** A source from the one list (shared/sources.ts): its name, its author, and a link to it. */
+function Sourced({ id, palette }: { id: string; palette: Palette }) {
+  const source = sourceById(id);
+  if (!source) return null;
+  return (
+    <View style={{ gap: 2 }}>
+      <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>{source.title.ar}</Text>
+      {source.author && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{source.author.ar}</Text>}
+      <ExternalLink url={source.link.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>{source.link.label}</ExternalLink>
+    </View>
+  );
+}
+
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'المصدر', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -68,9 +85,9 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
           {CONDITION_NOTES.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
           {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{source.title}</ExternalLink>)}
         </> : topic === 'words' ? <>
-          <Text style={paragraph}>تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية (corpus.quran.com)، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.</Text>
-          <Text style={paragraph}>لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.</Text>
-          <Text style={paragraph}>وإذا اتفقت كلمتان في الرسم واختلفتا في المعنى عُدّت كل منهما وحدها، وبجانبها ما يميّزها، مثل «عصا» و«عصى».</Text>
+          <Sourced id={WORDS_SOURCE} palette={palette} />
+          {WORDS_COUNTING.map((text, i) => <Text key={i} style={paragraph}>{text}</Text>)}
+          <ExternalLink url={`${WEBSITE}/attributions#${WORDS_SOURCE}`} color={palette.accent} size={15} style={{ textAlign: 'right' }}>المصادر والتراخيص</ExternalLink>
         </> : topic === 'prophets' ? <>
           <Text style={paragraph}>كل عمود حدث تحت لون مجموعته، وكل سطر سورة. حجم الدائرة على قدر آيات السورة في الحدث.</Text>
           <Text style={paragraph}>اضغط دائرة لتقرأ آياتها مع مواضع الحدث في السور الأخرى، ومن كل موضع تفتحه في المصحف أو تقارنه بسورة أخرى. وفي المواضع تُلوَّن الكلمات التي جاءت متتابعة في سورة أخرى من مواضع الحدث نفسه.</Text>
