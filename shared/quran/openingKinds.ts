@@ -1,6 +1,9 @@
 // The surah openings page (owner, 2026-11-13): every surah under one of the ten kinds of opening that al-Suyuti lists
 // in al-Itqan (النوع الستون, after Abu Shama), and cards of surahs whose openings look alike. docs/plans/quran-openings-kinds.md
 import { normalizeWord } from './normalize';
+import { sharedByAll } from './ayahContext';
+import type { BranchAyah } from './branches';
+import type { Likeness } from './wordMatch';
 
 export type OpeningKindId = 'praise' | 'letters' | 'call' | 'statement' | 'oath' | 'condition' | 'command' | 'question' | 'prayer' | 'reason';
 
@@ -43,6 +46,14 @@ export const ITQAN_NOTES = [
   { text: 'قال الكرماني في متشابه القرآن: التسبيح كلمة استأثر الله بها، فبدأ بالمصدر في بني إسرائيل لأنه الأصل، ثم بالماضي في الحديد والحشر لأنه أسبق الزمانين، ثم بالمضارع في الجمعة والتغابن، ثم بالأمر في الأعلى، استيعابا لهذه الكلمة من جميع جهاتها', ...itqan('٣٦١', 1125) },
   { text: 'هكذا جمع أبو شامة، قال: وما ذكرناه في الدعاء يجوز أن يذكر مع الخبر، وكذا الثناء كله خبر إلا «سبح» فإنه في قسم الأمر، و«سبحان» يحتمل الأمر والدعاء والخبر', ...itqan('٣٦٣', 1127) },
 ];
+
+/** Under each kind's quote: what al-Suyuti leaves unnamed and how the page fills it in, and the remarks he quotes about that kind. */
+export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, { text: string; cite?: string; url?: string }[]>> = {
+  praise: [ITQAN_NOTES[0], { text: 'لم يسمّ سور التحميد وتبارك، فهي التي تبدأ بهما. وسمّى الكرماني ست سور من سبع للتسبيح، والسابعة الصف.' }],
+  letters: [{ text: 'لم يسمّها، فهي السور التي تبدأ بحروف التهجي.' }],
+  question: [{ text: 'عدّها ستًا وسمّى خمسًا، والسادسة «هل أتى على الإنسان».' }],
+  prayer: [ITQAN_NOTES[1]],
+};
 
 /** What al-Suyuti leaves unnamed, and how the page fills it in. */
 export const ITQAN_GAPS = 'لم يسمّ السيوطي سور الحروف ولا التحميد ولا تبارك، وسمّى من سور التسبيح ستًا فيما نقله عن الكرماني، وعدّ الاستفهام ستًا وسمّى خمسًا. فالباقي هنا ما يبدأ بذلك من السور: السابعة في التسبيح الصف، والسادسة في الاستفهام «هل أتى على الإنسان».';
@@ -101,7 +112,7 @@ export function openingKeys(surah: number, words: (key: string) => string[]): st
 const LONG = 16;
 const SHOWN = 12;
 
-export type OpeningWord = { text: string; own: boolean } | { end: number };
+export type OpeningWord = { text: string; own: boolean; mark?: { kind: Likeness; some: boolean } } | { end: number };
 export type OpeningRow = { surah: number; guest?: OpeningKindId; words: OpeningWord[]; cut: boolean };
 export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[] };
 
@@ -110,7 +121,7 @@ export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alon
  * so it marks what sets that surah's opening apart. Cards whose rows share less than a word on average (alike in form, not in
  * wording, like «والصافات صفا» and «والذاريات ذروا») and the cards of surahs that stand alone mark nothing.
  */
-export function openingCards(words: (key: string) => string[]): OpeningCard[] {
+export function openingCards(words: (key: string) => string[], full?: (key: string) => BranchAyah | undefined): OpeningCard[] {
   return OPENING_CARDS.map(card => {
     const parts = card.surahs.map(surah => openingKeys(surah, words).map(key => ({ key, words: words(key) })));
     const plain = parts.map(ayat => ayat.flatMap(ayah => ayah.words.map(normalizeWord)));
@@ -118,11 +129,20 @@ export function openingCards(words: (key: string) => string[]): OpeningCard[] {
     const pairs = card.surahs.length * (card.surahs.length - 1);
     const shared = pairs ? sets.reduce((sum, set, r) => sum + sets.reduce((s, other, o) => s + (o === r ? 0 : [...set].filter(w => other.has(w)).length), 0), 0) / pairs : 0;
     const marks = !card.alone && shared >= 1;
+    const matched = full && !card.alone ? sharedByAll(parts.map((ayat, r) => {
+      const all = ayat.map(ayah => full(ayah.key));
+      return { ayah: { key: `${card.surahs[r]}:1`, page: 0, words: ayat.flatMap(a => a.words), roots: all.flatMap((a, n) => a?.roots ?? ayat[n].words.map(() => null)), lemmas: all.flatMap((a, n) => a?.lemmas ?? ayat[n].words.map(() => null)) }, before: null, after: null };
+    })) : null;
     const rows = parts.map((ayat, r): OpeningRow => {
       const surah = card.surahs[r];
       let at = 0;
       const all: OpeningWord[] = ayat.flatMap(ayah => [
-        ...ayah.words.map(text => { const word = plain[r][at++]; return { text, own: marks && !sets.some((set, o) => o !== r && set.has(word)) }; }),
+        ...ayah.words.map(text => {
+          const i = at++;
+          const word = plain[r][i];
+          const link = matched?.[r].match?.links?.[i];
+          return { text, own: marks && !sets.some((set, o) => o !== r && set.has(word)), ...(link ? { mark: { kind: link.kind, some: link.rows < card.surahs.length } } : {}) };
+        }),
         { end: Number(ayah.key.split(':')[1]) },
       ]);
       const count = plain[r].length;
