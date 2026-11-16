@@ -1,4 +1,13 @@
-.progress { appearance: none; flex: 1; min-width: 0; height: 2px; border: 0; border-radius: 999px; overflow: hidden; background: var(--home-rule); color: var(--home-muted); }
+.progress { appearance: none; display: block; width: 100%; height: 2px; border: 0; border-radius: 999px; overflow: hidden; background: var(--home-rule); color: var(--home-muted); }
 .progress::-webkit-progress-bar { background: var(--home-rule); }
 .progress::-webkit-progress-value { background: var(--home-muted); }
 .progress::-moz-progress-bar { background: var(--home-muted); }
+/* The count sits under the bar's end (the left in RTL), small, as in the app. */
+.holder { display: flex; flex-direction: column; }
+.count { align-self: flex-end; padding-top: 2px; font-size: 11px; line-height: 14px; font-variant-numeric: tabular-nums; }
+/* Phones: held under the top bar, sliding away and back with it. */
+@media (max-width: 1023.98px) {
+  .holder { position: sticky; top: calc(48px + env(safe-area-inset-top)); z-index: 40; background: color-mix(in srgb, var(--home-paper) 72%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); transition: transform 0.22s ease, opacity 0.22s ease; }
+  .away { transform: translateY(calc(-48px - 100%)); opacity: 0; pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) { .holder { transition: none; } }

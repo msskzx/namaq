@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useSyncExternalStore } from 'react';
+import React, { useCallback, useSyncExternalStore } from 'react';
 import useSWR from 'swr';
 import { LocateFixed, RotateCwSquare, UnfoldHorizontal } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -87,15 +87,27 @@ const setRotatedValue = (next: boolean) => {
   rotateListeners.forEach(listener => listener());
 };
 
-export function useRotated() {
-  const on = useSyncExternalStore(subscribeRotate, () => rotated, () => false);
-  return [on, setRotatedValue] as const;
+// A card that names itself (`card`) turns on its own, as each of the app's cards does: home's tree cards don't turn together.
+let rotatedCards = new Map<string, boolean>();
+const NO_CARDS = new Map<string, boolean>();
+
+export function useRotated(card?: string) {
+  const all = useSyncExternalStore(subscribeRotate, () => rotated, () => false);
+  const own = useSyncExternalStore(subscribeRotate, () => rotatedCards, () => NO_CARDS);
+  const on = card ? own.get(card) ?? false : all;
+  const set = useCallback((next: boolean) => {
+    if (!card) return setRotatedValue(next);
+    if ((rotatedCards.get(card) ?? false) === next) return;
+    rotatedCards = new Map(rotatedCards).set(card, next);
+    rotateListeners.forEach(listener => listener());
+  }, [card]);
+  return [on, set] as const;
 }
 
 /** Turns the open tree between right to left and top down; in the card's row of buttons. */
-export function RotateButton() {
+export function RotateButton({ card }: { card?: string } = {}) {
   const ar = useLanguage().language === 'ar';
-  const [on, set] = useRotated();
+  const [on, set] = useRotated(card);
   const label = ar ? 'تدوير الشجرة' : 'Rotate tree';
   // An action, not a setting: it never takes the accent colour.
   return <Button size="lg" variant="muted" onClick={() => set(!on)} aria-label={label} title={label}>

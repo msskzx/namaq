@@ -7,11 +7,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
+import { useHideOnScroll } from '@/components/common/useHideOnScroll';
 import styles from './TreeSteps.module.css';
 
 export type Steps = { previous?: string; next?: string; position: number; total: number };
 
-/** Where this tree (or compare page, with unit 'page') sits in the list being swiped through. */
+/**
+ * Where this tree (or compare page, with unit 'page') sits in the list being swiped through: a thin bar under the top bar with
+ * the count in small type under its end, as the app's PageProgress. On phones it stays under the top bar and slides away and
+ * back with it.
+ */
 export function TreeProgress({ steps, unit = 'tree' }: { steps: Pick<Steps, 'position' | 'total'>; unit?: 'tree' | 'page' }) {
   const ar = useLanguage().language === 'ar';
   const { position, total } = steps;
@@ -20,9 +25,10 @@ export function TreeProgress({ steps, unit = 'tree' }: { steps: Pick<Steps, 'pos
   const description = ar
     ? `${tree ? 'الشجرة' : 'الصفحة'} ${num(position)} من ${num(total)}، المتبقي ${num(remaining)}`
     : `${tree ? 'Tree' : 'Page'} ${position} of ${total}, ${remaining} remaining`;
-  return <div className="flex items-center gap-2 text-xs text-[var(--home-muted)]" dir={ar ? 'rtl' : 'ltr'} title={description}>
+  const [away] = useHideOnScroll();
+  return <div className={`${styles.holder} ${away ? styles.away : ''} text-[var(--home-muted)]`} dir={ar ? 'rtl' : 'ltr'} title={description}>
     <progress className={styles.progress} value={position} max={total} aria-label={tree ? (ar ? 'التقدم بين الأشجار' : 'Tree progress') : (ar ? 'التقدم بين الصفحات' : 'Page progress')} aria-valuetext={description} />
-    <span className="shrink-0 tabular-nums" dir="ltr" aria-hidden>{ar ? num(position) : position} / {ar ? num(total) : total}</span>
+    <span className={styles.count} dir="ltr" aria-hidden>{ar ? num(position) : position} / {ar ? num(total) : total}</span>
   </div>;
 }
 

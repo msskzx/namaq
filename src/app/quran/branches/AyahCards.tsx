@@ -24,7 +24,7 @@ import { stepTime } from '@shared/quran/readPlan';
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
 
-const matchTitles = (ar: boolean) => Object.fromEntries(Object.entries(LIKENESS_TITLE).map(([kind, title]) => [kind, ar ? title.ar : title.en])) as Record<Likeness, string>;
+export const matchTitles = (ar: boolean) => Object.fromEntries(Object.entries(LIKENESS_TITLE).map(([kind, title]) => [kind, ar ? title.ar : title.en])) as Record<Likeness, string>;
 
 export function CardsLegend() {
   return <MatchLegend ar={useLanguage().language === 'ar'} />;
@@ -35,6 +35,20 @@ type Props = { ayahKeys: string[]; passageKeys?: string[][]; names: Record<numbe
   card?: string;
   /** Shown under an ayah in the middle column, by its first ayah (a checked quiz answer). */
   note?: (key: string) => React.ReactNode };
+
+/** Each row's passage with what every row shares, as the matrix colours it (the path card under a tree reads the same). */
+export function usePassages(passages: string[][]) {
+  return useSWR<AyahContext[][]>(passages.length ? ['quran-passages', passages] : null, async () => {
+    const columns = await Promise.all(Array.from({ length: Math.max(0, ...passages.map(passage => passage.length)) }, (_, step) =>
+      quranContexts([...new Set(passages.flatMap(passage => passage[step] ? [passage[step]] : []))])));
+    return passages.map(passage => passage.flatMap((key, step) => columns[step].filter(item => item.ayah.key === key)));
+  }, { revalidateOnFocus: false });
+}
+
+/** The ayah before each row's first ayah and after its last, while the surrounding ayat are on. */
+export function useSurrounding(on: boolean, firsts: string[], ends: string[]) {
+  return useSWR<Surrounding>(on && firsts.length ? ['quran-surrounding', firsts.join(','), ends.join(',')] : null, () => quranSurrounding(firsts, ends), { revalidateOnFocus: false });
+}
 
 export default function AyahCards(props: Props) {
   const [context] = useCardAround(props.card);
@@ -60,12 +74,8 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
   // Links are numbered per tree, so a new tree starts with nothing lit.
   useEffect(() => setLit(null), [treeKey]);
   const loadContexts = ([, ...keys]: string[]) => quranContexts(keys);
-  const { data, error, isLoading, mutate } = useSWR<AyahContext[][]>(['quran-passages', passages], async () => {
-    const columns = await Promise.all(Array.from({ length: Math.max(0, ...passages.map(passage => passage.length)) }, (_, step) =>
-      quranContexts([...new Set(passages.flatMap(passage => passage[step] ? [passage[step]] : []))])));
-    return passages.map(passage => passage.flatMap((key, step) => columns[step].filter(item => item.ayah.key === key)));
-  }, { revalidateOnFocus: false });
-  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(context ? ['quran-surrounding', shown.join(','), ends.join(',')] : null, () => quranSurrounding(shown, ends), { revalidateOnFocus: false });
+  const { data, error, isLoading, mutate } = usePassages(passages);
+  const { data: around, error: aroundError, mutate: retryAround } = useSurrounding(context, shown, ends);
   const sideKeys = (side: 'before' | 'after') => around && [...new Set(Object.values(around[side]).flatMap(ayah => ayah ? [ayah.key] : []))];
   const sideKey = (keys?: string[]) => keys && keys.length > 1 ? ['quran-context', ...keys.slice(0, MAX_KEYS)] : null;
   const { data: beforeMatch } = useSWR<AyahContext[]>(sideKey(sideKeys('before')), loadContexts, { revalidateOnFocus: false });

@@ -143,10 +143,13 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
       <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
         {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
       </Button>
+    </>}
+    {/* The studio's button sits after save, as in the app; open, its controls take the row. */}
+    <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
+    {!studio && <>
       {toggles}
       <ShareButton video href={href} />
     </>}
-    <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
     {!studio && compareLinks.length === 1 && <Button size="lg" variant="muted" href={compareLinks[0].href} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}
     {!studio && compareLinks.length > 1 && <ComparePicker links={compareLinks} label={compareLabel} ar={ar} />}
     </div>
