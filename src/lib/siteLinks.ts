@@ -22,7 +22,7 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/compare', label: language === 'ar' ? 'مقارنة السور' : 'Compare surahs' },
   { href: '/quran/words', label: language === 'ar' ? 'ألفاظ القرآن' : 'Words of the Quran' },
   { href: '/quran/branches', label: language === 'ar' ? 'متشابهات القرآن' : 'Shared phrase trees' },
-  { href: '/quran/balagha', label: language === 'ar' ? 'البلاغة' : 'Balagha' },
+  { href: '/quran/lataif', label: language === 'ar' ? 'لطائف' : "Lata'if" },
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور وأوائلها المتشابهة' : 'Surah openings and their look-alikes' },

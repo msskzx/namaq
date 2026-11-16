@@ -2,15 +2,18 @@ import { itqanAt, itqanCredit, itqanPage, type ItqanData, type ItqanParagraph } 
 import type { ExampleView } from './iltifat';
 
 /**
- * The balagha page (owner, 2026-11-16; docs/plans/balagha.md): a curated list of examples, each drawn with a picture of
- * its own, grouped by device. Each device and each example carries its reference: al-Suyuti's own words in al-Itqan
- * where he gives the example, otherwise the note it came with.
+ * The lata'if page (owner, 2026-11-16; docs/plans/balagha.md): a gallery of curated examples on any topic (a turn of
+ * address, a choice between near-synonyms, the kinds of a word's meanings), each drawn with a picture of its own and
+ * maybe animated later. Never a complete set, unlike compare and branches; a topic that grows can get a page of its
+ * own. Each topic and each example carries its reference: a scholar's own words where he gives the example (al-Suyuti
+ * in al-Itqan for iltifat), otherwise the note it came with.
  */
-export type BalaghaQuote = { text: string; cite?: string; url?: string };
-export type BalaghaReference = { title: string; quotes: BalaghaQuote[] };
-export type Device = { name: string; heading: string; reference: BalaghaReference };
+export type LataifQuote = { text: string; cite?: string; url?: string };
+export type LataifReference = { title: string; quotes: LataifQuote[] };
+/** A topic: its name, al-Suyuti's heading for it in al-Itqan's balagha chapters, and its reference. */
+export type Topic = { name: string; heading: string; reference: LataifReference };
 
-export const DEVICES: Device[] = [
+export const TOPICS: Topic[] = [
   {
     name: 'الالتفات',
     heading: 'الِالْتِفَاتُ',
@@ -24,22 +27,22 @@ export const DEVICES: Device[] = [
   },
 ];
 
-/** Every example on the page so far is an iltifat; the view picks the device once others come. */
+/** Every example on the page so far is an iltifat; the view picks the topic once others come. */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const deviceOf = (_view: Pick<ExampleView, 'key'>): Device => DEVICES[0];
+export const topicOf = (_view: Pick<ExampleView, 'key'>): Topic => TOPICS[0];
 
 /**
- * An example's reference: al-Suyuti's paragraphs under the device's heading that quote one of its ayat, whole, each
+ * An example's reference: al-Suyuti's paragraphs under the topic's heading that quote one of its ayat, whole, each
  * with its page, then the note the example came with (it names the other books it is drawn from); with none, that
  * note alone, its first clause as the title.
  */
-export function exampleReference(view: Pick<ExampleView, 'key' | 'surah' | 'from' | 'to' | 'source'>, data: ItqanData): BalaghaReference {
-  const device = deviceOf(view);
+export function exampleReference(view: Pick<ExampleView, 'key' | 'surah' | 'from' | 'to' | 'source'>, data: ItqanData): LataifReference {
+  const topic = topicOf(view);
   const seen = new Set<string>();
   const paragraphs: ItqanParagraph[] = [];
   for (let ayah = view.from; ayah <= view.to; ayah++) {
     for (const paragraph of itqanAt(data, `${view.surah}:${ayah}`)) {
-      if (paragraph.heading !== device.heading || seen.has(paragraph.text)) continue;
+      if (paragraph.heading !== topic.heading || seen.has(paragraph.text)) continue;
       seen.add(paragraph.text);
       paragraphs.push(paragraph);
     }

@@ -66,9 +66,9 @@ Al-Suyuti's al-Itqan, kinds 52 to 58 (al-haqiqa wa-l-majaz to al-bada'i'), built
 - **Sheet.** Pills pick the book: «الإتقان للسيوطي» (built in) and «الكشاف للزمخشري» (download). Each paragraph is whole, under «heading · kind», with a folded reference «الإتقان للسيوطي ج/ص» linking Shamela's page. A tap on a paragraph lights the ayah words it quotes.
 - **Next.** The rest of the book in a later iteration.
 
-## The balagha page (owner, 2026-11-16)
+## The lata'if page (owner, 2026-11-16)
 
-The iltifat page became «البلاغة» (`/quran/balagha`, the app's `balagha` screen; `/quran/iltifat` redirects): a curated list of examples, each with a picture suited to it, grouped by device under pills. Not every example gets one, unlike compare and branches. Each device and each example carries its reference: al-Suyuti's definition and his paragraphs on the example, whole (`shared/quran/balaghaPage.ts`), otherwise the note the example came with.
+The iltifat page became «لطائف» (`/quran/lataif`, the app's `lataif` screen; `/quran/iltifat` and `/quran/balagha` redirect): a gallery of curated examples on any topic, each with a picture suited to it and maybe animated later. A topic can be a turn of address (iltifat), a choice between near-synonyms («اسعوا»، «امشوا»، «انطلقوا»), or the kinds of a word's meanings. It is never a complete set, unlike compare and branches; a topic that grows can get a page of its own. Topics sit under pills. Each topic and each example carries its reference (`shared/quran/lataif.ts`): a scholar's own words where he gives the example (al-Suyuti's definition and his paragraphs on it, whole), then the note the example came with.
 
 ## Later
 

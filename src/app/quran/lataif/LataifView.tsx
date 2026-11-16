@@ -7,7 +7,7 @@ import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { DEVICES, deviceOf, type BalaghaReference } from '@shared/quran/balaghaPage';
+import { TOPICS, topicOf, type LataifReference } from '@shared/quran/lataif';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
@@ -105,13 +105,13 @@ function ExampleCard({ view }: { view: ExampleView }) {
       {view.kind === 'dialog' && <Dialog turns={view.turns} />}
       <div data-share-skip className="flex gap-1">
         <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
-        <ShareImageButton size="icon" iconSize={20} href={`/quran/balagha#${view.key}`} />
+        <ShareImageButton size="icon" iconSize={20} href={`/quran/lataif#${view.key}`} />
       </div>
     </article>
   );
 }
 
-/** The voices' colours, under the device's name: what each colour on the cards means. */
+/** The voices' colours, under the topic's name: what each colour on the cards means. */
 function Voices() {
   return (
     <ul className="flex flex-wrap gap-x-4 text-sm" aria-label="ألوان الضمائر">
@@ -123,26 +123,26 @@ function Voices() {
 }
 
 /**
- * The balagha page's examples (owner, 2026-11-16): a curated list, each card with its own picture, grouped by device
- * with pills to pick one. Each device and each card carries its reference (shared/quran/balaghaPage.ts).
+ * The lata'if page (owner, 2026-11-16): a gallery of curated examples, each card with its own picture, grouped by topic
+ * with pills to pick one. Each topic and each card carries its reference (shared/quran/lataif.ts).
  */
-export default function BalaghaView({ views, references }: { views: ExampleView[]; references: Record<string, BalaghaReference> }) {
-  const [device, setDevice] = useState<string | null>(null);
+export default function LataifView({ views, references }: { views: ExampleView[]; references: Record<string, LataifReference> }) {
+  const [topic, setTopic] = useState<string | null>(null);
   const pill = (on: boolean) => `rounded-full border px-3 py-1.5 text-[0.9375rem] ${on ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-paper)]' : 'border-[var(--home-rule)]'}`;
   return (
     <>
       <div role="tablist" aria-label="الفنون" className="flex flex-wrap gap-2">
-        <button type="button" role="tab" aria-selected={device === null} onClick={() => setDevice(null)} className={pill(device === null)}>الكل</button>
-        {DEVICES.map(item => <button key={item.name} type="button" role="tab" aria-selected={device === item.name} onClick={() => setDevice(item.name)} className={pill(device === item.name)}>{item.name}</button>)}
+        <button type="button" role="tab" aria-selected={topic === null} onClick={() => setTopic(null)} className={pill(topic === null)}>الكل</button>
+        {TOPICS.map(item => <button key={item.name} type="button" role="tab" aria-selected={topic === item.name} onClick={() => setTopic(item.name)} className={pill(topic === item.name)}>{item.name}</button>)}
       </div>
-      {DEVICES.filter(item => device === null || device === item.name).map(item => (
+      {TOPICS.filter(item => topic === null || topic === item.name).map(item => (
         <section key={item.name} aria-label={item.name} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
             <h2 className="text-xl">{item.name}</h2>
             <Voices />
             <Reference title={item.reference.title} quotes={item.reference.quotes} />
           </div>
-          {views.filter(view => deviceOf(view).name === item.name).map(view => (
+          {views.filter(view => topicOf(view).name === item.name).map(view => (
             <div key={view.key} className="flex flex-col gap-1.5">
               <ExampleCard view={view} />
               <div className="px-1"><Reference title={references[view.key].title} quotes={references[view.key].quotes} /></div>
