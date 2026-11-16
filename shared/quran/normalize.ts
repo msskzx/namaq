@@ -5,6 +5,7 @@ const BASMALA = 'بسم الله الرحمن الرحيم';
 export function normalizeWord(token: string): string {
   return token
     .replace(MARKS, '')
+    .replace(/[\s\u200e\u200f]/g, '')
     .replace(/[أإآٱٲٳ]/g, 'ا')
     .replace(/[ىی]/g, 'ي')
     .replace(/ة/g, 'ه')

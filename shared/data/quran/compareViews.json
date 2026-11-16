@@ -1,0 +1,4888 @@
+{
+ "cards": {
+  "1:6|4:68": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "1:6|6:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "1:6|16:121": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:8|9:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:10|9:77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:11|27:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:22|40:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:23|7:194": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:23|10:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:24|3:131": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:25|10:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:25|14:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:25|29:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:25|47:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:29|65:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:30-34|7:11-18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:30-35|20:115-119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:30-39|17:61-65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:30-39|38:71-85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:32|51:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:35|7:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:36|7:20-22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:36|20:120-121": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:38-39|20:123-127": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:43|5:55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:43|27:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:43|31:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:48|2:123": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:49-50|7:103-137": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:49|14:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:55|51:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:57-61|7:138-162": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:61|3:112": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:62|5:69": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:64|10:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:73|27:93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:77|6:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:80|3:78": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:82|11:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:82|28:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:88|69:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:94-95|62:6-7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:94|28:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:101|3:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:103|29:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:105|57:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:106-107|5:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:107|9:116": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:107|18:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:107|32:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:107|34:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:107|46:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:110-112|2:277": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:110|58:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:114|5:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:115|20:98": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:118|6:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:119|6:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:119|17:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:119|25:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:120|13:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:124-136|6:161": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:124-136|16:120-123": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:125|22:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:128|25:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:131|28:53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:136|3:84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:136|29:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:144|2:149-150": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:148|58:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:154|3:169": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:154|16:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:154|19:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:156|4:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:160|4:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:160|25:71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:162|16:85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:164|45:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:170|5:104": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:172-173|16:114-115": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:172|5:88": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:173|6:145": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:174|3:77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:176|16:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:182|49:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:190|60:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:202|6:62": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:203|58:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:207|66:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:212|7:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:212|39:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:218|9:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:218|16:110": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:218|22:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:218|25:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:218|49:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:218|57:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:232|65:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:234|2:240": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:243|10:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:247|3:73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:250|3:147": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:254|14:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:263|47:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "2:281-284|3:25-29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "2:281|16:111": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:281|45:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "2:284|3:129": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:4|3:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:4|39:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:10|8:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:10|19:77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:10|63:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:10|64:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:11|8:52-54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:11|40:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:15|9:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:16|6:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:16|23:109": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:16|46:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:16|52:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:18|3:62": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:19|3:199": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:23|24:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:25|45:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:27|6:95": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:27|22:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:27|30:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:27|57:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:28|9:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:29|49:16-18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:32|5:92": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:38|25:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:40|3:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:42-51|5:109-110": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:42-63|19:16-40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:42-63|43:57-65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:51|11:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:52-63|5:111-119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:52|5:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:53|5:83": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:55|22:69": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:55|39:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:57|3:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:57|46:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:67-70|3:95-98": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:76|13:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:77|16:95": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:83|41:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:86|3:101": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:88|16:85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:89-91|5:34-36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:89|5:39": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:89|25:70-71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:94|16:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:95-97|6:161": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:95-97|16:120-123": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:98|13:43": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:101|4:175": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:105|19:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:105|43:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:109|11:123": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:123-127|8:9-12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:132|4:80": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:133|57:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:136|29:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:137|6:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:137|12:109": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:137|13:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:137|40:82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:137|47:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:142|47:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:164-168|62:2-6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "3:165|64:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:171|12:90": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:172|33:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "3:176|3:177": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:189|5:120": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:189|57:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "3:196|40:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:13-17|33:71-73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "4:13|57:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:13|61:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:14|9:63": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:16|24:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:17|4:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:22|17:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:26|24:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:38|4:39": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:39|36:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:39|61:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:41|50:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:43|5:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "4:49|10:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:59-60|4:136": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "4:68|6:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:68|37:118": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:74|4:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:80|5:92": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:80|47:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:80|64:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:95|57:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:99|4:149": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:105|35:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:106|5:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:107|22:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:110|16:119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:110|27:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:110|28:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:110|39:53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:122|39:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:131|4:170": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:131|64:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:134|8:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:149|33:54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "4:152|57:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:156|24:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:160|5:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:165|14:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "4:167-168|47:32-34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "5:7-9|35:3-7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "5:7|5:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:9-10|22:50-51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:9-10|30:15-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:9|33:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:16|14:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:17-18|5:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "5:20|7:80": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:20|29:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:35|29:69": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:35|61:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:36|39:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:39|7:153": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:39|25:70-71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:40|5:120": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:40|57:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:47|5:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:55|98:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:65|8:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:68|7:93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:76|17:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:85|25:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:88|6:118": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:92|8:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:92|24:54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:92|33:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:97|49:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:97|65:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:104-105|31:21-23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "5:109|27:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:111|10:84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "5:112|5:114": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:119|57:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:119|61:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "5:119|64:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:1|41:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:3|9:78": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:3|27:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:3|35:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:3|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:3|67:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:3|87:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:4-5|26:5-6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:4|20:133": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:7|46:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:8|15:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:10-11|16:34-36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:11|40:82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:11|47:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:12-16|45:26-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:15|7:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:15|11:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:15|76:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:21-24|11:18-21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:21|16:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:22-24|10:28-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:22|18:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:23|40:84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:29|23:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:32|28:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:32|47:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:33|10:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:33|25:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:33|36:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:40|28:71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:40|29:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:47|67:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:48|17:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:48|25:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:48|33:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:48|34:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:48|48:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:49|21:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:49|30:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:50|11:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:53|6:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:54|7:153": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:62|13:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:62|14:51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:63|17:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:72|30:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:74-87|21:51-73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:77|23:106": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:78|6:161": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:87|37:118": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:90|34:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:95|10:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:95|30:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:101-102|39:62": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:101|24:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:101|25:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:106|10:109": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:116|10:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:117|16:125": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:117|17:84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:117|53:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:130|39:71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:132|11:111": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:135|9:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:135|11:93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:143|6:144": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:145|16:115": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:147|12:110": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:148|16:35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "6:149|13:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "6:151|7:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "6:161|16:120-123": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:2|25:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:2|38:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:11-12|15:26-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:11-12|38:71-76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:11-19|20:115-119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:13-27|15:34-44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:13-27|38:77-85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:20-22|20:120-121": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:23|7:149-151": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:24-27|20:123-127": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:25|19:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:25|50:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:34|15:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:34|16:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:34|23:43": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:42|11:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:42|19:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:46|7:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:49|46:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:52|10:57": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:52|27:77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:52|41:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:59-64|7:65-72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:59-64|10:71-73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:59|39:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:60-62|7:90-93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:61-62|7:79": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:65|26:123-126": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:66-67|7:90-93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:66-72|26:127-140": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:66|7:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:66|38:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:67-68|7:79": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:67-70|7:104-106": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:69|7:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:71|12:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:71|53:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:73-75|7:85-88": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:75|34:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:80-81|29:28-29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:82-84|29:30-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:82|27:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:87|10:109": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:93|46:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:101|41:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:103-108|10:75": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:103-108|26:10-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:103-156|14:5-8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:103|10:73-75": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:106|28:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:106|37:157": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:106|68:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:109-126|10:76-82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:109-126|20:56-76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:109-126|26:34-51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:109-135|43:49-54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:109|15:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:118|17:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:127-137|10:83-92": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:132|51:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:147|18:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:147|30:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:149-151|11:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "7:177|16:118": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:178|7:186": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:178|16:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:190|9:75": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:194|10:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:194|11:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "7:194|28:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:196|18:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:196|39:1-2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:196|40:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:196|45:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "7:196|46:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:2-3|22:35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:4|8:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:8|17:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:8|23:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:8|43:78": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:20|24:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:20|64:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:23|27:80": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:23|30:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:27|8:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:28|63:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:28|64:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:29|65:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:34|45:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:35|10:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:43|8:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:58|22:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:65|8:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:68|59:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "8:69|16:114": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "8:74|49:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:9|63:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:27|24:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:32-33|61:8-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:38|13:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:39|11:57": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:51|10:84-85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:55|9:85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:62|9:96": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:65|30:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:70|14:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:70|16:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:70|30:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:72-73|57:12-15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "9:72-73|64:9-10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:72|61:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:73|24:57": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:78|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:80|63:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:82|10:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:87|9:93": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:88-89|61:11-12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:89|9:100": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:93|30:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:94|9:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "9:116|42:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:116|46:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:129|10:85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "9:129|27:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:3|25:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:3|32:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:6|29:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:6|30:22-23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:7|30:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:9|14:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:9|19:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:9|29:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:13|30:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:14|18:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:17|16:105": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:18|49:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:20|29:50": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:29|29:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:30|16:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:33|10:96": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:34|29:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:34|43:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:38|11:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:38|28:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:42-43|43:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:42|27:80": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:42|30:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:48-52|36:52-54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:48|11:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:48|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:49|16:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:52|10:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:52|25:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:52|32:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:52|46:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:55|30:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:60|12:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:61|34:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:66|34:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:67|28:73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:72|34:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:72|39:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:75-93|23:45-49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:75-93|27:7-14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:75-93|28:3-46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:75-93|40:23-46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:76-82|20:56-76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:76-82|26:34-51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "10:76|21:55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:76|38:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:77|10:80": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:78|43:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:82|23:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:84|67:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:85|23:94": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "10:93|32:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:93|45:17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "10:108|39:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:1|41:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:5|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:11|35:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:13|46:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:20|42:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:25-49|71:1-28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:26|39:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:27-49|23:24-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:32|21:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:32|27:71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:32|34:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:32|45:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:32|67:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:46|11:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:50|18:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:51|26:127": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:53|26:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:53|37:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:56|19:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:62|11:109": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:64-68|15:83-84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:66-67|11:94": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:69-76|29:28-32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:70-73|51:28-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:72|50:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:74-83|51:31-37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:82-83|15:73-77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "11:90|16:119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:96-99|23:45-48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:102|11:117": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:102|22:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "11:110|42:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "11:111|46:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:2|20:113": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:13|12:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:15|12:102": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:22|38:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:29|12:97": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:38|12:68": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "12:45|18:78": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:56|39:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:63|12:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:75|12:79": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:90|16:96": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:91-92|12:97-98": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:96|28:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:107|39:55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:107|43:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "12:108|52:43": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "12:109|16:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "12:109|30:42": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "13:1-2|39:2-5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "13:1|14:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:10|67:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:15|41:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:23|40:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "13:27|22:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:29|20:75": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:32|28:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:32|40:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:34|59:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "13:43|29:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "14:2|14:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:7|42:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:8|64:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:19|17:99": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "14:23|29:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "14:25|47:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:32|27:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "14:33|36:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:34|16:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "14:38|27:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "14:48-51|40:16-17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "15:19-22|50:7-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:19|16:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:26-29|38:71-72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "15:32|15:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:34-44|17:62-65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:34-44|38:77-85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:39|28:63": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:51-52|51:24-27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "15:51-77|27:54-58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:53-56|51:28-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "15:54|19:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:61-77|51:35-37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:80|50:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:81|26:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:82|26:141-152": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "15:89|22:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:89|67:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "15:89|71:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:2|97:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:3|20:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:3|21:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:12|36:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:14|35:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:14|45:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:15|50:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:20-24|25:3-5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "16:22|40:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:29|39:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:29|40:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:34|39:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:37|30:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:44|38:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:45|40:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:49|21:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:51|38:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:56|16:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:60|30:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:61|35:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:64|27:77": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:64|29:51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:65-66|23:18-21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "16:65|29:63": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:65|45:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:70|30:54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:72|40:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:73|34:22-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "16:78|17:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:93|42:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:96-97|39:35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:97|18:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:99|17:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:104|29:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:104|34:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:110|16:119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:117|31:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:121|37:118": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:121|48:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "16:122|29:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "16:127|27:70": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "17:2-104|23:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:2-104|40:25-54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:2|19:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:2|32:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "17:9|35:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:11|41:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:19|76:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:25|71:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:44|42:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:47-48|25:8-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "17:54|76:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:55|21:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:56|20:89": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:56|22:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:61-65|20:115-127": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:61|38:71-76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:66-70|45:12-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:77|33:62": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:77|48:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:81|21:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:82|29:51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:83|41:49-51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:89|18:54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "17:94|43:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:99|36:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "17:101-102|26:10-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:101-102|28:3-42": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "17:101|46:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:105|33:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:105|48:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:107|28:53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:108|18:98": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "17:108|73:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:4|19:88": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:4|21:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:13|28:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:15|19:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:24|28:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:26|27:65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:26|32:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "18:31|22:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "18:41|67:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:52|28:62-64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "18:54|30:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "18:54|39:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "18:85|18:89": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:88|18:107": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:88|29:7-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:94|18:95": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "18:107|19:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:4|19:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:8-10|19:20-21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "19:14-15|19:32-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:16-40|43:57-65": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "19:30|19:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:41-50|21:51-73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "19:41|19:54-56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "19:42|43:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:43|43:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:51|19:54-56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "19:60|19:96": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:61|19:63": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:67|76:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:77|34:35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:77|71:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "19:88|43:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:3|87:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:7|36:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:9-36|28:14-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:9-40|27:7-12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:9-40|79:15-19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:9-55|43:46-48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:23|53:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:41-55|26:18-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:41-98|28:36-46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:47|20:134": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:52|50:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:52|67:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:56-76|26:34-51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "20:57-60|20:63-64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:57|38:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:75|20:82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:82|34:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:104|23:113": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:112|41:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "20:113|39:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "20:128|32:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "20:133|21:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:4|21:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:4|25:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:4|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:10|29:51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:16|29:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:20|41:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:26|43:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:30|46:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "21:31|43:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:38|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:43|36:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:51-56|37:83-87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "21:51-73|26:69-104": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "21:53|43:22-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "21:73|98:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:75|21:86": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "21:84|38:42-44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "21:91-93|23:50-53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "21:91|66:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "21:103|43:83": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:103|70:42-44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:104|27:64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:108|29:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "21:109|72:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:6|36:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:6|42:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:6|46:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:8|22:68": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:12|22:62": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:16|57:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:19|44:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:22|32:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:28|22:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:50-54|34:4-6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "22:50|33:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:56|31:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:57|45:9-11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "22:61-62|31:29-30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "22:61|24:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:64|31:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "22:66|23:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:69|39:46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:69|40:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "22:70|49:16-18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "23:19|43:73": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:23-24|23:32-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "23:35|27:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:41|23:94": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:45-48|40:23-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "23:46|38:75": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:47|36:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:47|41:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:55|71:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:62-66|45:29-31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "23:70|34:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:78-79|67:23-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "23:82-83|27:67-68": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "23:89|43:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:106|33:67": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "23:112|23:113": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:1|38:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:5|25:70-71": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:6-7|24:8-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "24:8|24:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:10-14|24:19-23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "24:18|24:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "24:42-46|57:5-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "24:42|42:53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:43|30:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "24:54|33:66": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:54|64:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "24:57|64:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "24:64|49:16-18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "24:64|58:6-7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "25:1|44:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:3|39:43": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:27|25:57": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:35-36|26:12-17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "25:43|42:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:56|33:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:56|48:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:59|57:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "25:61|71:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:70|29:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:73|32:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "25:77|40:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:10-17|28:3-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:10-33|43:46-48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:10-68|44:17-33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:24-26|44:7-8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "26:28|55:17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:31|28:49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:31|45:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:40|26:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:69-104|29:16-27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:69-104|37:83-113": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:74|43:22-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:81|53:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:105-106|26:160-161": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "26:134|26:147": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "26:135-142|26:156-161": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:146-159|27:46-53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:160-171|37:133-135": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:172-175|27:58": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "26:176|50:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:7-12|28:3-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "27:13-14|28:36-46": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "27:13|54:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:25|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "27:27|27:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:38|27:42": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:52-53|41:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "27:56-58|29:30-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "27:60|31:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "27:65|59:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:67|56:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:69|40:82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "27:71|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:80-81|30:52-53": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "27:84|39:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:86|28:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "27:87|39:68": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "27:90|28:84": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:3-46|51:38-40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "28:13|30:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:14|38:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:20|36:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:36|46:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:37|28:85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:42|40:51": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:50|30:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:54|33:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:59|29:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:60|42:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:68-70|28:87-88": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:70|34:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:70|53:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "28:72-73|40:61": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "28:80|103:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:8|31:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:12|40:38": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:16|43:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:23|30:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:23|45:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:27|57:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:31-32|29:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:39|39:59": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:44|30:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:50|67:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:52|39:63": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:55|46:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "29:58|39:74": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:58|47:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:61-63|31:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "29:62|42:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:63|30:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:63|45:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:64|39:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "29:68|39:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "30:5|48:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "30:9|30:42": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "30:16|45:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "30:18|45:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "30:24|45:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "30:42|47:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "30:45|42:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "30:53|43:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "30:57-60|40:52-55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "31:7|45:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "31:11|46:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "31:23|64:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "31:30|40:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "32:4|57:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "32:5|70:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "32:7-9|38:71-85": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "32:7|37:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:11|39:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:14|41:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:19|43:72": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:20|46:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:21|39:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "32:25|45:17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "32:26|36:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "33:1-3|33:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "33:38|65:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "33:45|34:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "33:52|33:55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "33:63|45:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "33:63|67:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "33:64|48:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "33:66|64:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "33:67|50:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:1|64:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "34:4|35:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "34:22|39:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:26|34:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:28|48:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:29|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:35|71:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:40-43|46:6-7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "34:42|39:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:42|46:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "34:45|67:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "35:38|59:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "35:38|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "36:9|36:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:11|67:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:19|43:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:30|43:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "36:31|38:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "36:48|36:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:48|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:54|82:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "36:60-61|43:62-64": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "36:83|67:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "37:11|38:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:22|46:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:59|44:56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:73|54:16-18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:76-78|37:115-119": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "37:96|64:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:157|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:157|52:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:157|68:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:163|56:94": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "37:163|83:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "38:4|50:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "38:12-14|50:12-14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "38:29|40:54": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "38:71|38:76": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:1|39:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:2-4|40:14-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "39:13|76:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:19|40:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:24|46:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:25|39:54-55": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "39:32|39:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "39:35|41:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "39:59|45:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:21|40:82": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "40:22|40:50": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:48|40:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:62|43:87": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:63|41:28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:65|45:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "40:79|43:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "41:8|95:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "41:13-16|54:18-21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "41:14|41:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "41:20|41:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "42:9|46:33": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "42:17|45:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "42:17|46:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "42:17|69:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "42:36|87:16-17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "43:9-12|78:6-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "43:11|50:9-11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "43:34|56:15-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:46-48|79:15-24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "43:70|47:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:70|89:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:72|46:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:73|56:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:82-85|57:1-5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "43:82|69:52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "43:82|87:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:7|51:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:8|56:48": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:14|51:39": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:22|51:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:23|89:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:36|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:36|52:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:36|68:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:40-43|56:50-52": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:41|45:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:51-52|68:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:52|88:10-12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:54|56:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "44:58|87:8-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:3-4|51:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:4|52:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:10|45:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:15|45:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:22-25|46:3-7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "45:24|45:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "45:25|46:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "46:26|67:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "46:33|57:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "47:1|47:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "47:1|47:32-34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "47:13|86:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "48:2|71:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "48:5|57:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "48:8|73:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "49:15|61:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "49:16-18|64:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "49:16|49:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "49:16|58:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "49:18|59:22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:1|85:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:2|67:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:6|77:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:9|80:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:20|85:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:31|81:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:39-40|52:48-49": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "50:43|53:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "50:44|80:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:15|68:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:19|70:24-25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "51:20|52:36": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:47|91:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:48-49|78:6-8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:49|53:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:50-51|71:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "51:55|80:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:55|87:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "51:60|85:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:6|81:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:7-8|70:1-2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:9|67:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:10|78:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:10|81:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:12|74:45": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:14|83:17": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:16|56:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:17|68:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:20-24|56:20-25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "52:23|78:34-35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:29|68:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:29|69:42": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:41|53:35": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "52:42|86:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:1-12|81:19-25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "53:15|79:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:18|79:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:25|92:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:35|68:47": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:36-37|87:18-19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:38|75:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:43|53:60": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:45|78:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:46|75:37": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:50|77:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "53:59|56:81": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "54:8|74:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "54:49|80:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "54:54|68:34": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:3|70:19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:3|90:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:3|95:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:7|88:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:9|83:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:17|70:40": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:17|73:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:37|84:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:50|88:12": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "55:60|77:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:11-12|83:21-22": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:25|88:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:44|78:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:54|78:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:81|68:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:90|84:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:94|69:31": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:94|82:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:94|83:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "56:95|102:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "57:1-2|64:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "57:11|57:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "57:12-15|64:9-10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "57:12|66:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "57:21|57:29": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "57:24|92:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "58:17|63:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "58:22|98:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "59:1|59:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "59:15|65:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "60:6|64:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "60:8|60:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "61:1|62:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "61:12|64:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "61:12|66:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "61:13|110:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "63:1|63:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "63:9|64:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "63:9|71:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "64:9|65:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "64:9|66:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "64:17|73:20": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "66:5|68:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "67:23|76:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "68:1|96:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "68:12-15|83:12-13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "68:26|83:32": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "68:32|70:41": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "68:32|94:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "68:33|88:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:1-18|84:1-6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "69:4-5|91:11-15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "69:10|73:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:13-15|74:8-9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:14|89:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:20|84:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:20|84:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:23|76:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:25-37|84:10-15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "69:28|92:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:31|82:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:31|83:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:34|74:44": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:38-48|84:16-21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
+  },
+  "69:38|90:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:40-41|74:24-25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:48-52|74:54-56": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:49-52|84:22-25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "69:52|87:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "70:5|73:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "70:18|84:23": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "70:19|86:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "70:38|89:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "71:12|74:12-13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "72:2|72:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "72:7|83:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "73:7|76:26": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "73:8|87:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "73:18|82:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:22|75:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:37|75:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:37|82:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:39|90:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:44|76:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:44|89:18": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:44|107:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:46|82:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:46|95:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:46|107:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "74:52|81:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:10|99:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:13|82:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:18|84:21": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:20-21|76:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:22|83:24": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:38|82:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:38|87:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "75:38|96:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "76:25|87:15": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "77:8|81:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "77:39|86:15-16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:15|80:27": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:20|81:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:21|89:14": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:22|88:25": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:32|80:30": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "78:35|88:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "79:25|92:13": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "79:27|91:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "79:31|87:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "79:36|102:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "79:45|87:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:4|87:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:5|92:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:9|87:10": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:11-12|81:27-28": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:13-14|98:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:13|87:18-19": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:16|82:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "80:19|87:2-3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:4|100:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:7|87:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:9|83:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:9|95:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:9|107:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "82:14-15|83:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "83:11|95:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "83:11|107:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "83:24|88:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "83:31|84:9": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "85:5|104:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "87:8|92:7": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "87:8|94:5-6": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "87:12|88:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "87:12|111:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "87:17|93:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "88:4|101:11": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "88:4|111:3": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "89:15|89:16": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
+  },
+  "89:28|93:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "90:20|104:8": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "91:1|93:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "92:10|94:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "92:13|93:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "92:21|93:5": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "95:4|96:2": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "95:7|107:1": {
+   "view": "matrix",
+   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  }
+ }
+}
