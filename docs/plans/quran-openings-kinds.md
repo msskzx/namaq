@@ -8,11 +8,11 @@ Al-Suyuti, al-Itqan, النوع الستون في فواتح السور, after A
 
 ## Cards
 
-Inside a kind, surahs whose openings look alike share a card. The grouping is ours, and the help sheet says so. A card may take a surah from another kind when its opening is the same wording (الزمر in the حم card, tagged «الخبر»). The surahs of a kind that resemble none of the others share one «وحدها» card.
+Owner, 2026-11-16: the cards follow al-Suyuti's own groups wherever he gives them, and each such card quotes him with its page (`refs` in `OPENING_CARDS`). The call kind is his two fives from al-Itqan («نداء الرسول ﷺ», «نداء الأمة»), and the oath kind is his split by what is sworn by (the heavens, what goes with them, the wind, and one surah each for the rest, labelled as he labels them). Inside the letters kind the groups and names come from Tanasuq al-Durar: ذوات الر، الطواسين، مريم وطه، the الم surahs, and الزمر والحواميم. That last card holds al-Zumar (a statement) and the seven Ha-Mims in two labelled parts (`parts`), because al-Suyuti joins them by «تنزيل الكتاب» (p. 129). A kind al-Suyuti only lists (statement, condition, command, question, prayer) is one card in his order (owner, 2026-11-16), and the letter surahs Tanasuq does not group share one «وحدها» card, so every grouping on the page is his. Each kind's quote from al-Itqan sits under the kind's heading, collapsed to its page (`Reference`, web and app).
 
 - Opening: the first ayah. When that ayah has two words or fewer (the letters, «والصافات صفا»), the next ayah is added too. The Fatiha uses 1:2, after the basmala.
-- Colour: a word is coloured when no other row of the card has it on their longest common run of words (normalized letters). A card whose rows share less than one word on average is alike in form only, so it colours nothing (`saffat`). «وحدها» cards colour nothing either.
-- Rows over 16 words show their first 12 and «…». The surah name opens the mushaf.
-- The «إذا السماء» card (81, 82, 84) expands to the earlier page's conditions and their answer. 82's answer is our reading, and 84's is disputed. The explanation is in the help.
+- Colour: the rule every view uses (`sharedByAll`, ADR 0037): a word every surah on the card shares is coloured by its likeness, one only some share is faded, as in the matrix. Cards of surahs that stand alone colour nothing.
+- Rows over 16 words show their first 12 and «…». The surah name opens the mushaf. The share and expand buttons sit under the card.
+- The «إذا السماء» card (81, 82, 84) expands to the conditions and their answer, with the notes on the answer inside the card. 82's answer is our reading, and 84's is disputed.
 
 The surah order page links a surah to its card (`openingLike`). The openings quiz (#709) is linked from the page's pen button.

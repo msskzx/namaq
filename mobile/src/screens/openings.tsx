@@ -4,9 +4,11 @@ import { router } from 'expo-router';
 import { ChevronDown, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_SPANS, OPENING_KINDS, conditionLines, inKind, kindLabel, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { blend } from '@shared/quran/compareCardLook';
 import { Text } from '@/components/Text';
-import HelpSheet from '@/components/HelpSheet';
+import ExternalLink from '@/components/ExternalLink';
+import Reference from '@/components/Reference';
 import TopBar from '@/components/TopBar';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { ayahOf, surahNames } from '@/lib/branches';
@@ -18,10 +20,16 @@ import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
+/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): faded into the card when only some rows share it. */
+function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
+  const colour = palette.marks[kind];
+  return colour && (some ? blend(colour, palette.card, 0.55) : colour);
+}
+
 function Ayah({ words: list, cut, palette, size = 22 }: { words: OpeningWord[]; cut?: boolean; palette: Palette; size?: number }) {
   return (
     <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-      {list.map((word, i) => <Text key={i} style={'text' in word && word.own ? { color: palette.accent } : undefined}>{i > 0 ? ' ' : ''}{'end' in word ? num(word.end) : mushafText(word.text)}</Text>)}
+      {list.map((word, i) => <Text key={i} style={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{i > 0 ? ' ' : ''}{'end' in word ? num(word.end) : mushafText(word.text)}</Text>)}
       {cut ? <Text style={{ color: palette.muted }}> …</Text> : null}
     </Text>
   );
@@ -33,7 +41,7 @@ function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
       {conditionLines(surah).map(line => (
         <View key={line.key} style={{ borderRightWidth: 2, borderStyle: line.role === 'disputed' ? 'dashed' : 'solid', borderColor: line.role === 'answer' ? palette.green : line.role === 'disputed' ? palette.muted : palette.rule, paddingRight: 8 }}>
           {line.role !== 'condition' && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</Text>}
-          <Ayah palette={palette} size={19} words={[...words(line.key).map(text => ({ text, own: false })), { end: Number(line.key.split(':')[1]) }]} />
+          <Ayah palette={palette} size={19} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
         </View>
       ))}
     </View>
@@ -44,9 +52,9 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   return <>
     {card.rows.map((row, r) => (
       <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
+        {card.parts?.find(part => part.surahs[0] === row.surah) && <Text style={{ color: palette.ink, fontSize: 14, fontWeight: '700', textAlign: 'right', paddingBottom: 2 }}>{card.parts.find(part => part.surahs[0] === row.surah)!.label}</Text>}
         <Pressable disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
-          {row.guest && <Text style={{ color: palette.muted, fontSize: 12, borderWidth: 1, borderColor: palette.rule, borderRadius: 999, paddingHorizontal: 8 }}>{kindLabel(row.guest)}</Text>}
         </Pressable>
         {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} cut={row.cut} palette={palette} />}
       </View>
@@ -63,10 +71,17 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
     </View>
   ) });
   return (
-    <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 6, marginBottom: 12 }}>
-      <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
-      <Rows card={card} palette={palette} open={open} />
-      <View style={{ flexDirection: 'row', gap: 14, paddingTop: 4 }}>
+    <View style={{ marginBottom: 12, gap: 2 }}>
+      <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
+        {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
+        {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
+        <Rows card={card} palette={palette} open={open} />
+        {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
+          {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
+          {CONDITION_SOURCES.map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={13} style={{ textAlign: 'right' }}>{source.title}</ExternalLink>)}
+        </View>}
+      </View>
+      <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
         {card.rows.some(row => CONDITION_SPANS[row.surah]) && <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel="الشرط وجوابه" hitSlop={8} style={{ padding: 4, transform: [{ rotate: open ? '180deg' : '0deg' }] }}>
           <ChevronDown size={18} color={palette.muted} />
         </Pressable>}
@@ -85,12 +100,11 @@ export default function OpeningsScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [kind, setKind] = useState<OpeningKindId | null>(null);
-  const [help, setHelp] = useState(false);
   useTabRetap('openings', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const cards = useMemo(() => openingCards(words), []);
+  const cards = useMemo(() => openingCards(ayahOf), []);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll help={() => setHelp(true)}>
+      <TopBar hub hideOnScroll>
         <Pressable onPress={() => router.push('/quiz/openings')} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
           <PenLine size={20} color={palette.muted} />
         </Pressable>
@@ -107,9 +121,25 @@ export default function OpeningsScreen() {
         })}
       </ScrollView>
       <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom }}>
-        {cards.filter(card => !kind || inKind(card, kind)).map(card => <Card key={card.id} card={card} palette={palette} />)}
+        <View style={{ gap: 6, marginBottom: 8 }}>
+          <Reference title={ITQAN_OPENING.cite} quotes={[ITQAN_OPENING]} palette={palette} />
+          <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{OPENINGS_LEGEND}</Text>
+        </View>
+        {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
+          const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
+          const sole = cards.find(card => card.kind === k.id && soleCard(card));
+          return (
+            <View key={k.id}>
+              <View style={{ gap: 4, paddingTop: 8, marginBottom: 10 }}>
+                <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
+                <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
+                {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
+              </View>
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
+            </View>
+          );
+        })}
       </ScrollView>
-      <HelpSheet topic={help ? 'openings' : null} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

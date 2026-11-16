@@ -4,14 +4,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import treeData from '@shared/data/quran/trees.json';
 import { CONDITION_SPANS, OPENING_CARDS, conditionLines, openingCards } from '@shared/quran/openingKinds';
+import type { BranchAyah } from '@shared/quran/branches';
 import OpeningsView, { type ConditionText } from './OpeningsView';
 
-vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
 vi.mock('@/components/share/ShareImage', () => ({ ShareImageButton: () => <button type="button">مشاركة</button> }));
 
-const byKey = new Map((treeData as { ayat: { key: string; words: string[] }[] }).ayat.map(ayah => [ayah.key, ayah.words]));
-const words = (key: string) => byKey.get(key) ?? [];
-const cards = openingCards(words);
+const byKey = new Map((treeData as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
+const words = (key: string) => byKey.get(key)?.words ?? [];
+const cards = openingCards(key => byKey.get(key));
 const names = Object.fromEntries(Array.from({ length: 114 }, (_, i) => [i + 1, `سورة ${i + 1}`]));
 const conditions: ConditionText = Object.fromEntries(Object.keys(CONDITION_SPANS).map(s => [s, conditionLines(Number(s)).map(line => ({ ...line, words: words(line.key) }))]));
 const shown = () => [...document.querySelectorAll('[data-card]')].map(card => card.getAttribute('data-card'));
@@ -33,26 +33,47 @@ describe('the surah openings page', () => {
   it('opens on the kind in the link', () => {
     window.history.replaceState(null, '', '/quran/openings?kind=prayer');
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
-    expect(shown()).toEqual(['wayl', 'prayer-alone']);
+    expect(shown()).toEqual(['prayer']);
   });
 
-  it('colours the words one surah alone has, and tags a guest with its kind', () => {
+  it('colours shared words as the matrix does, and gives each kind its collapsed reference', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
-    const card = within(document.getElementById('ha-mim')!);
-    expect(card.getByText('الخبر')).toBeTruthy();
-    expect(document.querySelectorAll('#ha-mim [data-own]').length).toBeGreaterThan(0);
-    expect(document.querySelectorAll('#saffat [data-own]')).toHaveLength(0);
+    expect(document.querySelectorAll('#ha-mim [data-mark]').length).toBeGreaterThan(0);
+    expect(document.querySelectorAll('#letters-alone [data-mark]')).toHaveLength(0);
+    expect([...document.querySelectorAll('#ha-mim [data-part]')].map(part => part.textContent)).toEqual(['الخبر', 'الحواميم']);
+    const oath = screen.getByRole('region', { name: 'القسم' });
+    const reference = oath.querySelector('details')!;
+    expect(reference.open).toBe(false);
+    expect(reference.querySelector('summary')!.textContent).toBe('السيوطي، الإتقان ٣/٣٦٢');
+    expect(reference.textContent).toMatch(/القسم في خمس عشرة سورة/);
+  });
+
+  it('names a card only where its kind holds more than one, keeping the name for the shared picture', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const title = (id: string) => document.querySelector(`[data-card="${id}"] h3`)!;
+    expect(title('condition').hasAttribute('hidden')).toBe(true);
+    expect(title('condition').hasAttribute('data-share-only')).toBe(true);
+    expect(title('nabi').hasAttribute('hidden')).toBe(false);
+    expect(document.querySelector('[data-card="condition"] details')).toBeNull();
+    expect(within(screen.getByRole('region', { name: 'الشرط' })).getAllByText(/تناسق الدرر/).length).toBeGreaterThan(0);
+  });
+
+  it('shares the card itself, its buttons outside the picture', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const card = document.getElementById('hamd')!;
+    expect(card.hasAttribute('data-share-image')).toBe(true);
+    expect(card.parentElement!.hasAttribute('data-share-card')).toBe(true);
   });
 
   it('opens the إذا السماء card on its conditions and their answer', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
-    const card = document.getElementById('idha-sama')!;
+    const card = document.getElementById('condition')!;
     expect(card.querySelectorAll('[data-role]')).toHaveLength(0);
-    fireEvent.click(within(card).getByRole('button', { name: 'الشرط وجوابه' }));
+    fireEvent.click(within(card.parentElement!).getByRole('button', { name: 'الشرط وجوابه' }));
     expect(card.querySelectorAll('[data-role="answer"]')).toHaveLength(2);
     expect(card.querySelectorAll('[data-role="disputed"]')).toHaveLength(1);
     expect(within(card).getByText('الجواب، قراءتنا')).toBeTruthy();
-    expect(document.getElementById('hamd')!.querySelector('[aria-expanded]')).toBeNull();
+    expect(document.getElementById('hamd')!.parentElement!.querySelector('[aria-expanded]')).toBeNull();
   });
 
   it('links each surah to the mushaf and the page to the openings quiz', () => {
