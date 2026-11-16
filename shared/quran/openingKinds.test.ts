@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from '../data/quran/trees.json';
 import type { BranchAyah } from './branches';
-import { ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -22,10 +22,22 @@ describe('opening kinds', () => {
     for (const quote of ITQAN_QUOTES) expect(quote.cite).toMatch(/^السيوطي، الإتقان ٣\/٣٦[١-٣]$/);
   });
 
-  it('shows every surah on exactly one card, among surahs of its own kind only', () => {
+  it('shows every surah on exactly one card, of its own kind unless the card names its parts', () => {
     const shown = OPENING_CARDS.flatMap(card => card.surahs);
     expect(shown.sort((a, b) => a - b)).toEqual(Array.from({ length: 114 }, (_, i) => i + 1));
-    for (const card of OPENING_CARDS) for (const surah of card.surahs) expect(kindOf(surah)).toBe(card.kind);
+    for (const card of OPENING_CARDS.filter(c => !c.parts)) for (const surah of card.surahs) expect(kindOf(surah)).toBe(card.kind);
+    const zumar = cards.find(c => c.id === 'ha-mim')!;
+    expect(zumar.parts).toEqual([{ label: 'الخبر', surahs: [39] }, { label: 'الحواميم', surahs: [40, 41, 42, 43, 44, 45, 46] }]);
+    expect(inKind(zumar, 'statement') && inKind(zumar, 'letters')).toBe(true);
+  });
+
+  it('follows al-Suyuti\'s own groups where he gives them, each card quoting him with a page', () => {
+    const surahs = (id: string) => OPENING_CARDS.find(c => c.id === id)!.surahs;
+    expect(surahs('nabi')).toEqual([33, 65, 66, 73, 74]);
+    expect(surahs('umma')).toEqual([4, 5, 22, 49, 60]);
+    expect(surahs('aflak')).toEqual([85, 86]);
+    expect(surahs('hawa')).toEqual([51, 77]);
+    for (const card of OPENING_CARDS) for (const ref of card.refs ?? []) expect(ref.cite).toMatch(/^السيوطي، (الإتقان ٣\/٣٦[١-٣]|تناسق الدرر ص[٠-٩]+)$/);
   });
 
   it('opens with the first ayah, the next one too after a short one, and the Fatiha after the basmala', () => {
@@ -36,8 +48,8 @@ describe('opening kinds', () => {
   });
 
   it('colours the words the surahs of a card share, as the matrix does: all of them fully, only some faded', () => {
-    expect(marked(row('ha-mim', 40), false)).toEqual(['حمٓ']);
-    expect(marked(row('ha-mim', 40), true).join(' ')).toMatch(/تَنزِيلُ/);
+    expect(marked(row('alif-lam-ra', 10), false).join(' ')).toMatch(/ٱلْكِتَـٰبِ/);
+    expect(marked(row('ha-mim', 40), true).join(' ')).toMatch(/حمٓ/);
     expect(marked(row('hamd', 6), false).join(' ')).toMatch(/ٱلْحَمْدُ/);
   });
 
@@ -46,7 +58,7 @@ describe('opening kinds', () => {
   });
 
   it('cuts a long opening and ends every full one with its ayah number', () => {
-    const long = row('alladhina-amanu', 60);
+    const long = row('umma', 60);
     expect(long.cut).toBe(true);
     expect(long.words.filter(w => 'text' in w)).toHaveLength(12);
     const short = row('alif-lam-mim', 2);

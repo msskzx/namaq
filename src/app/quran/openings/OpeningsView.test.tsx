@@ -40,6 +40,7 @@ describe('the surah openings page', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     expect(document.querySelectorAll('#ha-mim [data-mark]').length).toBeGreaterThan(0);
     expect(document.querySelectorAll('#letters-alone [data-mark]')).toHaveLength(0);
+    expect([...document.querySelectorAll('#ha-mim [data-part]')].map(part => part.textContent)).toEqual(['الخبر', 'الحواميم']);
     const oath = screen.getByRole('region', { name: 'القسم' });
     const reference = oath.querySelector('details')!;
     expect(reference.open).toBe(false);

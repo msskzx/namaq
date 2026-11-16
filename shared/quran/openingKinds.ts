@@ -55,37 +55,86 @@ export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, { text: string; cit
 };
 
 
-/** A card's surahs: its own kind's, then any from another kind whose opening looks like theirs. `alone` holds the rest of a kind. */
-type CardDef = { id: string; kind: OpeningKindId; title: string; surahs: number[]; alone?: true };
+/**
+ * Al-Suyuti on surahs whose openings go together, from Tanasuq al-Durar (Dar al-Fadila, 2002), linked to the page in the
+ * Shamela library. His own words with the editor's footnote marks left out;
+ * words in [] are ours, naming the surah he means, and so is the punctuation.
+ */
+const tanasuq = (page: string, sh: number) => ({ cite: `السيوطي، تناسق الدرر ص${page}`, url: `https://shamela.ws/book/9992/${sh}` });
+
+/**
+ * A card's surahs, under the kind most of them share. `parts` splits a card whose surahs open with two kinds (الزمر and
+ * الحواميم). `refs` quote the book that puts the surahs together; a card with none is our own grouping. `alone` holds the
+ * rest of a kind.
+ */
+type CardDef = { id: string; kind: OpeningKindId; title: string; surahs: number[]; alone?: true; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
+export type Quote = { text: string; cite?: string; url?: string };
 
 export const OPENING_CARDS: CardDef[] = [
-  { id: 'hamd', kind: 'praise', title: 'الحمد لله', surahs: [1, 6, 18, 34, 35] },
-  { id: 'tabarak', kind: 'praise', title: 'تبارك الذي', surahs: [25, 67] },
-  { id: 'tasbih', kind: 'praise', title: 'التسبيح', surahs: [17, 57, 59, 61, 62, 64, 87] },
-  { id: 'alif-lam-mim', kind: 'letters', title: 'الم', surahs: [2, 3, 29, 30, 31, 32] },
-  { id: 'alif-lam-ra', kind: 'letters', title: 'الر', surahs: [10, 11, 12, 13, 14, 15] },
-  { id: 'ta-sin', kind: 'letters', title: 'طسم', surahs: [26, 27, 28] },
-  { id: 'ha-mim', kind: 'letters', title: 'حم', surahs: [40, 41, 42, 43, 44, 45, 46] },
+  { id: 'hamd', kind: 'praise', title: 'الحمد لله', surahs: [1, 6, 18, 34, 35], refs: [
+    { text: 'كل ربع من القرآن افتتح بسورة أولها الحمد: فأول القرآن سورة الحمد، وهذه [الأنعام] للربع الثاني، والكهف للربع الثالث، وسبأ وفاطر للربع الرابع', ...tanasuq('٨٤', 82) },
+    { text: 'مناسبة وضعها [فاطر] بعد سبأ تآخيهما في الافتتاح بالحمد، مع تناسبهما في المقدار', ...tanasuq('١٢٥', 125) },
+  ] },
+  { id: 'tabarak', kind: 'praise', title: 'تبارك الذي', surahs: [25, 67], refs: [{ text: 'فالأول التحميد في خمس سور وتبارك في سورتين', ...itqan('٣٦١', 1125) }] },
+  { id: 'tasbih', kind: 'praise', title: 'المسبحات', surahs: [17, 57, 59, 61, 62, 64, 87], refs: [
+    { text: 'وبذلك تعرف الحكمة في الفصل بها [المجادلة] بين الحديد والحشر، مع تآخيهما في الافتتاح بـ«سبح»', ...tanasuq('١٣٨', 143) },
+    { text: 'ولذلك فصل بها [الممتحنة] بين الحشر والصف، مع تآخيهما في الافتتاح بـ«سبح»', ...tanasuq('١٤٠', 145) },
+  ] },
+  { id: 'alif-lam-mim', kind: 'letters', title: 'الم', surahs: [2, 3, 29, 30, 31, 32], refs: [
+    { text: 'لمناسبة البقرة في الافتتاح بـ«الم»، وتوالي الطواسين والحواميم، وتوالي العنكبوت والروم ولقمان والسجدة', ...tanasuq('٩٢', 90) },
+  ] },
+  { id: 'alif-lam-ra', kind: 'letters', title: 'ذوات الر', surahs: [10, 11, 12, 13, 14, 15], refs: [
+    { text: 'فإن الأولى بسورة يونس أن تولى بالسور الخمس التي بعدها، لما اشتركت فيه من الاشتمال على القصص، ومن الافتتاح بـ«الر»، وبذكر الكتاب، ومن كونها مكيات', ...tanasuq('٩١', 89) },
+  ] },
+  { id: 'ta-sin', kind: 'letters', title: 'الطواسين', surahs: [26, 27, 28], refs: [
+    { text: 'وتقديم «طس» على القصص، مفصولا بها بين النظيرتين: طسم الشعراء وطسم القصص، في المطلع والطول', ...tanasuq('٤٧', 45) },
+  ] },
+  { id: 'ha-mim', kind: 'letters', title: 'الزمر والحواميم', surahs: [39, 40, 41, 42, 43, 44, 45, 46], parts: [{ label: 'الخبر', surahs: [39] }, { label: 'الحواميم', surahs: [40, 41, 42, 43, 44, 45, 46] }], refs: [
+    { text: 'وجه إيلاء الحواميم السبع سورة الزمر: تآخي المطالع في الافتتاح بتنزيل الكتاب', ...tanasuq('١٢٩', 130) },
+    { text: 'فإن مطلع غافر مناسب لمطلع الزمر، ومطلع فصلت التي هي ثانية الحواميم مناسب لمطلع هود التي هي ثانية ذوات «الر»، ومطلع الزخرف مؤاخ لمطلع الدخان، وكذا مطلع الجاثية لمطلع الأحقاف', ...tanasuq('١٣١', 132) },
+  ] },
+  { id: 'maryam-taha', kind: 'letters', title: 'مريم وطه', surahs: [19, 20], refs: [
+    { text: 'وسائر السور المفتتحة بالحروف المقطعة كلها مقترنة؛ كيونس وتواليها، ومريم وطه، والطواسين، و«الم» العنكبوت وتواليها، والحواميم', ...tanasuq('٧٤', 72) },
+  ] },
   { id: 'wal-quran', kind: 'letters', title: 'والقرآن', surahs: [36, 38, 50] },
-  { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 19, 20, 68], alone: true },
-  { id: 'ya-ayyuha-n-nabi', kind: 'call', title: 'يا أيها النبي', surahs: [33, 65, 66] },
-  { id: 'muzzammil', kind: 'call', title: 'المزمل والمدثر', surahs: [73, 74] },
-  { id: 'ya-ayyuha-n-nas', kind: 'call', title: 'يا أيها الناس', surahs: [4, 22] },
-  { id: 'alladhina-amanu', kind: 'call', title: 'يا أيها الذين آمنوا', surahs: [5, 49, 60] },
+  { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 68], alone: true },
+  { id: 'nabi', kind: 'call', title: 'نداء الرسول ﷺ', surahs: [33, 65, 66, 73, 74], refs: [
+    { text: 'خمس بنداء الرسول ﷺ: الأحزاب والطلاق والتحريم والمزمل والمدثر', ...itqan('٣٦١', 1125) },
+    { text: 'هذه السورة [التحريم] متآخية مع التي قبلها في الافتتاح بخطاب النبي ﷺ', ...tanasuq('١٤٤', 149) },
+    { text: 'هذه [المدثر] متآخية مع السورة التي قبلها في الافتتاح بخطاب النبي ﷺ، وصدر كليهما نازل في قصة واحدة', ...tanasuq('١٤٩', 154) },
+  ] },
+  { id: 'umma', kind: 'call', title: 'نداء الأمة', surahs: [4, 5, 22, 49, 60], refs: [
+    { text: 'وخمس بنداء الأمة: النساء والمائدة والحج والحجرات والممتحنة', ...itqan('٣٦١', 1125) },
+  ] },
   { id: 'inna', kind: 'statement', title: 'إنا', surahs: [48, 71, 97, 108] },
   { id: 'iqtarab', kind: 'statement', title: 'اقترب', surahs: [21, 54] },
   { id: 'qad', kind: 'statement', title: 'قد', surahs: [23, 58] },
-  { id: 'la-uqsim', kind: 'statement', title: 'لا أقسم', surahs: [75, 90] },
+  { id: 'la-uqsim', kind: 'statement', title: 'لا أقسم', surahs: [75, 90], refs: [{ text: '«لا أقسم» في موضعين', ...itqan('٣٦٢', 1126) }] },
   { id: 'qariah', kind: 'statement', title: 'الحاقة والقارعة', surahs: [69, 101] },
-  { id: 'statement-alone', kind: 'statement', title: 'وحدها', surahs: [8, 9, 16, 24, 39, 47, 55, 70, 80, 98, 102], alone: true },
-  { id: 'saffat', kind: 'oath', title: 'صفة ثم مصدرها', surahs: [37, 51, 77, 79, 100] },
-  { id: 'idha', kind: 'oath', title: 'والليل إذا', surahs: [53, 92, 93] },
-  { id: 'sama', kind: 'oath', title: 'والسماء', surahs: [85, 86] },
-  { id: 'oath-alone', kind: 'oath', title: 'وحدها', surahs: [52, 89, 91, 95, 103], alone: true },
-  { id: 'idha-sama', kind: 'condition', title: 'إذا السماء', surahs: [81, 82, 84] },
+  { id: 'statement-alone', kind: 'statement', title: 'وحدها', surahs: [8, 9, 16, 24, 47, 55, 70, 80, 98, 102], alone: true },
+  { id: 'aflak', kind: 'oath', title: 'بالأفلاك', surahs: [85, 86], refs: [
+    { text: 'وسورتان بالأفلاك: البروج والطارق', ...itqan('٣٦٢', 1126) },
+    { text: 'هما [البروج والطارق] متآخيتان فقرنتا، وقدمت الأولى لطولها، وذكرا بعد الانشقاق للمؤاخاة في الافتتاح بذكر السماء', ...tanasuq('١٥٦', 162) },
+  ] },
+  { id: 'lawazim', kind: 'oath', title: 'بلوازم الأفلاك', surahs: [53, 89, 91, 92, 93, 103], refs: [
+    { text: 'وست سور بلوازمها: فالنجم قسم بالثريا، والفجر بمبدأ النهار، والشمس بآية النهار، والليل بشطر الزمان، والضحى بشطر النهار، والعصر بالشطر الآخر أو بجملة الزمان', ...itqan('٣٦٢', 1126) },
+  ] },
+  { id: 'hawa', kind: 'oath', title: 'بالهواء', surahs: [51, 77], refs: [
+    { text: 'وسورتان بالهواء الذي هو أحد العناصر: والذاريات والمرسلات', ...itqan('٣٦٢', 1126) },
+  ] },
+  { id: 'oath-alone', kind: 'oath', title: 'وحدها', surahs: [37, 52, 95, 79, 100], alone: true, parts: [
+    { label: 'بالملائكة', surahs: [37] }, { label: 'بالتربة', surahs: [52] }, { label: 'بالنبات', surahs: [95] }, { label: 'بالحيوان الناطق', surahs: [79] }, { label: 'بالبهيم', surahs: [100] },
+  ], refs: [
+    { text: 'سورة أقسم فيها بالملائكة وهي «والصافات»… وسورة بالتربة التي هي منها أيضا وهي الطور، وسورة بالنبات وهي والتين، وسورة بالحيوان الناطق وهي والنازعات، وسورة بالبهيم وهي والعاديات', ...itqan('٣٦٢', 1126) },
+  ] },
+  { id: 'idha-sama', kind: 'condition', title: 'إذا السماء', surahs: [81, 82, 84], refs: [
+    { text: 'وكذلك الفصل بين الانفطار والانشقاق بالمطففين، وهما نظيرتان في المطلع والمقصد', ...tanasuq('٤٧', 45) },
+  ] },
   { id: 'idha-ja', kind: 'condition', title: 'إذا جاء', surahs: [63, 110] },
   { id: 'idha-fil', kind: 'condition', title: 'إذا وقعت', surahs: [56, 99] },
-  { id: 'qul', kind: 'command', title: 'قل', surahs: [72, 109, 112, 113, 114] },
+  { id: 'qul', kind: 'command', title: 'قل', surahs: [72, 109, 112, 113, 114], refs: [
+    { text: 'هاتان السورتان [الفلق والناس] نزلتا معا، فلذلك قرنتا، مع ما اشتركتا فيه من التسمية بالمعوذتين، ومن الافتتاح بـ«قل أعوذ»', ...tanasuq('١٧٣', 180) },
+  ] },
   { id: 'command-alone', kind: 'command', title: 'وحدها', surahs: [96], alone: true },
   { id: 'hal', kind: 'question', title: 'هل أتى', surahs: [76, 88] },
   { id: 'alam', kind: 'question', title: 'ألم', surahs: [94, 105] },
@@ -96,6 +145,9 @@ export const OPENING_CARDS: CardDef[] = [
 ];
 
 export const kindOf = (surah: number) => OPENING_KINDS.find(kind => kind.surahs.includes(surah))!.id;
+
+/** A kind's cards: its own, and a card with a part of that kind (الزمر under «الخبر»). */
+export const inKind = (card: OpeningCard, kind: OpeningKindId) => card.kind === kind || card.rows.some(row => kindOf(row.surah) === kind);
 
 /** The opening a card shows: the first ayah (the Fatiha's after the basmala), and the next one too when the first has two words or fewer. */
 export function openingKeys(surah: number, words: (key: string) => string[]): string[] {
@@ -111,7 +163,7 @@ const SHOWN = 12;
 export type OpeningMark = { kind: Likeness; some: boolean };
 export type OpeningWord = { text: string; mark?: OpeningMark } | { end: number };
 export type OpeningRow = { surah: number; words: OpeningWord[]; cut: boolean };
-export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[] };
+export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[]; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
 
 /**
  * The cards with their rows. Words the rows share are lined up and coloured as in the matrix (`sharedByAll`), one row being
@@ -139,7 +191,7 @@ export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): O
       const cut = at > LONG;
       return { surah, words: cut ? all.filter(word => 'text' in word).slice(0, SHOWN) : all, cut };
     });
-    return { id: card.id, kind: card.kind, title: card.title, alone: !!card.alone, rows };
+    return { id: card.id, kind: card.kind, title: card.title, alone: !!card.alone, rows, ...(card.parts ? { parts: card.parts } : {}), ...(card.refs ? { refs: card.refs } : {}) };
   });
 }
 
@@ -182,4 +234,4 @@ export const CONDITION_SOURCES = [
   { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
 ];
 
-export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. تجميع البطاقات من عملنا، والنص برواية حفص.';
+export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. البطاقة التي لا مصدر تحت عنوانها من تجميعنا، والنص برواية حفص.';

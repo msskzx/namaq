@@ -8,7 +8,7 @@ import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -36,27 +36,32 @@ function Conditions({ lines }: { lines: ConditionText[string] }) {
   );
 }
 
+/** A card's own part labels (الزمر and الحواميم, or what each lone oath swears by), shown over the part's first row. */
+const partAt = (card: OpeningCard, surah: number) => card.parts?.find(part => part.surahs[0] === surah)?.label;
+
 function Card({ card, names, conditions }: { card: OpeningCard; names: Record<number, string>; conditions: ConditionText }) {
   const [open, setOpen] = useState(false);
   const expandable = card.rows.some(row => conditions[row.surah]);
   return (
     <div className="flex flex-col gap-1">
       <article id={card.id} data-share-card data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
-      <h2 className="text-xl text-[var(--home-accent)]">{card.title}</h2>
-      {card.rows.map(row => (
-        <div key={row.surah} className="border-t border-[var(--home-rule)]/40 first-of-type:border-t-0 py-1.5">
-          <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
-            <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
+        <h2 className="text-xl text-[var(--home-accent)]">{card.title}</h2>
+        {card.refs && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
+        {card.rows.map((row, r) => (
+          <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>
+            {partAt(card, row.surah) && <p data-part className="pb-1 text-sm font-semibold">{partAt(card, row.surah)}</p>}
+            <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
+              <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
+            </div>
+            {open && conditions[row.surah]
+              ? <Conditions lines={conditions[row.surah]} />
+              : <p className="font-quran text-2xl leading-[2.1] text-justify"><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</p>}
           </div>
-          {open && conditions[row.surah]
-            ? <Conditions lines={conditions[row.surah]} />
-            : <p className="font-quran text-2xl leading-[2.1] text-justify"><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</p>}
-        </div>
-      ))}
+        ))}
         {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">
-        {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
-        {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}
-      </div>}
+          {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
+          {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}
+        </div>}
       </article>
       <div className="flex items-center gap-1">
         {expandable && <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'إخفاء الشرط وجوابه' : 'الشرط وجوابه'} title="الشرط وجوابه" className={icon}>
@@ -113,7 +118,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
               <h2 className="text-2xl font-bold">{k.label}</h2>
               <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} />
             </div>
-            {cards.filter(card => card.kind === k.id).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
+            {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
           </section>
         );
       })}

@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { ChevronDown, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { blend } from '@shared/quran/compareCardLook';
 import { Text } from '@/components/Text';
 import ExternalLink from '@/components/ExternalLink';
@@ -52,6 +52,7 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   return <>
     {card.rows.map((row, r) => (
       <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
+        {card.parts?.find(part => part.surahs[0] === row.surah) && <Text style={{ color: palette.ink, fontSize: 14, fontWeight: '700', textAlign: 'right', paddingBottom: 2 }}>{card.parts.find(part => part.surahs[0] === row.surah)!.label}</Text>}
         <Pressable disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
         </Pressable>
@@ -73,6 +74,7 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
     <View style={{ marginBottom: 12, gap: 2 }}>
       <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
+        {card.refs && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
         {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
@@ -131,7 +133,7 @@ export default function OpeningsScreen() {
                 <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
               </View>
-              {cards.filter(card => card.kind === k.id).map(card => <Card key={card.id} card={card} palette={palette} />)}
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
             </View>
           );
         })}
