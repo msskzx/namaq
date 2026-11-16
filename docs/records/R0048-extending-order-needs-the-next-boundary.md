@@ -12,7 +12,7 @@ evidence: "scripts/quran/verifyOrderQuotes.ts; shared/quran/surahOrder.test.ts; 
 implication: "Check the boundary into an existing range, and verify reused quotations as well as new ones. A failed source match is not evidence that the author is silent."
 date: "2026-11-16"
 topics: ["evidence-model","text-matching","testing"]
-buildsOn: ["namaq/0029-a-pair-must-be-named-in-the-quoted-sentence"]
+buildsOn: ["namaq/R0044-a-pair-must-be-named-in-the-quoted-sentence"]
 ---
 
 The book's table of contents also omits a separate entry for Hud, though its text appears on Shamela page 93. Reading the pages found the passage; the missing index entry did not become a missing quotation.
