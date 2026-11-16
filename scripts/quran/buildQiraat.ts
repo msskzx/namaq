@@ -143,11 +143,29 @@ for (const [key, list] of Object.entries(ayat)) {
 }
 
 // docs/audits/qiraat-source-audit.md
-for (const correction of corrections) {
-  const list = ayat[correction.ayah];
-  const index = list?.findIndex(word => word.at[0] === correction.at) ?? -1;
+// `at: null` adds a word the dump lacks, `replacement: null` drops one (a word filed under the next ayah is dropped there
+// and added to its own).
+for (const correction of corrections as { ayah: string; at: number | null; replacement: Out | null }[]) {
+  const list = (ayat[correction.ayah] ??= []);
+  if (correction.at === null) {
+    if (!correction.replacement) throw new Error(`Correction ${correction.ayah} adds nothing`);
+    const at = correction.replacement.at;
+    if (list.some(word => word.at[0] <= at[1] && at[0] <= word.at[1])) throw new Error(`Added qira'at position ${correction.ayah}:${at[0]} already taken`);
+    list.push(correction.replacement);
+    continue;
+  }
+  const index = list.findIndex(word => word.at[0] === correction.at);
   if (index < 0) throw new Error(`Missing corrected qira'at position ${correction.ayah}:${correction.at}`);
-  list[index] = correction.replacement as Out;
+  if (correction.replacement) list[index] = correction.replacement;
+  else list.splice(index, 1);
+  if (!list.length) delete ayat[correction.ayah];
+}
+for (const { ayah, replacement } of corrections as { ayah: string; replacement: Out | null }[]) {
+  if (!replacement) continue;
+  const [first, last] = replacement.at;
+  if (replacement.readings[0].text !== hafs.get(ayah)?.slice(first, last + 1).join(' ')) throw new Error(`Corrected qira'at ${ayah}:${first} is not the Hafs text there`);
+  const list = [...ayat[ayah]].sort((x, y) => x.at[0] - y.at[0]);
+  if (list.some((w, i) => i && w.at[0] <= list[i - 1].at[1])) throw new Error(`Qira'at words overlap in ${ayah}`);
 }
 
 const order = (key: string) => key.split(':').map(Number);
