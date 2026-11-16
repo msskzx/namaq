@@ -19,7 +19,7 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/tuhfa', label: 'تحفة الأطفال', Icon: BookMarked },
   { route: '/words', label: 'ألفاظ القرآن', Icon: TextSearch },
   { route: '/oaths', label: 'الأقسام', Icon: SunMoon },
-  { route: '/iltifat', label: 'الالتفات', Icon: MessagesSquare },
+  { route: '/balagha', label: 'البلاغة', Icon: MessagesSquare },
   { route: '/openings', label: 'افتتاح السور', Icon: ListStart },
   { route: '/order', label: 'ترتيب السور', Icon: ListOrdered },
 ];

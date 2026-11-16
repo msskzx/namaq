@@ -12,7 +12,7 @@ and from the historical records under `data/history/`.
 ## Format
 
 Copy an existing file. Name it `RNNNN-short-title.md` with the next free number
-(`R0051` after `R0050`) and add its row to the index below; the test refuses a
+(`R0052` after `R0051`) and add its row to the index below; the test refuses a
 number two records share and an index that misses a record. The `R` keeps a
 record id apart from ADR and PR numbers (`R0037` is a record, `ADR 0037` and
 `#737` are not). Until 2026-11-16 ids were bare numbers (`0037`), and four
@@ -150,4 +150,5 @@ counts for neither.
 | [R0047](R0047-a-tab-page-cannot-swipe-back.md) | A tab page cannot swipe back | challenge | solved |
 | [R0048](R0048-extending-order-needs-the-next-boundary.md) | Extending surah order needs the boundary into the old range | challenge | solved |
 | [R0049](R0049-a-tafsir-that-vocalizes-only-the-quran-marks-its-quotes.md) | A tafsir that vocalizes only the Quran marks its own quotes | challenge | solved |
-| [R0050](R0050-a-printed-page-is-found-again-by-its-letters.md) | A printed page is found again in a built book by its letters | challenge | solved |
+| [R0050](R0050-a-book-export-writes-marks-out-of-canonical-order.md) | A book export writes marks out of canonical order | challenge | solved |
+| [R0051](R0051-a-printed-page-is-found-again-by-its-letters.md) | A printed page is found again in a built book by its letters | challenge | solved |

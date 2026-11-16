@@ -47,6 +47,22 @@ export const sideLabel = (side: CardSide) => sideTitle({ surah: side.surah, numb
 
 /** What a side says in a story part its surah does not tell. */
 export const silentNote = (surah: number) => `لا تذكر سورة ${surahName(surah)} هذا الجزء`;
+/** A side-by-side separator's label: the surah, then the ayat its part holds. */
+export const partLabel = (surah: number, numbers: number[]) => `${surahName(surah)} ${runsLabel(numbers)}`.trim();
+/** The note at the end of a part's separator when the other surah does not tell it (owner, 2026-11-16). */
+export const aloneNote = (surah: number) => `سورة ${surahName(surah)} لا تذكر هذا الجزء`;
+
+/** A side-by-side row: both surahs in lanes, or one surah across the card when the other does not tell that part. */
+export type BesideRow = { lanes: [CardSide, CardSide] } | { alone: CardSide; side: 0 | 1; silent: number };
+
+export function besideRows(sides: [CardSide, CardSide]): BesideRow[] {
+  return rowSides(sides).map(row => {
+    const told = row.map(side => side.ayat.length > 0);
+    if (told[0] === told[1]) return { lanes: row };
+    const side = told[0] ? 0 : 1;
+    return { alone: row[side], side, silent: row[1 - side].surah };
+  });
+}
 
 /** A story card as one pair of sides per row, each row lined up across the two surahs; any other card as itself. */
 export function rowSides(sides: [CardSide, CardSide]): [CardSide, CardSide][] {

@@ -5,7 +5,7 @@
  * and a tap on the button from another tab comes back to the page that was open there last.
  */
 /** The Quran hub's tools. A new tool is a page in app/(tabs)/(quran), a name here and a tile on the hub. */
-export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'books', 'book', 'words', 'oaths', 'iltifat', 'openings', 'order'] as const;
+export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'books', 'book', 'words', 'oaths', 'balagha', 'openings', 'order'] as const;
 
 /** The first page of each stacked button. */
 const ROOT_OF: Record<string, string> = { '(home)': 'index', '(quran)': 'quran' };

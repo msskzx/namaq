@@ -16,7 +16,7 @@ export const skeleton = (word: string) => word.replace(MARKS, '').replace(/ة/g,
 
 // One side may carry a prefix the other leaves out: «رَءُوفٌ» for «لَرَءُوفࣱ», «الْأَزْلَامُ» for «بِٱلۡأَزۡلَٰمِ».
 const PREFIX = /^[فلبك]/;
-const same = (a: string, b: string) => a === b || (a.length > 1 && b.length > 1 && ((PREFIX.test(a) && a.slice(1) === b) || (PREFIX.test(b) && b.slice(1) === a)));
+export const same = (a: string, b: string) => a === b || (a.length > 1 && b.length > 1 && ((PREFIX.test(a) && a.slice(1) === b) || (PREFIX.test(b) && b.slice(1) === a)));
 
 /** Where a heading's words («كُفُوًا أَحَدٌ») run in an ayah's mushaf words: [first, last] from 0, or null. */
 export function matchHeading(words: string[], heading: string): [number, number] | null {

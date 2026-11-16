@@ -196,6 +196,32 @@ test.describe('a returning user', () => {
     await expect.poll(async () => (await stored<Record<string, { forgot: number }>>(page, 'ayah-forgot'))?.['18:10']?.forgot).toBe(2);
   });
 
+  test('a tap on the recall card does what a tap does in recite mode, and undo hides the ayah again', async ({ page }) => {
+    await open(page, '/');
+    const head = page.getByRole('heading', { name: 'هل تذكرها؟', exact: true });
+    const whole = page.getByRole('button', { name: 'أظهر الآية' }).first();
+    const undo = page.getByRole('button', { name: 'ارجع خطوة' }).first();
+    await expect(undo).toBeDisabled();
+    await whole.scrollIntoViewIfNeeded();
+    const lines = async () => {
+      const top = (await head.boundingBox())!;
+      const bottom = (await whole.boundingBox())!;
+      return { x: 195, y: (top.y + top.height + bottom.y) / 2 };
+    };
+    // Recite mode's tap shows the whole ayah (its default), and undo hides it again.
+    const at = await lines();
+    await page.mouse.click(at.x, at.y);
+    await expect(whole).toBeDisabled();
+    await expect(undo).toBeEnabled();
+    await undo.click();
+    await expect(whole).toBeEnabled();
+    await expect(undo).toBeDisabled();
+    // Recite mode's double tap shows the next word (its default), so the ayah is not whole yet.
+    await page.mouse.dblclick(at.x, at.y);
+    await expect(undo).toBeEnabled();
+    await expect(whole).toBeEnabled();
+  });
+
   test('the forgotten review opens the mushaf in recite mode', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'راجع ما نسيت' }).click();

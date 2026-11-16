@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
-import { SettingsHelp } from '@/components/common/SettingsHelp';
+import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
+import { DEVICES, deviceOf, type BalaghaReference } from '@shared/quran/balaghaPage';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
@@ -95,7 +96,7 @@ function ExampleCard({ view }: { view: ExampleView }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
     <article id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 rounded-[var(--card-radius)] bg-[var(--home-card)] px-4 pt-3.5 pb-1.5">
-      <h2 className="text-base text-[var(--home-muted)]">{title}</h2>
+      <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} />
         <p className={`${QURAN} text-justify [text-align-last:right]`}><Words lines={view.lines} /></p>
@@ -104,37 +105,51 @@ function ExampleCard({ view }: { view: ExampleView }) {
       {view.kind === 'dialog' && <Dialog turns={view.turns} />}
       <div data-share-skip className="flex gap-1">
         <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
-        <ShareImageButton size="icon" iconSize={20} href={`/quran/iltifat#${view.key}`} />
+        <ShareImageButton size="icon" iconSize={20} href={`/quran/balagha#${view.key}`} />
       </div>
     </article>
   );
 }
 
-/** What the help icon opens: what iltifat is, the colours, and where each example comes from. */
-export function IltifatHelp({ views }: { views: ExampleView[] }) {
+/** The voices' colours, under the device's name: what each colour on the cards means. */
+function Voices() {
   return (
-    <div className="flex flex-col gap-3">
-      <p>انتقال الكلام من غيبة إلى خطاب أو تكلم، أو من أحدها إلى غيره، والمتحدَّث عنه واحد.</p>
-      <ul className="flex flex-wrap gap-x-4" aria-label="ألوان الضمائر">
-        {(['he', 'we', 'you'] as Voice[]).map(voice => (
-          <li key={voice} style={{ color: VOICE_COLOR[voice] }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</li>
-        ))}
-      </ul>
-      <ul className="flex flex-col gap-1 text-sm text-[var(--home-muted)]" aria-label="المصادر">
-        {views.map(view => <li key={view.key}>{view.name} {rangeLabel(view)}: {view.source}</li>)}
-      </ul>
-      <p className="text-sm text-[var(--home-muted)]">النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</p>
-    </div>
+    <ul className="flex flex-wrap gap-x-4 text-sm" aria-label="ألوان الضمائر">
+      {(['he', 'we', 'you'] as Voice[]).map(voice => (
+        <li key={voice} style={{ color: VOICE_COLOR[voice] }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</li>
+      ))}
+    </ul>
   );
 }
 
-export default function IltifatView({ views }: { views: ExampleView[] }) {
+/**
+ * The balagha page's examples (owner, 2026-11-16): a curated list, each card with its own picture, grouped by device
+ * with pills to pick one. Each device and each card carries its reference (shared/quran/balaghaPage.ts).
+ */
+export default function BalaghaView({ views, references }: { views: ExampleView[]; references: Record<string, BalaghaReference> }) {
+  const [device, setDevice] = useState<string | null>(null);
+  const pill = (on: boolean) => `rounded-full border px-3 py-1.5 text-[0.9375rem] ${on ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-paper)]' : 'border-[var(--home-rule)]'}`;
   return (
     <>
-      <SettingsHelp label="ما الالتفات؟"><IltifatHelp views={views} /></SettingsHelp>
-      <div className="flex flex-col gap-3">
-        {views.map(view => <ExampleCard key={view.key} view={view} />)}
+      <div role="tablist" aria-label="الفنون" className="flex flex-wrap gap-2">
+        <button type="button" role="tab" aria-selected={device === null} onClick={() => setDevice(null)} className={pill(device === null)}>الكل</button>
+        {DEVICES.map(item => <button key={item.name} type="button" role="tab" aria-selected={device === item.name} onClick={() => setDevice(item.name)} className={pill(device === item.name)}>{item.name}</button>)}
       </div>
+      {DEVICES.filter(item => device === null || device === item.name).map(item => (
+        <section key={item.name} aria-label={item.name} className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl">{item.name}</h2>
+            <Voices />
+            <Reference title={item.reference.title} quotes={item.reference.quotes} />
+          </div>
+          {views.filter(view => deviceOf(view).name === item.name).map(view => (
+            <div key={view.key} className="flex flex-col gap-1.5">
+              <ExampleCard view={view} />
+              <div className="px-1"><Reference title={references[view.key].title} quotes={references[view.key].quotes} /></div>
+            </div>
+          ))}
+        </section>
+      ))}
     </>
   );
 }

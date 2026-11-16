@@ -1,11 +1,13 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, PenLine, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, PenLine, ScrollText, Undo2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
-import { markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { toggleBookmark } from '@shared/bookmarks';
+import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
@@ -29,6 +31,7 @@ import TreeIcon from './TreeIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder } from '@shared/quran/recite';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
+import { usePageTouch } from '@/lib/usePageTouch';
 import AyahLines, { pageWords, PageTop } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
@@ -216,6 +219,7 @@ const RECALL_WRITE = 'recall-write';
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
   const [, setGone] = useState(0);
+  const [round, setRound] = useState(0);
   const [writing, setWriting] = useState(() => readJson<boolean>(RECALL_WRITE) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
   if (!review && recalled.has(ayah)) return null;
@@ -225,11 +229,15 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
     <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
   </>;
-  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
+  return <Recall key={`${ayah}-${writing}-${round}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} onUndo={() => setRound(n => n + 1)} marks={marks} palette={palette} />;
 }
 
-/** The recall card itself, drawn afresh for each way of asking (`writing`), so the boxes start empty. */
-function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
+/**
+ * The recall card itself, drawn afresh for each way of asking (`writing`) and after each undo, so the boxes start empty.
+ * A tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings), and the
+ * undo button steps back as recite mode's does: to the ayah hidden again.
+ */
+function Recall({ ayah, title, writing, onWriting, onUndo, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; onUndo: () => void; marks: React.ReactNode; palette: Palette }) {
   const words = useMemo(() => pageWords(ayah), [ayah]);
   const [revealed, setRevealed] = useState(0);
   const [graded, setGraded] = useState<Graded | null>(null);
@@ -239,18 +247,33 @@ function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: str
     if (result.wrong.length) markForgotten(ayah);
   } });
   const shown = revealed >= words.length || !!graded;
+  const atStart = revealed === 0 && !graded;
+  const nextWord = () => setRevealed(n => Math.min(words.length, n + 1));
+  const wholeAyah = () => setRevealed(words.length);
+  const run = (action: GestureAction, key: string | null) => {
+    if (action === 'next-ayah') wholeAyah();
+    else if (action === 'next-word') nextWord();
+    else if (action === 'back' && !atStart) onUndo();
+    else if (key !== ayah) return;
+    else if (action === 'forgot') markForgotten(ayah);
+    else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: words.join(' '), href: ayahHref(ayah) });
+  };
+  const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');
+  // While writing, a touch on the ayah only brings the keyboard back, as in the reader; the boxes pick a word themselves.
+  const onTouch: typeof touches.touch = (...touch) => (writing && !shown ? boxes.focus() : touches.touch(...touch));
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
       actions={<>
-        {/* Recite mode's buttons first, in its order: the next word, the whole ayah, the pen (Reader.tsx). */}
-        {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onPress={() => setRevealed(n => Math.min(words.length, n + 1))} palette={palette} />}
-        <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onPress={() => setRevealed(words.length)} palette={palette} />
+        {/* Recite mode's buttons first, in its order: undo, the next word, the whole ayah, the pen (Reader.tsx). */}
+        <Action Icon={Undo2} label="ارجع خطوة" disabled={atStart} onPress={onUndo} palette={palette} />
+        {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onPress={nextWord} palette={palette} />}
+        <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onPress={wholeAyah} palette={palette} />
         <Action Icon={PenLine} label="اكتب الآية كاملة" on={writing} onPress={onWriting} palette={palette} />
         {marks}
       </>}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} palette={palette} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null}
+        <AyahLines ayah={ayah} palette={palette} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null} onTouch={onTouch}
           write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : null} />
         {writing && !shown && boxes.field}
       </View>

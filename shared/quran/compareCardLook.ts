@@ -21,6 +21,9 @@ export const COMPARE_CARD = {
   /** The ayat in the Quran font: size and line height. */
   ayahSize: 22,
   ayahLine: 44,
+  /** Side by side: each surah's lane in the Quran font, smaller to fit half the card. */
+  laneSize: 19,
+  laneLine: 38,
   /** A side's name, the note «قبلُ في السورة», and a stretch's ayat on its dotted rule, in the interface font (before UI_SCALE). */
   labelSize: 14,
   noteSize: 12,

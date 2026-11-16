@@ -56,7 +56,21 @@ A long press in the reader, app and website, gives «البلاغة» (a sparkle
 
 On the phone without the book, the sheet says what it holds and offers the download (`shared/books.ts`, kind «البلاغة»).
 
+## Al-Itqan (owner, 2026-11-16)
+
+Al-Suyuti's al-Itqan, kinds 52 to 58 (al-haqiqa wa-l-majaz to al-bada'i'), built into the app and shown first. Built by `npm run quran:itqan-balagha` (`scripts/quran/buildItqanBalagha.ts`) from Turath's export of Shamela 11728, pinned by hash; pages 884 to 1095, less page 942 (a stray cut piece numbered 3/68).
+
+- **Paragraphs.** Each line of the export is one of his paragraphs; a page's first line carries on the paragraph before unless a heading came between. Marks are compared after NFC: the export writes shadda before fatha.
+- **Headings.** His own: a short line with no short line beside it. Short lines in a row are verse. A note, a rule or a closing word («تنبيه», «قاعدة», «خاتمة») names no device, so the heading before it holds. Kinds 52 to 55 have no device headings: the kind's title stands alone.
+- **Quotes.** Each ﴿…﴾ is matched on the mushaf's words by consonant skeleton. A quote that fits one place goes there. One that fits several goes on the place nearest the paragraph's other surely placed quotes in the same surah; failing that, on all of them when they are five or fewer, with their count («مواضع الشاهد في القرآن: ٣، ولم يعيّن السيوطي أحدها»); above five, nowhere.
+- **Sheet.** Pills pick the book: «الإتقان للسيوطي» (built in) and «الكشاف للزمخشري» (download). Each paragraph is whole, under «heading · kind», with a folded reference «الإتقان للسيوطي ج/ص» linking Shamela's page. A tap on a paragraph lights the ayah words it quotes.
+- **Next.** The rest of the book in a later iteration.
+
+## The balagha page (owner, 2026-11-16)
+
+The iltifat page became «البلاغة» (`/quran/balagha`, the app's `balagha` screen; `/quran/iltifat` redirects): a curated list of examples, each with a picture suited to it, grouped by device under pills. Not every example gets one, unlike compare and branches. Each device and each example carries its reference: al-Suyuti's definition and his paragraphs on the example, whole (`shared/quran/balaghaPage.ts`), otherwise the note the example came with.
+
 ## Later
 
-- A device browser: browse the lit sentences by device, cards like the iltifat page. The iltifat page is a starting point to be completed there; its cards not attested in a classical book are to be checked.
+- A device browser: browse the lit sentences by device. The balagha page's iltifat cards not attested in a classical book are to be checked.
 - Other books where free: al-Iskafi and al-Karmani's cases on repeated ayat already in the compare cards.
