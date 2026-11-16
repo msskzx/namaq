@@ -5,7 +5,8 @@ import { Clapperboard, Pause, Play, RotateCcw, Spline, Timer, X } from 'lucide-r
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
-import type { GrowthStep } from '@shared/quran/growth';
+import { ALL_WORDS, type GrowthStep, type StepWords } from '@shared/quran/growth';
+import { stepTime } from '@shared/quran/readPlan';
 import styles from './Grow.module.css';
 import { reducedMotion } from '@/components/common/useSwipe';
 
@@ -18,7 +19,11 @@ type Prefs = { mode: GrowMode; speed: number; timer: number };
  *  `choice`: the open matrix has connections, so its studio switches between them and the read-along (`play`). */
 type GrowState = Prefs & { status: Status; at: number; total: number; studio: boolean; kind: 'tree' | 'matrix' | 'read'; choice: boolean; play: MatrixPlay;
   /** How many connection lines the open book matrix draws: with none, it has only the read-along. */
-  lines: number };
+  lines: number;
+  /** The ayah growing (or, in the tour, whose path is lit), and how many of its words its card under the tree shows. */
+  lit: string | null; words?: number;
+  /** Once the tree has grown: each ayah's path lit in turn, its card read word by word (`reading`, across the passage). */
+  tour: boolean; reading?: number };
 export type MatrixPlay = 'connections' | 'read';
 /** One word the matrix read-along stops on: its row (the progress bar it belongs to) and its time at 1×. */
 export type MatrixReadStep = { row: number; ms: number };
@@ -31,11 +36,28 @@ const LINE = 200;
 const BOX = 300;
 const RELIGHT = 140;
 const LEAF = 700;
+/** How long an ayah's path stays lit in the tour when its card has no words to read. */
+const PATH = 2500;
+
+/** The tour reads each path's card word by word: the card under the tree tells how many words each of its ayat has. */
+const tourWords = new Map<string, number[]>();
+/** How many cards under a growing tree are on the page: with none (a quiz's tree), the growth ends without the tour. */
+let tourCards = 0;
+/** Whether a card sits under the growing tree (the video keeps room for it only then). */
+export const hasTourCard = () => tourCards > 0;
+export function holdTourCard() {
+  tourCards++;
+  return () => { tourCards--; };
+}
+export function setTourWords(key: string, counts: number[] | null) {
+  if (counts) tourWords.set(key, counts);
+  else tourWords.delete(key);
+}
 
 const PREFS = 'branches-grow';
 const listeners = new Set<() => void>();
-let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, kind: 'tree', choice: false, play: 'connections', lines: 0 };
-let target: { card: HTMLElement; plan: GrowthStep[]; light: (key: string | null) => void; matrix?: { root: HTMLElement; enable: () => void };
+let state: GrowState = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, kind: 'tree', choice: false, play: 'connections', lines: 0, lit: null, tour: false };
+let target: { card: HTMLElement; plan: GrowthStep[]; words?: StepWords[]; light: (key: string | null) => void; matrix?: { root: HTMLElement; enable: () => void };
   read?: { steps: MatrixReadStep[]; onStep: (i: number | null) => void } } | null = null;
 /** Set while a book matrix's studio switches what it plays: the one target hands over to the other and the studio stays open. */
 let switching = false;
@@ -227,7 +249,7 @@ export async function play(from = 0, { video = false } = {}) {
   if (!target) return;
   if (target.matrix) return playMatrix(from, video);
   if (target.read) return playRead(from);
-  const { card, plan } = target;
+  const { card, plan, words } = target;
   const root = rootOf(card);
   if (!root || plan.length === 0) return;
   const token = ++run;
@@ -269,13 +291,15 @@ export async function play(from = 0, { video = false } = {}) {
   for (let i = from; i < plan.length; i++) {
     const step = plan[i];
     target.light(step.key);
-    set({ at: i });
+    const counts = words?.[i];
+    set({ at: i, lit: step.key, words: counts?.start, tour: false, reading: undefined });
     const route = startsFor(step.key);
     for (const [at, start] of route.entries()) {
       if (!start.hasAttribute('data-hide')) continue;
       const before = start.previousElementSibling;
       if (before?.hasAttribute('data-line') && !(await drawSegment(before as HTMLElement, token))) return;
       showStart(start);
+      if (start.getAttribute('data-node')?.startsWith('p') && counts) set({ words: counts.prefix });
       start.setAttribute('data-grow-now', '');
       if (!(await wait(BOX / speed(), token))) return;
       const item = start.closest('li');
@@ -292,6 +316,7 @@ export async function play(from = 0, { video = false } = {}) {
         const hidden = shown?.hasAttribute('data-hide');
         show(shown);
         shown?.setAttribute('data-grow-now', '');
+        if (counts) set({ words: counts.nodes[j] });
         if (!(await wait((hidden ? BOX : RELIGHT) / speed(), token))) return;
         continue;
       }
@@ -311,15 +336,33 @@ export async function play(from = 0, { video = false } = {}) {
       }
       show(shown);
       shown?.setAttribute('data-grow-now', '');
+      if (counts) set({ words: counts.nodes[j] });
       if (!(await wait(BOX / speed(), token))) return;
     }
     if (!(await drawLine(after(step.key), token))) return;
+    set({ words: ALL_WORDS });
     if (!(await wait(LEAF / speed(), token))) return;
     root.querySelectorAll('[data-grow-now]').forEach(element => element.removeAttribute('data-grow-now'));
   }
   clear(root);
+  // The tour, as in the app: each ayah's path lit in the order the ayat grew, its card read word by word.
+  if (words && tourCards > 0) {
+    for (const step of plan) {
+      target.light(step.key);
+      set({ lit: step.key, words: undefined, tour: true, reading: undefined });
+      // The card fetches its ayat when its path lights; a moment for it to say how long they are.
+      for (let waited = 0; !tourWords.has(step.key) && waited < 1500; waited += 100) if (!(await wait(100, token))) return;
+      const ayat = tourWords.get(step.key) ?? [];
+      if (!ayat.some(Boolean) && !(await wait(PATH / speed(), token))) return;
+      let reading = 0;
+      for (const [a, count] of ayat.entries()) for (let w = 0; w < count; w++) {
+        set({ reading: reading++ });
+        if (!(await wait(stepTime({ side: 0, ayah: a, word: w, last: w === count - 1 && a === ayat.length - 1 }, speed()), token))) return;
+      }
+    }
+  }
   target.light(null);
-  set({ status: 'done', at: plan.length });
+  set({ status: 'done', at: plan.length, lit: null, words: undefined, tour: false, reading: undefined });
 }
 
 export function pause(paused: boolean) {
@@ -348,16 +391,16 @@ export function stop() {
   if (root) clear(root);
   target?.light(null);
   target?.read?.onStep(null);
-  set({ status: 'idle', at: 0 });
+  set({ status: 'idle', at: 0, lit: null, words: undefined, tour: false, reading: undefined });
 }
 
 /** Lets the open tree be grown; a tree swiped away (unmounted) stops its growth. */
-export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: GrowthStep[] | null) {
+export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: GrowthStep[] | null, words?: StepWords[]) {
   const [lit, light] = useState<string | null>(null);
   useEffect(() => {
     loadPrefs();
     if (!plan || !card.current) return;
-    const mine = { card: card.current, plan, light };
+    const mine = { card: card.current, plan, words, light };
     target = mine;
     set({ status: 'idle', at: 0, total: plan.length, studio: false, kind: 'tree' });
     return () => {
@@ -366,7 +409,7 @@ export function useGrowTarget(card: React.RefObject<HTMLElement | null>, plan: G
       target = null;
       set({ total: 0, studio: false });
     };
-  }, [card, plan]);
+  }, [card, plan, words]);
   return lit;
 }
 

@@ -265,7 +265,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
     const range = end === ayah.key ? `${first}` : `${first}–${lastSurah === surah ? last : `${nameOf(lastSurah)} ${last}`}`;
     const name = nameOf(surah);
     return <div key={key} {...props}>
-      <PageSpread pages={[{
+      <PageSpread fillReading pages={[{
         // As the compare card heads a side (owner, 2026-11-14): the surah and number on one line, the mushaf button at its end. An ayah
         // that runs into the next surah names that surah after a «ثم», not inside a dash range.
         title: `${lastSurah !== surah ? `${name} ${first} ${ar ? 'ثم' : 'then'} ${nameOf(lastSurah)} ${last}` : `${name} ${range}`}${at === 'before' ? (ar ? ' · قبلها' : ' · before') : at === 'after' ? (ar ? ' · بعدها' : ' · after') : ''}`,

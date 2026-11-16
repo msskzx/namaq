@@ -263,7 +263,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         {!cards && tree && <RotateButton card={id} />}
       </>} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       {treeGroup && presentation && <SurahChips ayahKeys={presentation.ayat.map(ayah => ayah.key)} names={names} interactive={!cards} />}
-      {!cards && tree && presentation && passageKeys && <PathAyat rows={presentation.ayat.map(ayah => ayah.key)} passages={passageKeys} card={id} names={names} compare={Object.fromEntries(presentation.ayat.map(ayah => [ayah.key, compareLinksOfAyah(ayah.key)]))} />}
+      {!cards && tree && presentation && passageKeys && <PathAyat rows={presentation.ayat.map(ayah => ayah.key)} passages={passageKeys} card={id} names={names} grows compare={Object.fromEntries(presentation.ayat.map(ayah => [ayah.key, compareLinksOfAyah(ayah.key)]))} />}
       </PathScope>
       </GroupConnections>
     </div>

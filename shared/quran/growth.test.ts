@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Branch } from './branches';
-import { byMushaf, growthPlan } from './growth';
+import { byMushaf, cardWords, growthPlan, growthWords } from './growth';
 
 const leaf = (words: string[], ayat: string[]): Branch => ({ words, ayat, children: [] });
 
@@ -46,5 +46,22 @@ describe('growthPlan', () => {
 
   it('orders keys by surah then ayah, numerically', () => {
     expect(['9:2', '10:1', '9:10'].sort(byMushaf)).toEqual(['9:2', '9:10', '10:1']);
+  });
+});
+
+describe('growthWords', () => {
+  it('counts each growing ayah\'s card words with its boxes, from the words before the phrase', () => {
+    const plan = growthPlan(tree);
+    expect(growthWords(tree, plan, { offsets: { '51:15': 2 } }).map(step => step.nodes)).toEqual([[3, 4, 5], [5, 6, 7], [3, 4, 5], [3, 5]]);
+  });
+
+  it('holds the words before the phrase back until their own box is drawn', () => {
+    const [first] = growthWords(tree, growthPlan(tree), { offsets: { '15:45': 4 }, prefixed: ['15:45'] });
+    expect(first).toMatchObject({ start: 0, prefix: 4 });
+    expect(first.nodes[0]).toBe(7);
+  });
+
+  it('leaves ayah numbers out, and a basmala that opens the next surah', () => {
+    expect(cardWords(['رَبِّ', 'ٱلْعَـٰلَمِينَ', '﴿٢﴾', 'بِسْمِ', 'ٱللَّهِ', 'ٱلرَّحْمَـٰنِ', 'ٱلرَّحِيمِ', 'الٓمٓ'], false)).toEqual({ count: 3, afterEnd: false });
   });
 });

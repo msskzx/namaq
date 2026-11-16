@@ -11,14 +11,16 @@ const CHIP = 'inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border 
 /** Under the card's buttons, like tags under a post: the surahs the tree's ayat come from. On a tree, a tap lights that surah's ayat. */
 export default function SurahChips({ ayahKeys, names, interactive = true }: { ayahKeys: string[]; names: Record<number, string>; interactive?: boolean }) {
   const paths = useOuterPaths();
-  const studio = useGrowth().studio;
-  if (studio) return null;
+  const growth = useGrowth();
+  // In the studio the chips stay, the growing ayah's surah lit, as in the app; a tap there would light paths over the growth.
+  const studio = growth.studio;
   const surahs = treeSurahs(ayahKeys);
   return (
     <ul data-surah-chips aria-label="السور" className="-mt-1 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]">
       {surahs.map(({ surah, ayahKeys: keys }) => {
         const name = names[surah] ?? num(surah);
         const count = keys.length > 1 && <span className="text-xs opacity-70">{num(keys.length)}</span>;
+        if (studio) return <li key={surah} className={`${CHIP} ${growth.lit?.split(':')[0] === String(surah) ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-ink)]'}`}>{name}{count}</li>;
         if (!interactive || !paths) return <li key={surah} className={`${CHIP} border-[var(--home-rule)] text-[var(--home-ink)]`}>{name}{count}</li>;
         const id = `surah:${surah}`;
         const on = paths.pinned.has(pathToggleKey(id, keys));
