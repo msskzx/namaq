@@ -67,7 +67,7 @@ function SurahCard({ s }: { s: OrderSurah }) {
 }
 
 /**
- * Surah order from Fussilat to al-Nas, as in the app (owner, 2026-11-13): each surah's opening ayat and aim, and between two
+ * Surah order from al-Fatiha to al-Nas, as in the app (owner, 2026-11-13): each surah's opening ayat and aim, and between two
  * surahs what joins them, all quoted from al-Biqa'i, al-Suyuti and Ibn al-Zubayr with their pages. A juz chip narrows the list.
  */
 export default function OrderView({ surahs }: { surahs: OrderSurah[] }) {

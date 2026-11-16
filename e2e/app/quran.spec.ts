@@ -14,7 +14,17 @@ test('the Quran hub links to every tool', async ({ page }) => {
 
 test('the surah order narrows to a juz and cites its books', async ({ page }) => {
   await open(page, '/order');
-  await expect(page.getByRole('heading', { name: 'فصلت' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'الفاتحة' })).toBeVisible();
+  await page.getByRole('button', { name: '١', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'البقرة' })).toBeVisible();
+  await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
+  await page.getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://shamela.ws/book/9992/51');
+  await page.getByRole('button', { name: '١', exact: true }).evaluate(element => {
+    let strip = element.parentElement;
+    while (strip && strip.scrollWidth <= strip.clientWidth) strip = strip.parentElement;
+    strip?.scrollTo({ left: strip.scrollWidth, behavior: 'instant' });
+  });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'النبأ' })).toBeVisible();
   await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();

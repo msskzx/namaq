@@ -5,7 +5,7 @@ import { orderSurahs } from '@shared/quran/surahOrder';
 import OrderView from './OrderView';
 
 export const metadata: Metadata = {
-  title: 'ترتيب السور: من فصلت إلى الناس',
+  title: 'ترتيب السور: من الفاتحة إلى الناس',
 };
 
 export default function QuranOrderPage() {
