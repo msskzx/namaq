@@ -23,6 +23,9 @@ export const OPENING_KINDS: { id: OpeningKindId; label: string; surahs: number[]
  * Al-Suyuti's words for each kind, quoted from al-Itqan, ed. Muhammad Abu al-Fadl Ibrahim (al-Hay'a al-Misriyya, 1974),
  * vol. 3 pp. 361-363, linked to the page in the Shamela library. The punctuation is ours.
  */
+/** A quote and the page it cites; one with no page is our own note on the quotes above it. */
+type Quote = { text: string; cite?: string; url?: string };
+
 const itqan = (page: string, sh: number) => ({ cite: `السيوطي، الإتقان ٣/${page}`, url: `https://shamela.ws/book/11728/${sh}` });
 
 export const ITQAN_OPENING = { text: 'اعلم أن الله افتتح سور القرآن بعشرة أنواع من الكلام لا يخرج شيء من السور عنها', ...itqan('٣٦١', 1125) };
@@ -40,18 +43,13 @@ export const ITQAN_QUOTES: { kind: OpeningKindId; text: string; cite: string; ur
   { kind: 'reason', text: 'التعليل في «لإيلاف قريش»', ...itqan('٣٦٣', 1127) },
 ];
 
-/** Al-Kirmani on the tasbih surahs, and Abu Shama on kinds that overlap, both as al-Suyuti quotes them in the same chapter. */
-export const ITQAN_NOTES = [
-  { text: 'قال الكرماني في متشابه القرآن: التسبيح كلمة استأثر الله بها، فبدأ بالمصدر في بني إسرائيل لأنه الأصل، ثم بالماضي في الحديد والحشر لأنه أسبق الزمانين، ثم بالمضارع في الجمعة والتغابن، ثم بالأمر في الأعلى، استيعابا لهذه الكلمة من جميع جهاتها', ...itqan('٣٦١', 1125) },
-  { text: 'هكذا جمع أبو شامة، قال: وما ذكرناه في الدعاء يجوز أن يذكر مع الخبر، وكذا الثناء كله خبر إلا «سبح» فإنه في قسم الأمر، و«سبحان» يحتمل الأمر والدعاء والخبر', ...itqan('٣٦٣', 1127) },
-];
 
 /** Under each kind's quote: what al-Suyuti leaves unnamed and how the page fills it in, and the remarks he quotes about that kind. */
-export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, { text: string; cite?: string; url?: string }[]>> = {
-  praise: [ITQAN_NOTES[0], { text: 'لم يسمّ سور التحميد وتبارك، فهي التي تبدأ بهما. وسمّى الكرماني ست سور من سبع للتسبيح، والسابعة الصف.' }],
+export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, Quote[]>> = {
+  praise: [{ text: 'لم يسمّ سور التحميد وتبارك، فهي التي تبدأ بهما. وسمّى الكرماني فيما نقله ستًّا من سبع سور للتسبيح، والسابعة الصف.' }],
   letters: [{ text: 'لم يسمّها، فهي السور التي تبدأ بحروف التهجي.' }],
   question: [{ text: 'عدّها ستًا وسمّى خمسًا، والسادسة «هل أتى على الإنسان».' }],
-  prayer: [ITQAN_NOTES[1]],
+  prayer: [{ text: 'هكذا جمع أبو شامة، قال: وما ذكرناه في الدعاء يجوز أن يذكر مع الخبر، وكذا الثناء كله خبر إلا «سبح» فإنه في قسم الأمر، و«سبحان» يحتمل الأمر الدعاء والخبر', ...itqan('٣٦٣', 1127) }],
 };
 
 
@@ -68,26 +66,26 @@ const tanasuq = (page: string, sh: number) => ({ cite: `السيوطي، تنا�
  * rest of a kind.
  */
 type CardDef = { id: string; kind: OpeningKindId; title: string; surahs: number[]; alone?: true; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
-export type Quote = { text: string; cite?: string; url?: string };
 
 export const OPENING_CARDS: CardDef[] = [
   { id: 'hamd', kind: 'praise', title: 'الحمد لله', surahs: [1, 6, 18, 34, 35], refs: [
-    { text: 'كل ربع من القرآن افتتح بسورة أولها الحمد: فأول القرآن سورة الحمد، وهذه [الأنعام] للربع الثاني، والكهف للربع الثالث، وسبأ وفاطر للربع الرابع', ...tanasuq('٨٤', 82) },
+    { text: 'كل ربع من القرآن افتتح بسورة أولها الحمد: [فأول القرآن سورة الحمد]، وهذه [الأنعام] للربع الثاني، والكهف للربع الثالث، وسبأ وفاطر للربع الرابع', ...tanasuq('٨٤', 82) },
     { text: 'مناسبة وضعها [فاطر] بعد سبأ تآخيهما في الافتتاح بالحمد، مع تناسبهما في المقدار', ...tanasuq('١٢٥', 125) },
   ] },
   { id: 'tabarak', kind: 'praise', title: 'تبارك الذي', surahs: [25, 67], refs: [{ text: 'فالأول التحميد في خمس سور وتبارك في سورتين', ...itqan('٣٦١', 1125) }] },
   { id: 'tasbih', kind: 'praise', title: 'المسبحات', surahs: [17, 57, 59, 61, 62, 64, 87], refs: [
+    { text: 'قال الكرماني في متشابه القرآن: التسبيح كلمة استأثر الله بها، فبدأ بالمصدر في بني إسرائيل لأنه الأصل، ثم بالماضي في الحديد والحشر لأنه أسبق الزمانين، ثم بالمضارع في الجمعة والتغابن، ثم بالأمر في الأعلى', ...itqan('٣٦١', 1125) },
     { text: 'وبذلك تعرف الحكمة في الفصل بها [المجادلة] بين الحديد والحشر، مع تآخيهما في الافتتاح بـ«سبح»', ...tanasuq('١٣٨', 143) },
     { text: 'ولذلك فصل بها [الممتحنة] بين الحشر والصف، مع تآخيهما في الافتتاح بـ«سبح»', ...tanasuq('١٤٠', 145) },
   ] },
   { id: 'alif-lam-mim', kind: 'letters', title: 'الم', surahs: [2, 3, 29, 30, 31, 32], refs: [
-    { text: 'لمناسبة البقرة في الافتتاح بـ«الم»، وتوالي الطواسين والحواميم، وتوالي العنكبوت والروم ولقمان والسجدة', ...tanasuq('٩٢', 90) },
+    { text: 'وما تقدم من تقديم آل عمران على النساء وإن كانت أقصر منها لمناسبة البقرة في الافتتاح بـ«الم»، وتوالي الطواسين والحواميم، وتوالي العنكبوت والروم ولقمان والسجدة', ...tanasuq('٩٢', 90) },
   ] },
   { id: 'alif-lam-ra', kind: 'letters', title: 'ذوات الر', surahs: [10, 11, 12, 13, 14, 15], refs: [
     { text: 'فإن الأولى بسورة يونس أن تولى بالسور الخمس التي بعدها، لما اشتركت فيه من الاشتمال على القصص، ومن الافتتاح بـ«الر»، وبذكر الكتاب، ومن كونها مكيات', ...tanasuq('٩١', 89) },
   ] },
   { id: 'ta-sin', kind: 'letters', title: 'الطواسين', surahs: [26, 27, 28], refs: [
-    { text: 'وتقديم «طس» على القصص، مفصولا بها بين النظيرتين: طسم الشعراء وطسم القصص، في المطلع والطول', ...tanasuq('٤٧', 45) },
+    { text: 'وتقديم «طس» على القصص، مفصولا بها بين النظيرتين [طسم الشعراء وطسم القصص] في المطلع والطول', ...tanasuq('٤٧', 45) },
   ] },
   { id: 'ha-mim', kind: 'letters', title: 'الزمر والحواميم', surahs: [39, 40, 41, 42, 43, 44, 45, 46], parts: [{ label: 'الخبر', surahs: [39] }, { label: 'الحواميم', surahs: [40, 41, 42, 43, 44, 45, 46] }], refs: [
     { text: 'وجه إيلاء الحواميم السبع سورة الزمر: تآخي المطالع في الافتتاح بتنزيل الكتاب', ...tanasuq('١٢٩', 130) },
@@ -133,7 +131,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'idha-ja', kind: 'condition', title: 'إذا جاء', surahs: [63, 110] },
   { id: 'idha-fil', kind: 'condition', title: 'إذا وقعت', surahs: [56, 99] },
   { id: 'qul', kind: 'command', title: 'قل', surahs: [72, 109, 112, 113, 114], refs: [
-    { text: 'هاتان السورتان [الفلق والناس] نزلتا معا، فلذلك قرنتا، مع ما اشتركتا فيه من التسمية بالمعوذتين، ومن الافتتاح بـ«قل أعوذ»', ...tanasuq('١٧٣', 180) },
+    { text: 'هاتان السورتان [الفلق والناس] نزلتا معا… فلذلك قرنتا، مع ما اشتركتا فيه من التسمية بالمعوذتين، ومن الافتتاح بـ«قل أعوذ»', ...tanasuq('١٧٣', 180) },
   ] },
   { id: 'command-alone', kind: 'command', title: 'وحدها', surahs: [96], alone: true },
   { id: 'hal', kind: 'question', title: 'هل أتى', surahs: [76, 88] },
@@ -183,7 +181,8 @@ export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): O
       let at = 0;
       const all: OpeningWord[] = ayat.flatMap(ayah => [
         ...ayah.words.map(text => {
-          const link = marks?.[r].match?.links?.[at++];
+          const link = marks?.[r].match?.links?.[at];
+          at++;
           return link ? { text, mark: { kind: link.kind, some: link.rows < card.surahs.length } } : { text };
         }),
         { end: Number(ayah.key.split(':')[1]) },
@@ -234,4 +233,4 @@ export const CONDITION_SOURCES = [
   { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
 ];
 
-export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. البطاقة التي لا مصدر تحت عنوانها من تجميعنا، والنص برواية حفص.';
+export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. وما تحت عنوان البطاقة كلام السيوطي فيما يجمع سورها، وما لم يذكره منها فمن تجميعنا. والنص برواية حفص.';

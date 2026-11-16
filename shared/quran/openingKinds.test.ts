@@ -57,6 +57,10 @@ describe('opening kinds', () => {
     for (const card of cards.filter(c => c.alone)) for (const r of card.rows) expect([...marked(r, false), ...marked(r, true)]).toEqual([]);
   });
 
+  it('cuts long openings on the cards of surahs that stand alone too', () => {
+    expect(row('statement-alone', 8).cut).toBe(true);
+  });
+
   it('cuts a long opening and ends every full one with its ayah number', () => {
     const long = row('umma', 60);
     expect(long.cut).toBe(true);

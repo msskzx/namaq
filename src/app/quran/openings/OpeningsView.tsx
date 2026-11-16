@@ -20,7 +20,7 @@ const ROLE: Record<ConditionRole, string> = {
 };
 
 function Words({ words }: { words: OpeningWord[] }) {
-  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) 45%, var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) 55%, var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
 }
 
 function Conditions({ lines }: { lines: ConditionText[string] }) {
@@ -43,9 +43,9 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
   const [open, setOpen] = useState(false);
   const expandable = card.rows.some(row => conditions[row.surah]);
   return (
-    <div className="flex flex-col gap-1">
-      <article id={card.id} data-share-card data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
-        <h2 className="text-xl text-[var(--home-accent)]">{card.title}</h2>
+    <div data-share-card className="flex flex-col gap-1">
+      <article id={card.id} data-share-image data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
+        <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>
         {card.refs && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
         {card.rows.map((row, r) => (
           <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>
@@ -63,7 +63,7 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
           {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}
         </div>}
       </article>
-      <div className="flex items-center gap-1">
+      <div data-share-skip className="flex items-center gap-1">
         {expandable && <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'إخفاء الشرط وجوابه' : 'الشرط وجوابه'} title="الشرط وجوابه" className={icon}>
           <ChevronDown size={18} aria-hidden className={open ? 'rotate-180' : undefined} />
         </button>}

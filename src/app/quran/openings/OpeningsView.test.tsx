@@ -48,6 +48,13 @@ describe('the surah openings page', () => {
     expect(reference.textContent).toMatch(/القسم في خمس عشرة سورة/);
   });
 
+  it('shares the card itself, its buttons outside the picture', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const card = document.getElementById('hamd')!;
+    expect(card.hasAttribute('data-share-image')).toBe(true);
+    expect(card.parentElement!.hasAttribute('data-share-card')).toBe(true);
+  });
+
   it('opens the إذا السماء card on its conditions and their answer', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     const card = document.getElementById('idha-sama')!;
