@@ -150,3 +150,4 @@ counts for neither.
 | [R0047](R0047-a-tab-page-cannot-swipe-back.md) | A tab page cannot swipe back | challenge | solved |
 | [R0048](R0048-extending-order-needs-the-next-boundary.md) | Extending surah order needs the boundary into the old range | challenge | solved |
 | [R0049](R0049-a-tafsir-that-vocalizes-only-the-quran-marks-its-quotes.md) | A tafsir that vocalizes only the Quran marks its own quotes | challenge | solved |
+| [R0050](R0050-a-book-export-writes-marks-out-of-canonical-order.md) | A book export writes marks out of canonical order | challenge | solved |

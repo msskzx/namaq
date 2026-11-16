@@ -2,16 +2,15 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import QuranIltifatPage from './page';
+import QuranBalaghaPage from './page';
 
-vi.mock('@/components/common/SettingsHelp', () => ({ SettingsHelp: () => null }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
-describe('QuranIltifatPage', () => {
-  it('shows the title and the seven cards, with no explanation on the page', () => {
-    render(<QuranIltifatPage />);
-    expect(screen.getByRole('heading', { level: 1, name: 'الالتفات' })).toBeTruthy();
+describe('QuranBalaghaPage', () => {
+  it('shows the title and the seven cards, each followed by its reference', () => {
+    render(<QuranBalaghaPage />);
+    expect(screen.getByRole('heading', { level: 1, name: 'البلاغة' })).toBeTruthy();
     expect(screen.getAllByRole('article')).toHaveLength(7);
     expect(document.body.textContent).not.toContain('انتقال الكلام');
   });

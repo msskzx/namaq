@@ -1,9 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
 import ExternalLink from './ExternalLink';
-import { VOICE_NAME, voiceColor } from './Iltifat';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
@@ -12,7 +10,7 @@ import { sourceById } from '@shared/sources';
 
 const WEBSITE = 'https://namaq.vercel.app';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'iltifat' | 'order';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'order';
 
 /** A coloured sample word and what its colour means. */
 /** The colour of each likeness (MARK_LEGEND), as the colour setting draws it, with the kind of difference the books name for it. */
@@ -45,7 +43,7 @@ function Sourced({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'المصدر', iltifat: 'ما الالتفات؟', order: 'من أين هذا الكلام؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'المصدر', order: 'من أين هذا الكلام؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -57,16 +55,7 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
     <Sheet open={!!topic} onClose={onClose} palette={palette}>
       {topic && <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
-        {topic === 'iltifat' ? <>
-          <Text style={paragraph}>انتقال الكلام من غيبة إلى خطاب أو تكلم، أو من أحدها إلى غيره، والمتحدَّث عنه واحد.</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16 }}>
-            {(['he', 'we', 'you'] as Voice[]).map(voice => <Text key={voice} style={{ color: voiceColor(palette, voice), fontSize: 15 }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</Text>)}
-          </View>
-          <View style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>
-            {examples().map(view => <Text key={view.key} style={[paragraph, { color: palette.muted, fontSize: 14, lineHeight: 22 }]}>{view.name} {rangeLabel(view)}: {view.source}</Text>)}
-          </View>
-          <Text style={[paragraph, { color: palette.muted, fontSize: 14 }]}>النص برواية حفص. لم يراجع هذه الأمثلة أحد من أهل العلم.</Text>
-        </> : topic === 'order' ? <>
+        {topic === 'order' ? <>
           {ORDER_HELP.map((text, i) => <Text key={i} style={i === ORDER_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
           {Object.values(BOOKS).map(book => <ExternalLink key={book.shamela} url={`https://shamela.ws/book/${book.shamela}`} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{book.title}</ExternalLink>)}
         </> : topic === 'words' ? <>
