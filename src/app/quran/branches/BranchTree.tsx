@@ -14,7 +14,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
-import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
+import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, Through, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { likenessOf, treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
 import { MARK_CLASS } from '@/lib/markMode';
@@ -24,9 +24,7 @@ import { growthPlan, growthWords } from '@shared/quran/growth';
 import { useGrowTarget, useGrowth } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 
-type Props = { hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto' | 'down';
-  /** Every node's whole content, the root's too, in place of its words, references and buttons (a compare card's tree); `tab` names it over its edge. */
-  nodeContent?: (node: Branch) => { content: React.ReactNode; tab?: string } | undefined;
+type Props = { hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode | undefined; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto' | 'down';
   /** Off: no row of zoom buttons (a pinch or ctrl+wheel still zooms). */
   zoomBar?: boolean; rotatable?: boolean; growable?: boolean; surround?: { on: boolean; sync?: boolean; data?: Surrounding;
   /** With `sync`: the card whose own surrounding-ayat switch (in its row of buttons) the tree follows; none follows the settings' default. */
@@ -108,7 +106,9 @@ function BraidEdge({ count, join = false }: { count: number; join?: boolean }) {
 
 /** A node's words: shared-word colours when the tree compares ayat, amber for a word its ayat voice differently (inside `Marked`), and
  * a braid where neighbouring words differ together: one strand per way of writing them, with the ayat that write it so. */
-export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: string[]; ayahKeys: string[]; at?: number; prefix?: boolean }) {
+export function TreeWords({ words, ayahKeys, at = 0, prefix = false, tones }: { words: string[]; ayahKeys: string[]; at?: number; prefix?: boolean;
+  /** Each word's likeness, given in place of matching the ayat (a compare tree, Branch.tones). */
+  tones?: Branch['tones'] }) {
   const { contexts, offsets } = useContext(Comparison);
   const written = useContext(Written);
   const lit = useOuterPaths()?.lit;
@@ -122,7 +122,8 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
       const index = (prefix ? 0 : offsets[key] ?? 0) + at + i;
       return likenessOf(match, index);
     });
-    const kind = shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : matches.includes('written') ? 'written' : 'exact' : undefined;
+    const kind = tones ? tones[i] : shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : matches.includes('written') ? 'written' : 'exact' : undefined;
+    if (kind === 'related') return <mark data-match="related" className="bg-transparent text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]" title={ar ? LIKENESS_TITLE.root.ar : LIKENESS_TITLE.root.en}><MushafText>{shared}</MushafText></mark>;
     const moved = !!written.differs?.includes(at + i - written.offset);
     const shown = forms[i][0].word.replace(/^﴿(.+)﴾$/, shared.startsWith('﴿') ? '$&' : '$1');
     if (moved || (forms[i][0].word !== shared && kind !== 'root' && shared !== '۝')) return <span data-differs className={MARK_CLASS.written} title={title}><MushafText>{shown}</MushafText></span>;
@@ -151,21 +152,26 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false }: { words: 
 
 const nodeId = (index: number) => `n${index}`;
 
-function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, juz, renderNode, nodeContent, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
+function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   // The tree's own root (index -1): a compare tree's first children have no words above them either.
   const root = indices.get(node) === -1;
-  const custom = nodeContent?.(node);
-  // A compare tree that opens apart has no box before its first boxes, so no line into them.
-  const bare = !!nodeContent && root && node.words.length === 0;
-  const singleSurah = node.ayat.length > 0 && node.ayat.every(key => key.split(':')[0] === node.ayat[0].split(':')[0]);
-  const own = !!renderNode && !root;
-  // Every box names its ayat inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16).
-  const spans = shownAyat(node, path);
+  // A compare tree that opens apart has no box before its first boxes, so no line into them; each opens with its own ayah before.
+  const bare = root && node.words.length === 0 && node.ayat.length === 0;
+  const own = renderNode && !root ? renderNode(node, indices.get(node)!, tags, path) : undefined;
+  // A box with no words would be an empty box: where one side of a compare tree says nothing between two common stretches, its
+  // line runs straight on instead (owner, 2026-11-16: never an empty node, a longer line is fine).
+  const through = !root && own === undefined && node.words.length === 0 && node.ayat.length === 0;
+  // Every box names its ayat inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16). A compare tree's
+  // box names its own runs (`holds`) in place of the ayat it ends.
+  const named = node.holds ? node.holds.map(run => run[0]) : node.ayat;
+  const ended = shownAyat(node, path);
+  const spans = node.holds ? Object.fromEntries(node.holds.map(run => [run[0], run])) : ended;
+  const singleSurah = named.length > 0 && named.every(key => key.split(':')[0] === named[0].split(':')[0]);
   const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
     const neighbour = around.data.after[around.ends[key]];
     return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} /> }] : [];
   });
-  const references = node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} spans={spans} className={singleSurah ? 'justify-center' : 'mt-1'} />;
+  const references = named.length > 0 && <AyahRefs keys={named} names={names} tags={tags} spans={spans} className={singleSurah ? 'justify-center' : 'mt-1'} />;
   const words = [...path, ...node.words];
   const spelled = [...spelledPath, ...(node.spelled ?? node.words)];
   const shownWords = node.words.slice(root ? lead : 0);
@@ -174,26 +180,26 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
   const subject = (root ? shownWords : node.words).join(' ');
   // Every box that ends an ayah closes with its sign, as the mushaf writes it (owner, 2026-11-14).
   const last = shownWords[shownWords.length - 1] ?? '';
-  const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => spans[key][spans[key].length - 1]));
+  const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => ended[key][ended[key].length - 1]));
   const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(spelled) ? branchesHref(linkId(spelled, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
-  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
+  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <>
+    {bare && <BeforeFan ayahKeys={keys(child)} around={around} />}
+    <Node node={child} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} />
+  </> })), ...nexts];
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
-      {custom && (!root || shownWords.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className="max-w-full text-lg">
-        {custom.tab && <ReferenceHeader>{custom.tab}</ReferenceHeader>}
-        {custom.content}
-      </PathBox>}
-      {!custom && !boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
+      {through && <Through keys={keys(node)} />}
+      {!boundary && !through && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
-        {own ? renderNode(node, indices.get(node)!, tags, path) : <>
+        {own !== undefined ? own : <>
           {start}
           {singleSurah && <ReferenceHeader>{references}</ReferenceHeader>}
           <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
             references={!singleSurah && references}
             before={<PathButton id={id} keys={keys(node)} subject={subject} />}
             after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
-            <span className="block font-quran leading-loose"><span><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} /></span>{sign.map(end => <React.Fragment key="end">{' '}<span data-end><MushafText>{end}</MushafText></span></React.Fragment>)}</span>
+            <span className="block font-quran leading-loose"><span><TreeWords words={shownWords} ayahKeys={keys(node)} at={path.length + (root ? lead : 0)} tones={node.tones} /></span>{sign.map(end => <React.Fragment key="end">{' '}<span data-end><MushafText>{end}</MushafText></span></React.Fragment>)}</span>
           </Marked>
         </>}
       </PathBox>}
@@ -203,7 +209,7 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
       </>}
       {node.rejoin && <>
         <Stub keys={keys(node.rejoin)} />
-        <Node node={node.rejoin} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} />
+        <Node node={node.rejoin} parent={node} path={words} spelledPath={spelled} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} />
       </>}
     </div>
   );
@@ -576,7 +582,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 const NO_VARIANTS: Variant[] = [];
 const NO_OFFSETS: Record<string, number> = {};
 
-export default function BranchTree({ tree, names, ayat, offsets = NO_OFFSETS, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, nodeContent, zoomBar = true }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = NO_OFFSETS, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, zoomBar = true }: Props) {
   const prefixes = useMemo(() => listed && withStarts(listed, keys(tree)), [listed, tree]);
   const id = useId();
   const group = useGroupConnections()?.group;
@@ -698,8 +704,8 @@ export default function BranchTree({ tree, names, ayat, offsets = NO_OFFSETS, va
               </PathBox>
             </> }))} />
             <Stub keys={all} />
-          </> : <BeforeFan ayahKeys={all} around={around} />}
-          <Node node={tree} path={[]} start={startReference(all.filter(key => !prefixed.has(key)), tree.ayat)} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} nodeContent={nodeContent} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
+          </> : tree.words.length > 0 || tree.ayat.length > 0 ? <BeforeFan ayahKeys={all} around={around} /> : null}
+          <Node node={tree} path={[]} start={startReference(all.filter(key => !prefixed.has(key)), tree.ayat)} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
         </TreeViewport>
       </div>
   );

@@ -119,13 +119,39 @@ describe('BranchTree', () => {
       { words: ['ب'], ayat: [], children: [], via: ['1:1'] },
       { words: ['د'], ayat: [], children: [], via: ['2:2'] },
     ] };
-    const { container } = render(<BranchTree tree={parted} names={{}} direction="down" zoomBar={false} nodeContent={node => ({ content: <span>{node.words.join(' ')}</span> })} />);
-    expect([...container.querySelectorAll('[data-node]')].map(node => node.textContent)).toEqual(['أ', 'ب', 'د', 'ج']);
+    const { container } = render(<BranchTree tree={parted} names={{}} direction="down" zoomBar={false} />);
+    expect([...container.querySelectorAll('[data-node] .font-quran')].map(node => node.textContent)).toEqual(['أ', 'ب', 'د', 'ج']);
     // Each side runs on past its box to where the two meet.
     expect(container.querySelectorAll('[data-fan="start"] > ul > li > [data-line]')).toHaveLength(2 * 3);
     fireEvent.click(screen.getByText('ب'));
     expect([...container.querySelectorAll('[data-node]')].map(node => node.hasAttribute('data-lit'))).toEqual([true, true, false, true]);
     expect(screen.queryByRole('toolbar', { name: 'تكبير الشجرة' })).toBeNull();
+  });
+
+  it('names a compare box\'s own ayat over a rule and colours its words by the likeness it is given', () => {
+    // A box of one side names the ayat it holds; a box both sides end in names both, under its words, as a box of two surahs does.
+    const close: Branch = { words: ['ج', '۝'], ayat: [], children: [], via: ['2:35', '7:19'], holds: [['2:35'], ['7:19']], tones: ['exact', undefined] };
+    const parted: Branch = { words: [], ayat: [], via: ['2:35', '7:19'], rejoin: close, children: [
+      { words: ['ب'], ayat: [], children: [], via: ['2:35'], holds: [['2:35']], tones: ['root'] },
+      { words: ['د'], ayat: [], children: [], via: ['7:19'], holds: [['7:19']], tones: ['written'] },
+    ] };
+    const { container } = render(<BranchTree tree={parted} names={{ 2: 'البقرة', 7: 'الأعراف' }} direction="down" zoomBar={false} />);
+    const boxes = [...container.querySelectorAll('[data-node]')];
+    expect(boxes.map(box => box.querySelector('[data-ref]')?.textContent ?? null)).toEqual(['البقرة ٣٥', 'الأعراف ١٩', null]);
+    expect(boxes[2].textContent).toContain('البقرة ٣٥');
+    expect(boxes[2].textContent).toContain('الأعراف ١٩');
+    expect([...container.querySelectorAll('mark[data-match]')].map(mark => mark.getAttribute('data-match'))).toEqual(['root', 'written', 'exact']);
+  });
+
+  it('never draws an empty box: a side with no words between two meetings is a line running straight on', () => {
+    const close: Branch = { words: ['ج'], ayat: [], children: [], via: ['1:1', '2:2'] };
+    const parted: Branch = { words: ['أ'], ayat: [], via: ['1:1', '2:2'], rejoin: close, children: [
+      { words: ['ب'], ayat: [], children: [], via: ['1:1'] },
+      { words: [], ayat: [], children: [], via: ['2:2'] },
+    ] };
+    const { container } = render(<BranchTree tree={parted} names={{}} direction="down" zoomBar={false} />);
+    expect([...container.querySelectorAll('[data-node]')].map(node => node.textContent!.trim().length > 0)).toEqual([true, true, true]);
+    expect(container.querySelectorAll('[data-through]')).toHaveLength(1);
   });
 
   it('fits the complete tree by default and switches between fit and manual zoom', () => {

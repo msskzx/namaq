@@ -19,3 +19,5 @@ The same day a third case of the pattern showed: #785 let the surah chips rise i
 The owner asked how the pills got there, not only to remove them. Two separate changes met on one card: #776's tabs on compare trees (the rule's other path), and #783's shrink-to-fit (a native-only prop no test could see).
 
 Follow-up (owner, 2026-11-16): one layout for every tree. Tabs are gone; every box, side by side or top down, names its ayah inside over a rule, so there is no second path left to miss. `treeTabs.test.ts` fails if a tab comes back.
+
+Follow-up (owner, 2026-11-16): the compare tree still drew its own boxes through `nodeContent`, so #798's rule (every box names its ayah) and the same-style surrounding boxes never reached it. `nodeContent` is gone from both trees: `compareTree` (shared/quran/braid.ts) now hands the tree plain data (`holds` for the ayat a box names, `tones` for its words' likeness, end signs as words, `ayat`/`through` on each side's last box), and the default node path draws it. `ayahEnds` follows `rejoin` so the website finds each side's ayah after.
