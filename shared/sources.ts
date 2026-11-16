@@ -110,7 +110,7 @@ export const SOURCES: Source[] = [
   {
     id: 'burhan-zarkashi', group: 'books',
     title: { ar: 'البرهان في علوم القرآن', en: 'al-Burhan fi ‘Ulum al-Quran' }, author: { ar: 'بدر الدين الزركشي', en: 'al-Zarkashi' },
-    edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat, USE.openings],
   },
   {
     id: 'asrar-al-tikrar', group: 'books',

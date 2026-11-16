@@ -28,6 +28,9 @@ type Quote = { text: string; cite?: string; url?: string };
 
 const itqan = (page: string, sh: number) => ({ cite: `السيوطي، الإتقان ٣/${page}`, url: `https://shamela.ws/book/11728/${sh}` });
 
+/** Al-Zarkashi, al-Burhan fi 'Ulum al-Quran, ed. Muhammad Abu al-Fadl Ibrahim (Dar Ihya' al-Kutub al-'Arabiyya, 1957). */
+const burhan = (page: string, sh: number) => ({ cite: `الزركشي، البرهان ${page}`, url: `https://shamela.ws/book/11436/${sh}` });
+
 export const ITQAN_OPENING = { text: 'اعلم أن الله افتتح سور القرآن بعشرة أنواع من الكلام لا يخرج شيء من السور عنها', ...itqan('٣٦١', 1125) };
 
 export const ITQAN_QUOTES: { kind: OpeningKindId; text: string; cite: string; url: string }[] = [
@@ -44,11 +47,19 @@ export const ITQAN_QUOTES: { kind: OpeningKindId; text: string; cite: string; ur
 ];
 
 
-/** Under each kind's quote: what al-Suyuti leaves unnamed and how the page fills it in, and the remarks he quotes about that kind. */
+/** Under each kind's quote: what al-Suyuti leaves unnamed and how the page fills it in, the remarks he quotes about that kind, and
+ * al-Zarkashi's words where al-Burhan names what al-Itqan leaves out or sets two of the kind's openings side by side. */
 export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, Quote[]>> = {
   praise: [{ text: 'لم يسمّ سور التحميد وتبارك، فهي التي تبدأ بهما. وسمّى الكرماني فيما نقله ستًّا من سبع سور للتسبيح، والسابعة الصف.' }],
   letters: [{ text: 'لم يسمّها، فهي السور التي تبدأ بحروف التهجي.' }],
-  question: [{ text: 'عدّها ستًا وسمّى خمسًا، والسادسة «هل أتى على الإنسان».' }],
+  statement: [
+    { text: 'ونقل الزركشي عن ابن السيد قرنَه بين الحاقة والقارعة في باب الإظهار والإضمار:' },
+    { text: 'وإذا اقترن بالاسم الثاني حرف الاستفهام بمعنى التعظيم والتعجب كان المناسب الإظهار، كقوله تعالى: «الحاقة ما الحاقة» و«القارعة ما القارعة»، والإضمار جائز كقوله تعالى: «فأمه هاوية وما أدراك ما هيه»', ...burhan('٢/٤٨٤', 993) },
+  ],
+  question: [
+    { text: 'عدّها ستًّا وسمّى خمسًا، والسادسة «هل أتى على الإنسان»، سمّاها الزركشي فيما نقله من عدّ أبي شامة:' },
+    { text: 'لفظ الاستفهام في «هل أتى»، «عم يتساءلون»، «هل أتاك»، «ألم نشرح»، «ألم تر»، «أرأيت»، فتلك ست سور', ...burhan('١/١٨٠', 197) },
+  ],
   prayer: [{ text: 'هكذا جمع أبو شامة، قال: وما ذكرناه في الدعاء يجوز أن يذكر مع الخبر، وكذا الثناء كله خبر إلا «سبح» فإنه في قسم الأمر، و«سبحان» يحتمل الأمر الدعاء والخبر', ...itqan('٣٦٣', 1127) }],
 };
 

@@ -9,7 +9,7 @@ import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { aloneNote, aroundOf, besideRows, partLabel, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
+import { aloneNote, aroundOf, besideRows, partLabel, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
 import { around as aroundSetting, besideLayout, branchView, type BranchView } from '@/lib/settings';
 import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
@@ -25,6 +25,7 @@ import { WEBSITE } from '@/lib/branches';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
+import { compareMatrixOnly } from '@shared/quran/compareViews';
 
 const DOUBLE_TAP = 280;
 
@@ -178,8 +179,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
   const [view, setView] = useState<BranchView>(branchView.get);
   const [beside, setBeside] = useState(besideLayout.get);
-  // The read-along studio lights words in the matrix, so it shows the matrix while open.
-  const tree = view === 'tree' && !read.studio;
+  // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
+  const matrixOnly = compareMatrixOnly(card);
+  const tree = view === 'tree' && !read.studio && !matrixOnly;
   const sides = shownAyat(card, selected);
   // The card's own switches, opening on the settings' defaults.
   const [aroundOn, setAround] = useState(aroundSetting.get);
@@ -313,11 +315,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
     </>;
   };
 
-  // A refrain card's tree names every place the refrain repeats, as its matrix does.
-  const refrainLabels = card.many && isRefrain(card.many.options)
-    ? sides.map((side, i) => (i === card.many!.side ? `${surahName(side.surah)} ${card.many!.options.map(item => num(item.ayah.number)).join(' · ')}` : sideLabel(side))) as [string, string]
-    : undefined;
-
   const pickers = card.many && !isRefrain(card.many.options) && (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
       {card.many.options.map((item, row) => (
@@ -344,7 +341,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
             </View>
             {!folded.includes(r) && <CompareTree sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
           </View>
-        )) : <CompareTree sides={sides} palette={palette} around={around} labels={refrainLabels} />}
+        )) : <CompareTree sides={sides} palette={palette} around={around} />}
       </> : beside ? besideBody() : <>
         {side(card.sides[0], 0)}
         <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
@@ -356,7 +353,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={cardBox}>
+      {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
+      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
         {body}
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
@@ -374,9 +372,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
           {!tree && <Pressable onPress={() => setBeside(!beside)} hitSlop={6} accessibilityRole="button" accessibilityLabel={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} style={{ padding: 8 }}>
             {beside ? <Rows2 size={22} color={palette.muted} /> : <Columns2 size={22} color={palette.muted} />}
           </Pressable>}
-          <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+          {!matrixOnly && <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
-          </Pressable>
+          </Pressable>}
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
           {tree && card.group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
             <TreeIcon size={22} color={palette.muted} />

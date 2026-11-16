@@ -80,6 +80,15 @@ describe('PairCompare', () => {
     expect(screen.getByLabelText(/شجرةً$/)).toBeTruthy();
   });
 
+  it('opens a card the owner keeps as its matrix with no tree and no tree button', () => {
+    const matrixOnly: PairCard[] = [{ ...cards[0], id: '9:129|27:26' }];
+    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} />);
+    expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
+    expect(container.querySelectorAll('article')).toHaveLength(2);
+    expect(screen.queryByRole('button', { name: 'عرض الشجرة' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'عرض المصفوفة' })).toBeNull();
+  });
+
   it('lights the matching word on the other side when a word is tapped', () => {
     const { container } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     const [first] = container.querySelectorAll('mark[data-link="1"]');
@@ -171,15 +180,15 @@ describe('PairCompare', () => {
       const { unmount } = render(<PairCompare view={view} a={2} b={7} cards={[part]} pairs={pairs} names={names} />);
       expect(screen.getAllByRole('button', { name: /^اطوِ / }).map(button => button.getAttribute('aria-label')).sort()).toEqual(['اطوِ البقرة ٣٠', 'اطوِ البقرة ٣٠: لا تذكر سورة الاعراف هذا الجزء', 'اطوِ البقرة ٣٤', 'اطوِ الاعراف ١١–١٢'].sort());
       fireEvent.click(screen.getByRole('button', { name: 'اطوِ البقرة ٣٠' }));
-      expect(screen.queryByText('خليفة')).toBeNull();
+      expect(screen.queryByText(/خليفة/)).toBeNull();
       expect(screen.getAllByText('٣٠').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('منعك').length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/منعك/).length).toBeGreaterThan(0);
       fireEvent.click(screen.getByRole('button', { name: 'اطوِ الاعراف ١١–١٢' }));
-      expect(screen.queryByText('منعك')).toBeNull();
+      expect(screen.queryByText(/منعك/)).toBeNull();
       expect(screen.getByRole('button', { name: 'افتح البقرة ٣٤' })).toBeTruthy();
       fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٤' }));
       fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٠' }));
-      expect(screen.getByText('خليفة')).toBeTruthy();
+      expect(screen.getAllByText(/خليفة/).length).toBeGreaterThan(0);
       unmount();
     }
   });
@@ -193,7 +202,10 @@ describe('PairCompare', () => {
     expect(screen.getAllByRole('separator').map(node => node.getAttribute('aria-label'))).toEqual(['الآيات ٥١–٥٢', 'الآيات ٩٢']);
     unmount();
     render(<PairCompare view="tree" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
-    expect(screen.getAllByRole('separator', { name: 'آيات محذوفة، ثم الآية ٩٢' })).toHaveLength(1);
+    // No mark the mushaf does not write: the gap shows in the ayah signs and the box's names.
+    expect(screen.queryByText('⋯')).toBeNull();
+    // The box names each unbroken stretch of its ayat, not one range over the gap.
+    expect([...document.querySelectorAll('[data-ref]')].map(ref => ref.textContent)).toContain('البقرة ٥١–٥٢·البقرة ٩٢');
   });
 
   it('says when a story card\'s side steps back in its surah', () => {

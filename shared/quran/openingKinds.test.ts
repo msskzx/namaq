@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from '../data/quran/trees.json';
 import type { BranchAyah } from './branches';
-import { ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -20,6 +20,17 @@ describe('opening kinds', () => {
   it('quotes al-Itqan once for each kind, in his order, with a page', () => {
     expect(ITQAN_QUOTES.map(quote => quote.kind)).toEqual(OPENING_KINDS.map(kind => kind.id));
     for (const quote of ITQAN_QUOTES) expect(quote.cite).toMatch(/^السيوطي، الإتقان ٣\/٣٦[١-٣]$/);
+  });
+
+  it('backs the sixth question opening and the al-Haqqa / al-Qari\'a pair with al-Zarkashi\'s own words', () => {
+    const quoted = (kind: 'question' | 'statement') => ITQAN_KIND_NOTES[kind]!.filter(note => note.cite);
+    const [six] = quoted('question');
+    expect(six.cite).toBe('الزركشي، البرهان ١/١٨٠');
+    for (const opening of ['هل أتى', 'عم يتساءلون', 'هل أتاك', 'ألم نشرح', 'ألم تر', 'أرأيت']) expect(six.text).toContain(`«${opening}»`);
+    const [pair] = quoted('statement');
+    expect(pair.cite).toBe('الزركشي، البرهان ٢/٤٨٤');
+    expect(pair.text).toContain('«الحاقة ما الحاقة»');
+    expect(pair.text).toContain('«القارعة ما القارعة»');
   });
 
   it('shows every surah on exactly one card, of its own kind unless the card names its parts', () => {

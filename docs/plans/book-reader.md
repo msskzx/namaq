@@ -24,7 +24,7 @@ The marks are in `shared/readingMarks.ts`, so the website can keep them the same
 
 ## Pages
 
-The books' data keeps passages, not pages. `npm run quran:book-pages` reads the same Quranpedia dumps again and finds where each printed page starts inside the passages by its first letters (record R0051). It writes `shared/data/quran/bookPages.json`. Run it after rebuilding any of the three books. `shared/bookReader.ts` lays the pages out, finds a page by place, splits paragraphs and searches.
+The books' data keeps passages, not pages. `npm run quran:book-pages` reads the same Quranpedia dumps again and finds where each printed page starts inside the passages by its first letters (record R0052). It writes `shared/data/quran/bookPages.json`. Run it after rebuilding any of the three books. `shared/bookReader.ts` lays the pages out, finds a page by place, splits paragraphs and searches.
 
 ## Not yet
 

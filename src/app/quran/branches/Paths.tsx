@@ -120,7 +120,7 @@ export function Fan({ side, entries, label, join = false, bare = false }: { side
             {!(start && bare) && <Lines side={side} i={i} count={entries.length} lit={lit.includes(i)} />}
             {entry.item}
             {join && <>
-              <span aria-hidden data-line className={`h-0 min-w-2 flex-1 border-t-2 [[data-down]_&]:min-h-2 [[data-down]_&]:w-0 [[data-down]_&]:min-w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${lit.includes(i) ? LIT : LINE}`} />
+              <span aria-hidden data-line data-run className={`h-0 min-w-2 flex-1 border-t-2 [[data-down]_&]:min-h-2 [[data-down]_&]:w-0 [[data-down]_&]:min-w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${lit.includes(i) ? LIT : LINE}`} />
               <Lines side="end" i={i} count={entries.length} lit={lit.includes(i)} />
             </>}
           </li>
@@ -128,10 +128,17 @@ export function Fan({ side, entries, label, join = false, bare = false }: { side
       </ul>
       {entries.length > 1 && !(start && bare) && <Stem lit={lit} side={side} />}
       {join && entries.length > 1 && <Stem lit={lit} side="end" />}
-      {!join && <TreeLinks key={JSON.stringify(entries.map(entry => entry.key))} side={side} lit={lit} />}
+      {!(start && bare) && <TreeLinks key={JSON.stringify(entries.map(entry => entry.key))} side={side} lit={lit} />}
+      {join && <TreeLinks key={`join ${JSON.stringify(entries.map(entry => entry.key))}`} side="end" lit={lit} />}
     </div>
   );
 }
+
+/** In place of a box with no words: the line runs straight on, lit with its path (owner, 2026-11-16: never an empty node). */
+export const Through = ({ keys }: { keys: string[] }) => {
+  const on = useIsLit()(keys);
+  return <span aria-hidden data-line data-through data-connected={on || undefined} className={`w-6 shrink-0 border-t-2 [[data-down]_&]:h-6 [[data-down]_&]:w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${on ? LIT : LINE}`} />;
+};
 
 export const Stub = ({ keys }: { keys: string[] }) => {
   const on = useIsLit()(keys);

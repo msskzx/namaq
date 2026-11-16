@@ -40,6 +40,7 @@ import { useCardAround } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLook';
+import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
 
 export type SurahName = { ar: string; en?: string };
@@ -382,12 +383,14 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
     rows: page.rows.map((ayat, row) => (folded.includes(row) ? [] : ayat)),
     ruleLabels: parts.map((_, row) => (folded.includes(row) && shownSides[i].rows![row].length ? ayatOf(row, shownSides[i]) : undefined)),
   };
-  // The read-along studio lights words in the matrix, so it shows the matrix while open.
-  const tree = view === 'tree' && !read.studio;
+  // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
+  const matrixOnly = compareMatrixOnly(card);
+  const tree = view === 'tree' && !read.studio && !matrixOnly;
   // The card's own surrounding-ayat switch, opening on the settings' default.
   const [aroundOn, setAround] = useCardAround(anchorOf(card));
   const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
-  const neighbours = useNeighbours(shownSides, aroundOn && !card.many);
+  const neighbours = useNeighbours(shownSides, aroundOn && !card.many && !tree);
+  const treeNames = Object.fromEntries(shownSides.map(side => [side.surah, ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah)]));
   const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');
   // A refrain card's tree names every place the refrain repeats, as its matrix does.
   const titleOf = (side: CardSide, i: number) => card.many?.side === i && isRefrain(card.many.options)
@@ -415,7 +418,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
     <li id={anchor} data-share-card className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       <div data-share-image>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
-        {tree ? <div className="flex flex-col gap-2 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-[var(--home-ink)]">
+        {/* A tree stands in the branches tree's own frame, as on the branches page; the matrix is one card. */}
+        {tree ? <div className="flex flex-col gap-2 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
             {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
               className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
@@ -424,10 +428,10 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
           </div>}
           {rowsOf(shownSides).map((sides, row) => <div key={row} className={`${row > 0 || parts ? 'border-t border-dotted border-[var(--home-rule)]' : ''} ${parts ? 'min-h-7 pt-4' : row > 0 ? 'pt-2' : ''}`}>
             {parts && <div dir="rtl" className="grid h-0 grid-cols-2">{shownSides.map((side, i) => <div key={i} className="relative">
-              <div className="absolute start-0 top-0 z-10 -translate-y-1/2 bg-[var(--home-card)]">{foldButton(row, side)}</div>
-              {side.rows![row].length > 0 && folded.includes(row) && <span aria-hidden className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[var(--home-card)] px-2 font-[family-name:var(--font-amiri)] text-xs text-[var(--home-muted)]">{ayatOf(row, side)}</span>}
+              <div className="absolute start-0 top-0 z-10 -translate-y-1/2 bg-[var(--home-paper)]">{foldButton(row, side)}</div>
+              {side.rows![row].length > 0 && folded.includes(row) && <span aria-hidden className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[var(--home-paper)] px-2 font-[family-name:var(--font-amiri)] text-xs text-[var(--home-muted)]">{ayatOf(row, side)}</span>}
             </div>)}</div>}
-            {!folded.includes(row) && <CompareTree sides={sides} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : neighbours}
+            {!folded.includes(row) && <CompareTree sides={sides} names={treeNames} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : anchorOf(card)}
               empty={sides.map(side => emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar))} />}
           </div>)}
         </div> : <div onClick={event => pick(event.target)}>
@@ -440,9 +444,9 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
         {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
-        <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
+        {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
-        </Button>
+        </Button>}
         <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
           className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
