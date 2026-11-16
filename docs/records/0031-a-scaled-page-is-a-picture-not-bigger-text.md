@@ -11,7 +11,7 @@ conditions: "Expo app on iOS with Reanimated transforms on a view of nested Text
 evidence: "mobile/src/components/ReaderPager.tsx, MushafPageView.tsx (rows), Reader.tsx (scroll, anchor); src/app/quran/read/MushafPage.tsx fit(), Mushaf.module.css [data-flow]"
 implication: "Don't zoom text with a transform past the gesture itself: change the font size and lay the text out again. Check anything that measures positions (highlight bands, write boxes, kept scroll) at the new layout, after it is drawn, not in the same render."
 date: "2026-11-14"
-topics: ["mobile","ios","text","reader"]
+topics: ["mobile"]
 buildsOn: ["namaq/0030-a-fixed-height-box-clips-ios-text-mid-word"]
 ---
 

@@ -11,7 +11,7 @@ conditions: "Expo app, BranchTree.tsx Fan/Elbow/Stub, growth driven by growPlaye
 evidence: "mobile/src/components/BranchTree.tsx; e2e/app/quran.spec.ts 'the studio grows a tree to its end'"
 implication: "When an animation hides parts of a laid-out view with opacity, anything drawn from that layout (spines, overlays, measured lines) must also be gated by what is shown, or it points at the hidden parts."
 date: "2026-11-14"
-topics: ["mobile","graph-ui","animation"]
+topics: ["mobile","graph-ui"]
 buildsOn: []
 ---
 
