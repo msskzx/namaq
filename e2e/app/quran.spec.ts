@@ -30,6 +30,15 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
+test('the balagha page groups its examples by device, each with al-Suyuti\'s words folded under it', async ({ page }) => {
+  await open(page, '/balagha');
+  await expect(page.getByRole('tab', { name: 'الكل' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('heading', { name: 'الالتفات' })).toBeVisible();
+  const reference = page.getByRole('button', { name: 'الإتقان للسيوطي ٣/٢٩٢–٢٩٣' });
+  await reference.click();
+  await expect(page.getByRole('link', { name: /الإتقان للسيوطي ٣\/٢٩٢–٢٩٣/ }).first()).toBeVisible();
+});
+
 test.describe('branches', () => {
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');

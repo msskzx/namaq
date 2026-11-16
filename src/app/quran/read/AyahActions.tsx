@@ -95,7 +95,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
       {links?.qiraat && <Act label={readingsLabel} name={ar ? 'القراءات' : 'Readings'} popup onClick={preview('readings')}><Layers aria-hidden /></Act>}
       {onPreview && <Act label={tafsirLabel} name={ar ? 'التفسير' : 'Tafsir'} popup onClick={preview('tafsir')}><BookOpen aria-hidden /></Act>}
       {onPreview && irab && <Act label={ar ? 'إعراب الكلمة' : 'Grammar of the word'} name={ar ? 'الإعراب' : 'I‘rab'} popup onClick={preview('irab')}><ListTree aria-hidden /></Act>}
-      {onPreview && <Act label={ar ? 'البلاغة في الكشاف' : 'Rhetoric in al-Kashshaf'} name={ar ? 'البلاغة' : 'Balagha'} popup onClick={preview('balagha')}><Sparkles aria-hidden /></Act>}
+      {onPreview && <Act label={ar ? 'البلاغة في الآية' : 'Rhetoric in the ayah'} name={ar ? 'البلاغة' : 'Balagha'} popup onClick={preview('balagha')}><Sparkles aria-hidden /></Act>}
       {onShare && <Act label={shareLabel} name={ar ? 'مشاركة' : 'Share'} popup onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Act>}
     </div>
   );

@@ -71,18 +71,18 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const { data: balagha, error: balaghaError } = useSWR(balaghaKey ? ['balagha', balaghaKey] : null, ([api, key]) => load<BalaghaAyah>(api, key), { revalidateOnFocus: false });
   const error = tafsirKey ? tafsirError : irab ? irabError : balaghaKey ? balaghaError : previewError;
   const [surah, number] = (shown?.key ?? '0:0').split(':').map(Number);
-  const run = tafsirKey ? tafsir : balaghaKey ? balagha?.passage : null;
+  const run = tafsirKey ? tafsir : null;
   const trees = shown?.kind === 'trees';
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
   const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : balaghaKey ? Sparkles : ArrowLeftRight;
   return (
-    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الكشاف' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
+    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
       dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
         <div className="flex shrink-0 items-center gap-2 px-4 pb-2 pt-1 text-[var(--home-muted)]">
           <Icon size={20} aria-hidden />
-          {/* Al-Sa'di and al-Zamakhshari explain a run of ayat at once, so the sheet names the whole run. */}
+          {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
           <h2 className="flex-1 text-base font-normal">{`${names[surah] ?? num(surah)} ${run && run.from !== run.to ? `${num(run.from)}–${num(run.to)}` : num(number)}`}</h2>
           <button type="button" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق" className="flex size-9 items-center justify-center rounded-full"><X size={18} aria-hidden /></button>
         </div>

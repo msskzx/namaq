@@ -426,8 +426,8 @@ export default function Reader() {
           {/* The pressed word's i'rab (owner, 2026-11-15). */}
           {actions.word !== undefined && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setIrab({ key, word: word! }); }} />}
-          {/* Al-Kashshaf on the ayah, its device sentences lit (owner, 2026-11-16). */}
-          <ActButton Icon={Sparkles} label="البلاغة في الكشاف" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
+          {/* The ayah's balagha: al-Itqan's paragraphs and al-Kashshaf's passage, pills between them (owner, 2026-11-16). */}
+          <ActButton Icon={Sparkles} label="البلاغة في الآية" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
           {/* The word's places: its label names the long-pressed word, which is lit on the page. */}
           {actions.lemmas.length > 0 && <ActButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} name="المواضع" palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
