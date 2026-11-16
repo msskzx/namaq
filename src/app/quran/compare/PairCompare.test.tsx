@@ -80,6 +80,15 @@ describe('PairCompare', () => {
     expect(screen.getByLabelText(/شجرةً$/)).toBeTruthy();
   });
 
+  it('opens a card the owner keeps as its matrix with no tree and no tree button', () => {
+    const matrixOnly: PairCard[] = [{ ...cards[0], id: '9:129|27:26' }];
+    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} />);
+    expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
+    expect(container.querySelectorAll('article')).toHaveLength(2);
+    expect(screen.queryByRole('button', { name: 'عرض الشجرة' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'عرض المصفوفة' })).toBeNull();
+  });
+
   it('lights the matching word on the other side when a word is tapped', () => {
     const { container } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     const [first] = container.querySelectorAll('mark[data-link="1"]');
