@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -25,6 +25,7 @@ import TopicSheet, { type TopicOpen } from './TopicSheet';
 import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
+import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
 import { shareAyah } from './AyahShare';
 import { hasQiraat } from '@shared/quran/qiraatData';
@@ -39,6 +40,7 @@ import { readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';
 import { useKeyboardHeight } from '@/lib/keyboard';
+import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -53,9 +55,6 @@ type Place = { page: number; position?: RecitePosition | null; reviewing?: boole
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
 const WRITE = 'reader-write';
-
-/** How long (ms) a first tap waits for a second one, when a double tap does something. */
-const DOUBLE_TAP = 260;
 
 const models = new Map<number, ReturnType<typeof pageModel>>();
 const modelOf = (page: number) => {
@@ -101,6 +100,7 @@ export default function Reader() {
   const [mark, setMark] = useState<{ key: string; page: number; word?: number } | null>(null);
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [irab, setIrab] = useState<IrabTarget | null>(null);
+  const [balagha, setBalagha] = useState<string | null>(null);
   const [tools, setTools] = useState(false);
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[]; word?: number } | null>(null);
@@ -268,8 +268,6 @@ export default function Reader() {
     else if (key && action === 'save') toggleSaved(key);
   };
 
-  // A tap waits for a second one only when a double tap does something, so a plain tap stays instant otherwise.
-  const pending = useRef<{ timer: ReturnType<typeof setTimeout> } | null>(null);
   const moved = useRef(0);
   const actionsOpen = useRef(false);
   actionsOpen.current = !!actions;
@@ -281,36 +279,25 @@ export default function Reader() {
     moved.current = Date.now();
     // A neighbour about to slide in shows its top where the reader is now, however the page got scrolled there.
     setScrollTop(scrolled.current);
-    if (pending.current) { clearTimeout(pending.current.timer); pending.current = null; }
-  }, []);
-  useEffect(() => () => { if (pending.current) clearTimeout(pending.current.timer); }, []);
+    touches.cancel();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const openIndex = useCallback(() => { setActions(null); setSheet('index'); }, []);
   const writingNow = useRef(false);
   writingNow.current = !!writeKey;
+  // While reading, a tap, double tap or long press selects the ayah, and a tap on the page clears it. A second single
+  // tap on the marked ayah lets it go (owner, 2026-11-14); it is read once the tap is known not to be a double tap.
+  const touches = usePageTouch((gesture, key, x, y, word) => {
+    if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: shown.current, word: gesture === 'long' ? word : undefined } : null));
+    latest.current(readGestures()[mode][gesture], key, x, y, word);
+  }, () => readGestures()[mode].double !== 'none');
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
     if (Date.now() - moved.current < 350) return;
     // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
     if (writingNow.current) { boxes.focus(); return; }
     // A touch that closes the ayah buttons only closes them, as on the website.
     if (actionsOpen.current) { setActions(null); return; }
-    // While reading, a tap, double tap or long press selects the ayah, and a tap on the page clears it. A second single
-    // tap on the marked ayah lets it go (owner, 2026-11-14); it is read once the tap is known not to be a double tap.
-    const at = shown.current;
-    const select = (toggle: boolean, pressed?: number) => {
-      if (mode === 'read') setMark(current => (key && !(toggle && current?.key === key) ? { key, page: at, word: pressed } : null));
-    };
-    const set = readGestures()[mode];
-    if (touch === 'long') { select(false, word); latest.current(set.long, key, x, y, word); return; }
-    if (pending.current) {
-      clearTimeout(pending.current.timer);
-      pending.current = null;
-      select(false);
-      latest.current(set.double, key, x, y, word);
-      return;
-    }
-    if (set.double === 'none') { select(true); latest.current(set.tap, key, x, y, word); return; }
-    pending.current = { timer: setTimeout(() => { pending.current = null; select(true); latest.current(set.tap, key, x, y, word); }, DOUBLE_TAP) };
-  }, [mode]);
+    touches.touch(touch, key, x, y, word);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // While reciting the page ends above the recite pill, so it never covers a line.
   // While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no squeezed page),
@@ -399,7 +386,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 5 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 6 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -439,6 +426,8 @@ export default function Reader() {
           {/* The pressed word's i'rab (owner, 2026-11-15). */}
           {actions.word !== undefined && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setIrab({ key, word: word! }); }} />}
+          {/* Al-Kashshaf on the ayah, its device sentences lit (owner, 2026-11-16). */}
+          <ActButton Icon={Sparkles} label="البلاغة في الكشاف" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
           {/* The word's places: its label names the long-pressed word, which is lit on the page. */}
           {actions.lemmas.length > 0 && <ActButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} name="المواضع" palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
@@ -453,6 +442,7 @@ export default function Reader() {
       {/* The word long-pressed: its count and the ayat it is in (owner, 2026-11-13). */}
       <WordSheet lemmas={wordLemmas} onClose={() => setWordLemmas(null)} palette={palette} />
       <IrabSheet target={irab} onClose={() => setIrab(null)} palette={palette} />
+      <BalaghaSheet ayah={balagha} onClose={() => setBalagha(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"

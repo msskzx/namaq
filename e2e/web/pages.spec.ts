@@ -104,6 +104,29 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('a tap on the home recall card does what a tap does in recite mode, and undo hides the ayah again', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
+    await page.goto('/');
+    const card = page.locator('article').filter({ has: page.getByRole('button', { name: 'ارجع خطوة' }) }).first();
+    const whole = card.getByRole('button', { name: 'أظهر الآية' });
+    const undo = card.getByRole('button', { name: 'ارجع خطوة' });
+    const lines = card.locator('[data-ayah]').first();
+    await expect(lines).toBeVisible();
+    await expect(undo).toBeDisabled();
+    // Recite mode's tap shows the whole ayah (its default), and undo hides it again.
+    await lines.click();
+    await expect(whole).toBeDisabled();
+    await expect(undo).toBeEnabled();
+    await undo.click();
+    await expect(whole).toBeEnabled();
+    await expect(undo).toBeDisabled();
+    // Recite mode's double tap shows the next word (its default), so the ayah is not whole yet.
+    await lines.dblclick();
+    await expect(undo).toBeEnabled();
+    await expect(whole).toBeEnabled();
+    await noErrorPage(page);
+  });
+
   test('the home feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
     test.setTimeout(120_000);
     // Batches take the kinds in turn, one a batch; five batches on the days either side of today hold all seven, well inside
