@@ -148,3 +148,4 @@ counts for neither.
 | [R0045](R0045-a-scaled-page-is-a-picture-not-bigger-text.md) | Zooming a page with a scale transform enlarges a picture, not the text | challenge | solved |
 | [R0046](R0046-a-hidden-box-still-holds-its-place.md) | A box hidden by opacity still holds its place, and lines drawn from layout reach it | challenge | solved |
 | [R0047](R0047-a-tab-page-cannot-swipe-back.md) | A tab page cannot swipe back | challenge | solved |
+| [R0048](R0048-extending-order-needs-the-next-boundary.md) | Extending surah order needs the boundary into the old range | challenge | solved |
