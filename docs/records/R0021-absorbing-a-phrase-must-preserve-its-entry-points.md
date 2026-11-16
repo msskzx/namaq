@@ -12,7 +12,7 @@ evidence: "namaq PR #473; page, phraseTrees, branch-phrases route, and branchQue
 implication: "When combining groups, test each way a user reaches the absorbed group and each consumer of its word offsets."
 date: "2026-10-29"
 topics: ["testing","text-matching","ui-state"]
-buildsOn: ["namaq/0019-fixing-the-example-broke-the-ayah-next-door"]
+buildsOn: ["namaq/R0019-fixing-the-example-broke-the-ayah-next-door"]
 ---
 
 The branch page showed the wording shared by 43:83 and 70:42 separately from

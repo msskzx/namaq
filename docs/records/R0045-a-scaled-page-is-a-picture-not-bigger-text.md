@@ -12,7 +12,7 @@ evidence: "mobile/src/components/ReaderPager.tsx, MushafPageView.tsx (rows), Rea
 implication: "Don't zoom text with a transform past the gesture itself: change the font size and lay the text out again. Check anything that measures positions (highlight bands, write boxes, kept scroll) at the new layout, after it is drawn, not in the same render."
 date: "2026-11-14"
 topics: ["mobile"]
-buildsOn: ["namaq/0030-a-fixed-height-box-clips-ios-text-mid-word"]
+buildsOn: ["namaq/R0030-a-fixed-height-box-clips-ios-text-mid-word"]
 ---
 
 The old zoom kept the page's 15 lines and made everything bigger, which is what

@@ -16,6 +16,6 @@ Changes cover branch page presentation, AyahCards, TreeSteps, navigation CSS and
 
 Run npm run lint, npx tsc --noEmit, npm test and npm run build. Obtain an independent review before opening the PR.
 
-Distillate record namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points applies to bookmark lookup: the raw phrase inventory remains a valid entry point after a phrase disappears from the retained tree list.
+Distillate record namaq/R0021-absorbing-a-phrase-must-preserve-its-entry-points applies to bookmark lookup: the raw phrase inventory remains a valid entry point after a phrase disappears from the retained tree list.
 
 Filtering and sorting of search results is a subsequent task and is outside this change.

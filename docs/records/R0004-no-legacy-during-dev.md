@@ -12,7 +12,7 @@ evidence: "Owner's stated rule: \"we are in dev phase\" (no commit named in the 
 implication: "When a clean form and a compatible form both exist, propose the clean one and price the breakage honestly."
 date: "2026-09-30"
 topics: ["migrations"]
-buildsOn: ["namaq/0003-page-keyed-by-reader-not-book"]
+buildsOn: ["namaq/R0003-page-keyed-by-reader-not-book"]
 ---
 
 Rejected the staged migration and the URL-translation layer outright: "it is not
@@ -23,4 +23,4 @@ proposed before release.
 
 **Implications:** when a change has a clean form and a compatible form, propose
 the clean one and price the breakage honestly, rather than offering the staged
-path as the safe default. See [0003-page-keyed-by-reader-not-book](/records/namaq/0003-page-keyed-by-reader-not-book).
+path as the safe default. See [R0003-page-keyed-by-reader-not-book](R0003-page-keyed-by-reader-not-book.md).

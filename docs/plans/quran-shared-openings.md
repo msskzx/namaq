@@ -152,7 +152,7 @@ existing matching rules.
 - Keep unit coverage for shared marks, several differing marks and words,
   canonical combining-mark order, tatweel, more than two originals, and a
   display matching none of the originals. Verify unchanged grouping across the
-  corpus, following Distillate record `namaq/0019-fixing-the-example-broke-the-ayah-next-door`.
+  corpus, following Distillate record `namaq/R0019-fixing-the-example-broke-the-ayah-next-door`.
 - Independent source/API tests cover all 6,236 ayat, exact annotation marks,
   missing ayat, invalid keys, numeric ordering and deduplication, page boundaries,
   and both ends of surahs. Context loading must not query PostgreSQL or Neo4j.

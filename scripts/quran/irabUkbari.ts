@@ -1,5 +1,5 @@
 // docs/plans/irab.md: al-'Ukbari's al-Tibyan fi I'rab al-Qur'an, from Quranpedia's dump (book 309), cut at the words he
-// discusses. Like al-Sa'di's dump (docs/records/0034), each ayah carries printed pages, so the book is laid end to end
+// discusses. Like al-Sa'di's dump (docs/records/R0034), each ayah carries printed pages, so the book is laid end to end
 // in page order and read through once.
 
 /** [surah, ayah, first word, last word, page, text]; words count the corpus's words from 0, -1 for a passage on the whole ayah. */

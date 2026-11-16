@@ -16,7 +16,7 @@ Darwish («إعراب القرآن وبيانه», d. 1982), Safi («الجدو�
 - `shared/data/quran/irab.js` (2.9 MB, built into the app): for each of the 6,236 ayat in mushaf order, each corpus word's `[role, morphology, head]`, the strings stored once. 67,604 of 77,429 words have a role; the rest (mostly the subject of a nominal sentence, which the treebank leaves unnamed) show their morphology only.
 - `shared/data/quran/irabUkbari.js` (3.3 MB, downloaded by the phone, read on the server by the website): 5,795 passages `[surah, ayah, firstWord, lastWord, page, text]`, 5,616 on words and 179 on a whole ayah.
 
-Al-'Ukbari's dump has the same shape as al-Sa'di's (`docs/records/0034`): each ayah carries printed pages. `scripts/quran/irabUkbari.ts` lays them end to end and reads the book once:
+Al-'Ukbari's dump has the same shape as al-Sa'di's (`docs/records/R0034`): each ayah carries printed pages. `scripts/quran/irabUkbari.ts` lays them end to end and reads the book once:
 
 - «سورة …» on its own line opens the next surah.
 - «قال تعالى: (… (٢) … (٣))» quotes the ayat the next lines discuss. Some quotes put the number after the parenthesis: «(…) (٨٢).» or «(…) ((١٨)).»
