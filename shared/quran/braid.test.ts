@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import corpus from '../data/quran/trees.json';
 import { braid, compareTree } from './braid';
-import { keys } from './branches';
+import { keys, type Branch } from './branches';
+import type { CardSide } from './compareCards';
 
 const words = (key: string) => corpus.ayat.find(ayah => ayah.key === key)!.words;
 const text = (list: string[], [start, end]: [number, number]) => list.slice(start, end).join(' ').normalize('NFC');
@@ -45,26 +46,53 @@ describe('braid', () => {
   });
 });
 
-describe('endMark', () => {
-  it('shows one empty medallion where two ayat with different numbers end together, never two', async () => {
-    const { endMark } = await import('./braid');
-    expect(endMark([15, 186], true)).toBe('۝');
-    expect(endMark([7], true)).toBe('٧');
-    expect(endMark([], true)).toBe('');
-  });
-
+describe('compareTree', () => {
   it('makes a compare tree that parts and rejoins, each box naming the sides through it', () => {
     const side = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return { surah, ayah, ayat: [{ number: ayah, words: words(key) }] }; };
-    const { tree, nodes } = compareTree([side('2:35'), side('7:19')]);
+    const { tree, sides } = compareTree([side('2:35'), side('7:19')]);
     // It opens apart: a root with no words, a child for each side, then the shared «اسكن انت وزوجك الجنة».
     expect(tree.words).toEqual([]);
     expect(tree.children.map(keys)).toEqual([['2:35'], ['7:19']]);
     expect(keys(tree)).toEqual(['2:35', '7:19']);
+    expect(tree.children.map(child => sides.get(child))).toEqual([0, 1]);
     const middle = tree.rejoin!;
     expect(middle.words).toHaveLength(4);
-    expect(nodes.get(middle)!.other).toHaveLength(4);
-    expect(middle.children.map(child => nodes.get(child)!.side)).toEqual([0, 1]);
+    expect(middle.tones).toHaveLength(4);
+    expect(middle.children.map(child => sides.get(child))).toEqual([0, 1]);
     expect(middle.rejoin!.rejoin).toBeUndefined();
-    expect(nodes.get(middle.rejoin!)!.words.at(-1)!.end).toBe(35);
+  });
+
+  it('gives each node the end signs, the ayat it names and its words\' likeness, as a branches node', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 2, ayah: 51, ayat: [{ number: 51, words: ['وَإِذْ', 'وَٰعَدْنَا', 'مُوسَىٰٓ', 'أَرْبَعِينَ', 'لَيْلَةً'], marks: { 1: { kind: 'root' }, 2: { kind: 'exact', link: 'm' } } }] },
+      { surah: 7, ayah: 142, ayat: [{ number: 142, words: ['وَوَٰعَدْنَا', 'مُوسَىٰ', 'ثَلَـٰثِينَ', 'لَيْلَةً'], marks: { 1: { kind: 'exact', link: 'm' } } }, { number: 143, words: ['أَرْبَعِينَ', 'لَيْلَةً'] }] },
+    ];
+    const { tree } = compareTree(sides, new Set(['m']));
+    const [first, second] = tree.children;
+    // A box of one side names the ayat it holds; the sides' names are no longer kept for the first boxes alone.
+    expect(first.holds).toEqual([['2:51']]);
+    expect(second.holds).toEqual([['7:142']]);
+    // An ayah's end sign follows its last word, a word the other side writes differently is written, a root match is root.
+    expect(second.words).toContain('﴿١٤٢﴾');
+    expect(first.tones![first.words.indexOf('مُوسَىٰٓ')]).toBe('written');
+    expect(first.tones![first.words.indexOf('وَٰعَدْنَا')]).toBe('root');
+    // The box each side's last word is in hangs the ayah after it, found after the side's last ayah.
+    const last = (node: Branch): Branch => node.rejoin ? last(node.rejoin) : node;
+    const end = last(tree);
+    // «أربعين ليلة» closes both: it names the ayat ending there, and hangs both sides' ayah after, found after 7:143.
+    expect(end.holds).toEqual([['2:51'], ['7:143']]);
+    expect(end.ayat).toEqual(['2:51', '7:142']);
+    expect(end.through).toEqual({ '2:51': '2:51', '7:142': '7:143' });
+  });
+
+  it('marks two ayat with different numbers ending together with one empty sign, and both in the box\'s names', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 2, ayah: 15, ayat: [{ number: 15, words: ['فِى', 'طُغْيَـٰنِهِمْ', 'يَعْمَهُونَ'] }] },
+      { surah: 7, ayah: 186, ayat: [{ number: 186, words: ['فِى', 'طُغْيَـٰنِهِمْ', 'يَعْمَهُونَ'] }] },
+    ];
+    const { tree } = compareTree(sides);
+    expect(tree.words.at(-1)).toBe('۝');
+    expect(tree.holds).toEqual([['2:15'], ['7:186']]);
+    expect(tree.ayat).toEqual(['2:15', '7:186']);
   });
 });

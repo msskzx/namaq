@@ -9,7 +9,7 @@ import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
+import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
 import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
 import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent } from './StoryParts';
@@ -231,11 +231,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
     );
   };
 
-  // A refrain card's tree names every place the refrain repeats, as its matrix does.
-  const refrainLabels = card.many && isRefrain(card.many.options)
-    ? sides.map((side, i) => (i === card.many!.side ? `${surahName(side.surah)} ${card.many!.options.map(item => num(item.ayah.number)).join(' · ')}` : sideLabel(side))) as [string, string]
-    : undefined;
-
   const pickers = card.many && !isRefrain(card.many.options) && (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
       {card.many.options.map((item, row) => (
@@ -262,7 +257,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
             </View>
             {!folded.includes(r) && <CompareTree sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
           </View>
-        )) : <CompareTree sides={sides} palette={palette} around={around} labels={refrainLabels} />}
+        )) : <CompareTree sides={sides} palette={palette} around={around} />}
       </> : <>
         {side(card.sides[0], 0)}
         <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
@@ -274,7 +269,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={cardBox}>
+      {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
+      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
         {body}
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (

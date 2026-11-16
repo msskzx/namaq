@@ -4,6 +4,7 @@ import { num } from './arabicNumber';
 import type { GroupFilters } from './mutashabih/browse';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
+import type { Likeness } from './wordMatch';
 import { findText, firstLevel, searchQuery, textKeys, type Level, type SearchQuery } from './searchText';
 import type { ReaderPageData } from './readerPage';
 
@@ -14,9 +15,12 @@ export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page
  * `differs`: indices of words moved here from a neighbouring node because its ayat write them differently, drawn amber.
  * `spelled`: the node's words before any moved (see `foldForms`), which a node's tree id and links are made from.
  * `rejoin`: where the children's paths meet again, drawn after them (a compare card's tree, shared/quran/braid.ts `compareTree`);
- * `via`: then the ayat whose paths run through the node, in place of those found from `ayat` and the children.
+ * `via`: then the ayat whose paths run through the node, in place of those found from `ayat` and the children;
+ * `holds`: the runs of ayat the box names, one per side, in place of the ayat it ends; `tones`: each word's likeness, in place of
+ * matching the ayat through the node.
  */
-export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[]; rejoin?: Branch; via?: string[] };
+export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[]; rejoin?: Branch; via?: string[];
+  holds?: string[][]; tones?: (Likeness | 'related' | undefined)[] };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
 export type Variant = { words?: string[]; word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string; differs?: number[] };
 
@@ -150,7 +154,7 @@ const sameWord = (a: BranchAyah, i: number, b: BranchAyah, j: number) => letters
   && (spellingOf(a.words[i]) === spellingOf(b.words[j]) || (a.lemmas?.[i] ?? null) === (b.lemmas?.[j] ?? null));
 
 // Grown ayat end in ﴿n﴾; runs that end on different ayah numbers still share their node.
-const END = '۝';
+export const END = '۝';
 const isEnd = (word: string) => word.startsWith('﴿') || word === END;
 
 /** Whether a node's words open a phrase the page can list: nothing past an ayah end, but a letter opening's own ﴿١﴾. */
@@ -395,7 +399,7 @@ export function ayahEnds(node: Branch, path: string[] = []): Record<string, stri
     const [surah, ayah] = key.split(':').map(Number);
     return [key, node.through?.[key] ?? (grownPast ? `${surah}:${ayah + 1}` : key)];
   });
-  return Object.assign(Object.fromEntries(own), ...node.children.map(child => ayahEnds(child, words)));
+  return Object.assign(Object.fromEntries(own), ...node.children.map(child => ayahEnds(child, words)), node.rejoin ? ayahEnds(node.rejoin, words) : {});
 }
 
 
