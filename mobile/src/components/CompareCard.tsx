@@ -25,6 +25,7 @@ import { WEBSITE } from '@/lib/branches';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
+import { compareMatrixOnly } from '@shared/quran/compareViews';
 
 const DOUBLE_TAP = 280;
 
@@ -178,8 +179,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
   const [view, setView] = useState<BranchView>(branchView.get);
   const [beside, setBeside] = useState(besideLayout.get);
-  // The read-along studio lights words in the matrix, so it shows the matrix while open.
-  const tree = view === 'tree' && !read.studio;
+  // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
+  const matrixOnly = compareMatrixOnly(card);
+  const tree = view === 'tree' && !read.studio && !matrixOnly;
   const sides = shownAyat(card, selected);
   // The card's own switches, opening on the settings' defaults.
   const [aroundOn, setAround] = useState(aroundSetting.get);
@@ -374,9 +376,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
           {!tree && <Pressable onPress={() => setBeside(!beside)} hitSlop={6} accessibilityRole="button" accessibilityLabel={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} style={{ padding: 8 }}>
             {beside ? <Rows2 size={22} color={palette.muted} /> : <Columns2 size={22} color={palette.muted} />}
           </Pressable>}
-          <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
+          {!matrixOnly && <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
-          </Pressable>
+          </Pressable>}
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
           {tree && card.group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
             <TreeIcon size={22} color={palette.muted} />

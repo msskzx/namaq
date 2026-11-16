@@ -11,8 +11,8 @@ export type Strand = { kind: 'shared' | 'split'; a: Span; b: Span };
 /** Shared runs shorter than this stay inside a split, so a lone «من» or «الله» does not pinch the two strands together. */
 export const MIN_SHARED = 2;
 
-/** The spelling a braid compares: letters only, a leading و/ف kept so «وكلا» and «فكلا» stay apart. */
-const key = (word: string) => normalizeWord(word);
+/** The spelling a braid compares: letters only, a leading و/ف kept so «وكلا» and «فكلا» stay apart; a sajda sign glued on after a space (27:26) does not count. */
+const key = (word: string) => normalizeWord(word).replace(/[\s\u200e\u200f]/g, '');
 
 /**
  * Two word lists as a braid: the strands part where the wording differs and rejoin on each common stretch of
