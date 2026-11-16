@@ -11,6 +11,16 @@ export type WordsData = {
   ayat: string[][];
 };
 
+/** The source the counts come from (shared/sources.ts), shown from the words page's books icon. */
+export const WORDS_SOURCE = 'quranic-arabic-corpus';
+
+/** How the words page counts, under its source. */
+export const WORDS_COUNTING = [
+  'تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.',
+  'لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.',
+  'وإذا اتفقت كلمتان في الرسم واختلفتا في المعنى عُدّت كل منهما وحدها، وبجانبها ما يميّزها، مثل «عصا» و«عصى».',
+];
+
 export type WordPlace = { key: string; words: number[] };
 
 /** Lemma ids of one corpus word (from 0) of an ayah. */
@@ -42,6 +52,31 @@ export function placesOf(data: WordsData, id: number): WordPlace[] {
     indexes.set(data, (index = built));
   }
   return index[id] ?? [];
+}
+
+export const SURAHS = 114;
+
+/** How many times a word occurs in each surah (index 0 is al-Fatiha), from its places. */
+export function countsBySurah(places: WordPlace[]): number[] {
+  const counts = new Array<number>(SURAHS).fill(0);
+  for (const { key, words } of places) counts[Number(key.split(':')[0]) - 1] += words.length;
+  return counts;
+}
+
+/** The surah (from 0) nearest to `index` in which the word occurs, so a finger between bars lands on one. */
+export function nearestSurah(counts: number[], index: number): number {
+  const at = Math.min(SURAHS - 1, Math.max(0, index));
+  for (let step = 0; step < SURAHS; step++) {
+    if (counts[at - step]) return at - step;
+    if (counts[at + step]) return at + step;
+  }
+  return at;
+}
+
+/** The next surah (from 0) after `from` in which the word occurs, toward al-Nas (1) or al-Fatiha (-1); `from` when there is none. */
+export function stepSurah(counts: number[], from: number, by: 1 | -1): number {
+  for (let i = from + by; i >= 0 && i < SURAHS; i += by) if (counts[i]) return i;
+  return from;
 }
 
 /** Lemmas whose name holds the query, ignoring vowel marks, most frequent first. */

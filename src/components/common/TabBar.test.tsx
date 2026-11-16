@@ -3,6 +3,7 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import TabBar from './TabBar';
+import WordsSource from '@/app/quran/words/WordsSource';
 
 const { state } = vi.hoisted(() => ({ state: { path: '/', language: 'en' as 'ar' | 'en', loaded: true, toggleLanguage: vi.fn(), setTheme: vi.fn() } }));
 vi.mock('next/navigation', () => ({ usePathname: () => state.path, useRouter: () => ({ refresh: vi.fn() }) }));
@@ -13,6 +14,19 @@ vi.mock('next-themes', () => ({ useTheme: () => ({ theme: 'system', setTheme: st
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.loaded = true; vi.clearAllMocks(); });
 
 describe('TabBar', () => {
+  it('shows the words page\'s source as books, with the corpus, how it counts and the licences page', () => {
+    state.language = 'ar';
+    state.path = '/quran/words';
+    render(<><WordsSource /><TabBar /></>);
+    expect(screen.queryByRole('button', { name: 'مساعدة' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'المصادر' }));
+    const sheet = screen.getByRole('dialog', { name: 'المصدر' });
+    expect(within(sheet).getByText('المدوّنة القرآنية العربية')).toBeTruthy();
+    expect(within(sheet).getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toBeTruthy();
+    expect(within(sheet).getByRole('link', { name: 'corpus.quran.com' }).getAttribute('href')).toBe('https://corpus.quran.com');
+    expect(within(sheet).getByRole('link', { name: 'المصادر والتراخيص' }).getAttribute('href')).toBe('/attributions#quranic-arabic-corpus');
+  });
+
   it.each(['ar', 'en'] as const)('lights the Quran tab on the Quran hub and each of its tools in %s', language => {
     state.language = language;
     for (const path of ['/quran', '/quran/branches', '/quran/compare', '/quran/prophets', '/quran/tajwid/tuhfat-al-atfal', '/quran/iltifat']) {

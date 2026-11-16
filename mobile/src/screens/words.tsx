@@ -34,7 +34,7 @@ export default function WordsScreen() {
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll help={() => setHelp(true)} />
+      <TopBar hub hideOnScroll refs={() => setHelp(true)} />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
           <Search size={18} color={palette.muted} />

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import data from '../data/quran/words.json';
 import trees from '../data/quran/trees.json';
 import { pageGroups, type MushafPage } from './readerPage';
-import { corpusWords, lemmasAtMushafWord, lemmasOfWord, placesOf, searchWords, type WordsData } from './words';
+import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
 
 const words = data as unknown as WordsData;
 const idOf = (name: string) => words.lemmas.findIndex(([lemma]) => lemma === name);
@@ -81,5 +81,41 @@ describe('reader words', () => {
     expect(corpusWords('27:20', 3)).toEqual([3, 4]);
     expect(corpusWords('27:20', 4)).toEqual([5]);
     expect(lemmasAtMushafWord(words, '36:22', 0).map(id => words.lemmas[id][0])).toEqual(['مَا']);
+  });
+});
+
+describe('counts by surah', () => {
+  const words = data as unknown as WordsData;
+  const musa = words.lemmas.findIndex(([name]) => name === 'مُوسَىٰ');
+
+  it('adds up to the word\'s count, with al-A\'raf the most for Musa', () => {
+    const counts = countsBySurah(placesOf(words, musa));
+    expect(counts).toHaveLength(114);
+    expect(counts.reduce((a, b) => a + b, 0)).toBe(words.lemmas[musa][1]);
+    expect(counts[6]).toBe(Math.max(...counts));
+    expect(counts[0]).toBe(0);
+  });
+
+  it('counts an ayah that holds the word twice twice', () => {
+    expect(countsBySurah([{ key: '2:51', words: [1] }, { key: '2:60', words: [2, 9] }])[1]).toBe(3);
+  });
+
+  it('snaps a finger between bars to the nearest surah that has the word', () => {
+    const counts = new Array(114).fill(0);
+    counts[6] = 2; counts[19] = 1;
+    expect(nearestSurah(counts, 6)).toBe(6);
+    expect(nearestSurah(counts, 9)).toBe(6);
+    expect(nearestSurah(counts, 15)).toBe(19);
+    expect(nearestSurah(counts, 200)).toBe(19);
+    expect(nearestSurah(counts, -3)).toBe(6);
+  });
+
+  it('steps to the next surah that has the word, and stays at the ends', () => {
+    const counts = new Array(114).fill(0);
+    counts[6] = 2; counts[19] = 1;
+    expect(stepSurah(counts, 6, 1)).toBe(19);
+    expect(stepSurah(counts, 19, -1)).toBe(6);
+    expect(stepSurah(counts, 19, 1)).toBe(19);
+    expect(stepSurah(counts, 6, -1)).toBe(6);
   });
 });

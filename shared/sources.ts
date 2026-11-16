@@ -40,6 +40,7 @@ const PUBLIC_DOMAIN: Bi = {
 const USE = {
   order: { ar: 'ترتيب السور ومقاصدها', en: 'surah order and aims', href: '/quran/order' },
   openings: { ar: 'فواتح السور', en: 'surah openings', href: '/quran/openings' },
+  oaths: { ar: 'الأقسام في القرآن', en: 'oaths in the Quran', href: '/quran/oaths' },
   iltifat: { ar: 'الالتفات', en: 'iltifat', href: '/quran/iltifat' },
   branches: { ar: 'شواهد المتشابه في الفروع', en: 'the cited cases in branches', href: '/quran/branches' },
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
@@ -88,7 +89,22 @@ export const SOURCES: Source[] = [
   {
     id: 'itqan', group: 'books',
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
-    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths],
+  },
+  {
+    id: 'tibyan-ayman', group: 'books',
+    title: { ar: 'التبيان في أيمان القرآن', en: 'al-Tibyan fi Ayman al-Quran' }, author: { ar: 'ابن قيم الجوزية', en: 'Ibn al-Qayyim' },
+    edition: 'تحقيق عبد الله بن سالم البطاطي، دار عطاءات العلم ودار ابن حزم، الطبعة الرابعة ١٤٤٠هـ/٢٠١٩م', link: { url: 'https://quranpedia.app/books/b18337/index.html', label: 'الموسوعة القرآنية' }, licence: PUBLIC_DOMAIN, uses: [USE.oaths],
+  },
+  {
+    id: 'tafsir-ibn-kathir', group: 'books',
+    title: { ar: 'تفسير القرآن العظيم', en: 'Tafsir al-Quran al-‘Azim' }, author: { ar: 'ابن كثير', en: 'Ibn Kathir' },
+    edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths],
+  },
+  {
+    id: 'irab-nahhas', group: 'books',
+    title: { ar: 'إعراب القرآن', en: 'I‘rab al-Quran' }, author: { ar: 'أبو جعفر النحاس', en: 'al-Nahhas' },
+    edition: 'دار الكتب العلمية، بيروت، الطبعة الأولى ١٤٢١هـ', link: { url: 'https://quranpedia.net/book/318', label: 'الموسوعة القرآنية' }, licence: PUBLIC_DOMAIN, uses: [USE.oaths],
   },
   {
     id: 'burhan-zarkashi', group: 'books',
@@ -130,7 +146,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir],
+    uses: [USE.tafsir, USE.oaths],
   },
   {
     id: 'tibyan-ukbari', group: 'books',
@@ -305,3 +321,4 @@ export const SOURCES: Source[] = [
 ];
 
 export const sourcesIn = (group: SourceGroup) => SOURCES.filter(source => source.group === group);
+export const sourceById = (id: string) => SOURCES.find(source => source.id === id);
