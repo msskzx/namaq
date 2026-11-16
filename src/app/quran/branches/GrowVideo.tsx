@@ -8,7 +8,7 @@ import { END_MS } from '@shared/video/pageVideo';
 import { outroDrawer } from '@shared/video/recorder';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { askLeft, growRoot, growthState, openStudio, pause, play, stop, useGrowth } from './Grow';
+import { askLeft, growRoot, growthState, hasTourCard, openStudio, pause, play, stop, useGrowth } from './Grow';
 
 // A vertical story frame, as Instagram and WhatsApp status show it.
 const WIDTH = 1080;
@@ -17,6 +17,9 @@ const FPS = 30;
 /** How long the finished tree stays on screen before the end frame, and how long its fade into the emblem takes. */
 const HOLD = 1500;
 const FADE = 400;
+/** The room under a growing tree for the growing ayah's card, as in the app's video (mobile/src/lib/scene.ts drawCard). */
+const CARD_ROOM = 420;
+const CARD_BOTTOM = 1700;
 
 type Rect = { x: number; y: number; w: number; h: number };
 type Word = Rect & { text: string; font: string; color: string };
@@ -116,7 +119,58 @@ function alpha(element: Element, content: HTMLElement) {
 
 type Look = { paper: string; ink: string; rule: string; accent: string; green: string; font: string; logo: HTMLImageElement | null; ask: boolean; matrix: boolean };
 
-function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, progress: { at: number; total: number }) {
+/**
+ * The growing ayah's card, read off the studio's card under the tree as it is now: its words as they come with their boxes
+ * (unseen ones are skipped), then in the tour the word being read underlined. Scaled into the room under the tree.
+ */
+function drawCard(context: CanvasRenderingContext2D, look: Look) {
+  const card = document.querySelector<HTMLElement>('[data-path-ayat] article');
+  if (!card) return;
+  const frame = card.getBoundingClientRect();
+  if (!frame.width || !frame.height) return;
+  const scale = Math.min((WIDTH - 120) / frame.width, CARD_ROOM / frame.height, 3);
+  const place = (box: DOMRect): Rect => ({ x: (box.left - frame.left) * scale, y: (box.top - frame.top) * scale, w: box.width * scale, h: box.height * scale });
+  const style = getComputedStyle(card);
+  context.save();
+  context.globalAlpha = 1;
+  context.translate((WIDTH - frame.width * scale) / 2, CARD_BOTTOM - frame.height * scale);
+  context.fillStyle = style.backgroundColor || look.paper;
+  context.strokeStyle = style.borderTopColor || look.rule;
+  context.lineWidth = 2;
+  context.beginPath();
+  context.roundRect(1, 1, frame.width * scale - 2, frame.height * scale - 2, (parseFloat(style.borderTopLeftRadius) || 14) * scale);
+  context.fill();
+  context.stroke();
+  for (const reading of card.querySelectorAll('[data-reading]')) {
+    const { x, y, w, h } = place(reading.getBoundingClientRect());
+    context.fillStyle = look.accent;
+    context.fillRect(x, y + h - 2 * scale, w, 2 * scale);
+  }
+  context.direction = 'rtl';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  for (let text = walker.nextNode() as Text | null; text; text = walker.nextNode() as Text | null) {
+    const parent = text.parentElement;
+    if (!parent || parent.closest('button, a')) continue;
+    const font = getComputedStyle(parent);
+    if (font.visibility === 'hidden') continue;
+    for (const match of text.data.matchAll(/\S+/g)) {
+      range.setStart(text, match.index);
+      range.setEnd(text, match.index + match[0].length);
+      const box = range.getBoundingClientRect();
+      if (!box.width) continue;
+      const { x, y, w, h } = place(box);
+      context.font = `${font.fontWeight} ${parseFloat(font.fontSize) * scale}px ${font.fontFamily}`;
+      context.fillStyle = font.color;
+      context.fillText(match[0], x + w / 2, y + h / 2);
+    }
+  }
+  context.restore();
+}
+
+function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, progress: { at: number; total: number; kind?: string }) {
   context.save();
   context.fillStyle = look.paper;
   context.fillRect(0, 0, WIDTH, HEIGHT);
@@ -128,7 +182,9 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
   if (look.ask) context.fillText(look.matrix ? 'تذكّر الرابط' : 'اكمل الايات', WIDTH / 2, 290, WIDTH - 120);
 
   const legend = layoutChips(context, drawing.chips);
-  const area = { x: 60, y: 380, w: WIDTH - 120, h: Math.max(200, 1300 - legend.height) };
+  // A growing tree keeps room under it for its ayah's card.
+  const card = !drawing.matrix && progress.kind === 'tree' && hasTourCard();
+  const area = { x: 60, y: 380, w: WIDTH - 120, h: Math.max(200, 1300 - legend.height - (card ? CARD_ROOM + 40 : 0)) };
   const scale = Math.min(area.w / drawing.width, area.h / drawing.height, 3);
   const diagramBottom = area.y + (area.h + drawing.height * scale) / 2;
   context.translate(area.x + (area.w - drawing.width * scale) / 2, area.y + (area.h - drawing.height * scale) / 2);
@@ -265,6 +321,7 @@ function draw(context: CanvasRenderingContext2D, drawing: Drawing, look: Look, p
     words.forEach((line, i) => context.fillText(line, x + width / 2, top + 76 + i * 38));
   }
   context.restore();
+  if (card) drawCard(context, look);
 
   const gap = 12;
   const bar = (WIDTH - 120 - gap * (progress.total - 1)) / Math.max(1, progress.total);

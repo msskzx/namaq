@@ -30,7 +30,9 @@
 .spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }
 .spread mark.lit { background: var(--home-highlight); color: var(--home-on-highlight); box-shadow: 0 0 0 1px var(--home-highlight-border); }
 /* the word a read-along is on: a line under it, over any highlight */
-.spread mark.reading, .spread span.reading { border-radius: 0.25rem; background-image: linear-gradient(var(--home-accent), var(--home-accent)); background-size: 100% 2px; background-position: bottom; background-repeat: no-repeat; }
+.spread mark.reading, .spread span.reading { border-radius: 0.25rem; background-color: var(--home-paper-deep); background-image: linear-gradient(var(--home-accent), var(--home-accent)); background-size: 100% 2px; background-position: bottom; background-repeat: no-repeat; }
+/* The matrix and the path card under a tree light the word read with the highlight, as the app's matrix cards do. */
+.fillReading mark.reading, .fillReading span.reading { background-image: none; background-color: var(--home-highlight); color: var(--home-on-highlight); }
 /* compact: one card holding both ayat, a small label over each, as on the compare pair list */
 .single { grid-template-columns: minmax(0, 1fr); }
 .compact { column-gap: 0; row-gap: 0; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); }
@@ -83,3 +85,5 @@
 /* An ayah shown for context only: the ayah before or after in a compare matrix, running on with the ayat it frames. */
 .mutedAyah { color: var(--home-muted); font-size: 0.8em; }
 .mutedAyah mark { opacity: 0.85; }
+/* The studio's growing ayah: words its boxes have not drawn yet keep their place, unseen. */
+.unseen { visibility: hidden; }

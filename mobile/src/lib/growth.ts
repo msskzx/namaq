@@ -1,4 +1,6 @@
-import { growthPlan } from '@shared/quran/growth';
+import { ALL_WORDS, cardWords, growthPlan } from '@shared/quran/growth';
+
+export { ALL_WORDS };
 import { keys, type Branch, type Variant } from '@shared/quran/branches';
 
 /**
@@ -46,24 +48,6 @@ export type Afters = Record<string, string>;
  * The website's growth (Grow.tsx) as data: each ayah walks from the root to its end, reusing what earlier ayat drew
  * and growing its own branch from where it splits. In ask mode the first new box of each ayah waits, empty, for the answer.
  */
-/** Every word an ayah's card shows once its branch has grown. */
-export const ALL_WORDS = 10000;
-// Ayah ends (۝, ﴿٣﴾) are the card's ayah numbers, not words; a run into the next surah carries its basmala in the tree,
-// which the card sets apart, so those four words are not the card's either.
-const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
-const letters = (word: string) => word.replace(/[أإآٱ]/g, 'ا').normalize('NFD').replace(/\u0640/g, '').replace(/[^\u0621-\u064A]/g, '');
-const BASMALA = ['بسم', 'الله', 'الرحمن', 'الرحيم'];
-function cardWords(words: string[], afterEnd: boolean): { count: number; afterEnd: boolean } {
-  let count = 0;
-  for (let i = 0; i < words.length; i++) {
-    if (isEnd(words[i])) { afterEnd = true; continue; }
-    if (afterEnd && BASMALA.every((word, j) => words[i + j] !== undefined && letters(words[i + j]) === word)) { i += BASMALA.length - 1; continue; }
-    afterEnd = false;
-    count++;
-  }
-  return { count, afterEnd };
-}
-
 export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = false, prefixes = [], paths = false, offsets = {} }: { starts?: Starts; afters?: Afters; ask?: boolean; prefixes?: Variant[];
   /** Where the phrase starts in each ayah (the presentation's offsets): the words before it show with the box that draws them. */
   offsets?: Record<string, number>;

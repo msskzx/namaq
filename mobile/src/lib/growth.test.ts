@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
+import { growthPlan, growthWords } from '@shared/quran/growth';
 import { ALL_WORDS, connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
 import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, readId, treeList, withPathReading } from './branches';
 
@@ -34,6 +35,17 @@ describe('a tree growing in the studio', () => {
         expect(Math.max(...counts.filter(count => count < ALL_WORDS)), key).toBe(passage.get(key)!.length);
         expect(counts[counts.length - 1], key).toBe(ALL_WORDS);
       }
+    }
+  });
+
+  it('counts the card\'s words as the website does (shared growthWords)', () => {
+    for (const presentation of list.slice(0, 150).map(piece => cardOf(piece).presentation)) {
+      const beats = growthBeats(presentation.tree, { offsets: presentation.offsets });
+      const words = growthWords(presentation.tree, growthPlan(presentation.tree), { offsets: presentation.offsets });
+      growthPlan(presentation.tree).forEach((step, i) => {
+        const counts = beats.filter(beat => beat.key === step.key).map(beat => beat.words!).filter(count => count < ALL_WORDS);
+        expect(words[i].nodes[words[i].nodes.length - 1], step.key).toBe(Math.max(...counts));
+      });
     }
   });
 

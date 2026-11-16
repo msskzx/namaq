@@ -35,3 +35,48 @@ export function growthPlan(tree: Branch, starts: string[][] = []): GrowthStep[] 
     return { key, nodes, fresh: fresh < 0 ? nodes.length : fresh };
   });
 }
+
+// Ayah ends (۝, ﴿٣﴾) are the card's ayah numbers, not words; a run into the next surah carries its basmala in the tree,
+// which the card sets apart, so those four words are not the card's either.
+const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
+const letters = (word: string) => word.replace(/[أإآٱ]/g, 'ا').normalize('NFD').replace(/\u0640/g, '').replace(/[^\u0621-\u064A]/g, '');
+const BASMALA = ['بسم', 'الله', 'الرحمن', 'الرحيم'];
+
+/** How many of a node's words its ayah's card shows; `afterEnd` carries whether the last word read closed an ayah. */
+export function cardWords(words: string[], afterEnd: boolean): { count: number; afterEnd: boolean } {
+  let count = 0;
+  for (let i = 0; i < words.length; i++) {
+    if (isEnd(words[i])) { afterEnd = true; continue; }
+    if (afterEnd && BASMALA.every((word, j) => words[i + j] !== undefined && letters(words[i + j]) === word)) { i += BASMALA.length - 1; continue; }
+    afterEnd = false;
+    count++;
+  }
+  return { count, afterEnd };
+}
+
+/** Every word an ayah's card shows once its branch has grown. */
+export const ALL_WORDS = 10000;
+
+/**
+ * For each growing ayah, how many of its words (from the ayah's start) its card shows: before any box (`start`), once its
+ * words-before-the-phrase box is drawn (`prefix`), and after each of its nodes (`nodes`, as the step lists them).
+ */
+export type StepWords = { start: number; prefix: number; nodes: number[] };
+export function growthWords(tree: Branch, plan: GrowthStep[], { offsets = {}, prefixed = [] }: { offsets?: Record<string, number>; prefixed?: string[] } = {}): StepWords[] {
+  const nodes = new Map<number, Branch>();
+  const visit = (node: Branch) => { nodes.set(nodes.size - 1, node); node.children.forEach(visit); };
+  visit(tree);
+  return plan.map(step => {
+    const prefix = offsets[step.key] ?? 0;
+    let words = prefixed.includes(step.key) ? 0 : prefix;
+    const start = words;
+    words = prefix;
+    let afterEnd = false;
+    const counts = step.nodes.map(index => {
+      const counted = cardWords(nodes.get(index)?.words ?? [], afterEnd);
+      afterEnd = counted.afterEnd;
+      return (words += counted.count);
+    });
+    return { start, prefix, nodes: counts };
+  });
+}

@@ -6,6 +6,8 @@ import BranchTree from './BranchTree';
 import { GrowControls, GrowProgress, setPrefs } from './Grow';
 import { PathScope } from './Paths';
 import { CardActions } from './Filters';
+import PathAyat from './PathAyat';
+import { quranContexts } from '@/lib/quran/quranText';
 
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
@@ -319,5 +321,34 @@ describe('growing a tree', () => {
     unmount();
     expect(screen.queryByRole('button', { name: 'إيقاف مؤقت' })).toBeNull();
     expect(hidden.hasAttribute('data-hide') || hidden.hasAttribute('inert')).toBe(false);
+  });
+});
+
+describe('the growing ayah\'s card under the tree', () => {
+  const words: Record<string, string[]> = {
+    '15:45': ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى', 'جَنَّـٰتٍ', 'وَعُيُونٍ'],
+    '51:15': ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى', 'جَنَّـٰتٍ', 'وَعُيُونٍ'],
+    '44:51': ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى', 'مَقَامٍ', 'أَمِينٍ'],
+  };
+  const keys = ['15:45', '44:51', '51:15'];
+  const seen = () => [...document.querySelectorAll('[data-path-ayat] article p mark, [data-path-ayat] article p span')]
+    .filter(word => !word.closest('[class*="unseen"]') && !word.querySelector('mark, span') && words['15:45'].concat(words['44:51']).includes(word.textContent ?? '')).map(word => word.textContent);
+
+  it('shows the growing ayah\'s words as their boxes are drawn, then reads each path word by word', async () => {
+    vi.mocked(quranContexts).mockImplementation(async (asked: string[]) => asked.map(key => ({ ayah: { key, words: words[key], page: 1 } })) as never);
+    render(<PathScope>
+      <BranchTree tree={tree} names={{}} growable />
+      <GrowControls />
+      <PathAyat rows={keys} passages={keys.map(key => [key])} names={{}} grows />
+    </PathScope>);
+    grow();
+    await advance(350);
+    expect(document.querySelector('[data-path-ayat] article')?.textContent).toContain('إِنَّ');
+    expect(document.querySelectorAll('[data-path-ayat] [class*="unseen"]').length).toBeGreaterThan(0);
+    await advance(6000);
+    expect(document.querySelector('[data-path-ayat] [class*="unseen"]')).toBeNull();
+    await advance(4000);
+    expect(document.querySelector('[data-path-ayat] [data-reading]')).not.toBeNull();
+    expect(seen().length).toBeGreaterThan(0);
   });
 });

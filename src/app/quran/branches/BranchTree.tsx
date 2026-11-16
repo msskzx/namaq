@@ -20,8 +20,8 @@ import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
 import { MARK_CLASS } from '@/lib/markMode';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useCardAround, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
-import { growthPlan } from '@shared/quran/growth';
-import { useGrowTarget } from './Grow';
+import { growthPlan, growthWords } from '@shared/quran/growth';
+import { useGrowTarget, useGrowth } from './Grow';
 import { useGroupConnections } from './GroupConnections';
 
 type Props = { hideArrows?: boolean; ayat?: BranchAyah[]; prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; zoomInRail?: boolean | 'preview'; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>, path: string[]) => React.ReactNode; label?: string; header?: React.ReactNode; steppable?: boolean | Neighbours; direction?: 'side' | 'auto' | 'down';
@@ -574,8 +574,9 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep, neighbo
 
 // docs/plans/quran-shared-openings.md
 const NO_VARIANTS: Variant[] = [];
+const NO_OFFSETS: Record<string, number> = {};
 
-export default function BranchTree({ tree, names, ayat, offsets = {}, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, nodeContent, zoomBar = true }: Props) {
+export default function BranchTree({ tree, names, ayat, offsets = NO_OFFSETS, variants = NO_VARIANTS, prefixes: listed, subtreeLinks, showSpellings = true, zoomable = true, zoomInRail = false, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steppable = false, direction = 'side', rotatable = false, growable = false, view: given, surround, hideArrows, nodeContent, zoomBar = true }: Props) {
   const prefixes = useMemo(() => listed && withStarts(listed, keys(tree)), [listed, tree]);
   const id = useId();
   const group = useGroupConnections()?.group;
@@ -590,7 +591,12 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const outer = useOuterPaths();
   const own = usePaths([]);
   const cardRef = useRef<HTMLDivElement>(null);
-  const growingKey = useGrowTarget(cardRef, useMemo(() => (growable ? growthPlan(tree, (prefixes ?? variants).map(start => start.keys)) : null), [growable, tree, prefixes, variants]));
+  const plan = useMemo(() => (growable ? growthPlan(tree, (prefixes ?? variants).map(start => start.keys)) : null), [growable, tree, prefixes, variants]);
+  // The words each growing ayah's card shows as its boxes are drawn (the words before the phrase come with their own box).
+  const growthCounts = useMemo(() => plan ? growthWords(tree, plan, { offsets, prefixed: (prefixes ?? []).flatMap(prefix => prefix.keys) }) : undefined, [plan, tree, offsets, prefixes]);
+  const growingKey = useGrowTarget(cardRef, plan, growthCounts);
+  // In the studio the tree leaves room under it for the growing ayah's card, as the app's fixed frame does.
+  const studioRoom = useGrowth().studio && growable ? 'calc(100svh - var(--tree-chrome, 15rem) - 14rem)' : null;
   const paths = growingKey ? { ...(outer ?? own), lit: new Set([growingKey]) } : outer ?? own;
   const all = keys(tree);
   const ends = ayahEnds(tree);
@@ -675,7 +681,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
-        <TreeViewport lane={lane} hideArrows={hideArrows} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} down={direction === 'down'} zoomBar={zoomBar} flip={rotatable && rotated}>
+        <TreeViewport lane={lane} hideArrows={hideArrows} zoomInRail={zoomInRail} controls={controls} enabled={zoomable} ar={ar} height={(studioRoom && viewportHeight ? `min(${viewportHeight}, ${studioRoom})` : viewportHeight) ?? undefined} onStep={steppable ? step : undefined} neighbours={typeof steppable === 'object' ? steppable : undefined} auto={direction === 'auto'} down={direction === 'down'} zoomBar={zoomBar} flip={rotatable && rotated}>
           {beforeEntries.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={beforeEntries} />
             <Stub keys={all} />
