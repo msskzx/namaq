@@ -11,7 +11,9 @@ and from the historical records under `data/history/`.
 
 ## Format
 
-Copy an existing file. Name it `NNNN-short-title.md` with the next free number.
+Copy an existing file. Name it `NNNN-short-title.md` with the next free number;
+a number two records share makes a bare `Records used: NNNN` ambiguous, so the
+test refuses new ones (0029, 0031, 0032 and 0038 were shared before it).
 The fields are Distillate's, so `npm run records:export` can copy the records
 back into Distillate unchanged. Each frontmatter line is `key: <JSON value>`.
 
@@ -46,9 +48,11 @@ A few short paragraphs: what happened, what surprised us, why the fix works.
   fixed, which the final code no longer shows).
 - `outcome`: solved, failed, partial or open. A failure means "failed under
   these conditions", not a ban.
-- `topics` come from this list: agent-review, build-tooling, data-sync,
-  evidence-model, graph-layout, graph-ui, migrations, runtime-versions,
-  source-extraction, testing, text-matching, ui-rtl, ui-state.
+- `topics` come from this list (Distillate's, also `TOPICS` in
+  `scripts/records/format.ts`, which the test checks): agent-review,
+  build-tooling, data-sync, evidence-model, graph-layout, graph-ui, migrations,
+  mobile, runtime-versions, source-extraction, testing, text-matching, ui-rtl,
+  ui-state, video.
 - Links between records: `buildsOn` (continues an earlier record) and
   `variantOf` (same problem met elsewhere), as ids like `namaq/0019-…`.
   `lesson` names a Distillate lesson. All three are optional.
@@ -65,14 +69,28 @@ Records 0001 to 0027 came from the Distillate project (2026-09 to 2026-11).
 ## Copying to Distillate
 
 `npm run records:export` writes every record to
-`../distillate/content/records/namaq/` (or the folder you pass after `--`).
-Distillate's loader reads them as they are, with the links between records.
+`../distillate/content/records/namaq/` (or `<root>/content/records/namaq/` for
+the Distillate root you pass after `--`), skipping records Distillate already
+holds with the same fields and text. Distillate's loader reads them as they
+are, with the links between records.
+
+It also writes `content/usage/namaq.json` there: each merged PR's `Records used:`
+line with the records it resolves to, and the PR that added each record file.
+Distillate builds its stats page and each record's stats from that file. It
+needs the `gh` CLI signed in (or `--prs <file>` holding
+`gh pr list --state merged --json number,title,body,mergedAt` output) and the
+full git history; `--no-usage` skips it.
 
 ## Usage
 
 Every PR description has a `Records used:` line (see the PR template). To count
 how often each record was used across merged PRs, run `npm run records:used`
-(needs the `gh` CLI signed in).
+(needs the `gh` CLI signed in). Both commands read the line the same way
+(`scripts/records/usage.ts`): ids before the first full stop, outside
+parentheses, not in an item that names an ADR, and nothing after `none`. Write
+only the ids, as `0019, 0021` or `0019-fixing-the-example-broke-the-ayah-next-door`,
+and mention new records elsewhere in the description. A number that two
+records share is not counted for either; write the full id for those.
 
 ## Index
 
