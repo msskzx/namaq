@@ -1,6 +1,5 @@
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/components/Text';
-import { OATHS_HELP } from '@shared/quran/oaths';
 import { examples, rangeLabel, type Voice } from '@shared/quran/iltifat';
 import Sheet from './Sheet';
 import ExternalLink from './ExternalLink';
@@ -10,7 +9,7 @@ import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_GAPS, ITQAN_NOTES, ITQAN_OPEN
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
 
-export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'oaths' | 'iltifat' | 'openings' | 'order';
+export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'words' | 'iltifat' | 'openings' | 'order';
 
 /** A coloured sample word and what its colour means. */
 /** The colour of each likeness (MARK_LEGEND), as the colour setting draws it, with the kind of difference the books name for it. */
@@ -30,7 +29,7 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
   );
 }
 
-const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', oaths: 'ما الأقسام هنا؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
+const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', words: 'كيف نعدّ الكلمات؟', iltifat: 'ما الالتفات؟', openings: 'ما أنواع الافتتاح؟', order: 'من أين هذا الكلام؟' };
 
 /**
  * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
@@ -42,9 +41,7 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
     <Sheet open={!!topic} onClose={onClose} palette={palette}>
       {topic && <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{TITLES[topic]}</Text>
-        {topic === 'oaths' ? <>
-          {OATHS_HELP.map((text, i) => <Text key={i} style={i === OATHS_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
-        </> : topic === 'iltifat' ? <>
+        {topic === 'iltifat' ? <>
           <Text style={paragraph}>انتقال الكلام من غيبة إلى خطاب أو تكلم، أو من أحدها إلى غيره، والمتحدَّث عنه واحد.</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16 }}>
             {(['he', 'we', 'you'] as Voice[]).map(voice => <Text key={voice} style={{ color: voiceColor(palette, voice), fontSize: 15 }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</Text>)}

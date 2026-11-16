@@ -76,13 +76,6 @@ export const OTHER_OATHS: Oath[] = [
   { surah: 46, range: [34, 34], by: ['رب'], who: 'الكافرون إذ عرضوا على النار' },
 ];
 
-/** The page's help, the same on the website and in the app; the last paragraph is the note shown muted. */
-export const OATHS_HELP = [
-  'كل موضع في القرآن جاء فيه القسم بلفظه: بالواو أو التاء أو الباء، أو «لا أقسم»، أو «فلا وربك»، أو «لعمرك»، أو «قل إي وربي». وما أُخبر فيه عن قسم بغير لفظه، كـ«وأقسموا بالله جهد أيمانهم»، لم يدخل.',
-  'الكلمة الملوّنة ما أُقسم به. وما أقسم الله به بوصف بلا اسم، كالذاريات والمرسلات والنازعات والعاديات، يبقى بألفاظه ولا نقول ما هو، فذلك من التفسير. ويُعرض القسم وحده دون جوابه.',
-  'لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص، وفي «لا أقسم» (القيامة ١) قراءة أخرى لم تدخل هنا.',
-];
-
 export const OATHS: Record<OathKind, Oath[]> = { allah: ALLAH_OATHS, others: OTHER_OATHS };
 
 /** Each oath's surah names and ayat as the mushaf writes them (shared/data/quran/oaths.json, `npm run quran:oaths`). */

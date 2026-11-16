@@ -4,11 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BookOpen, Send } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
-import { SettingsHelp } from '@/components/common/SettingsHelp';
+import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { OATHS_HELP, oathPlace, oathShareText, oathsWith, type OathChip, type OathKind, type OathView } from '@shared/quran/oaths';
+import { KIND_QUOTES, OATH_QUOTES, type OathQuote } from '@shared/quran/oathSources';
+import { oathPlace, oathShareText, oathsWith, type OathChip, type OathKind, type OathView } from '@shared/quran/oaths';
 
 type Built = { oaths: OathView[]; chips: OathChip[] };
 
@@ -16,8 +17,6 @@ export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
   { kind: 'others', label: 'أقسم غيره' },
 ];
-
-const HELP = OATHS_HELP.map((text, i) => <p key={i} className={i === OATHS_HELP.length - 1 ? 'text-[var(--home-muted)]' : undefined}>{text}</p>);
 
 /** Shares an oath's text and its link with the phone's share sheet, or copies them where there is none. */
 async function shareOath(oath: OathView) {
@@ -29,10 +28,14 @@ async function shareOath(oath: OathView) {
   } catch {}
 }
 
+/** The book and page a quote comes from, as a link to that page. */
+const Cite = ({ quote }: { quote: OathQuote }) => <ExternalLink href={quote.url} className="whitespace-nowrap text-sm text-[var(--home-muted)] underline-offset-4 hover:underline">{quote.cite}</ExternalLink>;
+
 const ICON_BUTTON = 'inline-flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
 function OathCard({ oath }: { oath: OathView }) {
   const place = oathPlace(oath, num);
+  const quote = OATH_QUOTES[oath.id];
   return (
     <li className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-1">
       <h2 className="flex flex-wrap items-baseline gap-x-3 text-sm text-[var(--home-muted)]">
@@ -49,9 +52,11 @@ function OathCard({ oath }: { oath: OathView }) {
           </span>
         ))}
       </p>
-      <div className="flex gap-1">
+      {quote && <p className="mt-1 text-[0.95rem] leading-7 text-[var(--home-muted)]">«{quote.text}»</p>}
+      <div className="flex items-center gap-1">
         <Link href={ayahHref(oath.id)} className={ICON_BUTTON} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen size={18} aria-hidden /></Link>
         <button type="button" onClick={() => shareOath(oath)} className={ICON_BUTTON} aria-label={`شارك ${place}`} title="شارك"><Send size={18} aria-hidden /></button>
+        {quote && <span className="ms-auto"><Cite quote={quote} /></span>}
       </div>
     </li>
   );
@@ -76,11 +81,14 @@ export default function OathsView({ allah, others }: { allah: Built; others: Bui
   );
   return (
     <div className="flex flex-col gap-3">
-      <SettingsHelp label="ما الأقسام هنا؟">{HELP}</SettingsHelp>
       <h1 className="sr-only">الأقسام في القرآن</h1>
       <Segmented label="من أقسم" className="w-full [&>button]:flex-1" options={OATH_KINDS.map(option => ({
         key: option.kind, label: option.label, current: kind === option.kind, onClick: () => { setKind(option.kind); setWord(null); },
       }))} />
+      <figure className="px-1 text-[0.95rem] leading-7 text-[var(--home-muted)]">
+        <blockquote>«{KIND_QUOTES[kind].text}»</blockquote>
+        <figcaption><Cite quote={KIND_QUOTES[kind]} /></figcaption>
+      </figure>
       <ul aria-label="ما أُقسم به" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         {chip('الكل', null)}
         {chips.map(c => chip(c.word, c.word))}
