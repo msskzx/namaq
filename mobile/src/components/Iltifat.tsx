@@ -12,7 +12,7 @@ import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 // The app lays out right to left (direction: 'rtl' in app/_layout.tsx), so a row starts on the right.
 
-/** The website's colours for the three voices (src/app/quran/balagha/BalaghaView.tsx). */
+/** The website's colours for the three voices (src/app/quran/lataif/LataifView.tsx). */
 export const voiceColor = (palette: Palette, voice: Voice) => ({ he: palette.path, we: palette.green, you: palette.root })[voice];
 export const VOICE_NAME: Record<Voice, string> = { he: 'غيبة', we: 'تكلم', you: 'خطاب' };
 
