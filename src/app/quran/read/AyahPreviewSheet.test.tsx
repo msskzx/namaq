@@ -38,15 +38,24 @@ describe('the trees sheet', () => {
 });
 
 describe('the balagha sheet', () => {
-  it("shows al-Zamakhshari's whole passage, his device words in front of the lit sentence, and folds the book open", async () => {
+  it("opens on al-Suyuti's paragraph under his heading, lights the words it quotes, then shows al-Zamakhshari's passage on the other pill", async () => {
     const text = 'قرئ ﴿وَهَنَ﴾ بالحركات الثلاث. شبه الشيب بشواظ النار، ثم أخرجه مخرج الاستعارة في ﴿وَاشْتَعَلَ﴾. آخر.';
     const [start, end] = [text.indexOf('شبه'), text.indexOf('آخر') - 1];
     const data: BalaghaAyah = {
+      itqan: [{ kind: 'النَّوْعُ الثَّامِنُ وَالْخَمْسُونَ: فِي بَدَائِعِ الْقُرْآنِ', heading: 'الِاسْتِعَارَةُ', part: 3, pages: [150, 151], id: 1000, text: 'ومنه ﴿وَاشْتَعَلَ الرَّأْسُ شَيْبًا﴾ كله.', words: [[6, 8]], places: 1 }],
       words: ['قَالَ', 'رَبِّ', 'إِنِّي', 'وَهَنَ', 'ٱلۡعَظۡمُ', 'مِنِّي', 'وَٱشۡتَعَلَ', 'ٱلرَّأۡسُ', 'شَيۡبࣰا'], version: '2026-08-10',
       passage: { surah: 19, from: 4, to: 4, part: 3, pages: [5, 6], text, lit: [[start, end, 0, 4, 6, 6], [start, end, 1, 4, 6, 6]] },
     };
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => data })));
     render(<LanguageProvider><AyahPreviewSheet preview={{ kind: 'balagha', key: '19:4' }} onClose={vi.fn()} /></LanguageProvider>);
+    const itqanTab = await screen.findByRole('tab', { name: 'الإتقان للسيوطي' });
+    expect(itqanTab.getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByText(/«الِاسْتِعَارَةُ» · النَّوْعُ الثَّامِنُ/)).toBeTruthy();
+    expect(screen.getByText('شَيۡبࣰا').className).toMatch(/20%/);
+    expect(screen.getByText('قَالَ').className).not.toMatch(/20%/);
+    fireEvent.click(screen.getByRole('button', { name: 'الإتقان للسيوطي ٣/١٥٠–١٥١' }));
+    expect(screen.getByText('اقرأ الصفحة').getAttribute('href')).toBe('https://shamela.ws/book/11728/1000');
+    fireEvent.click(screen.getByRole('tab', { name: 'الكشاف للزمخشري' }));
     const lit = await screen.findByRole('button', { name: /«الاستعارة» «التشبيه»/ });
     expect(lit.textContent).toContain('ثم أخرجه مخرج الاستعارة');
     const credit = screen.getByRole('button', { name: /الكشاف للزمخشري/ });
