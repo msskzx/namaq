@@ -49,6 +49,7 @@ const USE = {
   tafsir: { ar: 'التفسير في المصحف', en: 'the tafsir in the mushaf reader', href: '/quran/read' },
   topics: { ar: 'موضوعات السور في المصحف', en: 'surah topics in the mushaf reader', href: '/quran/read' },
   irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
+  balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -157,6 +158,16 @@ export const SOURCES: Source[] = [
       en: 'The author died in 1219, so his text is in the public domain. We cut it at the words he parses, from Quranpedia’s dump, with the page number and a link. It does not ship with the app; whoever wants it downloads it to their phone.',
     },
     uses: [USE.irab],
+  },
+  {
+    id: 'kashshaf', group: 'books',
+    title: { ar: 'الكشاف عن حقائق التنزيل وعيون الأقاويل في وجوه التأويل', en: 'al-Kashshaf' }, author: { ar: 'جار الله الزمخشري', en: 'al-Zamakhshari' },
+    edition: 'دار الكتاب العربي، بيروت، الطبعة الثالثة ١٤٠٧هـ', link: { url: 'https://quranpedia.net/book/346', label: 'الموسوعة القرآنية' },
+    licence: {
+      ar: 'توفي المؤلف سنة ٥٣٨هـ، فنصه في الملك العام. نعرض كلامه كاملًا على كل آية دون حواشي الكتب المطبوعة معه، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. تضاء الجملة التي يسمّي فيها فنًّا من فنون البلاغة بقاعدة ثابتة. وفي الكتاب تأويلات معتزلية لبعض الصفات. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died in 1144, so his text is in the public domain. We show his whole passage on each ayah, without the works printed in its margins, from Quranpedia’s dump, with the page number and a link. A fixed rule lights the sentences where he names a rhetorical device. The book carries Mu‘tazili readings of some divine attributes. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.balagha],
   },
   {
     id: 'tafsir-mawdui', group: 'books',

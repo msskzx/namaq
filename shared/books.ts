@@ -4,19 +4,21 @@
  * from the website and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
  * The default tafsir can change later to a better book.
  */
-export type BookKind = 'tafsir' | 'irab';
-export type BookId = 'sadi' | 'irab-words' | 'ukbari';
+export type BookKind = 'tafsir' | 'irab' | 'balagha';
+export type BookId = 'sadi' | 'irab-words' | 'ukbari' | 'kashshaf';
 export type Book = { id: BookId; kind: BookKind; title: string; by: string; builtIn: boolean; megabytes: number };
 
 export const BOOKS: Book[] = [
   { id: 'sadi', kind: 'tafsir', title: 'تيسير الكريم الرحمن', by: 'السعدي (ت ١٣٧٦هـ)', builtIn: true, megabytes: 1.9 },
   { id: 'irab-words', kind: 'irab', title: 'الإعراب القصير لكل كلمة', by: 'المدونة القرآنية والشجرة النحوية', builtIn: true, megabytes: 0.5 },
   { id: 'ukbari', kind: 'irab', title: 'التبيان في إعراب القرآن', by: 'العكبري (ت ٦١٦هـ)', builtIn: false, megabytes: 0.7 },
+  { id: 'kashshaf', kind: 'balagha', title: 'الكشاف عن حقائق التنزيل', by: 'الزمخشري (ت ٥٣٨هـ)', builtIn: false, megabytes: 2.2 },
 ];
 
 export const BOOK_KINDS: { kind: BookKind; title: string }[] = [
   { kind: 'tafsir', title: 'التفسير' },
   { kind: 'irab', title: 'الإعراب' },
+  { kind: 'balagha', title: 'البلاغة' },
 ];
 
 export const bookOf = (id: BookId) => BOOKS.find(book => book.id === id)!;

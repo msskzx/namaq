@@ -4,6 +4,7 @@ import type { BookId } from '@shared/books';
 /** The books the phone downloads to keep (shared/books.ts); built-in books ship with the app and are not served here. */
 const FILES: Partial<Record<BookId, () => Promise<unknown>>> = {
   ukbari: async () => (await import('@shared/data/quran/irabUkbari')).default,
+  kashshaf: async () => (await import('@shared/data/quran/kashshaf')).default,
 };
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
