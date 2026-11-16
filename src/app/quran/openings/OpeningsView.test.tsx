@@ -33,7 +33,7 @@ describe('the surah openings page', () => {
   it('opens on the kind in the link', () => {
     window.history.replaceState(null, '', '/quran/openings?kind=prayer');
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
-    expect(shown()).toEqual(['wayl', 'prayer-alone']);
+    expect(shown()).toEqual(['prayer']);
   });
 
   it('colours shared words as the matrix does, and gives each kind its collapsed reference', () => {
@@ -57,7 +57,7 @@ describe('the surah openings page', () => {
 
   it('opens the إذا السماء card on its conditions and their answer', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
-    const card = document.getElementById('idha-sama')!;
+    const card = document.getElementById('condition')!;
     expect(card.querySelectorAll('[data-role]')).toHaveLength(0);
     fireEvent.click(within(card.parentElement!).getByRole('button', { name: 'الشرط وجوابه' }));
     expect(card.querySelectorAll('[data-role="answer"]')).toHaveLength(2);

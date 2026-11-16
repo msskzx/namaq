@@ -57,10 +57,6 @@ describe('opening kinds', () => {
     for (const card of cards.filter(c => c.alone)) for (const r of card.rows) expect([...marked(r, false), ...marked(r, true)]).toEqual([]);
   });
 
-  it('cuts long openings on the cards of surahs that stand alone too', () => {
-    expect(row('statement-alone', 8).cut).toBe(true);
-  });
-
   it('cuts a long opening and ends every full one with its ayah number', () => {
     const long = row('umma', 60);
     expect(long.cut).toBe(true);
@@ -71,7 +67,7 @@ describe('opening kinds', () => {
   });
 
   it('finds the surahs whose opening is like a surah\'s, and none for one that stands alone', () => {
-    expect(openingLike(82)).toEqual({ card: 'idha-sama', kind: 'condition', surahs: [81, 84] });
+    expect(openingLike(82)).toEqual({ card: 'condition', kind: 'condition', surahs: [56, 63, 81, 84, 99, 110] });
     expect(openingLike(7)).toBeNull();
   });
 

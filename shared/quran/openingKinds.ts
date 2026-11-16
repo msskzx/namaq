@@ -94,8 +94,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'maryam-taha', kind: 'letters', title: 'مريم وطه', surahs: [19, 20], refs: [
     { text: 'وسائر السور المفتتحة بالحروف المقطعة كلها مقترنة؛ كيونس وتواليها، ومريم وطه، والطواسين، و«الم» العنكبوت وتواليها، والحواميم', ...tanasuq('٧٤', 72) },
   ] },
-  { id: 'wal-quran', kind: 'letters', title: 'والقرآن', surahs: [36, 38, 50] },
-  { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 68], alone: true },
+  { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 36, 38, 50, 68], alone: true },
   { id: 'nabi', kind: 'call', title: 'نداء الرسول ﷺ', surahs: [33, 65, 66, 73, 74], refs: [
     { text: 'خمس بنداء الرسول ﷺ: الأحزاب والطلاق والتحريم والمزمل والمدثر', ...itqan('٣٦١', 1125) },
     { text: 'هذه السورة [التحريم] متآخية مع التي قبلها في الافتتاح بخطاب النبي ﷺ', ...tanasuq('١٤٤', 149) },
@@ -104,12 +103,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'umma', kind: 'call', title: 'نداء الأمة', surahs: [4, 5, 22, 49, 60], refs: [
     { text: 'وخمس بنداء الأمة: النساء والمائدة والحج والحجرات والممتحنة', ...itqan('٣٦١', 1125) },
   ] },
-  { id: 'inna', kind: 'statement', title: 'إنا', surahs: [48, 71, 97, 108] },
-  { id: 'iqtarab', kind: 'statement', title: 'اقترب', surahs: [21, 54] },
-  { id: 'qad', kind: 'statement', title: 'قد', surahs: [23, 58] },
-  { id: 'la-uqsim', kind: 'statement', title: 'لا أقسم', surahs: [75, 90], refs: [{ text: '«لا أقسم» في موضعين', ...itqan('٣٦٢', 1126) }] },
-  { id: 'qariah', kind: 'statement', title: 'الحاقة والقارعة', surahs: [69, 101] },
-  { id: 'statement-alone', kind: 'statement', title: 'وحدها', surahs: [8, 9, 16, 24, 47, 55, 70, 80, 98, 102], alone: true },
+  { id: 'statement', kind: 'statement', title: 'الجمل الخبرية', surahs: [8, 9, 16, 21, 23, 24, 47, 48, 54, 55, 58, 69, 70, 71, 75, 90, 80, 97, 98, 101, 102, 108] },
   { id: 'aflak', kind: 'oath', title: 'بالأفلاك', surahs: [85, 86], refs: [
     { text: 'وسورتان بالأفلاك: البروج والطارق', ...itqan('٣٦٢', 1126) },
     { text: 'هما [البروج والطارق] متآخيتان فقرنتا، وقدمت الأولى لطولها، وذكرا بعد الانشقاق للمؤاخاة في الافتتاح بذكر السماء', ...tanasuq('١٥٦', 162) },
@@ -125,21 +119,15 @@ export const OPENING_CARDS: CardDef[] = [
   ], refs: [
     { text: 'سورة أقسم فيها بالملائكة وهي «والصافات»… وسورة بالتربة التي هي منها أيضا وهي الطور، وسورة بالنبات وهي والتين، وسورة بالحيوان الناطق وهي والنازعات، وسورة بالبهيم وهي والعاديات', ...itqan('٣٦٢', 1126) },
   ] },
-  { id: 'idha-sama', kind: 'condition', title: 'إذا السماء', surahs: [81, 82, 84], refs: [
+  { id: 'condition', kind: 'condition', title: 'الشرط', surahs: [56, 63, 81, 82, 84, 99, 110], refs: [
     { text: 'وكذلك الفصل بين الانفطار والانشقاق بالمطففين، وهما نظيرتان في المطلع والمقصد', ...tanasuq('٤٧', 45) },
   ] },
-  { id: 'idha-ja', kind: 'condition', title: 'إذا جاء', surahs: [63, 110] },
-  { id: 'idha-fil', kind: 'condition', title: 'إذا وقعت', surahs: [56, 99] },
-  { id: 'qul', kind: 'command', title: 'قل', surahs: [72, 109, 112, 113, 114], refs: [
+  { id: 'command', kind: 'command', title: 'الأمر', surahs: [72, 96, 109, 112, 113, 114], refs: [
     { text: 'هاتان السورتان [الفلق والناس] نزلتا معا… فلذلك قرنتا، مع ما اشتركتا فيه من التسمية بالمعوذتين، ومن الافتتاح بـ«قل أعوذ»', ...tanasuq('١٧٣', 180) },
   ] },
-  { id: 'command-alone', kind: 'command', title: 'وحدها', surahs: [96], alone: true },
-  { id: 'hal', kind: 'question', title: 'هل أتى', surahs: [76, 88] },
-  { id: 'alam', kind: 'question', title: 'ألم', surahs: [94, 105] },
-  { id: 'question-alone', kind: 'question', title: 'وحدها', surahs: [78, 107], alone: true },
-  { id: 'wayl', kind: 'prayer', title: 'ويل', surahs: [83, 104] },
-  { id: 'prayer-alone', kind: 'prayer', title: 'وحدها', surahs: [111], alone: true },
-  { id: 'reason-alone', kind: 'reason', title: 'وحدها', surahs: [106], alone: true },
+  { id: 'question', kind: 'question', title: 'الاستفهام', surahs: [78, 88, 94, 105, 107, 76] },
+  { id: 'prayer', kind: 'prayer', title: 'الدعاء', surahs: [83, 104, 111] },
+  { id: 'reason', kind: 'reason', title: 'التعليل', surahs: [106], alone: true },
 ];
 
 export const kindOf = (surah: number) => OPENING_KINDS.find(kind => kind.surahs.includes(surah))!.id;
@@ -233,4 +221,4 @@ export const CONDITION_SOURCES = [
   { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
 ];
 
-export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. وما تحت عنوان البطاقة كلام السيوطي فيما يجمع سورها، وما لم يذكره منها فمن تجميعنا. والنص برواية حفص.';
+export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. والبطاقات على ما جمعه السيوطي، ونصه تحت عنوان النوع أو البطاقة. والنص برواية حفص.';
