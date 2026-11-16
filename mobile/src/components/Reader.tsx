@@ -6,9 +6,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
+import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
+import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { wordTargets } from '@shared/quran/writeAyah';
@@ -27,6 +29,8 @@ import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
+import ActButton, { ACT_WIDTH } from './ActButton';
+import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
@@ -63,6 +67,9 @@ const modelOf = (page: number) => {
   return model;
 };
 
+/** «البقرة ٥»: an ayah named as the reader names it, surah first. */
+const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`; };
+
 /** The recite pill's height: one icon button tall, and a little room around it. */
 const RECITE_BAR = 52;
 
@@ -75,17 +82,6 @@ function IconButton({ Icon, label, onPress, palette, on = false, disabled = fals
   );
 }
 
-/** A long-press button: the icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is). */
-function ActButton({ Icon, label, name, onPress, palette, on = false, color }: { Icon: (props: LucideProps) => React.ReactNode; label: string; name: string; onPress: () => void; palette: Palette; on?: boolean; color?: string }) {
-  return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }}
-      style={{ width: ACT_WIDTH, alignItems: 'center', gap: 3, paddingTop: 7, paddingBottom: 5, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
-      <Icon size={22} color={on ? palette.onAccent : color ?? palette.ink} />
-      <Text numberOfLines={1} style={{ fontSize: 11, color: on ? palette.onAccent : palette.muted }}>{name}</Text>
-    </Pressable>
-  );
-}
-const ACT_WIDTH = 56;
 
 /** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
 export default function Reader() {
@@ -117,6 +113,8 @@ export default function Reader() {
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
+  // The reader's فاصلة (owner, 2026-11-16): set only from an ayah's buttons, never by turning pages; `reader-place` keeps the page open.
+  const fasila = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas).quran ?? null;
   const [noting, setNoting] = useState<string | null>(null);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
@@ -371,7 +369,7 @@ export default function Reader() {
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
-        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
+        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} fasila={position ? null : fasila?.key ?? null} onTouch={onTouch}
         write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
     );
   };
@@ -386,7 +384,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 6 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 7 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -415,6 +413,8 @@ export default function Reader() {
           <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
+          <ActButton Icon={FasilaIcon} label={fasila?.key === actions.key ? 'أزل الفاصلة' : 'ضع الفاصلة هنا: هنا توقفت'} name="فاصلة" palette={palette} on={fasila?.key === actions.key}
+            onPress={() => { const key = actions.key; setQuranFasila(fasila?.key === key ? null : { key, page: pageOfAyah(key) ?? page }); setActions(null); }} />
           <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} name="تأمّل" palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
           {topics && <ActButton Icon={TableOfContents} label="موضوع الآية في السورة" name="الموضوعات" palette={palette}
             onPress={() => { setActions(null); setTopic({ surah: actionSurah, section: Math.max(0, sectionAt(actionSurah, actionAyah)) }); }} />}
@@ -458,6 +458,17 @@ export default function Reader() {
           <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : 'اكتب أول كل آية وآخرها'} palette={palette} on={writing} onPress={toggleWriting} />
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
+      )}
+      {/* Back to the فاصلة from any other page, with the bars (a tap), so it never covers the page's last line. */}
+      {tools && !position && fasila && fasila.page !== page && (
+        <Pressable onPress={() => jump({ page: fasila.page, key: fasila.key, mark: false })} accessibilityRole="button"
+          accessibilityLabel={`عد إلى فاصلتك، ${surahNames[Number(fasila.key.split(':')[0])] ?? ''} ${num(Number(fasila.key.split(':')[1]))}`}
+          style={{ position: 'absolute', alignSelf: 'center', bottom: tabBarTop(insets.bottom) + 10, height: 40, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
+          <View><FasilaIcon size={18} color={palette.accent} /></View>
+          <Text style={{ color: palette.ink, fontSize: 15 }}>{`عُد إلى فاصلتك · ${plainSurah(fasila.key)}`}</Text>
+        </Pressable>
       )}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
       {boxes.field}

@@ -40,7 +40,7 @@ function enclosed(text: string, open: number): { inner: string; end: number } | 
   return null;
 }
 
-const clean = (html: string) => html.replace(/<br\s*\/?>/g, '\n').replace(/<\/?p[^>]*>/g, '\n').replace(/<[^>]+>/g, '')
+export const clean = (html: string) => html.replace(/<br\s*\/?>/g, '\n').replace(/<\/?p[^>]*>/g, '\n').replace(/<[^>]+>/g, '')
   .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\r/g, '').replace(/[ \t]+\n/g, '\n');
 
 const SURAH = /(?:^|\n)\s*سُورَةُ [^\n]*/y;

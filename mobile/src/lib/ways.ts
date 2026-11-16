@@ -59,3 +59,6 @@ export function followWay(way: CardWay, target?: CompareTarget) {
   if (way.tree) toTab({ pathname: '/branches', params: { tree: way.tree } });
   else if (way.open) { setIntent(way.open); toTab('/branches'); }
 }
+
+/** Opens a book in the book reader at the passage on an ayah, lit (a reader sheet's book button). */
+export const openBookAt = (id: string, ayah: string) => toTab({ pathname: '/book', params: { id, ayah } });

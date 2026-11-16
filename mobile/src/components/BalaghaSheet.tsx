@@ -15,6 +15,7 @@ import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import LoadingDots from './LoadingDots';
 import Sheet from './Sheet';
+import OpenInBook from './OpenInBook';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -35,12 +36,12 @@ export default function BalaghaSheet({ ayah, onClose, palette }: { ayah: string 
   if (ayah && ayah !== kept) setKept(ayah);
   return (
     <Sheet open={!!ayah} onClose={onClose} palette={palette}>
-      {kept && <BalaghaBody key={kept} ayah={kept} palette={palette} />}
+      {kept && <BalaghaBody key={kept} ayah={kept} palette={palette} onClose={onClose} />}
     </Sheet>
   );
 }
 
-function BalaghaBody({ ayah, palette }: { ayah: string; palette: Palette }) {
+function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palette; onClose: () => void }) {
   useBooks();
   const itqanOn = bookState('itqan') === 'on';
   const paragraphs = useMemo(() => (itqanOn ? itqanAt(itqan, ayah) : []), [ayah, itqanOn]);
@@ -72,7 +73,7 @@ function BalaghaBody({ ayah, palette }: { ayah: string; palette: Palette }) {
         </View>
         {shown === 'itqan'
           ? <Itqan paragraphs={paragraphs} palette={palette} onSpan={setSpan} />
-          : <Kashshaf ayah={ayah} palette={palette} onSpan={setSpan} />}
+          : <Kashshaf ayah={ayah} palette={palette} onSpan={setSpan} onClose={onClose} />}
       </ScrollView>
     </View>
   );
@@ -80,14 +81,15 @@ function BalaghaBody({ ayah, palette }: { ayah: string; palette: Palette }) {
 
 const cardStyle = (palette: Palette) => ({ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 10 });
 
-function Folded({ credit, children, palette }: { credit: string; children: React.ReactNode; palette: Palette }) {
+function Folded({ credit, children, palette, extra }: { credit: string; children: React.ReactNode; palette: Palette; extra?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Pressable onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: 36 }}>
         {open ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{credit}</Text>
+        <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{credit}</Text>
+        {extra}
       </Pressable>
       {open && <View style={{ gap: 4 }}>{children}</View>}
     </>
@@ -120,7 +122,7 @@ function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; 
   ));
 }
 
-function Kashshaf({ ayah, palette, onSpan }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void }) {
+function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {
   useBooks();
   const on = bookState('kashshaf') === 'on';
   // null while reading the file, false when it cannot be read.
@@ -150,7 +152,7 @@ function Kashshaf({ ayah, palette, onSpan }: { ayah: string; palette: Palette; o
               </Text>
             ))}
           </Text>
-          <Folded credit={kashshafCredit(passage)} palette={palette}>
+          <Folded credit={kashshafCredit(passage)} palette={palette} extra={<OpenInBook book="kashshaf" ayah={ayah} onClose={onClose} palette={palette} />}>
             <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
               {`${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${book ? book.source.version : ''}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.`}
             </Text>
