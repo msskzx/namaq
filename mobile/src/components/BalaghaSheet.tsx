@@ -12,6 +12,7 @@ import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import LoadingDots from './LoadingDots';
 import Sheet from './Sheet';
+import OpenInBook from './OpenInBook';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md): al-Zamakhshari's whole passage on the ayah from
@@ -28,12 +29,12 @@ export default function BalaghaSheet({ ayah, onClose, palette }: { ayah: string 
   if (ayah && ayah !== kept) setKept(ayah);
   return (
     <Sheet open={!!ayah} onClose={onClose} palette={palette}>
-      {kept && <BalaghaBody key={kept} ayah={kept} palette={palette} />}
+      {kept && <BalaghaBody key={kept} ayah={kept} palette={palette} onClose={onClose} />}
     </Sheet>
   );
 }
 
-function BalaghaBody({ ayah, palette }: { ayah: string; palette: Palette }) {
+function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palette; onClose: () => void }) {
   useBooks();
   const on = bookState('kashshaf') === 'on';
   // null while reading the file, false when it cannot be read.
@@ -83,7 +84,8 @@ function BalaghaBody({ ayah, palette }: { ayah: string; palette: Palette }) {
             <Pressable onPress={() => setReference(open => !open)} accessibilityRole="button" aria-expanded={reference}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: 36 }}>
               {reference ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
-              <Text style={{ color: palette.muted, fontSize: 14 }}>{kashshafCredit(passage)}</Text>
+              <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{kashshafCredit(passage)}</Text>
+              <OpenInBook book="kashshaf" ayah={ayah} onClose={onClose} palette={palette} />
             </Pressable>
             {reference && (
               <View style={{ gap: 4 }}>

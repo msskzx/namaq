@@ -3,6 +3,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { ListTree } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import ExternalLink from '@/components/ExternalLink';
+import OpenInBook from './OpenInBook';
 import { num } from '@shared/quran/arabicNumber';
 import { IRAB_SOURCES, ukbariCredit, ukbariOf, ukbariPage, type BookPassage, type UkbariData } from '@shared/quran/irab';
 import { irabWordsAt } from '@shared/quran/irabData';
@@ -27,12 +28,12 @@ export default function IrabSheet({ target, onClose, palette }: { target: IrabTa
   if (target && target !== kept) setKept(target);
   return (
     <Sheet open={!!target} onClose={onClose} palette={palette}>
-      {kept && <IrabBody key={`${kept.key}/${kept.word}`} target={kept} palette={palette} />}
+      {kept && <IrabBody key={`${kept.key}/${kept.word}`} target={kept} palette={palette} onClose={onClose} />}
     </Sheet>
   );
 }
 
-function IrabBody({ target, palette }: { target: IrabTarget; palette: Palette }) {
+function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: Palette; onClose: () => void }) {
   useBooks();
   const { key } = target;
   const [surah, ayah] = key.split(':').map(Number);
@@ -88,7 +89,7 @@ function IrabBody({ target, palette }: { target: IrabTarget; palette: Palette })
             ))}
           </View>
         )}
-        {ukbariOn && ukbari && (passages.length ? passages.map((passage, i) => <Passage key={i} passage={passage} onWord={passage.from >= 0} palette={palette} />)
+        {ukbariOn && ukbari && (passages.length ? passages.map((passage, i) => <Passage key={i} passage={passage} onWord={passage.from >= 0} palette={palette} onClose={onClose} />)
           : <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 2 }}>لم يتكلم العكبري على هذه الكلمة ولا على آيتها.</Text>)}
         {none && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>لم تبقِ كتابًا للإعراب على هاتفك. اختر ما تريد، ويعمل بلا اتصال.</Text>}
         {ukbariOn && ukbari === false && (
@@ -106,12 +107,17 @@ function IrabBody({ target, palette }: { target: IrabTarget; palette: Palette })
 }
 
 /** One of al-'Ukbari's passages: the book and page on top (a link to the page), then his text with Quran words in the Quran font. */
-function Passage({ passage, onWord, palette }: { passage: BookPassage; onWord: boolean; palette: Palette }) {
+function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; onWord: boolean; palette: Palette; onClose: () => void }) {
   return (
     <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 10, gap: 4 }}>
-      <ExternalLink url={ukbariPage(passage)} color={palette.muted} size={13} style={{ textAlign: 'right' }}>
-        {onWord ? ukbariCredit(passage) : `${ukbariCredit(passage)}، على الآية`}
-      </ExternalLink>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <View style={{ flex: 1 }}>
+          <ExternalLink url={ukbariPage(passage)} color={palette.muted} size={13} style={{ textAlign: 'right' }}>
+            {onWord ? ukbariCredit(passage) : `${ukbariCredit(passage)}، على الآية`}
+          </ExternalLink>
+        </View>
+        <OpenInBook book="ukbari" ayah={`${passage.surah}:${passage.ayah}`} onClose={onClose} palette={palette} />
+      </View>
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(passage.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
       </Text>

@@ -21,6 +21,7 @@ import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import Sheet from './Sheet';
 import TreeIcon from './TreeIcon';
 import TreePager from './TreePager';
+import OpenInBook from './OpenInBook';
 
 export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: string };
 
@@ -110,10 +111,13 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
           })}
         </ScrollView>}
         {tafsir ? (
-          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
-            <ExternalLink url={tafsirSadiPage(tafsir)} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>
-              {tafsirSadiCredit(tafsir)}
-            </ExternalLink>
+          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <View style={{ flex: 1 }}>
+              <ExternalLink url={tafsirSadiPage(tafsir)} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>
+                {tafsirSadiCredit(tafsir)}
+              </ExternalLink>
+            </View>
+            <OpenInBook book="sadi" ayah={preview.key} onClose={onClose} palette={palette} />
           </View>
         ) : preview.kind === 'tafsir' ? null : preview.kind === 'readings' ? (
           <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>

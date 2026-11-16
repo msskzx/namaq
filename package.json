@@ -26,6 +26,7 @@
     "quran:tafsir": "tsx scripts/quran/buildTafsirSadi.ts",
     "quran:irab": "tsx scripts/quran/buildIrab.ts",
     "quran:kashshaf": "tsx scripts/quran/buildKashshaf.ts",
+    "quran:book-pages": "tsx scripts/quran/buildBookPages.ts",
     "quran:reader": "tsx --env-file=.env scripts/quran/buildReader.ts",
     "quran:mushaf": "tsx scripts/quran/buildMushaf.ts",
     "quran:prophets": "tsx --env-file=.env scripts/quran/buildProphets.ts",
