@@ -185,7 +185,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const onlyMatrix = !!id && (matrixOnly({ id }) || cut.some(piece => piece.id === id && matrixOnly(piece)));
   const cards = !!tree && (state.mode === 'cards' || onlyMatrix);
   const ends = tree && (id && ownAyatOnly({ id }) ? ownEnds(tree) : id && twoAyat({ id }) ? twoEnds(tree, key => positions.has(key)) : ayahEnds(tree));
-  const passageKeys = cards ? presentation!.ayat.map(ayah => {
+  const passageKeys = tree && presentation ? presentation.ayat.map(ayah => {
     const start = positions.get(ayah.key)!;
     const end = positions.get(ends![ayah.key])!;
     return source.ayat.slice(start, end + 1).map(item => item.key);
@@ -259,11 +259,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       </ul>}
       {treeGroup && <CardActions id={id} text={treeGroup.text} aliases={bookmarkAliases} toggles={<>
         {switchTo && <TreeMode to={cards ? 'tree' : 'cards'} href={switchTo} />}
-        {!cards && tree && <RotateButton />}
         <AroundButton card={id} />
+        {!cards && tree && <RotateButton card={id} />}
       </>} compareLinks={compareLinksFor(drawn.map(ayah => ayah.key))} details={requestedGroup && <GroupDetails key={id} group={requestedGroup} shownKeys={drawn.map(ayah => ayah.key)} />} />}
       {treeGroup && presentation && <SurahChips ayahKeys={presentation.ayat.map(ayah => ayah.key)} names={names} interactive={!cards} />}
-      {!cards && tree && presentation && <PathAyat ayat={presentation.ayat.map(ayah => ({ key: ayah.key, words: ayah.words }))} names={names} compare={Object.fromEntries(presentation.ayat.map(ayah => [ayah.key, compareLinksOfAyah(ayah.key)]))} />}
+      {!cards && tree && presentation && passageKeys && <PathAyat rows={presentation.ayat.map(ayah => ayah.key)} passages={passageKeys} card={id} names={names} compare={Object.fromEntries(presentation.ayat.map(ayah => [ayah.key, compareLinksOfAyah(ayah.key)]))} />}
       </PathScope>
       </GroupConnections>
     </div>

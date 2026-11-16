@@ -107,8 +107,8 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
         <Button size="lg" variant="muted" onClick={() => setMatrix(value => !value)} aria-label={label} title={label}>
           {matrix ? <TreeIcon aria-hidden /> : <GalleryHorizontal aria-hidden />}
         </Button>
-        {!matrix && <RotateButton />}
         <AroundButton card={id} />
+        {!matrix && <RotateButton card={id} />}
       </>} />}
     </div>
   );

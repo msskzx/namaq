@@ -100,6 +100,9 @@
 /* The selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14), one band like a forgotten ayah's. */
 .marked { position: relative; background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
 .marked + .marked::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
+/* The long-pressed word inside its ayah's band, a stronger box (the app's markWord: the accent at 30%). */
+.marked.pressedWord { border-radius: 4px; background: color-mix(in srgb, var(--home-accent) 30%, var(--home-card)); }
+.marked + .marked.pressedWord::before, .marked.pressedWord + .marked::before { background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
 
 .titleRow {
   display: flex;

@@ -283,7 +283,7 @@ function StoryPost({ card }: { card: StoryCard }) {
   const read = () => router.push(href);
   return <Post head={<PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} href={href} label="افتح القصة" />}
     actions={<Action Icon={BookOpen} label="افتح القصة" href={href} />}>
-    <div className={styles.story} data-story-scroll>
+    <div className={styles.storyMap} data-story-scroll>
       <StoryMap map={card.map} events={card.events} phases={card.phases} at={card.phase} onRead={read} />
     </div>
   </Post>;
@@ -314,8 +314,8 @@ function SavedPost({ item }: { item: SavedItem }) {
   if (data?.tree) return <TreePost tree={data.tree} />;
   return data?.pair ? <PairPost pair={data.pair} /> : null;
 }
-/** The tree card's height, as the branches page's on a phone. */
-const TREE_HEIGHT = '24rem';
+/** As the app's tree card (owner, 2026-11-15): grows with a taller screen, 68% of it less the buttons and chips under the tree, never under 24rem. */
+const TREE_HEIGHT = 'max(24rem, calc(68svh - 5rem))';
 
 /**
  * One tree as a post: the branches page's own tree (TreeViewCard), so it zooms, pans and lights a path on a click, as there.

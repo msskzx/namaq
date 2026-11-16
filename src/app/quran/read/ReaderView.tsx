@@ -619,7 +619,8 @@ export default function ReaderView({
           {toggleTools}
         </Button>}
         {shown.map((entry, at) => (
-          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
+          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark}
+            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
             write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} onTopic={onTopic} />
         ))}
       </article>

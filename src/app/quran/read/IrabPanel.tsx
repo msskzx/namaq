@@ -25,7 +25,7 @@ export default function IrabPanel({ ayah, data }: { ayah: string; data: IrabAyah
       <div role="tablist" aria-label="كلمات الآية" className="flex shrink-0 flex-wrap gap-1.5">
         {data.words.map((word, i) => (
           <button key={i} type="button" role="tab" aria-selected={i === picked} onClick={() => setPicked(i)}
-            className={`rounded-[var(--card-radius)] border px-2.5 font-quran text-[1.375rem] leading-[1.8] ${i === picked ? 'border-[var(--home-accent)] bg-[var(--home-paper)] text-[var(--home-accent)]' : i === headChip ? 'border-dashed border-[var(--home-accent)] bg-[var(--home-card)]' : 'border-[var(--home-rule)] bg-[var(--home-card)]'}`}>
+            className={`rounded-[var(--card-radius)] border px-2.5 font-quran text-[1.375rem] leading-[1.8] ${i === picked ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-[var(--home-accent)]' : i === headChip ? 'border-dashed border-[var(--home-accent)] bg-[var(--home-card)]' : 'border-[var(--home-rule)] bg-[var(--home-card)]'}`}>
             {word}
           </button>
         ))}

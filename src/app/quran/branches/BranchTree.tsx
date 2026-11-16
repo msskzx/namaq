@@ -582,7 +582,7 @@ export default function BranchTree({ tree, names, ayat, offsets = {}, variants =
   const ar = useLanguage().language === 'ar';
   const [local, setOn] = useState(surround?.on ?? false);
   const [synced] = useCardAround(surround?.card);
-  const [rotated, setRotated] = useRotated();
+  const [rotated, setRotated] = useRotated(surround?.card);
   // The rotate button turns only the open tree: the next tree opens in its own best direction again.
   useEffect(() => { if (rotatable) return () => setRotated(false); }, [rotatable, setRotated]);
   const on = surround?.sync ? synced : local;

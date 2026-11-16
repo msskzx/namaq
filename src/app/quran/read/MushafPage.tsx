@@ -132,6 +132,7 @@ export default function MushafPage({
   names,
   top,
   mark,
+  pressed,
   hidden,
   next,
   forgot,
@@ -148,6 +149,8 @@ export default function MushafPage({
   names: Record<number, string>;
   top?: number;
   mark?: { surah: number; ayah: number };
+  /** The ayah a long press opened the buttons of, lit as one band, and in it the pressed word (its data-word), lit stronger (the app's markWord). */
+  pressed?: { key: string; word?: number } | null;
   /** Recite mode: whether a word is still hidden; `word` counts that ayah's words on this page from 0. */
   hidden?: (key: string, word: number) => boolean;
   /** Recite mode: the ayah the next reveal shows. */
@@ -212,8 +215,8 @@ export default function MushafPage({
               ) : (
                 <p data-line className={styles.line}>
                   {lines[index]?.map((group, at) => {
-                    const on = marked(group.surah, group.ayah);
                     const key = `${group.surah}:${group.ayah}`;
+                    const on = marked(group.surah, group.ayah) || pressed?.key === key;
                     const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                     const veiled = !!hidden?.(key, word);
                     const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
@@ -225,7 +228,7 @@ export default function MushafPage({
                     const starts = topics && group.word && group.word !== '۞' && !firstWord[key] && (firstWord[key] = true) ? sectionsStartingAt(group.surah, group.ayah) : [];
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-veiled={veiled || undefined}
-                        className={[!veiled && on ? styles.marked : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
+                        className={[!veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
                         {starts.length > 0 && (
                           <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
                             {/* The number is drawn by CSS, so it is no text of the line (copying, finding an ayah's number). */}

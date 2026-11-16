@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import React, { createContext, useContext, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,6 +14,8 @@ import { HelpButton, SearchButton, SettingsButton } from './TabBar';
 import styles from './NavBar.module.css';
 
 export { NAV_SECTIONS, activeSection } from '@/lib/navigation';
+import { useHideOnScroll } from './useHideOnScroll';
+export { useHideOnScroll };
 
 /** AppChrome keeps the element of the top bar's page-actions slot here. */
 export const NavSlotContext = createContext<(element: HTMLDivElement | null) => void>(() => {});
@@ -53,28 +55,6 @@ export function NavButtons({ children, bottom = false }: { children: React.React
   const wide = useWideNav();
   const slot = (wide || bottom) && rail ? rail : top;
   return slot ? createPortal(children, slot) : null;
-}
-
-/** True after the page scrolls down past the bar, false again as soon as it scrolls up. `show` brings it back, e.g. on focus. */
-export function useHideOnScroll(threshold = 8) {
-  const [hidden, setHidden] = useState(false);
-  useEffect(() => {
-    let last = window.scrollY;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const y = Math.max(0, window.scrollY);
-      if (y < 64) setHidden(false);
-      else if (y - last > threshold) setHidden(true);
-      else if (last - y > threshold) setHidden(false);
-      else return;
-      last = y;
-    };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); };
-  }, [threshold]);
-  return [hidden, () => setHidden(false)] as const;
 }
 
 export default function NavBar() {
