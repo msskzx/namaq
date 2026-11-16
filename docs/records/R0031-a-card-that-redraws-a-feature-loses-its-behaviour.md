@@ -12,7 +12,7 @@ evidence: "mobile/src/components/HomeFeed.tsx, mobile/src/lib/useWriteBoxes.tsx,
 implication: "A card, preview or widget that shows an existing feature renders that feature's component, adding props for the new place (embedded, onOpen, page) instead of drawing it again. Before building one, find the component the feature's own page uses. Each such card gets a UI test that uses it (zoom or swipe, typing, the tap that opens its page), not a screenshot."
 date: "2026-11-13"
 topics: ["ui-state","graph-ui"]
-buildsOn: ["namaq/0018-a-test-against-the-shared-list-misses-a-menu-that-keeps-its-own"]
+buildsOn: ["namaq/R0018-a-test-against-the-shared-list-misses-a-menu-that-keeps-its-own"]
 ---
 
 The home feed was built as a social-style page with its own post cards. Each post

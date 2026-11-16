@@ -72,11 +72,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Before starting a task, and again after a first fix fails, search them (`rg`
   over `docs/records`) and read the ones that match. When you solve a real
   challenge in a way the code alone does not show, add a record in the same PR,
-  in the format the README there gives. Every PR description ends with a
-  `Records used:` line naming the records that changed a decision (for example
-  `Records used: 0019, 0021`) or `none`. Put only ids on that line, and the full
-  id (`0031-a-card-that-…`) for a number two records share; `npm run
-  records:used` counts them and Distillate's records stats are built from them.
+  in the format the README there gives: `docs/records/RNNNN-short-title.md`
+  with the next free number, and a row in the README index. Every PR description
+  ends with a `Records used:` line naming the records that changed a decision by
+  their `R` id (for example `Records used: R0019, R0021`) or `none`. Every `R` id
+  on that line counts, so mention a record you wrote elsewhere in the
+  description. `npm run records:used` counts them; `npm run records:export` copies
+  the records and those counts into Distillate, whose /records/stats page and
+  record pages show them.
   Distillate lessons are long write-ups written only when the owner asks.
 
 ## Sources and attributions

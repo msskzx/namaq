@@ -21,18 +21,42 @@ export function usedLine(body: string | null): string | null {
   return m ? m[1].trim() : null;
 }
 
-// What counts: ids before the first sentence end, outside parentheses, and not
-// in an item that names an ADR. "none" means none, whatever follows it.
-//   "0008, 0027"                        → 0008, 0027
-//   "0005 (new record 0032)"            → 0005
-//   "0032 (…). New record 0036: …"      → 0032
-//   "distillate/0005-a-mock-router-…"   → that Distillate record
-// A bare number that two records share is reported, not guessed, and so is a
-// bare number after an ADR item ("ADR 0035 and 0036, 0037" may mean ADR 0037).
+// Record ids are RNNNN since 2026-11-16. Before that they were bare numbers,
+// and these four numbers were given twice; the second record of each pair moved.
+export const RENUMBERED: Record<string, string> = { R0044: '0029', R0045: '0031', R0046: '0032', R0047: '0038' };
+
+// The slug a record had before the R ids: R0045-a-scaled-… was 0031-a-scaled-….
+export const oldSlug = (slug: string) => `${RENUMBERED[slug.slice(0, 5)] ?? slug.slice(1, 5)}${slug.slice(5)}`;
+
+const otherProject = /\b([a-z]+)\/(R?\d{4}(?:-[a-z0-9-]*[a-z0-9])?)/g;
+
+// A line with an R id counts every R id on it and nothing else of this
+// project's, so prose around the ids cannot be misread:
+//   "R0008, R0027 (new record R0048 is elsewhere)" → R0008, R0027, R0048
+// (so new records belong elsewhere in the description). Other projects' records
+// count when named with their project: "distillate/R0005-a-mock-router-…"
+// (an old "distillate/0005-…" is read as R0005; Distillate never shared a number).
+// A line with no R id was written before them and is read the old way: ids
+// before the first sentence end, outside parentheses, not in or after an ADR
+// item, nothing after "none". A bare old number two records shared, or one
+// after an ADR item ("ADR 0035 and 0036, 0037" may mean ADR 0037), is
+// reported, not guessed.
 export function parseUsedLine(line: string, slugs: string[], project = 'namaq'): UsedLine {
-  const text = line.replace(/\([^)]*\)/g, ' ').split(/\.(?:\s|$)/)[0].trim();
   const used: string[] = [];
   const unresolved: Unresolved[] = [];
+  const resolve = (whole: string, matches: string[], num: string) => {
+    if (matches.length === 1) used.push(`${project}/${matches[0]}`);
+    else unresolved.push({ text: whole, reason: matches.length ? `${matches.length} records share the number ${num}` : 'no such record' });
+  };
+  if (/\bR\d{4}\b/.test(line)) {
+    for (const [, from, id] of line.matchAll(otherProject)) if (from !== project) used.push(`${from}/${id.startsWith('R') ? id : `R${id}`}`);
+    for (const m of line.matchAll(/\b(?:[a-z]+\/)?(R\d{4})(?:-([a-z0-9-]*[a-z0-9]))?/g)) {
+      const [whole, num, rest] = m;
+      resolve(whole, rest ? slugs.filter((s) => s === `${num}-${rest}`) : slugs.filter((s) => s.startsWith(`${num}-`)), num);
+    }
+    return { used: [...new Set(used)], unresolved };
+  }
+  const text = line.replace(/\([^)]*\)/g, ' ').split(/\.(?:\s|$)/)[0].trim();
   if (/^none\b/i.test(text)) return { used, unresolved };
   let afterAdr = false;
   for (const item of text.split(',')) {
@@ -43,16 +67,14 @@ export function parseUsedLine(line: string, slugs: string[], project = 'namaq'):
     for (const m of item.matchAll(/\b(?:([a-z]+)\/)?(\d{4})(?:-([a-z0-9-]*[a-z0-9]))?/g)) {
       const [whole, from = project, num, rest] = m;
       if (from !== project) {
-        used.push(`${from}/${num}${rest ? `-${rest}` : ''}`);
+        used.push(`${from}/R${num}${rest ? `-${rest}` : ''}`);
         continue;
       }
       if (afterAdr && !rest) {
         unresolved.push({ text: whole, reason: 'a bare number after an ADR may name an ADR' });
         continue;
       }
-      const matches = rest ? slugs.filter((s) => s === `${num}-${rest}`) : slugs.filter((s) => s.startsWith(`${num}-`));
-      if (matches.length === 1) used.push(`${project}/${matches[0]}`);
-      else unresolved.push({ text: whole, reason: matches.length ? `${matches.length} records share the number ${num}` : 'no such record' });
+      resolve(whole, rest ? slugs.filter((s) => oldSlug(s) === `${num}-${rest}`) : slugs.filter((s) => oldSlug(s).startsWith(`${num}-`)), num);
     }
   }
   return { used: [...new Set(used)], unresolved };

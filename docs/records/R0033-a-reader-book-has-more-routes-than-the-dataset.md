@@ -12,7 +12,7 @@ evidence: "docs/audits/qiraat-source-audit.md; scripts/quran/qiraatCorrections.j
 implication: "Before calling a qira'at entry wrong or incomplete from al-Nashr, ask whether the extra reading is a Tayyiba route; the data's scope is Shatibiyya and Durra."
 date: "2026-11-14"
 topics: ["evidence-model","source-extraction"]
-buildsOn: ["namaq/0028-a-second-text-may-only-correct-what-it-can-see"]
+buildsOn: ["namaq/R0028-a-second-text-may-only-correct-what-it-can-see"]
 ---
 
 Al-Nashr collects every route Ibn al-Jazari accepted, so it often says a riwaya reads a word two ways. The

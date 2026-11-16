@@ -12,7 +12,7 @@ evidence: "Namaq PR for /quran/order (commits 1bcae6d and 5fc5977); shared/quran
 implication: "When a citation carries derived items (pairs, chips, colours), check each item against the exact text shown, not against the page or passage it came from."
 date: "2026-11-13"
 topics: ["evidence-model","source-extraction"]
-buildsOn: ["namaq/0026-a-citation-does-not-authorize-every-chip"]
+buildsOn: ["namaq/R0026-a-citation-does-not-authorize-every-chip"]
 ---
 
 Al-Suyuti often makes a link in three steps: it names an ayah at the end of one surah, names another at the start of the next, then concludes in a short sentence. The short conclusion read best on a card, so we quoted it and showed the ayat from the earlier sentences. An independent review against the book's pages found that the pairs on 10 of the 73 links were not in the quoted words.

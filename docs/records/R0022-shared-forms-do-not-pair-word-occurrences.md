@@ -12,7 +12,7 @@ evidence: "Namaq PR #512; regressions for 2:35/7:19, 2:170/31:21, tree offsets a
 implication: "Select concrete occurrences before classifying their forms, and check whether an index intentionally drops information before using it as comparison evidence."
 date: "2026-11-04"
 topics: ["testing","text-matching","ui-state"]
-buildsOn: ["namaq/0019-fixing-the-example-broke-the-ayah-next-door","namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points"]
+buildsOn: ["namaq/R0019-fixing-the-example-broke-the-ayah-next-door","namaq/R0021-absorbing-a-phrase-must-preserve-its-entry-points"]
 lesson: "text-to-evidence/0010-comparing-word-occurrences"
 ---
 

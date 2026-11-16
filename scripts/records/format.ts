@@ -1,4 +1,4 @@
-// One record = docs/records/NNNN-slug.md: a frontmatter block that holds
+// One record = docs/records/RNNNN-slug.md: a frontmatter block that holds
 // Distillate's record fields, one `key: <JSON value>` per line (valid YAML),
 // then the Markdown body. toDistillateMdx turns it back into the MDX file
 // Distillate keeps under content/records/namaq/, links between records included.
@@ -43,8 +43,8 @@ export function formatRecord(meta: Meta, body: string): string {
 }
 
 // Repo links in the body are relative Markdown links (../../path) here and
-// <RepoLink> tags in Distillate. Links to other records (NNNN-slug.md) become
-// /records/namaq/NNNN-slug. Braces outside code are escaped, since MDX reads
+// <RepoLink> tags in Distillate. Links to other records (RNNNN-slug.md) become
+// /records/namaq/RNNNN-slug. Braces outside code are escaped, since MDX reads
 // «{١ - ٨}» as a JavaScript expression.
 export function toDistillateMdx({ meta, body }: Record_): string {
   const mdxBody = body
@@ -53,7 +53,7 @@ export function toDistillateMdx({ meta, body }: Record_): string {
     .join('')
     .replace(/\[`([^`\]]+)`\]\(\.\.\/\.\.\/\1\)/g, (_, p) => `<RepoLink repo="namaq" path="${p}" />`)
     .replace(/\[([^\]]+)\]\(\.\.\/\.\.\/([^)]+)\)/g, (_, label, p) => `<RepoLink repo="namaq" path="${p}">${label}</RepoLink>`)
-    .replace(/\]\((\d{4}-[a-z0-9-]+)\.md\)/g, '](/records/namaq/$1)');
+    .replace(/\]\((R\d{4}-[a-z0-9-]+)\.md\)/g, '](/records/namaq/$1)');
   const keys = [...FIELD_ORDER.filter((k) => k in meta), ...Object.keys(meta).filter((k) => !(FIELD_ORDER as readonly string[]).includes(k))];
   return `export const meta = {\n${keys.map((k) => `  ${k}: ${JSON.stringify(meta[k])},`).join('\n')}\n};\n\n${mdxBody}\n`;
 }

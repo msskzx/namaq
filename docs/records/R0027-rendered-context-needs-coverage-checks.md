@@ -12,7 +12,7 @@ evidence: "Namaq PR #524 at c63417e1 and PR #525 at 6896a5db; regression tests a
 implication: "Tests verify all seven curated selections are initially visible with original verse numbers and without duplicates; explicit custom comparisons retain their previous collapsed context."
 date: "2026-11-07"
 topics: ["testing","text-matching","ui-state"]
-buildsOn: ["namaq/0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
+buildsOn: ["namaq/R0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
 lesson: "text-to-evidence/0012-evidence-belongs-to-the-selection"
 ---
 
