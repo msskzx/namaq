@@ -40,6 +40,7 @@ import { useCardAround } from '../branches/Surroundings';
 import type { BranchView } from '@shared/quran/branchView';
 import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type ReadStep } from './readAlong';
 import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLook';
+import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
 
 export type SurahName = { ar: string; en?: string };
@@ -382,8 +383,9 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
     rows: page.rows.map((ayat, row) => (folded.includes(row) ? [] : ayat)),
     ruleLabels: parts.map((_, row) => (folded.includes(row) && shownSides[i].rows![row].length ? ayatOf(row, shownSides[i]) : undefined)),
   };
-  // The read-along studio lights words in the matrix, so it shows the matrix while open.
-  const tree = view === 'tree' && !read.studio;
+  // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
+  const matrixOnly = compareMatrixOnly(card);
+  const tree = view === 'tree' && !read.studio && !matrixOnly;
   // The card's own surrounding-ayat switch, opening on the settings' default.
   const [aroundOn, setAround] = useCardAround(anchorOf(card));
   const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
@@ -440,9 +442,9 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
         {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
-        <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
+        {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
-        </Button>
+        </Button>}
         <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
           className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>

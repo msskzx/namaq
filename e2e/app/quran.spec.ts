@@ -235,6 +235,15 @@ test('compare shows a pair and its card actions', async ({ page }) => {
   await expect(page.getByText('الطور').first()).toBeVisible();
 });
 
+test('a compare card kept as its matrix has no tree and no tree button', async ({ page }) => {
+  // al-Fatiha and al-Nisa open first, and their one card (1:6 against 4:68) shares no two words in a row.
+  await open(page, '/compare');
+  await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /^اختر سورتين:.*الفاتحة/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
+});
+
 test.describe('a long story compare', () => {
   test.use({ seed: { 'compare-place': { lead: 2, other: 7 }, 'branches-view': '"matrix"' } });
 

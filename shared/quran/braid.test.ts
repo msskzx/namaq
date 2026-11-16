@@ -39,6 +39,12 @@ describe('braid', () => {
     }
   });
 
+  it('ends 9:129 and 27:26 on one shared «رب العرش العظيم», the sajda sign after al-Naml\'s word not parting them', () => {
+    const strands = braid(words('9:129'), words('27:26'));
+    expect(strands.map(strand => strand.kind)).toEqual(['split', 'shared', 'split', 'shared']);
+    expect(strands[3].b[1] - strands[3].b[0]).toBe(3);
+  });
+
   it('is one shared strand for identical ayat and one split when nothing long is shared', () => {
     expect(braid(words('26:8'), words('26:67')).map(strand => strand.kind)).toEqual(['shared']);
     expect(braid(['قال', 'موسى'], ['قال', 'فرعون']).map(strand => strand.kind)).toEqual(['split']);
