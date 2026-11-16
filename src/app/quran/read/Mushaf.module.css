@@ -234,6 +234,9 @@
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 .forgotEnd { color: var(--home-accent); }
 .saved { color: var(--home-root); }
+/* The «فاصلة» (docs/plans/book-reader.md): the number in the accent, a ribbon hanging over it like the app's. */
+.fasila { position: relative; color: var(--home-accent); }
+.fasila::before { content: ''; position: absolute; inset-inline-start: 50%; bottom: 70%; width: 0.4em; height: 0.75em; translate: -50% 0; background: var(--home-accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%); pointer-events: none; }
 
 .ayahActions { position: fixed; z-index: 30; display: flex; flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 1rem); gap: 0.125rem; padding: 0.375rem; transform: translate(-50%, calc(-100% - 0.5rem)); border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-paper); box-shadow: 0 6px 20px rgb(0 0 0 / 0.15); }
 /* The recite buttons sit in a see-through pill floating low over the page, like the tab bar (NavBar.module.css .tabs)
@@ -257,6 +260,7 @@
   .reader[data-reader-immersive="true"] .reciteBar { bottom: max(8px, calc(env(safe-area-inset-bottom) - 10px)); }
 }
 /* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */
+.fasilaPill { pointer-events: auto; border-radius: 999px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: color-mix(in srgb, var(--home-paper) 72%, transparent); }
 .reader[data-keyboard] .reciteBar { bottom: calc(var(--keyboard) + 8px); }
 
 /* Bigger text (ReaderView's text size): the page's words flow as one paragraph between titles, wrapped by the browser at

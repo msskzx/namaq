@@ -10,6 +10,8 @@ import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
+import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
+import FasilaIcon from '@/components/quran/FasilaIcon';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes } from './useWriteBoxes';
@@ -124,6 +126,7 @@ export default function ReaderView({
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
+  const fasila = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas).quran;
   const groups = useMemo(() => shown.map(entry => pageGroups(entry.data.items, entry.top)), [shown]);
   const order = useMemo(() => [...new Set(groups.flatMap(lines => lines.flatMap(line => line?.map(group => `${group.surah}:${group.ayah}`) ?? [])))], [groups]);
   /** Words of each ayah on each shown page, so words of an ayah are counted across a spread. */
@@ -620,14 +623,21 @@ export default function ReaderView({
         </Button>}
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark}
-            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
+            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} fasila={position ? undefined : fasila?.key}
             write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} onTopic={onTopic} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
+        fasila={fasila?.key === actions.key} onFasila={position ? undefined : () => setQuranFasila(fasila?.key === actions.key ? null : { key: actions.key, page: pageOfAyah(shown, actions.key) ?? page })}
         onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
         irab={!!actions.word} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
+      {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>
+        <Button size="sm" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
+          <FasilaIcon aria-hidden className="text-[var(--home-accent)]" width={18} height={18} />
+          {ar ? `عُد إلى فاصلتك · ${surahName(fasila.key) ?? ''} ${num(Number(fasila.key.split(':')[1]))}` : `Back to where you stopped · ${fasila.key}`}
+        </Button>
+      </div>}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
       <TopicSheet open={topic} onClose={() => setTopic(null)} />
       {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
@@ -651,6 +661,14 @@ export default function ReaderView({
       {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>
   );
+}
+
+/** The page among those shown where an ayah ends, or else where it starts. */
+function pageOfAyah(shown: { page: number; data: MushafPageData; top?: number }[], key: string): number | undefined {
+  const [surah, ayah] = key.split(':').map(Number);
+  const groups = (entry: (typeof shown)[number]) => pageGroups(entry.data.items, entry.top).flatMap(line => line ?? []);
+  return (shown.find(entry => groups(entry).some(group => group.surah === surah && group.marks.includes(ayah)))
+    ?? shown.find(entry => groups(entry).some(group => group.surah === surah && group.ayah === ayah)))?.page;
 }
 
 type ReaderProps = Omit<React.ComponentProps<typeof ReaderView>, 'mark'>;
