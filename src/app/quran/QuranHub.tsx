@@ -18,7 +18,7 @@ const ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/books': LibraryBig,
   '/quran/tajwid/tuhfat-al-atfal': BookMarked,
   '/quran/oaths': SunMoon,
-  '/quran/balagha': MessagesSquare,
+  '/quran/lataif': MessagesSquare,
   '/quran/openings': ListStart,
   '/quran/order': ListOrdered,
 };

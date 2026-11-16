@@ -9,7 +9,7 @@ export const QURAN_CARDS: { href: string; desc: Text }[] = [
   { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },
   { href: '/quran/words', desc: { ar: 'كم مرة ترد كل كلمة، وكلمات متقابلة جنبًا إلى جنب', en: 'How often each word occurs, and opposite words side by side' } },
   { href: '/quran/branches', desc: { ar: 'آيات تبدأ بالكلمات نفسها، وأين تتفرع', en: 'Ayat that open with the same words, and where they branch apart' } },
-  { href: '/quran/balagha', desc: { ar: 'أمثلة مختارة من فنون البلاغة، لكل مثال صورته ومرجعه', en: 'Chosen examples of rhetorical devices, each with its own picture and reference' } },
+  { href: '/quran/lataif', desc: { ar: 'أمثلة مختارة في موضوعات شتى، لكل مثال صورته ومرجعه', en: 'Chosen examples on many topics, each with its own picture and reference' } },
   { href: '/quran/qiraat', desc: { ar: 'مواضع تختلف فيها القراءات العشر', en: 'Places where the ten readings differ' } },
   { href: '/quran/order', desc: { ar: 'سور الأجزاء من ٢٥ إلى ٣٠ بأوائلها ومقاصدها، وما يصل كل سورة بالتي قبلها من كتب التناسب', en: 'The surahs of juz 25 to 30 with their openings and aims, and what joins each to the one before, from the books on surah order' } },
   { href: '/quran/openings', desc: { ar: 'أنواع افتتاح السور العشرة، ومقارنة الأوائل المتشابهة', en: 'The ten kinds of surah opening, with look-alike openings side by side' } },
@@ -33,7 +33,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
     ] },
     { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
       { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
-      quran('/quran/balagha', { ar: 'البلاغة', en: 'Balagha' }),
+      quran('/quran/lataif', { ar: 'لطائف', en: "Lata'if" }),
       quran('/quran/openings', { ar: 'افتتاح السور', en: 'Surah openings' }),
       quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
       quran('/quran/order', { ar: 'ترتيب السور', en: 'Surah order' }),
@@ -74,7 +74,7 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/books', label: { ar: 'الكتب', en: 'Books' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
-  { href: '/quran/balagha', label: { ar: 'البلاغة', en: 'Balagha' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/lataif', label: { ar: 'لطائف', en: "Lata'if" }, purpose: { ar: '', en: '' } },
   { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: '', en: '' } },
   { href: '/quran/order', label: { ar: 'ترتيب السور', en: 'Surah order' }, purpose: { ar: '', en: '' } },
 ];

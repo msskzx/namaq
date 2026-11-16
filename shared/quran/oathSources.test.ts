@@ -14,7 +14,7 @@ describe('oath sources', () => {
     for (const q of [...Object.values(KIND_QUOTES), ...Object.values(OATH_QUOTES).flat(), ...ON_QUOTES, ...BY_QUOTES]) {
       expect(q.text.length).toBeGreaterThan(20);
       expect(q.text).not.toMatch(/[ً-ْ]|\(\^\d+\)|\[[^\]]*: \d/);
-      expect(q.cite).toMatch(/^(ابن القيم، التبيان ص|ابن كثير، التفسير|السعدي، التفسير ص|النحاس، إعراب القرآن|السيوطي، الإتقان) [٠-٩/]+$/);
+      expect(q.cite).toMatch(/^(ابن القيم، التبيان ص|ابن كثير، التفسير|السعدي، التفسير ص|النحاس، إعراب القرآن|السيوطي، الإتقان) [٠-٩/–]+$/);
       expect(q.url).toMatch(/^https:\/\/(quranpedia\.app\/books\/b18337\/s\d+\.html#p\d+|shamela\.ws\/book\/(8473|11728)\/\d+|quranpedia\.net\/book\/(3\/1|318\/2)\/\d+)$/);
     }
   });
@@ -34,6 +34,13 @@ describe('oath sources', () => {
 
   it('places each oath in a named section only where Ibn al-Qayyim says so, his words first', () => {
     for (const s of OATH_SECTIONS.filter(s => !s.ours)) for (const o of s.oaths) expect(OATH_QUOTES[o][0].cite).toMatch(/^ابن القيم/);
+  });
+
+  it('moves the oaths his own words place, from the unplaced-oaths audit', () => {
+    const on = (o: string) => OATH_SECTIONS.find(s => s.oaths.includes(o))!.on;
+    expect(['16:63', '74:32', '85:1'].map(on)).toEqual(['rasul', 'jaza', 'jaza']);
+    expect(OATH_QUOTES['74:32'][0].text).toContain('على المعاد');
+    expect(OATH_QUOTES['85:1'][0].text).toContain('المقسم به وعليه');
   });
 
   it('says what every oath of Allah swears by', () => {

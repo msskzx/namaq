@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/itqanBalagha';
-import { DEVICES, deviceOf, exampleReference } from './balaghaPage';
+import { TOPICS, topicOf, exampleReference } from './lataif';
 
 const example = (surah: number, from: number, to: number, source = 'البرهان للزركشي والإتقان للسيوطي') => ({ key: `${surah}:${from}`, surah, from, to, source });
 
-describe("the balagha page's references", () => {
-  it("cites al-Suyuti's definition of the device with its page", () => {
-    expect(deviceOf(example(1, 2, 7)).name).toBe('الالتفات');
-    expect(DEVICES[0].reference.quotes[0].url).toBe('https://shamela.ws/book/11728/1053');
+describe("the lata'if page's references", () => {
+  it("cites al-Suyuti's definition of the topic with its page", () => {
+    expect(topicOf(example(1, 2, 7)).name).toBe('الالتفات');
+    expect(TOPICS[0].reference.quotes[0].url).toBe('https://shamela.ws/book/11728/1053');
   });
 
-  it("gives an example his whole paragraphs on it under the device's heading, each once, with their pages", () => {
+  it("gives an example his whole paragraphs on it under the topic's heading, each once, with their pages", () => {
     const reference = exampleReference(example(1, 2, 7), data);
     expect(reference.title).toBe('الإتقان للسيوطي ٣/٢٩٢–٢٩٣');
     expect(reference.quotes.at(-1)).toEqual({ text: 'البرهان للزركشي والإتقان للسيوطي' });
