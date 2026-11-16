@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import corpus from '../data/quran/trees.json';
-import { OPENING_CARDS, OPENING_KINDS, conditionLines, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as { ayat: { key: string; words: string[] }[] }).ayat.map(ayah => [ayah.key, ayah.words]));
 const words = (key: string) => byKey.get(key) ?? [];
@@ -13,6 +13,11 @@ describe('opening kinds', () => {
     const all = OPENING_KINDS.flatMap(kind => kind.surahs);
     expect(all.sort((a, b) => a - b)).toEqual(Array.from({ length: 114 }, (_, i) => i + 1));
     expect(OPENING_KINDS.map(kind => kind.surahs.length)).toEqual([14, 29, 10, 23, 15, 7, 6, 6, 3, 1]);
+  });
+
+  it('quotes al-Itqan once for each kind, in his order, with a page', () => {
+    expect(ITQAN_QUOTES.map(quote => quote.kind)).toEqual(OPENING_KINDS.map(kind => kind.id));
+    for (const quote of ITQAN_QUOTES) expect(quote.cite).toMatch(/^السيوطي، الإتقان ٣\/٣٦[١-٣]$/);
   });
 
   it('shows every surah on exactly one card, and a guest only next to its own kind\'s surahs', () => {
