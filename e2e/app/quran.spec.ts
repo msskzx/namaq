@@ -244,6 +244,23 @@ test('a compare card kept as its matrix has no tree and no tree button', async (
   await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
 });
 
+test.describe('a long story compare', () => {
+  test.use({ seed: { 'compare-place': { lead: 2, other: 7 }, 'branches-view': '"matrix"' } });
+
+  test('a card switches to side by side: lanes for shared parts, one surah across the card with the other named', async ({ page }) => {
+    await open(page, '/compare');
+    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء')).toHaveCount(0);
+    const story = page.getByRole('button', { name: 'السورتان جنبًا إلى جنب' }).nth(2);
+    await story.click();
+    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء').first()).toBeVisible();
+    await expect(page.getByText('البقرة ٣٠–٣٣', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('البقرة ٣٤', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('الأعراف ١١', { exact: true }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'السورتان بعضهما تحت بعض' }).first().click();
+    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء')).toHaveCount(0);
+  });
+});
+
 test('a prophet story dot shows its ayat, which open in the mushaf', async ({ page }) => {
   await open(page, '/prophets');
   await expect(page.getByRole('button', { name: /^اختر نبيًّا:/ })).toBeVisible();

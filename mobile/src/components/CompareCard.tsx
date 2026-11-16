@@ -1,18 +1,18 @@
-import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, GalleryHorizontal, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { aroundOf, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
-import { around as aroundSetting, branchView, type BranchView } from '@/lib/settings';
+import { aloneNote, aroundOf, besideRows, partLabel, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, sideLabel, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
+import { around as aroundSetting, besideLayout, branchView, type BranchView } from '@/lib/settings';
 import CompareTree from './CompareTree';
-import { Gap, PartRule, Silent } from './StoryParts';
+import { Gap, PartRule, Silent, StartRule } from './StoryParts';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
 import { likenessAt } from '@/lib/branches';
@@ -80,9 +80,9 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 }
 
 /** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
-function RunningAyat({ ayat, before, after, palette, light }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light }) {
+function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side. */ lane?: boolean }) {
   return (
-    <Text style={ayahStyle(palette)}>
+    <Text style={lane ? { ...ayahStyle(palette), fontSize: COMPARE_CARD.laneSize, lineHeight: COMPARE_CARD.laneLine } : ayahStyle(palette)}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
       {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} palette={palette} light={light(ayah)} inline /></Text>)}
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
@@ -107,6 +107,21 @@ function SideHead({ label, keys, palette, group }: { label: string; keys: string
         </Pressable>}
       </View>
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
+    </View>
+  );
+}
+
+/** A lane's head side by side: the surah and its ayat, then its buttons, all on one line to fit half the card. */
+function LaneHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
+      <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
+      <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={`اقرأ ${label} في المصحف`} style={{ padding: 4 }}>
+        <BookOpen size={16} color={palette.muted} />
+      </Pressable>
+      {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 4 }}>
+        <TreeIcon size={16} color={palette.muted} />
+      </Pressable>}
     </View>
   );
 }
@@ -163,6 +178,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const selected = step?.option ?? picked;
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
   const [view, setView] = useState<BranchView>(branchView.get);
+  const [beside, setBeside] = useState(besideLayout.get);
   // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
   const matrixOnly = compareMatrixOnly(card);
   const tree = view === 'tree' && !read.studio && !matrixOnly;
@@ -233,6 +249,72 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
     );
   };
 
+  // Side by side: a lane per surah; a story part one surah tells runs across the card, its separator naming the surah that does not (owner, 2026-11-16).
+  const besideBody = () => {
+    // A lane breaks where its ayat skip, each stretch after the first under a dotted rule naming its ayat, as the stacked sides do.
+    const lane = (cardSide: CardSide, i: 0 | 1, wide = false) => {
+      const stretches = cardSide.ayat.reduce<CardAyah[][]>((all, ayah) => {
+        const last = all[all.length - 1];
+        if (last && ayah.number === last[last.length - 1].number + 1) last.push(ayah); else all.push([ayah]);
+        return all;
+      }, []);
+      return stretches.map((stretch, k) => (
+        <View key={k}>
+          {k > 0 && <Gap label={runsLabel(stretch.map(ayah => ayah.number))} palette={palette} />}
+          <RunningAyat lane={!wide} ayat={stretch} before={parts || k > 0 ? undefined : around?.before[i]} after={parts || k < stretches.length - 1 ? undefined : around?.after[i]} palette={palette}
+            light={ayah => lightFor(lit, step, i, ayah.number, onWord, written)} />
+        </View>
+      ));
+    };
+    const same = card.sides[0].surah === card.sides[1].surah;
+    const twoLanes = (render: (i: 0 | 1) => ReactNode) => (
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        <View style={{ flex: 1 }}>{render(0)}</View>
+        {/* Solid between two surahs, dashed within one, as the stacked rule; iOS draws no dashed border on one edge, so a dashed box is clipped to one edge. */}
+        {same ? <View style={{ width: 1, overflow: 'hidden' }}><View style={{ flex: 1, width: 3, borderWidth: 1, borderColor: palette.rule, borderStyle: 'dashed' }} /></View>
+          : <View style={{ width: 1, backgroundColor: palette.rule }} />}
+        <View style={{ flex: 1 }}>{render(1)}</View>
+      </View>
+    );
+    return <>
+      {pickers}
+      <View style={{ flexDirection: 'row', gap: 9 }}>
+        {([0, 1] as const).map(i => {
+          const view = sideView(card, i, selected, []);
+          const cardSide = sides[i];
+          const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
+          return (
+            <View key={i} style={{ flex: 1 }}>
+              <LaneHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} />
+              {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'center' }}>قبلُ في السورة</Text>}
+            </View>
+          );
+        })}
+      </View>
+      {besideRows(sides).map((row, r) => {
+        const shut = !!parts && folded.includes(r);
+        if ('alone' in row) return (
+          <View key={r} style={{ gap: 4 }}>
+            {parts && <StartRule label={partLabel(row.alone.surah, card.sides[row.side].rows![r])} note={aloneNote(row.silent)} folded={shut} onToggle={() => toggle(r)} palette={palette} />}
+            {!shut && lane(row.alone, row.side, true)}
+          </View>
+        );
+        return (
+          <View key={r} style={{ gap: 4 }}>
+            {parts && <View style={{ flexDirection: 'row', gap: 9 }}>
+              {([0, 1] as const).map(i => (
+                <View key={i} style={{ flex: 1 }}>
+                  <StartRule label={partLabel(row.lanes[i].surah, card.sides[i].rows![r])} folded={shut} onToggle={() => toggle(r)} palette={palette} />
+                </View>
+              ))}
+            </View>}
+            {!shut && twoLanes(i => lane(row.lanes[i], i))}
+          </View>
+        );
+      })}
+    </>;
+  };
+
   // A refrain card's tree names every place the refrain repeats, as its matrix does.
   const refrainLabels = card.many && isRefrain(card.many.options)
     ? sides.map((side, i) => (i === card.many!.side ? `${surahName(side.surah)} ${card.many!.options.map(item => num(item.ayah.number)).join(' · ')}` : sideLabel(side))) as [string, string]
@@ -265,7 +347,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
             {!folded.includes(r) && <CompareTree sides={row} palette={palette} empty={[silentNote(row[0].surah), silentNote(row[1].surah)]} />}
           </View>
         )) : <CompareTree sides={sides} palette={palette} around={around} labels={refrainLabels} />}
-      </> : <>
+      </> : beside ? besideBody() : <>
         {side(card.sides[0], 0)}
         <Rule dashed={card.sides[0].surah === card.sides[1].surah} color={palette.rule} />
         {side(card.sides[1], 1)}
@@ -290,6 +372,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
           {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
           {!parts && <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
             <UnfoldHorizontal size={22} color={aroundOn ? palette.accent : palette.muted} />
+          </Pressable>}
+          {!tree && <Pressable onPress={() => setBeside(!beside)} hitSlop={6} accessibilityRole="button" accessibilityLabel={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} style={{ padding: 8 }}>
+            {beside ? <Rows2 size={22} color={palette.muted} /> : <Columns2 size={22} color={palette.muted} />}
           </Pressable>}
           {!matrixOnly && <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
             {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
