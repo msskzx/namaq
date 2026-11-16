@@ -12,7 +12,7 @@ evidence: "scripts/quran/irabUkbari.ts, scripts/quran/irabUkbari.test.ts, shared
 implication: "To place a book's Quran quotes on mushaf words, match consonant skeletons within the book's own ayah context before searching wider, and include the Arabic Extended-A mark range when stripping marks."
 date: "2026-11-15"
 topics: ["text-matching","source-extraction"]
-buildsOn: ["namaq/0034-a-dump-keyed-by-ayah-can-hold-pages-not-passages"]
+buildsOn: ["namaq/R0034-a-dump-keyed-by-ayah-can-hold-pages-not-passages"]
 ---
 
 The first pass placed 2,964 of 4,737 passages on words. Three things held the rest back. The mushaf text writes tanwin with the open forms in Arabic Extended-A (ࣰ ࣱ ࣲ), outside the usual U+064B-065F range, so «مُّحَمَّدࣱ» never met «مُحَمَّدٌ». About a fifth of the quotes put the ayah number after the closing parenthesis, «(…) (٨٢).», so the ayah context lagged one quote behind and later headings were searched in the wrong ayah. And much of the book names words inline, «وَ (هَلُوعًا) : حَالٌ», without «قوله تعالى».

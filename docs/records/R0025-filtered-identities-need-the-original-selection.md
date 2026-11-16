@@ -12,7 +12,7 @@ evidence: "Namaq PR #524 at c63417e1 and PR #525 at 6896a5db; regression tests a
 implication: "All juz-one word-tree suggestion IDs resolve against the full-corpus inventory; scoped search and saved-only results obey the same eligibility filters."
 date: "2026-11-07"
 topics: ["testing","text-matching","ui-state"]
-buildsOn: ["namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points"]
+buildsOn: ["namaq/R0021-absorbing-a-phrase-must-preserve-its-entry-points"]
 lesson: "text-to-evidence/0012-evidence-belongs-to-the-selection"
 ---
 

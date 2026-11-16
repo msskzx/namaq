@@ -12,7 +12,7 @@ evidence: "src/lib/model/hadithView.test.ts, \"loses no word of either hadith ac
 implication: "Any extraction that splits a text needs a check that recombines the pieces and compares with the whole; do not call a fixture checked until it has run."
 date: "2026-10-05"
 topics: ["testing","source-extraction","text-matching"]
-variantOf: ["namaq/0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
+variantOf: ["namaq/R0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
 ---
 
 Bukhari 50 and Muslim's hadith were first extracted as "hand-checked" fixtures with
@@ -36,4 +36,4 @@ missing. Any extraction that splits a text needs a check that puts the pieces ba
 and compares the result with the whole, and a report of what no piece covers
 (plan: [siyar-parsing.md](../../docs/plans/siyar-parsing.md), the `model:coverage`
 command). Do not call a fixture or batch checked until that check has run. Same
-family as [0005-checks-that-dont-rederive-pass-the-wrong-inputs](/records/namaq/0005-checks-that-dont-rederive-pass-the-wrong-inputs).
+family as [R0005-checks-that-dont-rederive-pass-the-wrong-inputs](R0005-checks-that-dont-rederive-pass-the-wrong-inputs.md).

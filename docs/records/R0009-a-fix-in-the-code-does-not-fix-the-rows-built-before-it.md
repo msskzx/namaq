@@ -12,7 +12,7 @@ evidence: "npm run model:project -- --units --root src/lib/model/fixtures/jibril
 implication: "After changing code that builds a stored view, run the projection from the checkout that holds the change and say so in the PR; consider storing a builder version in each row."
 date: "2026-10-08"
 topics: ["data-sync","testing"]
-variantOf: ["namaq/0007-a-page-that-reads-the-repo-at-request-time"]
+variantOf: ["namaq/R0007-a-page-that-reads-the-repo-at-request-time"]
 ---
 
 Scene 1 of both hadith began by repeating the last narrator of the isnad: `عَنْ أَبِي هُرَيْرَةَ،`
@@ -37,4 +37,4 @@ the code that builds a stored view needs a projection run from the checkout that
 change, and the PR should say so. An improvement axis: store a builder version or a hash in
 each `model_units` row, and let the page rebuild from the files when it does not match, so a
 stale row cannot outlive the code that made it. Same family as
-[0007-a-page-that-reads-the-repo-at-request-time](/records/namaq/0007-a-page-that-reads-the-repo-at-request-time).
+[R0007-a-page-that-reads-the-repo-at-request-time](R0007-a-page-that-reads-the-repo-at-request-time.md).

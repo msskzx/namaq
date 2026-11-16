@@ -12,8 +12,8 @@ evidence: "shared/quran/compareCardLook.test.ts; frames compared side by side wi
 implication: "A drawing that copies a screen (a video, an image, a widget) takes its sizes, colours and structure from a module the screen itself uses, never from numbers typed again. Check it by putting a frame next to the screen at the same moment."
 date: "2026-11-14"
 topics: ["ui-state","graph-ui"]
-buildsOn: ["namaq/0031-a-card-that-redraws-a-feature-loses-its-behaviour"]
-variantOf: ["namaq/0036-a-video-that-copies-the-app-drifts-from-it"]
+buildsOn: ["namaq/R0031-a-card-that-redraws-a-feature-loses-its-behaviour"]
+variantOf: ["namaq/R0036-a-video-that-copies-the-app-drifts-from-it"]
 ---
 
 The video's canvas cannot hold React Native views, so "reuse the component" here

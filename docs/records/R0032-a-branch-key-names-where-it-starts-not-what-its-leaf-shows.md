@@ -12,7 +12,7 @@ evidence: "shared/quran/treeLabels.test.ts rebuilds every tree and checks each l
 implication: "A label for a node must come from the words the node shows, not from the id it is filed under. Check labels against the corpus text, not against the tree's own keys."
 date: "2026-11-14"
 topics: ["testing","text-matching"]
-buildsOn: ["namaq/0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
+buildsOn: ["namaq/R0005-checks-that-dont-rederive-pass-the-wrong-inputs"]
 ---
 
 The owner saw «بسم الله الرحمن الرحيم ص والقرآن ذي الذكر» under «الصافات ١٨٢» on the الحمد لله رب العالمين tree. The tree was right: 37:182 and 1:2 are identical, so both grow into their next ayah until they split. The label was wrong: it printed the key, and the key is where the branch starts.

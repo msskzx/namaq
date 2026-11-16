@@ -12,7 +12,7 @@ evidence: "scripts/quran/buildQiraat.ts; scripts/quran/qiraatFarsh.test.ts; src/
 implication: "Before a second source overrules the first, list what its notation cannot express (here: a small sin over sad, a dot for tashil, a doubled ta), and limit the correction to cases where that cannot matter."
 date: "2026-11-13"
 topics: ["data-sync","text-matching","evidence-model"]
-buildsOn: ["namaq/0015-two-sources-that-disagree-are-not-an-error"]
+buildsOn: ["namaq/R0015-two-sources-that-disagree-are-not-an-error"]
 ---
 
 The dump names who reads each word; the King Fahd texts print what seven riwayat actually read. A first

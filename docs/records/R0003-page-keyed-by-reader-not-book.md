@@ -29,4 +29,4 @@ duplication argument was made.
 **Implications:** stop offering defensive modelling options. The pattern in both
 corrections was the same: I proposed a construct to carry weight that a cleaner
 key already carries. Lead with the key, and only then ask what still needs a
-bearer. See [0004-no-legacy-during-dev](/records/namaq/0004-no-legacy-during-dev).
+bearer. See [R0004-no-legacy-during-dev](R0004-no-legacy-during-dev.md).

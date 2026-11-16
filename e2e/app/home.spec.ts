@@ -41,7 +41,7 @@ test.describe('a new user', () => {
   });
 
   test('no tree draws tabs: every box names its ayah inside, at the normal size', async ({ page }) => {
-    // docs/records/0042: tabs came back on a path that skipped the rule, and iOS shrank their labels to a speck. Since 2026-11-16
+    // docs/records/R0042: tabs came back on a path that skipped the rule, and iOS shrank their labels to a speck. Since 2026-11-16
     // (owner) no tree has tabs at all.
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first()).toBeAttached();

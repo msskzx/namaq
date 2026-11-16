@@ -12,7 +12,7 @@ evidence: "Namaq PR #524 at c63417e1 and PR #525 at 6896a5db; regression tests a
 implication: "Uncited gender chips are hidden; the incorrect number tag for two plural forms is removed; filtering out the source comparison removes its chips and book-only eligibility."
 date: "2026-11-07"
 topics: ["evidence-model","testing","text-matching"]
-buildsOn: ["namaq/0023-a-pairwise-match-can-change-after-cropping"]
+buildsOn: ["namaq/R0023-a-pairwise-match-can-change-after-cropping"]
 lesson: "text-to-evidence/0012-evidence-belongs-to-the-selection"
 ---
 

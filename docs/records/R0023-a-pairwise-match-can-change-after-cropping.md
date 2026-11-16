@@ -12,7 +12,7 @@ evidence: "Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b
 implication: "Recheck an invariant after the transformation that produces the published inputs, and define the denominator of a user-facing similarity score."
 date: "2026-11-04"
 topics: ["testing","text-matching","evidence-model"]
-buildsOn: ["namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points","namaq/0022-shared-forms-do-not-pair-word-occurrences"]
+buildsOn: ["namaq/R0021-absorbing-a-phrase-must-preserve-its-entry-points","namaq/R0022-shared-forms-do-not-pair-word-occurrences"]
 ---
 
 The new comparison inventory first compared complete ayat and built groups whose

@@ -7,7 +7,7 @@ import { mergedPrs, parseUsedLine, usedLine } from "./usage";
 const prs = mergedPrs(process.argv);
 
 const recordsDir = path.join(__dirname, "../../docs/records");
-const slugs = readdirSync(recordsDir).filter((f) => /^\d{4}-.*\.md$/.test(f)).map((f) => f.slice(0, -3));
+const slugs = readdirSync(recordsDir).filter((f) => /^R\d{4}-.*\.md$/.test(f)).map((f) => f.slice(0, -3));
 
 const uses = new Map<string, number[]>();
 const unresolved: string[] = [];

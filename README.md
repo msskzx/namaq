@@ -54,7 +54,10 @@ The reasoning and lessons from building Namaq live in
   examines failures in verification.
 
 Challenges met while building Namaq, with their fixes, are recorded in
-[docs/records](docs/records/README.md).
+[docs/records](docs/records/README.md), one file per record with an `R` id
+(`R0019`). Every PR names the records it used, and Distillate shows them with
+their use: [all records](https://distillate-kappa.vercel.app/records) and
+[record stats](https://distillate-kappa.vercel.app/records/stats).
 
 ## License and source rights
 

@@ -188,7 +188,7 @@ test.describe('pages with the database', () => {
   });
 
   test('no tree on home draws tabs: every box names its ayah inside, over a rule', async ({ page }) => {
-    // docs/records/0042; since 2026-11-16 (owner) no tree has tabs at all.
+    // docs/records/R0042; since 2026-11-16 (owner) no tree has tabs at all.
     await page.goto('/');
     await expect(page.locator('[data-ref]').first()).toBeVisible();
     await expect(page.locator('[data-tab]')).toHaveCount(0);

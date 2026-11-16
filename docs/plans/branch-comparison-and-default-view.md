@@ -21,4 +21,4 @@ Comparison and reader metadata live in `shared/quran/ayahContext.ts`, `readerAya
 
 Run lint, TypeScript, the complete Vitest suite and the production build. Use two test workers to avoid CPU-contention timeouts in the existing full-corpus quiz tests. Cover both reported comparisons, tree offsets and continuation boundaries, corpus-wide match counts, saved choices and explicit URL precedence. Verify the running app serves matrix view from the preference and honors an explicit tree override.
 
-Distillate record `namaq/0019-fixing-the-example-broke-the-ayah-next-door` calls for checking shared rules across the inventory. The new invariant test covers all 5,174 multi-ayah tree groups. No matching record was found for the default-view setting.
+Distillate record `namaq/R0019-fixing-the-example-broke-the-ayah-next-door` calls for checking shared rules across the inventory. The new invariant test covers all 5,174 multi-ayah tree groups. No matching record was found for the default-view setting.
