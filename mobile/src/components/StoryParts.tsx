@@ -59,3 +59,18 @@ export function PartRule({ label, folded, onToggle, name, palette }: { label?: s
     </View>
   );
 }
+
+/** A side-by-side part's separator: the fold chevron and the part's surah and ayat at its start, and at its end the note that the other surah does not tell it. */
+export function StartRule({ label, note, folded, onToggle, palette }: { label: string; note?: string; folded: boolean; onToggle: () => void; palette: Palette }) {
+  const action = folded ? `افتح ${label}` : `اطوِ ${label}`;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 26 }}>
+      <Pressable onPress={onToggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ expanded: !folded }} accessibilityLabel={action} style={{ padding: 2 }}>
+        {folded ? <ChevronDown size={16} color={palette.muted} /> : <ChevronUp size={16} color={palette.muted} />}
+      </Pressable>
+      <Text style={{ color: palette.muted, fontSize: 12 }}>{label}</Text>
+      <Dotted color={palette.rule} />
+      {note ? <Text style={{ color: palette.muted, fontSize: 12 }}>{note}</Text> : null}
+    </View>
+  );
+}

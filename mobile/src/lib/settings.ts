@@ -50,6 +50,9 @@ export const markMode = setting<MarkMode>('word-marks', 'kinds', isMarkMode);
 /** The website's «ربط الكلمات المتشابهة بخطوط تلقائيًا»: a matrix of a book group opens with its word connections drawn. */
 export const connectors = setting('branches-connectors', false, isBoolean);
 
+/** Compare cards in the matrix: the two surahs one under the other, or side by side; each card's own button switches it there. */
+export const besideLayout = setting('compare-beside', false, isBoolean);
+
 /** The surrounding-ayat switch: one setting for every tree and matrix on the branches tab. */
 export const around = setting('branches-surround', false, isBoolean);
 
