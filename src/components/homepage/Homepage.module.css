@@ -64,7 +64,7 @@ a.hijri:hover { text-decoration: underline; }
 /* As the app's story card: 62% of a taller screen, never under 460px. */
 .storyMap { --story-map-bg: var(--home-card); max-height: max(460px, 62svh); overflow: auto; padding: 0 0.75rem 0.25rem; overscroll-behavior: contain; }
 .question { padding: 0.25rem 0.75rem 0.5rem; }
-.recall { padding: 0.25rem 0.75rem 0; }
+.recall { padding: 0.25rem 0.75rem 0; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }
 .prayers { display: grid; gap: 0.5rem; padding: 0.625rem; border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); color: var(--home-ink); text-decoration: none; }
 .prayerHead { display: flex; align-items: center; gap: 0.5rem; }
