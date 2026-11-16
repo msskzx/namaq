@@ -33,12 +33,13 @@ function OathCard({ oath }: { oath: OathView }) {
   const quotes = OATH_QUOTES[oath.id];
   return (
     <li className="flex flex-col gap-1">
-      <article className="flex flex-col gap-1 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-2">
-        <h3 className="flex flex-wrap items-baseline gap-x-3 text-sm text-[var(--home-muted)]">
-          <span>{place}</span>
-          {oath.who && <span className="text-[var(--home-green)]">{oath.who}</span>}
-        </h3>
+      {/* The home feed's head (owner, 2026-11-16): a bold title, a muted line under it, then the card. */}
+      <div className="flex flex-col px-1">
+        <h3 className="text-base font-bold">{place}</h3>
+        {oath.who && <p className="text-sm text-[var(--home-muted)]">{oath.who}</p>}
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
+      </div>
+      <article className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-1.5">
         <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
           {oath.lines.map(line => (
             <span key={line.ayah}>
@@ -105,7 +106,7 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
           {oathSections(by).map(section => (
             <section key={section.on} aria-label={section.title} className="flex flex-col gap-2">
               <div className="flex flex-col gap-0.5 pt-2">
-                <h2 className="text-lg text-[var(--home-ink)]">{section.title}</h2>
+                <h2 className="text-xl font-bold text-[var(--home-accent)]">{section.title}</h2>
                 <Reference title={citesOf(sectionQuotes(section))} quotes={sectionQuotes(section)} />
               </div>
               <OathList label={section.title} oaths={section.oaths.map(id => byId.get(id)!)} />

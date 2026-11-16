@@ -35,12 +35,13 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
   const quotes = OATH_QUOTES[oath.id];
   return (
     <View style={{ gap: 2 }}>
-      <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 8, gap: 4 }}>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'baseline', columnGap: 10 }}>
-          <Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>
-          {oath.who && <Text style={{ color: palette.green, fontSize: 13 }}>{oath.who}</Text>}
-        </View>
+      {/* The home feed's head (owner, 2026-11-16): a bold title, a muted line under it, then the card. */}
+      <View style={{ paddingHorizontal: 4 }}>
+        <Text accessibilityRole="header" style={{ fontSize: 16, fontWeight: '700', color: palette.ink }}>{place}</Text>
+        {oath.who && <Text style={{ color: palette.muted, fontSize: 14 }}>{oath.who}</Text>}
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} palette={palette} />}
+      </View>
+      <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 6 }}>
         <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
           {oath.lines.map(line => [
             ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${mushafText(word.text)} `}</Text>),
@@ -123,7 +124,7 @@ export default function OathsScreen() {
         }
         renderItem={({ item }) => ('head' in item ? (
           <View style={{ paddingTop: 8, gap: 2 }}>
-            <Text accessibilityRole="header" style={{ fontSize: 18, color: palette.ink }}>{item.head.title}</Text>
+            <Text accessibilityRole="header" style={{ fontSize: 20, fontWeight: '700', color: palette.accent }}>{item.head.title}</Text>
             <Reference title={citesOf(sectionQuotes(item.head))} quotes={sectionQuotes(item.head)} palette={palette} />
           </View>
         ) : <OathCard oath={item.oath} palette={palette} />)} />
