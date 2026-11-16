@@ -21,7 +21,7 @@ for (const entry of books.entries) {
  * ayah's words on page `page`, ۞ included and recite mode's title steps not, as the reader's spans number them
  * (MushafPage.tsx data-word).
  */
-export async function irabAyah(key: string, page?: number, n?: number): Promise<IrabAyah> {
+export async function ayahMushafWords(key: string, page?: number, n?: number): Promise<{ words: string[]; word: number }> {
   const surah = Number(key.split(':')[0]);
   const words: string[] = [];
   let word = 0;
@@ -33,5 +33,10 @@ export async function irabAyah(key: string, page?: number, n?: number): Promise<
     if (at === page && n !== undefined) word = words.length + on.slice(0, n).filter(w => w !== '۞').length;
     words.push(...on.filter(w => w !== '۞'));
   }
-  return { words, word: Math.min(word, Math.max(0, words.length - 1)), lines: irabWordsAt(key), ukbari: byAyah.get(key) ?? [] };
+  return { words, word: Math.min(word, Math.max(0, words.length - 1)) };
+}
+
+export async function irabAyah(key: string, page?: number, n?: number): Promise<IrabAyah> {
+  const { words, word } = await ayahMushafWords(key, page, n);
+  return { words, word, lines: irabWordsAt(key), ukbari: byAyah.get(key) ?? [] };
 }

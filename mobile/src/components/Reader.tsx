@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -25,6 +25,7 @@ import TopicSheet, { type TopicOpen } from './TopicSheet';
 import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
+import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
 import { shareAyah } from './AyahShare';
 import { hasQiraat } from '@shared/quran/qiraatData';
@@ -101,6 +102,7 @@ export default function Reader() {
   const [mark, setMark] = useState<{ key: string; page: number; word?: number } | null>(null);
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [irab, setIrab] = useState<IrabTarget | null>(null);
+  const [balagha, setBalagha] = useState<string | null>(null);
   const [tools, setTools] = useState(false);
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[]; word?: number } | null>(null);
@@ -399,7 +401,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 5 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 6 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -439,6 +441,8 @@ export default function Reader() {
           {/* The pressed word's i'rab (owner, 2026-11-15). */}
           {actions.word !== undefined && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setIrab({ key, word: word! }); }} />}
+          {/* Al-Kashshaf on the ayah, its device sentences lit (owner, 2026-11-16). */}
+          <ActButton Icon={Sparkles} label="البلاغة في الكشاف" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
           {/* The word's places: its label names the long-pressed word, which is lit on the page. */}
           {actions.lemmas.length > 0 && <ActButton Icon={TextSearch} label={`مواضع «${words.lemmas[actions.lemmas[0]][0]}» في القرآن`} name="المواضع" palette={palette}
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
@@ -453,6 +457,7 @@ export default function Reader() {
       {/* The word long-pressed: its count and the ayat it is in (owner, 2026-11-13). */}
       <WordSheet lemmas={wordLemmas} onClose={() => setWordLemmas(null)} palette={palette} />
       <IrabSheet target={irab} onClose={() => setIrab(null)} palette={palette} />
+      <BalaghaSheet ayah={balagha} onClose={() => setBalagha(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
