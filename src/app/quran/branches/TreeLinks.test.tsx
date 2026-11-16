@@ -78,4 +78,11 @@ describe('branch links', () => {
     rerender(<div data-tree-content dir="rtl"><PathScope><Fan entries={[...entries, { key: 'after', keys: ['1:3'], item: 'الآية التالية' }]} side="start" /></PathScope></div>);
     expect(container.querySelectorAll('[data-tree-links] path')).toHaveLength(3);
   });
+
+  it('curves both ends of branches that part and meet again (a compare tree), keeping the straight run between them', () => {
+    const { container } = render(<div data-tree-content dir="rtl" data-down><PathScope><Fan entries={entries} side="start" join /></PathScope></div>);
+    act(() => resize.forEach(callback => callback()));
+    expect(container.querySelectorAll('[data-fan] > svg')).toHaveLength(2);
+    expect(container.querySelectorAll('[data-run]')).toHaveLength(2);
+  });
 });

@@ -2,7 +2,6 @@ import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo,
 import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Text } from '@/components/Text';
 import type { Visit } from '@shared/quran/compareCards';
-import { curatedFor } from '@shared/quran/curatedComparisons';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
 import CompareCard from './CompareCard';
@@ -18,7 +17,6 @@ export type Focus = { visit: string; ayat: string[] };
 const PairPage = memo(function PairPage({ visit, width, height, palette, savedOnly, savedIds, focus, onLanded }: { visit: Visit; width: number; height: number; palette: Palette; savedOnly: boolean; savedIds: (id: string) => boolean; focus?: string[]; onLanded?: () => void }) {
   const all = cardsFor(visit.lead, visit.other);
   const cards = savedOnly ? all.filter(card => savedIds(card.id)) : all;
-  const story = curatedFor(visit.lead, visit.other);
   const list = useRef<FlatList<(typeof cards)[number]>>(null);
   const target = focus ? focusIndex(cards, focus) : -1;
   const landed = useRef(onLanded);
@@ -28,7 +26,6 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   // They keep arriving for a moment after the page opens, so it lands again each time, until the reader scrolls or the moment passes.
   const pending = useRef(target);
   const heights = useRef<number[]>([]);
-  const head = useRef(0);
   useEffect(() => {
     pending.current = target;
     if (target < 0) return;
@@ -38,7 +35,7 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   const land = useCallback(() => {
     const at = pending.current;
     if (at <= 0 || heights.current.slice(0, at).filter(Boolean).length < at) return;
-    const offset = head.current + heights.current.slice(0, at).reduce((sum, height) => sum + height + GAP, 0);
+    const offset = heights.current.slice(0, at).reduce((sum, height) => sum + height + GAP, 0);
     list.current?.scrollToOffset({ offset, animated: false });
   }, []);
   const stop = useCallback(() => { pending.current = -1; landed.current?.(); }, []);
@@ -52,9 +49,6 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
       <PageVideo lead={visit.lead} other={visit.other} cards={cards} open={video} onClose={() => setVideo(false)} palette={palette} />
       <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop} onScroll={shrink} scrollEventThrottle={16}
         contentContainerStyle={{ padding: 12, gap: GAP, paddingBottom: 32 }}
-        ListHeaderComponent={cards.length && story ? <View onLayout={event => { head.current = event.nativeEvent.layout.height + GAP; land(); }}>
-          <Text style={{ color: palette.accent, fontSize: 16, textAlign: 'right' }}>{story.name.ar}</Text>
-        </View> : undefined}
         ListEmptyComponent={<Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{savedOnly ? 'لا بطاقات محفوظة بين السورتين.' : 'لا آيات متشابهة بين السورتين.'}</Text>}
         renderItem={({ item, index }) => <View onLayout={event => { heights.current[index] = event.nativeEvent.layout.height; land(); }}><CompareCard card={item} palette={palette} onPageVideo={pageVideo} /></View>} />
     </View>

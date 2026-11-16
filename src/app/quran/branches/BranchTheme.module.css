@@ -24,7 +24,7 @@
 
 .page :global([data-node] header) { border-bottom: 0; }
 
-.page :global([data-fan]:has(> [data-tree-links]) > ul > li > span[aria-hidden]),
+.page :global([data-fan]:has(> [data-tree-links]) > ul > li > span[aria-hidden]:not([data-run])),
 .page :global([data-fan]:has(> [data-tree-links]) > [data-stem]) { visibility: hidden; }
 
 .page :global([data-tree-links] path) {
