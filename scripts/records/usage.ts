@@ -28,7 +28,8 @@ export const RENUMBERED: Record<string, string> = { R0044: '0029', R0045: '0031'
 // The slug a record had before the R ids: R0045-a-scaled-… was 0031-a-scaled-….
 export const oldSlug = (slug: string) => `${RENUMBERED[slug.slice(0, 5)] ?? slug.slice(1, 5)}${slug.slice(5)}`;
 
-const otherProject = /\b([a-z]+)\/(R?\d{4}(?:-[a-z0-9-]*[a-z0-9])?)/g;
+// "project/id" not inside a path, so docs/records/R0020-….md names no project.
+const otherProject = /(?<![\w/.-])([a-z]+)\/(R?\d{4}(?:-[a-z0-9-]*[a-z0-9])?)/g;
 
 // A line with an R id counts every R id on it and nothing else of this
 // project's, so prose around the ids cannot be misread:
@@ -50,8 +51,9 @@ export function parseUsedLine(line: string, slugs: string[], project = 'namaq'):
   };
   if (/\bR\d{4}\b/.test(line)) {
     for (const [, from, id] of line.matchAll(otherProject)) if (from !== project) used.push(`${from}/${id.startsWith('R') ? id : `R${id}`}`);
-    for (const m of line.matchAll(/\b(?:[a-z]+\/)?(R\d{4})(?:-([a-z0-9-]*[a-z0-9]))?/g)) {
-      const [whole, num, rest] = m;
+    for (const m of line.matchAll(/(?<![\w/.-])(?:([a-z]+)\/)?(R\d{4})(?:-([a-z0-9-]*[a-z0-9]))?/g)) {
+      const [whole, from = project, num, rest] = m;
+      if (from !== project) continue;
       resolve(whole, rest ? slugs.filter((s) => s === `${num}-${rest}`) : slugs.filter((s) => s.startsWith(`${num}-`)), num);
     }
     return { used: [...new Set(used)], unresolved };

@@ -18,6 +18,6 @@ Affected areas are branch filter UI, shared range controls, group browsing/prese
 
 Run lint, TypeScript, the full Vitest suite and the production build. Check mobile and desktop positioning, visible Apply/Reset, equal-height inputs, light/dark colors, Escape and outside-click dismissal in a real browser.
 
-Distillate record namaq/0021-absorbing-a-phrase-must-preserve-its-entry-points applies: retained and focused phrase paths remain separate consumers and both need regression coverage.
+Distillate record namaq/R0021-absorbing-a-phrase-must-preserve-its-entry-points applies: retained and focused phrase paths remain separate consumers and both need regression coverage.
 
 Search eligibility for aliases or partial-tree matches and consolidation of overlapping trees are deliberately outside this change. Discuss those after this PR merges.

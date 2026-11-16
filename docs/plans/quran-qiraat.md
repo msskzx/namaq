@@ -221,7 +221,7 @@ only for differences in letters or vowels (farsh), not performance (usul).
   alif, and the last vowel of a particle of one or two letters. Vowel-only
   differences (5:6 أرجلكم) are farsh.
 - The King Fahd Complex texts of seven riwayat correct the dump only narrowly
-  (docs/records/0028).
+  (docs/records/R0028).
 - Checked: 37 of the page's sourced examples agree with the data; the six left
   out are listed in `src/app/quran/qiraat/data/qiraatData.test.ts`.
 - Known gaps: some of al-Susi's long merging phrases and a few dump typos are

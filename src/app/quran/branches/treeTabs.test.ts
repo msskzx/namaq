@@ -10,7 +10,7 @@ const sources = (dir: string): string[] => readdirSync(dir, { withFileTypes: tru
 });
 
 describe('tree tabs', () => {
-  // docs/records/0042: on iOS, adjustsFontSizeToFit in a tab sized by its own text shrank the tree tabs to a speck, which the
+  // docs/records/R0042: on iOS, adjustsFontSizeToFit in a tab sized by its own text shrank the tree tabs to a speck, which the
   // web export (where the tests run) never shows. Labels keep their size; one too long is clipped.
   it('the app never shrinks text to fit', () => {
     const offenders = sources(join(ROOT, 'mobile/src')).filter(path => /adjustsFontSizeToFit/.test(readFileSync(path, 'utf8').replace(/\/\/.*|\{\/\*[\s\S]*?\*\/\}/g, '')));

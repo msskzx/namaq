@@ -36,6 +36,6 @@ same: it prints "apply the migration, then rerun" and writes nothing.
 data change: it has to land before the code that mentions the column, or the code must not
 mention it. When the owner applies migrations by hand, add tables, not columns, so a merge
 never waits on a person. Same family as
-[0009](R0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it.md): code and stored shape
+[R0009](R0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it.md): code and stored shape
 have to move together, and the cheapest way to keep them from moving apart is to let the code
 work without the new shape.

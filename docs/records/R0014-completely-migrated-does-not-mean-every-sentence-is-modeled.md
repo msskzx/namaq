@@ -21,7 +21,7 @@ ages, appearance, battles and the like. The entry has 342 sentences over pages 4
 `model:check` was happy with 24 spans for years, because it checks that each span is valid and
 says nothing about what no span covers. The same blind spot made the Jibril hadith pages drop
 a whole turn of conversation until the owner read them
-([0008](R0008-prove-a-split-by-putting-it-back-together.md)).
+([R0008](R0008-prove-a-split-by-putting-it-back-together.md)).
 
 `npm run model:coverage -- siyar-v4-3-az-zubayr` now finds the entry from its heading to the next
 entry's heading and puts every sentence in one of two piles: covered by a span, or not modeled.

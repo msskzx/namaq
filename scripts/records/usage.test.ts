@@ -9,7 +9,9 @@ describe('parseUsedLine with R ids', () => {
   it('counts every R id on the line, full or bare, and other projects named with theirs', () => {
     expect(used('R0008, R0027-context').used).toEqual(['namaq/R0008-split', 'namaq/R0027-context']);
     expect(used('R0031 (new record R0045 written here). ADR 0037, #737').used).toEqual(['namaq/R0031-a-card', 'namaq/R0045-a-scaled']);
-    expect(used('R0005, distillate/R0005-a-mock-router').used).toEqual(['distillate/R0005-a-mock-router', 'namaq/R0005-checks']);
+    expect(used('R0008, distillate/R0005-a-mock-router')).toEqual({ used: ['distillate/R0005-a-mock-router', 'namaq/R0008-split'], unresolved: [] });
+    expect(used('R0008; see docs/records/R0027-context.md').used).toEqual(['namaq/R0008-split']);
+    expect(used('namaq/R0027-context').used).toEqual(['namaq/R0027-context']);
   });
 
   it('reports an R id that names no record', () => {

@@ -37,4 +37,4 @@ test table should hold as many refusals as readings. Reject what you cannot plac
 unknown word next to a number, two numbers, a qualifier such as "about" or "and a half")
 instead of reading around it. Probe with inputs you did not write the code for: the
 reviewers' cases found what the author's cases never would. See also
-[0010](R0010-a-subagent-said-green-while-lint-and-tsc-were-red.md).
+[R0010](R0010-a-subagent-said-green-while-lint-and-tsc-were-red.md).
