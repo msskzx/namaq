@@ -25,11 +25,13 @@ often, and only that many first occurrences are coloured (86:2 repeats «الط�
 ## Page (website /quran/oaths, app Quran hub tile «الأقسام»)
 
 - A two-way switch: «أقسم الله» / «أقسم غيره».
-- Under the switch, that list's collapsible reference: Ibn al-Qayyim, al-Tibyan p. 5 (Allah) or p. 7 (others).
+- Under the switch, that list's collapsible reference: Ibn al-Qayyim, al-Tibyan p. 5 (Allah) or p. 7 (others), then
+  our notes that were in the help sheet (what counts as an oath, the colours, Hafs only, not reviewed by a scholar).
 - Allah's oaths sit in sections by what He swears on, Ibn al-Qayyim's five (al-Tibyan p. 8, copied by al-Suyuti, al-Itqan
   4/57). An oath goes in a section only where Ibn al-Qayyim himself places it, and his words saying so come first in its
   reference. The 13 he never places sit in a last section marked as our own grouping (`OATH_SECTIONS`, `UNNAMED_NOTE`).
-  Each section heading carries its own collapsible reference.
+  Each section heading carries a collapsible reference next to it: the same passage naming the five, since neither
+  book gives each its own; the last section's reference is our note.
 - Above the sections, chips by what He swears by (owner, 2026-11-16: "from Ibn al-Qayyim and al-Suyuti"): «الكل»,
   بذاته، بكلامه، بفعله، بالنبي ﷺ، بمفعوله, in al-Suyuti's own words (al-Itqan 4/55) with Ibn al-Qayyim's «بكلامه»
   (al-Tibyan p. 188) and the reference under them (`OATH_BY`, `BY_QUOTES`). A chip hides cards and sections left empty.

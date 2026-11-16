@@ -13,7 +13,7 @@ afterEach(cleanup);
 const allah = buildOaths('allah', data);
 const others = buildOaths('others', data);
 const renderView = () => render(<OathsView allah={allah} others={others} />);
-const cards = () => screen.getAllByRole('list', { name: 'الأقسام' }).flatMap(list => within(list).getAllByRole('listitem'));
+const cards = () => [...document.querySelectorAll<HTMLElement>('ol > li')];
 const chips = () => within(screen.getByRole('list', { name: 'ما أُقسم به' }));
 
 describe('OathsView', () => {
@@ -46,6 +46,7 @@ describe('OathsView', () => {
     fireEvent.click(chips().getByRole('button', { name: speech.label }));
     expect(cards()).toHaveLength(speech.oaths.length);
     expect(screen.getAllByRole('heading', { level: 2 }).map(h => h.textContent)).toEqual(['على أن القرآن حق', 'على أن الرسول حق']);
+    expect(within(chips().getByRole('button', { name: 'الكل' }).closest('div')!).getAllByText(/الإتقان ٤\/٥٥/).length).toBeGreaterThan(0);
     fireEvent.click(chips().getByRole('button', { name: 'الكل' }));
     expect(cards()).toHaveLength(ALLAH_OATHS.length);
   });

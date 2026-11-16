@@ -105,14 +105,14 @@ export type OathBy = 'self' | 'speech' | 'act' | 'prophet' | 'made';
 export const OATH_SECTIONS: { on: OathOn; title: string; ours?: true; oaths: string[] }[] = [
   { on: 'tawhid', title: 'على التوحيد', oaths: ['37:1'] },
   { on: 'quran', title: 'على أن القرآن حق', oaths: ['38:1', '43:2', '44:2', '50:1', '56:75', '81:15', '86:11'] },
-  { on: 'rasul', title: 'على أن الرسول حق', oaths: ['16:63', '36:2', '53:1', '68:1', '69:38', '93:1'] },
+  { on: 'rasul', title: 'على أن الرسول حق', oaths: ['36:2', '53:1', '68:1', '69:38', '93:1'] },
   { on: 'jaza', title: 'على الجزاء والوعد والوعيد', oaths: ['10:53', '34:3', '51:1', '51:23', '52:1', '64:7', '75:1', '77:1'] },
   { on: 'insan', title: 'على حال الإنسان', oaths: ['86:1', '90:1', '92:1', '95:1', '100:1', '103:1'] },
-  { on: 'unnamed', title: 'لم يعيّن ابن القيم ما أُقسم عليه', ours: true, oaths: ['4:65', '15:72', '15:92', '16:56', '19:68', '51:7', '70:40', '74:32', '79:1', '84:16', '85:1', '89:1', '91:1'] },
+  { on: 'unnamed', title: 'لم يعيّن ابن القيم ما أُقسم عليه', ours: true, oaths: ['4:65', '15:72', '15:92', '16:56', '16:63', '19:68', '51:7', '70:40', '74:32', '79:1', '84:16', '85:1', '89:1', '91:1'] },
 ];
 
 /** Our note on the last section: it gathers the oaths he does not place among his five. */
-export const UNNAMED_NOTE = 'جمعنا هنا ما لم يذكره ابن القيم في واحد من الخمسة، على ترتيب المصحف.';
+const UNNAMED_NOTE = 'جمعنا هنا ما لم يذكره ابن القيم في واحد من الخمسة، على ترتيب المصحف.';
 
 /** What each oath swears by; an oath may have two (al-Shams swears by His making and by what He made). */
 export const OATH_BY: { by: OathBy; label: string; oaths: string[] }[] = [
@@ -128,6 +128,19 @@ const BY_OF = new Map(OATH_BY.map(b => [b.by, new Set(b.oaths)]));
 /** The sections a chip leaves showing, each with its oaths sworn by that chip's kind, in mushaf order; none picked keeps them all. */
 export const oathSections = (by: OathBy | null) =>
   OATH_SECTIONS.map(section => ({ ...section, oaths: by ? section.oaths.filter(id => BY_OF.get(by)!.has(id)) : section.oaths })).filter(section => section.oaths.length);
+
+/** A reference's title: the books and pages its quotes cite, each once; our own note alone is «من جمعنا». */
+export const citesOf = (quotes: { cite?: string }[]) => [...new Set(quotes.flatMap(q => (q.cite ? [q.cite] : [])))].join('، ') || 'من جمعنا';
+
+/** Our notes on the whole page, once in the help sheet (owner, 2026-11-16: fold the help into the references). */
+const PAGE_NOTES = [
+  'جمعنا كل موضع في القرآن جاء فيه القسم بلفظه: بالواو أو التاء أو الباء، أو «لا أقسم»، أو «فلا وربك»، أو «لعمرك»، أو «قل إي وربي». وما أُخبر فيه عن قسم بغير لفظه، كـ«وأقسموا بالله جهد أيمانهم»، لم يدخل.',
+  'الكلمة الملوّنة ما أُقسم به. وما أقسم الله به بوصف بلا اسم، كالذاريات والمرسلات والنازعات والعاديات، يبقى بألفاظه ولا نقول ما هو، فذلك من التفسير. ويُعرض القسم وحده دون جوابه.',
+  'لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص، وفي «لا أقسم» (القيامة ١) قراءة أخرى لم تدخل هنا.',
+];
+
+/** A list's reference under the switch: Ibn al-Qayyim on that kind of oath, then our notes on the page. */
+export const kindQuotes = (kind: OathKind): { text: string; cite?: string; url?: string }[] => [KIND_QUOTES[kind], ...PAGE_NOTES.map(text => ({ text }))];
 
 /** A section's reference: Ibn al-Qayyim's five and al-Suyuti copying them, or our note on the section we gathered. */
 export const sectionQuotes = (section: { ours?: true }): { text: string; cite?: string; url?: string }[] => (section.ours ? [{ text: UNNAMED_NOTE }] : ON_QUOTES);

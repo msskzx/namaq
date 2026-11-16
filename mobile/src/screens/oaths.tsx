@@ -5,7 +5,7 @@ import data from '@shared/data/quran/oaths.json';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { BY_QUOTES, KIND_QUOTES, OATH_BY, OATH_QUOTES, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
+import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { buildOaths, oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import { Text } from '@/components/Text';
 import Reference from '@/components/Reference';
@@ -20,7 +20,6 @@ import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', data), others: buildOaths('others', data) };
 const BY_ID = new Map(BUILT.allah.map(oath => [oath.id, oath]));
-const citesOf = (quotes: { cite?: string }[]) => [...new Set(quotes.flatMap(q => (q.cite ? [q.cite] : [])))].join('، ') || 'من جمعنا';
 
 /** A row of the list: a section's heading with its reference, or an oath's card. */
 type Row = { head: ReturnType<typeof oathSections>[number] } | { oath: OathView };
@@ -41,7 +40,7 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
           <Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>
           {oath.who && <Text style={{ color: palette.green, fontSize: 13 }}>{oath.who}</Text>}
         </View>
-        {quotes && <Reference title={quotes.map(q => q.cite).join('، ')} quotes={quotes} palette={palette} />}
+        {quotes && <Reference title={citesOf(quotes)} quotes={quotes} palette={palette} />}
         <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
           {oath.lines.map(line => [
             ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${mushafText(word.text)} `}</Text>),
@@ -102,23 +101,26 @@ export default function OathsScreen() {
             );
           })}
         </View>
-        <Reference key={kind} title={KIND_QUOTES[kind].cite} quotes={[KIND_QUOTES[kind]]} palette={palette} />
       </View>
-      {kind === 'allah' && (
-        <View style={{ paddingBottom: 6 }}>
-          {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
-          <View style={{ direction: 'ltr' }}>
-            <FlatList data={[null, ...OATH_BY.map(b => b.by)]} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={value => value ?? 'all'}
-              style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: 4, gap: 6 }}
-              renderItem={({ item }) => chip(item ? OATH_BY.find(b => b.by === item)!.label : 'الكل', item)} />
-          </View>
-          <View style={{ paddingHorizontal: 16 }}>
-            <Reference title={citesOf(BY_QUOTES)} quotes={BY_QUOTES} palette={palette} />
-          </View>
-        </View>
-      )}
+      {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: kind === 'others' ? 10 : 0, paddingBottom: bottom, gap: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}
+        ListHeaderComponent={
+          <View style={{ gap: 4 }}>
+            <Reference key={kind} title={citesOf(kindQuotes(kind))} quotes={kindQuotes(kind)} palette={palette} />
+            {kind === 'allah' && (
+              <>
+                {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
+                <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
+                  <FlatList data={[null, ...OATH_BY.map(b => b.by)]} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={value => value ?? 'all'}
+                    style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, gap: 6 }}
+                    renderItem={({ item }) => chip(item ? OATH_BY.find(b => b.by === item)!.label : 'الكل', item)} />
+                </View>
+                <Reference title={citesOf(BY_QUOTES)} quotes={BY_QUOTES} palette={palette} />
+              </>
+            )}
+          </View>
+        }
         renderItem={({ item }) => ('head' in item ? (
           <View style={{ paddingTop: 8, gap: 2 }}>
             <Text accessibilityRole="header" style={{ fontSize: 18, color: palette.ink }}>{item.head.title}</Text>

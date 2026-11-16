@@ -8,7 +8,7 @@ import Reference from '@/components/common/Reference';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { BY_QUOTES, KIND_QUOTES, OATH_BY, OATH_QUOTES, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
+import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
@@ -38,7 +38,7 @@ function OathCard({ oath }: { oath: OathView }) {
           <span>{place}</span>
           {oath.who && <span className="text-[var(--home-green)]">{oath.who}</span>}
         </h3>
-        {quotes && <Reference title={quotes.map(q => q.cite).join('، ')} quotes={quotes} />}
+        {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
         <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
           {oath.lines.map(line => (
             <span key={line.ayah}>
@@ -57,8 +57,6 @@ function OathCard({ oath }: { oath: OathView }) {
     </li>
   );
 }
-
-const citesOf = (quotes: { cite?: string }[]) => [...new Set(quotes.flatMap(q => (q.cite ? [q.cite] : [])))].join('، ') || 'من جمعنا';
 
 const OathList = ({ label, oaths }: { label: string; oaths: OathView[] }) => (
   <ol aria-label={label} className="flex flex-col gap-2.5">
@@ -89,8 +87,13 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
       <Segmented label="من أقسم" className="w-full [&>button]:flex-1" options={OATH_KINDS.map(option => ({
         key: option.kind, label: option.label, current: kind === option.kind, onClick: () => { setKind(option.kind); setBy(null); },
       }))} />
-      <Reference key={kind} title={KIND_QUOTES[kind].cite} quotes={[KIND_QUOTES[kind]]} />
-      {kind === 'others' ? <OathList label="الأقسام" oaths={others} /> : (
+      <Reference key={kind} title={citesOf(kindQuotes(kind))} quotes={kindQuotes(kind)} />
+      {kind === 'others' ? (
+        <section aria-label="أقسم غيره" className="flex flex-col gap-2">
+          <h2 className="sr-only">أقسم غيره</h2>
+          <OathList label="أقسم غيره" oaths={others} />
+        </section>
+      ) : (
         <>
           <div className="flex flex-col gap-1">
             <ul aria-label="ما أُقسم به" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
@@ -105,7 +108,7 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
                 <h2 className="text-lg text-[var(--home-ink)]">{section.title}</h2>
                 <Reference title={citesOf(sectionQuotes(section))} quotes={sectionQuotes(section)} />
               </div>
-              <OathList label="الأقسام" oaths={section.oaths.map(id => byId.get(id)!)} />
+              <OathList label={section.title} oaths={section.oaths.map(id => byId.get(id)!)} />
             </section>
           ))}
         </>
