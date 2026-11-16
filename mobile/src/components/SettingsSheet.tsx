@@ -7,7 +7,7 @@ import Logo from './Logo';
 import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
-import { around, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
+import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from './Toggle';
 import { MemorizedSetting } from './Memorized';
 import { BooksSetting } from './Books';
@@ -32,6 +32,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <ViewTiles palette={palette} />
         <MarkTiles palette={palette} />
         <AroundSetting palette={palette} />
+        <BesideSetting palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
         <HapticsSetting palette={palette} />
@@ -71,6 +72,12 @@ function ConnectorsSetting({ palette }: { palette: Palette }) {
 function AroundSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = around.use();
   return <Toggle on={on} onChange={setOn} label="إظهار الآيات المحيطة افتراضيًا" palette={palette} />;
+}
+
+/** How a compare card's matrix opens; each card's own button switches it there. */
+function BesideSetting({ palette }: { palette: Palette }) {
+  const [on, setOn] = besideLayout.use();
+  return <Toggle on={on} onChange={setOn} label="عرض آيات المقارنة جنبًا إلى جنب افتراضيًا" palette={palette} />;
 }
 
 function HapticsSetting({ palette }: { palette: Palette }) {

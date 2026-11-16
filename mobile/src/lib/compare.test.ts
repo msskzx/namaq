@@ -3,12 +3,32 @@ import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
 import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
-import { cardsFor, compareTargetFor, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
+import { aloneNote, besideRows, cardsFor, compareTargetFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
   memory.clear();
   setBookmarkStorage({ getItem: key => memory.get(key) ?? null, setItem: (key, value) => void memory.set(key, value) });
+});
+
+describe('compare cards side by side', () => {
+  it('puts a story part both surahs tell in two lanes and a part one surah tells across the card', () => {
+    const adam = cardsFor(2, 7).find(card => card.sides[0].rows && card.sides[0].ayat.some(ayah => ayah.number === 30))!;
+    const rows = besideRows(adam.sides);
+    expect(rows[0]).toMatchObject({ alone: { surah: 2 }, side: 0, silent: 7 });
+    expect('lanes' in rows[1]).toBe(true);
+    expect(rows.some(row => 'alone' in row && row.alone.surah === 7 && row.side === 1 && row.silent === 2)).toBe(true);
+  });
+
+  it('keeps a card without parts as one row of two lanes', () => {
+    const card = cardsFor(2, 7).find(card => !card.sides[0].rows && !card.many)!;
+    expect(besideRows(card.sides)).toEqual([{ lanes: [expect.objectContaining({ surah: 2 }), expect.objectContaining({ surah: 7 })] }]);
+  });
+
+  it('names a part by its surah and ayat, and the surah that does not tell it', () => {
+    expect(partLabel(2, [30, 31, 32, 33])).toBe('البقرة ٣٠–٣٣');
+    expect(aloneNote(7)).toBe('سورة الأعراف لا تذكر هذا الجزء');
+  });
 });
 
 describe('compare cards on the phone', () => {
