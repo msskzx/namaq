@@ -25,11 +25,20 @@ often, and only that many first occurrences are coloured (86:2 repeats «الط�
 ## Page (website /quran/oaths, app Quran hub tile «الأقسام»)
 
 - A two-way switch: «أقسم الله» / «أقسم غيره».
-- A row of word chips: words sworn by in two oaths or more of that list, the most frequent first, after «الكل».
-  A chip only hides cards. The switch clears the chip.
-- One card per oath in mushaf order, in the app's card style: place (and speaker), the ayat in the Hafs font with the
-  words sworn by in the accent colour, then mushaf and share buttons on the right.
-- The explanation sits in the help (question mark), the same text on both (`OATHS_HELP`).
+- Under the switch, that list's collapsible reference: Ibn al-Qayyim, al-Tibyan p. 5 (Allah) or p. 7 (others).
+- Allah's oaths sit in sections by what He swears on, Ibn al-Qayyim's five (al-Tibyan p. 8, copied by al-Suyuti, al-Itqan
+  4/57). An oath goes in a section only where Ibn al-Qayyim himself places it, and his words saying so come first in its
+  reference. The 13 he never places sit in a last section marked as our own grouping (`OATH_SECTIONS`, `UNNAMED_NOTE`).
+  Each section heading carries its own collapsible reference.
+- Above the sections, chips by what He swears by (owner, 2026-11-16: "from Ibn al-Qayyim and al-Suyuti"): «الكل»,
+  بذاته، بكلامه، بفعله، بالنبي ﷺ، بمفعوله, in al-Suyuti's own words (al-Itqan 4/55) with Ibn al-Qayyim's «بكلامه»
+  (al-Tibyan p. 188) and the reference under them (`OATH_BY`, `BY_QUOTES`). A chip hides cards and sections left empty.
+  The switch clears it.
+- The others' oaths are one list, no chips.
+- One card per oath, in the app's card style: place (and speaker), its collapsible reference (`OATH_QUOTES`, every
+  quote word for word with book and page; Ibn Kathir, al-Sa'di and al-Nahhas where Ibn al-Qayyim is silent), the ayat in
+  the Hafs font with the words sworn by in the accent colour. Mushaf and share buttons sit under the card.
+- No help sheet: the references replace it (owner, 2026-11-16).
 
 The metro lines are gone: at 41 oaths they could not be read on a phone.
 
