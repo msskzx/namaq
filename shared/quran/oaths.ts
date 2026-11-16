@@ -82,8 +82,6 @@ export const OATHS: Record<OathKind, Oath[]> = { allah: ALLAH_OATHS, others: OTH
 export type OathData = { names: Record<string, string>; ayat: Record<string, string> };
 export type OathWord = { text: string; sworn: boolean };
 export type OathView = { id: string; kind: OathKind; surah: number; name: string; range: [number, number]; who?: string; by: string[]; lines: { ayah: number; words: OathWord[] }[] };
-/** A chip: a word sworn by in two oaths or more of one kind. */
-export type OathChip = { word: string; count: number };
 
 /** A word reduced to its letters for matching: the article set apart, long vowels and hamza dropped, a final ta' marbuta read as ta'. */
 const skeleton = (x: string) => {
@@ -109,9 +107,9 @@ export function isSworn(token: string, word: string) {
   });
 }
 
-/** The oaths of one kind with their words, and the chips: words sworn by in two oaths or more, the most frequent first. */
-export function buildOaths(kind: OathKind, { names, ayat }: OathData): { oaths: OathView[]; chips: OathChip[] } {
-  const oaths = OATHS[kind].map(({ surah, range: [lo, hi], by, who }) => ({
+/** The oaths of one kind with their words, the sworn ones marked. */
+export function buildOaths(kind: OathKind, { names, ayat }: OathData): OathView[] {
+  return OATHS[kind].map(({ surah, range: [lo, hi], by, who }) => ({
     id: `${surah}:${lo}`,
     kind,
     surah,
@@ -133,14 +131,7 @@ export function buildOaths(kind: OathKind, { names, ayat }: OathData): { oaths: 
     }
     return oath;
   });
-  const counts = new Map<string, number>();
-  for (const o of oaths) for (const w of new Set(o.by)) counts.set(w, (counts.get(w) ?? 0) + 1);
-  const chips = [...counts].filter(([, count]) => count > 1).map(([word, count]) => ({ word, count })).sort((a, b) => b.count - a.count);
-  return { oaths, chips };
 }
-
-/** The oaths a chip leaves showing: all of them with no chip, else those sworn by its word. */
-export const oathsWith = (oaths: OathView[], word: string | null) => (word ? oaths.filter(o => o.by.includes(word)) : oaths);
 
 /** An oath's place, as «الطور ١–٦». */
 export const oathPlace = (o: Pick<OathView, 'name' | 'range'>, num: (n: number) => string) =>

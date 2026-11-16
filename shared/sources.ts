@@ -102,6 +102,11 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths],
   },
   {
+    id: 'irab-nahhas', group: 'books',
+    title: { ar: 'إعراب القرآن', en: 'I‘rab al-Quran' }, author: { ar: 'أبو جعفر النحاس', en: 'al-Nahhas' },
+    edition: 'دار الكتب العلمية، بيروت، الطبعة الأولى ١٤٢١هـ', link: { url: 'https://quranpedia.net/book/318', label: 'الموسوعة القرآنية' }, licence: PUBLIC_DOMAIN, uses: [USE.oaths],
+  },
+  {
     id: 'burhan-zarkashi', group: 'books',
     title: { ar: 'البرهان في علوم القرآن', en: 'al-Burhan fi ‘Ulum al-Quran' }, author: { ar: 'بدر الدين الزركشي', en: 'al-Zarkashi' },
     edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat],

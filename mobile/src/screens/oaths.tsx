@@ -5,9 +5,10 @@ import data from '@shared/data/quran/oaths.json';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
+import { KIND_QUOTES, OATH_QUOTES } from '@shared/quran/oathSources';
 import { buildOaths, oathPlace, oathShareText, oathsWith, type OathKind, type OathView } from '@shared/quran/oaths';
 import { Text } from '@/components/Text';
-import HelpSheet from '@/components/HelpSheet';
+import Reference from '@/components/Reference';
 import TopBar from '@/components/TopBar';
 import { useTabBarSpace } from '@/components/tabBarSpace';
 import { WEBSITE } from '@/lib/branches';
@@ -25,19 +26,23 @@ function shareOath(oath: OathView) {
 
 function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
   const place = oathPlace(oath, num);
+  const quotes = OATH_QUOTES[oath.id];
   return (
-    <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 4 }}>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'baseline', columnGap: 10 }}>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>
-        {oath.who && <Text style={{ color: palette.green, fontSize: 13 }}>{oath.who}</Text>}
+    <View style={{ gap: 2 }}>
+      <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 8, gap: 4 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'baseline', columnGap: 10 }}>
+          <Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>
+          {oath.who && <Text style={{ color: palette.green, fontSize: 13 }}>{oath.who}</Text>}
+        </View>
+        {quotes && <Reference title={quotes.map(q => q.cite).join('، ')} quotes={quotes} palette={palette} />}
+        <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+          {oath.lines.map(line => [
+            ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${mushafText(word.text)} `}</Text>),
+            <Text key={`${line.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(line.ayah)} `}</Text>,
+          ])}
+        </Text>
       </View>
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-        {oath.lines.map(line => [
-          ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${mushafText(word.text)} `}</Text>),
-          <Text key={`${line.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(line.ayah)} `}</Text>,
-        ])}
-      </Text>
-      {/* Card actions on the right (owner): the mushaf, then share last. */}
+      {/* Card actions under the card, on the right (owner): the mushaf, then share last. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <Pressable onPress={() => readAyah(oath.id)} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
           <BookOpen size={19} color={palette.muted} />
@@ -62,7 +67,6 @@ export default function OathsScreen() {
   const top = useRef(0);
   const [kind, setKind] = useState<OathKind>('allah');
   const [word, setWord] = useState<string | null>(null);
-  const [help, setHelp] = useState(false);
   const { oaths, chips } = BUILT[kind];
   const shown = useMemo(() => oathsWith(oaths, word), [oaths, word]);
   useTabRetap('oaths', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setWord(null); });
@@ -78,7 +82,7 @@ export default function OathsScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll help={() => setHelp(true)} />
+      <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
         <View accessibilityRole="tablist" style={{ flexDirection: 'row', padding: 3, borderRadius: 12, backgroundColor: palette.paperDeep }}>
           {KINDS.map(option => {
@@ -91,6 +95,7 @@ export default function OathsScreen() {
             );
           })}
         </View>
+        <Reference key={kind} title={KIND_QUOTES[kind].cite} quotes={[KIND_QUOTES[kind]]} palette={palette} />
       </View>
       {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
       <View style={{ direction: 'ltr' }}>
@@ -101,7 +106,6 @@ export default function OathsScreen() {
       <FlatList ref={list} data={shown} keyExtractor={oath => oath.id} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom, gap: 10 }}
         renderItem={({ item }) => <OathCard oath={item} palette={palette} />} />
-      <HelpSheet topic={help ? 'oaths' : null} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

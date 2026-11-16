@@ -4,14 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BookOpen, Send } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
-import ExternalLink from '@/components/common/ExternalLink';
+import Reference from '@/components/common/Reference';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { KIND_QUOTES, OATH_QUOTES, type OathQuote } from '@shared/quran/oathSources';
-import { oathPlace, oathShareText, oathsWith, type OathChip, type OathKind, type OathView } from '@shared/quran/oaths';
-
-type Built = { oaths: OathView[]; chips: OathChip[] };
+import { BY_QUOTES, KIND_QUOTES, OATH_BY, OATH_QUOTES, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
+import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
@@ -28,53 +26,59 @@ async function shareOath(oath: OathView) {
   } catch {}
 }
 
-/** The book and page a quote comes from, as a link to that page. */
-const Cite = ({ quote }: { quote: OathQuote }) => <ExternalLink href={quote.url} className="whitespace-nowrap text-sm text-[var(--home-muted)] underline-offset-4 hover:underline">{quote.cite}</ExternalLink>;
-
 const ICON_BUTTON = 'inline-flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
 function OathCard({ oath }: { oath: OathView }) {
   const place = oathPlace(oath, num);
-  const quote = OATH_QUOTES[oath.id];
+  const quotes = OATH_QUOTES[oath.id];
   return (
-    <li className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-1">
-      <h2 className="flex flex-wrap items-baseline gap-x-3 text-sm text-[var(--home-muted)]">
-        <span>{place}</span>
-        {oath.who && <span className="text-[var(--home-green)]">{oath.who}</span>}
-      </h2>
-      <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
-        {oath.lines.map(line => (
-          <span key={line.ayah}>
-            {line.words.map((word, i) => (
-              <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${mushafText(word.text)} `}</span>
-            ))}
-            <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
-          </span>
-        ))}
-      </p>
-      {quote && <p className="mt-1 text-[0.95rem] leading-7 text-[var(--home-muted)]">«{quote.text}»</p>}
+    <li className="flex flex-col gap-1">
+      <article className="flex flex-col gap-1 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-2">
+        <h3 className="flex flex-wrap items-baseline gap-x-3 text-sm text-[var(--home-muted)]">
+          <span>{place}</span>
+          {oath.who && <span className="text-[var(--home-green)]">{oath.who}</span>}
+        </h3>
+        {quotes && <Reference title={quotes.map(q => q.cite).join('، ')} quotes={quotes} />}
+        <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
+          {oath.lines.map(line => (
+            <span key={line.ayah}>
+              {line.words.map((word, i) => (
+                <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${mushafText(word.text)} `}</span>
+              ))}
+              <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
+            </span>
+          ))}
+        </p>
+      </article>
       <div className="flex items-center gap-1">
         <Link href={ayahHref(oath.id)} className={ICON_BUTTON} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen size={18} aria-hidden /></Link>
         <button type="button" onClick={() => shareOath(oath)} className={ICON_BUTTON} aria-label={`شارك ${place}`} title="شارك"><Send size={18} aria-hidden /></button>
-        {quote && <span className="ms-auto"><Cite quote={quote} /></span>}
       </div>
     </li>
   );
 }
 
+const citesOf = (quotes: { cite?: string }[]) => [...new Set(quotes.flatMap(q => (q.cite ? [q.cite] : [])))].join('، ') || 'من جمعنا';
+
+const OathList = ({ label, oaths }: { label: string; oaths: OathView[] }) => (
+  <ol aria-label={label} className="flex flex-col gap-2.5">
+    {oaths.map(oath => <OathCard key={oath.id} oath={oath} />)}
+  </ol>
+);
+
 /**
- * Every oath in the Quran, as in the app (owner, 2026-11-13): Allah's oaths or those the Quran quotes from others,
- * in mushaf order, the words sworn by in colour. A chip keeps only the oaths sworn by its word.
+ * Every oath in the Quran, as in the app (owner, 2026-11-13): Allah's oaths or those the Quran quotes from others, the words
+ * sworn by in colour. Allah's are grouped by what He swears on, as Ibn al-Qayyim names it, and a chip keeps only those sworn
+ * by one of al-Suyuti's kinds (owner, 2026-11-16: "from Ibn al-Qayyim and al-Suyuti").
  */
-export default function OathsView({ allah, others }: { allah: Built; others: Built }) {
+export default function OathsView({ allah, others }: { allah: OathView[]; others: OathView[] }) {
   const [kind, setKind] = useState<OathKind>('allah');
-  const [word, setWord] = useState<string | null>(null);
-  const { oaths, chips } = kind === 'allah' ? allah : others;
-  const shown = oathsWith(oaths, word);
-  const chip = (label: string, value: string | null) => (
+  const [by, setBy] = useState<OathBy | null>(null);
+  const byId = new Map(allah.map(oath => [oath.id, oath]));
+  const chip = (label: string, value: OathBy | null) => (
     <li key={label}>
-      <button type="button" aria-pressed={word === value} onClick={() => setWord(value)}
-        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${word === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
+      <button type="button" aria-pressed={by === value} onClick={() => setBy(value)}
+        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${by === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
         {label}
       </button>
     </li>
@@ -83,19 +87,29 @@ export default function OathsView({ allah, others }: { allah: Built; others: Bui
     <div className="flex flex-col gap-3">
       <h1 className="sr-only">الأقسام في القرآن</h1>
       <Segmented label="من أقسم" className="w-full [&>button]:flex-1" options={OATH_KINDS.map(option => ({
-        key: option.kind, label: option.label, current: kind === option.kind, onClick: () => { setKind(option.kind); setWord(null); },
+        key: option.kind, label: option.label, current: kind === option.kind, onClick: () => { setKind(option.kind); setBy(null); },
       }))} />
-      <figure className="px-1 text-[0.95rem] leading-7 text-[var(--home-muted)]">
-        <blockquote>«{KIND_QUOTES[kind].text}»</blockquote>
-        <figcaption><Cite quote={KIND_QUOTES[kind]} /></figcaption>
-      </figure>
-      <ul aria-label="ما أُقسم به" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-        {chip('الكل', null)}
-        {chips.map(c => chip(c.word, c.word))}
-      </ul>
-      <ol aria-label="الأقسام" className="flex flex-col gap-2.5">
-        {shown.map(oath => <OathCard key={oath.id} oath={oath} />)}
-      </ol>
+      <Reference key={kind} title={KIND_QUOTES[kind].cite} quotes={[KIND_QUOTES[kind]]} />
+      {kind === 'others' ? <OathList label="الأقسام" oaths={others} /> : (
+        <>
+          <div className="flex flex-col gap-1">
+            <ul aria-label="ما أُقسم به" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+              {chip('الكل', null)}
+              {OATH_BY.map(b => chip(b.label, b.by))}
+            </ul>
+            <Reference title={citesOf(BY_QUOTES)} quotes={BY_QUOTES} />
+          </div>
+          {oathSections(by).map(section => (
+            <section key={section.on} aria-label={section.title} className="flex flex-col gap-2">
+              <div className="flex flex-col gap-0.5 pt-2">
+                <h2 className="text-lg text-[var(--home-ink)]">{section.title}</h2>
+                <Reference title={citesOf(sectionQuotes(section))} quotes={sectionQuotes(section)} />
+              </div>
+              <OathList label="الأقسام" oaths={section.oaths.map(id => byId.get(id)!)} />
+            </section>
+          ))}
+        </>
+      )}
     </div>
   );
 }

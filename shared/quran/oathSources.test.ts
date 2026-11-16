@@ -11,11 +11,11 @@ describe('oath sources', () => {
   });
 
   it('gives each quote its book, page and a link to that page', () => {
-    for (const q of [...Object.values(KIND_QUOTES), ...Object.values(OATH_QUOTES)]) {
+    for (const q of [...Object.values(KIND_QUOTES), ...Object.values(OATH_QUOTES).flat()]) {
       expect(q.text.length).toBeGreaterThan(20);
       expect(q.text).not.toMatch(/[ً-ْ]|\(\^\d+\)|\[[^\]]*: \d/);
-      expect(q.cite).toMatch(/^(ابن القيم، التبيان ص|ابن كثير، التفسير|السعدي، التفسير ص) [٠-٩/]+$/);
-      expect(q.url).toMatch(/^https:\/\/(quranpedia\.app\/books\/b18337\/s\d+\.html#p\d+|shamela\.ws\/book\/8473\/\d+|quranpedia\.net\/book\/3\/1\/\d+)$/);
+      expect(q.cite).toMatch(/^(ابن القيم، التبيان ص|ابن كثير، التفسير|السعدي، التفسير ص|النحاس، إعراب القرآن) [٠-٩/]+$/);
+      expect(q.url).toMatch(/^https:\/\/(quranpedia\.app\/books\/b18337\/s\d+\.html#p\d+|shamela\.ws\/book\/8473\/\d+|quranpedia\.net\/book\/(3\/1|318\/2)\/\d+)$/);
     }
   });
 
