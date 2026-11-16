@@ -6,7 +6,7 @@ import Sheet from './Sheet';
 import ExternalLink from './ExternalLink';
 import { VOICE_NAME, voiceColor } from './Iltifat';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_GAPS, ITQAN_NOTES, ITQAN_OPENING, ITQAN_QUOTES, ITQAN_SOURCE, OPENINGS_HELP } from '@shared/quran/openingKinds';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
 
@@ -57,7 +57,13 @@ export default function HelpSheet({ topic, note, onClose, palette }: { topic: He
           {ORDER_HELP.map((text, i) => <Text key={i} style={i === ORDER_HELP.length - 1 ? [paragraph, { color: palette.muted }] : paragraph}>{text}</Text>)}
           {Object.values(BOOKS).map(book => <ExternalLink key={book.shamela} url={`https://shamela.ws/book/${book.shamela}`} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{book.title}</ExternalLink>)}
         </> : topic === 'openings' ? <>
-          {OPENINGS_HELP.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
+          <Text style={paragraph}>{OPENINGS_HELP[0]}</Text>
+          {[ITQAN_OPENING, ...ITQAN_QUOTES, ...ITQAN_NOTES].map(quote => <View key={quote.text} style={{ gap: 2 }}>
+            <Text style={paragraph}>«{quote.text}»</Text>
+            <ExternalLink url={quote.url} color={palette.muted} size={13} style={{ color: palette.muted, textAlign: 'right' }}>{quote.cite}</ExternalLink>
+          </View>)}
+          <Text style={paragraph}>{ITQAN_GAPS}</Text>
+          {OPENINGS_HELP.slice(1).map(text => <Text key={text} style={paragraph}>{text}</Text>)}
           <Text style={[paragraph, { fontWeight: '700' }]}>الشرط وجوابه</Text>
           {CONDITION_NOTES.map(text => <Text key={text} style={paragraph}>{text}</Text>)}
           {[ITQAN_SOURCE, ...CONDITION_SOURCES].map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={paragraph.fontSize} style={[paragraph, { color: palette.muted, textDecorationLine: 'underline' }]}>{source.title}</ExternalLink>)}

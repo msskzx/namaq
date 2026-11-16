@@ -88,7 +88,7 @@ export const SOURCES: Source[] = [
   {
     id: 'itqan', group: 'books',
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
-    link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
   },
   {
     id: 'burhan-zarkashi', group: 'books',

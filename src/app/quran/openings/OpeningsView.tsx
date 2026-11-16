@@ -8,7 +8,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_SOURCE, OPENINGS_HELP, OPENING_KINDS, inKind, kindLabel, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_GAPS, ITQAN_NOTES, ITQAN_OPENING, ITQAN_QUOTES, ITQAN_SOURCE, OPENINGS_HELP, OPENING_KINDS, inKind, kindLabel, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -87,7 +87,10 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
   return (
     <>
       <SettingsHelp label="ما أنواع الافتتاح؟">
-        {OPENINGS_HELP.map(p => <p key={p}>{p}</p>)}
+        <p>{OPENINGS_HELP[0]}</p>
+        {[ITQAN_OPENING, ...ITQAN_QUOTES, ...ITQAN_NOTES].map(q => <p key={q.text}>«{q.text}» <ExternalLink className="whitespace-nowrap text-sm text-[var(--home-muted)]" href={q.url}>{q.cite}</ExternalLink></p>)}
+        <p>{ITQAN_GAPS}</p>
+        {OPENINGS_HELP.slice(1).map(p => <p key={p}>{p}</p>)}
         <p className="font-semibold">الشرط وجوابه</p>
         {CONDITION_NOTES.map(p => <p key={p}>{p}</p>)}
         <ul className="text-sm text-[var(--home-muted)]">
