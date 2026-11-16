@@ -12,7 +12,7 @@ evidence: "Namaq PR #514, source commit 0daf6adeb6908032a3212987293853c73661aa0b
 implication: "Race tests should leave router.replace pending while another input changes, including a deletion followed by an addition."
 date: "2026-11-04"
 topics: ["testing","ui-state"]
-buildsOn: ["distillate/0005-a-mock-router-too-fast-to-show-a-race"]
+buildsOn: ["distillate/R0005-a-mock-router-too-fast-to-show-a-race"]
 ---
 
 Picking a second surah before the first route finished could lose the first
