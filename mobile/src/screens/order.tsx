@@ -81,7 +81,7 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
 }
 
 /**
- * The website's /quran/order on the phone (owner, 2026-11-13): from Fussilat to al-Nas, each surah's opening ayat and aim,
+ * The website's /quran/order on the phone (owner, 2026-11-13): from al-Fatiha to al-Nas, each surah's opening ayat and aim,
  * and between two surahs what joins them, all quoted from the books with their pages. A juz chip narrows the list.
  * docs/plans/quran-order-sources.md
  */

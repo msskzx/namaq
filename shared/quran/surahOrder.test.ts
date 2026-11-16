@@ -1,14 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/surahOrder.json';
 import { num } from './arabicNumber';
-import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, orderInJuz, orderSurahs } from './surahOrder';
+import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, orderInJuz, orderSurahs } from './surahOrder';
 
 const surahs = orderSurahs(data, num);
 
 describe('surah order data', () => {
-  it('gives every surah from Fussilat to al-Nas an aim, and each after Fussilat a link', () => {
-    expect(Object.keys(ORDER_AIMS).map(Number)).toEqual(Array.from({ length: 74 }, (_, k) => 41 + k));
-    expect(Object.keys(ORDER_LINKS).map(Number)).toEqual(Array.from({ length: 73 }, (_, k) => 42 + k));
+  it('gives every surah from al-Fatiha to al-Nas an aim, and each after al-Fatiha a link', () => {
+    expect(Object.keys(ORDER_AIMS).map(Number)).toEqual(Array.from({ length: 114 }, (_, k) => 1 + k));
+    expect(Object.keys(ORDER_LINKS).map(Number)).toEqual(Array.from({ length: 113 }, (_, k) => 2 + k));
+  });
+
+  it('covers every juz and keeps the Ghafir–Fussilat boundary connected', () => {
+    expect(ORDER_JUZ).toEqual(Array.from({ length: 30 }, (_, i) => i + 1));
+    expect(orderInJuz(surahs, 1).map(s => s.surah)).toEqual([1, 2]);
+    expect(surahs.find(s => s.surah === 41)!.link).toMatchObject({ src: { book: 'tanasuq', page: 130, sh: 131 } });
+    expect(surahs[0].link).toBeUndefined();
   });
 
   it('cites a page of a known book for every quote, with a volume only for the books in volumes', () => {
@@ -34,8 +41,8 @@ describe('surah order data', () => {
 
 describe('orderSurahs', () => {
   it('opens each surah with whole ayat from the first', () => {
-    expect(surahs).toHaveLength(74);
-    expect(surahs[0]).toMatchObject({ surah: 41, name: 'فصلت', juz: [24, 25] });
+    expect(surahs).toHaveLength(114);
+    expect(surahs[0]).toMatchObject({ surah: 1, name: 'الفاتحة', juz: [1, 1] });
     expect(surahs.at(-1)!.opening.map(a => a.ayah)).toEqual([1, 2, 3, 4]);
     for (const s of surahs) expect(s.opening[0].ayah).toBe(1);
   });
