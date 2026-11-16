@@ -91,16 +91,20 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
   await expect(page.getByText('لم يتكلم العكبري على هذه الكلمة ولا على آيتها.')).toBeVisible();
 });
 
-test('an ayah\'s balagha shows al-Zamakhshari\'s passage once al-Kashshaf is downloaded, his device words lit', async ({ page }) => {
+test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s passage once al-Kashshaf is downloaded', async ({ page }) => {
   const text = 'قوله ﴿الْحَمْدُ لِلَّهِ﴾ كلام. وفيه استعارة في ﴿الْحَمْدُ﴾. آخر.';
   await page.route('https://namaq.vercel.app/api/books/kashshaf', route => route.fulfill({
     json: { source: { version: '2026-08-10', book: 346, from: '' }, entries: [[1, 1, 7, 1, 8, 9, text, [[text.indexOf('وفيه'), text.indexOf('آخر') - 1, 0, 2, 0, 0]]]] },
   }));
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'البلاغة في الكشاف' }).click();
+  await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
+  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('«الصِّفَةُ»', { exact: false })).toBeVisible();
+  await expect(page.getByText('الإتقان للسيوطي ٣/٢٣٣')).toBeVisible();
+  await page.getByRole('tab', { name: 'الكشاف للزمخشري' }).click();
   await page.getByRole('button', { name: 'نزّل الكشاف عن حقائق التنزيل' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
   await expect(page.getByText('«الاستعارة»', { exact: false })).toBeVisible();
   await expect(page.getByText('الكشاف للزمخشري ١/٨–٩')).toBeVisible();
   await expect.poll(() => stored<string[]>(page, 'books-saved')).toEqual(['kashshaf']);

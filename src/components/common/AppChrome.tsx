@@ -23,7 +23,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [railSlot, setRailSlot] = useState<HTMLDivElement | null>(null);
   const pathname = usePathname() ?? '/';
   // The app's own screens wear the app's palette (utilities and search are app tabs too, owner 2026-11-15).
-  const featureTheme = pathname === '/' || pathname === '/quran' || pathname === '/library' || pathname === '/utilities' || pathname === '/search' || /^\/quran\/(read|branches|compare|prophets|tajwid|oaths|iltifat|openings|order)(?:\/|$)/.test(pathname) || /^\/quizzes(?:\/|$)/.test(pathname);
+  const featureTheme = pathname === '/' || pathname === '/quran' || pathname === '/library' || pathname === '/utilities' || pathname === '/search' || /^\/quran\/(read|branches|compare|prophets|tajwid|oaths|balagha|openings|order)(?:\/|$)/.test(pathname) || /^\/quizzes(?:\/|$)/.test(pathname);
   const partyRoom = /^\/quizzes\/party\/[^/]+/.test(pathname);
   const tabs = !footerHidden && !partyRoom;
   // The root layout renders <html data-tabbar> so the first paint already leaves room for the tabs.
