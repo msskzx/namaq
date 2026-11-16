@@ -2,7 +2,6 @@
 
 // docs/plans/quran-repetition-merge.md
 import React, { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
@@ -15,8 +14,7 @@ import { mushafText } from '@shared/quran/mushafText';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
-export const SEARCH = 'w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100';
-export const LINK = 'text-amber-700 dark:text-amber-300 underline';
+export const SEARCH = 'w-full rounded border border-[var(--home-rule)] bg-[var(--home-paper)] py-2 ps-9 pe-3 text-base text-[var(--home-ink)]';
 const BAR = 'bg-[#50808e]';
 
 type Ranked = { word: string; count: number; root: string; rank: number; key: string };
@@ -47,10 +45,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
 
   return (
     <section className={PANEL}>
-      <h2 className="text-2xl mb-1">عدد مرات ورود كل كلمة</h2>
-      <p className={`${NOTE} mb-3`}>
-        تُعدّ الكلمة بمدخلها المعجمي من المدوّنة القرآنية العربية، فـ«والله» و«لله» تحت «ٱللَّه». <Link href="/attributions#quranic-arabic-corpus" className={LINK}>طريقة العدّ ومصدره في صفحة العزو</Link>.
-      </p>
+      <h2 className="text-2xl mb-3">عدد مرات ورود كل كلمة</h2>
       <div className="flex flex-wrap gap-2 mb-3">
         <Button size="sm" onClick={() => choose([])} disabled={chosen.length === 0}>
           <FontAwesomeIcon icon={faXmark} />
@@ -63,18 +58,18 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
       </div>
       <label className="relative block">
         <span className="sr-only">أضف كلمة إلى الرسم</span>
-        <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
         <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="أضف كلمة إلى الرسم"
           onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) add(suggestions[0].rank); }} className={SEARCH} />
       </label>
       {needle && (
-        <ul aria-label="كلمات مقترحة" className="mt-1 flex flex-col rounded border border-gray-200 dark:border-white/10">
+        <ul aria-label="كلمات مقترحة" className="mt-1 flex flex-col rounded border border-[var(--home-rule)]">
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (
             <li key={r.rank}>
-              <button type="button" onClick={() => add(r.rank)} className="w-full flex items-baseline gap-2 px-2 py-1 text-start hover:bg-amber-100 dark:hover:bg-white/10">
+              <button type="button" onClick={() => add(r.rank)} className="w-full flex items-baseline gap-2 px-2 py-1 text-start hover:bg-[var(--home-paper-deep)]">
                 <span className="font-quran text-lg">{mushafText(r.word)}</span>
                 <span className={`${NOTE} flex-1`}>{r.root}</span>
-                <span className="text-amber-700 dark:text-amber-300">{num(r.count)}</span>
+                <span className="text-[var(--home-accent)]">{num(r.count)}</span>
               </button>
             </li>
           ))}
@@ -87,7 +82,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
               <button type="button" aria-pressed={open === b.rank} aria-label={`مواضع «${b.word}»`} onClick={() => setOpen(open === b.rank ? null : b.rank)}
                 className={`font-quran text-lg truncate text-start underline-offset-4 hover:underline ${open === b.rank ? 'text-[var(--home-accent)] underline' : ''}`}>{mushafText(b.word)}</button>
               <span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
+              <span className="text-sm text-[var(--home-muted)]">{num(b.count)}</span>
               <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => choose(chosen.filter(rank => rank !== b.rank))}>
                 <FontAwesomeIcon icon={faXmark} />
               </Button>

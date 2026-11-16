@@ -244,3 +244,14 @@ test('the words page finds a word and lists its places', async ({ page }) => {
   await word.click();
   await expect(page.getByRole('button', { name: /^افتح .* في المصحف$/ }).first()).toBeVisible();
 });
+
+test('the words page shows its source and how it counts behind the books icon', async ({ page }) => {
+  await open(page, '/words');
+  await expect(page.getByRole('button', { name: 'مساعدة' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'المصادر' }).click();
+  await expect(page.getByText('المدوّنة القرآنية العربية', { exact: true })).toBeVisible();
+  await expect(page.getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toBeVisible();
+  await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
+  await page.getByRole('link', { name: 'المصادر والتراخيص' }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://namaq.vercel.app/attributions#quranic-arabic-corpus');
+});
