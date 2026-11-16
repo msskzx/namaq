@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { ChevronDown, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { blend } from '@shared/quran/compareCardLook';
 import { Text } from '@/components/Text';
 import ExternalLink from '@/components/ExternalLink';
@@ -73,7 +73,7 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
       <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
-        <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
+        {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
         {card.refs && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
         {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>

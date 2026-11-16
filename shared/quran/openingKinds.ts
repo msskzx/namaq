@@ -133,6 +133,9 @@ export const OPENING_CARDS: CardDef[] = [
 export const kindOf = (surah: number) => OPENING_KINDS.find(kind => kind.surahs.includes(surah))!.id;
 
 /** A kind's cards: its own, and a card with a part of that kind (الزمر under «الخبر»). */
+/** A card that is its kind's only card: the kind heading above already names it, so the page shows no card title (the share image keeps it). */
+export const soleCard = (card: { kind: OpeningKindId }) => OPENING_CARDS.filter(def => def.kind === card.kind).length === 1;
+
 export const inKind = (card: OpeningCard, kind: OpeningKindId) => card.kind === kind || card.rows.some(row => kindOf(row.surah) === kind);
 
 /** The opening a card shows: the first ayah (the Fatiha's after the basmala), and the next one too when the first has two words or fewer. */

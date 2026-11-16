@@ -8,7 +8,7 @@ import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -45,7 +45,9 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
   return (
     <div data-share-card className="flex flex-col gap-1">
       <article id={card.id} data-share-image data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
-        <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>
+        {soleCard(card)
+          ? <h3 data-share-only hidden className="text-xl text-[var(--home-accent)]">{card.title}</h3>
+          : <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>}
         {card.refs && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
         {card.rows.map((row, r) => (
           <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>

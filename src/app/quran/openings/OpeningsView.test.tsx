@@ -48,6 +48,14 @@ describe('the surah openings page', () => {
     expect(reference.textContent).toMatch(/القسم في خمس عشرة سورة/);
   });
 
+  it('names a card only where its kind holds more than one, keeping the name for the shared picture', () => {
+    render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
+    const title = (id: string) => document.querySelector(`[data-card="${id}"] h3`)!;
+    expect(title('condition').hasAttribute('hidden')).toBe(true);
+    expect(title('condition').hasAttribute('data-share-only')).toBe(true);
+    expect(title('nabi').hasAttribute('hidden')).toBe(false);
+  });
+
   it('shares the card itself, its buttons outside the picture', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     const card = document.getElementById('hamd')!;
