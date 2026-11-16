@@ -20,10 +20,10 @@ const adder = () => within(section()).getByPlaceholderText('أضف كلمة إل
 const suggestions = () => within(section()).queryByRole('list', { name: 'كلمات مقترحة' });
 
 describe('WordCounts', () => {
-  it('shows only the chart, with a link to how the corpus counts', () => {
+  it('shows only the chart; the source sits behind the top bar\'s books icon', () => {
     show();
     expect(within(section()).queryByRole('list', { name: 'جدول الكلمات' })).toBeNull();
-    expect(within(section()).getByRole('link', { name: 'طريقة العدّ ومصدره في صفحة العزو' }).getAttribute('href')).toBe('/attributions#quranic-arabic-corpus');
+    expect(within(section()).queryByRole('link')).toBeNull();
   });
 });
 

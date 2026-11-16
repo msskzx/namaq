@@ -41,6 +41,8 @@ test.describe('pages without the database', () => {
     const word = page.getByRole('button', { name: 'مواضع «ٱللَّه»' });
     await word.click();
     await expect(word).toHaveAttribute('aria-pressed', 'true');
+    await page.getByRole('button', { name: 'المصادر' }).click();
+    await expect(page.getByRole('dialog', { name: 'المصدر' }).getByRole('link', { name: 'المصادر والتراخيص' })).toHaveAttribute('href', '/attributions#quranic-arabic-corpus');
     await noErrorPage(page);
   });
 });

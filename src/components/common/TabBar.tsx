@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CircleHelp, Compass, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Compass, Library, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -105,7 +105,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
   );
 }
 
-/** The page's help (its rules and colour legend), opened from the question mark in the top bar, as in the app. */
+/** The page's help (its rules and colour legend), opened from the question mark in the top bar, or its sources from the books (the words page), as in the app. */
 function HelpSheet({ id, onClose, help }: { id: string; onClose: () => void; help: { label: string; content: React.ReactNode } }) {
   const { language } = useLanguage();
   const sheet = useRef<HTMLDivElement>(null);
@@ -127,7 +127,7 @@ function HelpSheet({ id, onClose, help }: { id: string; onClose: () => void; hel
   );
 }
 
-/** A question mark that opens the page's help; shows only on pages that have one. */
+/** A question mark that opens the page's help, or books for a page's sources; shows only on pages that have one. */
 export function HelpButton({ className }: { className: string }) {
   const help = usePageHelp();
   const { language } = useLanguage();
@@ -137,11 +137,12 @@ export function HelpButton({ className }: { className: string }) {
   useEffect(() => setOpen(false), [path]);
   const close = useCallback(() => setOpen(false), []);
   if (!help) return null;
-  const label = language === 'ar' ? 'مساعدة' : 'Help';
+  const label = help.refs ? (language === 'ar' ? 'المصادر' : 'Sources') : (language === 'ar' ? 'مساعدة' : 'Help');
+  const Icon = help.refs ? Library : CircleHelp;
   return (
     <>
       <button type="button" className={className} aria-label={label} title={label} aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => setOpen(value => !value)}>
-        <CircleHelp size={22} strokeWidth={1.75} aria-hidden />
+        <Icon size={22} strokeWidth={1.75} aria-hidden />
       </button>
       {/* On the body: the see-through top bar's blur would otherwise hold a fixed sheet inside the bar. */}
       {open && createPortal(<HelpSheet id={id} onClose={close} help={help} />, document.body)}

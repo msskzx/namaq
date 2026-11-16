@@ -7,15 +7,18 @@ import WordPlaces, { PLACES_STEP, placesByAyah } from './WordPlaces';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran/words', useSearchParams: () => new URLSearchParams() }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
-vi.mock('./places.json', () => ({ default: { places: { 'أَرْض': Array.from({ length: PLACES_STEP + 3 }, (_, i) => `2:${i + 1}:2`).join(' ') + ' 2:3:4', 'سَمَآء': '1:1:1' } } }));
+vi.mock('./places.json', () => ({ default: { places: { 'أَرْض': Array.from({ length: PLACES_STEP + 3 }, (_, i) => `2:${i + 1}:2`).join(' ') + ' 2:3:4', 'سَمَآء': '1:1:1', 'نَهَار': '2:1:1 2:2:1 2:2:3 3:5:1' } } }));
 vi.mock('@/lib/quran/quranText', () => ({
-  loadQuranText: async () => Array.from({ length: PLACES_STEP + 3 }, (_, i) => ({ key: `2:${i + 1}`, page: 2 + i, words: ['أ', 'الارض', 'ب', 'ارضا'] })),
+  loadQuranText: async () => [
+    ...Array.from({ length: PLACES_STEP + 3 }, (_, i) => ({ key: `2:${i + 1}`, page: 2 + i, words: ['أ', 'الارض', 'ب', 'ارضا'] })),
+    { key: '3:5', page: 51, words: ['النهار'] },
+  ],
 }));
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 const show = (word = 'أَرْض') => {
-  vi.stubGlobal('fetch', async () => ({ ok: true, json: async () => [{ number: 2, name: 'البقرة' }] }));
+  vi.stubGlobal('fetch', async () => ({ ok: true, json: async () => [{ number: 2, name: 'البقرة' }, { number: 3, name: 'آل عمران' }] }));
   render(<SWRConfig value={{ provider: () => new Map() }}><WordPlaces word={word} count={30} /></SWRConfig>);
 };
 
@@ -42,5 +45,21 @@ describe('WordPlaces', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'المزيد (٣)' }));
     expect(within(screen.getByRole('list', { name: 'مواضع «أَرْض»' })).getAllByRole('listitem')).toHaveLength(PLACES_STEP + 3);
     expect(screen.queryByRole('button', { name: /المزيد/ })).toBeNull();
+  });
+
+  it('picks a surah on the strip, says how often the word comes there and brings its first ayah into view', async () => {
+    const scrolled: string[] = [];
+    Element.prototype.scrollIntoView = function (this: Element) { scrolled.push(this.getAttribute('data-key') ?? ''); };
+    show('نَهَار');
+    const strip = await screen.findByRole('slider', { name: 'عدد مرات ورودها في كل سورة' });
+    fireEvent.keyDown(strip, { key: 'ArrowLeft' });
+    expect(strip.getAttribute('aria-valuetext')).toBe('البقرة');
+    expect(await screen.findByText('، منها ٣ في البقرة')).toBeTruthy();
+    fireEvent.keyDown(strip, { key: 'ArrowLeft' });
+    expect(strip.getAttribute('aria-valuetext')).toBe('آل عمران');
+    expect(screen.getByText('، منها ١ في آل عمران')).toBeTruthy();
+    expect(scrolled).toEqual(['2:1', '3:5']);
+    fireEvent.keyDown(strip, { key: 'ArrowLeft' });
+    expect(strip.getAttribute('aria-valuetext')).toBe('آل عمران');
   });
 });

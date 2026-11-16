@@ -321,3 +321,4 @@ export const SOURCES: Source[] = [
 ];
 
 export const sourcesIn = (group: SourceGroup) => SOURCES.filter(source => source.group === group);
+export const sourceById = (id: string) => SOURCES.find(source => source.id === id);

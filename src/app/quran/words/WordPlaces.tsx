@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { BookOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -8,7 +8,10 @@ import LoadingDots from '@/components/common/LoadingDots';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
 import { num } from '@shared/quran/arabicNumber';
 import { loadQuranText } from '@/lib/quran/quranText';
+import surahRows from '@shared/data/quran/surahs.json';
+import { countsBySurah } from '@shared/quran/words';
 import { NOTE } from '../panel';
+import SurahStrip from './SurahStrip';
 
 export const PLACES_STEP = 20;
 
@@ -26,7 +29,8 @@ export function placesByAyah(places: string): Place[] {
 }
 
 const loadPlaces = () => import('./places.json').then(module => module.default.places as Record<string, string>);
-const loadNames = () => fetch('/api/quran/surahs').then(res => (res.ok ? res.json() : [])).then((rows: { number: number; name: string }[]) => new Map(rows.map(row => [row.number, row.name])));
+const names = new Map(surahRows.map(row => [row.number, row.name]));
+const surahName = (number: number) => names.get(number) ?? `سورة ${num(number)}`;
 
 export default function WordPlaces({ word, count }: { word: string; count: number }) {
   const [shown, setShown] = useState(PLACES_STEP);
@@ -38,7 +42,23 @@ export default function WordPlaces({ word, count }: { word: string; count: numbe
       return ayah ? [{ ...place, ayah }] : [];
     });
   }, { revalidateOnFocus: false });
-  const { data: names } = useSWR('surah-names', loadNames, { revalidateOnFocus: false });
+  const counts = useMemo(() => countsBySurah(data ?? []), [data]);
+  const [chosen, setChosen] = useState<number | null>(null);
+  const list = useRef<HTMLOListElement>(null);
+  const [jump, setJump] = useState<string | null>(null);
+  // Picking a bar brings that surah's first ayah into view, loading more ayat first if it is further down.
+  useEffect(() => {
+    if (!jump) return;
+    const item = list.current?.querySelector<HTMLElement>(`[data-key="${jump}"]`);
+    if (item) { item.scrollIntoView({ block: 'start' }); setJump(null); }
+  }, [jump, shown]);
+  const pickSurah = (picked: number) => {
+    setChosen(picked);
+    const first = (data ?? []).findIndex(place => place.key.startsWith(`${picked + 1}:`));
+    if (first < 0) return;
+    if (first >= shown) setShown(first + PLACES_STEP);
+    setJump(data![first].key);
+  };
 
   const heading = <h3 className="text-xl">{`مواضع «${word}»`}</h3>;
   if (error) return <div className="mt-4">{heading}<p className={NOTE}>تعذّر تحميل المواضع.</p></div>;
@@ -47,7 +67,7 @@ export default function WordPlaces({ word, count }: { word: string; count: numbe
   const pages = data.slice(0, shown).map(({ key, words, ayah }): SpreadPage => {
     const [surah, number] = key.split(':').map(Number);
     return {
-      title: `${names?.get(surah) ?? `سورة ${num(surah)}`} ${num(number)}`,
+      title: `${surahName(surah)} ${num(number)}`,
       rows: [[{ number, words: ayah.words, marks: Object.fromEntries(words.map(index => [index, { kind: 'exact' }])) }]],
       action: <Button size="icon" href={`/quran/read/${ayah.page}?a=${key}`} aria-label="قراءة الآية" title="قراءة الآية"><BookOpen aria-hidden /></Button>,
     };
@@ -57,10 +77,14 @@ export default function WordPlaces({ word, count }: { word: string; count: numbe
     <div className="mt-4 flex flex-col gap-3">
       <div>
         {heading}
-        <p className={NOTE}>{`${num(count)} مرة في ${num(data.length)} آية`}</p>
+        <p className={NOTE}>
+          {`${num(count)} مرة في ${num(data.length)} آية`}
+          {chosen !== null && <span className="text-[var(--home-accent)]">{`، منها ${num(counts[chosen])} في ${surahName(chosen + 1)}`}</span>}
+        </p>
       </div>
-      <ol aria-label={`مواضع «${word}»`} className="flex flex-col gap-3">
-        {pages.map((page, i) => <li key={data[i].key}><PageSpread pages={[page]} compact single /></li>)}
+      {data.length > 0 && <SurahStrip counts={counts} picked={chosen} onPick={pickSurah} name={surahName} />}
+      <ol ref={list} aria-label={`مواضع «${word}»`} className="flex flex-col gap-3">
+        {pages.map((page, i) => <li key={data[i].key} data-key={data[i].key} className="scroll-mt-20"><PageSpread pages={[page]} compact single /></li>)}
       </ol>
       {shown < data.length && (
         <Button className="self-center" onClick={() => setShown(shown + PLACES_STEP)}>

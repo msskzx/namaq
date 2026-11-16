@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, LayoutGrid, Settings, CircleHelp, Search } from 'lucide-react-native';
+import { ChevronRight, LayoutGrid, Library, Settings, CircleHelp, Search } from 'lucide-react-native';
 import Logo from './Logo';
 import SettingsSheet from './SettingsSheet';
 import { usePalette } from '@/lib/theme';
@@ -23,7 +23,7 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * (owner, 2026-11-15: a chevron reads as "back" in a right-to-left app). With back (the search) a back arrow takes it instead.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
-export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, search }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, search }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
   /** A grid in the logo's place that opens the Quran hub (the Quran's tools). */
   hub?: boolean;
   /** The one search across the app, beside the gear (home, owner 2026-11-13). */
@@ -31,7 +31,9 @@ export default function TopBar({ children, settings: withSettings = false, hideO
   /** A back arrow in the logo's place. */
   back?: () => void;
   /** The page's help (rules and colour legend), in the gear's place at the bar's far end. */
-  help?: () => void }) {
+  help?: () => void;
+  /** The page's sources (with how it counts), as books in the help's place (the words page, owner 2026-11-16). */
+  refs?: () => void }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
@@ -58,7 +60,11 @@ export default function TopBar({ children, settings: withSettings = false, hideO
         {center
           ? <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>
           : <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
-        {help && center && <View style={{ flex: 1 }} />}
+        {(help || refs) && center && <View style={{ flex: 1 }} />}
+        {refs && <Pressable onPress={refs} accessibilityRole="button" accessibilityLabel="المصادر" hitSlop={4}
+          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
+          <Library size={22} color={palette.muted} />
+        </Pressable>}
         {help && <Pressable onPress={help} accessibilityRole="button" accessibilityLabel="مساعدة" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
           <CircleHelp size={22} color={palette.muted} />
