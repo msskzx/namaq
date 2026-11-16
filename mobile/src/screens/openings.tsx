@@ -74,7 +74,7 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
     <View style={{ marginBottom: 12, gap: 2 }}>
       <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
         {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
-        {card.refs && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
+        {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
         {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
@@ -127,11 +127,13 @@ export default function OpeningsScreen() {
         </View>
         {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
           const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
+          const sole = cards.find(card => card.kind === k.id && soleCard(card));
           return (
             <View key={k.id}>
               <View style={{ gap: 4, paddingTop: 8, marginBottom: 10 }}>
                 <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
+                {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
               </View>
               {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
             </View>

@@ -48,7 +48,7 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
         {soleCard(card)
           ? <h3 data-share-only hidden className="text-xl text-[var(--home-accent)]">{card.title}</h3>
           : <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>}
-        {card.refs && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
+        {card.refs && !soleCard(card) && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
         {card.rows.map((row, r) => (
           <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>
             {partAt(card, row.surah) && <p data-part className="pb-1 text-sm font-semibold">{partAt(card, row.surah)}</p>}
@@ -114,11 +114,13 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
       <p className="text-sm text-[var(--home-muted)]">{OPENINGS_LEGEND}</p>
       {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
         const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
+        const sole = cards.find(card => card.kind === k.id && soleCard(card));
         return (
           <section key={k.id} aria-label={k.label} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1 pt-2">
               <h2 className="text-2xl font-bold">{k.label}</h2>
               <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} />
+              {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} />}
             </div>
             {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
           </section>

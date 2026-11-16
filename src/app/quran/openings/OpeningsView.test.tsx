@@ -54,6 +54,8 @@ describe('the surah openings page', () => {
     expect(title('condition').hasAttribute('hidden')).toBe(true);
     expect(title('condition').hasAttribute('data-share-only')).toBe(true);
     expect(title('nabi').hasAttribute('hidden')).toBe(false);
+    expect(document.querySelector('[data-card="condition"] details')).toBeNull();
+    expect(within(screen.getByRole('region', { name: 'الشرط' })).getAllByText(/تناسق الدرر/).length).toBeGreaterThan(0);
   });
 
   it('shares the card itself, its buttons outside the picture', () => {
