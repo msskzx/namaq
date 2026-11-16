@@ -9,7 +9,8 @@ export type PhraseOccurrence = { key: string; start: number; end: number };
 export type PhraseGroup = { id: string; text: string; occurrences: PhraseOccurrence[] };
 export type TreeGroup = PhraseGroup & { textEn?: string; family?: true; aliases?: string[]; subtrees?: string[] };
 
-const letters = (word: string) => normalizeWord(word.normalize('NFC')).replace(/[ؤئء]/g, 'ا');
+/** A word's letters as the branches trees group words: tashkeel dropped, hamza seats made one. */
+export const letters = (word: string) => normalizeWord(word.normalize('NFC')).replace(/[ؤئء]/g, 'ا');
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const members = (occurrences: PhraseOccurrence[]) => [...new Set(occurrences.map(o => o.key))];
 const phraseId = (words: string[]) => words.map(letters).join(' ');
@@ -147,7 +148,8 @@ export function buildTreeGroups(ayat: BranchAyah[]): TreeGroup[] {
   return [...phrases.filter(group => retained.has(group)).map(group => aliases.has(group) ? { ...group, aliases: [...new Set(aliases.get(group))] } : group), ...letterTrees, ...families];
 }
 
-function sharedDisplay(forms: string[]) {
+/** One spelling for a word its ayat write differently: the marks they all share. */
+export function sharedDisplay(forms: string[]) {
   if (forms.every(form => form === forms[0])) return forms[0];
   if (forms.every(isEnd)) return '۝';
   const originals = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);

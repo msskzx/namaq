@@ -193,7 +193,8 @@ describe('PairCompare', () => {
     expect(screen.getAllByRole('separator').map(node => node.getAttribute('aria-label'))).toEqual(['الآيات ٥١–٥٢', 'الآيات ٩٢']);
     unmount();
     render(<PairCompare view="tree" a={2} b={7} cards={[calf]} pairs={pairs} names={names} />);
-    expect(screen.getAllByRole('separator', { name: 'آيات محذوفة' })).toHaveLength(1);
+    // No mark the mushaf does not write: the gap shows in the ayah signs and the box's names.
+    expect(screen.queryByText('⋯')).toBeNull();
     // The box names each unbroken stretch of its ayat, not one range over the gap.
     expect([...document.querySelectorAll('[data-ref]')].map(ref => ref.textContent)).toContain('البقرة ٥١–٥٢·البقرة ٩٢');
   });

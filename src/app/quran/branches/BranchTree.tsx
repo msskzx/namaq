@@ -14,10 +14,9 @@ import { num } from '@shared/quran/arabicNumber';
 import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
-import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
+import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, Through, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { likenessOf, treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
 import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
-import { SKIP } from '@shared/quran/braid';
 import { MARK_CLASS } from '@/lib/markMode';
 import { anchorOf, AroundStatus, NeighbourBox, SurroundToggle, targetStyle, useCardAround, useRotated, useSurrounding, type Around } from './Surroundings';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
@@ -124,7 +123,6 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false, tones }: { 
       return likenessOf(match, index);
     });
     const kind = tones ? tones[i] : shared !== '۝' && !shared.startsWith('﴿') && matches.length && matches.every(Boolean) ? matches.includes('root') ? 'root' : matches.includes('written') ? 'written' : 'exact' : undefined;
-    if (shared === SKIP) return <span role="separator" aria-label={ar ? 'آيات محذوفة' : 'Ayat left out'} className="text-[var(--home-muted)]">{SKIP}</span>;
     if (kind === 'related') return <mark data-match="related" className="bg-transparent text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]" title={ar ? LIKENESS_TITLE.root.ar : LIKENESS_TITLE.root.en}><MushafText>{shared}</MushafText></mark>;
     const moved = !!written.differs?.includes(at + i - written.offset);
     const shown = forms[i][0].word.replace(/^﴿(.+)﴾$/, shared.startsWith('﴿') ? '$&' : '$1');
@@ -160,6 +158,9 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
   // A compare tree that opens apart has no box before its first boxes, so no line into them; each opens with its own ayah before.
   const bare = root && node.words.length === 0 && node.ayat.length === 0;
   const own = renderNode && !root ? renderNode(node, indices.get(node)!, tags, path) : undefined;
+  // A box with no words would be an empty box: where one side of a compare tree says nothing between two common stretches, its
+  // line runs straight on instead (owner, 2026-11-16: never an empty node, a longer line is fine).
+  const through = !root && own === undefined && node.words.length === 0 && node.ayat.length === 0;
   // Every box names its ayat inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16). A compare tree's
   // box names its own runs (`holds`) in place of the ayat it ends.
   const named = node.holds ? node.holds.map(run => run[0]) : node.ayat;
@@ -188,7 +189,8 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
   return (
     <div data-grow={id} className="flex items-center [[data-down]_&]:flex-col">
       {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
-      {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
+      {through && <Through keys={keys(node)} />}
+      {!boundary && !through && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`${node.children.length === 0 ? 'max-w-52 [[data-down]_&]:max-w-44' : 'max-w-48 [[data-down]_&]:max-w-sm'} ${root ? 'text-xl' : 'text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {own !== undefined ? own : <>
           {start}

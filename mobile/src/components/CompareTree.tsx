@@ -32,12 +32,11 @@ export default function CompareTree({ sides, palette, around, empty }: { sides: 
   const near = useMemo(() => around && treeAround(sides, around), [sides, around]);
   const [pinned, setPinned] = useState(() => new Map<string, string[]>());
   const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
-  // A side with no words where the other has some: a dot, or in a story part that side does not tell, its note.
+  // In a story part one side does not tell, that side's note; elsewhere a side with no words is a line running straight on.
   const renderNode = (node: Branch) => {
     const side = owner.get(node);
-    if (side === undefined || node.words.length) return undefined;
-    if (empty && !sides[side].ayat.length) return <Silent note={empty[side]} palette={palette} />;
-    return <View accessibilityLabel="لا كلمات هنا" style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: palette.rule, margin: 8 }} />;
+    if (side === undefined || node.words.length || !empty || sides[side].ayat.length) return undefined;
+    return <Silent note={empty[side]} palette={palette} />;
   };
   // Fitted to the card's width as a branches tree fits its frame (fitCamera): a wider tree is drawn smaller, never cut.
   const [room, setRoom] = useState(0);
@@ -49,7 +48,7 @@ export default function CompareTree({ sides, palette, around, empty }: { sides: 
       {/* Laid out in a wide room, as TreeCard does, so the tree measures its own width rather than the card's. */}
       <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: size ? (room - size.width * scale) / 2 : 0, width: WIDE, alignItems: 'flex-start', direction: 'ltr', transform: [{ scale }], transformOrigin: 'left top' }}>
         <BranchTree presentation={{ tree, prefixes: [], offsets: {}, ayat: [] }} matches={{}} names={surahNames} palette={palette} around={near}
-          onTap={(_keys, light) => light?.()} paths={paths} direction="down" renderNode={renderNode}
+          onTap={(_keys, light) => light?.()} paths={paths} direction="down" renderNode={renderNode} spellings
           onLayout={event => { const { width, height } = event.nativeEvent.layout; setSize(width && height ? { width, height } : null); }} />
       </View>
     </View>

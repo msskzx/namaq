@@ -1,5 +1,5 @@
 import { num } from './arabicNumber';
-import { normalizeWord } from './normalize';
+import { letters, sharedDisplay } from './phraseTrees';
 import { END, type Branch } from './branches';
 import { likeness } from './wordMatch';
 import type { CardAyah, CardMark, CardSide } from './compareCards';
@@ -12,12 +12,12 @@ export type Strand = { kind: 'shared' | 'split'; a: Span; b: Span };
 /** Shared runs shorter than this stay inside a split, so a lone «من» or «الله» does not pinch the two strands together. */
 export const MIN_SHARED = 2;
 
-/** The spelling a braid compares: letters only, a leading و/ف kept so «وكلا» and «فكلا» stay apart. */
-const key = (word: string) => normalizeWord(word);
+/** The spelling a braid compares, as the branches trees group words: letters only, hamza seats made one, a leading و/ف kept so «وكلا» and «فكلا» stay apart. */
+const key = (word: string) => letters(word);
 
 /**
  * Two word lists as a braid: the strands part where the wording differs and rejoin on each common stretch of
- * at least MIN_SHARED words (longest common subsequence by letters, tashkeel ignored). Covers both lists in order.
+ * at least MIN_SHARED words (longest common subsequence by letters, as the branches trees compare words). Covers both lists in order.
  */
 export function braid(a: string[], b: string[], minShared = MIN_SHARED): Strand[] {
   const x = a.map(key);
@@ -50,21 +50,57 @@ export function braid(a: string[], b: string[], minShared = MIN_SHARED): Strand[
   return strands;
 }
 
-/** One word of a braid: its text, its ayah, its mark on the card, the ayah number after it when it ends an ayah, and `skip` (its ayah number) when it opens an ayah that does not follow the last. */
-export type BraidWord = { text: string; ayah: number; mark?: CardMark; end?: number; skip?: number };
+/** One word of a braid: its text, its ayah, its mark on the card, the ayah number after it when it ends an ayah, and `moved` when it
+ * moved out of a common stretch because the two sides write it differently (foldStrands). */
+export type BraidWord = { text: string; ayah: number; mark?: CardMark; end?: number; moved?: true };
 export type BraidStrand = { kind: Strand['kind']; a: BraidWord[]; b: BraidWord[] };
 
-const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap((ayah, k) => ayah.words.map((text, i) => ({
+const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap(ayah => ayah.words.map((text, i) => ({
   text, ayah: ayah.number, mark: ayah.marks?.[i], ...(i === ayah.words.length - 1 ? { end: ayah.number } : {}),
-  ...(i === 0 && k > 0 && ayah.number !== ayat[k - 1].number + 1 ? { skip: ayah.number } : {}),
 })));
 
-/** A card's two sides as a braid: one tree for a pair, parting and rejoining. */
+/** Two words the braid pairs as one but the sides write differently. */
+const apart = (a: BraidWord, b: BraidWord) => likeness([a.text, b.text]) !== 'exact';
+
+/**
+ * The branches trees' rule for a word written differently (docs/adr/0036), on a braid: the first word of a common stretch joins
+ * the parted words before it, and its last word the parted words after it, each side keeping its own writing. A common stretch left
+ * with no words lets the parts around it run on as one. The first stretch keeps at least one word, as a tree's trunk does.
+ */
+export function foldStrands(strands: BraidStrand[]): BraidStrand[] {
+  const out = strands.map(strand => ({ kind: strand.kind, a: [...strand.a], b: [...strand.b] }));
+  const move = (word: BraidWord): BraidWord => ({ ...word, moved: true });
+  for (let i = 0; i < out.length; i++) {
+    const strand = out[i];
+    if (strand.kind !== 'shared') continue;
+    const before = out[i - 1]?.kind === 'split' ? out[i - 1] : undefined;
+    const after = out[i + 1]?.kind === 'split' ? out[i + 1] : undefined;
+    if (before && strand.a.length && apart(strand.a[0], strand.b[0])) {
+      before.a.push(move(strand.a.shift()!));
+      before.b.push(move(strand.b.shift()!));
+    }
+    const keep = before || i > 0 ? 0 : 1;
+    if (after && strand.a.length > keep && apart(strand.a[strand.a.length - 1], strand.b[strand.b.length - 1])) {
+      after.a.unshift(move(strand.a.pop()!));
+      after.b.unshift(move(strand.b.pop()!));
+    }
+    if (strand.a.length) continue;
+    if (before && after) {
+      before.a.push(...after.a);
+      before.b.push(...after.b);
+      out.splice(i, 2);
+    } else out.splice(i, 1);
+    i--;
+  }
+  return out;
+}
+
+/** A card's two sides as a braid: one tree for a pair, parting and rejoining, with words the sides write differently folded into the parts (foldStrands). */
 export function braidOf(sides: [CardSide, CardSide]): BraidStrand[] {
   const a = flat(sides[0].ayat);
   const b = flat(sides[1].ayat);
-  return braid(a.map(word => word.text), b.map(word => word.text))
-    .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) }));
+  return foldStrands(braid(a.map(word => word.text), b.map(word => word.text))
+    .map(strand => ({ kind: strand.kind, a: a.slice(...strand.a), b: b.slice(...strand.b) })));
 }
 
 /** `side`: the side a node belongs to, on a node of one side only. */
@@ -73,28 +109,47 @@ export type CompareTree = { tree: Branch; sides: Map<Branch, 0 | 1> };
 /** The path key of a card side: its surah and first ayah. */
 export const sideKey = (side: CardSide) => `${side.surah}:${side.ayah}`;
 
-/** Where the sides' wording leaves out ayat: the mark before the first word after the gap. */
-export const SKIP = '⋯';
+const sign = (ends: number[]) => (ends.length > 1 ? END : `﴿${num(ends[0])}﴾`);
 
 /**
- * A node's words as the branches tree draws them: an ayah's end sign after its last word (one empty sign where two ayat with
- * different numbers end together), and each word's likeness (on a node both sides share, exact or written differently; on a
- * node of one side, its mark on the card, written where the other side writes the word differently: writtenLinks).
+ * A node of one side as the branches tree draws it: an ayah's end sign after its last word, and each word's likeness (its mark on
+ * the card, written where the other side writes the word differently: writtenLinks, or moved here for that: foldStrands).
  */
-function shown(words: BraidWord[], other: BraidWord[] | undefined, written: Set<string>): Pick<Branch, 'words' | 'tones'> {
+function one(words: BraidWord[], written: Set<string>): Pick<Branch, 'words' | 'tones'> {
   const out: string[] = [];
   const tones: Branch['tones'] = [];
-  words.forEach((word, i) => {
-    const partner = other?.[i];
-    if (word.skip) { out.push(SKIP); tones.push(undefined); }
-    out.push(word.text);
+  for (const word of words) {
     const mark = word.mark;
-    tones.push(partner ? (likeness([partner.text, word.text]) === 'written' ? 'written' : 'exact')
-      : mark?.kind === 'exact' && mark.link && written.has(mark.link) ? 'written' : mark?.kind);
-    const ends = [...new Set([word.end, partner?.end].filter((end): end is number => end !== undefined))];
-    if (ends.length) { out.push(ends.length > 1 ? END : `﴿${num(ends[0])}﴾`); tones.push(undefined); }
-  });
+    out.push(word.text);
+    tones.push(word.moved || (mark?.kind === 'exact' && mark.link && written.has(mark.link)) ? 'written' : mark?.kind);
+    if (word.end !== undefined) { out.push(sign([word.end])); tones.push(undefined); }
+  }
   return { words: out, tones };
+}
+
+/**
+ * A node both sides share, as the branches tree builds one (phraseTrees `grow`): each word in the writing both sides share, with
+ * each side's own writing in `forms` where they differ, so the tree draws it as a braid; an ayah's end sign after its last word
+ * (one empty sign where two ayat with different numbers end together).
+ */
+function both(a: BraidWord[], b: BraidWord[], surahs: [number, number]): Pick<Branch, 'words' | 'tones' | 'forms'> {
+  const out: string[] = [];
+  const tones: Branch['tones'] = [];
+  const forms: [string[], string[]] = [[], []];
+  a.forEach((word, i) => {
+    const partner = b[i];
+    const differ = apart(word, partner);
+    out.push(differ ? sharedDisplay([word.text, partner.text]) : word.text);
+    forms[0].push(word.text);
+    forms[1].push(partner.text);
+    tones.push(differ ? undefined : 'exact');
+    const ends = [...new Set([word.end, partner.end].filter((end): end is number => end !== undefined))];
+    if (ends.length) { out.push(sign(ends)); forms[0].push(sign(ends)); forms[1].push(sign(ends)); tones.push(undefined); }
+  });
+  // Each writing is named by the ayah it is written in (the first word the sides write differently), so a braid's strand names its own ayah.
+  const at = a.findIndex((word, i) => apart(word, b[i]));
+  const keys = at < 0 ? [] : [`${surahs[0]}:${a[at].ayah}`, `${surahs[1]}:${b[at].ayah}`];
+  return { words: out, tones, ...(at >= 0 && keys[0] !== keys[1] ? { forms: { [keys[0]]: forms[0], [keys[1]]: forms[1] } } : {}) };
 }
 
 /** Ayah numbers as runs of consecutive ayat, so a box whose ayat skip part of the surah names each stretch. */
@@ -112,36 +167,42 @@ function runs(surah: number, numbers: number[]): string[][] {
  * A card's two sides as one tree for the branches tree to draw: a node where both say the same words, a child for each side where
  * they part (the first side first), and `rejoin` where they meet again. Every node names the sides through it in `via`, so tapping
  * a box lights its side's path. A card that opens apart has a root with no words. A node of one side names the ayat it holds; a
- * node both share names the ayat that end in it (`holds`), as a branches box names the ayat it ends.
+ * node both share names the ayat that end in it (`holds`), as a branches box names the ayat it ends. Where one side has no words
+ * between two common stretches its child has none either, and the tree draws its line straight through.
  */
 export function compareTree(sides: [CardSide, CardSide], written: Set<string> = new Set()): CompareTree {
   const strands = braidOf(sides);
-  const ends = sides.map(sideKey);
-  const both = [...new Set(ends)];
+  const ends = sides.map(sideKey) as [string, string];
+  const all = [...new Set(ends)];
   const owner = new Map<Branch, 0 | 1>();
-  const one = (words: BraidWord[], side: 0 | 1): Branch => {
-    const branch: Branch = { ...shown(words, undefined, written), ayat: [], children: [], via: [ends[side]], holds: runs(sides[side].surah, words.map(word => word.ayah)) };
+  const part = (words: BraidWord[], side: 0 | 1): Branch => {
+    const branch: Branch = { ...one(words, written), ayat: [], children: [], via: [ends[side]], holds: runs(sides[side].surah, words.map(word => word.ayah)) };
     owner.set(branch, side);
     return branch;
   };
   const common = (a: BraidWord[], b: BraidWord[]): Branch => {
     const ending = [a, b].flatMap((words, side) => runs(sides[side].surah, words.flatMap(word => (word.end === undefined ? [] : [word.end]))));
-    return { ...shown(a, b, written), ayat: [], children: [], via: both, holds: ending };
+    return { ...both(a, b, [sides[0].surah, sides[1].surah]), ayat: [], children: [], via: all, holds: ending };
   };
   // The box each side's last word is in, which the ayah after it hangs from (`ayat`, as on a branches box that ends an ayah).
   const last: (Branch | undefined)[] = [undefined, undefined];
   const note = (node: Branch, a: BraidWord[], b: BraidWord[]) => { if (a.length) last[0] = node; if (b.length) last[1] = node; return node; };
-  const root = strands[0]?.kind === 'shared' ? note(common(strands[0].a, strands[0].b), strands[0].a, strands[0].b) : { words: [], ayat: [], children: [], via: both } as Branch;
+  const root = strands[0]?.kind === 'shared' ? note(common(strands[0].a, strands[0].b), strands[0].a, strands[0].b) : { words: [], ayat: [], children: [], via: all } as Branch;
   let at = root;
-  for (const strand of strands.slice(strands[0]?.kind === 'shared' ? 1 : 0)) {
+  strands.forEach((strand, i) => {
+    if (at === root && i === 0 && strand.kind === 'shared') return;
     if (strand.kind === 'split') {
-      at.children = [note(one(strand.a, 0), strand.a, []), note(one(strand.b, 1), [], strand.b)];
-      continue;
+      // A side with no words gets a child (a line running straight on) only between two common stretches: not before the first
+      // or after the last, where a line would come from nothing or lead nowhere. A side that tells nothing of a story part keeps
+      // its child, for its note.
+      const between = i > 0 && i < strands.length - 1;
+      at.children = [note(part(strand.a, 0), strand.a, []), note(part(strand.b, 1), [], strand.b)].filter((child, side) => child.words.length || between || !sides[side].ayat.length);
+      return;
     }
     const next = note(common(strand.a, strand.b), strand.a, strand.b);
     at.rejoin = next;
     at = next;
-  }
+  });
   // Its `through` names the side's last ayah, so the ayah after is found after it (ayahEnds).
   last.forEach((node, side) => {
     if (!node) return;

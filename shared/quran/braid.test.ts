@@ -95,4 +95,68 @@ describe('compareTree', () => {
     expect(tree.holds).toEqual([['2:15'], ['7:186']]);
     expect(tree.ayat).toEqual(['2:15', '7:186']);
   });
+
+  it('moves a word the sides write differently into the parted boxes beside it, as a branches tree does (ADR 0036)', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 7, ayah: 1, ayat: [{ number: 1, words: ['قَالَ', 'مُوسَىٰ', 'لِقَوْمِهِۦ', 'ٱذْكُرُوا'] }] },
+      { surah: 14, ayah: 6, ayat: [{ number: 6, words: ['قَالَ', 'مُوسَىٰ', 'لِقَوْمِهِ', 'ٱعْبُدُوا'] }] },
+    ];
+    const { tree } = compareTree(sides);
+    expect(tree.words).toEqual(['قَالَ', 'مُوسَىٰ']);
+    expect(tree.children.map(child => child.words[0])).toEqual(['لِقَوْمِهِۦ', 'لِقَوْمِهِ']);
+    expect(tree.children.map(child => child.tones![0])).toEqual(['written', 'written']);
+  });
+
+  it('keeps a word written differently inside a common stretch with each side\'s writing, for the tree to braid', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 7, ayah: 1, ayat: [{ number: 1, words: ['قَالَ', 'لِقَوْمِهِۦ', 'مُوسَىٰ'] }] },
+      { surah: 14, ayah: 6, ayat: [{ number: 6, words: ['قَالَ', 'لِقَوْمِهِ', 'مُوسَىٰ'] }] },
+    ];
+    const { tree } = compareTree(sides);
+    expect(tree.forms!['7:1'].slice(0, 3)).toEqual(['قَالَ', 'لِقَوْمِهِۦ', 'مُوسَىٰ']);
+    expect(tree.forms!['14:6'][1]).toBe('لِقَوْمِهِ');
+  });
+
+  it('fills the owner\'s example with no empty box and no mark the mushaf does not write (al-Baqara 24, Al Imran 131)', () => {
+    const side = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return { surah, ayah, ayat: [{ number: ayah, words: words(key) }] }; };
+    const { tree } = compareTree([side('2:24'), side('3:131')]);
+    const all = (node: Branch): Branch[] => [node, ...node.children.flatMap(all), ...(node.rejoin ? all(node.rejoin) : [])];
+    const nodes = all(tree).filter(node => node !== tree);
+    expect(nodes.flatMap(node => node.words).every(word => !/⋯/.test(word))).toBe(true);
+    // «التي», written «ٱلَّتِى» and «ٱلَّتِىٓ», moves into the parted boxes after «النار», so Al Imran's side is not empty there.
+    expect(nodes.every(node => node.words.length > 0)).toBe(true);
+    expect(tree.rejoin!.children.map(child => child.words[0])).toEqual([words('2:24')[7], words('3:131')[2]]);
+  });
+
+  it('leaves a side that says nothing between two common stretches without words, for the tree to draw as a line', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 2, ayah: 1, ayat: [{ number: 1, words: ['قَالَ', 'مُوسَىٰ', 'لِقَوْمِهِۦ', 'يَـٰقَوْمِ', 'ٱذْكُرُوا', 'نِعْمَةَ'] }] },
+      { surah: 5, ayah: 2, ayat: [{ number: 2, words: ['قَالَ', 'مُوسَىٰ', 'ٱذْكُرُوا', 'نِعْمَةَ'] }] },
+    ];
+    const { tree } = compareTree(sides);
+    expect(tree.children.map(child => child.words)).toEqual([['لِقَوْمِهِۦ', 'يَـٰقَوْمِ'], []]);
+    expect(tree.children[1].ayat).toEqual([]);
+  });
+
+  it('draws no line from nothing or to nowhere: a side with no words before the first or after the last common stretch has no child', () => {
+    const end: [CardSide, CardSide] = [
+      { surah: 7, ayah: 1, ayat: [{ number: 1, words: ['قَالَ', 'مُوسَىٰ', 'لِقَوْمِهِ', 'ٱذْكُرُوا'] }] },
+      { surah: 14, ayah: 6, ayat: [{ number: 6, words: ['قَالَ', 'مُوسَىٰ'] }] },
+    ];
+    expect(compareTree(end).tree.children.map(child => child.words.length)).toEqual([3]);
+    const start: [CardSide, CardSide] = [
+      { surah: 7, ayah: 1, ayat: [{ number: 1, words: ['ثُمَّ', 'قَالَ', 'مُوسَىٰ'] }] },
+      { surah: 14, ayah: 6, ayat: [{ number: 6, words: ['قَالَ', 'مُوسَىٰ'] }] },
+    ];
+    expect(compareTree(start).tree.children.map(child => child.words.length)).toEqual([1]);
+  });
+
+  it('names each writing of a braided word by the ayah it is written in', () => {
+    const sides: [CardSide, CardSide] = [
+      { surah: 2, ayah: 51, ayat: [{ number: 51, words: ['عَفَوْنَا', 'عَنكُم'] }, { number: 92, words: ['قَالَ', 'لِقَوْمِهِۦ', 'مُوسَىٰ'] }] },
+      { surah: 7, ayah: 148, ayat: [{ number: 148, words: ['قَالَ', 'لِقَوْمِهِ', 'مُوسَىٰ'] }] },
+    ];
+    const shared = compareTree(sides).tree.rejoin!;
+    expect(Object.keys(shared.forms!)).toEqual(['2:92', '7:148']);
+  });
 });

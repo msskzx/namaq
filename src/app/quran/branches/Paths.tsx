@@ -134,6 +134,12 @@ export function Fan({ side, entries, label, join = false, bare = false }: { side
   );
 }
 
+/** In place of a box with no words: the line runs straight on, lit with its path (owner, 2026-11-16: never an empty node). */
+export const Through = ({ keys }: { keys: string[] }) => {
+  const on = useIsLit()(keys);
+  return <span aria-hidden data-line data-through data-connected={on || undefined} className={`w-6 shrink-0 border-t-2 [[data-down]_&]:h-6 [[data-down]_&]:w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${on ? LIT : LINE}`} />;
+};
+
 export const Stub = ({ keys }: { keys: string[] }) => {
   const on = useIsLit()(keys);
   return <span aria-hidden data-line data-connected={on || undefined} className={`w-4 shrink-0 border-t-2 [[data-down]_&]:h-4 [[data-down]_&]:w-0 [[data-down]_&]:border-t-0 [[data-down]_&]:border-s-2 ${on ? LIT : LINE}`} />;

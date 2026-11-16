@@ -143,6 +143,17 @@ describe('BranchTree', () => {
     expect([...container.querySelectorAll('mark[data-match]')].map(mark => mark.getAttribute('data-match'))).toEqual(['root', 'written', 'exact']);
   });
 
+  it('never draws an empty box: a side with no words between two meetings is a line running straight on', () => {
+    const close: Branch = { words: ['ج'], ayat: [], children: [], via: ['1:1', '2:2'] };
+    const parted: Branch = { words: ['أ'], ayat: [], via: ['1:1', '2:2'], rejoin: close, children: [
+      { words: ['ب'], ayat: [], children: [], via: ['1:1'] },
+      { words: [], ayat: [], children: [], via: ['2:2'] },
+    ] };
+    const { container } = render(<BranchTree tree={parted} names={{}} direction="down" zoomBar={false} />);
+    expect([...container.querySelectorAll('[data-node]')].map(node => node.textContent!.trim().length > 0)).toEqual([true, true, true]);
+    expect(container.querySelectorAll('[data-through]')).toHaveLength(1);
+  });
+
   it('fits the complete tree by default and switches between fit and manual zoom', () => {
     let resize: ResizeObserverCallback = () => {};
     vi.stubGlobal('ResizeObserver', class {
