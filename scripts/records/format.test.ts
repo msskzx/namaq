@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { formatRecord, parseRecord, REQUIRED, toDistillateMdx } from './format';
+import { formatRecord, parseRecord, REQUIRED, toDistillateMdx, TOPICS } from './format';
 
 const dir = path.join(__dirname, '../../docs/records');
 const files = readdirSync(dir).filter((f) => /^\d{4}-.*\.md$/.test(f)).sort();
@@ -17,7 +17,17 @@ describe('docs/records', () => {
     for (const link of [...((r.meta.buildsOn as string[]) ?? []), ...((r.meta.variantOf as string[]) ?? [])]) {
       if (link.startsWith('namaq/')) expect(ids.has(link), link).toBe(true);
     }
+    for (const topic of (r.meta.topics as string[]) ?? []) expect(TOPICS, topic).toContain(topic);
     expect(formatRecord(r.meta, r.body)).toBe(r.text);
+  });
+
+  // A bare "Records used: 0031" cannot say which of two records it means.
+  // These four numbers were given twice before this check existed.
+  it('gives each new record its own number', () => {
+    const shared = ['0029', '0031', '0032', '0038'];
+    const counts = new Map<string, number>();
+    for (const f of files) counts.set(f.slice(0, 4), (counts.get(f.slice(0, 4)) ?? 0) + 1);
+    expect([...counts].filter(([n, c]) => c > 1 && !shared.includes(n)).map(([n]) => n)).toEqual([]);
   });
 
   it('exports to an MDX meta block Distillate can evaluate', () => {
@@ -31,5 +41,6 @@ describe('docs/records', () => {
     expect(mdx).toContain('<RepoLink repo="namaq" path="src/a.ts" />');
     expect(mdx).toContain('<RepoLink repo="namaq" path="docs/p.md">the plan</RepoLink>');
     expect(mdx).toContain('[0001](/records/namaq/0001-a)');
+    expect(toDistillateMdx({ slug: 'x', meta: {}, body: 'both «{١ - ٨}», not `{a}`' })).toContain('both «\\{١ - ٨\\}», not `{a}`');
   });
 });

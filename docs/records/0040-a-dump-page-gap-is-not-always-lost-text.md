@@ -11,7 +11,7 @@ conditions: "Quranpedia tafsir-book-3 dump 2026-08-10; turath book 42 export pin
 evidence: "scripts/quran/sadiShamela.ts, scripts/quran/buildTafsirSadi.ts, shared/quran/tafsirSadiData.test.ts."
 implication: "Before calling text missing from a dump, compare it with a second copy of the same edition letter by letter; page numbering gaps and truncation are different faults. A cut-off piece is the one to look for."
 date: "2026-11-15"
-topics: ["data-sources","tafsir"]
+topics: ["source-extraction"]
 ---
 
 The audit also catches false alarms from refrains («فبأي آلاء ربكما تكذبان») matching early; it ignores a jump whose skipped words are in the passage or the one before.

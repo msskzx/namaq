@@ -74,7 +74,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   challenge in a way the code alone does not show, add a record in the same PR,
   in the format the README there gives. Every PR description ends with a
   `Records used:` line naming the records that changed a decision (for example
-  `Records used: 0019, 0021`) or `none`; `npm run records:used` counts them.
+  `Records used: 0019, 0021`) or `none`. Put only ids on that line, and the full
+  id (`0031-a-card-that-…`) for a number two records share; `npm run
+  records:used` counts them and Distillate's records stats are built from them.
   Distillate lessons are long write-ups written only when the owner asks.
 
 ## Sources and attributions

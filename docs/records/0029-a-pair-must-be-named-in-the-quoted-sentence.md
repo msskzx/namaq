@@ -11,7 +11,7 @@ conditions: "/quran/order: 74 aims from al-Biqa'i and 73 links from al-Suyuti an
 evidence: "Namaq PR for /quran/order (commits 1bcae6d and 5fc5977); shared/quran/surahOrder.ts; docs/plans/quran-order-sources.md."
 implication: "When a citation carries derived items (pairs, chips, colours), check each item against the exact text shown, not against the page or passage it came from."
 date: "2026-11-13"
-topics: ["evidence-model","sources"]
+topics: ["evidence-model","source-extraction"]
 buildsOn: ["namaq/0026-a-citation-does-not-authorize-every-chip"]
 ---
 

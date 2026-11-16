@@ -14,6 +14,14 @@ export const REQUIRED = [
   'outcome', 'conditions', 'evidence', 'implication', 'date',
 ] as const;
 
+// Distillate's controlled topic list (its content/topics.json); a record whose
+// topic is not here fails Distillate's loader.
+export const TOPICS = [
+  'agent-review', 'build-tooling', 'data-sync', 'evidence-model', 'graph-layout', 'graph-ui',
+  'migrations', 'mobile', 'runtime-versions', 'source-extraction', 'testing', 'text-matching',
+  'ui-rtl', 'ui-state', 'video',
+] as const;
+
 export type Meta = Record<string, unknown>;
 export type Record_ = { slug: string; meta: Meta; body: string };
 
@@ -36,9 +44,13 @@ export function formatRecord(meta: Meta, body: string): string {
 
 // Repo links in the body are relative Markdown links (../../path) here and
 // <RepoLink> tags in Distillate. Links to other records (NNNN-slug.md) become
-// /records/namaq/NNNN-slug.
+// /records/namaq/NNNN-slug. Braces outside code are escaped, since MDX reads
+// «{١ - ٨}» as a JavaScript expression.
 export function toDistillateMdx({ meta, body }: Record_): string {
   const mdxBody = body
+    .split(/(```[\s\S]*?```|`[^`\n]*`)/)
+    .map((part, i) => (i % 2 ? part : part.replace(/[{}]/g, '\\$&')))
+    .join('')
     .replace(/\[`([^`\]]+)`\]\(\.\.\/\.\.\/\1\)/g, (_, p) => `<RepoLink repo="namaq" path="${p}" />`)
     .replace(/\[([^\]]+)\]\(\.\.\/\.\.\/([^)]+)\)/g, (_, label, p) => `<RepoLink repo="namaq" path="${p}">${label}</RepoLink>`)
     .replace(/\]\((\d{4}-[a-z0-9-]+)\.md\)/g, '](/records/namaq/$1)');
