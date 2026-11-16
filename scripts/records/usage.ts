@@ -26,20 +26,28 @@ export function usedLine(body: string | null): string | null {
 //   "0008, 0027"                        → 0008, 0027
 //   "0005 (new record 0032)"            → 0005
 //   "0032 (…). New record 0036: …"      → 0032
-//   "ADR 0035 and 0036 (…), 0037 (…)."  → 0037
 //   "distillate/0005-a-mock-router-…"   → that Distillate record
-// A bare number that two records share is reported, not guessed.
+// A bare number that two records share is reported, not guessed, and so is a
+// bare number after an ADR item ("ADR 0035 and 0036, 0037" may mean ADR 0037).
 export function parseUsedLine(line: string, slugs: string[], project = 'namaq'): UsedLine {
   const text = line.replace(/\([^)]*\)/g, ' ').split(/\.(?:\s|$)/)[0].trim();
   const used: string[] = [];
   const unresolved: Unresolved[] = [];
   if (/^none\b/i.test(text)) return { used, unresolved };
+  let afterAdr = false;
   for (const item of text.split(',')) {
-    if (/^\s*ADR\b/i.test(item)) continue;
+    if (/^\s*ADR\b/i.test(item)) {
+      afterAdr = true;
+      continue;
+    }
     for (const m of item.matchAll(/\b(?:([a-z]+)\/)?(\d{4})(?:-([a-z0-9-]*[a-z0-9]))?/g)) {
       const [whole, from = project, num, rest] = m;
       if (from !== project) {
         used.push(`${from}/${num}${rest ? `-${rest}` : ''}`);
+        continue;
+      }
+      if (afterAdr && !rest) {
+        unresolved.push({ text: whole, reason: 'a bare number after an ADR may name an ADR' });
         continue;
       }
       const matches = rest ? slugs.filter((s) => s === `${num}-${rest}`) : slugs.filter((s) => s.startsWith(`${num}-`));
@@ -51,15 +59,20 @@ export function parseUsedLine(line: string, slugs: string[], project = 'namaq'):
 }
 
 // Merged PRs from gh, or from a JSON file of the same shape (--prs <file>).
-export function mergedPrs(argv: string[], limit = '1000'): MergedPr[] {
+// Fails when gh returns as many PRs as the limit, since older ones were cut.
+export function mergedPrs(argv: string[]): MergedPr[] {
   const file = argv.indexOf('--prs');
   if (file > -1) return JSON.parse(readFileSync(argv[file + 1], 'utf8'));
-  return JSON.parse(
+  const at = argv.indexOf('--limit');
+  const limit = at > -1 ? argv[at + 1] : '5000';
+  const prs: MergedPr[] = JSON.parse(
     execFileSync('gh', ['pr', 'list', '--repo', REPO, '--state', 'merged', '--limit', limit, '--json', 'number,title,body,mergedAt'], {
       encoding: 'utf8',
-      maxBuffer: 64 * 1024 * 1024,
+      maxBuffer: 256 * 1024 * 1024,
     }),
   );
+  if (prs.length >= Number(limit)) throw new Error(`gh returned ${prs.length} PRs, the --limit; raise it so older PRs are not dropped`);
+  return prs;
 }
 
 // The PR that first added a record file: the "(#N)" of a squash commit, or the

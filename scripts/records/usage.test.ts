@@ -16,12 +16,15 @@ describe('parseUsedLine', () => {
     expect(used('none matched.').used).toEqual([]);
     expect(used('0005 (new record 0032)').used).toEqual(['namaq/0005-checks']);
     expect(used('0032 (a hidden box). New record 0036: a video.').used).toEqual(['namaq/0032-hidden']);
-    expect(used('ADR 0035 (words), 0036 (a video).').used).toEqual(['namaq/0036-video']);
-    expect(used('ADR 0035 and 0036 (tree node words), 0037 (one word rule).').used).toEqual(['namaq/0037-one-rule']);
+    expect(used('0008, ADR 0035 and 0036 (tree node words).').used).toEqual(['namaq/0008-split']);
   });
 
   it('reports a shared number or a missing slug instead of guessing', () => {
     expect(used('0031, 0008')).toEqual({ used: ['namaq/0008-split'], unresolved: [{ text: '0031', reason: '2 records share the number 0031' }] });
+    expect(used('ADR 0035 and 0036 (tree node words), 0037 (one word rule), 0008-split')).toEqual({
+      used: ['namaq/0008-split'],
+      unresolved: [{ text: '0037', reason: 'a bare number after an ADR may name an ADR' }],
+    });
     expect(used('namaq/0030-gone').unresolved).toEqual([{ text: 'namaq/0030-gone', reason: 'no such record' }]);
   });
 });

@@ -2,7 +2,7 @@
 // stats are built from (content/usage/namaq.json). Records Distillate already
 // holds unchanged (same meta and body) are skipped. Usage needs the gh CLI
 // signed in, or --prs <file> with gh's JSON; --no-usage skips it.
-// Usage: npm run records:export [-- <distillate root>] [--prs prs.json] [--no-usage]
+// Usage: npm run records:export [-- <distillate root>] [--prs prs.json] [--limit 9000] [--no-usage]
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
@@ -11,7 +11,7 @@ import { buildUsage, createdIn, mergedPrs } from './usage';
 
 const args = process.argv.slice(2);
 const recordsDir = path.join(__dirname, '../../docs/records');
-const root = path.resolve(args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--prs') ?? path.join(__dirname, '../../../distillate'));
+const root = path.resolve(args.find((a, i) => !a.startsWith('--') && !['--prs', '--limit'].includes(args[i - 1])) ?? path.join(__dirname, '../../../distillate'));
 const out = path.join(root, 'content/records/namaq');
 mkdirSync(out, { recursive: true });
 

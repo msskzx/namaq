@@ -90,7 +90,8 @@ how often each record was used across merged PRs, run `npm run records:used`
 parentheses, not in an item that names an ADR, and nothing after `none`. Write
 only the ids, as `0019, 0021` or `0019-fixing-the-example-broke-the-ayah-next-door`,
 and mention new records elsewhere in the description. A number that two
-records share is not counted for either; write the full id for those.
+records share is not counted for either, nor is a bare number after an ADR
+("ADR 0035 and 0036, 0037"); write the full id for those.
 
 ## Index
 

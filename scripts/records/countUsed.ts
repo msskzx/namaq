@@ -1,11 +1,10 @@
 // Counts the "Records used:" line across merged PRs. Needs the gh CLI signed in.
-// Usage: npm run records:used [-- --limit 500] [-- --prs prs.json]
+// Usage: npm run records:used [-- --limit 9000] [-- --prs prs.json]
 import { readdirSync } from "node:fs";
 import path from "node:path";
 import { mergedPrs, parseUsedLine, usedLine } from "./usage";
 
-const limitArg = process.argv.indexOf("--limit");
-const prs = mergedPrs(process.argv, limitArg > -1 ? process.argv[limitArg + 1] : "1000");
+const prs = mergedPrs(process.argv);
 
 const recordsDir = path.join(__dirname, "../../docs/records");
 const slugs = readdirSync(recordsDir).filter((f) => /^\d{4}-.*\.md$/.test(f)).map((f) => f.slice(0, -3));
