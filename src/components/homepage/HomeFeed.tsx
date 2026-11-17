@@ -28,6 +28,7 @@ import { lastPage } from '@/app/quran/read/OpenLastPage';
 import { useNow } from '@/components/utilities/Utilities';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
+import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
@@ -100,24 +101,26 @@ export function Stories() {
   </nav>;
 }
 
-/** The reading card: the first lines of the page the mushaf was left on, a button back to it, and today's date and juz. */
+/** The reading card: the first lines of the page at the mushaf's فاصلة (else the page it was left on), a button there, and today's date and juz. */
 export function ContinueReading() {
   const today = useToday();
-  const [page, setPage] = useState<number | null>(null);
+  const [last, setLast] = useState<number | null>(null);
   useEffect(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem(LAST_PAGE_KEY); } catch {}
-    setPage(lastPage(stored));
+    setLast(lastPage(stored));
   }, []);
+  const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
+  const { page, fasila } = last === null ? { page: null, fasila: false } : continuePage(fasilas, last);
   const { data } = useSWR(page ? `/api/home/feed?page=${page}` : null, fetchJson<Page & { surah: number }>, { revalidateOnFocus: false });
   const href = `/quran/read/${page ?? 1}`;
   const where = [data && names[data.surah], today?.date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
-  return <Post labelledBy="reading-title" head={<PostHead Icon={BookOpen} id="reading-title" title={page && page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where || undefined} />}
+  return <Post labelledBy="reading-title" head={<PostHead Icon={BookOpen} id="reading-title" title={fasila || (page && page > 1) ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where || undefined} />}
     actions={<>
       <Action Icon={BookOpen} label="اقرأ" href={href} />
       {today?.juz && <Link href={juzHref(today.juz[0])} onClick={() => markStoryOpened('juz')} className={`${styles.action} ${styles.accent} text-sm`} aria-label={`اقرأ ${juzLabel(today.juz)}، جزء اليوم`}>{juzLabel(today.juz)}</Link>}
     </>}>
-    <Link href={href} className={styles.pageSlice} aria-label="افتح المصحف حيث توقفت" lang="ar">
+    <Link href={href} className={styles.pageSlice} aria-label={fasila ? 'افتح المصحف عند فاصلتك' : 'افتح المصحف حيث توقفت'} lang="ar">
       {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
       {data ? <PageTop page={data} /> : <span className={styles.pageLines} />}
     </Link>

@@ -311,10 +311,14 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
         </View>
         <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? plainName(names[current]) : ''}</Text>
       </View>}
-      {/* The double rule around the text. */}
-      <View style={slice ? undefined : { flex: 1, borderWidth: 1, borderColor: palette.rule }}>
-        <View style={slice ? undefined : { flex: 1, margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
-          <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      {/* The double rule around the text. With flowing text the frames grow with it (flexGrow, not flex: 1): on a phone
+          flex: 1 is a zero basis, so the page stayed the screen's height, the words ran out past the frame and there was
+          nothing to scroll (owner, 2026-11-17). The web export grows them anyway, as browsers keep a flex item's content height. */}
+      <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
+        <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
+          {/* Drawn anew when the text starts or stops flowing, so it measures itself again: on a phone, back at the printed
+              size it kept the tall height it had while flowing, and the 15 lines spread down past the frame (owner, 2026-11-17). */}
+          <Pressable key={flowing ? 'flow' : 'page'} {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
                 {lineAt.map(at => {

@@ -97,6 +97,17 @@ describe('home', () => {
     expect(fetched).toContain('/api/home/feed?page=294');
   });
 
+  it('continues reading at the فاصلة when one is set', async () => {
+    localStorage.setItem('quran-reader-page', '294');
+    localStorage.setItem('reading-fasila', JSON.stringify({ quran: { key: '2:6', page: 3 } }));
+    render(<Homepage data={data} />);
+    const reading = await screen.findByRole('region', { name: 'تابع القراءة' });
+    await waitFor(() => expect(within(reading).getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/3'));
+    expect(within(reading).getByRole('link', { name: 'افتح المصحف عند فاصلتك' })).toBeTruthy();
+    await waitFor(() => expect(fetched).toContain('/api/home/feed?page=3'));
+    localStorage.removeItem('reading-fasila');
+  });
+
   it('shows today\'s pair as a post with its compare link, saves it, and remembers it was seen', async () => {
     render(<Homepage data={data} />);
     await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));

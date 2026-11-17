@@ -21,6 +21,7 @@ import { dayNumber } from '@shared/dailyPick';
 import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
+import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
@@ -172,24 +173,25 @@ export function Stories({ palette }: { palette: Palette }) {
 /** Where the reader stopped, kept by the mushaf tab (Reader.tsx, key `reader-place`). */
 const lastPage = () => Math.min(PAGES, Math.max(1, readJson<{ page: number }>('reader-place')?.page ?? 1));
 
-/** The reading card: a slice of the page the mushaf was left on, a button back to it, and today's date and juz under it. */
+/** The reading card: a slice of the page at the mushaf's فاصلة (else the page it was left on), a button there, and today's date and juz under it. */
 export function ContinueReading({ palette }: { palette: Palette }) {
-  const [page, setPage] = useState(lastPage);
-  // Back on home after reading: show the page reached.
-  useFocusEffect(useCallback(() => { setPage(lastPage()); }, []));
+  const [last, setLast] = useState(lastPage);
+  // Back on home after reading: show the page reached when no فاصلة is set.
+  useFocusEffect(useCallback(() => { setLast(lastPage()); }, []));
+  const { page, fasila } = continuePage(useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas), last);
   const { surah } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
   const { date, juz } = useToday();
   const read = () => openIntent({ tab: 'read', page });
   const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
-    <Post palette={palette} head={<PostHead Icon={BookOpen} title={page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
       actions={<>
         <Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />
         {juz && <Tap onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ padding: 8 }}>
           <Text style={{ color: palette.accent, fontSize: 14 }}>{juzLabel(juz)}</Text>
         </Tap>}
       </>}>
-      <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+      <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
         {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
         <PageTop page={page} palette={palette} />
       </Tap>
