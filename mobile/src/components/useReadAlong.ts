@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { PairCard } from '@shared/quran/compareCards';
 import { readPlan, READ_SPEEDS, stepTime } from '@shared/quran/readPlan';
-import { deviceStorage } from '@/lib/deviceStorage';
+import { device as deviceStorage } from '@/lib/storage';
 
 const SPEED_KEY = 'compare-read-pace';
 type Shared = { active: string | null; speed: number };

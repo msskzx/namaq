@@ -3,7 +3,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { ayahHref } from '@shared/ayahMarks';
 import { Text } from '@/ui/Text';
 import { ayahText } from '@/lib/mushaf';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { shareCard, shareCardLater } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { surahName } from '@shared/quran/surahNames';

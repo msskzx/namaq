@@ -6,7 +6,7 @@ import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
 import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';

@@ -12,10 +12,11 @@ type Loader = () => { default: Screen };
 
 const pending: (() => Screen)[] = [];
 
-export function lazyScreen(load: Loader): Screen {
+/** `warm: false` for a screen people rarely open (a developer tool): it loads only when visited. */
+export function lazyScreen(load: Loader, { warm = true } = {}): Screen {
   let screen: Screen | undefined;
   const get = () => (screen ??= load().default);
-  pending.push(get);
+  if (warm) pending.push(get);
   return function LazyScreen(props: object) {
     return createElement(get(), props);
   };

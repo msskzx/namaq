@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import type { ActionError, PartyView, PlayerAction } from '@shared/party/rules';
-import { deviceStorage } from './deviceStorage';
+import { device as deviceStorage } from './storage';
 
 const PLAYER_KEY = 'namaq-party-player';
 const NAME_KEY = 'namaq-party-name';

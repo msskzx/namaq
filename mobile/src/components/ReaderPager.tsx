@@ -4,6 +4,7 @@ import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { landingPage, MAX_ZOOM, settleZoom } from '@/lib/pageZoom';
+import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 
 const PULL = 70;
 const PULL_FLICK = 600;
@@ -24,9 +25,12 @@ type Props = {
   /** A downward swipe on the page: the reader's main action (the index and search). Off while the page scrolls. */
   onPull?: () => void;
   /** The text size: 1 is the printed page. */
-  zoom: number;
-  /** A pinch's new text size, and where the fingers were (from the row's top), so the reader keeps those words in sight. */
-  onZoom: (zoom: number, focalY: number) => void;
+  zoom?: number;
+  /** A pinch's new text size, and where the fingers were (from the row's top), so the reader keeps those words in sight. A host
+   * without it has no pinch. */
+  onZoom?: (zoom: number, focalY: number) => void;
+  /** A pushed screen's pager leaves the right edge to the back swipe, as the tree and matrix pagers do. */
+  backEdge?: boolean;
   /** How far the reader scrolled down the current page: a neighbour sliding in shows its top there. */
   scrollTop?: number;
   /** The scroll view the row sits in, as a gesture: the pinch runs alongside it, so two fingers on a zoomed page pinch. */
@@ -41,7 +45,7 @@ type Props = {
  * A pinch changes the text size. While the fingers are down the page is only stretched as a preview; when they lift
  * the page is set again at the new size, sharp.
  */
-export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom, onZoom, scrollTop = 0, scroll, onPinch }: Props) {
+export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom = 1, onZoom, backEdge, scrollTop = 0, scroll, onPinch }: Props) {
   const offset = useSharedValue((page - 1) * width);
   const from = useSharedValue(0);
   const settled = useRef(page);
@@ -78,6 +82,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
   const last = (count - 1) * width;
   const pan = Gesture.Pan()
     .maxPointers(1)
+    .hitSlop(backEdge ? BACK_EDGE_SLOP : {})
     .activeOffsetX([-12, 12])
     .failOffsetY([-24, 24])
     .onStart(() => {
@@ -110,6 +115,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     });
 
   const pinch = Gesture.Pinch()
+    .enabled(!!onZoom)
     .onStart(event => {
       pinching.value = true;
       focal.value = { x: event.focalX, y: event.focalY };
@@ -128,7 +134,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       scheduleOnRN(onMove);
       const next = settleZoom(zoom * stretch.value);
       if (next === zoom) stretch.value = withTiming(1, { duration: 150 });
-      else scheduleOnRN(onZoom, next, focal.value.y);
+      else if (onZoom) scheduleOnRN(onZoom, next, focal.value.y);
     });
   if (scroll) pinch.simultaneousWithExternalGesture(scroll);
 

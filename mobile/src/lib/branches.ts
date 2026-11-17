@@ -1,3 +1,4 @@
+import { WEBSITE } from './website';
 import corpus from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -209,7 +210,6 @@ export function withPathReading(presentation: Presentation, beats: Beat[]): Beat
 
 export const isSaved = (piece: BranchPiece, list = readBookmarks()) => isSavedIn(piece, list);
 export const toggleSaved = (piece: BranchPiece) => toggleBookmark({ id: piece.id, text: piece.text, href: branchesHref(piece.id) }, aliasesOf(piece));
-export const WEBSITE = 'https://namaq.vercel.app';
 
 /** What a growing tree draws before its root for each ayah, and after each ayah's end, matching what BranchTree draws. */
 export function growthParts(presentation: Presentation, around: Around | undefined): { starts: { id: string; keys: string[] }[]; afters: Record<string, string> } {

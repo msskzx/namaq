@@ -10,7 +10,7 @@ import { applyDraft, draftOf, type FilterDraft } from '@/lib/branchList';
 import { FilterFields } from './FilterFields';
 import Toggle from '@/ui/Toggle';
 import { isMemorizedScope, memorizedScope, readMemorized, subscribeMemorized, type Memorized } from '@shared/memorized';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 
@@ -40,7 +40,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   lead: number; other: number; onPick: (lead: number, other: number) => void; palette: Palette;
 }) {
   const [query, setQuery] = useState('');
-  const [byCount, setByCount] = useState(() => readJson<boolean>(SORT_KEY) ?? false);
+  const [byCount, setByCount] = useState(() => readJson(SORT_KEY, isBoolean) ?? false);
   const [expanded, setExpanded] = useState(() => new Set([lead]));
   const [filtering, setFiltering] = useState(false);
   const [draft, setDraftState] = useState<FilterDraft>(() => draftOf(listOfFilter(filter)));

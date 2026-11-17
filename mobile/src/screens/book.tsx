@@ -155,7 +155,7 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
     <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} showsVerticalScrollIndicator={false} scrollEventThrottle={32} onScrollBeginDrag={() => setActions(null)} style={{ flex: 1 }}>
         {size && height > 0 && (
-          <ReaderPager page={page + 1} count={pages.length} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} zoom={1} onZoom={() => {}} />
+          <ReaderPager page={page + 1} count={pages.length} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} backEdge />
         )}
       </ScrollView>
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>

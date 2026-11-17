@@ -10,7 +10,7 @@ import { ayatOf, EACH_AYAH, LISTEN_REFERENCE, PAUSES, RANGE_TIMES, RECITERS, RIW
 import { packBytes } from '@shared/quran/recitationSizes';
 import { isMemorized, readMemorized, serverMemorized, subscribeMemorized } from '@shared/memorized';
 import { applyReciter, applySpeed, listen, useListening } from '@/lib/listen';
-import { bytesOf, downloadPack, packsOf, progressOf, removePack, stopDownload, useListenFiles, type PackKind } from '@/lib/listenFiles';
+import { bytesOf, downloadPack, packsOf, progressOf, removePack, removeReciter, stopDownload, useListenFiles, type PackKind } from '@/lib/listenFiles';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
 import { ayahCounts } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
@@ -156,7 +156,7 @@ export default function ListenSheet({ open, start, onClose, palette }: { open: b
                       <PackRow reciter={item.id} kind={`surah:${surah}`} title={`سورة ${surahName(surah)}`} detail={`${num(ayahCounts.get(surah) ?? 0)} آية`} keys={ayatOf({ from: `${surah}:1`, to: surahEnd(`${surah}:1`, ayahCounts) }, ayahCounts)} bytes={packBytes(item.id, { surah })} palette={palette} />
                       <PackRow reciter={item.id} kind="all" title="المصحف كله" detail="من الفاتحة إلى الناس" keys={allKeys} bytes={packBytes(item.id, {})} palette={palette} />
                       {held > 0 && (
-                        <Pressable onPress={() => packsOf(item.id).forEach(pack => removePack(item.id, pack.kind))} accessibilityRole="button" accessibilityLabel="احذف تنزيلات القارئ"
+                        <Pressable onPress={() => removeReciter(item.id)} accessibilityRole="button" accessibilityLabel="احذف تنزيلات القارئ"
                           style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8, paddingHorizontal: 12 }}>
                           <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>احذف التنزيلات</Text>
                           <Trash2 size={20} color={palette.muted} />

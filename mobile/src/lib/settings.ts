@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './listState';
-import { readJson, writeJson } from './storage';
+import { isBoolean, isRecord, isString, readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
 import { isPenRule, type PenRule } from '@shared/quran/writeAyah';
 import { isMarkMode, type MarkMode } from '@shared/quran/wordMatch';
@@ -14,8 +14,7 @@ function setting<T>(key: string, fallback: T, valid: (value: unknown) => value i
   let value: T | undefined;
   const get = () => {
     if (value === undefined) {
-      const stored = readJson<unknown>(key);
-      value = valid(stored) ? stored : fallback;
+      value = readJson(key, valid) ?? fallback;
     }
     return value;
   };
@@ -29,7 +28,6 @@ function setting<T>(key: string, fallback: T, valid: (value: unknown) => value i
   return { get, set, use, subscribe };
 }
 
-const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';
 
 /** The first-launch tour ran or was skipped; the settings sheet clears it to play the tour again. */
 export const tourSeen = setting('tour-seen', false, isBoolean);
@@ -76,7 +74,7 @@ export const around = setting('branches-surround', false, isBoolean);
 
 /** The filters, search and surah narrowing the trees, kept so the tab opens as it was left. */
 export const listState = setting<ListState>('branches-list', EMPTY_LIST, (value): value is ListState =>
-  !!value && typeof value === 'object' && typeof (value as ListState).query === 'string' && typeof (value as ListState).filters === 'object');
+  isRecord(value) && isString(value.query) && isRecord(value.filters) && (value.range == null || isRecord(value.range)) && (value.saved === undefined || isBoolean(value.saved)));
 
 /** The settings sheet's look: light, dark, or as the phone is set. */
 export type ThemeChoice = 'light' | 'dark' | 'system';

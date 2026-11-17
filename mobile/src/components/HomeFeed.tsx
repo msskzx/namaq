@@ -40,7 +40,7 @@ import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
 import { pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
 import { around as aroundSetting, branchView, penRule } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
@@ -171,7 +171,7 @@ export function Stories({ palette }: { palette: Palette }) {
 }
 
 /** Where the reader stopped, kept by the mushaf tab (Reader.tsx, key `reader-place`). */
-const lastPage = () => Math.min(PAGES, Math.max(1, readJson<{ page: number }>('reader-place')?.page ?? 1));
+const lastPage = () => { const place = readJson('reader-place', isRecord); return isNumberIn(1, PAGES)(place?.page) ? Math.round(place.page) : 1; };
 
 /** The reading card: a slice of the page at the mushaf's فاصلة (else the page it was left on), a button there, and today's date and juz under it. */
 export function ContinueReading({ palette }: { palette: Palette }) {
@@ -225,7 +225,7 @@ const RECALL_WRITE = 'recall-write';
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
   const [, setGone] = useState(0);
-  const [writing, setWriting] = useState(() => readJson<boolean>(RECALL_WRITE) === true);
+  const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
   if (!review && recalled.has(ayah)) return null;
   const marks = <>

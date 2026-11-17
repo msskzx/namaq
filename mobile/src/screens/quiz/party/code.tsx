@@ -30,7 +30,7 @@ import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTr
 import { CompareFeedback, CompareInputs } from '@/components/QuizCompare';
 import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswers';
 import { useKeyboardShown } from '@/lib/keyboard';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import type { QuestionState } from '@/lib/quiz';
