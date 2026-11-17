@@ -1,5 +1,6 @@
-// «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one,
-// medium its neighbours, hard asks ayat with a close look-alike in another surah and always offers that surah.
+// «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one.
+// Medium and hard offer the surahs of the ayah's متشابهات first, then its neighbours (owner, 2026-11-17); hard also asks
+// the ayat with a close look-alike first.
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
@@ -61,16 +62,34 @@ function index(): Index {
 /** Hard: a look-alike in another surah shares most of the ayah's words; medium: some look-alike; easy: none. */
 const levelOf = (alike: Alike[] | undefined): Difficulty => !alike?.length ? 'easy' : alike[0].share >= HARD_FROM ? 'hard' : 'medium';
 
+/**
+ * The wrong surahs. Easy: far ones. Medium and hard: the look-alikes' surahs, then neighbours placed so the choices do
+ * not point at the answer: with no look-alike, a run of four surahs with the answer anywhere in it (not always in the
+ * middle); with look-alikes, neighbours of the answer and of the look-alikes' surahs alike, so no choice stands apart.
+ */
 function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, random: Random): number[] {
   const picked: number[] = [];
-  const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && n !== surah && !picked.includes(n)) picked.push(n); };
-  const lookAlike = [...new Set(alike.map(item => surahOf(item.key)))];
+  const free = (n: number) => n !== surah && !picked.includes(n) && n >= 1 && n <= 114;
+  const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && free(n)) picked.push(n); };
   const every = Array.from({ length: 114 }, (_, i) => i + 1);
-  const near = shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random);
-  const far = shuffle(every.filter(n => Math.abs(n - surah) > FAR), random);
-  if (difficulty === 'hard') take(lookAlike);
-  if (difficulty === 'medium') take(lookAlike.slice(0, 1));
-  take(difficulty === 'easy' ? far : near);
+  if (difficulty === 'easy') take(shuffle(every.filter(n => Math.abs(n - surah) > FAR), random));
+  else {
+    take([...new Set(alike.map(item => surahOf(item.key)))]);
+    if (!picked.length) {
+      const start = Math.min(Math.max(surah - Math.floor(random() * CHOICES), 1), 115 - CHOICES);
+      take(Array.from({ length: CHOICES }, (_, i) => start + i));
+    }
+    // One look-alike: one neighbour next to the answer and one next to the look-alike, two pairs. Two: a surah three or
+    // four from one of them, close to none, so every choice stands alone. Either way no choice stands apart as the answer.
+    const anchors = [surah, ...picked];
+    const around = (anchor: number, steps: number[]) => shuffle(steps.flatMap(step => [anchor - step, anchor + step]), random).find(free);
+    if (anchors.length === 2) for (const anchor of shuffle(anchors, random)) take([around(anchor, [1, 2]) ?? 0]);
+    if (anchors.length === 3) {
+      const alone = (n: number) => anchors.every(anchor => Math.abs(anchor - n) > 2);
+      take(shuffle(anchors, random).flatMap(anchor => shuffle([anchor - 4, anchor - 3, anchor + 3, anchor + 4], random)).filter(alone));
+    }
+    take(shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random));
+  }
   take(shuffle(every, random));
   return picked;
 }
