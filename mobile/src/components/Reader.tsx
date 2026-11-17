@@ -385,7 +385,7 @@ export default function Reader() {
       {/* Always drawn, so it slides away and back as every bar does (ui/motion) instead of popping. */}
       <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
           {/* No logo; the buttons at the right edge, under the thumb (owner, 2026-11-17). */}
-          <TopBar bare away={!tools}>
+          <TopBar away={!tools}>
             {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
             <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
               accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
