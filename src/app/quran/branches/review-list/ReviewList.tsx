@@ -1,0 +1,38 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
+import type { TreePreview } from '@/app/quran/read/ayahPreview';
+import TreeViewCard from '../TreeViewCard';
+
+/** Draws a card only once it nears the screen, so 381 trees scroll without drawing all at once. */
+function Lazy({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || shown) return;
+    const io = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setShown(true); }, { rootMargin: '1200px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [shown]);
+  return <div ref={ref} style={{ minHeight: shown ? undefined : 480 }}>{shown ? children : null}</div>;
+}
+
+export default function ReviewList({ group, groups, trees, missing }: {
+  group: string; groups: { name: string; count: number }[]; trees: TreePreview[]; missing: string[];
+}) {
+  return <main dir="rtl" className="mx-auto max-w-3xl px-4 py-6 flex flex-col gap-6">
+    <nav className="flex gap-3 sticky top-0 z-10 py-2" style={{ background: 'var(--home-bg, #1c1c1c)' }}>
+      {groups.map(item => <Link key={item.name} href={`?g=${item.name}`} style={{ fontWeight: item.name === group ? 700 : 400, textDecoration: item.name === group ? 'underline' : 'none' }}>
+        Group {item.name} ({item.count})
+      </Link>)}
+    </nav>
+    {missing.length > 0 && <p>Not found today: {missing.join(', ')}</p>}
+    {trees.map((tree, i) => <section key={tree.id} className="flex flex-col gap-2">
+      <h2 className="text-lg"><span dir="ltr">{group}{i + 1}</span> · {tree.text} <a href={tree.href} target="_blank" rel="noreferrer" style={{ fontSize: 12, opacity: 0.7 }} dir="ltr">{tree.id}</a></h2>
+      <Lazy><TreeViewCard tree={tree} height="420px" names={SURAH_NAMES} start="tree" /></Lazy>
+    </section>)}
+  </main>;
+}
