@@ -1,7 +1,7 @@
 import { Fragment, useRef, useState } from 'react';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { counted } from '@shared/quran/arabicNumber';
 import { dotSize, type EventView, type StoryMap as StoryMapData } from '@shared/quran/prophets/story';
 import type { Palette } from '@/lib/theme';

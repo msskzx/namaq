@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, type GestureResponderEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { SURAHS, nearestSurah, stepSurah } from '@shared/quran/words';
 import type { Palette } from '@/lib/theme';
 

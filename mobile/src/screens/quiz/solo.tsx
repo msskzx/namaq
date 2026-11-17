@@ -1,14 +1,14 @@
 import { useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import BackBar from '@/components/BackBar';
-import Button, { Row } from '@/components/Button';
-import LoadingDots from '@/components/LoadingDots';
+import TopBar from '@/ui/TopBar';
+import Button, { Row } from '@/ui/Button';
+import LoadingDots from '@/ui/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
-import Toggle from '@/components/Toggle';
+import Toggle from '@/ui/Toggle';
 import { quizPageBefore } from '@/lib/settings';
 import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
@@ -75,7 +75,7 @@ export default function SoloSetup() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <BackBar title="اختبار فردي" />
+      <TopBar back={() => router.back()} title="اختبار فردي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
         {resumable && (
           <View style={{ borderWidth: 1, borderColor: palette.accent, ...CARD, padding: 14, gap: 10 }}>

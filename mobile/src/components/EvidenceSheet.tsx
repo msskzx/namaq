@@ -1,9 +1,9 @@
 import { ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Tags } from 'lucide-react-native';
-import ExternalLink from './ExternalLink';
+import ExternalLink from '@/ui/ExternalLink';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 import type { Palette } from '@/lib/theme';
 
 const arabicDigits = (text: string) => text.replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);

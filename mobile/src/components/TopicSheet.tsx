@@ -1,14 +1,14 @@
 import { Pressable, ScrollView, View } from 'react-native';
 import { List } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
 import { num } from '@shared/quran/arabicNumber';
 import { sectionStart, surahTopicsCredit, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
 import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
 import { surahAim } from '@shared/quran/surahAims';
 import { surahNames } from '@/lib/branches';
 import type { Palette } from '@/lib/theme';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 
 export type TopicOpen = { surah: number; section: number };
 

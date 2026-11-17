@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { ListTree } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
 import OpenInBook from './OpenInBook';
 import { num } from '@shared/quran/arabicNumber';
 import { IRAB_SOURCES, ukbariCredit, ukbariOf, ukbariPage, type BookPassage, type UkbariData } from '@shared/quran/irab';
@@ -14,7 +14,7 @@ import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 
 export type IrabTarget = { key: string; word: number };
 

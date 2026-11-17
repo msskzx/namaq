@@ -1,7 +1,7 @@
 import { createContext, memo, useContext, useEffect, useId, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type LayoutChangeEvent } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Text, UI_SCALE } from '@/components/Text';
+import { Text, UI_SCALE } from '@/ui/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
@@ -17,7 +17,7 @@ import { aroundOf, likenessAt, mixedBefore, NOTHING_SHARED, subtreeOf, type Shar
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
 import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
-import Hourglass from './Hourglass';
+import Hourglass from '@/ui/Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib/scene';
 

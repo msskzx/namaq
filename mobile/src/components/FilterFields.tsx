@@ -1,6 +1,6 @@
 import { useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { shownBookmarks } from '@/lib/home';
@@ -9,13 +9,13 @@ import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
-import Toggle from './Toggle';
-import NumberPicker, { NumberList } from './NumberPicker';
-import { IconButton } from './Studio';
+import Toggle from '@/ui/Toggle';
+import NumberPicker, { NumberList } from '@/ui/NumberPicker';
 import surahRows from '@shared/data/quran/surahs.json';
 import { surahNames } from '@/lib/branches';
 import { draftRange, UNIT_MAX, type FilterDraft, type FilterUnit } from '@/lib/branchList';
 import type { Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const UNITS: { value: FilterUnit; label: string }[] = [
   { value: 'juz', label: 'من الجزء' },
@@ -126,11 +126,8 @@ export const draftValid = (draft: FilterDraft) => !['juz', 'surah', 'page'].incl
 export function FilterActions({ onReset, onApply, valid, palette }: { onReset: () => void; onApply: () => void; valid: boolean; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>
-      <IconButton label="إعادة ضبط" onPress={onReset} Icon={RotateCcw} color={palette.ink} />
-      <Pressable onPress={onApply} disabled={!valid} accessibilityRole="button" accessibilityLabel="تطبيق"
-        style={{ width: 52, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: valid ? palette.accent : palette.rule }}>
-        <Check size={24} color={palette.onAccent} />
-      </Pressable>
+      <IconButton label="إعادة ضبط" onPress={onReset} Icon={RotateCcw} tone="ink" />
+      <IconButton Icon={Check} label="تطبيق" onPress={onApply} round big disabled={!valid} />
     </View>
   );
 }

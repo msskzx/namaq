@@ -1,4 +1,6 @@
+import surahRows from '../data/quran/surahs.json';
 import { normalizeWord } from './normalize';
+import type { AyahWordsOf } from './quranText/ayahWords';
 
 /**
  * Every oath in the Quran (owner, 2026-11-13: the oaths page covers the whole Quran, app and website).
@@ -78,8 +80,7 @@ export const OTHER_OATHS: Oath[] = [
 
 export const OATHS: Record<OathKind, Oath[]> = { allah: ALLAH_OATHS, others: OTHER_OATHS };
 
-/** Each oath's surah names and ayat as the mushaf writes them (shared/data/quran/oaths.json, `npm run quran:oaths`). */
-export type OathData = { names: Record<string, string>; ayat: Record<string, string> };
+const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
 export type OathWord = { text: string; sworn: boolean };
 export type OathView = { id: string; kind: OathKind; surah: number; name: string; range: [number, number]; who?: string; by: string[]; lines: { ayah: number; words: OathWord[] }[] };
 
@@ -108,7 +109,7 @@ export function isSworn(token: string, word: string) {
 }
 
 /** The oaths of one kind with their words, the sworn ones marked. */
-export function buildOaths(kind: OathKind, { names, ayat }: OathData): OathView[] {
+export function buildOaths(kind: OathKind, ayahWords: AyahWordsOf): OathView[] {
   return OATHS[kind].map(({ surah, range: [lo, hi], by, who }) => ({
     id: `${surah}:${lo}`,
     kind,
@@ -118,9 +119,9 @@ export function buildOaths(kind: OathKind, { names, ayat }: OathData): OathView[
     who,
     by,
     lines: Array.from({ length: hi - lo + 1 }, (_, k) => {
-      const text = ayat[`${surah}:${lo + k}`];
-      if (text === undefined) throw new Error(`${surah}:${lo + k} is missing from the data`);
-      return { ayah: lo + k, words: text.split(' ').filter(word => normalizeWord(word) !== '').map(word => ({ text: word, sworn: false })) };
+      const words = ayahWords(`${surah}:${lo + k}`);
+      if (!words?.length) throw new Error(`${surah}:${lo + k} is missing from the pages`);
+      return { ayah: lo + k, words: words.filter(word => normalizeWord(word) !== '').map(word => ({ text: word, sworn: false })) };
     }),
   })).map(oath => {
     // Each listed word colours its first unmarked occurrence.

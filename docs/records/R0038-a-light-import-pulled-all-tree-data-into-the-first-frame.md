@@ -9,7 +9,7 @@ approach: "Traced the first frame's import graph with an esbuild metafile (entry
 outcome: "solved"
 conditions: "Expo 58, expo-router with sync route imports on native, Metro without inline requires (Expo's default). Sizes are source bytes, not device timings."
 evidence: "mobile/src/app/_layout.tsx, mobile/src/lib/lazyScreen.ts, mobile/src/lib/listState.ts"
-implication: "Keep app/_layout.tsx, lib/theme.ts, lib/settings.ts and components/LoadingScreen.tsx free of data imports, even for one constant. A new screen goes in src/screens/ with a lazyScreen route file, not straight in app/."
+implication: "Keep app/_layout.tsx, lib/theme.ts, lib/settings.ts and ui/LoadingScreen.tsx free of data imports, even for one constant. A new screen goes in src/screens/ with a lazyScreen route file, not straight in app/."
 date: "2026-11-14"
 topics: ["build-tooling"]
 ---

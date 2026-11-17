@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import data from '@shared/data/quran/surahOrder.json';
+import corpus from '@shared/data/quran/trees.json';
 import { num } from '@shared/quran/arabicNumber';
 import { orderSurahs } from '@shared/quran/surahOrder';
 import OrderView from './OrderView';
 
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 const surahs = orderSurahs(data, num);
 
 afterEach(cleanup);

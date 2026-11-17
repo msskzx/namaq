@@ -1,8 +1,8 @@
 // The iltifat page's seven examples (owner, 2026-11-13): each card draws its own picture. docs/plans/quran-within-surah.md
-import data from '../data/quran/iltifat.json';
 import surahs from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
-import { ayahWords } from './normalize';
+import { normalizeWord } from './normalize';
+import type { AyahWordsOf } from './quranText/ayahWords';
 
 /** هو (غيبة), نحن or أنا (تكلم), أنت (خطاب). */
 export type Voice = 'he' | 'we' | 'you';
@@ -96,27 +96,28 @@ export type ExampleView = { key: string; surah: number; name: string; from: numb
   | { kind: 'dialog'; turns: TurnView[] }
 );
 
-const ayat: Record<string, string> = data.ayat;
 const names: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.name]));
 
-function wordsOf(surah: number, ayah: number) {
-  const text = ayat[`${surah}:${ayah}`];
-  if (text === undefined) throw new Error(`${surah}:${ayah} is missing from the data`);
-  return ayahWords(text, false);
+
+function wordsOf(of: AyahWordsOf, surah: number, ayah: number) {
+  const words = of(`${surah}:${ayah}`);
+  if (!words?.length) throw new Error(`${surah}:${ayah} is missing from the pages`);
+  const display = words.filter(word => normalizeWord(word) !== '');
+  return { display, norm: display.map(normalizeWord) };
 }
 
-function voiced(surah: number, ayah: number, marks: Record<number, Mark[]>): Word[] {
-  const { display, norm } = wordsOf(surah, ayah);
+function voiced(of: AyahWordsOf, surah: number, ayah: number, marks: Record<number, Mark[]>): Word[] {
+  const { display, norm } = wordsOf(of, surah, ayah);
   const voices: (Voice | undefined)[] = display.map(() => undefined);
   for (const mark of marks[ayah] ?? []) for (const i of resolve(norm, mark)) voices[i] = mark[1];
   return display.map((text, i) => (voices[i] ? { text, voice: voices[i] } : { text }));
 }
 
-function spanLine(surah: number, { ayah, from, to }: Span, marks: Record<number, Mark[]>): Line {
-  const { norm } = wordsOf(surah, ayah);
+function spanLine(of: AyahWordsOf, surah: number, { ayah, from, to }: Span, marks: Record<number, Mark[]>): Line {
+  const { norm } = wordsOf(of, surah, ayah);
   const start = from ? resolve(norm, [from, 'he'])[0] : 0;
   const stop = to ? resolve(norm, [to, 'he']).at(-1)! + 1 : norm.length;
-  return { ayah, words: voiced(surah, ayah, marks).slice(start, stop), end: stop === norm.length };
+  return { ayah, words: voiced(of, surah, ayah, marks).slice(start, stop), end: stop === norm.length };
 }
 
 /** «٢–٧», or «٢٢» for one ayah. */
@@ -124,17 +125,17 @@ export const rangeLabel = ({ from, to }: { from: number; to: number }) => (from 
 
 export const exampleKey = (example: { surah: number; from: number }) => `${example.surah}:${example.from}`;
 
-export function exampleView(example: Example): ExampleView {
+export function exampleView(example: Example, of: AyahWordsOf): ExampleView {
   const base = { key: exampleKey(example), surah: example.surah, name: names[example.surah], from: example.from, to: example.to, source: example.source };
   if (example.kind === 'strip') {
     const lines = Array.from({ length: example.to - example.from + 1 }, (_, k) => example.from + k)
-      .map(ayah => ({ ayah, words: voiced(example.surah, ayah, example.marks), end: true }));
+      .map(ayah => ({ ayah, words: voiced(of, example.surah, ayah, example.marks), end: true }));
     return { ...base, kind: 'strip', steps: example.steps, lines };
   }
   if (example.kind === 'tree') {
     const trunk = example.trunk.split(' ');
     const leaves = example.leaves.map(({ ayah, who }) => {
-      const { display, norm } = wordsOf(example.surah, ayah);
+      const { display, norm } = wordsOf(of, example.surah, ayah);
       const at = resolve(norm, [example.trunk, 'he']);
       return { ayah, who, word: display[at.at(-1)! + 1], trunk: display.slice(at[0], at[0] + trunk.length).join(' ') };
     });
@@ -142,14 +143,14 @@ export function exampleView(example: Example): ExampleView {
   }
   const turns = example.turns.map((turn): TurnView => {
     if ('cut' in turn) return turn;
-    if ('narration' in turn) return { narration: turn.narration.map(span => spanLine(example.surah, span, example.marks)) };
-    return { who: turn.who, voice: turn.voice, side: turn.side, said: !!turn.said, lines: turn.spans.map(span => spanLine(example.surah, span, example.marks)) };
+    if ('narration' in turn) return { narration: turn.narration.map(span => spanLine(of, example.surah, span, example.marks)) };
+    return { who: turn.who, voice: turn.voice, side: turn.side, said: !!turn.said, lines: turn.spans.map(span => spanLine(of, example.surah, span, example.marks)) };
   });
   return { ...base, kind: 'dialog', turns };
 }
 
 /** In mushaf order. */
-export const examples = (): ExampleView[] => [...EXAMPLES].sort((a, b) => a.surah - b.surah || a.from - b.from).map(exampleView);
+export const examples = (of: AyahWordsOf): ExampleView[] => [...EXAMPLES].sort((a, b) => a.surah - b.surah || a.from - b.from).map(example => exampleView(example, of));
 
 /** The two words split into the letters they share and the letter that differs, each letter with its marks. */
 export function letterDiff(a: string, b: string): [before: string, differ: string, after: string][] {

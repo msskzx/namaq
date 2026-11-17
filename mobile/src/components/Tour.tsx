@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Modal, View, type LayoutChangeEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Gesture, GestureDetector, GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ChevronsLeft } from 'lucide-react-native';
@@ -16,7 +16,7 @@ import StoryMap from './StoryMap';
 import EventPlaces from './EventPlaces';
 import { storyMap } from '@shared/quran/prophets/story';
 import { prophetStory } from '@/lib/prophets';
-import Button from './Button';
+import Button from '@/ui/Button';
 import { cardOf } from '@/lib/branches';
 import { EMPTY_LIST } from '@/lib/branchList';
 import { pageData, surahBefore, surahNames as mushafNames } from '@/lib/mushaf';

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
@@ -37,6 +37,7 @@ import { readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
+import IconButton from '@/ui/IconButton';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
@@ -76,32 +77,19 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
   if (studio && current && !embedded) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
   // Embedded in a feed, the buttons look like the compare card's row beside it.
-  const icon = embedded ? { size: 22, color: palette.muted } : { size: 24, color: palette.ink };
+  const tone = embedded ? 'muted' : 'ink';
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: embedded ? 0 : 4, paddingHorizontal: embedded ? 0 : 8 }}>
-      <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
-        <Animated.View style={popped}><Bookmark size={embedded ? 22 : 26} color={saved ? palette.accent : icon.color} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
-      </Pressable>
+      <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} on={saved} fill tone={tone}
+        render={shown => <Animated.View style={popped}><Bookmark {...shown} /></Animated.View>} />
       {!embedded && <StudioButton palette={palette} />}
-      {onView && <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
-        {onView.mode === 'tree' ? <GalleryHorizontal {...icon} /> : <TreeIcon {...icon} />}
-      </Pressable>}
-      <Pressable onPress={onAround.toggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ selected: onAround.on }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
-        <UnfoldHorizontal size={icon.size} color={onAround.on ? palette.accent : icon.color} />
-      </Pressable>
-      {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
-        <RotateCwSquare {...icon} />
-      </Pressable>}
-      {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
-        <BookOpen {...icon} />
-      </Pressable>}
-      {targets.length > 0 && <Pressable onPress={() => onCompare(targets)} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
-        <ArrowLeftRight {...icon} />
-      </Pressable>}
+      {onView && <IconButton Icon={onView.mode === 'tree' ? GalleryHorizontal : TreeIcon} label={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={onView.toggle} tone={tone} />}
+      <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={onAround.toggle} on={onAround.on} tone={tone} />
+      {onRotate && <IconButton Icon={RotateCwSquare} label="تدوير الشجرة" onPress={onRotate} tone={tone} />}
+      {evidence && <IconButton Icon={BookOpen} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
+      {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" onPress={() => onCompare(targets)} tone={tone} />}
       {/* Share is always the last button (the left end). */}
-      <Pressable onPress={onShare} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-        <Send {...icon} />
-      </Pressable>
+      <IconButton Icon={Send} label="مشاركة" onPress={onShare} tone={tone} />
     </View>
   );
 }

@@ -9,6 +9,9 @@ export type AyahWords = Record<string, string[]>;
 
 export const HIZB = '۞';
 
+/** One ayah's words, its hizb mark left out, from wherever a platform reads its pages (the app's bundle, the website's server). */
+export type AyahWordsOf = (key: string) => readonly string[] | undefined;
+
 export function ayahWordsOf(pages: readonly MushafPage[]): AyahWords {
   const words: AyahWords = {};
   let surah = 0;

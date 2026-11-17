@@ -2,8 +2,8 @@ import { ScrollView, View } from 'react-native';
 import { router, type ErrorBoundaryProps } from 'expo-router';
 import { RotateCcw, House } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from '@/components/Text';
-import Button from '@/components/Button';
+import { Text } from '@/ui/Text';
+import Button from '@/ui/Button';
 import { usePalette } from '@/lib/theme';
 
 /**

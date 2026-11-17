@@ -59,7 +59,7 @@
 .railActions, .railLogo { display: none; }
 @media (max-width: 1023.98px) {
   .tabSpacer { display: block; height: calc(var(--app-tabbar)); }
-  /* A see-through pill floating over the page, low like the app's (mobile/src/components/TabBar.tsx). */
+  /* A see-through pill floating over the page, low like the app's (mobile/src/ui/TabBar.tsx). */
   .tabs {
     position: fixed; inset-inline: calc(20px + env(safe-area-inset-left)) calc(20px + env(safe-area-inset-right)); bottom: var(--tabbar-bottom); z-index: 50; display: flex;
     height: 56px; padding-inline: 6px; border-radius: 999px;

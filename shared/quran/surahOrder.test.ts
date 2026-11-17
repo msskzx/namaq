@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/surahOrder.json';
+import corpus from '../data/quran/trees.json';
+import surahRows from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
 import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, orderInJuz, orderSurahs } from './surahOrder';
 
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 const surahs = orderSurahs(data, num);
 
 describe('surah order data', () => {
@@ -33,8 +36,8 @@ describe('surah order data', () => {
     for (const [to, link] of Object.entries(ORDER_LINKS)) for (const [a, b] of link.pairs) {
       expect(Number(a.split(':')[0])).toBeLessThan(Number(to));
       expect(Number(b.split(':')[0])).toBe(Number(to));
-      expect(data.ayat[a as keyof typeof data.ayat]).toBeTruthy();
-      expect(data.ayat[b as keyof typeof data.ayat]).toBeTruthy();
+      expect(data(a)).toBeTruthy();
+      expect(data(b)).toBeTruthy();
     }
   });
 });
@@ -52,7 +55,7 @@ describe('orderSurahs', () => {
       const counts = s.opening.map(a => a.text.split(' ').length);
       const total = counts.reduce((x, y) => x + y, 0);
       expect(s.opening.length).toBeLessThanOrEqual(4);
-      expect(total >= 10 || s.opening.length === 4 || s.opening.length === data.counts[String(s.surah) as keyof typeof data.counts]).toBe(true);
+      expect(total >= 10 || s.opening.length === 4 || s.opening.length === surahRows.find(row => row.number === s.surah)!.numberOfAyat).toBe(true);
       expect(total - counts.at(-1)!).toBeLessThan(10);
     }
   });

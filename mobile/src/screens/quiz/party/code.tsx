@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
@@ -13,9 +13,9 @@ import type { ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
-import BackBar from '@/components/BackBar';
-import Button, { Row } from '@/components/Button';
-import LoadingDots from '@/components/LoadingDots';
+import TopBar from '@/ui/TopBar';
+import Button, { Row } from '@/ui/Button';
+import LoadingDots from '@/ui/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
 import QrCode from '@/components/QrCode';
 import QuizExplainer from '@/components/QuizExplainer';
@@ -416,10 +416,10 @@ export default function PartyRoom() {
   const title = view && (view.phase === 'question' || view.phase === 'reveal') ? `السؤال ${num(view.index + 1)} من ${num(view.total)}` : 'اختبار جماعي';
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <BackBar title={title}>
+      <TopBar back={() => router.back()} title={title}>
         {(status === 'connecting' || status === 'closed' || status === 'offline') && view ? <Text style={{ color: palette.muted, fontSize: 14 }}>يعيد الاتصال…</Text> : null}
         {joined && <Button variant="plain" Icon={LogOut} accessibilityLabel="غادر" onPress={leave} />}
-      </BackBar>
+      </TopBar>
       {joined && error && !['not-ready', 'name-taken', 'name-empty'].includes(error) ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right', padding: 12 }}>{ERRORS[error]}</Text> : null}
       {body}
     </KeyboardAvoidingView>

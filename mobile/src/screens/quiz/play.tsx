@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, ArrowRight, Check, Eraser, Eye, LogOut, RotateCcw, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { emptyBranchAnswers } from '@shared/quiz/score';
-import BackBar from '@/components/BackBar';
-import Button, { Row } from '@/components/Button';
+import TopBar from '@/ui/TopBar';
+import Button, { Row } from '@/ui/Button';
 import QuestionSwipe from '@/components/QuestionSwipe';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
@@ -76,7 +76,7 @@ export default function QuizPlay() {
   if (!run || run.questions.length === 0) {
     return (
       <View style={{ flex: 1, backgroundColor: palette.paper }}>
-        <BackBar />
+        <TopBar back={() => router.back()} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 16 }}>
           <Text style={{ color: palette.muted, fontSize: 17, textAlign: 'center' }}>{run ? 'لا توجد أسئلة كافية لهذا الاختيار.' : 'لا يوجد اختبار مفتوح.'}</Text>
           <Button label="العودة للإعداد" onPress={() => { setRun(null); router.back(); }} />
@@ -94,9 +94,9 @@ export default function QuizPlay() {
   const dots = <QuestionDots inBar states={run.questions.map((_, i) => questionState(run, i))} current={current} onPick={i => update(goTo(run, i))} palette={palette} />;
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <BackBar title={run.submitted ? 'النتيجة' : undefined} middle={run.submitted ? undefined : dots}>
+      <TopBar back={() => router.back()} title={run.submitted ? 'النتيجة' : undefined} middle={run.submitted ? undefined : dots}>
         <Button variant="plain" Icon={LogOut} accessibilityLabel="الخروج للإعدادات" onPress={() => { setRun(null); router.back(); }} />
-      </BackBar>
+      </TopBar>
       {run.submitted ? <Results run={run} palette={palette} /> : (
         <>
           <QuestionSwipe onNext={last ? undefined : () => update(goTo(run, current + 1))} onPrevious={current === 0 ? undefined : () => update(goTo(run, current - 1))}>

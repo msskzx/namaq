@@ -7,7 +7,6 @@ import { SettingsHelp } from '@/components/common/SettingsHelp';
 import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { BOOKS, citeLabel, citeUrl, ORDER_HELP, ORDER_JUZ, orderInJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
 
 const HELP = [
@@ -30,7 +29,7 @@ function PairAyah({ ayah }: { ayah: OrderAyah }) {
   return <>
     <span className="whitespace-nowrap pt-1.5 text-sm text-[var(--home-muted)]">{ayah.place}</span>
     <span className="font-quran text-xl leading-[2]">
-      {ayah.words.map((w, i) => <span key={i} data-shared={w.shared || undefined} className={w.shared ? 'text-[var(--home-accent)]' : undefined}>{`${mushafText(w.text)} `}</span>)}
+      {ayah.words.map((w, i) => <span key={i} data-shared={w.shared || undefined} className={w.shared ? 'text-[var(--home-accent)]' : undefined}>{`${w.text} `}</span>)}
     </span>
   </>;
 }
@@ -55,7 +54,7 @@ function SurahCard({ s }: { s: OrderSurah }) {
     <li className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-1">
       <h2 className="flex items-baseline gap-2"><span className="text-2xl text-[var(--home-accent)]">{s.name}</span><span className="text-sm text-[var(--home-muted)]">{num(s.surah)}</span></h2>
       <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
-        {s.opening.map(a => <span key={a.ayah}>{`${mushafText(a.text)} `}<span className="text-[var(--home-amber)]">{`${num(a.ayah)} `}</span></span>)}
+        {s.opening.map(a => <span key={a.ayah}>{`${a.text} `}<span className="text-[var(--home-amber)]">{`${num(a.ayah)} `}</span></span>)}
       </p>
       <p className="mt-1 text-lg leading-loose">«{s.aim.text}»</p>
       <Source cite={s.aim.src} />
