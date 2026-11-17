@@ -15,6 +15,7 @@ import TreeIcon from '@/components/common/TreeIcon';
 import styles from './Search.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 /** Results a group shows until its arrow opens the rest; at most this many when open (shared/quran/searchSources.ts). */
 export const GROUP_SHOWN = 3;
@@ -117,7 +118,7 @@ export default function SearchView() {
     <NavActions>
       <SearchField label="ابحث في كل شيء" placeholder="ابحث" value={query} onChangeText={setQuery} className="min-w-0 flex-1" />
     </NavActions>
-    {!waiting && found.query && !groups.length && <p className={styles.empty}>لا توجد نتيجة مطابقة.</p>}
+    {!waiting && found.query && !groups.length && <Empty text="لا توجد نتيجة مطابقة." />}
     {groups.map(group => {
       const { title, Icon } = GROUPS[group.kind];
       const more = group.hits.length > GROUP_SHOWN;

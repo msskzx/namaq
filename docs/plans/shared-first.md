@@ -151,6 +151,7 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
 - Step 5: `common/Segmented` is the one tab row (`tabs` makes a tablist, `fill`, option `name`/`lang`). Balagha's two books, the book sheet's tabs and the language switch use it. The library switch stays a top-bar switch; word lists and لطائف topics become chips (step 6).
 - Step 6: `common/Chip` is the one chip (as the app's `ui/Chip`: `lit`, `quran`, `dashed`, `small`, `count`, `check`, `role`, removable with `onClear`/`clearHref`). Filters, topics, i'rab words, tree surahs, compare's ayah picker and the quiz, party, events, nasab, listen and qira'at choice rows use it. The recite pen setting stays with the quiz thread.
 - Step 7: `common/Field` is the one text field (`multiline`, `code`) and `SearchField` the one search (magnifier, clear ×). The site search, city, surah, word, book and events searches, the party's code and name, the question bank search and the ayah note use them. The quiz and mushaf writing boxes and the people, graph and phrase comboboxes keep their own input for now.
+- Step 8: `common/Empty` is the one "nothing here" line (muted, centred, 15/26 as the app's `ui/Empty`; `children` puts an action under it). Library, site search, events, titles, people, nasab, quizzes, tree filters, compare and the word charts use it. Suggestion rows inside comboboxes and the surah index's result count stay as they are. The website pass is done.
 
 ## AGENTS.md rule (added as "Shared first")
 

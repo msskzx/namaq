@@ -14,6 +14,7 @@ import styles from './Nasab.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import LoadingDots from '@/components/common/LoadingDots';
 import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
@@ -139,7 +140,7 @@ export default function NasabView() {
         </ul>
       )}
 
-      {subjects.length === 0 && <p>{isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'}</p>}
+      {subjects.length === 0 && <Empty text={isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'} />}
       {failed && subjects.length > 0 && <p role="alert">{isArabic ? 'تعذر تحميل النسب.' : 'Could not load the nasab.'}</p>}
       {subjects.length > 0 && !current && !failed && <LoadingDots fill />}
       {missing.length > 0 && (

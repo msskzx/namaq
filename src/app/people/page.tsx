@@ -16,6 +16,7 @@ import type { Pagination } from '@/types/pagination';
 import { fetcher } from '@/lib/swr';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import Empty from '@/components/common/Empty';
 
 const PAGE_SIZE = 12;
 
@@ -186,9 +187,7 @@ const PeoplePage = () => {
           </div>
 
           {!isValidating && peoplePages && allPeople.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
-              {translations[language]?.noResults || 'No results found'}
-            </p>
+            <Empty text={translations[language]?.noResults || 'No results found'} />
           )}
         </>
       )}

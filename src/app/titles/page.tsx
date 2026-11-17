@@ -9,6 +9,7 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 
 import translations from '@/components/language/translations';
 import { fetcher } from '@/lib/swr';
+import Empty from '@/components/common/Empty';
 
 export default function TitlesPage() {
   const { language } = useLanguage();
@@ -30,9 +31,7 @@ export default function TitlesPage() {
                   <TitleCard key={title.slug} title={title} language={language} url={`/people?title=${title.slug}`} />
                 ))
               ) : (
-                <div className="col-span-full text-center py-4 text-gray-500">
-                  {language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'}
-                </div>
+                <Empty className="col-span-full" text={language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'} />
               )}
             </div>
           )}

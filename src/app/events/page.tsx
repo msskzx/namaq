@@ -15,6 +15,7 @@ import { filterTimeline, parseKinds, TIMELINE_KINDS, type TimelineItem, type Tim
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import Chip from '@/components/common/Chip';
 import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 const KIND_LABELS: Record<TimelineKind, { ar: string; en: string }> = {
   event: { ar: "حدث", en: "Event" },
@@ -71,7 +72,7 @@ function EventsPage() {
           {isLoading || !items ? (
             <LoadingDots fill="page" />
           ) : shown.length === 0 ? (
-            <p className="text-center text-gray-600 dark:text-gray-400">{ar ? "لا توجد نتائج مطابقة." : "Nothing matches."}</p>
+            <Empty text={ar ? "لا توجد نتائج مطابقة." : "Nothing matches."} />
           ) : (
             <EventTimeline events={shown} />
           )}

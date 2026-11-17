@@ -23,6 +23,7 @@ import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 type FilterDraft = { unit: FilterUnit; values: RangeDraft; filters: GroupFilters; saved: boolean };
 
@@ -177,7 +178,7 @@ export function SurahChip({ surah, ayah, clear }: { surah: string; ayah?: number
 
 export function NoTrees({ query, grouped = false }: { query: string; grouped?: boolean }) {
   const ar = useLanguage().language === 'ar';
-  return <p role="status" className="text-sm text-[var(--home-muted)]">{grouped ? (ar ? 'لا مواضع متشابهة تطابق التصفية.' : 'No parallel passages match these filters.') : query
+  return <Empty text={grouped ? (ar ? 'لا مواضع متشابهة تطابق التصفية.' : 'No parallel passages match these filters.') : query
     ? (ar ? `لا شجرة تطابق «${query}».` : `No tree matches «${query}».`)
-    : (ar ? 'لا شجرة في هذا النطاق.' : 'No tree in this range.')}</p>;
+    : (ar ? 'لا شجرة في هذا النطاق.' : 'No tree in this range.')} />;
 }

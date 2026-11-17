@@ -28,7 +28,6 @@ import { normalizeWord } from '@shared/quran/normalize';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
-import { NOTE } from '../panel';
 import PairSwipe from './PairSwipe';
 import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
@@ -46,6 +45,7 @@ import { surahName } from '@shared/quran/surahNames';
 import Frame from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -239,7 +239,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {(todo || juz) && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{todo ? (ar ? 'راجعت كل الصفحات هنا.' : 'Every page here is reviewed.') : ar ? 'لا صفحات بهذه التصفية.' : 'No pages match this filter.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
+        {(todo || juz) && !savedOnly && pairs.length === 0 ? <Empty text={todo ? (ar ? 'راجعت كل الصفحات هنا.' : 'Every page here is reviewed.') : ar ? 'لا صفحات بهذه التصفية.' : 'No pages match this filter.'} /> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
@@ -258,7 +258,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
           </li>
         ))}</ul>
           : all.length ? <ul data-all>{all.map(pair => row(pair, sides(pair)))}</ul>
-          : <p role="status" className={`${NOTE} px-3`}>{ar ? 'لا سورة بهذا البحث.' : 'No surah matches this search.'}</p>}
+          : <Empty text={ar ? 'لا سورة بهذا البحث.' : 'No surah matches this search.'} />}
       </div>
     </div>
   );
@@ -613,7 +613,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} names={videoNames(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
-          {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
+          {shown.length === 0 ? <Empty text={savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'} />
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} onPageVideo={canShare ? openPageVideo : undefined} />)}</ol>}
         </PairSwipe>
         {/* At the end of the cards, step on without scrolling back up. */}
