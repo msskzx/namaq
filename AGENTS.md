@@ -231,7 +231,10 @@ the KFGQPC Hafs page text with its tashkeel, ayah number medallion and every
 waqf, sajda and hizb sign. The copied level drops only the position on the
 page (two ayat stacked in compare or the matrix, words in a tree box); it keeps
 everything else. Features store places (surah:ayah:word), never copies of the
-text. Only the module sets the Quran font. The one exception is Quran quoted
+text. The words of each ayah as the page prints them, signs included, are in
+`shared/data/quran/ayahWords.json`, built from the pages by
+`npm run quran:ayah-words`; `shared/quran/quranText/ayahWords.ts` maps the
+older tree text's words onto them. Only the module sets the Quran font. The one exception is Quran quoted
 inside a book. `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 
