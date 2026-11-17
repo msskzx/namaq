@@ -73,7 +73,7 @@ describe('compare answers', () => {
   const ask = question.compare as CompareAsk;
 
   it('grades the first two words of each blank, as the tree quiz grades a leaf', () => {
-    expect(ask.blanks.map((_, i) => spoken(blankWords(ask, i))[0])).toEqual(['وَيَعْبُدُونَ', 'يَنفَعُهُمْ']);
+    expect(ask.blanks.map((_, i) => spoken(blankWords(ask, i))[0])).toEqual(['وَيَعۡبُدُونَ', 'يَنفَعُهُمۡ']);
     const rows = compareCorrections(ask, ['ويعبدون', 'ينفعكم شيئا']);
     expect(rows.map(row => row.correct)).toEqual([true, false]);
     expect(rows[1].right).toBe(0);

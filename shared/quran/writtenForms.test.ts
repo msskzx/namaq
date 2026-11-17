@@ -4,6 +4,7 @@ import { branchInventory } from './branchInventory';
 import type { Branch, BranchAyah, Variant } from './branches';
 import { createPhrasePresenter } from './phraseTrees';
 import { writtenForms } from './writtenForms';
+import { bare } from './quranText/ayahWords';
 
 const node = { forms: { '2:161': ['عَلَيْهِمْ', 'لَعْنَةُ', '﴿١٦١﴾'], '3:87': ['عَلَيْهِمْ', 'لَعْنَةَ', '﴿٨٧﴾'], '9:9': ['عَلَيْهِمْ', 'لَعْنَةُ', '﴿٩﴾'] } };
 
@@ -47,7 +48,8 @@ describe('every word a tree draws', () => {
     const wrong: string[] = [];
     const check = (id: string, words: string[], forms: Record<string, string[]> | undefined) => words.forEach((shared, index) => {
       for (const { word, keys } of writtenForms({ forms }, index, shared)) {
-        if (forms && !isEnd(word) && !keys.every(key => forms[key][index] === word)) wrong.push(`${id}: ${word}`);
+        // A word its ayat stop on differently is drawn without the waqf sign only some of them carry: the rest is theirs letter for letter.
+        if (forms && !isEnd(word) && !keys.every(key => forms[key][index] === word || bare(forms[key][index]) === word)) wrong.push(`${id}: ${word}`);
       }
     });
     const walk = (id: string, branch: Branch) => { check(id, branch.words, branch.forms); branch.children.forEach(child => walk(id, child)); };
@@ -65,6 +67,6 @@ describe('every word a tree draws', () => {
     const piece = branchInventory({}, null).find(candidate => candidate.id === 'cmp:0drvgjs1g0a1fs')!;
     const { tree, offsets } = present(piece.phrase);
     expect(tree.forms!['2:161'][1]).toBe(byKey.get('2:161')!.words[offsets['2:161'] + 1]);
-    expect(writtenForms(tree, 1, tree.words[1]).map(form => form.word)).toEqual(['لَعْنَةُ', 'لَعْنَةَ']);
+    expect(writtenForms(tree, 1, tree.words[1]).map(form => form.word)).toEqual(['لَعۡنَةُ', 'لَعۡنَةَ']);
   });
 });

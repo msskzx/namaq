@@ -102,12 +102,10 @@ describe('the write boxes', () => {
 });
 
 describe('pageAsk', () => {
-  it('shows the opening as the quiz counts it, past a quarter sign and where the page splits words differently', () => {
+  it('shows the opening as the quiz counts it, past a quarter sign', () => {
     expect(pageAsk('112:1', ['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'], { shows: 2, write: 'rest' })).toEqual({ cut: 3, asked: [3, 4] });
-    // 15:7 «لَّوۡمَا» is one page word for the quiz's two.
-    expect(pageAsk('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], { shows: 2, write: 'rest' })).toEqual({ cut: 1, asked: [1, 2] });
-    // 37:130 «إِلۡ يَاسِينَ» is two page words for the quiz's one.
-    expect(pageAsk('37:130', ['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلۡ', 'يَاسِينَ'], { shows: 3 }).cut).toBe(4);
+    // The quiz's words are the page's: 15:7 «لَّوۡمَا» is one word for both.
+    expect(pageAsk('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], { shows: 1, write: 'rest' })).toEqual({ cut: 1, asked: [1, 2] });
   });
   it('hides the whole ayah for its first and last words, and shows all of it without a count', () => {
     const words = ['ٱلۡحَمۡدُ', 'لِلَّهِ', 'رَبِّ', 'ٱلۡعَٰلَمِينَ', 'مَٰلِكِ', 'يَوۡمِ', 'ٱلدِّينِ', 'إِيَّاكَ'];

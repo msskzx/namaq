@@ -2,7 +2,6 @@
 // page, and the reader writes its first and last few words, one box each.
 import { matchedWords } from '../quiz/branchAnswers';
 import { normalizeWord } from './normalize';
-import { pageWordsAt } from './quranText/ayahWords';
 
 /** How many words are written at each end of an ayah. */
 export const WRITE_EACH = 3;
@@ -101,14 +100,14 @@ export type PageAsk = { shows?: number; write?: 'rest' | 'ends'; title?: 'hidden
 
 /**
  * Where on the page an asked ayah's hidden part starts (`cut`, among the page's words, ۞ included) and the words written in
- * boxes. The quiz's words and the page's line up one to one but in the few ayat they split differently (pageWordsAt).
+ * boxes. The quiz's words are the page's words; the page only adds ۞, which `spoken` skips.
  */
 export function pageAsk(key: string, pageWords: string[], ask: PageAsk): { cut: number; asked: number[] } {
   const spoken = pageWords.flatMap((word, at) => (maxLetters(word) ? [at] : []));
   const shows = ask.shows;
   const cut = shows === undefined ? pageWords.length
     : shows <= 0 ? 0
-    : (spoken[Math.max(...pageWordsAt(key, shows - 1))] ?? pageWords.length - 1) + 1;
+    : (spoken[shows - 1] ?? pageWords.length - 1) + 1;
   const asked = ask.write === 'ends' ? wordTargets(pageWords).filter(at => at >= cut)
     : ask.write === 'rest' ? spoken.filter(at => at >= cut) : [];
   return { cut, asked };

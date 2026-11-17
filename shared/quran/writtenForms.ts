@@ -1,4 +1,5 @@
 import type { Branch } from './branches';
+import { bare } from './quranText/ayahWords';
 
 export type WrittenForm = { word: string; keys: string[] };
 
@@ -12,9 +13,14 @@ const chosenForms = (node: Pick<Branch, 'forms'>, index: number, lit?: ReadonlyS
 
 export function writtenForms(node: Pick<Branch, 'forms'>, index: number, shared: string, lit?: ReadonlySet<string>): WrittenForm[] {
   const chosen = chosenForms(node, index, lit);
-  const found = new Map<string, string[]>();
-  for (const [key, words] of chosen) found.set(words[index], [...(found.get(words[index]) ?? []), key]);
-  const forms = [...found].map(([word, keys]) => ({ word, keys })).sort((a, b) => b.keys.length - a.keys.length);
+  // Ayat that write a word alike but stop on it differently (a waqf sign on one) write it the same; the shared word keeps a sign
+  // only where all of them carry it.
+  const found = new Map<string, { words: Set<string>; keys: string[] }>();
+  for (const [key, words] of chosen) {
+    const at = found.get(bare(words[index])) ?? { words: new Set<string>(), keys: [] };
+    found.set(bare(words[index]), { words: at.words.add(words[index]), keys: [...at.keys, key] });
+  }
+  const forms = [...found].map(([plain, { words, keys }]) => ({ word: words.size === 1 ? [...words][0] : plain, keys })).sort((a, b) => b.keys.length - a.keys.length);
   if (forms.length === 0 || (forms.length > 1 && forms.every(form => isEnd(form.word)))) return [{ word: shared, keys: chosen.map(([key]) => key) }];
   return forms;
 }
@@ -26,7 +32,7 @@ export function writtenStrands(node: Pick<Branch, 'forms'>, from: number, to: nu
   const found = new Map<string, WrittenStrand>();
   for (const [key, words] of chosenForms(node, from, lit)) {
     const run = words.slice(from, to);
-    const id = run.join(' ');
+    const id = run.map(bare).join(' ');
     found.set(id, { words: run, keys: [...(found.get(id)?.keys ?? []), key] });
   }
   return [...found.values()].sort((a, b) => b.keys.length - a.keys.length);

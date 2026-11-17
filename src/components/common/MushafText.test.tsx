@@ -12,7 +12,8 @@ afterEach(cleanup);
 
 it('renders comparison-source tanwin, ya and madda in the reader encoding', () => {
   const { container } = render(<MushafText>وَیَضِیقُ صَدۡرِی ذَنۢبࣱ مُوسَىٰۤ فِرۡعَوۡنَۚ</MushafText>);
-  expect(container.textContent).toBe('وَيَضِيقُ صَدۡرِي ذَنۢبٞ مُوسَىٰٓ فِرۡعَوۡنَ');
+  // A word already as the page writes it keeps its waqf sign (owner, 2026-11-17: every sign the mushaf shows).
+  expect(container.textContent).toBe('وَيَضِيقُ صَدۡرِي ذَنۢبٞ مُوسَىٰٓ فِرۡعَوۡنَۚ');
 });
 
 it('keeps context highlighting on the word rendered in the mushaf encoding', () => {
