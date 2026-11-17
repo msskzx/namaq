@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Pause, Play, Repeat, X } from 'lucide-react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { ONCE, reciterName, reciterOf } from '@shared/quran/recitation';

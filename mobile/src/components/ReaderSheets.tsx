@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
 import corpus from '@shared/data/quran/trees.json';
 import type { BranchAyah } from '@shared/quran/branches';
@@ -9,7 +9,7 @@ import { plainName } from '@shared/quran/normalize';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { indexAyat, searchAyat, searchable, type AyahSearch, type IndexedAyah } from '@shared/quran/ayahSearch';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';

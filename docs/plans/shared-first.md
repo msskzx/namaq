@@ -6,8 +6,9 @@ place; screens only arrange shared pieces. A missing variant becomes an option
 on the shared piece, never a copy.
 
 This file is the inventory (what is built more than once today), one home and
-a merge plan for each, the AGENTS.md rule, and a candidate guard. Nothing here
-is built yet. The recite bar is left out (the quiz thread is merging it) and so
+a merge plan for each, the AGENTS.md rule, and the guard. The owner agreed the
+guard on 2026-11-17; step 1 (the shared folder), the rule and the guard are in
+the same PR as this plan. The recite bar is left out (the quiz thread is merging it) and so
 is Quran text (the Quran text pipeline owns it).
 
 Counted on `main` at 566cd02.
@@ -51,7 +52,7 @@ menu, `ScopeFilter`, `CardMenu`, `Tour`, `AyahActions`); 4 loaders
 Each row is one PR. Order: cheapest high-traffic first. Each PR moves callers
 onto the shared piece, deletes the copies, and posts before/after screenshots.
 
-### 1. One shared folder (move only)
+### 1. One shared folder (move only) — done
 Today `mobile/src/components/` mixes 80 files: primitives (`Button`, `Sheet`,
 `Toggle`, `Text`) next to whole features (`Reader`, `QuizPage`, `HomeFeed`).
 Nobody can "search the shared folder" when it is this mixed.
@@ -139,7 +140,7 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
 (worst: `Utilities.tsx` 10, `homepage/Memorized.tsx` 6), one `Dialog` for the
 6 own dialogs, one loader. One PR per piece.
 
-## AGENTS.md rule (draft)
+## AGENTS.md rule (added as "Shared first")
 
 > ## Shared first
 >
@@ -157,15 +158,15 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
 > - Every PR that touches UI lists, before `Records used:`, a line
 >   `Shared pieces: used Button, Sheet; added Chip` (or `none`).
 
-## Candidate guard (after the second vote; needs the owner's sign-off)
+## Guard (second vote taken, owner agreed 2026-11-17)
 
 The first draft only banned importing `Pressable`, `Modal` and the like, and
 any `borderRadius`. The second agent prototyped it and showed it was too easy
 to get around and too blunt (see the vote below). This version takes all of its
 changes.
 
-`mobile/src/sharedFirst.test.ts`, built like `oneQuranText.test.ts`. Outside
-`mobile/src/ui/`:
+`shared/sharedFirst.test.ts` (one file for the app and the website), built
+like `oneQuranText.test.ts`. Outside `mobile/src/ui/`:
 
 1. **No drawn controls.** Count JSX uses (not imports) of: `Pressable`,
    `Touchable*`, `Modal`, `TextInput`, `Switch`, `ActivityIndicator` from
@@ -187,14 +188,18 @@ changes.
 Taken after step 1 (move Button, Sheet, Toggle, TopBar, TabBar, `CARD` into
 `ui/`), so the shared pieces are not listed as breaks.
 
-Website twin `src/sharedFirst.test.ts`, outside `src/components/common/`: no
+Website rules in the same file, outside `src/components/common/`: no
 `<button`, `<input`, `<select`, `<textarea`, `<dialog`, `role="dialog"`,
 `role="button"`, `popover`, `createPortal`, `fixed` overlays, `onClick` on a
 `div`/`span`, or `<summary>` used as a button; `rounded-*` classes counted per
 file and only allowed to shrink.
 
-Baseline sizes from the prototype (before the move): rule 1, 74 files and 229
-uses; framed surfaces, about 89 boxes in 56 files.
+Baseline after the move (`shared/sharedFirst.baseline.json`): app controls 222
+in 65 files, app boxes 235 in 60 files, website controls 171 in 75 files,
+website rounded corners 269 in 96 files. Checked to fail on: a new button in
+an unlisted screen through a multi-line `Pressable as Tap` import, a second
+button in a listed file, a `View` with responder props, a `...CARD` box with a
+border, and a clickable `div` with `rounded-xl` on the website.
 
 ### Second vote
 

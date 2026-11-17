@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { ChevronDown, ChevronUp, Sparkles } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanAt, itqanCredit, itqanPage, type ItqanParagraph } from '@shared/quran/itqanBalagha';
@@ -13,8 +13,8 @@ import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
-import LoadingDots from './LoadingDots';
-import Sheet from './Sheet';
+import LoadingDots from '@/ui/LoadingDots';
+import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
 
 /**

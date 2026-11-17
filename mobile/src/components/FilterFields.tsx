@@ -1,6 +1,6 @@
 import { useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { shownBookmarks } from '@/lib/home';
@@ -9,8 +9,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
-import Toggle from './Toggle';
-import NumberPicker, { NumberList } from './NumberPicker';
+import Toggle from '@/ui/Toggle';
+import NumberPicker, { NumberList } from '@/ui/NumberPicker';
 import { IconButton } from './Studio';
 import surahRows from '@shared/data/quran/surahs.json';
 import { surahNames } from '@/lib/branches';

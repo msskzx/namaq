@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 
 const WAVE = 'M6 0 C 0 6, 0 14, 6 20 C 12 26, 12 34, 6 40';

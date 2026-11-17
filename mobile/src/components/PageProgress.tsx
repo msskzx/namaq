@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { useCompact } from '@/lib/chrome';
 import type { Palette } from '@/lib/theme';

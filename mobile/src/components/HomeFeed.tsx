@@ -21,7 +21,7 @@ import { dayNumber } from '@shared/dailyPick';
 import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
-import { Text } from './Text';
+import { Text } from '@/ui/Text';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';

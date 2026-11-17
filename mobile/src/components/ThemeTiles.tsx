@@ -1,5 +1,5 @@
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import Svg, { Path } from 'react-native-svg';
 import { Check } from 'lucide-react-native';
 import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';

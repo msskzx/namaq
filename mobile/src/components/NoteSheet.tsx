@@ -4,8 +4,8 @@ import { NotebookPen, Send, Trash2 } from 'lucide-react-native';
 import { shareAyah } from './AyahShare';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
-import Sheet from './Sheet';
-import { Text, TextInput } from './Text';
+import Sheet from '@/ui/Sheet';
+import { Text, TextInput } from '@/ui/Text';
 import { ayahText, surahNames } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 

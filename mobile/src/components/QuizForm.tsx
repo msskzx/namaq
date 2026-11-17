@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { QUIZ_LEAVES, type QuizTopic } from '@shared/quiz/settings';
 import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_NOTES, type Difficulty } from '@shared/quiz/difficulty';
-import Button, { Row } from './Button';
+import Button, { Row } from '@/ui/Button';
 import { CARD, type Palette } from '@/lib/theme';
 
 export function Section({ title, palette, children }: { title: string; palette: Palette; children: React.ReactNode }) {

@@ -1,6 +1,6 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView, type GestureType } from 'react-native-gesture-handler';
@@ -13,7 +13,7 @@ import { matrixOf, readId, surahNames, type MatrixAyah, type MatrixCell, type Pr
 import { sharedTone } from '@/lib/marks';
 import type { Size } from '@/lib/camera';
 import { QURAN_FONT, toneColor, type Palette, CARD } from '@/lib/theme';
-import Hourglass from './Hourglass';
+import Hourglass from '@/ui/Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
 import type { Group, Tag } from '@shared/quran/mutashabih/types';

@@ -22,7 +22,7 @@ const RAW_EXTERNAL = [
   /Linking\.openURL|\bopenURL\b|window\.open\(|openBrowserAsync/,
 ];
 /** The two components themselves, and the quiz reference button that opens Namaq's own reader in a new tab. */
-const ALLOWED = new Set(['src/components/common/ExternalLink.tsx', 'mobile/src/components/ExternalLink.tsx', 'src/components/common/QuizReferenceDialog.tsx']);
+const ALLOWED = new Set(['src/components/common/ExternalLink.tsx', 'mobile/src/ui/ExternalLink.tsx', 'src/components/common/QuizReferenceDialog.tsx']);
 
 describe('ExternalLink', () => {
   afterEach(cleanup);

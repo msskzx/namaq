@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { ArrowLeftRight, ChevronDown } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
-import TopBar from '@/components/TopBar';
+import TopBar from '@/ui/TopBar';
 import { useTabRetap } from '@/lib/tabRetap';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import PageProgress from '@/components/PageProgress';
 import ComparePager, { type Focus, type PagerHandle } from '@/components/ComparePager';

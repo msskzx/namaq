@@ -5,7 +5,7 @@ import { BookOpen, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';

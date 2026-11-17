@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
-import Sheet from './Sheet';
-import ExternalLink from './ExternalLink';
+import { Text } from '@/ui/Text';
+import Sheet from '@/ui/Sheet';
+import ExternalLink from '@/ui/ExternalLink';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
 import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';

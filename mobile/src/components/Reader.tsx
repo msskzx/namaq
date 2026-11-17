@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Play, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
@@ -16,8 +16,8 @@ import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBa
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes } from '@/lib/useWriteBoxes';
 import TabHint from './TabHint';
-import TopBar from './TopBar';
-import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
+import TopBar from '@/ui/TopBar';
+import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
@@ -28,7 +28,7 @@ import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
-import ActButton, { ACT_WIDTH } from './ActButton';
+import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';

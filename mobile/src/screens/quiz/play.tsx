@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, ArrowRight, Check, Eraser, Eye, LogOut, RotateCcw, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { emptyBranchAnswers } from '@shared/quiz/score';
-import BackBar from '@/components/BackBar';
-import Button, { Row } from '@/components/Button';
+import BackBar from '@/ui/BackBar';
+import Button, { Row } from '@/ui/Button';
 import QuestionSwipe from '@/components/QuestionSwipe';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';

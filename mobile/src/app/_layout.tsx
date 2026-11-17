@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette, dark } from '@/lib/theme';
 import '@/lib/storage';
-import LoadingScreen from '@/components/LoadingScreen';
+import LoadingScreen from '@/ui/LoadingScreen';
 
 SplashScreen.preventAutoHideAsync();
 
