@@ -37,8 +37,10 @@ let loadTimer: ReturnType<typeof setTimeout> | null = null;
 /**
  * The file asked for last. Its end moves playback on only once it has been heard playing, and only once: an end
  * reported for the file before it (the same ayah again on a repeat included) or reported twice is not this file's.
+ * A status still on its way from the file before cannot tell which file it is for, so the file counts as heard only
+ * after one status shows it at its start (not loaded yet, or under a second in).
  */
-let current: { key: string; heard: boolean } | null = null;
+let current: { key: string; started: boolean; heard: boolean } | null = null;
 /** A file that has not started after this long has failed: a stream with no connection can wait without an error. */
 const LOAD_LIMIT = 15000;
 
@@ -61,7 +63,9 @@ const clearLoad = () => { if (loadTimer) { clearTimeout(loadTimer); loadTimer = 
 function fail() {
   clearLoad();
   current = null;
+  // The lock screen's play would play past the app, which no longer follows a failed file.
   player?.pause();
+  player?.clearLockScreenControls();
   if (state) emit({ ...state, playing: false, loading: false, failed: true });
 }
 
@@ -69,7 +73,8 @@ function onStatus(status: AudioStatus) {
   if (!state || state.quiet || !current || current.key !== state.key) return;
   if (status.error) { fail(); return; }
   if (!status.didJustFinish) {
-    if (status.playing && status.isLoaded && !current.heard) {
+    if (!status.isLoaded || status.currentTime < 1) current.started = true;
+    if (status.playing && status.isLoaded && current.started && !current.heard) {
       current.heard = true;
       clearLoad();
       if (state.loading) emit({ ...state, loading: false });
@@ -101,7 +106,7 @@ function go(step: Step, playing = true) {
   p.replace({ uri: sourceOf(state.reciter, key) });
   p.loop = false;
   p.setPlaybackRate(plan.speed, 'high');
-  current = { key, heard: false };
+  current = { key, started: false, heard: false };
   if (playing) { p.play(); loadTimer = setTimeout(() => { loadTimer = null; if (current && !current.heard) fail(); }, LOAD_LIMIT); }
   p.setActiveForLockScreen(true, { title: title(key), artist: reciterName(reciterOf(state.reciter)) });
   emit({ ...state, step, key, playing, quiet: false, loading: playing, failed: false });

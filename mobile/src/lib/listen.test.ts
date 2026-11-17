@@ -14,7 +14,7 @@ vi.mock('react', () => ({ useSyncExternalStore: () => null }));
 vi.mock('./listenFiles', () => ({ localAyah: () => null, streamUrl: (_: number, key: string) => key }));
 vi.mock('./mushaf', () => ({ ayahCounts: new Map([[1, 7]]), surahNames: [] }));
 
-const status = (over: Partial<AudioStatus>) => ({ playing: false, isLoaded: true, didJustFinish: false, duration: 3, error: null, ...over }) as AudioStatus;
+const status = (over: Partial<AudioStatus>) => ({ playing: false, isLoaded: true, didJustFinish: false, duration: 3, currentTime: 0.25, error: null, ...over }) as AudioStatus;
 const heard = () => onStatus(status({ playing: true }));
 const ended = () => onStatus(status({ didJustFinish: true }));
 
@@ -65,5 +65,15 @@ describe('playback', () => {
     heard();
     vi.advanceTimersByTime(20000);
     expect(listen.readListening()!.failed).toBe(false);
+  });
+
+  it('a tick from the voice before does not count the new file as heard', () => {
+    listen.listen('1:1', '1:3');
+    heard();
+    listen.applyReciter(2);
+    onStatus(status({ playing: true, currentTime: 2.5 }));
+    expect(listen.readListening()!.loading).toBe(true);
+    vi.advanceTimersByTime(15000);
+    expect(listen.readListening()!.failed).toBe(true);
   });
 });
