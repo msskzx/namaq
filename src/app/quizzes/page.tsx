@@ -48,8 +48,8 @@ import QuizAnswer, { type QuizData } from "./QuizAnswer";
 import { branchesCorrect, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
-import Link from "next/link";
 import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
+import Card from '@/components/common/Card';
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings; every kind of question is chosen inside them (owner, 2026-11-17). */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -63,12 +63,11 @@ function QuizModes({ ar }: { ar: boolean }) {
     <div className={styles.page}>
       <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
         {modes.map(({ href, Icon, title, text }) => (
-          <Link key={href} href={href}
-            className={`${styles.panel} flex flex-col items-start gap-2 text-[var(--home-ink)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
+          <Card key={href} href={href} className="flex flex-col items-start gap-2 p-[clamp(1rem,3vw,2rem)] text-[var(--home-ink)] active:scale-[0.98]">
             <Icon className="size-12 text-[var(--home-accent)]" strokeWidth={1.5} aria-hidden />
             <span className="text-xl font-bold">{title}</span>
             <span className="text-[var(--home-muted)]">{text}</span>
-          </Link>
+          </Card>
         ))}
       </nav>
     </div>
@@ -248,14 +247,14 @@ export default function QuizzesPage() {
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-          {stored && <section className={`mb-6 flex flex-col gap-3 border-[var(--home-accent)] ${styles.panel}`} aria-label={ar ? "اختبار لم تُنهه" : "Unfinished quiz"}>
+          {stored && <Card as="section" picked className="mb-6 flex flex-col gap-3 p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "اختبار لم تُنهه" : "Unfinished quiz"}>
             <p>{ar ? `لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(stored.current + 1)} من ${num(stored.data.questions.length)}.` : `You have an unfinished quiz, at question ${stored.current + 1} of ${stored.data.questions.length}.`}</p>
             <div className="flex flex-wrap gap-2">
               <Button variant="primary" href={`${pathname}?${stored.search}`}><FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />{ar ? "أكمله" : "Continue it"}</Button>
               <Button onClick={leave}>{ar ? "اتركه" : "Leave it"}</Button>
             </div>
-          </section>}
-          <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+          </Card>}
+          <Card as="fieldset" className="mb-6 min-w-0 p-[clamp(1rem,3vw,2rem)]">
             <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {TOPIC_GROUPS.map((group) => (
               <div key={group.en} className="mb-3 last:mb-0">
@@ -270,9 +269,9 @@ export default function QuizzesPage() {
               </div>
             ))}
             {topics.includes("PERSON_CIRCLE") && <PersonPicker person={person} ar={ar} onCommit={(slug) => setParam({ person: slug, length: undefined })} />}
-          </fieldset>
+          </Card>
           {ranged && (
-            <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+            <Card as="fieldset" className="mb-6 min-w-0 p-[clamp(1rem,3vw,2rem)]">
               <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{hasBranches ? (ar ? "متشابهات القرآن" : "Phrase trees") : (ar ? "النطاق" : "Range")}</legend>
               <div className="mb-5 flex flex-wrap items-start gap-x-6 gap-y-4">
                 <div className="min-w-0 basis-full">
@@ -312,7 +311,7 @@ export default function QuizzesPage() {
               {onPage && <QuizPenSetting ar={ar} />}
               </div>
               {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}
-            </fieldset>
+            </Card>
           )}
           {availability && (
             <>
@@ -386,7 +385,7 @@ export default function QuizzesPage() {
                 );
               })}
             </div>
-            <div className={styles.panel}>
+            <Card className="p-[clamp(1rem,3vw,2rem)]">
               <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
               <QuizAnswer question={questions[current]} given={answers[current]} typed={typed[current]} hints={hints[current]} revealed={Boolean(revealed[current])}
                 names={data?.surahNames ?? {}} ar={ar}
@@ -400,7 +399,7 @@ export default function QuizzesPage() {
                   {ar ? "المصدر" : "Source"}
                 </Button>
               )}
-            </div>
+            </Card>
             <div className="mt-4 flex items-center justify-between">
               <Button variant="outline" disabled={current === 0} onClick={() => setCurrent((value) => Math.max(0, value - 1))}>
                 <FontAwesomeIcon icon={ar ? faArrowRight : faArrowLeft} />

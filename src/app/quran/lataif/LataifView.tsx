@@ -9,6 +9,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { TOPICS, topicOf, type LataifReference } from '@shared/quran/lataif';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
+import Card from '@/components/common/Card';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
 export const VOICE_COLOR: Record<Voice, string> = { he: 'var(--home-slot-1)', we: 'var(--home-green)', you: 'var(--home-root)' };
@@ -95,7 +96,7 @@ function Dialog({ turns }: { turns: TurnView[] }) {
 function ExampleCard({ view }: { view: ExampleView }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
-    <article id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 rounded-[var(--card-radius)] bg-[var(--home-card)] px-4 pt-3.5 pb-1.5">
+    <Card as="article" id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 px-4 pt-3.5 pb-1.5">
       <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} />
@@ -107,7 +108,7 @@ function ExampleCard({ view }: { view: ExampleView }) {
         <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
         <ShareImageButton size="icon" iconSize={20} href={`/quran/lataif#${view.key}`} />
       </div>
-    </article>
+    </Card>
   );
 }
 

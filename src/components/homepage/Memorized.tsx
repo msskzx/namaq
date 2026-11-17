@@ -8,6 +8,7 @@ import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked,
 import { num } from '@shared/quran/arabicNumber';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
+import Card from '@/components/common/Card';
 
 /**
  * «ما أحفظه» on the website, as the app's (mobile/src/components/Memorized.tsx): the range picker, the settings section
@@ -103,7 +104,7 @@ export function MemorizedPrompt() {
   const [picking, setPicking] = useState(false);
   if ((asked || memorized) && !picking) return null;
   const done = () => { setPicking(false); setMemorizedAsked(); };
-  return <section aria-labelledby="memorized-title" dir="rtl" className="flex flex-col gap-2 rounded-[14px] border border-dashed border-[var(--home-rule)] bg-[var(--home-card)] p-3">
+  return <Card as="section" dashed aria-labelledby="memorized-title" dir="rtl" className="flex flex-col gap-2 p-3">
     <div className="flex items-center gap-2">
       <BookOpenCheck size={20} aria-hidden className="text-[var(--home-accent)]" />
       <h2 id="memorized-title" className="flex-1 text-[17px] font-bold">{picking ? 'ما أحفظه' : 'ما الذي تحفظه؟'}</h2>
@@ -117,5 +118,5 @@ export function MemorizedPrompt() {
         <Check size={18} aria-hidden />اختر
       </Button>
     </>}
-  </section>;
+  </Card>;
 }

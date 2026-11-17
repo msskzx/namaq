@@ -20,6 +20,7 @@ import type { BalaghaAyah } from './balagha';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
+import Card from '@/components/common/Card';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
@@ -31,19 +32,18 @@ const load = async <T,>(api: string, key: string): Promise<T> => {
   if (!response.ok) throw new Error('preview');
   return response.json();
 };
-const CARD = 'block rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)]';
 
 /** Each differing word of the ayah in a card: Hafs's reading first, then the others in the accent colour, each with who reads it. */
 function Readings({ qiraat }: { qiraat: WordDifference[] }) {
   return qiraat.map(word => (
-    <div key={word.at.join('-')} className={`${CARD} shrink-0 px-3.5`}>
+    <Card key={word.at.join('-')} className="block shrink-0 px-3.5">
       {word.readings.map((reading, i) => (
         <div key={i} className={`flex items-center gap-3 py-2 ${i ? 'border-t border-[var(--home-rule)]' : ''}`}>
           <span className={`min-w-[6.5rem] font-quran text-2xl leading-[1.9] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</span>
           <span className="flex-1 text-sm leading-6 text-[var(--home-muted)]">{whoReads(reading, word.readings)}</span>
         </div>
       ))}
-    </div>
+    </Card>
   ));
 }
 
@@ -94,12 +94,12 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           {/* Each tree is the branches page's own card (owner, 2026-11-14): zoom, pan, a path lit on a click, its own tree/matrix switch, opening in the settings' view. */}
           {trees && data?.trees.map(tree => (
             // A drag on the tree pans it; it never slides the sheet away.
-            <div key={tree.id} data-no-swipe-close className={`${CARD} shrink-0 overflow-hidden`}>
+            <Card key={tree.id} data-no-swipe-close className="block shrink-0 overflow-hidden">
               <TreeViewCard tree={tree} height="min(24rem, 55dvh)" names={names} />
-            </div>
+            </Card>
           ))}
           {shown.kind === 'compare' && data?.compare.map(item => (
-            <Link key={item.href} href={item.href} aria-label={`${item.page}، ${item.partner}`} className={`${CARD} shrink-0 px-3.5 py-2.5`}>
+            <Card key={item.href} href={item.href} aria-label={`${item.page}، ${item.partner}`} className="shrink-0 px-3.5 py-2.5">
               <span className="flex items-center gap-1.5 text-sm text-[var(--home-muted)]">
                 <span className="flex-1">{item.page}</span>
                 <span>{item.partner}</span>
@@ -108,7 +108,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
               <span className="mt-1 block text-justify font-quran text-xl leading-[1.9] [text-align-last:right]">
                 {item.words.map((word, i) => <span key={i} className={word.shared ? 'text-[var(--home-accent)]' : undefined}>{`${i ? ' ' : ''}${word.text}`}</span>)}
               </span>
-            </Link>
+            </Card>
           ))}
         </div>
         {shown.kind === 'irab' || shown.kind === 'balagha' ? null : shown.kind === 'tafsir' ? tafsir && <div className="mx-4 mt-2.5 flex shrink-0 items-center gap-3 text-sm"><ExternalLink href={tafsirSadiPage(tafsir)} className="flex-1 text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink><OpenInBook book="sadi" ayah={shown.key} /></div>
