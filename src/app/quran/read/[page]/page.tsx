@@ -6,6 +6,7 @@ import { spreadOf, type MushafPage } from '@shared/quran/readerPage';
 import ReaderView, { MarkedReaderView } from '../ReaderView';
 import { garamond } from '../font';
 import { ayahLinksFor, pageAyat } from '../ayahLinks';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 export const revalidate = 86400;
 
@@ -25,7 +26,7 @@ export default async function QuranReadPage({ params }: { params: Promise<{ page
   const [datas, surahs] = await Promise.all([Promise.all(spread.map(async at => (await import(`../../../../../shared/data/quran/mushaf/${at}.json`)).default as MushafPage)), surahList()]);
   const before = (at: number) => surahs.findLast(surah => surah.page != null && surah.page < at);
   const shown = new Set([...datas.flatMap(data => data.items.flatMap(item => ('surah' in item ? [item.surah] : []))), ...spread.flatMap(at => before(at)?.number ?? [])]);
-  const names = Object.fromEntries(surahs.filter(surah => shown.has(surah.number)).map(surah => [surah.number, surah.name]));
+  const names = Object.fromEntries(surahs.filter(surah => shown.has(surah.number)).map(surah => [surah.number, SURAH_TITLES[surah.number]]));
   const pages = spread.map((at, i) => ({ page: at, data: datas[i], top: before(at)?.number }));
   const links = ayahLinksFor(pages.flatMap(entry => pageAyat(entry.data, entry.top)));
   const props = { page: number, pages, names, surahs, links, fontClass: garamond.variable };

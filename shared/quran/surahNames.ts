@@ -36,5 +36,10 @@ export const SURAH_NAMES: Readonly<Record<number, string>> = Object.freeze(
   Object.fromEntries(surahRows.map(row => [row.number, FIXES[row.number] ?? pause(row.title)])),
 );
 
+/** The mushaf's own surah titles, for the surah headers on a mushaf page only: «سُورَةُ البَقَرَةِ». */
+export const SURAH_TITLES: Readonly<Record<number, string>> = Object.freeze(
+  Object.fromEntries(surahRows.map(row => [row.number, row.title.replace(/ـ/g, '')])),
+);
+
 /** A surah's name with tashkeel, as shown everywhere: «البَقَرَة». */
 export const surahName = (number: number): string => SURAH_NAMES[number] ?? String(number);

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import surahRows from "@shared/data/quran/surahs.json";
 import type { RecitePosition } from "@shared/quran/recite";
 import { pageModel } from "@shared/quran/recitePage";
 import { shownCut, type PageAsk } from "@shared/quran/writeAyah";
@@ -14,12 +13,13 @@ import { useQuizPageBefore } from "@/lib/quizPageBefore";
 import { useQuizPen } from "@/lib/penRule";
 import { writtenGrade } from "@shared/quiz/score";
 import type { PenRule } from "@shared/quran/writeAyah";
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** A recited ayah in a party (QuizPage's `party`). */
 export type PartyWrite = { pen: PenRule; asked: number[]; /** `done` false: what is written so far, graded if the time runs out; true: the ayah sent. */
   onWrite: (answer: string[], done: boolean) => void; words?: string[]; answer?: string[] | null };
 
-const NAMES: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.title]));
+const NAMES: Record<number, string> = SURAH_TITLES;
 /** MushafPage asks for an ayah's end sign with this word. */
 const END = Number.MAX_SAFE_INTEGER;
 /** Whether the quiz's recite bar starts with the pen on (writing) or off (revealing). */

@@ -49,6 +49,7 @@ import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { surahName } from '@shared/quran/surahNames';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
@@ -165,7 +166,7 @@ function Action({ Icon, label, href, onClick, on, tone, disabled }: { Icon: type
     : <button type="button" onClick={onClick} disabled={disabled} aria-label={label} title={label} aria-pressed={on} className={className}>{icon}</button>;
 }
 
-const compareNames = Object.fromEntries(surahRows.map(row => [row.number, { ar: row.title, en: row.nameTransliterated }]));
+const compareNames = Object.fromEntries(surahRows.map(row => [row.number, { ar: surahName(row.number), en: row.nameTransliterated }]));
 
 /** A look-alike pair as a post: the compare page's own card (read-along, views, saving, sharing), and a link to open it there. */
 function PairPost({ pair }: { pair: PairCard }) {

@@ -24,7 +24,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { branchesHref } from '@shared/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@shared/quran/curatedComparisons';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
-import { normalizeWord, plainName } from '@shared/quran/normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
@@ -101,7 +101,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
   const [draft, setDraft] = useState(() => draftOf(scope));
   useEffect(() => setDraft(draftOf(scope)), [scope]);
   const invalid = isRangeUnit(draft.unit) && !scopeRange(draft.unit, draft.values);
-  const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: plainName(name.ar), nameEn: name.en }));
+  const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: surahName(Number(number)), nameEn: name.en }));
   const clear = () => { onSavedOnly?.(false); setDraft(draftOf()); router.push(pairHref(a, b, review)); };
   const apply = ar ? 'تطبيق' : 'Apply';
   const reset = ar ? 'إعادة ضبط' : 'Reset';
@@ -314,7 +314,7 @@ const runsOf = (numbers: number[]) => numbers.reduce<[number, number][]>((runs, 
   return runs;
 }, []);
 
-const emptyNote = (name: string, ar: boolean) => (ar ? `لا تذكر سورة ${name.replace(/^سورة\s+/, '')} هذا الجزء` : `${name} does not tell this part`);
+const emptyNote = (name: string, ar: boolean) => (ar ? `لا تذكر سورة ${name} هذا الجزء` : `${name} does not tell this part`);
 
 /** A card whose sides line up in rows (a curated story part) as one pair of sides per row; any other card as itself. */
 function rowsOf(sides: CardSide[]): [CardSide, CardSide][] {
