@@ -11,6 +11,7 @@ import { applyReciter, applySpeed, ayahCounts, listen, stopListening, togglePlay
 import styles from './Mushaf.module.css';
 import { surahName } from '@shared/quran/surahNames';
 import Sheet from '@/components/common/Sheet';
+import Chip from '@/components/common/Chip';
 
 const named = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 const rangeText = (from: string, to: string) =>
@@ -23,9 +24,7 @@ function Chips<T>({ title, values, current, label, onPick }: { title: string; va
       <legend className="pb-2 text-sm text-[var(--home-muted)]">{title}</legend>
       <div className="flex flex-wrap gap-1.5">
         {values.map(value => (
-          <Button key={String(value)} size="sm" variant="outline" active={value === current} aria-pressed={value === current} onClick={() => onPick(value)} className="min-w-11 rounded-full">
-            {label(value)}
-          </Button>
+          <Chip key={String(value)} on={value === current} onClick={() => onPick(value)} label={label(value)} />
         ))}
       </div>
     </fieldset>

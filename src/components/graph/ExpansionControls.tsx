@@ -3,6 +3,7 @@ import translations from '@/components/language/translations';
 import Button from '@/components/common/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownLong, faShareNodes, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import Chip from '@/components/common/Chip';
 
 type GraphStrings = (typeof translations)[keyof typeof translations]['graph'];
 
@@ -52,10 +53,7 @@ export default function ExpansionControls({
       {isPerson && (
         <>
           {LINEAGE_BUTTONS.map(action => (
-            <Button key={action} active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
-              <FontAwesomeIcon icon={LINEAGE_ICON[action]!} />
-              {g.lineageActions[LINEAGE_LABEL_KEY[action]]}
-            </Button>
+            <Chip key={action} on={isActive(action)} onClick={() => onToggle(action)} label={<><FontAwesomeIcon icon={LINEAGE_ICON[action]!} />{g.lineageActions[LINEAGE_LABEL_KEY[action]]}</>} />
           ))}
         </>
       )}

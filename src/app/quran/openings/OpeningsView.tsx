@@ -10,6 +10,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -105,10 +106,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
       </header>
       <div role="group" aria-label="أنواع الافتتاح" className="flex gap-2 overflow-x-auto pb-1">
         {OPENING_KINDS.map(k => (
-          <button key={k.id} type="button" aria-pressed={kind === k.id} onClick={() => choose(k.id)}
-            className={`shrink-0 rounded-full border px-3.5 py-1 text-base ${kind === k.id ? 'border-[var(--home-action)] bg-[var(--home-action)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
-            {k.label}
-          </button>
+          <Chip key={k.id} label={k.label} on={kind === k.id} onClick={() => choose(k.id)} />
         ))}
       </div>
       <Reference title={ITQAN_OPENING.cite} quotes={[ITQAN_OPENING]} />

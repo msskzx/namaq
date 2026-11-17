@@ -10,6 +10,7 @@ import { mushafText } from '@shared/quran/mushafText';
 import { TOPICS, topicOf, type LataifReference } from '@shared/quran/lataif';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
 export const VOICE_COLOR: Record<Voice, string> = { he: 'var(--home-slot-1)', we: 'var(--home-green)', you: 'var(--home-root)' };
@@ -129,12 +130,11 @@ function Voices() {
  */
 export default function LataifView({ views, references }: { views: ExampleView[]; references: Record<string, LataifReference> }) {
   const [topic, setTopic] = useState<string | null>(null);
-  const pill = (on: boolean) => `rounded-full border px-3 py-1.5 text-[0.9375rem] ${on ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-paper)]' : 'border-[var(--home-rule)]'}`;
   return (
     <>
       <div role="tablist" aria-label="الفنون" className="flex flex-wrap gap-2">
-        <button type="button" role="tab" aria-selected={topic === null} onClick={() => setTopic(null)} className={pill(topic === null)}>الكل</button>
-        {TOPICS.map(item => <button key={item.name} type="button" role="tab" aria-selected={topic === item.name} onClick={() => setTopic(item.name)} className={pill(topic === item.name)}>{item.name}</button>)}
+        <Chip role="tab" label="الكل" on={topic === null} onClick={() => setTopic(null)} />
+        {TOPICS.map(item => <Chip key={item.name} role="tab" label={item.name} on={topic === item.name} onClick={() => setTopic(item.name)} />)}
       </div>
       {TOPICS.filter(item => topic === null || topic === item.name).map(item => (
         <section key={item.name} aria-label={item.name} className="flex flex-col gap-3">

@@ -3,7 +3,6 @@
 // docs/plans/quran-qiraat.md
 import React, { useState } from 'react';
 import Badge from '@/components/common/Badge';
-import Button from '@/components/common/Button';
 import ExternalLink from '@/components/common/ExternalLink';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
@@ -14,6 +13,7 @@ import { wordDiff } from '@shared/quran/wordDiff';
 import { mushafText } from '@shared/quran/mushafText';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export type QiraatEntry = { variant: Variant; text: string };
 
@@ -170,9 +170,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
         <nav className="flex flex-wrap items-center gap-2" aria-label="المواضع">
           <span>الآية</span>
           {here.map(({ e, i }) => (
-            <Button key={i} size="sm" active={i === selected} onClick={() => setSelected(i)}>
-              {num(e.variant.ayah)}
-            </Button>
+            <Chip key={i} on={i === selected} onClick={() => setSelected(i)} label={num(e.variant.ayah)} />
           ))}
         </nav>
       </Card>

@@ -8,6 +8,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 /**
  * The app's i'rab sheet (mobile/src/components/IrabSheet.tsx) on the website, which fetches it and keeps no books: the
@@ -24,10 +25,7 @@ export default function IrabPanel({ ayah, data }: { ayah: string; data: IrabAyah
     <>
       <div role="tablist" aria-label="كلمات الآية" className="flex shrink-0 flex-wrap gap-1.5">
         {data.words.map((word, i) => (
-          <button key={i} type="button" role="tab" aria-selected={i === picked} onClick={() => setPicked(i)}
-            className={`rounded-[var(--card-radius)] border px-2.5 font-quran text-[1.375rem] leading-[1.8] ${i === picked ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-[var(--home-accent)]' : i === headChip ? 'border-dashed border-[var(--home-accent)] bg-[var(--home-card)]' : 'border-[var(--home-rule)] bg-[var(--home-card)]'}`}>
-            {word}
-          </button>
+          <Chip key={i} role="tab" quran lit label={word} on={i === picked} dashed={i === headChip} onClick={() => setPicked(i)} />
         ))}
       </div>
       <Card className="block shrink-0 px-3.5 py-2.5">
