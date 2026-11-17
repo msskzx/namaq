@@ -309,3 +309,23 @@ test('the recite bar moves to the top and back, by its grip or by dragging, and 
   await expect.poll(y).toBeGreaterThan(600);
   await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
 });
+
+test.describe('zoom', () => {
+  test.use({ seed: { 'reader-zoom': 1.6, 'reader-place': { page: 3 } } });
+
+  test('pinching a zoomed page back out sets the printed page again, all on the screen', async ({ page }) => {
+    await open(page, '/read');
+    // A word on page 3's last line (shared/data/quran/mushaf/3.json): below the screen while zoomed, on it at the printed size.
+    const last = page.getByText('رَبِحَت', { exact: true });
+    const bottom = async () => { const box = await last.boundingBox(); return box ? box.y + box.height : Infinity; };
+    const screen = page.viewportSize()!.height;
+    await expect.poll(bottom).toBeGreaterThan(screen);
+    const cdp = await page.context().newCDPSession(page);
+    const fingers = (gap: number) => [{ x: 195 - gap / 2, y: 400, id: 1 }, { x: 195 + gap / 2, y: 400, id: 2 }];
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: fingers(240) });
+    for (let gap = 220; gap >= 80; gap -= 20) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: fingers(gap) });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect.poll(() => stored<number>(page, 'reader-zoom')).toBe(1);
+    await expect.poll(bottom).toBeLessThan(screen);
+  });
+});

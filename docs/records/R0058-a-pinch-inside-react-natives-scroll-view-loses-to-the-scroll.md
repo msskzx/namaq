@@ -32,3 +32,23 @@ flex item's content height. While flowing, the frames now use `flexGrow: 1`, and
 body is keyed on flowing so it measures itself again at the printed size. Lesson:
 anything that must grow with its content in a `minHeight` parent is `flexGrow`, not
 `flex: 1`, and a web screenshot cannot show the difference.
+
+## Third cause (2026-11-17, after the owner tried #861)
+
+Pinching back out of a zoomed page stopped at the printed text size with the 15
+lines spread over a page about twice the screen's height; only another page or
+surah drew it right again. Keying the text body on flowing was not enough: the
+page's outer View and its two frames changed their styles in place (`minHeight`
+to `height`, `flexGrow` to `flex: 1`) and on the phone the page kept its tall
+flowing height. The same transition laid out in `yoga-layout` comes out right,
+so the stale size comes from how the native views took the changed styles, not
+from Yoga's rules. The page's outer View is now keyed on flowing, so a page that
+starts or stops flowing is drawn fresh with only its new styles. The body's size
+is kept for each mode, so the printed lines are set at once at their old size
+instead of waiting a frame for a new measure (keying the whole page component
+would have dropped that state and drawn an empty page for a frame). The reader
+also clears its kept scroll offset when the text stops flowing, which the
+neighbour pages are placed by.
+Lesson: when a native view switches between two layouts with different style
+keys, draw it anew rather than trusting the style change; the web export cannot
+show it.
