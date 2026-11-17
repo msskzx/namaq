@@ -92,8 +92,8 @@ export function gradeWritten(asked: number[], typed: Record<number, string>, wor
 
 /**
  * Where an ayah's opening ends among its words as the mushaf page sets them: the first page word past the opening's letters.
- * The quiz's words (trees.json) and the page split a few ayat differently (لَّوْ مَا / لَّوۡمَا 15:7, إِلْ يَاسِينَ 37:130) and the
- * page has the ۞ quarter sign, so the opening is counted in letters, not words.
+ * The quiz's words (trees.json) are the page's words, but the page also has the ۞ quarter sign as a token of its own, so the
+ * opening is counted in letters, not words.
  */
 export function openingCut(pageWords: string[], opening: string[]): number {
   const letters = opening.map(normalizeWord).join('').replace(/\s+/g, '').length;
