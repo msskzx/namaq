@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Stack, ThemeProvider, DarkTheme, DefaultTheme, LocaleProvider } from 'expo-router';
 import { usePalette, dark } from '@/lib/theme';
 import { startAlerts } from '@/lib/adhan';
+import { syncPacks } from '@/lib/listenFiles';
 import { warmScreens } from '@/lib/lazyScreen';
 import ShareSheet from '@/components/ShareSheet';
 import { useStackOptions } from '@/lib/stackOptions';
@@ -17,6 +18,8 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
   const stack = useStackOptions();
   // Adhan notifications follow the switches, the place and the method, and roll forward each day the app is opened.
   useEffect(startAlerts, []);
+  // Downloaded recitations stay current through Quran Foundation's Content Sync (lib/listenFiles.ts).
+  useEffect(() => { syncPacks(); }, []);
   // Children mount first, so home is on screen by now; the other screens load behind it, a little later.
   useEffect(() => {
     onReady();

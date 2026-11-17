@@ -156,4 +156,5 @@ counts for neither.
 | [R0053](R0053-a-word-filed-under-the-next-ayah-needs-a-move.md) | A word filed under the next ayah needs a move, not a replacement | challenge | solved |
 | [R0054](R0054-a-guard-on-one-feature-misses-the-copies-in-another.md) | A guard written for one feature misses the same bypass in another | detour | solved |
 | [R0055](R0055-a-card-that-holds-a-button-must-not-be-a-pressable.md) | A card that holds a button must not be a pressable | challenge | solved |
+| [R0056](R0056-a-reader-drawn-anew-per-page-forgets-what-it-holds.md) | A reader drawn anew for every page forgets what it holds | challenge | solved |
 | [R0057](R0057-a-sign-on-a-word-is-not-a-way-of-writing-it.md) | A sign on a word is not a way of writing it | challenge | solved |
