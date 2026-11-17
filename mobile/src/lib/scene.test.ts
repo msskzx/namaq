@@ -63,5 +63,6 @@ describe('what the recorder says back', () => {
     expect(readRecorderMessage(JSON.stringify({ type: 'progress', at: 1, total: 2 }))).toBeNull();
     expect(readRecorderMessage('{not json')).toBeNull();
     expect(readRecorderMessage('null')).toBeNull();
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: '' }))).toEqual({ type: 'error' });
   });
 });

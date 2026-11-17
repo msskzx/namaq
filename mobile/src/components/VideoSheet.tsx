@@ -46,7 +46,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
   }, []);
   const again = () => { begin(); setVideo(null); setFailed(false); setPaused(false); setShareFailed(false); };
   const share = (made: Video) => {
-      setSharing(true);
+    setSharing(true);
     setShareFailed(false);
     shareVideo(made.data, made.mime).catch(() => { if (request.current === own) setShareFailed(true); }).finally(() => setSharing(false));
   };
