@@ -24,6 +24,22 @@ test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }
   await expect.poll(() => readerPage(page)).toBe(440);
 });
 
+test('the index lists every ayah a search finds', async ({ page }) => {
+  await open(page, '/read');
+  await page.getByText(HAMD, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
+  await page.getByLabel('ابحث عن سورة أو آية').fill('يا أيها الذين آمنوا');
+  await expect(page.getByText('٨٩ آية', { exact: true })).toBeVisible();
+  const last = page.getByRole('link').filter({ hasText: `${S(66)} ٨` });
+  await page.getByRole('link').filter({ hasText: `${S(2)} ١٠٤` }).hover();
+  await expect(async () => {
+    await page.mouse.wheel(0, 4000);
+    await expect(last).toBeVisible({ timeout: 500 });
+  }).toPass({ timeout: 20_000 });
+  await last.click();
+  await expect.poll(() => readerPage(page)).toBe(561);
+});
+
 test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);

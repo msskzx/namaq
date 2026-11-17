@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
-import { num } from '@shared/quran/arabicNumber';
+import { ayatCount, num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
 import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
@@ -49,7 +49,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   const [hits, setHits] = useState<AyahSearch & { query: string }>({ query: '', total: 0, hits: [] });
   useEffect(() => {
     if (!words) return;
-    const timer = setTimeout(() => setHits({ ...searchAyat(ayahIndex(), words), query: words }), 150);
+    const timer = setTimeout(() => setHits({ ...searchAyat(ayahIndex(), words, Infinity), query: words }), 150);
     return () => clearTimeout(timer);
   }, [words]);
   const found = words && hits.query === words ? hits : null;
@@ -113,7 +113,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
           </Pressable>
         )}
         {query.trim() && rows.length === 0 && (!words || found) && <Text style={{ color: palette.muted, fontSize: 14 }}>لا توجد سورة ولا آية بهذا النص.</Text>}
-        {found && found.total > found.hits.length && rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{num(found.total)} آية، أول {num(found.hits.length)} منها</Text>}
+        {rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{ayatCount(rows.length)}</Text>}
       </View>
       <FlatList data={rows} keyExtractor={row => (row.kind === 'juz' ? `j${row.juz}` : row.kind === 'surah' ? `s${row.number}-${row.from}` : `a${row.key}`)}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" initialNumToRender={30} style={{ flex: 1 }}
