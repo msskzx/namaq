@@ -58,7 +58,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
     choices: [{ value: RECITED, labelArabic: 'حفظتها' }, { value: FORGOT, labelArabic: 'نسيتها' }],
     correctAnswer: RECITED,
     ayahKey: ayah.key,
-    page: { shows: shown, write: 'rest' },
+    page: { shows: shown, recite: true },
     evidence: { claimKeys: [] },
   };
 }

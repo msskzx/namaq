@@ -13,7 +13,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   RECITE: { en: "Recite the rest", ar: "سمّع بقية الآية" },
   COMPARE: { en: "Compare two places", ar: "قارن الموضعين" },
   OPENINGS: { en: "Surah openings", ar: "أوائل السور" },
-  ENDS: { en: "First and last words", ar: "اكتب أول الآية وآخرها" },
+  ENDS: { en: "Recite an ayah", ar: "سمّع الآية" },
   TUHFA_COMPLETE: { en: "Complete the verse", ar: "أكمل البيت" },
   TUHFA_NEXT: { en: "The next verse", ar: "البيت التالي" },
   TUHFA_RULE: { en: "A letter's rule", ar: "حكم الحرف" },

@@ -1,11 +1,15 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { pageAsk, type PageAsk } from '@shared/quran/writeAyah';
+import type { RecitePosition } from '@shared/quran/recite';
+import { pageModel } from '@shared/quran/recitePage';
+import { shownCut, type PageAsk } from '@shared/quran/writeAyah';
 import MushafPageView, { type Recite } from './MushafPageView';
+import RecitePill from './recite/RecitePill';
+import { useRecite } from './recite/useRecite';
 import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
-import { quizPageBefore } from '@/lib/settings';
-import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
+import { quizPageBefore, useQuizPen } from '@/lib/settings';
+import { readJson, writeJson } from '@/lib/storage';
+import type { Graded } from '@/lib/useWriteBoxes';
 import type { Palette } from '@/lib/theme';
 
 /** A page's text height for its width, as AyahLines and the home cards draw it. */
@@ -15,73 +19,77 @@ const NO_SAVES: ReadonlySet<string> = new Set();
 const noTouch = () => {};
 /** MushafPageView asks for an ayah's end sign with this word. */
 const END = Number.MAX_SAFE_INTEGER;
+/** Whether the quiz's recite bar starts with the pen on (writing) or off (revealing). */
+const WRITE = 'quiz-write';
 
 /**
  * A quiz question about one ayah drawn as its whole mushaf page, the ayah in its own place and lines (owner, 2026-11-17):
- * the reader's page (MushafPageView) with recite mode's hidden words. «الصفحة قبلها» off (the default): every other word is
- * an empty box of its shape, surah titles too, only the ayah numbers left, and nothing around the page says where it is.
- * On: the ayat before it are written, as recite mode shows them. `ask` (the question's, writeAyah's PageAsk) says how much of
- * the asked ayah shows, what is written and whether its surah title shows; `shown` shows all of it. With `onGraded`, the words
- * asked are written in boxes in their places, as in the reader's write mode, and graded once the last box is written; the page
- * then colours what was right and wrong.
+ * the reader's page (MushafPageView). «الصفحة قبلها» off (the default): every other word is an empty box of its shape,
+ * surah titles too, only the ayah numbers left, and nothing around the page says where it is. On: the ayat before it are
+ * written. `ask` (the question's PageAsk) says how much of the asked ayah shows and whether its surah title shows. A recited
+ * question (`ask.recite`) is recited with recite mode's own bar (recite/), as in the mushaf, stopping at the ayah's end:
+ * `onWritten` gets the grade when the pen wrote it, `onShown` runs once it shows. `shown` shows all of it.
  */
-function QuizPage({ ayah, ask, shown, onGraded, palette }: { ayah: string; ask: PageAsk; shown: boolean;
-  onGraded?: (graded: Graded) => void; palette: Palette }) {
+function QuizPage({ ayah, ask, shown, onWritten, onShown, palette }: { ayah: string; ask: PageAsk; shown: boolean;
+  onWritten?: (graded: Graded) => void; onShown?: () => void; palette: Palette }) {
   const [width, setWidth] = useState(0);
   const [before] = quizPageBefore.use();
-  const [graded, setGraded] = useState<Graded | null>(null);
+  const pen = useQuizPen();
   const page = pageOfAyah(ayah);
   const parts = useMemo(() => {
     if (!page) return null;
     const data = pageData(page);
     const model = pageModel(data, surahBefore(page));
-    // The ayah's words on its page, signs that are no words (۞) among them, and where its opening ends.
     const words = model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === ayah).map(group => group.word!) ?? []);
-    return { data, model, words, ...pageAsk(ayah, words, ask) };
-  }, [page, ayah, ask]);
+    return { data, model, cut: shownCut(ayah, words, ask.shows) };
+  }, [page, ayah, ask.shows]);
+  const [position, setPosition] = useState<RecitePosition>(() => ({ start: ayah, shown: null, words: parts?.cut ?? 0 }));
+  const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? true);
+  const toggleWriting = () => setWriting(on => { writeJson(WRITE, !on); return !on; });
+  const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: writing && !shown, pen, until: ayah, floor: parts?.cut ?? 0,
+    onWritten: (_key, graded) => onWritten?.(graded) });
+  const open = shown || !ask.recite || recite.done;
+  useEffect(() => { if (recite.done) onShown?.(); }, [recite.done]); // eslint-disable-line react-hooks/exhaustive-deps
   const nameless = ask.title === 'hidden';
-  const writing = !!onGraded && !shown && !graded;
-  const boxes = useWriteBoxes({ ayah: onGraded ? ayah : null, words: parts?.words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
-    setGraded(result);
-    onGraded?.(result);
-  } });
-  const open = shown || !!graded;
-  const recite = useMemo((): Recite | null => {
+  const view = useMemo((): Recite | null => {
     if (!parts) return null;
-    const base = reciteView(parts.model, { start: ayah, shown: null, words: 0 });
     const titled = parts.model.titles;
     const [surah] = ayah.split(':').map(Number);
     const steps = ayah.endsWith(':1') ? titled.get(surah) ?? 0 : 0;
     const order = parts.model.order;
     const at = order.indexOf(ayah);
+    const base = recite.view;
     return {
-      ...base,
+      ...(base ?? { upcoming: ayah, nextAyah: () => null, nextWord: () => null }),
+      // The quiz stops at its ayah: nothing after it is the next one.
+      upcoming: open ? null : base?.upcoming ?? ayah,
       // Every surah title on the page is a step of its first ayah, so a title stays hidden like the words.
       titled,
-      upcoming: ayah,
       hidden: (key, word) => {
         // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(':1') ? titled.get(Number(key.split(':')[0])) ?? 0 : 0;
         // The asked ayah's surah title shows when it is the question, and else stays hidden until it is answered (always
-        // when the surah is the answer).
-        if (key === ayah) return word < steps ? ask.title !== 'shown' && (nameless || !open || !before) : !open && word - steps >= parts.cut;
+        // when the surah is the answer); its words are recite mode's.
+        if (key === ayah) return word < steps ? ask.title !== 'shown' && (nameless || !open || !before) : !open && !!base?.hidden(ayah, word - steps);
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
         return nameless && word < title;
       },
     };
-  }, [parts, ayah, open, before, nameless, ask.title]);
+  }, [parts, ayah, open, before, nameless, ask.title, recite.view]);
   if (!page || !parts) return null;
   return (
-    <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
-      {width > 0 && (
-        <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO} top={surahBefore(page)}
-          names={surahNames} recite={recite} forgot={NONE} saved={NO_SAVES} onTouch={writing ? () => boxes.focus() : noTouch} anonymous={!before || nameless}
-          write={writing ? { key: ayah, targets: parts.asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : null}
-          checked={graded ? { key: ayah, ...graded } : null} />
-      )}
-      {writing && boxes.field}
+    <View style={{ gap: 10 }}>
+      <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+        {width > 0 && (
+          <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO} top={surahBefore(page)}
+            names={surahNames} recite={view} forgot={NONE} saved={NO_SAVES} onTouch={recite.write ? () => recite.boxes.focus() : noTouch} anonymous={!before || nameless}
+            write={shown ? null : recite.write} checked={recite.checked} />
+        )}
+      </View>
+      {ask.recite && !shown && <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} palette={palette} />}
+      {recite.write && recite.boxes.field}
     </View>
   );
 }

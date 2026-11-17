@@ -27,6 +27,7 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import Toggle from "@/components/common/Toggle";
 import { setQuizPageBefore, useQuizPageBefore } from "@/lib/quizPageBefore";
+import { QuizPenSetting } from "@/components/recite/PenSetting";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
@@ -308,6 +309,7 @@ export default function QuizzesPage() {
                 <span id="quiz-page-before" className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"}</span>
                 <Toggle checked={pageBefore} label={ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"} onChange={setQuizPageBefore} />
               </div>}
+              {onPage && <QuizPenSetting ar={ar} />}
               </div>
               {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}
             </fieldset>

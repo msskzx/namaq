@@ -3,7 +3,7 @@
 import { BookOpen, Eye } from "lucide-react";
 import Button from "@/components/common/Button";
 import { ayahHref } from "@shared/ayahMarks";
-import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
+import { alikeDiff, FORGOT, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
 import QuizPage from "./QuizPage";
 import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
@@ -25,8 +25,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar 
   if (question.ayahKey && question.page) {
     return <div dir="rtl" lang="ar">
       <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} ask={question.page} shown={revealed}
-        onGraded={question.page.write && given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
-      {recited(question) && !revealed && onReveal && <Button className="mb-4" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}
+        onShown={onReveal} ar={ar} onWritten={given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
     </div>;
   }
   if (!question.quran) return null;

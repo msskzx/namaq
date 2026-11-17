@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { EMPTY_LIST, type ListState } from './listState';
 import { readJson, writeJson } from './storage';
 import { parseCardTint, type CardMode } from '@shared/cardTint';
+import { isPenRule, type PenRule } from '@shared/quran/writeAyah';
 import { isMarkMode, type MarkMode } from '@shared/quran/wordMatch';
 import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';
 import { isAdhanAlerts, NO_ALERTS, type AdhanAlerts } from '@shared/adhanAlerts';
@@ -45,6 +46,17 @@ export const haptics = setting('haptics', true, isBoolean);
  * surah name or juz; on, the ayat before the asked one are written as in recite mode.
  */
 export const quizPageBefore = setting('quiz-page-before', false, isBoolean);
+
+/** What recite mode's pen writes everywhere (owner, 2026-11-17): an ayah's first and last words, or all of it. */
+export const penRule = setting<PenRule>('pen-rule', 'whole', isPenRule);
+/** The quizzes' own pen rule, or `same` to follow the one for everything (owner, 2026-11-17: global, and per quiz). */
+export const quizPen = setting<PenRule | 'same'>('quiz-pen', 'same', (value): value is PenRule | 'same' => value === 'same' || isPenRule(value));
+/** The pen rule a quiz writes with. */
+export function useQuizPen(): PenRule {
+  const [rule] = penRule.use();
+  const [quiz] = quizPen.use();
+  return quiz === 'same' ? rule : quiz;
+}
 
 /** Tree or matrix: the default view of every tree, matrix unless the reader picks the tree (owner, 2026-11-17). */
 export type BranchView = 'tree' | 'matrix';

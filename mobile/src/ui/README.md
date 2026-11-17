@@ -13,6 +13,7 @@ below. Never copy one into a screen.
 | `TopBar` | Logo, hub, shelf or back on the right; `title` or `middle` beside back; page buttons; help, sources, gear; see-through, hides on scroll | every screen's top bar, pushed screens included |
 | `BarPicker` | A top bar's dropdown: text, chevron, no border; optional icon and count | the open list or item in a top bar (timeline, saved lists, compare, Tuhfa) |
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
+| `GlassBar` | A floating frosted bar of buttons, as tall as one icon button | recite mode's bar (`components/recite/RecitePill`) |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes | every sheet |
 | `Toggle` | On means knob on the right | every on/off setting |

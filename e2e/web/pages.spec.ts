@@ -88,10 +88,10 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the home recall card reveals a word at a time, and with the pen takes the whole ayah in write boxes and grades it', async ({ page }) => {
+  test('the home recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
-    const pen = page.getByRole('button', { name: 'اكتب الآية كاملة' }).first();
+    const pen = page.getByRole('button', { name: 'اكتب كل آية كاملة' }).first();
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
     await expect(async () => {
       await pen.click();
@@ -114,7 +114,7 @@ test.describe('pages with the database', () => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
     const card = page.locator('article').filter({ has: page.getByRole('button', { name: 'ارجع خطوة' }) }).first();
-    const whole = card.getByRole('button', { name: 'أظهر الآية' });
+    const whole = card.getByRole('button', { name: 'أظهر الآية التالية' });
     const undo = card.getByRole('button', { name: 'ارجع خطوة' });
     const lines = card.locator('[data-ayah]').first();
     await expect(lines).toBeVisible();

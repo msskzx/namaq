@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Play, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -13,14 +13,12 @@ import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, su
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
-import { wordTargets } from '@shared/quran/writeAyah';
-import { useWriteBoxes } from '@/lib/useWriteBoxes';
+import { compareKeys, forgottenOrder, nextForgotten, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
 import TopBar from '@/ui/TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
 import ReaderPager from './ReaderPager';
-import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
+import MushafPageView, { type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import TopicSheet, { type TopicOpen } from './TopicSheet';
@@ -33,12 +31,15 @@ import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';
+import RecitePill, { RECITE_BAR } from './recite/RecitePill';
+import IconButton from '@/ui/IconButton';
+import { useRecite } from './recite/useRecite';
 import ListenSheet from './ListenSheet';
 import { listen, useListening } from '@/lib/listen';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
-import { ayahCounts, firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -50,7 +51,8 @@ import { useKeyboardHeight } from '@/lib/keyboard';
 import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
-import { usePalette, type Palette } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
+import { penRule } from '@/lib/settings';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
@@ -72,19 +74,6 @@ const modelOf = (page: number) => {
 
 /** «البقرة ٥»: an ayah named as the reader names it, surah first. */
 const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`; };
-
-/** The recite pill's height: one icon button tall, and a little room around it. */
-const RECITE_BAR = 52;
-
-function IconButton({ Icon, label, onPress, palette, on = false, disabled = false, color }: { Icon: (props: LucideProps) => React.ReactNode; label: string; onPress: () => void; palette: Palette; on?: boolean; disabled?: boolean; color?: string }) {
-  return (
-    <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ disabled, selected: on }} hitSlop={6}
-      style={{ padding: 9, borderRadius: 999, backgroundColor: on ? palette.accent : 'transparent', opacity: disabled ? 0.35 : 1 }}>
-      <Icon size={24} color={on ? palette.onAccent : color ?? palette.ink} />
-    </Pressable>
-  );
-}
-
 
 /** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
 export default function Reader() {
@@ -139,30 +128,22 @@ export default function Reader() {
   const reciting = !!position;
   const mode = reciting ? 'recite' : 'read';
   const model = modelOf(page);
-  const view = position ? reciteView(model, position) : null;
-
-  // Write mode (owner, 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes its first
-  // and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
-  // green when right and amber when wrong.
+  // Write mode (owner, 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes what the pen
+  // setting asks (recite/useRecite.ts, the one recite mode of the mushaf, the home card and the quiz).
   const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
-  const [checked, setChecked] = useState<Checked | null>(null);
+  const [pen] = penRule.use();
   // A review asks one ayah at a time: once it shows, nothing more is written until the next one.
-  const reviewDone = reviewing && !!position?.shown;
-  const writeKey = writing && view?.upcoming && !reviewDone ? view.upcoming : null;
-  const writeWords = useMemo(() => (writeKey ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? []) : []), [writeKey, model]);
-  const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
-  // Words already shown (by the next-word button) are not asked.
-  const asked = writeKey && view ? wordTargets(writeWords).filter(at => view.hidden(writeKey, at + offset)) : [];
-  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
-    if (!writeKey || !position) return;
-    setChecked({ key: writeKey, ...graded });
-    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
-    if (graded.wrong.length) markForgotten(writeKey);
-    setPosition(revealAyah(position, writeKey));
-  } });
+  const recite = useRecite({ model, position, setPosition, writing, pen, autoFocus: true,
+    until: reviewing ? position?.start ?? null : null,
+    onPastEnd: () => {
+      if (reviewing) { if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review'); }
+      else if (page < PAGES) turnTo(page + 1);
+    } });
+  const { view, boxes, checked, setChecked } = recite;
+  const writeKey = recite.write?.key ?? null;
   const keyboard = useKeyboardHeight(reciting && writing);
   const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); boxes.blur(); };
-  const write: Write | null = writeKey ? { key: writeKey, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick, onActive: (y, h) => follow.current(y, h) } : null;
+  const write: Write | null = recite.write ? { ...recite.write, onActive: (y, h) => follow.current(y, h) } : null;
   // Scrolls the box being written into the part of the screen above the pill and keyboard.
   const follow = useRef((_y: number, _h: number) => {});
 
@@ -228,23 +209,9 @@ export default function Reader() {
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
 
-  const revealNextAyah = () => {
-    if (!position || !view) return;
-    if (reviewDone) {
-      if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review');
-      return;
-    }
-    const next = view.nextAyah();
-    if (next) setPosition(next);
-    else if (page < PAGES) turnTo(page + 1);
-  };
-  const revealNextWord = () => {
-    if (!position || !view) return;
-    const next = !reviewDone && view.nextWord();
-    if (next) setPosition(next);
-    else revealNextAyah();
-  };
-  const stepBackOne = () => { if (position) setPosition(stepBack(position, ayahCounts)); };
+  const revealNextAyah = recite.nextAyah;
+  const revealNextWord = recite.nextWord;
+  const stepBackOne = recite.back;
 
   const ayahText = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []).join(' ');
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
@@ -416,8 +383,8 @@ export default function Reader() {
               hitSlop={6} style={{ padding: 9 }}>
               <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
             </Pressable>
-            <IconButton Icon={List} label="فهرس السور والبحث" palette={palette} onPress={() => setSheet('index')} />
-            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} palette={palette} on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
+            <IconButton Icon={List} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
+            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
           </TopBar>
       </View>
       {actions && (
@@ -458,18 +425,10 @@ export default function Reader() {
       <BalaghaSheet ayah={balagha} onClose={() => setBalagha(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
-        <View accessibilityRole="toolbar" accessibilityLabel="أدوات التسميع"
-          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: pillBottom, height: RECITE_BAR, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
-          <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
-          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
-          {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
-          <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
-          <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
-          <IconButton Icon={reviewDone ? ArrowLeft : ChevronsLeft} label={reviewDone ? 'الآية المنسية التالية' : 'أظهر الآية التالية'} palette={palette}
-            disabled={reviewDone ? !reviewNext : !view?.upcoming && page === PAGES} onPress={revealNextAyah} />
-          <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : 'اكتب أول كل آية وآخرها'} palette={palette} on={writing} onPress={toggleWriting} />
-          <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
-        </View>
+        <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette}
+          more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
+          lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null}
+          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: pillBottom }} />
       )}
       <ListenBar bottom={reciting ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
         onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />

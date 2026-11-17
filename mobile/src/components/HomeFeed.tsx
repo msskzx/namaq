@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { AppState, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, PenLine, ScrollText, Undo2, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -29,17 +29,19 @@ import { treeList } from '@/lib/branches';
 import { shownBookmarks } from '@/lib/home';
 import TreeIcon from './TreeIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
-import { forgottenOrder } from '@shared/quran/recite';
-import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
+import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
+import { pageModel } from '@shared/quran/recitePage';
+import RecitePill from './recite/RecitePill';
+import { useRecite } from './recite/useRecite';
 import { usePageTouch } from '@/lib/usePageTouch';
 import AyahLines, { pageWords, PageTop } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
-import { pageData, PAGES, surahBefore } from '@/lib/mushaf';
+import { pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { readJson, writeJson } from '@/lib/storage';
 import { openIntent, toTab } from '@/lib/ways';
-import { around as aroundSetting, branchView } from '@/lib/settings';
+import { around as aroundSetting, branchView, penRule } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
 import { useMinute } from '@/lib/prayer';
 import { prophetStory } from '@/lib/prophets';
@@ -68,11 +70,14 @@ const cardStyle = (palette: Palette) => ({ borderWidth: 1, borderColor: palette.
  * Every feed post's one shape (owner, 2026-11-14), the compare card's: the head, the body in one card, and a row of icon
  * buttons under the card, starting on the right.
  */
-function Post({ head, actions, palette, children }: { head: React.ReactNode; actions?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
+function Post({ head, actions, bar, palette, children }: { head: React.ReactNode; actions?: React.ReactNode;
+  /** A bar of the feature's own between the card and its buttons (recite mode's, on the recall card). */
+  bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
   return (
     <View style={{ gap: 4 }}>
       {head}
       <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>{children}</View>
+      {bar}
       {actions && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>{actions}</View>}
     </View>
   );
@@ -217,7 +222,6 @@ const RECALL_WRITE = 'recall-write';
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
   const [, setGone] = useState(0);
-  const [round, setRound] = useState(0);
   const [writing, setWriting] = useState(() => readJson<boolean>(RECALL_WRITE) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
   if (!review && recalled.has(ayah)) return null;
@@ -227,53 +231,39 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
     <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
   </>;
-  return <Recall key={`${ayah}-${writing}-${round}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} onUndo={() => setRound(n => n + 1)} marks={marks} palette={palette} />;
+  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
 }
 
 /**
- * The recall card itself, drawn afresh for each way of asking (`writing`) and after each undo, so the boxes start empty.
- * A tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings), and the
- * undo button steps back as recite mode's does: to the ayah hidden again.
+ * The recall card itself: recite mode on one ayah (recite/useRecite.ts, the mushaf's own), with its bar under the card. A
+ * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
+ * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, title, writing, onWriting, onUndo, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; onUndo: () => void; marks: React.ReactNode; palette: Palette }) {
-  const words = useMemo(() => pageWords(ayah), [ayah]);
-  const [revealed, setRevealed] = useState(0);
-  const [graded, setGraded] = useState<Graded | null>(null);
-  const asked = useMemo(() => (writing ? words.map((_, at) => at) : []), [writing, words]);
-  const boxes = useWriteBoxes({ ayah, words, asked, onDone: result => {
-    setGraded(result);
-    if (result.wrong.length) markForgotten(ayah);
-  } });
-  const shown = revealed >= words.length || !!graded;
-  const atStart = revealed === 0 && !graded;
-  const nextWord = () => setRevealed(n => Math.min(words.length, n + 1));
-  const wholeAyah = () => setRevealed(words.length);
+function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
+  const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, shown: null, words: 0 });
+  const [pen] = penRule.use();
+  const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
+  const shown = recite.done;
   const run = (action: GestureAction, key: string | null) => {
-    if (action === 'next-ayah') wholeAyah();
-    else if (action === 'next-word') nextWord();
-    else if (action === 'back' && !atStart) onUndo();
+    if (action === 'next-ayah') recite.nextAyah();
+    else if (action === 'next-word') recite.nextWord();
+    else if (action === 'back') recite.back();
     else if (key !== ayah) return;
     else if (action === 'forgot') markForgotten(ayah);
-    else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: words.join(' '), href: ayahHref(ayah) });
+    else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: pageWords(ayah).join(' '), href: ayahHref(ayah) });
   };
   const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');
   // While writing, a touch on the ayah only brings the keyboard back, as in the reader; the boxes pick a word themselves.
-  const onTouch: typeof touches.touch = (...touch) => (writing && !shown ? boxes.focus() : touches.touch(...touch));
+  const onTouch: typeof touches.touch = (...touch) => (recite.write ? recite.boxes.focus() : touches.touch(...touch));
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
-      actions={<>
-        {/* Recite mode's buttons first, in its order: undo, the next word, the whole ayah, the pen (Reader.tsx). */}
-        <Action Icon={Undo2} label="ارجع خطوة" disabled={atStart} onPress={onUndo} palette={palette} />
-        {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onPress={nextWord} palette={palette} />}
-        <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onPress={wholeAyah} palette={palette} />
-        <Action Icon={PenLine} label="اكتب الآية كاملة" on={writing} onPress={onWriting} palette={palette} />
-        {marks}
-      </>}>
+      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
+      actions={marks}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} palette={palette} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null} onTouch={onTouch}
-          write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : null} />
-        {writing && !shown && boxes.field}
+        <AyahLines ayah={ayah} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
+        {recite.write && recite.boxes.field}
       </View>
     </Post>
   );

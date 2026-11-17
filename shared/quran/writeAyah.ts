@@ -91,24 +91,32 @@ export function gradeWritten(asked: number[], typed: Record<number, string>, wor
 }
 
 /**
- * How a quiz asks an ayah on its own mushaf page (QuizPage, owner 2026-11-17). `shows`: how many of its words show, counted
- * as the quiz's words (all when left out). `write`: the reader writes the rest (`rest`) or its first and last words (`ends`)
- * in boxes, graded once the last box is written. `title`: its surah's title stays hidden even with the ayat before written
- * (the surah is the answer), or shows (the surah is the question).
+ * What the pen writes, everywhere recite mode writes (the mushaf, the home recall card, the quiz): an ayah's first and last
+ * few words, or all of it (owner, 2026-11-17: a setting for all, and one for the quizzes).
  */
-export type PageAsk = { shows?: number; write?: 'rest' | 'ends'; title?: 'hidden' | 'shown' };
+export const PEN_RULES = ['ends', 'whole'] as const;
+export type PenRule = (typeof PEN_RULES)[number];
+export const isPenRule = (value: unknown): value is PenRule => (PEN_RULES as readonly unknown[]).includes(value);
+
+/** The words of an ayah the pen asks, by place, past signs that are no words (۞). */
+export const penTargets = (words: string[], rule: PenRule): number[] =>
+  rule === 'whole' ? words.flatMap((word, at) => (maxLetters(word) ? [at] : [])) : wordTargets(words);
 
 /**
- * Where on the page an asked ayah's hidden part starts (`cut`, among the page's words, ۞ included) and the words written in
- * boxes. The quiz's words are the page's words; the page only adds ۞, which `spoken` skips.
+ * How a quiz asks an ayah on its own mushaf page (QuizPage, owner 2026-11-17). `shows`: how many of its words show at first,
+ * counted as the quiz's words (all when left out). `recite`: the reader recites it with recite mode's bar, reveals or writes
+ * it, and grades it (حفظتها or نسيتها). `title`: its surah's title stays hidden even with the ayat before written (the surah
+ * is the answer), or shows (the surah is the question).
  */
-export function pageAsk(key: string, pageWords: string[], ask: PageAsk): { cut: number; asked: number[] } {
+export type PageAsk = { shows?: number; recite?: boolean; title?: 'hidden' | 'shown' };
+
+/**
+ * How many of an ayah's page words (۞ included) show before the hidden part. The quiz's words are the page's words; the
+ * page only adds ۞, which is skipped.
+ */
+export function shownCut(key: string, pageWords: string[], shows: number | undefined): number {
+  if (shows === undefined) return pageWords.length;
+  if (shows <= 0) return 0;
   const spoken = pageWords.flatMap((word, at) => (maxLetters(word) ? [at] : []));
-  const shows = ask.shows;
-  const cut = shows === undefined ? pageWords.length
-    : shows <= 0 ? 0
-    : (spoken[shows - 1] ?? pageWords.length - 1) + 1;
-  const asked = ask.write === 'ends' ? wordTargets(pageWords).filter(at => at >= cut)
-    : ask.write === 'rest' ? spoken.filter(at => at >= cut) : [];
-  return { cut, asked };
+  return (spoken[shows - 1] ?? pageWords.length - 1) + 1;
 }

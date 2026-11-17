@@ -186,10 +186,10 @@ test.describe('a returning user', () => {
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 
-  test('the recall card reveals a word at a time, and with the pen takes the whole ayah in write boxes and grades it', async ({ page }) => {
+  test('the recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
-    await page.getByRole('button', { name: 'اكتب الآية كاملة' }).first().click();
+    await page.getByRole('button', { name: 'اكتب كل آية كاملة' }).first().click();
     const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
     await expect(boxes.first()).toBeVisible();
     const count = await boxes.count();
@@ -203,7 +203,7 @@ test.describe('a returning user', () => {
   test('a tap on the recall card does what a tap does in recite mode, and undo hides the ayah again', async ({ page }) => {
     await open(page, '/');
     const head = page.getByRole('heading', { name: 'هل تذكرها؟', exact: true });
-    const whole = page.getByRole('button', { name: 'أظهر الآية' }).first();
+    const whole = page.getByRole('button', { name: 'أظهر الآية التالية' }).first();
     const undo = page.getByRole('button', { name: 'ارجع خطوة' }).first();
     await expect(undo).toBeDisabled();
     await whole.scrollIntoViewIfNeeded();
