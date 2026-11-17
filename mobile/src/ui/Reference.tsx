@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import type { Palette } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 /** A quote from a book: its words, with the page it cites as a link. A quote with no page is our own note on the ones above. */
 export type Quote = { text: string; cite?: string; url?: string };
@@ -16,10 +17,10 @@ export default function Reference({ title, quotes, palette }: { title: string; q
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 4 }}>
-      <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} hitSlop={6} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start' }}>
+      <Tap onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} hitSlop={6} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start' }}>
         <Text style={{ color: palette.muted, fontSize: 13 }}>{title}</Text>
         <ChevronDown size={14} color={palette.muted} style={{ transform: [{ rotate: open ? '180deg' : '0deg' }] }} />
-      </Pressable>
+      </Tap>
       {open && quotes.map((quote, i) => {
         const style = { color: i ? palette.muted : palette.ink, fontSize: i ? 13 : 15, lineHeight: i ? 21 : 25, textAlign: 'right' as const };
         return quote.url

@@ -86,6 +86,8 @@ const PRIMITIVES: Record<string, RegExp> = {
   'react-native': /^(Pressable|Touchable\w*|Modal|TextInput|Switch|ActivityIndicator)$/,
   'react-native-gesture-handler': /^(Pressable|Touchable\w*|RectButton|BorderlessButton)$/,
   'expo-blur': /^BlurView$/,
+  // The shared press (ui/Tap) is a raw tap area: a screen drawing one is still drawing its own control.
+  '@/ui/Tap': /^Tap$/,
 };
 
 /** The local names a file gives the primitives it imports (aliases, multi-line imports, `import * as`, require). */
