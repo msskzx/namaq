@@ -13,7 +13,7 @@ export type BookState = 'on' | 'off' | 'downloading' | 'failed';
 
 const HIDDEN = 'books-hidden';
 const SAVED = 'books-saved';
-const ids = (key: string) => (readJson<unknown[]>(key) ?? []).filter(isBookId);
+const ids = (key: string) => (readJson(key, Array.isArray) ?? []).filter(isBookId);
 
 let hidden = ids(HIDDEN);
 let saved = ids(SAVED);

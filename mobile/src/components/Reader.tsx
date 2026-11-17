@@ -12,7 +12,7 @@ import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkK
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { compareKeys, forgottenOrder, nextForgotten, type RecitePosition } from '@shared/quran/recite';
+import { compareKeys, forgottenOrder, isKey, nextForgotten, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
 import TopBar, { TOP_BAR } from '@/ui/TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
@@ -44,7 +44,7 @@ import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { words } from '@/lib/words';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';
 import { useKeyboardHeight } from '@/lib/keyboard';
@@ -61,6 +61,10 @@ const PLACE = 'reader-place';
 const LAST_RECITE = 'reader-recite-last';
 /** `y`: how far down the page the reader had scrolled, when the text is bigger than the printed page. */
 type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean; y?: number };
+const isPosition = (value: unknown): value is RecitePosition =>
+  isRecord(value) && isKey(value.start as string) && (value.shown === null || isKey(value.shown as string)) && isNumberIn(0, Infinity)(value.words) && (value.word === undefined || isNumberIn(0, Infinity)(value.word));
+const isPlace = (value: unknown): value is Place =>
+  isRecord(value) && isNumberIn(1, PAGES)(value.page) && (value.position == null || isPosition(value.position)) && (value.reviewing === undefined || isBoolean(value.reviewing)) && (value.y === undefined || isNumberIn(0, Infinity)(value.y));
 /** The text size (1 is the printed page), kept on this phone from one visit to the next. */
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
@@ -86,7 +90,7 @@ export default function Reader() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const focused = useIsFocused();
-  const place = useMemo(() => readJson<Place>(PLACE), []);
+  const place = useMemo(() => readJson(PLACE, isPlace), []);
   const [page, setPage] = useState(() => Math.min(PAGES, Math.max(1, place?.page ?? 1)));
   const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
@@ -99,7 +103,7 @@ export default function Reader() {
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[]; word?: number } | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
-  const [zoom, setZoom] = useState(() => settleZoom(readJson<number>(ZOOM) ?? 1));
+  const [zoom, setZoom] = useState(() => settleZoom(readJson(ZOOM, isNumberIn(0, Infinity)) ?? 1));
   const flowing = zoom > 1;
   /** Each page's drawn height: with bigger text a page runs past the screen and the reader scrolls down it. */
   const [heights, setHeights] = useState<Record<number, number>>({});
@@ -130,14 +134,14 @@ export default function Reader() {
   useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
-  const last = useMemo(() => (focused ? readJson<Place>(LAST_RECITE) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
+  const last = useMemo(() => (focused ? readJson(LAST_RECITE, isPlace) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const reciting = !!position;
   const mode = reciting ? 'recite' : 'read';
   const model = modelOf(page);
   // Write mode (owner, 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes what the pen
   // setting asks (recite/useRecite.ts, the one recite mode of the mushaf, the home card and the quiz).
-  const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
+  const [writing, setWriting] = useState(() => readJson(WRITE, isBoolean) ?? false);
   const [pen] = penRule.use();
   // A review asks one ayah at a time: once it shows, nothing more is written until the next one.
   const recite = useRecite({ model, position, setPosition, writing, pen, autoFocus: true,

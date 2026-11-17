@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ArrowLeftRight } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
+import type { CompareScope } from '@shared/quran/compareScope';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -16,13 +17,19 @@ import PageProgress from '@/components/PageProgress';
 import ComparePager, { type Focus, type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
 import { cardsFor, filteredPairs, landingIndex, pairTitle, visitKey, visitsOf, type PairFilter } from '@/lib/compare';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 
 const PLACE = 'compare-place';
 const FILTER = 'compare-filter';
 type Place = Pick<Visit, 'lead' | 'other'>;
+const isSurah = isNumberIn(1, 114);
+const isPlace = (value: unknown): value is Place => isRecord(value) && isSurah(value.lead) && isSurah(value.other);
+const isScope = (value: unknown): value is CompareScope => isRecord(value) && (
+  ['juz', 'surah', 'page'].includes(value.unit as string) ? isNumberIn(1, 604)(value.from) && isNumberIn(1, 604)(value.to)
+    : ['surahs', 'juzs'].includes(value.unit as string) && Array.isArray(value.list) && value.list.every(isNumberIn(1, 114)));
+const isFilter = (value: unknown): value is PairFilter => isRecord(value) && (value.scope === undefined || isScope(value.scope)) && (value.savedOnly === undefined || isBoolean(value.savedOnly));
 
 /** The website's compare page on the phone: surah pairs side by side, their cards scrolled, the pair list in a bottom sheet. */
 export default function CompareScreen() {
@@ -30,11 +37,11 @@ export default function CompareScreen() {
   const bottom = useTabBarSpace();
   const [help, setHelp] = useState(false);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const [filter, setFilter] = useState<PairFilter>(() => readJson<PairFilter>(FILTER) ?? {});
+  const [filter, setFilter] = useState<PairFilter>(() => readJson(FILTER, isFilter) ?? {});
   // The saved-only list follows the bookmarks only when the filter changes, so unsaving a card doesn't pull the page away.
   const pairs = useMemo(() => filteredPairs(filter), [filter]); // eslint-disable-line react-hooks/exhaustive-deps
   const visits = useMemo(() => visitsOf(pairs), [pairs]);
-  const [index, setIndex] = useState(() => landingIndex(visits, readJson<Place>(PLACE)));
+  const [index, setIndex] = useState(() => landingIndex(visits, readJson(PLACE, isPlace)));
   const visit = visits[index];
   const pager = useRef<PagerHandle>(null);
   const [sheet, setSheet] = useState(false);

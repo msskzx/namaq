@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { ayahAudioUrl, ayahFile, reciterOf } from '@shared/quran/recitation';
 import { applySync, syncDue, type AudioRow, type SyncResult } from '@shared/quran/recitationSync';
-import { readJson, writeJson } from './storage';
+import { arrayOf, isNumberIn, isRecord, isString, readJson, writeJson } from './storage';
 import { WEBSITE } from './branches';
 
 /**
@@ -23,8 +23,11 @@ const PACKS = 'listen-packs';
 const SYNCED = 'listen-sync';
 const web = Platform.OS === 'web';
 
-let packs: Pack[] = readJson<Pack[]>(PACKS) ?? [];
-let synced: Record<string, Synced> = readJson<Record<string, Synced>>(SYNCED) ?? {};
+const isPack = (value: unknown): value is Pack => isRecord(value) && isNumberIn(0, Infinity)(value.reciter) && isString(value.kind) && isString(value.label) && arrayOf(isString)(value.keys);
+const isSynced = (value: unknown): value is Synced => isRecord(value) && isString(value.token) && isRecord(value.rows) && isNumberIn(0, Infinity)(value.syncedAt);
+
+let packs: Pack[] = (readJson(PACKS, Array.isArray) ?? []).filter(isPack);
+let synced: Record<string, Synced> = Object.fromEntries(Object.entries(readJson(SYNCED, isRecord) ?? {}).filter(([, value]) => isSynced(value))) as Record<string, Synced>;
 const busy = new Map<string, Progress>();
 /** The ayat each running download is fetching, so that a sweep leaves them alone. */
 const running = new Map<string, string[]>();

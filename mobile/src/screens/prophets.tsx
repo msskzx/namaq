@@ -8,7 +8,7 @@ import Sheet from '@/ui/Sheet';
 import TabHint from '@/components/TabHint';
 import BarPicker from '@/ui/BarPicker';
 import TopBar from '@/ui/TopBar';
-import { readJson, writeJson } from '@/lib/storage';
+import { isString, readJson, writeJson } from '@/lib/storage';
 import { usePalette } from '@/lib/theme';
 
 const PICKED = 'prophets-picked';
@@ -16,7 +16,7 @@ const PICKED = 'prophets-picked';
 /** The prophets tab: one prophet's story at a time (Musa until one is picked), picked from a dropdown in the middle of the top bar (like the compare tab's). */
 export default function ProphetsTab() {
   const palette = usePalette();
-  const [slug, setSlug] = useState(() => findProphet(readJson<string>(PICKED) ?? '')?.slug ?? 'musa');
+  const [slug, setSlug] = useState(() => findProphet(readJson(PICKED, isString) ?? '')?.slug ?? 'musa');
   const [picking, setPicking] = useState(false);
   const prophet = findProphet(slug);
   const name = prophet ? prophetName(prophet) : '';

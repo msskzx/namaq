@@ -19,7 +19,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useIntent } from '@/lib/intent';
 import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
 import { around as aroundSetting, branchView, listState } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
+import { isRecord, readJson, writeJson } from '@/lib/storage';
 import { usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 
@@ -49,7 +49,7 @@ export default function BranchesScreen() {
   const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [pieces, setPieces] = useState<BranchPiece[] | null>(null);
-  useEffect(() => loadPrefs(readJson<Prefs>('branches-grow'), prefs => writeJson('branches-grow', prefs)), []);
+  useEffect(() => loadPrefs(readJson('branches-grow', isRecord) as Partial<Prefs> | undefined, prefs => writeJson('branches-grow', prefs)), []);
   // The list is built from the bundled data after the first frame, so the tab opens at once.
   const savedKey = list.saved ? bookmarks : null;
   useEffect(() => {

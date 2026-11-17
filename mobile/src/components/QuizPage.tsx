@@ -10,7 +10,7 @@ import type { PenRule } from '@shared/quran/writeAyah';
 import { useRecite } from './recite/useRecite';
 import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { quizPageBefore, useQuizPen } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, readJson, writeJson } from '@/lib/storage';
 import type { Graded } from '@/lib/useWriteBoxes';
 import type { Palette } from '@/lib/theme';
 
@@ -54,7 +54,7 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
     return { data, model, cut: shownCut(ayah, words, ask.shows) };
   }, [page, ayah, ask.shows]);
   const [position, setPosition] = useState<RecitePosition>(() => ({ start: ayah, shown: null, words: parts?.cut ?? 0 }));
-  const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? true);
+  const [writing, setWriting] = useState(() => readJson(WRITE, isBoolean) ?? true);
   const toggleWriting = () => setWriting(on => { writeJson(WRITE, !on); return !on; });
   const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: (writing || !!party) && !shown && !sent, pen, until: ayah, floor: parts?.cut ?? 0,
     onWritten: (_key, graded) => onWritten?.(graded),

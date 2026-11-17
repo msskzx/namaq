@@ -33,7 +33,7 @@ import { answer, claimTarget, closeStudio, growthState, studioOwner, stop, useGr
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
+import { isNumberIn, isRecord, isString, readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
@@ -44,6 +44,8 @@ const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
 const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, tour: false, kind: 'tree' };
 type Place = { id: string; camera?: Camera };
+const isCamera = (value: unknown): value is Camera => isRecord(value) && [value.s, value.x, value.y].every(isNumberIn(-Infinity, Infinity));
+const isPlace = (value: unknown): value is Place => isRecord(value) && isString(value.id) && (value.camera === undefined || isCamera(value.camera));
 
 /** A second tap within this time is a double tap: it saves the tree instead of opening the ayat. */
 const DOUBLE_TAP = 280;
@@ -157,7 +159,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   };
   // Embedded, «show only this part» opens that part on the branches tab.
   const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => (embedded ? embedded.open(piece) : onOpen?.(piece)) }), [onOpen, embedded]);
-  const place = useMemo(() => (embedded ? undefined : readJson<Place>(PLACE)), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const place = useMemo(() => (embedded ? undefined : readJson(PLACE, isPlace)), []); // eslint-disable-line react-hooks/exhaustive-deps
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   const [view, setView] = useState<Size | null>(null);
