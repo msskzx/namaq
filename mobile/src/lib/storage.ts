@@ -4,7 +4,7 @@ import { deviceStorage } from './deviceStorage';
 
 /** Every write on the phone goes through one store that keeps what the device refused and saves it again (shared/storage.ts). */
 const kept = keepingStorage(deviceStorage);
-const device = kept.storage;
+export const device = kept.storage;
 
 const leaving = new Set<() => void>();
 /** Runs `flush` when the app goes to the background, so an edit still waiting on a typing pause is saved before the phone may close the app. */
