@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { reviewPool } from '@shared/quran/branchInventory';
+import { branchInventory, reviewFilters } from '@shared/quran/branchInventory';
 import { treePreviewOf } from '@/app/quran/read/ayahPreview';
 import tiers from './tiers.json';
 import ReviewList from './ReviewList';
@@ -13,7 +13,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ g
   if (process.env.NODE_ENV === 'production' && !process.env.REVIEW_LIST) notFound();
   const g = (await searchParams).g;
   const group = GROUPS.find(name => name === g) ?? 'A';
-  const pool = new Map(reviewPool().map(piece => [piece.id, piece]));
+  const pool = new Map(branchInventory(reviewFilters({}), null, true).map(piece => [piece.id, piece]));
   const ids = (tiers as Record<string, string[]>)[group];
   const trees = ids.flatMap(id => { const piece = pool.get(id); return piece ? [{ ...treePreviewOf(piece), matrixOnly: false }] : []; });
   const missing = ids.filter(id => !pool.has(id));
