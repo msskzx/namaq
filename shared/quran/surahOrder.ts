@@ -2,6 +2,7 @@ import { juzOf } from './juz';
 import { normalizeWord } from './normalize';
 import surahRows from '../data/quran/surahs.json';
 import type { AyahWordsOf } from './quranText/ayahWords';
+import { SURAH_NAMES } from './surahNames';
 
 /**
  * Surah order from al-Fatiha to al-Nas (owner, 2026-11-13): each surah's aim in al-Biqa'i's words and what joins it to the
@@ -273,7 +274,7 @@ export type OrderSurah = { surah: number; name: string; juz: [number, number]; o
 const core = (word: string) => normalizeWord(word).replace(/^[وف]/, '').replace(/^(ال|لل|ل)/, '');
 const words = (text: string) => text.split(' ').filter(w => normalizeWord(w) !== '');
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const counts: Record<number, number> = Object.fromEntries(surahRows.map(row => [row.number, row.numberOfAyat]));
 
 /** A surah's opening: whole ayat from the first until ten words, four ayat or the surah's end. */

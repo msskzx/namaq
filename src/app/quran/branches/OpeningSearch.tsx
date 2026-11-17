@@ -14,6 +14,7 @@ import type { JuzRange } from '@shared/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { mushafText } from '@shared/quran/mushafText';
+import { surahName } from '@shared/quran/surahNames';
 
 /** A phrase's words in the Quran font, or its English gloss when the page is in English. */
 function PhraseText({ text, en, className }: { text: string; en?: string; className: string }) {
@@ -160,7 +161,7 @@ export default function OpeningSearch({ phrases: given, query: submitted = '', j
           {surahHits.map((surah, index) => <li key={`s${surah.number}`} role="presentation">
             <button id={`${listId}-${index}`} type="button" role="option" aria-selected={selected === index} onClick={() => pickSurah(surah)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
               <span className={`${NOTE} w-7 shrink-0 tabular-nums`}>{ar ? num(surah.number) : surah.number}</span>
-              <span className="flex-1">{surah.name}</span>
+              <span className="flex-1">{surahName(surah.number)}</span>
               <span className="text-[var(--home-accent)]">{ar ? num(surah.count) : surah.count}</span>
             </button>
           </li>)}

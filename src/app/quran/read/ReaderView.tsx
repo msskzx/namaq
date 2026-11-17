@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, EyeOff, File, List, Search } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { plainName } from '@shared/quran/normalize';
 import NoteDialog from '@/components/quran/NoteDialog';
 import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -45,6 +44,7 @@ import type { IndexSurah } from '@shared/quran/juzIndex';
 import SurahIndex from './SurahIndex';
 import { AyahShareDialog } from '@/components/share/AyahShare';
 import MushafPage, { settleTextSize, type Checked, type Write } from './MushafPage';
+import { surahName } from '@shared/quran/surahNames';
 
 export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
@@ -254,7 +254,7 @@ export default function ReaderView({
   const listening = useListening();
   const [listenFrom, setListenFrom] = useState<string | null>(null);
   const following = useFollowing();
-  const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
+  const surahOfKey = (key: string) => surahName(Number(key.split(':')[0]));
   const [preview, setPreview] = useState<Preview | null>(null);
   const [topic, setTopic] = useState<TopicOpen | null>(null);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
@@ -530,7 +530,7 @@ export default function ReaderView({
           {surahs.map(surah => surah.page && <li key={surah.number}>
             <Link prefetch={false} href={`/quran/read/${surah.page}`} className="flex items-baseline gap-3 border-b border-[var(--home-rule)] px-4 py-2 hover:bg-[var(--home-paper-deep)]" onClick={event => event.currentTarget.closest<HTMLElement>('[popover]')?.hidePopover?.()}>
               <span className="w-8 shrink-0 text-sm text-[var(--home-muted)]">{ar ? num(surah.number) : surah.number}</span>
-              <span>{ar ? surah.name : surah.nameTransliterated || surah.name}</span>
+              <span>{ar ? surahName(surah.number) : surah.nameTransliterated || surahName(surah.number)}</span>
             </Link>
           </li>)}
         </ol>
@@ -619,20 +619,20 @@ export default function ReaderView({
       {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>
         <Button size="md" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
           <FasilaIcon aria-hidden className="text-[var(--home-accent)]" width={18} height={18} />
-          {ar ? `عُد إلى فاصلتك · ${surahName(fasila.key) ?? ''} ${num(Number(fasila.key.split(':')[1]))}` : `Back to where you stopped · ${fasila.key}`}
+          {ar ? `عُد إلى فاصلتك · ${surahOfKey(fasila.key) ?? ''} ${num(Number(fasila.key.split(':')[1]))}` : `Back to where you stopped · ${fasila.key}`}
         </Button>
       </div>}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
       <ListenBar above={!!position} onRepeat={() => setListenFrom(listening?.key ?? null)} />
       {listening && listenShown === undefined && !following && <div className={mushaf.reciteBar} style={{ transform: `translateY(calc(-1 * (58px + ${position ? 'var(--recite-pill) + 16px' : '8px'})))` }}>
         <Button size="md" variant="muted" className={mushaf.fasilaPill} onClick={() => setFollowing(true)}>
-          {ar ? `عُد إلى الآية · ${surahName(listening.key) ?? ''} ${num(Number(listening.key.split(':')[1]))}` : `Back to the ayah being read · ${listening.key}`}
+          {ar ? `عُد إلى الآية · ${surahOfKey(listening.key) ?? ''} ${num(Number(listening.key.split(':')[1]))}` : `Back to the ayah being read · ${listening.key}`}
         </Button>
       </div>}
       <ListenSheet start={listenFrom} onClose={() => setListenFrom(null)} />
       <TopicSheet open={topic} onClose={() => setTopic(null)} />
-      {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
-      {sharing && <AyahShareDialog ayah={sharing} name={surahName(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
+      {noting && <NoteDialog ayah={noting} name={surahOfKey(noting)} ar={ar} onClose={() => setNoting(null)} />}
+      {sharing && <AyahShareDialog ayah={sharing} name={surahOfKey(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
       {position && <div className={mushaf.reciteBar}>
         <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} ar={ar} more={reviewing ? !!reviewNext : !last}
           after={reviewing ? { Icon: ar ? ArrowLeft : ArrowRight, label: ar ? 'الآية المنسية التالية' : 'Next forgotten ayah' } : undefined}

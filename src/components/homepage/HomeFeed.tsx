@@ -48,13 +48,14 @@ import { reviewHref } from './HomeCards';
 import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
  * a feed of pairs and trees that skips what this browser has seen (shared/feedSeen.ts) and loads more on request, and the prayer row.
  */
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const fetchJson = async <T,>(url: string): Promise<T> => {
   const response = await fetch(url);
   if (!response.ok) throw new Error(url);

@@ -7,11 +7,12 @@ import Button from '@/components/common/Button';
 import ExternalLink from '@/components/common/ExternalLink';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
-import { ayahWords, plainName } from '@shared/quran/normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
 import { num } from '@shared/quran/arabicNumber';
 import { wordDiff } from '@shared/quran/wordDiff';
 import { mushafText } from '@shared/quran/mushafText';
+import { surahName } from '@shared/quran/surahNames';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
@@ -128,10 +129,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
 }
 
 const JUZ_AMMA_FROM = 78;
-const surahLabel = (entries: QiraatEntry[], surah: number) => {
-  const name = entries.find(e => e.variant.surah === surah)?.surahName;
-  return name ? plainName(name).replace(/^سورة /, '') : String(surah);
-};
+const surahLabel = (_entries: QiraatEntry[], surah: number) => surahName(surah);
 
 export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
   const [selected, setSelected] = useState(0);

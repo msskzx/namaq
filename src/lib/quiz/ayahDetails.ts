@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { surahName } from '@shared/quran/surahNames';
 
 export type AyahDetails = Map<string, { text: string; reference: string }>;
 
@@ -21,6 +22,6 @@ export async function ayahDetails(
   });
   return new Map(ayat.map((ayah) => [
     `${ayah.surah.number}:${ayah.number}`,
-    { text: ayah.text, reference: `${ayah.surah.name} ${ayah.surah.number}:${ayah.number}` },
+    { text: ayah.text, reference: `${surahName(ayah.surah.number)} ${ayah.surah.number}:${ayah.number}` },
   ]));
 }

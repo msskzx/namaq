@@ -5,7 +5,6 @@ import { LightbulbOff, Play, Search } from 'lucide-react-native';
 import corpus from '@shared/quran/quranText/corpus';
 import type { BranchAyah } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { indexAyat, searchAyat, searchable, type AyahSearch, type IndexedAyah } from '@shared/quran/ayahSearch';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
@@ -13,11 +12,12 @@ import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';
+import { surahName } from '@shared/quran/surahNames';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
 
-const name = (surah: { name: string }) => plainName(surah.name).replace(/^سورة\s*/, '');
+const name = (surah: { number: number }) => surahName(surah.number);
 const AROUND = 6;
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
@@ -134,7 +134,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
             <Pressable onPress={() => go({ page: row.page, key: `${row.number}:${row.from}`, mark: false })} accessibilityRole="link"
               style={[{ height: SURAH_ROW, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16 }, index === here && !query.trim() ? { backgroundColor: palette.paperDeep } : null]}>
               <Text style={{ width: 30, color: palette.accent, fontSize: 13 }}>{num(row.number)}</Text>
-              <Text style={{ color: palette.ink, fontSize: 17 }}>{row.name}</Text>
+              <Text style={{ color: palette.ink, fontSize: 17 }}>{surahName(row.number)}</Text>
               {row.from > 1 && <Text style={{ color: palette.muted, fontSize: 13 }}>من الآية {num(row.from)}</Text>}
               <View style={{ flex: 1 }} />
               <Text style={{ color: palette.muted, fontSize: 13 }}>{num(row.page)}</Text>

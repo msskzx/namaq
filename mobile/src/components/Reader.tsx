@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
@@ -53,6 +52,7 @@ import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 import { penRule } from '@/lib/settings';
+import { surahName } from '@shared/quran/surahNames';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
@@ -78,7 +78,7 @@ const modelOf = (page: number) => {
 };
 
 /** «البقرة ٥»: an ayah named as the reader names it, surah first. */
-const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`; };
+const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 
 /** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
 export default function Reader() {
@@ -455,7 +455,7 @@ export default function Reader() {
       {/* Back to the فاصلة from any other page, with the bars (a tap), so it never covers the page's last line. */}
       {tools && !position && fasila && fasila.page !== page && (
         <Pressable onPress={() => jump({ page: fasila.page, key: fasila.key, mark: false })} accessibilityRole="button"
-          accessibilityLabel={`عد إلى فاصلتك، ${surahNames[Number(fasila.key.split(':')[0])] ?? ''} ${num(Number(fasila.key.split(':')[1]))}`}
+          accessibilityLabel={`عد إلى فاصلتك، ${surahName(Number(fasila.key.split(':')[0]))} ${num(Number(fasila.key.split(':')[1]))}`}
           style={{ position: 'absolute', alignSelf: 'center', bottom: tabBarTop(insets.bottom) + 10, height: 40, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />

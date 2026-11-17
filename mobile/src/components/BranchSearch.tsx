@@ -12,6 +12,7 @@ import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import TopBar from '@/ui/TopBar';
+import { surahName } from '@shared/quran/surahNames';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** The new list, and where it opens: a picked phrase, else the search's best tree. */
@@ -68,7 +69,7 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
         {found.surahs.map(surah => (
           <Pressable key={`s${surah.number}`} onPress={() => apply({ query: '', surah: surah.number })} accessibilityRole="button" style={row}>
             <Text style={{ color: palette.muted, width: 28 }}>{num(surah.number)}</Text>
-            <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{surah.name}</Text>
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{surahName(surah.number)}</Text>
             <Text style={{ color: palette.accent }}>{num(surah.count)}</Text>
           </Pressable>
         ))}

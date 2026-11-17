@@ -10,14 +10,14 @@ describe('the kinds written on the page', () => {
     expect(surahOpenings.count(all)).toBe(114);
     expect(surahOpenings.count({ range: { from: 30, to: 30 }, filters: {} })).toBe(37);
     const [question] = surahOpenings.questions({ range: null, filters: { surahs: '2' } }, 'easy', once);
-    expect(question).toMatchObject({ key: 'OPENINGS:2:1', ayahKey: '2:1', promptArabic: 'سمّع أول آية في سورة البقرة.', page: { shows: 0, recite: true, title: 'shown' } });
+    expect(question).toMatchObject({ key: 'OPENINGS:2:1', ayahKey: '2:1', promptArabic: 'سمّع أول آية في سورة البَقَرَةْ.', page: { shows: 0, recite: true, title: 'shown' } });
     expect(question.choices.map(choice => choice.value)).toEqual([RECITED, FORGOT]);
     expect(recited(question)).toBe(true);
   });
   it('asks any ayah in the range, named surah first', () => {
     expect(ayahEnds.count(all)).toBe(6236);
     const [question] = ayahEnds.questions({ range: null, filters: { surahs: '112' } }, 'easy', () => 0);
-    expect(question.promptArabic).toMatch(/^سمّع آية الإخلاص [١-٤]\.$/);
+    expect(question.promptArabic).toMatch(/^سمّع آية الإِخْلَاصْ [١-٤]\.$/);
     // A party asks it too, the pen on for all and the words graded (owner, 2026-11-17).
     expect(ayahEnds.party).toBe(true);
   });

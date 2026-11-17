@@ -13,7 +13,7 @@ function websiteSources(): SearchSources {
   const sources = bundledSources(listedPairs);
   const verdicts = withUnappliedStoryReviews(data.places as PlaceVerdicts);
   const kept = new Set(Object.entries(STORIES).flatMap(([slug, story]) =>
-    keptViews(slug, buildStory(story.events, { names: {}, ayah: () => '' }), verdicts).map(event => `${slug}|${event.title}`)));
+    keptViews(slug, buildStory(story.events, { ayah: () => '' }), verdicts).map(event => `${slug}|${event.title}`)));
   return { ...sources, events: sources.events?.filter(event => kept.has(`${event.slug}|${event.title}`)) };
 }
 

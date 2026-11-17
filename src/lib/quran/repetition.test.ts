@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { surahName } from '@shared/quran/surahNames';
 import compare from '@shared/quran/compare.fixture.json';
 import { buildRepetition, type RepetitionInput } from './repetition';
 import { findPassages, type AyahInput } from './passages';
@@ -43,9 +44,9 @@ describe('buildRepetition', () => {
 
   it('lists the surahs in input order with their ayah counts', () => {
     expect(result.surahs.map(s => ({ number: s.number, name: s.name, ayat: s.ayat }))).toEqual([
-      { number: 1, name: 'Alpha', ayat: 3 },
-      { number: 2, name: 'Beta', ayat: 2 },
-      { number: 3, name: 'Gamma', ayat: 1 },
+      { number: 1, name: surahName(1), ayat: 3 },
+      { number: 2, name: surahName(2), ayat: 2 },
+      { number: 3, name: surahName(3), ayat: 1 },
     ]);
   });
 
@@ -118,7 +119,7 @@ describe('buildRepetition edge cases', () => {
   it('returns empty results for no surahs and for a surah with no ayat', () => {
     expect(buildRepetition([])).toEqual({ surahs: [], cells: [], within: [], across: [], passages: [], ayat: {} });
     const r = buildRepetition([{ number: 4, name: 'A', ayat: [] }]);
-    expect(r.surahs).toEqual([{ number: 4, name: 'A', ayat: 0, words: 0 }]);
+    expect(r.surahs).toEqual([{ number: 4, name: surahName(4), ayat: 0, words: 0 }]);
     expect(r.cells).toEqual([]);
   });
 

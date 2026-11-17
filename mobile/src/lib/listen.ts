@@ -2,10 +2,10 @@ import { useSyncExternalStore } from 'react';
 import { createAudioPlayer, preload, setAudioModeAsync, type AudioPlayer, type AudioStatus } from 'expo-audio';
 import { ayatOf, FIRST, nextStep, pauseAfter, reciterName, reciterOf, stepTo, surahEnd, type Range, type Step } from '@shared/quran/recitation';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { ayahCounts, surahNames } from './mushaf';
 import { readListenPlan, readReciter } from '@shared/listenSettings';
 import { localAyah, streamUrl } from './listenFiles';
+import { surahName } from '@shared/quran/surahNames';
 
 /**
  * The one recitation playing in the app: a range of ayat, read by one reciter, with each ayah's and the range's repeats
@@ -31,7 +31,7 @@ let loaded: string | null = null;
 
 const title = (key: string) => {
   const [surah, ayah] = key.split(':').map(Number);
-  return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`;
+  return `${surahName(surah)} ${num(ayah)}`;
 };
 const sourceOf = (reciter: number, key: string) => localAyah(reciter, key) ?? streamUrl(reciter, key);
 

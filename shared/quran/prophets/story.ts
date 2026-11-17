@@ -1,5 +1,6 @@
 import { num } from '../arabicNumber';
-import { ayahWords, plainName } from '../normalize';
+import { ayahWords } from '../normalize';
+import { surahName } from '../surahNames';
 
 // docs/plans/quran-prophet-timelines.md
 export type Range = [number, number];
@@ -10,9 +11,9 @@ export type Story = { intro: string; phases: readonly string[]; events: StoryEve
 export const seg = (surah: number, lo: number, hi = lo): Segment => ({ surah, range: [lo, hi] });
 
 /** Where the story's text comes from: the website stores its own ayat file, the app reads its bundled Quran. */
-export type StoryText = { names: Record<number, string>; ayah: (key: string) => string | undefined };
-export type StoryData = { names: Record<number, string>; ayat: Record<string, string> };
-export const storedText = ({ names, ayat }: StoryData): StoryText => ({ names, ayah: key => ayat[key] });
+export type StoryText = { ayah: (key: string) => string | undefined };
+export type StoryData = { ayat: Record<string, string> };
+export const storedText = ({ ayat }: StoryData): StoryText => ({ ayah: key => ayat[key] });
 
 export type StoryLine = { ayah: number; text: string; words: string[]; norm: string[] };
 export type SegmentView = { surah: number; name: string; range: Range; lines: StoryLine[] };
@@ -22,11 +23,11 @@ export type EventView = { n: number; title: string; phase: number; segments: Seg
 export const storyKeys = (events: StoryEvent[]) =>
   events.flatMap(e => e.segments.flatMap(({ surah, range: [lo, hi] }) => Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`)));
 
-export function buildStory(events: StoryEvent[], { names, ayah }: StoryText): EventView[] {
+export function buildStory(events: StoryEvent[], { ayah }: StoryText): EventView[] {
   return events.map(({ title, phase, segments }, i) => {
     const views = segments.map(({ surah, range: [lo, hi] }) => ({
       surah,
-      name: plainName((names[surah] ?? '').replace(/\u0627\u0653/g, 'آ')).replace(/^سورة\s+/, ''),
+      name: surahName(surah),
       range: [lo, hi] as Range,
       lines: Array.from({ length: hi - lo + 1 }, (_, k) => {
         const text = ayah(`${surah}:${lo + k}`);

@@ -95,7 +95,7 @@ describe('ReaderView', () => {
     render(<ReaderView page={343} pages={one(343, { juz: 18, items: [{ line: ['مِن', 5] }] }, 23)} names={names} />);
     const page = screen.getByRole('region', { name: 'الصفحة ٣٤٣' });
     expect(page.textContent).toContain('الجزء الثامن عشر');
-    expect(page.textContent).toContain('المؤمنون');
+    expect(page.textContent).toContain(names[23]);
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
 
@@ -481,7 +481,7 @@ describe('SurahIndex', () => {
     render(<SurahIndex surahs={surahs} />);
     const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: 'البقرة ٢٥٥' } });
-    expect(screen.getByText('افتح البقرة ٢٥٥').closest('a')?.getAttribute('href')).toBe('/quran/read/ayah/2/255');
+    expect(screen.getByText('افتح البَقَرَةْ ٢٥٥').closest('a')?.getAttribute('href')).toBe('/quran/read/ayah/2/255');
     expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ١', 'الجزء ٢', 'الجزء ٣']);
     fireEvent.submit(search.closest('form')!);
     expect(push).toHaveBeenCalledWith('/quran/read/ayah/2/255');
@@ -498,7 +498,7 @@ describe('SurahIndex', () => {
     expect(searchQuran).toHaveBeenCalledWith('الحي القيوم');
     expect([...results.querySelectorAll('a')].map(a => a.getAttribute('href'))).toEqual(['/quran/read/ayah/2/255', '/quran/read/ayah/3/2']);
     expect([...results.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['ٱلْحَىُّ', 'ٱلْقَيُّومُ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ']);
-    expect(results.textContent).toContain('البقرة ٢٥٥');
+    expect(results.textContent).toContain('البَقَرَةْ ٢٥٥');
     expect(screen.queryByText('لا توجد سورة بهذا الاسم أو الرقم.')).toBeNull();
   });
 

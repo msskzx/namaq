@@ -1,8 +1,8 @@
 // The iltifat page's seven examples (owner, 2026-11-13): each card draws its own picture. docs/plans/quran-within-surah.md
-import surahs from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
 import type { AyahWordsOf } from './quranText/ayahWords';
+import { SURAH_NAMES } from './surahNames';
 
 /** هو (غيبة), نحن or أنا (تكلم), أنت (خطاب). */
 export type Voice = 'he' | 'we' | 'you';
@@ -96,7 +96,7 @@ export type ExampleView = { key: string; surah: number; name: string; from: numb
   | { kind: 'dialog'; turns: TurnView[] }
 );
 
-const names: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 
 
 function wordsOf(of: AyahWordsOf, surah: number, ayah: number) {
