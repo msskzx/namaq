@@ -1,4 +1,5 @@
 import { expect, longPress, open, readerPage, stored, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 // Words are matched as the mushaf data writes them (shared/data/quran/mushaf/1.json).
 const HAMD = 'ٱلۡحَمۡدُ';
@@ -19,7 +20,7 @@ test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }
   await page.getByText(HAMD, { exact: true }).first().click();
   await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
   await page.getByLabel('ابحث عن سورة أو آية').fill('يس');
-  await page.getByRole('link').filter({ hasText: 'يس' }).first().click();
+  await page.getByRole('link').filter({ hasText: `${S(36)}` }).first().click();
   await expect.poll(() => readerPage(page)).toBe(440);
 });
 
@@ -51,7 +52,7 @@ test('the trees sheet holds the branches cards, opening as the matrix with their
   await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
   await expect(page).toHaveURL(/\/branches/);
   // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees, as the matrix.
-  await expect(page.getByRole('button', { name: /^قراءة الصافات / }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: new RegExp(`^قراءة ${S(37)} `) }).first()).toBeVisible();
   expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
 });
 
@@ -59,8 +60,8 @@ test('the compare preview sheet opens the compare card', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, IHDINA);
   await page.getByRole('button', { name: /المقارن/ }).first().click();
-  await expect(page.getByRole('button', { name: /^الفاتحة مع / }).first()).toBeVisible();
-  await page.getByRole('button', { name: /^الفاتحة مع / }).first().click();
+  await expect(page.getByRole('button', { name: new RegExp(`^${S(1)} مع `) }).first()).toBeVisible();
+  await page.getByRole('button', { name: new RegExp(`^${S(1)} مع `) }).first().click();
   await expect(page).toHaveURL(/\/compare/);
 });
 
@@ -68,7 +69,7 @@ test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its 
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'تفسير السعدي' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ١–٧` })).toBeVisible();
   await expect(page.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
 });
@@ -80,7 +81,7 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: HAMD })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText(/اسم مرفوع/).first()).toBeVisible();
   await page.getByRole('button', { name: 'نزّل التبيان في إعراب القرآن' }).click();
@@ -99,7 +100,7 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText('«الصِّفَةُ»', { exact: false })).toBeVisible();
   await expect(page.getByText('الإتقان للسيوطي ٣/٢٣٣')).toBeVisible();
@@ -131,7 +132,7 @@ test.describe('surah topics', () => {
     await open(page, '/read');
     await pressWord(page, 'عَنِ');
     await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
-    await expect(page.getByRole('heading', { name: 'موضوعات سورة النبأ' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: `موضوعات سورة ${S(78)}` })).toBeVisible();
     await expect(page.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(page.getByText('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤')).toBeVisible();
     await page.getByRole('button', { name: /^٤\. جزاء المتقين/ }).click();
@@ -186,7 +187,7 @@ test('listening starts from a long press, and its sheet keeps the repeats and th
   await page.getByRole('button', { name: 'استمع من هذه الآية' }).click();
   const bar = page.getByRole('toolbar', { name: 'الاستماع' });
   await expect(bar).toBeVisible();
-  await expect(bar.getByRole('button', { name: /^الفاتحة [٢-٧]،/ })).toBeVisible();
+  await expect(bar.getByRole('button', { name: new RegExp(`^${S(1)} [٢-٧]،`) })).toBeVisible();
   await bar.getByRole('button', { name: 'التكرار والقارئ' }).click();
   await page.getByRole('button', { name: '٣', exact: true }).first().click();
   await expect.poll(async () => (await stored<{ eachAyah: number }>(page, 'listen-plan'))?.eachAyah).toBe(3);

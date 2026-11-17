@@ -1,4 +1,5 @@
 import { expect, longPress, open, stored, tab, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 // The book reader (docs/plans/book-reader.md): al-Sa'di, which comes with the app, page by page.
 // The فاصلة is a page, set from the ribbon in the top bar (owner, 2026-11-17).
@@ -12,7 +13,7 @@ test('a book opens from the shelf, its فاصلة stays on its page while the re
   expect(marked?.sadi?.page).toBeGreaterThan(0);
 
   await page.getByRole('button', { name: 'فهرس الكتاب ومحفوظاته' }).click();
-  await page.getByRole('link', { name: /^البقرة،/ }).click();
+  await page.getByRole('link', { name: new RegExp(`^${S(2)}،`) }).click();
   await expect.poll(async () => (await stored<{ sadi?: { entry: number } }>(page, 'book-last'))?.sadi?.entry).toBe(1);
   expect((await stored<{ sadi?: { page: number } }>(page, 'reading-fasila'))?.sadi?.page).toBe(marked?.sadi?.page);
   await expect(page.getByRole('button', { name: 'ضع الفاصلة في هذه الصفحة: هنا توقفت' })).toBeVisible();

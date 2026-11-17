@@ -1,4 +1,5 @@
 import { expect, open, readerPage, returningUser, stored, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 const menu = (page: import('@playwright/test').Page) => page.getByRole('toolbar');
 
@@ -15,7 +16,7 @@ test.describe('a new user', () => {
   test('the reading card opens the mushaf where it was left', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null })));
     await open(page, '/');
-    await page.getByRole('button', { name: /^افتح المصحف حيث توقفت، سورة الكهف/ }).click();
+    await page.getByRole('button', { name: new RegExp(`^افتح المصحف حيث توقفت، سورة ${S(18)}`) }).click();
     await expect(page).toHaveURL(/\/read/);
     expect(await readerPage(page)).toBe(300);
   });
@@ -27,7 +28,7 @@ test.describe('a new user', () => {
       localStorage.setItem('reading-fasila', JSON.stringify({ quran: { key: '2:6', page: 3 } }));
     });
     await open(page, '/');
-    await page.getByRole('button', { name: /^افتح المصحف عند فاصلتك، سورة البقرة/ }).click();
+    await page.getByRole('button', { name: new RegExp(`^افتح المصحف عند فاصلتك، سورة ${S(2)}`) }).click();
     await expect(page).toHaveURL(/\/read/);
     await expect.poll(() => readerPage(page)).toBe(3);
   });
@@ -155,7 +156,7 @@ test.describe('a new user', () => {
     await open(page, '/');
     await page.getByRole('button', { name: 'البحث' }).click();
     await page.getByLabel('ابحث في كل شيء').fill('الكهف');
-    await page.getByRole('link', { name: '١٨ الكهف' }).click();
+    await page.getByRole('link', { name: `١٨ ${S(18)}` }).click();
     await expect.poll(() => readerPage(page)).toBe(293);
   });
 
@@ -185,7 +186,7 @@ test.describe('a returning user', () => {
       await page.mouse.wheel(0, 3000);
       await expect(saved).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
-    await expect(page.getByText('البقرة ٢٥٥', { exact: true }).first()).toBeAttached();
+    await expect(page.getByText(`${S(2)} ٢٥٥`, { exact: true }).first()).toBeAttached();
   });
 
   test('a remembered ayah leaves the feed until its review is due', async ({ page }) => {
