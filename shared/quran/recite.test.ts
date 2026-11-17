@@ -48,3 +48,15 @@ describe('recite', () => {
     expect(nextForgotten(keys, '57:10')).toBeNull();
   });
 });
+
+
+describe('mixed forgotten ayat and words', () => {
+  it('keeps every mark in mushaf order and visits different words of the same ayah separately', () => {
+    const keys = forgottenOrder(['2:255:10', '1:2:1', '2:255', '2:255:2', '1:2:0', 'bad', '2:255:-1']);
+    expect(keys).toEqual(['1:2:0', '1:2:1', '2:255', '2:255:2', '2:255:10']);
+    expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
+    expect(nextForgotten(keys, '2:255')).toBe('2:255:2');
+    expect(nextForgotten(keys, '2:255:2')).toBe('2:255:10');
+    expect(nextForgotten(keys, '2:255:10')).toBeNull();
+  });
+});

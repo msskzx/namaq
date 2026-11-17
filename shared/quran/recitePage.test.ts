@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import type { RecitePosition } from './recite';
+import { stepBack, type RecitePosition } from './recite';
 import { joinModels, pageModel, reciteView } from './recitePage';
 
 const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
@@ -64,5 +64,46 @@ describe('a two-page spread', () => {
     if (shared) expect(spread.words[shared]).toBe(right.words[shared] + left.words[shared]);
     expect(spread.lines.length).toBe(right.lines.length + left.lines.length);
     expect(joinModels([right])).toBe(right);
+  });
+});
+
+
+describe('single-word recitation', () => {
+  const model = pageModel(page(1));
+
+  it('hides only the marked word and keeps the rest of the ayah, its end and neighbouring ayat visible', () => {
+    const view = reciteView(model, { start: '1:2', word: 1, shown: null, words: 0 });
+    expect(view.hidden('1:2', 0)).toBe(false);
+    expect(view.hidden('1:2', 1)).toBe(true);
+    expect(view.hidden('1:2', 2)).toBe(false);
+    expect(view.hidden('1:2', Number.MAX_SAFE_INTEGER)).toBe(false);
+    expect(view.hidden('1:1', 0)).toBe(false);
+    expect(view.hidden('1:3', 0)).toBe(false);
+  });
+
+  it('reveals the target with either reveal action, then restores its blank on a step back', () => {
+    const position = { start: '1:2', word: 0, shown: null, words: 0 };
+    const view = reciteView(model, position);
+    const revealed = view.nextWord()!;
+    expect(revealed).toEqual({ ...position, shown: '1:2' });
+    expect(view.nextAyah()).toEqual(revealed);
+    expect(reciteView(model, revealed).hidden('1:2', 0)).toBe(false);
+    expect(reciteView(model, revealed).nextWord()).toBeNull();
+    expect(reciteView(model, revealed).nextAyah()).toBeNull();
+    const back = stepBack(revealed, new Map([[1, 7]]));
+    expect(back).toEqual(position);
+    expect(reciteView(model, back).hidden('1:2', 0)).toBe(true);
+  });
+
+  it('counts Madina words without counting a hizb sign as word zero', () => {
+    const withHizb = pageModel({ juz: 1, items: [{ surah: 2 }, { line: ['۞', 'أول', 'ثان', 1, 'بعد', 2] }] });
+    const first = reciteView(withHizb, { start: '2:1', word: 0, shown: null, words: 0 });
+    expect(first.hidden('2:1', 0)).toBe(false);
+    expect(first.hidden('2:1', 1)).toBe(true);
+    expect(first.hidden('2:1', 2)).toBe(false);
+    const second = reciteView(withHizb, { start: '2:1', word: 1, shown: null, words: 0 });
+    expect(second.hidden('2:1', 1)).toBe(false);
+    expect(second.hidden('2:1', 2)).toBe(true);
+    expect(second.hidden('2:2', 0)).toBe(false);
   });
 });

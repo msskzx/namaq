@@ -4,7 +4,7 @@ import { Text } from '@/ui/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
 import { notesByDate, readAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
-import { mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { markAyah, markWord, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
@@ -13,7 +13,7 @@ import CardMenu, { type MenuAt, type MenuItem } from './CardMenu';
 import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
-import { ayahText, surahNames } from '@/lib/mushaf';
+import { ayahMushafWords, ayahText, surahNames } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
 import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
@@ -29,7 +29,7 @@ const WAYS: Record<CardWay['to'], { label: string; Icon: (props: LucideProps) =>
   compare: { label: 'في المقارنة', Icon: ArrowLeftRight },
 };
 
-export const FORGOTTEN_LABEL = 'آية نسيتها';
+export const FORGOTTEN_LABEL = 'ما نسيته';
 export const NOTE_LABEL = 'تأمل';
 
 /** A saved or forgotten card, or a note: on a shelf it is a fixed-width book with five lines; wide, it fills the row and shows the whole text. A note's text is the reader's own words, so it is not in the mushaf font. */
@@ -87,7 +87,7 @@ export function useHomeCards(palette: Palette) {
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
   const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
-  const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, ayahText(key))), [marks]);
+  const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, markWord(key) === undefined ? ayahText(key) : ayahMushafWords(markAyah(key))[markWord(key)!] ?? '')), [marks]);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   const noteCards = useMemo(() => notesByDate(notes).map(key => noteCard(key, notes[key].text)), [notes]);
   const [noting, setNoting] = useState<string | null>(null);
@@ -125,5 +125,5 @@ export function useHomeCards(palette: Palette) {
 }
 
 /** The review button: the reader in recite mode on the first forgotten ayah in mushaf order, stepping through the rest. */
-export const reviewForgotten = (forgotten: string[]) => openIntent({ tab: 'read', at: forgotten[0], recite: true, review: true });
+export const reviewForgotten = (forgotten: string[]) => openIntent({ tab: 'read', at: markAyah(forgotten[0]), word: markWord(forgotten[0]), recite: true, review: true });
 export const REVIEW_LABEL = 'راجع ما نسيت';

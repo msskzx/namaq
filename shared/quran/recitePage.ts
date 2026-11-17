@@ -36,17 +36,21 @@ export function reciteView(model: PageModel, position: RecitePosition) {
   titled.forEach((steps, surah) => { counts[`${surah}:1`] = (counts[`${surah}:1`] ?? 0) + steps; });
   const upcoming = nextAyah(position, model.order);
   const titleSteps = upcoming?.endsWith(':1') ? titled.get(Number(upcoming.split(':')[0])) ?? 0 : 0;
+  const target = position.word;
+  const tokens = model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === position.start).map(group => group.word) ?? []);
+  const targetAt = target === undefined ? -1 : tokens.map((word, at) => word === '۞' ? -1 : at).filter(at => at >= 0)[target];
   return {
     titled,
     upcoming,
     /** `word` counts the ayah's words on the page from 0, after its title steps. */
-    hidden: (key: string, word: number) => isHidden(position, key, word, upcoming),
+    hidden: (key: string, word: number) => target === undefined ? isHidden(position, key, word, upcoming) : key === position.start && position.shown !== key && word === targetAt,
     /** The next ayah step: a title or basmala, else the whole ayah; null when the page is done. */
     nextAyah: (): RecitePosition | null => {
+      if (target !== undefined) return position.shown === position.start ? null : revealAyah(position, position.start);
       if (!upcoming) return null;
       return position.words < titleSteps ? { ...position, words: position.words + 1 } : revealAyah(position, upcoming);
     },
-    nextWord: (): RecitePosition | null => (upcoming ? revealWord(position, upcoming, counts[upcoming] ?? 0) : null),
+    nextWord: (): RecitePosition | null => (target !== undefined ? position.shown === position.start ? null : revealAyah(position, position.start) : upcoming ? revealWord(position, upcoming, counts[upcoming] ?? 0) : null),
   };
 }
 

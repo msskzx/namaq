@@ -26,13 +26,13 @@ export function pageWords(ayah: string): string[] {
  * title), the ayah and what follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals the
  * ayah, with `checked` colouring what was written.
  */
-function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = false, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = false, targetWord, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
   /** A tap or long press on the lines (MushafPageView's), as the reader's page takes it. */
   onTouch?: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
   words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
-  whole?: boolean }) {
+  whole?: boolean; targetWord?: number }) {
   const [width, setWidth] = useState(0);
   const page = pageOfAyah(ayah);
   const parts = useMemo(() => {
@@ -44,7 +44,7 @@ function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = fa
     const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
-  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words]);
+  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, word: targetWord, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
   if (!page || !parts) return null;
   const height = width * PAGE_TEXT_RATIO;
   return (

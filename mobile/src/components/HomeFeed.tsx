@@ -5,7 +5,7 @@ import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, Lightb
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
-import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
@@ -232,9 +232,9 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     <Action Icon={Check} label="تذكّرتها" tone="green" palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" palette={palette} onPress={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
-    <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />
+    <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />
   </>;
-  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
+  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
 }
 
 /**
@@ -242,9 +242,9 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
  * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
  * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: string; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
+function Recall({ ayah, targetWord, title, writing, onWriting, marks, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
-  const [position, setPosition] = useState<RecitePosition>({ start: ayah, shown: null, words: 0 });
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, word: targetWord, shown: null, words: 0 });
   const [pen] = penRule.use();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const shown = recite.done;
@@ -253,7 +253,7 @@ function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: str
     else if (action === 'next-word') recite.nextWord();
     else if (action === 'back') recite.back();
     else if (key !== ayah) return;
-    else if (action === 'forgot') markForgotten(ayah);
+    else if (action === 'forgot') markForgotten(targetWord === undefined ? ayah : `${ayah}:${targetWord}`);
     else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: pageWords(ayah).join(' '), href: ayahHref(ayah) });
   };
   const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');
@@ -265,7 +265,7 @@ function Recall({ ayah, title, writing, onWriting, marks, palette }: { ayah: str
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
       actions={marks}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
+        <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
       </View>
     </Post>
