@@ -10,13 +10,14 @@ import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
 import { groupColor } from './StoryMap';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import { toTab } from '@/lib/ways';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -67,7 +68,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
       if (far && (forward ? hasNext : hasPrev)) scheduleOnRN(step, forward);
     });
   const share = (place: Place, k: number) => shareCard({ content: width => (
-    <View style={{ width, gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+    <Card palette={palette} gap={4} style={{ width }}>
       <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{phase}</Text>
       <Text style={{ color: palette.ink, fontSize: 19, fontWeight: '700', lineHeight: 30 }}>{event.title}</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -75,7 +76,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
         <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
       </View>
       <PlaceText place={place} shared={shared[k]} palette={palette} />
-    </View>
+    </Card>
   ) });
   const moved = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
@@ -90,8 +91,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
         </View>
       </View>
       {places.map((place, k) => (
-        <View key={place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}
-          style={{ gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: focus === place.surah ? 2 : 1, borderColor: focus === place.surah ? palette.ink : palette.rule }}>
+        <Card key={place.surah} palette={palette} gap={4} picked={focus === place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
           {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
           {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -103,7 +103,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
             <IconButton Icon={Send} label={`شارك ${place.name}`} onPress={() => share(place, k)} size="small" /></>}
           </View>
           <PlaceText place={place} shared={shared[k]} palette={palette} />
-        </View>
+        </Card>
       ))}
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
     </Animated.View>

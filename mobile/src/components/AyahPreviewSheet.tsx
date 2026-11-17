@@ -17,11 +17,12 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { surahNames } from '@/lib/branches';
 import { surahName } from '@/lib/compare';
 import { openCompare, openIntent, openTreesOf } from '@/lib/ways';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Sheet from '@/ui/Sheet';
 import TreeIcon from './TreeIcon';
 import TreePager from './TreePager';
 import OpenInBook from './OpenInBook';
+import Card from '@/ui/Card';
 
 export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: string };
 
@@ -53,7 +54,6 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   const tafsir = useMemo(() => (preview?.kind === 'tafsir' && sadi ? tafsirSadiOf(preview.key) : null), [preview, sadi]);
   const go = (open: () => void) => { onClose(); open(); };
   const [surah, number] = (preview?.key ?? '0:0').split(':').map(Number);
-  const card = { ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card };
   return (
     <Sheet open={!!preview} onClose={onClose} palette={palette} tall={preview?.kind === 'trees'}>
       {preview && <View style={preview.kind === 'trees' ? { flex: 1 } : { flexShrink: 1 }}>
@@ -83,21 +83,20 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
           )}
           {/* Each differing word: Hafs's reading first, then the others in the accent colour, each with who reads it. */}
           {qiraat.map(word => (
-            <View key={word.at.join('-')} style={{ ...card, paddingHorizontal: 14 }}>
+            <Card key={word.at.join('-')} palette={palette} pad={[0, 14]}>
               {word.readings.map((reading, i) => (
                 <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule }}>
                   <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
                   <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: palette.muted }}>{whoReads(reading, word.readings)}</Text>
                 </View>
               ))}
-            </View>
+            </Card>
           ))}
           {preview.kind === 'compare' && pairs.map(({ target, partner, words }) => {
             const [other, at] = partner.split(':').map(Number);
             const label = target.lead === target.other ? `${surahName(target.lead)} مع نفسها` : `${surahName(target.lead)} مع ${surahName(target.other)}`;
             return (
-              <Pressable key={`${target.lead}:${target.other}`} onPress={() => go(() => openCompare(target))} accessibilityRole="button" accessibilityLabel={`${label}، ${surahName(other)} ${num(at)}`}
-                style={{ ...card, paddingHorizontal: 14, paddingVertical: 10, gap: 4 }}>
+              <Card key={`${target.lead}:${target.other}`} palette={palette} pad={[10, 14]} gap={4} onPress={() => go(() => openCompare(target))} accessibilityLabel={`${label}، ${surahName(other)} ${num(at)}`}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Text style={{ flex: 1, color: palette.muted, fontSize: 14, textAlign: 'right' }}>{label}</Text>
                   <Text style={{ color: palette.muted, fontSize: 14 }}>{`${surahName(other)} ${num(at)}`}</Text>
@@ -106,7 +105,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
                 <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, textAlign: 'right', writingDirection: 'rtl', color: palette.ink }}>
                   {words.map((word, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: word.shared ? palette.accent : palette.ink }}>{`${i ? ' ' : ''}${word.text}`}</Text>)}
                 </Text>
-              </Pressable>
+              </Card>
             );
           })}
         </ScrollView>}

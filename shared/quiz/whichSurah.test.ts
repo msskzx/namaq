@@ -39,7 +39,27 @@ describe('which surah', () => {
     expect(whichSurah.count({ range: null, filters: { surahs: '36' } })).toBe(questions.length);
   });
 
-  it('offers far surahs when easy and neighbours when medium', () => {
+  it('offers the look-alikes\' surahs when medium, then neighbours that do not give the answer away', () => {
+    const medium = whichSurah.questions(whole, 'medium', seeded(8));
+    const places = new Set<number>();
+    for (const question of medium) {
+      const values = question.choices.map(choice => Number(choice.value));
+      const lookAlikes = Object.keys(question.alike ?? {}).map(Number);
+      const anchors = [Number(question.correctAnswer), ...lookAlikes];
+      if (!lookAlikes.length) {
+        // A run of four surahs, the answer anywhere in it.
+        expect(Math.max(...values) - Math.min(...values)).toBe(3);
+        places.add([...values].sort((x, y) => x - y).indexOf(Number(question.correctAnswer)));
+      }
+      if (lookAlikes.length) for (const value of values) expect(anchors.includes(value) || anchors.some(anchor => Math.abs(anchor - value) <= 4)).toBe(true);
+    }
+    expect([...places].sort()).toEqual([0, 1, 2, 3]);
+    const adam = medium.find(question => question.ayahKey === '2:34')!;
+    expect(Object.keys(adam.alike ?? {})).toHaveLength(3);
+    expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البَقَرَةْ', 'الإِسْرَاءْ', 'طه']));
+  });
+
+  it('offers far surahs when easy', () => {
     const [easy] = shuffle(whichSurah.questions({ range: null, filters: { surahs: '50' } }, 'easy', seeded(6)), seeded(7));
     expect(easy.choices.filter(choice => choice.value !== '50').every(choice => Math.abs(Number(choice.value) - 50) > 10)).toBe(true);
   });
