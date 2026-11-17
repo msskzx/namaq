@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { ArrowLeftRight, ChevronDown } from 'lucide-react-native';
+import { ArrowLeftRight } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
+import BarPicker from '@/ui/BarPicker';
 import TopBar from '@/ui/TopBar';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -91,13 +92,8 @@ export default function CompareScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper, paddingBottom: bottom }}>
       <TopBar hub hideOnScroll center help={() => setHelp(true)}>
-        <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
-          style={{ maxWidth: '100%', flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
-          <ArrowLeftRight size={16} color={palette.ink} />
-          <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 15 }}>{visit ? pairTitle(visit.lead, visit.other) : 'اختر سورتين'}</Text>
-          <Text style={{ color: palette.accent, fontSize: 14 }}>{num(count)}</Text>
-          <ChevronDown size={14} color={palette.ink} />
-        </Pressable>
+        <BarPicker Icon={ArrowLeftRight} text={visit ? pairTitle(visit.lead, visit.other) : 'اختر سورتين'} count={num(count)}
+          label={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`} onPress={() => setSheet(true)} />
       </TopBar>
       <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
       {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} focus={focus} onLanded={() => setFocus(undefined)} />
