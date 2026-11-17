@@ -8,9 +8,10 @@ import { countsBySurah, placesOf } from '@shared/quran/words';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { corpusText, words } from '@/lib/words';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
+import Card from '@/ui/Card';
 
 /** Ayat shown at first, and added by each «المزيد». */
 export const PLACES_STEP = 20;
@@ -76,13 +77,12 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
           const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;
           const text = corpusText(ayahOf(key)?.words ?? []);
           return (
-            <Pressable key={key} onPress={() => open(key)}
+            <Card key={key} palette={palette} pad={[7, 14]} onPress={() => open(key)}
               onLayout={event => {
                 const y = event.nativeEvent.layout.y;
                 tops.current.set(key, y);
                 if (pending.current === key) { pending.current = null; scroll.current?.scrollTo({ y, animated: false }); }
-              }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}
-              style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 6 }}>
+              }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}>
               <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
                 {text.map((word, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: marked.includes(i) ? palette.accent : palette.ink }}>{`${i ? ' ' : ''}${mushafText(word)}`}</Text>)}
               </Text>
@@ -90,7 +90,7 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
                 <BookOpen size={16} color={palette.muted} />
                 <Text style={{ color: palette.muted, fontSize: 13 }}>{place}</Text>
               </View>
-            </Pressable>
+            </Card>
           );
         })}
         {shown < places.length && (

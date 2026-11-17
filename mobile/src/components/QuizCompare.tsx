@@ -12,8 +12,9 @@ import type { Hints } from '@shared/quiz/hints';
 import { quranText } from '@/lib/quranText';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { openCompare } from '@/lib/ways';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const SIZE = 20;
 const quran = (palette: Palette, color?: string) => ({ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: color ?? palette.ink });
@@ -29,14 +30,14 @@ const Words = ({ line, at, palette }: { line: CompareLine; at: number[]; palette
 /** One ayah of the matrix in its card: its reference above, its words flowing right to left, then its number. */
 function Line({ line, palette, children, after }: { line: CompareLine; palette: Palette; children: React.ReactNode; after?: React.ReactNode }) {
   return (
-    <View style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
+    <Card palette={palette} pad={10} gap={2}>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{compareLabel(line.key)}</Text>
       <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 7 }}>
         {children}
         <Text style={quran(palette, palette.muted)}>{num(ayahOf(line.key))}</Text>
       </View>
       {after}
-    </View>
+    </Card>
   );
 }
 
