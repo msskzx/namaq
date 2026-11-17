@@ -3,7 +3,8 @@ import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
 import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
-import { aloneNote, besideRows, cardsFor, compareTargetsFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
+import type { Branch } from '@shared/quran/branches';
+import { aloneNote, besideRows, cardsFor, shownAyat, compareTargetsFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
@@ -148,6 +149,32 @@ describe('the «also in compare» button under a tree', () => {
 });
 
 describe('compare card views', () => {
+  it('draws on each side\'s path only its own ayah end signs, besides the box where the other side stops (tree audit R3-A)', async () => {
+    const { compareTree, sideKey } = await import('@shared/quran/braid');
+    const { num } = await import('@shared/quran/arabicNumber');
+    const wrong: string[] = [];
+    for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
+      const sides = shownAyat(card);
+      const { tree } = compareTree(sides);
+      sides.forEach((side, s) => {
+        const key = sideKey(side);
+        const signs: string[] = [];
+        const walk = (node: Branch) => {
+          signs.push(...node.words.filter(word => word.startsWith('﴿') || word === '۝'));
+          node.children.filter(child => child.via?.includes(key)).forEach(walk);
+          if (node.rejoin) walk(node.rejoin);
+        };
+        walk(tree);
+        const own = side.ayat.map(ayah => `﴿${num(ayah.number)}﴾`);
+        const otherLast = `﴿${num(sides[1 - s].ayat.at(-1)!.number)}﴾`;
+        let skipped = false;
+        const mine = signs.filter((sign, i) => skipped || sign !== otherLast || sign === own[i] || !(skipped = true));
+        const fits = (list: string[]) => list.every((sign, i) => sign === '۝' || sign === own[i]);
+        if (!(fits(mine) && (mine.length === own.length || mine.length === own.length - 1))) wrong.push(`${card.id} ${s}: ${signs.join('')}`);
+      });
+    }
+    expect(wrong).toEqual([]);
+  }, 120_000);
   it('braids every card so both sides are covered in order', async () => {
     const { braidOf, shownAyat } = await import('./compare');
     for (const pair of listedPairs.slice(0, 60)) for (const card of cardsFor(pair.a, pair.b)) {
