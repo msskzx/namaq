@@ -16,7 +16,7 @@ below. Never copy one into a screen.
 | `Tabs` | The website's segmented row: framed, the open tab filled in the accent; `fill` stretches, `iconOnly` | a few views of one thing (read or recite, two books, contents/saved/search, the two kinds of oaths); a wrapping list of words or filters is chips |
 | `Tap` | The one press: a finger that moved more than 10px (a scroll or swipe) never presses | inside every button piece and tappable card; a screen drawing one counts as a control |
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
-| `GlassBar` | A floating frosted bar of buttons, as tall as one icon button | recite mode's bar (`components/recite/RecitePill`) |
+| `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`, `small` on the home recall card) |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |

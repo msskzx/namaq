@@ -72,14 +72,13 @@ function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; 
  * buttons under the card, starting on the right.
  */
 function Post({ head, actions, bar, palette, children }: { head: React.ReactNode; actions?: React.ReactNode;
-  /** A bar of the feature's own between the card and its buttons (recite mode's, on the recall card). */
+  /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
   return (
     <View style={{ gap: 4 }}>
       {head}
       <Card palette={palette} pad={0} clip>{children}</Card>
-      {bar}
-      {actions && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>{actions}</View>}
+      {(bar || actions) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>{bar}{actions}</View>}
     </View>
   );
 }
@@ -261,7 +260,7 @@ function Recall({ ayah, targetWord, title, writing, onWriting, marks, palette }:
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
-      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
+      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
       actions={marks}>
       <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
