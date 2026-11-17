@@ -170,7 +170,7 @@ describe('compare card views', () => {
         let skipped = false;
         const mine = signs.filter((sign, i) => skipped || sign !== otherLast || sign === own[i] || !(skipped = true));
         const fits = (list: string[]) => list.every((sign, i) => sign === '۝' || sign === own[i]);
-        if (!(fits(mine) && (mine.length === own.length || mine.length === own.length - 1))) wrong.push(`${card.id} ${s}: ${signs.join('')}`);
+        if (!(fits(mine) && mine.length === own.length)) wrong.push(`${card.id} ${s}: ${signs.join('')}`);
       });
     }
     expect(wrong).toEqual([]);
