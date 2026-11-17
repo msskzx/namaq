@@ -20,3 +20,15 @@ only scrolled while writing above the keyboard. Once the zoomed page had to scro
 too, the scroll and the gesture-handler gestures inside it competed without
 knowing about each other, and on the phone the scroll lost its drag and the pinch
 lost its two fingers. The outcome stays open until the owner confirms on the phone.
+
+## Second cause (2026-11-17, after the owner tried #844)
+
+The page still did not scroll on the phone: the zoomed words ran out past the page
+frame. The two frame Views around the text were `flex: 1`. In Yoga that is a zero
+basis, and Yoga has no CSS automatic minimum size, so under a `minHeight` parent the
+frames stayed at the screen's height and the page never reported a taller one.
+There was nothing to scroll. The web export grows them anyway, because browsers keep a
+flex item's content height. While flowing, the frames now use `flexGrow: 1`, and the
+body is keyed on flowing so it measures itself again at the printed size. Lesson:
+anything that must grow with its content in a `minHeight` parent is `flexGrow`, not
+`flex: 1`, and a web screenshot cannot show the difference.
