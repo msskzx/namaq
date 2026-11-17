@@ -38,11 +38,14 @@ export function bookState(id: BookId): BookState {
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
 const folder = () => new Directory(Paths.document, 'books');
-/** A book's data must be a book: its source and a list of passages with their text. */
-const readable = (data: unknown) => {
+/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
+const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
+/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it. */
+const readable = (id: BookId, data: unknown) => {
   const book = data as { source?: unknown; entries?: unknown } | null;
+  const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
-    || !book.entries.every(entry => !!entry && typeof entry === 'object' && typeof (entry as { text?: unknown }).text === 'string')) throw new Error('not a book');
+    || !book.entries.every(entry => Array.isArray(entry) && typeof entry[at] === 'string')) throw new Error('not a book');
   return data;
 };
 const fileOf = (id: BookId) => new File(folder(), `${id}.json`);
@@ -63,7 +66,7 @@ export async function addBook(id: BookId) {
     if (web) {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`book ${id}: ${response.status}`);
-      loaded.set(id, readable(await response.json()));
+      loaded.set(id, readable(id, await response.json()));
     } else {
       const dir = folder();
       if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
@@ -71,8 +74,9 @@ export async function addBook(id: BookId) {
       const part = new File(dir, `${id}.json.part`);
       try {
         await File.downloadFileAsync(url, part, { idempotent: true });
-        loaded.set(id, readable(JSON.parse(await part.text())));
+        const data = readable(id, JSON.parse(await part.text()));
         part.moveSync(fileOf(id), { overwrite: true });
+        loaded.set(id, data);
       } finally {
         try { const left = new File(dir, `${id}.json.part`); if (left.exists) left.delete(); } catch {}
       }
@@ -107,7 +111,7 @@ export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
   try {
-    const data = readable(web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
+    const data = readable(id, web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
     return data as T;
   } catch {

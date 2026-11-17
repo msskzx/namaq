@@ -26,7 +26,8 @@ vi.mock('expo-file-system', () => {
   return { Directory, File, Paths: { document: 'doc' } };
 });
 
-const book = (text: string) => JSON.stringify({ source: { version: '1', book: 1 }, entries: [{ surah: 1, ayah: 1, text }] });
+// Shaped as the served books are: KashshafEntry = [surah, from, to, part, first, last, text, lit].
+const book = (text: string) => JSON.stringify({ source: { version: '1', book: 346 }, entries: [[1, 1, 1, 1, 1, 8, text, []]] });
 
 beforeEach(() => { disk.clear(); store.clear(); vi.resetModules(); });
 
@@ -39,13 +40,13 @@ describe('downloaded books', () => {
     serve = () => '{"entries": [1, 2';
     await books.addBook('kashshaf');
     expect(books.bookState('kashshaf')).toBe('failed');
-    expect(JSON.parse(disk.get('doc/books/kashshaf.json')!).entries[0].text).toBe('first');
+    expect(JSON.parse(disk.get('doc/books/kashshaf.json')!).entries[0][6]).toBe('first');
     expect([...disk.keys()].some(key => key.endsWith('.part'))).toBe(false);
   });
 
   it('refuses a file whose passages have no text', async () => {
     const books = await import('./books');
-    serve = () => JSON.stringify({ source: {}, entries: [{}] });
+    serve = () => JSON.stringify({ source: {}, entries: [[1, 1, 1, 1, 1, 8]] });
     await books.addBook('kashshaf');
     expect(books.bookState('kashshaf')).toBe('failed');
   });
@@ -59,6 +60,18 @@ describe('downloaded books', () => {
     serve = () => book('second');
     await books.addBook('kashshaf');
     expect(books.bookRevision('kashshaf')).toBeGreaterThan(first + 1);
-    expect((await books.readBook<{ entries: { text: string }[] }>('kashshaf'))!.entries[0].text).toBe('second');
+    expect((await books.readBook<{ entries: unknown[][] }>('kashshaf'))!.entries[0][6]).toBe('second');
+  });
+
+  it('installs the real Kashshaf and Ukbari files', async () => {
+    const { default: kashshaf } = await import('@shared/data/quran/kashshaf.js');
+    const { default: ukbari } = await import('@shared/data/quran/irabUkbari.js');
+    const books = await import('./books');
+    serve = () => JSON.stringify(kashshaf);
+    await books.addBook('kashshaf');
+    serve = () => JSON.stringify(ukbari);
+    await books.addBook('ukbari');
+    expect(books.bookState('kashshaf')).toBe('on');
+    expect(books.bookState('ukbari')).toBe('on');
   });
 });
