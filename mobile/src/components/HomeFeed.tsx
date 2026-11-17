@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { AppState, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
@@ -56,6 +56,7 @@ import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
 import { CARD, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -98,7 +99,7 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
       </View>
     </View>
   );
-  return open ? <Pressable onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Pressable> : head;
+  return open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
 }
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
@@ -152,7 +153,7 @@ export function Stories({ palette }: { palette: Palette }) {
           const { label, Icon } = STORY[id];
           const lit = storyIsNew(opened, id, times[id]);
           return (
-            <Pressable key={id} onPress={() => { markStoryOpened(id); open[id](); }} accessibilityRole="button" accessibilityLabel={id === 'juz' && juz ? `${label}: ${juzLabel(juz)}` : label}
+            <Tap key={id} onPress={() => { markStoryOpened(id); open[id](); }} accessibilityRole="button" accessibilityLabel={id === 'juz' && juz ? `${label}: ${juzLabel(juz)}` : label}
               style={({ pressed }) => ({ alignItems: 'center', gap: 4, width: 66, opacity: pressed ? 0.7 : 1 })}>
               <View style={{ width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: lit ? palette.accent : palette.rule, padding: 3 }}>
                 <View style={{ flex: 1, borderRadius: 27, backgroundColor: palette.card, alignItems: 'center', justifyContent: 'center' }}>
@@ -160,7 +161,7 @@ export function Stories({ palette }: { palette: Palette }) {
                 </View>
               </View>
               <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 13 }}>{label}</Text>
-            </Pressable>
+            </Tap>
           );
         })}
       </ScrollView>
@@ -184,14 +185,14 @@ export function ContinueReading({ palette }: { palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
       actions={<>
         <Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />
-        {juz && <Pressable onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ padding: 8 }}>
+        {juz && <Tap onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ padding: 8 }}>
           <Text style={{ color: palette.accent, fontSize: 14 }}>{juzLabel(juz)}</Text>
-        </Pressable>}
+        </Tap>}
       </>}>
-      <Pressable onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+      <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف حيث توقفت، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
         {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
         <PageTop page={page} palette={palette} />
-      </Pressable>
+      </Tap>
     </Post>
   );
 }

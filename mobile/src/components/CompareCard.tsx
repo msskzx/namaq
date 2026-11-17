@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { router } from 'expo-router';
@@ -27,6 +27,7 @@ import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 
 const DOUBLE_TAP = 280;
 
@@ -133,15 +134,15 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
     <View style={{ gap: 2 }}>
       {starts.length > 1 && <View style={{ flexDirection: 'row', gap: COMPARE_CARD.bar.gap }} accessibilityLabel="تقدّم القراءة">
         {starts.map((start, i) => (
-          <Pressable key={start} onPress={() => read.play(start)} accessibilityRole="button" accessibilityLabel={`من الآية ${num(i + 1)}`} style={{ flex: 1, height: 22, justifyContent: 'center' }}>
+          <Tap key={start} onPress={() => read.play(start)} accessibilityRole="button" accessibilityLabel={`من الآية ${num(i + 1)}`} style={{ flex: 1, height: 22, justifyContent: 'center' }}>
             <View style={{ height: COMPARE_CARD.bar.height, borderRadius: COMPARE_CARD.bar.radius, backgroundColor: i < reached ? palette.green : palette.rule }} />
-          </Pressable>
+          </Tap>
         ))}
       </View>}
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Pressable onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${read.speed}×`} style={[button, { minWidth: 44, alignItems: 'center' }]}>
+        <Tap onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${read.speed}×`} style={[button, { minWidth: 44, alignItems: 'center' }]}>
           <Text style={{ color: palette.muted, fontSize: 15 }}>{read.speed}×</Text>
-        </Pressable>
+        </Tap>
         <IconButton Icon={playing ? Pause : Play} label={label} onPress={() => (playing ? read.pause() : read.play())} on={active} />
         <IconButton Icon={RotateCcw} label="إعادة ضبط" onPress={read.reset} />
         <IconButton Icon={Send} label="مشاركة كفيديو" onPress={record} />
@@ -227,11 +228,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
               const row = piece.option;
               const ayah = piece.ayat[0];
               return (
-                <Pressable key={k} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: piece.picked }}
+                <Tap key={k} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: piece.picked }}
                   accessibilityLabel={`${surahName(cardSide.surah)} ${num(ayah.number)}`}
                   style={{ borderRightWidth: COMPARE_CARD.pickBar, borderRightColor: piece.picked ? palette.accent : 'transparent', paddingRight: COMPARE_CARD.pickPad }}>
                   <AyahText ayah={ayah} palette={palette} plain={piece.plain} light={piece.picked ? light(ayah) : undefined} />
-                </Pressable>
+                </Tap>
               );
             }
           }
@@ -309,11 +310,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   const pickers = card.many && !isRefrain(card.many.options) && (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
       {card.many.options.map((item, row) => (
-        <Pressable key={item.id} onPress={() => setPicked(row)} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
+        <Tap key={item.id} onPress={() => setPicked(row)} accessibilityRole="button" accessibilityState={{ selected: row === selected }}
           accessibilityLabel={`${surahName(card.sides[card.many!.side].surah)} ${num(item.ayah.number)}`}
           style={{ minWidth: 44, minHeight: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: row === selected ? palette.accent : palette.rule, paddingHorizontal: 8 }}>
           <Text style={{ color: row === selected ? palette.accent : palette.muted, fontSize: 14 }}>{num(item.ayah.number)}</Text>
-        </Pressable>
+        </Tap>
       ))}
     </View>
   );
@@ -345,9 +346,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
   return (
     <View style={{ gap: 4 }}>
       {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
-      <Pressable onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
+      <Tap onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
         {body}
-      </Pressable>
+      </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
           <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill

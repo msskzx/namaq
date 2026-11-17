@@ -326,7 +326,6 @@ export default function Reader() {
     else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
   };
   const [topic, setTopic] = useState<TopicOpen | null>(null);
-  const onTopic = useCallback((surah: number, section: number) => setTopic({ surah, section }), []);
   const jumpToAyah = useCallback((surah: number, ayah: number) => {
     const key = `${surah}:${ayah}`;
     const to = pageOfAyah(key) ?? 1;
@@ -340,7 +339,7 @@ export default function Reader() {
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch}
-        write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
+        write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );
   };
 

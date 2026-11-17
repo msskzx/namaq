@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { BookOpenCheck, Check, ChevronDown, ChevronUp, X } from 'lucide-react-native';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
 import { num } from '@shared/quran/arabicNumber';
@@ -9,6 +9,7 @@ import Sheet from '@/ui/Sheet';
 import { surahNames } from '@/lib/branches';
 import { CARD, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
@@ -46,10 +47,10 @@ export function MemorizedPicker({ palette }: { palette: Palette }) {
           {(['juz', 'surah'] as const).map(value => {
             const on = unit === value;
             return (
-              <Pressable key={value} onPress={() => setUnit(value)} accessibilityRole="radio" accessibilityState={{ checked: on }}
+              <Tap key={value} onPress={() => setUnit(value)} accessibilityRole="radio" accessibilityState={{ checked: on }}
                 style={{ flex: 1, alignItems: 'center', paddingVertical: 7, borderRadius: 8, backgroundColor: on ? palette.accent : 'transparent' }}>
                 <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 15 }}>{value === 'juz' ? 'الأجزاء' : 'السور'}</Text>
-              </Pressable>
+              </Tap>
             );
           })}
         </View>
@@ -58,10 +59,10 @@ export function MemorizedPicker({ palette }: { palette: Palette }) {
             {Array.from({ length: 30 }, (_, i) => i + 1).map(n => {
               const on = picked.includes(n);
               return (
-                <Pressable key={n} onPress={() => toggle(n)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={`الجزء ${num(n)}`}
+                <Tap key={n} onPress={() => toggle(n)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={`الجزء ${num(n)}`}
                   style={{ width: '14.5%', height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center', ...cell(on) }}>
                   <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 17 }}>{num(n)}</Text>
-                </Pressable>
+                </Tap>
               );
             })}
           </View>
@@ -70,14 +71,14 @@ export function MemorizedPicker({ palette }: { palette: Palette }) {
             {Array.from({ length: 114 }, (_, i) => i + 1).map(n => {
               const on = picked.includes(n);
               return (
-                <Pressable key={n} onPress={() => toggle(n)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={surahNames[n]}
+                <Tap key={n} onPress={() => toggle(n)} accessibilityRole="checkbox" accessibilityState={{ checked: on }} accessibilityLabel={surahNames[n]}
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderBottomWidth: 1, borderColor: palette.paperDeep }}>
                   <Text style={{ width: 30, color: palette.muted, fontSize: 13, textAlign: 'center' }}>{num(n)}</Text>
                   <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>{surahNames[n]}</Text>
                   <View style={{ width: 22, height: 22, borderRadius: 6, alignItems: 'center', justifyContent: 'center', ...cell(on) }}>
                     {on && <Check size={16} color={palette.onAccent} />}
                   </View>
-                </Pressable>
+                </Tap>
               );
             })}
           </ScrollView>
@@ -96,7 +97,7 @@ export function MemorizedSetting({ palette }: { palette: Palette }) {
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   return (
     <View style={{ gap: 6 }}>
-      <Pressable onPress={() => setOpen(value => !value)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`ما أحفظه: ${memorizedLabel(memorized)}`}
+      <Tap onPress={() => setOpen(value => !value)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`ما أحفظه: ${memorizedLabel(memorized)}`}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6 }}>
         <BookOpenCheck size={20} color={palette.accent} />
         <View style={{ flex: 1 }}>
@@ -104,7 +105,7 @@ export function MemorizedSetting({ palette }: { palette: Palette }) {
           <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{memorizedLabel(memorized)}</Text>
         </View>
         {open ? <ChevronUp size={18} color={palette.muted} /> : <ChevronDown size={18} color={palette.muted} />}
-      </Pressable>
+      </Tap>
       {open && <MemorizedPicker palette={palette} />}
       <Toggle on={questions} onChange={memorizedQuestions.write} label="الأسئلة مما أحفظ فقط" palette={palette} />
       <Toggle on={prefer} onChange={memorizedPrefer.write} label="قدّم ما أحفظه في التأمل" palette={palette} />
@@ -127,20 +128,20 @@ export function MemorizedPrompt({ palette }: { palette: Palette }) {
           <IconButton Icon={X} label="إغلاق" onPress={setMemorizedAsked} size="small" />
         </View>
         <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 23, textAlign: 'right' }}>اختر ما تحفظه، لتأتيك الأسئلة منه، ويتقدّم في التأمل. تجده في الإعدادات أيضًا.</Text>
-        <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel="اختر ما تحفظه"
+        <Tap onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel="اختر ما تحفظه"
           style={({ pressed }) => ({ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 40, borderRadius: 10, backgroundColor: palette.accent, opacity: pressed ? 0.8 : 1 })}>
           <Check size={18} color={palette.onAccent} />
           <Text style={{ color: palette.onAccent, fontSize: 16 }}>اختر</Text>
-        </Pressable>
+        </Tap>
       </View>
       <Sheet open={picking} onClose={() => { setPicking(false); setMemorizedAsked(); }} palette={palette}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 12 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>ما أحفظه</Text>
-            <Pressable onPress={() => { setPicking(false); setMemorizedAsked(); }} accessibilityRole="button" accessibilityLabel="تم"
+            <Tap onPress={() => { setPicking(false); setMemorizedAsked(); }} accessibilityRole="button" accessibilityLabel="تم"
               style={{ paddingHorizontal: 16, minHeight: 38, justifyContent: 'center', borderRadius: 10, backgroundColor: palette.accent }}>
               <Text style={{ color: palette.onAccent, fontSize: 16 }}>تم</Text>
-            </Pressable>
+            </Tap>
           </View>
           <MemorizedPicker palette={palette} />
         </ScrollView>

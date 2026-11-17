@@ -257,7 +257,6 @@ export default function ReaderView({
   const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
   const [preview, setPreview] = useState<Preview | null>(null);
   const [topic, setTopic] = useState<TopicOpen | null>(null);
-  const onTopic = useCallback((surah: number, section: number) => setTopic({ surah, section }), []);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const closeActions = useCallback(() => setActions(null), []);
   /** When the ayah buttons were last closed by a press elsewhere: that press only closes them. */
@@ -609,7 +608,7 @@ export default function ReaderView({
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} playing={listening?.key}
             pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
-            write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} onTopic={onTopic} />
+            write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}

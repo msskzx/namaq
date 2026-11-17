@@ -53,11 +53,11 @@
 }
 
 :root:has([data-feature-theme]) {
-  /* The reader's ayah bands (the app's palette.bands): selected, forgotten, recited aloud, and the long-pressed word. */
+  /* The reader's ayah bands (the app's palette.bands): selected, forgotten (amber), recited aloud and the long-pressed word (rose). */
   --home-band-mark: color-mix(in srgb, var(--home-ink) 10%, var(--home-card));
-  --home-band-forgot: color-mix(in srgb, #783d49 16%, var(--home-card));
-  --home-band-playing: color-mix(in srgb, #783d49 24%, var(--home-card));
-  --home-band-word: color-mix(in srgb, #783d49 24%, var(--home-band-mark));
+  --home-band-forgot: #f6dc9a;
+  --home-band-playing: #f3cbcb;
+  --home-band-word: #eebcc2;
   --home-paper: #f8f6f0;
   --home-paper-deep: #eee8da;
   --home-card: #f4ecdb;

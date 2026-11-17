@@ -23,7 +23,8 @@ export const light = {
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
   /** The reader's ayah bands over the card (theme.css --home-band-*): the selected ayah, a forgotten one, the one recited aloud, the long-pressed word over its band. */
-  bands: { mark: '#202c351a', forgot: '#783d4929', playing: '#783d493d', word: '#783d493d' },
+  // Bright bands on paper (owner, 2026-11-17): a forgotten ayah amber, the one recited aloud and the pressed word rose.
+  bands: { mark: '#202c351a', forgot: '#f6dc9a', playing: '#f3cbcb', word: '#eebcc2' },
   /** The prophets timeline's five phase colours, in the website's order (blue, amber, rose, green, violet), muted to this palette. */
   phases: ['#426578', '#8a6420', '#783d49', '#506449', '#665177'],
   /** The website's --home-slot-1…4: the word-connection colours. */

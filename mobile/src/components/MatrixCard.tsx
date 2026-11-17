@@ -1,5 +1,5 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Text } from '@/ui/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
@@ -19,6 +19,7 @@ import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/qur
 import type { Group, Tag } from '@shared/quran/mutashabih/types';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 
 type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
@@ -136,7 +137,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   </Text>);
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
-    <Pressable onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
+    <Tap onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
       style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
       {/* As the compare card heads a side (owner, 2026-11-15): the buttons at the right edge, in the thumb's reach, and the surah's
           name and number in the middle. The row is set left to right and filled from its right end, in any host. */}
@@ -163,7 +164,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
         </Text>}
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(own.key)}
-    </Pressable>
+    </Tap>
   );
 }
 

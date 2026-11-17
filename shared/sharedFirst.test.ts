@@ -86,13 +86,16 @@ const PRIMITIVES: Record<string, RegExp> = {
   'react-native': /^(Pressable|Touchable\w*|Modal|TextInput|Switch|ActivityIndicator)$/,
   'react-native-gesture-handler': /^(Pressable|Touchable\w*|RectButton|BorderlessButton)$/,
   'expo-blur': /^BlurView$/,
+  // The shared press (ui/Tap) is a raw tap area: a screen drawing one is still drawing its own control.
+  '@/ui/Tap': /^Tap$/,
 };
 
 /** The local names a file gives the primitives it imports (aliases, multi-line imports, `import * as`, require). */
 function primitiveNames(text: string): string[] {
   const names: string[] = [];
   for (const [from, primitive] of Object.entries(PRIMITIVES)) {
-    const source = from.replace(/[-/]/g, '\\$&');
+    // The shared press is caught by any path to it ('@/ui/Tap', '../ui/Tap', './Tap'), not only the alias.
+    const source = from === '@/ui/Tap' ? `(?:[^'"]*/ui|\\.)/Tap` : from.replace(/[-/]/g, '\\$&');
     const named = new RegExp(`import\\s+(?:type\\s+)?(?:\\w+\\s*,\\s*)?\\{([^}]*)\\}\\s*from\\s*['"]${source}['"]`, 'g');
     const required = new RegExp(`(?:const|let|var)\\s*\\{([^}]*)\\}\\s*=\\s*require\\(\\s*['"]${source}['"]\\s*\\)`, 'g');
     for (const regex of [named, required]) {
@@ -104,7 +107,7 @@ function primitiveNames(text: string): string[] {
       }
     }
     for (const match of text.matchAll(new RegExp(`import\\s+\\*\\s+as\\s+(\\w+)\\s+from\\s*['"]${source}['"]`, 'g'))) {
-      const all = ['Pressable', 'TouchableOpacity', 'TouchableHighlight', 'TouchableWithoutFeedback', 'TouchableNativeFeedback', 'Modal', 'TextInput', 'Switch', 'ActivityIndicator', 'RectButton', 'BorderlessButton', 'BlurView'];
+      const all = ['Pressable', 'TouchableOpacity', 'TouchableHighlight', 'TouchableWithoutFeedback', 'TouchableNativeFeedback', 'Modal', 'TextInput', 'Switch', 'ActivityIndicator', 'RectButton', 'BorderlessButton', 'BlurView', 'Tap'];
       names.push(...all.filter(name => primitive.test(name)).map(name => `${match[1]}.${name}`));
     }
   }
@@ -186,7 +189,7 @@ describe('shared first', () => {
   it('shared pieces never hand out a raw primitive', () => {
     const leaks = walk('mobile/src/ui', name => /\.tsx?$/.test(name)).filter(path => {
       const text = read(path);
-      if (/export\s*(\*|\{[^}]*\})\s*from\s*['"](react-native|react-native-gesture-handler|expo-blur)['"]/.test(text)) return true;
+      if (/export\s*(\*|\{[^}]*\})\s*from\s*['"](react-native|react-native-gesture-handler|expo-blur|[^'"]*\/Tap)['"]/.test(text)) return true;
       return primitiveNames(text).some(name => new RegExp(`export\\s*\\{[^}]*\\b${name}\\b|export\\s+(default\\s+|const\\s+\\w+\\s*=\\s*)${name}\\s*;`).test(text));
     });
     expect(leaks).toEqual([]);

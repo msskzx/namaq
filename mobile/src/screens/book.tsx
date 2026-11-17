@@ -43,7 +43,7 @@ export default function BookScreen() {
       {book ? <BookReader key={id} id={id} book={book} palette={palette} entry={params.entry} at={params.at} ayah={params.ayah} />
         : (
           <>
-            <TopBar shelf><Text numberOfLines={1} style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{bookOf(id).title}</Text></TopBar>
+            <TopBar shelf title={bookOf(id).title} />
             {book === null ? <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 40, alignItems: 'center' }}><LoadingDots /></View> : (
               <View style={{ padding: 16, gap: 12 }}>
                 <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>هذا الكتاب ليس على هاتفك. نزّله ليُقرأ هنا بلا اتصال.</Text>
@@ -158,8 +158,7 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
         )}
       </ScrollView>
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
-        <TopBar shelf>
-          <Text numberOfLines={1} style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{bookOf(id).title}</Text>
+        <TopBar shelf title={bookOf(id).title}>
           <IconButton Icon={FasilaIcon} label={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'} onPress={markPage} on={onFasila} tone="accent"
             render={icon => <FasilaIcon size={icon.size} color={icon.color} filled={onFasila} />} />
           <IconButton Icon={Search} label="ابحث في الكتاب" onPress={() => setSheet('search')} />

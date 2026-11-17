@@ -9,7 +9,6 @@ import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
-import { sectionsStartingAt as startsAt } from '@shared/quran/surahTopics';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
@@ -67,13 +66,7 @@ type Props = {
    * so the lines keep the page's size.
    */
   slice?: { from: number; to: number };
-  /**
-   * The surah's sections (docs/plans/surah-topics.md): a small number over the first word of each section's first ayah
-   * marks where one starts, without moving a word; a tap gives the surah and the section's place in its list. The header
-   * names no topic (owner, 2026-11-14).
-   */
-  onTopic?: (surah: number, section: number) => void;
-  /** A quiz page that must not say where it is (owner, 2026-11-17): no juz, surah name, marks or page number around the text. */
+    /** A quiz page that must not say where it is (owner, 2026-11-17): no juz, surah name, marks or page number around the text. */
   anonymous?: boolean;
 };
 
@@ -149,7 +142,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -400,14 +393,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         // Every word tells its place, so a band that appears later (a tap) is laid at once where the words are now.
                         <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {onTopic && !recite && wordAt === 0 && group.word && startsAt(group.surah, group.ayah).length > 0 && (
-                          <Pressable onPress={() => onTopic(group.surah!, startsAt(group.surah, group.ayah)[0])} accessibilityRole="button" accessibilityLabel="موضوعات السورة" hitSlop={8}
-                            style={{ position: 'absolute', right: 0, bottom: '62%', zIndex: 1, flexDirection: 'row', gap: 2 }}>
-                            {startsAt(group.surah, group.ayah).map(i => (
-                              <Text key={i} style={{ minWidth: size * 0.42, textAlign: 'center', fontSize: Math.max(9, size * 0.3), lineHeight: Math.max(12, size * 0.42), color: palette.accent, paddingHorizontal: 3 }}>{num(i + 1)}</Text>
-                            ))}
-                          </Pressable>
-                        )}
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />

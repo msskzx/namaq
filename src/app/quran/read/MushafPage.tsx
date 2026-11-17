@@ -5,7 +5,6 @@ import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/rea
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
-import { sectionsStartingAt } from '@shared/quran/surahTopics';
 import styles from './Mushaf.module.css';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
@@ -143,7 +142,6 @@ export default function MushafPage({
   checked,
   zoom = 1,
   slice,
-  onTopic,
   anonymous = false,
 }: {
   page: number;
@@ -172,12 +170,7 @@ export default function MushafPage({
   zoom?: number;
   /** Only these rows (item indexes, both ends kept), sized by the page's width: a few lines around an ayah, as the home recall card shows them. */
   slice?: { from: number; to: number };
-  /**
-   * The surah's sections (docs/plans/surah-topics.md): a small number over the first word of each section's first ayah
-   * marks where one starts, moving no word; the header names no topic (owner, 2026-11-14). Not while reciting.
-   */
-  onTopic?: (surah: number, section: number) => void;
-  /** A quiz page (the app's MushafPageView): no juz, surah name, quarter or sajda marks, or page number to say where it is. */
+    /** A quiz page (the app's MushafPageView): no juz, surah name, quarter or sajda marks, or page number to say where it is. */
   anonymous?: boolean;
 }) {
   const body = useRef<HTMLDivElement>(null);
@@ -194,8 +187,6 @@ export default function MushafPage({
   /** The surah whose title comes before each item, for its basmala. */
   const surahOf = data.items.map((_, at) => data.items.slice(0, at + 1).reduceRight<number | undefined>((found, item) => found ?? ('surah' in item ? item.surah : undefined), undefined));
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
-  const topics = onTopic && !hidden;
-  const firstWord: Record<string, boolean> = {};
   const badges = data.items.map(item => anonymous ? [] : [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
   useLayoutEffect(() => {
     const element = body.current;
@@ -231,16 +222,9 @@ export default function MushafPage({
                     const writing = !!group.word && veiled && write?.key === key;
                     const graded = !veiled && checked?.key === key ? (checked.right.includes(rel + checked.before) ? styles.right : checked.wrong.includes(rel + checked.before) ? styles.wrong : '') : '';
                     const mistyped = graded === styles.wrong && group.word ? checked!.typed[rel + checked!.before] : '';
-                    const starts = topics && group.word && group.word !== '۞' && !firstWord[key] && (firstWord[key] = true) ? sectionsStartingAt(group.surah, group.ayah) : [];
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-veiled={veiled || undefined}
-                        className={[!veiled && playing === key ? styles.playing : '', !veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
-                        {starts.length > 0 && (
-                          <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
-                            {/* The number is drawn by CSS, so it is no text of the line (copying, finding an ayah's number). */}
-                            {starts.map(i => <span key={i} data-n={num(i + 1)} />)}
-                          </button>
-                        )}
+                        className={[!veiled && playing === key ? styles.playing : '', !veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded].join(' ').trim() || undefined}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel + write.before)
                           ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />
