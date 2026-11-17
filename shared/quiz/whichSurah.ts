@@ -62,15 +62,31 @@ function index(): Index {
 /** Hard: a look-alike in another surah shares most of the ayah's words; medium: some look-alike; easy: none. */
 const levelOf = (alike: Alike[] | undefined): Difficulty => !alike?.length ? 'easy' : alike[0].share >= HARD_FROM ? 'hard' : 'medium';
 
+/**
+ * The wrong surahs. Easy: far ones. Medium and hard: the look-alikes' surahs, then neighbours placed so the choices do
+ * not point at the answer: with no look-alike, a run of four surahs with the answer anywhere in it (not always in the
+ * middle); with look-alikes, each neighbour sits next to the answer or to a look-alike's surah, so no lone cluster gives it away.
+ */
 function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, random: Random): number[] {
   const picked: number[] = [];
-  const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && n !== surah && !picked.includes(n)) picked.push(n); };
-  const lookAlike = [...new Set(alike.map(item => surahOf(item.key)))];
+  const free = (n: number) => n !== surah && !picked.includes(n) && n >= 1 && n <= 114;
+  const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && free(n)) picked.push(n); };
   const every = Array.from({ length: 114 }, (_, i) => i + 1);
-  const near = shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random);
-  const far = shuffle(every.filter(n => Math.abs(n - surah) > FAR), random);
-  if (difficulty !== 'easy') take(lookAlike);
-  take(difficulty === 'easy' ? far : near);
+  if (difficulty === 'easy') take(shuffle(every.filter(n => Math.abs(n - surah) > FAR), random));
+  else {
+    take([...new Set(alike.map(item => surahOf(item.key)))]);
+    if (!picked.length) {
+      const start = Math.min(Math.max(surah - Math.floor(random() * CHOICES), 1), 115 - CHOICES);
+      take(Array.from({ length: CHOICES }, (_, i) => start + i));
+    }
+    const anchors = [surah, ...picked];
+    while (picked.length < CHOICES - 1) {
+      const next = shuffle(anchors, random).map(anchor => shuffle([anchor - 1, anchor + 1, anchor - 2, anchor + 2], random).find(free)).find(n => n !== undefined);
+      if (next === undefined) break;
+      picked.push(next);
+    }
+    take(shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random));
+  }
   take(shuffle(every, random));
   return picked;
 }
