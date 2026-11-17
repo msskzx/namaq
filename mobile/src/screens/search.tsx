@@ -16,8 +16,9 @@ import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
 import { back, openIntent as go, toTab } from '@/lib/ways';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 /** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
@@ -54,8 +55,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
     case 'ayah': {
       const { start, end } = around(hit);
       return (
-        <Pressable onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)}
-          style={({ pressed: on }) => [{ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, paddingHorizontal: 12, paddingVertical: 8, marginBottom: 8 }, pressed(on)]}>
+        <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 38, color: palette.ink, textAlign: 'right' }}>
             {start > 0 ? '… ' : ''}
             {hit.words.slice(start, end).map((word, at) => {
@@ -65,7 +65,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
             {end < hit.words.length ? '…' : ''}
           </Text>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayahLabel(hit.key)}</Text>
-        </Pressable>
+        </Card>
       );
     }
     case 'word':

@@ -294,7 +294,7 @@ export default function Reader() {
   }, []);
   const scrolled = useRef(0);
   const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
-  useEffect(() => { if (!keyboard && !flowing) scrollTo(0); }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
   // With bigger text the row of pages is as tall as the current page; a neighbour sliding in shows its top where the reader is.
   const pagerHeight = flowing ? Math.max(height, heights[page] ?? 0) : height;
   const [scrollTop, setScrollTop] = useState(0);
@@ -375,7 +375,7 @@ export default function Reader() {
   // The long press's menu opens where the finger pressed.
   const actionsAt = actions ? { x: actions.x, y: actions.y } : null;
   return (
-    <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+    <View style={{ flex: 1, backgroundColor: palette.card }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <GestureDetector gesture={scrollGesture}>
       <ScrollView ref={scroller} scrollEnabled={!pinching && (!!keyboard || flowing)} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
         onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}

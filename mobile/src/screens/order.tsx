@@ -11,9 +11,10 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const SURAHS = orderSurahs(ayahMushafWords, num);
 type Row = { kind: 'link'; surah: number; link: OrderLinkView } | { kind: 'surah'; s: OrderSurah };
@@ -57,7 +58,7 @@ function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Palette })
 
 function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
-    <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 4 }}>
+    <Card palette={palette} pad={[6, 14]}>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
@@ -74,7 +75,7 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} size="small" />
       </View>
-    </View>
+    </Card>
   );
 }
 

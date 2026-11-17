@@ -24,6 +24,22 @@ test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }
   await expect.poll(() => readerPage(page)).toBe(440);
 });
 
+test('the index lists every ayah a search finds', async ({ page }) => {
+  await open(page, '/read');
+  await page.getByText(HAMD, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
+  await page.getByLabel('ابحث عن سورة أو آية').fill('يا أيها الذين آمنوا');
+  await expect(page.getByText('٨٩ آية', { exact: true })).toBeVisible();
+  const last = page.getByRole('link').filter({ hasText: `${S(66)} ٨` });
+  await page.getByRole('link').filter({ hasText: `${S(2)} ١٠٤` }).hover();
+  await expect(async () => {
+    await page.mouse.wheel(0, 4000);
+    await expect(last).toBeVisible({ timeout: 500 });
+  }).toPass({ timeout: 20_000 });
+  await last.click();
+  await expect.poll(() => readerPage(page)).toBe(561);
+});
+
 test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
@@ -308,4 +324,24 @@ test('the recite bar moves to the top and back, by its grip or by dragging, and 
   await page.mouse.up();
   await expect.poll(y).toBeGreaterThan(600);
   await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
+});
+
+test.describe('zoom', () => {
+  test.use({ seed: { 'reader-zoom': 1.6, 'reader-place': { page: 3 } } });
+
+  test('pinching a zoomed page back out sets the printed page again, all on the screen', async ({ page }) => {
+    await open(page, '/read');
+    // A word on page 3's last line (shared/data/quran/mushaf/3.json): below the screen while zoomed, on it at the printed size.
+    const last = page.getByText('رَبِحَت', { exact: true });
+    const bottom = async () => { const box = await last.boundingBox(); return box ? box.y + box.height : Infinity; };
+    const screen = page.viewportSize()!.height;
+    await expect.poll(bottom).toBeGreaterThan(screen);
+    const cdp = await page.context().newCDPSession(page);
+    const fingers = (gap: number) => [{ x: 195 - gap / 2, y: 400, id: 1 }, { x: 195 + gap / 2, y: 400, id: 2 }];
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: fingers(240) });
+    for (let gap = 220; gap >= 80; gap -= 20) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: fingers(gap) });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect.poll(() => stored<number>(page, 'reader-zoom')).toBe(1);
+    await expect.poll(bottom).toBeLessThan(screen);
+  });
 });
