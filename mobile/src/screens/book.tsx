@@ -13,7 +13,8 @@ import { Text, TextInput } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import ReaderPager from '@/components/ReaderPager';
-import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
+import ActButton from '@/ui/ActButton';
+import FloatingMenu from '@/ui/FloatingMenu';
 import FasilaIcon, { FasilaRibbon } from '@/components/FasilaIcon';
 import LoadingDots from '@/ui/LoadingDots';
 import { BookList } from '@/components/Books';
@@ -148,8 +149,8 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
     buzz();
     setBookFasila(id, onFasila ? null : { entry: first.entry, at: first.from, part: pages[page].part, page: pages[page].page });
   };
-  const buttons = 3;
-  const barWidth = buttons * (ACT_WIDTH + 2) + 10;
+  // The paragraph's menu, across the middle of the page, over the pressed line.
+  const actionsAt = actions ? { x: (size?.width ?? 300) / 2, y: actions.y } : null;
   return (
     <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} showsVerticalScrollIndicator={false} scrollEventThrottle={32} onScrollBeginDrag={() => setActions(null)} style={{ flex: 1 }}>
@@ -175,15 +176,14 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
         </Pressable>
       )}
       {actions && spot && (
-        <View accessibilityRole="toolbar" accessibilityLabel="أزرار الفقرة"
-          style={{ position: 'absolute', top: Math.max(insets.top + 60, actions.y - 76), left: Math.max(8, ((size?.width ?? 300) - barWidth) / 2), width: barWidth, flexDirection: 'row', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+        <FloatingMenu at={actionsAt} label="أزرار الفقرة" onClose={() => setActions(null)} top={insets.top + 52} palette={palette}>
           <ActButton Icon={Bookmark} label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} name="احفظ" palette={palette} on={isSaved} tint={palette.root} filled
             onPress={() => { toggleSavedParagraph({ book: id, ...spot, ...where(spot), text: paragraphText(spot).slice(0, 160) }); setActions(null); setLit(null); }} />
           <ActButton Icon={BookOpenText} label="افتح الآية في المصحف" name="المصحف" palette={palette}
             onPress={() => { const { surah, from } = entries[spot.entry]; setActions(null); openAyah(surah, from); }} />
           <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette}
             onPress={() => { const text = paragraphText(spot); setActions(null); void Share.share({ message: `${text}\n\n${bookOf(id).title}، ${pageName(id, where(spot).part, where(spot).page)}` }); }} />
-        </View>
+        </FloatingMenu>
       )}
       <BookSheet open={sheet} onTab={setSheet} onClose={() => setSheet(null)} id={id} entries={entries} pages={pages} page={page} palette={palette}
         saved={savedList.filter(item => item.book === id)} onGo={goTo} />
