@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { Text } from '@/components/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, ChevronLeft, ChevronsLeft, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, PenLine, Play, Send, Sparkles, TableOfContents, TextSearch, Undo2, X, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -32,6 +32,9 @@ import TreeIcon from './TreeIcon';
 import ActButton, { ACT_WIDTH } from './ActButton';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
+import ListenBar, { LISTEN_BAR } from './ListenBar';
+import ListenSheet from './ListenSheet';
+import { listen, useListening } from '@/lib/listen';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
@@ -117,6 +120,18 @@ export default function Reader() {
   // with nothing drawn on the page, 2026-11-17). `reader-place` keeps the page open.
   const fasila = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas).quran ?? null;
   const [noting, setNoting] = useState<string | null>(null);
+  // Listening (owner's sketch, 2026-11-17): the recitation playing, and the sheet of its range, repeats and reciter.
+  const listening = useListening();
+  const [listenFrom, setListenFrom] = useState<string | null>(null);
+  const [listenOpen, setListenOpen] = useState(false);
+  // The page follows the ayah being read, until the reader turns away; «عُد إلى الآية» brings it back.
+  const [following, setFollowing] = useState(true);
+  const listenPage = listening ? pageOfAyah(listening.key) ?? null : null;
+  // Reciting keeps its own place on the pages; the recitation does not move them then.
+  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following, position]); // eslint-disable-line react-hooks/exhaustive-deps
+  // A new recitation (from the ayah buttons or the sheet) follows again.
+  useEffect(() => { if (listening) setFollowing(true); }, [listening?.range]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
   const last = useMemo(() => (focused ? readJson<Place>(LAST_RECITE) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -175,7 +190,9 @@ export default function Reader() {
     setPage(next);
     setActions(null);
   }, []);
+  const turnByHand = useCallback((next: number) => { setFollowing(false); turnTo(next); }, [turnTo]);
   const jump = useCallback((to: Jump, recite?: 'review') => {
+    setFollowing(false);
     setPage(to.page);
     setActions(null);
     setTools(false);
@@ -194,6 +211,7 @@ export default function Reader() {
   // The homepage opens the mushaf at a surah or juz, or starts a recitation.
   const askOpening = (next: Openings) => {
     const key = next.keys[next.at];
+    setFollowing(false);
     setOpenings(next);
     setPage(pageOfAyah(key) ?? 1);
     setActions(null);
@@ -214,6 +232,7 @@ export default function Reader() {
       }
     }
     setOpenings(null);
+    setFollowing(false);
     const to = (intent.at && pageOfAyah(intent.at)) || intent.page || page;
     setPage(to);
     setActions(null);
@@ -302,7 +321,7 @@ export default function Reader() {
   // While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no squeezed page),
   // following the box being written.
   const pillBottom = keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom);
-  const pageInsets = { top: insets.top, bottom: reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : insets.bottom };
+  const pageInsets = { top: insets.top, bottom: (reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : listening ? tabBarBottom(insets.bottom) : insets.bottom) + (listening ? LISTEN_BAR + 8 : 0) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   const scrolled = useRef(0);
@@ -370,7 +389,7 @@ export default function Reader() {
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
-        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
+        recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch}
         write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
     );
   };
@@ -385,7 +404,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 7 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 8 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -397,7 +416,7 @@ export default function Reader() {
         onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop} />
+          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnByHand} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop} />
         )}
       </ScrollView>
       {tools && (
@@ -417,6 +436,8 @@ export default function Reader() {
       {actions && (
         <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
           style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+          {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
+          <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
           <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} tint={palette.root} filled onPress={() => { toggleSaved(actions.key); setActions(null); }} />
@@ -425,7 +446,7 @@ export default function Reader() {
             onPress={() => { setActions(null); setTopic({ surah: actionSurah, section: Math.max(0, sectionAt(actionSurah, actionAyah)) }); }} />}
           {targets.length > 0 && <ActButton Icon={ArrowLeftRight} label="في المقارنة" name="المقارنة" palette={palette}
             onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'compare', key }); }} />}
-          {trees && <ActButton Icon={TreeIcon} label="الأشجار التي فيها الآية" name="الأشجار" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
+          {trees && <ActButton Icon={TreeIcon} label="متشابهات الآية" name="المتشابهات" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'trees', key }); }} />}
           {readings && <ActButton Icon={Layers} label="القراءات العشر في كلمات الآية" name="القراءات" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'readings', key }); }} />}
           <ActButton Icon={BookOpen} label="تفسير السعدي" name="التفسير" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'tafsir', key }); }} />
           {/* The pressed word's i'rab (owner, 2026-11-15). */}
@@ -464,6 +485,17 @@ export default function Reader() {
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
       )}
+      <ListenBar bottom={reciting ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
+        onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />
+      {listening && listenPage && listenPage !== page && (
+        <Pressable onPress={() => { setFollowing(true); setPage(listenPage); setActions(null); }} accessibilityRole="button" accessibilityLabel={`عُد إلى الآية التي تُتلى، ${plainSurah(listening.key)}`}
+          style={{ position: 'absolute', alignSelf: 'center', bottom: (reciting ? pillBottom + RECITE_BAR + 8 : pillBottom) + LISTEN_BAR + 10, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
+          <Text style={{ color: palette.ink, fontSize: 14 }}>{`عُد إلى الآية · ${plainSurah(listening.key)}`}</Text>
+        </Pressable>
+      )}
+      <ListenSheet open={listenOpen} start={listenFrom} onClose={() => setListenOpen(false)} palette={palette} />
       {/* Back to the فاصلة from any other page, with the bars (a tap), so it never covers the page's last line. */}
       {tools && !position && fasila && fasila.page !== page && (
         <Pressable onPress={() => jump({ page: fasila.page, key: fasila.key, mark: false })} accessibilityRole="button"
@@ -478,7 +510,7 @@ export default function Reader() {
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
       {boxes.field}
       {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
-      <TabHint id="read" palette={palette} hidden={reciting || !!actions} />
+      <TabHint id="read" palette={palette} hidden={reciting || !!actions || !!listening} />
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
         last={last?.position ? () => { setReviewing(false); setOpenings(null); setPosition(last.position!); setPage(last.page); } : null} />
     </View>

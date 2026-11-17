@@ -18,5 +18,7 @@ export default async function AyahRedirect({ params, searchParams }: { params: P
   const page = await pageOfAyah(s, a, row?.page ?? 1, load);
   if (!page) notFound();
   const kept = new URLSearchParams(KEEP.flatMap(name => (typeof query[name] === 'string' ? [[name, query[name] as string]] : [])));
+  // Listening turns to the ayah being read without marking it.
+  if (query.listen === '1') redirect(`/quran/read/${page}`);
   redirect(`/quran/read/${page}?${kept.has('recite') ? kept.toString() : `a=${s}:${a}`}`);
 }

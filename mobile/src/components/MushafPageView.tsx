@@ -41,6 +41,8 @@ type Props = {
   top?: number;
   names: Record<number, string>;
   mark?: string | null;
+  /** The ayah being recited aloud (listening): a band in the accent, over the selection. */
+  playing?: string | null;
   /** The word of the marked ayah a long press landed on (its place in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
   markWord?: number | null;
   recite?: Recite | null;
@@ -90,8 +92,9 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 
 type Box = { x: number; y: number; w: number; h: number };
 /** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
-type Band = 'mark' | 'forgot' | null;
+type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
+  playing: palette => tint(palette.accent, 0.24),
   mark: palette => tint(palette.ink, 0.1),
   forgot: palette => tint(palette.accent, 0.16),
 };
@@ -145,7 +148,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -375,7 +378,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);

@@ -27,7 +27,7 @@ const UNITS: { value: FilterUnit; label: string }[] = [
 const CATEGORIES: Record<string, string> = { mutashabeh: 'متشابهات', pondering: 'تدبّر', words: 'أشجار الكلمات' };
 const SORT_LABELS = ['ترتيب المصحف', 'الأقرب', 'الأكثر مواضع', 'الأقل اختلافًا'];
 
-function Chip({ label, active, onPress, palette }: { label: string; active: boolean; onPress: () => void; palette: Palette }) {
+export function Chip({ label, active, onPress, palette }: { label: string; active: boolean; onPress: () => void; palette: Palette }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityState={{ selected: active }}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, height: 36, borderRadius: 18, borderWidth: 1, borderColor: active ? palette.accent : palette.rule, backgroundColor: active ? palette.accent : 'transparent' }}>
@@ -37,7 +37,7 @@ function Chip({ label, active, onPress, palette }: { label: string; active: bool
   );
 }
 
-function Group({ title, children, palette }: { title: string; children: React.ReactNode; palette: Palette }) {
+export function Group({ title, children, palette }: { title: string; children: React.ReactNode; palette: Palette }) {
   return (
     <View style={{ gap: 8 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>{title}</Text>
