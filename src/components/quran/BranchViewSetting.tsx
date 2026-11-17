@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { BRANCH_VIEW_COOKIE, parseBranchView, type BranchView } from '@shared/quran/branchView';
+import { BRANCH_VIEW_COOKIE, defaultBranchView, type BranchView } from '@shared/quran/branchView';
 import { SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import styles from '@/components/theme/ThemeTiles.module.css';
 
@@ -33,7 +33,7 @@ function Preview({ view }: { view: 'tree' | 'matrix' }) {
 export default function BranchViewSetting({ onPick }: { onPick?: () => void } = {}) {
   const router = useRouter();
   const ar = useLanguage().language === 'ar';
-  const [view, setView] = useState<BranchView>(() => parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree');
+  const [view, setView] = useState<BranchView>(() => defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE)));
   const choose = (value: BranchView) => {
     Cookies.set(BRANCH_VIEW_COOKIE, value, { expires: 365, sameSite: 'lax', path: '/' });
     setView(value);

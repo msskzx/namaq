@@ -40,9 +40,9 @@ export const hintsSeen = setting<HintId[]>(HINTS_SEEN, [], (value): value is Hin
 /** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
 
-/** Tree or matrix: the website's default-view setting. */
+/** Tree or matrix: the default view of every tree, matrix unless the reader picks the tree (owner, 2026-11-17). */
 export type BranchView = 'tree' | 'matrix';
-export const branchView = setting<BranchView>('branches-view', 'tree', (value): value is BranchView => value === 'tree' || value === 'matrix');
+export const branchView = setting<BranchView>('branches-view', 'matrix', (value): value is BranchView => value === 'tree' || value === 'matrix');
 
 /** How words the ayat share are coloured: by how alike they are, one colour, or none (owner, 2026-11-14). */
 export const markMode = setting<MarkMode>('word-marks', 'kinds', isMarkMode);

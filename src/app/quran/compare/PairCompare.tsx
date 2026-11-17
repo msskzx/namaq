@@ -333,7 +333,7 @@ const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1])
  * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
  * address, for an open button and for the shared link.
  */
-export function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
+export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;

@@ -12,23 +12,23 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(() => { cleanup(); Cookies.remove(BRANCH_VIEW_COOKIE, { path: '/' }); language.value = 'en'; refresh.mockClear(); });
 
 describe('BranchViewSetting', () => {
-  it('starts with tree, saves matrix across remounts, and can save tree again', () => {
+  it('starts with matrix, saves tree across remounts, and can save matrix again', () => {
     const { unmount } = render(<BranchViewSetting />);
-    expect(screen.getByRole('button', { name: 'Tree' }).getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Matrix' }));
-    expect(Cookies.get(BRANCH_VIEW_COOKIE)).toBe('cards');
-    expect(refresh).toHaveBeenCalledOnce();
-    unmount();
-    render(<BranchViewSetting />);
     expect(screen.getByRole('button', { name: 'Matrix' }).getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     expect(Cookies.get(BRANCH_VIEW_COOKIE)).toBe('tree');
-    expect(screen.getByRole('button', { name: 'Matrix' }).getAttribute('aria-pressed')).toBe('false');
-  });
-
-  it('uses tree for invalid saved values', () => {
-    Cookies.set(BRANCH_VIEW_COOKIE, 'invalid');
+    expect(refresh).toHaveBeenCalledOnce();
+    unmount();
     render(<BranchViewSetting />);
     expect(screen.getByRole('button', { name: 'Tree' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Matrix' }));
+    expect(Cookies.get(BRANCH_VIEW_COOKIE)).toBe('cards');
+    expect(screen.getByRole('button', { name: 'Tree' }).getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('uses matrix for invalid saved values', () => {
+    Cookies.set(BRANCH_VIEW_COOKIE, 'invalid');
+    render(<BranchViewSetting />);
+    expect(screen.getByRole('button', { name: 'Matrix' }).getAttribute('aria-pressed')).toBe('true');
   });
 });

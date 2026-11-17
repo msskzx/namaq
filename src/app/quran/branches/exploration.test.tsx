@@ -17,7 +17,7 @@ vi.mock('next/navigation', () => ({
   },
   redirect: (href: string) => { throw new Error(`REDIRECT ${href}`); },
 }));
-vi.mock('next/headers', () => ({ cookies: async () => ({ get: () => undefined }) }));
+vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => name === 'branches-view' ? { value: 'tree' } : undefined }) }));
 vi.mock('@/lib/quran/surahList', () => ({ surahList: async () => [{ number: 2, name: 'البقرة' }, { number: 7, name: 'الأعراف' }] }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: ReactNode }) => children }));
