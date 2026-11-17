@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import surahRows from "@shared/data/quran/surahs.json";
 import type { RecitePosition } from "@shared/quran/recite";
 import { pageModel } from "@shared/quran/recitePage";
@@ -12,6 +12,12 @@ import RecitePill from "@/components/recite/RecitePill";
 import { useRecite } from "@/components/recite/useRecite";
 import { useQuizPageBefore } from "@/lib/quizPageBefore";
 import { useQuizPen } from "@/lib/penRule";
+import { writtenGrade } from "@shared/quiz/score";
+import type { PenRule } from "@shared/quran/writeAyah";
+
+/** A recited ayah in a party (QuizPage's `party`). */
+export type PartyWrite = { pen: PenRule; asked: number[]; /** `done` false: what is written so far, graded if the time runs out; true: the ayah sent. */
+  onWrite: (answer: string[], done: boolean) => void; words?: string[]; answer?: string[] | null };
 
 const NAMES: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.title]));
 /** MushafPage asks for an ayah's end sign with this word. */
@@ -26,11 +32,15 @@ const WRITE = "quiz-write";
  * title shows. A recited question (`ask.recite`) is recited with recite mode's own bar (components/recite), as in the mushaf,
  * stopping at the ayah's end: `onWritten` gets the grade when the pen wrote it, `onShown` runs once it shows. `shown` shows all of it.
  */
-export default function QuizPage({ ayah, ask, shown, onWritten, onShown, ar = true }: { ayah: string; ask: PageAsk; shown: boolean;
-  onWritten?: (graded: Graded) => void; onShown?: () => void; ar?: boolean }) {
+export default function QuizPage({ ayah, ask, shown, onWritten, onShown, party, ar = true }: { ayah: string; ask: PageAsk; shown: boolean;
+  onWritten?: (graded: Graded) => void; onShown?: () => void;
+  /** In a party: the pen on with the host's rule, what is written handed over, and once revealed, the words marked by what was sent. */
+  party?: PartyWrite; ar?: boolean }) {
   const { pages, words } = useAyahPage(ayah);
   const before = useQuizPageBefore();
-  const pen = useQuizPen();
+  const quizPen = useQuizPen();
+  const pen = party?.pen ?? quizPen;
+  const [sent, setSent] = useState(false);
   const parts = useMemo(() => (pages && words ? { model: pageModel(pages.data, pages.top), cut: shownCut(ayah, words, ask.shows) } : null), [pages, words, ayah, ask.shows]);
   const [position, setPosition] = useState<RecitePosition | null>(null);
   // The page comes from the server: the recitation starts once it is here, with the words the question shows.
@@ -38,8 +48,18 @@ export default function QuizPage({ ayah, ask, shown, onWritten, onShown, ar = tr
   const [writing, setWriting] = useState(true);
   useEffect(() => { try { setWriting(localStorage.getItem(WRITE) !== "false"); } catch {} }, []);
   const toggleWriting = () => setWriting(on => { try { localStorage.setItem(WRITE, String(!on)); } catch {} return !on; });
-  const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: writing && !shown, pen, until: ayah, floor: parts?.cut ?? 0,
-    onWritten: (_key, graded) => onWritten?.(graded) });
+  const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: (writing || !!party) && !shown && !sent, pen, until: ayah, floor: parts?.cut ?? 0,
+    onWritten: (_key, graded) => onWritten?.(graded),
+    onSubmit: party ? (_key, typed) => { setSent(true); party.onWrite(party.asked.map(at => typed[at] ?? ""), true); } : undefined });
+  // Each word written reaches the party, so a player the time runs out on is graded on what they wrote.
+  const typedSoFar = recite.write?.typed;
+  const latest = useRef(party);
+  latest.current = party;
+  useEffect(() => {
+    if (typedSoFar && latest.current && !sent) latest.current.onWrite(latest.current.asked.map(at => typedSoFar[at] ?? ""), false);
+  }, [typedSoFar, sent]);
+  // Revealed in a party: the words marked by what this player sent, as the party graded them.
+  const marked = shown && party?.words && party.answer ? { key: ayah, ...writtenGrade({ asked: party.asked, words: party.words }, party.answer) } : null;
   const open = shown || !ask.recite || recite.done;
   useEffect(() => { if (recite.done) onShown?.(); }, [recite.done]); // eslint-disable-line react-hooks/exhaustive-deps
   const nameless = ask.title === "hidden";
@@ -72,9 +92,9 @@ export default function QuizPage({ ayah, ask, shown, onWritten, onShown, ar = tr
   return <div className="mb-4 flex flex-col gap-3">
     <div lang="ar" dir="rtl" className="aspect-[0.66] w-full [container-type:size]" onClick={write ? recite.boxes.focus : undefined}>
       <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} hidden={view.hidden} titled={view.titled} next={view.next} anonymous={!before || nameless}
-        write={write ? { ...write, before: 0 } : null} checked={recite.checked ? { ...recite.checked, before: 0 } : null} />
+        write={write ? { ...write, before: 0 } : null} checked={marked ? { ...marked, before: 0 } : recite.checked ? { ...recite.checked, before: 0 } : null} />
     </div>
-    {ask.recite && !shown && <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} ar={ar} className="self-center" />}
+    {ask.recite && !shown && !sent && <RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} ar={ar} className="self-center" />}
     {write && recite.boxes.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
   </div>;
 }

@@ -55,6 +55,8 @@ export default function TopBar({ children, title, middle, away: putAway = false,
   help?: () => void;
 }) {
   const palette = usePalette();
+  // Centred buttons keep clear of both sides: the logo on the left and the buttons on the right, whichever is wider.
+  const side = Math.max(SIDE, 12 + ((back || hub || shelf) ? 42 : 0) + [help, utilities, search, withSettings].filter(Boolean).length * 44);
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
   // Scrolling down, the row folds away under the status bar; put away, the whole bar leaves. Both move as every bar does (ui/motion).
@@ -67,14 +69,21 @@ export default function TopBar({ children, title, middle, away: putAway = false,
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
       <Animated.View {...hiddenProps(folded)} style={[{ overflow: 'hidden' }, row.frame]}>
       <Animated.View style={[{ height: HEIGHT, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row.content]}>
-        {/* Everything the thumb presses sits on the right; the logo (or the grid or shelf in its place) stays on the left
+        {/* Everything the thumb presses sits on the right; the logo (home) stays on the left
             (owner, 2026-11-17). A back arrow is the one exception: it leads on the right, the way back in Arabic. */}
         {back && <Tap onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
           <ChevronRight size={28} color={palette.ink} />
         </Tap>}
+        {/* The section's own main button leads on the right as well: the grid to the Quran tools, the shelf to the books (owner, 2026-11-17). */}
+        {!back && hub && <Tap onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+          <LayoutGrid size={24} color={palette.ink} />
+        </Tap>}
+        {!back && shelf && <Tap onPress={toShelf} accessibilityRole="button" accessibilityLabel="المكتبة" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+          <LibraryBig size={24} color={palette.ink} />
+        </Tap>}
         {middle ? <View style={{ flex: 1, minWidth: 0 }}>{middle}</View>
           : title ? <Text accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
-        {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
+        {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: side, right: side, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
         <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
           {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
@@ -83,17 +92,9 @@ export default function TopBar({ children, title, middle, away: putAway = false,
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
           {center ? null : children}
         </View>
-        {bare || back ? null : hub
-          ? <Tap onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
-            <LayoutGrid size={24} color={palette.ink} />
-          </Tap>
-          : shelf
-          ? <Tap onPress={toShelf} accessibilityRole="button" accessibilityLabel="المكتبة" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
-            <LibraryBig size={24} color={palette.ink} />
-          </Tap>
-          : <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
-            <Logo size={34} />
-          </Tap>}
+        {bare || back ? null : <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
+          <Logo size={34} />
+        </Tap>}
       </Animated.View>
       </Animated.View>
       {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}

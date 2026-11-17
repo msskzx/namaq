@@ -54,3 +54,43 @@ test('a party quiz: host and guest join, answer each question and see the final 
   expect(first.name).toBe('المضيف');
   await guestContext.close();
 });
+
+test('a party of recited ayat: each player writes the ayah with the pen, and the party grades the words', async ({ page, browser, errors }) => {
+  test.setTimeout(90_000);
+  const server = new PartyServer('recite');
+  await server.attach(page.context());
+  const guestContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: 'ar' });
+  await guestContext.addInitScript(() => localStorage.setItem('tour-seen', 'true'));
+  await server.attach(guestContext);
+  const guest = await guestContext.newPage();
+  guest.on('pageerror', error => errors.push(`guest pageerror: ${error.message}`));
+
+  await open(page, '/quiz/party');
+  await page.getByLabel('اسمك').fill('المضيف');
+  await page.getByRole('button', { name: 'ابدأ', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/quiz/party/${server.code}`));
+  await open(guest, `/quiz/party/${server.code}`);
+  await expect(guest.getByLabel('اسمك').last()).toBeFocused();
+  await guest.keyboard.type('الضيف');
+  await guest.keyboard.press('Enter');
+  await guest.getByRole('button', { name: 'أنا مستعد' }).click();
+  await expect(page.getByText('الضيف')).toBeVisible();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+
+  await expect.poll(() => server.question?.write).toBeTruthy();
+  for (let index = 0; index < server.state!.questions.length; index++) {
+    await expect.poll(() => server.state?.current).toBe(index);
+    const { words, asked } = server.question!.write as { words: string[]; asked: number[] };
+    const bar = page.getByLabel('أدوات التسميع');
+    // The pen is on for all, and the next ayah waits for everyone.
+    await expect(bar.getByRole('button', { name: 'أوقف الكتابة' })).toBeDisabled();
+    await expect(bar.getByRole('button', { name: 'أظهر الآية التالية' })).toHaveCount(0);
+    for (const at of asked) await page.getByLabel('اكتب الكلمة').fill(`${words[at]} `);
+    for (const _ of asked) await guest.getByLabel('اكتب الكلمة').fill('كلام ');
+    await expect(page.getByText(`${num(asked.length)} من ${num(asked.length)} كلمات`)).toBeVisible();
+    await expect(guest.getByText(`٠ من ${num(asked.length)} كلمات`)).toBeVisible();
+    await page.getByRole('button', { name: index === server.state!.questions.length - 1 ? 'الترتيب النهائي' : 'السؤال التالي' }).click();
+  }
+  await expect(page.getByRole('button', { name: 'اختبار آخر بالفريق نفسه' })).toBeVisible();
+  await guestContext.close();
+});

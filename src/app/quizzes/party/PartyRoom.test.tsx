@@ -14,7 +14,11 @@ vi.mock('@/lib/party/client', () => ({
 }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
 vi.mock('@/components/common/AppChrome', () => ({ useHideFooter: () => {} }));
-vi.mock('swr', () => ({ default: () => ({ data: undefined }) }));
+vi.mock('swr', async () => {
+  // The last page, for a recited ayah drawn on its page (QuizPage).
+  const last = (await import('@shared/data/quran/mushaf/604.json')).default;
+  return { default: (key: unknown) => ({ data: key === '/api/home/feed?ayah=112:1' ? { page: 604, top: 111, data: last, previous: null } : undefined }) };
+});
 
 const question = { key: 'q1', correctAnswer: 'a', promptArabic: 'من هو؟', choices: [{ value: 'a', labelArabic: 'أبو بكر' }, { value: 'b', labelArabic: 'عمر' }] };
 
@@ -126,6 +130,39 @@ describe('party question', () => {
     expect(within(board).getAllByRole('listitem').map(item => item.getAttribute('data-player'))).toEqual(['Amina', 'Host']);
     fireEvent.click(screen.getByRole('button', { name: /Next question/ }));
     expect(socket.send).toHaveBeenCalledWith({ type: 'next' });
+  });
+});
+
+describe('a recited ayah in a party', () => {
+  const words = ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'];
+  const written = { key: 'ENDS:112:1', family: 'ENDS', correctAnswer: '1', promptArabic: 'سمّع آية الإخلاص ١.', choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }],
+    ayahKey: '112:1', page: { shows: 0, recite: true, title: 'shown' }, write: { words, asked: [0, 1, 2, 3] } };
+  const asked = () => party([{ type: 'start', playerId: 'p0', early: true }, { type: 'loaded', questions: [written, question], surahNames: {} }]);
+  beforeEach(() => vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} }));
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('writes it on its page with the recite bar as a party has it, and sends the words', () => {
+    show(asked());
+    const bar = screen.getByRole('toolbar', { name: 'Recite tools' });
+    // The next ayah waits for everyone, the pen is on for all, and nothing ends the recitation.
+    expect(within(bar).queryByRole('button', { name: 'Reveal the next ayah' })).toBeNull();
+    expect((within(bar).getByRole('button', { name: 'Stop writing' }) as HTMLButtonElement).disabled).toBe(true);
+    expect(within(bar).queryByRole('button', { name: 'Stop reciting' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /حفظتها/ })).toBeNull();
+    const field = screen.getByLabelText('Write the word');
+    fireEvent.change(field, { target: { value: 'قل ' } });
+    // A step back empties the last box written.
+    fireEvent.click(within(bar).getByRole('button', { name: 'Step back' }));
+    for (const word of ['قل ', 'هو ', 'الله ', 'احد ']) fireEvent.change(screen.getByLabelText('Write the word'), { target: { value: word } });
+    expect(socket.send).toHaveBeenCalledWith({ type: 'submit', answer: ['قل', 'هو', 'الله', 'احد'] });
+  });
+
+  it('shows the words marked once the party reveals them, with the words right', () => {
+    const state = [{ type: 'submit', playerId: 'p0', answer: ['قل', 'هي', 'الله', 'احد'] }, { type: 'submit', playerId: 'p1', answer: [] }]
+      .reduce((current: PartyState, action) => reduce(current, action as Action, 0).state, asked());
+    show(state);
+    expect(screen.getByText('3 of 4 words')).toBeTruthy();
+    expect(screen.getByRole('note', { name: 'كتبت: هي' })).toBeTruthy();
   });
 });
 
