@@ -25,6 +25,7 @@ import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import { mushafText } from '@shared/quran/mushafText';
 import Card from '@/components/common/Card';
+import Field from '@/components/common/Field';
 
 type Question = PartyQuestion & ChoiceParts & {
   promptArabic: string;
@@ -58,8 +59,7 @@ export function NameForm({ initial, onSubmit, error, ar, label, nameError }: { i
     }}>
       <label className="flex flex-col gap-1">
         <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اسمك" : "Your name"}</span>
-        <input value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname"
-          className="w-full max-w-xs rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]" />
+        <Field label={ar ? "اسمك" : "Your name"} value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname" className="max-w-xs" />
       </label>
       {error && (!nameError || name.trim() === sent) && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
       <Button className="self-start" variant="primary" type="submit" disabled={!name.trim()}>{label}</Button>

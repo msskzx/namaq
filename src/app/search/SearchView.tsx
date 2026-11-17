@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, ScrollText, Search, TextSearch, Users, X, type LucideProps } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes, notesByDate } from '@shared/ayahNotes';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -14,6 +14,7 @@ import { NavActions } from '@/components/common/NavBar';
 import TreeIcon from '@/components/common/TreeIcon';
 import styles from './Search.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { SearchField } from '@/components/common/Field';
 
 /** Results a group shows until its arrow opens the rest; at most this many when open (shared/quran/searchSources.ts). */
 export const GROUP_SHOWN = 3;
@@ -114,11 +115,7 @@ export default function SearchView() {
   return <div className={styles.page} dir="rtl">
     <h1 className="sr-only">البحث</h1>
     <NavActions>
-      <label className={styles.box}>
-        <Search size={18} className={styles.icon} aria-hidden />
-        <input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="ابحث" aria-label="ابحث في كل شيء" />
-        {query && <button type="button" className={styles.clear} onClick={() => setQuery('')} aria-label="مسح"><X size={18} aria-hidden /></button>}
-      </label>
+      <SearchField label="ابحث في كل شيء" placeholder="ابحث" value={query} onChangeText={setQuery} className="min-w-0 flex-1" />
     </NavActions>
     {!waiting && found.query && !groups.length && <p className={styles.empty}>لا توجد نتيجة مطابقة.</p>}
     {groups.map(group => {

@@ -3,14 +3,15 @@
 // docs/plans/quran-repetition-merge.md
 import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import type { CountedSide, LemmaCount } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@shared/quran/normalize';
 import { NOTE, PANEL } from '../panel';
-import { SEARCH, SUGGESTIONS } from './WordCounts';
+import { SUGGESTIONS } from './WordCounts';
 import { mushafText } from '@shared/quran/mushafText';
+import { SearchField } from '@/components/common/Field';
 
 type Pair = [CountedSide, CountedSide];
 
@@ -64,12 +65,8 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
           </Button>
         )}
       </p>
-      <label className="relative block">
-        <span className="sr-only">{first ? 'اختر الكلمة المقابلة' : 'أضف زوجًا: اختر الكلمة الأولى'}</span>
-        <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
-        <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={first ? 'اختر الكلمة المقابلة' : 'أضف زوجًا: اختر الكلمة الأولى'}
-          onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) pick(suggestions[0]); }} className={SEARCH} />
-      </label>
+      <SearchField label={first ? 'اختر الكلمة المقابلة' : 'أضف زوجًا: اختر الكلمة الأولى'} placeholder={first ? 'اختر الكلمة المقابلة' : 'أضف زوجًا: اختر الكلمة الأولى'} value={query} onChangeText={setQuery}
+        onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) pick(suggestions[0]); }} />
       {needle && (
         <ul aria-label="كلمات مقترحة" className="mt-1 flex flex-col rounded border border-[var(--home-rule)]">
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (

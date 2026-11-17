@@ -1,9 +1,4 @@
 .page { width: 100%; max-width: 42rem; margin: 0 auto; padding: 0.25rem 1rem 6rem; display: flex; flex-direction: column; gap: 0.9rem; color: var(--home-ink); }
-.box { flex: 1; display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--home-rule); border-radius: 10px; padding: 0 0.6rem; background: var(--home-card); min-width: 0; }
-.box input { flex: 1; min-width: 0; height: 40px; border: 0; background: transparent; font-size: 16px; color: var(--home-ink); outline: none; }
-.box input::-webkit-search-cancel-button { display: none; }
-.icon { color: var(--home-muted); flex: none; }
-.clear { display: flex; color: var(--home-muted); }
 .heading { display: flex; align-items: center; justify-content: space-between; min-height: 40px; width: 100%; color: var(--home-ink); }
 .heading h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 700; }
 .heading svg { color: var(--home-accent); }

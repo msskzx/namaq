@@ -3,7 +3,7 @@
 // docs/plans/quran-repetition-merge.md
 import React, { useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import type { LemmaCounts } from '@/lib/quran/lemmas';
@@ -11,10 +11,10 @@ import { normalizeWord } from '@shared/quran/normalize';
 import { NOTE, PANEL } from '../panel';
 import WordPlaces from './WordPlaces';
 import { mushafText } from '@shared/quran/mushafText';
+import { SearchField } from '@/components/common/Field';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
-export const SEARCH = 'w-full rounded border border-[var(--home-rule)] bg-[var(--home-paper)] py-2 ps-9 pe-3 text-base text-[var(--home-ink)]';
 const BAR = 'bg-[#50808e]';
 
 type Ranked = { word: string; count: number; root: string; rank: number; key: string };
@@ -56,12 +56,8 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
           {`أكثر ${num(CHART_TOP)} كلمات ورودًا`}
         </Button>
       </div>
-      <label className="relative block">
-        <span className="sr-only">أضف كلمة إلى الرسم</span>
-        <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
-        <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="أضف كلمة إلى الرسم"
-          onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) add(suggestions[0].rank); }} className={SEARCH} />
-      </label>
+      <SearchField label="أضف كلمة إلى الرسم" placeholder="أضف كلمة إلى الرسم" value={query} onChangeText={setQuery}
+        onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) add(suggestions[0].rank); }} />
       {needle && (
         <ul aria-label="كلمات مقترحة" className="mt-1 flex flex-col rounded border border-[var(--home-rule)]">
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (

@@ -21,7 +21,7 @@ test('a book opens from the shelf, its فاصلة stays on its page while the re
 test('the search finds a word whatever its vowel marks and opens its page', async ({ page }) => {
   await page.goto('/quran/books/sadi/1');
   await page.getByRole('button', { name: 'ابحث في الكتاب' }).first().click();
-  await page.getByRole('textbox', { name: 'ابحث في الكتاب' }).fill('غشاوة');
+  await page.getByRole('searchbox', { name: 'ابحث في الكتاب' }).fill('غشاوة');
   await page.getByRole('link').filter({ hasText: 'غشاوة' }).first().click();
   await expect(page).toHaveURL(/\/sadi\/\d+$/);
   await expect(page.getByText(/غِشَاوَةٌ|غشاوة/).first()).toBeVisible();
