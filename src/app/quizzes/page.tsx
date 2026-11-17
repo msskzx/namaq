@@ -50,6 +50,7 @@ import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings; every kind of question is chosen inside them (owner, 2026-11-17). */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -261,9 +262,7 @@ export default function QuizzesPage() {
                 <p className="mb-1.5 text-sm text-[var(--home-muted)]">{group[ar ? "ar" : "en"]}</p>
                 <div className="flex flex-wrap gap-2">
                   {group.topics.map((value) => (
-                    <Button key={value} active={topics.includes(value)} aria-pressed={topics.includes(value)} onClick={() => toggleTopic(value)}>
-                      {TOPIC_LABELS[value][ar ? "ar" : "en"]}
-                    </Button>
+                    <Chip key={value} on={topics.includes(value)} onClick={() => toggleTopic(value)} label={TOPIC_LABELS[value][ar ? "ar" : "en"]} />
                   ))}
                 </div>
               </div>
@@ -285,10 +284,7 @@ export default function QuizzesPage() {
                 <p id="quiz-difficulty" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "الصعوبة" : "Difficulty"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {DIFFICULTIES.map((value) => (
-                    <Button key={value} active={difficulty === value} aria-pressed={difficulty === value}
-                      onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })}>
-                      {DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}
-                    </Button>
+                    <Chip key={value} on={difficulty === value} onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })} label={DIFFICULTY_LABELS[value][ar ? "ar" : "en"]} />
                   ))}
                 </div>
                 {topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
@@ -297,10 +293,7 @@ export default function QuizzesPage() {
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
-                    <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
-                      onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
-                      {ar ? num(value) : value}
-                    </Button>
+                    <Chip key={value} on={leaves === value} onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })} label={ar ? num(value) : value} />
                   ))}
                 </div>
               </div>}

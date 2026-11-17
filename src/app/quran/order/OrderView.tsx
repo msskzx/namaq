@@ -9,6 +9,7 @@ import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { BOOKS, citeLabel, citeUrl, ORDER_HELP, ORDER_JUZ, orderInJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 const HELP = [
   ...ORDER_HELP.map((text, i) => <p key={i} className={i === ORDER_HELP.length - 1 ? 'text-[var(--home-muted)]' : undefined}>{text}</p>),
@@ -75,10 +76,7 @@ export default function OrderView({ surahs }: { surahs: OrderSurah[] }) {
   const shown = orderInJuz(surahs, juz);
   const chip = (label: string, value: number | null) => (
     <li key={label}>
-      <button type="button" aria-pressed={juz === value} onClick={() => setJuz(value)}
-        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${juz === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
-        {label}
-      </button>
+      <Chip label={label} on={juz === value} onClick={() => setJuz(value)} />
     </li>
   );
   return (

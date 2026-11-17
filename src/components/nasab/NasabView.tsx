@@ -13,6 +13,7 @@ import { givenName, layoutNasab, nasabHonorific, type NasabPerson } from '@/lib/
 import styles from './Nasab.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import LoadingDots from '@/components/common/LoadingDots';
+import Chip from '@/components/common/Chip';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
@@ -104,10 +105,7 @@ export default function NasabView() {
         <GraphSearch personOnly hint={isArabic ? 'اختر لعرض النسب' : 'Select to show the nasab'} />
         <div className={styles.picks} aria-label={isArabic ? 'اختيارات سريعة' : 'Quick picks'}>
           {QUICK_PICKS.map((pick) => (
-            <Button key={pick.slug} size="sm" active={subjects.includes(pick.slug)} aria-pressed={subjects.includes(pick.slug)} onClick={() => toggle(pick.slug)}>
-              <FontAwesomeIcon icon={faUser} />
-              {isArabic ? pick.ar : pick.en}
-            </Button>
+            <Chip key={pick.slug} on={subjects.includes(pick.slug)} onClick={() => toggle(pick.slug)} label={<><FontAwesomeIcon icon={faUser} />{isArabic ? pick.ar : pick.en}</>} />
           ))}
         </div>
         {/* Left to right like every switch: off (fathers only) on the left, on (with descendants) on the right. */}

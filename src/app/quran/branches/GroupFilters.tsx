@@ -1,10 +1,10 @@
 'use client';
 
-import { ArrowDownWideNarrow, BookOpen, Check, Link2, Tags } from 'lucide-react';
-import Button from '@/components/common/Button';
+import { ArrowDownWideNarrow, BookOpen } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { SORTS, groupFilters, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
+import Chip from '@/components/common/Chip';
 
 const categories = {
   mutashabeh: { ar: 'متشابهات', en: 'Mutashabeh' },
@@ -26,20 +26,14 @@ export default function GroupFilterControls({ filters: draft, onChange, sort = t
       {Object.entries(group.values).map(([id, label]) => {
         const selected = draft[group.key] ?? (group.key === 'categories' ? defaultCategories : '');
         const active = selected.split(',').includes(id);
-        return <Button key={id} size="sm" variant="neutral" active={active} aria-pressed={active} onClick={() => set(group.key, toggleFilter(selected, id) || (group.key === 'categories' ? 'none' : ''))}>
-          {active ? <Check size={12} aria-hidden /> : group.key === 'categories' ? <Link2 size={12} aria-hidden /> : <Tags size={12} aria-hidden />}{ar ? label.ar : label.en}
-        </Button>;
+        return <Chip key={id} check on={active} onClick={() => set(group.key, toggleFilter(selected, id) || (group.key === 'categories' ? 'none' : ''))} label={ar ? label.ar : label.en} />;
       })}
-      {group.key === 'categories' && <Button size="sm" variant="neutral" active={draft.cited === '1'} aria-pressed={draft.cited === '1'} onClick={() => set('cited', draft.cited === '1' ? '' : '1')}>
-        <BookOpen size={12} aria-hidden />{ar ? 'في كتب المتشابه' : 'In the books'}
-      </Button>}
+      {group.key === 'categories' && <Chip on={draft.cited === '1'} onClick={() => set('cited', draft.cited === '1' ? '' : '1')} label={<><BookOpen size={12} aria-hidden />{ar ? 'في كتب المتشابه' : 'In the books'}</>} />}
     </fieldset>)}
     {sort && <fieldset className="flex flex-wrap gap-1.5"><legend className="mb-1 text-sm">{ar ? 'الترتيب' : 'Sort'}</legend>
       {SORTS.map((order, index) => {
         const active = (draft.sort || 'mushaf') === order;
-        return <Button size="sm" variant="neutral" key={order} active={active} aria-pressed={active} onClick={() => set('sort', index ? order : '')}>
-          <ArrowDownWideNarrow size={12} aria-hidden />{sorts[index]}
-        </Button>;
+        return <Chip key={order} on={active} onClick={() => set('sort', index ? order : '')} label={<><ArrowDownWideNarrow size={12} aria-hidden />{sorts[index]}</>} />;
       })}
     </fieldset>}
   </>;

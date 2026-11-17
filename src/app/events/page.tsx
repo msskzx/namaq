@@ -7,13 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faFlag, faMagnifyingGlass, faRoute, faShieldAlt } from "@fortawesome/free-solid-svg-icons";
 import LoadingDots from "@/components/common/LoadingDots";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import Button from "@/components/common/Button";
 import EventTimeline from "@/components/events/EventTimeline";
 import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import { fetcher } from "@/lib/swr";
 import { filterTimeline, parseKinds, TIMELINE_KINDS, type TimelineItem, type TimelineKind } from "@/lib/timeline";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import Chip from '@/components/common/Chip';
 
 const KIND_LABELS: Record<TimelineKind, { ar: string; en: string }> = {
   event: { ar: "حدث", en: "Event" },
@@ -70,10 +70,7 @@ function EventsPage() {
           </label>
           <div className="flex flex-wrap gap-2" role="group" aria-label={ar ? "النوع" : "Type"}>
             {TIMELINE_KINDS.map((kind) => (
-              <Button key={kind} variant="outline" size="sm" active={kinds.includes(kind)} aria-pressed={kinds.includes(kind)} onClick={() => toggle(kind)}>
-                <FontAwesomeIcon icon={KIND_ICONS[kind]} className="h-3 w-3" />
-                {KIND_LABELS[kind][ar ? "ar" : "en"]}
-              </Button>
+              <Chip key={kind} on={kinds.includes(kind)} onClick={() => toggle(kind)} label={<><FontAwesomeIcon icon={KIND_ICONS[kind]} className="h-3 w-3" />{KIND_LABELS[kind][ar ? "ar" : "en"]}</>} />
             ))}
           </div>
         </div>

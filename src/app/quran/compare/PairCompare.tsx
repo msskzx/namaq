@@ -44,6 +44,7 @@ import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
 import { surahName } from '@shared/quran/surahNames';
 import Frame from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -422,10 +423,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         {/* A tree stands in the branches tree's own frame, as on the branches page; the matrix is one card. */}
         {tree ? <div className="flex flex-col gap-2 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
-            {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
-              className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
-              {ar ? num(item.ayah.number) : item.ayah.number}
-            </button>)}
+            {card.many.options.map((item, row) => <Chip key={item.id} lit tapThrough on={row === selected} onClick={() => setSelected(row)} label={ar ? num(item.ayah.number) : item.ayah.number} />)}
           </div>}
           {rowsOf(shownSides).map((sides, row) => <div key={row} className={`${row > 0 || parts ? 'border-t border-dotted border-[var(--home-rule)]' : ''} ${parts ? 'min-h-7 pt-4' : row > 0 ? 'pt-2' : ''}`}>
             {parts && <div dir="rtl" className="grid h-0 grid-cols-2">{shownSides.map((side, i) => <div key={i} className="relative">

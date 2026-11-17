@@ -10,6 +10,7 @@ import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sec
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
@@ -74,10 +75,7 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
   const byId = new Map(allah.map(oath => [oath.id, oath]));
   const chip = (label: string, value: OathBy | null) => (
     <li key={label}>
-      <button type="button" aria-pressed={by === value} onClick={() => setBy(value)}
-        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${by === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
-        {label}
-      </button>
+      <Chip label={label} on={by === value} onClick={() => setBy(value)} />
     </li>
   );
   return (
