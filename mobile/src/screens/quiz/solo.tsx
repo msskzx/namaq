@@ -93,7 +93,7 @@ export default function SoloSetup() {
         <Section title="الصعوبة" palette={palette}>
           <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.kinds} />
         </Section>
-        {trees && <Section title="الإجابات" palette={palette}>
+        {trees && <Section title="متشابهات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
         </Section>}

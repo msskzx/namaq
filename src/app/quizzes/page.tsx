@@ -226,7 +226,6 @@ export default function QuizzesPage() {
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
   const percent = total === 0 ? 0 : Math.round((score / total) * 100);
-  const passed = total > 0 && score / total >= 0.5;
   const questionState = (index: number) => {
     const given = answers[index];
     if (given === undefined) return 'unanswered' as const;
@@ -350,10 +349,6 @@ export default function QuizzesPage() {
         ) : submitted ? (
           <div>
             <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>
-            <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
-              <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
-              {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
-            </p>
             <Button className="mb-4" aria-expanded={reviewing} onClick={() => setReviewing(value => !value)}><Eye size={16} aria-hidden />{reviewing ? (ar ? "العودة للنتيجة" : "Back to results") : (ar ? "مراجعة الأسئلة" : "Review questions")}</Button>
             {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree ? typed[index] ?? null : answers[index] ?? null, result: points[index], hints: hints[index] }))} names={data.surahNames ?? {}} ar={ar} />}
             <Button className="mt-6" variant="primary" onClick={reset}>

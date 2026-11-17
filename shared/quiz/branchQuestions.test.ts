@@ -12,14 +12,15 @@ const all = data.ayat as BranchAyah[];
 const trees = data.trees as TreeGroup[];
 
 describe('branchQuestions', () => {
-  it('preserves the beginnings before الإنسان ما', () => {
+  it('preserves the beginnings before الإنسان ما, each with its own الإنسان as the branches tree folds it (ADR 0036)', () => {
     const question = branchQuestions(all, null, trees.filter(tree => tree.id === 'الانسن ما'))[0];
     expect(question).toBeDefined();
     for (const key of ['79:35', '80:17', '82:6', '96:5', '99:3']) {
       const prefix = question.prefixes.find(prefix => prefix.keys.includes(key))!;
       const ayah = all.find(ayah => ayah.key === key)!;
-      expect(prefix.word).toBe(ayah.words.slice(0, ayah.words.findIndex(word => word.includes('إِنسَ'))).join(' '));
+      expect(prefix.word).toBe(ayah.words.slice(0, ayah.words.findIndex(word => word.includes('إِنسَ')) + 1).join(' '));
     }
+    expect(question.tree.words[0]).toBe('مَا');
   });
 
   it.each([2, 3, 7, 10, 11])('accepts two to ten branches: %i', count => {

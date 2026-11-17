@@ -48,4 +48,22 @@ describe('one tree', () => {
     expect(braid).toMatch(/import \{[^}]*\bletters\b[^}]*\bsharedDisplay\b[^}]*\} from '\.\/phraseTrees'/);
     expect(braid).toMatch(/return foldStrands\(braid\(/);
   });
+
+  // Quizzes (owner, 2026-11-17: «the same bug we had in trees is still in quizzes»): the quiz built its trees with the bare
+  // trie (createPhrasePresenter) and drew every box itself, so the branches rules never reached it.
+  it('builds every shown tree with createTreePresenter: the bare trie only gives ids and sizes', () => {
+    const bare = [...files, ...sources('shared').map(path => ({ path, text: readFileSync(join(ROOT, path), 'utf8') }))].filter(file => /\bcreatePhrasePresenter\b/.test(file.text) && !['shared/quran/phraseTrees.ts', 'shared/quran/subtrees.ts'].includes(file.path));
+    expect(bare.map(file => file.path)).toEqual([]);
+    expect(readFileSync(join(ROOT, 'shared/quiz/branchQuestions.ts'), 'utf8')).toMatch(/createTreePresenter\(/);
+  });
+
+  it('lets the quiz draw only its own boxes (to type in, or graded): every given box is drawn by BranchTree', () => {
+    const quiz = files.filter(file => /quiz/i.test(file.path) || file.path.endsWith('BranchAnswers.tsx'));
+    // A given node's words written out by a quiz is a box of its own, past the branches rules (signs, written forms).
+    expect(quiz.filter(file => /givenAnswer\(node\)/.test(file.text)).map(file => file.path)).toEqual([]);
+    // Each quiz renderNode hands every node it does not ask back to BranchTree (returns undefined for it).
+    const drawsAll = quiz.filter(file => [...file.text.matchAll(/renderNode(?::\s*RenderNode)?\s*=\s*\{?\(/g)]
+      .some(match => !/undefined/.test(file.text.slice(match.index, match.index + 700))));
+    expect(drawsAll.map(file => file.path)).toEqual([]);
+  });
 });

@@ -383,6 +383,9 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
 }
 
 /** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
+/** A tree the owner keeps to its own ayat (branchVerdicts `ayat: 'own'`): no ayah reads on into the one after it. */
+export const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
+
 export const ownEnds = (node: Branch): Record<string, string> => Object.fromEntries(keys(node).map(key => [key, key]));
 
 /** Each ayah's end one ayah on, for a card kept two ayat deep (twoAyat); `has` says which ayat exist, so a surah's last ayah ends on itself. */

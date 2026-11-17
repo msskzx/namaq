@@ -52,9 +52,8 @@ describe('solo quiz on the phone', () => {
     let run = startSolo(cleanSolo({ juzFrom: 30, juzTo: 30, length: 5 }), seeded(11));
     for (let i = 0; i < run.questions.length; i++) run = check(typeRight(goTo(run, i)));
     expect(run.questions.map((_, i) => questionState(run, i))).toEqual(run.questions.map(() => 'correct'));
-    const { score, total, passed } = soloScore(submit(run));
+    const { score, total } = soloScore(submit(run));
     expect(score).toBe(total);
-    expect(passed).toBe(true);
   });
 
   it('gives a point for each right leaf, so one right and one wrong is partly solved', () => {

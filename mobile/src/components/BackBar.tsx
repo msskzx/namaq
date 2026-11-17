@@ -6,7 +6,9 @@ import { ChevronRight } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
 
 /** A pushed screen's top bar: back on the right, a short title, the screen's own buttons on the left. */
-export default function BackBar({ title, children, onBack }: { title?: string; children?: React.ReactNode; onBack?: () => void }) {
+export default function BackBar({ title, middle, children, onBack }: { title?: string; children?: React.ReactNode; onBack?: () => void;
+  /** Drawn in place of the title, taking the bar's room (the quiz's question circles). */
+  middle?: React.ReactNode }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   return (
@@ -15,8 +17,9 @@ export default function BackBar({ title, children, onBack }: { title?: string; c
         <Pressable onPress={onBack ?? (() => router.back())} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ padding: 6 }}>
           <ChevronRight size={28} color={palette.ink} />
         </Pressable>
-        {title ? <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>
+        {middle ? <View style={{ flex: 1, minWidth: 0 }}>{middle}</View> : null}
+        {!middle && title ? <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
+        <View style={{ flex: middle ? 0 : 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>
       </View>
     </View>
   );
