@@ -19,8 +19,9 @@ import { EMPTY_LIST, listShowing } from '@/lib/branchList';
 import type { Size } from '@/lib/camera';
 import { around as aroundSetting } from '@/lib/settings';
 import { useKeyboardShown } from '@/lib/keyboard';
-import { QURAN_FONT, type Palette, CARD } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
+import Card from '@/ui/Card';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
 
@@ -94,7 +95,7 @@ export function MatrixInputs({ question, values, hints, onType, palette, names, 
         const spans = shownAyat(leaf, words);
         const label = ayahKeys.map(key => ayatLabel(spans[key], names)).join(' · ');
         return (
-          <View key={`${path.join('-')}:${ayahKeys[0]}`} style={{ gap: 2, padding: 10, borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
+          <Card key={`${path.join('-')}:${ayahKeys[0]}`} palette={palette} pad={10} gap={2}>
             {label ? <Text style={{ color: palette.muted, fontSize: 13 }}>{label}</Text> : null}
             <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
               {before.length > 0 && <Text style={text}>{quranText(before.join(' '))}</Text>}
@@ -103,7 +104,7 @@ export function MatrixInputs({ question, values, hints, onType, palette, names, 
                 ? <View key={index}>{askedBox(nodes[index], blank(question, index, values[index], onType, palette, 130, hints[index], readOnly), palette)}</View>
                 : <Text key={index} style={text}>{quranText(values[index])}</Text>)}
             </View>
-          </View>
+          </Card>
         );
       })}
     </View>

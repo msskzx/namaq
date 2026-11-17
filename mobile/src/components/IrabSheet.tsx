@@ -15,6 +15,7 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
+import Card from '@/ui/Card';
 
 export type IrabTarget = { key: string; word: number };
 
@@ -55,7 +56,6 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
   // The word the role points at («صفة» of «ٱللَّهِ»), outlined among the chips.
   const heads = new Set(corpus.map(i => lines[i]?.head).filter((head): head is number => head !== null && head !== undefined));
   const headChip = words.findIndex((_, i) => corpusWords(key, i).some(c => heads.has(c)));
-  const card = { ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card };
   const none = !shortOn && !ukbariOn;
   return (
     <View style={{ flexShrink: 1 }}>
@@ -79,7 +79,7 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
           </View>
         )}
         {shortOn && (
-          <View style={{ ...card, paddingHorizontal: 14, paddingVertical: 10, gap: 4 }}>
+          <Card palette={palette} pad={[10, 14]} gap={4}>
             <Text style={{ fontFamily: QURAN_FONT, fontSize: 30, lineHeight: 56, color: palette.accent, textAlign: 'right', writingDirection: 'rtl' }}>{words[picked]}</Text>
             {corpus.map(i => lines[i] && (
               <View key={i} style={{ gap: 2 }}>
@@ -87,7 +87,7 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
                 <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{lines[i].morph}</Text>
               </View>
             ))}
-          </View>
+          </Card>
         )}
         {ukbariOn && ukbari && (passages.length ? passages.map((passage, i) => <Passage key={i} passage={passage} onWord={passage.from >= 0} palette={palette} onClose={onClose} />)
           : <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 2 }}>لم يتكلم العكبري على هذه الكلمة ولا على آيتها.</Text>)}
@@ -109,7 +109,7 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
 /** One of al-'Ukbari's passages: the book and page on top (a link to the page), then his text with Quran words in the Quran font. */
 function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; onWord: boolean; palette: Palette; onClose: () => void }) {
   return (
-    <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 10, gap: 4 }}>
+    <Card palette={palette} pad={[10, 14]} gap={4}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <View style={{ flex: 1 }}>
           <ExternalLink url={ukbariPage(passage)} color={palette.muted} size={13} style={{ textAlign: 'right' }}>
@@ -121,6 +121,6 @@ function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; 
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(passage.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
       </Text>
-    </View>
+    </Card>
   );
 }

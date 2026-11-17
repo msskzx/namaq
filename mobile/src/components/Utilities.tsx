@@ -11,8 +11,9 @@ import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
-import { type Palette, CARD } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -147,7 +148,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
         <PlaceChip place={place} palette={palette} onPress={onPlace} />
         {date && <Text style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>}
       </View>
-      <View style={{ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, padding: 6 }}>
+      <Card palette={palette} pad={6}>
         {ALL.map((key, i) => {
           const on = key === next;
           const faint = key === 'sunrise';
@@ -166,7 +167,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
             </View>
           );
         })}
-      </View>
+      </Card>
       {blocked && (
         <Pressable onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
           style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'center', paddingVertical: 4, opacity: pressed ? 0.7 : 1 })}>

@@ -19,6 +19,7 @@ import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -64,13 +65,13 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   </>;
 }
 
-function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
+function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const share = () => shareCard({ link: `https://namaq.vercel.app/quran/openings?kind=${card.kind}#${card.id}`, content: width => (
-    <View style={{ width, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+    <Card palette={palette} style={{ width }}>
       <Text style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
       <Rows card={card} palette={palette} still />
-    </View>
+    </Card>
   ) });
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
@@ -137,7 +138,7 @@ export default function OpeningsScreen() {
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
                 {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
               </View>
-              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} />)}
             </View>
           );
         })}
