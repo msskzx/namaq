@@ -2,11 +2,10 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
-import corpus from '@shared/quran/quranText/corpus';
-import type { BranchAyah } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
-import { indexAyat, searchAyat, searchable, type AyahSearch, type IndexedAyah } from '@shared/quran/ayahSearch';
+import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
+import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
 import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
@@ -22,9 +21,6 @@ const AROUND = 6;
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
 
-let indexed: IndexedAyah[] | undefined;
-/** The ayah word search runs on the bundled text, indexed the first time it is used. */
-const ayahIndex = () => (indexed ??= indexAyat(corpus.ayat as BranchAyah[]));
 
 type Row =
   | { kind: 'juz'; juz: number; page: number; key: string }
