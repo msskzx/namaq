@@ -202,7 +202,7 @@ test('listening starts from a long press, and its sheet keeps the repeats and th
 test('a forgotten word persists on its own and undo leaves an ayah mark intact', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'نسيتها', exact: true }).click();
+  await page.getByRole('button', { name: 'نسيت الكلمة', exact: true }).click();
   await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:0': { forgot: 1, at: expect.any(Number) } });
   await page.reload();
   await pressWord(page, HAMD);
