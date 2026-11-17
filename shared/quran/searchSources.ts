@@ -1,9 +1,8 @@
-import corpus from './quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import wordsData from '../data/quran/words.json';
 import poemData from '../tajwid/tuhfat-al-atfal.json';
-import type { BranchAyah } from './branches';
-import { indexAyat, searchAyat, type IndexedAyah } from './ayahSearch';
+import { searchAyat } from './ayahSearch';
+import { corpusIndex as ayahIndex } from './corpusIndex';
 import { branchInventory, distinctBranchPieces } from './branchInventory';
 import { searchSharedPhrases } from './branchSearch';
 import { curatedFor } from './curatedComparisons';
@@ -22,9 +21,6 @@ const words = wordsData as unknown as WordsData;
 const names: Record<number, string> = SURAH_NAMES;
 /** A compare page's name, as the compare pages title it. */
 export const pairName = (a: number, b: number) => (a === b ? `سورة ${names[a]} مع نفسها` : `سورة ${names[a]} وسورة ${names[b]}`);
-
-let indexed: IndexedAyah[] | undefined;
-const ayahIndex = () => (indexed ??= indexAyat(corpus.ayat as BranchAyah[]));
 
 /** Builds the ayah index ahead of the first search, so typing does not wait for it. */
 export const warmSearch = () => void ayahIndex();
