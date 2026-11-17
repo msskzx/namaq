@@ -4,7 +4,8 @@ import { BOOK_KINDS, BOOKS, type Book, type BookKind } from '@shared/books';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import { addBook, bookState, removeBook, useBooks } from '@/lib/books';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
+import Card from '@/ui/Card';
 
 export const size = (book: Book) => (book.builtIn ? 'مع التطبيق' : `${num(Math.round(book.megabytes * 10) / 10).replace('.', '٫')} م.ب`);
 
@@ -37,7 +38,6 @@ function BookRow({ book, palette, first }: { book: Book; palette: Palette; first
 /** The books of one kind, or all of them under their kinds, each with its download or remove button. */
 export function BookList({ kind, palette }: { kind?: BookKind; palette: Palette }) {
   useBooks();
-  const card = { ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card };
   const kinds = BOOK_KINDS.filter(k => !kind || k.kind === kind);
   return (
     <View style={{ gap: 10 }}>
@@ -46,7 +46,7 @@ export function BookList({ kind, palette }: { kind?: BookKind; palette: Palette 
         return (
           <View key={k.kind} style={{ gap: 6 }}>
             {!kind && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{k.title}</Text>}
-            <View style={card}>{books.map((book, i) => <BookRow key={book.id} book={book} palette={palette} first={i === 0} />)}</View>
+            <Card palette={palette} pad={0}>{books.map((book, i) => <BookRow key={book.id} book={book} palette={palette} first={i === 0} />)}</Card>
           </View>
         );
       })}

@@ -1,13 +1,14 @@
 import { useRef, type ComponentRef } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router, type Href } from 'expo-router';
 import { User, Users, type LucideProps } from 'lucide-react-native';
 import TopBar from '@/ui/TopBar';
-import { usePalette, CARD } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
+import Card from '@/ui/Card';
 
 // The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes): solo and party only, every kind of question is
 // chosen inside them (owner, 2026-11-17).
@@ -28,12 +29,11 @@ export default function QuizzesScreen() {
       <TopBar hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         {MODES.map(({ href, Icon, title, text }) => (
-          <Pressable key={title} onPress={() => router.push(href)} accessibilityRole="link"
-            style={({ pressed }) => ({ backgroundColor: pressed ? palette.paperDeep : palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 18, gap: 8, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
+          <Card key={title} onPress={() => router.push(href)} accessibilityRole="link" palette={palette} pad={18} gap={8}>
             <Icon size={44} color={palette.accent} strokeWidth={1.5} />
             <Text style={{ color: palette.ink, fontSize: 20, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
             <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 24, textAlign: 'right' }}>{text}</Text>
-          </Pressable>
+          </Card>
         ))}
       </ScrollView>
     </View>
