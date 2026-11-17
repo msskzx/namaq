@@ -15,6 +15,7 @@ below. Never copy one into a screen.
 | `Card` | The one card: radius 14, one colour, rule border; `pad` (or [top and bottom, sides]), `gap`, `spine`, `dashed`, `outline`, `picked`, `faded`, `clip`; with `onPress` the whole card is one button | every boxed block of content (feed posts, shelves, books, quizzes, Quran tools, sheets, share images) |
 | `Tabs` | The website's segmented row: framed, the open tab filled in the accent; `fill` stretches, `iconOnly` | a few views of one thing (read or recite, two books, contents/saved/search, the two kinds of oaths); a wrapping list of words or filters is chips |
 | `Chip` | A round framed word to pick in a wrapping row, filled in the accent when on; `lit` (+`tint`) stays framed for Quran words and surahs, `quran`, `check`, `dashed`, `small`, `count`, `onClear` (removable) | filters, settings with several values, topics, an ayah's words, a tree's surahs, a search's terms |
+| `Field` (+ `SearchField`) | The one text field: framed like a card, 44 tall, 16px, right-aligned; `multiline` for a note, `code` for a party's number; `SearchField` adds the magnifier and a clear button | every typed input except the recite writing boxes |
 | `Tap` | The one press: a finger that moved more than 10px (a scroll or swipe) never presses | inside every button piece and tappable card; a screen drawing one counts as a control |
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
 | `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`, `small` on the home recall card) |
@@ -29,4 +30,4 @@ below. Never copy one into a screen.
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | Small loader, app start screen, quiz timer | waiting |
 
 Coming (docs/plans/shared-first.md):
-`Field` / `SearchField`, `Empty`, one `Loading`.
+`Empty`, one `Loading`.

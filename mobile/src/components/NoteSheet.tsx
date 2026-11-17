@@ -5,12 +5,13 @@ import { shareAyah } from './AyahShare';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import Sheet from '@/ui/Sheet';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { ayahText } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { onLeave } from '@/lib/storage';
 import { surahName } from '@shared/quran/surahNames';
+import Field from '@/ui/Field';
 
 /** How long typing rests before the note is kept, so the reader behind the sheet is not redrawn on every key. */
 const SAVE_MS = 400;
@@ -52,8 +53,7 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
           )}
         </View>
         {shown && <Text numberOfLines={2} style={{ color: palette.muted, fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{ayahText(shown)}</Text>}
-        <TextInput value={text} onChangeText={edit} multiline autoFocus={!!shown && !readAyahNotes()[shown]} placeholder="تأملك في هذه الآية" placeholderTextColor={palette.muted} accessibilityLabel="تأملك في هذه الآية"
-          style={{ flex: 1, minHeight: 140, borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 12, color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right', textAlignVertical: 'top', backgroundColor: palette.card }} />
+        <Field value={text} onChangeText={edit} multiline autoFocus={!!shown && !readAyahNotes()[shown]} placeholder="تأملك في هذه الآية" label="تأملك في هذه الآية" palette={palette} style={{ flex: 1 }} />
       </View>
     </Sheet>
   );

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import Sheet from '@/ui/Sheet';
-import { Text, TextInput } from '@/ui/Text';
-import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw, Search } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
+import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw } from 'lucide-react-native';
 import type { SurahPair } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
@@ -13,6 +13,7 @@ import { isMemorizedScope, memorizedScope, readMemorized, subscribeMemorized, ty
 import { isBoolean, readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { SearchField } from '@/ui/Field';
 
 const SORT_KEY = 'compare-pairs-sort';
 
@@ -90,7 +91,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   const otherOf = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
 
 
-  const field = { borderWidth: 1, borderColor: palette.rule, borderRadius: 8, color: palette.ink, fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, backgroundColor: palette.paper };
   const sortButton = (active: boolean) => ({ flex: 1, flexDirection: 'row' as const, alignItems: 'center' as const, justifyContent: 'center' as const, gap: 6, paddingVertical: 8, borderRadius: 8, backgroundColor: active ? palette.accent : 'transparent' });
 
   const renderRow = ({ item }: { item: Row }) => {
@@ -122,11 +122,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   return (
     <Sheet open={open} onClose={onClose} tall palette={palette}>
       <View style={{ flex: 1, paddingHorizontal: 12, gap: 8 }}>
-          <View style={{ justifyContent: 'center' }}>
-            <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن سورة: الطور، ٥٢…" placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن سورة"
-              style={[field, { paddingRight: 34, textAlign: 'right' }]} />
-            <View pointerEvents="none" style={{ position: 'absolute', right: 10 }}><Search size={16} color={palette.muted} /></View>
-          </View>
+          <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن سورة: الطور، ٥٢…" label="ابحث عن سورة" palette={palette} />
           <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2 }} accessibilityLabel="ترتيب القائمة">
             {[{ count: false, label: 'ترتيب المصحف', Icon: ArrowDown01 }, { count: true, label: 'الأكثر تشابهًا', Icon: ArrowDownWideNarrow }].map(({ count, label, Icon }) => (
               <Pressable key={label} onPress={() => { setByCount(count); writeJson(SORT_KEY, count); }} accessibilityRole="button" accessibilityState={{ selected: byCount === count }} style={sortButton(byCount === count)}>

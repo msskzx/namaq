@@ -9,7 +9,7 @@ import { entryLabel, entryOfAyah, pageOfSpot, paragraphsOf, runsIn, searchBook, 
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, readSavedParagraphs, serverFasilas, serverSavedParagraphs, setBookFasila, setLastBookSpot, lastBookSpot, subscribeFasilas, subscribeSavedParagraphs, toggleSavedParagraph } from '@shared/readingMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import ReaderPager from '@/components/ReaderPager';
@@ -27,6 +27,7 @@ import { buzz } from '@/lib/haptics';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Tabs from '@/ui/Tabs';
+import { SearchField } from '@/ui/Field';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
@@ -298,11 +299,7 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
       )}
       {kept === 'search' && (
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, marginBottom: 6, borderBottomWidth: 1, borderColor: palette.rule }}>
-            <Search size={18} color={palette.accent} />
-            <TextInput value={query} onChangeText={setQuery} placeholder="كلمة أو عبارة في الكتاب" placeholderTextColor={palette.muted} accessibilityLabel="ابحث في الكتاب"
-              returnKeyType="search" style={{ flex: 1, fontSize: 16, paddingVertical: 8, color: palette.ink, textAlign: 'right' }} />
-          </View>
+          <SearchField value={query} onChangeText={setQuery} placeholder="كلمة أو عبارة في الكتاب" label="ابحث في الكتاب" palette={palette} style={{ marginHorizontal: 16, marginBottom: 6 }} />
           {found.query === query && query.trim() && (
             <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 16, textAlign: 'right' }}>
               {found.hits.length ? `${found.more ? 'أول ' : ''}${num(found.hits.length)} موضعًا` : 'لا يوجد هذا في الكتاب.'}

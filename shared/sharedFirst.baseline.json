@@ -49,9 +49,8 @@
   "appBoxes": {
     "mobile/src/components/AyahPreviewSheet.tsx": 1,
     "mobile/src/components/Books.tsx": 1,
-    "mobile/src/components/BranchSearch.tsx": 1,
     "mobile/src/components/CompareCard.tsx": 2,
-    "mobile/src/components/CompareSheet.tsx": 6,
+    "mobile/src/components/CompareSheet.tsx": 5,
     "mobile/src/components/CompareTargetsSheet.tsx": 1,
     "mobile/src/components/CrashScreen.tsx": 1,
     "mobile/src/components/EvidenceSheet.tsx": 1,
@@ -61,7 +60,6 @@
     "mobile/src/components/ListenSheet.tsx": 4,
     "mobile/src/components/MatrixCard.tsx": 4,
     "mobile/src/components/Memorized.tsx": 7,
-    "mobile/src/components/NoteSheet.tsx": 1,
     "mobile/src/components/OpenInBook.tsx": 1,
     "mobile/src/components/PageVideo.tsx": 1,
     "mobile/src/components/QuestionDots.tsx": 1,
@@ -77,7 +75,7 @@
     "mobile/src/components/TabHint.tsx": 2,
     "mobile/src/components/Tour.tsx": 2,
     "mobile/src/components/TreePager.tsx": 1,
-    "mobile/src/components/Utilities.tsx": 14,
+    "mobile/src/components/Utilities.tsx": 13,
     "mobile/src/components/VideoSheet.tsx": 2,
     "mobile/src/components/WordSheet.tsx": 1,
     "mobile/src/lib/theme.ts": 1,
@@ -86,11 +84,8 @@
     "mobile/src/screens/library.tsx": 1,
     "mobile/src/screens/openings.tsx": 1,
     "mobile/src/screens/prophets.tsx": 1,
-    "mobile/src/screens/quiz/party/code.tsx": 6,
-    "mobile/src/screens/quiz/party/index.tsx": 1,
-    "mobile/src/screens/search.tsx": 1,
-    "mobile/src/screens/tuhfa.tsx": 2,
-    "mobile/src/screens/words.tsx": 1
+    "mobile/src/screens/quiz/party/code.tsx": 5,
+    "mobile/src/screens/tuhfa.tsx": 2
   },
   "webControls": {
     "src/app/events/page.tsx": 1,

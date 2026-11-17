@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text, TextInput } from '@/ui/Text';
-import { Search } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
 import { ayatCount, num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
@@ -14,6 +13,7 @@ import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
+import { SearchField } from '@/ui/Field';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
@@ -87,13 +87,8 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
     <Sheet open={open} onClose={onClose} palette={palette} tall>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         {recite && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22 }}>اختر سورة أو جزءًا أو آية. تُخفى الآيات في مواضعها من الصفحة، وتُظهر كل لمسة الآية التالية.</Text>}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: 1, borderColor: palette.rule }}>
-          <Search size={18} color={palette.accent} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="سورة، أو آية برقمها (٢:٢٥٥) أو بكلماتها"
-            placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن سورة أو آية" returnKeyType="search"
-            onSubmitEditing={() => reference && go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })}
-            style={{ flex: 1, fontSize: 16, paddingVertical: 8, color: palette.ink, textAlign: 'right' }} />
-        </View>
+        <SearchField value={query} onChangeText={setQuery} placeholder="سورة، أو آية برقمها (٢:٢٥٥) أو بكلماتها" label="ابحث عن سورة أو آية" palette={palette}
+          onSubmitEditing={() => reference && go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })} />
         {reference && (
           <Pressable style={[button, { alignSelf: 'flex-start' }]} accessibilityRole="button"
             onPress={() => go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })}>
