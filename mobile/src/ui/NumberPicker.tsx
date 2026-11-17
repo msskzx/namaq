@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { Palette } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 const ROW = 44;
 const SHOWN = 5;
@@ -22,11 +23,11 @@ export function NumberList({ value, onPick, max, min = 1, nameOf, palette, shown
         renderItem={({ item }) => {
           const active = item === value;
           return (
-            <Pressable onPress={() => onPick(item)} accessibilityRole="button" accessibilityLabel={`${num(item)} ${nameOf?.(item) ?? ''}`.trim()} accessibilityState={{ selected: active }}
+            <Tap onPress={() => onPick(item)} accessibilityRole="button" accessibilityLabel={`${num(item)} ${nameOf?.(item) ?? ''}`.trim()} accessibilityState={{ selected: active }}
               style={{ height: ROW, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 10, backgroundColor: active ? palette.accent : 'transparent' }}>
               <Text style={{ color: active ? palette.onAccent : palette.ink, fontSize: 16, minWidth: 28 }}>{num(item)}</Text>
               <Text numberOfLines={1} style={{ flex: 1, color: active ? palette.onAccent : palette.muted, fontSize: 15, textAlign: 'right' }}>{nameOf?.(item) ?? ''}</Text>
-            </Pressable>
+            </Tap>
           );
         }} />
     </View>
@@ -50,12 +51,12 @@ export default function NumberPicker({ value, onChange, max, min = 1, label, nam
   const name = nameOf?.(value);
   return (
     <View style={{ flex: 1, gap: 4 }}>
-      <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`${label} ${num(value)}${name ? ` ${name}` : ''}`} accessibilityState={{ expanded: open }}
+      <Tap onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityLabel={`${label} ${num(value)}${name ? ` ${name}` : ''}`} accessibilityState={{ expanded: open }}
         style={{ height: 44, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: open ? palette.accent : palette.rule, borderRadius: 8, paddingHorizontal: 10 }}>
         <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '600' }}>{num(value)}</Text>
         <Text numberOfLines={1} style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'right' }}>{name ?? ''}</Text>
         <Chevron size={18} color={palette.muted} />
-      </Pressable>
+      </Tap>
       {open && !controlled && <NumberList value={value} onPick={item => { onChange(item); setOpen(false); }} max={max} min={min} nameOf={nameOf} palette={palette} />}
     </View>
   );

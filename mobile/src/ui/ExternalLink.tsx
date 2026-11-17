@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
-import { Linking, Pressable, type StyleProp, type TextStyle } from 'react-native';
+import { Linking, type StyleProp, type TextStyle } from 'react-native';
 import { SquareArrowOutUpLeft } from 'lucide-react-native';
 import { Text, UI_SCALE } from '@/ui/Text';
+import { Tap } from '@/ui/Tap';
 
 /** Opens a page outside the app in the phone's browser. */
 export const openExternal = (url: string) => { void Linking.openURL(url).catch(() => {}); };
@@ -15,11 +16,11 @@ export default function ExternalLink({ url, color, size = 14, style, accessibili
   url: string; color: string; size?: number; style?: StyleProp<TextStyle>; accessibilityLabel?: string; children: ReactNode;
 }) {
   return (
-    <Pressable onPress={() => openExternal(url)} accessibilityRole="link" accessibilityLabel={accessibilityLabel} hitSlop={10}
+    <Tap onPress={() => openExternal(url)} accessibilityRole="link" accessibilityLabel={accessibilityLabel} hitSlop={10}
       style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
       <Text style={[{ color, fontSize: size }, style]}>
         {children}<Text style={{ textDecorationLine: 'none' }}>{'\u00A0'}</Text><SquareArrowOutUpLeft size={Math.round(size * UI_SCALE * 0.8)} color={color} />
       </Text>
-    </Pressable>
+    </Tap>
   );
 }

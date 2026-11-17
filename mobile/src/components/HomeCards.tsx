@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
@@ -18,6 +18,7 @@ import type { CompareTarget } from '@/lib/compare';
 import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
 import { QURAN_FONT, type Palette, CARD } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
 const WAYS: Record<CardWay['to'], { label: string; Icon: (props: LucideProps) => React.ReactNode }> = {
@@ -42,7 +43,7 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
     else box.current?.measureInWindow((x: number, y: number, width: number) => onPress({ x: x + width / 2, y: y + 24 }));
   };
   return (
-    <Pressable ref={box} onPress={event => open(event.nativeEvent)} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
+    <Tap ref={box} onPress={event => open(event.nativeEvent)} accessibilityRole="button" accessibilityLabel={`${label}: ${card.text}`}
       style={({ pressed }) => ({ width: wide ? '100%' : 250, minHeight: wide ? 0 : 200, padding: 14, gap: 10, borderWidth: 1, borderStartWidth: 5, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, opacity: pressed ? 0.75 : card.open ? 1 : 0.6 })}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
         <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
@@ -59,7 +60,7 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
       {note
         ? <Text numberOfLines={wide ? undefined : 6} style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
         : <Text numberOfLines={wide ? undefined : 5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>}
-    </Pressable>
+    </Tap>
   );
 }
 

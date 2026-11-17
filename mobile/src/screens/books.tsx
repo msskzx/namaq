@@ -1,5 +1,5 @@
 import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, ScrollView, useWindowDimensions, View } from 'react-native';
 import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -15,6 +15,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
 import { CARD, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 
 /** Tuhfat al-Atfal is a poem with a page of its own (screens/tuhfa.tsx), shelved with the books. It ships with the app and has nothing to manage. */
 const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
@@ -43,7 +44,6 @@ export default function LibraryScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll>
-        <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 19, textAlign: 'right' }}>المكتبة</Text>
         <IconButton Icon={editing ? Check : Pencil} label={editing ? 'تم' : 'تعديل الكتب'} onPress={() => setEditing(!editing)} on={editing} />
       </TopBar>
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
@@ -91,10 +91,10 @@ function Action({ book, state, editing, palette }: { book: Book; state: BookStat
 
 function Button({ Icon, label, press, muted, palette }: { Icon: typeof Trash2; label: string; press: () => void; muted: boolean; palette: Palette }) {
   return (
-    <Pressable onPress={press} accessibilityRole="button" accessibilityLabel={label}
+    <Tap onPress={press} accessibilityRole="button" accessibilityLabel={label}
       style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
       <Icon size={20} color={muted ? palette.muted : palette.accent} />
-    </Pressable>
+    </Tap>
   );
 }
 
@@ -124,8 +124,8 @@ function Card({ palette, label, onPress, kind, title, by, foot = null, action, f
   // reaches its button: a pressable card would read as one element with the button folded inside it.
   if (!onPress) return <View style={look}>{body}</View>;
   return (
-    <Pressable onPress={onPress} accessibilityRole="link" accessibilityLabel={label} style={({ pressed }) => [look, pressed && { backgroundColor: palette.paperDeep }]}>
+    <Tap onPress={onPress} accessibilityRole="link" accessibilityLabel={label} style={({ pressed }) => [look, pressed && { backgroundColor: palette.paperDeep }]}>
       {body}
-    </Pressable>
+    </Tap>
   );
 }

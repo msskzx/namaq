@@ -300,11 +300,11 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await expect(page.getByRole('button', { name: /^افتح الأعراف .* في المصحف$/ }).first()).toBeInViewport();
 });
 
-test('the words page shows its source and how it counts behind the books icon', async ({ page }) => {
+test('the words page shows its source and how it counts in the page, collapsed', async ({ page }) => {
   await open(page, '/words');
-  await expect(page.getByRole('button', { name: 'مساعدة' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'المصادر' }).click();
-  await expect(page.getByText('المدوّنة القرآنية العربية', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'المصادر' })).toHaveCount(0);
+  await expect(page.getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toHaveCount(0);
+  await page.getByRole('button', { name: /المصدر: المدوّنة القرآنية العربية/ }).click();
   await expect(page.getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toBeVisible();
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
   await page.getByRole('link', { name: 'المصادر والتراخيص' }).click();
