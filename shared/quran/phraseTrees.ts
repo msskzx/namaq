@@ -15,7 +15,7 @@ const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const members = (occurrences: PhraseOccurrence[]) => [...new Set(occurrences.map(o => o.key))];
 const phraseId = (words: string[]) => words.map(letters).join(' ');
 
-const withoutConjunction = (word: string, conjunction: string | null | undefined) => {
+export const withoutConjunction = (word: string, conjunction: string | null | undefined) => {
   if (!conjunction) return word;
   let at = 1;
   while (at < word.length && normalizeWord(word[at]) === '') at++;

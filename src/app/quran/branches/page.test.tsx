@@ -19,7 +19,7 @@ import { subtreeIndex } from '@shared/quran/subtrees';
 import { comparisonId } from '@shared/quran/mutashabih/identity';
 import { resolveTree } from '@/lib/quran/branchTreeLinks';
 import { inJuzRange } from '@shared/quran/juz';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { branchInventory } from '@shared/quran/branchInventory';

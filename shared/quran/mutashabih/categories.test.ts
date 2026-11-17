@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import artifact from '../../data/quran/mutashabih.json';
-import corpus from '../../data/quran/trees.json';
+import corpus from '../quranText/corpus';
 import manifest from './categories.json';
 import { groups } from './data';
 import { groupHasId } from './identity';

@@ -293,6 +293,14 @@ export function runOn(from: string, next: Pick<BranchAyah, 'key' | 'words' | 'ro
   };
 }
 
+const runParts = (from: string, run: BranchAyah[], basmala: RunOn | undefined) => run.map((next, j) => runOn(j ? run[j - 1].key : from, next, basmala));
+const runWords = (run: BranchAyah[], parts: RunOn[]) => parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]);
+
+/** The words an ayah runs on with (`next`): the ayat after it up to `through`, a basmala before a new surah, ayah ends between. */
+export function nextWords(from: string, run: BranchAyah[], basmala: RunOn | undefined): string[] {
+  return runWords(run, runParts(from, run, basmala));
+}
+
 /** The ayat that follow, in mushaf order and across surahs, until this ayah's run parts from every identical twin's. */
 function following(ayah: BranchAyah, twins: BranchAyah[], after: (key: string) => BranchAyah | undefined): BranchAyah[] {
   const run = (from: BranchAyah, length: number) => {
@@ -319,11 +327,11 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
       const twins = own.filter(other => other.key !== ayah.key && identical(own[i], other));
       const run = twins.length ? following(ayah, twins, after) : (continues(ayah, group) || continues(own[i], own)) && after(ayah.key) ? [after(ayah.key)] : [];
       if (!run.length) return ayah;
-      const parts = run.map((next, j) => runOn(j ? run[j - 1].key : ayah.key, next, basmala));
+      const parts = runParts(ayah.key, run, basmala);
       const joined = <T,>(pick: (next: RunOn) => T[]) => parts.flatMap((next, j) => [...(j ? [null] : []), ...pick(next)]);
       return {
         ...ayah,
-        next: parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]),
+        next: runWords(run, parts),
         ...(run[0].roots && { nextRoots: joined(next => next.roots!) }),
         ...(run[0].lemmas && { nextLemmas: joined(next => next.lemmas!) }),
         through: run[run.length - 1].key,

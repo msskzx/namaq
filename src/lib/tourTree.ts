@@ -1,4 +1,4 @@
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { branchInventory } from '@shared/quran/branchInventory';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';

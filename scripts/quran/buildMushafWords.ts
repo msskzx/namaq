@@ -1,10 +1,11 @@
+import corpus from '../../shared/quran/quranText/corpus';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { BranchAyah } from '../../shared/quran/branches';
 import type { MushafPage } from '../../shared/quran/readerPage';
 
 const root = join(__dirname, '../..');
-const ayat: BranchAyah[] = JSON.parse(readFileSync(join(root, 'shared/data/quran/trees.json'), 'utf8')).ayat;
+const ayat: BranchAyah[] = corpus.ayat;
 const reader = new Map<string, string[]>();
 let surah = 0;
 let ayah = 1;

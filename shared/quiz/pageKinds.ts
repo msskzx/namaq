@@ -2,7 +2,7 @@
 // tab holds only solo and party). «أوائل السور»: a surah's name, and its first ayah to write; «اكتب أول الآية وآخرها»: an
 // ayah's first and last words to write in their places. Graded by what is written: حفظتها when every word is right.
 // Only the ayat's keys and pages are read here, for the range and filters; the words are the page's own (QuizPage).
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import { num } from '../quran/arabicNumber';
 import type { BranchAyah } from '../quran/branches';

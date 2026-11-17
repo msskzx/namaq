@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
 import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, orderInJuz, orderSurahs } from './surahOrder';

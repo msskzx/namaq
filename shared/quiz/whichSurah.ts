@@ -1,6 +1,6 @@
 // «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one,
 // medium its neighbours, hard asks ayat with a close look-alike in another surah and always offers that surah.
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';

@@ -1,5 +1,5 @@
 import generated from '@shared/data/quran/compareCards';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import type { PairCard, StoredCards } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { dailyIndex, dailyPair as pairOfDay, dayNumber, feedTrees } from '@shared/dailyPick';

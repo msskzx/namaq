@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { branchesHref, conjunctions, linkId, stem, openingId, pageAyat, searchKey, searchPhrases, sharedOpenings, withConjunctions, withNext, type BranchAyah } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 

@@ -5,7 +5,7 @@ import { branchNodes, spelled } from '@shared/quiz/branchAnswers';
 import { branchQuestions } from '@shared/quiz/branchQuestions';
 import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { isAsked } from '@shared/quiz/score';
 import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';

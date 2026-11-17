@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import surahs from '@shared/data/quran/surahs.json';
 import { CONDITION_SPANS, conditionLines, openingCards } from '@shared/quran/openingKinds';
 import type { BranchAyah } from '@shared/quran/branches';

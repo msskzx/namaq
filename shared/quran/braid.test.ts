@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { braid, compareTree } from './braid';
 import { keys, type Branch } from './branches';
 import type { CardSide } from './compareCards';

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { grown, type BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext } from '@shared/quran/ayahContext';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { loadReaderAyat } from './readerAyat';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });

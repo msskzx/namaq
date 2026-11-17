@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { BranchAyah, WordFeatures } from '../../shared/quran/branches';
 import { buildGroups, KINDS, TAGS } from '../../src/lib/quran/mutashabih/engine';
-import source from '../../shared/data/quran/trees.json';
+import source from '../../shared/quran/quranText/corpus';
 
 const features = new Map<string, WordFeatures[]>();
 const corpus = readFileSync(join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');

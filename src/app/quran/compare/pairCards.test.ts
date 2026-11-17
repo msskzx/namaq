@@ -6,7 +6,7 @@ import within from './withinPairs.json';
 import curatedLinks from '@/lib/quran/curation/compareLinks.json';
 import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { normalizeWord } from '@shared/quran/normalize';
 import { compareLinkFor, compareLinksFor, engineCards, listedPairs, pairCards, reviewPairs, reviewStates, stepsBack, storyCards, timelineParts } from './pairCards';
 import { shownCards, type PairCard, type StoredCards } from '@shared/quran/compareCards';

@@ -1,5 +1,5 @@
 import type { BrowserContext, WebSocketRoute } from '@playwright/test';
-import corpus from '../../shared/data/quran/trees.json';
+import corpus from '../../shared/quran/quranText/corpus';
 import { act, createParty, viewFor, type Action, type PartyQuestion, type PartyState } from '../../shared/party/rules';
 import type { BranchAyah } from '../../shared/quran/branches';
 import { branchQuestionPool, branchQuiz } from '../../shared/quiz/branchQuestions';

@@ -1,6 +1,6 @@
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import type { Branch, BranchAyah, Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { askedNodes, branchNodes } from '@shared/quiz/branchAnswers';

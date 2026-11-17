@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ayatLabel, shownAyat, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { createPhrasePresenter, type PhraseGroup } from './phraseTrees';
-import treeData from '../data/quran/trees.json';
+import treeData from './quranText/corpus';
 
 const all = treeData.ayat as BranchAyah[];
 const byKey = new Map(all.map(ayah => [ayah.key, ayah]));
