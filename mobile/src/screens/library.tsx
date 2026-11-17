@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, ChevronDown, LightbulbOff, NotebookPen } from 'lucide-react-native';
+import { Check, LightbulbOff, NotebookPen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
+import BarPicker from '@/ui/BarPicker';
 import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import { toTab } from '@/lib/ways';
@@ -19,11 +20,7 @@ function Picker({ tab, onTab, palette }: { tab: Tab; onTab: (tab: Tab) => void; 
   const name = TABS.find(item => item.tab === tab)!.label;
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`اختر القائمة: ${name}`}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 7 }}>
-        <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 15 }}>{name}</Text>
-        <ChevronDown size={14} color={palette.ink} />
-      </Pressable>
+      <BarPicker text={name} label={`اختر القائمة: ${name}`} onPress={() => setOpen(true)} />
       <Sheet open={open} onClose={() => setOpen(false)} palette={palette}>
         <View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
           {TABS.map(item => (

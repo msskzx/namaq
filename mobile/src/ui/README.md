@@ -11,6 +11,8 @@ below. Never copy one into a screen.
 | `IconButton` | Icon-only button: `bar` (22 in 40) or `small` (18 in 28), tone muted/ink/accent/green, `on` colours the icon (no square), `round` filled accent circle for a bar's main action, `dot`, `expanded`, `role="link"` | every button that shows only an icon |
 | `ActButton` | Icon with its name under it; coloured icon when on | long-press and card menus |
 | `TopBar` | Logo, hub, shelf or back on the right; `title` or `middle` beside back; page buttons; help, sources, gear; see-through, hides on scroll | every screen's top bar, pushed screens included |
+| `BarPicker` | A top bar's dropdown: text, chevron, no border; optional icon and count | the open list or item in a top bar (timeline, saved lists, compare, Tuhfa) |
+| `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes | every sheet |
 | `Toggle` | On means knob on the right | every on/off setting |

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { hiddenProps, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Compass, LayoutGrid, Library, LibraryBig, Settings, CircleHelp, Search } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
@@ -29,7 +30,9 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * A pushed screen (a quiz, the library, an ayah, a prophet's story) passes back and a title, or middle for something that
  * takes the title's room (the quiz's question circles): one bar for every screen (owner, 2026-11-17: shared first).
  */
-export default function TopBar({ children, title, middle, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+export default function TopBar({ children, title, middle, away: putAway = false, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+  /** The whole bar slides up off the screen (the mushaf while reading); it stays drawn, so it comes back the same way. */
+  away?: boolean;
   /** A pushed screen's short title, beside the back arrow. */
   title?: string;
   /** Drawn in the title's place, taking the bar's room (the quiz's question circles). */
@@ -53,15 +56,16 @@ export default function TopBar({ children, title, middle, bare = false, settings
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
-  const hidden = useCompact() && hideOnScroll;
-  const away = useSharedValue(0);
-  useEffect(() => { away.value = withTiming(hidden ? 1 : 0, { duration: 180 }); }, [hidden, away]);
-  const row = useAnimatedStyle(() => ({ height: interpolate(away.value, [0, 1], [HEIGHT, 0]), opacity: interpolate(away.value, [0, 0.6], [1, 0], 'clamp') }));
+  // Scrolling down, the row folds away under the status bar; put away, the whole bar leaves. Both move as every bar does (ui/motion).
+  const folded = useCompact() && hideOnScroll;
+  const row = useSlideAway(folded, 'top', HEIGHT);
+  const bar = useSlideAway(putAway, 'top', insets.top + HEIGHT);
   return (
-    <View style={{ paddingTop: insets.top, overflow: 'hidden' }}>
+    <Animated.View {...hiddenProps(putAway)} style={[{ paddingTop: insets.top, overflow: 'hidden' }, bar.content]}>
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
-      <Animated.View style={[{ overflow: 'hidden', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
+      <Animated.View {...hiddenProps(folded)} style={[{ overflow: 'hidden' }, row.frame]}>
+      <Animated.View style={[{ height: HEIGHT, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row.content]}>
         {bare ? null : hub
           ? <Pressable onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <LayoutGrid size={24} color={palette.ink} />
@@ -89,7 +93,8 @@ export default function TopBar({ children, title, middle, bare = false, settings
         {search && <IconButton Icon={Search} label="البحث" onPress={search} />}
         {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
       </Animated.View>
+      </Animated.View>
       {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}
-    </View>
+    </Animated.View>
   );
 }
