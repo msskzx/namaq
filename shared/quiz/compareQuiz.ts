@@ -2,23 +2,18 @@
 // one ayah given whole, the other blank wherever its wording parts from it (the card's braid, shared/quran/braid.ts).
 import generated from '../data/quran/compareCards';
 import corpus from '../data/quran/trees.json';
-import surahRows from '../data/quran/surahs.json';
 import type { BranchAyah } from '../quran/branches';
 import { braidOf, type BraidStrand } from '../quran/braid';
 import { shownCards, type PairCard, type StoredCards } from '../quran/compareCards';
 import { writtenLinks } from '../quran/compareCardLook';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { likeness } from '../quran/wordMatch';
-import { num } from '../quran/arabicNumber';
 import { spoken } from './branchAnswers';
 import { byDifficulty, levelOf, treeScore, type Difficulty } from './difficulty';
-import { COMPARE_QUIZ, type CompareAsk, type CompareLine, type Tone } from './compareAnswers';
+import { COMPARE_QUIZ, compareLabel, type CompareAsk, type CompareLine, type Tone } from './compareAnswers';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
 import { shuffle, type Random } from './random';
 
-const names = Object.fromEntries(surahRows.map(row => [row.number, row.name])) as Record<number, string>;
-/** «يس ٥٣»: surah first, then ayah. */
-export const compareLabel = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${names[surah]} ${num(ayah)}`; };
 
 /** A card asked one way: the side given whole and the blanks on the other. */
 type Asked = { card: PairCard; ask: CompareAsk; level: Difficulty };

@@ -1,6 +1,8 @@
 // The compare quiz (owner, 2026-11-17): one compare card asked as its matrix, one ayah given whole and the other blank where
 // it parts from it. Grading follows the tree quiz's leaf rule: the first two words of each blank are enough.
 // Light on purpose: the party server grades with it (score.ts).
+import surahRows from '../data/quran/surahs.json';
+import { num } from '../quran/arabicNumber';
 import type { Likeness } from '../quran/wordMatch';
 import { LEAF_WORDS, matchedWords, rightWords, spoken, withoutRepeat } from './branchAnswers';
 import type { Correction } from './feedback';
@@ -16,6 +18,10 @@ export type CompareLine = { key: string; words: string[]; tones: Tone[] };
 export type CompareAsk = { card: string; shown: CompareLine; asked: CompareLine; blanks: [number, number][] };
 
 type Asking = { compare?: CompareAsk };
+
+const names = Object.fromEntries(surahRows.map(row => [row.number, row.name])) as Record<number, string>;
+/** «يس ٥٣»: surah first, then ayah. */
+export const compareLabel = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${names[surah]} ${num(ayah)}`; };
 
 export const blankWords = (ask: CompareAsk, blank: number) => ask.asked.words.slice(...ask.blanks[blank]);
 

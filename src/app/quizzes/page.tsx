@@ -411,7 +411,7 @@ export default function QuizzesPage() {
               ) : (
                 <Button variant="primary" onClick={() => {
                   setAnswers((previous) => ({
-                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, branchesCorrect(questions[Number(index)], value) ? questions[Number(index)].correctAnswer : ""])),
+                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, (questions[Number(index)].compare ? questionPoints(questions[Number(index)], value).earned === questionPoints(questions[Number(index)], value).total : branchesCorrect(questions[Number(index)], value)) ? questions[Number(index)].correctAnswer : ""])),
                     ...previous,
                   }));
                   setSubmitted(true);

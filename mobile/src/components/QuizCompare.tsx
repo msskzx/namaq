@@ -6,8 +6,7 @@ import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-
 import { Text, TextInput } from '@/components/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { markColour } from '@shared/quran/compareCardLook';
-import { addCompareHint, blankWords, compareCorrections, compareHintsOf, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
-import { compareLabel } from '@shared/quiz/compareQuiz';
+import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
 import { neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import type { Hints } from '@shared/quiz/hints';
 import { quranText } from '@/lib/quranText';

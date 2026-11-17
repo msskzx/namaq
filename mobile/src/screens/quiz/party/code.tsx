@@ -164,13 +164,17 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
   const branches = settings.topics.includes('BRANCHES');
   const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
-  const others = settings.topics.some(topic => topic !== 'BRANCHES');
+  // Trees and compare questions are typed, so they run on the longer time.
+  const typed = settings.topics.filter(topic => topic === 'BRANCHES' || topic === 'COMPARE');
+  const typedLabel = branches && typed.length === 1 ? 'وقت سؤال الشجرة' : 'وقت سؤال الكتابة';
+  const others = settings.topics.some(topic => topic !== 'BRANCHES' && topic !== 'COMPARE');
   if (!editable) {
     const rows: [string, string][] = [
       ['الأسئلة', settings.topics.map(topic => PARTY_KINDS.find(kind => kind.id === topic)?.name).filter(Boolean).join('، ')],
       ['عدد الأسئلة', num(settings.length)],
       ...(ranged ? [[branches ? 'الأشجار' : 'النطاق', scopeSummary(settings, true, branches)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]]] as [string, string][] : []),
-      ...(branches ? [['الإجابات في كل شجرة', num(settings.leaves)], ['وقت سؤال الشجرة', duration(settings.treeSeconds)]] as [string, string][] : []),
+      ...(branches ? [['الإجابات في كل شجرة', num(settings.leaves)]] as [string, string][] : []),
+      ...(typed.length ? [[typedLabel, duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
     return (
@@ -202,7 +206,11 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
         <>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
-          <Label palette={palette}>وقت سؤال الشجرة</Label>
+        </>
+      )}
+      {typed.length > 0 && (
+        <>
+          <Label palette={palette}>{typedLabel}</Label>
           <Row>{TREE_SECONDS.map(value => <Button key={value} label={duration(value)} active={settings.treeSeconds === value} onPress={() => change({ treeSeconds: value })} />)}</Row>
         </>
       )}
