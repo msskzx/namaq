@@ -4651,7 +4651,9 @@
   },
   "tree:0myp8ve10hwsmu": {
    "keep": true,
-   "why": "'amanu billah' then wa rasulih vs wa rusulih vs wal-yawm: easy to swap"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'amanu billah' then wa rasulih vs wa rusulih vs wal-yawm: easy to swap",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ozij4o0dy5loc": {
    "keep": true,
@@ -4667,7 +4669,9 @@
   },
   "tree:0slz79a01y92hs": {
    "keep": true,
-   "why": "2:41 and 4:47 both 'musaddiqan lima ma'akum'; anzaltu vs nazzalna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 2:41 and 4:47 both 'musaddiqan lima ma'akum'; anzaltu vs nazzalna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1pdntrd11am205": {
    "keep": false,
@@ -4764,7 +4768,9 @@
   },
   "tree:07p59r90mgw1wp": {
    "keep": true,
-   "why": "'lawla unzila alayhi ayatun min rabbih' x4 plus identical 6:4/36:46"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'lawla unzila alayhi ayatun min rabbih' x4 plus identical 6:4/36:46",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1w4bbhf1ld4x4l": {
    "keep": true,
@@ -4884,7 +4890,9 @@
   },
   "tree:1r62ala0kj2v6g": {
    "keep": true,
-   "why": "Adds 6:106 'ma uhiya' form; yuha vs uhiya swap risk"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adds 6:106 'ma uhiya' form; yuha vs uhiya swap risk",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1g0yjfr0mssp71": {
    "keep": true,
@@ -4924,7 +4932,9 @@
   },
   "tree:0n1e3ji1w8can0": {
    "keep": true,
-   "why": "'ittabi'u ma anzala Allah' 2:170 vs 31:21 alfayna/wajadna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ittabi'u ma anzala Allah' 2:170 vs 31:21 alfayna/wajadna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0tc7mbo0ndco6o": {
    "keep": true,
@@ -5068,7 +5078,9 @@
   },
   "tree:0de4waq1bebwpc": {
    "keep": true,
-   "why": "'utlu ma uhiya ilayka min' kitab rabbik vs al-kitab"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'utlu ma uhiya ilayka min' kitab rabbik vs al-kitab",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1en6c0b0hj639p": {
    "keep": true,
@@ -5156,7 +5168,9 @@
   },
   "tree:044hx5f1cfaldx": {
    "keep": true,
-   "why": "'ila ajalin musamma' slips: yu'akhkhirukum / yu'akhkhiruhum, many tails"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ila ajalin musamma' slips: yu'akhkhirukum / yu'akhkhiruhum, many tails",
+   "view": "matrix",
+   "checked": true
   },
   "tree:12w92h41pwu56c": {
    "keep": true,
@@ -5184,8 +5198,10 @@
   },
   "tree:1ftoon00u0367w": {
    "keep": true,
-   "why": "Lut pair 7:80/29:28 identical; other four places are noise",
-   "ask": "Keep for the Lut pair, or drop since four of six places are unrelated?"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Lut pair 7:80/29:28 identical; other four places are noise",
+   "ask": "Keep for the Lut pair, or drop since four of six places are unrelated?",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1f85bzd1i8os4l": {
    "keep": true,
@@ -5237,7 +5253,9 @@
   },
   "tree:1ye159v1rle6un": {
    "keep": true,
-   "why": "5:48 vs 5:49 'fahkum/wa an ihkum baynahum bima anzala Allah'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 5:48 vs 5:49 'fahkum/wa an ihkum baynahum bima anzala Allah'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0acdru60eghwyc": {
    "keep": true,
@@ -5245,7 +5263,9 @@
   },
   "tree:1gpwl060kqe4gk": {
    "keep": true,
-   "why": "'uhilla lakum' al-tayyibat twice, laylat al-siyam, sayd al-bahr"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'uhilla lakum' al-tayyibat twice, laylat al-siyam, sayd al-bahr",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0h5onzg1tn48ry": {
    "keep": true,
@@ -5253,7 +5273,9 @@
   },
   "tree:1q1q5k61x9e4q0": {
    "keep": true,
-   "why": "'uhillat lakum bahimat al-an'am' vs 'al-an'am illa ma yutla'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'uhillat lakum bahimat al-an'am' vs 'al-an'am illa ma yutla'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ba3ctx1c3c3ql": {
    "keep": true,
@@ -5261,7 +5283,9 @@
   },
   "tree:034loxt1uwejip": {
    "keep": true,
-   "why": "Resurrection analogy: al-arda ... al-nushur vs baldatan ... al-khuruj"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Resurrection analogy: al-arda ... al-nushur vs baldatan ... al-khuruj",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1jxynk91dddphj": {
    "keep": true,
@@ -5489,7 +5513,9 @@
   },
   "tree:0vb8lmn0suqdu1": {
    "keep": true,
-   "why": "Holds ba'suna pair and 17:94/18:55 'an yu'minu idh ja'ahumu al-huda'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Holds ba'suna pair and 17:94/18:55 'an yu'minu idh ja'ahumu al-huda'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1bhizhs1bc1ri0": {
    "keep": true,
@@ -5537,7 +5563,9 @@
   },
   "tree:10zww0512xsxmf": {
    "keep": true,
-   "why": "3:42 vs 3:45 'qalati al-mala'ikatu ya Maryamu' plus other speakers"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 3:42 vs 3:45 'qalati al-mala'ikatu ya Maryamu' plus other speakers",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10vhl0o112hxt2": {
    "keep": false,
@@ -5745,7 +5773,9 @@
   },
   "tree:13eg5rg1ajvziy": {
    "keep": true,
-   "why": "'idha qada amran fa-innama yaqulu lahu kun' x4 with wa/fa variants"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'idha qada amran fa-innama yaqulu lahu kun' x4 with wa/fa variants",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1cnjbrb0eoyk7d": {
    "keep": true,
@@ -5753,7 +5783,9 @@
   },
   "tree:0k75nmf1i2ej83": {
    "keep": true,
-   "why": "'wa idha qila lahum' with many replies; 2:170/31:21, 4:61/5:104 pairs"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'wa idha qila lahum' with many replies; 2:170/31:21, 4:61/5:104 pairs",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0m7gpf4000ge5w": {
    "keep": false,
@@ -5761,7 +5793,9 @@
   },
   "tree:1blfwa519qg3fd": {
    "keep": true,
-   "why": "Same opening, fourteen different commands and replies"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Same opening, fourteen different commands and replies",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1o8xbn51j5hwzf": {
    "keep": false,
@@ -5781,7 +5815,9 @@
   },
   "tree:1q6ytbz0wj4i03": {
    "keep": true,
-   "why": "'idha laqitum' alladhina kafaru (twice) vs fi'atan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'idha laqitum' alladhina kafaru (twice) vs fi'atan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1d52no60bb1jts": {
    "keep": true,
@@ -5945,7 +5981,9 @@
   },
   "tree:0n0xsmb0lkoeav": {
    "keep": true,
-   "why": "Rare 'adhdhana mu'adhdhinun': baynahum vs ayyatuha al-'ir"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Rare 'adhdhana mu'adhdhinun': baynahum vs ayyatuha al-'ir",
+   "view": "matrix",
+   "checked": true
   },
   "tree:06w9a5n11ck3fn": {
    "keep": true,
@@ -6041,7 +6079,9 @@
   },
   "tree:1jfs8zv1ehwsrz": {
    "keep": true,
-   "why": "'arsil ma'ana' akhana (Yusuf) vs bani Isra'il (Musa x2)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'arsil ma'ana' akhana (Yusuf) vs bani Isra'il (Musa x2)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0cxqxga0sqneso": {
    "keep": true,
@@ -6197,7 +6237,9 @@
   },
   "tree:1nzxak218z3zmo": {
    "keep": true,
-   "why": "'wastaghfir lahum' wa shawirhum / al-rasul / Allah; 9:80"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'wastaghfir lahum' wa shawirhum / al-rasul / Allah; 9:80",
+   "view": "matrix",
+   "checked": true
   },
   "tree:09z5ijc03ybgiy": {
    "keep": true,
@@ -6225,7 +6267,9 @@
   },
   "tree:12ptq751jnrizd": {
    "keep": true,
-   "why": "'stakbaru fi' anfusihim vs al-ard"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'stakbaru fi' anfusihim vs al-ard",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1b7melf1899bqf": {
    "keep": true,
@@ -6245,7 +6289,9 @@
   },
   "tree:0bycqf8080u1nq": {
    "keep": true,
-   "why": "'thumma stawa 'ala al-'arsh' six times, each continues differently"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'thumma stawa 'ala al-'arsh' six times, each continues differently",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0nuqr171xssftf": {
    "keep": true,
@@ -6349,7 +6395,9 @@
   },
   "tree:1kyswof10wcunt": {
    "keep": true,
-   "why": "'ishtaraw bihi' anfusahum vs thamanan qalilan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ishtaraw bihi' anfusahum vs thamanan qalilan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1m8nlfu00udfw2": {
    "keep": false,
@@ -6365,7 +6413,9 @@
   },
   "tree:06s65uv0pgu033": {
    "keep": true,
-   "why": "'ashadda minhum' quwwatan x4 vs batshan x2: classic"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ashadda minhum' quwwatan x4 vs batshan x2: classic",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1fu46b60i2ducc": {
    "keep": true,
@@ -6389,7 +6439,9 @@
   },
   "tree:181406r1wumgv7": {
    "keep": true,
-   "why": "'asabatkum musibatun' qad asabtum / qala / al-mawt"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'asabatkum musibatun' qad asabtum / qala / al-mawt",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1bpuk6i1dxnf9i": {
    "keep": true,
@@ -6433,7 +6485,9 @@
   },
   "tree:0z9ewke1sjf53o": {
    "keep": true,
-   "why": "'ashab al-janna hum fiha khalidun' set plus al-A'raf dialogue"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ashab al-janna hum fiha khalidun' set plus al-A'raf dialogue",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0f7h07o0im1es6": {
    "keep": true,
@@ -6485,7 +6539,9 @@
   },
   "tree:1qxxo930sxh305": {
    "keep": true,
-   "why": "'ashab Madyan' wal-mu'tafikat vs wa kudhdhiba Musa"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'ashab Madyan' wal-mu'tafikat vs wa kudhdhiba Musa",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0n8ahur1ox7sz3": {
    "keep": true,
@@ -6501,7 +6557,9 @@
   },
   "tree:0lkwwlc11awgdi": {
    "keep": true,
-   "why": "'wadrib lahum mathalan' rajulayn / mathala al-hayat / ashab al-qarya"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'wadrib lahum mathalan' rajulayn / mathala al-hayat / ashab al-qarya",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1w2yr4m07gv7nu": {
    "keep": true,
@@ -6577,7 +6635,9 @@
   },
   "tree:1y836z01ciplqy": {
    "keep": true,
-   "why": "'u'budu rabbakum' alladhi khalaqakum vs waf'alu al-khayr"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'u'budu rabbakum' alladhi khalaqakum vs waf'alu al-khayr",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0jfp8h51wxs3h1": {
    "keep": true,
@@ -6641,7 +6701,9 @@
   },
   "tree:0vtwdgb0582udh": {
    "keep": true,
-   "why": "'dhukkira bi-ayati rabbihi fa/thumma a'rada 'anha': wa nasiya vs inna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'dhukkira bi-ayati rabbihi fa/thumma a'rada 'anha': wa nasiya vs inna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:18ozvsv1mr75r7": {
    "keep": true,
@@ -6733,7 +6795,9 @@
   },
   "tree:0swimoj1nrfqkt": {
    "keep": true,
-   "why": "'i'lamu annama' 'ala rasulina / amwalukum / ghanimtum / al-hayat"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'i'lamu annama' 'ala rasulina / amwalukum / ghanimtum / al-hayat",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0pu1quy09kcvwi": {
    "keep": true,
@@ -6777,7 +6841,9 @@
   },
   "tree:068bpfz14cb0xt": {
    "keep": true,
-   "why": "Duas 'ighfir lana' dhunubana / warhamna / li-ikhwanina: classic"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Duas 'ighfir lana' dhunubana / warhamna / li-ikhwanina: classic",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0081pi81he479c": {
    "keep": true,
@@ -7281,7 +7347,9 @@
   },
   "tree:166anpl10d9uin": {
    "keep": true,
-   "why": "Ayah-ending 'illa qalila' with many lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ayah-ending 'illa qalila' with many lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0uy50zz12e4jqn": {
    "keep": true,
@@ -7401,7 +7469,9 @@
   },
   "tree:0eav5lq0xmamhk": {
    "keep": true,
-   "why": "'illa nadhirun' mubin / wa bashir / lakum: classic"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'illa nadhirun' mubin / wa bashir / lakum: classic",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0t3ldzx0va7zjd": {
    "keep": true,
@@ -7553,7 +7623,9 @@
   },
   "tree:0k8com70gxcr1f": {
    "keep": true,
-   "why": "Closing 'al-akhirati wal-ula': fa-lillahi vs nakal"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing 'al-akhirati wal-ula': fa-lillahi vs nakal",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0rqtyz21vphhm0": {
    "keep": false,
@@ -7853,7 +7925,9 @@
   },
   "tree:0k2ai5o1jktfsg": {
    "keep": true,
-   "why": "'al-amra kullahu' lillah vs fa-'budhu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-amra kullahu' lillah vs fa-'budhu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1k1f8150pexsk1": {
    "keep": false,
@@ -7933,7 +8007,9 @@
   },
   "tree:1ybro7n1ysa0el": {
    "keep": true,
-   "why": "'al-ba'sa'i wal-darra'i' wa hina vs wa zulzilu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-ba'sa'i wal-darra'i' wa hina vs wa zulzilu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1sasvrk1t11230": {
    "keep": false,
@@ -7977,7 +8053,9 @@
   },
   "tree:05hibr20809m70": {
    "keep": true,
-   "why": "'al-tawrata wal-injil' with eight different continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-tawrata wal-injil' with eight different continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1gg961l0wbzcy7": {
    "keep": true,
@@ -8045,7 +8123,9 @@
   },
   "tree:16lvp5n0o6ps4j": {
    "keep": true,
-   "why": "'al-jannatu allati' wu'ida / nurithu / urithtumuha"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-jannatu allati' wu'ida / nurithu / urithtumuha",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0vs9uix0yl2mad": {
    "keep": true,
@@ -8073,7 +8153,9 @@
   },
   "tree:049bim01cvbsm6": {
    "keep": true,
-   "why": "Closing 'al-haqq al-mubin': Allah huwa vs innaka 'ala"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing 'al-haqq al-mubin': Allah huwa vs innaka 'ala",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ln852i0dytmmi": {
    "keep": true,
@@ -8093,7 +8175,9 @@
   },
   "tree:0e16o041vnms0u": {
    "keep": true,
-   "why": "'al-haqqu min rabbika/rabbikum/rabbihim/'indina': core mutashabih"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-haqqu min rabbika/rabbikum/rabbihim/'indina': core mutashabih",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1cbd5wx1pznt6r": {
    "keep": true,
@@ -8225,7 +8309,9 @@
   },
   "tree:0hl2uvv0t86rfr": {
    "keep": true,
-   "why": "'al-khamri wal-maysir' qul / wal-ansab / wa yasuddakum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'al-khamri wal-maysir' qul / wal-ansab / wa yasuddakum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0u1pl530u57rwh": {
    "keep": true,
@@ -8325,7 +8411,9 @@
   },
   "tree:0rpwmpv0tz1q9l": {
    "keep": true,
-   "why": "'alladhi anzala' min al-sama' x2 / ilayka x2 / 'alayka: varied tails"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'alladhi anzala' min al-sama' x2 / ilayka x2 / 'alayka: varied tails",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0t8fdyr1p0grf1": {
    "keep": true,
@@ -8473,7 +8561,9 @@
   },
   "tree:1sd2kib15cy847": {
    "keep": true,
-   "why": "'alladhi nazzala' al-kitab / al-furqan / 'ala / min al-sama'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'alladhi nazzala' al-kitab / al-furqan / 'ala / min al-sama'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:063ntny0qlq4to": {
    "keep": true,
@@ -8681,7 +8771,9 @@
   },
   "tree:1u2udgl1wo35cx": {
    "keep": true,
-   "why": "Holds law sha'a allah pair (6:148/16:35); some noise but useful"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Holds law sha'a allah pair (6:148/16:35); some noise but useful",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1mxzlyz0m42nk5": {
    "keep": true,
@@ -8761,7 +8853,9 @@
   },
   "tree:0lune3t1tyemdb": {
    "keep": true,
-   "why": "Sabaru wa 'ala rabbihim yatawakkalun twin plus other branches"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Sabaru wa 'ala rabbihim yatawakkalun twin plus other branches",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07sri2x007wa1b": {
    "keep": true,
@@ -8805,7 +8899,9 @@
   },
   "tree:1m9sjyt096dzlr": {
    "keep": true,
-   "why": "Fi qulubihim zaygh (3:7) vs marad elsewhere: one-word difference"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Fi qulubihim zaygh (3:7) vs marad elsewhere: one-word difference",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0etbwan0izio05": {
    "keep": true,
@@ -8825,7 +8921,9 @@
   },
   "tree:0ljobu609csuaw": {
    "keep": true,
-   "why": "Qutilu fi sabil allah pair plus qatalu awladahum; small tree"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Qutilu fi sabil allah pair plus qatalu awladahum; small tree",
+   "view": "matrix",
+   "checked": true
   },
   "tree:05904vz1rqdxo1": {
    "keep": true,
@@ -9070,7 +9168,9 @@
   },
   "tree:1b9vmw21r4iiny": {
    "keep": true,
-   "why": "Jews: sabians order across 2:62/5:69/22:17 and حرمنا places"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Jews: sabians order across 2:62/5:69/22:17 and حرمنا places",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0cqcfp2151v06k": {
    "keep": true,
@@ -9362,7 +9462,9 @@
   },
   "tree:1p4sjnt1pcwljb": {
    "keep": true,
-   "why": "11:107 vs 11:108 identical until ending; 19:93 related"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 11:107 vs 11:108 identical until ending; 19:93 related",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1sos9hl0394kzj": {
    "keep": false,
@@ -9487,7 +9589,9 @@
   },
   "tree:11g6g6q0gjp7ag": {
    "keep": true,
-   "why": "Sacred month lists: 5:2 vs 5:97 order with الهدي والقلائد"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Sacred month lists: 5:2 vs 5:97 order with الهدي والقلائد",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1dfnk3p0bmowz1": {
    "keep": true,
@@ -9611,7 +9715,9 @@
   },
   "tree:1k7m0b20ivbdn2": {
    "keep": true,
-   "why": "Enmity and hatred: إلى يوم القيامة / في الخمر / أبدا"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Enmity and hatred: إلى يوم القيامة / في الخمر / أبدا",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1kul3311nmzlcf": {
    "keep": false,
@@ -9619,7 +9725,9 @@
   },
   "tree:15junsi04ctsk8": {
    "keep": true,
-   "why": "حتى يروا العذاب الأليم three places, plus other lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); حتى يروا العذاب الأليم three places, plus other lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:131b97w11d3j2g": {
    "keep": false,
@@ -9675,7 +9783,9 @@
   },
   "tree:11gsrvt13rlb5v": {
    "keep": true,
-   "why": "Closing العزيز الحكيم: which lead-in (إنك أنت / وهو / إنه هو) where"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing العزيز الحكيم: which lead-in (إنك أنت / وهو / إنه هو) where",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1g1o2jo1v2veju": {
    "keep": true,
@@ -9711,7 +9821,9 @@
   },
   "tree:1d1y8qg1jyt9e4": {
    "keep": true,
-   "why": "العزيز الرحيم then الذي: 26:217-218 vs 32:6-7"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); العزيز الرحيم then الذي: 26:217-218 vs 32:6-7",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1a0nvgr05hmzc3": {
    "keep": true,
@@ -9723,11 +9835,15 @@
   },
   "tree:0wwfj4b0g93xm3": {
    "keep": true,
-   "why": "ذلك تقدير العزيز العليم thrice vs other lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ذلك تقدير العزيز العليم thrice vs other lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1q0po1p00pm0hv": {
    "keep": true,
-   "why": "Closing العزيز الغفار in three places, lead-ins differ"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing العزيز الغفار in three places, lead-ins differ",
+   "view": "matrix",
+   "checked": true
   },
   "tree:09zlp1x0wno6p1": {
    "keep": true,
@@ -9751,7 +9867,9 @@
   },
   "tree:0t0azx51o82vin": {
    "keep": true,
-   "why": "وأن الله هو العلي الكبير (22:62, 31:30) vs other lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); وأن الله هو العلي الكبير (22:62, 31:30) vs other lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:00h9lb11u2f0cj": {
    "keep": true,
@@ -9871,7 +9989,9 @@
   },
   "tree:1sax5au1lvh5ji": {
    "keep": true,
-   "why": "مسخرات بأمره (7:54, 16:12) vs والجبال (22:18)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); مسخرات بأمره (7:54, 16:12) vs والجبال (22:18)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0su9niv00qra9h": {
    "keep": true,
@@ -9883,7 +10003,9 @@
   },
   "tree:0m1y9lz0uyzypb": {
    "keep": true,
-   "why": "Classic: وحق عليهم القول في أمم (41:25) vs الذين حق (46:18)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Classic: وحق عليهم القول في أمم (41:25) vs الذين حق (46:18)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1wbevjh1js4vvl": {
    "keep": false,
@@ -9939,7 +10061,9 @@
   },
   "tree:1kbfj021b3bvyo": {
    "keep": true,
-   "why": "3:19 vs 98:4 أوتوا الكتاب إلا من بعد ما جاءهم/جاءتهم; rest noise"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 3:19 vs 98:4 أوتوا الكتاب إلا من بعد ما جاءهم/جاءتهم; rest noise",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0j8nt5b0o5sghb": {
    "keep": false,
@@ -10155,7 +10279,9 @@
   },
   "tree:02ka3j90i5t7ah": {
    "keep": true,
-   "why": "Same closing after تنزيل الكتاب من / إنه أنا / بل هو / عند"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Same closing after تنزيل الكتاب من / إنه أنا / بل هو / عند",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1c2rhb01a45b12": {
    "keep": false,
@@ -10416,7 +10542,9 @@
   },
   "tree:073ndmo1oyv8xw": {
    "keep": true,
-   "why": "يوم يبعثهم الله جميعا فينبئهم (58:6) vs فيحلفون (58:18)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); يوم يبعثهم الله جميعا فينبئهم (58:6) vs فيحلفون (58:18)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0szvrvh1oyfxih": {
    "keep": true,
@@ -10432,7 +10560,9 @@
   },
   "tree:0kwkl410axpks3": {
    "keep": true,
-   "why": "إن وعد الله حق sets (فلا تغرنكم / ولكن أكثرهم / فاصبر), حق قدره"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); إن وعد الله حق sets (فلا تغرنكم / ولكن أكثرهم / فاصبر), حق قدره",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vf1ko103b8w5f": {
    "keep": true,
@@ -10652,7 +10782,9 @@
   },
   "tree:1qloduk03y3ve8": {
    "keep": true,
-   "why": "اذكروا نعمة الله عليكم and فضل الله عليكم ورحمته sets"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); اذكروا نعمة الله عليكم and فضل الله عليكم ورحمته sets",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xgc9sp0ncptqb": {
    "keep": true,
@@ -10712,7 +10844,9 @@
   },
   "tree:11mbo1b0pyznld": {
    "keep": true,
-   "why": "لا يذكرون اسم الله عليها (6:138) vs فاذكروا ... صواف (22:36)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); لا يذكرون اسم الله عليها (6:138) vs فاذكروا ... صواف (22:36)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1uygydk1lgm0va": {
    "keep": true,
@@ -10760,7 +10894,9 @@
   },
   "tree:0z0lkoz1hp5oof": {
    "keep": true,
-   "why": "Closing غفور رحيم: إن / فإن / والله lead-ins across 35 places"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing غفور رحيم: إن / فإن / والله lead-ins across 35 places",
+   "view": "matrix",
+   "checked": true
   },
   "tree:16n67xz1p08jcp": {
    "keep": true,
@@ -10908,7 +11044,9 @@
   },
   "tree:1pef6wf0saex1p": {
    "keep": true,
-   "why": "قالوا بل نتبع ما ألفينا (2:170) vs وجدنا (31:21); ضلوا عنا pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); قالوا بل نتبع ما ألفينا (2:170) vs وجدنا (31:21); ضلوا عنا pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:02q7suw1bg9ak4": {
    "keep": false,
@@ -10928,7 +11066,9 @@
   },
   "tree:16panj708sphhd": {
    "keep": true,
-   "why": "ليقولن الله قل الحمد لله: لا يعقلون (29:63) vs لا يعلمون (31:25)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ليقولن الله قل الحمد لله: لا يعقلون (29:63) vs لا يعلمون (31:25)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0mn1zoa1lpg9y4": {
    "keep": false,
@@ -11040,7 +11180,9 @@
   },
   "tree:1yto53r0hvq23f": {
    "keep": true,
-   "why": "إن الله لطيف خبير (22:63, 31:16) vs الله لطيف بعباده (42:19)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); إن الله لطيف خبير (22:63, 31:16) vs الله لطيف بعباده (42:19)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:13yu1hd0ahlp3j": {
    "keep": true,
@@ -11144,7 +11286,9 @@
   },
   "tree:1rvns7y015vy0q": {
    "keep": true,
-   "why": "Rare phrase: فعند الله مغانم كثيرة (4:94) vs وعدكم (48:20)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Rare phrase: فعند الله مغانم كثيرة (4:94) vs وعدكم (48:20)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0uv3c601s6we4g": {
    "keep": false,
@@ -11168,7 +11312,9 @@
   },
   "tree:1ahoe400q1c0xs": {
    "keep": true,
-   "why": "أغنى/يغني عنكم من الله من شيء (12:67-68); ما خلق الله من شيء"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); أغنى/يغني عنكم من الله من شيء (12:67-68); ما خلق الله من شيء",
+   "view": "matrix",
+   "checked": true
   },
   "tree:06tuk2o0lkzuy6": {
    "keep": false,
@@ -11317,7 +11463,9 @@
   },
   "tree:0o7btlp1e4qka5": {
    "keep": true,
-   "why": "إذا ذكر الله وحده (39:45) vs إذا دعي الله وحده (40:12); 7:70"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); إذا ذكر الله وحده (39:45) vs إذا دعي الله وحده (40:12); 7:70",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0yd92d11virtax": {
    "keep": false,
@@ -11469,7 +11617,9 @@
   },
   "tree:1qredas15hz4ss": {
    "keep": true,
-   "why": "يجتبي من رسله (3:179) vs يجتبي إليه من يشاء (42:13)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); يجتبي من رسله (3:179) vs يجتبي إليه من يشاء (42:13)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0vxebzd0pclgjn": {
    "keep": true,
@@ -11741,7 +11891,9 @@
   },
   "tree:0esfyxv1ygkkax": {
    "keep": true,
-   "why": "إن الله هو المسيح ابن مريم (5:17, 5:72) vs ابن الله (9:30)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); إن الله هو المسيح ابن مريم (5:17, 5:72) vs ابن الله (9:30)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:19teaw01yghuto": {
    "keep": true,
@@ -11769,7 +11921,9 @@
   },
   "tree:14rage509qh3kb": {
    "keep": true,
-   "why": "قال/وقال الملأ من قومه vs من قوم فرعون; 2:246"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); قال/وقال الملأ من قومه vs من قوم فرعون; 2:246",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07xb1uj0q5zu8z": {
    "keep": true,
@@ -11877,7 +12031,9 @@
   },
   "tree:18u4l4p1g0kcjj": {
    "keep": true,
-   "why": "لن تمسنا النار إلا أياما معدودة (2:80) vs معدودات (3:24)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); لن تمسنا النار إلا أياما معدودة (2:80) vs معدودات (3:24)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:151o5uv1mwmk6j": {
    "keep": true,
@@ -11929,7 +12085,9 @@
   },
   "tree:1emvk7r15c7f1x": {
    "keep": true,
-   "why": "فأبى أكثر الناس إلا كفورا (17:89, 25:50) vs 10:19"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); فأبى أكثر الناس إلا كفورا (17:89, 25:50) vs 10:19",
+   "view": "matrix",
+   "checked": true
   },
   "tree:107xelt195stpp": {
    "keep": true,
@@ -12025,7 +12183,9 @@
   },
   "tree:18chu860oglz7u": {
    "keep": true,
-   "why": "Same surah: والنخيل والأعناب ومن كل (16:11) vs تتخذون (16:67)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Same surah: والنخيل والأعناب ومن كل (16:11) vs تتخذون (16:67)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:08oh1ul19mogcr": {
    "keep": false,
@@ -12089,7 +12249,9 @@
   },
   "tree:04fch900zj65jg": {
    "keep": true,
-   "why": "Ending الواحد القهار after أم الله / لله / إلا الله / هو الله"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending الواحد القهار after أم الله / لله / إلا الله / هو الله",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0f1xqbw13ohrbm": {
    "keep": true,
@@ -12365,7 +12527,9 @@
   },
   "tree:0kc8vo90x81amp": {
    "keep": true,
-   "why": "وأوحينا إلى موسى أن ألق / أسر / اضرب; إذ استسقاه"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); وأوحينا إلى موسى أن ألق / أسر / اضرب; إذ استسقاه",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0sv0ra90knc9aj": {
    "keep": true,
@@ -12685,7 +12849,9 @@
   },
   "tree:0grhj5y0vney8k": {
    "keep": true,
-   "why": "أم لهم شرك في السموات (35:40, 46:4) and other أم لهم"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); أم لهم شرك في السموات (35:40, 46:4) and other أم لهم",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1x8hbk91irq6zl": {
    "keep": true,
@@ -12749,7 +12915,9 @@
   },
   "tree:0dvtbv70ogr7c3": {
    "keep": true,
-   "why": "Classic: فإما يأتينكم مني هدى فمن تبع (2:38) vs اتبع (20:123)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Classic: فإما يأتينكم مني هدى فمن تبع (2:38) vs اتبع (20:123)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0j2jmo40753mwa": {
    "keep": true,
@@ -12837,7 +13005,9 @@
   },
   "tree:1thcqj91wuiw53": {
    "keep": true,
-   "why": "وأملي لهم إن كيدي متين (7:183 = 68:45) vs 47:25"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); وأملي لهم إن كيدي متين (7:183 = 68:45) vs 47:25",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1rb56qv1adqfgl": {
    "keep": true,
@@ -12909,7 +13079,9 @@
   },
   "tree:0a2kl2s0y0aouu": {
    "keep": true,
-   "why": "وإن أدري أقريب أم بعيد (21:109) vs قل إن أدري أقريب (72:25); 21:111"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); وإن أدري أقريب أم بعيد (21:109) vs قل إن أدري أقريب (72:25); 21:111",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0d7he2a1shn6t6": {
    "keep": true,
@@ -12933,7 +13105,9 @@
   },
   "tree:0lr2pgm0hvrjm2": {
    "keep": true,
-   "why": "Classic: رب أوزعني أن أشكر 27:19 vs 46:15; اشكر لي pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Classic: رب أوزعني أن أشكر 27:19 vs 46:15; اشكر لي pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07tvz101z0bfa6": {
    "keep": false,
@@ -12961,7 +13135,9 @@
   },
   "tree:0prablv10d4tdp": {
    "keep": true,
-   "why": "وأن أعمل صالحا ترضاه وأدخلني (27:19) vs وأصلح لي (46:15)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); وأن أعمل صالحا ترضاه وأدخلني (27:19) vs وأصلح لي (46:15)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:09gfjhu1bhze1g": {
    "keep": false,
@@ -13653,7 +13829,9 @@
   },
   "tree:1brydor1c4bq93": {
    "keep": true,
-   "why": "wa-in takfuru fa-inna lillahi ma fi as-samawat in 4:131 and 4:170"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa-in takfuru fa-inna lillahi ma fi as-samawat in 4:131 and 4:170",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0oe3ut41x9lmm8": {
    "keep": true,
@@ -13805,7 +13983,9 @@
   },
   "tree:0der3h813t8bxm": {
    "keep": true,
-   "why": "inna rabbakumu Allah alladhi khalaq (7:54, 10:3) and la-ra'ufun rahim pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); inna rabbakumu Allah alladhi khalaq (7:54, 10:3) and la-ra'ufun rahim pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1jm2cd7182rx77": {
    "keep": true,
@@ -14206,7 +14386,9 @@
   },
   "tree:0k3dle51n2xcx1": {
    "keep": true,
-   "why": "fa-anna lahu nara jahannam pair and wa-inna lahu indana la-zulfa pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa-anna lahu nara jahannam pair and wa-inna lahu indana la-zulfa pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07qnfok00lqidc": {
    "keep": true,
@@ -14214,7 +14396,9 @@
   },
   "tree:09f2xh006uvhsq": {
    "keep": true,
-   "why": "law anna lahum ma fi al-ard (5:36/13:18), anna lahum ajran (17:9/18:2)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); law anna lahum ma fi al-ard (5:36/13:18), anna lahum ajran (17:9/18:2)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1sakkf20tvg3iw": {
    "keep": true,
@@ -14314,7 +14498,9 @@
   },
   "tree:0csow5x096kah3": {
    "keep": true,
-   "why": "ummatukum ummatan wahida: fa-'buduni vs fa-ttaquni; and tadhkira pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ummatukum ummatan wahida: fa-'buduni vs fa-ttaquni; and tadhkira pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1rp11p51hvqzyp": {
    "keep": true,
@@ -14434,7 +14620,9 @@
   },
   "tree:16aeed00tk19vc": {
    "keep": true,
-   "why": "in yasha' yudhhibkum set vs yarhamkum, yuskin ar-rih"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); in yasha' yudhhibkum set vs yarhamkum, yuskin ar-rih",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10ekrs21dwmd8a": {
    "keep": true,
@@ -14950,7 +15138,9 @@
   },
   "tree:1pagndw001lc7c": {
    "keep": true,
-   "why": "unzila ilaykum: min rabbikum set, al-kitab, wa-ilahuna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); unzila ilaykum: min rabbikum set, al-kitab, wa-ilahuna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1o4ogx40o36k1w": {
    "keep": true,
@@ -15803,7 +15993,9 @@
   },
   "tree:0ocopgd0i4fxp1": {
    "keep": true,
-   "why": "ahl al-qura: lau anna, a-fa-amina (7:97/98) and others"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ahl al-qura: lau anna, a-fa-amina (7:97/98) and others",
+   "view": "matrix",
+   "checked": true
   },
   "tree:06rp4am0muyoee": {
    "keep": false,
@@ -15851,7 +16043,9 @@
   },
   "tree:1lzps2b0i6tl6p": {
    "keep": true,
-   "why": "kam ahlakna min qablihim min qarn pair and wa-ma ahlakna min qarya pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); kam ahlakna min qablihim min qarn pair and wa-ma ahlakna min qarya pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10eexqw1nnbc08": {
    "keep": true,
@@ -16031,7 +16225,9 @@
   },
   "tree:0wahobf0hh0t1d": {
    "keep": true,
-   "why": "awhayna ila Musa an alqi, asri, idrib, tabawwa'a"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); awhayna ila Musa an alqi, asri, idrib, tabawwa'a",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vvs54t142bd3j": {
    "keep": true,
@@ -16395,7 +16591,9 @@
   },
   "tree:1n4hhv40vrkbve": {
    "keep": true,
-   "why": "ba'u bi-ghadabin min Allah vs ala ghadab"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ba'u bi-ghadabin min Allah vs ala ghadab",
+   "view": "matrix",
+   "checked": true
   },
   "tree:14zqfrz0u949cv": {
    "keep": true,
@@ -16443,7 +16641,9 @@
   },
   "tree:12h3hvz0rmjcev": {
    "keep": true,
-   "why": "uli ba'sin shadid pair plus 27:33 and al-hadid"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); uli ba'sin shadid pair plus 27:33 and al-hadid",
+   "view": "matrix",
+   "checked": true
   },
   "tree:13qmgjx0dtj90d": {
    "keep": true,
@@ -16831,7 +17031,9 @@
   },
   "tree:1bgkoay0hx74ga": {
    "keep": true,
-   "why": "wa-bada lahum sayyi'atu ma kasabu/amilu plus other bada lahum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa-bada lahum sayyi'atu ma kasabu/amilu plus other bada lahum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:054qbs206ft8q0": {
    "keep": true,
@@ -16971,7 +17173,9 @@
   },
   "tree:1qzr3gh0rftvql": {
    "keep": true,
-   "why": "thumma ba'athna min ba'dihim Musa (7:103, 10:75) vs min ba'dihi rusulan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); thumma ba'athna min ba'dihim Musa (7:103, 10:75) vs min ba'dihi rusulan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1e442hz0xzvzph": {
    "keep": true,
@@ -17055,7 +17259,9 @@
   },
   "tree:151doxk1e7vad0": {
    "keep": true,
-   "why": "ba'di ma unzila ilayka (5:49) vs ba'da ma yuha ilayka (11:12)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ba'di ma unzila ilayka (5:49) vs ba'da ma yuha ilayka (11:12)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1chmfig19de4ly": {
    "keep": false,
@@ -17079,7 +17285,9 @@
   },
   "tree:0ua15kt0276wvz": {
    "keep": true,
-   "why": "ihbitu ba'dukum li-ba'din aduww set plus fitna, naf', jahr"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ihbitu ba'dukum li-ba'din aduww set plus fitna, naf', jahr",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1v4pvks0cu4lei": {
    "keep": true,
@@ -17719,7 +17927,9 @@
   },
   "tree:0js9iye1501tai": {
    "keep": true,
-   "why": "Accusation of madness: 23:25 continues fatarabbasu, others continue with bal"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Accusation of madness: 23:25 continues fatarabbasu, others continue with bal",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0tndi561j0a50y": {
    "keep": true,
@@ -17855,7 +18065,9 @@
   },
   "tree:11ch2zl1y4gcf5": {
    "keep": true,
-   "why": "Holds the sultan triple and 7:80/29:28 'ma sabaqakum biha min ahad'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Holds the sultan triple and 7:80/29:28 'ma sabaqakum biha min ahad'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0xygsag0bcknyg": {
    "keep": true,
@@ -18015,7 +18227,9 @@
   },
   "tree:1u9t5ya0s2fspa": {
    "keep": true,
-   "why": "Rare 'al-adawa wal-baghda' clause; 5:91 vs 60:4 continue differently"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Rare 'al-adawa wal-baghda' clause; 5:91 vs 60:4 continue differently",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0yzo9170ovxmsj": {
    "keep": false,
@@ -18155,7 +18369,9 @@
   },
   "tree:1bpno1p0dhifv9": {
    "keep": true,
-   "why": "'tabaraka alladhi' openings in al-Furqan and 43:85 continue differently"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'tabaraka alladhi' openings in al-Furqan and 43:85 continue differently",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07qr7yq1v3h0cu": {
    "keep": true,
@@ -18348,7 +18564,9 @@
   },
   "tree:12fz4nr03jkw0r": {
    "keep": true,
-   "why": "Musa's nine signs 17:101 bayyinat vs 27:12 ila Fir'awn"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Musa's nine signs 17:101 bayyinat vs 27:12 ila Fir'awn",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1n61z5y1gmt8g2": {
    "keep": true,
@@ -18528,7 +18746,9 @@
   },
   "tree:1ql5wqn00a8xxp": {
    "keep": true,
-   "why": "'tilka al-qura' naqussu (7:101) vs ahlaknahum (18:59)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'tilka al-qura' naqussu (7:101) vs ahlaknahum (18:59)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0krksvy1r4pp2u": {
    "keep": true,
@@ -18584,7 +18804,9 @@
   },
   "tree:11b35im1t8omyi": {
    "keep": true,
-   "why": "'tubu ila' bari'ikum vs Allah, different continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'tubu ila' bari'ikum vs Allah, different continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0mxnwb314xbas7": {
    "keep": true,
@@ -18628,7 +18850,9 @@
   },
   "tree:1ckfkl00ltw34y": {
    "keep": true,
-   "why": "'fasiyamu thalathati ayyam' 2:196 fil-hajj vs 5:89 dhalika kaffara"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'fasiyamu thalathati ayyam' 2:196 fil-hajj vs 5:89 dhalika kaffara",
+   "view": "matrix",
+   "checked": true
   },
   "tree:08lhs5t08e6var": {
    "keep": false,
@@ -18864,7 +19088,9 @@
   },
   "tree:0clca5r1s62jz7": {
    "keep": true,
-   "why": "Nations lists: wa Thamud wa qawm Ibrahim vs qawm Lut"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Nations lists: wa Thamud wa qawm Ibrahim vs qawm Lut",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1f3eb8b08ymjmz": {
    "keep": true,
@@ -19044,7 +19270,9 @@
   },
   "tree:1jmpwe71natop9": {
    "keep": true,
-   "why": "jaza'u sayyi'atin bi-mithliha (10:27) vs sayyi'atun mithluha (42:40)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); jaza'u sayyi'atin bi-mithliha (10:27) vs sayyi'atun mithluha (42:40)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0sj8rsd1g6bzdp": {
    "keep": false,
@@ -19124,7 +19352,9 @@
   },
   "tree:0wdd3231r1je7b": {
    "keep": true,
-   "why": "29:27 fi dhurriyatihi vs 57:26 fi dhurriyatihima an-nubuwwa; rest noise"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 29:27 fi dhurriyatihi vs 57:26 fi dhurriyatihima an-nubuwwa; rest noise",
+   "view": "matrix",
+   "checked": true
   },
   "tree:093r0bb017l8pn": {
    "keep": true,
@@ -19241,7 +19471,9 @@
   },
   "tree:0h5n0131ymnddx": {
    "keep": true,
-   "why": "'jannat adn' yadkhulunaha / tajri / allati / mufattaha variants"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'jannat adn' yadkhulunaha / tajri / allati / mufattaha variants",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1bvnp0s0bxpwjc": {
    "keep": true,
@@ -19257,7 +19489,9 @@
   },
   "tree:0csgckk0891qx0": {
    "keep": true,
-   "why": "'jannatin min a'nab' vs 'min nakhil wa a'nab' in rain/growth verses"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'jannatin min a'nab' vs 'min nakhil wa a'nab' in rain/growth verses",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1to1r8x0586ull": {
    "keep": true,
@@ -19353,7 +19587,9 @@
   },
   "tree:19vd2uf11eaebt": {
    "keep": true,
-   "why": "Magicians' ropes 20:66 yukhayyalu vs 26:44 wa qalu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Magicians' ropes 20:66 yukhayyalu vs 26:44 wa qalu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0hfchbk0sqv6jq": {
    "keep": true,
@@ -19477,7 +19713,9 @@
   },
   "tree:0eobmo20oamu8o": {
    "keep": true,
-   "why": "2:173 vs 16:115 'innama harrama alaykum al-mayta' diverge"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 2:173 vs 16:115 'innama harrama alaykum al-mayta' diverge",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1kakhpz0e3u3nx": {
    "keep": true,
@@ -19549,7 +19787,9 @@
   },
   "tree:1srerx20jal3a4": {
    "keep": true,
-   "why": "Ending 'hakimun alim' (reverse order) in five places"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'hakimun alim' (reverse order) in five places",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1g1urym1v4m5ig": {
    "keep": false,
@@ -19645,7 +19885,9 @@
   },
   "tree:0nu0wut0oxsqox": {
    "keep": true,
-   "why": "'kharaju min diyarihim' 2:243 vs 8:47; 47:16 min indika"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'kharaju min diyarihim' 2:243 vs 8:47; 47:16 min indika",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0nqvt6z1261azb": {
    "keep": true,
@@ -19677,7 +19919,9 @@
   },
   "tree:07gxi3n0unuj6r": {
    "keep": true,
-   "why": "'khasafna bihi' wa bi-darihi al-ard (28:81) vs al-ard (29:40)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'khasafna bihi' wa bi-darihi al-ard (28:81) vs al-ard (29:40)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:01z7pnt0dthcp3": {
    "keep": true,
@@ -19785,7 +20029,9 @@
   },
   "tree:0uq94b50b93pjb": {
    "keep": true,
-   "why": "Iblis: 7:12 = 38:76 min tin vs 15:33 min salsal"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Iblis: 7:12 = 38:76 min tin vs 15:33 min salsal",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0u35c3u1utmgh8": {
    "keep": true,
@@ -19833,7 +20079,9 @@
   },
   "tree:0wnwxp9125ybpb": {
    "keep": true,
-   "why": "35:40 vs 46:4 'madha khalaqu min al-ard am lahum shirk' then diverge"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 35:40 vs 46:4 'madha khalaqu min al-ard am lahum shirk' then diverge",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1rpu3bv0fz1mlx": {
    "keep": true,
@@ -20073,7 +20321,9 @@
   },
   "tree:0s0hxsz14c1d1h": {
    "keep": true,
-   "why": "7:63 vs 7:69 Nuh/Hud; 21:2 vs 26:5 dhikrun min rabbihim / ar-rahman"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 7:63 vs 7:69 Nuh/Hud; 21:2 vs 26:5 dhikrun min rabbihim / ar-rahman",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0128p4q16u4zis": {
    "keep": false,
@@ -20133,7 +20383,9 @@
   },
   "tree:0k2w10m10437l4": {
    "keep": true,
-   "why": "'dhalika bi-annahum' kanu / qalu / qawmun la variants are slip-prone"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'dhalika bi-annahum' kanu / qalu / qawmun la variants are slip-prone",
+   "view": "matrix",
+   "checked": true
   },
   "cmp:15uftyl12a4eot": {
    "keep": false,
@@ -20409,7 +20661,9 @@
   },
   "tree:0zr0uob0yn5vn9": {
    "keep": true,
-   "why": "'rabbi ighfir li' wa li-akhi / wa hab li / wa li-walidayya"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'rabbi ighfir li' wa li-akhi / wa hab li / wa li-walidayya",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1qrazda0o75a0i": {
    "keep": true,
@@ -20457,7 +20711,9 @@
   },
   "tree:0giznfv1vnecur": {
    "keep": true,
-   "why": "'rabb al-mashriq' wal-maghrib vs 37:5 rabb al-mashariq"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'rabb al-mashriq' wal-maghrib vs 37:5 rabb al-mashariq",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0t43qq40k5f1do": {
    "keep": true,
@@ -20545,7 +20801,9 @@
   },
   "tree:0k0cbq308sugbr": {
    "keep": true,
-   "why": "'inna rabbaka min ba'diha la-ghafur rahim' 7:153 / 16:110 / 16:119"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'inna rabbaka min ba'diha la-ghafur rahim' 7:153 / 16:110 / 16:119",
+   "view": "matrix",
+   "checked": true
   },
   "tree:13w9wpq1dy2ca0": {
    "keep": true,
@@ -20581,7 +20839,9 @@
   },
   "tree:1levedx0xegblv": {
    "keep": true,
-   "why": "'rabbakumu alladhi khalaqakum' 2:21 vs 4:1; 17:66 yuzji"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'rabbakumu alladhi khalaqakum' 2:21 vs 4:1; 17:66 yuzji",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0brqv4x1x39xvf": {
    "keep": true,
@@ -20685,7 +20945,9 @@
   },
   "tree:1g0vlla1o7hikq": {
    "keep": true,
-   "why": "'rabbana innana' amanna / sami'na / nakhafu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'rabbana innana' amanna / sami'na / nakhafu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0fxnrej0xasyhf": {
    "keep": true,
@@ -20709,7 +20971,9 @@
   },
   "tree:0ue3xvq0qmh4ic": {
    "keep": true,
-   "why": "6:4 = 36:46 'illa kanu anha mu'ridin'; others differ"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 6:4 = 36:46 'illa kanu anha mu'ridin'; others differ",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0cfy7nr070dhyp": {
    "keep": false,
@@ -20861,7 +21125,9 @@
   },
   "tree:1gwsvuh0v981nt": {
    "keep": true,
-   "why": "'rizqan hasanan' 16:67 vs 16:75 in same surah; 11:88, 22:58"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'rizqan hasanan' 16:67 vs 16:75 in same surah; 11:88, 22:58",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ilg4040hq8cgm": {
    "keep": false,
@@ -20945,7 +21211,9 @@
   },
   "tree:005otp70m2n3n5": {
    "keep": true,
-   "why": "69:40 = 81:19 'innahu la-qawlu rasulin karim' vs 44:17"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 69:40 = 81:19 'innahu la-qawlu rasulin karim' vs 44:17",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1le2ud702m0lvx": {
    "keep": true,
@@ -21045,7 +21313,9 @@
   },
   "tree:1qupflf1n0wybp": {
    "keep": true,
-   "why": "'zayyana lahum' ash-shaytan vs su'u a'malihim, with wa/fa"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'zayyana lahum' ash-shaytan vs su'u a'malihim, with wa/fa",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1q5rkoe1gmyole": {
    "keep": true,
@@ -21093,7 +21363,9 @@
   },
   "tree:1xapfcx0k7omib": {
    "keep": true,
-   "why": "'subhana alladhi' asra / khalaqa / biyadihi / sakhkhara"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'subhana alladhi' asra / khalaqa / biyadihi / sakhkhara",
+   "view": "matrix",
+   "checked": true
   },
   "tree:018a6ua17yvu4e": {
    "keep": true,
@@ -21189,7 +21461,9 @@
   },
   "tree:0nwmkz704nv2vr": {
    "keep": true,
-   "why": "'sakhkhara lakum' al-fulk / ash-shams / al-layl / ma fi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'sakhkhara lakum' al-fulk / ash-shams / al-layl / ma fi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0z1b1500ihsfhi": {
    "keep": true,
@@ -21233,7 +21507,9 @@
   },
   "tree:16fpo1q0fng85a": {
    "keep": true,
-   "why": "Shaytan has no authority: illa an (14:22) / illa man (15:42) / illa li-na'lama"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Shaytan has no authority: illa an (14:22) / illa man (15:42) / illa li-na'lama",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10fslw91rv6nln": {
    "keep": true,
@@ -21753,7 +22029,9 @@
   },
   "tree:0vpkphs0ynusu8": {
    "keep": true,
-   "why": "Ending 'dalalin mubin' with la-fi / fi lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'dalalin mubin' with la-fi / fi lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07i15l41qu9sas": {
    "keep": true,
@@ -21897,7 +22175,9 @@
   },
   "tree:09on7rw0iwj7jo": {
    "keep": true,
-   "why": "Nation lists 'qawmi Nuh wa Ad wa Thamud' then different continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Nation lists 'qawmi Nuh wa Ad wa Thamud' then different continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ehru9i1v834jy": {
    "keep": true,
@@ -21933,7 +22213,9 @@
   },
   "tree:14el76q1464di8": {
    "keep": true,
-   "why": "'atau an amri rabbihim' 7:77 vs 51:44; 7:166 an ma nuhu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'atau an amri rabbihim' 7:77 vs 51:44; 7:166 an ma nuhu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0z3t3n00efxtko": {
    "keep": true,
@@ -22005,7 +22287,9 @@
   },
   "tree:02cp2jo1up442m": {
    "keep": true,
-   "why": "Ending 'adhabun alim' with walahum / falahu / lil-kafirin lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'adhabun alim' with walahum / falahu / lil-kafirin lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0w5hmyc0kwp7co": {
    "keep": true,
@@ -22033,7 +22317,9 @@
   },
   "tree:1ifj5qq05v6h6a": {
    "keep": true,
-   "why": "Ending 'adhabun shadid' 14:2 / 34:46 / 42:16 / 42:26"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'adhabun shadid' 14:2 / 34:46 / 42:16 / 42:26",
+   "view": "matrix",
+   "checked": true
   },
   "tree:14mi6p50ai238h": {
    "keep": true,
@@ -22041,7 +22327,9 @@
   },
   "tree:1ttqsr61rl6yye": {
    "keep": true,
-   "why": "Ending 'adhabun azim' walahum / walahum fil-akhira / walakum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'adhabun azim' walahum / walahum fil-akhira / walakum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0782wt50z2xwjv": {
    "keep": true,
@@ -22049,11 +22337,15 @@
   },
   "tree:0wjxzfz1wc9fup": {
    "keep": true,
-   "why": "Ending 'adhabin ghaliz' with min / ila / wa min wara'ihi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'adhabin ghaliz' with min / ila / wa min wara'ihi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:15vyz0j1katbvn": {
    "keep": true,
-   "why": "11:39 = 39:40 'wa yahillu alayhi adhabun muqim'; walahum / fi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 11:39 = 39:40 'wa yahillu alayhi adhabun muqim'; walahum / fi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0e3h0dv0h4u4rv": {
    "keep": true,
@@ -22077,7 +22369,9 @@
   },
   "tree:0h4aqe11gp9zd3": {
    "keep": true,
-   "why": "'adhaba yawmin azim' akhafu alaykum vs in asaytu rabbi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 'adhaba yawmin azim' akhafu alaykum vs in asaytu rabbi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1lp14xv1wxmg6p": {
    "keep": true,
@@ -22093,7 +22387,9 @@
   },
   "tree:16ov9n51qiqc6z": {
    "keep": true,
-   "why": "Ending 'adhaban alima' a'tadna / a'adda / yu'adhdhibkum lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ending 'adhaban alima' a'tadna / a'adda / yu'adhdhibkum lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1s4bn1z1fb1mdp": {
    "keep": true,
@@ -22145,7 +22441,9 @@
   },
   "tree:0pz3a871rl4lsz": {
    "keep": true,
-   "why": "lisan arabi mubin: wa hadha lisan (16:103) vs bi-lisan (26:195)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); lisan arabi mubin: wa hadha lisan (16:103) vs bi-lisan (26:195)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0jqlifp0i7uw9h": {
    "keep": true,
@@ -23538,7 +23836,9 @@
   },
   "tree:0bt1dby16l78dy": {
    "keep": true,
-   "why": "ajrun ghayru mamnun: lahum / fa-lahum / la-ajran lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ajrun ghayru mamnun: lahum / fa-lahum / la-ajran lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ltp8jx1cjekwb": {
    "keep": true,
@@ -23742,7 +24042,9 @@
   },
   "tree:1q94oat1qpejpb": {
    "keep": true,
-   "why": "wa fi adhanihim waqran x3 vs waqrun (41:44); asabi'ahum fi adhanihim pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa fi adhanihim waqran x3 vs waqrun (41:44); asabi'ahum fi adhanihim pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1nfhfjx06r5uah": {
    "keep": true,
@@ -24394,7 +24696,9 @@
   },
   "tree:1cxaci21lqyg6y": {
    "keep": true,
-   "why": "wa naza'na ma fi sudurihim min ghill: tajri (7:43) vs ikhwanan (15:47)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa naza'na ma fi sudurihim min ghill: tajri (7:43) vs ikhwanan (15:47)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1dgh1d61vp0bxo": {
    "keep": true,
@@ -24490,7 +24794,9 @@
   },
   "tree:0suk00n0gezg09": {
    "keep": true,
-   "why": "alladhina fi qulubihim marad set, qadhafa fi qulubihim al-ru'b pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); alladhina fi qulubihim marad set, qadhafa fi qulubihim al-ru'b pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vc2uk51r2brgj": {
    "keep": true,
@@ -24806,7 +25112,9 @@
   },
   "tree:0rleefo0kuvxei": {
    "keep": true,
-   "why": "wa qala alladhi amana ya qawmi (40:30, 40:38); Yusuf pair"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa qala alladhi amana ya qawmi (40:30, 40:38); Yusuf pair",
+   "view": "matrix",
+   "checked": true
   },
   "tree:19l94yz0iu629l": {
    "keep": false,
@@ -24910,7 +25218,9 @@
   },
   "tree:1yugjeu0bb806u": {
    "keep": true,
-   "why": "qala innama utituhu ala ilm pair plus other innama sayings"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qala innama utituhu ala ilm pair plus other innama sayings",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ggrwl31363f0t": {
    "keep": true,
@@ -25067,7 +25377,9 @@
   },
   "tree:1e1vd2n13dxprb": {
    "keep": true,
-   "why": "wa idh qala Musa li-qawmihi set plus li-akhihi / li-fatahu / li-ahlihi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa idh qala Musa li-qawmihi set plus li-akhihi / li-fatahu / li-ahlihi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1gimour0rdygs5": {
    "keep": true,
@@ -25119,7 +25431,9 @@
   },
   "tree:1qqmf101665p3m": {
    "keep": true,
-   "why": "qala ya bunayya la (12:5, 12:67) vs inni ara (37:102)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qala ya bunayya la (12:5, 12:67) vs inni ara (37:102)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:01ijse31s2xjjt": {
    "keep": true,
@@ -25383,7 +25697,9 @@
   },
   "tree:1lozpoj0nri20l": {
    "keep": true,
-   "why": "wa qalu law la unzila/nuzzila alayhi + malak / aya / ayat / hadha al-Qur'an"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa qalu law la unzila/nuzzila alayhi + malak / aya / ayat / hadha al-Qur'an",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vay46q19zvggw": {
    "keep": false,
@@ -25487,7 +25803,9 @@
   },
   "tree:0s9ludc0gw6gwc": {
    "keep": true,
-   "why": "kadhdhabat qablahum qawmu Nuh + which nations follow"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); kadhdhabat qablahum qawmu Nuh + which nations follow",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07n03o60glbw7k": {
    "keep": true,
@@ -25503,7 +25821,9 @@
   },
   "tree:1n79vmk0hsbdyo": {
    "keep": true,
-   "why": "kam ahlakna qablahum min qarn / al-qurun: classic set"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); kam ahlakna qablahum min qarn / al-qurun: classic set",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0xkt89a1vkyfk6": {
    "keep": true,
@@ -25519,7 +25839,9 @@
   },
   "tree:06lo88b0yu4ew7": {
    "keep": true,
-   "why": "wa qatalta nafsan fa-najjaynaka (20:40) vs kama qatalta nafsan bil-ams (28:19)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa qatalta nafsan fa-najjaynaka (20:40) vs kama qatalta nafsan bil-ams (28:19)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:157utm21dpdjui": {
    "keep": true,
@@ -25587,7 +25909,9 @@
   },
   "tree:01fwpo51ax0i6f": {
    "keep": true,
-   "why": "qad ja'akum + rasuluna yubayyinu pair, al-haqq / burhan / basa'ir"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qad ja'akum + rasuluna yubayyinu pair, al-haqq / burhan / basa'ir",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0aaoghd16krlp1": {
    "keep": true,
@@ -25719,7 +26043,9 @@
   },
   "tree:16e9n8c02085tc": {
    "keep": true,
-   "why": "wa qur'anin mubin ending: tilka ayat (15:1) vs in huwa illa dhikr (36:69)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa qur'anin mubin ending: tilka ayat (15:1) vs in huwa illa dhikr (36:69)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1k11fsb18arc3h": {
    "keep": true,
@@ -25787,7 +26113,9 @@
   },
   "tree:1bsj60b1whkdg3": {
    "keep": true,
-   "why": "qul a-ra'aytum in ... set, plus ma anzala / shuraka'akum / ma tad'un"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qul a-ra'aytum in ... set, plus ma anzala / shuraka'akum / ma tad'un",
+   "view": "matrix",
+   "checked": true
   },
   "tree:05lyn9a11f9cic": {
    "keep": true,
@@ -25875,7 +26203,9 @@
   },
   "tree:0qe0r4j1wi8c4v": {
    "keep": true,
-   "why": "a-wa law kanu la yamlikun (39:43) vs a-wa law ji'tukum (43:24)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); a-wa law kanu la yamlikun (39:43) vs a-wa law ji'tukum (43:24)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1gmv17o15wxbhq": {
    "keep": true,
@@ -25935,7 +26265,9 @@
   },
   "tree:07mnalk0qt6bm0": {
    "keep": true,
-   "why": "qul li-ibadiya alladhina amanu (14:31) vs wa qul...yaqulu (17:53)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qul li-ibadiya alladhina amanu (14:31) vs wa qul...yaqulu (17:53)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:04tkqye0j92b9q": {
    "keep": true,
@@ -26027,7 +26359,9 @@
   },
   "tree:038r4sx0xe3ls3": {
    "keep": true,
-   "why": "qulna lahum kunu qiradatan khasi'in pair vs udkhulu al-bab (4:154)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qulna lahum kunu qiradatan khasi'in pair vs udkhulu al-bab (4:154)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1dinwys1uvgday": {
    "keep": true,
@@ -26227,7 +26561,9 @@
   },
   "tree:0l4far4142jbve": {
    "keep": true,
-   "why": "ittakhadha qawmu Musa / min qawmi Musa umma / kana min qawmi Musa"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ittakhadha qawmu Musa / min qawmi Musa umma / kana min qawmi Musa",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1w5uxeg1hvsruc": {
    "keep": true,
@@ -26247,7 +26583,9 @@
   },
   "tree:03hbmc600zlcz0": {
    "keep": true,
-   "why": "li-Ad qawmi Hud (11:60) vs qawma Hud aw (11:89), same surah"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); li-Ad qawmi Hud (11:60) vs qawma Hud aw (11:89), same surah",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1eppdav1wgg9h5": {
    "keep": true,
@@ -26860,7 +27198,9 @@
   },
   "tree:132rbeg08fq5z0": {
    "keep": true,
-   "why": "wa ka'ayyin / fa ka'ayyin min qarya, nabiyy, aya, dabba"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa ka'ayyin / fa ka'ayyin min qarya, nabiyy, aya, dabba",
+   "view": "matrix",
+   "checked": true
   },
   "tree:109xwlw0eusx7q": {
    "keep": true,
@@ -27052,7 +27392,9 @@
   },
   "tree:0r12ejn1j7b3a3": {
    "keep": true,
-   "why": "kadhalika zuyyina lil-kafirin / lil-musrifin / li-fir'awn"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); kadhalika zuyyina lil-kafirin / lil-musrifin / li-fir'awn",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1m59ilh0i0dthn": {
    "keep": true,
@@ -27308,11 +27650,15 @@
   },
   "tree:1pm7e8f0xrjir3": {
    "keep": true,
-   "why": "wa in yaraw kulla ayatin la yu'minu biha, 6:25 vs 7:146"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa in yaraw kulla ayatin la yu'minu biha, 6:25 vs 7:146",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xiy8l501302o7": {
    "keep": true,
-   "why": "min / fi kulli ummatin shahidan / rasulan / fawjan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); min / fi kulli ummatin shahidan / rasulan / fawjan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0n1867w0842vn4": {
    "keep": true,
@@ -27332,7 +27678,9 @@
   },
   "tree:1lj5n770kqdx8l": {
    "keep": true,
-   "why": "qad alima kullu unasin mashrabahum 2:60 vs 7:160"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qad alima kullu unasin mashrabahum 2:60 vs 7:160",
+   "view": "matrix",
+   "checked": true
   },
   "tree:19mqjyb03vxjxb": {
    "keep": true,
@@ -27536,7 +27884,9 @@
   },
   "tree:04kfgzj15z4yqz": {
    "keep": true,
-   "why": "kulu mimma fi al-ard / razaqakum / dhukira / ghanimtum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); kulu mimma fi al-ard / razaqakum / dhukira / ghanimtum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07spfyy1j90hpy": {
    "keep": true,
@@ -27852,7 +28202,9 @@
   },
   "tree:1p0557s1qyvioy": {
    "keep": true,
-   "why": "la ta'kulu amwalakum / amwalahum / al-riba / mimma lam yudhkar"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la ta'kulu amwalakum / amwalahum / al-riba / mimma lam yudhkar",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1brjnmn0d2g23b": {
    "keep": true,
@@ -27892,7 +28244,9 @@
   },
   "tree:15ylboi1sdqykm": {
    "keep": true,
-   "why": "la tattabi'u khutuwat / al-hawa / ahwa'a / al-subul"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la tattabi'u khutuwat / al-hawa / ahwa'a / al-subul",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0gorw7i0jmb91i": {
    "keep": true,
@@ -27900,7 +28254,9 @@
   },
   "tree:1ntozhd1wp739t": {
    "keep": true,
-   "why": "ya ayyuha alladhina amanu la tattakhidhu ... awliya series"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); ya ayyuha alladhina amanu la tattakhidhu ... awliya series",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ogcoaa1yej1ns": {
    "keep": false,
@@ -27940,7 +28296,9 @@
   },
   "tree:1lsn0py1nfd7ie": {
    "keep": true,
-   "why": "wa la tahzan alayhim x3, kay taqarra aynuha wa la tahzan x2"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la tahzan alayhim x3, kay taqarra aynuha wa la tahzan x2",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ptxkgx0w4dc8v": {
    "keep": true,
@@ -28060,7 +28418,9 @@
   },
   "tree:1pmvbjf1jmz9r7": {
    "keep": true,
-   "why": "la ta'tadhiru qad / lan / al-yawma"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la ta'tadhiru qad / lan / al-yawma",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0jup13g1tw7jiu": {
    "keep": true,
@@ -28092,7 +28452,9 @@
   },
   "tree:1rumxeg1k95beg": {
    "keep": true,
-   "why": "la taqtulu anfusakum / awladakum / al-nafs / al-sayd / yusuf"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la taqtulu anfusakum / awladakum / al-nafs / al-sayd / yusuf",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0odvvuy1crszsc": {
    "keep": true,
@@ -28396,11 +28758,15 @@
   },
   "tree:0q62lub0s5etzr": {
    "keep": true,
-   "why": "la yu'khadhu minha adl / minha / minkum fidya on Judgment Day"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la yu'khadhu minha adl / minha / minkum fidya on Judgment Day",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1kblgll1iymcen": {
    "keep": true,
-   "why": "2:48 wa la yu'khadhu minha adl vs 6:70 la yu'khadh minha"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 2:48 wa la yu'khadhu minha adl vs 6:70 la yu'khadh minha",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0sjeqnl0vmyktp": {
    "keep": true,
@@ -28484,7 +28850,9 @@
   },
   "tree:1ey6zz009o1i8y": {
    "keep": true,
-   "why": "fa la yujza illa mithlaha (6:160, 40:40) vs alladhina amilu (28:84)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa la yujza illa mithlaha (6:160, 40:40) vs alladhina amilu (28:84)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1eapx411ups2fl": {
    "keep": true,
@@ -28628,7 +28996,9 @@
   },
   "tree:0qbzuam1myh73y": {
    "keep": true,
-   "why": "la yastawi al-qa'idun / al-khabith / minkum / ashab al-nar"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la yastawi al-qa'idun / al-khabith / minkum / ashab al-nar",
+   "view": "matrix",
+   "checked": true
   },
   "tree:09zhyv41j8cvls": {
    "keep": true,
@@ -28684,11 +29054,15 @@
   },
   "tree:0uomoyh07h1173": {
    "keep": true,
-   "why": "fa la yasuddannaka anha vs wa la yasuddannaka an ayat Allah"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa la yasuddannaka anha vs wa la yasuddannaka an ayat Allah",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0x98aw413z0evg": {
    "keep": true,
-   "why": "la yadurrukum kayduhum / man dalla / bare"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); la yadurrukum kayduhum / man dalla / bare",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0r5nplq0129alo": {
    "keep": true,
@@ -28808,7 +29182,9 @@
   },
   "tree:1s5v7h90ehbhnl": {
    "keep": true,
-   "why": "wa la yukallimuhumu Allah yawm al-qiyama vs wa la yanzuru ilayhim"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la yukallimuhumu Allah yawm al-qiyama vs wa la yanzuru ilayhim",
+   "view": "matrix",
+   "checked": true
   },
   "tree:16ozkn51kektcl": {
    "keep": true,
@@ -28956,7 +29332,9 @@
   },
   "tree:15wzoar0ucl86t": {
    "keep": true,
-   "why": "qul la aqulu lakum (6:50) vs wa la aqulu lakum (11:31)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); qul la aqulu lakum (6:50) vs wa la aqulu lakum (11:31)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:05iize611rzbbi": {
    "keep": true,
@@ -29064,7 +29442,9 @@
   },
   "tree:0uayxdr056twd7": {
    "keep": true,
-   "why": "wa la'in sa'altahum man khalaqa ... layaqulunna Allah / al-aziz"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la'in sa'altahum man khalaqa ... layaqulunna Allah / al-aziz",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xperi00uy9yk4": {
    "keep": true,
@@ -29392,7 +29772,9 @@
   },
   "tree:03ge9sm0whow9w": {
    "keep": true,
-   "why": "wa la-qad atayna musa / ibrahim / dawud / luqman"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la-qad atayna musa / ibrahim / dawud / luqman",
+   "view": "matrix",
+   "checked": true
   },
   "tree:18dtky70hbd725": {
    "keep": true,
@@ -29424,7 +29806,9 @@
   },
   "tree:13a2m461scp1a2": {
    "keep": true,
-   "why": "anzalna ilayka / ilaykum kitaban / ayatin mubayyinat"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); anzalna ilayka / ilaykum kitaban / ayatin mubayyinat",
+   "view": "matrix",
+   "checked": true
   },
   "cmp:0xueft21ovkw1i": {
    "keep": true,
@@ -29448,11 +29832,15 @@
   },
   "tree:05i9j7p0o7w10p": {
    "keep": true,
-   "why": "wa la-qad ja'akum musa / yusuf bil-bayyinat vs rasulun min anfusikum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la-qad ja'akum musa / yusuf bil-bayyinat vs rasulun min anfusikum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0po3g9u11vm86k": {
    "keep": true,
-   "why": "wa la-qad ja'ahum rasulun / musa / min rabbihim / min al-anba'"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la-qad ja'ahum rasulun / musa / min rabbihim / min al-anba'",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1pgvjnx19i5hlp": {
    "keep": true,
@@ -29500,7 +29888,9 @@
   },
   "tree:1w1956q1mj7ihw": {
    "keep": true,
-   "why": "wa la-qad alimtum alladhina / al-nash'a vs la-qad alimtum ma"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa la-qad alimtum alladhina / al-nash'a vs la-qad alimtum ma",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0gs8lnd0e2tdxf": {
    "keep": true,
@@ -29644,7 +30034,9 @@
   },
   "tree:17ymp2o1j9wwfs": {
    "keep": true,
-   "why": "li-kulli ummatin ajal / rasul / ja'alna mansakan, wa vs bare"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); li-kulli ummatin ajal / rasul / ja'alna mansakan, wa vs bare",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10ah62j0znppxv": {
    "keep": true,
@@ -29752,7 +30144,9 @@
   },
   "tree:0l28ywq0l16dlo": {
    "keep": true,
-   "why": "alam aqul lakum inni a'lamu ghayb vs min Allah ma la ta'lamun"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); alam aqul lakum inni a'lamu ghayb vs min Allah ma la ta'lamun",
+   "view": "matrix",
+   "checked": true
   },
   "tree:05ojp2k0vn3w4m": {
    "keep": true,
@@ -29784,7 +30178,9 @@
   },
   "tree:1x2ougp1whozft": {
    "keep": true,
-   "why": "innahu lakum aduwwun mubin x5 vs bi'sa vs fattakhidhuhu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); innahu lakum aduwwun mubin x5 vs bi'sa vs fattakhidhuhu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0n7tm3710m7u8d": {
    "keep": true,
@@ -30004,7 +30400,9 @@
   },
   "tree:1ahlfyq03q4clq": {
    "keep": true,
-   "why": "lilladhina ahsanu fi hadhihi al-dunya hasana (16:30, 39:10) vs al-husna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); lilladhina ahsanu fi hadhihi al-dunya hasana (16:30, 39:10) vs al-husna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0n475eg0ifu7qs": {
    "keep": true,
@@ -30036,7 +30434,9 @@
   },
   "tree:1wq5f55115xvyx": {
    "keep": true,
-   "why": "lilladhina la yu'minun / yuridun / yarjun"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); lilladhina la yu'minun / yuridun / yarjun",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1m91brs1ysy8ho": {
    "keep": true,
@@ -30164,7 +30564,9 @@
   },
   "tree:0tm439y0tdl266": {
    "keep": true,
-   "why": "wa lillahi / lillahi / sabbaha lillahi ma fi al-samawat set"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); wa lillahi / lillahi / sabbaha lillahi ma fi al-samawat set",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1uo8xyq0au36u0": {
    "keep": true,
@@ -30392,11 +30794,15 @@
   },
   "tree:0r6br9i0b8uljk": {
    "keep": true,
-   "why": "fa lamma ra'a al-qamara bazighan vs al-shamsa bazighatan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa lamma ra'a al-qamara bazighan vs al-shamsa bazighatan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:056ga4y1ym193w": {
    "keep": true,
-   "why": "asarru al-nadamata lamma ra'awu al-adhab vs ra'aw ba'sana"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); asarru al-nadamata lamma ra'awu al-adhab vs ra'aw ba'sana",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vacg1j0t9mvst": {
    "keep": true,
@@ -30444,7 +30850,9 @@
   },
   "tree:1vhjn021p164lw": {
    "keep": true,
-   "why": "fa lamma an ja'a / arada vs wa lamma an ja'at rusuluna"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa lamma an ja'a / arada vs wa lamma an ja'at rusuluna",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1bmajw60t7ulxe": {
    "keep": true,
@@ -30604,11 +31012,15 @@
   },
   "tree:1qxz7e91x47deh": {
    "keep": true,
-   "why": "li-naftinahum fihi wa rizqu vs wa man yu'rid"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); li-naftinahum fihi wa rizqu vs wa man yu'rid",
+   "view": "matrix",
+   "checked": true
   },
   "tree:01hydzc153n6gk": {
    "keep": true,
-   "why": "fa li-nafsihi / yahtadi li-nafsihi wa man dalla / kafara / asa'a"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); fa li-nafsihi / yahtadi li-nafsihi wa man dalla / kafara / asa'a",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0rymilt08ah1qf": {
    "keep": true,
@@ -30700,7 +31112,9 @@
   },
   "tree:1vlpg8q1axkv9q": {
    "keep": true,
-   "why": "lahu ma fi al-samawati wa ma fi al-ard with different follow-ons"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); lahu ma fi al-samawati wa ma fi al-ard with different follow-ons",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ifi8ij07i2spj": {
    "keep": true,
@@ -31321,7 +31735,9 @@
   },
   "tree:0ep1hhn0s2q851": {
    "keep": true,
-   "why": "Laysal birra an vs bi-an in same surah"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Laysal birra an vs bi-an in same surah",
+   "view": "matrix",
+   "checked": true
   },
   "tree:14ssbj61e6tuyy": {
    "keep": true,
@@ -31329,11 +31745,15 @@
   },
   "tree:1pyab7s0xdczwg": {
    "keep": true,
-   "why": "Laysa 'alaykum junah with fa/wa variants and 24:58 wala 'alayhim"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Laysa 'alaykum junah with fa/wa variants and 24:58 wala 'alayhim",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1n0qkcr071jqlx": {
    "keep": true,
-   "why": "Laysa/fa-laysa/wa-laysa 'alaykum junah: prefix variants"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Laysa/fa-laysa/wa-laysa 'alaykum junah: prefix variants",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0akn0eu0r3f07i": {
    "keep": true,
@@ -31433,7 +31853,9 @@
   },
   "tree:05sy40v0w96xwv": {
    "keep": true,
-   "why": "Laylat al-qadr repeated within surah al-Qadr"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Laylat al-qadr repeated within surah al-Qadr",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0s6jfbg1gdgwwc": {
    "keep": true,
@@ -31713,7 +32135,9 @@
   },
   "tree:1abxlo90hy4xf7": {
    "keep": true,
-   "why": "Kulu min tayyibati ma razaqnakum with different continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Kulu min tayyibati ma razaqnakum with different continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ul3n6l07y5hfj": {
    "keep": true,
@@ -32106,7 +32530,9 @@
   },
   "tree:17pa8if1egcg7z": {
    "keep": true,
-   "why": "Wa ma liz-zalimina min ansar/nasir/hamim endings"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa ma liz-zalimina min ansar/nasir/hamim endings",
+   "view": "matrix",
+   "checked": true
   },
   "tree:18i520f1hysl85": {
    "keep": true,
@@ -32262,7 +32688,9 @@
   },
   "tree:18k5poo0whbwnc": {
    "keep": true,
-   "why": "Wa ma min ilahin illa and wa ma min dabbatin sets"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa ma min ilahin illa and wa ma min dabbatin sets",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xnueds1sn69vo": {
    "keep": true,
@@ -32330,7 +32758,9 @@
   },
   "tree:093mh2y0u5w8bc": {
    "keep": true,
-   "why": "Ma hadha illa basharun/sihrun/rajulun/asatir replies"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ma hadha illa basharun/sihrun/rajulun/asatir replies",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1nfax6s1p8wpgw": {
    "keep": true,
@@ -32386,7 +32816,9 @@
   },
   "tree:0igccy61vg6472": {
    "keep": true,
-   "why": "Ma wa'adana: 7:44 vs the two opposite reactions in 33:12/33:22"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ma wa'adana: 7:44 vs the two opposite reactions in 33:12/33:22",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0qf8uuw049o8wc": {
    "keep": true,
@@ -32598,11 +33030,15 @@
   },
   "tree:1sid9y40lqbx96": {
    "keep": true,
-   "why": "Liyabluwakum fi ma atakum 5:48 vs 6:165; 59:7"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Liyabluwakum fi ma atakum 5:48 vs 6:165; 59:7",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1q0ao9s1hn9aci": {
    "keep": true,
-   "why": "Adjacent 34:44/45 ma ataynahum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adjacent 34:44/45 ma ataynahum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:00sf7e41kwp5pw": {
    "keep": true,
@@ -32642,7 +33078,9 @@
   },
   "tree:0q2osv21ixp8l6": {
    "keep": true,
-   "why": "Wa ma arsalna min qablika/fi qarya sets"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa ma arsalna min qablika/fi qarya sets",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1y0nvg81gyp0aw": {
    "keep": true,
@@ -32698,7 +33136,9 @@
   },
   "tree:1t960lj1dkeyxn": {
    "keep": true,
-   "why": "Wa ma asabakum: Uhud 3:153/3:166 and 42:30 min musiba"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa ma asabakum: Uhud 3:153/3:166 and 42:30 min musiba",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1p1wj820d15lji": {
    "keep": true,
@@ -32835,7 +33275,9 @@
   },
   "tree:19mwfwk1ouw6ge": {
    "keep": true,
-   "why": "9:124 vs 9:127 wa idha ma unzilat sura, then differ"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 9:124 vs 9:127 wa idha ma unzilat sura, then differ",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1od7wlm0epyrtg": {
    "keep": true,
@@ -32847,7 +33289,9 @@
   },
   "tree:14aj86k0gilig2": {
    "keep": true,
-   "why": "Ma anfaqtum min khayr/nafaqa/shay' continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ma anfaqtum min khayr/nafaqa/shay' continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10iiglf0vijysf": {
    "keep": true,
@@ -33027,7 +33471,9 @@
   },
   "tree:0qtd3361cwzpvu": {
    "keep": true,
-   "why": "Mathalulladhina ... ka-mathali parables, 2:261/265 adjacent"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Mathalulladhina ... ka-mathali parables, 2:261/265 adjacent",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1x1j64l0tkkrh5": {
    "keep": true,
@@ -33059,7 +33505,9 @@
   },
   "tree:0oqjjet1aasbbf": {
    "keep": true,
-   "why": "Basharan mithluna wa ma: Nuh's people 11:27 vs 36:15"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Basharan mithluna wa ma: Nuh's people 11:27 vs 36:15",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0hlr5g91o65fib": {
    "keep": true,
@@ -33091,7 +33539,9 @@
   },
   "tree:19crbed0jnb2xb": {
    "keep": true,
-   "why": "Mukhtalifan alwanuhu 16:13 vs 39:21"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Mukhtalifan alwanuhu 16:13 vs 39:21",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1m1jsma0efzc6g": {
    "keep": true,
@@ -33243,11 +33693,15 @@
   },
   "tree:17pz1vg0hjemaq": {
    "keep": true,
-   "why": "Adjacent 48:19 ya'khudhunaha vs 48:20 ta'khudhunaha; 4:94"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adjacent 48:19 ya'khudhunaha vs 48:20 ta'khudhunaha; 4:94",
+   "view": "matrix",
+   "checked": true
   },
   "tree:17glh171srpdz1": {
    "keep": true,
-   "why": "Sari'u 3:133 vs sabiqu 57:21 ila maghfiratin min rabbikum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Sari'u 3:133 vs sabiqu 57:21 ila maghfiratin min rabbikum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:18rs64d1jraozv": {
    "keep": true,
@@ -33255,7 +33709,9 @@
   },
   "tree:132jhkc1cjmnlo": {
    "keep": true,
-   "why": "Lahum maghfiratun wa ajrun 'azim vs kabir"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Lahum maghfiratun wa ajrun 'azim vs kabir",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0noyo5d0k9fl2l": {
    "keep": true,
@@ -33451,7 +33907,9 @@
   },
   "tree:1h531oe0weyu16": {
    "keep": true,
-   "why": "Wa ma ta'tihim min ayatin min ayati rabbihim 6:4 vs 36:46"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa ma ta'tihim min ayatin min ayati rabbihim 6:4 vs 36:46",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ftuox90rb2dtf": {
    "keep": true,
@@ -33467,7 +33925,9 @@
   },
   "tree:1wcva1l0k8z8ln": {
    "keep": true,
-   "why": "Wa min ayatihi refrain series in ar-Rum, Fussilat, ash-Shura"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa min ayatihi refrain series in ar-Rum, Fussilat, ash-Shura",
+   "view": "matrix",
+   "checked": true
   },
   "tree:148hk0u1ia0l1e": {
    "keep": true,
@@ -33495,7 +33955,9 @@
   },
   "tree:1marh690wgmcun": {
    "keep": true,
-   "why": "Min ajrin in ajriya illa 'ala rabbil 'alamin vs 'alallah"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Min ajrin in ajriya illa 'ala rabbil 'alamin vs 'alallah",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0rex7111hhlmoh": {
    "keep": true,
@@ -34420,7 +34882,9 @@
   },
   "tree:1s1tkov1rgyphd": {
    "keep": true,
-   "why": "Min bayninа: 6:53, 38:8, 41:5, 54:25"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Min bayninа: 6:53, 38:8, 41:5, 54:25",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0vv1h9d1sdgne1": {
    "keep": false,
@@ -34460,7 +34924,9 @@
   },
   "tree:1pu6xow03ubjnk": {
    "keep": true,
-   "why": "Tajri min tahtihimul anhar 7:43/10:9/18:31 vs 6:6, 39:16"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Tajri min tahtihimul anhar 7:43/10:9/18:31 vs 6:6, 39:16",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0fqaevp1rju6at": {
    "keep": true,
@@ -34728,11 +35194,15 @@
   },
   "tree:19vsyad1pfvt33": {
    "keep": true,
-   "why": "Adjacent 60:8/9 min diyarikum; 2:84"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adjacent 60:8/9 min diyarikum; 2:84",
+   "view": "matrix",
+   "checked": true
   },
   "tree:13tlcdd07jkain": {
    "keep": true,
-   "why": "Ukhriju min diyarihim set with different continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ukhriju min diyarihim set with different continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:070ifbn1qeh1d3": {
    "keep": true,
@@ -34752,7 +35222,9 @@
   },
   "tree:1fjolaj07mivt1": {
    "keep": true,
-   "why": "Min dhakarin aw untha wa huwa mu'min set; 49:13"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Min dhakarin aw untha wa huwa mu'min set; 49:13",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0dz6bs81waox2s": {
    "keep": true,
@@ -34772,11 +35244,15 @@
   },
   "tree:1n0lhs40xwbitc": {
    "keep": true,
-   "why": "A-unabbi'ukum bi-khayrin 3:15 vs a-fa-unabbi'ukum bi-sharrin 22:72 min dhalikum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); A-unabbi'ukum bi-khayrin 3:15 vs a-fa-unabbi'ukum bi-sharrin 22:72 min dhalikum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0cm7vfr0bqbnnh": {
    "keep": true,
-   "why": "Asawira min dhahabin wa lu'lu'an 22:23 vs 35:33 vs wa yalbasuna 18:31"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Asawira min dhahabin wa lu'lu'an 22:23 vs 35:33 vs wa yalbasuna 18:31",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1asp0kj1ncq8ch": {
    "keep": false,
@@ -34880,7 +35356,9 @@
   },
   "tree:0fjdx1q0hf8x8m": {
    "keep": true,
-   "why": "Min rasulin illa: liyuta' / bi-lisan / kanu bihi yastahzi'un"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Min rasulin illa: liyuta' / bi-lisan / kanu bihi yastahzi'un",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1i8oy9t0hsd085": {
    "keep": true,
@@ -34896,7 +35374,9 @@
   },
   "tree:08yevy116omthr": {
    "keep": true,
-   "why": "Hal ila maraddin/khurujin min sabil and fa-ma lahu min sabil"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Hal ila maraddin/khurujin min sabil and fa-ma lahu min sabil",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1hb256z12juub3": {
    "keep": true,
@@ -34912,7 +35392,9 @@
   },
   "tree:1044kr20j5bbj8": {
    "keep": true,
-   "why": "Ma anzalallahu biha min sultan set and 'alaykum min sultan set"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ma anzalallahu biha min sultan set and 'alaykum min sultan set",
+   "view": "matrix",
+   "checked": true
   },
   "tree:13jz02e1ugwzsy": {
    "keep": true,
@@ -35353,7 +35835,9 @@
   },
   "tree:0egaqrx1vpo0cn": {
    "keep": true,
-   "why": "Wa man qatala mu'minan/nafsan/mazluman rulings"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa man qatala mu'minan/nafsan/mazluman rulings",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0pdsc8z0oftpuf": {
    "keep": false,
@@ -35393,7 +35877,9 @@
   },
   "tree:1p3dlet0yo9w8r": {
    "keep": true,
-   "why": "Al-mala'u min qawmihi: inna la-naraka / ma naraka / la-in ittaba'tum sets"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Al-mala'u min qawmihi: inna la-naraka / ma naraka / la-in ittaba'tum sets",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0mhco4v0xi8tql": {
    "keep": true,
@@ -35553,11 +36039,15 @@
   },
   "tree:0kuavp219cu0q4": {
    "keep": true,
-   "why": "Ayah closing 'min mahis' with ma lana / ma lahum / hal lead-ins"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ayah closing 'min mahis' with ma lana / ma lahum / hal lead-ins",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1cdp8ys0n9p6uo": {
    "keep": true,
-   "why": "Ma asaba min musiba: fi al-ard (57:22) vs illa bi-idhn (64:11), 42:30"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ma asaba min musiba: fi al-ard (57:22) vs illa bi-idhn (64:11), 42:30",
+   "view": "matrix",
+   "checked": true
   },
   "tree:11773t60pk59wy": {
    "keep": true,
@@ -35577,7 +36067,9 @@
   },
   "tree:1tsne3w0vewg3s": {
    "keep": true,
-   "why": "Closing 'min makan' ba'id vs qarib, clustered in 34:51-53"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing 'min makan' ba'id vs qarib, clustered in 34:51-53",
+   "view": "matrix",
+   "checked": true
   },
   "tree:00bsc6r0liglwn": {
    "keep": true,
@@ -35613,7 +36105,9 @@
   },
   "tree:07r8p1j1mdrrjt": {
    "keep": true,
-   "why": "Yatadhakkarun (28:46) vs yahtadun (32:3); 34:34 vs 43:23 mutrafuha"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yatadhakkarun (28:46) vs yahtadun (32:3); 34:34 vs 43:23 mutrafuha",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0nqkf2l1t1uygz": {
    "keep": false,
@@ -35621,7 +36115,9 @@
   },
   "tree:1d2ngay18z6oeo": {
    "keep": true,
-   "why": "Zihar 58:2 vs 58:3 (alladhina yuzahiruna minkum / thumma ya'udun)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Zihar 58:2 vs 58:3 (alladhina yuzahiruna minkum / thumma ya'udun)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:12y3f1z09fcshb": {
    "keep": true,
@@ -35809,7 +36305,9 @@
   },
   "tree:0m5rbso0nulsc4": {
    "keep": true,
-   "why": "Wa minhum man yastami' ilayka: akinna (6:25) vs hatta idha kharaju (47:16)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa minhum man yastami' ilayka: akinna (6:25) vs hatta idha kharaju (47:16)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0tbufzn191woxh": {
    "keep": true,
@@ -35905,7 +36403,9 @@
   },
   "tree:1pfqjyl00z6bwx": {
    "keep": true,
-   "why": "Who does deeds: min al-salihat 4:124/20:112/21:94, su'an 4:110/4:123, 99:7-8"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Who does deeds: min al-salihat 4:124/20:112/21:94, su'an 4:110/4:123, 99:7-8",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xbgjqj1j1vz4z": {
    "keep": true,
@@ -36021,7 +36521,9 @@
   },
   "tree:08tanq51tm9efj": {
    "keep": true,
-   "why": "Ayah-final 'minhu dhikra' in al-Kahf 18:70 and 18:83"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ayah-final 'minhu dhikra' in al-Kahf 18:70 and 18:83",
+   "view": "matrix",
+   "checked": true
   },
   "tree:03fmkmj0lfy8y1": {
    "keep": false,
@@ -36161,7 +36663,9 @@
   },
   "tree:0z4qxtp1ubntpd": {
    "keep": true,
-   "why": "Munibina ilayhi: wa ittaquhu (30:31) vs thumma idha (30:33)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Munibina ilayhi: wa ittaquhu (30:31) vs thumma idha (30:33)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0y0rugn1npf5m3": {
    "keep": true,
@@ -36189,7 +36693,9 @@
   },
   "tree:16zclpq04g8iny": {
    "keep": true,
-   "why": "Arsalna Musa bi-ayatina: wa sultan mubin / an akhrij / ila Fir'awn"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Arsalna Musa bi-ayatina: wa sultan mubin / an akhrij / ila Fir'awn",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1dkaasp0rhmklb": {
    "keep": true,
@@ -36209,7 +36715,9 @@
   },
   "tree:1nkr1e802y8sny": {
    "keep": true,
-   "why": "2:136 wa ma utiya al-nabiyyun vs 3:84 wa al-nabiyyun; 33:7, 42:13"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); 2:136 wa ma utiya al-nabiyyun vs 3:84 wa al-nabiyyun; 33:7, 42:13",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0ygrj7y09cyqh2": {
    "keep": true,
@@ -36285,7 +36793,9 @@
   },
   "tree:0yad75m0x93en8": {
    "keep": true,
-   "why": "Najjaynahu wa ahlahu: min al-karb al-azim (Nuh) vs ajma'in (Lut)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Najjaynahu wa ahlahu: min al-karb al-azim (Nuh) vs ajma'in (Lut)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0b1is2x1sf64dl": {
    "keep": true,
@@ -36353,7 +36863,9 @@
   },
   "tree:1dmws3l15zmfhh": {
    "keep": true,
-   "why": "Closing 'nadhir mubin' with in huwa illa / innama ana / inni lakum"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Closing 'nadhir mubin' with in huwa illa / innama ana / inni lakum",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ybfe8q0weymxc": {
    "keep": true,
@@ -37302,7 +37814,9 @@
   },
   "tree:1oxis2a0ddy8nw": {
    "keep": true,
-   "why": "Min indika / min rabbika / min rabbihim"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Min indika / min rabbika / min rabbihim",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1xcx4y31b5faf1": {
    "keep": true,
@@ -37872,7 +38386,9 @@
   },
   "tree:0cx0xqp1cqrz0x": {
    "keep": true,
-   "why": "Wa'd Allah haqq / haqqan / la yukhlifu: many look-alike endings"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa'd Allah haqq / haqqan / la yukhlifu: many look-alike endings",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1fgpiy60qn31ss": {
    "keep": true,
@@ -37900,7 +38416,9 @@
   },
   "tree:18shv1z14630xl": {
    "keep": true,
-   "why": "Wa'adna Musa arba'in (2:51) vs thalathin (7:142)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wa'adna Musa arba'in (2:51) vs thalathin (7:142)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:14r3r8d1a5gxet": {
    "keep": true,
@@ -38088,7 +38606,9 @@
   },
   "tree:1fw20ts110dena": {
    "keep": true,
-   "why": "Wahabna lahu Ishaq wa Ya'qub x4 vs Harun, Yahya, ahlahu"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Wahabna lahu Ishaq wa Ya'qub x4 vs Harun, Yahya, ahlahu",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0jq6auq06bmwb8": {
    "keep": true,
@@ -38176,7 +38696,9 @@
   },
   "tree:1e4ibr31gazf6z": {
    "keep": true,
-   "why": "Hatta ya'tiya Allah bi-amrihi (2:109, 9:24) vs bi-qawm (5:54)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Hatta ya'tiya Allah bi-amrihi (2:109, 9:24) vs bi-qawm (5:54)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1iq3or81j4cy1m": {
    "keep": true,
@@ -38200,7 +38722,9 @@
   },
   "tree:05pqf8b1c2j2w3": {
    "keep": true,
-   "why": "Ya'juj wa Ma'juj: mufsiduna (18:94) vs wa hum min kull hadab (21:96)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ya'juj wa Ma'juj: mufsiduna (18:94) vs wa hum min kull hadab (21:96)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:00e6rgg002g8yu": {
    "keep": true,
@@ -38460,7 +38984,9 @@
   },
   "tree:0oy0j2i0lw2p5o": {
    "keep": true,
-   "why": "Lam yattakhidh waladan wa lam yakun (17:111 = 25:2); 19:92; 39:4"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Lam yattakhidh waladan wa lam yakun (17:111 = 25:2); 19:92; 39:4",
+   "view": "matrix",
+   "checked": true
   },
   "tree:17k6ifb13jfzs7": {
    "keep": true,
@@ -38916,7 +39442,9 @@
   },
   "tree:0x222vw1l41rku": {
    "keep": true,
-   "why": "Yas'auna fi al-ard fasadan (5:33, 5:64) vs fi ayatina mu'ajizin"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yas'auna fi al-ard fasadan (5:33, 5:64) vs fi ayatina mu'ajizin",
+   "view": "matrix",
+   "checked": true
   },
   "tree:09zbg9q0e8d5f0": {
    "keep": true,
@@ -38928,11 +39456,15 @@
   },
   "tree:1kaivqm0u5stv0": {
    "keep": true,
-   "why": "Yas'alunaka an: crescents, wine, orphans, the Hour, spirit, mountains..."
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yas'alunaka an: crescents, wine, orphans, the Hour, spirit, mountains...",
+   "view": "matrix",
+   "checked": true
   },
   "tree:07cdfp409i03jw": {
    "keep": true,
-   "why": "Yas'alunaka madha yunfiqun (2:215, 2:219) vs madha uhilla (5:4)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yas'alunaka madha yunfiqun (2:215, 2:219) vs madha uhilla (5:4)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0yu7hcj142w8gz": {
    "keep": true,
@@ -38964,7 +39496,9 @@
   },
   "tree:1fizrx20osjtnw": {
    "keep": true,
-   "why": "Man yasha' min ibadihi with many continuations"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Man yasha' min ibadihi with many continuations",
+   "view": "matrix",
+   "checked": true
   },
   "tree:064se070pyctcj": {
    "keep": true,
@@ -39000,7 +39534,9 @@
   },
   "tree:1esl5h310sbxen": {
    "keep": true,
-   "why": "Yasudduna an sabil Allah wa yabghunaha iwaja vs al-masjid al-haram"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yasudduna an sabil Allah wa yabghunaha iwaja vs al-masjid al-haram",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1ooyppc0obzrrm": {
    "keep": true,
@@ -39173,7 +39709,9 @@
   },
   "tree:0t5g4671drg6sf": {
    "keep": true,
-   "why": "Ya'lamuna annahu al-haqq (2:26) vs munazzal min rabbika (6:114)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Ya'lamuna annahu al-haqq (2:26) vs munazzal min rabbika (6:114)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:1vgdqgq08d7tj2": {
    "keep": true,
@@ -39265,7 +39803,9 @@
   },
   "tree:1ass6qp0hpdzc1": {
    "keep": true,
-   "why": "Yaf'alu ma yurid (2:253, 22:14) vs ma yasha' (3:40, 22:18)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yaf'alu ma yurid (2:253, 22:14) vs ma yasha' (3:40, 22:18)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:077hb2w055vnhs": {
    "keep": true,
@@ -39277,7 +39817,9 @@
   },
   "tree:1ivbkpe19p8w3y": {
    "keep": true,
-   "why": "Adjacent 4:92 illa khata'an vs 4:93 muta'ammidan"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adjacent 4:92 illa khata'an vs 4:93 muta'ammidan",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0bcg9y919sninn": {
    "keep": true,
@@ -39401,7 +39943,9 @@
   },
   "tree:0qndxfj0z67s0v": {
    "keep": true,
-   "why": "Hud: la as'alukum alayhi malan (11:29) vs ajran (11:51); 11:89"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Hud: la as'alukum alayhi malan (11:29) vs ajran (11:51); 11:89",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0gx33zm1ykdibe": {
    "keep": true,
@@ -39433,7 +39977,9 @@
   },
   "tree:1wnfmjh0anw1ab": {
    "keep": true,
-   "why": "Yukaffir ankum min sayyi'atikum (2:271) vs sayyi'atikum (8:29, 66:8)"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yukaffir ankum min sayyi'atikum (2:271) vs sayyi'atikum (8:29, 66:8)",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0xxxygf1vt9wkf": {
    "keep": true,
@@ -39473,7 +40019,9 @@
   },
   "tree:0zzb86k1pjuwqc": {
    "keep": true,
-   "why": "Anna yakunu lahu walad: 4:171 vs 6:101; al-mulk, asra"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Anna yakunu lahu walad: 4:171 vs 6:101; al-mulk, asra",
+   "view": "matrix",
+   "checked": true
   },
   "tree:0fk2x2a180rbey": {
    "keep": true,
@@ -39625,7 +40173,9 @@
   },
   "tree:1k4v8mg1lpnhhy": {
    "keep": true,
-   "why": "Yahdi bihi man yasha' min ibadihi (6:88) vs wa man yudlil (39:23); 2:26, 5:16"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Yahdi bihi man yasha' min ibadihi (6:88) vs wa man yudlil (39:23); 2:26, 5:16",
+   "view": "matrix",
+   "checked": true
   },
   "tree:12aplty0pjmo64": {
    "keep": true,
@@ -39737,7 +40287,9 @@
   },
   "tree:1ii866s1wnyts8": {
    "keep": true,
-   "why": "Adhab yawm azim: akhafu alaykum vs in asaytu rabbi"
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches); Adhab yawm azim: akhafu alaykum vs in asaytu rabbi",
+   "view": "matrix",
+   "checked": true
   },
   "tree:10bar0f05jgwvt": {
    "keep": true,
@@ -39842,6 +40394,66 @@
   "tree:0v1dwll01bnv5n": {
    "keep": true,
    "why": "Al-Anbiya: qalu (21:14) vs la-yaqulunna (21:46)"
+  },
+  "tree:0a4thdj0xs6hmt": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:15e21gr0a0ejnp": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1ej033a1tnnvmw": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:17pp56j1bnkdth": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1twzz480s1u9io": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1i3bb9d0781pjb": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1lt3rij18mhxa1": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1qzpsnm0yl7144": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1af77kp119torl": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
+  },
+  "tree:1hemmgg0xpitgu": {
+   "keep": true,
+   "why": "owner 2026-11-17: drop the tree, keep the matrix (like the Musa tree: one shared word or none, then long branches)",
+   "view": "matrix",
+   "checked": true
   }
  }
 }
