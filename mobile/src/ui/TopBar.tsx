@@ -15,6 +15,8 @@ import { useCompact } from '@/lib/chrome';
 import { toHub, toShelf, toTab } from '@/lib/ways';
 
 const HEIGHT = 52;
+/** The bar's row height, under the status bar. */
+export const TOP_BAR = HEIGHT;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
