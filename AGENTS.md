@@ -285,8 +285,11 @@ page (two ayat stacked in compare or the matrix, words in a tree box); it keeps
 everything else. Features store places (surah:ayah:word), never copies of the
 text. The pages are the only stored Quran text: a feature that needs an ayah's
 words reads them from the pages (`ayahWordsOf` in
-`shared/quran/quranText/ayahWords.ts`), never from a regrouped copy. The same
-file maps the older tree text's words onto the page words. Only the module sets the Quran font. The one exception is Quran quoted
+`shared/quran/quranText/ayahWords.ts`), never from a regrouped copy. Built
+data keeps positions only: trees.json holds keys, pages, roots and word
+ranges, and `shared/quran/quranText/corpus.ts` puts the page words back (import
+it, never trees.json). The same ayahWords file maps the corpus's word split onto
+the page words. Only the module sets the Quran font. The one exception is Quran quoted
 inside a book. `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 
