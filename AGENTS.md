@@ -216,8 +216,8 @@ pieces. Plan and inventory: `docs/plans/shared-first.md`.
   them in would change how they look and what they announce.
 - Rows in a suggestion or node list are buttons for the keyboard, not controls
   that read as buttons: they stack multiple lines, fill their row, and carry no
-  border. The existing ones stay plain `button` elements on the guard's list;
-  a new list gets a shared row piece (see "Shared first").
+  border. The existing ones stay plain `button` elements, counted in the
+  guard's baseline; a new list gets a shared row piece (see "Shared first").
 - Every button carries an icon beside its label, from `lucide-react`. Pick one that names the action rather than decorating it, and reuse the
   icon an action already has elsewhere (Start over and Reset share the rotate
   arrow, View profile shares the person). A horizontal arrow has to be mirrored
@@ -271,7 +271,7 @@ decision.
 | Quran text | the Quran module (being built: `shared/quran/quranText/`, `src/components/quran/text/`, `mobile/src/components/quran/text/`) | `shared/quran/oneQuranText.test.ts` |
 | Tree | builders in `shared/quran` (`createTreePresenter`, `compareTree`), drawn by each platform's `BranchTree` | `shared/quran/oneTree.test.ts` |
 | Link out of Namaq | `ExternalLink` (web and app) | `src/components/common/ExternalLink.test.tsx` |
-| Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` |
+| Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` counts raw buttons per file (no new ones) |
 | Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
 
 ### Quran text

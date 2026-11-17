@@ -38,7 +38,7 @@ function walk(dir: string, keep: (name: string) => boolean): string[] {
 }
 
 /** Comments name the rule without breaking it. */
-const withoutComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/.*$/gm, '$1');
+const withoutComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
 const notTest = (name: string) => !/\.test\.tsx?$/.test(name);
 const read = (path: string) => withoutComments(readFileSync(join(ROOT, path), 'utf8'));
 const count = (text: string, pattern: RegExp) => text.match(pattern)?.length ?? 0;
@@ -49,10 +49,13 @@ function openingTags(text: string, name: string): string[] {
   const start = new RegExp(`<${name}\\b`, 'g');
   for (let match = start.exec(text); match; match = start.exec(text)) {
     let depth = 0;
+    let quote = '';
     let end = match.index + 1;
     for (; end < text.length; end++) {
       const ch = text[end];
-      if (ch === '{') depth++;
+      if (quote) { if (ch === quote) quote = ''; continue; }
+      if (depth === 0 && (ch === '"' || ch === "'")) quote = ch;
+      else if (ch === '{') depth++;
       else if (ch === '}') depth--;
       else if (ch === '>' && depth === 0 && text[end - 1] !== '=') break;
     }
@@ -61,8 +64,20 @@ function openingTags(text: string, name: string): string[] {
   return tags;
 }
 
-/** The innermost `{ ... }` groups: style objects, among others. */
-const innermostObjects = (text: string) => text.match(/\{[^{}]*\}/g) ?? [];
+/**
+ * Every `{ ... }` group (style objects among them) with its nested groups taken out, so each group shows only its own
+ * props: a style holding `transform: [{ ... }]` or `${palette.rule}55` still reads as one object.
+ */
+function objects(text: string): string[] {
+  const found: string[] = [];
+  const open: string[][] = [];
+  for (const ch of text) {
+    if (ch === '{') open.push([]);
+    else if (ch === '}') { const own = open.pop(); if (own) found.push(own.join('')); }
+    else if (open.length) open[open.length - 1].push(ch);
+  }
+  return found;
+}
 
 // ---- App ----------------------------------------------------------------------------------------------------------
 
@@ -111,10 +126,9 @@ const RADIUS = /\bborder\w*Radius\s*:|\.\.\.\s*CARD\b|\.radius\b/;
 const FRAME = /\bborder\w*Width\s*:|\bborder\w*Color\s*:|backgroundColor\s*:\s*palette\.(card|paperDeep)\b/;
 const LITERAL_RADIUS = /\bborder\w*Radius\s*:\s*\d/g;
 
-function appBoxes(text: string): number {
-  const framed = innermostObjects(text).filter(object => RADIUS.test(object) && FRAME.test(object)).length;
-  return framed + count(text, LITERAL_RADIUS);
-}
+/** One per framed box; otherwise one per literal radius. */
+const appBoxes = (text: string) =>
+  objects(text).reduce((sum, object) => sum + (RADIUS.test(object) && FRAME.test(object) ? 1 : count(object, LITERAL_RADIUS)), 0);
 
 const appFiles = walk('mobile/src', name => /\.tsx?$/.test(name) && notTest(name)).filter(path => !path.startsWith(APP_SHARED));
 
@@ -129,17 +143,17 @@ const WEB_CONTROLS = [
 
 function webControls(path: string, text: string): number {
   if (path.endsWith('.css')) return count(text, /position\s*:\s*fixed\b/g);
-  const fixed = count(text, /[\s"'`]fixed(?=[\s"'`])/g);
+  const fixed = count(text, /[\s"'`:]fixed(?=[\s"'`])/g);
   const clickable = ['div', 'span', 'li', 'p', 'img', 'section', 'article'].flatMap(tag => openingTags(text, tag)).filter(tag => /\sonClick\s*=/.test(tag)).length;
   return WEB_CONTROLS.reduce((sum, pattern) => sum + count(text, pattern), 0) + fixed + clickable;
 }
 
 function webBoxes(path: string, text: string): number {
-  if (path.endsWith('.css')) return count(text, /border(-\w+)?-radius\s*:/g);
-  return count(text, /(?<![\w-])rounded(-[\w[\].\/]+)?(?![\w-])/g);
+  if (path.endsWith('.css')) return count(text, /border(-\w+)*-radius\s*:/g);
+  return count(text, /(?<![\w-])rounded(?!\w)/g);
 }
 
-const webFiles = walk('src', name => /\.(tsx|module\.css)$/.test(name) && notTest(name)).filter(path => !path.startsWith(WEB_SHARED));
+const webFiles = walk('src', name => /\.(tsx?|css)$/.test(name) && notTest(name)).filter(path => !path.startsWith(WEB_SHARED));
 
 // ---- Counts -------------------------------------------------------------------------------------------------------
 
@@ -170,8 +184,11 @@ describe('shared first', () => {
   const known = JSON.parse(readFileSync(BASELINE, 'utf8')) as typeof breaks;
 
   it('shared pieces never hand out a raw primitive', () => {
-    const leaks = walk('mobile/src/ui', name => /\.tsx?$/.test(name))
-      .filter(path => /export\s*(\*|\{[^}]*\})\s*from\s*['"](react-native|react-native-gesture-handler|expo-blur)['"]/.test(read(path)));
+    const leaks = walk('mobile/src/ui', name => /\.tsx?$/.test(name)).filter(path => {
+      const text = read(path);
+      if (/export\s*(\*|\{[^}]*\})\s*from\s*['"](react-native|react-native-gesture-handler|expo-blur)['"]/.test(text)) return true;
+      return primitiveNames(text).some(name => new RegExp(`export\\s*\\{[^}]*\\b${name}\\b|export\\s+(default\\s+|const\\s+\\w+\\s*=\\s*)${name}\\s*;`).test(text));
+    });
     expect(leaks).toEqual([]);
   });
 

@@ -195,11 +195,13 @@ Website rules in the same file, outside `src/components/common/`: no
 file and only allowed to shrink.
 
 Baseline after the move (`shared/sharedFirst.baseline.json`): app controls 222
-in 65 files, app boxes 235 in 60 files, website controls 171 in 75 files,
-website rounded corners 269 in 96 files. Checked to fail on: a new button in
+in 65 files, app boxes 154 in 61 files, website controls 172 in 76 files,
+website rounded corners 286 in 98 files. Checked to fail on: a new button in
 an unlisted screen through a multi-line `Pressable as Tap` import, a second
 button in a listed file, a `View` with responder props, a `...CARD` box with a
-border, and a clickable `div` with `rounded-xl` on the website.
+border, a clickable `div` with `rounded-xl` on the website, a box whose
+border colour is a template string, `rounded-t-xl`, tappable `Text` with a `>`
+in a prop, and a file in `ui/` that imports `Pressable` and exports it again.
 
 ### Second vote
 
