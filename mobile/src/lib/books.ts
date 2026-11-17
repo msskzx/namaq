@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
-import { BOOKS, bookOf, bookPath, isBookId, type BookId, type BookKind } from '@shared/books';
+import { bookOf, bookPath, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
 import { WEBSITE } from './branches';
 
@@ -32,9 +32,6 @@ export function bookState(id: BookId): BookState {
 
 /** Rerenders when any book comes or goes; read each book with bookState. */
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
-
-/** The books of a kind the person keeps, in the list's order. */
-export const booksOn = (kind: BookKind) => BOOKS.filter(book => book.kind === kind && bookState(book.id) === 'on');
 
 const folder = () => new Directory(Paths.document, 'books');
 const readable = (data: unknown) => {

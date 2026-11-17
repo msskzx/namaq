@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { createAudioPlayer, preload, setAudioModeAsync, type AudioPlayer, type AudioStatus } from 'expo-audio';
-import { ayatOf, FIRST, nextStep, pauseAfter, reciterName, reciterOf, stepTo, surahEnd, type Range, type Step } from '@shared/quran/recitation';
+import { ayatOf, FIRST, nextStep, pauseAfter, reciterName, reciterOf, surahEnd, type Range, type Step } from '@shared/quran/recitation';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahCounts, surahNames } from './mushaf';
 import { readListenPlan, readReciter } from '@shared/listenSettings';
@@ -100,13 +100,6 @@ export function togglePlaying() {
     player.play();
     emit({ ...state, playing: true });
   }
-}
-
-/** One ayah back or on, inside the range. */
-export function stepAyah(by: 1 | -1) {
-  if (!state) return;
-  const step = stepTo(state.step, by, state.keys.length);
-  if (step) go(step, state.playing);
 }
 
 /** The speed changed in the sheet: the ayah playing takes it at once. */

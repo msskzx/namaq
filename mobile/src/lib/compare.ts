@@ -167,14 +167,6 @@ export function filterOfList(state: ListState): PairFilter {
 }
 
 let pairsByAyah: Map<string, { id: string; a: number; b: number }[]> | undefined;
-/**
- * The listed surah pair holding a kept compare card with two of these ayat (the website's «في المقارنة» link).
- * Read from the stored pair ids, so no card is decoded.
- */
-export function compareTargetFor(keys: string[]): { lead: number; other: number } | undefined {
-  return compareTargetsFor(keys)[0];
-}
-
 /** One way from a tree into compare: a listed surah pair holding a kept card of two of its ayat, and those ayah numbers. */
 export type CompareTarget = { lead: number; other: number; ayat: [number, number] };
 

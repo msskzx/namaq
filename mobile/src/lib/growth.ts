@@ -1,7 +1,7 @@
 import { ALL_WORDS, cardWords, growthPlan } from '@shared/quran/growth';
 
 export { ALL_WORDS };
-import { keys, type Branch, type Variant } from '@shared/quran/branches';
+import { type Branch, type Variant } from '@shared/quran/branches';
 
 /**
  * Ids of what a tree card draws, shared by the tree, the growth studio and the video:
@@ -106,6 +106,3 @@ export function connectionBeats(count: number, ask = false): Beat[] {
     { step: i, key: '', ms: 500, reveal: [], now: [] },
   ]).flat();
 }
-
-/** The ayah keys each node holds, for lighting the path of the ayah that is growing. */
-export const nodeKeys = (tree: Branch) => new Map([...nodeIndices(tree)].map(([node, index]) => [nodeId(index), keys(node)]));

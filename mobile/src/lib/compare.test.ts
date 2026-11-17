@@ -3,7 +3,7 @@ import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
 import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
-import { aloneNote, besideRows, cardsFor, compareTargetFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
+import { aloneNote, besideRows, cardsFor, compareTargetsFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
@@ -139,7 +139,7 @@ describe('the «also in compare» button under a tree', () => {
     for (const piece of treeList()) {
       const keys = piece.keys;
       const web = compareLinkFor(keys)?.match(/a=(\d+)&b=(\d+)/);
-      const app = compareTargetFor(keys);
+      const app = compareTargetsFor(keys)[0];
       expect(app && [Math.min(app.lead, app.other), Math.max(app.lead, app.other)], piece.id).toEqual(web ? [Number(web[1]), Number(web[2])] : undefined);
       if (app) linked++;
     }
