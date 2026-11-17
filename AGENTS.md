@@ -224,9 +224,14 @@ R0042 and R0051, each cited by the next fix, until the owner agreed one
 builder for every tree). Stop and bring the owner a short proposal first:
 the one pipeline every feature should go through (entry, levels, what each
 feature passes in), the callers that leave it today, and the guard that
-would fail on any other path. Build the pipeline and the guard, and add the
-row here, only after the owner agrees. A new row in this table is always the
-owner's decision.
+would fail on any other path. Before it reaches the owner, a second agent
+votes on it: give a fresh subagent the bug, the code and the proposed guard
+(not your reasoning), and ask it to find a caller the pipeline misses and to
+show the guard fails when the old path is put back. The proposal goes to the
+owner with both votes, and the second agent's objections are written in it
+if the two disagree. Build the pipeline and the guard, and add the row here,
+only after the owner agrees. A new row in this table is always the owner's
+decision.
 
 | Thing | Entry | Guard |
 | --- | --- | --- |
