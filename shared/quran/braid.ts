@@ -2,6 +2,8 @@ import { num } from './arabicNumber';
 import { letters, sharedDisplay } from './phraseTrees';
 import { END, type Branch } from './branches';
 import { likeness } from './wordMatch';
+import { bare } from './quranText/ayahWords';
+import { writtenForms } from './writtenForms';
 import type { CardAyah, CardMark, CardSide } from './compareCards';
 
 /** Word ranges [start, end) on each of the two sides. */
@@ -62,6 +64,8 @@ const flat = (ayat: CardAyah[]): BraidWord[] => ayat.flatMap(ayah => ayah.words.
 
 /** Two words the braid pairs as one but the sides write differently. */
 const apart = (a: BraidWord, b: BraidWord) => likeness([a.text, b.text]) !== 'exact';
+/** The same word that the two ayat stop on differently: a waqf or other sign after it on one side only. */
+const signsApart = (a: BraidWord, b: BraidWord) => a.text !== b.text && bare(a.text) === bare(b.text);
 
 /**
  * The branches trees' rule for a word written differently (docs/adr/0036), on a braid: the first word of a common stretch joins
@@ -140,7 +144,9 @@ function both(a: BraidWord[], b: BraidWord[], surahs: [number, number], shown: (
   a.forEach((word, i) => {
     const partner = b[i];
     const differ = apart(word, partner);
-    out.push(differ ? sharedDisplay([word.text, partner.text]) : word.text);
+    // A sign only one side carries is not shown as both sides': the shared word keeps the signs both carry, and the drawer shows
+    // the rest faint until a path picks a side (writtenForms, as on the branches trees, owner 2026-11-17).
+    out.push(differ ? sharedDisplay([word.text, partner.text]) : signsApart(word, partner) ? writtenForms({ forms: { a: [word.text], b: [partner.text] } }, 0, word.text)[0].word : word.text);
     forms[0].push(word.text);
     forms[1].push(partner.text);
     tones.push(differ ? undefined : 'exact');
@@ -148,7 +154,7 @@ function both(a: BraidWord[], b: BraidWord[], surahs: [number, number], shown: (
     if (ends.length) { out.push(sign(ends)); forms[0].push(sign(ends)); forms[1].push(sign(ends)); tones.push(undefined); }
   });
   // Each writing is named by the ayah it is written in (the first word the sides write differently), so a braid's strand names its own ayah.
-  const at = a.findIndex((word, i) => apart(word, b[i]));
+  const at = a.findIndex((word, i) => apart(word, b[i]) || signsApart(word, b[i]));
   const keys = at < 0 ? [] : [`${surahs[0]}:${a[at].ayah}`, `${surahs[1]}:${b[at].ayah}`];
   return { words: out, tones, ...(at >= 0 && keys[0] !== keys[1] ? { forms: { [keys[0]]: forms[0], [keys[1]]: forms[1] } } : {}) };
 }
