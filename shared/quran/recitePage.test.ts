@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
 import type { RecitePosition } from './recite';
-import { pageModel, reciteView } from './recitePage';
+import { joinModels, pageModel, reciteView } from './recitePage';
 
 const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
 
@@ -52,5 +52,17 @@ describe('reciting one mushaf page', () => {
     expect(view.hidden('76:30', 0)).toBe(false);
     const all = steps(model, { start: '76:31', shown: null, words: 0 });
     expect(all.at(-1)?.shown).toBe(model.order.at(-1));
+  });
+});
+
+describe('a two-page spread', () => {
+  it('counts an ayah that runs over both pages as one, and keeps both pages\' order', () => {
+    const [right, left] = [pageModel(page(2)), pageModel(page(3))];
+    const spread = joinModels([right, left]);
+    expect(spread.order).toEqual([...new Set([...right.order, ...left.order])]);
+    const shared = right.order.find(key => left.order.includes(key));
+    if (shared) expect(spread.words[shared]).toBe(right.words[shared] + left.words[shared]);
+    expect(spread.lines.length).toBe(right.lines.length + left.lines.length);
+    expect(joinModels([right])).toBe(right);
   });
 });

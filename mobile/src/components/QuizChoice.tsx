@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, X } from 'lucide-react-native';
 import { Text } from '@/components/Text';
@@ -34,8 +35,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
-  // What is recited or written stays hidden until it is shown or answered.
-  const revealed = shown || answered || !recited(question);
+  // What is recited or written stays hidden until it is shown or answered; on the page, recite mode's bar shows it.
+  const [pageShown, setPageShown] = useState<string | null>(null);
+  const onPage = !!question.ayahKey && !!question.page;
+  const revealed = shown || answered || !recited(question) || pageShown === question.key;
   const alike = answered && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
@@ -44,8 +47,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {header}
       {question.ayahKey && question.page ? (
         <View style={{ marginHorizontal: 16 }}>
-          <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette} shown={revealed}
-            onGraded={question.page.write && !answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
+          <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette} shown={shown || answered || pageShown === question.key}
+            onShown={() => { setPageShown(question.key); onReveal?.(); }}
+            onWritten={!answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
         </View>
       ) : question.quran && (
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
@@ -56,7 +60,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           </Text>
         </View>
       )}
-      {!revealed && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
+      {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
       {revealed && (
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {

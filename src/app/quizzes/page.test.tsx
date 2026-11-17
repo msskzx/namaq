@@ -91,18 +91,24 @@ const branchQuestion = {
 const availabilityKeys: string[] = [];
 let availableSupply = 5;
 
-vi.mock('swr', () => ({
-  default: (rawKey: unknown) => {
-    const key = typeof rawKey === 'string' ? rawKey : null;
-    if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
-    if (key?.startsWith('/api/quiz/availability')) {
-      const available = nav.getUrl().includes('topic=AYAT') ? 2 : availableSupply;
-      return { data: { available, lengths: [5, 10, 15].filter((length) => length <= available) }, error: null, isLoading: false };
-    }
-    if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
-    return { data: undefined, error: null, isLoading: false };
-  },
-}));
+vi.mock('swr', async () => {
+  // Yasin's first page, for a question asked on the mushaf page (QuizPage).
+  const yasin = (await import('@shared/data/quran/mushaf/440.json')).default;
+  return {
+    default: (rawKey: unknown) => {
+      const key = typeof rawKey === 'string' ? rawKey : null;
+      if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
+      if (key?.startsWith('/api/quiz/availability')) {
+        const available = nav.getUrl().includes('topic=AYAT') ? 2 : availableSupply;
+        return { data: { available, lengths: [5, 10, 15].filter((length) => length <= available) }, error: null, isLoading: false };
+      }
+      if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
+      if (key === '/api/home/feed?ayah=36:2') return { data: { page: 440, top: 35, data: yasin, previous: null }, error: null, isLoading: false };
+      return { data: undefined, error: null, isLoading: false };
+    },
+  };
+});
+
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
 
@@ -258,11 +264,13 @@ describe('QuizzesPage', () => {
   });
 
   it('keeps a recited snippet\'s rest and choices hidden until shown, and saves «نسيتها» as forgotten', () => {
+    // The mushaf page measures itself.
+    vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
     const original = questions[0];
     questions[0] = {
       ...original, key: 'RECITE:36:1', family: 'RECITE', promptArabic: 'سمّع بقية الآية',
       choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }], correctAnswer: '1',
-      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2', page: { shows: 1, write: 'rest' as const } },
+      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2', page: { shows: 1, recite: true } },
     };
     try {
       nav.reset('/quizzes?topic=RECITE&length=5');
@@ -270,12 +278,18 @@ describe('QuizzesPage', () => {
       expect(document.querySelector('p.font-quran')).toBeNull();
       expect(screen.queryByRole('button', { name: 'نسيتها' })).toBeNull();
       expect(screen.queryByRole('button', { name: 'Show answer' })).toBeNull();
-      fireEvent.click(screen.getByRole('button', { name: 'Show the ayah' }));
+      // Shown with recite mode's own bar, as in the mushaf; it stops at the ayah's end.
+      expect(screen.getByRole('toolbar', { name: 'Recite tools' })).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Stop reciting' })).toBeNull();
+      // The words the question shows are where it starts: a step back cannot hide them.
+      expect((screen.getByRole('button', { name: 'Step back' }) as HTMLButtonElement).disabled).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Reveal the next ayah' }));
       fireEvent.click(screen.getByRole('button', { name: 'نسيتها' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       expect(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')['36:2'].forgot).toBe(1);
     } finally {
       questions[0] = original;
+      vi.unstubAllGlobals();
     }
   });
 

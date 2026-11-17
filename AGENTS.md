@@ -238,6 +238,7 @@ decision.
 | Quran text | the Quran module (being built: `shared/quran/quranText/`, `src/components/quran/text/`, `mobile/src/components/quran/text/`) | `shared/quran/oneQuranText.test.ts` |
 | Tree | builders in `shared/quran` (`createTreePresenter`, `compareTree`), drawn by each platform's `BranchTree` | `shared/quran/oneTree.test.ts` |
 | Link out of Namaq | `ExternalLink` (web and app) | `src/components/common/ExternalLink.test.tsx` |
+| Recite mode (تسميع) | `useRecite` (state) + `RecitePill` (bar) in `src/components/recite/` and `mobile/src/components/recite/`; the pen rule is a setting (`PenSetting`) | `shared/quran/oneRecite.test.ts` |
 | Button | `src/components/common/Button.tsx` | none yet |
 
 ### Quran text

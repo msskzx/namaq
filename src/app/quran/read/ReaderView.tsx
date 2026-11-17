@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, EyeOff, File, List, PenLine, Search, Undo2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, EyeOff, File, List, Search } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { plainName } from '@shared/quran/normalize';
 import NoteDialog from '@/components/quran/NoteDialog';
@@ -13,10 +13,12 @@ import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } fr
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import FasilaIcon from '@/components/quran/FasilaIcon';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
-import { wordTargets } from '@shared/quran/writeAyah';
-import { useWriteBoxes } from './useWriteBoxes';
+import RecitePill from '@/components/recite/RecitePill';
+import { useRecite } from '@/components/recite/useRecite';
+import { usePenRule } from '@/lib/penRule';
+import { joinModels, pageModel } from '@shared/quran/recitePage';
 import { WRITE_KEY } from './writeKey';
-import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
+import { compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import ListenBar, { ListenSheet } from './ListenBar';
 import { listen, setFollowing, shouldFollow, useFollowing, useListening } from '@/lib/listen';
@@ -161,13 +163,10 @@ export default function ReaderView({
     titled.forEach((steps, surah) => { counts[`${surah}:1`] = (counts[`${surah}:1`] ?? 0) + steps; });
     return counts;
   };
-  const upcomingLength = upcoming ? shown.reduce((sum, _, index) => sum + (countsOn(index)[upcoming] ?? 0), 0) : 0;
   const hiddenOn = (index: number) => position
     ? (key: string, word: number) => isHidden(position, key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (countsOn(at)[key] ?? 0), 0), upcoming)
     : undefined;
-  const titleSteps = upcoming && upcoming.endsWith(':1') ? Math.max(0, ...shown.map((_, index) => titledOn(index).get(Number(upcoming.split(':')[0])) ?? 0)) : 0;
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
-  const reviewDone = reviewing && !!position?.shown;
   // The ayah under review counts even after it is cleared from the list.
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -177,18 +176,19 @@ export default function ReaderView({
   // first and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(false);
-  const [checked, setChecked] = useState<Checked | null>(null);
-  const writeKey = writing && upcoming && !reviewDone ? upcoming : null;
-  const writeWords = useMemo(() => (writeKey ? groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? [])) : []), [writeKey, groups]);
-  // Words already shown (by the next-word button) are not asked.
-  const asked = writeKey && position ? wordTargets(writeWords).filter(at => at + titleSteps >= position.words) : [];
-  const boxes = useWriteBoxes({ ayah: writeKey, words: writeWords, asked, autoFocus: true, onDone: graded => {
-    if (!writeKey || !position) return;
-    setChecked({ key: writeKey, ...graded, before: 0 });
-    // A mistake puts the ayah on the forgotten shelf (owner, 2026-11-13).
-    if (graded.wrong.length) markForgotten(writeKey);
-    setPosition(revealAyah(position, writeKey));
-  } });
+  const pen = usePenRule();
+  const spreadModel = useMemo(() => joinModels(shown.map(entry => pageModel(entry.data, entry.top))), [shown]);
+  // Recite mode's one state (components/recite, as the home card and the quiz page): it stops at the ayah under review,
+  // then goes to the next forgotten one; past the last ayah shown it turns the page.
+  const reciter = useRecite({ model: spreadModel, position, setPosition, writing, pen, autoFocus: true,
+    until: reviewing ? position?.start ?? null : null,
+    onPastEnd: () => {
+      if (reviewing) { if (reviewNext) router.push(`${ayahHref(reviewNext)}?recite=${reviewNext}&review=1`); }
+      else if ((two ? spreadOf(page)[1] : page) < 604) go(1);
+    } });
+  const { boxes, checked, setChecked } = reciter;
+  const writeKey = reciter.write?.key ?? null;
+  const asked = reciter.write?.targets ?? [];
   const { input, typed, current } = boxes;
   // On a phone the keyboard covers the page's lower part: the recite pill rises above it, and the page (kept at its size)
   // moves up just enough to show the box being written (the app scrolls it, #691).
@@ -401,26 +401,10 @@ export default function ReaderView({
     setPosition({ start: order[0], shown: null, words: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the page opens with ?write=1
   }, [startWriting]);
-  const nextLabel = reviewDone
-    ? (ar ? 'الآية المنسية التالية' : 'Next forgotten ayah')
-    : (ar ? 'أظهر الآية التالية' : 'Reveal the next ayah');
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
-  const revealNextAyah = () => {
-    if (!position) return;
-    if (reviewing && position.shown) {
-      if (reviewNext) router.push(`${ayahHref(reviewNext)}?recite=${reviewNext}&review=1`);
-      return;
-    }
-    if (upcoming && position.words < titleSteps) setPosition({ ...position, words: position.words + 1 });
-    else if (upcoming) setPosition(revealAyah(position, upcoming));
-    else if ((two ? spreadOf(page)[1] : page) < 604) go(1);
-  };
-  const revealNextWord = () => {
-    if (!position) return;
-    if (upcoming && !reviewDone) setPosition(revealWord(position, upcoming, upcomingLength));
-    else revealNextAyah();
-  };
-  const stepBackOne = () => { if (position) { setPosition(stepBack(position, ayahCounts)); setChecked(null); } };
+  const revealNextAyah = reciter.nextAyah;
+  const revealNextWord = reciter.nextWord;
+  const stepBackOne = reciter.back;
   const ayahText = (key: string) => {
     const words = groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []));
     return `${words.join(' ')}${endsOn(key) ? '' : ' …'}`;
@@ -649,18 +633,11 @@ export default function ReaderView({
       <TopicSheet open={topic} onClose={() => setTopic(null)} />
       {noting && <NoteDialog ayah={noting} name={surahName(noting)} ar={ar} onClose={() => setNoting(null)} />}
       {sharing && <AyahShareDialog ayah={sharing} name={surahName(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
-      {position && <div className={mushaf.reciteBar}><div className={mushaf.recitePill} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
-        {reviewing && <span className="px-2 text-sm text-[var(--home-muted)]">{ar
-          ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`
-          : `Review ${reviewAt} of ${reviewTotal}`}</span>}
-        <Button size="lg" variant="muted" aria-label={ar ? 'ارجع خطوة' : 'Step back'} title={ar ? 'ارجع خطوة' : 'Step back'} disabled={atStart(position)} onClick={stepBackOne}><Undo2 aria-hidden /></Button>
-        <Button size="lg" variant="muted" aria-label={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} title={ar ? 'أظهر الكلمة التالية' : 'Reveal the next word'} disabled={reviewDone} onClick={revealNextWord}>{ar ? <ChevronLeft aria-hidden /> : <ChevronRight aria-hidden />}</Button>
-        <Button size="lg" variant="ghost" aria-label={nextLabel} title={nextLabel}
-          disabled={reviewDone ? !reviewNext : !upcoming && last} onClick={revealNextAyah}>{reviewDone ? (ar ? <ArrowLeft aria-hidden /> : <ArrowRight aria-hidden />) : ar ? <ChevronsLeft aria-hidden /> : <ChevronsRight aria-hidden />}</Button>
-        <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} aria-label={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')}
-          title={writing ? (ar ? 'أوقف الكتابة' : 'Stop writing') : (ar ? 'اكتب أول كل آية وآخرها' : 'Write the first and last words of each ayah')} onClick={toggleWriting}><PenLine aria-hidden /></Button>
-        <Button size="lg" variant="muted" aria-label={ar ? 'إنهاء التسميع' : 'Stop reciting'} title={ar ? 'إنهاء التسميع' : 'Stop reciting'} onClick={stopRecite}><X aria-hidden /></Button>
-      </div></div>}
+      {position && <div className={mushaf.reciteBar}>
+        <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} ar={ar} more={reviewing ? !!reviewNext : !last}
+          after={reviewing ? { Icon: ar ? ArrowLeft : ArrowRight, label: ar ? 'الآية المنسية التالية' : 'Next forgotten ayah' } : undefined}
+          lead={reviewing ? <span className="px-2 text-sm text-[var(--home-muted)]">{ar ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}` : `Review ${reviewAt} of ${reviewTotal}`}</span> : null} />
+      </div>}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
       {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>

@@ -31,14 +31,14 @@ test('the quizzes tab holds solo and party only, and the written kinds are asked
   // Two cards (owner, 2026-11-17): every kind of question is picked inside them.
   await expect(page.getByRole('link')).toHaveText([/^اختبار فردي/, /^اختبار جماعي/]);
   await page.getByRole('link', { name: /^اختبار فردي/ }).click();
-  await page.getByRole('button', { name: 'اكتب أول الآية وآخرها' }).click();
+  await page.getByRole('button', { name: 'سمّع الآية', exact: true }).click();
   await page.getByRole('button', { name: 'أوائل السور' }).click();
   await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
   await expect(page).toHaveURL(/\/quiz\/play/);
   // The ayah's words are boxes on its own page; the first is written into.
   await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة' }).first()).toBeVisible();
-  await page.getByRole('button', { name: 'أظهر الآية' }).click();
+  await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
   await page.getByRole('button', { name: 'نسيتها' }).click();
   await expect.poll(async () => Object.keys(await stored<Record<string, unknown>>(page, 'ayah-forgot') ?? {}).length).toBe(1);
 });
@@ -102,7 +102,7 @@ test('a solo quiz of which surah and recite questions: pick, reveal, then the re
   const run = await stored<{ questions: { family: string; correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
   for (const [index, question] of run!.questions.entries()) {
     if (question.family === 'RECITE') {
-      await page.getByRole('button', { name: 'أظهر الآية' }).click();
+      await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
       await page.getByRole('button', { name: 'حفظتها' }).click();
     } else await page.getByRole('button', { name: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic, exact: true }).click();
     await expect(page.getByRole('button', { name: 'في المصحف' })).toBeVisible();

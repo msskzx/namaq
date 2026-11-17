@@ -1,70 +1,80 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import surahRows from "@shared/data/quran/surahs.json";
-import { pageModel, reciteView } from "@shared/quran/recitePage";
-import { pageAsk, type PageAsk } from "@shared/quran/writeAyah";
+import type { RecitePosition } from "@shared/quran/recite";
+import { pageModel } from "@shared/quran/recitePage";
+import { shownCut, type PageAsk } from "@shared/quran/writeAyah";
 import MushafPage from "@/app/quran/read/MushafPage";
-import { useWriteBoxes, type Graded } from "@/app/quran/read/useWriteBoxes";
+import type { Graded } from "@/app/quran/read/useWriteBoxes";
 import { useAyahPage } from "@/components/homepage/AyahLines";
+import RecitePill from "@/components/recite/RecitePill";
+import { useRecite } from "@/components/recite/useRecite";
 import { useQuizPageBefore } from "@/lib/quizPageBefore";
+import { useQuizPen } from "@/lib/penRule";
 
 const NAMES: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.title]));
 /** MushafPage asks for an ayah's end sign with this word. */
 const END = Number.MAX_SAFE_INTEGER;
+/** Whether the quiz's recite bar starts with the pen on (writing) or off (revealing). */
+const WRITE = "quiz-write";
 
 /**
  * A quiz question about one ayah drawn as its whole mushaf page, as the app's QuizPage (owner, 2026-11-17): every other word
  * an empty box of its shape with only the ayah numbers left, and nothing around the page says where it is; with the setting
- * on, the ayat before it written. `ask` (the question's PageAsk) says how much of it shows, what is written and whether its
- * surah title shows; `shown` shows all of it. With `onGraded`, the words asked are written in boxes in their places and graded
- * once the last box is written.
+ * on, the ayat before it written. `ask` (the question's PageAsk) says how much of the asked ayah shows and whether its surah
+ * title shows. A recited question (`ask.recite`) is recited with recite mode's own bar (components/recite), as in the mushaf,
+ * stopping at the ayah's end: `onWritten` gets the grade when the pen wrote it, `onShown` runs once it shows. `shown` shows all of it.
  */
-export default function QuizPage({ ayah, ask, shown, onGraded }: { ayah: string; ask: PageAsk; shown: boolean;
-  onGraded?: (graded: Graded) => void }) {
+export default function QuizPage({ ayah, ask, shown, onWritten, onShown, ar = true }: { ayah: string; ask: PageAsk; shown: boolean;
+  onWritten?: (graded: Graded) => void; onShown?: () => void; ar?: boolean }) {
   const { pages, words } = useAyahPage(ayah);
   const before = useQuizPageBefore();
-  const [graded, setGraded] = useState<Graded | null>(null);
-  const parts = useMemo(() => {
-    if (!pages || !words) return null;
-    const model = pageModel(pages.data, pages.top);
-    return { model, ...pageAsk(ayah, words, ask) };
-  }, [pages, words, ayah, ask]);
+  const pen = useQuizPen();
+  const parts = useMemo(() => (pages && words ? { model: pageModel(pages.data, pages.top), cut: shownCut(ayah, words, ask.shows) } : null), [pages, words, ayah, ask.shows]);
+  const [position, setPosition] = useState<RecitePosition | null>(null);
+  // The page comes from the server: the recitation starts once it is here, with the words the question shows.
+  useEffect(() => { if (parts && !position) setPosition({ start: ayah, shown: null, words: parts.cut }); }, [parts, position, ayah]);
+  const [writing, setWriting] = useState(true);
+  useEffect(() => { try { setWriting(localStorage.getItem(WRITE) !== "false"); } catch {} }, []);
+  const toggleWriting = () => setWriting(on => { try { localStorage.setItem(WRITE, String(!on)); } catch {} return !on; });
+  const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: writing && !shown, pen, until: ayah, floor: parts?.cut ?? 0,
+    onWritten: (_key, graded) => onWritten?.(graded) });
+  const open = shown || !ask.recite || recite.done;
+  useEffect(() => { if (recite.done) onShown?.(); }, [recite.done]); // eslint-disable-line react-hooks/exhaustive-deps
   const nameless = ask.title === "hidden";
-  const writing = !!onGraded && !shown && !graded;
-  // The boxes start once the page is here, so the first asked word is the box being written.
-  const boxes = useWriteBoxes({ ayah: onGraded && parts ? ayah : null, words: words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
-    setGraded(result);
-    onGraded?.(result);
-  } });
-  const open = shown || !!graded;
   const view = useMemo(() => {
-    if (!parts) return null;
+    if (!parts || !position) return null;
     const { titles: titled, order } = parts.model;
     const steps = ayah.endsWith(":1") ? titled.get(Number(ayah.split(":")[0])) ?? 0 : 0;
     const at = order.indexOf(ayah);
+    const base = recite.view;
     return {
       titled,
-      next: reciteView(parts.model, { start: ayah, shown: null, words: 0 }).upcoming,
+      // The quiz stops at its ayah: nothing after it is the next one.
+      next: recite.done || open ? null : base?.upcoming ?? ayah,
       hidden: (key: string, word: number) => {
         // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(":1") ? titled.get(Number(key.split(":")[0])) ?? 0 : 0;
         // The asked ayah's surah title shows when it is the question, and else stays hidden until it is answered (always
-        // when the surah is the answer).
-        if (key === ayah) return word < steps ? ask.title !== "shown" && (nameless || !open || !before) : !open && word - steps >= parts.cut;
+        // when the surah is the answer); its words are recite mode's, or the question's cut when it is not recited.
+        if (key === ayah) return word < steps ? ask.title !== "shown" && (nameless || !open || !before) : !open && (base ? base.hidden(ayah, word - steps) : word - steps >= parts.cut);
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
         return nameless && word < title;
       },
     };
-  }, [parts, ayah, open, before, nameless, ask.title]);
+  }, [parts, position, ayah, open, before, nameless, ask.title, recite.view, recite.done]);
   if (!pages || !parts || !view) return <div className="aspect-[2/3] w-full animate-pulse rounded-[14px] bg-[var(--home-paper-deep)]" />;
+  const write = shown ? null : recite.write;
   // The page sizes itself by its container (Mushaf.module.css .page), so the box it sits in is one page's shape.
-  return <div lang="ar" dir="rtl" className="mb-4 aspect-[0.66] w-full [container-type:size]" onClick={writing ? boxes.focus : undefined}>
-    <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} hidden={view.hidden} titled={view.titled} next={view.next} anonymous={!before || nameless}
-      write={writing ? { key: ayah, targets: parts.asked, typed: boxes.typed, current: boxes.current, before: 0, onBox: boxes.pick } : null}
-      checked={graded ? { key: ayah, ...graded, before: 0 } : null} />
-    {writing && boxes.field({ "aria-label": "اكتب الكلمة" })}
+  return <div className="mb-4 flex flex-col gap-3">
+    <div lang="ar" dir="rtl" className="aspect-[0.66] w-full [container-type:size]" onClick={write ? recite.boxes.focus : undefined}>
+      <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} hidden={view.hidden} titled={view.titled} next={view.next} anonymous={!before || nameless}
+        write={write ? { ...write, before: 0 } : null} checked={recite.checked ? { ...recite.checked, before: 0 } : null} />
+    </div>
+    {ask.recite && !shown && <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} ar={ar} className="self-center" />}
+    {write && recite.boxes.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
   </div>;
 }

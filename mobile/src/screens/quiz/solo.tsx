@@ -9,6 +9,7 @@ import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
 import Toggle from '@/components/Toggle';
+import { QuizPenSetting } from '@/components/recite/PenSetting';
 import { quizPageBefore } from '@/lib/settings';
 import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
@@ -104,6 +105,7 @@ export default function SoloSetup() {
         </Section>}
         {onPage && <Section title="صفحة المصحف" palette={palette}>
           <Toggle on={pageBefore} onChange={setPageBefore} label="اكتب الآيات قبلها في الصفحة" palette={palette} />
+          <QuizPenSetting palette={palette} />
         </Section>}
         <Section title="عدد الأسئلة" palette={palette}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>

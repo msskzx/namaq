@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronsLeft, Feather, Users, EyeOff, LightbulbOff, NotebookPen, PenLine, ScrollText, Undo2 } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -15,7 +15,10 @@ import { useRouter } from 'next/navigation';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import { BRANCH_VIEW_COOKIE, defaultBranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
-import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
+import RecitePill from '@/components/recite/RecitePill';
+import { useRecite } from '@/components/recite/useRecite';
+import { usePenRule } from '@/lib/penRule';
+import { pageModel } from '@shared/quran/recitePage';
 import { usePageGestures } from '@/app/quran/read/usePageGestures';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
@@ -32,7 +35,7 @@ import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
-import { forgottenOrder } from '@shared/quran/recite';
+import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
@@ -134,10 +137,13 @@ function PostHead({ Icon, title, sub, href, label, id }: { Icon: typeof BookOpen
  * Every feed post's one shape (owner, 2026-11-14), the compare card's and the app's (mobile HomeFeed's Post): the head,
  * the body in one card, and a row of icon buttons under the card, starting on the right.
  */
-function Post({ head, actions, labelledBy, children }: { head: React.ReactNode; actions?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
+function Post({ head, actions, bar, labelledBy, children }: { head: React.ReactNode; actions?: React.ReactNode;
+  /** A bar of the card's own between it and its buttons (recall's recite bar). */
+  bar?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
   const body = <>
     {head}
     <div className={styles.post}>{children}</div>
+    {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
     {actions && <div className={styles.postActions} data-share-skip>{actions}</div>}
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
@@ -176,20 +182,19 @@ const recalled = new Set<string>();
 const RECALL_WRITE = 'recall-write';
 
 /**
- * An ayah to recall in the mushaf's own lines, asked as recite mode asks it (owner, 2026-11-14): its words hidden, recite
- * mode's buttons reveal the next word or the whole ayah, and the pen asks for the whole ayah in write boxes (read/useWriteBoxes);
- * a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due comes with the review link and
- * «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
+ * An ayah to recall in the mushaf's own lines, asked as recite mode asks it (owner, 2026-11-14): its words hidden, and
+ * recite mode's own bar and pen (components/recite) reveal or write it; a mistake puts it on the forgotten shelf, as in the
+ * reader. A forgotten ayah that is due comes with the review link and «تذكّرتها» rests it; an ayah of the day from what is
+ * memorized (`review` absent) has «نسيتها» too.
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
   const [, setGone] = useState(0);
-  const [round, setRound] = useState(0);
   const [writing, setWriting] = useState(false);
   useEffect(() => { try { setWriting(localStorage.getItem(RECALL_WRITE) === 'true'); } catch {} }, []);
   const toggleWriting = () => setWriting(on => { try { localStorage.setItem(RECALL_WRITE, String(!on)); } catch {} return !on; });
   const [surah, number] = ayah.split(':').map(Number);
   if (!review && recalled.has(ayah)) return null;
-  return <Recall key={`${ayah}-${writing}-${round}`} ayah={ayah} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting} onUndo={() => setRound(n => n + 1)}>
+  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
     <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label="راجع ما نسيت" href={review} />}
@@ -198,29 +203,21 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: 
 }
 
 /**
- * The recall card's ayah and buttons (the app's Recall): recite mode's undo, next word and whole ayah, and the pen that asks
- * for the whole ayah in write boxes. A tap, double tap or long press on the ayah does what it does in recite mode (the
- * reader's gesture settings, read/usePageGestures). Drawn afresh for each way of asking (`writing`) and after each undo, so
- * the boxes start empty and the ayah is hidden again, as recite mode's undo leaves it.
+ * The recall card itself (the app's Recall): recite mode on one ayah (components/recite, the mushaf's own), with its bar
+ * under the card, stopping at the ayah's end. A tap, double tap or long press on the ayah does what it does in recite mode
+ * (the reader's gesture settings, read/usePageGestures); the pen writes what the pen setting asks. Drawn afresh for each way
+ * of asking (`writing`).
  */
-function Recall({ ayah, title, sub, writing, onWriting, onUndo, children }: { ayah: string; title: string; sub: string; writing: boolean; onWriting: () => void; onUndo: () => void; children: React.ReactNode }) {
-  const [revealed, setRevealed] = useState(0);
-  const [graded, setGraded] = useState<Graded | null>(null);
+function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: string; title: string; sub: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
   const { pages, words } = useAyahPage(ayah);
-  const asked = useMemo(() => (writing ? (words ?? []).map((_, at) => at) : []), [writing, words]);
-  const boxes = useWriteBoxes({ ayah: words ? ayah : null, words: words ?? [], asked, onDone: result => {
-    setGraded(result);
-    if (result.wrong.length) markForgotten(ayah);
-  } });
-  const count = words?.length ?? 0;
-  const shown = (!!words && revealed >= count) || !!graded;
-  const atStart = revealed === 0 && !graded;
-  const nextWord = () => setRevealed(n => Math.min(count, n + 1));
-  const wholeAyah = () => setRevealed(count);
+  const model = useMemo(() => (pages ? pageModel(pages.data, pages.top) : null), [pages]);
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, shown: null, words: 0 });
+  const pen = usePenRule();
+  const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const run = (action: GestureAction, key: string | undefined) => {
-    if (action === 'next-ayah') wholeAyah();
-    else if (action === 'next-word') nextWord();
-    else if (action === 'back' && !atStart) onUndo();
+    if (action === 'next-ayah') recite.nextAyah();
+    else if (action === 'next-word') recite.nextWord();
+    else if (action === 'back') recite.back();
     else if (key !== ayah) return;
     else if (action === 'forgot') markForgotten(ayah);
     else if (action === 'save' && words) toggleBookmark({ id: ayahBookmarkId(ayah), text: words.join(' '), href: ayahHref(ayah) });
@@ -229,26 +226,18 @@ function Recall({ ayah, title, sub, writing, onWriting, onUndo, children }: { ay
   usePageGestures(lines, {
     onGesture: (gesture, target) => {
       // While writing, a touch on the ayah only brings the keyboard back, as in the reader; the boxes pick a word themselves.
-      if (writing && !shown) boxes.focus();
+      if (recite.write) recite.boxes.focus();
       else run(readGestures().recite[gesture], target.closest<HTMLElement>('[data-ayah]:not([data-veiled])')?.dataset.ayah);
     },
     waitForDouble: () => readGestures().recite.double !== 'none',
   });
-  const pen = 'اكتب الآية كاملة';
   return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />}
-    actions={<>
-      {/* Recite mode's buttons first, in its order: undo, the next word, the whole ayah, the pen; then the marks. */}
-      <Action Icon={Undo2} label="ارجع خطوة" disabled={atStart} onClick={onUndo} />
-      {!writing && <Action Icon={ChevronLeft} label="أظهر الكلمة التالية" disabled={shown} onClick={nextWord} />}
-      <Action Icon={ChevronsLeft} label="أظهر الآية" disabled={shown} onClick={wholeAyah} />
-      <Action Icon={PenLine} label={pen} on={writing} onClick={onWriting} />
-      {children}
-    </>}>
+    bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} />}
+    actions={children}>
     <div ref={lines} className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
-      {pages && <AyahLines ayah={ayah} pages={pages} shown={shown} words={writing ? 0 : revealed} checked={graded ? { key: ayah, ...graded } : null}
-        write={writing ? { key: ayah, targets: asked, typed: boxes.typed, current: boxes.current, onBox: boxes.pick } : undefined} />}
-      {words && writing && !shown && boxes.field({ 'aria-label': 'اكتب الكلمة' })}
+      {pages && <AyahLines ayah={ayah} pages={pages} shown={recite.done} words={position.words} checked={recite.checked} write={recite.write ?? undefined} />}
+      {recite.write && recite.boxes.field({ 'aria-label': 'اكتب الكلمة' })}
     </div>
   </Post>;
 }

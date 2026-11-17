@@ -20,7 +20,7 @@ export const FORGOT = '0';
  * A question the reader recites or writes and then grades (حفظتها or نسيتها): what it asks stays hidden until it is shown,
  * its two answers keep their order, and نسيتها puts the ayah on the forgotten shelf.
  */
-export const recited = (question: { reveal?: unknown; page?: { write?: unknown } }) => !!(question.reveal || question.page?.write);
+export const recited = (question: { reveal?: unknown; page?: { recite?: unknown } }) => !!(question.reveal || question.page?.recite);
 
 export type ChoiceQuestion = {
   key: string;

@@ -11,7 +11,7 @@ export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'R
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
-  SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'اكتب أول الآية وآخرها',
+  SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'سمّع الآية',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
 } as Record<FeedQuizKind & string, string>;
 
