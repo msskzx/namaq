@@ -19,7 +19,7 @@ export default function GlassBar({ label, style, alert, small, children }: { lab
       style={[{ flexDirection: 'row', alignItems: 'center', overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge },
         // A notice is a card-round line of text that grows with it; a bar is a pill of buttons.
         alert ? { borderRadius: 14, paddingVertical: 10, paddingHorizontal: 14 }
-          : small ? { height: GLASS_BAR_SMALL, gap: 8, paddingHorizontal: 8, borderRadius: 999 }
+          : small ? { height: GLASS_BAR_SMALL, gap: 16, paddingHorizontal: 8, borderRadius: 999 }
           : { height: GLASS_BAR, justifyContent: 'space-evenly', borderRadius: 999 }, style]}>
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
