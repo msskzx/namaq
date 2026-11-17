@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { prisma } from '@/lib/prisma';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import ThemesView from '../ThemesView';
 import pairs from './data/index';
