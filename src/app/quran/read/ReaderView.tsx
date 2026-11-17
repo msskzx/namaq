@@ -540,6 +540,16 @@ export default function ReaderView({
   });
   const reciteLabel = reciting ? (ar ? 'إنهاء التسميع' : 'Stop reciting') : (ar ? 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' : 'Recite: hide the ayat and reveal them one by one');
   const reciteToggle = <Button size="lg" variant={reciting ? 'primary' : 'muted'} aria-pressed={reciting} onClick={() => (reciting ? stopRecite() : startRecite())} aria-label={reciteLabel} title={reciteLabel}><EyeOff aria-hidden /></Button>;
+  // The فاصلة is a page (owner, 2026-11-17): the ribbon fills on its page, and a tap puts it on the page open or takes it off.
+  // Nothing is drawn on the page itself. It names the page by the first ayah on it.
+  const onFasila = fasila?.page === page;
+  const markPage = () => {
+    const entry = pages.find(item => item.page === page);
+    const first = entry && pageGroups(entry.data.items, entry.top).flatMap(line => line ?? []).find(group => group.surah && group.ayah);
+    setQuranFasila(onFasila || !first ? null : { key: `${first.surah}:${first.ayah}`, page });
+  };
+  const fasilaLabel = onFasila ? (ar ? 'أزل الفاصلة من هذه الصفحة' : 'Remove your stop mark from this page') : (ar ? 'ضع الفاصلة في هذه الصفحة: هنا توقفت' : 'Mark this page as where you stopped');
+  const fasilaToggle = <Button size="lg" variant="ghost" aria-pressed={onFasila} onClick={markPage} aria-label={fasilaLabel} title={fasilaLabel} className="text-[var(--home-accent)]"><FasilaIcon aria-hidden filled={onFasila} /></Button>;
   const indexAndSearch = <>
     <Button size="lg" variant="muted" popoverTarget={indexId} aria-label={index} title={index}><List aria-hidden /></Button>
     <SwipePanel id={indexId} dir={ar ? 'rtl' : 'ltr'}>
@@ -572,11 +582,13 @@ export default function ReaderView({
       {rail && createPortal(<>
         <Button size="lg" variant="muted" onClick={() => go(-1)} disabled={first} aria-label={previous} title={previous}><PreviousIcon aria-hidden /></Button>
         <Button size="lg" variant="muted" onClick={() => go(1)} disabled={last} aria-label={next} title={next}><NextIcon aria-hidden /></Button>
+        {!reciting && fasilaToggle}
         {indexAndSearch}
         <Button size="lg" variant="muted" onClick={() => chooseSpread(!spread)} aria-label={layout} title={layout}><LayoutIcon aria-hidden /></Button>
         {reciteToggle}
       </>, rail)}
       {phone && phoneTools && <NavActions>
+        {!reciting && fasilaToggle}
         {indexAndSearch}
         {reciteToggle}
       </NavActions>}
@@ -598,6 +610,7 @@ export default function ReaderView({
               <span className="max-sm:sr-only">{next}</span>
               <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} aria-hidden />
             </Button>
+            {!reciting && fasilaToggle}
             {indexAndSearch}
             {reciteToggle}
           </div>
@@ -623,12 +636,11 @@ export default function ReaderView({
         </Button>}
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark}
-            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved} fasila={position ? undefined : fasila?.key}
+            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
             write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} onTopic={onTopic} />
         ))}
       </article>
       {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
-        fasila={fasila?.key === actions.key} onFasila={position ? undefined : () => setQuranFasila(fasila?.key === actions.key ? null : { key: actions.key, page: pageOfAyah(shown, actions.key) ?? page })}
         onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
         irab={!!actions.word} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
@@ -661,14 +673,6 @@ export default function ReaderView({
       {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>
   );
-}
-
-/** The page among those shown where an ayah ends, or else where it starts. */
-function pageOfAyah(shown: { page: number; data: MushafPageData; top?: number }[], key: string): number | undefined {
-  const [surah, ayah] = key.split(':').map(Number);
-  const groups = (entry: (typeof shown)[number]) => pageGroups(entry.data.items, entry.top).flatMap(line => line ?? []);
-  return (shown.find(entry => groups(entry).some(group => group.surah === surah && group.marks.includes(ayah)))
-    ?? shown.find(entry => groups(entry).some(group => group.surah === surah && group.ayah === ayah)))?.page;
 }
 
 type ReaderProps = Omit<React.ComponentProps<typeof ReaderView>, 'mark'>;

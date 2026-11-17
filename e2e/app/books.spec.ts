@@ -1,25 +1,31 @@
 import { expect, longPress, open, stored, tab, test } from './fixtures';
 
 // The book reader (docs/plans/book-reader.md): al-Sa'di, which comes with the app, page by page.
-test('a book opens from the shelf, a فاصلة stays put while the reader turns pages, and its button comes back to it', async ({ page }) => {
+// The فاصلة is a page, set from the ribbon in the top bar (owner, 2026-11-17).
+test('a book opens from the shelf, its فاصلة stays on its page while the reader turns pages, and its button comes back to it', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'المكتبة').click();
   await page.getByRole('link', { name: 'تيسير الكريم الرحمن' }).click();
-  const paragraph = page.getByText(/^واعلم أن من القواعد/).first();
-  await expect(async () => {
-    await longPress(page, paragraph);
-    await expect(page.getByRole('toolbar', { name: 'أزرار الفقرة' })).toBeVisible({ timeout: 1500 });
-  }).toPass({ timeout: 15_000 });
-  await page.getByRole('button', { name: 'ضع الفاصلة هنا: هنا توقفت' }).click();
-  await expect.poll(async () => (await stored<{ sadi?: { page: number } }>(page, 'reading-fasila'))?.sadi?.page).toBe(39);
+  await page.getByRole('button', { name: 'ضع الفاصلة في هذه الصفحة: هنا توقفت' }).click();
+  await expect(page.getByRole('button', { name: 'أزل الفاصلة من هذه الصفحة' })).toBeVisible();
+  const marked = await stored<{ sadi?: { page: number } }>(page, 'reading-fasila');
+  expect(marked?.sadi?.page).toBeGreaterThan(0);
 
   await page.getByRole('button', { name: 'فهرس الكتاب ومحفوظاته' }).click();
   await page.getByRole('link', { name: /^البقرة،/ }).click();
   await expect.poll(async () => (await stored<{ sadi?: { entry: number } }>(page, 'book-last'))?.sadi?.entry).toBe(1);
-  expect((await stored<{ sadi?: { page: number } }>(page, 'reading-fasila'))?.sadi?.page).toBe(39);
+  expect((await stored<{ sadi?: { page: number } }>(page, 'reading-fasila'))?.sadi?.page).toBe(marked?.sadi?.page);
+  await expect(page.getByRole('button', { name: 'ضع الفاصلة في هذه الصفحة: هنا توقفت' })).toBeVisible();
 
   await page.getByRole('button', { name: /عد إلى فاصلتك/ }).click();
-  await expect(page.getByText(/^واعلم أن من القواعد/).first()).toBeInViewport();
+  await expect(page.getByRole('button', { name: 'أزل الفاصلة من هذه الصفحة' })).toBeVisible();
+  // A long press on a paragraph no longer offers the فاصلة: it saves, opens the mushaf or shares.
+  const paragraph = page.getByText(/^تقدم الكلام|^واعلم/).first();
+  await expect(async () => {
+    await longPress(page, paragraph);
+    await expect(page.getByRole('toolbar', { name: 'أزرار الفقرة' })).toBeVisible({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+  await expect(page.getByRole('toolbar', { name: 'أزرار الفقرة' }).getByRole('button', { name: /الفاصلة/ })).toHaveCount(0);
 });
 
 test('the search finds a word in the book whatever its vowel marks, and opens its page', async ({ page }) => {
@@ -30,15 +36,13 @@ test('the search finds a word in the book whatever its vowel marks, and opens it
   await expect(page.getByText('ص ٤١', { exact: true })).toBeVisible();
 });
 
-test('the mushaf keeps its فاصلة apart from the page open', async ({ page }) => {
+test('the mushaf keeps its فاصلة on a page apart from the page open', async ({ page }) => {
   await open(page, '/read');
-  const word = page.getByText(/^ٱلۡحَمۡدُ/).first();
-  await expect(async () => {
-    await longPress(page, word);
-    await expect(page.getByRole('toolbar')).toBeVisible({ timeout: 1500 });
-  }).toPass({ timeout: 15_000 });
-  await page.getByRole('button', { name: 'ضع الفاصلة هنا: هنا توقفت' }).click();
-  await expect.poll(async () => (await stored<{ quran?: { key: string } }>(page, 'reading-fasila'))?.quran?.key).toBe('1:2');
+  // A tap on an ayah brings the bars.
+  await page.getByText(/^ٱلۡحَمۡدُ/).first().click();
+  await page.getByRole('button', { name: 'ضع الفاصلة في هذه الصفحة: هنا توقفت' }).click();
+  await expect.poll(async () => (await stored<{ quran?: { key: string; page: number } }>(page, 'reading-fasila'))?.quran).toEqual({ key: '1:1', page: 1 });
+  await expect(page.getByRole('button', { name: 'أزل الفاصلة من هذه الصفحة' })).toBeVisible();
 });
 
 // Book management moved from the settings to the library (owner, 2026-11-17): the pencil turns on editing.
