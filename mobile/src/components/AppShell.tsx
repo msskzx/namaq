@@ -6,6 +6,7 @@ import { startAlerts } from '@/lib/adhan';
 import { syncPacks } from '@/lib/listenFiles';
 import { warmScreens } from '@/lib/lazyScreen';
 import ShareSheet from '@/components/ShareSheet';
+import SaveNotice from '@/components/SaveNotice';
 import { useStackOptions } from '@/lib/stackOptions';
 import { noteRootPage } from '@/lib/ways';
 import { leave } from '@/lib/storage';
@@ -44,6 +45,7 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
             <Stack.Screen name="prophets/[slug]" />
           </Stack>
           <ShareSheet />
+          <SaveNotice />
         </View>
       </LocaleProvider>
     </ThemeProvider>

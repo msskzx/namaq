@@ -21,19 +21,27 @@ const browserStorage: KeyStorage = {
  */
 export function keepingStorage(base: KeyStorage) {
   const unsaved = new Map<string, string>();
+  const watchers = new Set<() => void>();
+  // Watchers hear when something becomes unsaved and when all of it is saved, not every write.
+  const changed = (before: number) => { if ((before === 0) !== (unsaved.size === 0)) watchers.forEach(watcher => watcher()); };
   const storage: KeyStorage = {
     getItem: key => (unsaved.has(key) ? unsaved.get(key)! : base.getItem(key)),
     setItem: (key, value) => {
+      const before = unsaved.size;
       try { base.setItem(key, value); unsaved.delete(key); } catch { unsaved.set(key, value); }
+      changed(before);
     },
     subscribe: base.subscribe,
   };
   /** Saves again what the device refused; true when nothing is left unsaved. */
   const retry = () => {
+    const before = unsaved.size;
     for (const [key, value] of [...unsaved]) { try { base.setItem(key, value); unsaved.delete(key); } catch {} }
+    changed(before);
     return unsaved.size === 0;
   };
-  return { storage, retry, unsaved: () => unsaved.size };
+  const watch = (watcher: () => void) => { watchers.add(watcher); return () => { watchers.delete(watcher); }; };
+  return { storage, retry, unsaved: () => unsaved.size, watch };
 }
 
 let current = browserStorage;

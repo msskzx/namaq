@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react';
 import { setBookmarkStorage } from '@shared/bookmarks';
 import { keepingStorage, setKeyStorage } from '@shared/storage';
 import { deviceStorage } from './deviceStorage';
@@ -11,6 +12,17 @@ const leaving = new Set<() => void>();
 export function onLeave(flush: () => void) { leaving.add(flush); return () => { leaving.delete(flush); }; }
 /** The app went to the background (AppShell): pending edits are written, and writes the device refused are tried again. */
 export function leave() { leaving.forEach(flush => flush()); kept.retry(); }
+
+// While the device refuses a write (its storage full), it is tried again every half minute, and the notice stays until it is saved.
+const RETRY_EVERY = 30_000;
+let retrying: ReturnType<typeof setInterval> | null = null;
+kept.watch(() => {
+  if (kept.unsaved() > 0 && !retrying) retrying = setInterval(() => { if (kept.retry() && retrying) { clearInterval(retrying); retrying = null; } }, RETRY_EVERY);
+  if (kept.unsaved() === 0 && retrying) { clearInterval(retrying); retrying = null; }
+});
+const unsavedNow = () => kept.unsaved() > 0;
+/** Whether an edit the device refused is still waiting to be saved (SaveNotice). */
+export const useUnsaved = () => useSyncExternalStore(kept.watch, unsavedNow, () => false);
 
 /** What a value read back from the phone must be before a screen uses it: valid JSON of another shape counts as nothing saved. */
 export type Check<T> = (value: unknown) => value is T;
