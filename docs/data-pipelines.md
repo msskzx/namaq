@@ -366,14 +366,11 @@ becomes a node or an edge.
 
 ## The Quran reader
 
-`npm run quran:reader` fetches the 604 pages of the 1421 Madinah mushaf from the
-Quran.com API (`verses/by_page`, `mushaf=2`) and writes one file per page under
-`src/app/quran/read/data/`: the words of each printed line, a circled number
-for each ayah end, and a surah header where a surah begins. The sajda sign is part of the word's text, as the API
-gives it, at all 15 places. Branches, ayah search and the surrounding-ayat cards read their words from these files and the stored surah names, not
-the stored ayat. Their page numbers come from the 1441 pages below (`mushafPages`, the page each ayah's first word is on), so their links open the page the reader shows. Nothing syncs to Neo4j. `npm test` checks the files.
+The 1441 Madinah mushaf pages under `shared/data/quran/mushaf/` are the only stored Quran text (AGENTS.md, "Quran text"). Trees,
+the matrix, compare, quizzes, ayah search and the surrounding-ayat cards read their words from them (`ayahWordsOf`, `pageAyat`).
+The older 1421 pages that `npm run quran:reader` fetched from Quran.com are gone.
 
-The reader at `/quran/read` draws the 1441 Madinah mushaf instead, the edition
+The reader at `/quran/read` draws the 1441 Madinah mushaf, the edition
 in print today, from `shared/data/quran/mushaf/`. `npm run quran:mushaf --
 <pages dir> <hafsData_v18.json>` builds those files from two downloads:
 

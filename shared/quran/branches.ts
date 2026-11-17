@@ -6,7 +6,7 @@ import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { Likeness } from './wordMatch';
 import { findText, firstLevel, searchQuery, textKeys, type Level, type SearchQuery } from './searchText';
-import { mushafPages, type MushafPage, type ReaderPageData } from './readerPage';
+import { mushafPages, type MushafPage } from './readerPage';
 import { ayahWordsOf, wordsOnly } from './quranText/ayahWords';
 
 export type WordFeatures = { gender?: string; number?: string; case?: string; pos?: string };
@@ -75,30 +75,6 @@ export function pageAyat(pages: MushafPage[]): BranchAyah[] {
   const words = ayahWordsOf(pages);
   const pageOf = mushafPages(pages);
   return Object.entries(words).map(([key, tokens]) => ({ key, page: pageOf.get(key)!, words: wordsOnly(tokens) }));
-}
-
-export function readerAyat(pages: ReaderPageData[], pageOf?: Map<string, number>): BranchAyah[] {
-  const ayat: BranchAyah[] = [];
-  let surah = 0;
-  let words: string[] = [];
-  pages.forEach((data, i) => {
-    for (const item of data.items) {
-      if ('surah' in item) {
-        surah = item.surah;
-        continue;
-      }
-      for (const token of item.line) {
-        if (typeof token === 'number') {
-          ayat.push({ key: `${surah}:${token}`, page: pageOf?.get(`${surah}:${token}`) ?? i + 1, words });
-          words = [];
-        } else {
-          const word = token.split(' ').filter(piece => normalizeWord(piece) !== '').join(' ');
-          if (word) words.push(word);
-        }
-      }
-    }
-  });
-  return ayat;
 }
 
 const CONJ: Record<string, string> = { w: 'و', f: 'ف' };

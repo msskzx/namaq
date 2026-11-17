@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';
+import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, tintSurfaces, type CardMode } from '@shared/cardTint';
 import { SAMPLE_AYAH } from '@shared/viewPreview';
 import { readCardTint, setCardTint } from '@/lib/cardTint';
 import styles from './ThemeTiles.module.css';
 
 /** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
-function Mini({ mode, card }: { mode: CardMode; card: string }) {
+function Mini({ mode, tint }: { mode: CardMode; tint: string }) {
   const colours = MODE_PREVIEW[mode];
-  return <span className={styles.page} style={{ background: colours.page }}>
+  const card = cardColour(mode, tint);
+  return <span className={styles.page} style={{ background: tintSurfaces(mode, tint)?.paper ?? colours.page }}>
     <span className={styles.card} style={{ background: card, color: colours.ink, borderColor: colours.rule }}>
       <span>{SAMPLE_AYAH.start}</span>
       <span>{SAMPLE_AYAH.end} <b style={{ color: colours.accent }}>{SAMPLE_AYAH.ending}</b></span>
@@ -42,8 +43,8 @@ export default function ThemeTiles() {
         return <button key={tile.key} type="button" aria-pressed={on} title={name} onClick={choose} className={styles.tile}>
           <span className={styles.thumb} aria-hidden>
             {tile.mode === 'system'
-              ? <span className={styles.split}><Mini mode="light" card={cardColour('light', tints.light)} /><Mini mode="dark" card={cardColour('dark', tints.dark)} /></span>
-              : <Mini mode={tile.mode} card={cardColour(tile.mode, tile.key)} />}
+              ? <span className={styles.split}><Mini mode="light" tint={tints.light} /><Mini mode="dark" tint={tints.dark} /></span>
+              : <Mini mode={tile.mode} tint={tile.key} />}
             {on && <span className={styles.check}><Check size={10} strokeWidth={3} aria-hidden /></span>}
           </span>
           <span>{name}</span>

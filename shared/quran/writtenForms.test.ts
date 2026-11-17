@@ -33,6 +33,14 @@ describe('writtenForms', () => {
     expect(writtenForms(node, 2, '۝', new Set(['2:161', '3:87']))).toEqual([{ word: '۝', keys: ['2:161', '3:87'] }]);
   });
 
+  it('shows a stop sign only some ayat carry faint, and the picked ayah\'s own word once a path is lit', () => {
+    const stops = { forms: { '1:1': ['قَالَ', 'رَبِّۖ'], '1:2': ['قَالَ', 'رَبِّ'], '1:3': ['قَالَ', 'رَبِّۖ'] } };
+    expect(writtenForms(stops, 1, 'رَبِّ')).toEqual([{ word: 'رَبِّ', faint: 'ۖ', keys: ['1:1', '1:2', '1:3'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:1']))).toEqual([{ word: 'رَبِّۖ', keys: ['1:1'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:2']))).toEqual([{ word: 'رَبِّ', keys: ['1:2'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:1', '1:3']))).toEqual([{ word: 'رَبِّۖ', keys: ['1:1', '1:3'] }]);
+  });
+
   it('ignores lit ayat the node does not hold', () => {
     expect(writtenForms(node, 1, 'لَعْنَة', new Set(['7:1']))).toHaveLength(2);
   });
