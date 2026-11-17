@@ -3,6 +3,8 @@ import corpus from '../../shared/quran/quranText/corpus';
 import { act, createParty, viewFor, type Action, type PartyQuestion, type PartyState } from '../../shared/party/rules';
 import type { BranchAyah } from '../../shared/quran/branches';
 import { branchQuestionPool, branchQuiz } from '../../shared/quiz/branchQuestions';
+import { ayahEnds } from '../../shared/quiz/pageKinds';
+import { writeAsk } from '../../shared/quiz/writeAsk';
 
 /** The party worker's address in the test build (EXPO_PUBLIC_PARTY_URL in e2e/playwright.config.ts). */
 const HOST = 'http://127.0.0.1:8787';
@@ -19,6 +21,9 @@ export class PartyServer {
   readonly code = '123456';
   state: PartyState | null = null;
   private sockets: { id: string; ws: WebSocketRoute }[] = [];
+
+  /** `trees` asks tree questions; `recite` asks the ayat of al-Ikhlas written with the pen, as /api/quiz sends them. */
+  constructor(private readonly kind: 'trees' | 'recite' = 'trees') {}
 
   async attach(context: BrowserContext) {
     await context.route(`${HOST}/parties`, async route => {
@@ -60,7 +65,11 @@ export class PartyServer {
       if (result.state.players.some(player => player.id === id)) ws.send(JSON.stringify({ type: 'state', view: viewFor(result.state, id, now) }));
     }
     if (state.phase !== 'loading' && result.state.phase === 'loading') {
-      const questions = branchQuiz(branchQuestionPool((corpus as { ayat: BranchAyah[] }).ayat, null), result.state.settings.length, result.state.settings.leaves, random);
+      const { settings } = result.state;
+      const questions = this.kind === 'recite'
+        ? ayahEnds.questions({ range: null, filters: { surahs: '112' } }, 'easy', random).slice(0, 2)
+          .map(question => ({ ...question, write: writeAsk(question.ayahKey!, question.page!, settings.pen) ?? undefined }))
+        : branchQuiz(branchQuestionPool((corpus as { ayat: BranchAyah[] }).ayat, null), settings.length, settings.leaves, random);
       setTimeout(() => this.dispatch({ type: 'loaded', questions: questions as unknown as PartyQuestion[], surahNames: {} }), 50);
     }
   }

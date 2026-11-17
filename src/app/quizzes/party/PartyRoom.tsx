@@ -231,7 +231,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const waiting = view.players.filter((player) => !player.submitted);
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
-  const total = (question.tree || question.compare ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
       <p className="sr-only" aria-live="polite">{ar
@@ -252,14 +252,15 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             <p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p>
           </blockquote>
         )}
-        <ChoiceQuran question={question} given={revealed ? view.answer as string ?? undefined : undefined} revealed ar={ar} />
+        <ChoiceQuran question={question} given={revealed && typeof view.answer === "string" ? view.answer : undefined} revealed ar={ar}
+          pen={view.settings.pen} onWrite={(answer) => send({ type: "submit", answer })} written={revealed ? (Array.isArray(view.answer) ? view.answer : null) : undefined} />
         {question.compare ? (
           revealed ? <CompareFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : []} ar={ar} />
             : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
-        ) : (
+        ) : question.write ? null : (
           <div className="flex flex-col gap-2">
             {question.choices.map((choice) => {
               const given = view.answer === choice.value;
@@ -283,11 +284,13 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} فراغات` : `${view.result.earned} of ${view.result.total} blanks`)
             : question.tree
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : `${view.result.earned} of ${view.result.total} leaves`)
+            : question.write
+            ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} كلمات` : `${view.result.earned} of ${view.result.total} words`)
             : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}
-        {revealed && view.answer !== null && !question.tree && !question.compare && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
+        {revealed && view.answer !== null && !question.tree && !question.compare && !question.write && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
           surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
-        {revealed && view.answer === null && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
+        {revealed && (view.answer === null || question.write) && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
         {revealed && question.evidence?.reference && (
           <Button className="mt-3" size="sm" variant="outline" onClick={() => setSource(true)}><FontAwesomeIcon icon={faBookOpen} />{ar ? "المصدر" : "Source"}</Button>
         )}

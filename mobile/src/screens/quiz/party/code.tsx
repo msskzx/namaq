@@ -5,6 +5,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
+import { PEN_NAMES } from '@/components/recite/PenSetting';
+import { WRITTEN_TOPICS } from '@shared/quiz/settings';
+import type { PenRule } from '@shared/quran/writeAyah';
 import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
 import { QUIZ_LENGTHS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
@@ -157,23 +160,26 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
 const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
 
 /** A choice question's surah view (which surah), or its plain choices. */
-const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran);
+const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page;
 
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
   const branches = settings.topics.includes('BRANCHES');
   const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
-  // Trees and compare questions are typed, so they run on the longer time.
-  const typed = settings.topics.filter(topic => topic === 'BRANCHES' || topic === 'COMPARE');
+  // Trees, compare questions and recited ayat are typed, so they run on the longer time.
+  const isTyped = (topic: QuizTopic) => topic === 'BRANCHES' || topic === 'COMPARE' || WRITTEN_TOPICS.includes(topic);
+  const typed = settings.topics.filter(isTyped);
+  const written = settings.topics.some(topic => WRITTEN_TOPICS.includes(topic));
   const typedLabel = branches && typed.length === 1 ? 'وقت سؤال المتشابهات' : 'وقت سؤال الكتابة';
-  const others = settings.topics.some(topic => topic !== 'BRANCHES' && topic !== 'COMPARE');
+  const others = settings.topics.some(topic => !isTyped(topic));
   if (!editable) {
     const rows: [string, string][] = [
       ['الأسئلة', settings.topics.map(topic => PARTY_KINDS.find(kind => kind.id === topic)?.name).filter(Boolean).join('، ')],
       ['عدد الأسئلة', num(settings.length)],
       ...(ranged ? [[branches ? 'الأشجار' : 'النطاق', scopeSummary(settings, true, branches)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]]] as [string, string][] : []),
       ...(branches ? [['الإجابات في كل سؤال', num(settings.leaves)]] as [string, string][] : []),
+      ...(written ? [['الكتابة بالقلم', PEN_NAMES[settings.pen ?? 'whole']]] as [string, string][] : []),
       ...(typed.length ? [[typedLabel, duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
@@ -206,6 +212,12 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
         <>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
+        </>
+      )}
+      {written && (
+        <>
+          <Label palette={palette}>الكتابة بالقلم</Label>
+          <Row>{(Object.keys(PEN_NAMES) as PenRule[]).map(value => <Button key={value} label={PEN_NAMES[value]} active={(settings.pen ?? 'whole') === value} onPress={() => change({ pen: value })} />)}</Row>
         </>
       )}
       {typed.length > 0 && (
@@ -302,7 +314,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const sent = view.answer !== null;
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
-  const total = (question.tree || question.compare ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   const started = typed.some((text, index) => (question.compare || question.asked?.includes(index)) && text.trim());
 
   if (!revealed && sent) return (
@@ -319,11 +331,11 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : []} palette={palette} /></View>
         : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
-        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
+        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(view.answer) ? view.answer : null} />
         : <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
-          {question.tree || question.compare ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
+          {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
         </Text>
       )}
       <View style={{ paddingHorizontal: 16, gap: 12 }}>
@@ -352,7 +364,8 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
           </View>}
         </>
       ) : isAyahChoice(question)
-        ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })} /></View>
+        ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
+          pen={view.settings.pen} onWrite={answer => send({ type: 'submit', answer })} /></View>
         : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
     </View>
   );
@@ -374,7 +387,7 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
         ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : []} palette={palette} /></View>
         : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
-        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
+        : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(entry.answer) ? entry.answer : null} />
         : <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />)}
       {view.you === view.hostId && <View style={{ alignItems: 'flex-start' }}><Button big variant="primary" Icon={RotateCcw} label="اختبار آخر بالفريق نفسه" onPress={() => send({ type: 'again' })} /></View>}
     </ScrollView>

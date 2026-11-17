@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { freshBoxes, gradeWritten, nextBox, previousBox, typeInBox, type Boxes } from '@shared/quran/writeAyah';
+import { clearLastBox, freshBoxes, gradeWritten, nextBox, previousBox, typeInBox, type Boxes } from '@shared/quran/writeAyah';
 
 export type Graded = ReturnType<typeof gradeWritten>;
 
@@ -8,7 +8,7 @@ export type Graded = ReturnType<typeof gradeWritten>;
  * holds, the box being written, and the out-of-sight field the keyboard types into. `onDone` gets the grade once the last
  * box is written.
  */
-export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean; onDone: (graded: Graded) => void }) {
+export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean; onDone: (graded: Graded, typed: Record<number, string>) => void }) {
   const [boxes, setBoxes] = useState<Boxes>(() => freshBoxes(asked));
   const input = useRef<HTMLInputElement>(null);
   // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
@@ -23,7 +23,7 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
   useEffect(() => { if (ayah && autoFocus) input.current?.focus({ preventScroll: true }); }, [ayah, autoFocus]);
   const step = ({ boxes: next, finished }: { boxes: Boxes; finished: boolean }) => {
     setBoxes(next);
-    if (finished) onDone(gradeWritten(asked, next.typed, words));
+    if (finished) onDone(gradeWritten(asked, next.typed, words), next.typed);
   };
   const back = () => {
     const previous = previousBox(boxes, asked);
@@ -47,6 +47,8 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
   return {
     typed: boxes.typed,
     current: boxes.current,
+    /** Empties the last box written and writes it again; false when none is written. */
+    clearLast: () => { const cleared = clearLastBox(boxes, asked); if (cleared) { setBoxes(cleared); input.current?.focus({ preventScroll: true }); } return !!cleared; },
     /** A click on a box: write it. */
     pick: (at: number) => { setBoxes(current => ({ ...current, current: at })); input.current?.focus({ preventScroll: true }); },
     focus: () => input.current?.focus({ preventScroll: true }),

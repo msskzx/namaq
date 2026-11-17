@@ -1,6 +1,7 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
-import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, SOLO_TOPICS, type QuizTopic } from '../quiz/settings';
+import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
+import { isPenRule, type PenRule } from '../quran/writeAyah';
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, type Difficulty } from '../quiz/difficulty';
 import { QUIZ_CATEGORIES, quizFilters, treeScopeParams, type ScopeFilters } from '../quiz/scopeParams';
 
@@ -24,9 +25,11 @@ export type PartySettings = {
   leaves: number;
   seconds: number;
   treeSeconds: number;
+  /** What the pen asks in a recited ayah, for everyone (the host's pen rule; owner 2026-11-17: the whole ayah by default). */
+  pen: PenRule;
 };
 
-export const DEFAULT_SETTINGS: PartySettings = { topics: ['BRANCHES'], length: 5, person: '', juzFrom: 1, juzTo: 30, filters: { categories: QUIZ_CATEGORIES }, difficulty: DEFAULT_DIFFICULTY, leaves: 3, seconds: 60, treeSeconds: 180 };
+export const DEFAULT_SETTINGS: PartySettings = { topics: ['BRANCHES'], length: 5, person: '', juzFrom: 1, juzTo: 30, filters: { categories: QUIZ_CATEGORIES }, difficulty: DEFAULT_DIFFICULTY, leaves: 3, seconds: 60, treeSeconds: 180, pen: 'whole' };
 
 export type PartyQuestion = ScoredQuestion & { key: string; correctAnswer: string; [field: string]: unknown };
 export type Points = { earned: number; total: number };
@@ -83,7 +86,7 @@ const pick = <T,>(options: readonly T[], value: unknown, fallback: T) => options
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
 export function cleanSettings(settings: Partial<PartySettings>, base: PartySettings = DEFAULT_SETTINGS): PartySettings {
-  const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic) && !SOLO_TOPICS.includes(topic)))] : base.topics;
+  const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic)))] : base.topics;
   const from = juz(settings.juzFrom, base.juzFrom);
   const to = juz(settings.juzTo, base.juzTo);
   return {
@@ -97,6 +100,7 @@ export function cleanSettings(settings: Partial<PartySettings>, base: PartySetti
     leaves: pick(QUIZ_LEAVES, settings.leaves, base.leaves as (typeof QUIZ_LEAVES)[number]),
     seconds: pick(QUESTION_SECONDS, settings.seconds, base.seconds as (typeof QUESTION_SECONDS)[number]),
     treeSeconds: pick(TREE_SECONDS, settings.treeSeconds, base.treeSeconds as (typeof TREE_SECONDS)[number]),
+    pen: isPenRule(settings.pen) ? settings.pen : base.pen ?? DEFAULT_SETTINGS.pen,
   };
 }
 
@@ -114,12 +118,14 @@ export function quizQuery(settings: PartySettings) {
     if (settings.difficulty && settings.difficulty !== DEFAULT_DIFFICULTY) params.set('difficulty', settings.difficulty);
     params.set('leaves', String(settings.leaves));
   }
+  // A recited ayah comes with its words and the places the pen asks, so the party can grade it.
+  if (settings.topics.some(topic => WRITTEN_TOPICS.includes(topic))) params.set('pen', settings.pen ?? DEFAULT_SETTINGS.pen);
   return params.toString();
 }
 
 const key = (name: string) => name.normalize('NFC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
-/** Typed questions (a tree, a compare card's blanks) get the longer time. */
-const secondsFor = (state: PartyState, question: PartyQuestion) => (question.tree || question.compare ? state.settings.treeSeconds : state.settings.seconds) * 1000;
+/** Typed questions (a tree, a compare card's blanks, a written ayah) get the longer time. */
+const secondsFor = (state: PartyState, question: PartyQuestion) => (question.tree || question.compare || question.write ? state.settings.treeSeconds : state.settings.seconds) * 1000;
 
 function nextHost(players: Player[], hostId: string, connected: boolean) {
   const at = players.findIndex(player => player.id === hostId);
@@ -269,8 +275,11 @@ export type PartyView = {
 export function viewFor(state: PartyState, playerId: string, now: number): PartyView {
   const revealed = state.phase === 'reveal';
   const question = state.phase === 'question' || revealed ? state.questions[state.current] : null;
-  // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too.
-  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: undefined, alike: undefined, note: undefined } : question;
+  // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
+  // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
+  const written = question?.write as { asked: number[] } | undefined;
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, note: undefined,
+    ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;
   return {
     code: state.code,
     you: playerId,
