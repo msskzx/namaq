@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   try {
     return NextResponse.json(await syncRecitation(reciter, params.get('t') || undefined), { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    if (error instanceof SyncError && ['resync_required', 'token_filter_mismatch'].includes(error.code ?? '')) return NextResponse.json({ resync: true });
+    if (error instanceof SyncError && ['resync_required', 'token_filter_mismatch', 'cursor_filter_mismatch', 'cursor_per_page_mismatch'].includes(error.code ?? '')) return NextResponse.json({ resync: true });
     console.error('listen-sync', error);
     return NextResponse.json({ error: 'Sync failed' }, { status: error instanceof SyncError ? error.status : 500 });
   }

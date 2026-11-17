@@ -20,7 +20,7 @@ import { nextOpening, OPENINGS_KEY, type Openings } from '@shared/quran/openings
 import { atStart, compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import ListenBar, { ListenSheet } from './ListenBar';
-import { listen, useListening } from '@/lib/listen';
+import { listen, setFollowing, shouldFollow, useFollowing, useListening } from '@/lib/listen';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import TopicSheet, { type TopicOpen } from './TopicSheet';
 import type { AyahLinks } from './ayahLinks';
@@ -270,7 +270,7 @@ export default function ReaderView({
   // Listening (the app's Reader): the recitation playing, its sheet, and the pages following the ayah being read until the reader turns away.
   const listening = useListening();
   const [listenFrom, setListenFrom] = useState<string | null>(null);
-  const [following, setFollowing] = useState(true);
+  const following = useFollowing();
   const surahName = (key: string) => plainName(names[Number(key.split(':')[0])] ?? '').replace(/^سورة\s*/, '') || undefined;
   const [preview, setPreview] = useState<Preview | null>(null);
   const [topic, setTopic] = useState<TopicOpen | null>(null);
@@ -295,9 +295,9 @@ export default function ReaderView({
   );
   useEffect(() => { write(LAST_PAGE_KEY, String(page)); }, [page]);
   const listenShown = listening ? pageOfAyah(shown, listening.key) : undefined;
-  useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   useEffect(() => {
-    if (listening && following && !listenShown) router.push(`${ayahHref(listening.key)}?listen=1`);
+    // Reciting keeps its own place on the pages; the recitation does not move them then.
+    if (listening && !position && shouldFollow(listening.key, !!listenShown)) router.push(`${ayahHref(listening.key)}?listen=1`);
   }, [listening?.key, following, listenShown]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { setZoom(settleTextSize(Number(read(TEXT_SIZE_KEY)) || 1)); }, []);
   const sizeTo = useCallback((next: number) => { setZoom(next); write(TEXT_SIZE_KEY, String(next)); }, []);
@@ -643,7 +643,7 @@ export default function ReaderView({
         fasila={fasila?.key === actions.key} onFasila={position ? undefined : () => setQuranFasila(fasila?.key === actions.key ? null : { key: actions.key, page: pageOfAyah(shown, actions.key) ?? page })}
         onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
-        irab={!!actions.word} onListen={() => { setFollowing(true); listen(actions.key); }} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
+        irab={!!actions.word} onListen={() => listen(actions.key)} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>
         <Button size="md" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
           <FasilaIcon aria-hidden className="text-[var(--home-accent)]" width={18} height={18} />

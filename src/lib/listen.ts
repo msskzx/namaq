@@ -21,6 +21,27 @@ const subscribe = (listener: () => void) => { listeners.add(listener); return ()
 const read = () => state;
 export const useListening = () => useSyncExternalStore(subscribe, read, () => null);
 
+/**
+ * Whether the pages follow the ayah being read. It lives here, not in the reader, because the reader is drawn anew for
+ * every page; `landed` is the ayah last seen on the pages, so that leaving it by any link (not only the page arrows)
+ * stops the following until the «back to the ayah» pill.
+ */
+let follow = { on: true, landed: null as string | null };
+const followers = new Set<() => void>();
+const readFollowing = () => follow.on;
+export const useFollowing = () => useSyncExternalStore(cb => { followers.add(cb); return () => { followers.delete(cb); }; }, readFollowing, () => true);
+export function setFollowing(on: boolean) {
+  follow = { on, landed: on ? null : follow.landed };
+  followers.forEach(cb => cb());
+}
+/** Called with the ayah being read and whether the pages show it; true when the reader should go to it. */
+export function shouldFollow(key: string, shown: boolean) {
+  if (shown) { follow.landed = key; return false; }
+  if (!follow.on) return false;
+  if (follow.landed === key) { setFollowing(false); return false; }
+  return true;
+}
+
 let audio: HTMLAudioElement | null = null;
 let ahead: HTMLAudioElement | null = null;
 let quietTimer: ReturnType<typeof setTimeout> | null = null;
@@ -74,17 +95,20 @@ export function listen(from: string, to?: string) {
   const keys = ayatOf(range, ayahCounts);
   if (!keys.length) return;
   state = { range, keys, step: FIRST, key: keys[0], playing: true, quiet: false, reciter: readReciter() };
+  setFollowing(true);
   go(FIRST);
 }
 
 export function togglePlaying() {
   if (!state || !audio) return;
-  if (state.quiet) {
-    const next = nextStep(state.step, state.keys.length, readListenPlan());
-    if (next) go(next); else stopListening();
-  } else if (state.playing) {
+  if (state.playing) {
+    if (quietTimer) { clearTimeout(quietTimer); quietTimer = null; }
     audio.pause();
     emit({ ...state, playing: false });
+  } else if (state.quiet) {
+    // A pause that was itself paused goes on to what was next.
+    const next = nextStep(state.step, state.keys.length, readListenPlan());
+    if (next) go(next); else stopListening();
   } else {
     audio.play().catch(() => {});
     emit({ ...state, playing: true });
@@ -94,7 +118,7 @@ export function togglePlaying() {
 export function stepAyah(by: 1 | -1) {
   if (!state) return;
   const step = stepTo(state.step, by, state.keys.length);
-  if (step) go(step, state.playing || state.quiet);
+  if (step) go(step, state.playing);
 }
 
 export function applySpeed() { if (audio) audio.playbackRate = readListenPlan().speed; }
@@ -102,11 +126,12 @@ export function applySpeed() { if (audio) audio.playbackRate = readListenPlan().
 export function applyReciter(reciter: number) {
   if (!state) return;
   state = { ...state, reciter };
-  go({ ...state.step, repeat: 0 }, state.playing || state.quiet);
+  go({ ...state.step, repeat: 0 }, state.playing);
 }
 
 export function stopListening() {
   if (quietTimer) { clearTimeout(quietTimer); quietTimer = null; }
   audio?.pause();
+  setFollowing(true);
   emit(null);
 }

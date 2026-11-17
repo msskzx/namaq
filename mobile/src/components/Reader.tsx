@@ -126,7 +126,8 @@ export default function Reader() {
   // The page follows the ayah being read, until the reader turns away; «عُد إلى الآية» brings it back.
   const [following, setFollowing] = useState(true);
   const listenPage = listening ? pageOfAyah(listening.key) ?? null : null;
-  useEffect(() => { if (listenPage && following) setPage(listenPage); }, [listenPage, following]);
+  // Reciting keeps its own place on the pages; the recitation does not move them then.
+  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
@@ -188,6 +189,7 @@ export default function Reader() {
   }, []);
   const turnByHand = useCallback((next: number) => { setFollowing(false); turnTo(next); }, [turnTo]);
   const jump = useCallback((to: Jump, recite?: 'review') => {
+    setFollowing(false);
     setPage(to.page);
     setActions(null);
     setTools(false);
@@ -206,6 +208,7 @@ export default function Reader() {
   // The homepage opens the mushaf at a surah or juz, or starts a recitation.
   const askOpening = (next: Openings) => {
     const key = next.keys[next.at];
+    setFollowing(false);
     setOpenings(next);
     setPage(pageOfAyah(key) ?? 1);
     setActions(null);
@@ -226,6 +229,7 @@ export default function Reader() {
       }
     }
     setOpenings(null);
+    setFollowing(false);
     const to = (intent.at && pageOfAyah(intent.at)) || intent.page || page;
     setPage(to);
     setActions(null);
@@ -477,7 +481,7 @@ export default function Reader() {
       <ListenBar bottom={reciting ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
         onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />
       {listening && listenPage && listenPage !== page && (
-        <Pressable onPress={() => setFollowing(true)} accessibilityRole="button" accessibilityLabel={`عُد إلى الآية التي تُتلى، ${plainSurah(listening.key)}`}
+        <Pressable onPress={() => { setFollowing(true); setPage(listenPage); setActions(null); }} accessibilityRole="button" accessibilityLabel={`عُد إلى الآية التي تُتلى، ${plainSurah(listening.key)}`}
           style={{ position: 'absolute', alignSelf: 'center', bottom: (reciting ? pillBottom + RECITE_BAR + 8 : pillBottom) + LISTEN_BAR + 10, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />

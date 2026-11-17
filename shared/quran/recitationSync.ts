@@ -8,9 +8,9 @@ export type AudioRow = { id: number; key: string; url: string };
 
 /**
  * What one sync run means for a reciter: `full` replaces every row (a first sync, or the resource was refreshed),
- * `upsert` and `remove` change single rows, `gone` means the recitation is no longer public, and `token` is the next checkpoint.
+ * `upsert` and `remove` (row ids, or ayah keys when that is what Quran Foundation names) change single rows, `gone` means the recitation is no longer public, and `token` is the next checkpoint.
  */
-export type SyncResult = { token: string; full?: AudioRow[]; upsert: AudioRow[]; remove: number[]; gone?: boolean };
+export type SyncResult = { token: string; full?: AudioRow[]; upsert: AudioRow[]; remove: (number | string)[]; gone?: boolean };
 
 /** Quran Foundation's ayah file URLs are relative to its audio host, or start with //. */
 export const audioUrl = (url: string) => (url.startsWith('//') ? `https:${url}` : /^https?:/.test(url) ? url : `https://verses.quran.com/${url.replace(/^\//, '')}`);
@@ -30,21 +30,28 @@ export type Mutation = { type: string; record_type?: string | null; record_key?:
  */
 export function foldMutations(mutations: Mutation[], snapshots: Map<string, AudioRow[]>, token: string): SyncResult {
   const result: SyncResult = { token, upsert: [], remove: [] };
+  const sameRow = (item: AudioRow, id: number | string) => item.id === id || item.key === id;
   for (const mutation of mutations) {
     if (mutation.type === 'RESOURCE_CREATE' || mutation.type === 'RESOURCE_INVALIDATE') {
-      result.full = snapshots.get(mutation.snapshot_url ?? '') ?? [];
-      result.upsert = [];
-      result.remove = [];
-      result.gone = false;
+      Object.assign(result, { full: [...(snapshots.get(mutation.snapshot_url ?? '') ?? [])], upsert: [], remove: [], gone: false });
     } else if (mutation.type === 'RESOURCE_DELETE') {
       Object.assign(result, { full: [], upsert: [], remove: [], gone: true });
     } else if (mutation.record_type === 'audio_file' && (mutation.type === 'ROW_CREATE' || mutation.type === 'ROW_UPDATE')) {
       const changed = mutation.data ? row({ record_type: 'audio_file', ...mutation.data }) : null;
-      if (changed) result.upsert = [...result.upsert.filter(item => item.id !== changed.id), changed];
-    } else if (mutation.record_type === 'audio_file' && mutation.type === 'ROW_DELETE') {
-      const id = Number(mutation.record_key);
-      result.upsert = result.upsert.filter(item => item.id !== id);
-      result.remove.push(id);
+      if (!changed) continue;
+      // After a snapshot, a row change lands in the snapshot itself.
+      if (result.full) result.full = [...result.full.filter(item => item.id !== changed.id && item.key !== changed.key), changed];
+      else {
+        result.upsert = [...result.upsert.filter(item => item.id !== changed.id), changed];
+        result.remove = result.remove.filter(id => id !== changed.id && id !== changed.key);
+      }
+    } else if (mutation.record_type === 'audio_file' && mutation.type === 'ROW_DELETE' && mutation.record_key != null) {
+      const id = /^\d+$/.test(String(mutation.record_key)) ? Number(mutation.record_key) : String(mutation.record_key);
+      if (result.full) result.full = result.full.filter(item => !sameRow(item, id));
+      else {
+        result.upsert = result.upsert.filter(item => !sameRow(item, id));
+        result.remove.push(id);
+      }
     }
   }
   return result;
@@ -62,8 +69,8 @@ export function applySync(rows: Record<string, AudioRow>, sync: SyncResult): { r
   const next = { ...rows };
   const refetch: string[] = [];
   for (const item of sync.upsert) { if (next[item.key]?.url !== item.url) refetch.push(item.key); next[item.key] = item; }
-  const removed = new Set(sync.remove);
-  const drop = Object.values(next).filter(item => removed.has(item.id)).map(item => item.key);
+  const removed = new Set<number | string>(sync.remove);
+  const drop = Object.values(next).filter(item => removed.has(item.id) || removed.has(item.key)).map(item => item.key);
   for (const key of drop) delete next[key];
   return { rows: next, refetch, drop };
 }

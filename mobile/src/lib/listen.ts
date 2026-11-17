@@ -52,8 +52,8 @@ function onStatus(status: AudioStatus) {
   if (!pause) { go(next); return; }
   const p = ensurePlayer();
   loaded = null;
-  p.loop = true;
   p.replace(SILENCE);
+  p.loop = true;
   p.play();
   emit({ ...state, quiet: true });
   quietTimer = setTimeout(() => { quietTimer = null; if (state) go(next); }, pause * 1000);
@@ -65,8 +65,8 @@ function go(step: Step, playing = true) {
   const p = ensurePlayer();
   const key = state.keys[step.at];
   const plan = readListenPlan();
-  p.loop = false;
   p.replace({ uri: sourceOf(state.reciter, key) });
+  p.loop = false;
   p.setPlaybackRate(plan.speed, 'high');
   loaded = key;
   if (playing) p.play();
@@ -106,7 +106,7 @@ export function togglePlaying() {
 export function stepAyah(by: 1 | -1) {
   if (!state) return;
   const step = stepTo(state.step, by, state.keys.length);
-  if (step) go(step, state.playing || state.quiet);
+  if (step) go(step, state.playing);
 }
 
 /** The speed changed in the sheet: the ayah playing takes it at once. */
@@ -116,7 +116,7 @@ export function applySpeed() { if (player && state && !state.quiet) player.setPl
 export function applyReciter(reciter: number) {
   if (!state) return;
   state = { ...state, reciter };
-  go({ ...state.step, repeat: 0 }, state.playing || state.quiet);
+  go({ ...state.step, repeat: 0 }, state.playing);
 }
 
 export function stopListening() {

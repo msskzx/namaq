@@ -22,13 +22,21 @@ describe('recitation sync', () => {
       { type: 'ROW_DELETE', record_type: 'audio_file', record_key: '5', data: null },
       { type: 'RESOURCE_UPDATE' },
     ], new Map([['/s', [a]]]), 't2');
-    expect(run).toEqual({ token: 't2', full: [a], upsert: [b], remove: [5], gone: false });
+    expect(run).toEqual({ token: 't2', full: [a, b], upsert: [], remove: [], gone: false });
+    const rows = foldMutations([
+      { type: 'ROW_DELETE', record_type: 'audio_file', record_key: '5', data: null },
+      { type: 'ROW_DELETE', record_type: 'audio_file', record_key: '1:7', data: null },
+      { type: 'ROW_UPDATE', record_type: 'audio_file', record_key: 5, data: { id: 5, verse_key: '1:5', url: 'x/001005.mp3' } },
+    ], new Map(), 't4');
+    expect(rows.remove).toEqual(['1:7']);
+    expect(rows.upsert.map(item => item.id)).toEqual([5]);
     expect(foldMutations([{ type: 'RESOURCE_DELETE' }], new Map(), 't3')).toMatchObject({ full: [], gone: true });
   });
 
   it('fetches again only files whose address changed, and drops removed ones', () => {
     const moved = { ...b, url: 'https://verses.quran.com/new/001002.mp3' };
     expect(applySync({ '1:1': a, '1:2': b }, { token: 't', upsert: [moved], remove: [1] })).toEqual({ rows: { '1:2': moved }, refetch: ['1:2'], drop: ['1:1'] });
+    expect(applySync({ '1:1': a, '1:2': b }, { token: 't', upsert: [], remove: ['1:1'] }).drop).toEqual(['1:1']);
     expect(applySync({ '1:1': a, '1:2': b }, { token: 't', full: [a], upsert: [], remove: [] })).toEqual({ rows: { '1:1': a }, refetch: [], drop: ['1:2'] });
     // A first sync has nothing on the phone to fetch again.
     expect(applySync({}, { token: 't', full: [a, b], upsert: [], remove: [] }).refetch).toEqual([]);

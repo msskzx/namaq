@@ -156,7 +156,7 @@ export default function ListenSheet({ open, start, onClose, palette }: { open: b
                       {memorizedKeys.length > 0 && (
                         <PackRow reciter={item.id} kind="memorized" title="ما أحفظه" detail="من إعداد «ما أحفظه»" keys={memorizedKeys} bytes={packBytes(item.id, { memorized })} palette={palette} />
                       )}
-                      <PackRow reciter={item.id} kind="surah" title={`سورة ${surahName(surah)}`} detail={`${num(ayahCounts.get(surah) ?? 0)} آية`} keys={ayatOf({ from: `${surah}:1`, to: surahEnd(`${surah}:1`, ayahCounts) }, ayahCounts)} bytes={packBytes(item.id, { surah })} palette={palette} />
+                      <PackRow reciter={item.id} kind={`surah:${surah}`} title={`سورة ${surahName(surah)}`} detail={`${num(ayahCounts.get(surah) ?? 0)} آية`} keys={ayatOf({ from: `${surah}:1`, to: surahEnd(`${surah}:1`, ayahCounts) }, ayahCounts)} bytes={packBytes(item.id, { surah })} palette={palette} />
                       <PackRow reciter={item.id} kind="all" title="المصحف كله" detail="من الفاتحة إلى الناس" keys={allKeys} bytes={packBytes(item.id, {})} palette={palette} />
                       {held > 0 && (
                         <Pressable onPress={() => packsOf(item.id).forEach(pack => removePack(item.id, pack.kind))} accessibilityRole="button" accessibilityLabel="احذف تنزيلات القارئ"
