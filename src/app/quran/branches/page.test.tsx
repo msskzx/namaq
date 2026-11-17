@@ -423,7 +423,7 @@ describe('Quran branch trees', () => {
   });
 
   it('gives a tree outside the list no steps', async () => {
-    render(await open({ o: 'ان الله غفور رحيم', at: '2:173:21,2:182:12' }));
+    render(await open({ o: 'ان الله لذو فضل علي الناس ولكن اكثر الناس لا يشكرون', at: '2:243:17,40:61:9' }));
     expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
     expect(screen.queryByRole('navigation', { name: 'التنقل بين الأشجار' })).toBeNull();
   });
