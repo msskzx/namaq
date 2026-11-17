@@ -17,6 +17,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
+import Tabs from '@/ui/Tabs';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
@@ -88,17 +89,7 @@ export default function OathsScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
-        <View accessibilityRole="tablist" style={{ flexDirection: 'row', padding: 3, borderRadius: 12, backgroundColor: palette.paperDeep }}>
-          {KINDS.map(option => {
-            const on = option.kind === kind;
-            return (
-              <Pressable key={option.kind} onPress={() => pick(option.kind)} accessibilityRole="tab" accessibilityState={{ selected: on }}
-                style={{ flex: 1, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
-                <Text style={{ fontSize: 16, color: on ? palette.onAccent : palette.muted }}>{option.label}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <Tabs options={KINDS.map(option => ({ key: option.kind, label: option.label }))} value={kind} onChange={pick} palette={palette} fill />
       </View>
       {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
