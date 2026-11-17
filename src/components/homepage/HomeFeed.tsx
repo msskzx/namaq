@@ -50,6 +50,7 @@ import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { surahName } from '@shared/quran/surahNames';
+import Card from '@/components/common/Card';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
@@ -147,7 +148,7 @@ function Post({ head, actions, bar, labelledBy, children }: { head: React.ReactN
   bar?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
   const body = <>
     {head}
-    <div className={styles.post}>{children}</div>
+    <Card className="overflow-hidden">{children}</Card>
     {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
     {actions && <div className={styles.postActions} data-share-skip>{actions}</div>}
   </>;

@@ -12,6 +12,7 @@ import {
 } from '@shared/prayer';
 import styles from './Utilities.module.css';
 import Sheet from '@/components/common/Sheet';
+import Card from '@/components/common/Card';
 
 const lib = adhan as unknown as Adhan;
 type View = 'times' | 'qibla' | 'calendar';
@@ -213,13 +214,13 @@ function Times({ place, onPlace }: { place: Place; onPlace: () => void }) {
         {date && <span className={styles.date}>{date}</span>}
       </div>
       {times && (
-        <div className={styles.card}>
+        <Card className="p-1.5">
           {ALL.map(key => (
             <div key={key} className={`${styles.time} ${key === 'sunrise' ? styles.faint : ''} ${key === next ? styles.next : ''}`} aria-current={key === next ? 'time' : undefined}>
               <span>{PRAYER_NAMES[key]}</span><span>{clock(times[key], true)}</span>
             </div>
           ))}
-        </div>
+        </Card>
       )}
       <div>
         <label className={styles.label} htmlFor="prayer-method">طريقة الحساب</label>
