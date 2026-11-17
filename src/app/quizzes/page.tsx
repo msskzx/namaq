@@ -25,6 +25,8 @@ import { isCompareBookmark } from "@shared/compareBookmarks";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import Toggle from "@/components/common/Toggle";
+import { setQuizPageBefore, useQuizPageBefore } from "@/lib/quizPageBefore";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
@@ -221,6 +223,7 @@ export default function QuizzesPage() {
   }, [pathname, router, topicQuery, search]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
+  const pageBefore = useQuizPageBefore();
   const leave = () => { writeRun(null); setStored(null); };
   const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree || question.compare ? typed[index] : answers[index])), [questions, answers, typed]);
   const score = points.reduce((sum, point) => sum + point.earned, 0);
@@ -241,6 +244,8 @@ export default function QuizzesPage() {
 
   if (!started) {
     const hasBranches = topics.includes("BRANCHES");
+    // Recite and «في أي سورة؟» are asked on the ayah's mushaf page (owner, 2026-11-17).
+    const onPage = topics.includes("RECITE") || topics.includes("SURAH");
     const toggleTopic = (value: QuizTopic) => setParam({
       topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
       solo: topics.length === 1 && topics[0] === value ? "1" : undefined,
@@ -297,7 +302,7 @@ export default function QuizzesPage() {
                 {topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
               </div>
               {hasBranches && <div role="group" aria-labelledby="quiz-leaves">
-                <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
+                <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
                     <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
@@ -306,6 +311,10 @@ export default function QuizzesPage() {
                     </Button>
                   ))}
                 </div>
+              </div>}
+              {onPage && <div className="flex basis-full items-center justify-between gap-3">
+                <span id="quiz-page-before" className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"}</span>
+                <Toggle checked={pageBefore} label={ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"} onChange={setQuizPageBefore} />
               </div>}
               </div>
               {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}

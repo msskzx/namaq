@@ -19,7 +19,7 @@ export function Section({ title, palette, children }: { title: string; palette: 
 export function LeavesPicker({ value, onChange, palette }: { value: number; onChange: (value: number) => void; palette: Palette }) {
   return (
     <>
-      <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600', textAlign: 'right', marginTop: 4 }}>عدد الإجابات في كل شجرة</Text>
+      <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600', textAlign: 'right', marginTop: 4 }}>عدد الإجابات في كل سؤال</Text>
       <Row>
         {QUIZ_LEAVES.map(leaves => (
           <Button key={leaves} label={num(leaves)} active={value === leaves} onPress={() => onChange(leaves)} />

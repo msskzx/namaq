@@ -154,7 +154,7 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
 }
 
 /** The kinds a party can mix (a recited snippet stays solo: the reader grades it alone). */
-const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'شجرة المتشابهات' }, ...CHOICE_KINDS.filter(kind => kind.party)];
+const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
 
 /** A choice question's surah view (which surah), or its plain choices. */
 const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran);
@@ -166,14 +166,14 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
   // Trees and compare questions are typed, so they run on the longer time.
   const typed = settings.topics.filter(topic => topic === 'BRANCHES' || topic === 'COMPARE');
-  const typedLabel = branches && typed.length === 1 ? 'وقت سؤال الشجرة' : 'وقت سؤال الكتابة';
+  const typedLabel = branches && typed.length === 1 ? 'وقت سؤال المتشابهات' : 'وقت سؤال الكتابة';
   const others = settings.topics.some(topic => topic !== 'BRANCHES' && topic !== 'COMPARE');
   if (!editable) {
     const rows: [string, string][] = [
       ['الأسئلة', settings.topics.map(topic => PARTY_KINDS.find(kind => kind.id === topic)?.name).filter(Boolean).join('، ')],
       ['عدد الأسئلة', num(settings.length)],
       ...(ranged ? [[branches ? 'الأشجار' : 'النطاق', scopeSummary(settings, true, branches)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]]] as [string, string][] : []),
-      ...(branches ? [['الإجابات في كل شجرة', num(settings.leaves)]] as [string, string][] : []),
+      ...(branches ? [['الإجابات في كل سؤال', num(settings.leaves)]] as [string, string][] : []),
       ...(typed.length ? [[typedLabel, duration(settings.treeSeconds)]] as [string, string][] : []),
       ...(others ? [['وقت السؤال', duration(settings.seconds)]] as [string, string][] : []),
     ];
