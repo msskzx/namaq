@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr';
 import { BookOpen, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -298,7 +298,7 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
 
   return (
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="relative flex flex-col gap-2">
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingDots fill />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && (!context || around) && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" className={styles.track}>
         <div ref={lane} data-matrix-content onClick={light} className={styles.lane} data-columns={COLUMNS.length} style={{ '--columns': COLUMNS.length } as React.CSSProperties}>

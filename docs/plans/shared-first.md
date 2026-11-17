@@ -145,6 +145,7 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
   Reader sheets, listen, compare list, book sheet, place, share, note, page and tree videos and the quiz reference use it.
   Left for later: the settings and help panels in `TabBar` (a panel beside the rail on desktop, not modal),
   the tour, and the floating menus (`CardMenu`, `AyahActions`, `ScopeFilter`), which want a shared floating menu like the app's.
+- Step 3: `common/LoadingDots` is the one loader (`fill`, `fill="page"`), as in the app. `LoadingSpinner` and `InkLoader` (logo and quill loaders) are gone; `NavigationLoader` keeps its job (when to show) and shows the dots.
 
 ## AGENTS.md rule (added as "Shared first")
 

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { volumeChapterRows } from '@/lib/history/volumeChapters';
 import { fetcher } from '@/lib/swr';
@@ -130,7 +130,7 @@ export default function SourceContents({
 
             {open && (
               <>
-                {isLoading && <div className="p-4"><LoadingSpinner /></div>}
+                {isLoading && <div className="p-4"><LoadingDots fill /></div>}
                 {contents && (
                   <>
                     <VolumeBody slug={slug} volume={contents} />

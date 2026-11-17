@@ -6,7 +6,7 @@ import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
@@ -26,7 +26,7 @@ function EventPage() {
     <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="w-full px-4 py-8">
         {isLoading ? (
-          <LoadingSpinner fill />
+          <LoadingDots fill="page" />
         ) : (
           <>
             <div className="flex items-center gap-4 mb-6">

@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faFlag, faMagnifyingGlass, faRoute, faShieldAlt } from "@fortawesome/free-solid-svg-icons";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import EventTimeline from "@/components/events/EventTimeline";
@@ -81,7 +81,7 @@ function EventsPage() {
         <div className="mt-8">
           {error && <ErrorMessage title={t.eventsLoadError} />}
           {isLoading || !items ? (
-            <LoadingSpinner fill />
+            <LoadingDots fill="page" />
           ) : shown.length === 0 ? (
             <p className="text-center text-gray-600 dark:text-gray-400">{ar ? "لا توجد نتائج مطابقة." : "Nothing matches."}</p>
           ) : (

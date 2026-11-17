@@ -6,7 +6,7 @@ import { faArrowLeft, faArrowRight, faBookOpen, faFilter, faMagnifyingGlass } fr
 import useSWR from 'swr';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import QuizReferenceDialog from '@/components/common/QuizReferenceDialog';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { QUESTION_FAMILIES, QUESTION_STATUSES } from '@/lib/quiz/types';
@@ -84,7 +84,7 @@ export default function QuestionBankReview() {
         {ar ? 'النص العربي الناقص فقط' : 'Incomplete Arabic prompt only'}
       </label>
       {error ? <ErrorMessage title={ar ? 'تعذر تحميل الأسئلة' : 'Failed to load questions'} /> : null}
-      {isLoading || !data ? <LoadingSpinner fill /> : (
+      {isLoading || !data ? <LoadingDots fill="page" /> : (
         <>
           <p className="mb-4 text-sm text-[var(--home-muted)]">{ar ? `${data.pagination.total} سؤالًا` : `${data.pagination.total} questions`}</p>
           <ol className="space-y-5">

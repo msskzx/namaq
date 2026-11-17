@@ -12,7 +12,7 @@ import NasabPlot from './NasabPlot';
 import { givenName, layoutNasab, nasabHonorific, type NasabPerson } from '@/lib/relationship/nasabLayout';
 import styles from './Nasab.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
@@ -143,7 +143,7 @@ export default function NasabView() {
 
       {subjects.length === 0 && <p>{isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'}</p>}
       {failed && subjects.length > 0 && <p role="alert">{isArabic ? 'تعذر تحميل النسب.' : 'Could not load the nasab.'}</p>}
-      {subjects.length > 0 && !current && !failed && <LoadingSpinner />}
+      {subjects.length > 0 && !current && !failed && <LoadingDots fill />}
       {missing.length > 0 && (
         <p>{isArabic ? 'لا سجل لهؤلاء في الشبكة: ' : 'Not in the graph: '}{missing.join(', ')}</p>
       )}

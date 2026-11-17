@@ -22,7 +22,7 @@ import { QUIZ_CATEGORIES, quizFilters, SCOPE_KEYS, treeScopeParams } from "@shar
 import { memorizedFilters, memorizedQuestions, readMemorized } from "@shared/memorized";
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from "@shared/bookmarks";
 import { isCompareBookmark } from "@shared/compareBookmarks";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import Toggle from "@/components/common/Toggle";
@@ -346,7 +346,7 @@ export default function QuizzesPage() {
       <div className="mx-auto max-w-6xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         {error && <><ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} /><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></>}
         {isLoading || !data ? (
-          <LoadingSpinner fill />
+          <LoadingDots fill="page" />
         ) : questions.length === 0 ? (
           <div className="text-center text-[var(--home-muted)]"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
         ) : submitted ? (

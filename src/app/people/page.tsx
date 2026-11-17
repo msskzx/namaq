@@ -7,7 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import translations from '@/components/language/translations';
 import PeopleSearch from '@/components/people/PeopleSearch';
 import type { Title } from '@/generated/prisma';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import PersonCard from '@/components/people/PersonCard';
 import { PersonWithTitles } from '@/types/person';
 import useSWR from 'swr';
@@ -169,7 +169,7 @@ const PeoplePage = () => {
       ) : null}
 
       {(isInitialLoad && (!peoplePages || peoplePages.length === 0)) || isLoadingTitles ? (
-        <LoadingSpinner fill />
+        <LoadingDots fill="page" />
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
@@ -182,7 +182,7 @@ const PeoplePage = () => {
 
           {/* Loading spinner at the bottom when loading more */}
           <div ref={loadMoreRef} className="mt-8 flex justify-center">
-            {isValidating && !isInitialLoad && <LoadingSpinner />}
+            {isValidating && !isInitialLoad && <LoadingDots fill />}
           </div>
 
           {!isValidating && peoplePages && allPeople.length === 0 && (

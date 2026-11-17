@@ -14,7 +14,7 @@ import { searchable, type AyahSearch } from '@shared/quran/ayahSearch';
 import { preloadQuranSearch, searchQuran } from '@/lib/quran/quranText';
 import styles from '@/components/homepage/Home.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import { surahName } from '@shared/quran/surahNames';
 
 const MUTED = 'text-[var(--home-muted)]';
@@ -102,7 +102,7 @@ export default function SurahIndex({ surahs, fontClass, onNavigate, recite = fal
             {ar ? `افتح ${name(reference.surah)} ${num(reference.ayah)}` : `Open ${reference.surah.nameTransliterated || name(reference.surah)} ${reference.ayah}`}
           </Button>
         )}
-        {wordSearch && found === 0 && !ayahHits && <LoadingSpinner size="sm" className="mt-2 justify-start" />}
+        {wordSearch && found === 0 && !ayahHits && <LoadingDots className="mt-2" />}
         {wordSearch && found === 0 && ayahHits && (
           <p className={`${MUTED} mt-2 text-sm`} aria-live="polite">
             {ayahHits.failed
