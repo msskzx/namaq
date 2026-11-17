@@ -29,8 +29,10 @@ export type Dock = { edge: DockEdge; top: number; bottom: number; height: number
  * handler (`onClose`), and says what the next-ayah button does once its ayat are done (`after`: the reader's next forgotten
  * ayah, or the next page) and whether there is anything after (`more`).
  */
-export default function RecitePill({ recite, writing, onWriting, onClose, after, more = false, lead, style, palette, dock }: {
+export default function RecitePill({ recite, writing, onWriting, onClose, after, more = false, lead, style, palette, dock, small = false }: {
   recite: Recite; writing: boolean; onWriting: () => void; onClose?: () => void;
+  /** The small bar, sized to its buttons, so the card's own buttons fit beside it on one row (home's recall card, owner 2026-11-17). */
+  small?: boolean;
   /** The bar dragged to the top or the bottom (the reader); without it the bar stays where `style` puts it. */
   dock?: Dock;
   after?: { Icon: Icon; label: string }; more?: boolean; lead?: React.ReactNode;
@@ -40,15 +42,16 @@ export default function RecitePill({ recite, writing, onWriting, onClose, after,
   const next = recite.done && after ? after : { Icon: ChevronsLeft, label: 'أظهر الآية التالية' };
   // The grip asks the docked bar to slide over; the edge changes once it is there, so the page makes room after the bar moves.
   const [moving, setMoving] = useState<DockEdge | null>(null);
+  const size = small ? 'small' : 'bar';
   const bar = (
-    <GlassBar label="أدوات التسميع" style={dock ? null : style}>
+    <GlassBar label="أدوات التسميع" style={dock ? null : style} small={small}>
       {lead}
-      <IconButton Icon={Undo2} label="ارجع خطوة" tone="ink" disabled={recite.atStart} onPress={recite.back} />
-      <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" tone="ink" disabled={recite.done} onPress={recite.nextWord} />
+      <IconButton Icon={Undo2} label="ارجع خطوة" size={size} tone="ink" disabled={recite.atStart} onPress={recite.back} />
+      <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" size={size} tone="ink" disabled={recite.done} onPress={recite.nextWord} />
       {/* In a party the next ayah waits for everyone, and the pen is on for all (owner, 2026-11-17). */}
-      {!recite.party && <IconButton Icon={next.Icon} label={next.label} tone="ink" disabled={ended && !more} onPress={recite.nextAyah} />}
-      <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} tone="ink" on={writing} disabled={recite.party} onPress={onWriting} />
-      {onClose && <IconButton Icon={X} label="إنهاء التسميع" tone="ink" onPress={onClose} />}
+      {!recite.party && <IconButton Icon={next.Icon} label={next.label} size={size} tone="ink" disabled={ended && !more} onPress={recite.nextAyah} />}
+      <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} size={size} tone="ink" on={writing} disabled={recite.party} onPress={onWriting} />
+      {onClose && <IconButton Icon={X} label="إنهاء التسميع" size={size} tone="ink" onPress={onClose} />}
       {/* The grip, on the far left away from the buttons: drag the bar by it (or anywhere on the bar), or tap it to move the bar to the other edge. */}
       {dock && <IconButton Icon={GripVertical} label={dock.edge === 'top' ? 'انقل الشريط إلى الأسفل' : 'انقل الشريط إلى الأعلى'} size="small" onPress={() => setMoving(dock.edge === 'top' ? 'bottom' : 'top')} />}
     </GlassBar>
