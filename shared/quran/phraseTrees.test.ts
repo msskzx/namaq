@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { ayahEnds, pageAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { buildPhraseGroups, buildTreeGroups, createPhrasePresenter, focusPhraseGroup, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
-import treeData from '../data/quran/trees.json';
+import treeData from './quranText/corpus';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
   const words = text.split(' ');

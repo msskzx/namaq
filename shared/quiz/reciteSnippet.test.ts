@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { normalizeWord } from '../quran/normalize';
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import { reciteSnippet } from './reciteSnippet';
 import { FORGOT, RECITED } from './choiceKinds';
 

@@ -1,5 +1,5 @@
 import generated from '@shared/data/quran/compareCards';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import { shownCards, surahOrder, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
 import { pageInScope, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';

@@ -10,7 +10,7 @@ import { inJuzRange, parseJuzRange, type JuzRange } from '@shared/quran/juz';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks as subtreeLinksFor } from '@/lib/quran/branchTreeLinks';
 import { buildPhraseGroups, buildTreeGroups, focusPhraseGroup, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@shared/quran/phraseTrees';
 import { subtreeIndex, type Subtree } from '@shared/quran/subtrees';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import BranchTree from './BranchTree';
 import TreeSteps, { TreeMode, TreeProgress } from './TreeSteps';
 import BranchHeading, { MatchingRules } from './BranchHeading';

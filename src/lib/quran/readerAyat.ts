@@ -1,6 +1,6 @@
 import { pageAyat, type BranchAyah } from '@shared/quran/branches';
 import type { MushafPage } from '@shared/quran/readerPage';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 
 let source: Promise<BranchAyah[]> | undefined;
 

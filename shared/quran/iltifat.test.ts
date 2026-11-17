@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EXAMPLES, examples, letterDiff, resolve, type Line, type Voice } from './iltifat';
 import { normalizeWord } from './normalize';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 
 const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 const views = examples(key => pageWords.get(key));

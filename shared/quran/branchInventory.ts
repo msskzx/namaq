@@ -1,4 +1,4 @@
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import type { BranchAyah, Opening } from './branches';
 import { buildPhraseGroups, type TreeGroup } from './phraseTrees';
 import { ALL_KINDS, searchSharedPhrases } from './branchSearch';

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import data from '../data/quran/trees.json';
+import data from './quranText/corpus';
 import words from '../data/quran/mushafWords.json';
 
 it('leaves the trees\' words as the Madina page prints them, signs and all (they come from the pages)', async () => {

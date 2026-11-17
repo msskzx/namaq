@@ -7,7 +7,7 @@ import { branchesHref, type Branch, type BranchAyah } from '@shared/quran/branch
 import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { ayahContexts, sharedByAll, surrounding } from '@shared/quran/ayahContext';
 import { inJuzRange } from '@shared/quran/juz';

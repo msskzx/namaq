@@ -3,7 +3,7 @@ import { branchesHref, type BranchAyah } from '../branches';
 import { browseGroups, deduplicateGroups, filteredAyat, groupFilters, toggleFilter, type GroupFilters } from './browse';
 import type { Group } from './types';
 import artifact from '../../data/quran/mutashabih.json';
-import treeData from '../../data/quran/trees.json';
+import treeData from '../quranText/corpus';
 import { canonicalGroups, groupHasId } from './identity';
 
 function group(id: string, keys: string[], options: Partial<Pick<Group, 'kind' | 'score' | 'tags' | 'citations' | 'differences'>> = {}): Group {

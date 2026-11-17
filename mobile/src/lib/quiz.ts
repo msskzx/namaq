@@ -1,6 +1,6 @@
 // The solo quiz on the phone: tree questions built on the device from the bundled متشابهات,
 // graded with the website's rules (shared/quiz), and kept so a quiz survives leaving the app.
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import type { BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { sharedOpenings, withRoots, type BranchAyah } from '@shared/quran/branches';
 
 const all = data.ayat as BranchAyah[];

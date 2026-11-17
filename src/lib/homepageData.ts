@@ -1,6 +1,6 @@
 import { surahList } from './quran/surahList';
 import { surahLabel } from './quran/surahLabel';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { buildPhraseGroups } from '@shared/quran/phraseTrees';
 import { tourRecitePage, tourStory, tourTree, TOUR_RECITE } from './tourTree';
 import { groups } from '@shared/quran/mutashabih/data';

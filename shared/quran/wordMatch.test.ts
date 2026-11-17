@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/trees.json';
+import data from './quranText/corpus';
 import { sharedByAll } from './ayahContext';
 import type { BranchAyah } from './branches';
 import { likeness, markTones } from './wordMatch';

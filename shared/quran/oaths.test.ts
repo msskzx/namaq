@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 
 const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 const data = (key: string) => pageWords.get(key);

@@ -1,7 +1,7 @@
 // «قارن الموضعين» (owner, 2026-11-17): a compare card of one ayah against one ayah, asked as its matrix only (no trees):
 // one ayah given whole, the other blank wherever its wording parts from it (the card's braid, shared/quran/braid.ts).
 import generated from '../data/quran/compareCards';
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { braidOf, type BraidStrand } from '../quran/braid';
 import { shownCards, type PairCard, type StoredCards } from '../quran/compareCards';
