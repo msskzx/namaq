@@ -12,4 +12,3 @@
 .hit { color: var(--home-accent); }
 .verse { display: flex; flex-direction: column; }
 .verse span:last-child { text-align: left; }
-.empty { color: var(--home-muted); text-align: center; margin-top: 1.5rem; }

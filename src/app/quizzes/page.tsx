@@ -51,6 +51,7 @@ import { useHideFooter } from '@/components/common/AppChrome';
 import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings; every kind of question is chosen inside them (owner, 2026-11-17). */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -324,7 +325,7 @@ export default function QuizzesPage() {
                   </Button>
                 </fieldset>
               ) : (
-                <p className="text-[var(--home-muted)]">{ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."}</p>
+                <Empty text={ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."} />
               )}
             </>
           )}
@@ -340,7 +341,7 @@ export default function QuizzesPage() {
         {isLoading || !data ? (
           <LoadingDots fill="page" />
         ) : questions.length === 0 ? (
-          <div className="text-center text-[var(--home-muted)]"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
+          <Empty text={ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}><Button variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></Empty>
         ) : submitted ? (
           <div>
             <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>

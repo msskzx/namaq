@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { NavActions } from '@/components/common/NavBar';
 import { useHomeCards, type CardData, type LibraryTab } from '@/components/homepage/HomeCards';
 import styles from '@/components/homepage/Homepage.module.css';
+import Empty from '@/components/common/Empty';
 
 /** Every saved card, forgotten ayah and note, one list at a time, picked in the top bar as the app's page does. */
 export default function Library({ data, tab }: { data: CardData; tab: LibraryTab }) {
@@ -18,7 +19,7 @@ export default function Library({ data, tab }: { data: CardData; tab: LibraryTab
         {tabs.map(item => <Link key={item.tab} href={`/library?tab=${item.tab}`} replace scroll={false} aria-current={item.tab === tab ? 'page' : undefined}>{item.label}</Link>)}
       </nav>
     </NavActions>
-    {cards.length ? <div className={styles.list}>{cards}</div> : <p className={`${styles.empty} justify-center`}>{empty}</p>}
+    {cards.length ? <div className={styles.list}>{cards}</div> : <Empty text={empty} />}
     {menu}
   </div>;
 }

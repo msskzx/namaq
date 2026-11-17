@@ -12,6 +12,7 @@ import { NOTE, PANEL } from '../panel';
 import { SUGGESTIONS } from './WordCounts';
 import { mushafText } from '@shared/quran/mushafText';
 import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 type Pair = [CountedSide, CountedSide];
 
@@ -79,7 +80,7 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
           ))}
         </ul>
       )}
-      {pairs.length === 0 ? <p className={`${NOTE} mt-3`}>الرسم فارغ. ابحث عن كلمتين لإضافة زوج.</p> : (
+      {pairs.length === 0 ? <Empty text="الرسم فارغ. ابحث عن كلمتين لإضافة زوج." /> : (
         <ol aria-label="أزواج الكلمات المتقابلة" className="mt-3 flex flex-col gap-2">
           {pairs.map(([a, b], i) => {
             const max = Math.max(1, a.count, b.count);

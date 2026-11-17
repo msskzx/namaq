@@ -12,6 +12,7 @@ import { NOTE, PANEL } from '../panel';
 import WordPlaces from './WordPlaces';
 import { mushafText } from '@shared/quran/mushafText';
 import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
@@ -71,7 +72,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
           ))}
         </ul>
       )}
-      {bars.length === 0 ? <p className={`${NOTE} mt-3`}>الرسم فارغ. ابحث عن كلمة لإضافتها.</p> : (
+      {bars.length === 0 ? <Empty text="الرسم فارغ. ابحث عن كلمة لإضافتها." /> : (
         <ol aria-label="عدد مرات ورود الكلمات المختارة" className="mt-3 flex flex-col gap-0.5">
           {bars.map(b => (
             <li key={b.rank} className="grid grid-cols-[6rem_1fr_3.5rem_auto] sm:grid-cols-[8rem_1fr_4rem_auto] items-center gap-2" title={`${b.word}: ${num(b.count)}`}>
