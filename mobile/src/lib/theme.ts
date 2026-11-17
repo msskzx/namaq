@@ -1,6 +1,6 @@
 import { useColorScheme } from 'react-native';
 import { useMemo } from 'react';
-import { cardColour } from '@shared/cardTint';
+import { cardColour, tintSurfaces } from '@shared/cardTint';
 import type { ConnectionTone } from '@shared/quran/mutashabih/connections';
 import { markTones, type Likeness } from '@shared/quran/wordMatch';
 import { cardTints, markMode, themeChoice } from './settings';
@@ -71,11 +71,13 @@ export function usePalette(): Palette {
   const [mode] = markMode.use();
   const isDark = choice === 'system' ? scheme === 'dark' : choice === 'dark';
   const card = isDark ? cardColour('dark', tints.dark) : cardColour('light', tints.light);
+  const surfaces = isDark ? tintSurfaces('dark', tints.dark) : tintSurfaces('light', tints.light);
   // Cards and reading areas take the tint chosen on the theme tiles; the page stays as it is.
   return useMemo(() => {
     const base = isDark ? dark : light;
-    return { ...base, card, marks: markTones(mode, { exact: base.accent, written: base.amber, root: base.root }) };
-  }, [isDark, card, mode]);
+    const page = surfaces ? { ...surfaces, glass: `${surfaces.paperDeep}b3` } : null;
+    return { ...base, ...page, card, marks: markTones(mode, { exact: base.accent, written: base.amber, root: base.root }) };
+  }, [isDark, card, surfaces, mode]);
 }
 
 /** Joined و is green and joined ف purple, as on the website's trees. */

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Stack, ThemeProvider, DarkTheme, DefaultTheme, LocaleProvider } from 'expo-router';
-import { usePalette, dark } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
 import { startAlerts } from '@/lib/adhan';
 import { syncPacks } from '@/lib/listenFiles';
 import { warmScreens } from '@/lib/lazyScreen';
@@ -27,7 +27,7 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
     const start = setTimeout(() => { stop = warmScreens(); }, 1500);
     return () => { clearTimeout(start); stop(); };
   }, [onReady]);
-  const base = palette.paper === dark.paper ? DarkTheme : DefaultTheme;
+  const base = palette.scheme === 'dark' ? DarkTheme : DefaultTheme;
   const theme = { ...base, colors: { ...base.colors, background: palette.paper, card: palette.paper, text: palette.ink, border: palette.rule, primary: palette.accent } };
   return (
     <ThemeProvider value={theme}>
