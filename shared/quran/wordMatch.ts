@@ -1,4 +1,5 @@
 import { normalizeWord } from './normalize';
+import { bare } from './quranText/ayahWords';
 
 // docs/adr/0037-one-rule-colours-words-the-ayat-share.md
 /**
@@ -7,7 +8,7 @@ import { normalizeWord } from './normalize';
  */
 export type Likeness = 'exact' | 'written' | 'root';
 
-const writing = (word: string) => word.replace(/[ـ⁠]/g, '').normalize('NFC');
+const writing = (word: string) => bare(word).replace(/[ـ⁠]/g, '').normalize('NFC');
 
 export function likeness(words: string[]): Likeness {
   const written = words.map(writing);

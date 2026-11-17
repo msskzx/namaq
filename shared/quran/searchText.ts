@@ -1,4 +1,4 @@
-import { normalizeWord } from './normalize';
+import { normalizeWord, seated } from './normalize';
 
 /**
  * One way to search Quran text, shared by the reader search and the branches
@@ -54,7 +54,7 @@ export const plainSpelling = (word: string) => spellings(word).at(-1)!;
 /** Without the letters the mushaf marks silent (يَدْعُوا۟ → يدعو, سَأُو۟رِيكُمْ → سأريكم). */
 const withoutSilent = (word: string) => word.replace(/[اوي]۟/g, '');
 
-const key = (word: string) => normalizeWord(word.replace(/[\u0654\u0655]/g, 'ء')).replace(/[^ء-ي]/g, '').replace(/ا+/g, 'ا');
+const key = (word: string) => normalizeWord(seated(word).replace(/[\u0654\u0655]/g, 'ء')).replace(/[^ء-ي]/g, '').replace(/ا+/g, 'ا');
 /** Hamza on any seat as one letter, as the mushaf often seats it otherwise (يَسْـَٔلُونَكَ = يسألونك, جَآءُو = جاءوا). */
 const seatKey = (word: string) => key(word.replace(/[أإؤئ\u0654\u0655]/g, 'ء'));
 /** Text seat keys also take the alif modern spelling adds after a final waw (جَآءُو = جاءوا). */

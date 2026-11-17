@@ -3,6 +3,7 @@
 import { num } from '../quran/arabicNumber';
 import { runOn, type Branch, type BranchAyah } from '../quran/branches';
 import { type BranchQuestion } from './branchQuestions';
+import { bare } from '../quran/quranText/ayahWords';
 
 /** Marks the end of an ayah when a branch runs on into the next one: ﴿٤٣﴾, or ۝ in a merged display. */
 const AYAH_MARK = /^(۝|﴿([٠-٩]+)﴾)$/;
@@ -53,6 +54,9 @@ export function checkRebuilt(question: string, rebuilt: readonly Rebuilt[], ayat
       if (++at >= ayat.length) return fail('runs past the last ayah', expected);
       expected.push(word, ...runOn(ayat[at - 1].key, ayat[at], basmala).words);
     }
-    return words.join(' ') === expected.join(' ') ? [] : fail('text differs', expected);
+    // A box several ayat share keeps a waqf sign only where all of them carry it (writtenForms), so a word may lack its own ayah's sign.
+    const [got, want] = [words.join(' ').split(' '), expected.join(' ').split(' ')];
+    const same = got.length === want.length && got.every((word, i) => word === want[i] || word.normalize('NFC') === bare(want[i]).normalize('NFC'));
+    return same ? [] : fail('text differs', expected);
   });
 }

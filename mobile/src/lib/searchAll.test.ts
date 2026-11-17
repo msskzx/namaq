@@ -27,6 +27,6 @@ describe('trees in the app search', () => {
   it('keeps to trees that hold the words as typed when there are some', () => {
     const trees = group('فرعون', 'tree') as { text: string }[];
     expect(trees.length).toBeGreaterThan(0);
-    expect(trees.every(tree => tree.text.includes('فِرْعَوْن'))).toBe(true);
+    expect(trees.every(tree => tree.text.includes('فِرۡعَوۡن'))).toBe(true);
   });
 });

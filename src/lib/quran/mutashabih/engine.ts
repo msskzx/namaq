@@ -1,6 +1,7 @@
 // docs/plans/quran-mutashabih.md
 import { spell, type BranchAyah } from '@shared/quran/branches';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
+import { bare } from '@shared/quran/quranText/ayahWords';
 import { buildPhraseGroups, type PhraseOccurrence } from '@shared/quran/phraseTrees';
 import rawEvidence from '@shared/quran/mutashabih/evidence.json';
 
@@ -33,7 +34,7 @@ const wordsOf = (ayah: BranchAyah): Word[] => ayah.words.flatMap((text, index) =
 });
 
 function levelOf(a: Word, b: Word): Level | undefined {
-  if (same(a, b)) return a.text === b.text ? 'exact' : 'letters';
+  if (same(a, b)) return bare(a.text) === bare(b.text) ? 'exact' : 'letters';
   if (a.lemma && a.lemma === b.lemma && a.root === b.root) return 'lemma';
   if (a.root && a.root === b.root) return 'root';
 }
@@ -149,7 +150,7 @@ function compareWords(a: Word[], b: Word[], config = MATCH_CONFIG): Comparison {
   const tags = unique(columns.flatMap(column => column.tags));
   const full = matched / Math.max(a.length, b.length);
   const spans: [Place, Place] = [place(a[0], a.at(-1)!), place(b[0], b.at(-1)!)];
-  if (a.length === b.length && a.every((word, i) => word.text === b[i].text)) return { columns, tags: [], score: 1, coverage: 1, kind: 'identical', spans };
+  if (a.length === b.length && a.every((word, i) => bare(word.text) === bare(b[i].text))) return { columns, tags: [], score: 1, coverage: 1, kind: 'identical', spans };
   let score = full;
   let close = matched >= config.minMatchedWords && score >= config.minCoverage;
   const strong = hits.filter(hit => isStrong(hit.level));

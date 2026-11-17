@@ -2,14 +2,18 @@ import { expect, it } from 'vitest';
 import data from '../data/quran/trees.json';
 import words from '../data/quran/mushafWords.json';
 
-it('covers every source word without the font-incompatible circle character', () => {
+it('leaves the trees\' words as the Madina page prints them, signs and all (they come from the pages)', async () => {
+  const { mushafText } = await import('./mushafText');
+  const changed = data.ayat.flatMap(ayah => ayah.words.filter(word => mushafText(word) !== word).map(word => `${ayah.key} ${word}`));
+  expect(changed).toEqual([]);
+  expect(mushafText(data.ayat.find(ayah => ayah.key === '27:26')!.words.at(-1)!)).toMatch(/۩$/);
+});
+
+it('turns a word of the older copies into the page\'s spelling', async () => {
+  const { mushafText } = await import('./mushafText');
   const display: Record<string, string> = words;
-  for (const ayah of data.ayat) {
-    for (const word of ayah.words.flatMap(word => word === 'بَعْدَ مَا' || word === 'إِلْ يَاسِينَ' ? word.split(' ') : [word])) {
-      expect(display[word], `${ayah.key}: ${word}`).toBeDefined();
-      expect(display[word]).not.toContain('\u06DF');
-    }
-  }
+  const [old, page] = Object.entries(display).find(([key, value]) => key !== value)!;
+  expect(mushafText(old)).toBe(page);
 });
 
 it('leaves an ayah number bare so the font draws one medallion, not one inside ﴿﴾', async () => {
