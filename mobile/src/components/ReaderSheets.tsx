@@ -12,6 +12,7 @@ import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
+import Tabs from '@/ui/Tabs';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
@@ -179,13 +180,7 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
-      <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-        {(['read', 'recite'] as const).map(option => (
-          <Pressable key={option} onPress={() => setMode(option)} accessibilityRole="tab" accessibilityState={{ selected: mode === option }} style={chip(mode === option)}>
-            <Text style={{ color: mode === option ? palette.onAccent : palette.ink, fontSize: 15 }}>{option === 'read' ? 'قراءة' : 'تسميع'}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <Tabs options={[{ key: 'read', label: 'قراءة' }, { key: 'recite', label: 'تسميع' }] as const} value={mode} onChange={setMode} palette={palette} />
       {GESTURES.map(gesture => (
         <View key={gesture} style={{ gap: 6 }}>
           <Text style={{ color: palette.ink, fontSize: 15 }}>{GESTURE_NAMES[gesture]}</Text>

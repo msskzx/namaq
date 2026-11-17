@@ -102,7 +102,7 @@ options). Smaller boxes (word chips, inputs) are not cards and go to their own
 pieces below.
 **PRs:** 5a home + library + quizzes, 5b Quran tools screens.
 
-### 6. Tabs
+### 6. Tabs (done: reader settings, balagha, book sheet, oaths. The word lists in WordSheet and IrabSheet and the لطائف topics wrap and filter, so they are chips, step 7)
 Drift: seven tab rows, four looks: filled accent (`ReaderSheets`,
 `BalaghaSheet`), outlined round pill (`WordSheet`, `IrabSheet`), 56×38 radius
 12 (`screens/book.tsx`), full-width radius 10 (`screens/oaths.tsx`,

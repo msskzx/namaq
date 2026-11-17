@@ -26,6 +26,7 @@ import { toTab } from '@/lib/ways';
 import { buzz } from '@/lib/haptics';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Tabs from '@/ui/Tabs';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
@@ -268,13 +269,8 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
   const row = { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderColor: `${palette.rule}66` } as const;
   return (
     <Sheet open={!!open} onClose={onClose} palette={palette} tall>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 10 }} accessibilityRole="tablist">
-        {TABS.map(({ tab, label, Icon }) => (
-          <Pressable key={tab} onPress={() => onTab(tab)} accessibilityRole="tab" accessibilityLabel={label} accessibilityState={{ selected: kept === tab }}
-            style={{ width: 56, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: kept === tab ? palette.rule : 'transparent', backgroundColor: kept === tab ? palette.paperDeep : 'transparent' }}>
-            <Icon size={20} color={kept === tab ? palette.ink : palette.muted} />
-          </Pressable>
-        ))}
+      <View style={{ paddingBottom: 10 }}>
+        <Tabs options={TABS.map(({ tab, label, Icon }) => ({ key: tab, label, Icon }))} value={kept} onChange={onTab} palette={palette} iconOnly />
       </View>
       {kept === 'contents' && (
         <FlatList data={surahs} keyExtractor={([surah]) => String(surah)} style={{ flex: 1 }} initialNumToRender={40}

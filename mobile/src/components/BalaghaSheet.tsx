@@ -17,6 +17,7 @@ import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
 import Card from '@/ui/Card';
+import Tabs from '@/ui/Tabs';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -50,7 +51,6 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
   const [span, setSpan] = useState<[number, number][]>([]);
   const words = useMemo(() => ayahMushafWords(ayah), [ayah]);
   const [surah, number] = ayah.split(':').map(Number);
-  const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
     <View style={{ flexShrink: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
@@ -65,13 +65,7 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
             ))}
           </Text>
         </Card>
-        <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-          {(['itqan', 'kashshaf'] as const).map(book => (
-            <Pressable key={book} onPress={() => { setShown(book); setSpan([]); }} accessibilityRole="tab" aria-selected={shown === book} style={chip(shown === book)}>
-              <Text style={{ color: shown === book ? palette.onAccent : palette.ink, fontSize: 15 }}>{BOOK_NAMES[book]}</Text>
-            </Pressable>
-          ))}
-        </View>
+        <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'
           ? <Itqan paragraphs={paragraphs} palette={palette} onSpan={setSpan} />
           : <Kashshaf ayah={ayah} palette={palette} onSpan={setSpan} onClose={onClose} />}
