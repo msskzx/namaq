@@ -18,6 +18,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
 import type { Group, Tag } from '@shared/quran/mutashabih/types';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
+import IconButton from '@/ui/IconButton';
 
 type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
@@ -141,12 +142,10 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
           name and number in the middle. The row is set left to right and filled from its right end, in any host. */}
       <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', alignItems: 'center', gap: 4, marginBottom: 4, minHeight: 26 }}>
         {current && !still && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, zIndex: 1 }}>
-          <Pressable onPress={() => readAyah(own.key)} hitSlop={8} accessibilityRole="button" accessibilityLabel={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} style={{ padding: 4 }}>
-            <BookOpen size={18} color={palette.muted} />
-          </Pressable>
+          <IconButton Icon={BookOpen} label={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} onPress={() => readAyah(own.key)} size="small" />
           {tools}
         </View>}
-        <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'center', paddingHorizontal: current && !still ? (tools ? 60 : 30) : 0 }}>
+        <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'center', paddingHorizontal: current && !still ? (tools ? 64 : 32) : 0 }}>
           {lastSurah !== surah ? `${surahNames[surah]} ${num(number)} ثم ${surahNames[lastSurah]} ${num(lastNumber)}` : `${surahNames[surah]} ${range}`}{at === 'before' ? ' · قبلها' : at === 'after' ? ' · بعدها' : ''}
         </Text>
       </View>

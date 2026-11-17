@@ -53,16 +53,13 @@ import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
 import { CARD, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
 /** A post's icon button, as the compare card's row has them: muted, or in the accent when on. */
-function Action({ Icon, label, on, onPress, palette, color, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; color?: string; disabled?: boolean }) {
-  return (
-    <Pressable onPress={onPress} disabled={disabled} hitSlop={6} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ ...(on === undefined ? {} : { selected: on }), ...(disabled ? { disabled } : {}) }} style={{ padding: 8, opacity: disabled ? 0.4 : 1 }}>
-      <Icon size={22} color={on ? palette.accent : color ?? palette.muted} />
-    </Pressable>
-  );
+function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; tone?: 'green'; disabled?: boolean }) {
+  return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} disabled={disabled} tone={tone} />;
 }
 
 const cardStyle = (palette: Palette) => ({ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card });
@@ -225,7 +222,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
   if (!review && recalled.has(ayah)) return null;
   const marks = <>
-    <Action Icon={Check} label="تذكّرتها" color={palette.green} palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
+    <Action Icon={Check} label="تذكّرتها" tone="green" palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" palette={palette} onPress={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
     <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />

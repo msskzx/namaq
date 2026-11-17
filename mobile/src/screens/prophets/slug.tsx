@@ -5,6 +5,7 @@ import { ChevronRight, CircleHelp } from 'lucide-react-native';
 import ProphetStory from '@/components/ProphetStory';
 import { usePalette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
+import IconButton from '@/ui/IconButton';
 
 /** A prophet's story opened by link (/prophets/[slug]), under a back bar. */
 export default function ProphetScreen() {
@@ -18,9 +19,7 @@ export default function ProphetScreen() {
           <ChevronRight size={28} color={palette.ink} />
         </Pressable>
         <View style={{ flex: 1 }} />
-        <Pressable onPress={help} accessibilityRole="button" accessibilityLabel="شرح الصفحة" hitSlop={10} style={{ padding: 6 }}>
-          <CircleHelp size={22} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={CircleHelp} label="شرح الصفحة" onPress={help} />
       </View>
     </View>
   );

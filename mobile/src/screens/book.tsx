@@ -24,6 +24,7 @@ import { setIntent } from '@/lib/intent';
 import { toTab } from '@/lib/ways';
 import { buzz } from '@/lib/haptics';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
@@ -159,16 +160,10 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
         <TopBar shelf>
           <Text numberOfLines={1} style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{bookOf(id).title}</Text>
-          <Pressable onPress={markPage} accessibilityRole="button" accessibilityState={{ selected: onFasila }}
-            accessibilityLabel={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'} hitSlop={4} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-            <FasilaIcon size={22} color={palette.accent} filled={onFasila} />
-          </Pressable>
-          <Pressable onPress={() => setSheet('search')} accessibilityRole="button" accessibilityLabel="ابحث في الكتاب" hitSlop={4} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-            <Search size={22} color={palette.muted} />
-          </Pressable>
-          <Pressable onPress={() => setSheet('contents')} accessibilityRole="button" accessibilityLabel="فهرس الكتاب ومحفوظاته" hitSlop={4} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-            <List size={22} color={palette.muted} />
-          </Pressable>
+          <IconButton Icon={FasilaIcon} label={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'} onPress={markPage} on={onFasila} tone="accent"
+            render={icon => <FasilaIcon size={icon.size} color={icon.color} filled={onFasila} />} />
+          <IconButton Icon={Search} label="ابحث في الكتاب" onPress={() => setSheet('search')} />
+          <IconButton Icon={List} label="فهرس الكتاب ومحفوظاته" onPress={() => setSheet('contents')} />
         </TopBar>
       </View>
       {fasila && fasilaPage !== page && !actions && (

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { ArrowLeftRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { aroundOf, ayahOf, matrixOf, mixedBefore, NOTHING_SHARED, readId, surahNames, type Presentation } from '@/lib/branches';
@@ -8,6 +8,7 @@ import { openCompare } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { Cell } from './MatrixCard';
+import IconButton from '@/ui/IconButton';
 
 /**
  * The ayat of the paths a tap lit, read in full under the tree, each as the matrix draws it (owner, 2026-11-14): the same card,
@@ -77,10 +78,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
           const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;
           const targets = compareTargetsOfAyah(key);
           return <Cell key={key} cell={cell} at="ayah" palette={palette} width={width - 24} current shown={shown} around={around} read={reading ? { row: starts.indexOf(key), now: reading } : undefined}
-            tools={targets.length > 0 && <Pressable onPress={() => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets))}
-              accessibilityRole="button" accessibilityLabel={`قارن ${place}`} hitSlop={8} style={{ padding: 4 }}>
-              <ArrowLeftRight size={18} color={palette.muted} />
-            </Pressable>} />;
+            tools={targets.length > 0 && <IconButton Icon={ArrowLeftRight} label={`قارن ${place}`} onPress={() => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets))} size="small" />} />;
         })}
       </ScrollView>
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />

@@ -15,6 +15,7 @@ import Toggle from '@/ui/Toggle';
 import { isMemorizedScope, memorizedScope, readMemorized, subscribeMemorized, type Memorized } from '@shared/memorized';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const SORT_KEY = 'compare-pairs-sort';
 
@@ -138,7 +139,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
           <GestureDetector gesture={pan}>
             <View style={{ height: 40, alignItems: 'center', justifyContent: 'center' }}>
               <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: palette.rule }} />
-              <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="إغلاق" hitSlop={8} style={{ position: 'absolute', left: 0, padding: 6 }}><X size={20} color={palette.muted} /></Pressable>
+              <View style={{ position: 'absolute', left: 0 }}><IconButton Icon={X} label="إغلاق" onPress={close} size="small" /></View>
             </View>
           </GestureDetector>
           <View style={{ justifyContent: 'center' }}>
@@ -161,8 +162,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
               <Text numberOfLines={1} style={{ flex: 1, fontSize: 15, color: filtered ? palette.accent : palette.ink, textAlign: 'right' }}>{scopeText(filter, memorized)}</Text>
               <View style={{ transform: [{ rotate: filtering ? '180deg' : '0deg' }] }}><ChevronDown size={16} color={palette.muted} /></View>
             </Pressable>
-            {filtered && <Pressable onPress={() => { onFilter({}); setDraftState(draftOf(listOfFilter({}))); }} accessibilityRole="button" accessibilityLabel="إعادة ضبط" hitSlop={4}
-              style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}><RotateCcw size={20} color={palette.ink} /></Pressable>}
+            {filtered && <IconButton Icon={RotateCcw} label="إعادة ضبط" onPress={() => { onFilter({}); setDraftState(draftOf(listOfFilter({}))); }} tone="ink" />}
           </View>
           {filtering
             ? <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 8, gap: 18 }} keyboardShouldPersistTaps="handled">

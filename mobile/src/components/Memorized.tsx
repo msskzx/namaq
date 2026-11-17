@@ -8,6 +8,7 @@ import Toggle from '@/ui/Toggle';
 import Sheet from '@/ui/Sheet';
 import { surahNames } from '@/lib/branches';
 import { CARD, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
@@ -123,7 +124,7 @@ export function MemorizedPrompt({ palette }: { palette: Palette }) {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <BookOpenCheck size={20} color={palette.accent} />
           <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>ما الذي تحفظه؟</Text>
-          <Pressable onPress={setMemorizedAsked} hitSlop={8} accessibilityRole="button" accessibilityLabel="إغلاق"><X size={18} color={palette.muted} /></Pressable>
+          <IconButton Icon={X} label="إغلاق" onPress={setMemorizedAsked} size="small" />
         </View>
         <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 23, textAlign: 'right' }}>اختر ما تحفظه، لتأتيك الأسئلة منه، ويتقدّم في التأمل. تجده في الإعدادات أيضًا.</Text>
         <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel="اختر ما تحفظه"

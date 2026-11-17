@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { Image, Modal, Platform, Pressable, Share, View, useWindowDimensions } from 'react-native';
+import { Image, Modal, Platform, Share, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { captureRef } from 'react-native-view-shot';
 import { Clapperboard, Link, ListVideo, Send, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Logo from './Logo';
 import LoadingDots from '@/ui/LoadingDots';
-import { IconButton } from './Studio';
 import { MODAL_GAP, closeShare, useShareRequest } from '@/lib/shareImage';
 import { CAPTURE_RESULT, shareImageFile } from '@/lib/shareFile';
 import { UI_FONT_BOLD, usePalette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 type Shot = { uri: string; width: number; height: number };
 
@@ -89,7 +89,7 @@ export default function ShareSheet() {
         )}
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52, backgroundColor: palette.paper }}>
           <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>مشاركة</Text>
-          <IconButton label="إغلاق" onPress={closeShare} Icon={X} color={palette.ink} />
+          <IconButton label="إغلاق" onPress={closeShare} Icon={X} tone="ink" />
         </View>
         <View onLayout={event => setBox({ width: event.nativeEvent.layout.width - 24, height: event.nativeEvent.layout.height - 24 })}
           style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, alignItems: 'center', justifyContent: 'center' }}>
@@ -98,13 +98,10 @@ export default function ShareSheet() {
             : <View accessibilityLabel="جارٍ تجهيز الصورة"><LoadingDots /></View>}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 72, backgroundColor: palette.paper }}>
-          <Pressable onPress={() => shot && void shareImageFile(shot.uri)} disabled={!shot} accessibilityRole="button" accessibilityLabel="مشاركة كصورة"
-            style={{ width: 64, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent, opacity: shot ? 1 : 0.5 }}>
-            <Send size={26} color={palette.onAccent} />
-          </Pressable>
-          {request?.onVideo && <IconButton label="مشاركة كفيديو" onPress={() => video(request.onVideo)} Icon={Clapperboard} color={palette.ink} />}
-          {request?.onPageVideo && <IconButton label="مشاركة الصفحة كفيديو" onPress={() => video(request.onPageVideo)} Icon={ListVideo} color={palette.ink} />}
-          {request?.link && <IconButton label="مشاركة الرابط" onPress={link} Icon={Link} color={palette.ink} />}
+          <IconButton Icon={Send} label="مشاركة كصورة" onPress={() => shot && void shareImageFile(shot.uri)} round big disabled={!shot} />
+          {request?.onVideo && <IconButton label="مشاركة كفيديو" onPress={() => video(request.onVideo)} Icon={Clapperboard} tone="ink" />}
+          {request?.onPageVideo && <IconButton label="مشاركة الصفحة كفيديو" onPress={() => video(request.onPageVideo)} Icon={ListVideo} tone="ink" />}
+          {request?.link && <IconButton label="مشاركة الرابط" onPress={link} Icon={Link} tone="ink" />}
         </View>
       </View>
     </Modal>

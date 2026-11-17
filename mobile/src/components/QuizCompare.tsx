@@ -1,7 +1,7 @@
 // The compare quiz (shared/quiz/compareQuiz.ts) as the matrix only (owner, 2026-11-17: no trees): the given ayah whole, the
 // asked ayah with a box wherever it parts from it. Grading, hints and the checked marks follow the tree quiz's.
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
@@ -13,6 +13,7 @@ import { quranText } from '@/lib/quranText';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { openCompare } from '@/lib/ways';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const SIZE = 20;
 const quran = (palette: Palette, color?: string) => ({ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: color ?? palette.ink });
@@ -41,10 +42,7 @@ function Line({ line, palette, children, after }: { line: CompareLine; palette: 
 
 function Bar({ label, onPress, Icon, palette }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette }) {
   return (
-    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label}
-      style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }}>
-      <Icon size={22} color={palette.ink} />
-    </Pressable>
+    <IconButton Icon={Icon} label={label} onPress={onPress} tone="ink" />
   );
 }
 

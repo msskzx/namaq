@@ -26,6 +26,7 @@ import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
+import IconButton from '@/ui/IconButton';
 
 const DOUBLE_TAP = 280;
 
@@ -99,12 +100,8 @@ function SideHead({ label, keys, palette, group }: { label: string; keys: string
     // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
-        <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={read} style={{ padding: 6 }}>
-          <BookOpen size={18} color={palette.muted} />
-        </Pressable>
-        {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 6 }}>
-          <TreeIcon size={18} color={palette.muted} />
-        </Pressable>}
+        <IconButton Icon={BookOpen} label={read} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
+        {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
       </View>
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
     </View>
@@ -116,12 +113,8 @@ function LaneHead({ label, keys, palette, group }: { label: string; keys: string
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
       <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
-      <Pressable onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} hitSlop={8} accessibilityRole="button" accessibilityLabel={`اقرأ ${label} في المصحف`} style={{ padding: 4 }}>
-        <BookOpen size={16} color={palette.muted} />
-      </Pressable>
-      {group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} hitSlop={8} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 4 }}>
-        <TreeIcon size={16} color={palette.muted} />
-      </Pressable>}
+      <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
+      {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
     </View>
   );
 }
@@ -149,13 +142,11 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
         <Pressable onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${read.speed}×`} style={[button, { minWidth: 44, alignItems: 'center' }]}>
           <Text style={{ color: palette.muted, fontSize: 15 }}>{read.speed}×</Text>
         </Pressable>
-        <Pressable onPress={() => (playing ? read.pause() : read.play())} accessibilityRole="button" accessibilityLabel={label} style={button}>
-          {playing ? <Pause size={22} color={palette.accent} /> : <Play size={22} color={active ? palette.accent : palette.muted} />}
-        </Pressable>
-        <Pressable onPress={read.reset} accessibilityRole="button" accessibilityLabel="إعادة ضبط" style={button}><RotateCcw size={22} color={palette.muted} /></Pressable>
-        <Pressable onPress={record} accessibilityRole="button" accessibilityLabel="مشاركة كفيديو" style={button}><Send size={22} color={palette.muted} /></Pressable>
+        <IconButton Icon={playing ? Pause : Play} label={label} onPress={() => (playing ? read.pause() : read.play())} on={active} />
+        <IconButton Icon={RotateCcw} label="إعادة ضبط" onPress={read.reset} />
+        <IconButton Icon={Send} label="مشاركة كفيديو" onPress={record} />
         <View style={{ flex: 1 }} />
-        <Pressable onPress={read.close} accessibilityRole="button" accessibilityLabel="إغلاق الاستوديو" style={button}><X size={22} color={palette.muted} /></Pressable>
+        <IconButton Icon={X} label="إغلاق الاستوديو" onPress={read.close} />
       </View>
     </View>
   );
@@ -359,33 +350,18 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
       </Pressable>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <Pressable onPress={() => toggleCardSaved(card)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: saved }} accessibilityLabel={saved ? 'إزالة من المحفوظة' : 'حفظ'} style={{ padding: 8 }}>
-            <Animated.View style={popped}><Bookmark size={22} color={saved ? palette.accent : palette.muted} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
-          </Pressable>
-          <Pressable onPress={read.open} hitSlop={6} accessibilityRole="button" accessibilityLabel="استوديو القراءة" style={{ padding: 8 }}>
-            <Clapperboard size={22} color={palette.muted} />
-          </Pressable>
+          <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill
+            render={icon => <Animated.View style={popped}><Bookmark {...icon} /></Animated.View>} />
+          <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
           {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
-          {!parts && <Pressable onPress={() => setAround(!aroundOn)} hitSlop={6} accessibilityRole="button" accessibilityState={{ selected: aroundOn }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
-            <UnfoldHorizontal size={22} color={aroundOn ? palette.accent : palette.muted} />
-          </Pressable>}
-          {!tree && <Pressable onPress={() => setBeside(!beside)} hitSlop={6} accessibilityRole="button" accessibilityLabel={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} style={{ padding: 8 }}>
-            {beside ? <Rows2 size={22} color={palette.muted} /> : <Columns2 size={22} color={palette.muted} />}
-          </Pressable>}
-          {!matrixOnly && <Pressable onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} hitSlop={6} accessibilityRole="button" accessibilityLabel={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
-            {view === 'tree' ? <GalleryHorizontal size={22} color={palette.muted} /> : <TreeIcon size={22} color={palette.muted} />}
-          </Pressable>}
+          {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
+          {!tree && <IconButton Icon={beside ? Rows2 : Columns2} label={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} onPress={() => setBeside(!beside)} />}
+          {!matrixOnly && <IconButton Icon={view === 'tree' ? GalleryHorizontal : TreeIcon} label={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} />}
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
-          {tree && card.group && <Pressable onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتح في متشابهات القرآن" style={{ padding: 8 }}>
-            <TreeIcon size={22} color={palette.muted} />
-          </Pressable>}
-          {onOpen && <Pressable onPress={onOpen} hitSlop={6} accessibilityRole="button" accessibilityLabel="افتحها في المقارنة" style={{ padding: 8 }}>
-            <ArrowLeftRight size={22} color={palette.muted} />
-          </Pressable>}
+          {tree && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
+          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
           {/* Share is always the last button (the left end), as on the branches tab. */}
-          <Pressable onPress={() => share()} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-            <Send size={22} color={palette.muted} />
-          </Pressable>
+          <IconButton Icon={Send} label="مشاركة" onPress={() => share()} />
         </View>
       )}
       <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
