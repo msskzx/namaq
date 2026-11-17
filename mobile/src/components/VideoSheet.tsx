@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Modal, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import Sheet from '@/ui/Sheet';
 import { Text } from '@/ui/Text';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { ChevronLeft, Pause, Play, RotateCcw, Send } from 'lucide-react-native';
 import LoadingDots from '@/ui/LoadingDots';
 import VideoFrame, { type FrameHandle } from './VideoFrame';
 import { recorderPage, type VideoInput } from '@/lib/scene';
@@ -16,7 +16,6 @@ type Video = { data: string; mime: string };
  *  `page` builds another recorder page from the font, in place of the tree's. A page video in parts names the `part`, and `onNext` records the next one. */
 export default function VideoSheet({ input, page, onClose, palette, part, onNext }: { input?: VideoInput | null; page?: ((font: string) => string) | null; onClose: () => void; palette: Palette; part?: string; onNext?: () => void }) {
   const open = !!input || !!page;
-  const insets = useSafeAreaInsets();
   const [font, setFont] = useState<string | null>(null);
   const [run, setRun] = useState(0);
   const [video, setVideo] = useState<Video | null>(null);
@@ -41,12 +40,8 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
   // As on the website, the recording can be paused: the paused time is left out of the video.
   const toggle = () => { frame.current?.send({ type: paused ? 'resume' : 'pause' }); setPaused(!paused); };
   return (
-    <Modal visible={open} animationType="slide" onRequestClose={onClose} statusBarTranslucent>
-      <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52 }}>
-          <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>{part ? `مشاركة كفيديو · ${part}` : 'مشاركة كفيديو'}</Text>
-          <IconButton label="إغلاق" onPress={onClose} Icon={X} tone="ink" />
-        </View>
+    <Sheet open={open} onClose={onClose} full title={part ? `مشاركة كفيديو · ${part}` : 'مشاركة كفيديو'} palette={palette}>
+      <View style={{ flex: 1 }}>
         <View style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule }}>
           {open && font !== null && <VideoFrame ref={frame} key={run} html={page ? page(font) : recorderPage(input!, font)} onMessage={message} />}
         </View>
@@ -66,6 +61,6 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
             </>}
         </View>
       </View>
-    </Modal>
+    </Sheet>
   );
 }

@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { FlatList, Modal, Pressable, ScrollView, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import Sheet from '@/ui/Sheet';
 import { Text, TextInput } from '@/ui/Text';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { scheduleOnRN } from 'react-native-worklets';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw, Search, X } from 'lucide-react-native';
+import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw, Search } from 'lucide-react-native';
 import type { SurahPair } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
@@ -42,7 +39,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter; onFilter: (filter: PairFilter) => void;
   lead: number; other: number; onPick: (lead: number, other: number) => void; palette: Palette;
 }) {
-  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [byCount, setByCount] = useState(() => readJson<boolean>(SORT_KEY) ?? false);
   const [expanded, setExpanded] = useState(() => new Set([lead]));
@@ -93,14 +89,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   const isCurrent = (pair: SurahPair, from: number) => from === lead && (pair.a === other || pair.b === other);
   const otherOf = (pair: SurahPair, n: number) => (pair.a === n ? pair.b : pair.a);
 
-  const drag = useSharedValue(0);
-  const close = () => { drag.value = 0; onClose(); };
-  const pan = Gesture.Pan().activeOffsetY(8).onUpdate(event => { drag.value = Math.max(0, event.translationY); })
-    .onEnd(event => {
-      if (event.translationY > 90 || event.velocityY > 700) scheduleOnRN(close);
-      else drag.value = withTiming(0, { duration: 180 });
-    });
-  const moved = useAnimatedStyle(() => ({ transform: [{ translateY: drag.value }] }));
 
   const field = { borderWidth: 1, borderColor: palette.rule, borderRadius: 8, color: palette.ink, fontSize: 16, paddingHorizontal: 10, paddingVertical: 8, backgroundColor: palette.paper };
   const sortButton = (active: boolean) => ({ flex: 1, flexDirection: 'row' as const, alignItems: 'center' as const, justifyContent: 'center' as const, gap: 6, paddingVertical: 8, borderRadius: 8, backgroundColor: active ? palette.accent : 'transparent' });
@@ -132,16 +120,8 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   };
 
   return (
-    <Modal visible={open} transparent animationType="slide" onRequestClose={close} statusBarTranslucent>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Pressable onPress={close} accessibilityLabel="إغلاق" style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' }} />
-        <Animated.View style={[{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '85%', direction: 'rtl', backgroundColor: palette.paper, borderTopLeftRadius: 18, borderTopRightRadius: 18, borderTopWidth: 1, borderColor: palette.rule, paddingHorizontal: 12, paddingBottom: insets.bottom + 8, gap: 8 }, moved]}>
-          <GestureDetector gesture={pan}>
-            <View style={{ height: 40, alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: palette.rule }} />
-              <View style={{ position: 'absolute', left: 0 }}><IconButton Icon={X} label="إغلاق" onPress={close} size="small" /></View>
-            </View>
-          </GestureDetector>
+    <Sheet open={open} onClose={onClose} tall palette={palette}>
+      <View style={{ flex: 1, paddingHorizontal: 12, gap: 8 }}>
           <View style={{ justifyContent: 'center' }}>
             <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن سورة: الطور، ٥٢…" placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن سورة"
               style={[field, { paddingRight: 34, textAlign: 'right' }]} />
@@ -178,8 +158,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
               </ScrollView>
             : <FlatList data={rows} keyExtractor={row => row.key} renderItem={renderRow} keyboardShouldPersistTaps="handled" style={{ flex: 1 }}
                 ListFooterComponent={empty ? <Text style={{ color: palette.muted, padding: 12, textAlign: 'right' }}>{query.trim() ? 'لا سورة بهذا البحث.' : 'لا صفحات بهذه التصفية.'}</Text> : undefined} />}
-        </Animated.View>
-      </GestureHandlerRootView>
-    </Modal>
+      </View>
+    </Sheet>
   );
 }
