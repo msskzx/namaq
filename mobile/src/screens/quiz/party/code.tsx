@@ -24,6 +24,8 @@ import { DEFAULT_DIFFICULTY, DIFFICULTY_NAMES } from '@shared/quiz/difficulty';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
 import { QuizFeedback, QuizInputs, type TreeQuestion } from '@/components/QuizTree';
+import { CompareFeedback, CompareInputs } from '@/components/QuizCompare';
+import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswers';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/branches';
 import { scopeSummary } from '@shared/quiz/scopeSummary';
@@ -48,6 +50,7 @@ const ERRORS: Record<ActionError, string> = {
 const duration = (seconds: number) => seconds < 60 ? `${num(seconds)} ث` : `${num(seconds / 60)} د`;
 const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 const isTree = (question: Question): question is Question & TreeQuestion => Boolean(question.tree);
+const isCompare = (question: Question): question is Question & { compare: CompareAsk } => Boolean(question.compare);
 
 function Label({ children, palette, muted }: { children: React.ReactNode; palette: Palette; muted?: boolean }) {
   return <Text style={{ color: muted ? palette.muted : palette.ink, fontSize: 15, lineHeight: 23, textAlign: 'right' }}>{children}</Text>;
@@ -287,12 +290,12 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   // On a tree the prompt scrolls away with it; the countdown stays.
   const prompt = question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null;
   const revealed = view.phase === 'reveal';
-  const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
+  const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
   const sent = view.answer !== null;
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
-  const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
-  const started = typed.some((text, index) => question.asked?.includes(index) && text.trim());
+  const total = (question.tree || question.compare ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  const started = typed.some((text, index) => (question.compare || question.asked?.includes(index)) && text.trim());
 
   if (!revealed && sent) return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
@@ -304,13 +307,15 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   if (revealed) return (
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24, gap: 12 }}>
       {question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null}
-      {isTree(question)
+      {isCompare(question)
+        ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : []} palette={palette} /></View>
+        : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
         : <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
-          {question.tree ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
+          {question.tree || question.compare ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
         </Text>
       )}
       <View style={{ paddingHorizontal: 16, gap: 12 }}>
@@ -325,12 +330,14 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: 10, gap: 8 }}>
         {view.deadline !== null && <Countdown deadline={view.deadline} total={total} offset={offset} palette={palette} />}
-        {!isTree(question) && prompt}
+        {!isTree(question) && !isCompare(question) && prompt}
       </View>
-      {isTree(question) ? (
+      {isTree(question) || isCompare(question) ? (
         <>
           <View style={{ flex: 1 }}>
-            <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} header={prompt} />
+            {isCompare(question)
+              ? <CompareInputs question={question} typed={typed} onType={(blank, text) => setTyped(values => values.map((value, i) => i === blank ? text : value))} palette={palette} header={prompt} />
+              : <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} header={prompt} />}
           </View>
           {!typing && <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
             <Button big variant="primary" Icon={Check} label="أرسل" disabled={!started} onPress={() => send({ type: 'submit', answer: typed })} />
@@ -355,7 +362,9 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
       <Leaderboard players={view.players} you={view.you} palette={palette} final />
       {entries.length > 0 && <Label palette={palette} muted>اضغط سؤالًا لتراجع إجابتك فيه.</Label>}
       {entries.length > 0 && <QuestionDots states={states} current={review ?? -1} onPick={setReview} palette={palette} />}
-      {entry && question && (isTree(question)
+      {entry && question && (isCompare(question)
+        ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : []} palette={palette} /></View>
+        : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} />
         : <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />)}

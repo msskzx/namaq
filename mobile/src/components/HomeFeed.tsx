@@ -47,9 +47,10 @@ import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
-import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
+import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
 import { CARD, type Palette } from '@/lib/theme';
 
@@ -320,16 +321,22 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   return (
     <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />}
       actions={<>
-        {isTree(question) && !checked && <>
+        {(isTree(question) || isCompare(question)) && !checked && <>
           <Action Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} palette={palette} />
           <Action Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} palette={palette} />
         </>}
         {/* After the answer, the ayah's mushaf button joins the card's row, not the card (owner, 2026-11-15). */}
-        {!isTree(question) && question.ayahKey && run.typed[0][0] !== undefined &&
+        {!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined &&
           <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />}
         <QuizActions palette={palette} />
       </>}>
-      {!isTree(question)
+      {isCompare(question)
+        ? <View style={{ height: QUIZ_TREE_HEIGHT }}>
+          {checked
+            ? <CompareFeedback question={question} typed={run.typed[0]} palette={palette} header={prompt} hints={run.hints?.[0]} />
+            : <CompareInputs question={question} typed={run.typed[0]} onType={(blank, text) => setRun(now => now && typeAnswer(now, blank, text))} palette={palette} header={prompt} />}
+        </View>
+        : !isTree(question)
         ? <View style={{ paddingBottom: 12 }}>
           <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} scroll={false}
             onReveal={() => setRun(reveal(run))}

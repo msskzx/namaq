@@ -10,6 +10,7 @@ import type { QuestionChoice } from "@/lib/quiz/types";
 import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@shared/quiz/score";
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
+import { CompareFeedback } from "./CompareAnswers";
 import { mushafText } from '@shared/quran/mushafText';
 import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 
@@ -47,12 +48,14 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
     </nav>
     <p className="text-sm text-[var(--home-muted)]" aria-live="polite">{ar ? `السؤال ${num(index + 1)} من ${num(entries.length)}` : `Question ${index + 1} of ${entries.length}`}</p>
     <p dir="rtl" lang="ar">{question.promptArabic}</p>
-    <p>{question.tree
+    <p>{question.compare
+      ? (ar ? `${num(result.earned)} من ${num(result.total)} فراغات` : `${result.earned} of ${result.total} blanks`)
+      : question.tree
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
     {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} />
-    {question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : <>
+    {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
       <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} surahName={value => question.choices.find(item => item.value === value)?.labelArabic} />

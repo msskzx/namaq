@@ -14,6 +14,7 @@ import type { JuzRange } from '@shared/quran/juz';
 import { quizTrees } from '@shared/quiz/treeScope';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswers';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 
@@ -83,6 +84,11 @@ export function availability(settings: Pick<SoloSettings, 'kinds' | 'list'>, boo
 /** A question of the solo quiz: a tree to complete, or one to answer from its choices. */
 export type SoloQuestion = AskedBranchQuestion | ChoiceQuestion;
 export const isTree = (question: SoloQuestion): question is AskedBranchQuestion => 'tree' in question && !!question.tree;
+export const isCompare = (question: SoloQuestion): question is ChoiceQuestion & { compare: CompareAsk } => 'compare' in question && !!question.compare;
+/** A question answered by typing: a tree's nodes or a compare card's blanks. */
+const typedIn = (question: SoloQuestion) => isTree(question) || isCompare(question);
+/** What a typed question holds before anything is typed; a choice question holds nothing until one is picked. */
+const emptyOf = (question: SoloQuestion) => isTree(question) ? emptyBranchAnswers(question) : emptyCompareAnswers(question);
 
 export type SoloRun = {
   settings: SoloSettings;
@@ -103,7 +109,7 @@ export function startSolo(settings: SoloSettings, random: Random = Math.random, 
   const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty) : [];
   const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings.list), settings.difficulty, random, settings.length * 3));
   const questions = mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat);
-  return { settings, questions, typed: questions.map(question => isTree(question) ? emptyBranchAnswers(question) : []), checked: questions.map(() => false), current: 0, submitted: false };
+  return { settings, questions, typed: questions.map(emptyOf), checked: questions.map(() => false), current: 0, submitted: false };
 }
 
 /** Picking a choice answers the question for good. */
@@ -113,7 +119,7 @@ export const pick = (run: SoloRun, value: string): SoloRun =>
 export const reveal = (run: SoloRun): SoloRun => ({ ...run, shown: run.questions.map((_, i) => i === run.current || !!run.shown?.[i]) });
 
 /** The answer as the shared scoring reads it: a tree's typed nodes, or the choice picked. */
-const answerOf = (question: SoloQuestion, typed: string[]) => isTree(question) ? typed : typed[0];
+const answerOf = (question: SoloQuestion, typed: string[]) => typedIn(question) ? typed : typed[0];
 
 const at = <T,>(list: T[], index: number, value: T) => list.map((item, i) => i === index ? value : item);
 
@@ -124,18 +130,19 @@ export const setHints = (run: SoloRun, hints: Hints): SoloRun =>
   run.checked[run.current] ? run : { ...run, hints: run.questions.map((_, i) => i === run.current ? hints : run.hints?.[i] ?? {}) };
 
 export const clearAnswers = (run: SoloRun): SoloRun =>
-  run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, isTree(run.questions[run.current]) ? emptyBranchAnswers(run.questions[run.current]) : []) };
+  run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, emptyOf(run.questions[run.current])) };
 
 /** Something was typed in at least one asked node, so checking means something. */
 export const hasTyped = (run: SoloRun, index = run.current) =>
-  isTree(run.questions[index]) ? run.typed[index].some((text, node) => isAsked(run.questions[index] as AskedBranchQuestion, node) && text.trim() !== '') : run.typed[index].length > 0;
+  isTree(run.questions[index]) ? run.typed[index].some((text, node) => isAsked(run.questions[index] as AskedBranchQuestion, node) && text.trim() !== '')
+    : isCompare(run.questions[index]) ? run.typed[index].some(text => text.trim() !== '') : run.typed[index].length > 0;
 
 export const check = (run: SoloRun): SoloRun => ({ ...run, checked: at(run.checked, run.current, true) });
 
 /** Showing the answer gives up the question: what was typed is dropped and it scores nothing. */
 export const showAnswer = (run: SoloRun): SoloRun => ({
   ...run,
-  typed: at(run.typed, run.current, isTree(run.questions[run.current]) ? emptyBranchAnswers(run.questions[run.current]) : []),
+  typed: at(run.typed, run.current, emptyOf(run.questions[run.current])),
   checked: at(run.checked, run.current, true),
 });
 
@@ -149,6 +156,10 @@ export type QuestionState = 'unanswered' | 'correct' | 'partial' | 'incorrect';
 export function questionState(run: SoloRun, index: number): QuestionState {
   if (!run.checked[index]) return 'unanswered';
   const question = run.questions[index];
+  if (isCompare(question)) {
+    const { earned, total } = questionPoints(question, run.typed[index]);
+    return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
+  }
   if (!isTree(question)) return run.typed[index][0] === question.correctAnswer ? 'correct' : 'incorrect';
   if (branchesCorrect(question, run.typed[index])) return 'correct';
   return questionPoints(question, run.typed[index]).earned > 0 ? 'partial' : 'incorrect';
@@ -156,7 +167,7 @@ export function questionState(run: SoloRun, index: number): QuestionState {
 
 /** One point per asked leaf typed right; a question never checked scores nothing. */
 export function soloScore(run: SoloRun) {
-  const points = run.questions.map((question, i) => run.checked[i] ? questionPoints(question, answerOf(question, run.typed[i])) : { earned: 0, total: questionPoints(question, isTree(question) ? [] : undefined).total });
+  const points = run.questions.map((question, i) => run.checked[i] ? questionPoints(question, answerOf(question, run.typed[i])) : { earned: 0, total: questionPoints(question, typedIn(question) ? [] : undefined).total });
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
   return { points, score, total, percent: total ? Math.round((score / total) * 100) : 0 };

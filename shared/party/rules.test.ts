@@ -167,6 +167,20 @@ describe('party questions', () => {
     expect(state.players.map(player => player.score)).toEqual([2, 1, 0]);
   });
 
+  it('scores a compare question one point per blank, on the longer timer', () => {
+    const compare: PartyQuestion = { key: 'compare', correctAnswer: 'ويعبدون … ينفعهم ولا يضرهم', choices: [], compare: {
+      card: '21:66|25:55', shown: { key: '21:66', words: ['قال', 'أفتعبدون', 'من', 'دون', 'الله'], tones: [] },
+      asked: { key: '25:55', words: ['ويعبدون', 'من', 'دون', 'الله', 'ينفعهم', 'ولا', 'يضرهم'], tones: [] }, blanks: [[0, 1], [4, 7]] } };
+    let state = playing([compare]);
+    expect(state.deadline).toBe(180_000);
+    state = run(state, [
+      { type: 'submit', playerId: 'p0', answer: ['ويعبدون', 'ينفعهم ولا'] },
+      { type: 'submit', playerId: 'p1', answer: ['ويعبدون', 'ينفعكم شيئا'] },
+      { type: 'submit', playerId: 'p2', answer: ['', ''] },
+    ]);
+    expect(state.players.map(player => player.score)).toEqual([2, 1, 0]);
+  });
+
   it('moves on only when the host taps next, then ends on the final leaderboard', () => {
     let state = run(playing(), ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'a' }) as Action));
     expect(act(state, { type: 'next', playerId: 'p1' }, 0).error).toBe('not-host');

@@ -118,7 +118,8 @@ export function quizQuery(settings: PartySettings) {
 }
 
 const key = (name: string) => name.normalize('NFC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
-const secondsFor = (state: PartyState, question: PartyQuestion) => (question.tree ? state.settings.treeSeconds : state.settings.seconds) * 1000;
+/** Typed questions (a tree, a compare card's blanks) get the longer time. */
+const secondsFor = (state: PartyState, question: PartyQuestion) => (question.tree || question.compare ? state.settings.treeSeconds : state.settings.seconds) * 1000;
 
 function nextHost(players: Player[], hostId: string, connected: boolean) {
   const at = players.findIndex(player => player.id === hostId);

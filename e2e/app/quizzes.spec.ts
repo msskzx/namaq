@@ -111,3 +111,39 @@ test('a solo quiz of which surah and recite questions: pick, reveal, then the re
   }
   await expect(page.getByText(/^النتيجة: ٥ من ٥/)).toBeVisible();
 });
+
+test('a compare quiz: the matrix only, a right and a wrong blank, then the result', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'قارن الموضعين' }).click();
+  await page.getByRole('button', { name: 'شجرة المتشابهات' }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { compare: { asked: { words: string[] }; blanks: [number, number][] } }[] }>(page, 'quiz-solo-run');
+  const blanks = page.getByLabel(/^الفراغ /);
+  const first = run!.questions[0].compare;
+  await expect(blanks).toHaveCount(first.blanks.length);
+  // No tree to switch to (owner, 2026-11-17).
+  await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
+  for (const [i, [from, to]] of first.blanks.entries()) await blanks.nth(i).fill(first.asked.words.slice(from, to).join(' '));
+  await page.getByRole('button', { name: 'تحقق', exact: true }).click();
+  await expect(page.getByLabel('السؤال ١ - صحيح')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'افتح في مقارنة السور' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'التالي' }).click();
+  await blanks.first().fill('كلام خطأ');
+  await page.getByRole('button', { name: 'تحقق', exact: true }).click();
+  await expect(page.getByText('كتبتَ:').first()).toBeVisible();
+
+  const send = page.getByRole('button', { name: 'إرسال' });
+  const next = page.getByRole('button', { name: 'التالي' });
+  for (let i = 0; i < 15; i++) {
+    await expect(send.or(next)).toBeVisible();
+    if (await send.count()) break;
+    await next.click();
+  }
+  await send.click();
+  await expect(page.getByText(/^النتيجة: /)).toBeVisible();
+  await page.getByLabel('السؤال ١ - صحيح').click();
+  await expect(page.getByText(/فراغات$/)).toBeVisible();
+});

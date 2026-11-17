@@ -1,8 +1,9 @@
 import { branchNodes, givenAnswer, matchTreeAnswers } from './branchAnswers';
 import type { BranchAnswer } from './branchQuestions';
 import type { Branch, Variant } from '../quran/branches';
+import { comparePoints, type CompareAsk } from './compareAnswers';
 
-export type ScoredQuestion = { correctAnswer?: string; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[] };
+export type ScoredQuestion = { correctAnswer?: string; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[]; compare?: CompareAsk };
 export type QuestionAnswer = string | string[];
 
 export const isAsked = (question: ScoredQuestion, index: number) => !question.asked || question.asked.includes(index);
@@ -20,8 +21,9 @@ export function branchPoints(question: ScoredQuestion, typed: string[]) {
   return { earned: asked.filter(index => matches[index]?.correct).length, total: asked.length };
 }
 
-/** A tree question scores one point per asked leaf, any other question one point. */
+/** A tree question scores one point per asked leaf, a compare question one per blank, any other question one point. */
 export function questionPoints(question: ScoredQuestion, answer: QuestionAnswer | undefined) {
+  if (question.compare) return comparePoints(question, Array.isArray(answer) ? answer : []);
   if (question.tree) return branchPoints(question, Array.isArray(answer) ? answer : emptyBranchAnswers(question));
   return { earned: Number(answer !== undefined && answer === question.correctAnswer), total: 1 };
 }
