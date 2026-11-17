@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { branchesHref, type BranchAyah } from '../branches';
 import { browseGroups, deduplicateGroups, filteredAyat, groupFilters, toggleFilter, type GroupFilters } from './browse';
 import type { Group } from './types';
-import artifact from '../../data/quran/mutashabih.json';
+import { builtGroups as artifact } from './data';
 import treeData from '../quranText/corpus';
 import { canonicalGroups, groupHasId } from './identity';
 

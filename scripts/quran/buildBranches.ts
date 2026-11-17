@@ -27,7 +27,8 @@ const { trees, subtrees } = buildSubtrees(buildTreeGroups(ayat), ayat);
 // The words stay on the pages: shared/quran/quranText/corpus.ts reads them back (owner 2026-11-17).
 const stored = ayat.map(({ words: _words, next: _next, ...rest }) => rest);
 const titled = trees.map(tree => (tree.family ? tree : (({ text: _text, ...rest }) => rest)(tree)));
-const serialized = `${JSON.stringify({ ayat: stored, trees: titled, subtrees })}\n`;
+const counted = subtrees.map(({ text, ...rest }) => ({ ...rest, length: text.split(' ').length }));
+const serialized = `${JSON.stringify({ ayat: stored, trees: titled, subtrees: counted })}\n`;
 writeFileSync(OUT, serialized);
 const entries = trees.flatMap(group => phrasePieces(group, ayat));
 console.log(`trees ${trees.length}, subtrees ${subtrees.length}, ayat ${ayat.length}, entries ${entries.length}, repeated occurrences ${trees.filter(group => group.occurrences.length > new Set(group.occurrences.map(o => o.key)).size).length}`);
