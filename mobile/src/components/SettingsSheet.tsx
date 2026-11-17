@@ -1,14 +1,14 @@
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-native';
-import { openExternal } from './ExternalLink';
-import Sheet from './Sheet';
+import { openExternal } from '@/ui/ExternalLink';
+import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
 import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { WEBSITE } from '@/lib/branches';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
-import Toggle from './Toggle';
+import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
 import { PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';

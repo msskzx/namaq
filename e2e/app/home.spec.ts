@@ -20,19 +20,6 @@ test.describe('a new user', () => {
     expect(await readerPage(page)).toBe(300);
   });
 
-  test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
-    await open(page, '/');
-    const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
-    await button.scrollIntoViewIfNeeded();
-    // The card's head names where the tree's ayat are, surah first; the branches tab opens on that same tree.
-    const places = (await button.getByText(/[٠-٩]/).textContent())!.trim();
-    const surah = places.match(/^[^٠-٩]+/)![0].trim();
-    await button.click();
-    await expect(page).toHaveURL(/\/branches/);
-    await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
-    await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
-  });
-
   test('the pair card is the compare card and opens the compare tab', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeAttached();
@@ -40,13 +27,30 @@ test.describe('a new user', () => {
     await expect(page).toHaveURL(/\/compare/);
   });
 
-  test('no tree draws tabs: every box names its ayah inside, at the normal size', async ({ page }) => {
-    // docs/records/R0042: tabs came back on a path that skipped the rule, and iOS shrank their labels to a speck. Since 2026-11-16
-    // (owner) no tree has tabs at all.
-    await open(page, '/');
-    await expect(page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first()).toBeAttached();
-    await expect(page.locator('[aria-label$="شجرةً"]').first()).toBeAttached();
-    await expect(page.getByTestId('node-tab')).toHaveCount(0);
+  test.describe('with the tree picked in settings', () => {
+    test.use({ seed: { 'branches-view': '"tree"' } });
+
+    test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
+      await open(page, '/');
+      const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
+      await button.scrollIntoViewIfNeeded();
+      // The card's head names where the tree's ayat are, surah first; the branches tab opens on that same tree.
+      const places = (await button.getByText(/[٠-٩]/).textContent())!.trim();
+      const surah = places.match(/^[^٠-٩]+/)![0].trim();
+      await button.click();
+      await expect(page).toHaveURL(/\/branches/);
+      await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
+      await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
+    });
+
+    test('no tree draws tabs: every box names its ayah inside, at the normal size', async ({ page }) => {
+      // docs/records/R0042: tabs came back on a path that skipped the rule, and iOS shrank their labels to a speck. Since 2026-11-16
+      // (owner) no tree has tabs at all.
+      await open(page, '/');
+      await expect(page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first()).toBeAttached();
+      await expect(page.locator('[aria-label$="شجرةً"]').first()).toBeAttached();
+      await expect(page.getByTestId('node-tab')).toHaveCount(0);
+    });
   });
 
   test('the story circles open their pages', async ({ page }) => {
@@ -68,8 +72,8 @@ test.describe('a new user', () => {
   });
 
   test('the feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
-    // Three batches a day take three kinds in turn; three days apart, the seven kinds all come up.
-    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    // Three batches a day take three kinds in turn; three days apart, the eight kinds all come up.
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
     const seen = new Set<string>();
     for (const days of [0, 3, 6]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));

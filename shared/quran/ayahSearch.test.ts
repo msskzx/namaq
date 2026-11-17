@@ -1,18 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { readerAyat } from './branches';
+import { pageAyat } from './branches';
 import { normalizeWord } from './normalize';
-import { mushafPages, type MushafPage, type ReaderPageData } from './readerPage';
+import type { MushafPage } from './readerPage';
 import { indexAyat, searchAyat, searchable } from './ayahSearch';
 
-const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>
-  JSON.parse(readFileSync(join(__dirname, '../../src/app/quran/read/data', `${i + 1}.json`), 'utf8')),
-);
 const mushaf: MushafPage[] = Array.from({ length: 604 }, (_, i) =>
   JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${i + 1}.json`), 'utf8')),
 );
-const ayat = indexAyat(readerAyat(pages, mushafPages(mushaf)));
+const ayat = indexAyat(pageAyat(mushaf));
 const covered = (query: string, key: string) => {
   const hit = searchAyat(ayat, query, 10000).hits.find(found => found.key === key);
   return hit && hit.words.slice(hit.from, hit.to + 1).map(normalizeWord);
@@ -37,9 +34,9 @@ describe('searchAyat', () => {
     expect(searchAyat(ayat, 'قال').hits.every(hit => hit.words.map(normalizeWord).join(' ').includes('قال'))).toBe(true);
   });
 
-  it('keeps the word range right after a word the text splits with a space', () => {
+  it('keeps the word range right where the page writes «بعد ما» as two words', () => {
     expect(covered('اثمه علي', '2:181')).toEqual(['اثمه', 'علي']);
-    expect(covered('بعد ما سمعه', '2:181')).toEqual(['بعد ما', 'سمعه']);
+    expect(covered('بعد ما سمعه', '2:181')).toEqual(['بعد', 'ما', 'سمعه']);
   });
 
   it('ignores punctuation in the query and marks in the text', () => {

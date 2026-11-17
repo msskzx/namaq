@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { landingPage, MAX_ZOOM, settleZoom } from '@/lib/pageZoom';
@@ -29,6 +29,10 @@ type Props = {
   onZoom: (zoom: number, focalY: number) => void;
   /** How far the reader scrolled down the current page: a neighbour sliding in shows its top there. */
   scrollTop?: number;
+  /** The scroll view the row sits in, as a gesture: the pinch runs alongside it, so two fingers on a zoomed page pinch. */
+  scroll?: GestureType;
+  /** Told when two fingers start and stop pinching, so the reader holds the page still meanwhile. */
+  onPinch?: (on: boolean) => void;
 };
 
 /**
@@ -37,7 +41,7 @@ type Props = {
  * A pinch changes the text size. While the fingers are down the page is only stretched as a preview; when they lift
  * the page is set again at the new size, sharp.
  */
-export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom, onZoom, scrollTop = 0 }: Props) {
+export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom, onZoom, scrollTop = 0, scroll, onPinch }: Props) {
   const offset = useSharedValue((page - 1) * width);
   const from = useSharedValue(0);
   const settled = useRef(page);
@@ -59,6 +63,9 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     }
     settled.current = page;
   }, [page, width, offset]);
+
+  // A pager taken away mid-pinch lets the scroll go again.
+  useEffect(() => () => onPinch?.(false), [onPinch]);
 
   // The page set at the new size replaces the preview.
   useLayoutEffect(() => { stretch.value = 1; }, [zoom, stretch]);
@@ -107,11 +114,14 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       pinching.value = true;
       focal.value = { x: event.focalX, y: event.focalY };
       scheduleOnRN(onMove);
+      if (onPinch) scheduleOnRN(onPinch, true);
     })
     .onUpdate(event => {
       stretch.value = Math.min(MAX_ZOOM, Math.max(0.9, zoom * event.scale)) / zoom;
     })
     .onFinalize(() => {
+      // Only a pinch that started: a one-finger touch also ends here.
+      if (pinching.value && onPinch) scheduleOnRN(onPinch, false);
       pinching.value = false;
     })
     .onEnd(() => {
@@ -120,6 +130,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       if (next === zoom) stretch.value = withTiming(1, { duration: 150 });
       else scheduleOnRN(onZoom, next, focal.value.y);
     });
+  if (scroll) pinch.simultaneousWithExternalGesture(scroll);
 
   const track = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
   const preview = useAnimatedStyle(() => {

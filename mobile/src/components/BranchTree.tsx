@@ -1,14 +1,15 @@
 import { createContext, memo, useContext, useEffect, useId, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type LayoutChangeEvent } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Text, UI_SCALE } from '@/components/Text';
+import { Text, UI_SCALE } from '@/ui/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { ayatLabel, endSign, keys, shownAyat, withStarts, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { markColour } from '@shared/quran/compareCardLook';
-import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
+import { bare } from '@shared/quran/quranText/ayahWords';
+import { writtenForms, writtenPieces, writtenStrands, type WrittenForm } from '@shared/quran/writtenForms';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
@@ -16,7 +17,7 @@ import { aroundOf, likenessAt, mixedBefore, NOTHING_SHARED, subtreeOf, type Shar
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
 import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
-import Hourglass from './Hourglass';
+import Hourglass from '@/ui/Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib/scene';
 
@@ -128,7 +129,7 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
     if (given) {
       // A compare tree's words carry their likeness; a word its sides write differently is amber, as on every tree.
       const written = writtenForms({ forms }, i, word, shared.paths?.lit);
-      if (written.length > 1 || (written[0].word !== word && !isMark(word))) return palette.marks.written;
+      if (written.length > 1 || (bare(written[0].word) !== bare(word) && !isMark(word))) return palette.marks.written;
       return markColour(given[i] === 'written' ? 'exact' : given[i], palette, given[i] === 'written');
     }
     const kinds = marks ? [likenessAt(marks, i)] : ayahKeys.map(key => {
@@ -142,7 +143,7 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
     // A word moved here from a neighbour because the ayat write it differently, over its root match.
     if (differs?.includes(i)) return palette.marks.written;
     if (kind === 'root' && written.length === 1) return palette.marks.root;
-    if (written.length > 1 || (written[0].word !== word && !isMark(word))) return palette.marks.written;
+    if (written.length > 1 || (bare(written[0].word) !== bare(word) && !isMark(word))) return palette.marks.written;
     return kind && palette.marks[kind];
   });
 }
@@ -163,9 +164,14 @@ function BraidEdge({ count, join, palette }: { count: number; join?: boolean; pa
 }
 
 /** One word of a node that holds a braid, in its own place so the video finds it where the app put it. */
-function Word({ text, color, size }: { text: string; color: string; size: number }) {
-  const part = usePart({ size, words: [{ text, color }], lineHeight: size * 1.9 });
-  return <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color, writingDirection: 'rtl' }}>{text}</Text>;
+function Word({ form, color, size, palette }: { form: WrittenForm; color: string; size: number; palette: Palette }) {
+  const part = usePart({ size, words: [{ text: quranText(form.word), color }], lineHeight: size * 1.9 });
+  return <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color, writingDirection: 'rtl' }}><Written form={form} palette={palette} /></Text>;
+}
+
+/** A word as the node's ayat write it, with the stop signs only some of them carry faint (shared/quran/writtenForms.ts). */
+function Written({ form, palette }: { form: WrittenForm; palette: Palette }) {
+  return <>{quranText(form.word)}{form.faint ? <Text style={{ color: palette.rule }}>{form.faint}</Text> : null}</>;
 }
 
 /** One way of writing a braid's words, outlined, with the ayat that write it so; the video draws the outline, words and references. */
@@ -194,7 +200,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
     return (
       <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
         {pieces.map((piece, n) => piece.kind === 'word' && (
-          <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}{quranText(writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit)[0].word)}</Text>
+          <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}<Written form={writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit)[0]} palette={palette} /></Text>
         ))}
       </Text>
     );
@@ -206,7 +212,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
       {pieces.map((piece, n) => {
         if (piece.kind === 'word') {
           const written = writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit);
-          return <Word key={n} text={quranText(written[0].word)} color={tones[piece.index] ?? color ?? palette.ink} size={size} />;
+          return <Word key={n} form={written[0]} color={tones[piece.index] ?? color ?? palette.ink} size={size} palette={palette} />;
         }
         const strands = writtenStrands({ forms }, piece.from, piece.to, shared.paths?.lit);
         return (

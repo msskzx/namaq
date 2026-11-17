@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Text } from '@/components/Text';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
@@ -14,8 +15,8 @@ import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@s
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { compareKeys, forgottenOrder, nextForgotten, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
-import TopBar from './TopBar';
-import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
+import TopBar from '@/ui/TopBar';
+import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
@@ -26,11 +27,12 @@ import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
-import ActButton, { ACT_WIDTH } from './ActButton';
+import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';
-import RecitePill, { IconButton, RECITE_BAR } from './recite/RecitePill';
+import RecitePill, { RECITE_BAR } from './recite/RecitePill';
+import IconButton from '@/ui/IconButton';
 import { useRecite } from './recite/useRecite';
 import ListenSheet from './ListenSheet';
 import { listen, useListening } from '@/lib/listen';
@@ -262,6 +264,16 @@ export default function Reader() {
   const pageInsets = { top: insets.top, bottom: (reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : listening ? tabBarBottom(insets.bottom) : insets.bottom) + (listening ? LISTEN_BAR + 8 : 0) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
+  // The scroll view as a gesture-handler gesture, so the pager's swipe and pinch inside it are weighed together with it:
+  // without it a zoomed page did not scroll and two fingers on it went to the scroll, not the pinch (owner, 2026-11-17).
+  const scrollGesture = useMemo(() => Gesture.Native(), []);
+  /** While two fingers pinch, the page holds still, and the scroll they started at is the one the new size is anchored to. */
+  const [pinching, setPinching] = useState(false);
+  const pinchFrom = useRef(0);
+  const onPinch = useCallback((on: boolean) => {
+    if (on) pinchFrom.current = scrolled.current;
+    setPinching(on);
+  }, []);
   const scrolled = useRef(0);
   const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
   useEffect(() => { if (!keyboard && !flowing) scrollTo(0); }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -299,7 +311,7 @@ export default function Reader() {
     return () => cancelAnimationFrame(frame);
   }, [drawnHeight, zoom]); // eslint-disable-line react-hooks/exhaustive-deps
   const zoomTo = useCallback((next: number, focalY: number) => {
-    anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - scrolled.current, from: heights[page] ?? 0 };
+    anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - pinchFrom.current, from: heights[page] ?? 0 };
     restoring.current = false;
     quietUntil.current = Date.now() + 800;
     setZoom(next);
@@ -349,25 +361,30 @@ export default function Reader() {
   const barRows = Math.ceil(buttons / Math.max(1, Math.floor((barWidth - 10) / (ACT_WIDTH + 2))));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-      <ScrollView ref={scroller} scrollEnabled={!!keyboard || flowing} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
+      <GestureDetector gesture={scrollGesture}>
+      <ScrollView ref={scroller} scrollEnabled={!pinching && (!!keyboard || flowing)} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
         onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}
+        onScrollBeginDrag={() => { moved.current = Date.now(); touches.cancel(); }}
         onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnByHand} onMove={onMove} render={render} onPull={openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop} />
+          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnByHand} onMove={onMove} render={render} onPull={keyboard ? undefined : openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop}
+            scroll={scrollGesture} onPinch={onPinch} />
         )}
       </ScrollView>
+      </GestureDetector>
       {tools && (
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
-          <TopBar>
+          {/* No logo; the buttons at the right edge, under the thumb (owner, 2026-11-17). */}
+          <TopBar bare>
             {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
             <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
               accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
               hitSlop={6} style={{ padding: 9 }}>
               <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
             </Pressable>
-            <IconButton Icon={List} label="فهرس السور والبحث" palette={palette} onPress={() => setSheet('index')} />
-            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} palette={palette} on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
+            <IconButton Icon={List} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
+            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
           </TopBar>
         </View>
       )}

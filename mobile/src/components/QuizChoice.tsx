@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, X } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import Button from '@/components/Button';
+import { Text } from '@/ui/Text';
+import Button from '@/ui/Button';
 import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizPage from './QuizPage';
 import { num } from '@shared/quran/arabicNumber';

@@ -4,7 +4,10 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { ALLAH_OATHS, OTHER_OATHS, buildOaths } from '@shared/quran/oaths';
 import { OATH_BY, OATH_SECTIONS } from '@shared/quran/oathSources';
-import data from '@shared/data/quran/oaths.json';
+import corpus from '@shared/data/quran/trees.json';
+
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 import OathsView from './OathsView';
 import { metadata } from './page';
 

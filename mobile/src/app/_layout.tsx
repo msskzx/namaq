@@ -5,9 +5,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
-import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette, dark } from '@/lib/theme';
+import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette } from '@/lib/theme';
 import '@/lib/storage';
-import LoadingScreen from '@/components/LoadingScreen';
+import LoadingScreen from '@/ui/LoadingScreen';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -54,7 +54,7 @@ export default function RootLayout() {
           {loading && <LoadingScreen words={fonts} done={ready} onLayout={() => SplashScreen.hideAsync()} onGone={onGone} />}
         </View>
         {/* While loading, the bar sits on the loading screen, which follows the phone's scheme like the splash. */}
-        <StatusBar style={(loading ? scheme === 'dark' : palette.paper === dark.paper) ? 'light' : 'dark'} />
+        <StatusBar style={(loading ? scheme === 'dark' : palette.scheme === 'dark') ? 'light' : 'dark'} />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

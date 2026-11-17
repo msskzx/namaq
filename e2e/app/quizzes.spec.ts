@@ -15,7 +15,8 @@ const answersOf = async (page: Page, index: number) => {
   return question.asked.map(node => givenAnswer(nodes[node]));
 };
 
-const leaves = (page: Page) => page.getByLabel(/^الطرف /);
+// The quiz explainer draws a read-only example; only the question's own boxes count.
+const leaves = (page: Page) => page.locator('input:not([readonly])').and(page.getByLabel(/^الطرف /));
 
 test.beforeEach(async ({ page }) => {
   // The same questions every run: Math.random seeded before the app starts.

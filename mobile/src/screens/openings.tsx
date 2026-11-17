@@ -1,16 +1,16 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronDown, PenLine, Send } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { blend } from '@shared/quran/compareCardLook';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
-import Reference from '@/components/Reference';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
+import Reference from '@/ui/Reference';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
@@ -18,6 +18,7 @@ import { shareCard } from '@/lib/shareImage';
 import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -83,12 +84,8 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
         </View>}
       </View>
       <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
-        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel="الشرط وجوابه" hitSlop={8} style={{ padding: 4, transform: [{ rotate: open ? '180deg' : '0deg' }] }}>
-          <ChevronDown size={18} color={palette.muted} />
-        </Pressable>}
-        <Pressable onPress={share} accessibilityRole="button" accessibilityLabel={`شارك ${card.title}`} hitSlop={8} style={{ padding: 4 }}>
-          <Send size={18} color={palette.muted} />
-        </Pressable>
+        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} size="small" expanded={open} />}
+        <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} size="small" />
       </View>
     </View>
   );
@@ -112,9 +109,7 @@ export default function OpeningsScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll>
-        <Pressable onPress={quizOpenings} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
-          <PenLine size={20} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={PenLine} label="اختبار أوائل السور" onPress={quizOpenings} role="link" />
       </TopBar>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ gap: 8, paddingHorizontal: 16, paddingVertical: 8, alignItems: 'center', flexDirection: 'row' }}>
         {OPENING_KINDS.map(k => {

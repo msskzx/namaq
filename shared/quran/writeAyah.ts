@@ -2,7 +2,6 @@
 // page, and the reader writes its first and last few words, one box each.
 import { matchedWords } from '../quiz/branchAnswers';
 import { normalizeWord } from './normalize';
-import { pageWordsAt } from './quranText/ayahWords';
 
 /** How many words are written at each end of an ayah. */
 export const WRITE_EACH = 3;
@@ -112,12 +111,12 @@ export const penTargets = (words: string[], rule: PenRule): number[] =>
 export type PageAsk = { shows?: number; recite?: boolean; title?: 'hidden' | 'shown' };
 
 /**
- * How many of an ayah's page words (۞ included) show before the hidden part. The quiz's words and the page's line up one to
- * one but in the few ayat they split differently (pageWordsAt).
+ * How many of an ayah's page words (۞ included) show before the hidden part. The quiz's words are the page's words; the
+ * page only adds ۞, which is skipped.
  */
 export function shownCut(key: string, pageWords: string[], shows: number | undefined): number {
   if (shows === undefined) return pageWords.length;
   if (shows <= 0) return 0;
   const spoken = pageWords.flatMap((word, at) => (maxLetters(word) ? [at] : []));
-  return (spoken[Math.max(...pageWordsAt(key, shows - 1))] ?? pageWords.length - 1) + 1;
+  return (spoken[shows - 1] ?? pageWords.length - 1) + 1;
 }

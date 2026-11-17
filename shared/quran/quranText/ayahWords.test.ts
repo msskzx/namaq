@@ -3,13 +3,11 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import trees from '../../data/quran/trees.json';
 import type { MushafPage } from '../readerPage';
-import { ayahWordsOf, HIZB, pageWordsAt, SPLITS, wordsOnly } from './ayahWords';
+import { ayahWordsOf, corpusWordsAt, HIZB, pageWordsAt, SPLITS, wordsOnly } from './ayahWords';
 
 const pages: MushafPage[] = Array.from({ length: 604 }, (_, at) => JSON.parse(readFileSync(join(__dirname, `../../data/quran/mushaf/${at + 1}.json`), 'utf8')));
 const words = ayahWordsOf(pages);
 const LETTER = /[ء-يٱ]/;
-/** Letters only, so the older text's spelling meets the page's (ى/ي, hamza seats and marks aside). */
-const skeleton = (word: string) => word.normalize('NFD').replace(/[^\u0621-\u063A\u0641-\u064A\u0671]/g, '').replace(/[\u0671\u0623\u0625\u0622]/g, '\u0627').replace(/\u0649/g, '\u064A').replace(/[\u0624\u0626]/g, '\u0621');
 
 describe('ayah words from the Madina pages', () => {
   it('holds every ayah of the Quran', () => {
@@ -25,19 +23,17 @@ describe('ayah words from the Madina pages', () => {
     expect(all.filter(token => token !== HIZB && !LETTER.test(token))).toEqual([]);
   });
 
-  it('lines up with the older text word by word, the seven split words aside', () => {
+  it('is where the trees take their words: every ayah of trees.json holds the page\'s words, signs and all', () => {
     const ayat = (trees as { ayat: { key: string; words: string[] }[] }).ayat;
-    const off = ayat.filter(ayah => {
-      const page = wordsOnly(words[ayah.key]);
-      const covered = ayah.words.map((_, at) => pageWordsAt(ayah.key, at));
-      const joined = covered.map(at => skeleton(at.map(index => page[index]).join('')));
-      const old = ayah.words.map(word => skeleton(word));
-      // A page word that two old words share (لوما = لو + ما) holds both.
-      const same = joined.every((page, at) => page === old[at] || (ayah.key in SPLITS && page.includes(old[at])));
-      return !same || new Set(covered.flat()).size !== page.length;
-    });
-    // The older text spells two words otherwise (2:72 «فادارءتم», 11:13 «افتراه»): same word, other rasm.
-    expect(off.map(ayah => ayah.key)).toEqual(['2:72', '11:13']);
-    expect(Object.keys(SPLITS).every(key => ayat.find(ayah => ayah.key === key)!.words.length === SPLITS[key].length)).toBe(true);
+    expect(ayat.filter(ayah => JSON.stringify(ayah.words) !== JSON.stringify(wordsOnly(words[ayah.key]))).map(ayah => ayah.key)).toEqual([]);
+  });
+
+  it('gives each corpus word to exactly one page word where the two split an ayah differently', () => {
+    for (const [key, rows] of Object.entries(SPLITS)) {
+      const pageCount = wordsOnly(words[key]).length;
+      const given = Array.from({ length: pageCount }, (_, at) => corpusWordsAt(key, at)).flat();
+      expect(given, key).toEqual(rows.map((_, old) => old));
+      expect(new Set(rows.flatMap((_, old) => pageWordsAt(key, old))).size, key).toBe(pageCount);
+    }
   });
 });

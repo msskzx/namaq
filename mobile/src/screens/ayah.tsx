@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight } from 'lucide-react-native';

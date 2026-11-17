@@ -6,7 +6,7 @@ export type Quote = { text: string; cite?: string; url?: string };
 
 /**
  * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,
- * the first in ink, the rest smaller. The phone app has the same in mobile/src/components/Reference.tsx.
+ * the first in ink, the rest smaller. The phone app has the same in mobile/src/ui/Reference.tsx.
  */
 export default function Reference({ title, quotes }: { title: string; quotes: Quote[] }) {
   return (

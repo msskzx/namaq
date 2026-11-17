@@ -102,12 +102,10 @@ describe('the write boxes', () => {
 });
 
 describe('shownCut', () => {
-  it('shows the opening as the quiz counts it, past a quarter sign and where the page splits words differently', () => {
+  it('shows the opening as the quiz counts it, past a quarter sign', () => {
     expect(shownCut('112:1', ['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'], 2)).toBe(3);
-    // 15:7 «لَّوۡمَا» is one page word for the quiz's two.
-    expect(shownCut('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], 2)).toBe(1);
-    // 37:130 «إِلۡ يَاسِينَ» is two page words for the quiz's one.
-    expect(shownCut('37:130', ['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلۡ', 'يَاسِينَ'], 3)).toBe(4);
+    // The quiz's words are the page's: 15:7 «لَّوۡمَا» is one word for both.
+    expect(shownCut('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], 1)).toBe(1);
   });
   it('hides all of it from nothing, and shows all of it without a count', () => {
     expect(shownCut('1:2', ['ٱلۡحَمۡدُ', 'لِلَّهِ'], 0)).toBe(0);

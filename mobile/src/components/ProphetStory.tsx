@@ -1,10 +1,10 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTabRetap } from '@/lib/tabRetap';
-import { useTabBarSpace } from './tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { storyMap } from '@shared/quran/prophets/story';
 import EventPlaces from '@/components/EventPlaces';
 import HelpSheet from '@/components/HelpSheet';

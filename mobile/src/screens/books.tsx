@@ -4,16 +4,17 @@ import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-r
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
-import { Text } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import FasilaIcon from '@/components/FasilaIcon';
 import { size } from '@/components/Books';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { addBook, bookState, removeBook, useBooks, type BookState } from '@/lib/books';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
 import { CARD, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 /** Tuhfat al-Atfal is a poem with a page of its own (screens/tuhfa.tsx), shelved with the books. It ships with the app and has nothing to manage. */
 const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
@@ -43,10 +44,7 @@ export default function LibraryScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll>
         <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 19, textAlign: 'right' }}>المكتبة</Text>
-        <Pressable onPress={() => setEditing(!editing)} accessibilityRole="button" accessibilityLabel={editing ? 'تم' : 'تعديل الكتب'} hitSlop={4}
-          style={({ pressed }) => ({ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.6 : 1 })}>
-          {editing ? <Check size={22} color={palette.accent} /> : <Pencil size={21} color={palette.muted} />}
-        </Pressable>
+        <IconButton Icon={editing ? Check : Pencil} label={editing ? 'تم' : 'تعديل الكتب'} onPress={() => setEditing(!editing)} on={editing} />
       </TopBar>
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
         {shown.map(book => {

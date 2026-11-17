@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
-import Button, { Row } from '@/components/Button';
+import { Text } from '@/ui/Text';
+import Button, { Row } from '@/ui/Button';
 import { penRule, quizPen } from '@/lib/settings';
 import type { PenRule } from '@shared/quran/writeAyah';
 import type { Palette } from '@/lib/theme';

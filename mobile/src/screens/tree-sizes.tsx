@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { ScrollView, View, type LayoutChangeEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import BranchTree, { type Direction, type NodeActions } from '@/components/BranchTree';
 import { aroundOf, cardOf, surahNames, treeList } from '@/lib/branches';
 import { sizeKey, type Shipped } from '@/lib/treeSizes';

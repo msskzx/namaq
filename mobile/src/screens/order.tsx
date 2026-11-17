@@ -1,21 +1,21 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
-import data from '@shared/data/quran/surahOrder.json';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { citeLabel, citeUrl, ORDER_JUZ, orderInJuz, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
 import HelpSheet from '@/components/HelpSheet';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { ayahMushafWords } from '@/lib/mushaf';
+import IconButton from '@/ui/IconButton';
 
-const SURAHS = orderSurahs(data, num);
+const SURAHS = orderSurahs(ayahMushafWords, num);
 type Row = { kind: 'link'; surah: number; link: OrderLinkView } | { kind: 'surah'; s: OrderSurah };
 
 function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
@@ -34,7 +34,7 @@ function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
       <Text style={{ color: palette.muted, fontSize: 13, minWidth: 64 }}>{ayah.place}</Text>
       <Text style={{ flex: 1, fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.ink, writingDirection: 'rtl' }}>
-        {ayah.words.map((w, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: w.shared ? palette.accent : palette.ink }}>{`${mushafText(w.text)} `}</Text>)}
+        {ayah.words.map((w, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: w.shared ? palette.accent : palette.ink }}>{`${w.text} `}</Text>)}
       </Text>
     </View>
   );
@@ -64,7 +64,7 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
       </View>
       <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
         {s.opening.map(a => [
-          <Text key={a.ayah} style={{ fontFamily: QURAN_FONT }}>{`${mushafText(a.text)} `}</Text>,
+          <Text key={a.ayah} style={{ fontFamily: QURAN_FONT }}>{`${a.text} `}</Text>,
           <Text key={`${a.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(a.ayah)} `}</Text>,
         ])}
       </Text>
@@ -72,9 +72,7 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
       <Source cite={s.aim.src} palette={palette} />
       {/* Card actions on the right (owner): the mushaf. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
-        <Pressable onPress={() => readAyah(`${s.surah}:1`)} accessibilityRole="button" accessibilityLabel={`افتح سورة ${s.name} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
-          <BookOpen size={19} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} size="small" />
       </View>
     </View>
   );

@@ -152,12 +152,13 @@ export function buildTreeGroups(ayat: BranchAyah[]): TreeGroup[] {
 export function sharedDisplay(forms: string[]) {
   if (forms.every(form => form === forms[0])) return forms[0];
   if (forms.every(isEnd)) return '۝';
-  const originals = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
+  // The page's tatweel (شَيۡـٔٗا) is part of how it writes the word: kept, as a letter of its own.
+  const originals = forms.map(form => form.replace(/\u2060/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   forms = originals.map(words => words.map((word, i) => {
     const bases = originals.map(other => other[i]?.[0]);
     return bases.every(base => base === bases[0]) ? word : bases.every(base => base && 'ؤئء'.includes(base)) ? word.replace(/^[ؤئ]/, 'ء') : word;
   }).join(''));
-  const letters = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFD').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
+  const letters = forms.map(form => form.replace(/\u2060/g, '').normalize('NFD').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   if (letters.some(other => other.length !== letters[0].length || other.some((letter, i) => letter[0] !== letters[0][i][0]))) return forms[0];
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }

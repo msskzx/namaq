@@ -2,7 +2,7 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import { Download, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book, type BookKind } from '@shared/books';
 import { num } from '@shared/quran/arabicNumber';
-import { Text } from './Text';
+import { Text } from '@/ui/Text';
 import { addBook, bookState, removeBook, useBooks } from '@/lib/books';
 import { CARD, type Palette } from '@/lib/theme';
 

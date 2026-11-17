@@ -1,8 +1,8 @@
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import Svg, { Path } from 'react-native-svg';
 import { Check } from 'lucide-react-native';
-import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, type CardMode } from '@shared/cardTint';
+import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, tintSurfaces, type CardMode } from '@shared/cardTint';
 import { SAMPLE_AYAH, SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
 import { closeStudio } from '@/lib/growPlayer';
 import { branchView, cardTints, markMode, themeChoice, type BranchView } from '@/lib/settings';
@@ -10,11 +10,12 @@ import { MARK_LEGEND, MARK_MODE_NAMES, MARK_MODES, MARK_SETTING_LABEL, markTones
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 
 /** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
-function Mini({ mode, card, small }: { mode: CardMode; card: string; small?: boolean }) {
+function Mini({ mode, tint, small }: { mode: CardMode; tint: string; small?: boolean }) {
   const colours = MODE_PREVIEW[mode];
+  const card = cardColour(mode, tint);
   const text = { color: colours.ink, fontFamily: QURAN_FONT, fontSize: small ? 8 : 10, lineHeight: small ? 14 : 17, textAlign: 'center' as const };
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colours.page }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: tintSurfaces(mode, tint)?.paper ?? colours.page }}>
       <View style={{ width: small ? '86%' : '76%', height: '66%', justifyContent: 'center', borderWidth: 1, borderColor: colours.rule, borderRadius: 5, backgroundColor: card, overflow: 'hidden' }}>
         <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.start}</Text>
         <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.end} <Text style={{ color: colours.accent, fontWeight: '700' }}>{SAMPLE_AYAH.ending}</Text></Text>
@@ -58,8 +59,8 @@ export default function ThemeTiles({ palette }: { palette: Palette }) {
           return (
             <Tile key={tile.key} name={tile.ar} on={on} onPress={choose} palette={palette}>
               {tile.mode === 'system'
-                ? <><Mini mode="light" card={cardColour('light', tints.light)} small /><Mini mode="dark" card={cardColour('dark', tints.dark)} small /></>
-                : <Mini mode={tile.mode} card={cardColour(tile.mode, tile.key)} />}
+                ? <><Mini mode="light" tint={tints.light} small /><Mini mode="dark" tint={tints.dark} small /></>
+                : <Mini mode={tile.mode} tint={tile.key} />}
             </Tile>
           );
         })}

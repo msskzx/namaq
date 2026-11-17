@@ -39,7 +39,58 @@ test('the lata\'if page groups its examples by topic, each with al-Suyuti\'s wor
   await expect(page.getByRole('link', { name: /الإتقان للسيوطي ٣\/٢٩٢–٢٩٣/ }).first()).toBeVisible();
 });
 
+test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {
+  // The matrix is the default view (owner, 2026-11-17).
+  await open(page, '/branches');
+  await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
+});
+
+test('every matrix has one studio: the read-along, and on a book matrix a switch to its connections', async ({ page }) => {
+  // The cards either side are drawn off screen, ready for a swipe: only the open card's buttons count.
+  const onScreen = async (name: string) => {
+    const buttons = page.getByRole('button', { name, exact: true });
+    const found = [];
+    for (let i = 0; i < await buttons.count(); i++) {
+      const box = await buttons.nth(i).boundingBox();
+      if (box && box.x >= 0 && box.x + box.width <= 390) found.push(buttons.nth(i));
+    }
+    return found;
+  };
+  const swipe = async () => {
+    await page.mouse.move(80, 400);
+    await page.mouse.down();
+    await page.mouse.move(330, 400, { steps: 8 });
+    await page.mouse.up();
+  };
+  await open(page, '/branches');
+  await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
+  await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
+  expect(await onScreen('استوديو الروابط')).toHaveLength(0);
+  await (await onScreen('استوديو القراءة'))[0].click();
+  await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
+  await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
+  await page.getByRole('button', { name: 'إغلاق الاستوديو' }).click();
+  // The seventh tree (al-Baqarah 6–7 with Ya Sin 10–11) has book connections.
+  for (let i = 0; i < 6; i++) {
+    await swipe();
+    await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
+  }
+  // Every card opens on the default view, the matrix.
+  await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
+  expect(await onScreen('استوديو القراءة')).toHaveLength(0);
+  await (await onScreen('استوديو الروابط'))[0].click();
+  await page.getByRole('button', { name: 'الروابط', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'اقرأ مع التظليل' })).toBeVisible();
+  await page.getByRole('button', { name: 'الروابط', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
+});
+
 test.describe('branches', () => {
+  // These tests are about the tree, so they run for a reader who picked it.
+  test.use({ seed: { 'branches-view': '"tree"' } });
+
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
@@ -48,49 +99,6 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
-  });
-
-  test('every matrix has one studio: the read-along, and on a book matrix a switch to its connections', async ({ page }) => {
-    // The cards either side are drawn off screen, ready for a swipe: only the open card's buttons count.
-    const onScreen = async (name: string) => {
-      const buttons = page.getByRole('button', { name, exact: true });
-      const found = [];
-      for (let i = 0; i < await buttons.count(); i++) {
-        const box = await buttons.nth(i).boundingBox();
-        if (box && box.x >= 0 && box.x + box.width <= 390) found.push(buttons.nth(i));
-      }
-      return found;
-    };
-    const swipe = async () => {
-      await page.mouse.move(80, 400);
-      await page.mouse.down();
-      await page.mouse.move(330, 400, { steps: 8 });
-      await page.mouse.up();
-    };
-    await open(page, '/branches');
-    await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    await (await onScreen('عرض المصفوفة'))[0].click();
-    await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
-    expect(await onScreen('استوديو الروابط')).toHaveLength(0);
-    await (await onScreen('استوديو القراءة'))[0].click();
-    await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
-    await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
-    await page.getByRole('button', { name: 'إغلاق الاستوديو' }).click();
-    // The seventh tree (al-Baqarah 6–7 with Ya Sin 10–11) has book connections.
-    for (let i = 0; i < 6; i++) {
-      await swipe();
-      await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
-    }
-    // A card opens on the default view: this one is switched to its matrix by its own button.
-    await expect.poll(async () => (await onScreen('عرض المصفوفة')).length).toBe(1);
-    await (await onScreen('عرض المصفوفة'))[0].click();
-    await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
-    expect(await onScreen('استوديو القراءة')).toHaveLength(0);
-    await (await onScreen('استوديو الروابط'))[0].click();
-    await page.getByRole('button', { name: 'الروابط', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'اقرأ مع التظليل' })).toBeVisible();
-    await page.getByRole('button', { name: 'الروابط', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
   });
 
   test('a tree is saved and shows behind the saved circle on home', async ({ page }) => {

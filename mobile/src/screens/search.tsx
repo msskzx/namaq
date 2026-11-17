@@ -6,17 +6,18 @@ import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, 
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
-import { Text, TextInput } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text, TextInput } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
 import WordSheet from '@/components/WordSheet';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
 import { back, openIntent as go, toTab } from '@/lib/ways';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 /** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
@@ -164,7 +165,7 @@ export default function SearchScreen() {
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
             accessibilityLabel="ابحث في كل شيء"
             style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
-          {query !== '' && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
+          {query !== '' && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
         </View>
       </TopBar>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}

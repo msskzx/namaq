@@ -9,6 +9,9 @@ export type AyahWords = Record<string, string[]>;
 
 export const HIZB = '۞';
 
+/** One ayah's words, its hizb mark left out, from wherever a platform reads its pages (the app's bundle, the website's server). */
+export type AyahWordsOf = (key: string) => readonly string[] | undefined;
+
 export function ayahWordsOf(pages: readonly MushafPage[]): AyahWords {
   const words: AyahWords = {};
   let surah = 0;
@@ -45,3 +48,21 @@ export const pageWordsAt = (key: string, at: number): number[] => SPLITS[key]?.[
 
 /** The ayah's words without its hizb mark: the words a tree, the matrix or a quiz counts. */
 export const wordsOnly = (tokens: readonly string[]) => tokens.filter(token => token !== HIZB);
+
+/**
+ * The older text's words (and so the Quranic Arabic Corpus words, which split the ayah the same way) that page word `at` stands
+ * for: one word, or two where the page writes them as one (15:7 «لَّوۡمَا»). A page word that only continues an older word
+ * split in two on the page (2:181 «مَا» after «بَعۡدَ») gets none: the older word belongs to its first part.
+ */
+export function corpusWordsAt(key: string, at: number): number[] {
+  const rows = SPLITS[key];
+  if (!rows) return [at];
+  const covering = rows.flatMap((pages, old) => (pages.includes(at) ? [old] : []));
+  return covering.filter(old => rows[old][0] === at);
+}
+
+/** The page's signs around a word: waqf signs, the hizb mark, the sajda and the line over a sajda's words (U+06E4). Drawn with the word, never part of how it is written. */
+export const SIGNS = /[\u06D6-\u06DC\u06DE\u06E4\u06E9]/g;
+
+/** A page word as it is written, its signs left out: words that differ only by a waqf or sajda sign are the same word. */
+export const bare = (word: string) => word.replace(SIGNS, '');

@@ -3,8 +3,8 @@ import { RefreshControl, View, type NativeScrollEvent, type NativeSyntheticEvent
 // The gesture handler's scroll view, so a pinch on a tree card takes over from the page's scroll instead of losing to it.
 import { ScrollView } from 'react-native-gesture-handler';
 import { newVisit } from '@shared/feedSeen';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import Tour from '@/components/Tour';
 import { ContinueReading, Feed, Stories } from '@/components/HomeFeed';
 import { MemorizedPrompt } from '@/components/Memorized';
