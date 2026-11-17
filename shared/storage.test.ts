@@ -47,3 +47,22 @@ describe('a write the device refuses', () => {
     expect(kept.storage.getItem('k')).toBe('two');
   });
 });
+
+describe('what is left unsaved', () => {
+  it('tells its watchers when something is left unsaved and when all of it is saved', () => {
+    const phone = device();
+    const kept = keepingStorage(phone.base);
+    let told = 0;
+    kept.watch(() => { told++; });
+    kept.storage.setItem('a', '1');
+    expect(told).toBe(0);
+    phone.fill(true);
+    kept.storage.setItem('a', '2');
+    kept.storage.setItem('b', '3');
+    expect(told).toBe(1);
+    phone.fill(false);
+    kept.retry();
+    expect(told).toBe(2);
+    expect(kept.unsaved()).toBe(0);
+  });
+});
