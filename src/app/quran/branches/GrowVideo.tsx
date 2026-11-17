@@ -9,6 +9,7 @@ import { outroDrawer } from '@shared/video/recorder';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { askLeft, growRoot, growthState, hasTourCard, openStudio, pause, play, stop, useGrowth } from './Grow';
+import Sheet from '@/components/common/Sheet';
 
 // A vertical story frame, as Instagram and WhatsApp status show it.
 const WIDTH = 1080;
@@ -513,8 +514,7 @@ export default function GrowVideo() {
     ? { title: 'مشاركة كفيديو', close: 'إغلاق', pause: 'إيقاف مؤقت', resume: 'متابعة', again: 'إعادة', share: 'مشاركة الفيديو', save: 'حفظ الفيديو', recording: 'جارٍ تجهيز الفيديو' }
     : { title: 'Share as video', close: 'Close', pause: 'Pause', resume: 'Resume', again: 'Replay', share: 'Share video', save: 'Save video', recording: 'Preparing the video' };
 
-  return <dialog ref={dialog} aria-label={labels.title} onClose={close} dir={ar ? 'rtl' : 'ltr'}
-    className="m-0 h-svh max-h-none w-screen max-w-none bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-black/60">
+  return <Sheet ref={dialog} open={open} kind="full" label={labels.title} onClose={close} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'}>
     <div className="flex h-full flex-col items-center gap-3 p-3">
       <div className="flex w-full items-center justify-between">
         <h2 className="text-base font-semibold">{labels.title}</h2>
@@ -531,5 +531,5 @@ export default function GrowVideo() {
         </>}
       </div>}
     </div>
-  </dialog>;
+  </Sheet>;
 }

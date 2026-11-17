@@ -9,6 +9,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { pageName } from '@shared/readerBooks';
 import { readFasilas, readSavedParagraphs, serverFasilas, serverSavedParagraphs, setBookFasila, setLastBookSpot, subscribeFasilas, subscribeSavedParagraphs, toggleSavedParagraph } from '@shared/readingMarks';
 import Button from '@/components/common/Button';
+import Sheet from '@/components/common/Sheet';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import ExternalLink from '@/components/common/ExternalLink';
 import FasilaIcon from '@/components/quran/FasilaIcon';
@@ -16,7 +17,7 @@ import { useSwipe } from '@/components/common/useSwipe';
 import type { ViewSlice } from '@/lib/books/bookView';
 import styles from './Books.module.css';
 
-type Sheet = 'contents' | 'saved' | 'search';
+type BookTab = 'contents' | 'saved' | 'search';
 type Hit = { page: number; name: string; entry: number; at: number; before: string; match: string; after: string };
 
 /**
@@ -36,7 +37,7 @@ export default function BookReader({ id, title, page, total, name, printed, sour
   const saved = useMemo(() => savedAll.filter(item => item.book === id), [savedAll, id]);
   const savedKeys = useMemo(() => new Set(saved.map(item => `${item.entry}:${item.at}`)), [saved]);
   const [picked, setPicked] = useState<Spot | null>(null);
-  const [sheet, setSheet] = useState<Sheet | null>(null);
+  const [sheet, setSheet] = useState<BookTab | null>(null);
   const stage = useRef<HTMLElement>(null);
   const href = (at: number) => `/quran/books/${id}/${at}`;
   const go = (step: number) => { const at = page + step; if (at >= 1 && at <= total) router.push(href(at)); };
@@ -126,16 +127,14 @@ export default function BookReader({ id, title, page, total, name, printed, sour
   );
 }
 
-const TABS: { tab: Sheet; label: string }[] = [{ tab: 'contents', label: 'الفهرس' }, { tab: 'saved', label: 'المحفوظات' }, { tab: 'search', label: 'البحث في الكتاب' }];
+const TABS: { tab: BookTab; label: string }[] = [{ tab: 'contents', label: 'الفهرس' }, { tab: 'saved', label: 'المحفوظات' }, { tab: 'search', label: 'البحث في الكتاب' }];
 
 /** One sheet for moving about the book: its surahs, the paragraphs saved from it, and a search through it. */
 function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
-  id: ReaderBookId; tab: Sheet; onTab: (tab: Sheet) => void; onClose: () => void;
+  id: ReaderBookId; tab: BookTab; onTab: (tab: BookTab) => void; onClose: () => void;
   contents: { surah: number; name: string; page: number }[]; page: number;
   saved: { entry: number; at: number; part: number; page: number; text: string }[];
 }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => { dialog.current?.showModal(); }, []);
   const here = contents.findLast(item => item.page <= page)?.surah;
   const [query, setQuery] = useState('');
   const [found, setFound] = useState<{ hits: Hit[]; more: boolean; query: string }>({ hits: [], more: false, query: '' });
@@ -150,7 +149,7 @@ function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
   }, [id, query]);
   const hits = query.trim().length < 2 ? [] : found.hits;
   return (
-    <dialog ref={dialog} className={styles.sheet} onClose={onClose} onClick={event => { if (event.target === dialog.current) onClose(); }} aria-label={TABS.find(item => item.tab === tab)?.label}>
+    <Sheet open onClose={onClose} label={TABS.find(item => item.tab === tab)?.label} className="h-[min(80dvh,44rem)]">
       <div className={styles.sheetHead}>
         <div role="tablist" className="flex gap-1">
           {TABS.map(item => (
@@ -185,6 +184,6 @@ function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
           </>
         )}
       </div>
-    </dialog>
+    </Sheet>
   );
 }
