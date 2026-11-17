@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
+import Toggle from '@/components/common/Toggle';
 
 function AnalyticsOptOut() {
   const [analyticsEnabled, setAnalyticsEnabled] = useState<boolean | null>(null);
@@ -47,9 +48,7 @@ function AnalyticsOptOut() {
           <span className="text-sm font-medium text-[var(--home-ink)]">
             {language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'}
           </span>
-          <button dir="ltr" type="button" role="switch" aria-checked={analyticsEnabled} aria-label={language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'} onClick={() => handleToggleAnalytics(!analyticsEnabled)} className={`relative inline-flex h-6 w-11 items-center rounded-full border border-[var(--home-rule)] transition-colors ${analyticsEnabled ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-paper-deep)]'}`}>
-            <span aria-hidden className={`inline-block size-4 transform rounded-full transition-transform ${analyticsEnabled ? 'translate-x-6 bg-[var(--home-paper)]' : 'translate-x-1 bg-[var(--home-muted)]'}`} />
-          </button>
+          <Toggle checked={analyticsEnabled} label={language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'} onChange={handleToggleAnalytics} />
         </div>
         
         <div className="text-xs text-[var(--home-ink)]">

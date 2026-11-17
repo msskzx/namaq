@@ -11,6 +11,7 @@ import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
 import ExternalLink from '@/components/common/ExternalLink';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import Button from '@/components/common/Button';
 
 export type TopicOpen = { surah: number; section: number };
 
@@ -55,7 +56,7 @@ export default function TopicSheet({ open, onClose }: { open: TopicOpen | null; 
         <div className="flex shrink-0 items-center gap-2 px-4 pb-2 pt-1 text-[var(--home-muted)]">
           <List size={20} aria-hidden />
           <h2 className="flex-1 text-base font-normal">{`موضوعات سورة ${names[shown.surah] ?? num(shown.surah)}`}</h2>
-          <button type="button" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق" className="flex size-9 items-center justify-center rounded-full"><X size={18} aria-hidden /></button>
+          <Button size="round" variant="muted" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق"><X aria-hidden /></Button>
         </div>
         <div className="min-h-0 overflow-y-auto px-[18px] pb-1">
           {aim && (

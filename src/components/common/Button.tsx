@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost' | 'muted' | 'neutral';
-export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg';
+export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg' | 'round';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
@@ -17,9 +17,11 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   md: 'px-3 py-1.5 text-sm',
   icon: 'p-2',
   lg: 'size-11 shrink-0 [&_svg]:size-5',
+  /** An icon alone in a circle, beside a title or under a card (close, share, open in the mushaf). */
+  round: 'size-9 shrink-0 [&_svg]:size-[18px]',
 };
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
-  return ['inline-flex items-center justify-center gap-2 rounded-sm transition disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
+  return ['inline-flex items-center justify-center gap-2 transition', size === 'round' ? 'rounded-full' : 'rounded-sm', 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
 }
 
 type CommonProps = {
