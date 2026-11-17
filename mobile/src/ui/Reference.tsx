@@ -13,7 +13,9 @@ export type Quote = { text: string; cite?: string; url?: string };
  * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,
  * the first in ink, the rest smaller. The website has the same in src/components/common/Reference.tsx.
  */
-export default function Reference({ title, quotes, palette }: { title: string; quotes: Quote[]; palette: Palette }) {
+export default function Reference({ title, quotes, links = [], palette }: { title: string; quotes: Quote[];
+  /** Links under the quotes when open (the source's own page, our sources and licences page). */
+  links?: { label: string; url: string }[]; palette: Palette }) {
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 4 }}>
@@ -27,6 +29,7 @@ export default function Reference({ title, quotes, palette }: { title: string; q
           ? <Text key={quote.text} style={style}>«{quote.text}» <ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink></Text>
           : <Text key={quote.text} style={style}>{quote.text}</Text>;
       })}
+      {open && links.map(link => <ExternalLink key={link.url} url={link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>{link.label}</ExternalLink>)}
     </View>
   );
 }

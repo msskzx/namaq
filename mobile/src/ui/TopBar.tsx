@@ -5,7 +5,7 @@ import { BlurView } from 'expo-blur';
 import Animated from 'react-native-reanimated';
 import { hiddenProps, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BookText, ChevronRight, Compass, LayoutGrid, LibraryBig, Settings, CircleHelp, Search } from 'lucide-react-native';
+import { ChevronRight, Compass, LayoutGrid, LibraryBig, Settings, CircleHelp, Search } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
 import Logo from '@/components/Logo';
@@ -32,7 +32,7 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * A pushed screen (a quiz, the library, an ayah, a prophet's story) passes back and a title, or middle for something that
  * takes the title's room (the quiz's question circles): one bar for every screen (owner, 2026-11-17: shared first).
  */
-export default function TopBar({ children, title, middle, away: putAway = false, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+export default function TopBar({ children, title, middle, away: putAway = false, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
   /** The whole bar slides up off the screen (the mushaf while reading); it stays drawn, so it comes back the same way. */
   away?: boolean;
   /** A pushed screen's short title, beside the back arrow. */
@@ -53,8 +53,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
   back?: () => void;
   /** The page's help (rules and colour legend), among the buttons on the right. */
   help?: () => void;
-  /** The page's sources (with how it counts), a book with text lines, not the library tab's books (the words page, owner 2026-11-16 and 2026-11-17). */
-  refs?: () => void }) {
+}) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
@@ -78,7 +77,6 @@ export default function TopBar({ children, title, middle, away: putAway = false,
         {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
         <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
-          {refs && <IconButton Icon={BookText} label="المصادر" onPress={refs} />}
           {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
           {utilities && <IconButton Icon={Compass} label="الأدوات" onPress={utilities} />}
           {search && <IconButton Icon={Search} label="البحث" onPress={search} />}
