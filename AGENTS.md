@@ -274,6 +274,7 @@ decision.
 | Recite mode (تسميع) | `useRecite` (state) + `RecitePill` (bar) in `src/components/recite/` and `mobile/src/components/recite/`; the pen rule is a setting (`PenSetting`) | `shared/quran/oneRecite.test.ts` |
 | Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` counts raw buttons per file (no new ones) |
 | Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
+| Surah name | `surahName` / `SURAH_NAMES` in `shared/quran/surahNames.ts` (pause form with tashkeel, «البَقَرَةْ»); `SURAH_TITLES` only for a mushaf page's surah headers; the plain `name` only for matching | `shared/quran/oneSurahName.test.ts` |
 
 ### Quran text
 

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { createAudioPlayer, preload, setAudioModeAsync, type AudioPlayer, type AudioStatus } from 'expo-audio';
 import { ayatOf, FIRST, nextStep, pauseAfter, reciterName, reciterOf, surahEnd, type Range, type Step } from '@shared/quran/recitation';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahCounts, surahNames } from './mushaf';
+import { ayahCounts } from './mushaf';
 import { readListenPlan, readReciter } from '@shared/listenSettings';
 import { localAyah, streamUrl } from './listenFiles';
 import { surahName } from '@shared/quran/surahNames';

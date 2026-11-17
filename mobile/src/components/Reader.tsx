@@ -39,7 +39,7 @@ import { listen, useListening } from '@/lib/listen';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
-import { firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -54,6 +54,7 @@ import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 import { penRule, reciteBarEdge } from '@/lib/settings';
 import { surahName } from '@shared/quran/surahNames';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
@@ -354,7 +355,7 @@ export default function Reader() {
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
-        top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
+        top={surahBefore(at)} names={SURAH_TITLES} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch}
         write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );

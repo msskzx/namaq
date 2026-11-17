@@ -1,7 +1,6 @@
 /// <reference types="expo/types" />
 import surahRows from '@shared/data/quran/surahs.json';
 import { ayahWords, mushafPages, type MushafPage } from '@shared/quran/readerPage';
-import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** The 604 pages of the 1441 Madinah mushaf, bundled with the app; each file is read the first time its page is shown. */
 const files = require.context('../../../shared/data/quran/mushaf', false, /^\.\/\d+\.json$/);
@@ -17,8 +16,6 @@ export function pageData(page: number): MushafPage {
 
 export const surahs = surahRows;
 /** Surah names as the mushaf writes them in the title boxes, with tashkeel (the website reads them from the database). */
-/** The mushaf's surah titles, for the headers on a mushaf page only; every other place shows surahName. */
-export const surahNames: Record<number, string> = SURAH_TITLES;
 export const ayahCounts: ReadonlyMap<number, number> = new Map(surahs.map(row => [row.number, row.numberOfAyat]));
 
 /** The surah running at the top of a page that opens mid-surah. */

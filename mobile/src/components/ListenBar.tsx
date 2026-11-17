@@ -7,7 +7,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { ONCE, reciterName, reciterOf } from '@shared/quran/recitation';
 import { stopListening, togglePlaying, useListening } from '@/lib/listen';
 import { readListenPlan, serverListenPlan, subscribeListenPlan } from '@shared/listenSettings';
-import { surahNames } from '@/lib/mushaf';
+
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { surahName } from '@shared/quran/surahNames';

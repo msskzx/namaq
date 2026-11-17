@@ -8,11 +8,12 @@ import RecitePill from './recite/RecitePill';
 import { writtenGrade } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { useRecite } from './recite/useRecite';
-import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import { quizPageBefore, useQuizPen } from '@/lib/settings';
 import { isBoolean, readJson, writeJson } from '@/lib/storage';
 import type { Graded } from '@/lib/useWriteBoxes';
 import type { Palette } from '@/lib/theme';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** A page's text height for its width, as AyahLines and the home cards draw it. */
 const PAGE_TEXT_RATIO = 1.5;
@@ -104,7 +105,7 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
       <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
         {width > 0 && (
           <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO} top={surahBefore(page)}
-            names={surahNames} recite={view} forgot={NONE} saved={NO_SAVES} onTouch={recite.write ? () => recite.boxes.focus() : noTouch} anonymous={!before || nameless}
+            names={SURAH_TITLES} recite={view} forgot={NONE} saved={NO_SAVES} onTouch={recite.write ? () => recite.boxes.focus() : noTouch} anonymous={!before || nameless}
             write={shown ? null : recite.write} checked={marked ?? recite.checked} />
         )}
       </View>
