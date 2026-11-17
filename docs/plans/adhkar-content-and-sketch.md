@@ -75,20 +75,33 @@ through the agreed Quran module, preserving all mushaf signs.
 
 ## Dark-mode sketch
 
-The sketch imports the real app Card, Tabs, TopBar, Reference, Sheet, Button,
-IconButton and Amiri Text. It uses the dark palette, one card surface and
-right-aligned text. Cards are plain containers, with their own accessible
-buttons. Counts and reset are static sketch controls, with no stored state,
-haptics or completion behavior. Occasion tabs and source disclosure work only
-so the proposed states can be rendered. The four icons illustrate placement;
-the existing Utilities picker and its sliding highlight will be extended in
-round 2, rather than replaced by this sketch's static icon row.
+The sketch imports the real app Card, Tabs, TopBar, Reference, Button, IconButton,
+Amiri Text and the reader's MushafPageView. It uses the dark palette, one card
+colour and right-aligned text.
 
-![Morning selection with sourced counter](../screenshots/adhkar/morning-dark.png)
+- Each occasion tab lists all of its items, not a sample.
+- The Quran item shows Madina page 604 whole, since al-Ikhlas and
+  al-Mu'awwidhatayn fill that page. It goes through the reader's own page view
+  with the Hafs font, so nothing stores Quran text.
+- A virtue shows under the text only where the hadith states it, in quotation
+  marks. The counter shows only where the hadith states a count.
+- Each card ends with its own collapsed reference (book, page, report, the
+  collections al-Nawawi names). Opened, it quotes al-Nawawi's words on when and
+  how often, then every grade in the scholar's words with its own book and page.
+  There is no source sheet: the owner's rule is one collapsible reference per
+  section.
+- The bell for the fajr and asr reminders sits beside the tabs on the morning and
+  evening tabs only.
+- The icon row at the top only shows where the fourth icon sits. Round 2 adds it
+  to the real UtilityPicker.
 
-![Reference and named grading](../screenshots/adhkar/reference-dark.png)
+![Morning, all items](../screenshots/adhkar/morning-dark.png)
 
-![After-prayer items without counters](../screenshots/adhkar/prayer-dark.png)
+![A card's reference opened](../screenshots/adhkar/reference-dark.png)
+
+![Sleep](../screenshots/adhkar/sleep-dark.png)
+
+![After prayer: no counters](../screenshots/adhkar/prayer-dark.png)
 
 The [sketch source](../../mobile/sketches/adhkar/index.tsx) is outside `src/app/`.
 Render it independently without changing production routes:
@@ -98,11 +111,10 @@ node mobile/sketches/adhkar/render.mjs
 node e2e/serve.mjs /tmp/namaq-adhkar-sketch 8093
 ```
 
-Open port8093 in a browser set to dark mode. The renderer temporarily selects
+Open port 8093 in a browser set to dark mode. The renderer temporarily selects
 this sketch as the Expo Router root and removes its temporary config afterward.
 It refuses to overwrite an existing dynamic config. Screenshots are the Expo web
-render at 390 by 844, not iOS or Android device verification. The sketch omits
-Quran rendering rather than create a temporary competing Quran text path.
+render at 390 wide, not iOS or Android device verification.
 
 ## Limits and handoff
 
