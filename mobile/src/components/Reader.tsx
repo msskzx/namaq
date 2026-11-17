@@ -9,7 +9,7 @@ import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, L
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
@@ -64,6 +64,11 @@ type Place = { page: number; position?: RecitePosition | null; reviewing?: boole
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
 const WRITE = 'reader-write';
+const WORD_FORGOT = { ar: 'نسيتها', en: 'I forgot this word' };
+const UNDO_WORD_FORGOT = { ar: 'تراجع', en: 'Undo' };
+const UNDO_WORD_NAME = { ar: 'تراجع عن نسيان الكلمة', en: 'Undo forgotten word' };
+const AYAH_FORGOT = { ar: 'نسيت الآية', en: 'I forgot this ayah' };
+const AYAH_FORGOT_AGAIN = { ar: 'نسيت الآية مجددًا', en: 'I forgot this ayah again' };
 
 const models = new Map<number, ReturnType<typeof pageModel>>();
 const modelOf = (page: number) => {
@@ -102,6 +107,7 @@ export default function Reader() {
   const anchor = useRef<{ share: number; screen: number; from: number } | null>(null);
   /** Until when keeping an ayah in sight waits, so it doesn't undo where a pinch left the page. */
   const quietUntil = useRef(0);
+  const allForgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks);
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
@@ -136,7 +142,7 @@ export default function Reader() {
   const recite = useRecite({ model, position, setPosition, writing, pen, autoFocus: true,
     until: reviewing ? position?.start ?? null : null,
     onPastEnd: () => {
-      if (reviewing) { if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review'); }
+      if (reviewing) { if (reviewNext) jump({ page: pageOfAyah(markAyah(reviewNext)) ?? page, key: reviewNext, mark: false }, 'review'); }
       else if (page < PAGES) turnTo(page + 1);
     } });
   const { view, boxes, checked, setChecked } = recite;
@@ -178,11 +184,11 @@ export default function Reader() {
     setMark(to.mark && !position ? { key: to.key, page: to.page } : null);
     if (recite === 'review') {
       setReviewing(true);
-      setPosition({ start: to.key, shown: null, words: 0 });
+      setPosition({ start: markAyah(to.key), ...(markWord(to.key) !== undefined ? { word: markWord(to.key) } : {}), shown: null, words: 0 });
     } else if (position) {
       // While reciting, a link starts the recitation again from where it leads.
       setReviewing(false);
-      setPosition({ start: to.key, shown: null, words: 0 });
+      setPosition({ start: markAyah(to.key), ...(markWord(to.key) !== undefined ? { word: markWord(to.key) } : {}), shown: null, words: 0 });
     }
   }, [position]);
 
@@ -195,7 +201,7 @@ export default function Reader() {
     setTools(false);
     setReviewing(!!intent.recite && !!intent.review);
     setMark(intent.at && !intent.recite ? { key: intent.at, page: to } : null);
-    setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], shown: null, words: 0 } : null);
+    setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], ...(intent.word !== undefined ? { word: intent.word } : {}), shown: null, words: 0 } : null);
   });
 
   const startRecite = () => {
@@ -205,9 +211,10 @@ export default function Reader() {
     setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
   };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
-  const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
-  const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
-  const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
+  const reviewKey = position ? position.word === undefined ? position.start : wordMarkKey(position.start, position.word) : '';
+  const reviewNext = reviewing && position ? nextForgotten(forgotten, reviewKey) : null;
+  const reviewAt = position ? forgotten.filter(key => compareKeys(key, reviewKey) < 0).length + 1 : 1;
+  const reviewTotal = forgotten.length + (position && !forgotten.includes(reviewKey) ? 1 : 0);
 
   const revealNextAyah = recite.nextAyah;
   const revealNextWord = recite.nextWord;
@@ -222,7 +229,7 @@ export default function Reader() {
     else if (action === 'next-word') revealNextWord();
     else if (action === 'back') stepBackOne();
     else if (key && action === 'actions') { buzz(); setActions({ key, x, y, word, lemmas: word === undefined ? [] : lemmasAtMushafWord(words, key, word) }); }
-    else if (key && action === 'forgot') markForgotten(key);
+    else if (key && action === 'forgot') markForgotten(position?.start === key && position.word !== undefined ? wordMarkKey(key, position.word) : key);
     else if (key && action === 'save') toggleSaved(key);
   };
 
@@ -344,6 +351,7 @@ export default function Reader() {
   };
 
   const actionKey = actions?.key;
+  const wordKey = actions?.word !== undefined ? wordMarkKey(actions.key, actions.word) : null;
   const forgotCount = actionKey ? (forgot[actionKey]?.forgot ?? 0) : 0;
   // Where else the ayah is: its compare cards, the trees that hold it and its readings, each shown only when there are any.
   const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
@@ -353,7 +361,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 8 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 8 + (wordKey ? 1 : 0) + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -391,7 +399,8 @@ export default function Reader() {
           style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
           <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
-          <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
+          <ActButton Icon={LightbulbOff} label={forgotCount ? AYAH_FORGOT_AGAIN.ar : AYAH_FORGOT.ar} name={AYAH_FORGOT.ar} palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
+          {wordKey && <ActButton Icon={LightbulbOff} label={allForgot[wordKey] ? UNDO_WORD_NAME.ar : WORD_FORGOT.ar} name={allForgot[wordKey] ? UNDO_WORD_FORGOT.ar : WORD_FORGOT.ar} palette={palette} on={!!allForgot[wordKey]} onPress={() => { if (allForgot[wordKey]) clearForgotten(wordKey); else markForgotten(wordKey); setActions(null); setMark(null); }} />}
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} tint={palette.root} filled onPress={() => { toggleSaved(actions.key); setActions(null); }} />
           <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} name="تأمّل" palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />

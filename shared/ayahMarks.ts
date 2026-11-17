@@ -16,7 +16,7 @@ function parse(raw: string | null): AyahMarks {
     if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
       for (const [key, value] of Object.entries(parsed)) {
         const mark = value as Partial<AyahMark> | null;
-        if (/^\d+:\d+$/.test(key) && mark && Number(mark.forgot) > 0) {
+        if (/^[1-9]\d*:[1-9]\d*(?::(?:0|[1-9]\d*))?$/.test(key) && mark && Number(mark.forgot) > 0) {
           marks[key] = { forgot: Number(mark.forgot), at: Number(mark.at) || 0 };
           if (Number(mark.step) > 0) marks[key].step = Number(mark.step);
           if (Number(mark.due) > 0) marks[key].due = Number(mark.due);
@@ -35,6 +35,16 @@ const write = (marks: AyahMarks) => store.write(JSON.stringify(marks));
 const DAY = 86_400_000;
 /** How long a remembered ayah rests before it comes back: 1 day, 3 days, a week, then a month every time after (owner, 2026-11-13). */
 export const REST_DAYS = [1, 3, 7, 30];
+
+export const markAyah = (key: string) => key.split(':').slice(0, 2).join(':');
+export const markWord = (key: string) => key.split(':').length === 3 ? Number(key.split(':')[2]) : undefined;
+export const wordMarkKey = (ayah: string, word: number) => `${ayah}:${word}`;
+
+export function clearForgotten(key: string) {
+  const marks = { ...readAyahMarks() };
+  delete marks[key];
+  write(marks);
+}
 
 /** Counts one more time this ayah was forgotten; it is due again now and its rests start over. */
 export function markForgotten(key: string, now = Date.now()) {

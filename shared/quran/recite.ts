@@ -6,6 +6,7 @@ export type AyahKey = string; // "57:1"
 export type RecitePosition = {
   /** First hidden ayah when reciting began; ayat before it stay visible as context. */
   start: AyahKey;
+  word?: number;
   /** Last ayah revealed in full, or null before the first reveal. */
   shown: AyahKey | null;
   /** Words revealed so far of the ayah after `shown`. */
@@ -20,7 +21,7 @@ export const isKey = (key: string | null | undefined): key is AyahKey => !!key &
 
 export function compareKeys(a: AyahKey, b: AyahKey) {
   const [x, y] = [parseKey(a), parseKey(b)];
-  return x.surah - y.surah || x.ayah - y.ayah;
+  return x.surah - y.surah || x.ayah - y.ayah || Number(a.split(':')[2] ?? -1) - Number(b.split(':')[2] ?? -1);
 }
 
 /** The ayah before `key` in the mushaf, given each surah's ayah count. */
@@ -77,7 +78,7 @@ export function positionQuery(position: RecitePosition, extra: Record<string, st
 
 /** Forgotten ayat in mushaf order, and the one after `current` (wrapping to the first). */
 export function forgottenOrder(keys: Iterable<AyahKey>) {
-  return [...keys].filter(isKey).sort(compareKeys);
+  return [...keys].filter(key => /^\d{1,3}:\d{1,3}(?::\d+)?$/.test(key)).sort(compareKeys);
 }
 export function nextForgotten(keys: readonly AyahKey[], current: AyahKey): AyahKey | null {
   return keys.find(key => compareKeys(key, current) > 0) ?? null;

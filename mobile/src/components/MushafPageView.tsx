@@ -375,7 +375,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key && markWord === at ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : mark === key ? 'mark' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);

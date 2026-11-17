@@ -30,7 +30,7 @@ test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
   await page.getByRole('button', { name: 'احفظ الآية' }).click();
   await expect.poll(async () => (await stored<{ id: string }[]>(page, 'bookmarks'))?.map(b => b.id)).toContain('ayah:1:2');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'نسيتها' }).click();
+  await page.getByRole('button', { name: 'نسيت الآية' }).click();
   await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:2');
 });
 
@@ -197,4 +197,76 @@ test('listening starts from a long press, and its sheet keeps the repeats and th
   await page.getByRole('button', { name: 'أوقف الاستماع' }).click();
   await expect(bar).toBeHidden();
 });
+});
+
+test('a forgotten word persists on its own and undo leaves an ayah mark intact', async ({ page }) => {
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'نسيتها', exact: true }).click();
+  await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:0': { forgot: 1, at: expect.any(Number) } });
+  await page.reload();
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'نسيت الآية', exact: true }).click();
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'تراجع عن نسيان الكلمة', exact: true }).click();
+  await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2']);
+});
+
+test.describe('word review', () => {
+  test.use({ seed: { 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 1, shown: null, words: 0 } }, 'reader-write': true } });
+
+  test('tests only the marked word and rests it after a correct answer', async ({ page }) => {
+    await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+    await page.getByLabel('اكتب الكلمة').fill('لله');
+    await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
+    await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2:1']);
+  });
+
+  test('a wrong answer resets only the word mark', async ({ page }) => {
+    await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await page.getByLabel('اكتب الكلمة').fill('رب');
+    await page.getByLabel('اكتب الكلمة').press('Enter');
+    await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:1': { forgot: 2, at: expect.any(Number) } });
+  });
+});
+
+for (const theme of ['light', 'dark'] as const) {
+  test.describe(`forgotten word in ${theme}`, () => {
+    test.use({ seed: { theme: JSON.stringify(theme), 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1 } } });
+
+    test('the reader and home review show the word mark', async ({ page }) => {
+      await open(page, '/read');
+      await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+      const capture = async (name: string) => {
+        if (process.env.WORD_SCREENSHOTS) await page.screenshot({ path: `docs/screenshots/forgotten-word/${theme}-${name}.jpg`, type: 'jpeg', quality: 85 });
+      };
+      await capture('reader');
+      await page.goto('/');
+      await page.getByText('هل تذكرها؟', { exact: true }).scrollIntoViewIfNeeded();
+      await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeVisible();
+      await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+      await capture('review');
+      await page.getByRole('toolbar', { name: 'أدوات التسميع' }).getByRole('button', { name: 'أظهر الكلمة التالية' }).click();
+      await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeDisabled();
+    });
+  });
+}
+
+test.describe('two word reviews in one ayah', () => {
+  test.use({ seed: { 'ayah-forgot': { '1:2:0': { forgot: 1, at: 1 }, '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 0, shown: null, words: 0 } }, 'reader-write': true } });
+
+  test('the next word has its own blank and no feedback from the previous answer', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByLabel('اكتب الكلمة').fill('خطأ');
+    await page.getByLabel('اكتب الكلمة').press('Enter');
+    await expect(page.getByLabel('كتبت: خطأ')).toBeVisible();
+    await page.getByRole('button', { name: 'الآية المنسية التالية' }).click();
+    await expect(page.getByLabel('كتبت: خطأ')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await page.getByLabel('اكتب الكلمة').fill('لله');
+    await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
+  });
 });

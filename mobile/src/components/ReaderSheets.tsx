@@ -97,7 +97,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
               <Play size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>تابع التسميع من حيث توقفت</Text>
             </Pressable>}
             {forgotten.length > 0 && <Pressable style={button} accessibilityRole="button"
-              onPress={() => go({ page: pageOfAyah(forgotten[0]) ?? 1, key: forgotten[0], mark: false }, 'review')}>
+              onPress={() => go({ page: pageOfAyah(forgotten[0].split(':').slice(0, 2).join(':')) ?? 1, key: forgotten[0], mark: false }, 'review')}>
               <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت</Text>
             </Pressable>}
           </View>
