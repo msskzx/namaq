@@ -2,7 +2,7 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render as renderUI, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render as renderUI, screen } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
 import { branchesCorrect, emptyBranchAnswers } from '@shared/quiz/score';

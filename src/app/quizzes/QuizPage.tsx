@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import surahRows from "@shared/data/quran/surahs.json";
 import { pageModel, reciteView } from "@shared/quran/recitePage";
-import { maxLetters } from "@shared/quran/writeAyah";
+import { maxLetters, openingCut } from "@shared/quran/writeAyah";
 import MushafPage from "@/app/quran/read/MushafPage";
 import { useWriteBoxes, type Graded } from "@/app/quran/read/useWriteBoxes";
 import { useAyahPage } from "@/components/homepage/AyahLines";
@@ -16,12 +16,12 @@ const END = Number.MAX_SAFE_INTEGER;
 /**
  * A quiz question about one ayah drawn as its whole mushaf page, as the app's QuizPage (owner, 2026-11-17): every other word
  * an empty box of its shape with only the ayah numbers left, and nothing around the page says where it is; with the setting
- * on, the ayat before it written. `opening` spoken words of the asked ayah show; `shown` shows all of it. With `onGraded`,
+ * on, the ayat before it written. `opening` (its opening words, matched by letters) shows; `shown` shows all of it. With `onGraded`,
  * the rest is written in boxes in its places and graded once the last box is written.
  */
 export default function QuizPage({ ayah, opening, shown, nameless = false, onGraded }: { ayah: string;
-  /** How many of the ayah's spoken words show (the mushaf's ۞ is no word); all of them when left out. */
-  opening?: number; shown: boolean;
+  /** The ayah's opening words that show (as the question has them); all of it when left out. */
+  opening?: string[]; shown: boolean;
   /** The surah is the answer («في أي سورة؟»): no surah title or name shows, even with the ayat before written. */
   nameless?: boolean;
   onGraded?: (graded: Graded) => void }) {
@@ -32,11 +32,12 @@ export default function QuizPage({ ayah, opening, shown, nameless = false, onGra
     if (!pages || !words) return null;
     const model = pageModel(pages.data, pages.top);
     const spoken = words.flatMap((word, at) => (maxLetters(word) ? [at] : []));
-    const cut = opening === undefined ? words.length : spoken[opening] ?? words.length;
+    const cut = opening === undefined ? words.length : openingCut(words, opening);
     return { model, cut, asked: spoken.filter(at => at >= cut) };
   }, [pages, words, opening]);
   const writing = !!onGraded && !shown && !graded;
-  const boxes = useWriteBoxes({ ayah: onGraded ? ayah : null, words: words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
+  // The boxes start once the page is here, so the first asked word is the box being written.
+  const boxes = useWriteBoxes({ ayah: onGraded && parts ? ayah : null, words: words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
     setGraded(result);
     onGraded?.(result);
   } });
@@ -53,7 +54,8 @@ export default function QuizPage({ ayah, opening, shown, nameless = false, onGra
         // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(":1") ? titled.get(Number(key.split(":")[0])) ?? 0 : 0;
-        if (key === ayah) return word < steps || (!open && word - steps >= parts.cut);
+        // The asked ayah's surah title stays hidden until it is answered, and always when the surah is the answer.
+        if (key === ayah) return word < steps ? nameless || !open || !before : !open && word - steps >= parts.cut;
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
         return nameless && word < title;

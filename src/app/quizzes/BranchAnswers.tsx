@@ -90,8 +90,8 @@ function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
  * The graded answer as the ayah cards (the matrix): each ayah's card with how its asked node was graded. Quizzes draw the
  * matrix only and leave the tree to the rest of the site (owner, 2026-11-17).
  */
-export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean;
-  /** The hints used on this question. */
+export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true, hints }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean;
+  /** The hints used on this question, marked with a small bulb. */
   hints?: Hints }) {
   const snapshot = JSON.stringify({ question: givenQuestion, typed: givenTyped });
   const feedback = React.useMemo(() => {
@@ -109,7 +109,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
         <AyahCards card={id} ayahKeys={keys(solutionTree)} names={names} note={key => {
           const row = correctionOf(rows, key);
           return row && <div className="flex flex-col gap-1 border-t border-[var(--home-rule)] pt-2" data-answer={row.correct ? "correct" : "incorrect"}>
-            <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
+            <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}{hints?.[row.index] ? <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} /> : null}</p>
             {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
           </div>;
         }} />

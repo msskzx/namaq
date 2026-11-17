@@ -155,12 +155,13 @@ function Typed({ row, palette }: { row: Correction; palette: Palette }) {
 }
 
 /** A checked answer under its ayah in the matrix: the same mark and verdict as in the tree, and what was typed when wrong. */
-function MatrixMark({ row, palette }: { row: Correction; palette: Palette }) {
+function MatrixMark({ row, palette, hinted }: { row: Correction; palette: Palette; hinted?: boolean }) {
   return (
     <View style={{ direction: 'rtl', gap: 2, marginTop: 6, paddingTop: 6, borderTopWidth: 1, borderColor: palette.rule }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Badge row={row} palette={palette} />
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
+        {hinted && <Lightbulb size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
       </View>
       {!row.correct && <Typed row={row} palette={palette} />}
     </View>
@@ -200,8 +201,8 @@ function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text:
  * The graded answer as the matrix: each ayah's row with how its asked node was graded; a tap opens its ayat. It can show the
  * surrounding ayat, and be saved, shared or opened on the branches tab.
  */
-export function QuizFeedback({ question, typed, palette, names: _names, onTap, header }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
-  /** The hints used on this question. */
+export function QuizFeedback({ question, typed, palette, names: _names, onTap, header, hints }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
+  /** The hints used on this question, marked with a small bulb. */
   hints?: Hints }) {
   // Graded once per question and answer: a party sends a new copy of the same question with every update, and an
   // unanswered question comes with a new empty answer each render, which must not rebuild the matrix.
@@ -222,7 +223,7 @@ export function QuizFeedback({ question, typed, palette, names: _names, onTap, h
         {header}
         <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
           {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}}
-            note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} /> : null; }} />}
+            note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>
       <View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>

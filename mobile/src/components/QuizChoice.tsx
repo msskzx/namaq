@@ -48,7 +48,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {question.ayahKey && ON_PAGE.has(question.family) ? (
         <View style={{ marginHorizontal: 16 }}>
           <QuizPage key={question.key} ayah={question.ayahKey} palette={palette} shown={revealed}
-            opening={question.family === RECITE_SNIPPET ? question.quran?.length ?? 0 : undefined} nameless={question.family === WHICH_SURAH}
+            opening={question.family === RECITE_SNIPPET ? question.quran ?? [] : undefined} nameless={question.family === WHICH_SURAH}
             onGraded={question.family === RECITE_SNIPPET && !answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
         </View>
       ) : question.quran && (

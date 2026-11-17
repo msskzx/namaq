@@ -28,7 +28,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar 
   if (question.ayahKey && question.family && ON_PAGE.has(question.family)) {
     const recite = question.family === RECITE_SNIPPET;
     return <div dir="rtl" lang="ar">
-      <QuizPage key={question.ayahKey} ayah={question.ayahKey} shown={revealed} opening={recite ? question.quran?.length ?? 0 : undefined} nameless={!recite}
+      <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} shown={revealed} opening={recite ? question.quran ?? [] : undefined} nameless={!recite}
         onGraded={recite && given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
       {question.reveal && !revealed && onReveal && <Button className="mb-4" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}
     </div>;

@@ -211,7 +211,7 @@ export default function MushafPage({
   const rows = data.items.map((item, index) => (slice && (index < slice.from || index > slice.to) ? null :
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
-                <h2 className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
+                <h2 aria-hidden={(anonymous && surahHidden(item.surah)) || undefined} className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
               ) : 'basmala' in item ? (
                 (() => {
                   const surah = surahOf[index];
@@ -275,7 +275,7 @@ export default function MushafPage({
   // A slice: only these rows, sized by the page's width, with no frame, header or page number.
   if (slice) return <div ref={body} data-page={page} className={`${styles.body} ${styles.slice}`}>{rows}</div>;
   return (
-    <section aria-label={`الصفحة ${num(page)}`} data-page={page} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
+    <section aria-label={anonymous ? 'صفحة المصحف' : `الصفحة ${num(page)}`} data-page={page} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
       <div className={styles.head}>
         <span>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</span>
         {badges.some(list => list.length > 0) && (
