@@ -1,5 +1,6 @@
-// «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one,
-// medium its neighbours, hard asks ayat with a close look-alike in another surah and always offers that surah.
+// «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one.
+// Medium and hard offer the surahs of the ayah's متشابهات first, then its neighbours (owner, 2026-11-17); hard also asks
+// the ayat with a close look-alike first.
 import corpus from '../data/quran/trees.json';
 import surahRows from '../data/quran/surahs.json';
 import type { BranchAyah } from '../quran/branches';
@@ -68,8 +69,7 @@ function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, rand
   const every = Array.from({ length: 114 }, (_, i) => i + 1);
   const near = shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random);
   const far = shuffle(every.filter(n => Math.abs(n - surah) > FAR), random);
-  if (difficulty === 'hard') take(lookAlike);
-  if (difficulty === 'medium') take(lookAlike.slice(0, 1));
+  if (difficulty !== 'easy') take(lookAlike);
   take(difficulty === 'easy' ? far : near);
   take(shuffle(every, random));
   return picked;
