@@ -208,4 +208,3 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
     </View>
   );
 }
-

@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
-import { BOOKS, bookOf, bookPath, isBookId, type BookId } from '@shared/books';
+import { bookOf, bookPath, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
 import { WEBSITE } from './branches';
 
