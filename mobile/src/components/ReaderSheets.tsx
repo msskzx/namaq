@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
-import { num } from '@shared/quran/arabicNumber';
+import { ayatCount, num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
 import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
@@ -112,7 +112,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
           </Pressable>
         )}
         {query.trim() && rows.length === 0 && (!words || found) && <Text style={{ color: palette.muted, fontSize: 14 }}>لا توجد سورة ولا آية بهذا النص.</Text>}
-        {rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{num(rows.length)} آية</Text>}
+        {rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{ayatCount(rows.length)}</Text>}
       </View>
       <FlatList data={rows} keyExtractor={row => (row.kind === 'juz' ? `j${row.juz}` : row.kind === 'surah' ? `s${row.number}-${row.from}` : `a${row.key}`)}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" initialNumToRender={30} style={{ flex: 1 }}
@@ -140,7 +140,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
           const start = Math.max(0, row.from - AROUND);
           const end = Math.min(row.words.length, row.to + 1 + AROUND);
           return (
-            <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link" accessibilityLabel={`${name(surahs[surah - 1])} ${num(ayah)}`}
+            <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link"
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
               <Text style={{ color: palette.ink, fontSize: 20, lineHeight: 36, fontFamily: QURAN_FONT }}>

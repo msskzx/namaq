@@ -30,8 +30,8 @@ test('the index lists every ayah a search finds', async ({ page }) => {
   await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
   await page.getByLabel('ابحث عن سورة أو آية').fill('يا أيها الذين آمنوا');
   await expect(page.getByText('٨٩ آية', { exact: true })).toBeVisible();
-  const last = page.getByRole('link', { name: `${S(66)} ٨`, exact: true });
-  await page.getByRole('link', { name: `${S(2)} ١٠٤`, exact: true }).hover();
+  const last = page.getByRole('link').filter({ hasText: `${S(66)} ٨` });
+  await page.getByRole('link').filter({ hasText: `${S(2)} ١٠٤` }).hover();
   await expect(async () => {
     await page.mouse.wheel(0, 4000);
     await expect(last).toBeVisible({ timeout: 500 });
