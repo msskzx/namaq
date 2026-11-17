@@ -3,9 +3,9 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpenCheck, Check, ChevronDown, ChevronUp, X } from 'lucide-react-native';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
 import { num } from '@shared/quran/arabicNumber';
-import { Text } from './Text';
-import Toggle from './Toggle';
-import Sheet from './Sheet';
+import { Text } from '@/ui/Text';
+import Toggle from '@/ui/Toggle';
+import Sheet from '@/ui/Sheet';
 import { surahNames } from '@/lib/branches';
 import { CARD, type Palette } from '@/lib/theme';
 

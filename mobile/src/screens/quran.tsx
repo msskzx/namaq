@@ -1,10 +1,10 @@
 import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';

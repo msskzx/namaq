@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import ExternalLink from './ExternalLink';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
 import type { Palette } from '@/lib/theme';
 
 /** A quote from a book: its words, with the page it cites as a link. A quote with no page is our own note on the ones above. */

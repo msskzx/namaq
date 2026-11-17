@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahHref } from '@shared/ayahMarks';
-import { Text } from './Text';
+import { Text } from '@/ui/Text';
 import { ayahText, surahNames } from '@/lib/mushaf';
 import { WEBSITE } from '@/lib/branches';
 import { shareCard, shareCardLater } from '@/lib/shareImage';

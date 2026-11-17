@@ -1,4 +1,4 @@
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { Place } from '@shared/quran/prophets/story';

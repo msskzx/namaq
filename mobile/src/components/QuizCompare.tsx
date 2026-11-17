@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { markColour } from '@shared/quran/compareCardLook';
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';

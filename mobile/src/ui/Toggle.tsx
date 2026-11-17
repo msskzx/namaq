@@ -1,5 +1,5 @@
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 
 /** The website's switch: on means the knob sits on the right. */

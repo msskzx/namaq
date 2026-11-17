@@ -3,9 +3,9 @@ import { Image, Modal, Platform, Pressable, Share, View, useWindowDimensions } f
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { captureRef } from 'react-native-view-shot';
 import { Clapperboard, Link, ListVideo, Send, X } from 'lucide-react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import Logo from './Logo';
-import LoadingDots from './LoadingDots';
+import LoadingDots from '@/ui/LoadingDots';
 import { IconButton } from './Studio';
 import { MODAL_GAP, closeShare, useShareRequest } from '@/lib/shareImage';
 import { CAPTURE_RESULT, shareImageFile } from '@/lib/shareFile';

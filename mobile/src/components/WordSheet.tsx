@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { countsBySurah, placesOf } from '@shared/quran/words';
@@ -9,7 +9,7 @@ import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { corpusText, words } from '@/lib/words';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
 
 /** Ayat shown at first, and added by each «المزيد». */

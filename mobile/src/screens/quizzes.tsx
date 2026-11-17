@@ -1,12 +1,12 @@
 import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router, type Href } from 'expo-router';
 import { User, Users, type LucideProps } from 'lucide-react-native';
-import TopBar from '@/components/TopBar';
+import TopBar from '@/ui/TopBar';
 import { usePalette, CARD } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 
 // The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes): solo and party only, every kind of question is

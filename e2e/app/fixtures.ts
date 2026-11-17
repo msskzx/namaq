@@ -65,7 +65,7 @@ export async function longPress(page: Page, target: Locator, ms = 900) {
   await page.mouse.up();
 }
 
-/** The tab bar at the bottom (mobile/src/components/TabBar.tsx). */
+/** The tab bar at the bottom (mobile/src/ui/TabBar.tsx). */
 export const tab = (page: Page, name: 'القرآن' | 'المصحف' | 'الرئيسية' | 'الاختبارات' | 'المكتبة') => page.getByRole('tab', { name, exact: true });
 
 /** What the app keeps under a localStorage key, parsed. */

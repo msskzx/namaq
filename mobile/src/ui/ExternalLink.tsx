@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Linking, Pressable, type StyleProp, type TextStyle } from 'react-native';
 import { SquareArrowOutUpLeft } from 'lucide-react-native';
-import { Text, UI_SCALE } from '@/components/Text';
+import { Text, UI_SCALE } from '@/ui/Text';
 
 /** Opens a page outside the app in the phone's browser. */
 export const openExternal = (url: string) => { void Linking.openURL(url).catch(() => {}); };

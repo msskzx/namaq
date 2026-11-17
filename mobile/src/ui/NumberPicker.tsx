@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { Palette } from '@/lib/theme';

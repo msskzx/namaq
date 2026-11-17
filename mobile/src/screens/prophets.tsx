@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Check, ChevronDown } from 'lucide-react-native';
 import { findProphet, PROPHETS, prophetName } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';
-import Sheet from '@/components/Sheet';
+import Sheet from '@/ui/Sheet';
 import TabHint from '@/components/TabHint';
-import TopBar from '@/components/TopBar';
+import TopBar from '@/ui/TopBar';
 import { readJson, writeJson } from '@/lib/storage';
 import { usePalette } from '@/lib/theme';
 
