@@ -1,6 +1,16 @@
 import { setBookmarkStorage } from '@shared/bookmarks';
-import { setKeyStorage } from '@shared/storage';
+import { keepingStorage, setKeyStorage } from '@shared/storage';
 import { deviceStorage } from './deviceStorage';
+
+/** Every write on the phone goes through one store that keeps what the device refused and saves it again (shared/storage.ts). */
+const kept = keepingStorage(deviceStorage);
+const device = kept.storage;
+
+const leaving = new Set<() => void>();
+/** Runs `flush` when the app goes to the background, so an edit still waiting on a typing pause is saved before the phone may close the app. */
+export function onLeave(flush: () => void) { leaving.add(flush); return () => { leaving.delete(flush); }; }
+/** The app went to the background (AppShell): pending edits are written, and writes the device refused are tried again. */
+export function leave() { leaving.forEach(flush => flush()); kept.retry(); }
 
 /** What a value read back from the phone must be before a screen uses it: valid JSON of another shape counts as nothing saved. */
 export type Check<T> = (value: unknown) => value is T;
@@ -12,7 +22,7 @@ export const arrayOf = <T>(check: Check<T>) => (value: unknown): value is T[] =>
 
 export function readJson<T>(key: string, check: Check<T>): T | undefined {
   try {
-    const raw = deviceStorage.getItem(key);
+    const raw = device.getItem(key);
     const value: unknown = raw ? JSON.parse(raw) : undefined;
     return check(value) ? value : undefined;
   } catch {
@@ -21,8 +31,8 @@ export function readJson<T>(key: string, check: Check<T>): T | undefined {
 }
 
 export function writeJson(key: string, value: unknown) {
-  try { deviceStorage.setItem(key, JSON.stringify(value)); } catch {}
+  device.setItem(key, JSON.stringify(value));
 }
 
-setBookmarkStorage(deviceStorage);
-setKeyStorage(deviceStorage);
+setBookmarkStorage(device);
+setKeyStorage(device);

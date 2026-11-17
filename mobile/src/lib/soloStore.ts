@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { cleanSolo, type SoloRun, type SoloSettings } from './quiz';
-import { arrayOf, isBoolean, isNumberIn, isRecord, readJson, writeJson } from './storage';
+import { arrayOf, isBoolean, isNumberIn, isRecord, onLeave, readJson, writeJson } from './storage';
 
 const RUN = 'quiz-solo-run';
 const SETTINGS = 'quiz-solo-settings';
@@ -30,8 +30,16 @@ export function setRun(next: SoloRun | null) {
   run = next;
   listeners.forEach(listener => listener());
   clearTimeout(pending);
-  pending = setTimeout(() => writeJson(RUN, run), 400);
+  pending = setTimeout(flushRun, 400);
 }
+
+function flushRun() {
+  if (pending === undefined) return;
+  clearTimeout(pending);
+  pending = undefined;
+  writeJson(RUN, run);
+}
+onLeave(flushRun);
 
 const subscribe = (listener: () => void) => {
   listeners.add(listener);

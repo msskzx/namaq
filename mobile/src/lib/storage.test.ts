@@ -45,3 +45,14 @@ describe('values read back from the phone', () => {
     expect(packsOf(7)).toHaveLength(1);
   });
 });
+
+describe('leaving the app', () => {
+  it('writes the solo run still waiting on a typing pause', async () => {
+    const solo = await import('./soloStore');
+    const { leave } = await import('./storage');
+    solo.setRun({ settings: {}, questions: [], typed: [], checked: [], current: 0, submitted: false } as never);
+    expect(saved.has('quiz-solo-run')).toBe(false);
+    leave();
+    expect(JSON.parse(saved.get('quiz-solo-run')!).current).toBe(0);
+  });
+});

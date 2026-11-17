@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { View } from 'react-native';
+import { AppState, View } from 'react-native';
 import { Stack, ThemeProvider, DarkTheme, DefaultTheme, LocaleProvider } from 'expo-router';
 import { usePalette } from '@/lib/theme';
 import { startAlerts } from '@/lib/adhan';
@@ -8,6 +8,7 @@ import { warmScreens } from '@/lib/lazyScreen';
 import ShareSheet from '@/components/ShareSheet';
 import { useStackOptions } from '@/lib/stackOptions';
 import { noteRootPage } from '@/lib/ways';
+import { leave } from '@/lib/storage';
 
 /**
  * Everything the app shows, loaded by the root layout only after the loading screen is up (app/_layout.tsx),
@@ -20,6 +21,8 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
   useEffect(startAlerts, []);
   // Downloaded recitations stay current through Quran Foundation's Content Sync (lib/listenFiles.ts).
   useEffect(() => { syncPacks(); }, []);
+  // The phone may close a backgrounded app without another timer tick: what waits to be saved is saved now.
+  useEffect(() => { const sub = AppState.addEventListener('change', state => { if (state !== 'active') leave(); }); return () => sub.remove(); }, []);
   // Children mount first, so home is on screen by now; the other screens load behind it, a little later.
   useEffect(() => {
     onReady();

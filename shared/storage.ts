@@ -15,6 +15,27 @@ const browserStorage: KeyStorage = {
   },
 };
 
+/**
+ * A store over the device's that keeps a write the device refused (a full or unavailable store) in memory, reads it back from there,
+ * and saves it again on `retry`, so an edit is never lost or rolled back on screen because one write failed.
+ */
+export function keepingStorage(base: KeyStorage) {
+  const unsaved = new Map<string, string>();
+  const storage: KeyStorage = {
+    getItem: key => (unsaved.has(key) ? unsaved.get(key)! : base.getItem(key)),
+    setItem: (key, value) => {
+      try { base.setItem(key, value); unsaved.delete(key); } catch { unsaved.set(key, value); }
+    },
+    subscribe: base.subscribe,
+  };
+  /** Saves again what the device refused; true when nothing is left unsaved. */
+  const retry = () => {
+    for (const [key, value] of [...unsaved]) { try { base.setItem(key, value); unsaved.delete(key); } catch {} }
+    return unsaved.size === 0;
+  };
+  return { storage, retry, unsaved: () => unsaved.size };
+}
+
 let current = browserStorage;
 const swaps = new Set<() => void>();
 
