@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
@@ -10,7 +10,6 @@ import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from
 import ExternalLink from '@/components/common/ExternalLink';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
-import { useSwipeClose } from '@/components/common/useSwipeClose';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import type { AyahPreview } from './ayahPreview';
 import IrabPanel from './IrabPanel';
@@ -20,6 +19,7 @@ import BalaghaPanel from './BalaghaPanel';
 import type { BalaghaAyah } from './balagha';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
+import Sheet from '@/components/common/Sheet';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
@@ -55,13 +55,6 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const sheet = useRef<HTMLDialogElement>(null);
   const [shown, setShown] = useState(preview);
   if (preview && preview !== shown) setShown(preview);
-  useEffect(() => {
-    const dialog = sheet.current;
-    if (!dialog) return;
-    if (preview && !dialog.open) dialog.showModal();
-    if (!preview && dialog.open) dialog.close();
-  }, [preview]);
-  useSwipeClose(sheet, !!preview, { direction: 'down', onClose: () => sheet.current?.close() });
   const tafsirKey = shown?.kind === 'tafsir' ? shown.key : null;
   const balaghaKey = shown?.kind === 'balagha' ? shown.key : null;
   const irab = shown?.kind === 'irab' ? shown : null;
@@ -78,8 +71,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
   const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : balaghaKey ? Sparkles : ArrowLeftRight;
   return (
-    <dialog ref={sheet} aria-label={shown ? (trees ? 'متشابهات الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
-      dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
+    <Sheet ref={sheet} open={!!preview} onClose={onClose} label={shown ? (trees ? 'متشابهات الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined}>
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
         <div className="flex shrink-0 items-center gap-2 px-4 pb-2 pt-1 text-[var(--home-muted)]">
@@ -126,6 +118,6 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           <ChevronLeft size={18} aria-hidden className="text-[var(--home-muted)]" />
         </Link>}
       </div>}
-    </dialog>
+    </Sheet>
   );
 }

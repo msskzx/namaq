@@ -11,6 +11,7 @@ import {
   prayerDay, PRAYER_NAMES, qiblaBearing, qiblaLabel, searchPlaces, turnTo, type Adhan, type MethodId, type Place, type PrayerSettings,
 } from '@shared/prayer';
 import styles from './Utilities.module.css';
+import Sheet from '@/components/common/Sheet';
 
 const lib = adhan as unknown as Adhan;
 type View = 'times' | 'qibla' | 'calendar';
@@ -236,19 +237,12 @@ function Times({ place, onPlace }: { place: Place; onPlace: () => void }) {
 }
 
 function PlaceSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
   const [place] = useStore(placeStore, null);
   const [query, setQuery] = useState('');
   const [refused, setRefused] = useState(false);
   const [busy, setBusy] = useState(false);
   const shown = useMemo(() => searchPlaces(query), [query]);
-  useEffect(() => {
-    const sheet = dialog.current;
-    if (!sheet) return;
-    if (open && !sheet.open) sheet.showModal();
-    if (!open && sheet.open) sheet.close();
-    if (!open) { setQuery(''); setRefused(false); }
-  }, [open]);
+  useEffect(() => { if (!open) { setQuery(''); setRefused(false); } }, [open]);
   const pick = (next: Place) => { placeStore.write(JSON.stringify(next)); onClose(); };
   const here = async () => {
     setBusy(true);
@@ -257,7 +251,7 @@ function PlaceSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
     if (found) pick(found); else setRefused(true);
   };
   return (
-    <dialog ref={dialog} className={styles.sheet} onClose={onClose} onClick={event => { if (event.target === dialog.current) onClose(); }} aria-label="المكان" dir="rtl" lang="ar">
+    <Sheet open={open} onClose={onClose} label="المكان" className="p-4">
       <div className={styles.sheetBody}>
         <button type="button" className={`${styles.wide} ${styles.primary}`} onClick={here} disabled={busy}><LocateFixed size={18} aria-hidden />موقعي الحالي</button>
         {refused && <p className={styles.note}>تعذّر معرفة الموقع، فاختر مدينة.</p>}
@@ -274,7 +268,7 @@ function PlaceSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
           {!shown.length && <p className={styles.note} style={{ padding: '1rem' }}>لا توجد نتيجة مطابقة.</p>}
         </div>
       </div>
-    </dialog>
+    </Sheet>
   );
 }
 

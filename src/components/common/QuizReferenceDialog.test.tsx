@@ -38,15 +38,13 @@ describe('QuizReferenceDialog', () => {
     cleanup();
   });
 
-  it('closes by button, backdrop and Escape', () => {
+  it('closes by its button and by a tap on the backdrop', () => {
     const onClose = vi.fn();
     render(<QuizReferenceDialog reference={reference} onClose={onClose} />);
-    const [backdrop, close] = screen.getAllByRole('button', { name: 'إغلاق المرجع' });
-    fireEvent.click(close);
+    fireEvent.click(screen.getByRole('button', { name: 'إغلاق المرجع' }));
     expect(onClose).toHaveBeenCalledTimes(1);
-    fireEvent.click(backdrop);
-    fireEvent.keyDown(window, { key: 'Escape' });
-    expect(onClose).toHaveBeenCalledTimes(3);
+    fireEvent.click(screen.getByRole('dialog'));
+    expect(onClose).toHaveBeenCalledTimes(2);
     cleanup();
   });
 });

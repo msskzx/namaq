@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useRef, useState, useSyncExternalStore } from 'react';
 import { Check, ChevronDown, Pause, Play, Repeat, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { EACH_AYAH, LISTEN_REFERENCE, ONCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, reciterOf, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
 import Button from '@/components/common/Button';
 import Reference from '@/components/common/Reference';
-import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { applyReciter, applySpeed, ayahCounts, listen, stopListening, togglePlaying, useListening } from '@/lib/listen';
 import styles from './Mushaf.module.css';
 import { surahName } from '@shared/quran/surahNames';
+import Sheet from '@/components/common/Sheet';
 
 const named = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 const rangeText = (from: string, to: string) =>
@@ -59,19 +59,11 @@ export function ListenSheet({ start, onClose }: { start: string | null; onClose:
   const [view, setView] = useState<'repeat' | 'reciters'>('repeat');
   const [picked, setPicked] = useState<Range | null>(null);
   const open = start !== null;
-  useEffect(() => {
-    const dialog = sheet.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-  useSwipeClose(sheet, open, { direction: 'down', onClose: () => sheet.current?.close() });
   const base = listening?.range ?? (start ? { from: start, to: surahEnd(start, ayahCounts) } : null);
   const range = picked ?? base;
   const change = (next: Partial<RepeatPlan>) => { writeListenPlan({ ...plan, ...next }); if (next.speed) applySpeed(); };
   return (
-    <dialog ref={sheet} aria-label="الاستماع" onClose={() => { setView('repeat'); setPicked(null); onClose(); }} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
-      dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
+    <Sheet ref={sheet} open={open} label="الاستماع" onClose={() => { setView('repeat'); setPicked(null); onClose(); }}>
       {open && <div className="flex max-h-[85dvh] flex-col gap-4 overflow-y-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
         {view === 'repeat' ? <>
@@ -117,7 +109,7 @@ export function ListenSheet({ start, onClose }: { start: string | null; onClose:
           <Reference title={LISTEN_REFERENCE.title} quotes={LISTEN_REFERENCE.quotes} />
         </>}
       </div>}
-    </dialog>
+    </Sheet>
   );
 }
 

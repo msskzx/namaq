@@ -11,6 +11,7 @@ import { clock, partLengths, stepEnds } from '@shared/video/pageVideo';
 import { VIDEO_TYPES } from '@shared/video/recorder';
 import type { CardSide, PairCard } from './pairCards';
 import { setReadSpeed, useReadSpeed } from './readAlong';
+import Sheet from '@/components/common/Sheet';
 
 export const canRecord = () => typeof HTMLCanvasElement !== 'undefined' && 'captureStream' in HTMLCanvasElement.prototype
   && typeof MediaRecorder !== 'undefined' && VIDEO_TYPES.some(type => MediaRecorder.isTypeSupported(type));
@@ -71,7 +72,6 @@ function RecorderDialog({ pages, title, ar, onClose }: { pages: string[]; title:
   const [run, setRun] = useState(0);
   const [video, setVideo] = useState<File | null>(null);
   const [status, setStatus] = useState<'recording' | 'paused' | 'done' | 'failed'>('recording');
-  useEffect(() => { dialog.current?.showModal(); }, []);
   useEffect(() => {
     const listen = (event: MessageEvent) => {
       if (event.source !== frame.current?.contentWindow || typeof event.data !== 'string') return;
@@ -113,8 +113,7 @@ function RecorderDialog({ pages, title, ar, onClose }: { pages: string[]; title:
     : { title: several ? `Share as video · part ${part + 1} of ${pages.length}` : 'Share as video', close: 'Close', pause: 'Pause', resume: 'Resume', again: 'Replay', share: 'Share video', save: 'Save video', recording: 'Preparing the video', next: 'Next part', failed: 'This device cannot record the video.' };
   const Next = ar ? ChevronLeft : ChevronRight;
 
-  return <dialog ref={dialog} aria-label={labels.title} onClose={onClose} dir={ar ? 'rtl' : 'ltr'}
-    className="m-0 h-svh max-h-none w-screen max-w-none bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-black/60">
+  return <Sheet ref={dialog} open kind="full" label={labels.title} onClose={onClose} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'}>
     <div className="flex h-full flex-col items-center gap-3 p-3">
       <div className="flex w-full items-center justify-between">
         <h2 className="text-base font-semibold">{labels.title}</h2>
@@ -135,7 +134,7 @@ function RecorderDialog({ pages, title, ar, onClose }: { pages: string[]; title:
         </>}
       </div>
     </div>
-  </dialog>;
+  </Sheet>;
 }
 
 /** One card's read-along as a video, from its studio. */
@@ -161,7 +160,6 @@ export function PageVideo({ cards, title, subtitle, label, names, ar, onClose }:
   const summary = !lengths.length ? '' : lengths.length > 1 ? `${ar ? `الأجزاء ${num(lengths.length)}` : `${lengths.length} parts`} · ${time(total)}` : time(total);
   const all = off.length === 0;
   const next = READ_SPEEDS[(READ_SPEEDS.indexOf(speed) + 1) % READ_SPEEDS.length];
-  useEffect(() => { dialog.current?.showModal(); }, []);
   const record = () => {
     const inputs = pageVideoInputs({ title, look: webLook(), cards: picked.map(({ card, plan }) => videoCard(card, plan, speed, names)), ...(subtitle ? { subtitle } : {}), ...(ar ? {} : { words: ENGLISH }) });
     setPages(inputs.map(pageOf));
@@ -171,8 +169,7 @@ export function PageVideo({ cards, title, subtitle, label, names, ar, onClose }:
     ? { title: 'مشاركة الصفحة كفيديو', close: 'إغلاق', all: all ? 'إلغاء تحديد الكل' : 'تحديد الكل', speed: 'السرعة', record: 'مشاركة كفيديو' }
     : { title: 'Share the page as video', close: 'Close', all: all ? 'Untick all' : 'Tick all', speed: 'Speed', record: 'Share as video' };
   if (pages) return <RecorderDialog pages={pages} title={title} ar={ar} onClose={onClose} />;
-  return <dialog ref={dialog} aria-label={labels.title} onClose={onClose} onClick={event => { if (event.target === dialog.current) dialog.current?.close(); }} dir={ar ? 'rtl' : 'ltr'}
-    className="m-0 mt-auto max-h-[85dvh] w-full max-w-none rounded-t-2xl border-t border-[var(--home-rule)] bg-[var(--home-paper)] p-3 text-[var(--home-ink)] backdrop:bg-black/40 sm:m-auto sm:max-w-lg sm:rounded-2xl sm:border">
+  return <Sheet ref={dialog} open kind="center" label={labels.title} onClose={onClose} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className="max-h-[85dvh] max-w-lg p-3">
     <div className="flex max-h-[calc(85dvh-1.5rem)] flex-col gap-2">
       <div className="flex items-center gap-1">
         <h2 className="flex-1 text-base font-semibold">{labels.title}</h2>
@@ -198,5 +195,5 @@ export function PageVideo({ cards, title, subtitle, label, names, ar, onClose }:
         <Button size="lg" variant="primary" disabled={!picked.length} onClick={record} aria-label={labels.record} title={labels.record}><Send aria-hidden /></Button>
       </div>
     </div>
-  </dialog>;
+  </Sheet>;
 }

@@ -8,6 +8,7 @@ import MushafText from '@/components/common/MushafText';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import { quranContexts } from '@/lib/quran/quranText';
+import Sheet from '@/components/common/Sheet';
 
 /** How long typing rests before the note is kept, so the reader behind the dialog is not redrawn on every key. */
 const SAVE_MS = 400;
@@ -23,8 +24,6 @@ export default function NoteDialog({ ayah, name, ar, onClose }: { ayah: string; 
   const flush = () => { if (pending.current) { clearTimeout(pending.current.timer); writeAyahNote(ayah, pending.current.text); pending.current = null; } };
   const [surah, number] = ayah.split(':').map(Number);
   useEffect(() => {
-    const box = dialog.current;
-    if (box && !box.open) { if (typeof box.showModal === 'function') box.showModal(); else box.setAttribute('open', ''); }
     if (!readAyahNotes()[ayah]) field.current?.focus();
     let live = true;
     quranContexts([ayah]).then(([context]) => { if (live && context) setWords(context.ayah.words.join(' ')); }).catch(() => {});
@@ -40,8 +39,7 @@ export default function NoteDialog({ ayah, name, ar, onClose }: { ayah: string; 
   const labels = ar
     ? { title: 'تأملك في هذه الآية', close: 'إغلاق', remove: 'احذف التأمل', share: 'مشاركة' }
     : { title: 'Your note on this ayah', close: 'Close', remove: 'Delete note', share: 'Share' };
-  return <dialog ref={dialog} aria-label={labels.title} onClose={() => { flush(); onClose(); }} onClick={event => { if (event.target === dialog.current) close(); }} dir={ar ? 'rtl' : 'ltr'}
-    className="m-auto mb-0 w-full max-w-xl rounded-t-2xl bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-black/45 md:mb-auto md:rounded-2xl">
+  return <Sheet ref={dialog} open kind="center" label={labels.title} onClose={() => { flush(); onClose(); }} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className="max-w-xl">
     <div className="flex flex-col gap-2 p-4">
       <div className="flex items-center gap-2">
         <NotebookPen size={18} aria-hidden className="text-[var(--home-accent)]" />
@@ -55,5 +53,5 @@ export default function NoteDialog({ ayah, name, ar, onClose }: { ayah: string; 
         className="w-full resize-y rounded-xl border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-base leading-relaxed" />
     </div>
     {sharing && <AyahShareDialog ayah={ayah} name={name} note={text.trim()} onClose={() => setSharing(false)} />}
-  </dialog>;
+  </Sheet>;
 }

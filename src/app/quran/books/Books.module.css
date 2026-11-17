@@ -12,8 +12,6 @@
 .actions { position: fixed; z-index: 20; inset-inline: 0; bottom: max(var(--app-tabbar, 0px), 12px); margin-inline: auto; width: max-content; display: flex; gap: 0.25rem; padding: 0.375rem; border: 1px solid var(--home-rule); border-radius: 999px; background: color-mix(in srgb, var(--home-paper) 72%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: 0 6px 20px rgb(0 0 0 / 0.12); }
 .pillBar { position: fixed; z-index: 20; inset-inline: 0; bottom: max(var(--app-tabbar, 0px), 12px); display: flex; justify-content: center; pointer-events: none; }
 .backPill { pointer-events: auto; border-radius: 999px; background: color-mix(in srgb, var(--home-paper) 88%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid var(--home-rule); color: var(--home-ink); }
-.sheet { width: min(100vw, 36rem); height: min(80dvh, 44rem); margin: auto auto 0; padding: 0; border: 1px solid var(--home-rule); border-radius: 1rem 1rem 0 0; background: var(--home-paper); color: var(--home-ink); }
-.sheet::backdrop { background: rgb(0 0 0 / 0.4); }
 .sheetHead { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--home-rule); }
 .sheetBody { height: calc(100% - 3.5rem); overflow-y: auto; }
 .tab { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.9375rem; color: var(--home-muted); }
