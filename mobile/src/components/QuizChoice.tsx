@@ -2,8 +2,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, X } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import Button from '@/components/Button';
-import { alikeDiff, FORGOT, RECITE_SNIPPET, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
-import { WHICH_SURAH } from '@shared/quiz/whichSurah';
+import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizPage from './QuizPage';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
@@ -19,12 +18,9 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
   return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
 }
 
-/** The kinds asked on the ayah's own mushaf page (owner, 2026-11-17), in its place and shape. */
-const ON_PAGE = new Set([RECITE_SNIPPET, WHICH_SURAH]);
-
 /**
- * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, or for recite and «في أي سورة؟» its whole
- * mushaf page (QuizPage), where the rest of a recited ayah is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
+ * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, or for a question asked on the page its whole
+ * mushaf page (QuizPage, owner 2026-11-17), where what it asks to write is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
  */
@@ -38,18 +34,18 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
-  const revealed = shown || answered || !question.reveal;
+  // What is recited or written stays hidden until it is shown or answered.
+  const revealed = shown || answered || !recited(question);
   const alike = answered && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
   return (
     <Box {...(scroll ? { contentContainerStyle: { paddingBottom: 24, gap: 12 } } : { style: { gap: 12 } })}>
       {header}
-      {question.ayahKey && ON_PAGE.has(question.family) ? (
+      {question.ayahKey && question.page ? (
         <View style={{ marginHorizontal: 16 }}>
-          <QuizPage key={question.key} ayah={question.ayahKey} palette={palette} shown={revealed}
-            opening={question.family === RECITE_SNIPPET ? question.quran ?? [] : undefined} nameless={question.family === WHICH_SURAH}
-            onGraded={question.family === RECITE_SNIPPET && !answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
+          <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette} shown={revealed}
+            onGraded={question.page.write && !answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
         </View>
       ) : question.quran && (
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>

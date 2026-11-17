@@ -91,6 +91,7 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     choices: shuffle([surah, ...wrong], random).map(n => ({ value: String(n), labelArabic: names[n] })),
     correctAnswer: String(surah),
     ayahKey: ayah.key,
+    page: { title: 'hidden' },
     ...(Object.keys(closest).length && { alike: closest }),
     evidence: { claimKeys: [] },
   };

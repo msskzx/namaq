@@ -12,13 +12,15 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   SURAH: { en: "Which surah?", ar: "في أي سورة؟" },
   RECITE: { en: "Recite the rest", ar: "سمّع بقية الآية" },
   COMPARE: { en: "Compare two places", ar: "قارن الموضعين" },
+  OPENINGS: { en: "Surah openings", ar: "أوائل السور" },
+  ENDS: { en: "First and last words", ar: "اكتب أول الآية وآخرها" },
   TUHFA_COMPLETE: { en: "Complete the verse", ar: "أكمل البيت" },
   TUHFA_NEXT: { en: "The next verse", ar: "البيت التالي" },
   TUHFA_RULE: { en: "A letter's rule", ar: "حكم الحرف" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
 ];
 

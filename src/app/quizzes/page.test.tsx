@@ -203,8 +203,7 @@ describe('QuizzesPage', () => {
     render(<QuizzesPage />);
     const modes = screen.getByRole('navigation', { name: 'Quiz mode' });
     const links = within(modes).getAllByRole('link');
-    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party', '/quran/read/recite', '/quizzes/openings', '/quran/read?write=1']);
-    expect(within(links[2]).getByText('Recite')).toBeTruthy();
+    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party']);
     expect(within(links[0]).getByText('Solo quiz')).toBeTruthy();
     expect(within(links[1]).getByText('Party quiz')).toBeTruthy();
     cleanup();
@@ -241,7 +240,7 @@ describe('QuizzesPage', () => {
       ...original, key: 'SURAH:2:34', family: 'SURAH', promptArabic: 'في أي سورة هذه الآية؟',
       choices: [{ value: '20', labelArabic: 'طه' }, { value: '2', labelArabic: 'البقرة' }, { value: '18', labelArabic: 'الكهف' }, { value: '17', labelArabic: 'الإسراء' }],
       correctAnswer: '2',
-      ...{ quran: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'أَبَىٰ'], ayahKey: '2:34', alike: { 17: { key: '17:61', words: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'قَالَ'] } } },
+      ...{ quran: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'أَبَىٰ'], ayahKey: '2:34', page: { title: 'hidden' as const }, alike: { 17: { key: '17:61', words: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'قَالَ'] } } },
     };
     try {
       nav.reset('/quizzes?topic=SURAH&length=5');
@@ -263,7 +262,7 @@ describe('QuizzesPage', () => {
     questions[0] = {
       ...original, key: 'RECITE:36:1', family: 'RECITE', promptArabic: 'سمّع بقية الآية',
       choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }], correctAnswer: '1',
-      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2' },
+      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2', page: { shows: 1, write: 'rest' as const } },
     };
     try {
       nav.reset('/quizzes?topic=RECITE&length=5');

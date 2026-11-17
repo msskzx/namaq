@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { maxLetters, openingCut } from '@shared/quran/writeAyah';
+import { pageAsk, type PageAsk } from '@shared/quran/writeAyah';
 import MushafPageView, { type Recite } from './MushafPageView';
 import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { quizPageBefore } from '@/lib/settings';
@@ -20,15 +20,12 @@ const END = Number.MAX_SAFE_INTEGER;
  * A quiz question about one ayah drawn as its whole mushaf page, the ayah in its own place and lines (owner, 2026-11-17):
  * the reader's page (MushafPageView) with recite mode's hidden words. «الصفحة قبلها» off (the default): every other word is
  * an empty box of its shape, surah titles too, only the ayah numbers left, and nothing around the page says where it is.
- * On: the ayat before it are written, as recite mode shows them. `opening` (the asked ayah's opening words, matched by
- * letters, writeAyah's openingCut) shows; `shown` shows all of it. With `onGraded`, the rest is written in boxes in its places, as in the
- * reader's write mode, and graded once the last box is written; the page then colours what was right and wrong.
+ * On: the ayat before it are written, as recite mode shows them. `ask` (the question's, writeAyah's PageAsk) says how much of
+ * the asked ayah shows, what is written and whether its surah title shows; `shown` shows all of it. With `onGraded`, the words
+ * asked are written in boxes in their places, as in the reader's write mode, and graded once the last box is written; the page
+ * then colours what was right and wrong.
  */
-function QuizPage({ ayah, opening, shown, nameless = false, onGraded, palette }: { ayah: string;
-  /** The ayah's opening words that show (as the question has them); all of it when left out. */
-  opening?: string[]; shown: boolean;
-  /** The surah is the answer («في أي سورة؟»): no surah title or name shows, even with the ayat before written. */
-  nameless?: boolean;
+function QuizPage({ ayah, ask, shown, onGraded, palette }: { ayah: string; ask: PageAsk; shown: boolean;
   onGraded?: (graded: Graded) => void; palette: Palette }) {
   const [width, setWidth] = useState(0);
   const [before] = quizPageBefore.use();
@@ -40,10 +37,9 @@ function QuizPage({ ayah, opening, shown, nameless = false, onGraded, palette }:
     const model = pageModel(data, surahBefore(page));
     // The ayah's words on its page, signs that are no words (۞) among them, and where its opening ends.
     const words = model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === ayah).map(group => group.word!) ?? []);
-    const spoken = words.flatMap((word, at) => (maxLetters(word) ? [at] : []));
-    const cut = opening === undefined ? words.length : openingCut(words, opening);
-    return { data, model, words, cut, asked: spoken.filter(at => at >= cut) };
-  }, [page, ayah, opening]);
+    return { data, model, words, ...pageAsk(ayah, words, ask) };
+  }, [page, ayah, ask]);
+  const nameless = ask.title === 'hidden';
   const writing = !!onGraded && !shown && !graded;
   const boxes = useWriteBoxes({ ayah: onGraded ? ayah : null, words: parts?.words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
     setGraded(result);
@@ -67,14 +63,15 @@ function QuizPage({ ayah, opening, shown, nameless = false, onGraded, palette }:
         // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(':1') ? titled.get(Number(key.split(':')[0])) ?? 0 : 0;
-        // The asked ayah's surah title stays hidden until it is answered, and always when the surah is the answer.
-        if (key === ayah) return word < steps ? nameless || !open || !before : !open && word - steps >= parts.cut;
+        // The asked ayah's surah title shows when it is the question, and else stays hidden until it is answered (always
+        // when the surah is the answer).
+        if (key === ayah) return word < steps ? ask.title !== 'shown' && (nameless || !open || !before) : !open && word - steps >= parts.cut;
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
         return nameless && word < title;
       },
     };
-  }, [parts, ayah, open, before, nameless]);
+  }, [parts, ayah, open, before, nameless, ask.title]);
   if (!page || !parts) return null;
   return (
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>

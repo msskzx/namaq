@@ -15,7 +15,6 @@ import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { atStart, compareKeys, forgottenOrder, nextForgotten, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { wordTargets } from '@shared/quran/writeAyah';
 import { useWriteBoxes } from '@/lib/useWriteBoxes';
-import { nextOpening, openingRound, type Openings } from '@shared/quran/openings';
 import TabHint from './TabHint';
 import TopBar from './TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from './tabBarSpace';
@@ -136,8 +135,6 @@ export default function Reader() {
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
   const last = useMemo(() => (focused ? readJson<Place>(LAST_RECITE) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The surah openings quiz: a random surah's start at a time, its first ayah written (owner, 2026-11-13).
-  const [openings, setOpenings] = useState<Openings | null>(null);
   const reciting = !!position;
   const mode = reciting ? 'recite' : 'read';
   const model = modelOf(page);
@@ -148,8 +145,8 @@ export default function Reader() {
   // green when right and amber when wrong.
   const [writing, setWriting] = useState(() => readJson<boolean>(WRITE) ?? false);
   const [checked, setChecked] = useState<Checked | null>(null);
-  // A review or the openings quiz asks one ayah at a time: once it shows, nothing more is written until the next one.
-  const reviewDone = (reviewing || !!openings) && !!position?.shown;
+  // A review asks one ayah at a time: once it shows, nothing more is written until the next one.
+  const reviewDone = reviewing && !!position?.shown;
   const writeKey = writing && view?.upcoming && !reviewDone ? view.upcoming : null;
   const writeWords = useMemo(() => (writeKey ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word) ?? []) : []), [writeKey, model]);
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
@@ -183,8 +180,8 @@ export default function Reader() {
   const keep = () => writeJson(PLACE, { page, position, reviewing, y: flowing ? Math.round(scrollY.current) : 0 } satisfies Place);
   useEffect(() => {
     keep();
-    if (position && !reviewing && !openings) writeJson(LAST_RECITE, { page, position } satisfies Place);
-  }, [page, position, reviewing, openings]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (position && !reviewing) writeJson(LAST_RECITE, { page, position } satisfies Place);
+  }, [page, position, reviewing]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const turnTo = useCallback((next: number) => {
     setPage(next);
@@ -197,7 +194,6 @@ export default function Reader() {
     setActions(null);
     setTools(false);
     setMark(to.mark && !position ? { key: to.key, page: to.page } : null);
-    setOpenings(null);
     if (recite === 'review') {
       setReviewing(true);
       setPosition({ start: to.key, shown: null, words: 0 });
@@ -209,29 +205,7 @@ export default function Reader() {
   }, [position]);
 
   // The homepage opens the mushaf at a surah or juz, or starts a recitation.
-  const askOpening = (next: Openings) => {
-    const key = next.keys[next.at];
-    setFollowing(false);
-    setOpenings(next);
-    setPage(pageOfAyah(key) ?? 1);
-    setActions(null);
-    setTools(false);
-    setMark(null);
-    setReviewing(false);
-    setChecked(null);
-    setPosition({ start: key, shown: null, words: 0 });
-  };
   useIntent('read', intent => {
-    if (intent.openings) {
-      const keys = openingRound(intent.openings.range, Math.random);
-      if (keys.length) {
-        setWriting(true);
-        writeJson(WRITE, true);
-        askOpening({ range: intent.openings.range, keys, at: 0 });
-        return;
-      }
-    }
-    setOpenings(null);
     setFollowing(false);
     const to = (intent.at && pageOfAyah(intent.at)) || intent.page || page;
     setPage(to);
@@ -240,7 +214,6 @@ export default function Reader() {
     setReviewing(!!intent.recite && !!intent.review);
     setMark(intent.at && !intent.recite ? { key: intent.at, page: to } : null);
     setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], shown: null, words: 0 } : null);
-    if (intent.write) { setWriting(true); writeJson(WRITE, true); setChecked(null); }
   });
 
   const startRecite = () => {
@@ -249,7 +222,7 @@ export default function Reader() {
     setReviewing(false);
     setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
   };
-  const stopRecite = () => { setActions(null); setReviewing(false); setOpenings(null); setPosition(null); setChecked(null); boxes.blur(); };
+  const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -257,8 +230,7 @@ export default function Reader() {
   const revealNextAyah = () => {
     if (!position || !view) return;
     if (reviewDone) {
-      if (openings) askOpening(nextOpening(openings, Math.random));
-      else if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review');
+      if (reviewNext) jump({ page: pageOfAyah(reviewNext) ?? page, key: reviewNext, mark: false }, 'review');
       return;
     }
     const next = view.nextAyah();
@@ -476,11 +448,10 @@ export default function Reader() {
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
           {reviewing && <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text>}
-          {openings && <Text numberOfLines={1} accessibilityLabel={`أوائل السور، السورة ${num(openings.at + 1)} من ${num(openings.keys.length)}`} style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>{`${num(openings.at + 1)} من ${num(openings.keys.length)}`}</Text>}
           <IconButton Icon={Undo2} label="ارجع خطوة" palette={palette} disabled={atStart(position)} onPress={stepBackOne} />
           <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" palette={palette} disabled={reviewDone} onPress={revealNextWord} />
-          <IconButton Icon={reviewDone ? ArrowLeft : ChevronsLeft} label={reviewDone ? (openings ? 'السورة التالية' : 'الآية المنسية التالية') : 'أظهر الآية التالية'} palette={palette}
-            disabled={reviewDone ? !openings && !reviewNext : !view?.upcoming && page === PAGES} onPress={revealNextAyah} />
+          <IconButton Icon={reviewDone ? ArrowLeft : ChevronsLeft} label={reviewDone ? 'الآية المنسية التالية' : 'أظهر الآية التالية'} palette={palette}
+            disabled={reviewDone ? !reviewNext : !view?.upcoming && page === PAGES} onPress={revealNextAyah} />
           <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : 'اكتب أول كل آية وآخرها'} palette={palette} on={writing} onPress={toggleWriting} />
           <IconButton Icon={X} label="إنهاء التسميع" palette={palette} onPress={stopRecite} />
         </View>
@@ -512,7 +483,7 @@ export default function Reader() {
       {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
       <TabHint id="read" palette={palette} hidden={reciting || !!actions || !!listening} />
       <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
-        last={last?.position ? () => { setReviewing(false); setOpenings(null); setPosition(last.position!); setPage(last.page); } : null} />
+        last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
     </View>
   );
 }
