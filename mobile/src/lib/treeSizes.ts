@@ -18,7 +18,7 @@ export const sizeKey = (id: string, around: boolean) => around ? `${id}+` : id;
 const cutKey = (id: string, presentation: Presentation, around: boolean) => sizeKey(`${id}|${presentation.ayat.map(ayah => ayah.key).join(',')}`, around);
 
 let saved: TreeSizes | undefined;
-const savedSizes = () => (saved ??= readJson(SAVED, (value): value is TreeSizes => isRecord(value) && Object.values(value).every(sized => arrayOf(isNumberIn(-Infinity, Infinity))(sized) && sized.length === 4)) ?? {});
+const savedSizes = () => (saved ??= Object.fromEntries(Object.entries(readJson(SAVED, isRecord) ?? {}).filter(([, sized]) => arrayOf(isNumberIn(-Infinity, Infinity))(sized) && sized.length === 4)) as TreeSizes);
 
 /** The tree's sizes: measured by `npm run tree-sizes` for whole trees, or on this phone the first time a filtered one opened. */
 export function sizesOf(id: string, presentation: Presentation, around: boolean): Sized | undefined {

@@ -64,7 +64,7 @@ type Place = { page: number; position?: RecitePosition | null; reviewing?: boole
 const isPosition = (value: unknown): value is RecitePosition =>
   isRecord(value) && isKey(value.start as string) && (value.shown === null || isKey(value.shown as string)) && isNumberIn(0, Infinity)(value.words) && (value.word === undefined || isNumberIn(0, Infinity)(value.word));
 const isPlace = (value: unknown): value is Place =>
-  isRecord(value) && isNumberIn(1, PAGES)(value.page) && (value.position == null || isPosition(value.position)) && (value.reviewing === undefined || isBoolean(value.reviewing)) && (value.y === undefined || isNumberIn(0, Infinity)(value.y));
+  isRecord(value) && isNumberIn(1, PAGES)(value.page) && (value.position == null || isPosition(value.position)) && (value.reviewing === undefined || isBoolean(value.reviewing)) && (value.y === undefined || isNumberIn(-Infinity, Infinity)(value.y));
 /** The text size (1 is the printed page), kept on this phone from one visit to the next. */
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
