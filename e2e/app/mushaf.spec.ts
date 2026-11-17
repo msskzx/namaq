@@ -288,3 +288,23 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   await expect.poll(start).toBe('1:6');
 });
+
+test('the recite bar moves to the top and back, by its grip or by dragging, and stays where it was put', async ({ page }) => {
+  await open(page, '/read');
+  await page.getByText(HAMD, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  const bar = page.getByLabel('أدوات التسميع');
+  const y = async () => (await bar.boundingBox())!.y;
+  expect(await y()).toBeGreaterThan(600);
+  await page.getByRole('button', { name: 'انقل الشريط إلى الأعلى' }).click();
+  await expect.poll(y).toBeLessThan(30);
+  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('top');
+  // Dragged most of the way down, it settles at the bottom.
+  const box = (await bar.boundingBox())!;
+  await page.mouse.move(box.x + 40, box.y + box.height / 2);
+  await page.mouse.down();
+  for (let step = 1; step <= 12; step++) { await page.mouse.move(box.x + 40, box.y + box.height / 2 + step * 50); await page.waitForTimeout(16); }
+  await page.mouse.up();
+  await expect.poll(y).toBeGreaterThan(600);
+  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
+});
