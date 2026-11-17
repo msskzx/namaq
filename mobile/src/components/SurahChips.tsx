@@ -1,9 +1,9 @@
-import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/ui/Text';
+import { ScrollView, View } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { treeSurahs } from '@shared/quran/treeSurahs';
 import { surahNames } from '@/lib/branches';
 import type { Palette } from '@/lib/theme';
+import Chip from '@/ui/Chip';
 
 export const CHIPS_HEIGHT = 40;
 /** How far the chips rise into the bookmark row's spare room (kept for the studio's bar, which hides them). */
@@ -19,11 +19,8 @@ export default function SurahChips({ ayahKeys, palette, lit, onToggle, tuck }: {
           const on = lit?.(surah, keys) ?? false;
           const name = surahNames[surah] ?? num(surah);
           return (
-            <Pressable key={surah} disabled={!onToggle} onPress={() => onToggle?.(surah, keys)} hitSlop={6} accessibilityRole={onToggle ? 'button' : 'text'} accessibilityState={onToggle ? { selected: on } : undefined} accessibilityLabel={`سورة ${name}`}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 5, height: 32, paddingHorizontal: 12, borderRadius: 16, borderWidth: 1, borderColor: on ? palette.path : palette.rule, backgroundColor: on ? palette.paperDeep : 'transparent' }}>
-              <Text style={{ color: on ? palette.path : palette.ink, fontSize: 14 }}>{name}</Text>
-              {keys.length > 1 && <Text style={{ color: on ? palette.path : palette.muted, fontSize: 11 }}>{num(keys.length)}</Text>}
-            </Pressable>
+            <Chip key={surah} small lit tint={palette.path} role={onToggle ? 'button' : 'text'} label={name} count={keys.length > 1 ? keys.length : undefined} on={on}
+              onPress={onToggle && (() => onToggle(surah, keys))} accessibilityLabel={`سورة ${name}`} palette={palette} />
           );
         })}
       </ScrollView>

@@ -13,6 +13,7 @@ import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
 import Tabs from '@/ui/Tabs';
+import Chip from '@/ui/Chip';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
@@ -159,7 +160,6 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const [mode, setMode] = useState<ReaderMode>(shownMode);
   useEffect(() => { setMode(shownMode); }, [shownMode]);
-  const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
@@ -171,9 +171,7 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
             {MODE_ACTIONS[mode].map(action => {
               const on = gestures[mode][gesture] === action;
               return (
-                <Pressable key={action} onPress={() => setGesture(mode, gesture, action)} accessibilityRole="radio" accessibilityState={{ checked: on }} style={chip(on)}>
-                  <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 13 }}>{ACTION_NAMES[action]}</Text>
-                </Pressable>
+                <Chip key={action} role="radio" label={ACTION_NAMES[action]} on={on} onPress={() => setGesture(mode, gesture, action)} palette={palette} />
               );
             })}
           </View>

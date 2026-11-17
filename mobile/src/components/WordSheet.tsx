@@ -12,6 +12,7 @@ import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
 import Card from '@/ui/Card';
+import Chip from '@/ui/Chip';
 
 /** Ayat shown at first, and added by each «المزيد». */
 export const PLACES_STEP = 20;
@@ -58,10 +59,8 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
         {lemmas.length > 1
           ? <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {lemmas.map((lemma, i) => (
-              <Pressable key={lemma} onPress={() => { setPicked(i); setShown(PLACES_STEP); setSurah(null); tops.current.clear(); pending.current = null; }} accessibilityRole="tab" accessibilityState={{ selected: i === picked }}
-                style={{ paddingHorizontal: 14, paddingVertical: 2, borderRadius: 999, borderWidth: 1, borderColor: i === picked ? palette.accent : palette.rule, backgroundColor: i === picked ? palette.paperDeep : 'transparent' }}>
-                <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 40, color: i === picked ? palette.accent : palette.ink }}>{mushafText(words.lemmas[lemma][0])}</Text>
-              </Pressable>
+              <Chip key={lemma} role="tab" lit quran label={mushafText(words.lemmas[lemma][0])} on={i === picked} palette={palette}
+                onPress={() => { setPicked(i); setShown(PLACES_STEP); setSurah(null); tops.current.clear(); pending.current = null; }} />
             ))}
           </View>
           : <Text accessibilityRole="header" style={{ fontFamily: QURAN_FONT, fontSize: 26, lineHeight: 46, color: palette.accent, textAlign: 'right' }}>{mushafText(name)}</Text>}

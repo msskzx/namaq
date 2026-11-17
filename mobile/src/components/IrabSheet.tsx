@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { ListTree } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
@@ -12,10 +12,11 @@ import { corpusWords } from '@shared/quran/words';
 import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
 import Card from '@/ui/Card';
+import Chip from '@/ui/Chip';
 
 export type IrabTarget = { key: string; word: number };
 
@@ -70,10 +71,7 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
               const on = i === picked;
               const head = i === headChip && !on;
               return (
-                <Pressable key={i} onPress={() => setPicked(i)} accessibilityRole="tab" aria-selected={on} accessibilityLabel={word}
-                  style={{ ...CARD, paddingHorizontal: 10, borderWidth: 1, borderStyle: head ? 'dashed' : 'solid', borderColor: on || head ? palette.accent : palette.rule, backgroundColor: on ? palette.paperDeep : palette.card }}>
-                  <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 40, color: on ? palette.accent : palette.ink }}>{word}</Text>
-                </Pressable>
+                <Chip key={i} role="tab" lit quran dashed={head} label={word} on={on} onPress={() => setPicked(i)} palette={palette} />
               );
             })}
           </View>

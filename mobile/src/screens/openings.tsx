@@ -17,7 +17,7 @@ import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 
@@ -75,7 +75,7 @@ function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
   ) });
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
-      <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
+      <Card palette={palette} pad={[9, 16]}>
         {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
@@ -83,7 +83,7 @@ function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
           {CONDITION_SOURCES.map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={13} style={{ textAlign: 'right' }}>{source.title}</ExternalLink>)}
         </View>}
-      </View>
+      </Card>
       <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
         {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} size="small" expanded={open} />}
         <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} size="small" />
