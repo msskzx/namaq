@@ -132,6 +132,7 @@ export default function MushafPage({
   names,
   top,
   mark,
+  playing,
   pressed,
   hidden,
   next,
@@ -150,6 +151,8 @@ export default function MushafPage({
   names: Record<number, string>;
   top?: number;
   mark?: { surah: number; ayah: number };
+  /** The ayah being recited aloud (listening): a band in the accent. */
+  playing?: string | null;
   /** The ayah a long press opened the buttons of, lit as one band, and in it the pressed word (its data-word), lit stronger (the app's markWord). */
   pressed?: { key: string; word?: number } | null;
   /** Recite mode: whether a word is still hidden; `word` counts that ayah's words on this page from 0. */
@@ -231,7 +234,7 @@ export default function MushafPage({
                     const starts = topics && group.word && group.word !== '۞' && !firstWord[key] && (firstWord[key] = true) ? sectionsStartingAt(group.surah, group.ayah) : [];
                     return (
                       <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-veiled={veiled || undefined}
-                        className={[!veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
+                        className={[!veiled && playing === key ? styles.playing : '', !veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded, starts.length ? styles.topicAt : ''].join(' ').trim() || undefined}>
                         {starts.length > 0 && (
                           <button type="button" data-topic-tab className={styles.topicTab} aria-label="موضوعات السورة" onClick={event => { event.stopPropagation(); onTopic!(group.surah!, starts[0]); }}>
                             {/* The number is drawn by CSS, so it is no text of the line (copying, finding an ayah's number). */}

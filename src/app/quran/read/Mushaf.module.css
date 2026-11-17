@@ -100,6 +100,9 @@
 /* The selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14), one band like a forgotten ayah's. */
 .marked { position: relative; background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
 .marked + .marked::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
+/* The ayah being recited aloud: the band in the accent (the app's 'playing' band). */
+.marked.playing, .playing { position: relative; background: color-mix(in srgb, var(--home-accent) 24%, var(--home-card)); }
+.playing + .playing::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 /* The long-pressed word inside its ayah's band, a stronger box (the app's markWord: the accent at 30%). */
 .marked.pressedWord { border-radius: 4px; background: color-mix(in srgb, var(--home-accent) 30%, var(--home-card)); }
 .marked + .marked.pressedWord::before, .marked.pressedWord + .marked::before { background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
@@ -259,6 +262,15 @@
   .reciteBar { inset-inline: 0; }
   .reader[data-reader-immersive="true"] .reciteBar { bottom: max(8px, calc(env(safe-area-inset-bottom) - 10px)); }
 }
+/* The recitation playing (the app's ListenBar), in the recite bar's place, or just above the recite pill while reciting. */
+.listenBar {
+  pointer-events: auto; display: flex; align-items: center; gap: 4px; width: 100%; max-width: 26rem; height: 58px; padding-inline: 8px; border-radius: 16px;
+  background: color-mix(in srgb, var(--home-paper) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--home-ink) 12%, transparent);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
+}
+.reciteBar[data-above] { transform: translateY(calc(-1 * (var(--recite-pill) + 8px))); }
 /* The pill back to the «فاصلة», in the recite bar's place. */
 .fasilaPill { pointer-events: auto; border-radius: 999px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: color-mix(in srgb, var(--home-paper) 88%, transparent); border: 1px solid var(--home-rule); color: var(--home-ink); }
 /* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */

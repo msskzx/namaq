@@ -251,7 +251,7 @@ test.describe('pages with the database', () => {
       await page.mouse.down();
       await page.waitForTimeout(700);
       await page.mouse.up();
-      await expect(page.getByRole('button', { name: 'أشجار هذه الآية' })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('button', { name: 'متشابهات الآية' })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
     await page.getByRole('button', { name: 'تفسير السعدي' }).click();
     const sheet = page.getByRole('dialog', { name: 'تفسير السعدي' });
