@@ -12,7 +12,7 @@ import { isMemorized, readMemorized, serverMemorized, subscribeMemorized } from 
 import { applyReciter, applySpeed, listen, useListening } from '@/lib/listen';
 import { bytesOf, downloadPack, packsOf, progressOf, removePack, stopDownload, useListenFiles, type PackKind } from '@/lib/listenFiles';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
-import { ayahCounts, surahNames } from '@/lib/mushaf';
+import { ayahCounts } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { surahName } from '@shared/quran/surahNames';

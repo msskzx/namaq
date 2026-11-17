@@ -15,7 +15,7 @@ const go = (surah: number, ayah: string) => {
   fireEvent.change(screen.getByRole('combobox'), { target: { value: String(surah) } });
   fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${ayah}`) }));
 };
-const entries = variants.map(variant => ({ variant, text: texts[`${variant.surah}:${variant.ayah}`], surahName: 'سُورَةُ ٱلْفَاتِحَةِ' }));
+const entries = variants.map(variant => ({ variant, text: texts[`${variant.surah}:${variant.ayah}`] }));
 
 afterEach(cleanup);
 

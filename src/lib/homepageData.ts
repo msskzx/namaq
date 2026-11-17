@@ -4,6 +4,7 @@ import treeData from '@shared/quran/quranText/corpus';
 import { buildPhraseGroups } from '@shared/quran/phraseTrees';
 import { tourRecitePage, tourStory, tourTree, TOUR_RECITE } from './tourTree';
 import { groups } from '@shared/quran/mutashabih/data';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 const phrases = buildPhraseGroups(treeData.ayat);
 
@@ -27,7 +28,7 @@ export async function getHomepageData() {
     bookmarkAyat: bookmarkAyat(),
     tour: tourTree(),
     tourStory: tourStory(),
-    tourRecite: { ...TOUR_RECITE, data: await tourRecitePage(), names: Object.fromEntries(surahs.filter(surah => surah.number >= TOUR_RECITE.top).map(surah => [surah.number, surah.name])) },
+    tourRecite: { ...TOUR_RECITE, data: await tourRecitePage(), names: Object.fromEntries(surahs.filter(surah => surah.number >= TOUR_RECITE.top).map(surah => [surah.number, SURAH_TITLES[surah.number]])) },
   };
 }
 

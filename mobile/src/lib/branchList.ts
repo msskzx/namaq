@@ -50,7 +50,7 @@ export function openingIndex(pieces: BranchPiece[], query: string) {
 
 export const isFiltered = (state: ListState) => !!(state.range || state.saved || hasGroupFilters(state.filters) || state.filters.sort);
 
-export type SurahHit = { number: number; name: string; count: number };
+export type SurahHit = { number: number; count: number };
 const SURAH_HITS = 3;
 export const SUGGESTIONS = 10;
 
@@ -62,7 +62,7 @@ export function suggestions(state: ListState, query: string, bookmarks: Bookmark
   const inventory = branchList({ ...state, query: '' }, bookmarks);
   const counts: Record<number, number> = {};
   inventory.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(number => { counts[number] = (counts[number] ?? 0) + 1; }));
-  const surahs = surahRows.filter(row => counts[row.number] && matchesSurah(row, typed)).slice(0, SURAH_HITS).map(row => ({ number: row.number, name: row.name, count: counts[row.number] }));
+  const surahs = surahRows.filter(row => counts[row.number] && matchesSurah(row, typed)).slice(0, SURAH_HITS).map(row => ({ number: row.number, count: counts[row.number] }));
   const matched = distinctBranchPieces(searchSharedPhrases(inventory, typed));
   // Trees the filters hide, listed last under their own label (as on the website).
   return { surahs, phrases: matched.slice(0, SUGGESTIONS), outside: outsideMatches(typed, matched) };
