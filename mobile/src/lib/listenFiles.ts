@@ -16,7 +16,8 @@ import { WEBSITE } from './branches';
 export type PackKind = 'memorized' | 'all' | `surah:${number}`;
 export type Pack = { reciter: number; kind: PackKind; label: string; keys: string[] };
 export type Progress = { done: number; total: number; failed?: boolean };
-type Synced = { token: string; rows: Record<string, AudioRow>; syncedAt: number };
+/** `repair`: held ayat whose file must still be fetched (changed at the source, or a fetch that failed), tried at every app start. */
+type Synced = { token: string; rows: Record<string, AudioRow>; syncedAt: number; repair?: string[] };
 
 const PACKS = 'listen-packs';
 const SYNCED = 'listen-sync';
@@ -36,7 +37,35 @@ export const useListenFiles = () => useSyncExternalStore(subscribe, () => versio
 
 const folder = (reciter: number) => new Directory(Paths.document, 'listen', String(reciter));
 const fileOf = (reciter: number, key: string) => new File(folder(reciter), ayahFile(key));
+let parts = 0;
 const packId = (reciter: number, kind: PackKind) => `${reciter}:${kind}`;
+/** An ayah's file is on the phone only once a whole download was moved into place. */
+const have = (reciter: number, key: string) => { try { const file = fileOf(reciter, key); return file.exists && file.size > 0; } catch { return false; } };
+
+/** Each reciter's syncs and file changes run one after another, so two downloads never rewrite its rows over each other. */
+const lines = new Map<number, Promise<unknown>>();
+function inLine<T>(reciter: number, task: () => Promise<T>): Promise<T> {
+  const run = (lines.get(reciter) ?? Promise.resolve()).then(task, task);
+  lines.set(reciter, run.catch(() => undefined));
+  return run;
+}
+
+/**
+ * Fetches an ayah into a staging file and moves it over the ayah's file only once the download finished: on Android a failed
+ * download can leave part of a file behind (expo-file-system File.downloadFileAsync), which must never pass for the whole.
+ */
+async function fetchAyah(reciter: number, key: string, url: string) {
+  // Its own staging name, so two downloads holding the same ayah never write into one file.
+  const name = `${ayahFile(key)}.${++parts}.part`;
+  try {
+    const part = new File(folder(reciter), name);
+    await File.downloadFileAsync(url, part, { idempotent: true });
+    if (!part.exists || !part.size) throw new Error(`listen ${key}: empty file`);
+    part.moveSync(fileOf(reciter, key), { overwrite: true });
+  } finally {
+    try { const left = new File(folder(reciter), name); if (left.exists) left.delete(); } catch {}
+  }
+}
 const savePacks = (next: Pack[]) => { packs = next; writeJson(PACKS, packs); changed(); };
 const saveSynced = (reciter: number, value: Synced | null) => {
   synced = { ...synced };
@@ -50,7 +79,7 @@ export const progressOf = (reciter: number, kind: PackKind) => busy.get(packId(r
 /** The ayah's file on the phone, when it was downloaded. */
 export function localAyah(reciter: number, key: string): string | undefined {
   if (web || !packs.some(pack => pack.reciter === reciter)) return undefined;
-  try { const file = fileOf(reciter, key); return file.exists ? file.uri : undefined; } catch { return undefined; }
+  return have(reciter, key) ? fileOf(reciter, key).uri : undefined;
 }
 
 /** The bytes a reciter's downloads take on the phone. */
@@ -75,30 +104,44 @@ function sweep(reciter: number) {
     if (!dir.exists) return;
     const fetching = [...running.entries()].filter(([id]) => id.startsWith(`${reciter}:`)).flatMap(([, keys]) => keys);
     const names = new Set([...heldKeys(reciter), ...fetching].map(ayahFile));
-    for (const item of dir.list()) if (item instanceof File && !names.has(item.name)) item.delete();
+    for (const item of dir.list()) if (item instanceof File && !names.has(item.name) && !(fetching.length && item.name.endsWith('.part'))) item.delete();
   } catch {}
 }
 
-/** Brings a reciter's rows up to date; the files that changed are fetched again and removed ones deleted. */
+/**
+ * Brings a reciter's rows up to date: removed files are deleted, and changed ones are kept until their new file has arrived (repair),
+ * so a failed fetch never leaves the ayah with no file.
+ */
 async function sync(reciter: number) {
   const had = synced[reciter];
   let result = await fetchSync(reciter, had?.token);
   if ('resync' in result) result = await fetchSync(reciter);
   if ('resync' in result) throw new Error('listen-sync resync');
-  if (result.gone) { packsOf(reciter).forEach(pack => removePack(reciter, pack.kind)); saveSynced(reciter, null); return; }
+  if (result.gone) { stopReciter(reciter); packsOf(reciter).forEach(pack => removePack(reciter, pack.kind)); saveSynced(reciter, null); return; }
   const applied = applySync(had?.rows ?? {}, result);
-  saveSynced(reciter, { token: result.token, rows: applied.rows, syncedAt: Date.now() });
   applied.drop.forEach(key => deleteFile(reciter, key));
-  // A changed file is replaced; a held file that is missing (a fetch that failed last time) is fetched again.
-  applied.refetch.forEach(key => deleteFile(reciter, key));
-  for (const key of heldKeys(reciter)) {
-    const row = applied.rows[key];
-    if (!row || fileOf(reciter, key).exists) continue;
-    try { await File.downloadFileAsync(row.url, fileOf(reciter, key), { idempotent: true }); } catch {}
-  }
+  const repair = [...new Set([...(had?.repair ?? []), ...applied.refetch])].filter(key => applied.rows[key]);
+  saveSynced(reciter, { token: result.token, rows: applied.rows, syncedAt: Date.now(), ...(repair.length ? { repair } : {}) });
+  await repairFiles(reciter);
 }
 
-/** Downloads the ayat (four at a time), from the addresses Content Sync gives. */
+/** Fetches the held ayat whose file changed at the source or is missing; the ones that fail stay listed for the next try. */
+async function repairFiles(reciter: number) {
+  const now = synced[reciter];
+  if (!now) return;
+  const held = heldKeys(reciter);
+  const listed = new Set(now.repair ?? []);
+  const failed: string[] = [];
+  for (const key of held) {
+    const row = now.rows[key];
+    if (!row || (!listed.has(key) && have(reciter, key))) continue;
+    try { await fetchAyah(reciter, key, row.url); } catch { failed.push(key); }
+  }
+  const after = synced[reciter];
+  if (after) saveSynced(reciter, { ...after, ...(failed.length ? { repair: failed } : { repair: undefined }) });
+}
+
+/** Downloads the ayat (four at a time), from the addresses Content Sync gives. A pack counts only when every one of its ayat is on the phone. */
 export async function downloadPack(reciter: number, kind: PackKind, label: string, keys: string[]) {
   const id = packId(reciter, kind);
   if (web || (busy.has(id) && !busy.get(id)!.failed)) return;
@@ -107,45 +150,48 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
   busy.set(id, progress);
   running.set(id, keys);
   changed();
+  const fail = () => { running.delete(id); busy.set(id, { ...progress, failed: true }); changed(); };
   try {
-    if (!synced[reciter] || syncDue(synced[reciter].syncedAt, Date.now())) await sync(reciter);
-  } catch {
+    await inLine(reciter, async () => { if (!synced[reciter] || syncDue(synced[reciter].syncedAt, Date.now())) await sync(reciter); });
+    const rows = synced[reciter]?.rows ?? {};
+    const dir = folder(reciter);
+    if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
+    // An ayah Content Sync has no file for cannot be downloaded: the pack is not complete.
+    const queue = keys.filter(key => rows[key]);
+    let failed = queue.length < keys.length;
+    progress.total = queue.length;
+    const worker = async () => {
+      for (let key = queue.shift(); key && !stopped.has(id); key = queue.shift()) {
+        try { if (!have(reciter, key)) await fetchAyah(reciter, key, rows[key].url); } catch { failed = true; }
+        progress.done += 1;
+        if (progress.done % 10 === 0 || progress.done === progress.total) changed();
+      }
+    };
+    await Promise.all([worker(), worker(), worker(), worker()]);
     running.delete(id);
-    busy.set(id, { ...progress, failed: true });
-    changed();
-    return;
+    if (stopped.has(id)) { busy.delete(id); stopped.delete(id); sweep(reciter); changed(); return; }
+    // A failed run keeps its whole files so that trying again picks up where it stopped; the next app start sweeps them otherwise.
+    if (failed || !progress.total || keys.some(key => !have(reciter, key))) { fail(); return; }
+    busy.delete(id);
+    // The same download done again (a changed «ما أحفظه») drops the ayat it no longer holds.
+    const old = packs.find(pack => pack.reciter === reciter && pack.kind === kind);
+    const rest = packs.filter(pack => pack !== old);
+    const next = [...rest, { reciter, kind, label, keys }];
+    if (old) { const kept = heldKeys(reciter, next); old.keys.forEach(key => { if (!kept.has(key)) deleteFile(reciter, key); }); }
+    savePacks(next);
+  } catch {
+    fail();
   }
-  const rows = synced[reciter]?.rows ?? {};
-  const dir = folder(reciter);
-  if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
-  const queue = keys.filter(key => rows[key]);
-  progress.total = queue.length;
-  let failed = false;
-  const worker = async () => {
-    for (let key = queue.shift(); key && !stopped.has(id); key = queue.shift()) {
-      try {
-        const file = fileOf(reciter, key);
-        if (!file.exists) await File.downloadFileAsync(rows[key].url, file, { idempotent: true });
-      } catch { failed = true; }
-      progress.done += 1;
-      if (progress.done % 10 === 0 || progress.done === progress.total) changed();
-    }
-  };
-  await Promise.all([worker(), worker(), worker(), worker()]);
-  running.delete(id);
-  if (stopped.has(id)) { busy.delete(id); stopped.delete(id); sweep(reciter); changed(); return; }
-  // A failed run keeps its files so that trying again picks up where it stopped; the next app start sweeps them otherwise.
-  if (failed || !progress.total) { busy.set(id, { ...progress, failed: true }); changed(); return; }
-  busy.delete(id);
-  // The same download done again (a changed «ما أحفظه») drops the ayat it no longer holds.
-  const old = packs.find(pack => pack.reciter === reciter && pack.kind === kind);
-  const rest = packs.filter(pack => pack !== old);
-  const next = [...rest, { reciter, kind, label, keys }];
-  if (old) { const kept = heldKeys(reciter, next); old.keys.forEach(key => { if (!kept.has(key)) deleteFile(reciter, key); }); }
-  savePacks(next);
 }
 
 export const stopDownload = (reciter: number, kind: PackKind) => { stopped.add(packId(reciter, kind)); };
+const stopReciter = (reciter: number) => { for (const id of running.keys()) if (id.startsWith(`${reciter}:`)) stopped.add(id); };
+
+/** Removes all of a reciter's downloads, stopping the ones still running so that none comes back when it finishes. */
+export function removeReciter(reciter: number) {
+  stopReciter(reciter);
+  packsOf(reciter).forEach(pack => removePack(reciter, pack.kind));
+}
 
 /** Removes a download's files, keeping those another of the reciter's downloads still holds. */
 export function removePack(reciter: number, kind: PackKind) {
@@ -167,8 +213,12 @@ export async function syncPacks(now = Date.now()) {
     if (root.exists) for (const item of root.list()) if (item instanceof Directory && /^\d+$/.test(item.name)) sweep(Number(item.name));
   } catch {}
   for (const reciter of new Set(packs.map(pack => pack.reciter))) {
-    if (!syncDue(synced[reciter]?.syncedAt, now)) continue;
-    try { await sync(reciter); } catch {}
+    try {
+      await inLine(reciter, async () => {
+        if (syncDue(synced[reciter]?.syncedAt, now)) await sync(reciter);
+        else if (synced[reciter]?.repair?.length) await repairFiles(reciter);
+      });
+    } catch {}
   }
   changed();
 }
