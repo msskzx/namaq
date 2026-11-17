@@ -143,6 +143,7 @@ export default function MushafPage({
   zoom = 1,
   slice,
   onTopic,
+  anonymous = false,
 }: {
   page: number;
   data: MushafPageData;
@@ -173,6 +174,8 @@ export default function MushafPage({
    * marks where one starts, moving no word; the header names no topic (owner, 2026-11-14). Not while reciting.
    */
   onTopic?: (surah: number, section: number) => void;
+  /** A quiz page (the app's MushafPageView): no juz, surah name, quarter or sajda marks, or page number to say where it is. */
+  anonymous?: boolean;
 }) {
   const body = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
@@ -190,7 +193,7 @@ export default function MushafPage({
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const topics = onTopic && !hidden;
   const firstWord: Record<string, boolean> = {};
-  const badges = data.items.map(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
+  const badges = data.items.map(item => anonymous ? [] : [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter)] : []), ...('line' in item && isSajda(item.line) ? [['سجدة']] : [])]);
   useLayoutEffect(() => {
     const element = body.current;
     if (!element) return;
@@ -205,7 +208,7 @@ export default function MushafPage({
   const rows = data.items.map((item, index) => (slice && (index < slice.from || index > slice.to) ? null :
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
-                <h2 className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
+                <h2 aria-hidden={(anonymous && surahHidden(item.surah)) || undefined} className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
               ) : 'basmala' in item ? (
                 (() => {
                   const surah = surahOf[index];
@@ -269,9 +272,9 @@ export default function MushafPage({
   // A slice: only these rows, sized by the page's width, with no frame, header or page number.
   if (slice) return <div ref={body} data-page={page} className={`${styles.body} ${styles.slice}`}>{rows}</div>;
   return (
-    <section aria-label={`الصفحة ${num(page)}`} data-page={page} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
+    <section aria-label={anonymous ? 'صفحة المصحف' : `الصفحة ${num(page)}`} data-page={page} data-side={page % 2 ? 'right' : 'left'} data-flow={flow || undefined} className={styles.page}>
       <div className={styles.head}>
-        <span>الجزء {juzName(data.juz)}</span>
+        <span>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</span>
         {badges.some(list => list.length > 0) && (
           <div className={styles.strip}>
             {badges.flat().map(label => (
@@ -281,13 +284,13 @@ export default function MushafPage({
             ))}
           </div>
         )}
-        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{current && names[current] ? plainName(names[current]) : ''}</span>
+        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{!anonymous && current && names[current] ? plainName(names[current]) : ''}</span>
       </div>
       <div className={styles.frame}>
         <div ref={body} className={`${styles.body} ${page <= 2 && !flow ? styles.opening : ''}`} style={flow ? undefined : { gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>
           {rows}
         </div>
-        <div className={styles.foot}>{num(page)}</div>
+        <div className={styles.foot}>{anonymous ? '' : num(page)}</div>
       </div>
     </section>
   );

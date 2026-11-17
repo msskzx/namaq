@@ -8,6 +8,7 @@ import type { Difficulty } from './difficulty';
 import type { Random } from './random';
 import type { ScopeFilters } from './scopeParams';
 import type { QuizTopic } from './settings';
+import type { CompareAsk } from './compareAnswers';
 
 /** A recited snippet's kind and its two answers (reciteSnippet.ts), here so screens need not load the Quran's text. */
 export const RECITE_SNIPPET = 'RECITE';
@@ -33,6 +34,8 @@ export type ChoiceQuestion = {
   alike?: Record<string, { key: string; words: string[] }>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */
   note?: { label: string; text: string };
+  /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */
+  compare?: CompareAsk;
   evidence: { claimKeys: string[] };
 };
 
@@ -79,8 +82,9 @@ export function mixQuestions<T>(lists: T[][], length: number, random: Random, ay
   return picked;
 }
 
-/** The ayat a question asks about: a tree's places, or a choice question's ayah. */
-export const questionAyat = (question: { tree?: Branch; ayahKey?: string }) => question.tree ? keys(question.tree) : question.ayahKey ? [question.ayahKey] : [];
+/** The ayat a question asks about: a tree's places, a compare card's two ayat, or a choice question's ayah. */
+export const questionAyat = (question: { tree?: Branch; ayahKey?: string; compare?: CompareAsk }) =>
+  question.tree ? keys(question.tree) : question.compare ? [question.compare.shown.key, question.compare.asked.key] : question.ayahKey ? [question.ayahKey] : [];
 
 /** The words where the asked ayah and a picked look-alike part, by index in each. */
 export const alikeDiff = (asked: string[], alike: string[]) => wordDiff(asked.map(normalizeWord), alike.map(normalizeWord));

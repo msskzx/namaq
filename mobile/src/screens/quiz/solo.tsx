@@ -8,6 +8,8 @@ import BackBar from '@/components/BackBar';
 import Button, { Row } from '@/components/Button';
 import LoadingDots from '@/components/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
+import Toggle from '@/components/Toggle';
+import { quizPageBefore } from '@/lib/settings';
 import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
@@ -20,7 +22,7 @@ import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette, CARD } from '@/lib/theme';
 
 /** What each kind is called on its chip. */
-const KIND_NAMES = { BRANCHES: 'شجرة المتشابهات', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
+const KIND_NAMES = { BRANCHES: 'متشابهات القرآن', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
 
 /** The solo quiz setup: the kinds of question mixed, the part of the Quran (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
@@ -48,6 +50,9 @@ export default function SoloSetup() {
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const { available, lengths } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
+  // Recite and «في أي سورة؟» are asked on the ayah's mushaf page (owner, 2026-11-17).
+  const onPage = settings.kinds.includes('RECITE') || settings.kinds.includes('SURAH');
+  const [pageBefore, setPageBefore] = quizPageBefore.use();
   // A kind that does not ask the Quran (the Tuhfa's lines) has no range to pick.
   const ranged = settings.kinds.some(kind => RANGED_TOPICS.includes(kind));
   // At least one kind stays picked.
@@ -96,6 +101,9 @@ export default function SoloSetup() {
         {trees && <Section title="متشابهات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
+        </Section>}
+        {onPage && <Section title="صفحة المصحف" palette={palette}>
+          <Toggle on={pageBefore} onChange={setPageBefore} label="اكتب الآيات قبلها في الصفحة" palette={palette} />
         </Section>}
         <Section title="عدد الأسئلة" palette={palette}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>

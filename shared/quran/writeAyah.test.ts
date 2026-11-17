@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
+import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, openingCut, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
 
 describe('writing an ayah\'s first and last words', () => {
   it('asks the first and last three words, or every word of a short ayah', () => {
@@ -98,5 +98,14 @@ describe('the write boxes', () => {
     expect(previousBox({ typed: {}, current: 4 }, asked)?.current).toBe(1);
     expect(nextBox({ typed: {}, current: 4 }, asked).finished).toBe(true);
     expect(gradeWritten(asked, { 0: 'قال', 1: 'خطا', 4: 'صدري' }, words)).toEqual({ right: [0, 4], wrong: [1], typed: { 1: 'خطا' } });
+  });
+});
+
+describe('openingCut', () => {
+  it('ends the opening at the same letters when the page splits words differently or has a quarter sign', () => {
+    expect(openingCut(['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ'], ['قُلْ', 'هُوَ'])).toBe(3);
+    expect(openingCut(['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], ['لَّوْ', 'مَا'])).toBe(1);
+    expect(openingCut(['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلۡ', 'يَاسِينَ'], ['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلْ يَاسِينَ'])).toBe(4);
+    expect(openingCut(['قُلۡ', 'هُوَ'], [])).toBe(0);
   });
 });

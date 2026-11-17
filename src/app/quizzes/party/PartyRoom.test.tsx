@@ -58,13 +58,13 @@ describe('party lobby', () => {
     expect(socket.send).toHaveBeenCalledWith({ type: 'ready', ready: true });
   });
 
-  it('shows the example tree to the host and the players when trees are chosen', () => {
+  it('shows the example question, as the matrix, to the host and the players when متشابهات are chosen', () => {
     const trees = reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['BRANCHES'] } }, 0).state;
     show(trees);
-    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    expect(document.querySelector('[data-quiz-matrix]')).toBeTruthy();
     cleanup();
     show(trees, 'p1');
-    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    expect(document.querySelector('[data-quiz-matrix]')).toBeTruthy();
     expect(screen.getByText('Grading:')).toBeTruthy();
   });
 

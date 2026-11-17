@@ -11,8 +11,9 @@ import Button, { Row } from '@/components/Button';
 import QuestionSwipe from '@/components/QuestionSwipe';
 import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
+import { CompareFeedback, CompareInputs } from '@/components/QuizCompare';
 import { surahNames } from '@/lib/branches';
-import { check, cleanSolo, clearAnswers, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
@@ -33,7 +34,12 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
     return (
       <View style={{ flex: 1 }}>
         <QuestionDots states={states} current={review} onPick={setReview} palette={palette} />
-        {isTree(question) ? <>
+        {isCompare(question) ? <>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
+            {`${num(points[review].earned)} من ${num(points[review].total)} فراغات`}
+          </Text>
+          <CompareFeedback key={question.key} question={question} typed={run.typed[review]} palette={palette} hints={run.hints?.[review]} />
+        </> : isTree(question) ? <>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
             {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
           </Text>
@@ -94,7 +100,12 @@ export default function QuizPlay() {
       {run.submitted ? <Results run={run} palette={palette} /> : (
         <>
           <QuestionSwipe onNext={last ? undefined : () => update(goTo(run, current + 1))} onPrevious={current === 0 ? undefined : () => update(goTo(run, current - 1))}>
-            {!isTree(question)
+            {isCompare(question)
+              ? checked
+                ? <CompareFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} header={top} hints={run.hints?.[current]} />
+                : <CompareInputs key={question.key} question={question} typed={run.typed[current]} onType={(blank, text) => update(typeAnswer(run, blank, text))} palette={palette} header={top}
+                  hints={run.hints?.[current] ?? {}} onHints={hints => update(setHints(run, hints))} />
+              : !isTree(question)
               ? <QuizChoice key={question.key} question={question} picked={run.typed[current][0]} shown={!!run.shown?.[current]} palette={palette} header={top} onOpen={readAyah}
                 onReveal={() => update(reveal(run))}
                 onPick={value => {
@@ -108,7 +119,7 @@ export default function QuizPlay() {
           </QuestionSwipe>
           {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
           {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
-            {!checked && isTree(question) && (
+            {!checked && (isTree(question) || isCompare(question)) && (
               <Row>
                 <Button variant="primary" Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => update(check(run))} />
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />

@@ -71,6 +71,8 @@ type Props = {
    * names no topic (owner, 2026-11-14).
    */
   onTopic?: (surah: number, section: number) => void;
+  /** A quiz page that must not say where it is (owner, 2026-11-17): no juz, surah name, marks or page number around the text. */
+  anonymous?: boolean;
 };
 
 
@@ -143,7 +145,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -304,13 +306,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       style={slice ? { width } : { width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
       {/* One height on every page, chip or not, so facing pages' frames line up. */}
       {!slice && <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
-        <Text style={{ color: palette.muted, fontSize: small }}>الجزء {juzName(data.juz)}</Text>
+        <Text style={{ color: palette.muted, fontSize: small }}>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
-          {badges.map(label => (
+          {!anonymous && badges.map(label => (
             <Text key={label} style={{ borderWidth: 1, borderColor: label === 'سجدة' ? palette.accent : palette.rule, color: label === 'سجدة' ? palette.accent : palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>{label}</Text>
           ))}
         </View>
-        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{current && names[current] ? plainName(names[current]) : ''}</Text>
+        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? plainName(names[current]) : ''}</Text>
       </View>}
       {/* The double rule around the text. */}
       <View style={slice ? undefined : { flex: 1, borderWidth: 1, borderColor: palette.rule }}>
@@ -432,7 +434,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
             })}
           </Pressable>
           {!slice && <View style={{ paddingVertical: 2 }}>
-            <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{num(page)}</Text>
+            <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{anonymous ? ' ' : num(page)}</Text>
           </View>}
         </View>
       </View>
