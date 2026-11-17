@@ -118,11 +118,6 @@
     "shared/data/quran/branchVerdicts.json",
     "shared/data/quran/mushafWords.json",
     "shared/data/quran/mutashabih.json",
-    "shared/data/quran/qiraat.json",
-    "shared/data/quran/trees.json",
-    "shared/data/quran/words.json",
-    "src/app/quran/compare/similar.json",
-    "src/app/quran/words/lemmas.json",
-    "src/app/quran/words/places.json"
+    "shared/data/quran/trees.json"
   ]
 }

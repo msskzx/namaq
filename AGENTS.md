@@ -290,8 +290,10 @@ words reads them from the pages (`ayahWordsOf` in
 data keeps positions only: trees.json holds keys, pages, roots and word
 ranges, and `shared/quran/quranText/corpus.ts` puts the page words back (import
 it, never trees.json). The same ayahWords file maps the corpus's word split onto
-the page words. Only the module sets the Quran font. The one exception is Quran quoted
-inside a book. `oneQuranText.test.ts` lists today's breaks in
+the page words. Only the module sets the Quran font. The exceptions are Quran quoted
+inside a book, the other readers' readings (qiraat.json), and the Quranic
+Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
+of them is the Hafs page text. `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 
 ## Data model
