@@ -17,7 +17,7 @@ import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
-import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
+import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -109,7 +109,7 @@ export default function QuizPlay() {
               ? <QuizChoice key={question.key} question={question} picked={run.typed[current][0]} shown={!!run.shown?.[current]} palette={palette} header={top} onOpen={readAyah}
                 onReveal={() => update(reveal(run))}
                 onPick={value => {
-                  if (question.family === RECITE_SNIPPET && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+                  if (recited(question) && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
                   update(pick(run, value));
                 }} />
               : checked

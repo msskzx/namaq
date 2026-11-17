@@ -8,7 +8,7 @@ import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } 
 import { shuffle, type Random } from '@shared/quiz/random';
 import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
-import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { mixQuestions, questionAyat, recited, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS } from '@shared/quiz/settings';
 import { DEFAULT_LEAVES } from './types';
@@ -30,6 +30,7 @@ export interface AssembledQuestion {
   quran?: ChoiceQuestion['quran'];
   number?: ChoiceQuestion['number'];
   reveal?: ChoiceQuestion['reveal'];
+  page?: ChoiceQuestion['page'];
   ayahKey?: string;
   alike?: ChoiceQuestion['alike'];
   note?: ChoiceQuestion['note'];
@@ -112,7 +113,7 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   // Each kind gets its share of the quiz, never two questions on one ayah (choiceKinds.ts mixQuestions); extra are drawn for those skipped.
   return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat).map((question) => ({
     ...question,
-    choices: question.reveal ? question.choices : shuffle(question.choices, random),
+    choices: recited(question) ? question.choices : shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),
   }));
 }

@@ -7,9 +7,10 @@ test.describe('pages without the database', () => {
     await noErrorPage(page);
   });
 
-  test('the quizzes page lists every quiz', async ({ page }) => {
+  test('the quizzes page offers solo and party only', async ({ page }) => {
     await page.goto('/quizzes');
-    for (const name of ['اختبار فردي', 'اختبار جماعي', 'تسميع', 'اكتب أول الآية وآخرها']) await expect(page.getByText(name, { exact: true }).first()).toBeVisible();
+    const modes = page.getByRole('navigation', { name: 'نوع الاختبار' }).getByRole('link');
+    await expect(modes).toHaveText([/اختبار فردي/, /اختبار جماعي/]);
   });
 
   test('prayer times for a picked city', async ({ page }) => {
@@ -47,6 +48,10 @@ test.describe('pages without the database', () => {
   });
 });
 
+/** The matrix is the default view (owner, 2026-11-17); tests about the tree run for a reader who picked it in settings. */
+const pickTree = (page: import('@playwright/test').Page) =>
+  page.context().addCookies([{ name: 'branches-view', value: 'tree', url: test.info().project.use.baseURL! }]);
+
 test.describe('pages with the database', () => {
   test.skip(!hasDatabase, 'needs DATABASE_URL or .env (see e2e/README.md)');
 
@@ -74,6 +79,7 @@ test.describe('pages with the database', () => {
   });
 
   test('the home tree card is the branches tree and opens it', async ({ page }) => {
+    await pickTree(page);
     await page.goto('/');
     const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' }).first();
     await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
@@ -214,13 +220,22 @@ test.describe('pages with the database', () => {
 
   test('no tree on home draws tabs: every box names its ayah inside, over a rule', async ({ page }) => {
     // docs/records/R0042; since 2026-11-16 (owner) no tree has tabs at all.
+    await pickTree(page);
     await page.goto('/');
     await expect(page.locator('[data-ref]').first()).toBeVisible();
     await expect(page.locator('[data-tab]')).toHaveCount(0);
     for (const ref of (await page.locator('[data-ref]').all()).slice(0, 6)) expect(parseFloat(await ref.evaluate(element => getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(11);
   });
 
-  test('branches shows the first tree', async ({ page }) => {
+  test('branches opens the first tree as the matrix for a new visitor', async ({ page }) => {
+    await page.goto('/quran/branches');
+    await expect(page.getByRole('region', { name: 'آيات الشجرة في سياقها' }).filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true })).toHaveCount(0);
+    await noErrorPage(page);
+  });
+
+  test('branches shows the first tree to a reader who picked the tree', async ({ page }) => {
+    await pickTree(page);
     await page.goto('/quran/branches');
     await expect(page.getByRole('progressbar', { name: 'التقدم بين الأشجار' })).toBeAttached();
     await expect(page.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();

@@ -10,7 +10,7 @@ import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
-import { FORGOT, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
+import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
@@ -341,7 +341,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
           <QuizChoice question={question} picked={run.typed[0][0]} shown={!!run.shown?.[0]} palette={palette} header={prompt} scroll={false}
             onReveal={() => setRun(reveal(run))}
             onPick={value => {
-              if (question.family === RECITE_SNIPPET && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+              if (recited(question) && value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
               setRun(pick(run, value));
             }} />
         </View>

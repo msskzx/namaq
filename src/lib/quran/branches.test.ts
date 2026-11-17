@@ -54,7 +54,7 @@ describe('sharedOpenings', () => {
   it('keeps the generated artifact as the full Quran corpus', () => {
     expect(all).toHaveLength(6236);
     expect(all.find(ayah => ayah.key === '2:3')?.conjs?.[3]).toBe('و');
-    expect(all.find(ayah => ayah.key === '43:83')?.next?.slice(0, 2)).toEqual(['وَهُوَ', 'ٱلَّذِى']);
+    expect(all.find(ayah => ayah.key === '43:83')?.next?.slice(0, 2)).toEqual(['وَهُوَ', 'ٱلَّذِي']);
   });
 });
 

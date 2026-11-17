@@ -42,7 +42,7 @@ test('a reflection note is written from the long-press menu', async ({ page }) =
   await expect.poll(async () => (await stored<Record<string, { text: string }>>(page, 'ayah-notes'))?.['1:2']?.text).toBe('الحمد كله لله');
 });
 
-test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
+test('the trees sheet holds the branches cards, opening as the matrix with their own tree switch, and opens the ayah\'s trees', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'متشابهات الآية' }).click();
@@ -50,8 +50,8 @@ test('the trees sheet holds the branches cards, with their own matrix switch, an
   await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
   await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
   await expect(page).toHaveURL(/\/branches/);
-  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
-  await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
+  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees, as the matrix.
+  await expect(page.getByRole('button', { name: /^قراءة الصافات / }).first()).toBeVisible();
   expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
 });
 

@@ -100,7 +100,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
     <>
       <header className="flex items-center gap-2">
         <h1 className="text-3xl font-bold">افتتاح السور</h1>
-        <Link href="/quizzes/openings" aria-label="اختبار أوائل السور" title="اختبار أوائل السور" className={`ms-auto ${icon}`}><PenLine size={18} aria-hidden /></Link>
+        <Link href="/quizzes?topic=OPENINGS" aria-label="اختبار أوائل السور" title="اختبار أوائل السور" className={`ms-auto ${icon}`}><PenLine size={18} aria-hidden /></Link>
       </header>
       <div role="group" aria-label="أنواع الافتتاح" className="flex gap-2 overflow-x-auto pb-1">
         {OPENING_KINDS.map(k => (

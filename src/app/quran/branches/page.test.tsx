@@ -260,9 +260,9 @@ describe('Quran branch trees', () => {
     render(await open({ o: 'يومهم الذي', juzFrom: '25', juzTo: '30' }));
     expect(screen.getByText('۝').closest('[data-node]')).toBeNull();
     expect(screen.queryByRole('button', { name: 'إظهار المسار: ۝' })).toBeNull();
-    expect(screen.getByText(/^وَهُوَ ٱلَّذِى فِى ٱلسَّمَآءِ/)).toBeTruthy();
-    expect(screen.getByText(/^يَوْمَ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ/)).toBeTruthy();
-    expect(screen.getByText('فِيهِ يُصْعَقُونَ')).toBeTruthy();
+    expect(screen.getByText(/^وَهُوَ ٱلَّذِي فِي ٱلسَّمَآءِ/)).toBeTruthy();
+    expect(screen.getByText(/^يَوۡمَ يَخۡرُجُونَ مِنَ ٱلۡأَجۡدَاثِ/)).toBeTruthy();
+    expect(screen.getByText('فِيهِ يُصۡعَقُونَ')).toBeTruthy();
   });
   it('suggests the retained tree when typing absorbed wording, from phrases fetched once and not sent with the page', async () => {
     const fetch = vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 }));
@@ -298,7 +298,7 @@ describe('Quran branch trees', () => {
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
     render(await follow({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
-    expect(within(tree).getAllByText(/^فَذَرْهُمْ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
+    expect(within(tree).getAllByText(/^فَذَرۡهُمۡ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
     expect(within(tree).queryByText('ف')).toBeNull();
     expect(tree.textContent).toContain('الزخرف ٨٣');
     expect(tree.textContent).toContain('٧٠:٤٢');

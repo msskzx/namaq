@@ -475,7 +475,7 @@ describe('compare pair cards', () => {
   it('marks words that share only a root lightly, apart from same-word matches', () => {
     const card = pairCards(2, 3).find(card => card.id === '2:66|3:138')!;
     const kinds = card.sides.map(side => Object.entries(side.ayat[0].marks ?? {}).map(([i, mark]) => `${side.ayat[0].words[Number(i)]}:${mark.kind}`));
-    expect(kinds[0]).toContain('بَيْنَ:related');
+    expect(kinds[0]).toContain('بَيۡنَ:related');
     expect(kinds[1].filter(entry => entry.endsWith(':related'))).toHaveLength(1);
   });
 

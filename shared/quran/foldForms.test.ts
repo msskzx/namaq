@@ -113,7 +113,7 @@ describe('every tree of the default list, folded', () => {
   it('leaves a trunk on every tree and a braid only where the neighbours cannot take the word', () => {
     const braided = new Set<string>();
     for (const [id, { tree }] of presentations) {
-      expect(tree.words.length).toBeGreaterThan(0);
+      expect(tree.words.length, id).toBeGreaterThan(0);
       const walk = (node: Branch) => {
         if (writtenPieces(node.words.length, i => writtenForms(node, i, node.words[i]).length > 1).some(piece => piece.kind === 'braid')) braided.add(id);
         node.children.forEach(walk);

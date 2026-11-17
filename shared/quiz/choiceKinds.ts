@@ -9,11 +9,18 @@ import type { Random } from './random';
 import type { ScopeFilters } from './scopeParams';
 import type { QuizTopic } from './settings';
 import type { CompareAsk } from './compareAnswers';
+import type { PageAsk } from '../quran/writeAyah';
 
 /** A recited snippet's kind and its two answers (reciteSnippet.ts), here so screens need not load the Quran's text. */
 export const RECITE_SNIPPET = 'RECITE';
 export const RECITED = '1';
 export const FORGOT = '0';
+
+/**
+ * A question the reader recites or writes and then grades (حفظتها or نسيتها): what it asks stays hidden until it is shown,
+ * its two answers keep their order, and نسيتها puts the ayah on the forgotten shelf.
+ */
+export const recited = (question: { reveal?: unknown; page?: { write?: unknown } }) => !!(question.reveal || question.page?.write);
 
 export type ChoiceQuestion = {
   key: string;
@@ -30,6 +37,8 @@ export type ChoiceQuestion = {
   correctAnswer: string;
   /** The ayah (`surah:ayah`) the question is about, opened in the mushaf after answering. */
   ayahKey?: string;
+  /** Asked on the ayah's own mushaf page instead of the words above (QuizPage): how much shows, what is written, the surah title. */
+  page?: PageAsk;
   /** For a wrong choice, the ayah in it that looks like the asked one, shown when it is picked. */
   alike?: Record<string, { key: string; words: string[] }>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */

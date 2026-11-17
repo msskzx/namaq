@@ -35,7 +35,7 @@ export const EXAMPLES: Example[] = [
   {
     kind: 'strip', surah: 10, from: 22, to: 22, source: BURHAN,
     steps: [{ voice: 'you', label: 'أنتم' }, { voice: 'he', label: 'هم' }, { voice: 'we', label: '«نحن»', note: 'دعاؤهم' }],
-    marks: { 22: [['يسيركم', 'you'], ['كنتم', 'you'], ['بهم', 'he', 'وجرين بهم'], ['وفرحوا', 'he'], ['وجاءهم', 'he'], ['وظنوا انهم', 'he'], ['بهم دعوا', 'he'], ['لين انجيتنا', 'we'], ['لنكونن', 'we']] },
+    marks: { 22: [['يسيركم', 'you'], ['كنتم', 'you'], ['بهم', 'he', 'وجرين بهم'], ['وفرحوا', 'he'], ['وجاءهم', 'he'], ['وظنوا انهم', 'he'], ['بهم دعوا', 'he'], ['لئن انجيتنا', 'we'], ['لنكونن', 'we']] },
   },
   {
     kind: 'strip', surah: 35, from: 9, to: 9, source: BURHAN,
