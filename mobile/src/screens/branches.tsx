@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { Search, X, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -21,22 +21,17 @@ import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
 import { around as aroundSetting, branchView, listState } from '@/lib/settings';
 import { readJson, writeJson } from '@/lib/storage';
 import { usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
-  return (
-    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label} accessibilityState={on === undefined ? undefined : { selected: on }}
-      style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: on ? 1 : 0, borderColor: palette.accent }}>
-      <Icon size={22} color={on ? palette.accent : palette.muted} />
-      {dot && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-    </Pressable>
-  );
+  return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} dot={dot} />;
 }
 
 function Chip({ text, onClear, palette }: { text: string; onClear: () => void; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: palette.rule, borderRadius: 16, paddingStart: 12, paddingEnd: 4, height: 32, flexShrink: 1 }}>
       <Text style={{ color: palette.ink, fontSize: 14, flexShrink: 1 }} numberOfLines={1}>{text}</Text>
-      <Pressable onPress={onClear} accessibilityRole="button" accessibilityLabel={`إزالة ${text}`} hitSlop={8} style={{ padding: 4 }}><X size={14} color={palette.muted} /></Pressable>
+      <IconButton Icon={X} label={`إزالة ${text}`} onPress={onClear} size="small" />
     </View>
   );
 }

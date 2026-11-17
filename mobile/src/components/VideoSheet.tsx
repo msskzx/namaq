@@ -5,10 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, Pause, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import LoadingDots from '@/ui/LoadingDots';
 import VideoFrame, { type FrameHandle } from './VideoFrame';
-import { IconButton } from './Studio';
 import { recorderPage, type VideoInput } from '@/lib/scene';
 import { fontFace, shareVideo } from '@/lib/shareVideo';
 import type { Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 type Video = { data: string; mime: string };
 
@@ -45,7 +45,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
       <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52 }}>
           <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>{part ? `مشاركة كفيديو · ${part}` : 'مشاركة كفيديو'}</Text>
-          <IconButton label="إغلاق" onPress={onClose} Icon={X} color={palette.ink} />
+          <IconButton label="إغلاق" onPress={onClose} Icon={X} tone="ink" />
         </View>
         <View style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule }}>
           {open && font !== null && <VideoFrame ref={frame} key={run} html={page ? page(font) : recorderPage(input!, font)} onMessage={message} />}
@@ -53,18 +53,15 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 64 }}>
           {failed ? <Text style={{ color: palette.accent }}>لا يمكن تسجيل الفيديو على هذا الجهاز.</Text>
             : video ? <>
-              <IconButton label="إعادة" onPress={again} Icon={RotateCcw} color={palette.ink} />
-              <Pressable onPress={() => void shareVideo(video.data, video.mime)} accessibilityRole="button" accessibilityLabel="مشاركة الفيديو"
-                style={{ width: 56, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
-                <Send size={24} color={palette.onAccent} />
-              </Pressable>
+              <IconButton label="إعادة" onPress={again} Icon={RotateCcw} tone="ink" />
+              <IconButton Icon={Send} label="مشاركة الفيديو" onPress={() => void shareVideo(video.data, video.mime)} round big />
               {onNext && <Pressable onPress={onNext} accessibilityRole="button" accessibilityLabel="الجزء التالي"
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 48, paddingHorizontal: 12, borderRadius: 24, borderWidth: 1, borderColor: palette.rule }}>
                 <Text style={{ color: palette.ink, fontSize: 15 }}>الجزء التالي</Text>
                 <ChevronLeft size={20} color={palette.ink} />
               </Pressable>}
             </> : <>
-              {font !== null && <IconButton label={paused ? 'متابعة' : 'إيقاف مؤقت'} onPress={toggle} Icon={paused ? Play : Pause} color={palette.ink} />}
+              {font !== null && <IconButton label={paused ? 'متابعة' : 'إيقاف مؤقت'} onPress={toggle} Icon={paused ? Play : Pause} tone="ink" />}
               <View accessibilityLabel="جارٍ تجهيز الفيديو"><LoadingDots /></View>
             </>}
         </View>

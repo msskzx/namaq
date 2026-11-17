@@ -62,7 +62,7 @@ TopBar, Text, ExternalLink, Reference, NumberPicker, Loading. Features stay in
 **PR:** move files, fix imports, add `ui/README.md` listing each piece with a
 screenshot. No look changes.
 
-### 2. Icon button
+### 2. Icon button — done
 Drift: 74 hand-drawn icon buttons. Icon size 22 (32), 20 (11), 18 (9), 24 (8),
 16 (8), 26, 28, 21, 19, 34, 17. Hit area 4, 6, 8, 10, 12. Box 40, 34, 44, 56,
 52, 48, 42, 30, 38… Worst: `CompareCard.tsx` (15), `TopBar.tsx` (9),

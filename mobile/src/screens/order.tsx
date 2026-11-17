@@ -14,6 +14,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const SURAHS = orderSurahs(data, num);
 type Row = { kind: 'link'; surah: number; link: OrderLinkView } | { kind: 'surah'; s: OrderSurah };
@@ -72,9 +73,7 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
       <Source cite={s.aim.src} palette={palette} />
       {/* Card actions on the right (owner): the mushaf. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
-        <Pressable onPress={() => readAyah(`${s.surah}:1`)} accessibilityRole="button" accessibilityLabel={`افتح سورة ${s.name} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
-          <BookOpen size={19} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} size="small" />
       </View>
     </View>
   );

@@ -11,6 +11,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** The new list, and where it opens: a picked phrase, else the search's best tree. */
@@ -52,7 +53,7 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
             <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
               accessibilityLabel="ابحث عن عبارة مشتركة بين آيتين أو أكثر" onSubmitEditing={() => apply({}, { query: query.trim() })}
               style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
-            {typed && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
+            {typed && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
           </View>
         </View>
       </Pressable>

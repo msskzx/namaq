@@ -16,6 +16,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', data), others: buildOaths('others', data) };
@@ -51,12 +52,8 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
       </View>
       {/* Card actions under the card, on the right (owner): the mushaf, then share last. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
-        <Pressable onPress={() => readAyah(oath.id)} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
-          <BookOpen size={19} color={palette.muted} />
-        </Pressable>
-        <Pressable onPress={() => shareOath(oath)} accessibilityRole="button" accessibilityLabel={`شارك ${place}`} hitSlop={6} style={{ padding: 8 }}>
-          <Send size={19} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} size="small" />
+        <IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} size="small" />
       </View>
     </View>
   );

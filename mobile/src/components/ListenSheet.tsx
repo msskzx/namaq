@@ -15,6 +15,7 @@ import { bytesOf, downloadPack, packsOf, progressOf, removePack, stopDownload, u
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
 import { ayahCounts, surahNames } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const surahName = (surah: number) => plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '');
 
@@ -97,10 +98,7 @@ export default function ListenSheet({ open, start, onClose, palette }: { open: b
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ flex: 1, color: palette.ink, fontSize: 18, textAlign: 'right' }}>الاستماع</Text>
               {range && (
-                <Pressable onPress={() => { listen(range.from, range.to); close(); }} accessibilityRole="button" accessibilityLabel="استمع إلى المقطع"
-                  style={{ width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.accent }}>
-                  <Play size={20} color={palette.onAccent} fill={palette.onAccent} />
-                </Pressable>
+                <IconButton Icon={Play} label="استمع إلى المقطع" onPress={() => { listen(range.from, range.to); close(); }} round />
               )}
             </View>
             {range && (

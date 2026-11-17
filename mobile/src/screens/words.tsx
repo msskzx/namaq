@@ -13,6 +13,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { words } from '@/lib/words';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 /** Words listed with no search (the most frequent) and at most with one. */
 export const WORDS_SHOWN = 40;
@@ -41,7 +42,7 @@ export default function WordsScreen() {
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" placeholderTextColor={palette.muted} returnKeyType="search"
             accessibilityLabel="ابحث عن كلمة في القرآن"
             style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 44 }} />
-          {query !== '' && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
+          {query !== '' && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
         </View>
       </View>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom }}>

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Line as SvgLine, Path } from 'react-native-svg';
 import { BookOpen, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -9,6 +9,7 @@ import { Text } from '@/ui/Text';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 // The app lays out right to left (direction: 'rtl' in app/_layout.tsx), so a row starts on the right.
 
@@ -127,12 +128,8 @@ export function IltifatCard({ view, palette, image }: { view: ExampleView; palet
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
       {image ? <View style={{ height: 10 }} /> : <View style={{ flexDirection: 'row' }}>
-        <Pressable onPress={() => readAyah(`${view.surah}:${view.from}`)} accessibilityRole="button" accessibilityLabel={`افتح ${title} في المصحف`} hitSlop={6} style={{ padding: 8 }}>
-          <BookOpen size={21} color={palette.muted} />
-        </Pressable>
-        <Pressable onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} accessibilityRole="button" accessibilityLabel={`شارك ${title}`} hitSlop={6} style={{ padding: 8 }}>
-          <Send size={21} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
+        <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
       </View>}
     </View>
   );

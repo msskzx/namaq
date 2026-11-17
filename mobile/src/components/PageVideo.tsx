@@ -10,9 +10,9 @@ import { sideLabel } from '@/lib/compare';
 import { pageVideoPages } from '@/lib/compareVideo';
 import type { Palette } from '@/lib/theme';
 import Sheet from '@/ui/Sheet';
-import { IconButton } from './Studio';
 import VideoSheet from './VideoSheet';
 import { nextSpeed, useReadSpeed } from './useReadAlong';
+import IconButton from '@/ui/IconButton';
 
 /**
  * Share a pair page as video: every card is ticked at first; untick the ones to leave out.
@@ -41,7 +41,7 @@ export default function PageVideo({ lead, other, cards, open, onClose, palette }
           <Pressable onPress={nextSpeed} accessibilityRole="button" accessibilityLabel={`السرعة ${speed}×`} style={{ minWidth: 44, padding: 8, alignItems: 'center' }}>
             <Text style={{ color: palette.muted, fontSize: 15 }}>{speed}×</Text>
           </Pressable>
-          <IconButton label={all ? 'إلغاء تحديد الكل' : 'تحديد الكل'} onPress={() => setOff(all ? cards.map(card => card.id) : [])} Icon={CheckCheck} color={all ? palette.accent : palette.ink} pressed={all} />
+          <IconButton label={all ? 'إلغاء تحديد الكل' : 'تحديد الكل'} onPress={() => setOff(all ? cards.map(card => card.id) : [])} Icon={CheckCheck} on={all} tone="ink" />
         </View>
         <FlatList data={plans} keyExtractor={({ card }) => card.id} style={{ flexGrow: 0 }} contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 4 }}
           renderItem={({ item: { card }, index }) => {
@@ -60,10 +60,7 @@ export default function PageVideo({ lead, other, cards, open, onClose, palette }
           }} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingTop: 8 }}>
           <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{summary}</Text>
-          <Pressable onPress={record} disabled={!picked.length} accessibilityRole="button" accessibilityLabel="مشاركة كفيديو"
-            style={{ width: 56, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: picked.length ? palette.accent : palette.rule }}>
-            <Send size={24} color={palette.onAccent} />
-          </Pressable>
+          <IconButton Icon={Send} label="مشاركة كفيديو" onPress={record} round big disabled={!picked.length} />
         </View>
       </Sheet>
       <VideoSheet page={pages?.[part] ?? null} onClose={() => setPages(null)} palette={palette}
