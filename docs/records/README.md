@@ -9,6 +9,18 @@ Agents write these records as they work. They are different from Distillate
 lessons (long write-ups the owner asks for when discussing a feature in depth)
 and from the historical records under `data/history/`.
 
+## One lesson, one place
+
+A record is for judgment a test cannot check. When the same mistake is written
+up again, the lesson is not a record any more but a missing pipeline: the
+owner agrees one entry point and its guard (AGENTS.md, "One entry for each
+shared thing"), and the old records point there. The one-entry lesson was
+written seven times before that happened: R0018 (a menu kept its own list),
+R0031 (a home card redrew a feature), R0036 and R0037 (videos redrew the app),
+R0042 (a rule kept in one branch), R0051 (one tree, one builder) and R0054 (the
+quiz kept its own tree path). Read them as one lesson. Do not add an eighth;
+propose the pipeline to the owner instead.
+
 ## Format
 
 Copy an existing file. Name it `RNNNN-short-title.md` with the next free number

@@ -3,34 +3,30 @@
 import { BookOpen, Eye } from "lucide-react";
 import Button from "@/components/common/Button";
 import { ayahHref } from "@shared/ayahMarks";
-import { alikeDiff, FORGOT, RECITE_SNIPPET, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
-import { WHICH_SURAH } from "@shared/quiz/whichSurah";
+import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
 import QuizPage from "./QuizPage";
 import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string; family?: string };
-
-/** The kinds asked on the ayah's own mushaf page (owner, 2026-11-17), in its place and shape, as in the app's QuizChoice. */
-const ON_PAGE = new Set<string>([RECITE_SNIPPET, WHICH_SURAH]);
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string; family?: string };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
 }
 
 /**
- * The ayah a choice question asks about, and a recited snippet's hidden rest until it is shown. Recite and «في أي سورة؟» draw
- * it as its whole mushaf page (QuizPage), where the rest of a recited ayah is written in boxes and its grade answers حفظتها or نسيتها.
+ * The ayah a choice question asks about, and a recited snippet's hidden rest until it is shown. A question asked on the page
+ * draws it as its whole mushaf page (QuizPage, as the app's QuizChoice), where what it asks is written in boxes and its grade
+ * answers حفظتها or نسيتها.
  */
 export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar }: { question: ChoiceParts; given?: string; revealed: boolean; onReveal?: () => void;
   /** A recited ayah's written rest, graded: حفظتها when every word is right, نسيتها otherwise. */
   onAnswer?: (value: string) => void; ar: boolean }) {
-  if (question.ayahKey && question.family && ON_PAGE.has(question.family)) {
-    const recite = question.family === RECITE_SNIPPET;
+  if (question.ayahKey && question.page) {
     return <div dir="rtl" lang="ar">
-      <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} shown={revealed} opening={recite ? question.quran ?? [] : undefined} nameless={!recite}
-        onGraded={recite && given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
-      {question.reveal && !revealed && onReveal && <Button className="mb-4" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}
+      <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} ask={question.page} shown={revealed}
+        onGraded={question.page.write && given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
+      {recited(question) && !revealed && onReveal && <Button className="mb-4" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}
     </div>;
   }
   if (!question.quran) return null;

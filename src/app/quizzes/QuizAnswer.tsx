@@ -9,7 +9,7 @@ import type { QuizReference } from "@/lib/quiz/quizReference";
 import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions";
 import type { Branch, Variant } from "@shared/quran/branches";
 import type { Hints } from "@shared/quiz/hints";
-import { FORGOT, RECITE_SNIPPET } from "@shared/quiz/choiceKinds";
+import { FORGOT, recited } from "@shared/quiz/choiceKinds";
 import { markForgotten } from "@shared/ayahMarks";
 import { mushafText } from "@shared/quran/mushafText";
 import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
@@ -36,6 +36,7 @@ export interface QuizQuestionView {
   compare?: CompareAsk;
   quran?: ChoiceParts["quran"];
   reveal?: ChoiceParts["reveal"];
+  page?: ChoiceParts["page"];
   ayahKey?: string;
   alike?: ChoiceParts["alike"];
   note?: ChoiceParts["note"];
@@ -96,7 +97,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         <BranchInputs key={question.key} question={question} typed={answers} onChange={onType} hints={hints ?? {}} onHints={onHints}
           onCheck={() => onAnswer(branchesCorrect(question, answers) ? question.correctAnswer : "")} ar={ar} />
       )
-    ) : question.reveal && !revealed && !locked ? null : <div className="flex flex-col gap-2">
+    ) : recited(question) && !revealed && !locked ? null : <div className="flex flex-col gap-2">
       {question.choices.map((choice) => {
         const isAnswer = choice.value === question.correctAnswer;
         const isGiven = given === choice.value;
@@ -108,7 +109,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
               color: locked && isAnswer ? 'var(--home-green)' : locked && isGiven ? 'var(--home-accent)' : 'var(--home-ink)' }}
             onClick={() => {
               if (locked) return;
-              if (question.family === RECITE_SNIPPET && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+              if (recited(question) && choice.value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
               onAnswer(choice.value);
             }}>
             {/* No empty circle before a choice (owner, 2026-11-15): the mark comes only with the answer, as in the app. */}
@@ -122,7 +123,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
     </div>}
     {locked && <ChoiceAfter question={question} given={given} ar={ar} mushaf={mushaf}
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
-    {!locked && !question.reveal && <Button className="mt-3" size="sm" onClick={() => {
+    {!locked && !recited(question) && <Button className="mt-3" size="sm" onClick={() => {
       if (question.tree) onType(emptyBranchAnswers(question));
       if (question.compare) onType(emptyCompareAnswers(question));
       onAnswer("");

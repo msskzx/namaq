@@ -79,6 +79,6 @@ describe('the surah openings page', () => {
   it('links each surah to the mushaf and the page to the openings quiz', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     expect(screen.getByRole('link', { name: 'سورة 106' }).getAttribute('href')).toBe('/quran/read/ayah/106/1');
-    expect(screen.getByRole('link', { name: 'اختبار أوائل السور' }).getAttribute('href')).toBe('/quizzes/openings');
+    expect(screen.getByRole('link', { name: 'اختبار أوائل السور' }).getAttribute('href')).toBe('/quizzes?topic=OPENINGS');
   });
 });

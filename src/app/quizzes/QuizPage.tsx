@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import surahRows from "@shared/data/quran/surahs.json";
 import { pageModel, reciteView } from "@shared/quran/recitePage";
-import { maxLetters, openingCut } from "@shared/quran/writeAyah";
+import { pageAsk, type PageAsk } from "@shared/quran/writeAyah";
 import MushafPage from "@/app/quran/read/MushafPage";
 import { useWriteBoxes, type Graded } from "@/app/quran/read/useWriteBoxes";
 import { useAyahPage } from "@/components/homepage/AyahLines";
@@ -16,14 +16,11 @@ const END = Number.MAX_SAFE_INTEGER;
 /**
  * A quiz question about one ayah drawn as its whole mushaf page, as the app's QuizPage (owner, 2026-11-17): every other word
  * an empty box of its shape with only the ayah numbers left, and nothing around the page says where it is; with the setting
- * on, the ayat before it written. `opening` (its opening words, matched by letters) shows; `shown` shows all of it. With `onGraded`,
- * the rest is written in boxes in its places and graded once the last box is written.
+ * on, the ayat before it written. `ask` (the question's PageAsk) says how much of it shows, what is written and whether its
+ * surah title shows; `shown` shows all of it. With `onGraded`, the words asked are written in boxes in their places and graded
+ * once the last box is written.
  */
-export default function QuizPage({ ayah, opening, shown, nameless = false, onGraded }: { ayah: string;
-  /** The ayah's opening words that show (as the question has them); all of it when left out. */
-  opening?: string[]; shown: boolean;
-  /** The surah is the answer («في أي سورة؟»): no surah title or name shows, even with the ayat before written. */
-  nameless?: boolean;
+export default function QuizPage({ ayah, ask, shown, onGraded }: { ayah: string; ask: PageAsk; shown: boolean;
   onGraded?: (graded: Graded) => void }) {
   const { pages, words } = useAyahPage(ayah);
   const before = useQuizPageBefore();
@@ -31,10 +28,9 @@ export default function QuizPage({ ayah, opening, shown, nameless = false, onGra
   const parts = useMemo(() => {
     if (!pages || !words) return null;
     const model = pageModel(pages.data, pages.top);
-    const spoken = words.flatMap((word, at) => (maxLetters(word) ? [at] : []));
-    const cut = opening === undefined ? words.length : openingCut(words, opening);
-    return { model, cut, asked: spoken.filter(at => at >= cut) };
-  }, [pages, words, opening]);
+    return { model, ...pageAsk(ayah, words, ask) };
+  }, [pages, words, ayah, ask]);
+  const nameless = ask.title === "hidden";
   const writing = !!onGraded && !shown && !graded;
   // The boxes start once the page is here, so the first asked word is the box being written.
   const boxes = useWriteBoxes({ ayah: onGraded && parts ? ayah : null, words: words ?? [], asked: onGraded ? parts?.asked ?? [] : [], onDone: result => {
@@ -54,14 +50,15 @@ export default function QuizPage({ ayah, opening, shown, nameless = false, onGra
         // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(":1") ? titled.get(Number(key.split(":")[0])) ?? 0 : 0;
-        // The asked ayah's surah title stays hidden until it is answered, and always when the surah is the answer.
-        if (key === ayah) return word < steps ? nameless || !open || !before : !open && word - steps >= parts.cut;
+        // The asked ayah's surah title shows when it is the question, and else stays hidden until it is answered (always
+        // when the surah is the answer).
+        if (key === ayah) return word < steps ? ask.title !== "shown" && (nameless || !open || !before) : !open && word - steps >= parts.cut;
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
         return nameless && word < title;
       },
     };
-  }, [parts, ayah, open, before, nameless]);
+  }, [parts, ayah, open, before, nameless, ask.title]);
   if (!pages || !parts || !view) return <div className="aspect-[2/3] w-full animate-pulse rounded-[14px] bg-[var(--home-paper-deep)]" />;
   // The page sizes itself by its container (Mushaf.module.css .page), so the box it sits in is one page's shape.
   return <div lang="ar" dir="rtl" className="mb-4 aspect-[0.66] w-full [container-type:size]" onClick={writing ? boxes.focus : undefined}>
