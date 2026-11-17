@@ -137,7 +137,6 @@ export default function MushafPage({
   next,
   forgot,
   saved,
-  fasila,
   titled,
   write,
   checked,
@@ -159,8 +158,6 @@ export default function MushafPage({
   /** Ayat the reader forgot (highlighted, ayah number in the accent) and saved (ayah number in purple). */
   forgot?: Readonly<Record<string, unknown>>;
   saved?: ReadonlySet<string>;
-  /** The ayah where the reader stopped («فاصلة»): its number in the accent with a ribbon over it. */
-  fasila?: string;
   /** Surahs whose title (and basmala, 2 steps) are recite steps of their own: they count as the first words of the surah's first ayah. */
   titled?: ReadonlyMap<number, number>;
   /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a click on a box picks it. */
@@ -247,7 +244,7 @@ export default function MushafPage({
                         {group.marks.map(end => (
                           <Fragment key={end}>
                             {group.word ? ' ' : ''}
-                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, !endHidden(end) && fasila === `${group.surah}:${end}` ? styles.fasila : '', endHidden(end) ? '' : saved?.has(`${group.surah}:${end}`) ? styles.saved : forgot?.[`${group.surah}:${end}`] ? styles.forgotEnd : ''].join(' ').trim()}>
+                            <span data-veiled={endHidden(end) || undefined} className={[styles.end, endHidden(end) ? '' : saved?.has(`${group.surah}:${end}`) ? styles.saved : forgot?.[`${group.surah}:${end}`] ? styles.forgotEnd : ''].join(' ').trim()}>
                               {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                               {endHidden(end) ? EMPTY_END : num(end)}
                             </span>

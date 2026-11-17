@@ -35,7 +35,7 @@ import { shareAyah } from './AyahShare';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
-import { ayahCounts, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { ayahCounts, firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -113,7 +113,8 @@ export default function Reader() {
   const forgot = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
-  // The reader's فاصلة (owner, 2026-11-16): set only from an ayah's buttons, never by turning pages; `reader-place` keeps the page open.
+  // The reader's فاصلة: a page, set only from the ribbon in the top bar, never by turning pages (owner, 2026-11-16; per page
+  // with nothing drawn on the page, 2026-11-17). `reader-place` keeps the page open.
   const fasila = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas).quran ?? null;
   const [noting, setNoting] = useState<string | null>(null);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
@@ -369,7 +370,7 @@ export default function Reader() {
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={surahNames} mark={!position && mark?.page === at ? mark.key : null} markWord={!position && mark?.page === at ? mark.word ?? null : null}
-        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} fasila={position ? null : fasila?.key ?? null} onTouch={onTouch}
+        recite={position ? reciteView(atModel, position) : null} forgot={forgot} saved={saved} onTouch={onTouch}
         write={at === page ? write : null} checked={position && at === page ? checked : null} onTopic={onTopic} />
     );
   };
@@ -402,6 +403,12 @@ export default function Reader() {
       {tools && (
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
           <TopBar>
+            {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
+            <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
+              accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
+              hitSlop={6} style={{ padding: 9 }}>
+              <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
+            </Pressable>
             <IconButton Icon={List} label="فهرس السور والبحث" palette={palette} onPress={() => setSheet('index')} />
             <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} palette={palette} on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
           </TopBar>
@@ -413,8 +420,6 @@ export default function Reader() {
           <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} onPress={() => { toggleSaved(actions.key); setActions(null); }} />
-          <ActButton Icon={FasilaIcon} label={fasila?.key === actions.key ? 'أزل الفاصلة' : 'ضع الفاصلة هنا: هنا توقفت'} name="فاصلة" palette={palette} on={fasila?.key === actions.key}
-            onPress={() => { const key = actions.key; setQuranFasila(fasila?.key === key ? null : { key, page: pageOfAyah(key) ?? page }); setActions(null); }} />
           <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'تأملك في الآية' : 'اكتب تأملًا'} name="تأمّل" palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
           {topics && <ActButton Icon={TableOfContents} label="موضوع الآية في السورة" name="الموضوعات" palette={palette}
             onPress={() => { setActions(null); setTopic({ surah: actionSurah, section: Math.max(0, sectionAt(actionSurah, actionAyah)) }); }} />}

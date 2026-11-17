@@ -5,7 +5,7 @@
 .pill { display: inline-flex; align-items: center; gap: 0.3rem; margin-block: 0.75rem 0.25rem; padding: 0 0.75rem; height: 1.75rem; border: 1px solid var(--home-rule); border-radius: 999px; background: var(--home-card); font-size: 0.875rem; }
 .paragraph { position: relative; margin-block: 0.25rem; margin-inline: -0.25rem; padding-inline: 0.25rem; border-radius: 0.5rem; text-align: justify; cursor: pointer; }
 .paragraph[data-lit] { background: color-mix(in srgb, var(--home-ink) 8%, transparent); }
-.fasila, .saved { position: absolute; inset-inline-start: -1.25rem; top: 0.2rem; width: 0.55rem; height: 1.6rem; background: var(--home-accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%); }
+.saved { position: absolute; inset-inline-start: -1.25rem; top: 0.2rem; width: 0.55rem; height: 1.6rem; background: var(--home-accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%); }
 .saved { top: 0.45rem; height: 1rem; background: var(--home-root); }
 .footer { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; color: var(--home-muted); font-size: 0.875rem; }
 .name { color: var(--home-muted); }

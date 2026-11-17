@@ -3,7 +3,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { ArrowLeftRight, BookOpen, Bookmark, Check, Layers, LightbulbOff, ListTree, NotebookPen, Send, Sparkles, TableOfContents } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
-import FasilaIcon from '@/components/quran/FasilaIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
@@ -27,14 +26,13 @@ function Act({ label, name, on = false, pressed, popup = false, onClick, childre
  * its compare cards, the trees that hold it, how the ten readers differ in its words and al-Sa'di's tafsir, each previewed
  * in a sheet (AyahPreviewSheet). The first three show only when there are any; every ayah has its tafsir.
  */
-export default function AyahActions({ ayah, x, y, forgot, saved, fasila = false, noted = false, ar, links, irab = false, onForgot, onClear, onSave, onFasila, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, irab = false, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
   forgot: number;
   saved: boolean;
   /** The reader's «فاصلة» is on this ayah: where they stopped reading, set by them alone (docs/plans/book-reader.md). */
-  fasila?: boolean;
   noted?: boolean;
   ar: boolean;
   links?: AyahLink;
@@ -43,7 +41,6 @@ export default function AyahActions({ ayah, x, y, forgot, saved, fasila = false,
   onForgot: () => void;
   onClear: () => void;
   onSave: () => void;
-  onFasila?: () => void;
   onNote?: () => void;
   /** The tree and compare buttons preview in place rather than leaving the mushaf (owner, 2026-11-13). */
   onPreview?: (kind: Kind) => void;
@@ -82,7 +79,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, fasila = false,
   const shareLabel = ar ? 'مشاركة' : 'Share';
   const readingsLabel = ar ? 'القراءات العشر في كلمات الآية' : 'The ten readings of its words';
   const tafsirLabel = ar ? 'تفسير السعدي' : 'Al-Sa‘di’s tafsir';
-  const count = 2 + (onFasila ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
+  const count = 2 + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const half = typeof window === 'undefined' ? 0 : Math.min(count * 27 + 8, window.innerWidth / 2 - 8);
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
@@ -92,7 +89,6 @@ export default function AyahActions({ ayah, x, y, forgot, saved, fasila = false,
       <Act label={forgotLabel} name={ar ? 'نسيتها' : 'Forgot'} on={!!forgot} onClick={() => { onForgot(); onClose(); }}><LightbulbOff aria-hidden /></Act>
       {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
       <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
-      {onFasila && <Act label={fasila ? (ar ? 'أزل الفاصلة' : 'Remove your stop mark') : (ar ? 'ضع الفاصلة هنا: هنا توقفت' : 'Mark where you stopped reading')} name={ar ? 'الفاصلة' : 'Stop'} on={fasila} pressed={fasila} onClick={() => { onFasila(); onClose(); }}><FasilaIcon aria-hidden /></Act>}
       {onNote && <Act label={noteLabel} name={ar ? 'تأمّل' : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
       {onTopics && <Act label={ar ? 'موضوع الآية في السورة' : 'Topic of this ayah'} name={ar ? 'الموضوعات' : 'Topics'} popup onClick={() => { onTopics(); onClose(); }}><TableOfContents aria-hidden /></Act>}
       {!!links?.compare.length && <Act label={compareLabel} name={ar ? 'المقارنة' : 'Compare'} popup onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Act>}

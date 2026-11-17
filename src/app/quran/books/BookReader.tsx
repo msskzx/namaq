@@ -65,13 +65,19 @@ export default function BookReader({ id, title, page, total, name, printed, sour
   const onPage = (spot?: Spot) => !!spot && slices.some(slice => slice.paragraphs.some(p => p.entry === spot.entry && p.at === spot.at));
   const pickedText = (spot: Spot) => slices.flatMap(slice => slice.paragraphs).find(p => p.entry === spot.entry && p.at === spot.at)?.runs.map(run => run.text).join('') ?? '';
   const pickedAyah = picked ? slices.find(slice => slice.paragraphs.some(p => p.entry === picked.entry && p.at === picked.at))?.ayah : undefined;
-  const isFasila = !!picked && fasila?.entry === picked.entry && fasila.at === picked.at;
+  // The فاصلة is a page (owner, 2026-11-17): the ribbon in the top bar fills on its page, and a tap puts it on the page open or takes it off.
+  const onFasila = onPage(fasila);
+  const markPage = () => setBookFasila(id, onFasila || !first ? null : { entry: first.entry, at: first.at, ...printed });
   const isSaved = !!picked && savedKeys.has(`${picked.entry}:${picked.at}`);
 
   return (
     <div dir="rtl" lang="ar" className={styles.reader}>
       <NavActions><h1 className={styles.title}>{title}</h1></NavActions>
       <NavButtons>
+        <Button size="lg" variant="ghost" aria-pressed={onFasila} aria-label={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
+          title={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'} className="text-[var(--home-accent)]" onClick={markPage}>
+          <FasilaIcon aria-hidden filled={onFasila} />
+        </Button>
         <Button size="lg" variant="muted" aria-label="ابحث في الكتاب" title="ابحث في الكتاب" onClick={() => setSheet('search')}><Search aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label="فهرس الكتاب ومحفوظاته" title="فهرس الكتاب ومحفوظاته" onClick={() => setSheet('contents')}><List aria-hidden /></Button>
       </NavButtons>
@@ -86,8 +92,7 @@ export default function BookReader({ id, title, page, total, name, printed, sour
                 <p key={key} data-spot={key} data-lit={on || lit === key || undefined} className={styles.paragraph} role="button" tabIndex={0} aria-pressed={on}
                   onClick={() => { if (!justSwiped()) setPicked(on ? null : { entry: p.entry, at: p.at }); }}
                   onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPicked(on ? null : { entry: p.entry, at: p.at }); } }}>
-                  {fasila?.entry === p.entry && fasila.at === p.at ? <span className={styles.fasila} aria-label="فاصلتك" role="img" />
-                    : savedKeys.has(key) ? <span className={styles.saved} aria-label="فقرة محفوظة" role="img" /> : null}
+                  {savedKeys.has(key) && <span className={styles.saved} aria-label="فقرة محفوظة" role="img" />}
                   {p.runs.map((run, i) => (run.quran ? <span key={i} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
                 </p>
               );
@@ -104,15 +109,13 @@ export default function BookReader({ id, title, page, total, name, printed, sour
         <div ref={toolbar} role="toolbar" aria-label="أزرار الفقرة" className={styles.actions}>
           <Button size="lg" variant={isSaved ? 'primary' : 'muted'} aria-pressed={isSaved} aria-label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} title={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'}
             onClick={() => { toggleSavedParagraph({ book: id, ...picked, ...printed, text: pickedText(picked).slice(0, 160) }); setPicked(null); }}><Bookmark aria-hidden fill={isSaved ? 'currentColor' : 'none'} /></Button>
-          <Button size="lg" variant={isFasila ? 'primary' : 'muted'} aria-pressed={isFasila} aria-label={isFasila ? 'أزل الفاصلة' : 'ضع الفاصلة هنا: هنا توقفت'} title={isFasila ? 'أزل الفاصلة' : 'ضع الفاصلة هنا: هنا توقفت'}
-            onClick={() => { setBookFasila(id, isFasila ? null : { ...picked, ...printed }); setPicked(null); }}><FasilaIcon aria-hidden /></Button>
           {pickedAyah && <Button size="lg" variant="muted" href={`/quran/read/ayah/${pickedAyah.replace(':', '/')}`} aria-label="افتح الآية في المصحف" title="افتح الآية في المصحف"><BookOpenText aria-hidden /></Button>}
           <Button size="lg" variant="ghost" aria-label="إغلاق" title="إغلاق" onClick={() => setPicked(null)}><X aria-hidden /></Button>
         </div>
       )}
       {fasila && !picked && !onPage(fasila) && (
         <div className={styles.pillBar}>
-          <Button size="md" variant="muted" href={`/quran/books/${id}?spot=${fasila.entry}:${fasila.at}`} className={styles.backPill} aria-label={`عد إلى فاصلتك، ${pageName(id, fasila.part, fasila.page)}`}>
+          <Button size="md" variant="muted" href={`/quran/books/${id}?at=${fasila.entry}:${fasila.at}`} className={styles.backPill} aria-label={`عد إلى فاصلتك، ${pageName(id, fasila.part, fasila.page)}`}>
             <FasilaIcon aria-hidden width={18} height={18} className="text-[var(--home-accent)]" />
             عُد إلى فاصلتك · {pageName(id, fasila.part, fasila.page)}
           </Button>
