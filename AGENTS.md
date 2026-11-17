@@ -69,6 +69,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
   steps and the subagent briefs for this cycle.
 - Records of past challenges live in [docs/records](docs/records/README.md).
+  Records carry judgment a test cannot check (how to read a source, what a
+  citation allows). A mistake that can happen again is not fixed by a record:
+  see "One entry for each shared thing" below.
   Before starting a task, and again after a first fix fails, search them (`rg`
   over `docs/records`) and read the ones that match. When you solve a real
   challenge in a way the code alone does not show, add a record in the same PR,
@@ -211,9 +214,19 @@ was rebuilt three times (#776, #811, #825), and Quran text lost its signs and
 room in every feature that shaped it itself. Each shared thing has ONE entry
 point and a guard test that fails on any other path. Before building, find the
 thing here and use its entry; give it a prop for the new place rather than a
-copy. A new shared thing gets a row here and its guard in the same PR. A guard
-checks every caller of the lower-level code it replaces, not only the feature
-that was reported (docs/records/R0054).
+copy. A guard checks every caller of the lower-level code it replaces, not
+only the feature that was reported (docs/records/R0054).
+
+When a bug comes back, or a fix would have to be repeated in another feature,
+do not add a guard on your own. A guard written alone tends to fence the
+symptom and leave the second path open (the tree bug returned after R0031,
+R0042 and R0051, each cited by the next fix, until the owner agreed one
+builder for every tree). Stop and bring the owner a short proposal first:
+the one pipeline every feature should go through (entry, levels, what each
+feature passes in), the callers that leave it today, and the guard that
+would fail on any other path. Build the pipeline and the guard, and add the
+row here, only after the owner agrees. A new row in this table is always the
+owner's decision.
 
 | Thing | Entry | Guard |
 | --- | --- | --- |
