@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
-import { LightbulbOff, Play, Search } from 'lucide-react-native';
+import { Search } from 'lucide-react-native';
 import { ayatCount, num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
@@ -30,17 +30,14 @@ type Row =
   | { kind: 'surah'; number: number; name: string; from: number; page: number }
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
-/** The index of surahs and juz', the search for a surah, an ayah number or words, and the recite shortcuts. */
-export function IndexSheet({ open, onClose, onJump, palette, page, last, forgotten, recite }: {
+/** The index of surahs and juz', and the search for a surah, an ayah number or words. */
+export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
   open: boolean;
   /** The page open in the reader: the index opens at its surah. */
   page: number;
   onClose: () => void;
-  onJump: (jump: Jump, recite?: 'review') => void;
+  onJump: (jump: Jump) => void;
   palette: Palette;
-  /** Where the last recitation stopped. */
-  last: (() => void) | null;
-  forgotten: string[];
   /** Reciting: the index says what a link does now, as the website's recite index. */
   recite?: boolean;
 }) {
@@ -84,23 +81,12 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   }, [rows]);
   const start = plain && !query.trim() && here > 0 ? Math.max(0, here - 2) : 0;
 
-  const go = (jump: Jump, recite?: 'review') => { onJump(jump, recite); onClose(); };
+  const go = (jump: Jump) => { onJump(jump); onClose(); };
   const button = { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 } as const;
   return (
     <Sheet open={open} onClose={onClose} palette={palette} tall>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         {recite && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22 }}>اختر سورة أو جزءًا أو آية. تُخفى الآيات في مواضعها من الصفحة، وتُظهر كل لمسة الآية التالية.</Text>}
-        {(last || forgotten.length > 0) && (
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {last && <Pressable style={button} accessibilityRole="button" onPress={() => { last(); onClose(); }}>
-              <Play size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>تابع التسميع من حيث توقفت</Text>
-            </Pressable>}
-            {forgotten.length > 0 && <Pressable style={button} accessibilityRole="button"
-              onPress={() => go({ page: pageOfAyah(forgotten[0].split(':').slice(0, 2).join(':')) ?? 1, key: forgotten[0], mark: false }, 'review')}>
-              <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت</Text>
-            </Pressable>}
-          </View>
-        )}
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: 1, borderColor: palette.rule }}>
           <Search size={18} color={palette.accent} />
           <TextInput value={query} onChangeText={setQuery} placeholder="سورة، أو آية برقمها (٢:٢٥٥) أو بكلماتها"
