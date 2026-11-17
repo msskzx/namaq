@@ -140,20 +140,27 @@ async function repairFiles(reciter: number) {
   // download was removed meanwhile is skipped.
   const id = `${reciter}:repair`;
   if (!now?.repair?.length || running.has(id)) return;
-  const failed: string[] = [];
+  const fetched = new Set<string>();
   try {
     for (const key of now.repair) {
       const row = synced[reciter]?.rows[key];
       if (!row || !heldKeys(reciter).has(key)) continue;
       running.set(id, [key]);
-      try { await fetchAyah(reciter, key, row.url); } catch { failed.push(key); }
+      try { await fetchAyah(reciter, key, row.url); fetched.add(key); } catch {}
       if (!heldKeys(reciter).has(key)) deleteFile(reciter, key);
     }
   } finally {
     running.delete(id);
   }
+  settle(reciter, fetched);
+}
+
+/** Takes the ayat just fetched off the list still to fetch, keeping what a sync added meanwhile. */
+function settle(reciter: number, fetched: Set<string>) {
   const after = synced[reciter];
-  if (after) saveSynced(reciter, { ...after, repair: failed.length ? failed : undefined });
+  if (!after?.repair || !fetched.size) return;
+  const left = after.repair.filter(key => !fetched.has(key));
+  saveSynced(reciter, { ...after, repair: left.length ? left : undefined });
 }
 
 /** Downloads the ayat (four at a time), from the addresses Content Sync gives. A pack counts only when every one of its ayat is on the phone. */
@@ -172,18 +179,22 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
     const dir = folder(reciter);
     if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
     // An ayah Content Sync has no file for cannot be downloaded: the pack is not complete.
+    // A held file the sync found changed is fetched again with the pack's own.
+    const repair = new Set(synced[reciter]?.repair ?? []);
+    const fetched = new Set<string>();
     const queue = keys.filter(key => rows[key]);
     let failed = queue.length < keys.length;
     progress.total = queue.length;
     const worker = async () => {
       for (let key = queue.shift(); key && !stopped.has(id); key = queue.shift()) {
-        try { if (!have(reciter, key)) await fetchAyah(reciter, key, rows[key].url); } catch { failed = true; }
+        try { if (repair.has(key) || !have(reciter, key)) { await fetchAyah(reciter, key, rows[key].url); fetched.add(key); } } catch { failed = true; }
         progress.done += 1;
         if (progress.done % 10 === 0 || progress.done === progress.total) changed();
       }
     };
     await Promise.all([worker(), worker(), worker(), worker()]);
     running.delete(id);
+    settle(reciter, fetched);
     if (stopped.has(id)) { busy.delete(id); stopped.delete(id); sweep(reciter); changed(); return; }
     // A failed run keeps its whole files so that trying again picks up where it stopped; the next app start sweeps them otherwise.
     if (failed || !progress.total || keys.some(key => !have(reciter, key))) { fail(); return; }

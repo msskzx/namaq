@@ -176,4 +176,15 @@ describe('audio downloads', () => {
     expect(downloads).toBe(1);
     expect([...disk.keys()].filter(key => key.endsWith('.mp3'))).toEqual([]);
   });
+  it('fetches again with a download the files its own sync found changed', async () => {
+    const files = await load();
+    await files.downloadPack(7, 'surah:1', 'one', KEYS);
+    syncReply = () => ({ token: 't2', upsert: [row('1:1', 'https://cdn/new')], remove: [] });
+    vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 2 * 24 * 60 * 60 * 1000);
+    await files.downloadPack(7, 'all', 'all', KEYS);
+    expect(disk.get(path('1:1'))).toBe('bytes of https://cdn/new');
+    downloads = 0;
+    await (await load()).syncPacks(Date.now());
+    expect(downloads).toBe(0);
+  });
 });
