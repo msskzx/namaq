@@ -1,7 +1,20 @@
 import type { Branch } from './branches';
 import { bare } from './quranText/ayahWords';
 
-export type WrittenForm = { word: string; keys: string[] };
+/** `faint`: the stop signs only some of the form's ayat carry, drawn faded after the word until a path picks one ayah. */
+export type WrittenForm = { word: string; keys: string[]; faint?: string };
+
+const TAIL = /[\u06D6-\u06DB\u06DE\u06E9]+$/;
+
+/** One way of writing a word that its ayat stop on differently: the signs all of them carry stay in the word, the rest go faint. */
+function blend(words: Set<string>, plain: string): { word: string; faint?: string } {
+  const tails = [...words].map(word => word.match(TAIL)?.[0] ?? '');
+  if ([...words].some((word, i) => word.slice(0, word.length - tails[i].length) !== plain)) return { word: plain };
+  const signs = [...new Set(tails.join(''))];
+  const firm = signs.filter(sign => tails.every(tail => tail.includes(sign))).join('');
+  const faint = signs.filter(sign => !firm.includes(sign)).join('');
+  return faint ? { word: plain + firm, faint } : { word: plain + firm };
+}
 
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 
@@ -14,13 +27,13 @@ const chosenForms = (node: Pick<Branch, 'forms'>, index: number, lit?: ReadonlyS
 export function writtenForms(node: Pick<Branch, 'forms'>, index: number, shared: string, lit?: ReadonlySet<string>): WrittenForm[] {
   const chosen = chosenForms(node, index, lit);
   // Ayat that write a word alike but stop on it differently (a waqf sign on one) write it the same; the shared word keeps a sign
-  // only where all of them carry it.
+  // where all of them carry it and shows the others faint (owner 2026-11-17).
   const found = new Map<string, { words: Set<string>; keys: string[] }>();
   for (const [key, words] of chosen) {
     const at = found.get(bare(words[index])) ?? { words: new Set<string>(), keys: [] };
     found.set(bare(words[index]), { words: at.words.add(words[index]), keys: [...at.keys, key] });
   }
-  const forms = [...found].map(([plain, { words, keys }]) => ({ word: words.size === 1 ? [...words][0] : plain, keys })).sort((a, b) => b.keys.length - a.keys.length);
+  const forms = [...found].map(([plain, { words, keys }]) => ({ ...(words.size === 1 ? { word: [...words][0] } : blend(words, plain)), keys })).sort((a, b) => b.keys.length - a.keys.length);
   if (forms.length === 0 || (forms.length > 1 && forms.every(form => isEnd(form.word)))) return [{ word: shared, keys: chosen.map(([key]) => key) }];
   return forms;
 }
