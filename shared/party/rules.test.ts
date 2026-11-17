@@ -256,13 +256,33 @@ describe('party helpers', () => {
     expect(cleanSettings({ difficulty: 'nope' as never }).difficulty).toBe('medium');
   });
 
-  it('asks which surah over the range, leaves recite to solo, and keeps the surah hidden until the reveal', () => {
-    expect(quizQuery(cleanSettings({ topics: ['SURAH', 'RECITE'], juzFrom: 30, juzTo: 30 }))).toBe('topic=SURAH&length=5&juzFrom=30&juzTo=30&leaves=3');
+  it('asks which surah over the range and keeps the surah hidden until the reveal', () => {
+    expect(quizQuery(cleanSettings({ topics: ['SURAH'], juzFrom: 30, juzTo: 30 }))).toBe('topic=SURAH&length=5&juzFrom=30&juzTo=30&leaves=3');
     const asked = { ...choice('SURAH:2:34', '2'), ayahKey: '2:34', alike: { 17: { key: '17:61', words: [] } } };
     let state = playing([asked, choice('q2')]);
     expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'q0', correctAnswer: '', ayahKey: undefined, alike: undefined });
     state = run(state, ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'b' }) as Action));
     expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'SURAH:2:34', correctAnswer: '2', ayahKey: '2:34' });
+  });
+
+  it('asks recited ayat with the host\'s pen, grades the words written, and keeps the words hidden until the reveal', () => {
+    const settings = cleanSettings({ topics: ['SURAH', 'RECITE', 'ENDS'], pen: 'ends' });
+    expect(settings.topics).toEqual(['SURAH', 'RECITE', 'ENDS']);
+    expect(cleanSettings({ pen: 'nope' as never }).pen).toBe('whole');
+    expect(quizQuery(settings)).toBe('topic=SURAH&topic=RECITE&topic=ENDS&length=5&leaves=3&pen=ends');
+    const words = ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'];
+    const written = { ...choice('ENDS:112:1', '1'), ayahKey: '112:1', page: { shows: 0, recite: true }, reveal: ['x'], write: { words, asked: [0, 1, 2, 3] } };
+    let state = playing([written, choice('q2')]);
+    // The question names its ayah and is drawn on its page, so the ayah stays; its words wait for the reveal.
+    expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'q0', ayahKey: '112:1', write: { asked: [0, 1, 2, 3] }, reveal: undefined });
+    expect((viewFor(state, 'p1', 0).question?.write as { words?: string[] }).words).toBeUndefined();
+    state = run(state, [
+      { type: 'submit', playerId: 'p0', answer: ['قل', 'هو', 'الله', 'احد'] },
+      { type: 'submit', playerId: 'p1', answer: ['قل', 'هي', '', 'احد'] },
+      { type: 'submit', playerId: 'p2', answer: [] },
+    ] as Action[]);
+    expect(state.results).toMatchObject({ p0: { earned: 4, total: 4 }, p1: { earned: 2, total: 4 }, p2: { earned: 0, total: 4 } });
+    expect((viewFor(state, 'p1', 0).question?.write as { words?: string[] }).words).toEqual(words);
   });
 
   it('expires an idle party', () => {
@@ -273,5 +293,17 @@ describe('party helpers', () => {
 
   it('ranks the leaderboard by score, then name', () => {
     expect(leaderboard([{ name: 'b', score: 1 }, { name: 'a', score: 1 }, { name: 'c', score: 2 }]).map(player => player.name)).toEqual(['c', 'a', 'b']);
+  });
+  it('grades a recited ayah on what was written when the time runs out', () => {
+    const write = { asked: [0, 1, 2, 3], words: ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'] };
+    const recited = { key: 'ENDS:112:1', correctAnswer: '1', promptArabic: 'سمّع', choices: [], ayahKey: '112:1', write } as unknown as PartyQuestion;
+    let state = createParty('123456', 'p0', 'Host', 0);
+    state = act(state, { type: 'start', playerId: 'p0', early: true }, 0).state;
+    state = act(state, { type: 'loaded', questions: [recited], surahNames: {} }, 0).state;
+    state = act(state, { type: 'draft', playerId: 'p0', answer: ['قل', 'هو'] }, 1).state;
+    expect(state.phase).toBe('question');
+    state = act(state, { type: 'tick' }, state.deadline!).state;
+    expect(state.results.p0).toEqual({ earned: 2, total: 4 });
+    expect(viewFor(state, 'p0', state.deadline ?? 0).answer).toEqual(['قل', 'هو']);
   });
 });

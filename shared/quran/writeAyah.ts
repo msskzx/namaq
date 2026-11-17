@@ -64,6 +64,15 @@ export function nextBox(boxes: Boxes, asked: number[]): { boxes: Boxes; finished
   return at + 1 < asked.length ? { boxes: { ...boxes, current: asked[at + 1] }, finished: false } : { boxes, finished: true };
 }
 
+/** The last box written, emptied and written again (a party's step back, owner 2026-11-17), or null when none is written. */
+export function clearLastBox(boxes: Boxes, asked: number[]): Boxes | null {
+  const last = [...asked].reverse().find(at => boxes.typed[at]);
+  if (last === undefined) return null;
+  const typed = { ...boxes.typed };
+  delete typed[last];
+  return { typed, current: last };
+}
+
 /** Back to the box before (a Backspace in an empty box), or null on the first one. */
 export function previousBox(boxes: Boxes, asked: number[]): Boxes | null {
   const at = boxes.current === null ? -1 : asked.indexOf(boxes.current);

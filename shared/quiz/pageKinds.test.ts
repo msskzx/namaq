@@ -18,6 +18,7 @@ describe('the kinds written on the page', () => {
     expect(ayahEnds.count(all)).toBe(6236);
     const [question] = ayahEnds.questions({ range: null, filters: { surahs: '112' } }, 'easy', () => 0);
     expect(question.promptArabic).toMatch(/^سمّع آية الإخلاص [١-٤]\.$/);
-    expect(ayahEnds.party).toBe(false);
+    // A party asks it too, the pen on for all and the words graded (owner, 2026-11-17).
+    expect(ayahEnds.party).toBe(true);
   });
 });

@@ -31,8 +31,9 @@ export default function RecitePill({ recite, writing, onWriting, onClose, after,
     {lead}
     <Button size="lg" variant="muted" {...tip(ar ? 'ارجع خطوة' : 'Step back')} disabled={recite.atStart} onClick={recite.back}><Undo2 aria-hidden /></Button>
     <Button size="lg" variant="muted" {...tip(ar ? 'أظهر الكلمة التالية' : 'Reveal the next word')} disabled={recite.done} onClick={recite.nextWord}><Word aria-hidden /></Button>
-    <Button size="lg" variant="ghost" {...tip(next.label)} disabled={ended && !more} onClick={recite.nextAyah}><next.Icon aria-hidden /></Button>
-    <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} {...tip(pen)} onClick={onWriting}><PenLine aria-hidden /></Button>
+    {/* In a party the next ayah waits for everyone, and the pen is on for all (owner, 2026-11-17). */}
+    {!recite.party && <Button size="lg" variant="ghost" {...tip(next.label)} disabled={ended && !more} onClick={recite.nextAyah}><next.Icon aria-hidden /></Button>}
+    <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} {...tip(pen)} disabled={recite.party} onClick={onWriting}><PenLine aria-hidden /></Button>
     {onClose && <Button size="lg" variant="muted" {...tip(ar ? 'إنهاء التسميع' : 'Stop reciting')} onClick={onClose}><X aria-hidden /></Button>}
   </div>;
 }

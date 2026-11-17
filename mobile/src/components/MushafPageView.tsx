@@ -103,7 +103,8 @@ export function Veil({ text, size, palette, next, faint = false }: { text: strin
   return (
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, opacity: faint ? 0.55 : 1, borderStyle: faint ? 'dashed' : 'solid',
-      backgroundColor: faint ? 'transparent' : next ? tint(palette.accent, 0.22) : tint(palette.muted, 0.1), borderWidth: 1, borderColor: next && !faint ? palette.accent : palette.rule }}>
+      // The next ayah's boxes are the write boxes' own (paper, owner 2026-11-17), so reciting and writing look the same.
+      backgroundColor: faint ? 'transparent' : next ? palette.paper : tint(palette.muted, 0.1), borderWidth: 1, borderColor: palette.rule }}>
       <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
     </View>
   );
@@ -252,7 +253,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const badges = data.items.flatMap(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter).join(' ')] : []), ...('line' in item && isSajda(item.line) ? ['سجدة'] : [])]);
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
-  const upcoming = { backgroundColor: tint(palette.accent, 0.22) } as const;
+  const upcoming = { backgroundColor: palette.paper } as const;
   const small = Math.max(11, width * 0.026);
   const press = (key: string | null, word?: number) => ({
     onPress: (event: GestureResponderEvent) => onTouch('tap', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),

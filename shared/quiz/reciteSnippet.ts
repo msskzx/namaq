@@ -66,7 +66,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
 export const reciteSnippet: ChoiceKind = {
   id: RECITE_SNIPPET,
   name: 'سمّع بقية الآية',
-  party: false,
+  party: true,
   // The difficulty only changes how much of the opening is shown.
   questions: (scope, difficulty, random, limit = Infinity) => shuffle(inScope(scope), random).slice(0, limit).map(ayah => question(ayah, difficulty)),
   count: scope => inScope(scope).length,

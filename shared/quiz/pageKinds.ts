@@ -35,7 +35,7 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
 const kind = (id: string, name: string, keys: (scope: ChoiceScope) => string[], prompt: (surah: number, ayah: number) => string): ChoiceKind => ({
   id: id as ChoiceKind['id'],
   name,
-  party: false,
+  party: true,
   questions: (scope, _difficulty, random, limit = Infinity) => shuffle(keys(scope), random).slice(0, limit).map(key => {
     const [surah, ayah] = key.split(':').map(Number);
     return ask(id, key, prompt(surah, ayah));

@@ -29,8 +29,9 @@ export default function RecitePill({ recite, writing, onWriting, onClose, after,
       {lead}
       <IconButton Icon={Undo2} label="ارجع خطوة" tone="ink" disabled={recite.atStart} onPress={recite.back} />
       <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" tone="ink" disabled={recite.done} onPress={recite.nextWord} />
-      <IconButton Icon={next.Icon} label={next.label} tone="ink" disabled={ended && !more} onPress={recite.nextAyah} />
-      <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} tone="ink" on={writing} onPress={onWriting} />
+      {/* In a party the next ayah waits for everyone, and the pen is on for all (owner, 2026-11-17). */}
+      {!recite.party && <IconButton Icon={next.Icon} label={next.label} tone="ink" disabled={ended && !more} onPress={recite.nextAyah} />}
+      <IconButton Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} tone="ink" on={writing} disabled={recite.party} onPress={onWriting} />
       {onClose && <IconButton Icon={X} label="إنهاء التسميع" tone="ink" onPress={onClose} />}
     </GlassBar>
   );

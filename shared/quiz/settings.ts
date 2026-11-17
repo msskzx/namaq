@@ -5,8 +5,8 @@ export type QuizTopics = readonly QuizTopic[];
 
 /** The topics built from the Quran's text on the fly (quiz/kinds.ts), not from the question bank. */
 export const CHOICE_TOPICS = ['COMPARE', 'SURAH', 'RECITE', 'OPENINGS', 'ENDS', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const satisfies readonly QuizTopic[];
-/** The topics a party cannot ask: the reader grades what they recite or write alone. */
-export const SOLO_TOPICS: readonly QuizTopic[] = ['RECITE', 'OPENINGS', 'ENDS'];
+/** The topics recited on the page with recite mode's bar: in a party the pen writes them and the party grades the words (owner, 2026-11-17). */
+export const WRITTEN_TOPICS: readonly QuizTopic[] = ['RECITE', 'OPENINGS', 'ENDS'];
 /** The topics asked on the ayah's own mushaf page, so the setup offers «اكتب الآيات قبلها في الصفحة». */
 export const PAGE_TOPICS: readonly QuizTopic[] = ['SURAH', 'RECITE', 'OPENINGS', 'ENDS'];
 /** The topics asked over part of the Quran, so the setup offers the range filters. */

@@ -5,10 +5,12 @@ import Button from "@/components/common/Button";
 import { ayahHref } from "@shared/ayahMarks";
 import { alikeDiff, FORGOT, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
 import QuizPage from "./QuizPage";
+import type { WriteAsk } from "@shared/quiz/score";
+import type { PenRule } from "@shared/quran/writeAyah";
 import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string; family?: string };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
@@ -19,12 +21,15 @@ function Words({ words, marked }: { words: string[]; marked?: number[] }) {
  * draws it as its whole mushaf page (QuizPage, as the app's QuizChoice), where what it asks is written in boxes and its grade
  * answers حفظتها or نسيتها.
  */
-export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar }: { question: ChoiceParts; given?: string; revealed: boolean; onReveal?: () => void;
+export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar, pen, onWrite, written }: { question: ChoiceParts; given?: string; revealed: boolean; onReveal?: () => void;
+  /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
+  pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
   /** A recited ayah's written rest, graded: حفظتها when every word is right, نسيتها otherwise. */
   onAnswer?: (value: string) => void; ar: boolean }) {
   if (question.ayahKey && question.page) {
     return <div dir="rtl" lang="ar">
-      <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} ask={question.page} shown={revealed}
+      <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} ask={question.page} shown={question.write ? written !== undefined : revealed}
+        party={question.write ? { pen: pen ?? "whole", asked: question.write.asked, words: question.write.words, answer: written, onWrite: onWrite ?? (() => {}) } : undefined}
         onShown={onReveal} ar={ar} onWritten={given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
     </div>;
   }
