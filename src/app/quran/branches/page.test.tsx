@@ -29,7 +29,8 @@ import { ALL_KINDS } from '@shared/quran/branchSearch';
 import { mushafText } from '@shared/quran/mushafText';
 import { surahList } from '@/lib/quran/surahList';
 
-const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
+// Most tests read the tree, so they run as a reader who picked it; the matrix is the default for everyone else.
+const preference = vi.hoisted(() => ({ value: 'tree' as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
 const params = new URLSearchParams();
 const navigation = vi.hoisted(() => ({ push: vi.fn() }));
@@ -42,7 +43,7 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 78, name: 'النبأ' }]) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
-afterEach(() => { cleanup(); preference.value = undefined; preference.connectors = undefined; });
+afterEach(() => { cleanup(); preference.value = 'tree'; preference.connectors = undefined; });
 const open = (values: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(values) });
 const target = (values: Record<string, string>) => open(values).then(() => '', (error: Error) => error.message.replace('REDIRECT ', ''));
 const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://localhost').searchParams);
@@ -248,10 +249,11 @@ describe('Quran branch trees', () => {
     expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
   });
 
-  it('ignores an invalid saved preference', async () => {
-    preference.value = 'invalid';
+  it.each([undefined, 'invalid'])('opens a link without a view as the matrix when the saved view is %s', async saved => {
+    preference.value = saved;
     render(await open({ o: 'لا اثم عليه' }));
-    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
+    expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
   });
 
   it('shows an ayah boundary between continuations without a separate phrase node', async () => {

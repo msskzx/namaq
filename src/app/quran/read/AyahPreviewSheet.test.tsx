@@ -25,14 +25,14 @@ describe('the readings sheet', () => {
 });
 
 describe('the trees sheet', () => {
-  it("draws each tree as the branches page's card, with its own switch to the matrix", async () => {
+  it("draws each tree as the branches page's card, opening as the matrix with its own switch to the tree", async () => {
     const data = ayahPreview('2:25');
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => data })));
     render(<LanguageProvider><AyahPreviewSheet preview={{ kind: 'trees', key: '2:25', all: '/quran/branches?k=2:25' }} onClose={vi.fn()} /></LanguageProvider>);
-    const switches = await screen.findAllByRole('button', { name: 'عرض المصفوفة' });
+    const switches = await screen.findAllByRole('button', { name: 'عرض الشجرة' });
     expect(switches.length).toBe(data.trees.length);
     fireEvent.click(switches[0]);
-    expect(screen.getAllByRole('button', { name: 'عرض الشجرة' }).length).toBe(1);
+    expect(screen.getAllByRole('button', { name: 'عرض المصفوفة' }).length).toBe(1);
     vi.unstubAllGlobals();
   });
 });

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { GalleryHorizontal } from 'lucide-react';
 import Button from '@/components/common/Button';
 import TreeIcon from '@/components/common/TreeIcon';
-import { BRANCH_VIEW_COOKIE, parseBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
+import { BRANCH_VIEW_COOKIE, defaultBranchView, showsOtherView, type BranchView } from '@shared/quran/branchView';
 import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import BranchTree from './BranchTree';
 import AyahCards from './AyahCards';
@@ -20,15 +20,15 @@ import { AroundButton, RotateButton } from './Surroundings';
  * pan, a path lit on a click and read in full under the buttons, a double click to save, and the card's own buttons (save,
  * tree or matrix, rotate, the surrounding ayat, share). It opens in the view chosen in the settings (the branches page's cookie),
  * and its switches change only this card. The home feed and the reader's trees sheet use it.
- * `mixed`: one tree in ten opens the other view, as the home feed does.
+ * `mixed`: for a reader who picked the tree, one tree in ten opens as the matrix, as the home feed does.
  */
 /** `frameClassName` draws the tree in a card of its own (home's posts); the matrix is a card already, so it goes without. */
 export default function TreeViewCard({ tree, height, names, mixed = false, actionsClassName, frameClassName }: {
   tree: TreePreview; height: string; names: Record<number, string>; mixed?: boolean; actionsClassName?: string; frameClassName?: string;
 }) {
   const [chosen, setView] = useState<BranchView>(() => {
-    const pref = parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) ?? 'tree';
-    return mixed && showsOtherView(tree.id) ? (pref === 'tree' ? 'cards' : 'tree') : pref;
+    const pref = defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE));
+    return mixed && pref === 'tree' && showsOtherView(tree.id) ? 'cards' : pref;
   });
   const view: BranchView = tree.matrixOnly ? 'cards' : chosen;
   const viewLabel = view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة';
