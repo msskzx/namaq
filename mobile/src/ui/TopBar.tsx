@@ -18,7 +18,7 @@ const HEIGHT = 52;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
- * The phone top bar: the page's own buttons and the bar's (help, search, gear) on the right under the thumb (owner, 2026-11-17).
+ * The phone top bar: the page's own buttons and the bar's (search, gear) on the right under the thumb, the help on the far left (owner, 2026-11-17).
  * The gear (owner, 2026-11-10) and the logo, on the left, show only on the homepage (owner, 2026-11-17).
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
@@ -47,12 +47,12 @@ export default function TopBar({ children, title, middle, away: putAway = false,
   utilities?: () => void;
   /** A back arrow, first on the right; the bar then has no logo. */
   back?: () => void;
-  /** The page's help (rules and colour legend), among the buttons on the right. */
+  /** The page's help (rules and colour legend), on the far left. */
   help?: () => void;
 }) {
   const palette = usePalette();
   // Centred buttons keep clear of both sides: the logo on the left and the buttons on the right, whichever is wider.
-  const side = Math.max(SIDE, 12 + ((back || hub || shelf) ? 42 : 0) + [help, utilities, search, withSettings].filter(Boolean).length * 44);
+  const side = Math.max(SIDE, 12 + ((back || hub || shelf) ? 42 : 0) + [utilities, search, withSettings].filter(Boolean).length * 44);
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
   // Scrolling down, the row folds away under the status bar; put away, the whole bar leaves. Both move as every bar does (ui/motion).
@@ -82,12 +82,13 @@ export default function TopBar({ children, title, middle, away: putAway = false,
         {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: side, right: side, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
         <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
-          {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
           {utilities && <IconButton Icon={Compass} label="الأدوات" onPress={utilities} />}
           {search && <IconButton Icon={Search} label="البحث" onPress={search} />}
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
           {center ? null : children}
         </View>
+        {/* The page's help on the far left, out of the way of the buttons (owner, 2026-11-17). */}
+        {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
         {/* The logo only on home (owner, 2026-11-17): elsewhere it was a second home button beside the home tab. Home is
             the one page with the gear, so the gear and the logo go together. */}
         {withSettings && <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
