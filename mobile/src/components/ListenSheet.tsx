@@ -4,7 +4,7 @@ import { Check, ChevronDown, ChevronLeft, CircleCheck, CirclePause, Download, Mi
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import Reference from '@/ui/Reference';
-import { Chip, Group } from './FilterFields';
+import { Group } from './FilterFields';
 import { num } from '@shared/quran/arabicNumber';
 import { ayatOf, EACH_AYAH, LISTEN_REFERENCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, sizeLabel, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { packBytes } from '@shared/quran/recitationSizes';
@@ -16,6 +16,7 @@ import { ayahCounts } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { surahName } from '@shared/quran/surahNames';
+import Chip from '@/ui/Chip';
 
 
 const ALL: Range = { from: '1:1', to: '114:6' };
@@ -111,16 +112,16 @@ export default function ListenSheet({ open, start, onClose, palette }: { open: b
               </View>
             )}
             <Group title="كرّر كل آية" palette={palette}>
-              {EACH_AYAH.map(n => <Chip key={n} label={timesLabel(n)} active={plan.eachAyah === n} onPress={() => change({ eachAyah: n })} palette={palette} />)}
+              {EACH_AYAH.map(n => <Chip check key={n} label={timesLabel(n)} on={plan.eachAyah === n} onPress={() => change({ eachAyah: n })} palette={palette} />)}
             </Group>
             <Group title="ثم كرّر المقطع كله" palette={palette}>
-              {RANGE_TIMES.map(n => <Chip key={n} label={timesLabel(n)} active={plan.rangeTimes === n} onPress={() => change({ rangeTimes: n })} palette={palette} />)}
+              {RANGE_TIMES.map(n => <Chip check key={n} label={timesLabel(n)} on={plan.rangeTimes === n} onPress={() => change({ rangeTimes: n })} palette={palette} />)}
             </Group>
             <Group title="مهلة بعد كل آية لتردّدها" palette={palette}>
-              {PAUSES.map(pause => <Chip key={String(pause)} label={pauseLabel(pause)} active={plan.pause === pause} onPress={() => change({ pause })} palette={palette} />)}
+              {PAUSES.map(pause => <Chip check key={String(pause)} label={pauseLabel(pause)} on={plan.pause === pause} onPress={() => change({ pause })} palette={palette} />)}
             </Group>
             <Group title="السرعة" palette={palette}>
-              {SPEEDS.map(speed => <Chip key={speed} label={speedLabel(speed)} active={plan.speed === speed} onPress={() => change({ speed })} palette={palette} />)}
+              {SPEEDS.map(speed => <Chip check key={speed} label={speedLabel(speed)} on={plan.speed === speed} onPress={() => change({ speed })} palette={palette} />)}
             </Group>
             <View style={{ height: 1, backgroundColor: palette.glassEdge }} />
             <Pressable onPress={() => setView('reciters')} accessibilityRole="button" accessibilityLabel="القارئ والتنزيل" style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 4 }}>

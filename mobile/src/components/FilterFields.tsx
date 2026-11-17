@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { Check, RotateCcw } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -16,6 +16,7 @@ import { surahNames } from '@/lib/branches';
 import { draftRange, UNIT_MAX, type FilterDraft, type FilterUnit } from '@/lib/branchList';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Chip from '@/ui/Chip';
 
 const UNITS: { value: FilterUnit; label: string }[] = [
   { value: 'juz', label: 'من الجزء' },
@@ -26,16 +27,6 @@ const UNITS: { value: FilterUnit; label: string }[] = [
 ];
 const CATEGORIES: Record<string, string> = { mutashabeh: 'متشابهات', pondering: 'تدبّر', words: 'أشجار الكلمات' };
 const SORT_LABELS = ['ترتيب المصحف', 'الأقرب', 'الأكثر مواضع', 'الأقل اختلافًا'];
-
-export function Chip({ label, active, onPress, palette }: { label: string; active: boolean; onPress: () => void; palette: Palette }) {
-  return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityState={{ selected: active }}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, height: 36, borderRadius: 18, borderWidth: 1, borderColor: active ? palette.accent : palette.rule, backgroundColor: active ? palette.accent : 'transparent' }}>
-      {active && <Check size={13} color={palette.onAccent} />}
-      <Text style={{ color: active ? palette.onAccent : palette.ink, fontSize: 14 }}>{label}</Text>
-    </Pressable>
-  );
-}
 
 export function Group({ title, children, palette }: { title: string; children: React.ReactNode; palette: Palette }) {
   return (
@@ -74,7 +65,7 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
       {savedOnly && trees && <Toggle on={draft.saved} onChange={on => setDraft({ ...draft, saved: on })} label="المحفوظة فقط" palette={palette} disabled={!draft.saved && !saved} />}
       {savedOnly && trees && !draft.saved && !saved && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -6 }}>لا محفوظات بعد: احفظ {compare ? 'بطاقة' : 'شجرة'} بزر الحفظ تحتها.</Text>}
       <Group title="النطاق" palette={palette}>
-        {UNITS.map(unit => <Chip key={unit.value} label={unit.label} active={draft.unit === unit.value} palette={palette}
+        {UNITS.map(unit => <Chip check key={unit.value} label={unit.label} on={draft.unit === unit.value} palette={palette}
           onPress={() => setDraft({ ...draft, unit: unit.value, from: '1', to: String(UNIT_MAX[unit.value]), picked: [] })} />)}
       </Group>
       {ranged && (() => {
@@ -98,21 +89,21 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
         </View>;
       })()}
       {pickList.length > 0 && <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-        {pickList.map(item => <Chip key={item.n} label={item.label} active={draft.picked.includes(item.n)} palette={palette}
+        {pickList.map(item => <Chip check key={item.n} label={item.label} on={draft.picked.includes(item.n)} palette={palette}
           onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
       </View>}
       {!compare && trees && <>
       <Group title="نوع المقارنة" palette={palette}>
-        {Object.entries(CATEGORIES).map(([id, label]) => <Chip key={id} label={label} active={categories.split(',').includes(id)} palette={palette}
+        {Object.entries(CATEGORIES).map(([id, label]) => <Chip check key={id} label={label} on={categories.split(',').includes(id)} palette={palette}
           onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
-        <Chip label="في كتب المتشابه" active={draft.filters.cited === '1'} palette={palette} onPress={() => setFilter('cited', draft.filters.cited === '1' ? '' : '1')} />
+        <Chip check label="في كتب المتشابه" on={draft.filters.cited === '1'} palette={palette} onPress={() => setFilter('cited', draft.filters.cited === '1' ? '' : '1')} />
       </Group>
       <Group title="نوع الاختلاف" palette={palette}>
-        {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip key={id} label={label.ar} active={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
+        {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip check key={id} label={label.ar} on={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
           onPress={() => setFilter('differences', toggleFilter(draft.filters.differences, id))} />)}
       </Group>
       {sort && <Group title="الترتيب" palette={palette}>
-        {SORTS.map((order, i) => <Chip key={order} label={SORT_LABELS[i]} active={(draft.filters.sort || 'mushaf') === order} palette={palette} onPress={() => setFilter('sort', i ? order : '')} />)}
+        {SORTS.map((order, i) => <Chip check key={order} label={SORT_LABELS[i]} on={(draft.filters.sort || 'mushaf') === order} palette={palette} onPress={() => setFilter('sort', i ? order : '')} />)}
       </Group>}
       </>}
     </>

@@ -91,7 +91,7 @@ job. `Tour` keeps its own overlay.
 `ActButton`s, used by the card menu and the reader long press.
 **PRs:** 4a sheets, 4b floating menu.
 
-### 5. Card (5a done: home, library, quizzes; 5b done: Quran tools, sheets. Open: hub tiles, openings, لطائف have no border, owner to pick; MatrixCard's lane frames stay its own)
+### 5. Card (5a done: home, library, quizzes; 5b done: Quran tools, sheets. Hub tiles, openings and لطائف now framed too (owner 2026-11-17); MatrixCard's lane frames stay its own)
 Drift: the `CARD` token in `lib/theme.ts:63` is only a radius (14), spread
 as `...CARD` in 27 files, each adding its own border, colour and padding.
 About 42 more boxed containers set a literal radius instead: 10 (19), 12 (8),
@@ -110,7 +110,7 @@ Drift: seven tab rows, four looks: filled accent (`ReaderSheets`,
 **Home:** `Tabs` in `ui/`, same look as the website's `Segmented`.
 **PR:** one.
 
-### 7. Chip
+### 7. Chip (done: filters, listen plan, gestures, لطائف topics, order, oaths, word lists, tree surahs, removable search chips. Not chips: the reader's and book's floating pills, the video studio's cycle buttons)
 Drift: 9 round chips in `Reader.tsx` (3), `CardMenu.tsx` (2), `WordSheet`,
 `screens/book.tsx`, `screens/order.tsx`, `screens/oaths.tsx`, plus
 `SurahChips` and `FilterFields`, paddings 12/6, 14/2, 10/…
