@@ -8,8 +8,8 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 
 describe('QuranLataifPage', () => {
-  it('shows the title and the seven cards, each followed by its reference', () => {
-    render(<QuranLataifPage />);
+  it('shows the title and the seven cards, each followed by its reference', async () => {
+    render(await QuranLataifPage());
     expect(screen.getByRole('heading', { level: 1, name: 'لطائف' })).toBeTruthy();
     expect(screen.getAllByRole('article')).toHaveLength(7);
     expect(document.body.textContent).not.toContain('انتقال الكلام');
