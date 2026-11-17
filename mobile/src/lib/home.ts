@@ -4,22 +4,23 @@ import { ayahBookmarkId, markAyah, markWord } from '@shared/ayahMarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { aliasesOf, hasTrees } from './branchList';
 import { cardsFor, compareTargetsFor, compareTargetsOfAyah, type CompareTarget } from './compare';
-import { treeList } from './branches';
+import { ayahOf, treeList } from './branches';
 import type { Intent } from './intent';
 import { quranText } from './quranText';
 
 export type Reference = { surah: number; ayat: number[]; range?: boolean };
 export type SavedCard = { id: string; text: string; kind: BookmarkKind; references: Reference[]; open: Intent | null };
 
-let treeKeys: Map<string, string[]> | undefined;
-/** Each tree's ayat under its id and the ids the website saved it under. */
-const keysOfTree = (id: string) => {
-  if (!treeKeys) {
-    treeKeys = new Map();
-    for (const piece of treeList()) for (const name of [piece.id, ...aliasesOf(piece)]) if (name && !treeKeys.has(name)) treeKeys.set(name, piece.keys);
+let trees: Map<string, { keys: string[]; text: string }> | undefined;
+/** Each tree under its id and the ids the website saved it under. */
+const treeOf = (id: string) => {
+  if (!trees) {
+    trees = new Map();
+    for (const piece of treeList()) for (const name of [piece.id, ...aliasesOf(piece)]) if (name && !trees.has(name)) trees.set(name, { keys: piece.keys, text: piece.text });
   }
-  return treeKeys.get(id);
+  return trees.get(id);
 };
+const keysOfTree = (id: string) => treeOf(id)?.keys;
 
 const split = (key: string) => key.split(':').map(Number) as [number, number];
 
@@ -48,17 +49,18 @@ export function savedCard(item: Bookmark): SavedCard {
     const keys = compareBookmarkAyat(item);
     const surahs = keys.map(key => split(key)[0]);
     const other = surahs.find(surah => surah !== surahs[0]) ?? surahs[0];
-    return { id: item.id, text: item.text, kind, references: referencesOf(keys, /\d-\d/.test(item.id)), open: surahs.length ? { tab: 'compare', lead: surahs[0], other, ayat: keys } : null };
+    // The card's first words as the page prints them, as saving one writes them: an older save may hold the corpus's spelling.
+    const words = keys.length ? ayahOf(keys[0])?.words.slice(0, 6).join(' ') : undefined;
+    return { id: item.id, text: words ? `${words} …` : item.text, kind, references: referencesOf(keys, /\d-\d/.test(item.id)), open: surahs.length ? { tab: 'compare', lead: surahs[0], other, ayat: keys } : null };
   }
-  const keys = keysOfTree(item.id);
-  return { id: item.id, text: item.text, kind, references: referencesOf(keys ?? []), open: keys ? { tab: 'branches', open: item.id } : null };
+  const tree = treeOf(item.id);
+  const keys = tree?.keys;
+  // The tree's words as the page prints them today: an older save may hold the corpus's spelling.
+  return { id: item.id, text: tree?.text ?? item.text, kind, references: referencesOf(keys ?? []), open: keys ? { tab: 'branches', open: item.id } : null };
 }
 
-/**
- * A shelf card's words as the mushaf font draws them. A saved ayah already holds the mushaf page's own words;
- * trees and compare cards hold the corpus spelling, whose marks (such as the small zero over a silent alif) the font has no glyph for.
- */
-export const shelfText = (card: Pick<SavedCard, 'kind' | 'text'>) => (card.kind === 'ayah' ? card.text : quranText(card.text));
+/** A shelf card's words as the mushaf font draws them: the page's own words (savedCard), one medallion per ayah number. */
+export const shelfText = (card: Pick<SavedCard, 'text'>) => quranText(card.text);
 
 /**
  * Where else a saved card's ayat can be seen, for its long press: the mushaf, its tree and matrix (or, for an ayah,

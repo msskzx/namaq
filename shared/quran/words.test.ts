@@ -16,7 +16,7 @@ describe('word counts', () => {
     expect(words.lemmas[idOf('ٱللَّه')][1]).toBe(2699);
     expect(placesOf(words, idOf('ٱللَّه'))).toHaveLength(1821);
     expect(words.lemmas[idOf('جَنَّة')][1]).toBe(147);
-    expect(words.lemmas[idOf('يَوْم')][1]).toBe(405);
+    expect(words.lemmas[idOf('يَوۡم')][1]).toBe(405);
     expect(words.lemmas[idOf('حَيَوٰة')][1]).toBe(76);
     expect(data.notice).toMatch(/Quranic Arabic Corpus \(morphology, version 0\.4\)/);
   });

@@ -5,12 +5,15 @@ HAFS Uthmanic Script font (version 18). It is one Unicode font for all pages.
 Its licence lets anyone use, copy and distribute it free of charge, unchanged.
 
 Trees, compare, quizzes and every other feature show the pages' own words
-(AGENTS.md, "Quran text"), so they need no conversion. Quran quoted inside
-books (tafsir, i'rab, balagha) and the Corpus's dictionary forms are in the
-older Tanzil spelling. `shared/data/quran/mushafWords.json` maps those words to
-the Madina spelling, word by word, without pause and sajda signs, through
-`mushafText`. The table is fixed (owner 2026-11-17: kept for quoted Quran
-only): the old text it was built from is gone, so it can no longer be rebuilt.
+(AGENTS.md, "Quran text"), so they need no conversion. The Corpus's dictionary
+forms (words.json, lemmas.json) and the other readers' readings (qiraat.json)
+come in the older spelling; their build scripts store them in the Madina
+spelling through `scripts/quran/madinaSpelling.ts` (owner 2026-11-17). It
+keeps a word the pages print, takes the few words the marks alone cannot settle
+from `scripts/quran/madinaSpelling.json` (400 words kept from the old font
+table, which was deleted), and otherwise swaps the older copies' marks. The app
+converts nothing; `mushafText` only drops the ﴿﴾ around an ayah number. Quran
+quoted inside books keeps the book's own spelling.
 
 The printed Madinah mushaf fills every line by stretching letters (kashida).
 A single web font cannot do that, so the reader stretches or squeezes each

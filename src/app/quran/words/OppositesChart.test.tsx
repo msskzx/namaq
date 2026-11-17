@@ -15,7 +15,7 @@ const opposites: [CountedSide, CountedSide][] = [
   [side('الليل', 84), side('النهار', 57)],
   [{ label: 'الدنيا', lemma: 'دُنْيَا', form: false, count: 115 }, { label: 'الآخرة', lemma: 'آخِر', form: true, count: 115 }],
 ];
-const lemmas: LemmaCount[] = [['شَمْس', 33, 'شمس'], ['قَمَر', 27, 'قمر']];
+const lemmas: LemmaCount[] = [['شَمۡس', 33, 'شمس'], ['قَمَر', 27, 'قمر']];
 const show = () => render(<OppositesChart opposites={opposites} lemmas={lemmas} />);
 const section = () => screen.getByRole('heading', { name: 'كلمات متقابلة' }).closest('section') as HTMLElement;
 const chart = () => within(section()).queryByRole('list', { name: 'أزواج الكلمات المتقابلة' });
@@ -52,14 +52,14 @@ describe('OppositesChart', () => {
     expect(within(section()).getByRole('status').textContent).toBe('');
     fireEvent.change(adder(), { target: { value: 'شمس' } });
     fireEvent.click(within(section()).getByRole('button', { name: /شَمۡس/ }));
-    expect(within(section()).getByRole('status').textContent).toMatch('الطرف الأول: شَمْس. اختر مقابله.');
+    expect(within(section()).getByRole('status').textContent).toMatch('الطرف الأول: شَمۡس. اختر مقابله.');
     fireEvent.click(within(section()).getByRole('button', { name: /إلغاء/ }));
     expect(within(section()).queryByText(/الطرف الأول/)).toBeNull();
     fireEvent.change(adder(), { target: { value: 'شمس' } });
     fireEvent.keyDown(adder(), { key: 'Enter' });
     fireEvent.change(adder(), { target: { value: 'قمر' } });
     fireEvent.keyDown(adder(), { key: 'Enter' });
-    expect(rows()[2]).toBe('شَمْس: ٣٣ · قَمَر: ٢٧');
+    expect(rows()[2]).toBe('شَمۡس: ٣٣ · قَمَر: ٢٧');
   });
 
   it('removes one pair', () => {

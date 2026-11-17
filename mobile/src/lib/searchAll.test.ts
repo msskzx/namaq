@@ -12,7 +12,7 @@ describe('the app search on the bundled data', () => {
 
   it('finds ayat, the word, trees and prophets\' events for «فرعون»', () => {
     expect(group('فرعون', 'ayah').length).toBeGreaterThan(3);
-    expect(group('فرعون', 'word')).toContainEqual(expect.objectContaining({ name: 'فِرْعَوْن', count: 74 }));
+    expect(group('فرعون', 'word')).toContainEqual(expect.objectContaining({ name: 'فِرۡعَوۡن', count: 74 }));
     expect(group('فرعون', 'tree').length).toBeGreaterThan(0);
     expect(group('فرعون', 'event')).toContainEqual(expect.objectContaining({ slug: 'musa', title: 'إغراق فرعون وجنوده' }));
   });
