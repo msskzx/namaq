@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, ChevronDown, LightbulbOff, NotebookPen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import BackBar from '@/ui/BackBar';
+import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import { toTab } from '@/lib/ways';
 import { FORGOTTEN_LABEL, NOTE_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
@@ -50,10 +50,10 @@ export default function LibraryScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {/* A back button, as on the quiz pages: this page is opened from the homepage and has no tab bar. */}
-      <BackBar onBack={() => (router.canGoBack() ? router.back() : toTab('/'))}>
+      <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))}>
         <View style={{ flex: 1, alignItems: 'center' }}><Picker tab={tab} onTab={setTab} palette={palette} /></View>
-        <View style={{ width: 40 }} />
-      </BackBar>
+        <View style={{ width: 34 }} />
+      </TopBar>
       <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 12 }}
         renderItem={({ item }) => tab === 'saved'
           ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />

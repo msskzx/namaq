@@ -72,7 +72,7 @@ icon per the owner's "no square" rule). Built on `Button variant="plain"`.
 **PRs:** 2a top bars + sheets, 2b cards (CompareCard, MatrixCard, TreeCard,
 HomeCards), 2c the rest.
 
-### 3. One top bar
+### 3. One top bar — done (Share and Video sheet headers move with step 4)
 Drift: `TopBar` (logo right, buttons, gear left; see-through), `BackBar`
 (back chevron right, title, buttons left; solid with a line), and hand-drawn
 copies with their own chevron in `screens/prophets/slug.tsx`,
