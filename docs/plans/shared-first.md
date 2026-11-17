@@ -147,6 +147,7 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
   the tour, and the floating menus (`CardMenu`, `AyahActions`, `ScopeFilter`), which want a shared floating menu like the app's.
 - Step 3: `common/LoadingDots` is the one loader (`fill`, `fill="page"`), as in the app. `LoadingSpinner` and `InkLoader` (logo and quill loaders) are gone; `NavigationLoader` keeps its job (when to show) and shows the dots.
 - Step 4a: `common/Card` is the one card (`as`, `href`, `picked`, `dashed`, `faded`). The inline cards of the Quran pages, reader panels, sources, attributions, qira'at (off its grey look), quizzes and the party's panels (`PaperPage .panel` is gone) use it. Next (4b): the CSS-module cards (home feed `.daily`/`.post`/`.prayers`/`.book`, utilities, mushaf spread).
+- Step 4b: Card gains `as="button"` and `spine`; the home shelf books, the feed post, the books shelf and the utilities card use it; dead `.daily`/`.prayers` CSS removed. The mushaf spread (`PageSpread`) and the tree frame (`.post` via TreeViewCard) stay: page and tree drawings are exempt.
 
 ## AGENTS.md rule (added as "Shared first")
 

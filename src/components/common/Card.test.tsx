@@ -21,3 +21,10 @@ it('is one link with href, and marks picked, dashed and faded cards', () => {
   expect(link.className).toContain('border-dashed');
   expect(link.className).toContain('opacity-60');
 });
+
+it('is one button with as="button", and a book with spine', () => {
+  render(<Card as="button" spine onClick={() => {}}>book</Card>);
+  const button = screen.getByRole('button', { name: 'book' });
+  expect(button.getAttribute('type')).toBe('button');
+  expect(button.className).toContain('border-s-[5px]');
+});
