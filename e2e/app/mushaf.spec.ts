@@ -42,17 +42,29 @@ test('a reflection note is written from the long-press menu', async ({ page }) =
   await expect.poll(async () => (await stored<Record<string, { text: string }>>(page, 'ayah-notes'))?.['1:2']?.text).toBe('الحمد كله لله');
 });
 
-test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
+test('a new user\'s trees sheet opens its cards as the matrix', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-  await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
   await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
-  await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
-  await expect(page).toHaveURL(/\/branches/);
-  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
-  await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
-  expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
+});
+
+test.describe('with the tree picked in settings', () => {
+  test.use({ seed: { 'branches-view': '"tree"' } });
+
+  test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
+    await open(page, '/read');
+    await pressWord(page, HAMD);
+    await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
+    await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
+    await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
+    await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
+    await expect(page).toHaveURL(/\/branches/);
+    // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
+    await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
+    expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
+  });
 });
 
 test('the compare preview sheet opens the compare card', async ({ page }) => {

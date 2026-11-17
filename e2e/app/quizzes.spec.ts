@@ -15,7 +15,8 @@ const answersOf = async (page: Page, index: number) => {
   return question.asked.map(node => givenAnswer(nodes[node]));
 };
 
-const leaves = (page: Page) => page.getByLabel(/^الطرف /);
+// The quiz explainer draws a read-only example; only the question's own boxes count.
+const leaves = (page: Page) => page.locator('input:not([readonly])').and(page.getByLabel(/^الطرف /));
 
 test.beforeEach(async ({ page }) => {
   // The same questions every run: Math.random seeded before the app starts.
@@ -114,7 +115,7 @@ test('a solo quiz of which surah and recite questions: pick, reveal, then the re
 test('a compare quiz: the matrix only, a right and a wrong blank, then the result', async ({ page }) => {
   await open(page, '/quiz/solo');
   await page.getByRole('button', { name: 'قارن الموضعين' }).click();
-  await page.getByRole('button', { name: 'شجرة المتشابهات' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
   await expect(page).toHaveURL(/\/quiz\/play/);
   await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
