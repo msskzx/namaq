@@ -48,7 +48,7 @@ export const haptics = setting('haptics', true, isBoolean);
 export const quizPageBefore = setting('quiz-page-before', false, isBoolean);
 
 /** What recite mode's pen writes everywhere (owner, 2026-11-17): an ayah's first and last words, or all of it. */
-export const penRule = setting<PenRule>('pen-rule', 'ends', isPenRule);
+export const penRule = setting<PenRule>('pen-rule', 'whole', isPenRule);
 /** The quizzes' own pen rule, or `same` to follow the one for everything (owner, 2026-11-17: global, and per quiz). */
 export const quizPen = setting<PenRule | 'same'>('quiz-pen', 'same', (value): value is PenRule | 'same' => value === 'same' || isPenRule(value));
 /** The pen rule a quiz writes with. */

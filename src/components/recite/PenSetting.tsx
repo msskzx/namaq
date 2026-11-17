@@ -11,7 +11,7 @@ export const PEN_NAMES: Record<PenRule, { ar: string; en: string }> = {
 };
 const RULES = Object.keys(PEN_NAMES) as PenRule[];
 
-/** The pen rule for the mushaf and the home card (owner, 2026-11-17: a setting, first and last words by default; the app's PenSetting). */
+/** The pen rule for the mushaf and the home card (owner, 2026-11-17: a setting, the whole ayah by default; the app's PenSetting). */
 export function PenSetting({ ar }: { ar: boolean }) {
   const rule = usePenRule();
   const label = ar ? 'الكتابة بالقلم في التسميع' : 'Writing with the pen while reciting';

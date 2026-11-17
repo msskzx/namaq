@@ -6,6 +6,7 @@ import { NavSlotElement, RailSlotElement } from '@/components/common/NavBar';
 import { usePageHelp } from '@/components/common/SettingsHelp';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { MushafPage } from '@shared/quran/readerPage';
+import { setPenRule } from '@/lib/penRule';
 import ReaderView, { MarkedReaderView } from './ReaderView';
 import SurahIndex from './SurahIndex';
 
@@ -280,6 +281,8 @@ describe('Recite mode', () => {
 
   it('writes the first and last words of the next ayah in its boxes, moving on by itself, then grades it', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ', 'فِيهِۛ', 'هُدٗى', 'لِّلۡمُتَّقِينَ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const boxes = () => screen.getAllByRole('button', { name: /اكتب هذه الكلمة|كلمة مكتوبة/ });
@@ -308,6 +311,8 @@ describe('Recite mode', () => {
 
   it('leaves an ayah written right off the forgotten shelf', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const field = screen.getByLabelText('اكتب الكلمة');
@@ -320,6 +325,8 @@ describe('Recite mode', () => {
 
   it('goes back a box with backspace in an empty box', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const field = screen.getByLabelText('اكتب الكلمة');

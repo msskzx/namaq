@@ -8,7 +8,7 @@ import type { Palette } from '@/lib/theme';
 /** What the recite bar's pen asks to write, by rule (shared/quran/writeAyah.ts penTargets). */
 export const PEN_NAMES: Record<PenRule, string> = { ends: 'أول الآية وآخرها', whole: 'الآية كاملة' };
 
-/** The pen rule for the mushaf and the home card (owner, 2026-11-17: a setting, first and last words by default). */
+/** The pen rule for the mushaf and the home card (owner, 2026-11-17: a setting, the whole ayah by default). */
 export function PenSetting({ palette }: { palette: Palette }) {
   const [rule, setRule] = penRule.use();
   return (

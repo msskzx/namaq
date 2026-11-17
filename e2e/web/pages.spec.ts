@@ -91,7 +91,7 @@ test.describe('pages with the database', () => {
   test('the home recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
-    const pen = page.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }).first();
+    const pen = page.getByRole('button', { name: 'اكتب كل آية كاملة' }).first();
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
     await expect(async () => {
       await pen.click();

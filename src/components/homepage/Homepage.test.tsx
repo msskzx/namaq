@@ -143,8 +143,6 @@ describe('home', () => {
 
   it('asks to recall a due forgotten ayah word by word, or in the reader\'s write boxes with the pen, grades what is typed, and remembered takes it away', async () => {
     localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
-    // The pen writes what the pen setting asks (first and last words by default); here the whole ayah.
-    localStorage.setItem('pen-rule', 'whole');
     render(<Homepage data={data} />);
     const reciting = (await screen.findByText('هل تذكرها؟')).closest('article')!;
     // Recite mode's way first: the words hidden, the next word or the whole ayah on a click.

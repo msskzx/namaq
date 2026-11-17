@@ -189,7 +189,7 @@ test.describe('a returning user', () => {
   test('the recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
-    await page.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }).first().click();
+    await page.getByRole('button', { name: 'اكتب كل آية كاملة' }).first().click();
     const boxes = page.getByRole('button', { name: 'اكتب هذه الكلمة' });
     await expect(boxes.first()).toBeVisible();
     const count = await boxes.count();

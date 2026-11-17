@@ -1,6 +1,6 @@
 // The website side of the app's «pen-rule» and «quiz-pen» settings (mobile/src/lib/settings.ts): what recite mode's pen
-// asks to write, everywhere it recites, and a quiz's own rule or the same one. Per device in localStorage; first and last
-// words by default (owner, 2026-11-17).
+// asks to write, everywhere it recites, and a quiz's own rule or the same one. Per device in localStorage; the whole
+// ayah by default (owner, 2026-11-17).
 import { useSyncExternalStore } from 'react';
 import { isPenRule, type PenRule } from '@shared/quran/writeAyah';
 
@@ -19,12 +19,12 @@ function store(key: string, value: string) {
 
 export type QuizPen = PenRule | 'same';
 const isQuizPen = (value: unknown): value is QuizPen => value === 'same' || isPenRule(value);
-const readPen = () => read<PenRule>('pen-rule', 'ends', isPenRule);
+const readPen = () => read<PenRule>('pen-rule', 'whole', isPenRule);
 const readQuizPen = () => read<QuizPen>('quiz-pen', 'same', isQuizPen);
 
 export const setPenRule = (rule: PenRule) => store('pen-rule', rule);
 export const setQuizPen = (rule: QuizPen) => store('quiz-pen', rule);
-export const usePenRule = () => useSyncExternalStore(subscribe, readPen, () => 'ends' as const);
+export const usePenRule = () => useSyncExternalStore(subscribe, readPen, () => 'whole' as const);
 export const useQuizPenSetting = () => useSyncExternalStore(subscribe, readQuizPen, () => 'same' as const);
 /** The rule a quiz writes by: its own, or the one in settings. */
 export function useQuizPen(): PenRule {
