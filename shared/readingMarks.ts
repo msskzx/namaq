@@ -34,6 +34,13 @@ export function setQuranFasila(fasila: QuranFasila | null) {
   fasilaStore.write(JSON.stringify(next));
 }
 
+/**
+ * The page the home «تابع القراءة» card opens: the mushaf's فاصلة, which the person set on purpose, else the page last
+ * open (owner, 2026-11-17). Peeking at a page or jumping in from search moves the last page, never the فاصلة.
+ */
+export const continuePage = (fasilas: Fasilas, lastPage: number): { page: number; fasila: boolean } =>
+  fasilas.quran ? { page: fasilas.quran.page, fasila: true } : { page: lastPage, fasila: false };
+
 export function setBookFasila(book: ReaderBookId, fasila: BookFasila | null) {
   const next: Fasilas = { ...readFasilas() };
   if (fasila) next[book] = fasila;

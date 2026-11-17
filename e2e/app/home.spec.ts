@@ -20,6 +20,18 @@ test.describe('a new user', () => {
     expect(await readerPage(page)).toBe(300);
   });
 
+  // The فاصلة wins over the page last open (owner, 2026-11-17).
+  test('the reading card opens the mushaf at the فاصلة when one is set', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null }));
+      localStorage.setItem('reading-fasila', JSON.stringify({ quran: { key: '2:6', page: 3 } }));
+    });
+    await open(page, '/');
+    await page.getByRole('button', { name: /^افتح المصحف عند فاصلتك، سورة البقرة/ }).click();
+    await expect(page).toHaveURL(/\/read/);
+    await expect.poll(() => readerPage(page)).toBe(3);
+  });
+
   test('the pair card is the compare card and opens the compare tab', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeAttached();
