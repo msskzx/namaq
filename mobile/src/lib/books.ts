@@ -19,6 +19,10 @@ let hidden = ids(HIDDEN);
 let saved = ids(SAVED);
 const busy = new Map<BookId, 'downloading' | 'failed'>();
 const loaded = new Map<BookId, unknown>();
+/** Grows each time a book is installed or removed, so what was built from its old copy is built again (readerBook.ts). */
+const revisions = new Map<BookId, number>();
+export const bookRevision = (id: BookId) => revisions.get(id) ?? 0;
+const revise = (id: BookId) => revisions.set(id, bookRevision(id) + 1);
 const listeners = new Set<() => void>();
 let version = 0;
 const changed = () => { version++; listeners.forEach(listener => listener()); };
@@ -34,8 +38,11 @@ export function bookState(id: BookId): BookState {
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
 const folder = () => new Directory(Paths.document, 'books');
+/** A book's data must be a book: its source and a list of passages with their text. */
 const readable = (data: unknown) => {
-  if (!data || typeof data !== 'object' || !Array.isArray((data as { entries?: unknown }).entries)) throw new Error('not a book');
+  const book = data as { source?: unknown; entries?: unknown } | null;
+  if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
+    || !book.entries.every(entry => !!entry && typeof entry === 'object' && typeof (entry as { text?: unknown }).text === 'string')) throw new Error('not a book');
   return data;
 };
 const fileOf = (id: BookId) => new File(folder(), `${id}.json`);
@@ -45,6 +52,7 @@ export async function addBook(id: BookId) {
   if (bookOf(id).builtIn) {
     hidden = hidden.filter(other => other !== id);
     writeJson(HIDDEN, hidden);
+    revise(id);
     changed();
     return;
   }
@@ -59,13 +67,20 @@ export async function addBook(id: BookId) {
     } else {
       const dir = folder();
       if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
-      const file = await File.downloadFileAsync(url, fileOf(id), { idempotent: true });
-      // A cut-off or wrong download is not kept: the book must read as its data.
-      try { loaded.set(id, readable(JSON.parse(await file.text()))); } catch (error) { file.delete(); throw error; }
+      // Downloaded beside the book and moved over it only once it reads as a book, so a cut-off or wrong download never replaces it.
+      const part = new File(dir, `${id}.json.part`);
+      try {
+        await File.downloadFileAsync(url, part, { idempotent: true });
+        loaded.set(id, readable(JSON.parse(await part.text())));
+        part.moveSync(fileOf(id), { overwrite: true });
+      } finally {
+        try { const left = new File(dir, `${id}.json.part`); if (left.exists) left.delete(); } catch {}
+      }
     }
     saved = [...saved.filter(other => other !== id), id];
     writeJson(SAVED, saved);
     busy.delete(id);
+    revise(id);
   } catch {
     busy.set(id, 'failed');
   }
@@ -73,6 +88,7 @@ export async function addBook(id: BookId) {
 }
 
 export function removeBook(id: BookId) {
+  revise(id);
   if (bookOf(id).builtIn) {
     hidden = [...hidden.filter(other => other !== id), id];
     writeJson(HIDDEN, hidden);
@@ -91,7 +107,7 @@ export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
   try {
-    const data = web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text());
+    const data = readable(web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
     return data as T;
   } catch {
