@@ -23,6 +23,7 @@
     "quran:topics": "tsx scripts/quran/buildSurahTopics.ts",
     "quran:oaths": "tsx scripts/quran/buildOaths.ts",
     "quran:qiraat": "tsx scripts/quran/buildQiraat.ts",
+    "quran:recitation-sizes": "tsx scripts/quran/buildRecitationSizes.ts",
     "quran:tafsir": "tsx scripts/quran/buildTafsirSadi.ts",
     "quran:irab": "tsx scripts/quran/buildIrab.ts",
     "quran:kashshaf": "tsx scripts/quran/buildKashshaf.ts",

@@ -48,6 +48,14 @@
             "backgroundColor": "#15191b"
           }
         }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": true
+        }
       ]
     ],
     "experiments": {

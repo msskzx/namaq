@@ -12,7 +12,7 @@ describe("the reader's ayah buttons", () => {
   it('shows no compare or trees button for an ayah with neither', () => {
     render(<AyahActions {...props} />);
     expect(screen.queryByLabelText('في المقارنة')).toBeNull();
-    expect(screen.queryByLabelText('أشجار هذه الآية')).toBeNull();
+    expect(screen.queryByLabelText('متشابهات الآية')).toBeNull();
   });
 
   it('previews the compare cards and the trees holding the ayah in a sheet instead of leaving the mushaf', () => {
@@ -21,7 +21,7 @@ describe("the reader's ayah buttons", () => {
     expect(screen.getByLabelText('في المقارنة').getAttribute('href')).toBeNull();
     fireEvent.click(screen.getByLabelText('في المقارنة'));
     expect(onPreview).toHaveBeenLastCalledWith('compare');
-    fireEvent.click(screen.getByLabelText('أشجار هذه الآية'));
+    fireEvent.click(screen.getByLabelText('متشابهات الآية'));
     expect(onPreview).toHaveBeenLastCalledWith('trees');
   });
 
