@@ -294,7 +294,9 @@ it, never trees.json). The same ayahWords file maps the corpus's word split onto
 the page words. Only the module sets the Quran font. The exceptions are Quran quoted
 inside a book, the other readers' readings (qiraat.json), and the Quranic
 Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
-of them is the Hafs page text. `oneQuranText.test.ts` lists today's breaks in
+of them is the Hafs page text. `mushafWords.json` (old spelling to Madina spelling,
+word by word) is kept only to show those quotes and forms in the Madina
+spelling; page text never goes through it. `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 
 ## Data model
