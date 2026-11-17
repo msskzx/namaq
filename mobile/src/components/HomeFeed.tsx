@@ -374,9 +374,10 @@ const STORY_SHARE = 0.62;
  * a tap and saves on a double tap, as there. The open button takes it to the branches tab.
  */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
-  // Opens on the settings' default view (one tree in ten the other view); the card's own switches change only this card.
+  // Opens on the settings' default view; a reader who picked the tree sees one tree in ten as the matrix, but the tree is
+  // never shown to anyone who did not pick it (owner, 2026-11-17). The card's own switches change only this card.
   const [preferred] = branchView.use();
-  const mode = showsOtherView(piece.id) ? (preferred === 'tree' ? 'matrix' : 'tree') : preferred;
+  const mode = preferred === 'tree' && showsOtherView(piece.id) ? 'matrix' : preferred;
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);

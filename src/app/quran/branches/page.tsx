@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { BRANCH_VIEW_COOKIE, BRANCH_CONNECTORS_COOKIE, parseBranchView } from '@shared/quran/branchView';
+import { BRANCH_VIEW_COOKIE, BRANCH_CONNECTORS_COOKIE, defaultBranchView, parseBranchView } from '@shared/quran/branchView';
 import { redirect } from 'next/navigation';
 import { surahList } from '@/lib/quran/surahList';
 import { surahLabel } from '@/lib/quran/surahLabel';
@@ -124,8 +124,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const settings = await cookies();
   const defaultConnections = settings.get(BRANCH_CONNECTORS_COOKIE)?.value === 'on';
   const explicitMode = parseBranchView(first(params.m));
-  const preferredMode = explicitMode ? undefined : parseBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value);
-  const mode = explicitMode ?? (preferredMode === 'cards' ? 'cards' : undefined);
+  // No view in the address opens the matrix, so a shared link shows the matrix; only the reader's own tree setting opens the tree.
+  const mode = explicitMode ?? (defaultBranchView(settings.get(BRANCH_VIEW_COOKIE)?.value) === 'cards' ? 'cards' : undefined);
   const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, query: query || undefined, surah, ayah, mode, filters: asked, saved: savedIds.length ? savedIds : undefined, review: review || undefined };
   if (resolved?.family && query && !textIs(resolved.text, query)) redirect(branchesHref(id, juz, { ...state, query: resolved.text }));
   // The list view is gone: search results and surahs are swiped through as trees.

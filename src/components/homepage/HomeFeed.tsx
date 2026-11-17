@@ -13,7 +13,7 @@ import { bookmarkKind } from '@shared/bookmarkKind';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
-import { BRANCH_VIEW_COOKIE, parseBranchView } from '@shared/quran/branchView';
+import { BRANCH_VIEW_COOKIE, defaultBranchView } from '@shared/quran/branchView';
 import { Card as CompareCard } from '@/app/quran/compare/PairCompare';
 import { useWriteBoxes, type Graded } from '@/app/quran/read/useWriteBoxes';
 import { usePageGestures } from '@/app/quran/read/usePageGestures';
@@ -165,7 +165,7 @@ function PairPost({ pair }: { pair: PairCard }) {
   return <article dir="rtl">
     <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${label(a)} · ${label(b)}`} />
     <ul className="list-none p-0">
-      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} />
+      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} />
     </ul>
   </article>;
 }

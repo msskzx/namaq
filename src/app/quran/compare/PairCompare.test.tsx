@@ -60,6 +60,14 @@ describe('PairCompare', () => {
     expect(within(pane()).getByRole('status').textContent).toContain('لا سورة');
   });
 
+  it('opens a card as the matrix when no view was picked and switches to the tree', () => {
+    const { container } = render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
+    expect(container.querySelectorAll('article')).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: 'عرض الشجرة' }));
+    expect(screen.getByLabelText(/شجرةً$/)).toBeTruthy();
+  });
+
   it('opens a card as a tree that parts where the wording differs and switches to the matrix', () => {
     const parting: PairCard[] = [{
       id: 'y',
@@ -68,7 +76,7 @@ describe('PairCompare', () => {
         { surah: 68, ayah: 46, ayat: [{ number: 46, words: ['أم', 'تسألهم', 'خرجا', 'فهم', 'من', 'مغرم', 'مثقلون'] }] },
       ],
     }];
-    const { container } = render(<PairCompare a={52} b={68} cards={parting} pairs={pairs} names={names} />);
+    const { container } = render(<PairCompare a={52} b={68} cards={parting} pairs={pairs} names={names} view="tree" />);
     const tree = screen.getByLabelText(/شجرةً$/);
     const nodes = [...tree.querySelectorAll('[data-node] .font-quran')].map(node => node.textContent);
     expect(nodes).toEqual(['أم تسألهم', 'أجرا', 'خرجا', 'فهم من مغرم مثقلون ۝']);
@@ -82,7 +90,7 @@ describe('PairCompare', () => {
 
   it('opens a card the owner keeps as its matrix with no tree and no tree button', () => {
     const matrixOnly: PairCard[] = [{ ...cards[0], id: '9:129|27:26' }];
-    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} />);
+    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} view="tree" />);
     expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
     expect(container.querySelectorAll('article')).toHaveLength(2);
     expect(screen.queryByRole('button', { name: 'عرض الشجرة' })).toBeNull();
