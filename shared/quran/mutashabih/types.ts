@@ -31,6 +31,10 @@ export type Position = { key: string; index: number };
 export type Word = Position & { features?: WordFeatures; text: string; letters: string; lemma?: string; root?: string; conj?: string; base: string };
 export type Column = { a?: Position; b?: Position; level?: Level; tags: Tag[] };
 export type Place = PhraseOccurrence & { through?: string };
+/** One side's differing words, at most three (more: there were more); none means the side omits them (∅). */
+export type DifferenceSide = { words: string[]; more: boolean };
+export type DifferenceWords = { a: DifferenceSide; b: DifferenceSide };
+
 export type Citation = { id: string; book: string; edition: string; locator: string; quote: string; url: string; examples?: Partial<Record<Tag, string>>; places: string[]; selections?: Place[]; tags: Tag[] };
 export type Comparison = { columns: Column[]; tags: Tag[]; score: number; coverage: number; kind?: Kind; spans: [Place, Place] };
 
@@ -47,6 +51,9 @@ export type Group = {
   score: number;
   citations: Citation[];
   detail?: string;
+  /** A book's own example per tag (quoted text, not the page). */
   examples?: Partial<Record<Tag, string>>;
+  /** The page words that differ per tag, for tags without a book's example (shared/quran/mutashabih/examples.ts). */
+  words?: Partial<Record<Tag, DifferenceWords>>;
   columns: { a: string; b: string; columns: Column[] }[];
 };

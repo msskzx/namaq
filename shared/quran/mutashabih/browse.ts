@@ -95,6 +95,7 @@ export function deduplicateGroups(groups: Group[]): Group[] {
     existing.tags = [...new Set([...existing.tags, ...group.tags])];
     existing.categories = [...new Set([...(existing.categories ?? []), ...(group.categories ?? [])])];
     existing.examples = { ...group.examples, ...existing.examples };
+    existing.words = { ...group.words, ...existing.words };
   }
   return retained.map(group => evidenceGroup(group));
 }

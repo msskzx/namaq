@@ -38,6 +38,7 @@ import { toneColor, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import IconButton from '@/ui/IconButton';
+import DifferenceWords from '@/components/quran/text/DifferenceWords';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
@@ -109,7 +110,7 @@ function ConnectionChips({ group, selected, onToggle, palette }: { group: Group;
               <Tags size={13} color={on ? palette.paper : tone} />
               <Text style={{ color: on ? palette.paper : tone, fontSize: 13 }}>{TAGS[tag].ar}</Text>
             </Pressable>
-            {example ? <Text style={{ color: palette.ink, fontSize: 14 }}>{example}</Text> : null}
+            {example ? <Text style={{ color: palette.ink, fontSize: 14 }}>{example}</Text> : group.words?.[tag] ? <DifferenceWords words={group.words[tag]!} color={palette.ink} fontSize={14} /> : null}
           </View>
         );
       })}
