@@ -114,7 +114,7 @@
 
 /* Words the ayat share, by how alike they are (shared/quran/wordMatch.ts), under the colour setting (src/lib/markMode.ts).
    With none, a mark keeps its text's own colour. */
-:root { --mark-exact: var(--home-accent); --mark-written: var(--home-amber); --mark-root: var(--home-root); }
+:root { --mark-exact: var(--home-accent); --mark-written: var(--home-amber); --mark-root: var(--home-root); --mark-some: 80%; }
 :root[data-marks="one"] { --mark-written: var(--home-accent); --mark-root: var(--home-accent); }
 :root[data-marks="none"] { --mark-exact: currentColor; --mark-written: currentColor; --mark-root: currentColor; }
 

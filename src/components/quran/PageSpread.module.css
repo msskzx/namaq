@@ -22,9 +22,9 @@
 /* related: same root, different word, so maybe a different meaning («بين» and «بيان»): a faint purple */
 .spread mark.related { color: color-mix(in srgb, var(--mark-root) 45%, var(--home-muted)); }
 /* some: a word only some of the matrix rows share, its colour faded into the card */
-.spread mark.some:not(.lit) { color: color-mix(in srgb, var(--mark-exact) 55%, var(--home-card)); }
-.spread mark.some.written:not(.lit) { color: color-mix(in srgb, var(--mark-written) 55%, var(--home-card)); }
-.spread mark.some.root:not(.lit) { color: color-mix(in srgb, var(--mark-root) 55%, var(--home-card)); }
+.spread mark.some:not(.lit) { color: color-mix(in srgb, var(--mark-exact) var(--mark-some), var(--home-card)); }
+.spread mark.some.written:not(.lit) { color: color-mix(in srgb, var(--mark-written) var(--mark-some), var(--home-card)); }
+.spread mark.some.root:not(.lit) { color: color-mix(in srgb, var(--mark-root) var(--mark-some), var(--home-card)); }
 /* With no word colours (src/lib/markMode.ts), faded and related words keep the text's colour too. */
 :global(:root[data-marks="none"]) .spread mark:not(.lit) { color: inherit; }
 .spread mark.linkable { cursor: pointer; border-radius: 0.25rem; -webkit-tap-highlight-color: transparent; }

@@ -49,6 +49,9 @@ export function blend(a: string, b: string, weight: number) {
   return `#${x.map((value, i) => Math.round(value * weight + y[i] * (1 - weight)).toString(16).padStart(2, '0')).join('')}`;
 }
 
+/** How much of its colour a word only some ayat share keeps, faded into the card; theme.css --mark-some is the same (owner, 2026-11-17: 55% was too faint to read). */
+export const SOME_WEIGHT = 0.8;
+
 /** Each likeness's colour under the colour setting (shared/quran/wordMatch.ts); `muted` fades a related word's root colour. */
 export type MarkColours = { marks: Partial<Record<Likeness, string>>; muted: string };
 

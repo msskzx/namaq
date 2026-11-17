@@ -1,4 +1,4 @@
-import { blend } from '@shared/quran/compareCardLook';
+import { SOME_WEIGHT, blend } from '@shared/quran/compareCardLook';
 import { likenessAt, type MatrixLink, type Shared } from './branches';
 import type { Palette } from './theme';
 
@@ -8,5 +8,8 @@ export function sharedTone(palette: Palette, shared: Shared & { links?: Map<numb
   if (kind) return palette.marks[kind];
   const link = shared.links?.get(i);
   const colour = link?.some ? palette.marks[link.kind] : undefined;
-  return colour && blend(colour, palette.card, 0.55);
+  return colour && someTone(palette, colour);
 }
+
+/** A colour faded into the card for a word only some rows share. */
+export const someTone = (palette: Palette, colour: string) => blend(colour, palette.card, SOME_WEIGHT);
