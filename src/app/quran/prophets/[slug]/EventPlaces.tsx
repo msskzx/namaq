@@ -12,6 +12,7 @@ import type { CompareLink } from '@/app/quran/compare/pairCards';
 import { PlaceReview } from './PlaceReview';
 import PlaceText from './PlaceText';
 import { groupColor, type StoryReview } from './StoryMap';
+import Button from '@/components/common/Button';
 
 /**
  * One event read across the surahs that tell it: a card for each surah, one under another, words another surah also has in colour.
@@ -45,7 +46,6 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
     cancel: back,
   });
   const icon = 'rounded p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]';
-  const step = 'hidden sm:inline-flex size-9 items-center justify-center rounded-lg border border-[var(--home-rule)] text-[var(--home-ink)] hover:bg-[var(--home-paper-deep)] disabled:opacity-40';
   return (
     <section ref={box} aria-labelledby="event-heading" className={`flex flex-col gap-4 ${settling ? 'transition-transform duration-[250ms]' : ''}`} style={x ? { transform: `translateX(${x}px)` } : undefined}>
       <div className="flex items-center gap-3">
@@ -53,8 +53,10 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
           <p className="text-sm font-semibold" style={{ color: groupColor(event.phase) }}>{phase}</p>
           <h2 id="event-heading" className="text-2xl font-bold leading-snug">{event.title}</h2>
         </div>
-        <button type="button" className={step} onClick={() => onStep(-1)} disabled={!hasPrev} aria-label="الحدث السابق"><ArrowRight size={18} aria-hidden /></button>
-        <button type="button" className={step} onClick={() => onStep(1)} disabled={!hasNext} aria-label="الحدث التالي"><ArrowLeft size={18} aria-hidden /></button>
+        <span className="hidden sm:contents">
+          <Button size="round" variant="outline" onClick={() => onStep(-1)} disabled={!hasPrev} aria-label="الحدث السابق"><ArrowRight aria-hidden /></Button>
+          <Button size="round" variant="outline" onClick={() => onStep(1)} disabled={!hasNext} aria-label="الحدث التالي"><ArrowLeft aria-hidden /></Button>
+        </span>
       </div>
       <div className="flex max-w-4xl flex-col gap-3">
         {places.map((place, k) => (

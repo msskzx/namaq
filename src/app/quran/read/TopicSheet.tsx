@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { List, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
@@ -9,8 +9,9 @@ import { sectionStart, surahTopicsCredit, surahTopicsOf, type TopicSection } fro
 import { surahAim } from '@shared/quran/surahAims';
 import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
 import ExternalLink from '@/components/common/ExternalLink';
-import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import Button from '@/components/common/Button';
+import Sheet from '@/components/common/Sheet';
 
 export type TopicOpen = { surah: number; section: number };
 
@@ -25,13 +26,6 @@ export default function TopicSheet({ open, onClose }: { open: TopicOpen | null; 
   const sheet = useRef<HTMLDialogElement>(null);
   const [shown, setShown] = useState(open);
   if (open && open !== shown) setShown(open);
-  useEffect(() => {
-    const dialog = sheet.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-  useSwipeClose(sheet, !!open, { direction: 'down', onClose: () => sheet.current?.close() });
   const topics = shown ? surahTopicsOf(shown.surah) : null;
   const aim = shown ? surahAim(shown.surah) : undefined;
   const rows = (list: TopicSection[], depth: number, prefix = ''): React.ReactNode[] => list.flatMap((section, i) => {
@@ -48,14 +42,13 @@ export default function TopicSheet({ open, onClose }: { open: TopicOpen | null; 
     ];
   });
   return (
-    <dialog ref={sheet} aria-label={shown ? `موضوعات سورة ${names[shown.surah] ?? ''}` : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
-      dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
+    <Sheet ref={sheet} open={!!open} onClose={onClose} label={shown ? `موضوعات سورة ${names[shown.surah] ?? ''}` : undefined}>
       {shown && topics && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />
         <div className="flex shrink-0 items-center gap-2 px-4 pb-2 pt-1 text-[var(--home-muted)]">
           <List size={20} aria-hidden />
           <h2 className="flex-1 text-base font-normal">{`موضوعات سورة ${names[shown.surah] ?? num(shown.surah)}`}</h2>
-          <button type="button" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق" className="flex size-9 items-center justify-center rounded-full"><X size={18} aria-hidden /></button>
+          <Button size="round" variant="muted" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق"><X aria-hidden /></Button>
         </div>
         <div className="min-h-0 overflow-y-auto px-[18px] pb-1">
           {aim && (
@@ -68,6 +61,6 @@ export default function TopicSheet({ open, onClose }: { open: TopicOpen | null; 
         </div>
         <p className="mx-[18px] mt-2 shrink-0 text-[0.8125rem] leading-[1.7] text-[var(--home-muted)]">{surahTopicsCredit(topics)}</p>
       </div>}
-    </dialog>
+    </Sheet>
   );
 }

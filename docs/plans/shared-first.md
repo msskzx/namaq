@@ -140,6 +140,12 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
 (worst: `Utilities.tsx` 10, `homepage/Memorized.tsx` 6), one `Dialog` for the
 6 own dialogs, one loader. One PR per piece.
 
+- Step 1 (#900): `common/Button` gains `round`; raw buttons in the touched screens moved onto it.
+- Step 2: `common/Sheet` is the one dialog (native `<dialog>`, kinds `bottom`, `center`, `full`; Escape, backdrop, swipe down, `close()` on its ref).
+  Reader sheets, listen, compare list, book sheet, place, share, note, page and tree videos and the quiz reference use it.
+  Left for later: the settings and help panels in `TabBar` (a panel beside the rail on desktop, not modal),
+  the tour, and the floating menus (`CardMenu`, `AyahActions`, `ScopeFilter`), which want a shared floating menu like the app's.
+
 ## AGENTS.md rule (added as "Shared first")
 
 > ## Shared first

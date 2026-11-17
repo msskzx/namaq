@@ -8,6 +8,7 @@ import Emblem from '@/components/common/Emblem';
 import LoadingDots from '@/components/common/LoadingDots';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { shareTarget, shareUrl } from './shareTarget';
+import Sheet from '@/components/common/Sheet';
 
 /** What the dialog draws: a card on the page (captured as it looks) or a card drawn for the image (an ayah, a note). */
 export type ShareSource = { element: HTMLElement } | { content: React.ReactNode };
@@ -59,8 +60,6 @@ export function ShareImageDialog({ source, link, onVideo, onPageVideo, onClose }
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   useEffect(() => {
-    const box = dialog.current;
-    if (box && !box.open) { if (typeof box.showModal === 'function') box.showModal(); else box.setAttribute('open', ''); }
     if (!('element' in source)) return;
     let live = true;
     draw(source.element).then(canvas => { if (live) setShot(canvas.toDataURL('image/png')); }, () => { if (live) setFailed(true); });
@@ -92,8 +91,8 @@ export function ShareImageDialog({ source, link, onVideo, onPageVideo, onClose }
     ? { title: 'مشاركة', close: 'إغلاق', image: 'مشاركة كصورة', video: 'مشاركة كفيديو', pageVideo: 'مشاركة الصفحة كفيديو', link: 'مشاركة الرابط', copied: 'نُسخ الرابط', failed: 'تعذّر تجهيز الصورة.', wait: 'جارٍ تجهيز الصورة' }
     : { title: 'Share', close: 'Close', image: 'Share as image', video: 'Share as video', pageVideo: 'Share the page as video', link: 'Share link', copied: 'Link copied', failed: 'Could not make the image.', wait: 'Making the image' };
   // Kept to this dialog: React passes a dialog's close event on to its parents, and would close a note dialog this one opened from.
-  return <dialog ref={dialog} aria-label={labels.title} onClose={event => { event.stopPropagation(); onClose(); }} onClick={event => { if (event.target === dialog.current) close(); }} dir={ar ? 'rtl' : 'ltr'}
-    className="m-auto mb-0 open:flex max-h-[92dvh] w-full max-w-md flex-col rounded-t-2xl bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-black/45 md:mb-auto md:rounded-2xl">
+  return <Sheet ref={dialog} open kind="center" label={labels.title} onClose={event => { event.stopPropagation(); onClose(); }} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'}
+    className="max-h-[92dvh] max-w-md flex-col open:flex">
     <div className="flex items-center gap-2 px-4 pt-3">
       <h2 className="flex-1 font-semibold">{labels.title}</h2>
       <Button size="lg" variant="muted" aria-label={labels.close} title={labels.close} onClick={close}><X aria-hidden /></Button>
@@ -114,7 +113,7 @@ export function ShareImageDialog({ source, link, onVideo, onPageVideo, onClose }
       {onPageVideo && <Button size="lg" variant="muted" aria-label={labels.pageVideo} title={labels.pageVideo} onClick={() => { close(); onPageVideo(); }}><ListVideo aria-hidden /></Button>}
       {link && <Button size="lg" variant="muted" aria-label={copied ? labels.copied : labels.link} title={copied ? labels.copied : labels.link} onClick={() => void shareLink()}>{copied ? <Check aria-hidden /> : <Link2 aria-hidden />}</Button>}
     </div>
-  </dialog>;
+  </Sheet>;
 }
 
 /**

@@ -1,4 +1,5 @@
 import { expect, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 // The website's book reader (docs/plans/book-reader.md), as the app's: a فاصلة stays put while the pages turn.
 test('a book opens from the shelf, its فاصلة stays on its page while the reader turns pages, and its pill comes back to it', async ({ page }) => {
@@ -29,7 +30,7 @@ test('the search finds a word whatever its vowel marks and opens its page', asyn
 test('an ayah opens the page of its passage', async ({ page }) => {
   await page.goto('/quran/books/kashshaf?ayah=2:5');
   await expect(page).toHaveURL(/\/quran\/books\/kashshaf\/\d+$/);
-  await expect(page.getByRole('link', { name: /افتح البقرة/ }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: new RegExp(`افتح ${S(2)}`) }).first()).toBeVisible();
 });
 
 test('the mushaf puts its فاصلة on the page open from the top bar, nothing drawn on the page', async ({ page }) => {

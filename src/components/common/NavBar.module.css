@@ -24,10 +24,10 @@
 .emblem { display: block; height: 2rem; width: auto; }
 
 .actions { margin-inline-start: auto; display: flex; align-items: center; gap: 0.375rem; }
-.language, .iconButton { min-width: 1.875rem; height: 1.875rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
+.language { min-width: 1.875rem; height: 1.875rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
 .language { font-size: 0.875rem; padding-inline: 0.375rem; }
 .menuButton { width: 1.875rem; height: 1.875rem; }
-.language:hover, .iconButton:hover { background: var(--home-paper-deep); }
+.language:hover { background: var(--home-paper-deep); }
 
 .menuOnly { position: absolute; top: 0; inset-inline-end: 0; z-index: 50; color: var(--home-ink); }
 .menuOnly .band { min-height: 0; padding: calc(0.75rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right)) 0.75rem calc(0.75rem + env(safe-area-inset-left)); justify-content: flex-end; }

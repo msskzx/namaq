@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, ArrowRight, House, Play } from 'lucide-react';
+import { ArrowLeft, ArrowRight, House, Play, SkipForward } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Emblem from '@/components/common/Emblem';
 import MushafText from '@/components/common/MushafText';
@@ -110,7 +110,7 @@ function TourBody({ tour, story, recite, names, onDone }: Props & { onDone: () =
     </div> : <>
       <div className="mx-auto flex w-full max-w-2xl items-center px-4 pt-4">
         <h2 className="flex-1 text-xl font-bold">{title[step]}</h2>
-        <button type="button" onClick={next} className="text-[var(--home-muted)]">{ar ? 'تخطَّ' : 'Skip'}</button>
+        <Button variant="muted" onClick={next}><SkipForward size={16} aria-hidden />{ar ? 'تخطَّ' : 'Skip'}</Button>
       </div>
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-hidden px-4 pt-3">
         {step === 'matrix' && tour && <div className="min-h-0 flex-1 overflow-y-auto" dir="rtl">

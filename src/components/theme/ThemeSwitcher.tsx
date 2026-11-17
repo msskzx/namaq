@@ -5,7 +5,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useLanguage } from '../language/LanguageContext';
 import Toggle from '../common/Toggle';
-import styles from '../common/NavBar.module.css';
+import Button from '@/components/common/Button';
 
 export default function ThemeSwitcher({ palette = 'default' }: { palette?: 'default' | 'site' } = {}) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -19,9 +19,9 @@ export default function ThemeSwitcher({ palette = 'default' }: { palette?: 'defa
       ? (language === 'ar' ? 'التبديل إلى الوضع الفاتح' : 'Switch to light mode')
       : (language === 'ar' ? 'التبديل إلى الوضع الداكن' : 'Switch to dark mode');
     return (
-      <button type="button" className={styles.iconButton} aria-label={label} title={label} onClick={() => setTheme(dark ? 'light' : 'dark')}>
-        {dark ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
-      </button>
+      <Button variant="outline" aria-label={label} title={label} onClick={() => setTheme(dark ? 'light' : 'dark')}>
+        {dark ? <Sun aria-hidden /> : <Moon aria-hidden />}
+      </Button>
     );
   }
   return (

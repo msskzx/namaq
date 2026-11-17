@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyn
 import Link from 'next/link';
 import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { useSwipeClose } from '@/components/common/useSwipeClose';
+import Sheet from '@/components/common/Sheet';
 import Segmented from '@/components/common/Segmented';
 import Toggle from '@/components/common/Toggle';
 import TreeIcon from '@/components/common/TreeIcon';
@@ -584,10 +584,9 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
   }, [nextStep?.href, previousStep?.href, ar]); // eslint-disable-line react-hooks/exhaustive-deps
   const choose = () => {
     if (window.matchMedia?.('(min-width: 1024px)').matches) pane.current?.querySelector('input')?.focus();
-    else { sheet.current?.showModal(); setOpen(true); }
+    else setOpen(true);
   };
   const close = () => sheet.current?.close();
-  useSwipeClose(sheet, open, { direction: 'down', onClose: close });
   useEffect(() => {
     const wide = window.matchMedia?.('(min-width: 1024px)');
     const change = () => { if (wide?.matches) sheet.current?.close(); };
@@ -631,17 +630,15 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
           <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
         </aside>
       </div>
-      <dialog ref={sheet} aria-label={label} onClose={() => setOpen(false)} onClick={event => { if (event.target === sheet.current) close(); }}
-        className="m-0 mt-auto max-h-[85dvh] w-full max-w-none rounded-t-2xl border-t border-[var(--home-rule)] bg-[var(--home-paper)] p-3 text-[var(--home-ink)] backdrop:bg-black/40 lg:hidden"
-        dir={ar ? 'rtl' : 'ltr'}>
+      <Sheet ref={sheet} open={open} label={label} onClose={() => setOpen(false)} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className="p-3 lg:hidden">
         <div className="flex max-h-[calc(85dvh-1.5rem)] flex-col gap-2">
           <div className="flex items-center justify-between">
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
-            <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
+            <Button size="round" variant="muted" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'}><X aria-hidden /></Button>
           </div>
           {open && <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />}
         </div>
-      </dialog>
+      </Sheet>
     </div>
   );
 }
