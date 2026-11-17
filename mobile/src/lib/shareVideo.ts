@@ -3,8 +3,13 @@ import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { QURAN_FONT, UI_FONT } from './theme';
 
-/** The Hafs font for the recorder page, inlined so the web view draws the same letters as the app. */
-export async function fontFace() {
+/** The Hafs font for the recorder page, inlined so the web view draws the same letters as the app. Read once; a failed read is tried again next time. */
+let faces: Promise<string> | null = null;
+export function fontFace() {
+  faces ??= readFaces().catch(error => { faces = null; throw error; });
+  return faces;
+}
+async function readFaces() {
   const face = async (family: string, module: number, weight = 'normal') => {
     const asset = await Asset.fromModule(module).downloadAsync();
     const data = await new File(asset.localUri ?? asset.uri).base64();

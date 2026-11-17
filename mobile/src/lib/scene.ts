@@ -76,6 +76,18 @@ export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: n
  * and posts the file back as base64 (to the app's WebView, or to the web build's parent page).
  * Plain JavaScript in a string, since it runs inside a web view.
  */
+/** What the recorder page says back, checked: a finished video (base64 of a video type) or a failure; anything else is nothing. */
+export type RecorderMessage = { type: 'video'; data: string; mime: string } | { type: 'error' };
+export function readRecorderMessage(text: string): RecorderMessage | null {
+  let parsed: unknown;
+  try { parsed = JSON.parse(text); } catch { return null; }
+  if (!parsed || typeof parsed !== 'object') return null;
+  const { type, data, mime } = parsed as { type?: unknown; data?: unknown; mime?: unknown };
+  if (type === 'error') return { type };
+  if (type === 'video' && typeof data === 'string' && data.length > 0 && typeof mime === 'string' && mime.startsWith('video/')) return { type, data, mime };
+  return null;
+}
+
 export function recorderPage(input: VideoInput, fontFace = '') {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>${fontFace}html,body{margin:0;height:100%;background:${input.look.paper};overflow:hidden}canvas{display:block;height:100%;width:auto;margin:0 auto;max-width:100%;object-fit:contain}</style></head>
