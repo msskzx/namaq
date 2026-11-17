@@ -294,7 +294,39 @@ test('recite from the top bar starts at the page start', async ({ page }) => {
   // A tapped ayah is selected, but the top bar still recites from the page's first ayah (owner, 2026-11-17).
   await page.getByText(IHDINA, { exact: true }).first().click();
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   await expect.poll(start).toBe('1:1');
+});
+
+test('the eye offers the selected ayah, and nothing to continue or review on a first visit', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  await page.getByText(IHDINA, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  const menu = page.getByRole('toolbar', { name: 'ابدأ التسميع' });
+  await expect(menu.getByRole('button')).toHaveCount(2);
+  await menu.getByRole('button', { name: 'سمّع من الآية المختارة' }).click();
+  await expect.poll(start).toBe('1:6');
+});
+
+test.describe('the eye with a recitation to continue and a forgotten ayah', () => {
+  test.use({ seed: { 'ayah-forgot': { '2:5': { forgot: 1, at: 1 } }, 'reader-recite-last': { page: 3, position: { start: '2:17', shown: null, words: 0 } } } });
+  test('continues where the recitation stopped', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByText(HAMD, { exact: true }).first().click();
+    await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+    await page.getByRole('button', { name: 'تابع التسميع من حيث توقفت' }).click();
+    await expect.poll(() => readerPage(page)).toBe(3);
+    await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+  });
+  test('reviews what was forgotten', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByText(HAMD, { exact: true }).first().click();
+    await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+    await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
+    await expect.poll(() => readerPage(page)).toBe(2);
+    await expect(page.getByText(/مراجعة/)).toBeVisible();
+  });
 });
 
 test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
@@ -310,6 +342,7 @@ test('the recite bar moves to the top and back, by its grip or by dragging, and 
   await open(page, '/read');
   await page.getByText(HAMD, { exact: true }).first().click();
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   const bar = page.getByLabel('أدوات التسميع');
   const y = async () => (await bar.boundingBox())!.y;
   expect(await y()).toBeGreaterThan(600);
