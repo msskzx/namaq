@@ -137,7 +137,7 @@ function one(words: BraidWord[], written: Set<string>): Pick<Branch, 'words' | '
  * each side's own writing in `forms` where they differ, so the tree draws it as a braid; an ayah's end sign after its last word
  * where both sides end (one empty sign where two ayat with different numbers end together).
  */
-function both(a: BraidWord[], b: BraidWord[], surahs: [number, number], shown: (a: BraidWord, b: BraidWord) => number[]): Pick<Branch, 'words' | 'tones' | 'forms'> {
+function both(a: BraidWord[], b: BraidWord[], surahs: [number, number], shown: (a: BraidWord, b: BraidWord) => number[], paths: [string, string]): Pick<Branch, 'words' | 'tones' | 'forms'> {
   const out: string[] = [];
   const tones: Branch['tones'] = [];
   const forms: [string[], string[]] = [[], []];
@@ -154,9 +154,12 @@ function both(a: BraidWord[], b: BraidWord[], surahs: [number, number], shown: (
     if (ends.length) { out.push(sign(ends)); forms[0].push(sign(ends)); forms[1].push(sign(ends)); tones.push(undefined); }
   });
   // Each writing is named by the ayah it is written in (the first word the sides write differently), so a braid's strand names its own ayah.
-  const at = a.findIndex((word, i) => apart(word, b[i]) || signsApart(word, b[i]));
-  const keys = at < 0 ? [] : [`${surahs[0]}:${a[at].ayah}`, `${surahs[1]}:${b[at].ayah}`];
-  return { words: out, tones, ...(at >= 0 && keys[0] !== keys[1] ? { forms: { [keys[0]]: forms[0], [keys[1]]: forms[1] } } : {}) };
+  // A box that differs only in its signs has no strands to name: its writings are named by the two paths, so picking a side shows
+  // that side's own signs in full.
+  const at = a.findIndex((word, i) => apart(word, b[i]));
+  const signs = a.some((word, i) => signsApart(word, b[i]));
+  const keys = at >= 0 ? [`${surahs[0]}:${a[at].ayah}`, `${surahs[1]}:${b[at].ayah}`] : signs ? paths : [];
+  return { words: out, tones, ...(keys.length && keys[0] !== keys[1] ? { forms: { [keys[0]]: forms[0], [keys[1]]: forms[1] } } : {}) };
 }
 
 /** Ayah numbers as runs of consecutive ayat, so a box whose ayat skip part of the surah names each stretch. */
@@ -236,7 +239,7 @@ export function compareTree(sides: [CardSide, CardSide], written: Set<string> = 
   };
   const common = (a: BraidWord[], b: BraidWord[]): Branch => {
     const ending = [a, b].flatMap((words, side) => runs(sides[side].surah, words.flatMap((word, i) => (shown(a[i], b[i]).length && word.end !== undefined && (lasts.has(word) || [a, b][1 - side][i].end !== undefined) ? [word.end] : []))));
-    return { ...both(a, b, [sides[0].surah, sides[1].surah], shown), ayat: [], children: [], via: all, holds: ending };
+    return { ...both(a, b, [sides[0].surah, sides[1].surah], shown, ends), ayat: [], children: [], via: all, holds: ending };
   };
   // The box each side's last word is in, which the ayah after it hangs from (`ayat`, as on a branches box that ends an ayah).
   const last: (Branch | undefined)[] = [undefined, undefined];
