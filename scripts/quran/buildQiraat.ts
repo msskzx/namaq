@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import corrections from './qiraatCorrections.json';
 import type { MushafPage } from '../../shared/quran/readerPage';
 import { farshGroups, sameForm, type DumpReading } from './qiraatFarsh';
+import { madinaSpelling } from './madinaSpelling';
 
 // docs/plans/quran-qiraat.md: the word differences (farsh) of the ten readers per ayah, from Quranpedia's qira'at dump,
 // anchored to the words of the bundled Hafs mushaf. Writes shared/data/quran/qiraat.json and a review list.
@@ -171,7 +172,8 @@ for (const { ayah, replacement } of corrections as { ayah: string; replacement: 
 const order = (key: string) => key.split(':').map(Number);
 const sorted = Object.fromEntries(Object.entries(ayat)
   .sort(([a], [b]) => order(a)[0] - order(b)[0] || order(a)[1] - order(b)[1])
-  .map(([key, list]) => [key, list.sort((x, y) => x.at[0] - y.at[0])]));
+  // Each reading is stored in the Madina page's spelling, the form the screens show.
+  .map(([key, list]) => [key, list.sort((x, y) => x.at[0] - y.at[0]).map(word => ({ ...word, readings: word.readings.map(r => ({ ...r, text: madinaSpelling(r.text) })) }))]));
 const count = Object.values(sorted).reduce((n, list) => n + list.length, 0);
 writeFileSync(OUT, `${JSON.stringify({
   source: { name: 'الموسوعة القرآنية', url: 'https://quranpedia.net', dump: URL, version: VERSION },

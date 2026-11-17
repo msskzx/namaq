@@ -48,15 +48,15 @@ describe('the homepage shelf', () => {
     expect(savedCard(saved('no-such-tree')).open).toBeNull();
   });
 
-  it('draws a saved tree or compare card in the mushaf font’s marks, and leaves a saved ayah’s mushaf words as they are', () => {
+  it('shows a saved tree or compare card in the page\'s words, even when an older save holds the corpus\'s spelling', () => {
     const corpus = 'يَـٰقَوْمِ ٱعْبُدُوا۟ ٱللَّهَ';
-    for (const kind of ['tree', 'compare'] as const) {
-      const shown = shelfText({ kind, text: corpus });
-      expect(shown).not.toMatch(/[\u06DF]/);
-      expect(shown).toContain('ٱعۡبُدُواْ');
-    }
+    const piece = treeList()[0];
+    expect(shelfText(savedCard({ ...saved(piece.id), text: corpus }))).toBe(piece.text);
+    const compare = shelfText(savedCard({ ...saved('compare:7:59-64|11:25-49'), text: corpus }));
+    expect(compare).toMatch(/^لَقَدۡ أَرۡسَلۡنَا نُوحًا/);
+    expect(compare).not.toMatch(/[\u06DF]/);
     const page = 'ٱعۡبُدُواْ ٱللَّهَ';
-    expect(shelfText({ kind: 'ayah', text: page })).toBe(page);
+    expect(shelfText({ text: page })).toBe(page);
   });
 });
 

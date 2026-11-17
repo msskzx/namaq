@@ -6,6 +6,7 @@ import builtPlaces from '@/app/quran/words/places.json';
 import builtWords from '@shared/data/quran/words.json';
 import { countLemmas, countPairs, fromBuckwalter, lemmaPlaces, wordLemmas } from './lemmas';
 import { OPPOSITES } from './opposites';
+import { lemmaFiles } from '../../../scripts/quran/lemmaFiles';
 
 const MORPHOLOGY = join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt');
 
@@ -23,6 +24,9 @@ describe('fromBuckwalter', () => {
     expect(() => fromBuckwalter('rCm')).toThrow(/"C"/);
   });
 });
+
+/** The committed files as buildLemmas writes them, in the Madina page's spelling. */
+const files = lemmaFiles(readFileSync(MORPHOLOGY, 'utf8'));
 
 describe('countLemmas', () => {
   const lines = [
@@ -68,7 +72,7 @@ describe('countLemmas', () => {
 
   it('matches the committed JSON, with the name Allah 2,699 times', () => {
     const fromFile = countLemmas(readFileSync(MORPHOLOGY, 'utf8'));
-    expect(fromFile).toEqual({ lemmas: built.lemmas, unlemmatized: built.unlemmatized });
+    expect(files.lemmas).toEqual(built);
     expect(fromFile.lemmas.find(([lemma]) => lemma === 'ٱللَّه')?.[1]).toBe(2699);
     expect(new Set(fromFile.lemmas.map(([lemma]) => lemma)).size).toBe(fromFile.lemmas.length);
     expect(built.notice).toMatch(/Quranic Arabic Corpus \(morphology, version 0\.4\)/);
@@ -79,10 +83,10 @@ describe('countLemmas', () => {
   });
 
   it('has places for every counted lemma in the committed JSON', () => {
-    const places = lemmaPlaces(readFileSync(MORPHOLOGY, 'utf8'));
-    expect(places).toEqual(builtPlaces.places);
+    const { places } = files.places;
+    expect(files.places).toEqual(builtPlaces);
     expect(Object.keys(places).sort()).toEqual(built.lemmas.map(([lemma]) => lemma).sort());
-    expect(places['أَرْض'].split(' ')).toHaveLength(461);
+    expect(places['أَرۡض'].split(' ')).toHaveLength(461);
     expect(builtPlaces.notice).toBe(built.notice);
   });
 
@@ -90,8 +94,7 @@ describe('countLemmas', () => {
     const { ayat } = wordLemmas(lines.join('\n'));
     expect(ayat[0]).toEqual(['4 0', ' 0']);
     expect([ayat[1][0], ayat[1][22], ayat[1][60]]).toEqual(['', '    3+1', '  2']);
-    const fromFile = wordLemmas(readFileSync(MORPHOLOGY, 'utf8'));
-    expect(fromFile).toEqual({ lemmas: builtWords.lemmas, ayat: builtWords.ayat });
+    expect(files.words).toEqual(builtWords);
     expect(builtWords.notice).toBe(built.notice);
   });
 
@@ -114,7 +117,7 @@ describe('countLemmas', () => {
 
   it('builds every pair of opposites from the file, with no side left at zero', () => {
     const fromFile = countPairs(readFileSync(MORPHOLOGY, 'utf8'), OPPOSITES);
-    expect(fromFile).toEqual(built.opposites);
+    expect(files.lemmas.opposites).toEqual(built.opposites);
     expect(fromFile.flat().every(side => side.count > 0)).toBe(true);
     expect(fromFile.find(([a]) => a.label === 'الدنيا')?.map(side => side.count)).toEqual([115, 115]);
   });

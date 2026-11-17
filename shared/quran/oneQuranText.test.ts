@@ -26,11 +26,10 @@ const FONT_HOME = ['src/app/globals.css', 'mobile/src/lib/fonts.ts', 'mobile/src
 const BOOKS = ['tafsirSadi', 'kashshaf', 'irab', 'irabUkbari', 'itqanBalagha', 'bookPages'].map(name => `shared/data/quran/${name}.`);
 /**
  * Not the Hafs text, so the pages cannot hold it (owner, 2026-11-17): the other readers' readings (qiraat) and the Quranic Arabic
- * Corpus's dictionary forms of a word (lemmas, on the words page and in similar ayat). Also the old-spelling table that
- * shows those quotes and forms in the Madina spelling (mushafWords.json, owner 2026-11-17: kept for quoted Quran only;
- * page text never goes through it).
+ * Corpus's dictionary forms of a word (lemmas, on the words page and in similar ayat). The build stores the readings and
+ * lemmas in the Madina page's spelling (scripts/quran/madinaSpelling.ts, owner 2026-11-17), so no screen converts a word.
  */
-const NOT_HAFS = ['shared/data/quran/mushafWords.json', 'shared/data/quran/qiraat.json', 'shared/data/quran/words.json', 'src/app/quran/words/lemmas.json', 'src/app/quran/words/places.json', 'src/app/quran/compare/similar.json'];
+const NOT_HAFS = ['shared/data/quran/qiraat.json', 'shared/data/quran/words.json', 'src/app/quran/words/lemmas.json', 'src/app/quran/words/places.json', 'src/app/quran/compare/similar.json'];
 
 const inside = (path: string, places: string[]) => places.some(place => path.startsWith(place));
 
