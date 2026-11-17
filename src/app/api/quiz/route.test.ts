@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { surahName } from '@shared/quran/surahNames';
 
 const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindMany, surahFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
@@ -8,6 +9,7 @@ const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindM
   surahFindMany: vi.fn(),
 }));
 vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz, availableQuestionCount }));
+vi.mock('@/lib/quran/readerAyat', () => ({ loadAyahText: async () => (surah: number, ayah: number) => `page ${surah}:${ayah}` }));
 vi.mock('@/lib/prisma', () => ({ prisma: { historicalClaim: { findMany: historicalClaimFindMany }, ayah: { findMany: ayahFindMany }, surah: { findMany: surahFindMany } } }));
 
 import { GET } from './route';
@@ -45,7 +47,7 @@ describe('GET /api/quiz', () => {
     assembleQuiz.mockResolvedValue(Array.from({ length: 5 }, () => question({ family: 'AYAH_REVEALED_ABOUT', attribute: '66:4', evidence: { claimKeys: [] } })));
     ayahFindMany.mockResolvedValue([{ number: 4, text: 'إِن تَتُوبَا إِلَى ٱللَّهِ', surah: { number: 66, name: 'التحريم' } }]);
     const body = await (await GET(request('?topic=AYAT&length=5'))).json();
-    expect(body.questions[0].ayah).toEqual({ text: 'إِن تَتُوبَا إِلَى ٱللَّهِ', reference: 'التَّحْرِيمْ 66:4' });
+    expect(body.questions[0].ayah).toEqual({ text: 'page 66:4', reference: `${surahName(66)} 66:4` });
   });
 
   it('rejects an unknown topic', async () => {
@@ -176,7 +178,7 @@ describe('GET /api/quiz', () => {
     const response = await GET(request('?topic=AYAT&length=5'));
     const body = await response.json();
     expect(body.questions[0].choiceDetails['2:255']).toEqual({
-      text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ',
+      text: 'page 2:255',
       reference: 'البَقَرَةْ 2:255',
     });
   });

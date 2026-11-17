@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { Image, Modal, Platform, Share, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image, Platform, Share, View, useWindowDimensions } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
-import { Clapperboard, Link, ListVideo, Send, X } from 'lucide-react-native';
+import { Clapperboard, Link, ListVideo, Send } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Logo from './Logo';
 import LoadingDots from '@/ui/LoadingDots';
+import Sheet, { CLOSE_MS } from '@/ui/Sheet';
 import { MODAL_GAP, closeShare, useShareRequest } from '@/lib/shareImage';
 import { CAPTURE_RESULT, shareImageFile } from '@/lib/shareFile';
 import { UI_FONT_BOLD, usePalette } from '@/lib/theme';
@@ -39,7 +39,6 @@ function Fit({ width, children, onReady }: { width: number; children: ReactNode;
 export default function ShareSheet() {
   const request = useShareRequest();
   const palette = usePalette();
-  const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const frame = useRef<ComponentRef<typeof View>>(null);
   const [drawn, setDrawn] = useState(false);
@@ -69,13 +68,13 @@ export default function ShareSheet() {
     closeShare();
     if (!onVideo) return;
     if (Platform.OS === 'ios') pending.current = onVideo;
-    else setTimeout(onVideo, MODAL_GAP);
+    else setTimeout(onVideo, MODAL_GAP + CLOSE_MS);
   };
   const dismissed = () => { const next = pending.current; pending.current = null; next?.(); };
   const link = () => { if (request?.link) void Share.share({ message: request.link }); };
   return (
-    <Modal visible={!!request} animationType="slide" onRequestClose={closeShare} onDismiss={dismissed} statusBarTranslucent>
-      <View style={{ flex: 1, backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom + 8, direction: 'rtl' }}>
+    <Sheet open={!!request} onClose={closeShare} onDismiss={dismissed} full title="مشاركة" palette={palette}>
+      <View style={{ flex: 1 }}>
         {request && !shot && !failed && (
           <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0 }}>
             <View ref={frame} collapsable={false} style={{ width: frameWidth, backgroundColor: palette.paper, paddingHorizontal: 16, paddingTop: 20, paddingBottom: 12, gap: 10, direction: 'rtl' }}>
@@ -87,10 +86,6 @@ export default function ShareSheet() {
             </View>
           </View>
         )}
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, height: 52, backgroundColor: palette.paper }}>
-          <Text style={{ flex: 1, color: palette.ink, fontSize: 16, fontWeight: '600', paddingHorizontal: 8 }}>مشاركة</Text>
-          <IconButton label="إغلاق" onPress={closeShare} Icon={X} tone="ink" />
-        </View>
         <View onLayout={event => setBox({ width: event.nativeEvent.layout.width - 24, height: event.nativeEvent.layout.height - 24 })}
           style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, alignItems: 'center', justifyContent: 'center' }}>
           {shot && fit ? <Image source={{ uri: shot.uri }} accessibilityLabel="الصورة" style={{ width: shot.width * fit, height: shot.height * fit }} />
@@ -104,6 +99,6 @@ export default function ShareSheet() {
           {request?.link && <IconButton label="مشاركة الرابط" onPress={link} Icon={Link} tone="ink" />}
         </View>
       </View>
-    </Modal>
+    </Sheet>
   );
 }

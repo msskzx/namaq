@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { surahName } from '@shared/quran/surahNames';
+import { loadAyahText } from '@/lib/quran/readerAyat';
 
 export type AyahDetails = Map<string, { text: string; reference: string }>;
 
@@ -20,8 +21,9 @@ export async function ayahDetails(
     where: { OR: pairs.map(({ surah, number }) => ({ number, surah: { number: surah } })) },
     include: { surah: { select: { number: true, name: true } } },
   });
+  const text = await loadAyahText();
   return new Map(ayat.map((ayah) => [
     `${ayah.surah.number}:${ayah.number}`,
-    { text: ayah.text, reference: `${surahName(ayah.surah.number)} ${ayah.surah.number}:${ayah.number}` },
+    { text: text(ayah.surah.number, ayah.number), reference: `${surahName(ayah.surah.number)} ${ayah.surah.number}:${ayah.number}` },
   ]));
 }

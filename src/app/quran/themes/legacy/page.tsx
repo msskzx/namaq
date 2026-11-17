@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
-import { ayahWords } from '@shared/quran/normalize';
+import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import ThemesView from '../ThemesView';
 import pairs from './data/index';
 import { surahName } from '@shared/quran/surahNames';
@@ -11,9 +11,10 @@ export const metadata: Metadata = {
   title: 'القرآن: مواضع متقابلة بين سورتين',
 };
 
+/** A surah's ayat as the Madina pages print them (the basmala stands above the first ayah, not in it). */
 async function load(number: number) {
-  const rows = await prisma.ayah.findMany({ where: { surah: { number } }, orderBy: { number: 'asc' }, select: { text: true } });
-  return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9).display.join(' '));
+  const ayat = await loadReaderAyat();
+  return ayat.filter(ayah => ayah.key.startsWith(`${number}:`)).map(ayah => ayah.words.join(' '));
 }
 
 export default async function QuranThemesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {

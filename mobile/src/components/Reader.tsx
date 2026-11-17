@@ -14,7 +14,7 @@ import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@s
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { compareKeys, forgottenOrder, nextForgotten, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
-import TopBar from '@/ui/TopBar';
+import TopBar, { TOP_BAR } from '@/ui/TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch, type Write } from './MushafPageView';
@@ -26,7 +26,8 @@ import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
-import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
+import ActButton from '@/ui/ActButton';
+import FloatingMenu from '@/ui/FloatingMenu';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';
@@ -51,7 +52,7 @@ import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
-import { penRule } from '@/lib/settings';
+import { penRule, reciteBarEdge } from '@/lib/settings';
 import { surahName } from '@shared/quran/surahNames';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
@@ -148,6 +149,9 @@ export default function Reader() {
   const { view, boxes, checked, setChecked } = recite;
   const writeKey = recite.write?.key ?? null;
   const keyboard = useKeyboardHeight(reciting && writing);
+  // The recite bar sits at the bottom or, dragged there, at the top under the top bar (owner, 2026-11-17).
+  const [barEdge, setBarEdge] = reciteBarEdge.use();
+  const barAtTop = reciting && barEdge === 'top';
   const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); boxes.blur(); };
   const write: Write | null = recite.write ? { ...recite.write, onActive: (y, h) => follow.current(y, h) } : null;
   // Scrolls the box being written into the part of the screen above the pill and keyboard.
@@ -270,7 +274,7 @@ export default function Reader() {
   // While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no squeezed page),
   // following the box being written.
   const pillBottom = keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom);
-  const pageInsets = { top: insets.top, bottom: (reciting ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : listening ? tabBarBottom(insets.bottom) : insets.bottom) + (listening ? LISTEN_BAR + 8 : 0) };
+  const pageInsets = { top: insets.top + (barAtTop ? RECITE_BAR + 8 : 0), bottom: (reciting && !barAtTop ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : listening || reciting ? tabBarBottom(insets.bottom) : insets.bottom) + (listening ? LISTEN_BAR + 8 : 0) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   // The scroll view as a gesture-handler gesture, so the pager's swipe and pinch inside it are weighed together with it:
@@ -329,8 +333,8 @@ export default function Reader() {
   const onFocus = useCallback((y: number, h: number) => follow.current(y, h), []);
   follow.current = (y, h) => {
     if (!size || (!keyboard && (!flowing || Date.now() < quietUntil.current))) return;
-    const top = insets.top + 8;
-    const bottom = keyboard ? size.height - pillBottom - RECITE_BAR - 12 : size.height - pageInsets.bottom - 8;
+    const top = barAtTop ? insets.top + (tools ? TOP_BAR : 0) + RECITE_BAR + 16 : pageInsets.top + 8;
+    const bottom = keyboard ? size.height - (barAtTop ? keyboard + 8 : pillBottom + RECITE_BAR + 12) : size.height - pageInsets.bottom - 8;
     if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
     else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
   };
@@ -363,11 +367,8 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 9 + (wordKey ? 1 : 0) + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
-  // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
-  const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
-  // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
-  const barRows = Math.ceil(buttons / Math.max(1, Math.floor((barWidth - 10) / (ACT_WIDTH + 2))));
+  // The long press's menu opens where the finger pressed.
+  const actionsAt = actions ? { x: actions.x, y: actions.y } : null;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <GestureDetector gesture={scrollGesture}>
@@ -397,8 +398,7 @@ export default function Reader() {
           </TopBar>
       </View>
       {actions && (
-        <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+        <FloatingMenu at={actionsAt} label={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`} onClose={() => setActions(null)} top={pageInsets.top} palette={palette}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
           <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
           <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />
@@ -424,7 +424,7 @@ export default function Reader() {
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
           {/* Share is always the last button. */}
           <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
-        </View>
+        </FloatingMenu>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
@@ -439,13 +439,14 @@ export default function Reader() {
         <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette}
           more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
           lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null}
-          style={{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: pillBottom }} />
+          style={{ left: TAB_BAR.side, right: TAB_BAR.side }}
+          dock={size ? { edge: barEdge, top: insets.top + (tools ? TOP_BAR : 0) + 8, bottom: pillBottom, height: size.height, onEdge: setBarEdge } : undefined} />
       )}
-      <ListenBar bottom={reciting ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
+      <ListenBar bottom={reciting && !barAtTop ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
         onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />
       {listening && listenPage && listenPage !== page && (
         <Pressable onPress={() => { setFollowing(true); setPage(listenPage); setActions(null); }} accessibilityRole="button" accessibilityLabel={`عُد إلى الآية التي تُتلى، ${plainSurah(listening.key)}`}
-          style={{ position: 'absolute', alignSelf: 'center', bottom: (reciting ? pillBottom + RECITE_BAR + 8 : pillBottom) + LISTEN_BAR + 10, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          style={{ position: 'absolute', alignSelf: 'center', bottom: (reciting && !barAtTop ? pillBottom + RECITE_BAR + 8 : pillBottom) + LISTEN_BAR + 10, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
           <Text style={{ color: palette.ink, fontSize: 14 }}>{`عُد إلى الآية · ${plainSurah(listening.key)}`}</Text>
