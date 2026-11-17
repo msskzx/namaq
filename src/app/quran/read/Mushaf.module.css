@@ -98,14 +98,14 @@
 .end { color: var(--home-muted); }
 
 /* The selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14), one band like a forgotten ayah's. */
-.marked { position: relative; background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
+.marked { position: relative; background: var(--home-band-mark); }
 .marked + .marked::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 /* The ayah being recited aloud: the band in the accent (the app's 'playing' band). */
-.marked.playing, .playing { position: relative; background: color-mix(in srgb, var(--home-accent) 24%, var(--home-card)); }
+.marked.playing, .playing { position: relative; background: var(--home-band-playing); }
 .playing + .playing::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 /* The long-pressed word inside its ayah's band, a stronger box (the app's markWord: the accent at 30%). */
-.marked.pressedWord { border-radius: 4px; background: color-mix(in srgb, var(--home-accent) 30%, var(--home-card)); }
-.marked + .marked.pressedWord::before, .marked.pressedWord + .marked::before { background: color-mix(in srgb, var(--home-ink) 10%, var(--home-card)); }
+.marked.pressedWord { border-radius: 4px; background: var(--home-band-word); }
+.marked + .marked.pressedWord::before, .marked.pressedWord + .marked::before { background: var(--home-band-mark); }
 
 .titleRow {
   display: flex;
@@ -233,7 +233,7 @@
 /* What was typed for a wrong word, struck through just above it. */
 .mistyped { position: absolute; bottom: 90%; inset-inline: -2em; text-align: center; font-family: var(--font-amiri), serif; font-size: 0.55em; line-height: 1; white-space: nowrap; text-decoration: line-through; pointer-events: none; user-select: none; }
 /* A forgotten ayah is highlighted as one band: each word after the first fills the gap back to the word before it. */
-.forgot { position: relative; background: color-mix(in srgb, var(--home-accent) 16%, var(--home-card)); }
+.forgot { position: relative; background: var(--home-band-forgot); }
 .forgot + .forgot::before { content: ''; position: absolute; z-index: -1; inset-block: 0; inset-inline-start: -1em; width: 1em; background: inherit; }
 .forgotEnd { color: var(--home-accent); }
 .saved { color: var(--home-root); }
