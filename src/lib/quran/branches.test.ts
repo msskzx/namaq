@@ -1,25 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
-import { branchesHref, conjunctions, linkId, stem, openingId, readerAyat, searchKey, searchPhrases, sharedOpenings, withConjunctions, withNext, type BranchAyah } from '@shared/quran/branches';
+import data from '@shared/quran/quranText/corpus';
+import { branchesHref, conjunctions, linkId, stem, openingId, pageAyat, searchKey, searchPhrases, sharedOpenings, withConjunctions, withNext, type BranchAyah } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 
 const all = data.ayat as BranchAyah[];
 const groups = sharedOpenings(all);
 const ayah = (key: string, text: string): BranchAyah => ({ key, page: 1, words: text.split(' ') });
-
-describe('readerAyat', () => {
-  it('reads the ayat in page order, dropping the marks the reader sets beside a word', () => {
-    const read = readerAyat([
-      { juz: 1, items: [{ surah: 1 }, { line: ['۞ بِسْمِ', 'ٱللَّهِ ۖ', 1, 'ٱلْحَمْدُ'] }] },
-      { juz: 1, items: [{ line: ['لِلَّهِ', 'ۛ', 2] }, { surah: 2 }, { line: ['الٓمٓ', 1] }] },
-    ]);
-    expect(read).toEqual([
-      { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] },
-      { key: '1:2', page: 2, words: ['ٱلْحَمْدُ', 'لِلَّهِ'] },
-      { key: '2:1', page: 2, words: ['الٓمٓ'] },
-    ]);
-  });
-});
 
 describe('sharedOpenings', () => {
   it('groups only ayat whose first two words match another ayah', () => {
@@ -41,8 +27,8 @@ describe('sharedOpenings', () => {
     expect(openingId(ayah('42:1', 'حم'))).toBe('حم');
   });
 
-  it('ignores the pause and section marks the reader keeps beside a word', () => {
-    const read = readerAyat([{ juz: 1, items: [{ surah: 2 }, { line: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم', 1, 'إِنَّ', 'ٱللَّهَ', 'غفور', 2] }] }]);
+  it('ignores the hizb mark and the stop signs the page sets on a word', () => {
+    const read = pageAyat([{ juz: 1, items: [{ surah: 2 }, { line: ['۞', 'إِنَّ', 'ٱللَّهَۖ', 'عَلِيمٌ', 1, 'إِنَّ', 'ٱللَّهَ', 'غَفُورٌ', 2] }] }]);
     expect([...sharedOpenings(read)].map(([id, group]) => [id, group.map(a => a.key)])).toEqual([['ان الله', ['2:1', '2:2']]]);
   });
 
@@ -54,7 +40,7 @@ describe('sharedOpenings', () => {
   it('keeps the generated artifact as the full Quran corpus', () => {
     expect(all).toHaveLength(6236);
     expect(all.find(ayah => ayah.key === '2:3')?.conjs?.[3]).toBe('و');
-    expect(all.find(ayah => ayah.key === '43:83')?.next?.slice(0, 2)).toEqual(['وَهُوَ', 'ٱلَّذِى']);
+    expect(all.find(ayah => ayah.key === '43:83')?.next?.slice(0, 2)).toEqual(['وَهُوَ', 'ٱلَّذِي']);
   });
 });
 

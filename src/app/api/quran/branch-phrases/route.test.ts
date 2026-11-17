@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { NextRequest } from 'next/server';
 import { phraseTreeId } from '@shared/quran/mutashabih/identity';
 import { buildPhraseGroups } from '@shared/quran/phraseTrees';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { GET } from './route';
 
 const search = (query: Record<string, string>) => GET(new NextRequest(`http://localhost/api/quran/branch-phrases?${new URLSearchParams({ categories: 'words', ...query })}`));

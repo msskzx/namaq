@@ -6,7 +6,7 @@ import within from './withinPairs.json';
 import curatedLinks from '@/lib/quran/curation/compareLinks.json';
 import generated from '@shared/data/quran/compareCards';
 import { buildCompareCards } from './buildCards';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { normalizeWord } from '@shared/quran/normalize';
 import { compareLinkFor, compareLinksFor, engineCards, listedPairs, pairCards, reviewPairs, reviewStates, stepsBack, storyCards, timelineParts } from './pairCards';
 import { shownCards, type PairCard, type StoredCards } from '@shared/quran/compareCards';
@@ -399,7 +399,7 @@ describe('compare pair cards', () => {
   it('links two ayat of a tree to their compare card only for a kept pair on a listed page', () => {
     expect(compareLinkFor(['2:23', '7:194', '1:1'])).toBe('/quran/compare?a=2&b=7#c-2-23-7-194');
     // A tree across two surahs has one link; one across more lists every listed pair holding a kept card of two of its ayat.
-    expect(compareLinksFor(['2:35', '7:19'])).toEqual([{ href: '/quran/compare?a=2&b=7#c-2-35-7-19', label: 'البقرة مع الأعراف · ٣٥ · ١٩', labelEn: "Al-Baqara with Al-A'raaf · 35 · 19", surahs: [2, 7] }]);
+    expect(compareLinksFor(['2:35', '7:19'])).toEqual([{ href: '/quran/compare?a=2&b=7#c-2-35-7-19', label: 'البَقَرَةْ مع الأَعْرَافْ · ٣٥ · ١٩', labelEn: "Al-Baqara with Al-A'raaf · 35 · 19", surahs: [2, 7] }]);
     const many = compareLinksFor(['2:35', '7:19', '20:117']);
     expect(many.map(link => link.href.split('#')[0])).toEqual([...new Set(many.map(link => link.href.split('#')[0]))]);
     expect(compareLinkFor(['3:57', '18:30'])).toBeUndefined();
@@ -462,7 +462,7 @@ describe('compare pair cards', () => {
     });
 
     it('names the page «… مع نفسها» from a tree inside one surah', () => {
-      expect(compareLinksFor(['6:76', '6:77'])[0]?.label).toBe('الأنعام مع نفسها · ٧٦ · ٧٧');
+      expect(compareLinksFor(['6:76', '6:77'])[0]?.label).toBe('الأَنْعَامْ مع نفسها · ٧٦ · ٧٧');
     });
   });
 
@@ -475,7 +475,7 @@ describe('compare pair cards', () => {
   it('marks words that share only a root lightly, apart from same-word matches', () => {
     const card = pairCards(2, 3).find(card => card.id === '2:66|3:138')!;
     const kinds = card.sides.map(side => Object.entries(side.ayat[0].marks ?? {}).map(([i, mark]) => `${side.ayat[0].words[Number(i)]}:${mark.kind}`));
-    expect(kinds[0]).toContain('بَيْنَ:related');
+    expect(kinds[0]).toContain('بَيۡنَ:related');
     expect(kinds[1].filter(entry => entry.endsWith(':related'))).toHaveLength(1);
   });
 

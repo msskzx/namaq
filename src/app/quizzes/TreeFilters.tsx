@@ -9,10 +9,11 @@ import type { RangeDraft } from '@/components/quran/RangeFilter';
 import { isRangeUnit, ScopeFields, scopeRange, type FilterUnit } from '@/components/quran/ScopeFilter';
 import GroupFilterControls from '@/app/quran/branches/GroupFilters';
 import { SavedOnly } from '@/app/quran/branches/Filters';
+import { surahName } from '@shared/quran/surahNames';
 
 export type TreeChoice = { range: JuzRange | null; filters: ScopeFilters; saved: boolean };
 
-const allSurahs = surahRows.map(row => ({ number: row.number, name: row.name, nameEn: row.nameTransliterated }));
+const allSurahs = surahRows.map(row => ({ number: row.number, name: surahName(row.number), nameEn: row.nameTransliterated }));
 const PLACE_KEYS = ['surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo'] as const;
 
 type Draft = { unit: FilterUnit; values: RangeDraft; filters: ScopeFilters; saved: boolean };

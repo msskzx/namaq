@@ -34,8 +34,8 @@ describe('PairCompare', () => {
       open: (group as HTMLDetailsElement).open,
       links: [...group.querySelectorAll('ul a')].map(link => link.getAttribute('href')),
     }));
-    expect(groups().map(group => group.surah)).toEqual(['البقرة', 'الاعراف', 'هود', 'الشعراء', 'الطور', 'القلم']);
-    expect(groups().filter(group => group.open).map(group => group.surah)).toEqual(['الطور']);
+    expect(groups().map(group => group.surah)).toEqual(['البَقَرَةْ', 'الأَعْرَافْ', 'هُودْ', 'الشُّعَرَاءْ', 'الطُّورْ', 'القَلَمْ']);
+    expect(groups().filter(group => group.open).map(group => group.surah)).toEqual(['الطُّورْ']);
     expect(groups()[1].links).toEqual(['/quran/compare?a=7&b=2', '/quran/compare?a=7&b=11', '/quran/compare?a=7&b=26']);
     expect(groups()[5].links).toEqual(['/quran/compare?a=68&b=52']);
     fireEvent.click(within(pane()).getByRole('button', { name: /الأكثر تشابهًا/ }));
@@ -60,6 +60,14 @@ describe('PairCompare', () => {
     expect(within(pane()).getByRole('status').textContent).toContain('لا سورة');
   });
 
+  it('opens a card as the matrix when no view was picked and switches to the tree', () => {
+    const { container } = render(<PairCompare a={52} b={68} cards={cards} pairs={pairs} names={names} />);
+    expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
+    expect(container.querySelectorAll('article')).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: 'عرض الشجرة' }));
+    expect(screen.getByLabelText(/شجرةً$/)).toBeTruthy();
+  });
+
   it('opens a card as a tree that parts where the wording differs and switches to the matrix', () => {
     const parting: PairCard[] = [{
       id: 'y',
@@ -68,7 +76,7 @@ describe('PairCompare', () => {
         { surah: 68, ayah: 46, ayat: [{ number: 46, words: ['أم', 'تسألهم', 'خرجا', 'فهم', 'من', 'مغرم', 'مثقلون'] }] },
       ],
     }];
-    const { container } = render(<PairCompare a={52} b={68} cards={parting} pairs={pairs} names={names} />);
+    const { container } = render(<PairCompare a={52} b={68} cards={parting} pairs={pairs} names={names} view="tree" />);
     const tree = screen.getByLabelText(/شجرةً$/);
     const nodes = [...tree.querySelectorAll('[data-node] .font-quran')].map(node => node.textContent);
     expect(nodes).toEqual(['أم تسألهم', 'أجرا', 'خرجا', 'فهم من مغرم مثقلون ۝']);
@@ -82,7 +90,7 @@ describe('PairCompare', () => {
 
   it('opens a card the owner keeps as its matrix with no tree and no tree button', () => {
     const matrixOnly: PairCard[] = [{ ...cards[0], id: '9:129|27:26' }];
-    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} />);
+    const { container } = render(<PairCompare a={52} b={68} cards={matrixOnly} pairs={pairs} names={names} view="tree" />);
     expect(screen.queryByLabelText(/شجرةً$/)).toBeNull();
     expect(container.querySelectorAll('article')).toHaveLength(2);
     expect(screen.queryByRole('button', { name: 'عرض الشجرة' })).toBeNull();
@@ -126,7 +134,7 @@ describe('PairCompare', () => {
 
   it('says «سورة» once per surah when the names already start with it', () => {
     render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={{ ...names, 52: { ar: 'سُورَةُ الطُّورِ' } }} />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سورة الطور وسورة القلم');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('سورة الطُّورْ وسورة القَلَمْ');
   });
 
   it('opens each ayah of a card in the reader', () => {
@@ -158,13 +166,13 @@ describe('PairCompare', () => {
     };
     const { container, unmount } = render(<PairCompare view="cards" a={2} b={7} cards={[part]} pairs={pairs} names={{ ...names, 7: { ar: 'سُورَةُ الْاَعْرَافِ', en: "Al-A'raf" } }} />);
     const rows = [...container.querySelectorAll('article')].map(page => [...page.querySelectorAll('p')].map(row => row.textContent?.replace(/[٠-٩]/g, '').replace(/\s+/g, ' ').trim()));
-    expect(rows).toEqual([['خليفة', 'اسجدوا'], ['لا تذكر سورة الاعراف هذا الجزء', '–اسجدوا منعك']]);
+    expect(rows).toEqual([['خليفة', 'اسجدوا'], ['لا تذكر سورة الأَعْرَافْ هذا الجزء', '–اسجدوا منعك']]);
     // Each part under a rule names its ayat on that rule.
     expect(screen.getAllByRole('separator').map(node => node.textContent)).toEqual(['٣٠', '٣٤', '١١–١٢']);
     unmount();
     render(<PairCompare view="tree" a={2} b={7} cards={[part]} pairs={pairs} names={names} />);
     expect(screen.getAllByLabelText(/شجرةً$/)).toHaveLength(2);
-    expect(screen.getByText('لا تذكر سورة الاعراف هذا الجزء')).toBeTruthy();
+    expect(screen.getByText('لا تذكر سورة الأَعْرَافْ هذا الجزء')).toBeTruthy();
     expect(screen.queryByLabelText('لا كلمات هنا')).toBeNull();
   });
 
@@ -178,16 +186,16 @@ describe('PairCompare', () => {
     };
     for (const view of ['cards', 'tree'] as const) {
       const { unmount } = render(<PairCompare view={view} a={2} b={7} cards={[part]} pairs={pairs} names={names} />);
-      expect(screen.getAllByRole('button', { name: /^اطوِ / }).map(button => button.getAttribute('aria-label')).sort()).toEqual(['اطوِ البقرة ٣٠', 'اطوِ البقرة ٣٠: لا تذكر سورة الاعراف هذا الجزء', 'اطوِ البقرة ٣٤', 'اطوِ الاعراف ١١–١٢'].sort());
-      fireEvent.click(screen.getByRole('button', { name: 'اطوِ البقرة ٣٠' }));
+      expect(screen.getAllByRole('button', { name: /^اطوِ / }).map(button => button.getAttribute('aria-label')).sort()).toEqual(['اطوِ البَقَرَةْ ٣٠', 'اطوِ البَقَرَةْ ٣٠: لا تذكر سورة الأَعْرَافْ هذا الجزء', 'اطوِ البَقَرَةْ ٣٤', 'اطوِ الأَعْرَافْ ١١–١٢'].sort());
+      fireEvent.click(screen.getByRole('button', { name: 'اطوِ البَقَرَةْ ٣٠' }));
       expect(screen.queryByText(/خليفة/)).toBeNull();
       expect(screen.getAllByText('٣٠').length).toBeGreaterThan(0);
       expect(screen.getAllByText(/منعك/).length).toBeGreaterThan(0);
-      fireEvent.click(screen.getByRole('button', { name: 'اطوِ الاعراف ١١–١٢' }));
+      fireEvent.click(screen.getByRole('button', { name: 'اطوِ الأَعْرَافْ ١١–١٢' }));
       expect(screen.queryByText(/منعك/)).toBeNull();
-      expect(screen.getByRole('button', { name: 'افتح البقرة ٣٤' })).toBeTruthy();
-      fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٤' }));
-      fireEvent.click(screen.getByRole('button', { name: 'افتح البقرة ٣٠' }));
+      expect(screen.getByRole('button', { name: 'افتح البَقَرَةْ ٣٤' })).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'افتح البَقَرَةْ ٣٤' }));
+      fireEvent.click(screen.getByRole('button', { name: 'افتح البَقَرَةْ ٣٠' }));
       expect(screen.getAllByText(/خليفة/).length).toBeGreaterThan(0);
       unmount();
     }
@@ -205,7 +213,7 @@ describe('PairCompare', () => {
     // No mark the mushaf does not write: the gap shows in the ayah signs and the box's names.
     expect(screen.queryByText('⋯')).toBeNull();
     // The box names each unbroken stretch of its ayat, not one range over the gap.
-    expect([...document.querySelectorAll('[data-ref]')].map(ref => ref.textContent)).toContain('البقرة ٥١–٥٢·البقرة ٩٢');
+    expect([...document.querySelectorAll('[data-ref]')].map(ref => ref.textContent)).toContain('البَقَرَةْ ٥١–٥٢·البَقَرَةْ ٩٢');
   });
 
   it('says when a story card\'s side steps back in its surah', () => {
@@ -354,7 +362,7 @@ describe('PairCompare', () => {
 
     it('titles the card with its ayah range and lists a verdict per pair', () => {
       render(<PairCompare view="cards" a={7} b={26} cards={[range]} pairs={pairs} names={names} review />);
-      expect(screen.getByRole('heading', { level: 3, name: 'الاعراف ١٠٦–١٠٧' })).toBeTruthy();
+      expect(screen.getByRole('heading', { level: 3, name: 'الأَعْرَافْ ١٠٦–١٠٧' })).toBeTruthy();
       expect(screen.getByText(/7:106 ~ 26:31/).textContent).toContain('first pair');
       expect(screen.getByText(/7:107 ~ 26:32/).textContent).toContain('checked by you');
     });
@@ -394,9 +402,9 @@ describe('PairCompare', () => {
 
     it('opens on the first partner and moves the marks when another is picked', () => {
       const { container } = render(<PairCompare view="cards" a={10} b={26} cards={[many]} pairs={pairs} names={names2} review />);
-      const first = screen.getByRole('button', { name: /^الشعراء ١٠٩: / });
-      const second = screen.getByRole('button', { name: /^الشعراء ١٢٧: / });
-      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء ١٠٩ · ١٢٧' })).toBeTruthy();
+      const first = screen.getByRole('button', { name: /^الشُّعَرَاءْ ١٠٩: / });
+      const second = screen.getByRole('button', { name: /^الشُّعَرَاءْ ١٢٧: / });
+      expect(screen.getByRole('heading', { level: 3, name: 'الشُّعَرَاءْ ١٠٩ · ١٢٧' })).toBeTruthy();
       expect(first.getAttribute('aria-pressed')).toBe('true');
       expect(second.getAttribute('aria-pressed')).toBe('false');
       expect(first.querySelector('mark')).toBeTruthy();
@@ -418,7 +426,7 @@ describe('PairCompare', () => {
         fireEvent.click(screen.getByRole('button', { name: 'استوديو القراءة' }));
         fireEvent.click(screen.getByRole('button', { name: 'اقرأ مع التظليل' }));
         const reading = () => container.querySelector('[data-reading]')!;
-        expect(reading().closest('article')!.getAttribute('aria-label')).toContain('يونس');
+        expect(reading().closest('article')!.getAttribute('aria-label')).toContain('يُونُسْ');
         expect(reading().textContent).toBe('إن');
         act(() => { vi.advanceTimersByTime(1300); });
         expect(reading().textContent).toBe('أجري');
@@ -426,7 +434,7 @@ describe('PairCompare', () => {
         expect(reading().closest('button')!.textContent).toContain('109');
         act(() => { vi.advanceTimersByTime(1300); });
         act(() => { vi.advanceTimersByTime(2600); });
-        expect(screen.getByRole('button', { name: /^الشعراء ١٢٧: / }).getAttribute('aria-pressed')).toBe('true');
+        expect(screen.getByRole('button', { name: /^الشُّعَرَاءْ ١٢٧: / }).getAttribute('aria-pressed')).toBe('true');
         expect(reading().textContent).toBe('إن');
         expect(screen.getAllByRole('button', { name: /^من الآية/ })).toHaveLength(3);
       } finally { vi.useRealTimers(); }
@@ -436,15 +444,15 @@ describe('PairCompare', () => {
       const refrain = (n: number) => ({ id: `10:72|26:${n}`, ayah: { number: n, words: ['ويل', 'يومئذ'], marks: { 0: { kind: 'exact' as const, link: 'a' } } }, shared: options[0].shared });
       const same = [refrain(109), refrain(127)];
       render(<PairCompare view="cards" a={10} b={26} cards={[{ ...many, many: { side: 1, options: same }, sides: [many.sides[0], { surah: 26, ayah: 109, ayat: [same[0].ayah] }] }]} pairs={pairs} names={names2} />);
-      expect(screen.getByRole('heading', { level: 3, name: 'الشعراء' })).toBeTruthy();
+      expect(screen.getByRole('heading', { level: 3, name: 'الشُّعَرَاءْ' })).toBeTruthy();
       expect(screen.getByRole('link', { name: '١٢٧' }).getAttribute('href')).toBe('/quran/read/ayah/26/127');
-      expect(screen.queryByRole('button', { name: /^الشعراء ١٢٧: / })).toBeNull();
+      expect(screen.queryByRole('button', { name: /^الشُّعَرَاءْ ١٢٧: / })).toBeNull();
       expect(screen.getAllByText('ويل')).toHaveLength(1);
     });
 
     it('gives each partner its ayah text as well as its reference', () => {
       render(<PairCompare view="cards" a={10} b={26} cards={[many]} pairs={pairs} names={names2} />);
-      expect(screen.getByRole('button', { name: /^الشعراء ١٢٧: / }).textContent).toContain('127');
+      expect(screen.getByRole('button', { name: /^الشُّعَرَاءْ ١٢٧: / }).textContent).toContain('127');
     });
 
     it('still scrolls a saved link to the card when its first partner has been removed', () => {

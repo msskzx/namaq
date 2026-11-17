@@ -2,16 +2,16 @@
 
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import surahRows from '@shared/data/quran/surahs.json';
 import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/readerPage';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { ayahSlice, pageEnd, pageTop, READING_LINES } from '@shared/quran/ayahSlice';
 import MushafPage, { type Checked, type Write } from '@/app/quran/read/MushafPage';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 export type Page = { page: number; top?: number; data: MushafPageData };
 type Pages = Page & { previous: Page | null };
 
-const NAMES: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.title]));
+const NAMES: Record<number, string> = SURAH_TITLES;
 const load = async (url: string): Promise<Pages> => {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`${url}: ${response.status}`);

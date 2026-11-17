@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
 import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
-import { Text, TextInput } from './Text';
-import Sheet from './Sheet';
+import { Text, TextInput } from '@/ui/Text';
+import Sheet from '@/ui/Sheet';
 import { hijriDate } from '@shared/hijri';
 import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
@@ -11,7 +11,9 @@ import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
-import { type Palette, CARD } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -146,7 +148,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
         <PlaceChip place={place} palette={palette} onPress={onPlace} />
         {date && <Text style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>}
       </View>
-      <View style={{ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, padding: 6 }}>
+      <Card palette={palette} pad={6}>
         {ALL.map((key, i) => {
           const on = key === next;
           const faint = key === 'sunrise';
@@ -165,7 +167,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
             </View>
           );
         })}
-      </View>
+      </Card>
       {blocked && (
         <Pressable onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
           style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'center', paddingVertical: 4, opacity: pressed ? 0.7 : 1 })}>
@@ -333,9 +335,7 @@ function Calendar({ palette }: { palette: Palette }) {
   if (!month) return <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 40 }}>لا يدعم هذا الجهاز التقويم الهجري.</Text>;
   const cells: (typeof month.days[number] | null)[] = [...Array(month.lead).fill(null), ...month.days];
   const arrow = (Icon: (props: LucideProps) => React.ReactNode, step: number, label: string) => (
-    <Pressable onPress={() => setOffset(offset + step)} accessibilityRole="button" accessibilityLabel={label} hitSlop={8} style={{ padding: 8 }}>
-      <Icon size={22} color={palette.ink} />
-    </Pressable>
+    <IconButton Icon={Icon} label={label} onPress={() => setOffset(offset + step)} tone="ink" />
   );
   return (
     <View style={{ gap: 12 }}>

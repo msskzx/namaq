@@ -1,4 +1,5 @@
 import { expect, open, readerPage, tab, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 test('the Quran hub links to every tool', async ({ page }) => {
   await open(page, '/');
@@ -14,9 +15,9 @@ test('the Quran hub links to every tool', async ({ page }) => {
 
 test('the surah order narrows to a juz and cites its books', async ({ page }) => {
   await open(page, '/order');
-  await expect(page.getByRole('heading', { name: 'الفاتحة' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)}` })).toBeVisible();
   await page.getByRole('button', { name: '١', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'البقرة' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(2)}` })).toBeVisible();
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
   await page.getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://shamela.ws/book/9992/51');
@@ -26,7 +27,7 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
     strip?.scrollTo({ left: strip.scrollWidth, behavior: 'instant' });
   });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'النبأ' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(78)}` })).toBeVisible();
   await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
@@ -39,7 +40,58 @@ test('the lata\'if page groups its examples by topic, each with al-Suyuti\'s wor
   await expect(page.getByRole('link', { name: /الإتقان للسيوطي ٣\/٢٩٢–٢٩٣/ }).first()).toBeVisible();
 });
 
+test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {
+  // The matrix is the default view (owner, 2026-11-17).
+  await open(page, '/branches');
+  await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
+});
+
+test('every matrix has one studio: the read-along, and on a book matrix a switch to its connections', async ({ page }) => {
+  // The cards either side are drawn off screen, ready for a swipe: only the open card's buttons count.
+  const onScreen = async (name: string) => {
+    const buttons = page.getByRole('button', { name, exact: true });
+    const found = [];
+    for (let i = 0; i < await buttons.count(); i++) {
+      const box = await buttons.nth(i).boundingBox();
+      if (box && box.x >= 0 && box.x + box.width <= 390) found.push(buttons.nth(i));
+    }
+    return found;
+  };
+  const swipe = async () => {
+    await page.mouse.move(80, 400);
+    await page.mouse.down();
+    await page.mouse.move(330, 400, { steps: 8 });
+    await page.mouse.up();
+  };
+  await open(page, '/branches');
+  await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
+  await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
+  expect(await onScreen('استوديو الروابط')).toHaveLength(0);
+  await (await onScreen('استوديو القراءة'))[0].click();
+  await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
+  await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
+  await page.getByRole('button', { name: 'إغلاق الاستوديو' }).click();
+  // The seventh tree (al-Baqarah 6–7 with Ya Sin 10–11) has book connections.
+  for (let i = 0; i < 6; i++) {
+    await swipe();
+    await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
+  }
+  // Every card opens on the default view, the matrix.
+  await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
+  expect(await onScreen('استوديو القراءة')).toHaveLength(0);
+  await (await onScreen('استوديو الروابط'))[0].click();
+  await page.getByRole('button', { name: 'الروابط', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'اقرأ مع التظليل' })).toBeVisible();
+  await page.getByRole('button', { name: 'الروابط', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
+});
+
 test.describe('branches', () => {
+  // These tests are about the tree, so they run for a reader who picked it.
+  test.use({ seed: { 'branches-view': '"tree"' } });
+
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
@@ -48,49 +100,6 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
-  });
-
-  test('every matrix has one studio: the read-along, and on a book matrix a switch to its connections', async ({ page }) => {
-    // The cards either side are drawn off screen, ready for a swipe: only the open card's buttons count.
-    const onScreen = async (name: string) => {
-      const buttons = page.getByRole('button', { name, exact: true });
-      const found = [];
-      for (let i = 0; i < await buttons.count(); i++) {
-        const box = await buttons.nth(i).boundingBox();
-        if (box && box.x >= 0 && box.x + box.width <= 390) found.push(buttons.nth(i));
-      }
-      return found;
-    };
-    const swipe = async () => {
-      await page.mouse.move(80, 400);
-      await page.mouse.down();
-      await page.mouse.move(330, 400, { steps: 8 });
-      await page.mouse.up();
-    };
-    await open(page, '/branches');
-    await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
-    await (await onScreen('عرض المصفوفة'))[0].click();
-    await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
-    expect(await onScreen('استوديو الروابط')).toHaveLength(0);
-    await (await onScreen('استوديو القراءة'))[0].click();
-    await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
-    await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
-    await page.getByRole('button', { name: 'إغلاق الاستوديو' }).click();
-    // The seventh tree (al-Baqarah 6–7 with Ya Sin 10–11) has book connections.
-    for (let i = 0; i < 6; i++) {
-      await swipe();
-      await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
-    }
-    // A card opens on the default view: this one is switched to its matrix by its own button.
-    await expect.poll(async () => (await onScreen('عرض المصفوفة')).length).toBe(1);
-    await (await onScreen('عرض المصفوفة'))[0].click();
-    await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
-    expect(await onScreen('استوديو القراءة')).toHaveLength(0);
-    await (await onScreen('استوديو الروابط'))[0].click();
-    await page.getByRole('button', { name: 'الروابط', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'اقرأ مع التظليل' })).toBeVisible();
-    await page.getByRole('button', { name: 'الروابط', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
   });
 
   test('a tree is saved and shows behind the saved circle on home', async ({ page }) => {
@@ -108,7 +117,7 @@ test.describe('branches', () => {
     await box.fill('إن المتقين');
     await box.press('Enter');
     await expect(page.getByText('«إن المتقين»')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'سورة الدخان' })).toBeVisible();
+    await expect(page.getByRole('button', { name: `سورة ${S(44)}` })).toBeVisible();
   });
 
   test('the studio grows a tree to its end', async ({ page }) => {
@@ -122,7 +131,7 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
     await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
     // Once grown, each ayah's path is lit in turn and its ayah read under the tree word by word, the word read lit.
-    await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: `قارن ${S(15)} ٤٥` })).toBeVisible({ timeout: 20_000 });
     await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('span, div')].some(item => getComputedStyle(item).backgroundColor === 'rgb(220, 197, 160)')), { timeout: 15_000 }).toBe(true);
   });
 
@@ -192,8 +201,8 @@ test.describe('branches', () => {
     await box.press('Enter');
     // Two roots (al-A'raf 22, Taha 121) meet in one box, then part again into two leaves.
     const node = (name: RegExp) => page.getByRole('button', { name }).first();
-    const rootA = node(/^فَدَلَّىٰهُمَا /), leafA = node(/^الأعراف ٢٢ وَنَادَىٰهُمَا /), rootB = node(/فَأَكَلَا /), leafB = node(/^طه ١٢١/);
-    const litA = page.getByRole('button', { name: 'قارن الأعراف ٢٢' }), litB = page.getByRole('button', { name: 'قارن طه ١٢١' });
+    const rootA = node(/^فَدَلَّىٰهُمَا /), leafA = node(new RegExp(`^${S(7)} ٢٢ وَنَادَىٰهُمَا `)), rootB = node(/فَأَكَلَا /), leafB = node(new RegExp(`^${S(20)} ١٢١`));
+    const litA = page.getByRole('button', { name: `قارن ${S(7)} ٢٢` }), litB = page.getByRole('button', { name: `قارن ${S(20)} ١٢١` });
     await rootA.click();
     await expect(litA).toBeVisible();
     await leafA.click();
@@ -218,11 +227,11 @@ test.describe('branches', () => {
     const save = page.getByRole('button', { name: 'حفظ الشجرة' }).first();
     await expect(save).toBeVisible();
     const before = await save.boundingBox();
-    await page.getByRole('button', { name: 'سورة الحجر' }).click();
-    await expect(page.getByRole('button', { name: 'قارن الحجر ٤٥' })).toBeVisible();
+    await page.getByRole('button', { name: `سورة ${S(15)}` }).click();
+    await expect(page.getByRole('button', { name: `قارن ${S(15)} ٤٥` })).toBeVisible();
     expect(await save.boundingBox()).toEqual(before);
     // The surah's name comes first, then the ayat, in one label on the right (the matrix's head).
-    await expect(page.getByText('الحجر ٤٥–٤٦', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(`${S(15)} ٤٥–٤٦`, { exact: true }).first()).toBeVisible();
   });
 });
 
@@ -232,14 +241,14 @@ test('compare shows a pair and its card actions', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
   await page.getByRole('button', { name: /^اختر سورتين:/ }).click();
   await page.getByLabel(/^ابحث عن سورة/).fill('الطور');
-  await expect(page.getByText('الطور').first()).toBeVisible();
+  await expect(page.getByText(`${S(52)}`).first()).toBeVisible();
 });
 
 test('a compare card kept as its matrix has no tree and no tree button', async ({ page }) => {
   // al-Fatiha and al-Nisa open first, and their one card (1:6 against 4:68) shares no two words in a row.
   await open(page, '/compare');
   await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
-  await expect(page.getByRole('button', { name: /^اختر سورتين:.*الفاتحة/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: new RegExp(`^اختر سورتين:.*${S(1)}`) })).toBeVisible();
   await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
 });
@@ -249,23 +258,23 @@ test.describe('a long story compare', () => {
 
   test('a card switches to side by side: lanes for shared parts, one surah across the card with the other named', async ({ page }) => {
     await open(page, '/compare');
-    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء')).toHaveCount(0);
+    await expect(page.getByText(`سورة ${S(7)} لا تذكر هذا الجزء`)).toHaveCount(0);
     const story = page.getByRole('button', { name: 'السورتان جنبًا إلى جنب' }).nth(2);
     await story.click();
-    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء').first()).toBeVisible();
-    await expect(page.getByText('البقرة ٣٠–٣٣', { exact: true }).first()).toBeVisible();
-    await expect(page.getByText('البقرة ٣٤', { exact: true }).first()).toBeVisible();
-    await expect(page.getByText('الأعراف ١١', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(`سورة ${S(7)} لا تذكر هذا الجزء`).first()).toBeVisible();
+    await expect(page.getByText(`${S(2)} ٣٠–٣٣`, { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(`${S(2)} ٣٤`, { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(`${S(7)} ١١`, { exact: true }).first()).toBeVisible();
     await page.getByRole('button', { name: 'السورتان بعضهما تحت بعض' }).first().click();
-    await expect(page.getByText('سورة الأعراف لا تذكر هذا الجزء')).toHaveCount(0);
+    await expect(page.getByText(`سورة ${S(7)} لا تذكر هذا الجزء`)).toHaveCount(0);
   });
 });
 
 test('a prophet story dot shows its ayat, which open in the mushaf', async ({ page }) => {
   await open(page, '/prophets');
   await expect(page.getByRole('button', { name: /^اختر نبيًّا:/ })).toBeVisible();
-  await page.getByRole('button', { name: /^إغراق فرعون وجنوده، البقرة/ }).click();
-  const read = page.getByRole('button', { name: /^افتح البقرة/ }).first();
+  await page.getByRole('button', { name: new RegExp(`^إغراق فرعون وجنوده، ${S(2)}`) }).click();
+  const read = page.getByRole('button', { name: new RegExp(`^افتح ${S(2)}`) }).first();
   await expect(read).toBeVisible();
   await read.click();
   await expect.poll(() => readerPage(page)).toBe(8);
@@ -288,15 +297,15 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   const box = (await strip.boundingBox())!;
   // al-A'raf is the seventh surah from the right.
   await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
-  await expect(page.getByText('، منها ٢١ في الأعراف')).toBeVisible();
-  await expect(page.getByRole('button', { name: /^افتح الأعراف .* في المصحف$/ }).first()).toBeInViewport();
+  await expect(page.getByText(`، منها ٢١ في ${S(7)}`)).toBeVisible();
+  await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
-test('the words page shows its source and how it counts behind the books icon', async ({ page }) => {
+test('the words page shows its source and how it counts in the page, collapsed', async ({ page }) => {
   await open(page, '/words');
-  await expect(page.getByRole('button', { name: 'مساعدة' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'المصادر' }).click();
-  await expect(page.getByText('المدوّنة القرآنية العربية', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'المصادر' })).toHaveCount(0);
+  await expect(page.getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toHaveCount(0);
+  await page.getByRole('button', { name: /المصدر: المدوّنة القرآنية العربية/ }).click();
   await expect(page.getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toBeVisible();
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
   await page.getByRole('link', { name: 'المصادر والتراخيص' }).click();

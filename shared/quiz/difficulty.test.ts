@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { type BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz } from './branchQuestions';
 import { byDifficulty, DIFFICULTIES, levelOf, parseDifficulty, treeScore, type Difficulty } from './difficulty';

@@ -7,7 +7,7 @@ import { branchesHref, type Branch, type BranchAyah } from '@shared/quran/branch
 import { RailSlotElement } from '@/components/common/NavBar';
 import { AroundButton } from './Surroundings';
 import BranchTree from './BranchTree';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { ayahContexts, sharedByAll, surrounding } from '@shared/quran/ayahContext';
 import { inJuzRange } from '@shared/quran/juz';
@@ -100,8 +100,8 @@ describe('BranchTree', () => {
     for (const key of ['2:36', '7:20']) {
       const previous = container.querySelector(`[data-node="before${key}"]`)!;
       const purple = [...previous.querySelectorAll('mark[title="نفس اللفظ أو الجذر"]')].map(mark => mark.textContent);
-      expect(purple).toContain(key === '2:36' ? 'مِنْهَا' : 'مِنْ');
-      expect([...previous.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent)).toContain('حَيْثُ');
+      expect(purple).toContain(key === '2:36' ? 'مِنۡهَا' : 'مِنۡ');
+      expect([...previous.querySelectorAll('mark[title="نفس الكلمة"]')].map(mark => mark.textContent)).toContain('حَيۡثُ');
     }
   });
 

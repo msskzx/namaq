@@ -1,29 +1,32 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronDown, PenLine, Send } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
-import { blend } from '@shared/quran/compareCardLook';
-import { Text } from '@/components/Text';
-import ExternalLink from '@/components/ExternalLink';
-import Reference from '@/components/Reference';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { someTone } from '@/lib/marks';
+import { Text } from '@/ui/Text';
+import ExternalLink from '@/ui/ExternalLink';
+import Reference from '@/ui/Reference';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
+import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
-/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): faded into the card when only some rows share it. */
+/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): mixed with the muted colour when only some rows share it. */
 function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   const colour = palette.marks[kind];
-  return colour && (some ? blend(colour, palette.card, 0.55) : colour);
+  return colour && (some ? someTone(palette, colour) : colour);
 }
 
 function Ayah({ words: list, cut, palette, size = 22 }: { words: OpeningWord[]; cut?: boolean; palette: Palette; size?: number }) {
@@ -62,13 +65,13 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   </>;
 }
 
-function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
+function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const share = () => shareCard({ link: `https://namaq.vercel.app/quran/openings?kind=${card.kind}#${card.id}`, content: width => (
-    <View style={{ width, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+    <Card palette={palette} style={{ width }}>
       <Text style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
       <Rows card={card} palette={palette} still />
-    </View>
+    </Card>
   ) });
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
@@ -82,16 +85,18 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
         </View>}
       </View>
       <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
-        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <Pressable onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel="الشرط وجوابه" hitSlop={8} style={{ padding: 4, transform: [{ rotate: open ? '180deg' : '0deg' }] }}>
-          <ChevronDown size={18} color={palette.muted} />
-        </Pressable>}
-        <Pressable onPress={share} accessibilityRole="button" accessibilityLabel={`شارك ${card.title}`} hitSlop={8} style={{ padding: 4 }}>
-          <Send size={18} color={palette.muted} />
-        </Pressable>
+        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} size="small" expanded={open} />}
+        <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} size="small" />
       </View>
     </View>
   );
 }
+
+/** The quiz button: the solo quiz set to ask the surahs' openings (a kind inside the quizzes, owner 2026-11-17). */
+const quizOpenings = () => {
+  writeSettings({ ...readSettings(), kinds: ['OPENINGS'] });
+  router.push('/quiz/solo');
+};
 
 /** The website's /quran/openings on the phone (owner, 2026-11-13): the ten kinds of opening as chips, and cards of surahs whose openings look alike. */
 export default function OpeningsScreen() {
@@ -105,9 +110,7 @@ export default function OpeningsScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll>
-        <Pressable onPress={() => router.push('/quiz/openings')} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
-          <PenLine size={20} color={palette.muted} />
-        </Pressable>
+        <IconButton Icon={PenLine} label="اختبار أوائل السور" onPress={quizOpenings} role="link" />
       </TopBar>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ gap: 8, paddingHorizontal: 16, paddingVertical: 8, alignItems: 'center', flexDirection: 'row' }}>
         {OPENING_KINDS.map(k => {
@@ -135,7 +138,7 @@ export default function OpeningsScreen() {
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
                 {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
               </View>
-              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} />)}
             </View>
           );
         })}

@@ -14,8 +14,8 @@ describe("the reader's ayah preview", () => {
 
   it('gives the other ayah of each compare card, its shared words marked', () => {
     const [card] = ayahPreview('2:5').compare;
-    expect(card.page).toBe('البقرة مع لقمان');
-    expect(card.partner).toBe('لقمان ٥');
+    expect(card.page).toBe('البَقَرَةْ مع لُقْمَانْ');
+    expect(card.partner).toBe('لُقْمَانْ ٥');
     expect(card.href).toContain('/quran/compare?a=2&b=31');
     expect(card.words.every(word => word.shared)).toBe(true);
   });

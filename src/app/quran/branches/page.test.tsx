@@ -19,17 +19,17 @@ import { subtreeIndex } from '@shared/quran/subtrees';
 import { comparisonId } from '@shared/quran/mutashabih/identity';
 import { resolveTree } from '@/lib/quran/branchTreeLinks';
 import { inJuzRange } from '@shared/quran/juz';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { branchInventory } from '@shared/quran/branchInventory';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
-import { mushafText } from '@shared/quran/mushafText';
 import { surahList } from '@/lib/quran/surahList';
 
-const preference = vi.hoisted(() => ({ value: undefined as string | undefined, connectors: undefined as string | undefined }));
+// Most tests read the tree, so they run as a reader who picked it; the matrix is the default for everyone else.
+const preference = vi.hoisted(() => ({ value: 'tree' as string | undefined, connectors: undefined as string | undefined }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: (name: string) => { const value = name === 'branches-connectors' ? preference.connectors : preference.value; return value ? { value } : undefined; } }) }));
 const params = new URLSearchParams();
 const navigation = vi.hoisted(() => ({ push: vi.fn() }));
@@ -42,7 +42,7 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 78, name: 'النبأ' }]) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
-afterEach(() => { cleanup(); preference.value = undefined; preference.connectors = undefined; });
+afterEach(() => { cleanup(); preference.value = 'tree'; preference.connectors = undefined; });
 const open = (values: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(values) });
 const target = (values: Record<string, string>) => open(values).then(() => '', (error: Error) => error.message.replace('REDIRECT ', ''));
 const paramsOf = (href: string) => Object.fromEntries(new URL(href, 'http://localhost').searchParams);
@@ -66,7 +66,7 @@ describe('Quran branch trees', () => {
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
     try {
       render(await open({ o: 'الم', m: 'cards', q: 'الم' }));
-      const card = await screen.findByLabelText('البقرة ١–٢');
+      const card = await screen.findByLabelText('البَقَرَةْ ١–٢');
       expect(card.textContent).toContain((data.ayat as BranchAyah[]).find(ayah => ayah.key === '2:2')!.words.join(' '));
       expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(2);
       expect(document.querySelectorAll('[data-col][data-current]')).toHaveLength(6);
@@ -95,7 +95,7 @@ describe('Quran branch trees', () => {
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
     try {
       render(await open({ o: 'group:2:1,3:1,29:1,30:1,31:1,32:1', m: 'cards' }));
-      const card = await screen.findByLabelText('البقرة ١–٢');
+      const card = await screen.findByLabelText('البَقَرَةْ ١–٢');
       expect(card.textContent).toContain((data.ayat as BranchAyah[]).find(ayah => ayah.key === '2:2')!.words.join(' '));
       expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(2);
       expect(document.querySelectorAll('[data-col][data-current]')).toHaveLength(6);
@@ -248,19 +248,20 @@ describe('Quran branch trees', () => {
     expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
   });
 
-  it('ignores an invalid saved preference', async () => {
-    preference.value = 'invalid';
+  it.each([undefined, 'invalid'])('opens a link without a view as the matrix when the saved view is %s', async saved => {
+    preference.value = saved;
     render(await open({ o: 'لا اثم عليه' }));
-    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
+    expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
   });
 
   it('shows an ayah boundary between continuations without a separate phrase node', async () => {
     render(await open({ o: 'يومهم الذي', juzFrom: '25', juzTo: '30' }));
     expect(screen.getByText('۝').closest('[data-node]')).toBeNull();
     expect(screen.queryByRole('button', { name: 'إظهار المسار: ۝' })).toBeNull();
-    expect(screen.getByText(/^وَهُوَ ٱلَّذِى فِى ٱلسَّمَآءِ/)).toBeTruthy();
-    expect(screen.getByText(/^يَوْمَ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ/)).toBeTruthy();
-    expect(screen.getByText('فِيهِ يُصْعَقُونَ')).toBeTruthy();
+    expect(screen.getByText(/^وَهُوَ ٱلَّذِي فِي ٱلسَّمَآءِ/)).toBeTruthy();
+    expect(screen.getByText(/^يَوۡمَ يَخۡرُجُونَ مِنَ ٱلۡأَجۡدَاثِ/)).toBeTruthy();
+    expect(screen.getByText('فِيهِ يُصۡعَقُونَ')).toBeTruthy();
   });
   it('suggests the retained tree when typing absorbed wording, from phrases fetched once and not sent with the page', async () => {
     const fetch = vi.fn(async (url: string) => url.includes('branch-phrases') ? phrasesRoute(new NextRequest(`http://localhost${url}`)) : new Response(null, { status: 404 }));
@@ -272,7 +273,7 @@ describe('Quran branch trees', () => {
     vi.unstubAllGlobals();
     expect(fetch.mock.calls.map(([url]) => url).filter(url => url.includes('branch-phrases') && !url.includes('outside=1'))).toEqual(['/api/quran/branch-phrases?all=1&juzFrom=25&juzTo=30&s=43']);
     expect(options.filter(option => !option.className.includes('home-muted'))).toHaveLength(1);
-    expect(options[0].textContent).toContain(mushafText('يَوْمَهُمُ ٱلَّذِى'));
+    expect(options[0].textContent).toContain('يَوۡمَهُمُ ٱلَّذِي');
   });
 
   it('lists trees the filters hide under their own label; picking one clears the filters', async () => {
@@ -281,7 +282,7 @@ describe('Quran branch trees', () => {
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'إن المجرمين في' } });
     expect(await screen.findByText('خارج التصفية الحالية، فتحها يمسح التصفية', {}, { timeout: 5000 })).toBeTruthy();
     vi.unstubAllGlobals();
-    const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes(mushafText('ٱلْمُجْرِمِينَ')))!;
+    const hidden = screen.getAllByRole('option').find(option => option.textContent?.includes('ٱلۡمُجۡرِمِينَ'))!;
     fireEvent.click(hidden);
     const pushed = new URL(navigation.push.mock.calls.at(-1)![0], 'http://localhost');
     expect(pushed.searchParams.get('juzFrom')).toBeNull();
@@ -296,11 +297,11 @@ describe('Quran branch trees', () => {
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
     render(await follow({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
-    expect(within(tree).getAllByText(/^فَذَرْهُمْ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
+    expect(within(tree).getAllByText(/^فَذَرۡهُمۡ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
     expect(within(tree).queryByText('ف')).toBeNull();
-    expect(tree.textContent).toContain('الزخرف ٨٣');
+    expect(tree.textContent).toContain('الزُّخْرُفْ ٨٣');
     expect(tree.textContent).toContain('٧٠:٤٢');
-    expect(tree.textContent).toContain('الزخرف ٨٣');
+    expect(tree.textContent).toContain('الزُّخْرُفْ ٨٣');
   });
 
   it('has no list view any more: old list and page links open the first tree', async () => {
@@ -395,7 +396,7 @@ describe('Quran branch trees', () => {
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
-    expect(screen.getByText('سورة البقرة')).toBeTruthy();
+    expect(screen.getByText('سورة البَقَرَةْ')).toBeTruthy();
     const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('2:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
@@ -434,8 +435,8 @@ describe('Quran branch trees', () => {
     cleanup();
     render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
-    expect(tree.textContent).toContain('البقرة ١٧٣');
-    expect(tree.textContent).toContain('البقرة ١٨٢');
+    expect(tree.textContent).toContain('البَقَرَةْ ١٧٣');
+    expect(tree.textContent).toContain('البَقَرَةْ ١٨٢');
     expect(screen.getByRole('navigation', { name: 'التنقل بين الأشجار' }).textContent).toBe(parentSteps);
   });
 
@@ -517,8 +518,8 @@ describe('branches review', () => {
     vi.mocked(surahList).mockResolvedValueOnce([{ number: 1, name: 'الفاتحة' }, { number: 37, name: 'الصافات' }, { number: 38, name: 'ص' }] as Awaited<ReturnType<typeof surahList>>);
     render(await open({ o: 'cmp:0oc27w50449cxf' }));
     const label = (key: string) => document.querySelector(`[data-node][data-keys="${key}"] [data-ref]`)?.textContent;
-    expect(label('1:2')).toBe('الفاتحة ٢–٣');
-    expect(label('37:182')).toBe('الصافات ١٨٢ ثم ص ١');
+    expect(label('1:2')).toBe('الفَاتِحَةْ ٢–٣');
+    expect(label('37:182')).toBe('الصَّافَّاتْ ١٨٢ ثم صٓ ١');
   }, 30000);
 
   it('reviews every kind of tree up to 35 ayat and names the trees a tree sits inside', async () => {

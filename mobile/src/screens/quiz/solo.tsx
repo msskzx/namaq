@@ -1,13 +1,16 @@
 import { useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import BackBar from '@/components/BackBar';
-import Button, { Row } from '@/components/Button';
-import LoadingDots from '@/components/LoadingDots';
+import TopBar from '@/ui/TopBar';
+import Button, { Row } from '@/ui/Button';
+import LoadingDots from '@/ui/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
+import Toggle from '@/ui/Toggle';
+import { QuizPenSetting } from '@/components/recite/PenSetting';
+import { quizPageBefore } from '@/lib/settings';
 import { DifficultyPicker, LeavesPicker, Section } from '@/components/QuizForm';
 import { FilterFields } from '@/components/FilterFields';
 import { applyDraft, draftOf, EMPTY_LIST, type FilterDraft } from '@/lib/branchList';
@@ -15,12 +18,13 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { memorizedQuestions, readMemorized, withMemorizedScope } from '@shared/memorized';
 import { availability, cleanSolo, SOLO_KINDS, startSolo, type SoloSettings } from '@/lib/quiz';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
-import { RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { PAGE_TOPICS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
-import { usePalette, CARD } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
+import Card from '@/ui/Card';
 
 /** What each kind is called on its chip. */
-const KIND_NAMES = { BRANCHES: 'شجرة المتشابهات', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
+const KIND_NAMES = { BRANCHES: 'متشابهات القرآن', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
 
 /** The solo quiz setup: the kinds of question mixed, the part of the Quran (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
@@ -48,6 +52,9 @@ export default function SoloSetup() {
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const { available, lengths } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
+  // Recite, «في أي سورة؟» and the written kinds are asked on the ayah's mushaf page (owner, 2026-11-17).
+  const onPage = settings.kinds.some(kind => PAGE_TOPICS.includes(kind));
+  const [pageBefore, setPageBefore] = quizPageBefore.use();
   // A kind that does not ask the Quran (the Tuhfa's lines) has no range to pick.
   const ranged = settings.kinds.some(kind => RANGED_TOPICS.includes(kind));
   // At least one kind stays picked.
@@ -70,10 +77,10 @@ export default function SoloSetup() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <BackBar title="اختبار فردي" />
+      <TopBar back={() => router.back()} title="اختبار فردي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
         {resumable && (
-          <View style={{ borderWidth: 1, borderColor: palette.accent, ...CARD, padding: 14, gap: 10 }}>
+          <Card palette={palette} outline={palette.accent} gap={10}>
             <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>
               {`لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(resumable.current + 1)} من ${num(resumable.questions.length)}.`}
             </Text>
@@ -81,7 +88,7 @@ export default function SoloSetup() {
               <Button variant="primary" Icon={ArrowLeft} label="أكمله" onPress={() => router.push('/quiz/play')} />
               <Button label="اتركه" onPress={() => setRun(null)} />
             </Row>
-          </View>
+          </Card>
         )}
         <Section title="أنواع الأسئلة" palette={palette}>
           <Row>{SOLO_KINDS.map(kind => <Button key={kind} label={KIND_NAMES[kind]} active={settings.kinds.includes(kind)} onPress={() => toggleKind(kind)} />)}</Row>
@@ -93,9 +100,13 @@ export default function SoloSetup() {
         <Section title="الصعوبة" palette={palette}>
           <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.kinds} />
         </Section>
-        {trees && <Section title="الإجابات" palette={palette}>
+        {trees && <Section title="متشابهات" palette={palette}>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
+        </Section>}
+        {onPage && <Section title="صفحة المصحف" palette={palette}>
+          <Toggle on={pageBefore} onChange={setPageBefore} label="اكتب الآيات قبلها في الصفحة" palette={palette} />
+          <QuizPenSetting palette={palette} />
         </Section>}
         <Section title="عدد الأسئلة" palette={palette}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>

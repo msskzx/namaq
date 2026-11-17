@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { braid, compareTree } from './braid';
 import { keys, type Branch } from './branches';
 import type { CardSide } from './compareCards';
@@ -155,6 +155,20 @@ describe('compareTree', () => {
       { surah: 14, ayah: 6, ayat: [{ number: 6, words: ['قَالَ', 'مُوسَىٰ'] }] },
     ];
     expect(compareTree(start).tree.children.map(child => child.words.length)).toEqual([1]);
+  });
+
+  it('keeps an ayah one side ends inside a common stretch out of the other side\'s path (73:19 and 74:54-55)', () => {
+    const side = (surah: number, numbers: number[]): CardSide => ({ surah, ayah: numbers[0], ayat: numbers.map(number => ({ number, words: words(`${surah}:${number}`) })) });
+    const sides: [CardSide, CardSide] = [side(73, [19]), side(74, [54, 55])];
+    const { tree } = compareTree(sides);
+    const path = (key: string) => {
+      const out: string[] = [];
+      const walk = (node: Branch) => { out.push(...node.words); node.children.filter(child => child.via?.includes(key)).forEach(walk); if (node.rejoin) walk(node.rejoin); };
+      walk(tree);
+      return out.filter(word => word.startsWith('﴿'));
+    };
+    expect(path('73:19')).toEqual(['﴿١٩﴾']);
+    expect(path('74:54')).toEqual(['﴿٥٤﴾', '﴿٥٥﴾']);
   });
 
   it('names each writing of a braided word by the ayah it is written in', () => {

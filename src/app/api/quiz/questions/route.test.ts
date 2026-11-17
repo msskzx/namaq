@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { count, findMany, historicalClaimFindMany, ayahFindMany } = vi.hoisted(() => ({ count: vi.fn(), findMany: vi.fn(), historicalClaimFindMany: vi.fn(), ayahFindMany: vi.fn() }));
+vi.mock('@/lib/quran/readerAyat', () => ({ loadAyahText: async () => (surah: number, ayah: number) => `page ${surah}:${ayah}` }));
 vi.mock('@/lib/prisma', () => ({ prisma: { quizQuestion: { count, findMany }, historicalClaim: { findMany: historicalClaimFindMany }, ayah: { findMany: ayahFindMany } } }));
 
 import { GET } from './route';
@@ -80,8 +81,8 @@ describe('GET /api/quiz/questions', () => {
     const response = await GET(new Request('http://localhost/api/quiz/questions'));
     const body = await response.json();
     expect(body.questions[0].choiceDetails).toEqual({
-      '2:255': { text: 'آية الكرسي', reference: 'البقرة 2:255' },
-      '2:256': { text: 'لا إكراه في الدين', reference: 'البقرة 2:256' },
+      '2:255': { text: 'page 2:255', reference: 'البَقَرَةْ 2:255' },
+      '2:256': { text: 'page 2:256', reference: 'البَقَرَةْ 2:256' },
     });
   });
 });

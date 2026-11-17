@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
-import { Check, ChevronDown } from 'lucide-react-native';
+import { Check } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import poemData from '@shared/tajwid/tuhfat-al-atfal.json';
-import { Text } from '@/components/Text';
-import Sheet from '@/components/Sheet';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { Text } from '@/ui/Text';
+import Sheet from '@/ui/Sheet';
+import BarPicker from '@/ui/BarPicker';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
@@ -70,11 +71,7 @@ export default function TuhfaScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll center>
-        <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel={`اختر بابًا: ${chapters[chapter].title}`}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 6, maxWidth: '100%', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 7 }}>
-          <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 15 }}>{chapters[chapter].title}</Text>
-          <ChevronDown size={14} color={palette.ink} />
-        </Pressable>
+        <BarPicker text={chapters[chapter].title} label={`اختر بابًا: ${chapters[chapter].title}`} onPress={() => setPicking(true)} />
       </TopBar>
       <ScrollView ref={scroll} onScroll={onScroll} onContentSizeChange={toVerse} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: bottom }}>
         <Text style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'center' }}>{poem.title}</Text>

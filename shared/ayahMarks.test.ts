@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah } from './ayahMarks';
+import { clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah } from './ayahMarks';
 
 describe('ayahMarks', () => {
   beforeEach(() => localStorage.clear());
@@ -55,5 +55,75 @@ describe('readDueMarks', () => {
     expect(Object.keys(first)).toEqual(['2:255']);
     expect(readDueMarks(2)).toBe(first);
     expect(Object.keys(readDueMarks(86_400_000)).sort()).toEqual(['2:255', '57:3']);
+  });
+});
+
+
+describe('forgotten word positions', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('keeps an ayah and its distinct words in the same offline store without word text', () => {
+    markForgotten('2:255', 100);
+    markForgotten(wordMarkKey('2:255', 0), 200);
+    markForgotten(wordMarkKey('2:255', 4), 300);
+    markForgotten(wordMarkKey('2:255', 0), 400);
+    expect(JSON.parse(localStorage.getItem('ayah-forgot')!)).toEqual({
+      '2:255': { forgot: 1, at: 100 },
+      '2:255:0': { forgot: 2, at: 400 },
+      '2:255:4': { forgot: 1, at: 300 },
+    });
+    expect(readAyahMarks()).toEqual(JSON.parse(localStorage.getItem('ayah-forgot')!));
+    expect(markAyah('2:255:0')).toBe('2:255');
+    expect(markWord('2:255:0')).toBe(0);
+    expect(markWord('2:255')).toBeUndefined();
+  });
+
+  it('undoes a resting word without changing its ayah or another word', () => {
+    markForgotten('2:255', 100);
+    markForgotten('2:255:0', 200);
+    markForgotten('2:255:4', 300);
+    rememberAyah('2:255:0', 400);
+    clearForgotten('2:255:0');
+    expect(readAyahMarks()).toEqual({
+      '2:255': { forgot: 1, at: 100 },
+      '2:255:4': { forgot: 1, at: 300 },
+    });
+    clearForgotten('2:255:0');
+    expect(Object.keys(readAyahMarks())).toEqual(['2:255', '2:255:4']);
+  });
+
+  it('rests a remembered word like an ayah and resets only that word after a mistake', () => {
+    const day = 86_400_000;
+    let now = 1_000;
+    markForgotten('2:255', now);
+    markForgotten('2:255:0', now);
+    markForgotten('2:255:4', now);
+    for (const days of [1, 3, 7, 30]) {
+      rememberAyah('2:255:0', now);
+      expect(dueMarks(readAyahMarks(), now)['2:255:0']).toBeUndefined();
+      expect(readAyahMarks()['2:255:0'].due).toBe(now + days * day);
+      now += days * day;
+      expect(dueMarks(readAyahMarks(), now)['2:255:0']).toBeDefined();
+    }
+    markForgotten('2:255:0', now);
+    expect(readAyahMarks()['2:255:0']).toEqual({ forgot: 2, at: now });
+    expect(readAyahMarks()['2:255']).toEqual({ forgot: 1, at: 1_000 });
+    expect(readAyahMarks()['2:255:4']).toEqual({ forgot: 1, at: 1_000 });
+    rememberAyah('2:255:0', now);
+    expect(readAyahMarks()['2:255:0'].due).toBe(now + day);
+  });
+
+  it('reads old ayah marks and word zero while discarding malformed word positions and stored text', () => {
+    localStorage.setItem('ayah-forgot', JSON.stringify({
+      '1:2': { forgot: 2, at: 10 },
+      '1:2:0': { forgot: 1, at: 20, text: 'not stored' },
+      '1:2:-1': { forgot: 1, at: 20 },
+      '1:2:1.5': { forgot: 1, at: 20 },
+      '1:2:0:1': { forgot: 1, at: 20 },
+    }));
+    expect(readAyahMarks()).toEqual({
+      '1:2': { forgot: 2, at: 10 },
+      '1:2:0': { forgot: 1, at: 20 },
+    });
   });
 });

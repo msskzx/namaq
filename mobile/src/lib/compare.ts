@@ -1,6 +1,5 @@
 import generated from '@shared/data/quran/compareCards';
-import corpus from '@shared/data/quran/trees.json';
-import surahRows from '@shared/data/quran/surahs.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { shownCards, surahOrder, type CardSide, type PairCard, type StoredCards, type SurahPair, type Visit } from '@shared/quran/compareCards';
 import { pageInScope, type CompareScope, type SurahSpans } from '@shared/quran/compareScope';
 import { curatedComparisons } from '@shared/quran/curatedComparisons';
@@ -9,6 +8,7 @@ import { readBookmarks, toggleBookmark, type Bookmark } from '@shared/bookmarks'
 import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
 import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
+import { surahName } from '@shared/quran/surahNames';
 export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 import { sharedByAll } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
@@ -35,7 +35,7 @@ export function cardsFor(a: number, b: number): PairCard[] {
   return cards;
 }
 
-export const surahName = (n: number) => surahRows.find(row => row.number === n)?.name ?? String(n);
+export { surahName };
 /** «سورة البقرة وسورة آل عمران», or «سورة الشعراء مع نفسها» for a surah compared with itself. */
 export const pairTitle = (lead: number, other: number) => (lead === other ? `سورة ${surahName(lead)} مع نفسها` : `سورة ${surahName(lead)} وسورة ${surahName(other)}`);
 export const visitKey = (visit: Pick<Visit, 'lead' | 'other'>) => `${visit.lead}·${visit.other}`;
@@ -167,14 +167,6 @@ export function filterOfList(state: ListState): PairFilter {
 }
 
 let pairsByAyah: Map<string, { id: string; a: number; b: number }[]> | undefined;
-/**
- * The listed surah pair holding a kept compare card with two of these ayat (the website's «في المقارنة» link).
- * Read from the stored pair ids, so no card is decoded.
- */
-export function compareTargetFor(keys: string[]): { lead: number; other: number } | undefined {
-  return compareTargetsFor(keys)[0];
-}
-
 /** One way from a tree into compare: a listed surah pair holding a kept card of two of its ayat, and those ayah numbers. */
 export type CompareTarget = { lead: number; other: number; ayat: [number, number] };
 

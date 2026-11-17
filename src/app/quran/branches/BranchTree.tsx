@@ -13,6 +13,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
+import { bare } from '@shared/quran/quranText/ayahWords';
 import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
 import { Fan, PathBox, PathButton, PathProvider, PathScope, Stub, Through, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import { likenessOf, treeContexts, type AyahContext, type Surrounding } from '@shared/quran/ayahContext';
@@ -126,8 +127,10 @@ export function TreeWords({ words, ayahKeys, at = 0, prefix = false, tones }: { 
     if (kind === 'related') return <mark data-match="related" className="bg-transparent text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]" title={ar ? LIKENESS_TITLE.root.ar : LIKENESS_TITLE.root.en}><MushafText>{shared}</MushafText></mark>;
     const moved = !!written.differs?.includes(at + i - written.offset);
     const shown = forms[i][0].word.replace(/^﴿(.+)﴾$/, shared.startsWith('﴿') ? '$&' : '$1');
-    if (moved || (forms[i][0].word !== shared && kind !== 'root' && shared !== '۝')) return <span data-differs className={MARK_CLASS.written} title={title}><MushafText>{shown}</MushafText></span>;
-    return kind ? <mark data-match={kind} className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{shown}</MushafText></mark> : <MushafText>{shown}</MushafText>;
+    // A stop sign only some of the node's ayat carry shows faint until a path picks one ayah (shared/quran/writtenForms.ts).
+    const faint = forms[i][0].faint && <span data-faint className="text-[var(--home-rule)]">{forms[i][0].faint}</span>;
+    if (moved || (bare(forms[i][0].word) !== bare(shared) && kind !== 'root' && shared !== '۝')) return <span data-differs className={MARK_CLASS.written} title={title}><MushafText>{shown}</MushafText>{faint}</span>;
+    return kind ? <mark data-match={kind} className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{shown}</MushafText>{faint}</mark> : <><MushafText>{shown}</MushafText>{faint}</>;
   };
   // docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
   return writtenPieces(words.length, i => forms[i].length > 1).map((piece, n) => {

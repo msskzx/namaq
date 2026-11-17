@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { NotebookPen, Send, Trash2 } from 'lucide-react-native';
 import { shareAyah } from './AyahShare';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
-import Sheet from './Sheet';
-import { Text, TextInput } from './Text';
-import { ayahText, surahNames } from '@/lib/mushaf';
+import Sheet from '@/ui/Sheet';
+import { Text, TextInput } from '@/ui/Text';
+import { ayahText } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import { onLeave } from '@/lib/storage';
+import { surahName } from '@shared/quran/surahNames';
 
 /** How long typing rests before the note is kept, so the reader behind the sheet is not redrawn on every key. */
 const SAVE_MS = 400;
@@ -18,9 +21,10 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
   const [shown, setShown] = useState(ayah);
   const pending = useRef<{ key: string; text: string; timer: ReturnType<typeof setTimeout> } | null>(null);
   const flush = () => { if (pending.current) { clearTimeout(pending.current.timer); writeAyahNote(pending.current.key, pending.current.text); pending.current = null; } };
-  useEffect(() => flush, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { const stop = onLeave(flush); return () => { stop(); flush(); }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!ayah) { flush(); return; }
+    flush();
+    if (!ayah) return;
     setShown(ayah);
     setText(readAyahNotes()[ayah]?.text ?? '');
   }, [ayah]);
@@ -28,6 +32,8 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
   const edit = (next: string, now = false) => {
     setText(next);
     if (!shown) return;
+    // A note still waiting on another ayah is saved first, not replaced.
+    if (pending.current && pending.current.key !== shown) flush();
     if (pending.current) clearTimeout(pending.current.timer);
     pending.current = { key: shown, text: next, timer: setTimeout(flush, SAVE_MS) };
     if (now) flush();
@@ -37,16 +43,12 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
       <View style={{ flex: 1, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <NotebookPen size={18} color={palette.accent} />
-          <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>{surahNames[surah]} {num(number)}</Text>
+          <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>{surahName(surah)} {num(number)}</Text>
           {!!text.trim() && (
-            <Pressable onPress={() => { edit('', true); onClose(); }} hitSlop={6} accessibilityRole="button" accessibilityLabel="احذف التأمل" style={{ padding: 6 }}>
-              <Trash2 size={20} color={palette.muted} />
-            </Pressable>
+            <IconButton Icon={Trash2} label="احذف التأمل" onPress={() => { edit('', true); onClose(); }} />
           )}
           {!!text.trim() && shown && (
-            <Pressable onPress={() => { flush(); onClose(); shareAyah(shown, palette, text.trim(), true); }} hitSlop={6} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 6 }}>
-              <Send size={20} color={palette.muted} />
-            </Pressable>
+            <IconButton Icon={Send} label="مشاركة" onPress={() => { flush(); onClose(); shareAyah(shown, palette, text.trim(), true); }} />
           )}
         </View>
         {shown && <Text numberOfLines={2} style={{ color: palette.muted, fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{ayahText(shown)}</Text>}

@@ -3,7 +3,8 @@ import { readBookmarks, setBookmarkStorage } from '@shared/bookmarks';
 import { ALL_KINDS_LIST, applyDraft, branchList, draftOf, EMPTY_LIST, listShowing } from './branchList';
 import { compareLinkFor } from '@/app/quran/compare/pairCards';
 import { treeList } from './branches';
-import { aloneNote, besideRows, cardsFor, compareTargetFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
+import type { Branch } from '@shared/quran/branches';
+import { aloneNote, besideRows, cardsFor, shownAyat, compareTargetsFor, partLabel, filteredPairs, filterOfList, landingIndex, listedPairs, listOfFilter, pairMatches, savedIdsOf, toggleCardSaved, visitsOf, type PairFilter } from './compare';
 
 const memory = new Map<string, string>();
 beforeEach(() => {
@@ -26,8 +27,8 @@ describe('compare cards side by side', () => {
   });
 
   it('names a part by its surah and ayat, and the surah that does not tell it', () => {
-    expect(partLabel(2, [30, 31, 32, 33])).toBe('البقرة ٣٠–٣٣');
-    expect(aloneNote(7)).toBe('سورة الأعراف لا تذكر هذا الجزء');
+    expect(partLabel(2, [30, 31, 32, 33])).toBe('البَقَرَةْ ٣٠–٣٣');
+    expect(aloneNote(7)).toBe('سورة الأَعْرَافْ لا تذكر هذا الجزء');
   });
 });
 
@@ -139,7 +140,7 @@ describe('the «also in compare» button under a tree', () => {
     for (const piece of treeList()) {
       const keys = piece.keys;
       const web = compareLinkFor(keys)?.match(/a=(\d+)&b=(\d+)/);
-      const app = compareTargetFor(keys);
+      const app = compareTargetsFor(keys)[0];
       expect(app && [Math.min(app.lead, app.other), Math.max(app.lead, app.other)], piece.id).toEqual(web ? [Number(web[1]), Number(web[2])] : undefined);
       if (app) linked++;
     }
@@ -148,6 +149,73 @@ describe('the «also in compare» button under a tree', () => {
 });
 
 describe('compare card views', () => {
+  it('draws on each side\'s path only its own ayah end signs, besides the box where the other side stops (tree audit R3-A)', async () => {
+    const { compareTree, sideKey } = await import('@shared/quran/braid');
+    const { num } = await import('@shared/quran/arabicNumber');
+    const wrong: string[] = [];
+    for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
+      const sides = shownAyat(card);
+      const { tree } = compareTree(sides);
+      sides.forEach((side, s) => {
+        const key = sideKey(side);
+        const signs: string[] = [];
+        const walk = (node: Branch) => {
+          signs.push(...node.words.filter(word => word.startsWith('﴿') || word === '۝'));
+          node.children.filter(child => child.via?.includes(key)).forEach(walk);
+          if (node.rejoin) walk(node.rejoin);
+        };
+        walk(tree);
+        const own = side.ayat.map(ayah => `﴿${num(ayah.number)}﴾`);
+        const otherLast = `﴿${num(sides[1 - s].ayat.at(-1)!.number)}﴾`;
+        let skipped = false;
+        const mine = signs.filter((sign, i) => skipped || sign !== otherLast || sign === own[i] || !(skipped = true));
+        const fits = (list: string[]) => list.every((sign, i) => sign === '۝' || sign === own[i]);
+        if (!(fits(mine) && mine.length === own.length)) wrong.push(`${card.id} ${s}: ${signs.join('')}`);
+      });
+    }
+    expect(wrong).toEqual([]);
+  }, 120_000);
+  it('shows a stop sign in a shared box only when both sides stop there; the other side\'s sign is never on a path as its own, and a picked path shows its own', async () => {
+    const { compareTree, sideKey } = await import('@shared/quran/braid');
+    const { writtenForms } = await import('@shared/quran/writtenForms');
+    const { bare } = await import('@shared/quran/quranText/ayahWords');
+    const isSign = (word: string) => word.startsWith('\uFD3F') || word === '\u06DD';
+    const wrong: string[] = [];
+    for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
+      const sides = shownAyat(card);
+      const { tree } = compareTree(sides);
+      sides.forEach((side, s) => {
+        const key = sideKey(side);
+        const own = side.ayat.flatMap(ayah => ayah.words);
+        const shown: string[] = [];
+        const picked: string[] = [];
+        const lit = new Set([key]);
+        const walk = (node: Branch) => {
+          // A box with a braid names its writings by the braid's ayah, not by the path (its strands carry the labels).
+          const braided = node.words.some((word, i) => !!node.forms && writtenForms(node, i, word).length > 1);
+          node.words.forEach((word, i) => {
+            if (isSign(word)) return;
+            // What the box draws in full for every side: a braid (two writings) is left to its strands.
+            const forms = node.forms ? writtenForms(node, i, word) : [{ word }];
+            shown.push(forms.length > 1 ? '' : forms[0].word);
+            // And once this side's path is picked: a word only its signs set apart shows this side's signs in full.
+            picked.push(braided || !node.forms ? '' : writtenForms(node, i, word, lit)[0].word);
+          });
+          node.children.filter(child => child.via?.includes(key)).forEach(walk);
+          if (node.rejoin) walk(node.rejoin);
+        };
+        walk(tree);
+        shown.forEach((word, i) => {
+          if (!word || own[i] === undefined || bare(word) !== bare(own[i])) return;
+          const extra = [...word.slice(bare(word).length)].filter(sign => !own[i].includes(sign));
+          if (extra.length) wrong.push(`${card.id} ${s}: ${word} for ${own[i]}`);
+          if (picked[i] && picked[i] !== own[i]) wrong.push(`${card.id} ${s} picked: ${picked[i]} for ${own[i]}`);
+        });
+      });
+    }
+    expect(wrong).toEqual([]);
+  }, 120_000);
+
   it('braids every card so both sides are covered in order', async () => {
     const { braidOf, shownAyat } = await import('./compare');
     for (const pair of listedPairs.slice(0, 60)) for (const card of cardsFor(pair.a, pair.b)) {

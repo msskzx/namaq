@@ -3,16 +3,18 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { searchWords } from '@shared/quran/words';
-import { Text, TextInput } from '@/components/Text';
-import HelpSheet from '@/components/HelpSheet';
-import TopBar from '@/components/TopBar';
+import { searchWords, WORDS_COUNTING, WORDS_SOURCE } from '@shared/quran/words';
+import { Text, TextInput } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import WordSheet from '@/components/WordSheet';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { words } from '@/lib/words';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import Reference from '@/ui/Reference';
+import { sourceById } from '@shared/sources';
 
 /** Words listed with no search (the most frequent) and at most with one. */
 export const WORDS_SHOWN = 40;
@@ -21,6 +23,10 @@ export const WORDS_SHOWN = 40;
  * The website's /quran/words on the phone, kept small (owner, 2026-11-13): search a word, see how often the Quran uses it,
  * and tap it for its ayat. With no search it lists the most frequent words. docs/plans/word-counts-app.md
  */
+/** Where the counts come from, and our page of sources and licences. */
+const source = sourceById(WORDS_SOURCE);
+const WEBSITE = 'https://namaq.vercel.app';
+
 export default function WordsScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
@@ -28,21 +34,25 @@ export default function WordsScreen() {
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<number[] | null>(null);
-  const [help, setHelp] = useState(false);
   const top = useRef(0);
   useTabRetap('words', () => { if (top.current > 4) scroll.current?.scrollTo({ y: 0, animated: true }); else setQuery(''); });
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll refs={() => setHelp(true)} />
+      <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
           <Search size={18} color={palette.muted} />
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" placeholderTextColor={palette.muted} returnKeyType="search"
             accessibilityLabel="ابحث عن كلمة في القرآن"
             style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 44 }} />
-          {query !== '' && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
+          {query !== '' && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
         </View>
+        {/* The page's source in the page, collapsed, as openings and oaths carry theirs (owner, 2026-11-17: no sources icon). */}
+        {source && <View style={{ paddingTop: 8 }}>
+          <Reference title={`المصدر: ${source.title.ar}`} quotes={WORDS_COUNTING.map(text => ({ text }))} palette={palette}
+            links={[{ label: source.link.label, url: source.link.url }, { label: 'المصادر والتراخيص', url: `${WEBSITE}/attributions#${WORDS_SOURCE}` }]} />
+        </View>}
       </View>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom }}>
         {found.length === 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', marginTop: 24 }}>لا كلمة تطابق البحث.</Text>}
@@ -59,7 +69,6 @@ export default function WordsScreen() {
         })}
       </ScrollView>
       <WordSheet lemmas={open} onClose={() => setOpen(null)} palette={palette} />
-      <HelpSheet topic={help ? 'words' : null} onClose={() => setHelp(false)} palette={palette} />
     </View>
   );
 }

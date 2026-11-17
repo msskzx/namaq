@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/trees.json';
+import data from './quranText/corpus';
 import { sharedByAll } from './ayahContext';
 import type { BranchAyah } from './branches';
 import { likeness, markTones } from './wordMatch';
@@ -19,7 +19,7 @@ describe('one rule for words the ayat share', () => {
 
   it('marks «لعنة» in Al-Baqarah 161 and Al Imran 87 as written differently, in the matrix as in the tree', () => {
     const [baqara, imran] = matched('2:161', '3:87');
-    const at = (context: typeof baqara) => context.ayah.words.findIndex(word => word.startsWith('لَعْنَة'));
+    const at = (context: typeof baqara) => context.ayah.words.findIndex(word => word.startsWith('لَعۡنَة'));
     expect(baqara.match!.written).toContain(at(baqara));
     expect(imran.match!.written).toContain(at(imran));
     expect(baqara.match!.exact).not.toContain(at(baqara));

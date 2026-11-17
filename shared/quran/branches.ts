@@ -6,7 +6,8 @@ import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { Likeness } from './wordMatch';
 import { findText, firstLevel, searchQuery, textKeys, type Level, type SearchQuery } from './searchText';
-import type { ReaderPageData } from './readerPage';
+import { mushafPages, type MushafPage } from './readerPage';
+import { ayahWordsOf, wordsOnly } from './quranText/ayahWords';
 
 export type WordFeatures = { gender?: string; number?: string; case?: string; pos?: string };
 
@@ -69,28 +70,11 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
-export function readerAyat(pages: ReaderPageData[], pageOf?: Map<string, number>): BranchAyah[] {
-  const ayat: BranchAyah[] = [];
-  let surah = 0;
-  let words: string[] = [];
-  pages.forEach((data, i) => {
-    for (const item of data.items) {
-      if ('surah' in item) {
-        surah = item.surah;
-        continue;
-      }
-      for (const token of item.line) {
-        if (typeof token === 'number') {
-          ayat.push({ key: `${surah}:${token}`, page: pageOf?.get(`${surah}:${token}`) ?? i + 1, words });
-          words = [];
-        } else {
-          const word = token.split(' ').filter(piece => normalizeWord(piece) !== '').join(' ');
-          if (word) words.push(word);
-        }
-      }
-    }
-  });
-  return ayat;
+/** The ayat as the Madina pages print them (the one Quran text, AGENTS.md): each ayah's words with their waqf and sajda signs, hizb marks left out. */
+export function pageAyat(pages: MushafPage[]): BranchAyah[] {
+  const words = ayahWordsOf(pages);
+  const pageOf = mushafPages(pages);
+  return Object.entries(words).map(([key, tokens]) => ({ key, page: pageOf.get(key)!, words: wordsOnly(tokens) }));
 }
 
 const CONJ: Record<string, string> = { w: 'و', f: 'ف' };
@@ -101,11 +85,17 @@ export function conjunctions(morphology: string): Map<string, string> {
   return found;
 }
 
-export function withConjunctions(ayat: BranchAyah[], morphology: string): BranchAyah[] {
+/** The corpus words a text's word `i` stands for (1-based places); the page's own splits come from quranText/ayahWords `corpusWordsAt`. */
+export type CorpusPlaces = (key: string, i: number) => number[];
+const samePlaces: CorpusPlaces = (_, i) => [i];
+
+export function withConjunctions(ayat: BranchAyah[], morphology: string, places: CorpusPlaces = samePlaces): BranchAyah[] {
   const found = conjunctions(morphology);
   return ayat.map(ayah => {
     const conjs = ayah.words.map((word, i) => {
-      const location = `${ayah.key}:${i + 1}`;
+      const [first] = places(ayah.key, i);
+      if (first === undefined) return null;
+      const location = `${ayah.key}:${first + 1}`;
       const conj = found.get(location) ?? null;
       if (conj && !normalizeWord(word).startsWith(conj)) throw new Error(`${location} starts with ${word}, not ${conj}`);
       return conj;
@@ -115,7 +105,7 @@ export function withConjunctions(ayat: BranchAyah[], morphology: string): Branch
   });
 }
 
-export function withRoots(ayat: BranchAyah[], morphology: string): BranchAyah[] {
+export function withRoots(ayat: BranchAyah[], morphology: string, places: CorpusPlaces = samePlaces): BranchAyah[] {
   const roots = new Map<string, string | null>();
   const lemmas = new Map<string, string | null>();
   const join = (found: Map<string, string | null>, location: string, value: string | null) => {
@@ -126,12 +116,13 @@ export function withRoots(ayat: BranchAyah[], morphology: string): BranchAyah[] 
     join(roots, match[1], match[2].match(/(?:^|\|)ROOT:([^|\r\n]+)/)?.[1] ?? null);
     join(lemmas, match[1], match[2].match(/(?:^|\|)LEM:([^|\r\n]+)/)?.[1] ?? null);
   }
-  const at = (ayah: BranchAyah, i: number) => {
-    const location = `${ayah.key}:${i + 1}`;
+  const at = (ayah: BranchAyah, i: number) => places(ayah.key, i).map(place => {
+    const location = `${ayah.key}:${place + 1}`;
     if (!roots.has(location)) throw new Error(`Missing STEM annotation at ${location}`);
     return location;
-  };
-  return ayat.map(ayah => ({ ...ayah, roots: ayah.words.map((_, i) => roots.get(at(ayah, i))!), lemmas: ayah.words.map((_, i) => lemmas.get(at(ayah, i))!) }));
+  });
+  const of = (found: Map<string, string | null>, locations: string[]) => locations.map(location => found.get(location)!).filter(Boolean).join('+') || null;
+  return ayat.map(ayah => ({ ...ayah, roots: ayah.words.map((_, i) => of(roots, at(ayah, i))), lemmas: ayah.words.map((_, i) => of(lemmas, at(ayah, i))) }));
 }
 
 const rootPartition = (ayah: BranchAyah, length: number) => {
@@ -302,6 +293,14 @@ export function runOn(from: string, next: Pick<BranchAyah, 'key' | 'words' | 'ro
   };
 }
 
+const runParts = (from: string, run: BranchAyah[], basmala: RunOn | undefined) => run.map((next, j) => runOn(j ? run[j - 1].key : from, next, basmala));
+const runWords = (run: BranchAyah[], parts: RunOn[]) => parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]);
+
+/** The words an ayah runs on with (`next`): the ayat after it up to `through`, a basmala before a new surah, ayah ends between. */
+export function nextWords(from: string, run: BranchAyah[], basmala: RunOn | undefined): string[] {
+  return runWords(run, runParts(from, run, basmala));
+}
+
 /** The ayat that follow, in mushaf order and across surahs, until this ayah's run parts from every identical twin's. */
 function following(ayah: BranchAyah, twins: BranchAyah[], after: (key: string) => BranchAyah | undefined): BranchAyah[] {
   const run = (from: BranchAyah, length: number) => {
@@ -328,11 +327,11 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
       const twins = own.filter(other => other.key !== ayah.key && identical(own[i], other));
       const run = twins.length ? following(ayah, twins, after) : (continues(ayah, group) || continues(own[i], own)) && after(ayah.key) ? [after(ayah.key)] : [];
       if (!run.length) return ayah;
-      const parts = run.map((next, j) => runOn(j ? run[j - 1].key : ayah.key, next, basmala));
+      const parts = runParts(ayah.key, run, basmala);
       const joined = <T,>(pick: (next: RunOn) => T[]) => parts.flatMap((next, j) => [...(j ? [null] : []), ...pick(next)]);
       return {
         ...ayah,
-        next: parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]),
+        next: runWords(run, parts),
         ...(run[0].roots && { nextRoots: joined(next => next.roots!) }),
         ...(run[0].lemmas && { nextLemmas: joined(next => next.lemmas!) }),
         through: run[run.length - 1].key,
@@ -383,6 +382,9 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
 }
 
 /** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
+/** A tree the owner keeps to its own ayat (branchVerdicts `ayat: 'own'`): no ayah reads on into the one after it. */
+export const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
+
 export const ownEnds = (node: Branch): Record<string, string> => Object.fromEntries(keys(node).map(key => [key, key]));
 
 /** Each ayah's end one ayah on, for a card kept two ayat deep (twoAyat); `has` says which ayat exist, so a surah's last ayah ends on itself. */

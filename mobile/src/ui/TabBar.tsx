@@ -1,0 +1,81 @@
+import { useEffect } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router, useSegments } from 'expo-router';
+import type { BottomTabBarProps } from 'expo-router/js-tabs';
+import { BookOpen, Feather, House, LibraryBig, type LucideProps } from 'lucide-react-native';
+import TreeIcon from '@/components/TreeIcon';
+import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
+import { usePalette } from '@/lib/theme';
+import { retapTab } from '@/lib/tabRetap';
+import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
+import { openPage, tapOnOpen } from '@/lib/tabGroups';
+
+// Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
+// read left to right they are library, quizzes, home, mushaf, Quran. Keys are the tab routes; home, library and Quran hold page stacks (lib/tabGroups.ts).
+// The library took the utilities' place (owner, 2026-11-17); the utilities open from the compass in home's top bar.
+const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
+  { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
+  { key: 'read', label: 'المصحف', Icon: BookOpen },
+  { key: '(home)', label: 'الرئيسية', Icon: House },
+  { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
+  { key: '(library)', label: 'المكتبة', Icon: LibraryBig },
+];
+
+// Instagram-style (owner, 2026-11-10): while a page scrolls down the bar gets a little smaller, and it comes back on the way up.
+const FULL = TAB_BAR.height;
+const SMALL = 44;
+const ICON_SMALL = 0.8;
+
+export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
+  const palette = usePalette();
+  const insets = useSafeAreaInsets();
+  const immersive = useImmersive();
+  const compact = useCompact();
+  const shrink = useHidden(compact);
+  // A new tab starts with the bar at full size.
+  const segments = useSegments();
+  const open = state.routes[state.index]?.name ?? '(home)';
+  const { page } = openPage(segments);
+  useEffect(() => { setCompact(false); }, [page]);
+  const row = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [FULL, SMALL]) }));
+  const icon = useAnimatedStyle(() => ({ transform: [{ scale: interpolate(shrink.value, [0, 1], [1, ICON_SMALL]) }] }));
+  // A see-through pill floating over the page (owner, 2026-11-13); pages leave room for it with useTabBarSpace. On the mushaf it hides while reading.
+  // Reading the mushaf, it slides down off the screen as every bar hides (ui/motion), and back up on a tap.
+  const away = page === 'read' && immersive;
+  const slide = useSlideAway(away, 'bottom', FULL + tabBarBottom(insets.bottom) + 24);
+  return (
+    <Animated.View {...hiddenProps(away, 'box-none')} style={[{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tabBarBottom(insets.bottom),
+      borderRadius: 999, boxShadow: '0 6px 24px rgba(0, 0, 0, 0.3)' }, slide.content]}>
+      <Animated.View style={[{ flexDirection: 'row', paddingHorizontal: 6, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }, row]}>
+        <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
+        <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
+        {BUTTONS.map(({ key, label, Icon }) => {
+          const active = open === key;
+          // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts); from the search it goes home.
+          // Another button opens its tab on the page that was open there last.
+          const press = () => {
+            if (active) {
+              if (tapOnOpen(page) === 'retap') retapTab(page);
+              else router.back();
+              return;
+            }
+            const route = state.routes.find(item => item.name === key);
+            if (route) navigateToTab(route.key);
+          };
+          return (
+            <Pressable key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: active }} accessibilityLabel={label}
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Animated.View style={icon}>
+                <Icon size={26} color={active ? palette.accent : palette.muted} strokeWidth={active ? 2.25 : 1.75} />
+              </Animated.View>
+            </Pressable>
+          );
+        })}
+      </Animated.View>
+    </Animated.View>
+  );
+}

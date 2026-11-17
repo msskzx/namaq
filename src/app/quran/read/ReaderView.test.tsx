@@ -6,6 +6,7 @@ import { NavSlotElement, RailSlotElement } from '@/components/common/NavBar';
 import { usePageHelp } from '@/components/common/SettingsHelp';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { MushafPage } from '@shared/quran/readerPage';
+import { setPenRule } from '@/lib/penRule';
 import ReaderView, { MarkedReaderView } from './ReaderView';
 import SurahIndex from './SurahIndex';
 
@@ -94,7 +95,7 @@ describe('ReaderView', () => {
     render(<ReaderView page={343} pages={one(343, { juz: 18, items: [{ line: ['مِن', 5] }] }, 23)} names={names} />);
     const page = screen.getByRole('region', { name: 'الصفحة ٣٤٣' });
     expect(page.textContent).toContain('الجزء الثامن عشر');
-    expect(page.textContent).toContain('المؤمنون');
+    expect(page.textContent).toContain(names[23]);
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
 
@@ -280,6 +281,8 @@ describe('Recite mode', () => {
 
   it('writes the first and last words of the next ayah in its boxes, moving on by itself, then grades it', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ', 'فِيهِۛ', 'هُدٗى', 'لِّلۡمُتَّقِينَ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const boxes = () => screen.getAllByRole('button', { name: /اكتب هذه الكلمة|كلمة مكتوبة/ });
@@ -308,6 +311,8 @@ describe('Recite mode', () => {
 
   it('leaves an ayah written right off the forgotten shelf', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     const { container } = render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const field = screen.getByLabelText('اكتب الكلمة');
@@ -320,6 +325,8 @@ describe('Recite mode', () => {
 
   it('goes back a box with backspace in an empty box', () => {
     const page = data({ line: ['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 2] });
+    // The pen set to first and last words (the whole ayah is the default).
+    setPenRule('ends');
     render(<ReaderView page={2} pages={one(2, page, 2)} names={names} surahs={surahs} recite={{ start: '2:2', shown: null, words: 0 }} />);
     fireEvent.click(screen.getByRole('button', { name: 'اكتب أول كل آية وآخرها' }));
     const field = screen.getByLabelText('اكتب الكلمة');
@@ -399,14 +406,15 @@ describe('Recite mode', () => {
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:1'].forgot).toBe(1);
   });
 
-  it('starts reciting from the marked ayah with the recite button', () => {
+  // The top bar recites from the page's start even with an ayah marked (owner, 2026-11-17).
+  it('starts reciting from the page start with the recite button, even with an ayah marked', () => {
     media(true);
     const rail = document.createElement('div');
     const { container } = render(<RailSlotElement.Provider value={rail}>
       <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} mark={{ surah: 2, ayah: 2 }} />
     </RailSlotElement.Provider>);
     fireEvent.click(within(rail).getByRole('button', { name: /^تسميع/ }));
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
   });
 
   it('keeps the rest of an ayah that runs onto the next page hidden there', () => {
@@ -473,7 +481,7 @@ describe('SurahIndex', () => {
     render(<SurahIndex surahs={surahs} />);
     const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: 'البقرة ٢٥٥' } });
-    expect(screen.getByText('افتح البقرة ٢٥٥').closest('a')?.getAttribute('href')).toBe('/quran/read/ayah/2/255');
+    expect(screen.getByText('افتح البَقَرَةْ ٢٥٥').closest('a')?.getAttribute('href')).toBe('/quran/read/ayah/2/255');
     expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ١', 'الجزء ٢', 'الجزء ٣']);
     fireEvent.submit(search.closest('form')!);
     expect(push).toHaveBeenCalledWith('/quran/read/ayah/2/255');
@@ -490,7 +498,7 @@ describe('SurahIndex', () => {
     expect(searchQuran).toHaveBeenCalledWith('الحي القيوم');
     expect([...results.querySelectorAll('a')].map(a => a.getAttribute('href'))).toEqual(['/quran/read/ayah/2/255', '/quran/read/ayah/3/2']);
     expect([...results.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['ٱلْحَىُّ', 'ٱلْقَيُّومُ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ']);
-    expect(results.textContent).toContain('البقرة ٢٥٥');
+    expect(results.textContent).toContain('البَقَرَةْ ٢٥٥');
     expect(screen.queryByText('لا توجد سورة بهذا الاسم أو الرقم.')).toBeNull();
   });
 

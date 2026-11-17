@@ -224,6 +224,10 @@
    "view": "matrix",
    "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
   },
+  "2:116|18:4": {
+   "view": "matrix",
+   "why": "owner 2026-11-17: drop this tree; al-Kahf 4 stops inside the shared box, so al-Baqara's path seems to pass its sign"
+  },
   "2:118|6:37": {
    "view": "matrix",
    "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"

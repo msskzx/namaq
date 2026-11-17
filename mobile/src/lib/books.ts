@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
-import { BOOKS, bookOf, bookPath, isBookId, type BookId, type BookKind } from '@shared/books';
+import { bookOf, bookPath, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
-import { WEBSITE } from './branches';
+import { WEBSITE } from './website';
 
 /**
  * The person's books (shared/books.ts): which are on the phone, and downloading or removing one. A built-in book is
@@ -13,12 +13,16 @@ export type BookState = 'on' | 'off' | 'downloading' | 'failed';
 
 const HIDDEN = 'books-hidden';
 const SAVED = 'books-saved';
-const ids = (key: string) => (readJson<unknown[]>(key) ?? []).filter(isBookId);
+const ids = (key: string) => (readJson(key, Array.isArray) ?? []).filter(isBookId);
 
 let hidden = ids(HIDDEN);
 let saved = ids(SAVED);
 const busy = new Map<BookId, 'downloading' | 'failed'>();
 const loaded = new Map<BookId, unknown>();
+/** Grows each time a book is installed or removed, so what was built from its old copy is built again (readerBook.ts). */
+const revisions = new Map<BookId, number>();
+export const bookRevision = (id: BookId) => revisions.get(id) ?? 0;
+const revise = (id: BookId) => revisions.set(id, bookRevision(id) + 1);
 const listeners = new Set<() => void>();
 let version = 0;
 const changed = () => { version++; listeners.forEach(listener => listener()); };
@@ -33,12 +37,15 @@ export function bookState(id: BookId): BookState {
 /** Rerenders when any book comes or goes; read each book with bookState. */
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
-/** The books of a kind the person keeps, in the list's order. */
-export const booksOn = (kind: BookKind) => BOOKS.filter(book => book.kind === kind && bookState(book.id) === 'on');
-
 const folder = () => new Directory(Paths.document, 'books');
-const readable = (data: unknown) => {
-  if (!data || typeof data !== 'object' || !Array.isArray((data as { entries?: unknown }).entries)) throw new Error('not a book');
+/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
+const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
+/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it. */
+const readable = (id: BookId, data: unknown) => {
+  const book = data as { source?: unknown; entries?: unknown } | null;
+  const at = TEXT_AT[id] ?? -1;
+  if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
+    || !book.entries.every(entry => Array.isArray(entry) && typeof entry[at] === 'string')) throw new Error('not a book');
   return data;
 };
 const fileOf = (id: BookId) => new File(folder(), `${id}.json`);
@@ -48,6 +55,7 @@ export async function addBook(id: BookId) {
   if (bookOf(id).builtIn) {
     hidden = hidden.filter(other => other !== id);
     writeJson(HIDDEN, hidden);
+    revise(id);
     changed();
     return;
   }
@@ -58,17 +66,25 @@ export async function addBook(id: BookId) {
     if (web) {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`book ${id}: ${response.status}`);
-      loaded.set(id, readable(await response.json()));
+      loaded.set(id, readable(id, await response.json()));
     } else {
       const dir = folder();
       if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
-      const file = await File.downloadFileAsync(url, fileOf(id), { idempotent: true });
-      // A cut-off or wrong download is not kept: the book must read as its data.
-      try { loaded.set(id, readable(JSON.parse(await file.text()))); } catch (error) { file.delete(); throw error; }
+      // Downloaded beside the book and moved over it only once it reads as a book, so a cut-off or wrong download never replaces it.
+      const part = new File(dir, `${id}.json.part`);
+      try {
+        await File.downloadFileAsync(url, part, { idempotent: true });
+        const data = readable(id, JSON.parse(await part.text()));
+        part.moveSync(fileOf(id), { overwrite: true });
+        loaded.set(id, data);
+      } finally {
+        try { const left = new File(dir, `${id}.json.part`); if (left.exists) left.delete(); } catch {}
+      }
     }
     saved = [...saved.filter(other => other !== id), id];
     writeJson(SAVED, saved);
     busy.delete(id);
+    revise(id);
   } catch {
     busy.set(id, 'failed');
   }
@@ -76,6 +92,7 @@ export async function addBook(id: BookId) {
 }
 
 export function removeBook(id: BookId) {
+  revise(id);
   if (bookOf(id).builtIn) {
     hidden = [...hidden.filter(other => other !== id), id];
     writeJson(HIDDEN, hidden);
@@ -94,7 +111,7 @@ export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
   try {
-    const data = web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text());
+    const data = readable(id, web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
     return data as T;
   } catch {

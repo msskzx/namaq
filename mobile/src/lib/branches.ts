@@ -1,10 +1,11 @@
-import corpus from '@shared/data/quran/trees.json';
+import { WEBSITE } from './website';
+import corpus from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { Likeness } from '@shared/quran/wordMatch';
 import { ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
-import { ayahEnds, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ownAyat, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
@@ -14,6 +15,7 @@ import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { stepTime } from '@shared/quran/readPlan';
 import type { Beat } from './growth';
 import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
 /** Which word positions of an ayah every ayah shares, by how alike they are (shared/quran/wordMatch.ts). */
@@ -27,7 +29,7 @@ export type Matches = Record<string, Shared>;
 export type TreeCard = { piece: BranchPiece; presentation: Presentation; matches: Matches };
 
 export const surahs = surahRows;
-export const surahNames: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.name]));
+export const surahNames: Record<number, string> = SURAH_NAMES;
 
 const all = corpus.ayat as BranchAyah[];
 let ayatByKey: Map<string, BranchAyah> | undefined;
@@ -53,7 +55,6 @@ const cards = new Map<string, TreeCard>();
 const curatedEnds = new WeakMap<Presentation, Record<string, string>>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
-const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
 
 export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'range'> = EMPTY_LIST): TreeCard {
   const id = JSON.stringify([piece.id, piece.keys.length, state.filters, state.range]);
@@ -209,7 +210,6 @@ export function withPathReading(presentation: Presentation, beats: Beat[]): Beat
 
 export const isSaved = (piece: BranchPiece, list = readBookmarks()) => isSavedIn(piece, list);
 export const toggleSaved = (piece: BranchPiece) => toggleBookmark({ id: piece.id, text: piece.text, href: branchesHref(piece.id) }, aliasesOf(piece));
-export const WEBSITE = 'https://namaq.vercel.app';
 
 /** What a growing tree draws before its root for each ayah, and after each ayah's end, matching what BranchTree draws. */
 export function growthParts(presentation: Presentation, around: Around | undefined): { starts: { id: string; keys: string[] }[]; afters: Record<string, string> } {

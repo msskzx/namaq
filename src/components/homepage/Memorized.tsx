@@ -6,14 +6,14 @@ import Toggle from '@/components/common/Toggle';
 import Segmented from '@/components/common/Segmented';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, serverMemorized, serverMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
 import { num } from '@shared/quran/arabicNumber';
-import surahRows from '@shared/data/quran/surahs.json';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 /**
  * «ما أحفظه» on the website, as the app's (mobile/src/components/Memorized.tsx): the range picker, the settings section
  * with its two preferences, and the home card that asks once. Kept in this browser only, never shown or counted.
  */
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 export const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized, serverMemorized);
 
 /** A short line for what is picked: «القرآن كله», «الأجزاء ٢٧، ٢٨…», or a nudge while nothing is picked. */

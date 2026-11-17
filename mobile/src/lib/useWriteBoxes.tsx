@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { TextInput } from 'react-native';
-import { freshBoxes, gradeWritten, nextBox, previousBox, typeInBox, type Boxes } from '@shared/quran/writeAyah';
+import { clearLastBox, freshBoxes, gradeWritten, nextBox, previousBox, typeInBox, type Boxes } from '@shared/quran/writeAyah';
 
 export type Graded = ReturnType<typeof gradeWritten>;
 
@@ -8,7 +8,7 @@ export type Graded = ReturnType<typeof gradeWritten>;
  * The write quiz's boxes (the reader's write mode and the home recall card): what each box holds, the box being
  * written, and the out-of-sight field the keyboard types into. `onDone` gets the grade once the last box is written.
  */
-export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean; onDone: (graded: Graded) => void }) {
+export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean; onDone: (graded: Graded, typed: Record<number, string>) => void }) {
   const [boxes, setBoxes] = useState<Boxes>(() => freshBoxes(asked));
   const input = useRef<ComponentRef<typeof TextInput>>(null);
   useEffect(() => {
@@ -17,7 +17,7 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
   }, [ayah]); // eslint-disable-line react-hooks/exhaustive-deps
   const step = ({ boxes: next, finished }: { boxes: Boxes; finished: boolean }) => {
     setBoxes(next);
-    if (finished) onDone(gradeWritten(asked, next.typed, words));
+    if (finished) onDone(gradeWritten(asked, next.typed, words), next.typed);
   };
   const onKey = (key: string) => {
     if (key !== 'Backspace' || boxes.current === null || boxes.typed[boxes.current]) return;
@@ -33,6 +33,8 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
   return {
     typed: boxes.typed,
     current: boxes.current,
+    /** Empties the last box written and writes it again; false when none is written. */
+    clearLast: () => { const cleared = clearLastBox(boxes, asked); if (cleared) { setBoxes(cleared); input.current?.focus(); } return !!cleared; },
     /** A tap on a box: write it. */
     pick: (at: number) => { setBoxes(current => ({ ...current, current: at })); input.current?.focus(); },
     focus: () => input.current?.focus(),

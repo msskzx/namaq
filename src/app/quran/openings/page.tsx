@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import treeData from '@shared/data/quran/trees.json';
-import surahs from '@shared/data/quran/surahs.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { CONDITION_SPANS, conditionLines, openingCards } from '@shared/quran/openingKinds';
 import type { BranchAyah } from '@shared/quran/branches';
 import OpeningsView, { type ConditionText } from './OpeningsView';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export const metadata: Metadata = {
   title: 'افتتاح السور',
@@ -14,7 +14,7 @@ const ayahOf = (key: string) => byKey.get(key);
 const words = (key: string) => byKey.get(key)?.words ?? [];
 
 export default function QuranOpeningsPage() {
-  const names = Object.fromEntries(surahs.map(s => [s.number, s.name]));
+  const names = SURAH_NAMES;
   const conditions: ConditionText = Object.fromEntries(Object.keys(CONDITION_SPANS).map(surah => [surah, conditionLines(Number(surah)).map(line => ({ ...line, words: words(line.key) }))]));
   return (
     <div dir="rtl" className="w-full max-w-3xl mx-auto px-4 py-6 flex flex-col gap-4 text-[var(--home-ink)]">

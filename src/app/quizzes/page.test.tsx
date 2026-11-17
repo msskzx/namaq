@@ -91,17 +91,24 @@ const branchQuestion = {
 const availabilityKeys: string[] = [];
 let availableSupply = 5;
 
-vi.mock('swr', () => ({
-  default: (key: string | null) => {
-    if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
-    if (key?.startsWith('/api/quiz/availability')) {
-      const available = nav.getUrl().includes('topic=AYAT') ? 2 : availableSupply;
-      return { data: { available, lengths: [5, 10, 15].filter((length) => length <= available) }, error: null, isLoading: false };
-    }
-    if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
-    return { data: undefined, error: null, isLoading: false };
-  },
-}));
+vi.mock('swr', async () => {
+  // Yasin's first page, for a question asked on the mushaf page (QuizPage).
+  const yasin = (await import('@shared/data/quran/mushaf/440.json')).default;
+  return {
+    default: (rawKey: unknown) => {
+      const key = typeof rawKey === 'string' ? rawKey : null;
+      if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
+      if (key?.startsWith('/api/quiz/availability')) {
+        const available = nav.getUrl().includes('topic=AYAT') ? 2 : availableSupply;
+        return { data: { available, lengths: [5, 10, 15].filter((length) => length <= available) }, error: null, isLoading: false };
+      }
+      if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
+      if (key === '/api/home/feed?ayah=36:2') return { data: { page: 440, top: 35, data: yasin, previous: null }, error: null, isLoading: false };
+      return { data: undefined, error: null, isLoading: false };
+    },
+  };
+});
+
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
 
@@ -125,12 +132,12 @@ describe('QuizzesPage', () => {
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-      fireEvent.change(screen.getByLabelText('Node 1'), { target: { value: 'فينبئهم' } });
+      fireEvent.change(screen.getAllByLabelText('Node 1')[0], { target: { value: 'فينبئهم' } });
       fireEvent.click(screen.getByRole('button', { name: 'Show answer' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       expect(screen.queryByRole('textbox')).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-      expect(screen.getByLabelText('Node 1')).toHaveProperty('value', '');
+      expect(screen.getAllByLabelText('Node 1')[0]).toHaveProperty('value', '');
       expect(screen.getByRole('button', { name: 'Question 1 - unanswered' })).toBeTruthy();
       fireEvent.click(screen.getByRole('button', { name: 'Exit to setup' }));
       expect(nav.getUrl()).toBe('/quizzes?topic=BRANCHES');
@@ -176,7 +183,7 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(screen.getByText('Score: 0 / 5 (0%)')).toBeTruthy();
-    expect(screen.getByText('Not passed')).toBeTruthy();
+    expect(screen.queryByText('Not passed')).toBeNull();
     expect(screen.queryByText('No answer')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Review questions' }));
     expect(screen.getByText('No answer')).toBeTruthy();
@@ -202,8 +209,7 @@ describe('QuizzesPage', () => {
     render(<QuizzesPage />);
     const modes = screen.getByRole('navigation', { name: 'Quiz mode' });
     const links = within(modes).getAllByRole('link');
-    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party', '/quran/read/recite', '/quizzes/openings', '/quran/read?write=1']);
-    expect(within(links[2]).getByText('Recite')).toBeTruthy();
+    expect(links.map(link => link.getAttribute('href'))).toEqual(['/quizzes?topic=BRANCHES', '/quizzes/party']);
     expect(within(links[0]).getByText('Solo quiz')).toBeTruthy();
     expect(within(links[1]).getByText('Party quiz')).toBeTruthy();
     cleanup();
@@ -240,12 +246,13 @@ describe('QuizzesPage', () => {
       ...original, key: 'SURAH:2:34', family: 'SURAH', promptArabic: 'في أي سورة هذه الآية؟',
       choices: [{ value: '20', labelArabic: 'طه' }, { value: '2', labelArabic: 'البقرة' }, { value: '18', labelArabic: 'الكهف' }, { value: '17', labelArabic: 'الإسراء' }],
       correctAnswer: '2',
-      ...{ quran: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'أَبَىٰ'], ayahKey: '2:34', alike: { 17: { key: '17:61', words: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'قَالَ'] } } },
+      ...{ quran: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'أَبَىٰ'], ayahKey: '2:34', page: { title: 'hidden' as const }, alike: { 17: { key: '17:61', words: ['فَسَجَدُوٓا۟', 'إِلَّآ', 'إِبْلِيسَ', 'قَالَ'] } } },
     };
     try {
       nav.reset('/quizzes?topic=SURAH&length=5');
       render(<QuizzesPage />);
-      expect(document.querySelectorAll('p.font-quran span')).toHaveLength(4);
+      // Asked on the ayah's mushaf page (QuizPage), not as a line of text (owner, 2026-11-17).
+      expect(document.querySelector('p.font-quran')).toBeNull();
       expect(screen.queryByRole('link', { name: 'In the mushaf' })).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'الإسراء' }));
       expect(screen.getByText('Incorrect')).toBeTruthy();
@@ -257,24 +264,32 @@ describe('QuizzesPage', () => {
   });
 
   it('keeps a recited snippet\'s rest and choices hidden until shown, and saves «نسيتها» as forgotten', () => {
+    // The mushaf page measures itself.
+    vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
     const original = questions[0];
     questions[0] = {
       ...original, key: 'RECITE:36:1', family: 'RECITE', promptArabic: 'سمّع بقية الآية',
       choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }], correctAnswer: '1',
-      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2' },
+      ...{ quran: ['وَٱلْقُرْءَانِ'], reveal: ['ٱلْحَكِيمِ'], ayahKey: '36:2', page: { shows: 1, recite: true } },
     };
     try {
       nav.reset('/quizzes?topic=RECITE&length=5');
       render(<QuizzesPage />);
-      expect(document.querySelector('p.font-quran')!.textContent).toMatch(/…$/);
+      expect(document.querySelector('p.font-quran')).toBeNull();
       expect(screen.queryByRole('button', { name: 'نسيتها' })).toBeNull();
       expect(screen.queryByRole('button', { name: 'Show answer' })).toBeNull();
-      fireEvent.click(screen.getByRole('button', { name: 'Show the ayah' }));
+      // Shown with recite mode's own bar, as in the mushaf; it stops at the ayah's end.
+      expect(screen.getByRole('toolbar', { name: 'Recite tools' })).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Stop reciting' })).toBeNull();
+      // The words the question shows are where it starts: a step back cannot hide them.
+      expect((screen.getByRole('button', { name: 'Step back' }) as HTMLButtonElement).disabled).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Reveal the next ayah' }));
       fireEvent.click(screen.getByRole('button', { name: 'نسيتها' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       expect(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')['36:2'].forgot).toBe(1);
     } finally {
       questions[0] = original;
+      vi.unstubAllGlobals();
     }
   });
 
@@ -397,7 +412,7 @@ describe('QuizzesPage', () => {
     }
   });
 
-  it('reports a rounded percentage with a pass state at the inclusive threshold', () => {
+  it('reports a rounded percentage with no passed or failed word (owner, 2026-11-17)', () => {
     nav.reset('/quizzes?topic=PEOPLE&length=5');
     render(<QuizzesPage />);
 
@@ -409,7 +424,7 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(screen.getByText('Score: 3 / 5 (60%)')).toBeTruthy();
-    expect(screen.getByText('Passed')).toBeTruthy();
+    expect(screen.queryByText('Passed')).toBeNull();
   });
 
   it('keeps a tree answer with no right leaf marked incorrect', () => {
@@ -418,7 +433,7 @@ describe('QuizzesPage', () => {
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'خطأ' } });
+      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'خطأ' } });
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
     } finally {
@@ -433,15 +448,14 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
 
-      expect(screen.getAllByRole('textbox')).toHaveLength(4);
-      fireEvent.change(screen.getByLabelText('Node 1'), { target: { value: 'فينبئهم' } });
-      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'فيحلفون له' } });
+      // Matrix rows: the node 58:6 and 58:7 share is asked in both their rows.
+      expect(screen.getAllByRole('textbox')).toHaveLength(5);
+      fireEvent.change(screen.getAllByLabelText('Node 1')[0], { target: { value: 'فينبئهم' } });
+      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'فيحلفون له' } });
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
 
       expect(screen.getByRole('button', { name: 'Question 1 - partly correct' })).toBeTruthy();
-      for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
-        expect(document.body.textContent).toContain(words);
-      }
+      expect(screen.queryByRole('region', { name: 'Answer tree' })).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
       expect(screen.getByText('Score: 2 / 8 (25%)')).toBeTruthy();
@@ -457,16 +471,13 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
       for (const [index, value] of ['فينبئهم', 'بما عملوا', 'على كل شي شهيد', 'فيحلفون له'].entries()) {
-        fireEvent.change(screen.getByLabelText(`Node ${index + 1}`), { target: { value } });
+        fireEvent.change(screen.getAllByLabelText(`Node ${index + 1}`)[0], { target: { value } });
       }
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
       fireEvent.click(screen.getByRole('button', { name: 'Next' }));
       fireEvent.click(screen.getByRole('button', { name: 'Question 1 - correct' }));
       expect(screen.queryByRole('textbox')).toBeNull();
-      for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
-        expect(document.body.textContent).toContain(words);
-      }
       fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
       expect(screen.getByText('Score: 4 / 8 (50%)')).toBeTruthy();
@@ -532,7 +543,7 @@ describe('QuizzesPage', () => {
   it('offers one to ten answers per tree, defaulting to three, and sends the choice with the quiz', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);
-    const group = screen.getByRole('group', { name: 'Answers per tree' });
+    const group = screen.getByRole('group', { name: 'Answers per question' });
     expect(within(group).getAllByRole('button').map((button) => button.textContent)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
     expect(within(group).getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
     expect(screen.getAllByText('You type this')).toHaveLength(3);
@@ -549,8 +560,8 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
       expect(screen.getAllByRole('textbox')).toHaveLength(1);
-      expect(screen.getByText('فَيُنَبِّئُهُمْ')).toBeTruthy();
-      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'فيحلفون له' } });
+      expect(document.body.textContent).toContain('فَيُنَبِّئُهُمْ');
+      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'فيحلفون له' } });
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
     } finally {

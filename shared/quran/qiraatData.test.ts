@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import data from '../data/quran/qiraat.json';
 import corrections from '../../scripts/quran/qiraatCorrections.json';
 import { qiraatOf } from './qiraatData';
+import { madinaSpelling } from '../../scripts/quran/madinaSpelling';
 
 const word = (key: string, at: number) => qiraatOf(key).find(w => w.at[0] === at)!;
 
@@ -28,7 +29,7 @@ describe('al-Nashr source corrections', () => {
     it(`${key} gives Shuba only the Shatibiyya جبرئل and keeps Ibn Kathir separate`, () => {
       const readings = word(key, at).readings;
       expect(readings[1].rawis).toEqual([3, 4]);
-      expect(readings.filter(r => r.rawis.includes(9)).map(r => r.text)).toEqual([`${prefix}جَبْرَئِلَ`]);
+      expect(readings.filter(r => r.rawis.includes(9)).map(r => r.text)).toEqual([`${prefix}جَبۡرَئِلَ`]);
     });
   }
 
@@ -48,7 +49,7 @@ describe('al-Nashr source corrections', () => {
   it('2:177 anchors the differing case on البر after the rub marker and ليس', () => {
     expect(word('2:177', 2)).toEqual({ at: [2, 2], readings: [
       { text: 'ٱلۡبِرَّ', rawis: [10, 11, 12] },
-      { text: 'ٱلْبِرُّ', rawis: [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20] },
+      { text: 'ٱلۡبِرُّ', rawis: [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20] },
     ] });
   });
 });
@@ -59,7 +60,8 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
   it('keeps every corrected word in the data and names each riwaya once in it', () => {
     for (const { ayah, replacement } of corrections) {
       if (!replacement) continue;
-      expect(word(ayah, replacement.at[0])).toEqual(replacement);
+      // Stored in the Madina page's spelling, as the build writes it.
+      expect(word(ayah, replacement.at[0])).toEqual({ ...replacement, readings: replacement.readings.map(r => ({ ...r, text: madinaSpelling(r.text) })) });
       expect(replacement.readings.flatMap(r => r.rawis).sort((a, b) => a - b)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
     }
   });
@@ -80,7 +82,7 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
   });
 
   it('adds the words the dump lacked', () => {
-    expect(word('5:2', 28).readings[1]).toEqual({ text: 'شَنْـَٔانُ', rawis: [7, 8, 9, 15, 16] });
+    expect(word('5:2', 28).readings[1]).toEqual({ text: 'شَنۡـَٔانُ', rawis: [7, 8, 9, 15, 16] });
     expect(word('15:41', 3).readings[1]).toEqual({ text: 'عَلِيٌّ', rawis: [17, 18] });
     expect(rawis('112:4', 3)).toEqual([[10], [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16], [11, 12, 17, 18, 19, 20]]);
     expect(rawis('2:67', 12)[2]).toEqual([11, 12, 19, 20]);
@@ -90,7 +92,7 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
     for (const [key, at] of [['20:13', 0], ['23:52', 0], ['25:69', 0], ['42:35', 0], ['70:4', 0], ['84:12', 0]] as const) {
       for (const r of word(key, at).readings) expect(r.text.split(' ')).toHaveLength(1);
     }
-    expect(word('23:14', 9).readings[1].text).toBe('عَظْمًا');
+    expect(word('23:14', 9).readings[1].text).toBe('عَظۡمًا');
     expect(word('5:107', 11).readings[0].rawis).toEqual([10]);
   });
 });

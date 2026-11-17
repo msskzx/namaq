@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { Search, X, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
-import TopBar from '@/components/TopBar';
+import TopBar from '@/ui/TopBar';
 import { useTabRetap } from '@/lib/tabRetap';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
-import LoadingDots from '@/components/LoadingDots';
+import LoadingDots from '@/ui/LoadingDots';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
 import { aliasesOf, branchList, EMPTY_LIST, isFiltered, listShowing, openingIndex, type ListState } from '@/lib/branchList';
@@ -19,24 +19,19 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useIntent } from '@/lib/intent';
 import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
 import { around as aroundSetting, branchView, listState } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
+import { isRecord, readJson, writeJson } from '@/lib/storage';
 import { usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
-  return (
-    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label} accessibilityState={on === undefined ? undefined : { selected: on }}
-      style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: on ? 1 : 0, borderColor: palette.accent }}>
-      <Icon size={22} color={on ? palette.accent : palette.muted} />
-      {dot && <View style={{ position: 'absolute', top: 7, end: 7, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-    </Pressable>
-  );
+  return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} dot={dot} />;
 }
 
 function Chip({ text, onClear, palette }: { text: string; onClear: () => void; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: palette.rule, borderRadius: 16, paddingStart: 12, paddingEnd: 4, height: 32, flexShrink: 1 }}>
       <Text style={{ color: palette.ink, fontSize: 14, flexShrink: 1 }} numberOfLines={1}>{text}</Text>
-      <Pressable onPress={onClear} accessibilityRole="button" accessibilityLabel={`إزالة ${text}`} hitSlop={8} style={{ padding: 4 }}><X size={14} color={palette.muted} /></Pressable>
+      <IconButton Icon={X} label={`إزالة ${text}`} onPress={onClear} size="small" />
     </View>
   );
 }
@@ -54,7 +49,7 @@ export default function BranchesScreen() {
   const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [pieces, setPieces] = useState<BranchPiece[] | null>(null);
-  useEffect(() => loadPrefs(readJson<Prefs>('branches-grow'), prefs => writeJson('branches-grow', prefs)), []);
+  useEffect(() => loadPrefs(readJson('branches-grow', isRecord) as Partial<Prefs> | undefined, prefs => writeJson('branches-grow', prefs)), []);
   // The list is built from the bundled data after the first frame, so the tab opens at once.
   const savedKey = list.saved ? bookmarks : null;
   useEffect(() => {
@@ -112,13 +107,14 @@ export default function BranchesScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll help={() => setHelp(true)}>
+        {/* The search button first, under the thumb (owner, 2026-11-17). */}
+        <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
         {/* The applied search and places sit in the bar, so they take no row of their own (owner, 2026-11-15). */}
         {(list.query || list.surah || list.ayah) ? <View style={{ flex: 1, flexDirection: 'row', gap: 6, overflow: 'hidden' }}>
           {list.query ? <Chip text={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
           {list.surah ? <Chip text={`سورة ${surahNames[list.surah]}`} onClear={() => change({ ...list, surah: undefined })} palette={palette} /> : null}
           {list.ayah ? <Chip text={`${surahNames[Number(list.ayah.split(':')[0])]} ${num(Number(list.ayah.split(':')[1]))}`} onClear={() => change({ ...list, ayah: undefined })} palette={palette} /> : null}
         </View> : null}
-        <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
       </TopBar>
       {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>

@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import data from '@shared/data/quran/surahOrder.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { num } from '@shared/quran/arabicNumber';
 import { orderSurahs } from '@shared/quran/surahOrder';
 import OrderView from './OrderView';
 
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 const surahs = orderSurahs(data, num);
 
 afterEach(cleanup);
@@ -22,7 +24,7 @@ describe('OrderView', () => {
     render(<OrderView surahs={surahs} />);
     fireEvent.click(screen.getByRole('button', { name: '١' }));
     const list = screen.getByRole('list', { name: 'السور' });
-    expect(within(list).getAllByRole('heading').map(h => h.textContent)).toEqual(['الفاتحة١', 'البقرة٢']);
+    expect(within(list).getAllByRole('heading').map(h => h.textContent)).toEqual(['الفَاتِحَةْ١', 'البَقَرَةْ٢']);
     expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(1);
     expect(within(list).getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).getAttribute('href')).toBe('https://shamela.ws/book/9992/51');
   });
@@ -33,7 +35,7 @@ describe('OrderView', () => {
     const list = screen.getByRole('list', { name: 'السور' });
     const headings = within(list).getAllByRole('heading');
     expect(headings).toHaveLength(37);
-    expect(headings[0].textContent).toContain('النبأ');
+    expect(headings[0].textContent).toContain('النَّبَأْ');
     expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(36);
     expect(screen.getByRole('button', { name: '٣٠' }).getAttribute('aria-pressed')).toBe('true');
   });

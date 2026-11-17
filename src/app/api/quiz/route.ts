@@ -5,10 +5,13 @@ import { assembleQuiz, availableQuestionCount } from '@/lib/quiz/assemble';
 import { askedAyah, ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
+import { writeAsk } from '@shared/quiz/writeAsk';
+import { isPenRule } from '@shared/quran/writeAyah';
 import { parseJuzRange } from '@shared/quran/juz';
 import { parseTreeScope } from '@shared/quiz/treeScope';
 import { seededRandom } from '@shared/quiz/feedQuiz';
 import { parseLeaves, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
+import { surahName } from '@shared/quran/surahNames';
 
 async function referenceClaims(claimKeys: string[]) {
   if (claimKeys.length === 0) return [];
@@ -41,6 +44,8 @@ export async function GET(request: Request) {
   const difficulty = parseDifficulty(searchParams.get('difficulty'));
   // A seed (the home feed's question cards) asks the same questions every time.
   const seed = searchParams.get('seed');
+  // A party's recited ayat come with the words its host's pen asks (shared/quiz/writeAsk.ts).
+  const pen = searchParams.get('pen');
   const random = seed && /^\d{1,9}$/.test(seed) ? seededRandom(Number(seed)) : Math.random;
   if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) return NextResponse.json({ error: 'Unknown topic', topics: QUIZ_TOPICS }, { status: 400 });
   // The home feed's question cards ask one question (with a seed); a quiz has one of the quiz lengths.
@@ -62,13 +67,14 @@ export async function GET(request: Request) {
     return NextResponse.json({
       questions: questions.map((question) => ({
         ...question,
+        ...(isPenRule(pen) && question.ayahKey && question.page?.recite ? { write: writeAsk(question.ayahKey, question.page, pen) ?? undefined } : {}),
         choiceDetails: Object.fromEntries(
           question.choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
         ),
         ayah: details.get(askedAyah(question) ?? '') ?? null,
         evidence: { reference: selectQuizReference(question.evidence.claimKeys, claims) },
       })),
-      surahNames: Object.fromEntries(names.map((row) => [row.number, row.name])),
+      surahNames: Object.fromEntries(names.map((row) => [row.number, surahName(row.number)])),
     });
   } catch (error) {
     console.error('Quiz API error:', error);

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
-import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
 import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
@@ -19,12 +18,13 @@ import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 import BalaghaPanel from './BalaghaPanel';
 import type { BalaghaAyah } from './balagha';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
   | { kind: 'irab'; key: string; page: number; n: number };
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const load = async <T,>(api: string, key: string): Promise<T> => {
   const response = await fetch(`/api/quran/${api}?k=${encodeURIComponent(key)}`);
   if (!response.ok) throw new Error('preview');
@@ -77,7 +77,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
   const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : balaghaKey ? Sparkles : ArrowLeftRight;
   return (
-    <dialog ref={sheet} aria-label={shown ? (trees ? 'الأشجار التي فيها الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
+    <dialog ref={sheet} aria-label={shown ? (trees ? 'متشابهات الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined} onClose={onClose} onClick={event => { if (event.target === sheet.current) sheet.current?.close(); }}
       dir="rtl" lang="ar" className="m-0 mx-auto mt-auto max-h-[85dvh] w-full max-w-lg rounded-t-[22px] border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)]">
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <span aria-hidden className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--home-rule)]" />

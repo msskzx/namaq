@@ -1,8 +1,9 @@
 import { Pressable, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
 
 const WAVE = 'M6 0 C 0 6, 0 14, 6 20 C 12 26, 12 34, 6 40';
 
@@ -65,9 +66,7 @@ export function StartRule({ label, note, folded, onToggle, palette }: { label: s
   const action = folded ? `افتح ${label}` : `اطوِ ${label}`;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 26 }}>
-      <Pressable onPress={onToggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ expanded: !folded }} accessibilityLabel={action} style={{ padding: 2 }}>
-        {folded ? <ChevronDown size={16} color={palette.muted} /> : <ChevronUp size={16} color={palette.muted} />}
-      </Pressable>
+      <IconButton Icon={folded ? ChevronDown : ChevronUp} label={action} onPress={onToggle} size="small" expanded={!folded} />
       <Text style={{ color: palette.muted, fontSize: 12 }}>{label}</Text>
       <Dotted color={palette.rule} />
       {note ? <Text style={{ color: palette.muted, fontSize: 12 }}>{note}</Text> : null}

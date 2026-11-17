@@ -1,21 +1,23 @@
 import { useMemo, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { ArrowLeftRight, BookOpen, Send } from 'lucide-react-native';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import PlaceText from './PlaceText';
 import { groupColor } from './StoryMap';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import { toTab } from '@/lib/ways';
+import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -66,7 +68,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
       if (far && (forward ? hasNext : hasPrev)) scheduleOnRN(step, forward);
     });
   const share = (place: Place, k: number) => shareCard({ content: width => (
-    <View style={{ width, gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+    <Card palette={palette} gap={4} style={{ width }}>
       <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{phase}</Text>
       <Text style={{ color: palette.ink, fontSize: 19, fontWeight: '700', lineHeight: 30 }}>{event.title}</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -74,7 +76,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
         <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
       </View>
       <PlaceText place={place} shared={shared[k]} palette={palette} />
-    </View>
+    </Card>
   ) });
   const moved = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
   return (
@@ -89,24 +91,19 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
         </View>
       </View>
       {places.map((place, k) => (
-        <View key={place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}
-          style={{ gap: 4, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: focus === place.surah ? 2 : 1, borderColor: focus === place.surah ? palette.ink : palette.rule }}>
+        <Card key={place.surah} palette={palette} gap={4} picked={focus === place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
           {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
           {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
             <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
-            {readable && <><Pressable onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} accessibilityRole="button" accessibilityLabel={`افتح ${place.name} في المصحف`} hitSlop={8} style={{ padding: 4 }}>
-              <BookOpen size={18} color={palette.muted} />
-            </Pressable>
+            {readable && <><IconButton Icon={BookOpen} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} size="small" />
             <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
             {/* Share is always the last button: this place as an image, under the event's title. */}
-            <Pressable onPress={() => share(place, k)} accessibilityRole="button" accessibilityLabel={`شارك ${place.name}`} hitSlop={8} style={{ padding: 4 }}>
-              <Send size={18} color={palette.muted} />
-            </Pressable></>}
+            <IconButton Icon={Send} label={`شارك ${place.name}`} onPress={() => share(place, k)} size="small" /></>}
           </View>
           <PlaceText place={place} shared={shared[k]} palette={palette} />
-        </View>
+        </Card>
       ))}
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
     </Animated.View>
@@ -120,9 +117,6 @@ function CompareButton({ place, targets, onChoose, palette }: { place: Place; ta
   // Seen from this place's surah.
   const own = targets.map(t => (t.lead === place.surah ? t : { lead: t.other, other: t.lead, ayat: [t.ayat[1], t.ayat[0]] as [number, number] }));
   return (
-    <Pressable onPress={() => (own.length === 1 ? openCompare(own[0]) : onChoose(own))}
-      accessibilityRole="button" accessibilityLabel={`قارن ${place.name}`} hitSlop={8} style={{ padding: 4 }}>
-      <ArrowLeftRight size={18} color={palette.muted} />
-    </Pressable>
+    <IconButton Icon={ArrowLeftRight} label={`قارن ${place.name}`} onPress={() => (own.length === 1 ? openCompare(own[0]) : onChoose(own))} size="small" />
   );
 }

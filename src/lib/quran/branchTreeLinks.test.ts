@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { keys, searchPhrases, type Branch, type BranchAyah } from '@shared/quran/branches';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks } from './branchTreeLinks';
 import { buildPhraseGroups, createPhrasePresenter, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@shared/quran/phraseTrees';
@@ -53,7 +53,7 @@ describe('subtree links', () => {
     expect(keys(node).sort()).toEqual(['24:54', '47:33', '4:59', '5:92', '64:12']);
     expect([...new URL(href, 'https://namaq.test').searchParams]).toEqual([['o', 'اطيعوا الله واطيعوا الرسول']]);
     expect(opened(href)).toEqual([...keys(node)].sort());
-    expect(index.byId.get('اطيعوا الله واطيعوا الرسول')!.text.normalize('NFC')).toBe('أَطِيعُوا۟ ٱللَّهَ وَأَطِيعُوا۟ ٱلرَّسُولَ'.normalize('NFC'));
+    expect(index.byId.get('اطيعوا الله واطيعوا الرسول')!.text.normalize('NFC')).toBe('أَطِيعُواْ ٱللَّهَ وَأَطِيعُواْ ٱلرَّسُولَ'.normalize('NFC'));
   });
 
   it('opens exactly the subtree ayat for every inner node of every tree and subtree, by subtree id in every tree', () => {

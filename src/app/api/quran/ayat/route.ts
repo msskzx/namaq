@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { loadAyahText } from '@/lib/quran/readerAyat';
 
 type AyahPair = { surah: number; ayah: number };
 
@@ -74,7 +75,8 @@ export async function GET(request: Request) {
       if (!result) {
         return NextResponse.json({ error: 'Ayah not found' }, { status: 404 });
       }
-      return NextResponse.json(result);
+      const text = await loadAyahText();
+      return NextResponse.json({ ...result, text: text(surah, ayah) });
     }
 
     // Multiple pairs: fetch all, then order by requested order
@@ -107,7 +109,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Ayat not found' }, { status: 404 });
     }
 
-    return NextResponse.json(results);
+    const text = await loadAyahText();
+    return NextResponse.json(results.map(row => ({ ...row, text: text(row.surah.number, row.number) })));
   } catch (error) {
     console.error('Error fetching ayah(s):', error);
     return NextResponse.json(

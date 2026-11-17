@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, X } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import Button from '@/components/Button';
-import { alikeDiff, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { Text } from '@/ui/Text';
+import Button from '@/ui/Button';
+import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import QuizPage from './QuizPage';
+import type { WriteAsk } from '@shared/quiz/score';
+import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
@@ -18,12 +22,15 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
 }
 
 /**
- * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, a recited snippet's rest behind a button,
+ * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, or for a question asked on the page its whole
+ * mushaf page (QuizPage, owner 2026-11-17), where what it asks to write is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
  */
-export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true }: {
+export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
+  /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
+  pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
   /** The mushaf button under the answer. A card leaves it out and puts it in its own button row (owner, 2026-11-15). */
   onOpen?: (key: string) => void;
   header?: React.ReactNode; palette: Palette;
@@ -32,14 +39,27 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
-  const revealed = shown || answered || !question.reveal;
+  // What is recited or written stays hidden until it is shown or answered; on the page, recite mode's bar shows it.
+  const [pageShown, setPageShown] = useState<string | null>(null);
+  const onPage = !!question.ayahKey && !!question.page;
+  // A party grades a recited ayah by the words written, so it has no choices to pick.
+  const write = (question as ChoiceQuestion & { write?: WriteAsk }).write;
+  const revealed = shown || answered || !recited(question) || pageShown === question.key;
   const alike = answered && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
   return (
     <Box {...(scroll ? { contentContainerStyle: { paddingBottom: 24, gap: 12 } } : { style: { gap: 12 } })}>
       {header}
-      {question.quran && (
+      {question.ayahKey && question.page ? (
+        <View style={{ marginHorizontal: 16 }}>
+          <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette}
+            shown={write ? written !== undefined : shown || answered || pageShown === question.key}
+            party={write ? { pen: pen ?? 'whole', asked: write.asked, words: write.words, answer: written, onWrite: onWrite ?? (() => {}) } : undefined}
+            onShown={() => { setPageShown(question.key); onReveal?.(); }}
+            onWritten={!answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
+        </View>
+      ) : question.quran && (
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
             <Words words={question.quran} marked={diff?.a} palette={palette} />
@@ -48,8 +68,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           </Text>
         </View>
       )}
-      {!revealed && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
-      {revealed && (
+      {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
+      {revealed && !write && (
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
             const right = answered && choice.value === question.correctAnswer;

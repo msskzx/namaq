@@ -15,7 +15,7 @@ const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const members = (occurrences: PhraseOccurrence[]) => [...new Set(occurrences.map(o => o.key))];
 const phraseId = (words: string[]) => words.map(letters).join(' ');
 
-const withoutConjunction = (word: string, conjunction: string | null | undefined) => {
+export const withoutConjunction = (word: string, conjunction: string | null | undefined) => {
   if (!conjunction) return word;
   let at = 1;
   while (at < word.length && normalizeWord(word[at]) === '') at++;
@@ -152,18 +152,29 @@ export function buildTreeGroups(ayat: BranchAyah[]): TreeGroup[] {
 export function sharedDisplay(forms: string[]) {
   if (forms.every(form => form === forms[0])) return forms[0];
   if (forms.every(isEnd)) return '۝';
-  const originals = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
+  // The page's tatweel (شَيۡـٔٗا) is part of how it writes the word: kept, as a letter of its own.
+  const originals = forms.map(form => form.replace(/\u2060/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   forms = originals.map(words => words.map((word, i) => {
     const bases = originals.map(other => other[i]?.[0]);
     return bases.every(base => base === bases[0]) ? word : bases.every(base => base && 'ؤئء'.includes(base)) ? word.replace(/^[ؤئ]/, 'ء') : word;
   }).join(''));
-  const letters = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFD').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
+  const letters = forms.map(form => form.replace(/\u2060/g, '').normalize('NFD').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   if (letters.some(other => other.length !== letters[0].length || other.some((letter, i) => letter[0] !== letters[0][i][0]))) return forms[0];
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }
 
 export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
-  return foldForms(createPhrasePresenter(ayat, continueIdentical, followCorpus, within)(group));
+  return createTreePresenter(ayat, continueIdentical, followCorpus, within)(group);
+}
+
+/**
+ * The one way a tree is built for showing (branches, home cards, previews, quizzes): the phrase trie with every rule folded in
+ * (foldForms, ADR 0036). Made once for many trees, as the quiz builds several. `createPhrasePresenter` alone is the bare trie,
+ * for ids and sizes only; shared/quran/oneTree.test.ts keeps it out of anything drawn.
+ */
+export function createTreePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
+  const present = createPhrasePresenter(ayat, continueIdentical, followCorpus, within);
+  return (group: PhraseGroup) => foldForms(present(group));
 }
 
 export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {

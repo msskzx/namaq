@@ -2,9 +2,10 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/words.json';
-import trees from '../data/quran/trees.json';
+import trees from './quranText/corpus';
 import { pageGroups, type MushafPage } from './readerPage';
 import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
+import { corpusWordsAt } from './quranText/ayahWords';
 
 const words = data as unknown as WordsData;
 const idOf = (name: string) => words.lemmas.findIndex(([lemma]) => lemma === name);
@@ -15,7 +16,7 @@ describe('word counts', () => {
     expect(words.lemmas[idOf('ٱللَّه')][1]).toBe(2699);
     expect(placesOf(words, idOf('ٱللَّه'))).toHaveLength(1821);
     expect(words.lemmas[idOf('جَنَّة')][1]).toBe(147);
-    expect(words.lemmas[idOf('يَوْم')][1]).toBe(405);
+    expect(words.lemmas[idOf('يَوۡم')][1]).toBe(405);
     expect(words.lemmas[idOf('حَيَوٰة')][1]).toBe(76);
     expect(data.notice).toMatch(/Quranic Arabic Corpus \(morphology, version 0\.4\)/);
   });
@@ -69,7 +70,8 @@ describe('reader words', () => {
   it('matches the corpus words the app shows ayah cards with', () => {
     for (const ayah of trees.ayat) {
       const [surah, number] = ayah.key.split(':').map(Number);
-      const shown = ayah.words.filter(word => !word.startsWith('﴿') && word !== '۞').length;
+      // The trees hold the page's words; where the page splits an ayah otherwise (15:7 «لَّوۡمَا»), corpusWordsAt counts its corpus words.
+      const shown = ayah.words.filter(word => !word.startsWith('﴿') && word !== '۞').flatMap((_, at) => corpusWordsAt(ayah.key, at)).length;
       expect([ayah.key, shown]).toEqual([ayah.key, words.ayat[surah - 1][number - 1].split(' ').length]);
     }
   });

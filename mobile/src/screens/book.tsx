@@ -9,27 +9,31 @@ import { entryLabel, entryOfAyah, pageOfSpot, paragraphsOf, runsIn, searchBook, 
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, readSavedParagraphs, serverFasilas, serverSavedParagraphs, setBookFasila, setLastBookSpot, lastBookSpot, subscribeFasilas, subscribeSavedParagraphs, toggleSavedParagraph } from '@shared/readingMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { Text, TextInput } from '@/components/Text';
-import TopBar from '@/components/TopBar';
-import Sheet from '@/components/Sheet';
+import { Text, TextInput } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
+import Sheet from '@/ui/Sheet';
 import ReaderPager from '@/components/ReaderPager';
-import ActButton, { ACT_WIDTH } from '@/components/ActButton';
+import ActButton from '@/ui/ActButton';
+import FloatingMenu from '@/ui/FloatingMenu';
 import FasilaIcon, { FasilaRibbon } from '@/components/FasilaIcon';
-import LoadingDots from '@/components/LoadingDots';
+import LoadingDots from '@/ui/LoadingDots';
 import { BookList } from '@/components/Books';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { surahNames } from '@/lib/branches';
 import { useReaderBook, type ReaderBook } from '@/lib/readerBook';
 import { setIntent } from '@/lib/intent';
 import { toTab } from '@/lib/ways';
 import { buzz } from '@/lib/haptics';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import Tabs from '@/ui/Tabs';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
- * runs, the page following the finger like the mushaf's. A long press on a paragraph saves it, sets the «فاصلة» there
- * (where the reader stopped, moved only by the reader), opens its ayat in the mushaf or shares it. The page last open is
- * kept by itself and never moves the فاصلة. Opened with ?id=<book>&entry=&at= it opens at that paragraph, lit.
+ * runs, the page following the finger like the mushaf's. The «فاصلة», the page where the reader stopped, is the ribbon
+ * in the top bar: one tap puts it on the page open, filled there, and only the reader moves it (owner, 2026-11-17: per page,
+ * nothing drawn over the text). A long press on a paragraph saves it, opens its ayat in the mushaf or shares it. The page
+ * last open is kept by itself and never moves the فاصلة. Opened with ?id=<book>&entry=&at= it opens at that paragraph, lit.
  */
 export default function BookScreen() {
   const params = useLocalSearchParams<{ id?: string; entry?: string; at?: string; ayah?: string }>();
@@ -41,7 +45,7 @@ export default function BookScreen() {
       {book ? <BookReader key={id} id={id} book={book} palette={palette} entry={params.entry} at={params.at} ayah={params.ayah} />
         : (
           <>
-            <TopBar hub><Text numberOfLines={1} style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{bookOf(id).title}</Text></TopBar>
+            <TopBar shelf title={bookOf(id).title} />
             {book === null ? <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 40, alignItems: 'center' }}><LoadingDots /></View> : (
               <View style={{ padding: 16, gap: 12 }}>
                 <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>هذا الكتاب ليس على هاتفك. نزّله ليُقرأ هنا بلا اتصال.</Text>
@@ -133,30 +137,34 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
   const pagerHeight = Math.max(height, heights[page + 1] ?? 0);
   const render = (at: number) => (
     <BookPageView book={id} entries={entries} page={pages[at - 1]} index={at} palette={palette} minHeight={height} bottom={bottom} top={insets.top + 56}
-      lit={lit} saved={saved} fasila={fasila ? keyOf(fasila) : null} onHeight={onHeight} onLong={onLong} onTap={onTap} onAyah={openAyah} />
+      lit={lit} saved={saved} onHeight={onHeight} onLong={onLong} onTap={onTap} onAyah={openAyah} />
   );
   const fasilaPage = fasila ? pageOfSpot(pages, fasila) : -1;
   const spot = actions?.spot;
   const isSaved = !!spot && saved.has(keyOf(spot));
-  const isFasila = !!spot && !!fasila && keyOf(fasila) === keyOf(spot);
-  const buttons = 4;
-  const barWidth = buttons * (ACT_WIDTH + 2) + 10;
+  // The page open is the فاصلة's page: the ribbon in the top bar is filled, and a tap takes it off.
+  const onFasila = fasilaPage === page;
+  const markPage = () => {
+    const first = pages[page]?.slices[0];
+    if (!first) return;
+    buzz();
+    setBookFasila(id, onFasila ? null : { entry: first.entry, at: first.from, part: pages[page].part, page: pages[page].page });
+  };
+  // The paragraph's menu, across the middle of the page, over the pressed line.
+  const actionsAt = actions ? { x: (size?.width ?? 300) / 2, y: actions.y } : null;
   return (
     <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <ScrollView ref={scroller} showsVerticalScrollIndicator={false} scrollEventThrottle={32} onScrollBeginDrag={() => setActions(null)} style={{ flex: 1 }}>
         {size && height > 0 && (
-          <ReaderPager page={page + 1} count={pages.length} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} zoom={1} onZoom={() => {}} />
+          <ReaderPager page={page + 1} count={pages.length} width={size.width} height={pagerHeight} onPage={turnTo} onMove={onMove} render={render} backEdge />
         )}
       </ScrollView>
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
-        <TopBar hub>
-          <Text numberOfLines={1} style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{bookOf(id).title}</Text>
-          <Pressable onPress={() => setSheet('search')} accessibilityRole="button" accessibilityLabel="ابحث في الكتاب" hitSlop={4} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-            <Search size={22} color={palette.muted} />
-          </Pressable>
-          <Pressable onPress={() => setSheet('contents')} accessibilityRole="button" accessibilityLabel="فهرس الكتاب ومحفوظاته" hitSlop={4} style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-            <List size={22} color={palette.muted} />
-          </Pressable>
+        <TopBar shelf title={bookOf(id).title}>
+          <IconButton Icon={FasilaIcon} label={onFasila ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'} onPress={markPage} on={onFasila} tone="accent"
+            render={icon => <FasilaIcon size={icon.size} color={icon.color} filled={onFasila} />} />
+          <IconButton Icon={Search} label="ابحث في الكتاب" onPress={() => setSheet('search')} />
+          <IconButton Icon={List} label="فهرس الكتاب ومحفوظاته" onPress={() => setSheet('contents')} />
         </TopBar>
       </View>
       {fasila && fasilaPage !== page && !actions && (
@@ -169,17 +177,14 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
         </Pressable>
       )}
       {actions && spot && (
-        <View accessibilityRole="toolbar" accessibilityLabel="أزرار الفقرة"
-          style={{ position: 'absolute', top: Math.max(insets.top + 60, actions.y - 76), left: Math.max(8, ((size?.width ?? 300) - barWidth) / 2), width: barWidth, flexDirection: 'row', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
-          <ActButton Icon={Bookmark} label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} name="احفظ" palette={palette} on={isSaved}
+        <FloatingMenu at={actionsAt} label="أزرار الفقرة" onClose={() => setActions(null)} top={insets.top + 52} palette={palette}>
+          <ActButton Icon={Bookmark} label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} name="احفظ" palette={palette} on={isSaved} tint={palette.root} filled
             onPress={() => { toggleSavedParagraph({ book: id, ...spot, ...where(spot), text: paragraphText(spot).slice(0, 160) }); setActions(null); setLit(null); }} />
-          <ActButton Icon={FasilaIcon} label={isFasila ? 'أزل الفاصلة' : 'ضع الفاصلة هنا: هنا توقفت'} name="فاصلة" palette={palette} on={isFasila}
-            onPress={() => { setBookFasila(id, isFasila ? null : { ...spot, ...where(spot) }); setActions(null); setLit(null); }} />
           <ActButton Icon={BookOpenText} label="افتح الآية في المصحف" name="المصحف" palette={palette}
             onPress={() => { const { surah, from } = entries[spot.entry]; setActions(null); openAyah(surah, from); }} />
           <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette}
             onPress={() => { const text = paragraphText(spot); setActions(null); void Share.share({ message: `${text}\n\n${bookOf(id).title}، ${pageName(id, where(spot).part, where(spot).page)}` }); }} />
-        </View>
+        </FloatingMenu>
       )}
       <BookSheet open={sheet} onTab={setSheet} onClose={() => setSheet(null)} id={id} entries={entries} pages={pages} page={page} palette={palette}
         saved={savedList.filter(item => item.book === id)} onGo={goTo} />
@@ -187,12 +192,12 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
   );
 }
 
-/** A ribbon's place beside its paragraph's first line, in the page's right margin. */
+/** A saved paragraph's mark's place beside its first line, in the page's right margin. */
 const MARGIN = 20;
 
-const BookPageView = memo(function BookPageView({ book, entries, page, index, palette, minHeight, bottom, top, lit, saved, fasila, onHeight, onLong, onTap, onAyah }: {
+const BookPageView = memo(function BookPageView({ book, entries, page, index, palette, minHeight, bottom, top, lit, saved, onHeight, onLong, onTap, onAyah }: {
   book: ReaderBookId; entries: BookEntry[]; page: BookPage; index: number; palette: Palette; minHeight: number; bottom: number; top: number;
-  lit: Spot | null; saved: ReadonlySet<string>; fasila: string | null;
+  lit: Spot | null; saved: ReadonlySet<string>;
   onHeight: (page: number, height: number) => void; onLong: (spot: Spot, y: number) => void; onTap: () => void; onAyah: (surah: number, ayah: number) => void;
 }) {
   return (
@@ -217,8 +222,7 @@ const BookPageView = memo(function BookPageView({ book, entries, page, index, pa
               return (
                 <Pressable key={at} onLongPress={event => onLong({ entry: slice.entry, at }, event.nativeEvent.pageY)} delayLongPress={350} onPress={onTap}
                   style={{ marginVertical: 3, borderRadius: 8, paddingHorizontal: 4, marginHorizontal: -4, backgroundColor: on ? `${palette.ink}14` : 'transparent' }}>
-                  {fasila === key ? <View style={{ position: 'absolute', right: -MARGIN + 3, top: 2 }}><FasilaRibbon color={palette.accent} height={26} /></View>
-                    : saved.has(key) ? <View style={{ position: 'absolute', right: -MARGIN + 4, top: 6 }}><FasilaRibbon color={palette.root} height={16} width={8} /></View> : null}
+                  {saved.has(key) && <View style={{ position: 'absolute', right: -MARGIN + 4, top: 6 }}><FasilaRibbon color={palette.root} height={16} width={8} /></View>}
                   <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 36, textAlign: 'justify', writingDirection: 'rtl' }}>
                     {runsIn(entry.text, at, end).map((run, i) => (run.quran
                       ? <Text key={i} onPress={() => onAyah(entry.surah, entry.from)} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text>
@@ -265,13 +269,8 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
   const row = { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderColor: `${palette.rule}66` } as const;
   return (
     <Sheet open={!!open} onClose={onClose} palette={palette} tall>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 10 }} accessibilityRole="tablist">
-        {TABS.map(({ tab, label, Icon }) => (
-          <Pressable key={tab} onPress={() => onTab(tab)} accessibilityRole="tab" accessibilityLabel={label} accessibilityState={{ selected: kept === tab }}
-            style={{ width: 56, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: kept === tab ? palette.rule : 'transparent', backgroundColor: kept === tab ? palette.paperDeep : 'transparent' }}>
-            <Icon size={20} color={kept === tab ? palette.ink : palette.muted} />
-          </Pressable>
-        ))}
+      <View style={{ paddingBottom: 10 }}>
+        <Tabs options={TABS.map(({ tab, label, Icon }) => ({ key: tab, label, Icon }))} value={kept} onChange={onTab} palette={palette} iconOnly />
       </View>
       {kept === 'contents' && (
         <FlatList data={surahs} keyExtractor={([surah]) => String(surah)} style={{ flex: 1 }} initialNumToRender={40}

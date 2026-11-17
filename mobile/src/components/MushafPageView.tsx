@@ -1,16 +1,13 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
-import { FasilaRibbon } from './FasilaIcon';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import type { MushafPage, WordGroup } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
-import { sectionsStartingAt as startsAt } from '@shared/quran/surahTopics';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
@@ -42,13 +39,13 @@ type Props = {
   top?: number;
   names: Record<number, string>;
   mark?: string | null;
+  /** The ayah being recited aloud (listening): a band in the accent, over the selection. */
+  playing?: string | null;
   /** The word of the marked ayah a long press landed on (its place in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
   markWord?: number | null;
   recite?: Recite | null;
   forgot: Readonly<Record<string, unknown>>;
   saved: ReadonlySet<string>;
-  /** The reader's «فاصلة», where they stopped reading (shared/readingMarks.ts): a ribbon tucked in at that ayah's end. */
-  fasila?: string | null;
   /** A touch on a word gives its ayah and the word's place in it (from 0, the ۞ mark not counted); a touch elsewhere on the page (or on a hidden word) gives null. */
   onTouch: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
@@ -68,12 +65,8 @@ type Props = {
    * so the lines keep the page's size.
    */
   slice?: { from: number; to: number };
-  /**
-   * The surah's sections (docs/plans/surah-topics.md): a small number over the first word of each section's first ayah
-   * marks where one starts, without moving a word; a tap gives the surah and the section's place in its list. The header
-   * names no topic (owner, 2026-11-14).
-   */
-  onTopic?: (surah: number, section: number) => void;
+    /** A quiz page that must not say where it is (owner, 2026-11-17): no juz, surah name, marks or page number around the text. */
+  anonymous?: boolean;
 };
 
 
@@ -91,10 +84,11 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 
 type Box = { x: number; y: number; w: number; h: number };
 /** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
-type Band = 'mark' | 'forgot' | null;
+type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
-  mark: palette => tint(palette.ink, 0.1),
-  forgot: palette => tint(palette.accent, 0.16),
+  playing: palette => palette.bands.playing,
+  mark: palette => palette.bands.mark,
+  forgot: palette => palette.bands.forgot,
 };
 /** `word`: the long-pressed word, a stronger box laid over the ayah's unbroken band. */
 type Cell = { band: Band; word?: boolean };
@@ -108,7 +102,8 @@ export function Veil({ text, size, palette, next, faint = false }: { text: strin
   return (
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, opacity: faint ? 0.55 : 1, borderStyle: faint ? 'dashed' : 'solid',
-      backgroundColor: faint ? 'transparent' : next ? tint(palette.accent, 0.22) : tint(palette.muted, 0.1), borderWidth: 1, borderColor: next && !faint ? palette.accent : palette.rule }}>
+      // The next ayah's boxes are the write boxes' own (paper, owner 2026-11-17), so reciting and writing look the same.
+      backgroundColor: faint ? 'transparent' : next ? palette.paper : tint(palette.muted, 0.1), borderWidth: 1, borderColor: palette.rule }}>
       <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
     </View>
   );
@@ -146,7 +141,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, markWord = null, recite, forgot, saved, fasila = null, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -257,7 +252,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const firstHidden = (surah: number) => surahHidden(surah) || basmalaHidden(surah);
   const badges = data.items.flatMap(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter).join(' ')] : []), ...('line' in item && isSajda(item.line) ? ['سجدة'] : [])]);
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
-  const upcoming = { backgroundColor: tint(palette.accent, 0.22) } as const;
+  const upcoming = { backgroundColor: palette.paper } as const;
   const small = Math.max(11, width * 0.026);
   const press = (key: string | null, word?: number) => ({
     onPress: (event: GestureResponderEvent) => onTouch('tap', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),
@@ -292,7 +287,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
     }).concat(cells.map((cell, at) => {
       const box = cell.word ? boxes[`${line}:${at}`] : undefined;
-      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: tint(palette.accent, 0.3) }} /> : null;
+      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: palette.bands.word }} /> : null;
     }));
   };
 
@@ -307,18 +302,22 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       style={slice ? { width } : { width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
       {/* One height on every page, chip or not, so facing pages' frames line up. */}
       {!slice && <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
-        <Text style={{ color: palette.muted, fontSize: small }}>الجزء {juzName(data.juz)}</Text>
+        <Text style={{ color: palette.muted, fontSize: small }}>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
-          {badges.map(label => (
+          {!anonymous && badges.map(label => (
             <Text key={label} style={{ borderWidth: 1, borderColor: label === 'سجدة' ? palette.accent : palette.rule, color: label === 'سجدة' ? palette.accent : palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>{label}</Text>
           ))}
         </View>
-        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{current && names[current] ? plainName(names[current]) : ''}</Text>
+        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? names[current] : ''}</Text>
       </View>}
-      {/* The double rule around the text. */}
-      <View style={slice ? undefined : { flex: 1, borderWidth: 1, borderColor: palette.rule }}>
-        <View style={slice ? undefined : { flex: 1, margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
-          <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      {/* The double rule around the text. With flowing text the frames grow with it (flexGrow, not flex: 1): on a phone
+          flex: 1 is a zero basis, so the page stayed the screen's height, the words ran out past the frame and there was
+          nothing to scroll (owner, 2026-11-17). The web export grows them anyway, as browsers keep a flex item's content height. */}
+      <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
+        <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
+          {/* Drawn anew when the text starts or stops flowing, so it measures itself again: on a phone, back at the printed
+              size it kept the tall height it had while flowing, and the 15 lines spread down past the frame (owner, 2026-11-17). */}
+          <Pressable key={flowing ? 'flow' : 'page'} {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
                 {lineAt.map(at => {
@@ -376,7 +375,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key && markWord === at ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : mark === key ? 'mark' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
@@ -397,25 +396,12 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         // Every word tells its place, so a band that appears later (a tap) is laid at once where the words are now.
                         <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {onTopic && !recite && wordAt === 0 && group.word && startsAt(group.surah, group.ayah).length > 0 && (
-                          <Pressable onPress={() => onTopic(group.surah!, startsAt(group.surah, group.ayah)[0])} accessibilityRole="button" accessibilityLabel="موضوعات السورة" hitSlop={8}
-                            style={{ position: 'absolute', right: 0, bottom: '62%', zIndex: 1, flexDirection: 'row', gap: 2 }}>
-                            {startsAt(group.surah, group.ayah).map(i => (
-                              <Text key={i} style={{ minWidth: size * 0.42, textAlign: 'center', fontSize: Math.max(9, size * 0.3), lineHeight: Math.max(12, size * 0.42), color: palette.accent, paddingHorizontal: 3 }}>{num(i + 1)}</Text>
-                            ))}
-                          </Pressable>
-                        )}
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
                         {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
-                        {fasila && group.marks.some(end => `${group.surah}:${end}` === fasila) && (
-                          <View pointerEvents="none" style={{ position: 'absolute', left: -GAP * size * 0.75, top: -size * 0.45 }}>
-                            <FasilaRibbon color={palette.accent} width={Math.max(5, size * 0.2)} height={size * 1.2} />
-                          </View>
-                        )}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
@@ -423,7 +409,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                               {group.word ? ' ' : ''}
                               {/* The number and its sign are quiet, neither the text's colour nor the accent; a saved ayah's take the bookmark
                                   colour and a forgotten one's the accent (owner, 2026-11-14). */}
-                              <Text style={{ color: endHidden(end) ? palette.muted : fasila === `${group.surah}:${end}` ? palette.accent : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
+                              <Text style={{ color: endHidden(end) ? palette.muted : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
                                 {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                                 {endHidden(end) ? EMPTY_END : num(end)}
                               </Text>
@@ -440,7 +426,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
             })}
           </Pressable>
           {!slice && <View style={{ paddingVertical: 2 }}>
-            <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{num(page)}</Text>
+            <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{anonymous ? ' ' : num(page)}</Text>
           </View>}
         </View>
       </View>

@@ -1,6 +1,6 @@
 import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import type { Visit } from '@shared/quran/compareCards';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';

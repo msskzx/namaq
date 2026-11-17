@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { branchQuestions } from '../quiz/branchQuestions';
 import { keys, withStarts, type BranchAyah, type Variant } from './branches';
 

@@ -3,8 +3,8 @@ import { RefreshControl, View, type NativeScrollEvent, type NativeSyntheticEvent
 // The gesture handler's scroll view, so a pinch on a tree card takes over from the page's scroll instead of losing to it.
 import { ScrollView } from 'react-native-gesture-handler';
 import { newVisit } from '@shared/feedSeen';
-import TopBar from '@/components/TopBar';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import TopBar from '@/ui/TopBar';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import Tour from '@/components/Tour';
 import { ContinueReading, Feed, Stories } from '@/components/HomeFeed';
 import { MemorizedPrompt } from '@/components/Memorized';
@@ -17,7 +17,7 @@ import { usePalette } from '@/lib/theme';
 /**
  * Home (owner, 2026-11-13): reading and learning first, like a social app's home. Story circles, the page the mushaf was left on,
  * then a feed that loads more as it nears its end (owner, 2026-11-14: no «more» button and no tools below; prayer times live in
- * the utilities tab, saved cards behind their story circle). Pulled down at the top, it refreshes. Nothing about the reader is counted or shown.
+ * the utilities behind the compass in the top bar (owner, 2026-11-17), saved cards behind their story circle). Pulled down at the top, it refreshes. Nothing about the reader is counted or shown.
  */
 /** How close to the end (px) the feed asks for its next batch, about two cards ahead. */
 const NEAR_END = 1200;
@@ -51,7 +51,7 @@ export default function HomeScreen() {
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar settings search={() => toTab('/search')} hideOnScroll />
+      <TopBar settings utilities={() => toTab('/utilities')} search={() => toTab('/search')} hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} onLayout={event => { seenTo.current.height = event.nativeEvent.layout.height; }}
         onContentSizeChange={(_w, h) => check(h)} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={palette.accent} colors={[palette.accent]} progressBackgroundColor={palette.card} />}

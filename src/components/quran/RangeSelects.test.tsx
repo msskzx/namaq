@@ -18,7 +18,7 @@ describe('surah and juz range lists', () => {
   it('names each surah beside its number', () => {
     render(<Harness start={{ unit: 'surah', values: ['70', '114'] }} />);
     const from = screen.getByRole('combobox', { name: 'From chapter' }) as HTMLSelectElement;
-    expect(from.selectedOptions[0].textContent).toBe('70 المعارج');
+    expect(from.selectedOptions[0].textContent).toBe('70 المَعَارِجْ');
   });
 
   it('starts the to list at the from surah and pulls to along', () => {
@@ -38,6 +38,6 @@ describe('surah and juz range lists', () => {
   it('names the surah and ayah each juz starts at', () => {
     render(<Harness start={{ unit: 'juz', values: ['2', '30'] }} />);
     const from = screen.getByRole('combobox', { name: 'From juz' }) as HTMLSelectElement;
-    expect(from.selectedOptions[0].textContent).toBe('2 · البقرة 142');
+    expect(from.selectedOptions[0].textContent).toBe('2 · البَقَرَةْ 142');
   });
 });

@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { CONDITION_SPANS, OPENING_CARDS, conditionLines, openingCards } from '@shared/quran/openingKinds';
 import type { BranchAyah } from '@shared/quran/branches';
 import OpeningsView, { type ConditionText } from './OpeningsView';
@@ -79,6 +79,6 @@ describe('the surah openings page', () => {
   it('links each surah to the mushaf and the page to the openings quiz', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     expect(screen.getByRole('link', { name: 'سورة 106' }).getAttribute('href')).toBe('/quran/read/ayah/106/1');
-    expect(screen.getByRole('link', { name: 'اختبار أوائل السور' }).getAttribute('href')).toBe('/quizzes/openings');
+    expect(screen.getByRole('link', { name: 'اختبار أوائل السور' }).getAttribute('href')).toBe('/quizzes?topic=OPENINGS');
   });
 });

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
@@ -17,7 +17,8 @@ import VideoSheet from './VideoSheet';
 import PageProgress from './PageProgress';
 import SurahChips from './SurahChips';
 import { StudioButton, StudioControls, StudioProgress } from './Studio';
-import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, matrixReading, toggleSaved, WEBSITE, withPathReading } from '@/lib/branches';
+import { aroundOf, cardOf, evidenceOf, growthParts, isSaved, matrixReading, toggleSaved, withPathReading } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
@@ -33,15 +34,19 @@ import { answer, claimTarget, closeStudio, growthState, studioOwner, stop, useGr
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
 import type { BranchView } from '@/lib/settings';
-import { readJson, writeJson } from '@/lib/storage';
+import { isNumberIn, isRecord, isString, readJson, writeJson } from '@/lib/storage';
 import { toneColor, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
+import IconButton from '@/ui/IconButton';
+import DifferenceWords from '@/components/quran/text/DifferenceWords';
 
 const PLACE = 'branches-place';
 /** What an embedded pager reads instead of the branches tab's studio: never growing, never asking. */
 const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, tour: false, kind: 'tree' };
 type Place = { id: string; camera?: Camera };
+const isCamera = (value: unknown): value is Camera => isRecord(value) && [value.s, value.x, value.y].every(isNumberIn(-Infinity, Infinity));
+const isPlace = (value: unknown): value is Place => isRecord(value) && isString(value.id) && (value.camera === undefined || isCamera(value.camera));
 
 /** A second tap within this time is a double tap: it saves the tree instead of opening the ayat. */
 const DOUBLE_TAP = 280;
@@ -76,32 +81,19 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
   if (studio && current && !embedded) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
   // Embedded in a feed, the buttons look like the compare card's row beside it.
-  const icon = embedded ? { size: 22, color: palette.muted } : { size: 24, color: palette.ink };
+  const tone = embedded ? 'muted' : 'ink';
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: embedded ? 0 : 4, paddingHorizontal: embedded ? 0 : 8 }}>
-      <Pressable onPress={save} hitSlop={8} accessibilityRole="button" accessibilityLabel={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} style={{ padding: 8 }}>
-        <Animated.View style={popped}><Bookmark size={embedded ? 22 : 26} color={saved ? palette.accent : icon.color} fill={saved ? palette.accent : 'transparent'} /></Animated.View>
-      </Pressable>
+      <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} on={saved} fill tone={tone}
+        render={shown => <Animated.View style={popped}><Bookmark {...shown} /></Animated.View>} />
       {!embedded && <StudioButton palette={palette} />}
-      {onView && <Pressable onPress={onView.toggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} style={{ padding: 8 }}>
-        {onView.mode === 'tree' ? <GalleryHorizontal {...icon} /> : <TreeIcon {...icon} />}
-      </Pressable>}
-      <Pressable onPress={onAround.toggle} hitSlop={8} accessibilityRole="button" accessibilityState={{ selected: onAround.on }} accessibilityLabel="الآيات المحيطة" style={{ padding: 8 }}>
-        <UnfoldHorizontal size={icon.size} color={onAround.on ? palette.accent : icon.color} />
-      </Pressable>
-      {onRotate && <Pressable onPress={onRotate} hitSlop={8} accessibilityRole="button" accessibilityLabel="تدوير الشجرة" style={{ padding: 8 }}>
-        <RotateCwSquare {...icon} />
-      </Pressable>}
-      {evidence && <Pressable onPress={() => onEvidence(evidence)} hitSlop={8} accessibilityRole="button" accessibilityLabel="المصادر" style={{ padding: 8 }}>
-        <BookOpen {...icon} />
-      </Pressable>}
-      {targets.length > 0 && <Pressable onPress={() => onCompare(targets)} hitSlop={8} accessibilityRole="button" accessibilityLabel="في المقارنة" style={{ padding: 8 }}>
-        <ArrowLeftRight {...icon} />
-      </Pressable>}
+      {onView && <IconButton Icon={onView.mode === 'tree' ? GalleryHorizontal : TreeIcon} label={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={onView.toggle} tone={tone} />}
+      <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={onAround.toggle} on={onAround.on} tone={tone} />
+      {onRotate && <IconButton Icon={RotateCwSquare} label="تدوير الشجرة" onPress={onRotate} tone={tone} />}
+      {evidence && <IconButton Icon={BookOpen} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
+      {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" onPress={() => onCompare(targets)} tone={tone} />}
       {/* Share is always the last button (the left end). */}
-      <Pressable onPress={onShare} hitSlop={8} accessibilityRole="button" accessibilityLabel="مشاركة" style={{ padding: 8 }}>
-        <Send {...icon} />
-      </Pressable>
+      <IconButton Icon={Send} label="مشاركة" onPress={onShare} tone={tone} />
     </View>
   );
 }
@@ -121,7 +113,7 @@ function ConnectionChips({ group, selected, onToggle, palette }: { group: Group;
               <Tags size={13} color={on ? palette.paper : tone} />
               <Text style={{ color: on ? palette.paper : tone, fontSize: 13 }}>{TAGS[tag].ar}</Text>
             </Pressable>
-            {example ? <Text style={{ color: palette.ink, fontSize: 14 }}>{example}</Text> : null}
+            {example ? <Text style={{ color: palette.ink, fontSize: 14 }}>{example}</Text> : group.words?.[tag] ? <DifferenceWords words={group.words[tag]!} color={palette.ink} fontSize={14} /> : null}
           </View>
         );
       })}
@@ -168,7 +160,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   };
   // Embedded, «show only this part» opens that part on the branches tab.
   const actions = useMemo<NodeActions>(() => ({ onSubtree: piece => (embedded ? embedded.open(piece) : onOpen?.(piece)) }), [onOpen, embedded]);
-  const place = useMemo(() => (embedded ? undefined : readJson<Place>(PLACE)), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const place = useMemo(() => (embedded ? undefined : readJson(PLACE, isPlace)), []); // eslint-disable-line react-hooks/exhaustive-deps
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   const [view, setView] = useState<Size | null>(null);

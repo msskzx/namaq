@@ -1,8 +1,7 @@
 // «في أي سورة؟» (owner, 2026-11-13): an ayah and four surahs to pick from. Easy offers surahs far from the right one.
 // Medium and hard offer the surahs of the ayah's متشابهات first, then its neighbours (owner, 2026-11-17); hard also asks
 // the ayat with a close look-alike first.
-import corpus from '../data/quran/trees.json';
-import surahRows from '../data/quran/surahs.json';
+import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { normalizeWord } from '../quran/normalize';
@@ -10,6 +9,7 @@ import { byDifficulty, HARD_FROM, wordShare, type Difficulty } from './difficult
 import { shuffle, type Random } from './random';
 import { quizTrees } from './treeScope';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
+import { SURAH_NAMES } from '../quran/surahNames';
 
 export const WHICH_SURAH = 'SURAH';
 const CHOICES = 4;
@@ -19,7 +19,7 @@ const MIN_WORDS = 3;
 const NEAR = 4;
 const FAR = 10;
 
-const names = Object.fromEntries(surahRows.map(row => [row.number, row.name])) as Record<number, string>;
+const names = SURAH_NAMES;
 const surahOf = (key: string) => Number(key.split(':')[0]);
 
 type Alike = { key: string; share: number };
@@ -110,6 +110,7 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     choices: shuffle([surah, ...wrong], random).map(n => ({ value: String(n), labelArabic: names[n] })),
     correctAnswer: String(surah),
     ayahKey: ayah.key,
+    page: { title: 'hidden' },
     ...(Object.keys(closest).length && { alike: closest }),
     evidence: { claimKeys: [] },
   };

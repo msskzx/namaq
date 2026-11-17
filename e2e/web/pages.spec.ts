@@ -7,9 +7,10 @@ test.describe('pages without the database', () => {
     await noErrorPage(page);
   });
 
-  test('the quizzes page lists every quiz', async ({ page }) => {
+  test('the quizzes page offers solo and party only', async ({ page }) => {
     await page.goto('/quizzes');
-    for (const name of ['اختبار فردي', 'اختبار جماعي', 'تسميع', 'اكتب أول الآية وآخرها']) await expect(page.getByText(name, { exact: true }).first()).toBeVisible();
+    const modes = page.getByRole('navigation', { name: 'نوع الاختبار' }).getByRole('link');
+    await expect(modes).toHaveText([/اختبار فردي/, /اختبار جماعي/]);
   });
 
   test('prayer times for a picked city', async ({ page }) => {
@@ -47,6 +48,10 @@ test.describe('pages without the database', () => {
   });
 });
 
+/** The matrix is the default view (owner, 2026-11-17); tests about the tree run for a reader who picked it in settings. */
+const pickTree = (page: import('@playwright/test').Page) =>
+  page.context().addCookies([{ name: 'branches-view', value: 'tree', url: test.info().project.use.baseURL! }]);
+
 test.describe('pages with the database', () => {
   test.skip(!hasDatabase, 'needs DATABASE_URL or .env (see e2e/README.md)');
 
@@ -74,6 +79,7 @@ test.describe('pages with the database', () => {
   });
 
   test('the home tree card is the branches tree and opens it', async ({ page }) => {
+    await pickTree(page);
     await page.goto('/');
     const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' }).first();
     await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
@@ -82,10 +88,10 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
-  test('the home recall card reveals a word at a time, and with the pen takes the whole ayah in write boxes and grades it', async ({ page }) => {
+  test('the home recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
-    const pen = page.getByRole('button', { name: 'اكتب الآية كاملة' }).first();
+    const pen = page.getByRole('button', { name: 'اكتب كل آية كاملة' }).first();
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
     await expect(async () => {
       await pen.click();
@@ -108,7 +114,7 @@ test.describe('pages with the database', () => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
     const card = page.locator('article').filter({ has: page.getByRole('button', { name: 'ارجع خطوة' }) }).first();
-    const whole = card.getByRole('button', { name: 'أظهر الآية' });
+    const whole = card.getByRole('button', { name: 'أظهر الآية التالية' });
     const undo = card.getByRole('button', { name: 'ارجع خطوة' });
     const lines = card.locator('[data-ayah]').first();
     await expect(lines).toBeVisible();
@@ -131,7 +137,7 @@ test.describe('pages with the database', () => {
     test.setTimeout(120_000);
     // Batches take the kinds in turn, one a batch; five batches on the days either side of today hold all seven, well inside
     // the server's two days.
-    const kinds = ['في أي سورة؟', 'أكمل الشجرة', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
     const seen = new Set<string>();
     for (const days of [-1, 1]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
@@ -214,13 +220,22 @@ test.describe('pages with the database', () => {
 
   test('no tree on home draws tabs: every box names its ayah inside, over a rule', async ({ page }) => {
     // docs/records/R0042; since 2026-11-16 (owner) no tree has tabs at all.
+    await pickTree(page);
     await page.goto('/');
     await expect(page.locator('[data-ref]').first()).toBeVisible();
     await expect(page.locator('[data-tab]')).toHaveCount(0);
     for (const ref of (await page.locator('[data-ref]').all()).slice(0, 6)) expect(parseFloat(await ref.evaluate(element => getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(11);
   });
 
-  test('branches shows the first tree', async ({ page }) => {
+  test('branches opens the first tree as the matrix for a new visitor', async ({ page }) => {
+    await page.goto('/quran/branches');
+    await expect(page.getByRole('region', { name: 'آيات الشجرة في سياقها' }).filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true })).toHaveCount(0);
+    await noErrorPage(page);
+  });
+
+  test('branches shows the first tree to a reader who picked the tree', async ({ page }) => {
+    await pickTree(page);
     await page.goto('/quran/branches');
     await expect(page.getByRole('progressbar', { name: 'التقدم بين الأشجار' })).toBeAttached();
     await expect(page.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
@@ -251,7 +266,7 @@ test.describe('pages with the database', () => {
       await page.mouse.down();
       await page.waitForTimeout(700);
       await page.mouse.up();
-      await expect(page.getByRole('button', { name: 'أشجار هذه الآية' })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('button', { name: 'متشابهات الآية' })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
     await page.getByRole('button', { name: 'تفسير السعدي' }).click();
     const sheet = page.getByRole('dialog', { name: 'تفسير السعدي' });

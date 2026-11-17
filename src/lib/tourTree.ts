@@ -1,15 +1,15 @@
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { branchInventory } from '@shared/quran/branchInventory';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import type { BranchAyah } from '@shared/quran/branches';
 import { tourPieceIn } from '@shared/quran/tour';
-import { buildStory, storedText, type StoryData } from '@shared/quran/prophets/story';
+import { buildStory } from '@shared/quran/prophets/story';
+import { quranStoryText } from '@shared/quran/prophets/storyText';
 import { STORIES } from '@shared/quran/prophets/stories';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import verdicts from '@shared/quran/prophets/verdicts.json';
 import type { MushafPage } from '@shared/quran/readerPage';
-import adamAyat from '@/app/quran/prophets/ayat/adam.json';
 
 let tour: ReturnType<typeof phrasePresentation> | null | undefined;
 /** The tree the first-visit tour shows (the app's tour tree), built once. */
@@ -29,7 +29,7 @@ export function tourStory() {
 
 function buildTourStory() {
   const { events, phases } = STORIES.adam;
-  return { phases, events: keptViews('adam', buildStory(events, storedText(adamAyat as StoryData)), verdicts.places as PlaceVerdicts) };
+  return { phases, events: keptViews('adam', buildStory(events, quranStoryText), verdicts.places as PlaceVerdicts) };
 }
 
 /** The mushaf page the tour recites: the last one, al-Ikhlas, al-Falaq and an-Nas (the app's tour page). */

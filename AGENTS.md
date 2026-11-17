@@ -69,6 +69,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
   steps and the subagent briefs for this cycle.
 - Records of past challenges live in [docs/records](docs/records/README.md).
+  Records carry judgment a test cannot check (how to read a source, what a
+  citation allows). A mistake that can happen again is not fixed by a record:
+  see "One entry for each shared thing" below.
   Before starting a task, and again after a first fix fails, search them (`rg`
   over `docs/records`) and read the ones that match. When you solve a real
   challenge in a way the code alone does not show, add a record in the same PR,
@@ -165,6 +168,38 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   its worktree if it has one (`git worktree remove <path>` before
   `git branch -D`, since a worktree checkout blocks the branch delete).
 
+## Shared first
+
+Owner, 2026-11-17: the same control kept being built again (three recite bars,
+two top bars and five hand-drawn copies, 74 icon buttons in 11 sizes), so
+features drifted. Screens arrange shared pieces; they never draw their own
+controls or boxes. The shared folders are `mobile/src/ui/` (app) and
+`src/components/common/` (website); `mobile/src/ui/README.md` lists the app's
+pieces. Plan and inventory: `docs/plans/shared-first.md`.
+
+- Before building any button, bar, sheet, menu, card, tab row, chip, field,
+  list row, empty message or loader, look in the shared folder. If the piece is
+  there, use it.
+- If it is there but lacks what you need, add an option (a prop) to it and
+  check every current caller still looks the same. Never copy it.
+- If it is not there, build it in the shared folder first, list it in the
+  README, then use it. A look used by one screen is still a shared piece.
+- Feature pieces shared by several screens (the recite controls in
+  `components/recite/`, the tree, the Quran text module) are built from the
+  pieces in the shared folder too.
+- Every PR that touches UI has a line before `Records used:`:
+  `Shared pieces: used Button, Sheet; added Chip` (or `none`).
+- `shared/sharedFirst.test.ts` counts, per file, what is drawn outside the
+  shared folders: controls (raw `Pressable`, `Modal`, `TextInput`, `Switch`,
+  loaders, `BlurView`, tappable `Text`/`View`, tap gestures; on the website raw
+  `<button>`, `<input>`, dialogs, popovers, portals, fixed overlays, clickable
+  `div`s) and boxes (rounded corners with a border or the card colour, literal
+  radii; `rounded-*` and `border-radius` on the website). Today's counts are in
+  `sharedFirst.baseline.json`. A file may never draw more than its count; a file
+  that draws less has its count lowered (`UPDATE_BASELINE=1 npx vitest run
+  sharedFirst`). Never raise a count to let a new copy in. Tree drawings, the
+  mushaf page, videos and theme swatches are exempt from the box count.
+
 ## Shared components
 
 - Every action button goes through `src/components/common/Button.tsx` rather
@@ -181,7 +216,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   them in would change how they look and what they announce.
 - Rows in a suggestion or node list are buttons for the keyboard, not controls
   that read as buttons: they stack multiple lines, fill their row, and carry no
-  border. Leave them as plain `button` elements.
+  border. The existing ones stay plain `button` elements, counted in the
+  guard's baseline; a new list gets a shared row piece (see "Shared first").
 - Every button carries an icon beside its label, from `lucide-react`. Pick one that names the action rather than decorating it, and reuse the
   icon an action already has elsewhere (Start over and Reset share the rotate
   arrow, View profile shares the person). A horizontal arrow has to be mirrored
@@ -193,7 +229,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Every link that leaves Namaq (a Shamela citation, a source on /sources or
   /attributions, Quranpedia, archive.org) goes through `ExternalLink`:
   `src/components/common/ExternalLink.tsx` on the website,
-  `mobile/src/components/ExternalLink.tsx` in the app (or its `openExternal`
+  `mobile/src/ui/ExternalLink.tsx` in the app (or its `openExternal`
   for a settings row that draws the same mark itself). It ends the text with a
   small out-of-site mark (lucide `SquareArrowOutUpLeft`, mirrored in English) in
   the link's own colour, so a reader knows before tapping that the link leaves
@@ -203,6 +239,66 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.
+
+## One entry for each shared thing
+
+Features drift when a new place draws an existing thing its own way: the tree
+was rebuilt three times (#776, #811, #825), and Quran text lost its signs and
+room in every feature that shaped it itself. Each shared thing has ONE entry
+point and a guard test that fails on any other path. Before building, find the
+thing here and use its entry; give it a prop for the new place rather than a
+copy. A guard checks every caller of the lower-level code it replaces, not
+only the feature that was reported (docs/records/R0054).
+
+When a bug comes back, or a fix would have to be repeated in another feature,
+do not add a guard on your own. A guard written alone tends to fence the
+symptom and leave the second path open (the tree bug returned after R0031,
+R0042 and R0051, each cited by the next fix, until the owner agreed one
+builder for every tree). Stop and bring the owner a short proposal first:
+the one pipeline every feature should go through (entry, levels, what each
+feature passes in), the callers that leave it today, and the guard that
+would fail on any other path. Before it reaches the owner, a second agent
+votes on it: give a fresh subagent the bug, the code and the proposed guard
+(not your reasoning), and ask it to find a caller the pipeline misses and to
+show the guard fails when the old path is put back. The proposal goes to the
+owner with both votes, and the second agent's objections are written in it
+if the two disagree. Build the pipeline and the guard, and add the row here,
+only after the owner agrees. A new row in this table is always the owner's
+decision.
+
+| Thing | Entry | Guard |
+| --- | --- | --- |
+| Quran text | the Quran module (being built: `shared/quran/quranText/`, `src/components/quran/text/`, `mobile/src/components/quran/text/`) | `shared/quran/oneQuranText.test.ts` |
+| Tree | builders in `shared/quran` (`createTreePresenter`, `compareTree`), drawn by each platform's `BranchTree` | `shared/quran/oneTree.test.ts` |
+| Link out of Namaq | `ExternalLink` (web and app) | `src/components/common/ExternalLink.test.tsx` |
+| Recite mode (تسميع) | `useRecite` (state) + `RecitePill` (bar) in `src/components/recite/` and `mobile/src/components/recite/`; the pen rule is a setting (`PenSetting`) | `shared/quran/oneRecite.test.ts` |
+| Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` counts raw buttons per file (no new ones) |
+| Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
+| Surah name | `surahName` / `SURAH_NAMES` in `shared/quran/surahNames.ts` (pause form with tashkeel, «البَقَرَةْ»); `SURAH_TITLES` only for a mushaf page's surah headers; the plain `name` only for matching | `shared/quran/oneSurahName.test.ts` |
+
+### Quran text
+
+Every Quran text goes through the module, at the first level the feature has
+room for: the whole Madina page, a slice of the page, the ayah as the page sets
+it, or the ayah copied off the page. "As in the mushaf" holds at every level:
+the KFGQPC Hafs page text with its tashkeel, ayah number medallion and every
+waqf, sajda and hizb sign. The copied level drops only the position on the
+page (two ayat stacked in compare or the matrix, words in a tree box); it keeps
+everything else. Features store places (surah:ayah:word), never copies of the
+text. The pages are the only stored Quran text: a feature that needs an ayah's
+words reads them from the pages (`ayahWordsOf` in
+`shared/quran/quranText/ayahWords.ts`), never from a regrouped copy. Built
+data keeps positions only: trees.json holds keys, pages, roots and word
+ranges, and `shared/quran/quranText/corpus.ts` puts the page words back (import
+it, never trees.json). The same ayahWords file maps the corpus's word split onto
+the page words. Only the module sets the Quran font. The exceptions are Quran quoted
+inside a book, the other readers' readings (qiraat.json), and the Quranic
+Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
+of them is the Hafs page text. The readings and dictionary forms are stored
+in the Madina page's spelling (`scripts/quran/madinaSpelling.ts` at build
+time), so no screen converts a word; book quotes keep the book's own spelling.
+`oneQuranText.test.ts` lists today's breaks in
+`oneQuranText.baseline.json`; the list only shrinks.
 
 ## Data model
 

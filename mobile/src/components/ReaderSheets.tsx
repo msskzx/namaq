@@ -1,30 +1,27 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { LightbulbOff, Play, Search } from 'lucide-react-native';
-import corpus from '@shared/data/quran/trees.json';
-import type { BranchAyah } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
-import { indexAyat, searchAyat, searchable, type AyahSearch, type IndexedAyah } from '@shared/quran/ayahSearch';
+import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
+import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';
+import { surahName } from '@shared/quran/surahNames';
+import Tabs from '@/ui/Tabs';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
 
-const name = (surah: { name: string }) => plainName(surah.name).replace(/^سورة\s*/, '');
+const name = (surah: { number: number }) => surahName(surah.number);
 const AROUND = 6;
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
 
-let indexed: IndexedAyah[] | undefined;
-/** The ayah word search runs on the bundled text, indexed the first time it is used. */
-const ayahIndex = () => (indexed ??= indexAyat(corpus.ayat as BranchAyah[]));
 
 type Row =
   | { kind: 'juz'; juz: number; page: number; key: string }
@@ -97,7 +94,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
               <Play size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>تابع التسميع من حيث توقفت</Text>
             </Pressable>}
             {forgotten.length > 0 && <Pressable style={button} accessibilityRole="button"
-              onPress={() => go({ page: pageOfAyah(forgotten[0]) ?? 1, key: forgotten[0], mark: false }, 'review')}>
+              onPress={() => go({ page: pageOfAyah(forgotten[0].split(':').slice(0, 2).join(':')) ?? 1, key: forgotten[0], mark: false }, 'review')}>
               <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت</Text>
             </Pressable>}
           </View>
@@ -134,7 +131,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
             <Pressable onPress={() => go({ page: row.page, key: `${row.number}:${row.from}`, mark: false })} accessibilityRole="link"
               style={[{ height: SURAH_ROW, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16 }, index === here && !query.trim() ? { backgroundColor: palette.paperDeep } : null]}>
               <Text style={{ width: 30, color: palette.accent, fontSize: 13 }}>{num(row.number)}</Text>
-              <Text style={{ color: palette.ink, fontSize: 17 }}>{row.name}</Text>
+              <Text style={{ color: palette.ink, fontSize: 17 }}>{surahName(row.number)}</Text>
               {row.from > 1 && <Text style={{ color: palette.muted, fontSize: 13 }}>من الآية {num(row.from)}</Text>}
               <View style={{ flex: 1 }} />
               <Text style={{ color: palette.muted, fontSize: 13 }}>{num(row.page)}</Text>
@@ -183,13 +180,7 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
-      <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-        {(['read', 'recite'] as const).map(option => (
-          <Pressable key={option} onPress={() => setMode(option)} accessibilityRole="tab" accessibilityState={{ selected: mode === option }} style={chip(mode === option)}>
-            <Text style={{ color: mode === option ? palette.onAccent : palette.ink, fontSize: 15 }}>{option === 'read' ? 'قراءة' : 'تسميع'}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <Tabs options={[{ key: 'read', label: 'قراءة' }, { key: 'recite', label: 'تسميع' }] as const} value={mode} onChange={setMode} palette={palette} />
       {GESTURES.map(gesture => (
         <View key={gesture} style={{ gap: 6 }}>
           <Text style={{ color: palette.ink, fontSize: 15 }}>{GESTURE_NAMES[gesture]}</Text>
@@ -206,15 +197,5 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
         </View>
       ))}
     </View>
-  );
-}
-
-export function GestureSheet({ open, onClose, palette, mode }: { open: boolean; onClose: () => void; palette: Palette; mode: ReaderMode }) {
-  return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
-      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-        <GestureSettings key={String(open)} palette={palette} mode={mode} />
-      </View>
-    </Sheet>
   );
 }

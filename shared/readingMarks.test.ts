@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { setKeyStorage } from './storage';
-import { isParagraphSaved, lastBookSpot, readFasilas, setBookFasila, setLastBookSpot, setQuranFasila, toggleSavedParagraph } from './readingMarks';
+import { continuePage, isParagraphSaved, lastBookSpot, readFasilas, setBookFasila, setLastBookSpot, setQuranFasila, toggleSavedParagraph } from './readingMarks';
 
 describe('reading marks', () => {
   beforeEach(() => {
@@ -23,6 +23,12 @@ describe('reading marks', () => {
     setQuranFasila(null);
     setBookFasila('kashshaf', null);
     expect(readFasilas()).toEqual({});
+  });
+
+  it('continues reading at the فاصلة, else at the page last open', () => {
+    expect(continuePage(readFasilas(), 120)).toEqual({ page: 120, fasila: false });
+    setQuranFasila({ key: '18:1', page: 293 });
+    expect(continuePage(readFasilas(), 120)).toEqual({ page: 293, fasila: true });
   });
 
   it('saves a paragraph and lets it go', () => {

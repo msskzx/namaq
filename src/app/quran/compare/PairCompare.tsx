@@ -24,7 +24,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { branchesHref } from '@shared/quran/branches';
 import { curatedComparisons, curatedFor, surahPairHref } from '@shared/quran/curatedComparisons';
 import type { SurahPair } from '@/lib/quran/mutashabih/pairs';
-import { normalizeWord, plainName } from '@shared/quran/normalize';
+import { normalizeWord } from '@shared/quran/normalize';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
@@ -42,6 +42,7 @@ import { ayahStarts, isRefrain, READ_SPEEDS, setReadSpeed, useReadAlong, type Re
 import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLook';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
+import { surahName } from '@shared/quran/surahNames';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -51,9 +52,8 @@ const readSort = () => { try { return localStorage.getItem(SORT_KEY) === 'count'
 const writeSort = (count: boolean) => { try { localStorage.setItem(SORT_KEY, count ? 'count' : 'mushaf'); } catch {} };
 
 function useNames(names: Names, ar: boolean) {
-  const plain = (n: number) => (ar ? plainName(names[n]?.ar ?? '') : names[n]?.en ?? String(n));
-  // Names from the database already start with «سُورَةُ»; say it once either way.
-  const surah = (n: number) => `سورة ${plainName(names[n]?.ar ?? '').replace(/^سورة\s+/, '')}`;
+  const plain = (n: number) => (ar ? surahName(n) : names[n]?.en ?? String(n));
+  const surah = (n: number) => `سورة ${surahName(n)}`;
   const title = (a: number, b: number) => a === b ? (ar ? `${surah(a)} مع نفسها` : `${plain(a)} with itself`) : ar ? `${surah(a)} و${surah(b)}` : `${plain(a)} and ${plain(b)}`;
   return { plain, title };
 }
@@ -101,7 +101,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
   const [draft, setDraft] = useState(() => draftOf(scope));
   useEffect(() => setDraft(draftOf(scope)), [scope]);
   const invalid = isRangeUnit(draft.unit) && !scopeRange(draft.unit, draft.values);
-  const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: plainName(name.ar), nameEn: name.en }));
+  const allSurahs = Object.entries(names).map(([number, name]) => ({ number: Number(number), name: surahName(Number(number)), nameEn: name.en }));
   const clear = () => { onSavedOnly?.(false); setDraft(draftOf()); router.push(pairHref(a, b, review)); };
   const apply = ar ? 'تطبيق' : 'Apply';
   const reset = ar ? 'إعادة ضبط' : 'Reset';
@@ -283,7 +283,7 @@ const lightMarks = (lit: string | null, reading?: ReadStep, written?: Set<string
 });
 
 function sidePage(side: CardSide, names: Names, ar: boolean, lit: string | null, extra?: React.ReactNode, partners?: Pick<SpreadPage, 'pick' | 'footer'> & { numbers: number[]; ayat: SpreadAyah[][] }, reading?: ReadStep, written?: Set<string>): SpreadPage {
-  const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
+  const name = ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah);
   const read = ar ? `اقرأ ${name} ${num(side.ayah)} في المصحف` : `Read ${name} ${side.ayah} in the mushaf`;
   const show = (n: number) => (ar ? num(n) : n);
   const last = side.ayat[side.ayat.length - 1]?.number ?? side.ayah;
@@ -314,7 +314,7 @@ const runsOf = (numbers: number[]) => numbers.reduce<[number, number][]>((runs, 
   return runs;
 }, []);
 
-const emptyNote = (name: string, ar: boolean) => (ar ? `لا تذكر سورة ${name.replace(/^سورة\s+/, '')} هذا الجزء` : `${name} does not tell this part`);
+const emptyNote = (name: string, ar: boolean) => (ar ? `لا تذكر سورة ${name} هذا الجزء` : `${name} does not tell this part`);
 
 /** A card whose sides line up in rows (a curated story part) as one pair of sides per row; any other card as itself. */
 function rowsOf(sides: CardSide[]): [CardSide, CardSide][] {
@@ -333,7 +333,7 @@ const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1])
  * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
  * address, for an open button and for the shared link.
  */
-export function Card({ card, names, ar, savedIds, review, view: preferred = 'tree', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
+export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -364,11 +364,11 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
   const toggleFold = (row: number) => setFolded(current => (current.includes(row) ? current.filter(other => other !== row) : [...current, row]));
   // The rule's label is the ayat alone, as on every rule; the button's name adds the surah for a screen reader.
   const ayatOf = (row: number, side: CardSide) => runsOf(side.rows![row]).map(([from, to]) => `${ar ? num(from) : from}${to > from ? `–${ar ? num(to) : to}` : ''}`).join(' · ');
-  const rangeOf = (row: number, side: CardSide) => `${ar ? plainName(names[side.surah]?.ar ?? '').replace(/^سورة\s+/, '') : names[side.surah]?.en ?? String(side.surah)} ${ayatOf(row, side)}`;
+  const rangeOf = (row: number, side: CardSide) => `${ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah)} ${ayatOf(row, side)}`;
   // Folded, the chevron keeps its corner and the part's range takes the middle of the rule, as every rule's label does.
   const foldButton = (row: number, side: CardSide) => {
     const told = shownSides.find(other => other.rows![row].length)!;
-    const range = side.rows![row].length ? rangeOf(row, side) : `${rangeOf(row, told)}: ${emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar)}`;
+    const range = side.rows![row].length ? rangeOf(row, side) : `${rangeOf(row, told)}: ${emptyNote(ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah), ar)}`;
     const closed = folded.includes(row);
     const label = closed ? (ar ? `افتح ${range}` : `Open ${range}`) : (ar ? `اطوِ ${range}` : `Fold ${range}`);
     return <Button size="sm" variant="muted" aria-expanded={!closed} aria-label={label} title={label} onClick={event => { event.stopPropagation(); toggleFold(row); }} className="font-[family-name:var(--font-amiri)]">
@@ -390,18 +390,18 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
   const [aroundOn, setAround] = useCardAround(anchorOf(card));
   const aroundLabel = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   const neighbours = useNeighbours(shownSides, aroundOn && !card.many && !tree);
-  const treeNames = Object.fromEntries(shownSides.map(side => [side.surah, ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah)]));
+  const treeNames = Object.fromEntries(shownSides.map(side => [side.surah, ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah)]));
   const viewLabel = view === 'tree' ? (ar ? 'عرض المصفوفة' : 'Show the matrix') : (ar ? 'عرض الشجرة' : 'Show the tree');
   // A refrain card's tree names every place the refrain repeats, as its matrix does.
   const titleOf = (side: CardSide, i: number) => card.many?.side === i && isRefrain(card.many.options)
-    ? `${ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? side.surah} ${card.many.options.map(item => (ar ? num(item.ayah.number) : item.ayah.number)).join(' · ')}`
+    ? `${ar ? surahName(side.surah) : names[side.surah]?.en ?? side.surah} ${card.many.options.map(item => (ar ? num(item.ayah.number) : item.ayah.number)).join(' · ')}`
     : sidePage(side, names, ar, null).title;
   const withNeighbours = (page: SpreadPage, i: number): SpreadPage => neighbours && !page.pick
     // The ayah before and after run on with the side's ayat as one text, not rows of their own.
     ? { ...page, rows: [[...(neighbours.before[i] ? [neighbours.before[i]!] : []), ...page.rows.flat(), ...(neighbours.after[i] ? [neighbours.after[i]!] : [])]] }
     : page;
   const partners = (side: CardSide) => {
-    const name = ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah);
+    const name = ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah);
     const options = card.many!.options;
     if (isRefrain(options)) return {
       numbers: [],
@@ -432,7 +432,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'tre
               {side.rows![row].length > 0 && folded.includes(row) && <span aria-hidden className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[var(--home-paper)] px-2 font-[family-name:var(--font-amiri)] text-xs text-[var(--home-muted)]">{ayatOf(row, side)}</span>}
             </div>)}</div>}
             {!folded.includes(row) && <CompareTree sides={sides} names={treeNames} titles={[titleOf(sides[0], 0), titleOf(sides[1], 1)]} ar={ar} around={card.many || row > 0 ? undefined : anchorOf(card)}
-              empty={sides.map(side => emptyNote(ar ? plainName(names[side.surah]?.ar ?? '') : names[side.surah]?.en ?? String(side.surah), ar))} />}
+              empty={sides.map(side => emptyNote(ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah), ar))} />}
           </div>)}
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (

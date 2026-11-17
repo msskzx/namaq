@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import type { BranchAyah } from './branches';
 import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
@@ -59,9 +59,9 @@ describe('opening kinds', () => {
   });
 
   it('colours the words the surahs of a card share, as the matrix does: all of them fully, only some faded', () => {
-    expect(marked(row('alif-lam-ra', 10), false).join(' ')).toMatch(/ٱلْكِتَـٰبِ/);
+    expect(marked(row('alif-lam-ra', 10), false).join(' ')).toMatch(/ٱلۡكِتَٰبِ/);
     expect(marked(row('ha-mim', 40), true).join(' ')).toMatch(/حمٓ/);
-    expect(marked(row('hamd', 6), false).join(' ')).toMatch(/ٱلْحَمْدُ/);
+    expect(marked(row('hamd', 6), false).join(' ')).toMatch(/ٱلۡحَمۡدُ/);
   });
 
   it('colours nothing on the cards of surahs that stand alone', () => {

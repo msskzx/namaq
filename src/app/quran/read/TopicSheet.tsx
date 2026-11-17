@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { List, X } from 'lucide-react';
-import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahHref } from '@shared/ayahMarks';
 import { sectionStart, surahTopicsCredit, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
@@ -11,10 +10,11 @@ import { surahAim } from '@shared/quran/surahAims';
 import { citeLabel, citeUrl } from '@shared/quran/surahOrder';
 import ExternalLink from '@/components/common/ExternalLink';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type TopicOpen = { surah: number; section: number };
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const range = (s: TopicSection) => (s.from === undefined ? '' : s.from === s.to ? num(s.from) : `${num(s.from)}–${num(s.to!)}`);
 
 /**

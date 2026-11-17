@@ -6,11 +6,11 @@ import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { JUZ_STARTS, type JuzRange } from '@shared/quran/juz';
 import { RangeFields, rangeFromDraft, type RangeDraft } from './RangeFilter';
 import RangeSelects, { type RangeOption } from './RangeSelects';
 import ScopePicker, { type ScopeOption } from './ScopePicker';
+import { surahName } from '@shared/quran/surahNames';
 
 export type FilterUnit = 'juz' | 'surah' | 'page' | 'surahs' | 'juzs';
 const RANGE_MAX = { juz: 30, surah: 114, page: 604 };
@@ -37,12 +37,12 @@ export function ScopeFields({ draft, onChange, range, allSurahs }: { draft: Scop
   const toLabel = unit === 'surah' ? (ar ? 'إلى السورة' : 'To chapter') : unit === 'page' ? (ar ? 'إلى الصفحة' : 'To page') : (ar ? 'إلى الجزء' : 'To juz');
   const label = ar ? 'تصفية' : 'Filter';
   const show = (n: number) => (ar ? num(n) : String(n));
-  const surahName = (n: number) => { const option = allSurahs.find(item => item.number === n); return (!ar && option?.nameEn) || plainName(option?.name ?? '').replace(/^سورة\s*/, ''); };
+  const nameOf = (n: number) => (!ar && allSurahs.find(item => item.number === n)?.nameEn) || surahName(n);
   // Surahs and juz are picked from lists that say which surah each number is; pages stay typed numbers.
   const listed: RangeOption[] | null = unit === 'surah' && allSurahs.length
-    ? Array.from({ length: 114 }, (_, i) => ({ value: i + 1, label: `${show(i + 1)} ${surahName(i + 1)}`.trim() }))
+    ? Array.from({ length: 114 }, (_, i) => ({ value: i + 1, label: `${show(i + 1)} ${nameOf(i + 1)}`.trim() }))
     : unit === 'juz' && allSurahs.length
-      ? JUZ_STARTS.map((start, i) => { const [surah, ayah] = start.split(':').map(Number); return { value: i + 1, label: `${show(i + 1)} · ${surahName(surah)} ${show(ayah)}` }; })
+      ? JUZ_STARTS.map((start, i) => { const [surah, ayah] = start.split(':').map(Number); return { value: i + 1, label: `${show(i + 1)} · ${nameOf(surah)} ${show(ayah)}` }; })
       : null;
   return <div className="flex flex-wrap items-start gap-2">
     <select aria-label={ar ? 'التصفية حسب' : 'Filter by'} value={unit} onChange={event => { const next = event.target.value as FilterUnit; onChange({ ...draft, unit: next, values: ['1', String(scopeMax(next))] }); }}

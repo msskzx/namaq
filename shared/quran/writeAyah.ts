@@ -64,6 +64,15 @@ export function nextBox(boxes: Boxes, asked: number[]): { boxes: Boxes; finished
   return at + 1 < asked.length ? { boxes: { ...boxes, current: asked[at + 1] }, finished: false } : { boxes, finished: true };
 }
 
+/** The last box written, emptied and written again (a party's step back, owner 2026-11-17), or null when none is written. */
+export function clearLastBox(boxes: Boxes, asked: number[]): Boxes | null {
+  const last = [...asked].reverse().find(at => boxes.typed[at]);
+  if (last === undefined) return null;
+  const typed = { ...boxes.typed };
+  delete typed[last];
+  return { typed, current: last };
+}
+
 /** Back to the box before (a Backspace in an empty box), or null on the first one. */
 export function previousBox(boxes: Boxes, asked: number[]): Boxes | null {
   const at = boxes.current === null ? -1 : asked.indexOf(boxes.current);
@@ -88,4 +97,35 @@ export function gradeWritten(asked: number[], typed: Record<number, string>, wor
   const right = asked.filter(at => writtenRight(typed[at] ?? '', words[at]));
   const wrong = asked.filter(at => !right.includes(at));
   return { right, wrong, typed: Object.fromEntries(wrong.map(at => [at, typed[at] ?? ''])) as Record<number, string> };
+}
+
+/**
+ * What the pen writes, everywhere recite mode writes (the mushaf, the home recall card, the quiz): an ayah's first and last
+ * few words, or all of it (owner, 2026-11-17: a setting for all, and one for the quizzes).
+ */
+export const PEN_RULES = ['ends', 'whole'] as const;
+export type PenRule = (typeof PEN_RULES)[number];
+export const isPenRule = (value: unknown): value is PenRule => (PEN_RULES as readonly unknown[]).includes(value);
+
+/** The words of an ayah the pen asks, by place, past signs that are no words (۞). */
+export const penTargets = (words: string[], rule: PenRule): number[] =>
+  rule === 'whole' ? words.flatMap((word, at) => (maxLetters(word) ? [at] : [])) : wordTargets(words);
+
+/**
+ * How a quiz asks an ayah on its own mushaf page (QuizPage, owner 2026-11-17). `shows`: how many of its words show at first,
+ * counted as the quiz's words (all when left out). `recite`: the reader recites it with recite mode's bar, reveals or writes
+ * it, and grades it (حفظتها or نسيتها). `title`: its surah's title stays hidden even with the ayat before written (the surah
+ * is the answer), or shows (the surah is the question).
+ */
+export type PageAsk = { shows?: number; recite?: boolean; title?: 'hidden' | 'shown' };
+
+/**
+ * How many of an ayah's page words (۞ included) show before the hidden part. The quiz's words are the page's words; the
+ * page only adds ۞, which is skipped.
+ */
+export function shownCut(key: string, pageWords: string[], shows: number | undefined): number {
+  if (shows === undefined) return pageWords.length;
+  if (shows <= 0) return 0;
+  const spoken = pageWords.flatMap((word, at) => (maxLetters(word) ? [at] : []));
+  return (spoken[shows - 1] ?? pageWords.length - 1) + 1;
 }

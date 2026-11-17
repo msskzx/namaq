@@ -2,16 +2,16 @@
 import type { Random } from './random';
 import type { QuizTopic } from './settings';
 
-/** The surah openings quiz (write a surah's first ayah), which is no quiz topic of its own. */
+/** The surah openings kind (write a surah's first ayah); the feed draws it as its own card (OpeningPost). */
 export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
 /** The kinds in the order they take turns: the Quran's only; the history topics wait for their phase. */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', OPENINGS, 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'];
+export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
-  SURAH: 'في أي سورة؟', BRANCHES: 'أكمل الشجرة', RECITE: 'سمّع بقية الآية', [OPENINGS]: 'أوائل السور',
+  SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'سمّع الآية',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
 } as Record<FeedQuizKind & string, string>;
 

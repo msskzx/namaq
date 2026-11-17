@@ -1,6 +1,7 @@
 // docs/plans/quran-mutashabih.md
 import { spell, type BranchAyah } from '@shared/quran/branches';
-import { normalizeWord, plainName } from '@shared/quran/normalize';
+import { normalizeWord } from '@shared/quran/normalize';
+import { bare } from '@shared/quran/quranText/ayahWords';
 import { buildPhraseGroups, type PhraseOccurrence } from '@shared/quran/phraseTrees';
 import rawEvidence from '@shared/quran/mutashabih/evidence.json';
 
@@ -33,7 +34,7 @@ const wordsOf = (ayah: BranchAyah): Word[] => ayah.words.flatMap((text, index) =
 });
 
 function levelOf(a: Word, b: Word): Level | undefined {
-  if (same(a, b)) return a.text === b.text ? 'exact' : 'letters';
+  if (same(a, b)) return bare(a.text) === bare(b.text) ? 'exact' : 'letters';
   if (a.lemma && a.lemma === b.lemma && a.root === b.root) return 'lemma';
   if (a.root && a.root === b.root) return 'root';
 }
@@ -149,7 +150,7 @@ function compareWords(a: Word[], b: Word[], config = MATCH_CONFIG): Comparison {
   const tags = unique(columns.flatMap(column => column.tags));
   const full = matched / Math.max(a.length, b.length);
   const spans: [Place, Place] = [place(a[0], a.at(-1)!), place(b[0], b.at(-1)!)];
-  if (a.length === b.length && a.every((word, i) => word.text === b[i].text)) return { columns, tags: [], score: 1, coverage: 1, kind: 'identical', spans };
+  if (a.length === b.length && a.every((word, i) => bare(word.text) === bare(b[i].text))) return { columns, tags: [], score: 1, coverage: 1, kind: 'identical', spans };
   let score = full;
   let close = matched >= config.minMatchedWords && score >= config.minCoverage;
   const strong = hits.filter(hit => isStrong(hit.level));
@@ -270,29 +271,6 @@ function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citat
     return { a: places[i].key, b: places[j].key, ...comparison };
   });
   const tags = unique(citations.length ? citations.flatMap(citation => citation.tags) : kind === 'same_frame' ? ['frame' as const] : kind === 'identical' || kind === 'shared_phrase' ? [] : pairs.flatMap(pair => pair.tags));
-  const examples: Partial<Record<Tag, string>> = {};
-  const words = new Map(rows.flatMap(row => row.map(word => [`${word.key}:${word.index}`, word] as const)));
-  for (const tag of tags) {
-    const cited = citations.find(citation => citation.examples?.[tag])?.examples?.[tag];
-    if (cited || tags.length === 1 && detail) {
-      examples[tag] = cited ?? detail!;
-      continue;
-    }
-    const pair = pairs.find(pair => pair.columns.some(column => column.tags.includes(tag) || tag === 'frame' && column.tags.length));
-    const changed = pair?.columns.filter(column => column.tags.includes(tag) || tag === 'frame' && column.tags.length);
-    if (!changed?.length) continue;
-    const selected = tag === 'order' || tag === 'inversion' ? changed : changed.slice(0, 1);
-    const side = (key: 'a' | 'b') => {
-      const positions = selected.flatMap(column => column[key] ? [column[key]!] : []);
-      positions.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }) || a.index - b.index);
-      const values = unique(positions.map(position => {
-        const word = words.get(`${position.key}:${position.index}`)!;
-        return tag === 'case' ? spell(word.text) : plainName(word.text);
-      }));
-      return values.slice(0, 3).join(' ') + (values.length > 3 ? ' …' : '') || '∅';
-    };
-    examples[tag] = `${side('a')} / ${side('b')}`;
-  }
   const differences: Record<string, number[]> = {};
   if (focus) Object.assign(differences, focus);
   else if (tags.length) {
@@ -308,8 +286,8 @@ function makeGroup(places: Place[], rows: Word[][], kind: Kind, citations: Citat
   return {
     id, text: anchor.text, tree: { ...anchor, id }, places, kind, tags, differences,
     score: Math.min(...pairs.map(pair => pair.score)),
-    citations: citations.map(citation => ({ ...citation, examples: Object.fromEntries(citation.tags.flatMap(tag => examples[tag] ? [[tag, examples[tag]]] : [])) })),
-    detail, examples,
+    citations,
+    detail,
     columns: pairs.map(({ a, b, columns }) => ({
       a, b, columns: columns.map(column => {
         if (!focus) return column;

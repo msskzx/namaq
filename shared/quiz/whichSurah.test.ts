@@ -28,7 +28,7 @@ describe('which surah', () => {
     const hard = whichSurah.questions(whole, 'hard', seeded(3), 30);
     for (const question of hard) expect(Object.keys(question.alike ?? {}).length).toBeGreaterThan(0);
     const adam = whichSurah.questions({ range: { from: 1, to: 1 }, filters: {} }, 'hard', seeded(4)).find(question => question.ayahKey === '2:34')!;
-    expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البقرة', 'الإسراء', 'طه']));
+    expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البَقَرَةْ', 'الإِسْرَاءْ', 'طه']));
     expect(adam.alike?.['17'].key).toBe('17:61');
   });
 
@@ -56,7 +56,7 @@ describe('which surah', () => {
     expect([...places].sort()).toEqual([0, 1, 2, 3]);
     const adam = medium.find(question => question.ayahKey === '2:34')!;
     expect(Object.keys(adam.alike ?? {})).toHaveLength(3);
-    expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البقرة', 'الإسراء', 'طه']));
+    expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البَقَرَةْ', 'الإِسْرَاءْ', 'طه']));
   });
 
   it('offers far surahs when easy', () => {

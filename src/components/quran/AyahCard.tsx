@@ -7,6 +7,7 @@ import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 import { SLOT_COLORS } from './slotColors';
 import { mushafText } from '@shared/quran/mushafText';
+import { surahName } from '@shared/quran/surahNames';
 
 export type WordNote = { className?: string; title?: string };
 
@@ -42,7 +43,7 @@ export function AyahCard({ ayah, slots, notes }: AyahCardProps) {
             {slots ? <SharedText text={ayah.text} slots={slots} notes={notes} /> : mushafText(ayah.text)}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            {language === 'ar' ? ayah.surah.name : ayah.surah.nameTransliterated || ayah.surah.name} - {t.ayahs} {ayah.number}
+            {language === 'ar' ? surahName(ayah.surah.number) : ayah.surah.nameTransliterated || surahName(ayah.surah.number)} - {t.ayahs} {ayah.number}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 // docs/quiz-ayah-branches.md
 import type { Branch } from '../quran/branches';
-import { normalizeWord } from '../quran/normalize';
+import { normalizeWord, seated } from '../quran/normalize';
 import { shuffle, type Random } from './random';
 
 const DAGGER = 'ٰ';
@@ -13,7 +13,7 @@ const letters = (text: string) => normalizeWord(text.replace(/آ/g, 'ءا').repl
 function pattern(word: string): string {
   const pieces: string[] = [];
   let previous = '';
-  for (const char of word.replace(/آ/g, 'ءا')) {
+  for (const char of seated(word).replace(/آ/g, 'ءا')) {
     if (char === DAGGER) {
       if (SEATS.includes(previous)) pieces[pieces.length - 1] += '?';
       pieces.push('ا?');
@@ -60,6 +60,12 @@ export function leadingWords(given: string, words: string[]): number {
 }
 
 export const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
+
+/** The ayah signs a node opens with (﴿١٧﴾ where its ayah reads on into the next): drawn before an asked box, never typed. */
+export function leadingSigns(words: string[]): string[] {
+  const first = words.findIndex(word => letters(word) !== '');
+  return words.slice(0, first < 0 ? words.length : first);
+}
 
 /**
  * The typed answer without a repeat of the last word of the node before it: someone may type that word again

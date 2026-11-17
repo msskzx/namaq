@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/surahOrder.json';
+import corpus from './quranText/corpus';
+import surahRows from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
 import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, orderInJuz, orderSurahs } from './surahOrder';
 
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 const surahs = orderSurahs(data, num);
 
 describe('surah order data', () => {
@@ -33,8 +36,8 @@ describe('surah order data', () => {
     for (const [to, link] of Object.entries(ORDER_LINKS)) for (const [a, b] of link.pairs) {
       expect(Number(a.split(':')[0])).toBeLessThan(Number(to));
       expect(Number(b.split(':')[0])).toBe(Number(to));
-      expect(data.ayat[a as keyof typeof data.ayat]).toBeTruthy();
-      expect(data.ayat[b as keyof typeof data.ayat]).toBeTruthy();
+      expect(data(a)).toBeTruthy();
+      expect(data(b)).toBeTruthy();
     }
   });
 });
@@ -42,7 +45,7 @@ describe('surah order data', () => {
 describe('orderSurahs', () => {
   it('opens each surah with whole ayat from the first', () => {
     expect(surahs).toHaveLength(114);
-    expect(surahs[0]).toMatchObject({ surah: 1, name: 'الفاتحة', juz: [1, 1] });
+    expect(surahs[0]).toMatchObject({ surah: 1, name: 'الفَاتِحَةْ', juz: [1, 1] });
     expect(surahs.at(-1)!.opening.map(a => a.ayah)).toEqual([1, 2, 3, 4]);
     for (const s of surahs) expect(s.opening[0].ayah).toBe(1);
   });
@@ -52,7 +55,7 @@ describe('orderSurahs', () => {
       const counts = s.opening.map(a => a.text.split(' ').length);
       const total = counts.reduce((x, y) => x + y, 0);
       expect(s.opening.length).toBeLessThanOrEqual(4);
-      expect(total >= 10 || s.opening.length === 4 || s.opening.length === data.counts[String(s.surah) as keyof typeof data.counts]).toBe(true);
+      expect(total >= 10 || s.opening.length === 4 || s.opening.length === surahRows.find(row => row.number === s.surah)!.numberOfAyat).toBe(true);
       expect(total - counts.at(-1)!).toBeLessThan(10);
     }
   });
@@ -60,7 +63,7 @@ describe('orderSurahs', () => {
   it('colours the words a pair shares', () => {
     const duha = surahs.find(s => s.surah === 93)!;
     const [layl, duhaAyah] = duha.link!.pairs[0];
-    expect(layl.place).toBe('الليل ١٣');
+    expect(layl.place).toBe('اللَّيْلْ ١٣');
     expect(layl.words.filter(w => w.shared).length).toBeGreaterThan(0);
     expect(duhaAyah.words.filter(w => w.shared).length).toBeGreaterThan(0);
   });

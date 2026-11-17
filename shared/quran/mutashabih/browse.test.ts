@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { branchesHref, type BranchAyah } from '../branches';
 import { browseGroups, deduplicateGroups, filteredAyat, groupFilters, toggleFilter, type GroupFilters } from './browse';
 import type { Group } from './types';
-import artifact from '../../data/quran/mutashabih.json';
-import treeData from '../../data/quran/trees.json';
+import { builtGroups as artifact } from './data';
+import treeData from '../quranText/corpus';
 import { canonicalGroups, groupHasId } from './identity';
 
 function group(id: string, keys: string[], options: Partial<Pick<Group, 'kind' | 'score' | 'tags' | 'citations' | 'differences'>> = {}): Group {
@@ -61,7 +61,7 @@ describe('browse groups', () => {
     expect(visible).toHaveLength(1);
     expect(visible[0].places.map(place => place.key)).toEqual(['17:61', '18:50']);
     expect(visible[0].tree.occurrences.map(place => place.start)).toEqual([0, 0]);
-    expect(visible[0].tree.text).toContain('إِذْ قُلْنَا');
+    expect(visible[0].tree.text).toContain('إِذۡ قُلۡنَا');
     for (const id of [...oldIds, ...candidates.map(group => group.id)]) expect(groupHasId(visible[0], id)).toBe(true);
     expect(candidates.map(group => group.places.length)).toEqual([4, 5]);
   });

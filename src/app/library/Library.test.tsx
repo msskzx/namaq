@@ -30,8 +30,8 @@ describe('the saved and forgotten page', () => {
     quranContexts.mockImplementation(async (keys: string[]) => keys.map(key => ({ ayah: { key, words: [`نص ${key}`] } })));
     localStorage.setItem('ayah-forgot', JSON.stringify({ '2:1': { forgot: 1, at: 1 }, '2:2': { forgot: 1, at: 2 } }));
     render(<Library data={data} tab="forgotten" />);
-    const cards = screen.getAllByRole('button', { name: /البقرة/ });
-    expect(cards.map(card => card.textContent?.slice(0, 8))).toEqual(['البقرة ٢', 'البقرة ١']);
+    const cards = screen.getAllByRole('button', { name: /البَقَرَةْ/ });
+    expect(cards.map(card => card.textContent?.slice(0, 12))).toEqual(['البَقَرَةْ ٢', 'البَقَرَةْ ١']);
     await waitFor(() => expect(cards[0].textContent).toContain('نص 2:2'));
   });
 
@@ -39,8 +39,8 @@ describe('the saved and forgotten page', () => {
     quranContexts.mockResolvedValue([]);
     localStorage.setItem('ayah-notes', JSON.stringify({ '2:1': { text: 'أول', at: 1 }, '2:2': { text: 'ثان', at: 2 } }));
     render(<Library data={data} tab="notes" />);
-    const cards = screen.getAllByRole('button', { name: /البقرة/ });
-    expect(cards.map(card => card.textContent)).toEqual(['البقرة ٢ثان', 'البقرة ١أول']);
+    const cards = screen.getAllByRole('button', { name: /البَقَرَةْ/ });
+    expect(cards.map(card => card.textContent)).toEqual(['البَقَرَةْ ٢ثان', 'البَقَرَةْ ١أول']);
     fireEvent.click(cards[0]);
     fireEvent.click(within(screen.getByRole('dialog', { name: 'تأمل' })).getByRole('button', { name: 'عدّل التأمل' }));
     const box = await screen.findByRole('textbox', { name: 'تأملك في هذه الآية' });
@@ -71,12 +71,12 @@ describe('saved cards', () => {
     localStorage.setItem('bookmarks', JSON.stringify([bookmark]));
     render(<Library data={homeData} tab="saved" />);
     const card = screen.getByRole('button', { name: /الكتاب والحكمة/ });
-    expect(card.textContent).toContain('البقرة ١٢٩، ١٥١');
-    expect(card.textContent).toContain('آل عمران ١٦٤');
-    expect(card.textContent).toContain('الجمعة ٢');
+    expect(card.textContent).toContain('البَقَرَةْ ١٢٩، ١٥١');
+    expect(card.textContent).toContain('آلِ عِمْرَانْ ١٦٤');
+    expect(card.textContent).toContain('الجُمُعَةْ ٢');
     expect(card.getAttribute('data-kind')).toBe('tree');
     expect(card.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('شجرة');
-    expect(card.textContent).toMatch(/^البقرة/);
+    expect(card.textContent).toMatch(/^البَقَرَةْ/);
     expect(card.textContent).not.toMatch(/عائلة|فتح للمقارنة|فتح للاستكشاف/);
   });
 

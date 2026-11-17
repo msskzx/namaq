@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
+import { clearLastBox, freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, penTargets, shownCut, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
 
 describe('writing an ayah\'s first and last words', () => {
   it('asks the first and last three words, or every word of a short ayah', () => {
@@ -98,5 +98,32 @@ describe('the write boxes', () => {
     expect(previousBox({ typed: {}, current: 4 }, asked)?.current).toBe(1);
     expect(nextBox({ typed: {}, current: 4 }, asked).finished).toBe(true);
     expect(gradeWritten(asked, { 0: 'قال', 1: 'خطا', 4: 'صدري' }, words)).toEqual({ right: [0, 4], wrong: [1], typed: { 1: 'خطا' } });
+  });
+});
+
+describe('clearLastBox', () => {
+  it('empties the last box written and writes it again', () => {
+    expect(clearLastBox({ typed: { 1: 'قل', 3: 'هو' }, current: 5 }, [1, 3, 5])).toEqual({ typed: { 1: 'قل' }, current: 3 });
+    expect(clearLastBox({ typed: {}, current: 1 }, [1, 3])).toBeNull();
+  });
+});
+
+describe('shownCut', () => {
+  it('shows the opening as the quiz counts it, past a quarter sign', () => {
+    expect(shownCut('112:1', ['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'], 2)).toBe(3);
+    // The quiz's words are the page's: 15:7 «لَّوۡمَا» is one word for both.
+    expect(shownCut('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], 1)).toBe(1);
+  });
+  it('hides all of it from nothing, and shows all of it without a count', () => {
+    expect(shownCut('1:2', ['ٱلۡحَمۡدُ', 'لِلَّهِ'], 0)).toBe(0);
+    expect(shownCut('1:2', ['ٱلۡحَمۡدُ', 'لِلَّهِ'], undefined)).toBe(2);
+  });
+});
+
+describe('penTargets', () => {
+  const words = ['۞', 'ٱلۡحَمۡدُ', 'لِلَّهِ', 'رَبِّ', 'ٱلۡعَٰلَمِينَ', 'مَٰلِكِ', 'يَوۡمِ', 'ٱلدِّينِ', 'إِيَّاكَ'];
+  it('asks the first and last words, or every word, never the quarter sign', () => {
+    expect(penTargets(words, 'ends')).toEqual([1, 2, 3, 6, 7, 8]);
+    expect(penTargets(words, 'whole')).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
   });
 });

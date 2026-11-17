@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { branchInventory } from './branchInventory';
 import { keys, type Branch, type BranchAyah, type Variant } from './branches';
 import { foldForms } from './foldForms';
@@ -113,7 +113,7 @@ describe('every tree of the default list, folded', () => {
   it('leaves a trunk on every tree and a braid only where the neighbours cannot take the word', () => {
     const braided = new Set<string>();
     for (const [id, { tree }] of presentations) {
-      expect(tree.words.length).toBeGreaterThan(0);
+      expect(tree.words.length, id).toBeGreaterThan(0);
       const walk = (node: Branch) => {
         if (writtenPieces(node.words.length, i => writtenForms(node, i, node.words[i]).length > 1).some(piece => piece.kind === 'braid')) braided.add(id);
         node.children.forEach(walk);

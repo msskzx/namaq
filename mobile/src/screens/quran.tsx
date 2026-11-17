@@ -1,10 +1,10 @@
 import { useRef, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookMarked, LibraryBig, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
@@ -15,7 +15,6 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/branches', label: 'متشابهات القرآن', Icon: TreeIcon },
   { route: '/compare', label: 'مقارنة السور', Icon: ArrowLeftRight },
   { route: '/prophets', label: 'قصص الأنبياء', Icon: ScrollText },
-  { route: '/books', label: 'الكتب', Icon: LibraryBig },
   { route: '/tuhfa', label: 'تحفة الأطفال', Icon: BookMarked },
   { route: '/words', label: 'ألفاظ القرآن', Icon: TextSearch },
   { route: '/oaths', label: 'الأقسام', Icon: SunMoon },

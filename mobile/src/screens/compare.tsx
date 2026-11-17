@@ -1,27 +1,35 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
-import { ArrowLeftRight, ChevronDown } from 'lucide-react-native';
+import { View } from 'react-native';
+import { Text } from '@/ui/Text';
+import { ArrowLeftRight } from 'lucide-react-native';
 import type { Visit } from '@shared/quran/compareCards';
+import type { CompareScope } from '@shared/quran/compareScope';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import TabHint from '@/components/TabHint';
-import TopBar from '@/components/TopBar';
+import BarPicker from '@/ui/BarPicker';
+import TopBar from '@/ui/TopBar';
 import { useTabRetap } from '@/lib/tabRetap';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import PageProgress from '@/components/PageProgress';
 import ComparePager, { type Focus, type PagerHandle } from '@/components/ComparePager';
 import CompareSheet from '@/components/CompareSheet';
 import { cardsFor, filteredPairs, landingIndex, pairTitle, visitKey, visitsOf, type PairFilter } from '@/lib/compare';
-import { readJson, writeJson } from '@/lib/storage';
+import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 
 const PLACE = 'compare-place';
 const FILTER = 'compare-filter';
 type Place = Pick<Visit, 'lead' | 'other'>;
+const isSurah = isNumberIn(1, 114);
+const isPlace = (value: unknown): value is Place => isRecord(value) && isSurah(value.lead) && isSurah(value.other);
+const isScope = (value: unknown): value is CompareScope => isRecord(value) && (
+  ['juz', 'surah', 'page'].includes(value.unit as string) ? isNumberIn(1, 604)(value.from) && isNumberIn(1, 604)(value.to)
+    : ['surahs', 'juzs'].includes(value.unit as string) && Array.isArray(value.list) && value.list.every(isNumberIn(1, 114)));
+const isFilter = (value: unknown): value is PairFilter => isRecord(value) && (value.scope === undefined || isScope(value.scope)) && (value.savedOnly === undefined || isBoolean(value.savedOnly));
 
 /** The website's compare page on the phone: surah pairs side by side, their cards scrolled, the pair list in a bottom sheet. */
 export default function CompareScreen() {
@@ -29,11 +37,11 @@ export default function CompareScreen() {
   const bottom = useTabBarSpace();
   const [help, setHelp] = useState(false);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const [filter, setFilter] = useState<PairFilter>(() => readJson<PairFilter>(FILTER) ?? {});
+  const [filter, setFilter] = useState<PairFilter>(() => readJson(FILTER, isFilter) ?? {});
   // The saved-only list follows the bookmarks only when the filter changes, so unsaving a card doesn't pull the page away.
   const pairs = useMemo(() => filteredPairs(filter), [filter]); // eslint-disable-line react-hooks/exhaustive-deps
   const visits = useMemo(() => visitsOf(pairs), [pairs]);
-  const [index, setIndex] = useState(() => landingIndex(visits, readJson<Place>(PLACE)));
+  const [index, setIndex] = useState(() => landingIndex(visits, readJson(PLACE, isPlace)));
   const visit = visits[index];
   const pager = useRef<PagerHandle>(null);
   const [sheet, setSheet] = useState(false);
@@ -91,13 +99,8 @@ export default function CompareScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper, paddingBottom: bottom }}>
       <TopBar hub hideOnScroll center help={() => setHelp(true)}>
-        <Pressable onPress={() => setSheet(true)} accessibilityRole="button" accessibilityLabel={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`}
-          style={{ maxWidth: '100%', flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 7 }}>
-          <ArrowLeftRight size={16} color={palette.ink} />
-          <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 15 }}>{visit ? pairTitle(visit.lead, visit.other) : 'اختر سورتين'}</Text>
-          <Text style={{ color: palette.accent, fontSize: 14 }}>{num(count)}</Text>
-          <ChevronDown size={14} color={palette.ink} />
-        </Pressable>
+        <BarPicker Icon={ArrowLeftRight} text={visit ? pairTitle(visit.lead, visit.other) : 'اختر سورتين'} count={num(count)}
+          label={`اختر سورتين: ${visit ? pairTitle(visit.lead, visit.other) : ''}`} onPress={() => setSheet(true)} />
       </TopBar>
       <PageProgress at={index + 1} count={visits.length} label="الصفحة" palette={palette} />
       {visits.length ? <ComparePager key={`${listKey}:${jumps}`} ref={pager} visits={visits} index={index} onIndex={arrive} palette={palette} savedOnly={!!filter.savedOnly} savedIds={savedIds} focus={focus} onLanded={() => setFocus(undefined)} />

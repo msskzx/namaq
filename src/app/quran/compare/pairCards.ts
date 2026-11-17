@@ -1,4 +1,4 @@
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
@@ -15,6 +15,7 @@ import type { Story, StoryEvent } from '@shared/quran/prophets/story';
 import links from '@/lib/quran/curation/compareLinks.json';
 import { rootWeights, similarAyahPair } from '@/lib/quran/mutashabih/similar';
 import { dailyPair, dayNumber } from '@shared/dailyPick';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type { CardSide, ManyOption, PairCard } from '@shared/quran/compareCards';
 export type ReviewState = 'checked' | 'ask' | 'dropped';
@@ -369,7 +370,7 @@ export function compareLinksFor(keys: string[]): CompareLink[] {
     const itself = x[0] === y[0];
     return {
       href: holders.get(id)!,
-      label: `${a?.name} مع ${itself ? 'نفسها' : b?.name} · ${num(x[1])} · ${num(y[1])}`,
+      label: `${SURAH_NAMES[x[0]]} مع ${itself ? 'نفسها' : SURAH_NAMES[y[0]]} · ${num(x[1])} · ${num(y[1])}`,
       labelEn: `${a?.nameTransliterated} with ${itself ? 'itself' : b?.nameTransliterated} · ${x[1]} · ${y[1]}`,
       surahs: [x[0], y[0]] as [number, number],
     };
@@ -397,6 +398,6 @@ export function compareLinksOfAyah(key: string): CompareLink[] {
     const partner = id.split('|').find(other => other !== key) ?? key;
     const [surah, ayah] = partner.split(':').map(Number);
     const row = surahName(surah);
-    return { href: holders.get(id)!, label: `${row?.name} ${num(ayah)}`, labelEn: `${row?.nameTransliterated} ${ayah}`, partner, surahs: [own, surah] as [number, number] };
+    return { href: holders.get(id)!, label: `${SURAH_NAMES[surah]} ${num(ayah)}`, labelEn: `${row?.nameTransliterated} ${ayah}`, partner, surahs: [own, surah] as [number, number] };
   });
 }

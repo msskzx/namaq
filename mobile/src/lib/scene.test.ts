@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { logoUrl } from './logo';
-import { FRAME, geometry, recorderPage } from './scene';
+import { FRAME, geometry, readRecorderMessage, recorderPage } from './scene';
 
 const box = (x: number, y: number, w = 100, h = 40) => ({ id: '', size: 18, words: [], x, y, w, h });
 
@@ -51,5 +51,18 @@ describe('the recorder page', () => {
     const svg = decodeURIComponent(look.logo.split(',')[1]);
     expect(svg).toMatch(/^<svg [^>]*viewBox="12 24.7 76 76"/);
     expect(svg).toContain('fill="#9c3b22"');
+  });
+});
+
+describe('what the recorder says back', () => {
+  it('takes only a finished video of a video type, or a failure', () => {
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: 'AAAA' }))).toEqual({ type: 'video', mime: 'video/mp4', data: 'AAAA' });
+    expect(readRecorderMessage(JSON.stringify({ type: 'error', message: 'unsupported' }))).toEqual({ type: 'error' });
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'text/html', data: 'AAAA' }))).toBeNull();
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/webm' }))).toBeNull();
+    expect(readRecorderMessage(JSON.stringify({ type: 'progress', at: 1, total: 2 }))).toBeNull();
+    expect(readRecorderMessage('{not json')).toBeNull();
+    expect(readRecorderMessage('null')).toBeNull();
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: '' }))).toEqual({ type: 'error' });
   });
 });

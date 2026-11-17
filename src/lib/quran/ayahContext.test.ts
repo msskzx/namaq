@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { grown, type BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext } from '@shared/quran/ayahContext';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import { loadReaderAyat } from './readerAyat';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
@@ -50,8 +50,8 @@ describe('loadReaderAyat', () => {
     expect(crossPage.ayah).toMatchObject({ key: '2:142', page: 22 });
     expect(crossPage.after).toMatchObject({ key: '2:143', page: 22 });
     const [first, second] = ayahContexts(all, ['94:6', '94:5']);
-    expect(first.ayah).toMatchObject({ key: '94:5', page: 597, words: ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا'] });
-    expect(second.ayah).toMatchObject({ key: '94:6', page: 597, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
+    expect(first.ayah).toMatchObject({ key: '94:5', page: 597, words: ['فَإِنَّ', 'مَعَ', 'ٱلۡعُسۡرِ', 'يُسۡرًا'] });
+    expect(second.ayah).toMatchObject({ key: '94:6', page: 597, words: ['إِنَّ', 'مَعَ', 'ٱلۡعُسۡرِ', 'يُسۡرٗا'] });
     expect(first.after).toEqual(second.ayah);
     expect(second.before).toEqual(first.ayah);
   });
@@ -115,7 +115,7 @@ describe('sharedByAll', () => {
 
   it('marks words written differently as written (docs/adr/0037), and every word exact when all ayat agree', async () => {
     const all = await loadReaderAyat();
-    // يُسْرًا and يُسْرًۭا differ in the tanween's shape, which the tree draws apart too (docs/adr/0035).
+    // يُسۡرًا and يُسۡرٗا differ in the tanween's shape, which the tree draws apart too (docs/adr/0035).
     expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(pick)).toEqual([{ exact: [1, 2], written: [3], rooted: [0] }, { exact: [1, 2], written: [3], rooted: [0] }]);
     expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact)).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
   });
@@ -128,7 +128,7 @@ describe('sharedByAll', () => {
       expect(marked[0]).toBeGreaterThan(0);
     }
     const [own] = sharedByAll(ayahContexts(all, ['28:16', '7:23', '71:28']));
-    expect(own.match!.rooted.some(i => own.ayah.words[i].includes('غْفِر'))).toBe(true);
+    expect(own.match!.rooted.some(i => own.ayah.words[i].includes('غۡفِر'))).toBe(true);
   });
 
   it('marks a repeated word where it lines up with the other ayah (16:35 has «من شيء» twice; 6:148 once)', async () => {

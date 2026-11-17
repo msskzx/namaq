@@ -11,7 +11,7 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 
 afterEach(cleanup);
 
-const lemmas: LemmaCount[] = [['ٱللَّه', 9, 'اله'], ['مِن', 4, ''], ['رَحْمَة', 3, 'رحم'], ...Array.from({ length: 20 }, (_, i): LemmaCount => [`م${i}`, 1, ''])];
+const lemmas: LemmaCount[] = [['ٱللَّه', 9, 'اله'], ['مِن', 4, ''], ['رَحۡمَة', 3, 'رحم'], ...Array.from({ length: 20 }, (_, i): LemmaCount => [`م${i}`, 1, ''])];
 const show = () => render(<WordCounts lemmas={lemmas} />);
 const section = () => screen.getByRole('heading', { name: 'عدد مرات ورود كل كلمة' }).closest('section') as HTMLElement;
 const chart = () => within(section()).queryByRole('list', { name: 'عدد مرات ورود الكلمات المختارة' });
@@ -31,7 +31,7 @@ describe('WordCounts chart', () => {
   it('starts with the top lemmas, longest bar first', () => {
     show();
     expect(bars()).toHaveLength(CHART_TOP);
-    expect(bars().slice(0, 3)).toEqual(['ٱللَّه: ٩', 'مِن: ٤', 'رَحْمَة: ٣']);
+    expect(bars().slice(0, 3)).toEqual(['ٱللَّه: ٩', 'مِن: ٤', 'رَحۡمَة: ٣']);
   });
 
   it('empties the plot, then restores the top lemmas', () => {
@@ -49,11 +49,11 @@ describe('WordCounts chart', () => {
     fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
     fireEvent.change(adder(), { target: { value: 'رحمه' } });
     fireEvent.click(within(suggestions()!).getByRole('button', { name: /رَحۡمَة/ }));
-    expect(bars()).toEqual(['رَحْمَة: ٣']);
+    expect(bars()).toEqual(['رَحۡمَة: ٣']);
     expect(suggestions()).toBeNull();
     fireEvent.change(adder(), { target: { value: 'اللَّه' } });
     fireEvent.keyDown(adder(), { key: 'Enter' });
-    expect(bars()).toEqual(['ٱللَّه: ٩', 'رَحْمَة: ٣']);
+    expect(bars()).toEqual(['ٱللَّه: ٩', 'رَحۡمَة: ٣']);
   });
 
   it('leaves chosen lemmas out of the suggestions and says when nothing matches', () => {
@@ -72,9 +72,9 @@ describe('WordCounts chart', () => {
   it('opens a word\'s places from its bar, and closes them on a second tap', () => {
     show();
     expect(within(section()).queryByText(/places of/)).toBeNull();
-    const word = within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' });
+    const word = within(section()).getByRole('button', { name: 'مواضع «رَحۡمَة»' });
     fireEvent.click(word);
-    expect(within(section()).getByText('places of رَحْمَة')).toBeTruthy();
+    expect(within(section()).getByText('places of رَحۡمَة')).toBeTruthy();
     expect(word.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(word);
     expect(within(section()).queryByText(/places of/)).toBeNull();
@@ -89,11 +89,11 @@ describe('WordCounts chart', () => {
 
   it('closes the places when their word leaves the chart, so they stay closed when it comes back', () => {
     show();
-    fireEvent.click(within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' }));
+    fireEvent.click(within(section()).getByRole('button', { name: 'مواضع «رَحۡمَة»' }));
     fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
     fireEvent.click(within(section()).getByRole('button', { name: /أكثر ١٠ كلمات/ }));
     expect(within(section()).queryByText(/places of/)).toBeNull();
-    expect(within(section()).getByRole('button', { name: 'مواضع «رَحْمَة»' }).getAttribute('aria-pressed')).toBe('false');
+    expect(within(section()).getByRole('button', { name: 'مواضع «رَحۡمَة»' }).getAttribute('aria-pressed')).toBe('false');
   });
 });
 

@@ -97,6 +97,17 @@ describe('home', () => {
     expect(fetched).toContain('/api/home/feed?page=294');
   });
 
+  it('continues reading at the فاصلة when one is set', async () => {
+    localStorage.setItem('quran-reader-page', '294');
+    localStorage.setItem('reading-fasila', JSON.stringify({ quran: { key: '2:6', page: 3 } }));
+    render(<Homepage data={data} />);
+    const reading = await screen.findByRole('region', { name: 'تابع القراءة' });
+    await waitFor(() => expect(within(reading).getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/3'));
+    expect(within(reading).getByRole('link', { name: 'افتح المصحف عند فاصلتك' })).toBeTruthy();
+    await waitFor(() => expect(fetched).toContain('/api/home/feed?page=3'));
+    localStorage.removeItem('reading-fasila');
+  });
+
   it('shows today\'s pair as a post with its compare link, saves it, and remembers it was seen', async () => {
     render(<Homepage data={data} />);
     await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));
@@ -148,7 +159,7 @@ describe('home', () => {
     // Recite mode's way first: the words hidden, the next word or the whole ayah on a click.
     await waitFor(() => expect(within(reciting).getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeTruthy());
     expect(within(reciting).queryAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(0);
-    fireEvent.click(within(reciting).getByRole('button', { name: 'اكتب الآية كاملة' }));
+    fireEvent.click(within(reciting).getByRole('button', { name: 'اكتب كل آية كاملة' }));
     expect(localStorage.getItem('recall-write')).toBe('true');
     // The card is drawn afresh for the pen, with empty boxes.
     const post = screen.getByText('هل تذكرها؟').closest('article')!;
@@ -186,7 +197,7 @@ describe('home', () => {
     render(<Homepage data={data} />);
     expect(screen.queryByRole('region', { name: 'ما الذي تحفظه؟' })).toBeNull();
     const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
-    expect(post.textContent).toContain('الفاتحة');
+    expect(post.textContent).toContain('الفَاتِحَةْ');
     expect(within(post).queryByRole('link', { name: 'راجع ما نسيت' })).toBeNull();
     fireEvent.click(within(post).getByRole('button', { name: /نسيتها/ }));
     expect(Object.keys(JSON.parse(localStorage.getItem('ayah-forgot')!))[0]).toMatch(/^1:/);

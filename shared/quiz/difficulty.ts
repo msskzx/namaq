@@ -68,6 +68,10 @@ export const DIFFICULTY_NOTES: Partial<Record<QuizTopic, { en: string; ar: strin
     ar: 'في أي سورة، سهل: سور متباعدة. متوسط: سور متشابهات الآية إن كان لها متشابهات، ثم السور المجاورة. صعب: مثله، مع آيات لها شبيهة قريبة في سورة أخرى أولًا.',
     en: 'Which surah, easy: surahs far apart. Medium: the surahs of the ayah\'s look-alikes, if any, then neighbouring surahs. Hard: the same, asking ayat with a close look-alike in another surah first.',
   },
+  COMPARE: {
+    ar: 'قارن الموضعين، سهل: آيتان تفترقان كثيرًا. صعب: آيتان تكادان تتطابقان إلا كلمة أو كلمتين.',
+    en: 'Compare, easy: two ayat far apart in wording. Hard: two ayat alike but for a word or two.',
+  },
   RECITE: {
     ar: 'سمّع بقية الآية، سهل: تظهر كلمتان زيادة من أولها. صعب: يظهر أقل ما يميّزها.',
     en: 'Recite the rest, easy: two more opening words. Hard: just enough to tell the ayah.',

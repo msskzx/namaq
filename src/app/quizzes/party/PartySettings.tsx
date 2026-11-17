@@ -11,7 +11,9 @@ import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@shared/party/rules";
 import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
-import { RANGED_TOPICS, SOLO_TOPICS } from "@shared/quiz/settings";
+import { RANGED_TOPICS, WRITTEN_TOPICS } from "@shared/quiz/settings";
+import { PEN_NAMES } from "@/components/recite/PenSetting";
+import type { PenRule } from "@shared/quran/writeAyah";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@shared/quiz/difficulty";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";
@@ -34,7 +36,13 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 export default function PartySettingsPanel({ settings, editable, onChange, ar }: { settings: PartySettings; editable: boolean; onChange: (change: Partial<PartySettings>) => void; ar: boolean }) {
   const branches = settings.topics.includes("BRANCHES");
   const ranged = settings.topics.some((topic) => RANGED_TOPICS.includes(topic));
-  const others = settings.topics.some((topic) => topic !== "BRANCHES");
+  // Trees, compare questions and recited ayat are typed, so they run on the longer time.
+  const isTyped = (topic: QuizTopic) => topic === "BRANCHES" || topic === "COMPARE" || WRITTEN_TOPICS.includes(topic);
+  const typedTopics = settings.topics.filter(isTyped);
+  const written = settings.topics.some((topic) => WRITTEN_TOPICS.includes(topic));
+  const typedTime = typedTopics.length > 0;
+  const typedLabel = branches && typedTopics.length === 1 ? (ar ? "وقت سؤال المتشابهات" : "Time per similar-verses question") : (ar ? "وقت سؤال الكتابة" : "Time per typed question");
+  const others = settings.topics.some((topic) => !isTyped(topic));
   const ready = settings.topics.length > 0 && (!settings.topics.includes("PERSON_CIRCLE") || settings.person);
   const scope = new URLSearchParams(quizQuery(settings));
   scope.delete("length");
@@ -51,10 +59,9 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         [branches ? (ar ? "الأشجار" : "Trees") : (ar ? "النطاق" : "Range"), scopeSummary(settings, ar, branches)] as [string, string],
         [ar ? "الصعوبة" : "Difficulty", DIFFICULTY_LABELS[settings.difficulty ?? DEFAULT_DIFFICULTY][ar ? "ar" : "en"]] as [string, string],
       ] : []),
-      ...(branches ? [
-        [ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string],
-        [ar ? "وقت سؤال الشجرة" : "Time per tree", duration(settings.treeSeconds, ar)] as [string, string],
-      ] : []),
+      ...(branches ? [[ar ? "الإجابات في كل سؤال" : "Answers per question", n(settings.leaves, ar)] as [string, string]] : []),
+      ...(written ? [[ar ? "الكتابة بالقلم" : "Writing with the pen", PEN_NAMES[settings.pen ?? "whole"][ar ? "ar" : "en"]] as [string, string]] : []),
+      ...(typedTime ? [[typedLabel, duration(settings.treeSeconds, ar)] as [string, string]] : []),
       ...(others ? [[ar ? "وقت السؤال" : "Time per question", duration(settings.seconds, ar)] as [string, string]] : []),
     ];
     return (
@@ -74,7 +81,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       <h2 className="mb-3 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
       {TOPIC_GROUPS.map((group) => (
         <Row key={group.en} label={group[ar ? "ar" : "en"]}>
-          {group.topics.filter((topic) => !SOLO_TOPICS.includes(topic)).map((topic) => (
+          {group.topics.map((topic) => (
             <Button key={topic} active={settings.topics.includes(topic)} aria-pressed={settings.topics.includes(topic)} onClick={() => toggle(topic)}>
               {TOPIC_LABELS[topic][ar ? "ar" : "en"]}
             </Button>
@@ -93,15 +100,18 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
             {DIFFICULTIES.map((value) => <Button key={value} active={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} aria-pressed={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })}>{DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}</Button>)}
             {settings.topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
           </Row>
-          {branches && <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
+          {branches && <Row label={ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}>
             {QUIZ_LEAVES.map((value) => (
               <Button key={value} size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
             ))}
           </Row>}
           </div>
-          {branches && <>
-            <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
-            <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
+          {branches && <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
+          {written && <Row label={ar ? "الكتابة بالقلم" : "Writing with the pen"}>
+            {(Object.keys(PEN_NAMES) as PenRule[]).map((value) => <Button key={value} active={(settings.pen ?? "whole") === value} aria-pressed={(settings.pen ?? "whole") === value} onClick={() => onChange({ pen: value })}>{PEN_NAMES[value][ar ? "ar" : "en"]}</Button>)}
+          </Row>}
+          {typedTime && <>
+            <Row label={typedLabel}>
               {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
             </Row>
           </>}

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
-import { Check, ChevronDown } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
+import { Check } from 'lucide-react-native';
 import { findProphet, PROPHETS, prophetName } from '@shared/quran/prophets';
 import ProphetStory from '@/components/ProphetStory';
-import Sheet from '@/components/Sheet';
+import Sheet from '@/ui/Sheet';
 import TabHint from '@/components/TabHint';
-import TopBar from '@/components/TopBar';
-import { readJson, writeJson } from '@/lib/storage';
+import BarPicker from '@/ui/BarPicker';
+import TopBar from '@/ui/TopBar';
+import { isString, readJson, writeJson } from '@/lib/storage';
 import { usePalette } from '@/lib/theme';
 
 const PICKED = 'prophets-picked';
@@ -15,7 +16,7 @@ const PICKED = 'prophets-picked';
 /** The prophets tab: one prophet's story at a time (Musa until one is picked), picked from a dropdown in the middle of the top bar (like the compare tab's). */
 export default function ProphetsTab() {
   const palette = usePalette();
-  const [slug, setSlug] = useState(() => findProphet(readJson<string>(PICKED) ?? '')?.slug ?? 'musa');
+  const [slug, setSlug] = useState(() => findProphet(readJson(PICKED, isString) ?? '')?.slug ?? 'musa');
   const [picking, setPicking] = useState(false);
   const prophet = findProphet(slug);
   const name = prophet ? prophetName(prophet) : '';
@@ -28,11 +29,7 @@ export default function ProphetsTab() {
     <View style={{ flex: 1 }}>
       <ProphetStory key={slug} slug={slug} inTab header={help => (
         <TopBar hub hideOnScroll center help={help}>
-          <Pressable onPress={() => setPicking(true)} accessibilityRole="button" accessibilityLabel={`اختر نبيًّا: ${name}`}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 7 }}>
-            <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 15 }}>{name}</Text>
-            <ChevronDown size={14} color={palette.ink} />
-          </Pressable>
+          <BarPicker text={name} label={`اختر نبيًّا: ${name}`} onPress={() => setPicking(true)} />
         </TopBar>
       )} />
       <Sheet open={picking} onClose={() => setPicking(false)} palette={palette}>

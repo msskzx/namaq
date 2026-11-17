@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MUSA } from './musa';
-import { AYAT } from '../../../src/app/quran/prophets/ayat';
+import { quranStoryText } from './storyText';
 import { buildStory, dotSize, placeIn, placesOf, rangeText, seg, sharedWords, storedText, storyMap } from './story';
 
 const events = [
@@ -8,14 +8,13 @@ const events = [
   { phase: 1, title: 'b', segments: [seg(2, 49)] },
 ];
 const text = storedText({
-  names: { 2: 'سُورَةُ البَقَرَةِ', 20: 'سُورَةُ طه', 28: 'سُورَةُ القَصَصِ' },
   ayat: { '28:3': 'نَتۡلُوا۟ عَلَیۡكَ', '28:4': 'إِنَّ فِرۡعَوۡنَ عَلَا', '20:37': 'وَلَقَدۡ مَنَنَّا', '2:49': 'وَإِذۡ نَجَّیۡنَـٰكُم' },
 });
 
 describe('buildStory', () => {
   it('gives each event its ayat in order, under the surah name without «سورة»', () => {
     const [first, second] = buildStory(events, text);
-    expect(first.segments.map(g => [g.name, g.lines.map(l => l.ayah)])).toEqual([['القصص', [3, 4]], ['طه', [37]]]);
+    expect(first.segments.map(g => [g.name, g.lines.map(l => l.ayah)])).toEqual([['القَصَصْ', [3, 4]], ['طه', [37]]]);
     expect(first.count).toBe(3);
     expect(second.n).toBe(2);
   });
@@ -33,13 +32,13 @@ describe('placesOf', () => {
 });
 
 describe('storyMap', () => {
-  const map = storyMap(buildStory(MUSA.events, storedText(AYAT.musa)));
+  const map = storyMap(buildStory(MUSA.events, quranStoryText));
 
   it('has a row for each surah that tells part of the story, in mushaf order', () => {
     expect(map.surahs.length).toBe(45);
     expect(map.surahs.map(s => s.surah)).toEqual([...map.surahs.map(s => s.surah)].sort((a, b) => a - b));
-    expect(map.surahs[0]).toEqual({ surah: 2, name: 'البقرة' });
-    expect(map.surahs[1]).toEqual({ surah: 3, name: 'آل عمران' });
+    expect(map.surahs[0]).toEqual({ surah: 2, name: 'البَقَرَةْ' });
+    expect(map.surahs[1]).toEqual({ surah: 3, name: 'آلِ عِمْرَانْ' });
   });
 
   it('puts every ayah of the story in exactly one place', () => {
@@ -64,7 +63,7 @@ describe('dotSize', () => {
 
 describe('sharedWords', () => {
   it('marks words in a run of two another surah\'s place also has, not lone words', () => {
-    const shared = storedText({ names: { 7: 'الأعراف', 26: 'الشعراء' }, ayat: { '7:109': 'قَالَ ٱلۡمَلَأُ إِنَّ هَـٰذَا لَسَـٰحِرٌ عَلِیمࣱ', '26:34': 'قَالَ لِلۡمَلَإِ إِنَّ هَـٰذَا لَسَـٰحِرٌ' } });
+    const shared = storedText({ ayat: { '7:109': 'قَالَ ٱلۡمَلَأُ إِنَّ هَـٰذَا لَسَـٰحِرٌ عَلِیمࣱ', '26:34': 'قَالَ لِلۡمَلَإِ إِنَّ هَـٰذَا لَسَـٰحِرٌ' } });
     const [event] = buildStory([{ phase: 0, title: 'a', segments: [seg(7, 109), seg(26, 34)] }], shared);
     const [[[a]], [[b]]] = sharedWords(placesOf(event));
     expect(a).toEqual([false, false, true, true, true, false]);

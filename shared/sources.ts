@@ -54,6 +54,7 @@ const USE = {
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
+  listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
@@ -211,6 +212,22 @@ export const SOURCES: Source[] = [
       en: 'The words of the 1421 Madinah mushaf, under Quran.com’s terms of use. Downloaded once; the app never calls it.',
     },
     uses: [USE.trees],
+  },
+  {
+    id: 'quran-foundation-audio', group: 'quran',
+    title: { ar: 'تلاوات الآيات من مؤسسة القرآن', en: 'Ayah recitations from Quran Foundation' }, author: { ar: 'مؤسسة القرآن', en: 'Quran Foundation' },
+    link: { url: 'https://api-docs.quran.com/legal/developer-terms/', label: 'api-docs.quran.com' },
+    licence: {
+      ar: 'بشروط المطورين لمؤسسة القرآن: تُسمع التلاوات داخل التطبيق والموقع ولا تُنشر خارجهما، والمنزَّل منها على الهاتف يُحدَّث بخدمة المزامنة (Content Sync). حقوق كل تلاوة لأصحابها.',
+      en: 'Under Quran Foundation’s developer terms: recitations play inside the app and website and are not redistributed, and downloads on the phone are kept current through its Content Sync. Each recording’s rights stay with its owners.',
+    },
+    uses: [USE.listen],
+  },
+  {
+    id: 'expo-audio', group: 'code',
+    title: { ar: 'expo-audio', en: 'expo-audio' }, author: { ar: 'Expo', en: 'Expo' },
+    link: { url: 'https://docs.expo.dev/versions/latest/sdk/audio/', label: 'docs.expo.dev' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [USE.listen],
   },
   {
     id: 'tanzil', group: 'quran',

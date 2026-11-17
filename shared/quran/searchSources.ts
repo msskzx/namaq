@@ -1,9 +1,8 @@
-import corpus from '../data/quran/trees.json';
 import surahRows from '../data/quran/surahs.json';
 import wordsData from '../data/quran/words.json';
 import poemData from '../tajwid/tuhfat-al-atfal.json';
-import type { BranchAyah } from './branches';
-import { indexAyat, searchAyat, type IndexedAyah } from './ayahSearch';
+import { searchAyat } from './ayahSearch';
+import { corpusIndex as ayahIndex } from './corpusIndex';
 import { branchInventory, distinctBranchPieces } from './branchInventory';
 import { searchSharedPhrases } from './branchSearch';
 import { curatedFor } from './curatedComparisons';
@@ -12,18 +11,16 @@ import { STORIES } from './prophets/stories';
 import { searchWords, type WordsData } from './words';
 import { numberVerses, type Poem } from '../tajwid/poem';
 import { holdsTerms, type CompareItem, type EventItem, type SearchSources, type TuhfaItem } from './searchAll';
+import { SURAH_NAMES } from './surahNames';
 
 /** Results a group lists at most when opened in full; the finders return one more, so a page can say there are more. */
 export const GROUP_MAX = 100;
 const FIND = GROUP_MAX + 1;
 
 const words = wordsData as unknown as WordsData;
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 /** A compare page's name, as the compare pages title it. */
 export const pairName = (a: number, b: number) => (a === b ? `سورة ${names[a]} مع نفسها` : `سورة ${names[a]} وسورة ${names[b]}`);
-
-let indexed: IndexedAyah[] | undefined;
-const ayahIndex = () => (indexed ??= indexAyat(corpus.ayat as BranchAyah[]));
 
 /** Builds the ayah index ahead of the first search, so typing does not wait for it. */
 export const warmSearch = () => void ayahIndex();

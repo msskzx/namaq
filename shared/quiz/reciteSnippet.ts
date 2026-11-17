@@ -1,11 +1,9 @@
 // Recite a snippet (owner, 2026-11-13): an ayah's opening words from the chosen range, the reader recites the rest, shows
 // it and says whether they had it. The opening is long enough that no other ayah starts the same way.
-import corpus from '../data/quran/trees.json';
-import surahRows from '../data/quran/surahs.json';
+import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { normalizeWord } from '../quran/normalize';
-import { num } from '../quran/arabicNumber';
 import type { Difficulty } from './difficulty';
 import { shuffle } from './random';
 import { FORGOT, RECITE_SNIPPET, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
@@ -16,7 +14,6 @@ const MIN_LEFT = 3;
 /** Easy shows two more words than the shortest opening no other ayah shares; medium one more; hard none. */
 const EXTRA: Record<Difficulty, number> = { easy: 2, medium: 1, hard: 0 };
 
-const names = Object.fromEntries(surahRows.map(row => [row.number, row.name])) as Record<number, string>;
 
 type Index = { ayat: Map<string, BranchAyah>; opening: Map<string, number> };
 let built: Index | undefined;
@@ -51,17 +48,17 @@ const inScope = (scope: ChoiceScope) => {
 };
 
 function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
-  const [surah, number] = ayah.key.split(':').map(Number);
   const shown = Math.min(index().opening.get(ayah.key)! + EXTRA[difficulty], ayah.words.length - MIN_LEFT);
   return {
     key: `${RECITE_SNIPPET}:${ayah.key}`,
     family: RECITE_SNIPPET,
-    promptArabic: `سمّع بقية الآية، ثم أظهرها. ${names[surah]} ${num(number)}`,
+    promptArabic: 'اكتب بقية الآية في مكانها، أو سمّعها ثم أظهرها.',
     quran: ayah.words.slice(0, shown),
     reveal: ayah.words.slice(shown),
     choices: [{ value: RECITED, labelArabic: 'حفظتها' }, { value: FORGOT, labelArabic: 'نسيتها' }],
     correctAnswer: RECITED,
     ayahKey: ayah.key,
+    page: { shows: shown, recite: true },
     evidence: { claimKeys: [] },
   };
 }
@@ -69,7 +66,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
 export const reciteSnippet: ChoiceKind = {
   id: RECITE_SNIPPET,
   name: 'سمّع بقية الآية',
-  party: false,
+  party: true,
   // The difficulty only changes how much of the opening is shown.
   questions: (scope, difficulty, random, limit = Infinity) => shuffle(inScope(scope), random).slice(0, limit).map(ayah => question(ayah, difficulty)),
   count: scope => inScope(scope).length,

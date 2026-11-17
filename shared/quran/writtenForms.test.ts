@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { branchInventory } from './branchInventory';
 import type { Branch, BranchAyah, Variant } from './branches';
 import { createPhrasePresenter } from './phraseTrees';
 import { writtenForms } from './writtenForms';
+import { bare } from './quranText/ayahWords';
 
 const node = { forms: { '2:161': ['عَلَيْهِمْ', 'لَعْنَةُ', '﴿١٦١﴾'], '3:87': ['عَلَيْهِمْ', 'لَعْنَةَ', '﴿٨٧﴾'], '9:9': ['عَلَيْهِمْ', 'لَعْنَةُ', '﴿٩﴾'] } };
 
@@ -32,6 +33,14 @@ describe('writtenForms', () => {
     expect(writtenForms(node, 2, '۝', new Set(['2:161', '3:87']))).toEqual([{ word: '۝', keys: ['2:161', '3:87'] }]);
   });
 
+  it('shows a stop sign only some ayat carry faint, and the picked ayah\'s own word once a path is lit', () => {
+    const stops = { forms: { '1:1': ['قَالَ', 'رَبِّۖ'], '1:2': ['قَالَ', 'رَبِّ'], '1:3': ['قَالَ', 'رَبِّۖ'] } };
+    expect(writtenForms(stops, 1, 'رَبِّ')).toEqual([{ word: 'رَبِّ', faint: 'ۖ', keys: ['1:1', '1:2', '1:3'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:1']))).toEqual([{ word: 'رَبِّۖ', keys: ['1:1'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:2']))).toEqual([{ word: 'رَبِّ', keys: ['1:2'] }]);
+    expect(writtenForms(stops, 1, 'رَبِّ', new Set(['1:1', '1:3']))).toEqual([{ word: 'رَبِّۖ', keys: ['1:1', '1:3'] }]);
+  });
+
   it('ignores lit ayat the node does not hold', () => {
     expect(writtenForms(node, 1, 'لَعْنَة', new Set(['7:1']))).toHaveLength(2);
   });
@@ -47,7 +56,8 @@ describe('every word a tree draws', () => {
     const wrong: string[] = [];
     const check = (id: string, words: string[], forms: Record<string, string[]> | undefined) => words.forEach((shared, index) => {
       for (const { word, keys } of writtenForms({ forms }, index, shared)) {
-        if (forms && !isEnd(word) && !keys.every(key => forms[key][index] === word)) wrong.push(`${id}: ${word}`);
+        // A word its ayat stop on differently is drawn without the waqf sign only some of them carry: the rest is theirs letter for letter.
+        if (forms && !isEnd(word) && !keys.every(key => forms[key][index] === word || bare(forms[key][index]) === word)) wrong.push(`${id}: ${word}`);
       }
     });
     const walk = (id: string, branch: Branch) => { check(id, branch.words, branch.forms); branch.children.forEach(child => walk(id, child)); };
@@ -65,6 +75,6 @@ describe('every word a tree draws', () => {
     const piece = branchInventory({}, null).find(candidate => candidate.id === 'cmp:0drvgjs1g0a1fs')!;
     const { tree, offsets } = present(piece.phrase);
     expect(tree.forms!['2:161'][1]).toBe(byKey.get('2:161')!.words[offsets['2:161'] + 1]);
-    expect(writtenForms(tree, 1, tree.words[1]).map(form => form.word)).toEqual(['لَعْنَةُ', 'لَعْنَةَ']);
+    expect(writtenForms(tree, 1, tree.words[1]).map(form => form.word)).toEqual(['لَعۡنَةُ', 'لَعۡنَةَ']);
   });
 });

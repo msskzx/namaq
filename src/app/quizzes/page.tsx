@@ -25,6 +25,9 @@ import { isCompareBookmark } from "@shared/compareBookmarks";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import Toggle from "@/components/common/Toggle";
+import { setQuizPageBefore, useQuizPageBefore } from "@/lib/quizPageBefore";
+import { QuizPenSetting } from "@/components/recite/PenSetting";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
@@ -35,7 +38,7 @@ import { num } from "@shared/quran/arabicNumber";
 import { parseJuzRange } from "@shared/quran/juz";
 import { BranchExplainer } from "./BranchAnswers";
 import { DIFFICULTY_LABELS, DIFFICULTY_NOTES, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
-import { RANGED_TOPICS } from "@shared/quiz/settings";
+import { PAGE_TOPICS, RANGED_TOPICS } from "@shared/quiz/settings";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, parseDifficulty } from "@shared/quiz/difficulty";
 import PersonPicker from "./PersonPicker";
 import { readRun, writeRun, type SoloRun } from "./soloRun";
@@ -46,27 +49,19 @@ import { branchesCorrect, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 import Link from "next/link";
-import { BookOpenText, Eye, EyeOff, LogOut, PenLine, RotateCcw, User, Users } from "lucide-react";
+import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
 
-/** /quizzes with no settings: pick solo or party first, then that mode's settings. */
+/** /quizzes with no settings: pick solo or party first, then that mode's settings; every kind of question is chosen inside them (owner, 2026-11-17). */
 function QuizModes({ ar }: { ar: boolean }) {
   const modes = [
     { href: "/quizzes?topic=BRANCHES", Icon: User, title: ar ? "اختبار فردي" : "Solo quiz",
       text: ar ? "أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها." : "Answer questions on the ayat of the Quran, then review the answer and its ayat." },
     { href: "/quizzes/party", Icon: Users, title: ar ? "اختبار جماعي" : "Party quiz",
       text: ar ? "ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك." : "Start a party and share its number, or join others from your phone." },
-    { href: "/quran/read/recite", Icon: EyeOff, title: ar ? "تسميع" : "Recite",
-      text: ar ? "تُخفى الآيات في المصحف، وتُظهرها واحدة واحدة وأنت تسمّع، وتعلّم ما نسيته لتراجعه." : "The ayat are hidden in the mushaf; reveal them one by one as you recite, and mark what you forgot to review it." },
-    // A surah's name, and its first ayah to write in the mushaf (the app's card, owner 2026-11-13).
-    { href: "/quizzes/openings", Icon: BookOpenText, title: ar ? "أوائل السور" : "Surah openings",
-      text: ar ? "ترى اسم السورة، وتكتب أول آية منها في مكانها من المصحف." : "See a surah's name, and write its first ayah in its place on the mushaf page." },
-    // Recite with writing on, from the top of the page the mushaf is open at (the app's card, owner 2026-11-13).
-    { href: "/quran/read?write=1", Icon: PenLine, title: ar ? "اكتب أول الآية وآخرها" : "Write the first and last words",
-      text: ar ? "كلمات الآية صناديق في مكانها من المصحف، تكتب أول كلماتها وآخرها، ثم تظهر الآية." : "Each ayah's words are boxes in their places on the mushaf page; write its first and last words, then the ayah shows." },
   ];
   return (
     <div className={styles.page}>
-      <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2 lg:max-w-5xl lg:grid-cols-3" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
+      <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
         {modes.map(({ href, Icon, title, text }) => (
           <Link key={href} href={href}
             className={`${styles.panel} flex flex-col items-start gap-2 text-[var(--home-ink)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
@@ -221,18 +216,18 @@ export default function QuizzesPage() {
   }, [pathname, router, topicQuery, search]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
+  const pageBefore = useQuizPageBefore();
   const leave = () => { writeRun(null); setStored(null); };
-  const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree ? typed[index] : answers[index])), [questions, answers, typed]);
+  const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree || question.compare ? typed[index] : answers[index])), [questions, answers, typed]);
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
   const percent = total === 0 ? 0 : Math.round((score / total) * 100);
-  const passed = total > 0 && score / total >= 0.5;
   const questionState = (index: number) => {
     const given = answers[index];
     if (given === undefined) return 'unanswered' as const;
     if (given === questions[index].correctAnswer) return 'correct' as const;
     // A tree with some of its asked leaves right is partly solved, not wrong.
-    return questions[index].tree && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
+    return (questions[index].tree || questions[index].compare) && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
   };
   const stateLabel = (state: ReturnType<typeof questionState>) =>
     ar ? ({ correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
@@ -242,6 +237,8 @@ export default function QuizzesPage() {
 
   if (!started) {
     const hasBranches = topics.includes("BRANCHES");
+    // Recite, «في أي سورة؟» and the written kinds are asked on the ayah's mushaf page (owner, 2026-11-17).
+    const onPage = topics.some((topic) => PAGE_TOPICS.includes(topic));
     const toggleTopic = (value: QuizTopic) => setParam({
       topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
       solo: topics.length === 1 && topics[0] === value ? "1" : undefined,
@@ -298,7 +295,7 @@ export default function QuizzesPage() {
                 {topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
               </div>
               {hasBranches && <div role="group" aria-labelledby="quiz-leaves">
-                <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
+                <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
                     <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
@@ -308,6 +305,11 @@ export default function QuizzesPage() {
                   ))}
                 </div>
               </div>}
+              {onPage && <div className="flex basis-full items-center justify-between gap-3">
+                <span id="quiz-page-before" className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"}</span>
+                <Toggle checked={pageBefore} label={ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"} onChange={setQuizPageBefore} />
+              </div>}
+              {onPage && <QuizPenSetting ar={ar} />}
               </div>
               {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}
             </fieldset>
@@ -350,12 +352,8 @@ export default function QuizzesPage() {
         ) : submitted ? (
           <div>
             <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>
-            <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>
-              <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
-              {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
-            </p>
             <Button className="mb-4" aria-expanded={reviewing} onClick={() => setReviewing(value => !value)}><Eye size={16} aria-hidden />{reviewing ? (ar ? "العودة للنتيجة" : "Back to results") : (ar ? "مراجعة الأسئلة" : "Review questions")}</Button>
-            {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree ? typed[index] ?? null : answers[index] ?? null, result: points[index], hints: hints[index] }))} names={data.surahNames ?? {}} ar={ar} />}
+            {reviewing && <QuestionReview entries={questions.map((question, index) => ({ question, answer: question.tree || question.compare ? typed[index] ?? null : answers[index] ?? null, result: points[index], hints: hints[index] }))} names={data.surahNames ?? {}} ar={ar} />}
             <Button className="mt-6" variant="primary" onClick={reset}>
               <FontAwesomeIcon icon={faRotateLeft} />
               {ar ? "اختبار جديد" : "New quiz"}
@@ -416,7 +414,7 @@ export default function QuizzesPage() {
               ) : (
                 <Button variant="primary" onClick={() => {
                   setAnswers((previous) => ({
-                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, branchesCorrect(questions[Number(index)], value) ? questions[Number(index)].correctAnswer : ""])),
+                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, (questions[Number(index)].compare ? questionPoints(questions[Number(index)], value).earned === questionPoints(questions[Number(index)], value).total : branchesCorrect(questions[Number(index)], value)) ? questions[Number(index)].correctAnswer : ""])),
                     ...previous,
                   }));
                   setSubmitted(true);

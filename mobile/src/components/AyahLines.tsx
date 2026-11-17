@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { ayahSlice, pageEnd, pageTop, READING_LINES } from '@shared/quran/ayahSlice';
 import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
-import { pageData, pageOfAyah, surahBefore, surahNames } from '@/lib/mushaf';
+import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** A page's text height for its width: the lines of a slice keep the size they have on the whole page. */
 const PAGE_TEXT_RATIO = 1.5;
@@ -26,13 +27,13 @@ export function pageWords(ayah: string): string[] {
  * title), the ayah and what follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals the
  * ayah, with `checked` colouring what was written.
  */
-function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = false, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = false, targetWord, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
   /** A tap or long press on the lines (MushafPageView's), as the reader's page takes it. */
   onTouch?: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
   words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
-  whole?: boolean }) {
+  whole?: boolean; targetWord?: number }) {
   const [width, setWidth] = useState(0);
   const page = pageOfAyah(ayah);
   const parts = useMemo(() => {
@@ -44,18 +45,18 @@ function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = fa
     const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
-  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words]);
+  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, word: targetWord, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
   if (!page || !parts) return null;
   const height = width * PAGE_TEXT_RATIO;
   return (
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
       {width > 0 && parts.previous && (
         <MushafPageView page={parts.previous.page} data={parts.previous.data} model={parts.previous.model} palette={palette} width={width} height={height}
-          top={surahBefore(parts.previous.page)} names={surahNames} forgot={NONE} saved={NO_SAVES} onTouch={onTouch} slice={parts.previous.slice} />
+          top={surahBefore(parts.previous.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={onTouch} slice={parts.previous.slice} />
       )}
       {width > 0 && (
         <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={height} top={surahBefore(page)}
-          names={surahNames} recite={whole ? undefined : recite} forgot={NONE} saved={NO_SAVES} onTouch={onTouch} write={shown ? null : write} checked={shown ? checked : null} slice={parts.slice} />
+          names={SURAH_TITLES} recite={whole ? undefined : recite} forgot={NONE} saved={NO_SAVES} onTouch={onTouch} write={shown ? null : write} checked={shown ? checked : null} slice={parts.slice} />
       )}
     </View>
   );
@@ -73,7 +74,7 @@ export const PageTop = memo(function PageTop({ page, palette }: { page: number; 
   return (
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">
       {width > 0 && <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
-        top={surahBefore(page)} names={surahNames} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={parts.slice} />}
+        top={surahBefore(page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={parts.slice} />}
     </View>
   );
 });

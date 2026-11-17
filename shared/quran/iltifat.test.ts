@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/iltifat.json';
 import { EXAMPLES, examples, letterDiff, resolve, type Line, type Voice } from './iltifat';
-import { ayahWords } from './normalize';
+import { normalizeWord } from './normalize';
+import corpus from './quranText/corpus';
 
-const views = examples();
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const views = examples(key => pageWords.get(key));
 const view = (surah: number) => views.find(v => v.surah === surah)!;
-const wordsOf = (key: string) => ayahWords((data.ayat as Record<string, string>)[key], false).display;
+const wordsOf = (key: string) => pageWords.get(key)!.filter(word => normalizeWord(word) !== '');
 const collapse = (voices: Voice[]) => voices.filter((v, i) => v !== voices[i - 1]);
 const textOf = (lines: Line[]) => lines.flatMap(line => line.words.map(w => w.text));
 
@@ -15,7 +16,7 @@ describe('iltifat examples', () => {
   });
 
   it('has the text of every ayah each example covers', () => {
-    for (const e of EXAMPLES) for (let a = e.from; a <= e.to; a++) expect(data.ayat).toHaveProperty([`${e.surah}:${a}`]);
+    for (const e of EXAMPLES) for (let a = e.from; a <= e.to; a++) expect(pageWords.has(`${e.surah}:${a}`)).toBe(true);
   });
 
   it('shows every word of a strip card, and its voices change in the order of its chips', () => {
@@ -66,7 +67,7 @@ describe('iltifat examples', () => {
   it('names each tree leaf by its speaker words in the ayah', () => {
     const v = view(43);
     if (v.kind !== 'tree') throw new Error('tree');
-    for (const leaf of v.leaves) expect(ayahWords(wordsOf(`43:${leaf.ayah}`).join(' '), false).norm.join(' ')).toContain(ayahWords(leaf.who, false).norm.join(' '));
+    for (const leaf of v.leaves) expect(wordsOf(`43:${leaf.ayah}`).map(normalizeWord).join(' ')).toContain(leaf.who.split(' ').map(normalizeWord).join(' '));
   });
 
   it('places a phrase only when it occurs once', () => {

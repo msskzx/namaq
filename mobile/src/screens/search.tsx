@@ -6,17 +6,19 @@ import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, 
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
-import { Text, TextInput } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text, TextInput } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
 import WordSheet from '@/components/WordSheet';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
 import { back, openIntent as go, toTab } from '@/lib/ways';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 /** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
@@ -53,8 +55,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
     case 'ayah': {
       const { start, end } = around(hit);
       return (
-        <Pressable onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)}
-          style={({ pressed: on }) => [{ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, paddingHorizontal: 12, paddingVertical: 8, marginBottom: 8 }, pressed(on)]}>
+        <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 38, color: palette.ink, textAlign: 'right' }}>
             {start > 0 ? '… ' : ''}
             {hit.words.slice(start, end).map((word, at) => {
@@ -64,7 +65,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
             {end < hit.words.length ? '…' : ''}
           </Text>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayahLabel(hit.key)}</Text>
-        </Pressable>
+        </Card>
       );
     }
     case 'word':
@@ -164,7 +165,7 @@ export default function SearchScreen() {
           <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
             accessibilityLabel="ابحث في كل شيء"
             style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
-          {query !== '' && <Pressable onPress={() => setQuery('')} accessibilityRole="button" accessibilityLabel="مسح" hitSlop={8}><X size={18} color={palette.muted} /></Pressable>}
+          {query !== '' && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
         </View>
       </TopBar>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}

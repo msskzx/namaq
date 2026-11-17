@@ -1,4 +1,5 @@
 import { expect, longPress, open, readerPage, stored, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 // Words are matched as the mushaf data writes them (shared/data/quran/mushaf/1.json).
 const HAMD = 'ٱلۡحَمۡدُ';
@@ -19,7 +20,7 @@ test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }
   await page.getByText(HAMD, { exact: true }).first().click();
   await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
   await page.getByLabel('ابحث عن سورة أو آية').fill('يس');
-  await page.getByRole('link').filter({ hasText: 'يس' }).first().click();
+  await page.getByRole('link').filter({ hasText: `${S(36)}` }).first().click();
   await expect.poll(() => readerPage(page)).toBe(440);
 });
 
@@ -30,7 +31,7 @@ test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
   await page.getByRole('button', { name: 'احفظ الآية' }).click();
   await expect.poll(async () => (await stored<{ id: string }[]>(page, 'bookmarks'))?.map(b => b.id)).toContain('ayah:1:2');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'نسيتها' }).click();
+  await page.getByRole('button', { name: 'نسيت الآية' }).click();
   await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:2');
 });
 
@@ -42,16 +43,16 @@ test('a reflection note is written from the long-press menu', async ({ page }) =
   await expect.poll(async () => (await stored<Record<string, { text: string }>>(page, 'ayah-notes'))?.['1:2']?.text).toBe('الحمد كله لله');
 });
 
-test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
+test('the trees sheet holds the branches cards, opening as the matrix with their own tree switch, and opens the ayah\'s trees', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-  await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
-  await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'متشابهات الآية' }).click();
+  await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
   await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
   await expect(page).toHaveURL(/\/branches/);
-  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
-  await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
+  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees, as the matrix.
+  await expect(page.getByRole('button', { name: new RegExp(`^قراءة ${S(37)} `) }).first()).toBeVisible();
   expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
 });
 
@@ -59,8 +60,8 @@ test('the compare preview sheet opens the compare card', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, IHDINA);
   await page.getByRole('button', { name: /المقارن/ }).first().click();
-  await expect(page.getByRole('button', { name: /^الفاتحة مع / }).first()).toBeVisible();
-  await page.getByRole('button', { name: /^الفاتحة مع / }).first().click();
+  await expect(page.getByRole('button', { name: new RegExp(`^${S(1)} مع `) }).first()).toBeVisible();
+  await page.getByRole('button', { name: new RegExp(`^${S(1)} مع `) }).first().click();
   await expect(page).toHaveURL(/\/compare/);
 });
 
@@ -68,7 +69,7 @@ test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its 
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'تفسير السعدي' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ١–٧` })).toBeVisible();
   await expect(page.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
 });
@@ -80,7 +81,7 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: HAMD })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText(/اسم مرفوع/).first()).toBeVisible();
   await page.getByRole('button', { name: 'نزّل التبيان في إعراب القرآن' }).click();
@@ -99,7 +100,7 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await open(page, '/read');
   await pressWord(page, HAMD);
   await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
-  await expect(page.getByRole('heading', { name: 'الفاتحة ٢' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText('«الصِّفَةُ»', { exact: false })).toBeVisible();
   await expect(page.getByText('الإتقان للسيوطي ٣/٢٣٣')).toBeVisible();
@@ -131,7 +132,7 @@ test.describe('surah topics', () => {
     await open(page, '/read');
     await pressWord(page, 'عَنِ');
     await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
-    await expect(page.getByRole('heading', { name: 'موضوعات سورة النبأ' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: `موضوعات سورة ${S(78)}` })).toBeVisible();
     await expect(page.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(page.getByText('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤')).toBeVisible();
     await page.getByRole('button', { name: /^٤\. جزاء المتقين/ }).click();
@@ -172,4 +173,139 @@ test.describe('the write quiz', () => {
     await expect(page.getByLabel('كتبت: بسا')).toBeVisible();
     await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:1');
   });
+});
+
+test.describe('listening', () => {
+  // The range plays round without end, so the bar stays while the test works with it.
+  test.use({ seed: { 'listen-plan': { eachAyah: 1, rangeTimes: 0, pause: 'none', speed: 1 } } });
+test('listening starts from a long press, and its sheet keeps the repeats and the reciter', async ({ page }) => {
+  // The recitations are not fetched in the test: every ayah plays a second of silence.
+  const silence = await import('node:fs').then(fs => fs.readFileSync('mobile/assets/silence.mp3'));
+  await page.route(/\.mp3($|\?)/, route => route.fulfill({ body: silence, contentType: 'audio/mpeg' }));
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'استمع من هذه الآية' }).click();
+  const bar = page.getByRole('toolbar', { name: 'الاستماع' });
+  await expect(bar).toBeVisible();
+  await expect(bar.getByRole('button', { name: new RegExp(`^${S(1)} [٢-٧]،`) })).toBeVisible();
+  await bar.getByRole('button', { name: 'التكرار والقارئ' }).click();
+  await page.getByRole('button', { name: '٣', exact: true }).first().click();
+  await expect.poll(async () => (await stored<{ eachAyah: number }>(page, 'listen-plan'))?.eachAyah).toBe(3);
+  await page.getByRole('button', { name: 'القارئ والتنزيل' }).click();
+  await page.getByRole('radio', { name: /الحصري \(المعلّم\)/ }).click();
+  await expect.poll(() => stored<number>(page, 'reciter')).toBe(12);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'أوقف الاستماع' }).click();
+  await expect(bar).toBeHidden();
+});
+});
+
+test('a forgotten word persists on its own and undo leaves an ayah mark intact', async ({ page }) => {
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'نسيت الكلمة', exact: true }).click();
+  await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:0': { forgot: 1, at: expect.any(Number) } });
+  await page.reload();
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'نسيت الآية', exact: true }).click();
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'تراجع عن نسيان الكلمة', exact: true }).click();
+  await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2']);
+});
+
+test.describe('word review', () => {
+  test.use({ seed: { 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 1, shown: null, words: 0 } }, 'reader-write': true } });
+
+  test('tests only the marked word and rests it after a correct answer', async ({ page }) => {
+    await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+    await page.getByLabel('اكتب الكلمة').fill('لله');
+    await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
+    await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2:1']);
+  });
+
+  test('a wrong answer resets only the word mark', async ({ page }) => {
+    await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await page.getByLabel('اكتب الكلمة').fill('رب');
+    await page.getByLabel('اكتب الكلمة').press('Enter');
+    await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:1': { forgot: 2, at: expect.any(Number) } });
+  });
+});
+
+for (const theme of ['light', 'dark'] as const) {
+  test.describe(`forgotten word in ${theme}`, () => {
+    test.use({ seed: { theme: JSON.stringify(theme), 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1 } } });
+
+    test('the reader and home review show the word mark', async ({ page }) => {
+      await open(page, '/read');
+      await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+      const capture = async (name: string) => {
+        if (process.env.WORD_SCREENSHOTS) await page.screenshot({ path: `docs/screenshots/forgotten-word/${theme}-${name}.jpg`, type: 'jpeg', quality: 85 });
+      };
+      await capture('reader');
+      await page.goto('/');
+      await page.getByText('هل تذكرها؟', { exact: true }).scrollIntoViewIfNeeded();
+      await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeVisible();
+      await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
+      await capture('review');
+      await page.getByRole('toolbar', { name: 'أدوات التسميع' }).getByRole('button', { name: 'أظهر الكلمة التالية' }).click();
+      await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeDisabled();
+    });
+  });
+}
+
+test.describe('two word reviews in one ayah', () => {
+  test.use({ seed: { 'ayah-forgot': { '1:2:0': { forgot: 1, at: 1 }, '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 0, shown: null, words: 0 } }, 'reader-write': true } });
+
+  test('the next word has its own blank and no feedback from the previous answer', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByLabel('اكتب الكلمة').fill('خطأ');
+    await page.getByLabel('اكتب الكلمة').press('Enter');
+    await expect(page.getByLabel('كتبت: خطأ')).toBeVisible();
+    await page.getByRole('button', { name: 'الآية المنسية التالية' }).click();
+    await expect(page.getByLabel('كتبت: خطأ')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await page.getByLabel('اكتب الكلمة').fill('لله');
+    await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
+  });
+});
+
+test('recite from the top bar starts at the page start', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  // A tapped ayah is selected, but the top bar still recites from the page's first ayah (owner, 2026-11-17).
+  await page.getByText(IHDINA, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await expect.poll(start).toBe('1:1');
+});
+
+test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  await pressWord(page, IHDINA);
+  await page.getByRole('button', { name: 'سمّع من هذه الآية' }).click();
+  await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+  await expect.poll(start).toBe('1:6');
+});
+
+test('the recite bar moves to the top and back, by its grip or by dragging, and stays where it was put', async ({ page }) => {
+  await open(page, '/read');
+  await page.getByText(HAMD, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  const bar = page.getByLabel('أدوات التسميع');
+  const y = async () => (await bar.boundingBox())!.y;
+  expect(await y()).toBeGreaterThan(600);
+  await page.getByRole('button', { name: 'انقل الشريط إلى الأعلى' }).click();
+  await expect.poll(y).toBeLessThan(30);
+  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('top');
+  // Dragged most of the way down, it settles at the bottom.
+  const box = (await bar.boundingBox())!;
+  await page.mouse.move(box.x + 40, box.y + box.height / 2);
+  await page.mouse.down();
+  for (let step = 1; step <= 12; step++) { await page.mouse.move(box.x + 40, box.y + box.height / 2 + step * 50); await page.waitForTimeout(16); }
+  await page.mouse.up();
+  await expect.poll(y).toBeGreaterThan(600);
+  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
 });

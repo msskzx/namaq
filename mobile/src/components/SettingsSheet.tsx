@@ -1,16 +1,16 @@
 import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-native';
-import { openExternal } from './ExternalLink';
-import Sheet from './Sheet';
+import { openExternal } from '@/ui/ExternalLink';
+import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
 import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
-import Toggle from './Toggle';
+import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
-import { BooksSetting } from './Books';
+import { PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';
 
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
@@ -35,8 +35,8 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <BesideSetting palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
+        <PenSetting palette={palette} />
         <HapticsSetting palette={palette} />
-        <BooksSetting palette={palette} />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
           <Pressable onPress={() => { onClose(); setTimeout(() => { hintsSeen.set([]); tourSeen.set(false); }, REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>

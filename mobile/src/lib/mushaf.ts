@@ -16,7 +16,6 @@ export function pageData(page: number): MushafPage {
 
 export const surahs = surahRows;
 /** Surah names as the mushaf writes them in the title boxes, with tashkeel (the website reads them from the database). */
-export const surahNames: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.title]));
 export const ayahCounts: ReadonlyMap<number, number> = new Map(surahs.map(row => [row.number, row.numberOfAyat]));
 
 /** The surah running at the top of a page that opens mid-surah. */
@@ -27,6 +26,18 @@ let starts: Map<string, number> | undefined;
 export function pageOfAyah(key: string): number | undefined {
   starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
   return starts.get(key);
+}
+
+/** The first ayah that starts on a page (the page's فاصلة names it), or the ayah running onto it when none starts there. */
+export function firstAyahOfPage(page: number): string {
+  starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
+  let before = '1:1';
+  for (const [key, at] of starts) {
+    if (at === page) return key;
+    if (at > page) break;
+    before = key;
+  }
+  return before;
 }
 
 /** One ayah's words as the mushaf writes them, looked for from its surah's first page so that only a few pages are read. */

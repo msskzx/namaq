@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { setBookmarkStorage } from '@shared/bookmarks';
 import { compareBookmarkId } from '@shared/compareBookmarks';
 import { compareLinksOfAyah } from '@/app/quran/compare/pairCards';

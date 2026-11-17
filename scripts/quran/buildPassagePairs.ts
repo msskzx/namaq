@@ -6,7 +6,7 @@ import { inJuzRange } from '../../shared/quran/juz';
 import { normalizeWord } from '../../shared/quran/normalize';
 import type { SimilarPair } from '../../src/lib/quran/similar';
 import type { CompactColumn, SimilarAyahPair } from '../../src/lib/quran/mutashabih/similar';
-import source from '../../shared/data/quran/trees.json';
+import source from '../../shared/quran/quranText/corpus';
 import engine from '../../src/app/quran/compare/pairs.json';
 import similar from '../../src/app/quran/compare/similar.json';
 

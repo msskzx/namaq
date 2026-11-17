@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import source from '@shared/data/quran/trees.json';
+import source from '@shared/quran/quranText/corpus';
 import data from '@/app/quran/compare/pairs.json';
 import type { BranchAyah } from '@shared/quran/branches';
 import { crossingColumns, rootWeights, similarAyahPair, withAliases, type SimilarAyahPair } from './similar';

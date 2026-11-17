@@ -20,7 +20,7 @@ const ROLE: Record<ConditionRole, string> = {
 };
 
 function Words({ words }: { words: OpeningWord[] }) {
-  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) 55%, var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) var(--mark-some), var(--home-muted))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
 }
 
 function Conditions({ lines }: { lines: ConditionText[string] }) {
@@ -100,7 +100,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
     <>
       <header className="flex items-center gap-2">
         <h1 className="text-3xl font-bold">افتتاح السور</h1>
-        <Link href="/quizzes/openings" aria-label="اختبار أوائل السور" title="اختبار أوائل السور" className={`ms-auto ${icon}`}><PenLine size={18} aria-hidden /></Link>
+        <Link href="/quizzes?topic=OPENINGS" aria-label="اختبار أوائل السور" title="اختبار أوائل السور" className={`ms-auto ${icon}`}><PenLine size={18} aria-hidden /></Link>
       </header>
       <div role="group" aria-label="أنواع الافتتاح" className="flex gap-2 overflow-x-auto pb-1">
         {OPENING_KINDS.map(k => (

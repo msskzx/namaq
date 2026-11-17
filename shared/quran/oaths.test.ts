@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import data from '../data/quran/oaths.json';
+import corpus from './quranText/corpus';
+
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const data = (key: string) => pageWords.get(key);
 import { normalizeWord } from './normalize';
 import { ALLAH_OATHS, OTHER_OATHS, buildOaths, isSworn, oathPlace, type OathKind } from './oaths';
 
@@ -62,7 +65,7 @@ describe('oaths', () => {
     expect(oathPlace({ name: 'العصر', range: [1, 1] }, String)).toBe('العصر 1');
   });
 
-  it('throws when a range is missing from the data', () => {
-    expect(() => buildOaths('allah', { names: {}, ayat: {} })).toThrow(/missing/);
+  it('throws when a range is missing from the pages', () => {
+    expect(() => buildOaths('allah', () => undefined)).toThrow(/missing/);
   });
 });
