@@ -6,11 +6,11 @@ import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, 
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
-import { Text, TextInput } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text, TextInput } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
 import WordSheet from '@/components/WordSheet';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';

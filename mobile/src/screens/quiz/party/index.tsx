@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { NAME_MAX } from '@shared/party/rules';
-import BackBar from '@/components/BackBar';
-import Button from '@/components/Button';
+import BackBar from '@/ui/BackBar';
+import Button from '@/ui/Button';
 import { Section } from '@/components/QuizForm';
 import { NoPartyServer, playerId, saveName, savedName, startParty } from '@/lib/party';
 import { usePalette } from '@/lib/theme';

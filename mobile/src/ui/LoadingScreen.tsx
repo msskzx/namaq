@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Text } from '@/components/Text';
-import Logo from './Logo';
+import { Text } from '@/ui/Text';
+import Logo from '@/components/Logo';
 import { dark, light } from '@/lib/theme';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
 

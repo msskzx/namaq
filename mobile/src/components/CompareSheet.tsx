@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Modal, Pressable, ScrollView, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -11,7 +11,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
 import { applyDraft, draftOf, type FilterDraft } from '@/lib/branchList';
 import { FilterFields } from './FilterFields';
-import Toggle from './Toggle';
+import Toggle from '@/ui/Toggle';
 import { isMemorizedScope, memorizedScope, readMemorized, subscribeMemorized, type Memorized } from '@shared/memorized';
 import { readJson, writeJson } from '@/lib/storage';
 import type { Palette } from '@/lib/theme';

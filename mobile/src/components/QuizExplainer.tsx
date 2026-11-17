@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import example from '@shared/data/quiz/example.json';
 import type { Branch, Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';

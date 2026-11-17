@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { ArrowLeftRight, BookOpen, Send } from 'lucide-react-native';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';

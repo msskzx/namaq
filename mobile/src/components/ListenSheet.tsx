@@ -1,9 +1,9 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Check, ChevronDown, ChevronLeft, CircleCheck, CirclePause, Download, Mic, Play, RotateCw, Trash2 } from 'lucide-react-native';
-import { Text } from '@/components/Text';
-import Sheet from './Sheet';
-import Reference from './Reference';
+import { Text } from '@/ui/Text';
+import Sheet from '@/ui/Sheet';
+import Reference from '@/ui/Reference';
 import { Chip, Group } from './FilterFields';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName } from '@shared/quran/normalize';

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text } from '@/components/Text';
+import { Text } from '@/ui/Text';
 import { Check, CheckCheck, Send } from 'lucide-react-native';
 import type { PairCard } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
@@ -9,7 +9,7 @@ import { clock, partLengths, stepEnds } from '@shared/video/pageVideo';
 import { sideLabel } from '@/lib/compare';
 import { pageVideoPages } from '@/lib/compareVideo';
 import type { Palette } from '@/lib/theme';
-import Sheet from './Sheet';
+import Sheet from '@/ui/Sheet';
 import { IconButton } from './Studio';
 import VideoSheet from './VideoSheet';
 import { nextSpeed, useReadSpeed } from './useReadAlong';

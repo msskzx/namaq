@@ -4,11 +4,11 @@ import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-r
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
-import { Text } from '@/components/Text';
-import TopBar from '@/components/TopBar';
+import { Text } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import FasilaIcon from '@/components/FasilaIcon';
 import { size } from '@/components/Books';
-import { useTabBarSpace } from '@/components/tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { addBook, bookState, removeBook, useBooks, type BookState } from '@/lib/books';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';

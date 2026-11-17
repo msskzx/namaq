@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
-import { Text, TextInput } from '@/components/Text';
+import { Text, TextInput } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
 import { quranText } from '@/lib/quranText';
 import { ALL_KINDS_LIST, applyDraft, draftOf, EMPTY_LIST, suggestions, type FilterDraft, type ListState } from '@/lib/branchList';
-import { useTabBarSpace } from './tabBarSpace';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
