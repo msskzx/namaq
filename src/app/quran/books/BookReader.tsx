@@ -10,6 +10,7 @@ import { pageName } from '@shared/readerBooks';
 import { readFasilas, readSavedParagraphs, serverFasilas, serverSavedParagraphs, setBookFasila, setLastBookSpot, subscribeFasilas, subscribeSavedParagraphs, toggleSavedParagraph } from '@shared/readingMarks';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
+import Segmented from '@/components/common/Segmented';
 import { NavActions, NavButtons } from '@/components/common/NavBar';
 import ExternalLink from '@/components/common/ExternalLink';
 import FasilaIcon from '@/components/quran/FasilaIcon';
@@ -151,11 +152,8 @@ function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
   return (
     <Sheet open onClose={onClose} label={TABS.find(item => item.tab === tab)?.label} className="h-[min(80dvh,44rem)]">
       <div className={styles.sheetHead}>
-        <div role="tablist" className="flex gap-1">
-          {TABS.map(item => (
-            <button key={item.tab} id={`book-tab-${item.tab}`} role="tab" aria-selected={tab === item.tab} aria-controls="book-sheet-panel" className={styles.tab} onClick={() => onTab(item.tab)}>{item.label}</button>
-          ))}
-        </div>
+        <Segmented tabs label="الفهرس والمحفوظات والبحث"
+          options={TABS.map(item => ({ key: item.tab, label: item.label, current: tab === item.tab, id: `book-tab-${item.tab}`, controls: 'book-sheet-panel', onClick: () => onTab(item.tab) }))} />
         <Button size="icon" variant="ghost" aria-label="إغلاق" onClick={onClose}><X aria-hidden /></Button>
       </div>
       <div id="book-sheet-panel" role="tabpanel" aria-labelledby={`book-tab-${tab}`} className={styles.sheetBody}>
