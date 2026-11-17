@@ -7,6 +7,7 @@ import Segmented from '@/components/common/Segmented';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, serverMemorized, serverMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
 import { num } from '@shared/quran/arabicNumber';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import Button from '@/components/common/Button';
 
 /**
  * «ما أحفظه» on the website, as the app's (mobile/src/components/Memorized.tsx): the range picker, the settings section
@@ -107,14 +108,14 @@ export function MemorizedPrompt() {
       <BookOpenCheck size={20} aria-hidden className="text-[var(--home-accent)]" />
       <h2 id="memorized-title" className="flex-1 text-[17px] font-bold">{picking ? 'ما أحفظه' : 'ما الذي تحفظه؟'}</h2>
       {picking
-        ? <button type="button" onClick={done} className="min-h-10 rounded-[10px] bg-[var(--home-accent)] px-4 text-[var(--home-paper)]">تم</button>
-        : <button type="button" onClick={setMemorizedAsked} aria-label="إغلاق" title="إغلاق" className="grid size-9 place-items-center text-[var(--home-muted)]"><X size={18} aria-hidden /></button>}
+        ? <Button variant="primary" onClick={done}><Check size={18} aria-hidden />تم</Button>
+        : <Button size="round" variant="muted" onClick={setMemorizedAsked} aria-label="إغلاق" title="إغلاق"><X aria-hidden /></Button>}
     </div>
     {picking ? <MemorizedPicker /> : <>
       <p className="leading-7 text-[var(--home-muted)]">اختر ما تحفظه، لتأتيك الأسئلة منه، ويتقدّم في التأمل. تجده في الإعدادات أيضًا.</p>
-      <button type="button" onClick={() => setPicking(true)} aria-label="اختر ما تحفظه" className="inline-flex min-h-10 items-center gap-1.5 self-start rounded-[10px] bg-[var(--home-accent)] px-4 text-[var(--home-paper)]">
+      <Button variant="primary" onClick={() => setPicking(true)} aria-label="اختر ما تحفظه" className="self-start">
         <Check size={18} aria-hidden />اختر
-      </button>
+      </Button>
     </>}
   </section>;
 }

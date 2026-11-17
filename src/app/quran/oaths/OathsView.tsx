@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { BookOpen, Send } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import Reference from '@/components/common/Reference';
@@ -9,6 +8,7 @@ import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
+import Button from '@/components/common/Button';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
@@ -24,8 +24,6 @@ async function shareOath(oath: OathView) {
     else await navigator.clipboard.writeText(`${text}\n${url}`);
   } catch {}
 }
-
-const ICON_BUTTON = 'inline-flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
 function OathCard({ oath }: { oath: OathView }) {
   const place = oathPlace(oath, num);
@@ -51,8 +49,8 @@ function OathCard({ oath }: { oath: OathView }) {
         </p>
       </article>
       <div className="flex items-center gap-1">
-        <Link href={ayahHref(oath.id)} className={ICON_BUTTON} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen size={18} aria-hidden /></Link>
-        <button type="button" onClick={() => shareOath(oath)} className={ICON_BUTTON} aria-label={`شارك ${place}`} title="شارك"><Send size={18} aria-hidden /></button>
+        <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>
+        <Button size="round" variant="muted" onClick={() => shareOath(oath)} aria-label={`شارك ${place}`} title="شارك"><Send aria-hidden /></Button>
       </div>
     </li>
   );

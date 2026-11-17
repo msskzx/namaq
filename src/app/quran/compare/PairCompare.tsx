@@ -637,7 +637,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         <div className="flex max-h-[calc(85dvh-1.5rem)] flex-col gap-2">
           <div className="flex items-center justify-between">
             <span aria-hidden className="mx-auto h-1 w-10 rounded-full bg-[var(--home-rule)]" />
-            <button type="button" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'} className="flex size-9 items-center justify-center rounded-full text-[var(--home-muted)]"><X size={18} aria-hidden /></button>
+            <Button size="round" variant="muted" onClick={close} aria-label={ar ? 'إغلاق' : 'Close'}><X aria-hidden /></Button>
           </div>
           {open && <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} onPick={close} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />}
         </div>

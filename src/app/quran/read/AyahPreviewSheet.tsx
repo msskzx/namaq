@@ -19,6 +19,7 @@ import type { IrabAyah } from './irab';
 import BalaghaPanel from './BalaghaPanel';
 import type { BalaghaAyah } from './balagha';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import Button from '@/components/common/Button';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
@@ -85,7 +86,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           <Icon size={20} aria-hidden />
           {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
           <h2 className="flex-1 text-base font-normal">{`${names[surah] ?? num(surah)} ${run && run.from !== run.to ? `${num(run.from)}–${num(run.to)}` : num(number)}`}</h2>
-          <button type="button" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق" className="flex size-9 items-center justify-center rounded-full"><X size={18} aria-hidden /></button>
+          <Button size="round" variant="muted" onClick={() => sheet.current?.close()} aria-label="إغلاق" title="إغلاق"><X aria-hidden /></Button>
         </div>
         <div className="flex min-h-0 flex-col gap-2.5 overflow-y-auto px-4 pb-1">
           {readings && <Readings qiraat={readings} />}
