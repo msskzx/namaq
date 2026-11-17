@@ -17,6 +17,8 @@ import type { QuestionChoice } from "@/lib/quiz/types";
 import { leaderboard, NAME_MAX, type ActionError, type PartyQuestion, type PartyView, type PlayerView } from "@shared/party/rules";
 import { playerId, saveName, savedName, usePartySocket, type PartyStatus } from "@/lib/party/client";
 import { BranchFeedback, BranchInputs } from "../BranchAnswers";
+import { CompareFeedback, CompareInputs } from "../CompareAnswers";
+import { emptyCompareAnswers } from "@shared/quiz/compareAnswers";
 import PartySettingsPanel from "./PartySettings";
 import { Eye } from "lucide-react";
 import QuestionReview from "../QuestionReview";
@@ -223,13 +225,13 @@ function ChoiceText({ question, value }: { question: Question; value: string }) 
 function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: ReturnType<typeof usePartySocket>["send"]; offset: number; ar: boolean }) {
   const question = view.question as Question;
   const revealed = view.phase === "reveal";
-  const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
+  const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
   const [source, setSource] = useState(false);
   const sent = view.answer !== null;
   const waiting = view.players.filter((player) => !player.submitted);
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
-  const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  const total = (question.tree || question.compare ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
       <p className="sr-only" aria-live="polite">{ar
@@ -243,7 +245,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
     <div className="flex flex-col gap-5">
       {!revealed && view.deadline !== null && <div className="flex justify-center"><Countdown deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
       <div className={styles.panel}>
-        <p dir="rtl" lang="ar" className={`mb-4 ${question.tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
+        <p dir="rtl" lang="ar" className={`mb-4 ${question.tree || question.compare ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
           <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
             <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(question.ayah.text)}</p>
@@ -251,7 +253,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           </blockquote>
         )}
         <ChoiceQuran question={question} given={revealed ? view.answer as string ?? undefined : undefined} revealed ar={ar} />
-        {question.tree ? (
+        {question.compare ? (
+          revealed ? <CompareFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : []} ar={ar} />
+            : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
+        ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : (
@@ -274,11 +279,13 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           </div>
         )}
         {revealed && view.result && (
-          <p className="mt-4 font-semibold" data-result>{question.tree
+          <p className="mt-4 font-semibold" data-result>{question.compare
+            ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} فراغات` : `${view.result.earned} of ${view.result.total} blanks`)
+            : question.tree
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : `${view.result.earned} of ${view.result.total} leaves`)
             : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}
-        {revealed && view.answer !== null && !question.tree && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
+        {revealed && view.answer !== null && !question.tree && !question.compare && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
           surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
         {revealed && view.answer === null && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
         {revealed && question.evidence?.reference && (

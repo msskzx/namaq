@@ -34,7 +34,11 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 export default function PartySettingsPanel({ settings, editable, onChange, ar }: { settings: PartySettings; editable: boolean; onChange: (change: Partial<PartySettings>) => void; ar: boolean }) {
   const branches = settings.topics.includes("BRANCHES");
   const ranged = settings.topics.some((topic) => RANGED_TOPICS.includes(topic));
-  const others = settings.topics.some((topic) => topic !== "BRANCHES");
+  // Trees and compare questions are typed, so they run on the longer time.
+  const typedTopics = settings.topics.filter((topic) => topic === "BRANCHES" || topic === "COMPARE");
+  const typedTime = typedTopics.length > 0;
+  const typedLabel = branches && typedTopics.length === 1 ? (ar ? "وقت سؤال الشجرة" : "Time per tree") : (ar ? "وقت سؤال الكتابة" : "Time per typed question");
+  const others = settings.topics.some((topic) => topic !== "BRANCHES" && topic !== "COMPARE");
   const ready = settings.topics.length > 0 && (!settings.topics.includes("PERSON_CIRCLE") || settings.person);
   const scope = new URLSearchParams(quizQuery(settings));
   scope.delete("length");
@@ -51,10 +55,8 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         [branches ? (ar ? "الأشجار" : "Trees") : (ar ? "النطاق" : "Range"), scopeSummary(settings, ar, branches)] as [string, string],
         [ar ? "الصعوبة" : "Difficulty", DIFFICULTY_LABELS[settings.difficulty ?? DEFAULT_DIFFICULTY][ar ? "ar" : "en"]] as [string, string],
       ] : []),
-      ...(branches ? [
-        [ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string],
-        [ar ? "وقت سؤال الشجرة" : "Time per tree", duration(settings.treeSeconds, ar)] as [string, string],
-      ] : []),
+      ...(branches ? [[ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string]] : []),
+      ...(typedTime ? [[typedLabel, duration(settings.treeSeconds, ar)] as [string, string]] : []),
       ...(others ? [[ar ? "وقت السؤال" : "Time per question", duration(settings.seconds, ar)] as [string, string]] : []),
     ];
     return (
@@ -99,9 +101,9 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
             ))}
           </Row>}
           </div>
-          {branches && <>
-            <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
-            <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
+          {branches && <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
+          {typedTime && <>
+            <Row label={typedLabel}>
               {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
             </Row>
           </>}
