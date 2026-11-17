@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Check, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
+import QuranWords from '@/components/quran/text/QuranWords';
 
 /**
  * The one chip, as the app's `ui/Chip`: a round, framed word to pick among others in a row (filters, a topic, a surah).
@@ -26,7 +27,7 @@ export default function Chip({ label, on = false, onClick, role = 'button', name
   tapThrough?: boolean;
   className?: string;
 }) {
-  const size = small ? 'h-7 px-2.5 text-sm' : quran ? 'px-3.5 font-quran text-[1.375rem] leading-[1.8]' : 'min-h-9 px-3 text-[0.9375rem]';
+  const size = small ? 'h-7 px-2.5 text-sm' : quran ? 'px-3.5 text-[1.375rem] leading-[1.8]' : 'min-h-9 px-3 text-[0.9375rem]';
   const base = `inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border ${size}`;
   if (onClear || clearHref) {
     const x = 'grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]';
@@ -43,7 +44,7 @@ export default function Chip({ label, on = false, onClick, role = 'button', name
     : 'border-[var(--home-rule)] text-[var(--home-ink)]';
   const body = <>
     {check && on && <Check size={13} aria-hidden />}
-    {label}
+    {quran ? <QuranWords>{label}</QuranWords> : label}
     {count !== undefined && <span className="text-xs opacity-70">{num(count)}</span>}
   </>;
   if (!onClick) return <span className={`${base} ${look} ${className}`}>{body}</span>;
