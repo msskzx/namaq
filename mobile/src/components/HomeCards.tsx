@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
@@ -61,17 +61,6 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
         ? <Text numberOfLines={wide ? undefined : 6} style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
         : <Text numberOfLines={wide ? undefined : 5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>}
     </Tap>
-  );
-}
-
-/** A row of cards, the first on the right. Inverted in a left-to-right box, as the compare pager does, so it starts on the right on every platform. */
-export function Shelf({ cards, render }: { cards: SavedCard[]; render: (card: SavedCard, index: number) => React.ReactNode }) {
-  return (
-    <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
-      <FlatList data={cards} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={card => card.id}
-        contentContainerStyle={{ gap: 12, paddingVertical: 4, paddingHorizontal: 16 }}
-        renderItem={({ item, index }) => <View style={{ direction: 'rtl' }}>{render(item, index)}</View>} />
-    </View>
   );
 }
 

@@ -209,12 +209,3 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
   );
 }
 
-export function GestureSheet({ open, onClose, palette, mode }: { open: boolean; onClose: () => void; palette: Palette; mode: ReaderMode }) {
-  return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
-      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-        <GestureSettings key={String(open)} palette={palette} mode={mode} />
-      </View>
-    </Sheet>
-  );
-}
