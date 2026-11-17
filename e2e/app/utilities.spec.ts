@@ -1,8 +1,11 @@
-import { expect, open, tab, test } from './fixtures';
+import { expect, open, test } from './fixtures';
+
+// The utilities left the tab bar for the library (owner, 2026-11-17): they open from the compass in home's top bar.
+const compass = (page: import('@playwright/test').Page) => page.getByRole('button', { name: 'الأدوات', exact: true }).filter({ visible: true }).first();
 
 test('prayer times for a picked city, then the qibla and the Hijri month', async ({ page }) => {
   await open(page, '/');
-  await tab(page, 'الأدوات').click();
+  await compass(page).click();
   await page.getByRole('button', { name: 'اختر مدينة' }).filter({ visible: true }).first().click();
   await page.getByLabel('ابحث عن مدينة').fill('القاهرة');
   await page.getByRole('radio', { name: 'القاهرة' }).click();
@@ -21,7 +24,7 @@ test('prayer times for a picked city, then the qibla and the Hijri month', async
 
 test('a sideways swipe moves to the next utility and its icon', async ({ page }) => {
   await open(page, '/');
-  await tab(page, 'الأدوات').click();
+  await compass(page).click();
   await page.getByRole('radio', { name: 'مواقيت الصلاة' }).click();
   await expect(page.getByRole('radio', { name: 'مواقيت الصلاة' })).toBeChecked();
   // The web export pages with CSS scroll snap; scrolling the pager one page is what a swipe does.

@@ -12,7 +12,7 @@ vi.mock('@/components/language/LanguageContext', () => ({
 vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restoreAllMocks(); vi.clearAllMocks(); });
 
-const destinations = ['/quran', '/quran/read', '/', '/quizzes', '/utilities'];
+const destinations = ['/quran', '/quran/read', '/', '/quizzes', '/quran/books'];
 
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
@@ -32,8 +32,15 @@ describe('launch navigation', () => {
     expect(back.getAttribute('href')).toBe('/quran');
   });
 
-  it('puts the settings gear and the search in the homepage top bar only, as in the app', () => {
+  it('puts the library in the logo\'s place on a book\'s page, back to the shelf, as in the app', () => {
+    state.path = '/quran/books/sadi/4';
     render(<NavBar />);
+    expect(within(screen.getByRole('navigation')).getByRole('link', { name: 'Library' }).getAttribute('href')).toBe('/quran/books');
+  });
+
+  it('puts the settings gear, the search and the utilities compass in the homepage top bar only, as in the app', () => {
+    render(<NavBar />);
+    expect(within(screen.getByRole('navigation')).getByRole('link', { name: 'Utilities' }).getAttribute('href')).toBe('/utilities');
     expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Settings' })).toBeTruthy();
     expect(within(screen.getByRole('navigation')).getByRole('link', { name: 'Search' }).getAttribute('href')).toBe('/search');
     cleanup();

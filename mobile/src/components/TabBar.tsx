@@ -5,7 +5,7 @@ import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } f
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { BookOpen, Compass, Feather, House, type LucideProps } from 'lucide-react-native';
+import { BookOpen, Feather, House, LibraryBig, type LucideProps } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
 import { TAB_BAR, tabBarBottom } from './tabBarSpace';
 import { usePalette } from '@/lib/theme';
@@ -13,20 +13,15 @@ import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 import { openPage, tapOnOpen } from '@/lib/tabGroups';
 
-/**
- * Utilities shows once its first tool lands (owner, 2026-11-13): the bar never opens an empty page.
- * The thread building prayer times, qibla and the Hijri calendar turns this on with its utilities page.
- */
-export const SHOW_UTILITIES = true;
-
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
-// read left to right they are utilities, quizzes, home, mushaf, Quran. Keys are the tab routes; home and Quran hold page stacks (lib/tabGroups.ts).
-const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode; hidden?: boolean }[] = [
+// read left to right they are library, quizzes, home, mushaf, Quran. Keys are the tab routes; home, library and Quran hold page stacks (lib/tabGroups.ts).
+// The library took the utilities' place (owner, 2026-11-17); the utilities open from the compass in home's top bar.
+const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
   { key: 'read', label: 'المصحف', Icon: BookOpen },
   { key: '(home)', label: 'الرئيسية', Icon: House },
   { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
-  { key: 'utilities', label: 'الأدوات', Icon: Compass, hidden: !SHOW_UTILITIES },
+  { key: '(library)', label: 'المكتبة', Icon: LibraryBig },
 ];
 
 // Instagram-style (owner, 2026-11-10): while a page scrolls down the bar gets a little smaller, and it comes back on the way up.
@@ -57,7 +52,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
       <Animated.View style={[{ flexDirection: 'row', paddingHorizontal: 6, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }, row]}>
         <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
         <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
-        {BUTTONS.filter(button => !button.hidden).map(({ key, label, Icon }) => {
+        {BUTTONS.map(({ key, label, Icon }) => {
           const active = open === key;
           // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts); from the search it goes home.
           // Another button opens its tab on the page that was open there last.
