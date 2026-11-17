@@ -7,9 +7,10 @@ test.describe('pages without the database', () => {
     await noErrorPage(page);
   });
 
-  test('the quizzes page lists every quiz', async ({ page }) => {
+  test('the quizzes page offers solo and party only', async ({ page }) => {
     await page.goto('/quizzes');
-    for (const name of ['اختبار فردي', 'اختبار جماعي', 'تسميع', 'اكتب أول الآية وآخرها']) await expect(page.getByText(name, { exact: true }).first()).toBeVisible();
+    const modes = page.getByRole('navigation', { name: 'نوع الاختبار' }).getByRole('link');
+    await expect(modes).toHaveText([/اختبار فردي/, /اختبار جماعي/]);
   });
 
   test('prayer times for a picked city', async ({ page }) => {

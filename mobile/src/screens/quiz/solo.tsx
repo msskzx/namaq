@@ -17,7 +17,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { memorizedQuestions, readMemorized, withMemorizedScope } from '@shared/memorized';
 import { availability, cleanSolo, SOLO_KINDS, startSolo, type SoloSettings } from '@/lib/quiz';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
-import { RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { PAGE_TOPICS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette, CARD } from '@/lib/theme';
 
@@ -50,8 +50,8 @@ export default function SoloSetup() {
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const { available, lengths } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
-  // Recite and «في أي سورة؟» are asked on the ayah's mushaf page (owner, 2026-11-17).
-  const onPage = settings.kinds.includes('RECITE') || settings.kinds.includes('SURAH');
+  // Recite, «في أي سورة؟» and the written kinds are asked on the ayah's mushaf page (owner, 2026-11-17).
+  const onPage = settings.kinds.some(kind => PAGE_TOPICS.includes(kind));
   const [pageBefore, setPageBefore] = quizPageBefore.use();
   // A kind that does not ask the Quran (the Tuhfa's lines) has no range to pick.
   const ranged = settings.kinds.some(kind => RANGED_TOPICS.includes(kind));
