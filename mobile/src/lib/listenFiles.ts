@@ -89,9 +89,16 @@ export function bytesOf(reciter: number): number {
 }
 
 async function fetchSync(reciter: number, token?: string): Promise<SyncResult | { resync: true }> {
-  const response = await fetch(`${WEBSITE}/api/quran/listen-sync?r=${reciter}${token ? `&t=${encodeURIComponent(token)}` : ''}`);
-  if (!response.ok) throw new Error(`listen-sync ${response.status}`);
-  return response.json();
+  // A sync that hangs would hold the reciter's downloads behind it (inLine).
+  const abort = new AbortController();
+  const timer = setTimeout(() => abort.abort(), 20_000);
+  try {
+    const response = await fetch(`${WEBSITE}/api/quran/listen-sync?r=${reciter}${token ? `&t=${encodeURIComponent(token)}` : ''}`, { signal: abort.signal });
+    if (!response.ok) throw new Error(`listen-sync ${response.status}`);
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 const deleteFile = (reciter: number, key: string) => { try { const file = fileOf(reciter, key); if (file.exists) file.delete(); } catch {} };
@@ -117,28 +124,36 @@ async function sync(reciter: number) {
   let result = await fetchSync(reciter, had?.token);
   if ('resync' in result) result = await fetchSync(reciter);
   if ('resync' in result) throw new Error('listen-sync resync');
+  // Its downloads were removed while the sync ran: nothing is kept for it.
+  if (!packs.some(pack => pack.reciter === reciter) && ![...running.keys()].some(id => id.startsWith(`${reciter}:`))) return;
   if (result.gone) { stopReciter(reciter); packsOf(reciter).forEach(pack => removePack(reciter, pack.kind)); saveSynced(reciter, null); return; }
   const applied = applySync(had?.rows ?? {}, result);
   applied.drop.forEach(key => deleteFile(reciter, key));
   const repair = [...new Set([...(had?.repair ?? []), ...applied.refetch])].filter(key => applied.rows[key]);
   saveSynced(reciter, { token: result.token, rows: applied.rows, syncedAt: Date.now(), ...(repair.length ? { repair } : {}) });
-  await repairFiles(reciter);
 }
 
 /** Fetches the held ayat whose file changed at the source or is missing; the ones that fail stay listed for the next try. */
 async function repairFiles(reciter: number) {
   const now = synced[reciter];
-  if (!now) return;
-  const held = heldKeys(reciter);
-  const listed = new Set(now.repair ?? []);
+  // Listed as running, so a sweep leaves its staging file alone and a second start does not repair the same files; an ayah whose
+  // download was removed meanwhile is skipped.
+  const id = `${reciter}:repair`;
+  if (!now?.repair?.length || running.has(id)) return;
   const failed: string[] = [];
-  for (const key of held) {
-    const row = now.rows[key];
-    if (!row || (!listed.has(key) && have(reciter, key))) continue;
-    try { await fetchAyah(reciter, key, row.url); } catch { failed.push(key); }
+  try {
+    for (const key of now.repair) {
+      const row = synced[reciter]?.rows[key];
+      if (!row || !heldKeys(reciter).has(key)) continue;
+      running.set(id, [key]);
+      try { await fetchAyah(reciter, key, row.url); } catch { failed.push(key); }
+      if (!heldKeys(reciter).has(key)) deleteFile(reciter, key);
+    }
+  } finally {
+    running.delete(id);
   }
   const after = synced[reciter];
-  if (after) saveSynced(reciter, { ...after, ...(failed.length ? { repair: failed } : { repair: undefined }) });
+  if (after) saveSynced(reciter, { ...after, repair: failed.length ? failed : undefined });
 }
 
 /** Downloads the ayat (four at a time), from the addresses Content Sync gives. A pack counts only when every one of its ayat is on the phone. */
@@ -213,12 +228,9 @@ export async function syncPacks(now = Date.now()) {
     if (root.exists) for (const item of root.list()) if (item instanceof Directory && /^\d+$/.test(item.name)) sweep(Number(item.name));
   } catch {}
   for (const reciter of new Set(packs.map(pack => pack.reciter))) {
-    try {
-      await inLine(reciter, async () => {
-        if (syncDue(synced[reciter]?.syncedAt, now)) await sync(reciter);
-        else if (synced[reciter]?.repair?.length) await repairFiles(reciter);
-      });
-    } catch {}
+    try { await inLine(reciter, async () => { if (syncDue(synced[reciter]?.syncedAt, now)) await sync(reciter); }); } catch {}
+    // Outside the line, so a download started meanwhile does not wait for every repaired file.
+    await repairFiles(reciter);
   }
   changed();
 }

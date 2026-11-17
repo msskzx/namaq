@@ -145,4 +145,35 @@ describe('audio downloads', () => {
     expect(files.packsOf(7)).toEqual([]);
     expect(files.progressOf(7, 'all')).toBeUndefined();
   });
+  it('fetches again an ayah whose file is empty', async () => {
+    const files = await load();
+    await files.downloadPack(7, 'all', 'all', KEYS);
+    disk.set(path('1:2'), '');
+    expect(files.localAyah(7, '1:2')).toBeUndefined();
+    downloads = 0;
+    await files.downloadPack(7, 'all', 'all', KEYS);
+    expect(downloads).toBe(1);
+  });
+
+  it('stops repairing a reciter whose downloads were removed, and a sweep meanwhile spares the file being fetched', async () => {
+    const files = await load();
+    await files.downloadPack(7, 'all', 'all', KEYS);
+    syncReply = () => ({ token: 't2', full: KEYS.map(key => row(key, `https://cdn/new/${key}`)), upsert: [], remove: [] });
+    let release!: () => void;
+    const gate = new Promise<void>(resolve => { release = resolve; });
+    downloads = 0;
+    net = async (url, at) => { disk.set(at, 'part'); await gate; disk.set(at, `bytes of ${url}`); };
+    const start = files.syncPacks(Date.now() + 2 * 24 * 60 * 60 * 1000);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    // A stopped download sweeps the folder while the first repaired ayah is still arriving.
+    files.stopDownload(7, 'all');
+    expect([...disk.keys()].some(key => key.endsWith('.part'))).toBe(true);
+    await files.syncPacks(Date.now());
+    expect([...disk.keys()].some(key => key.endsWith('.part'))).toBe(true);
+    files.removeReciter(7);
+    release();
+    await start;
+    expect(downloads).toBe(1);
+    expect([...disk.keys()].filter(key => key.endsWith('.mp3'))).toEqual([]);
+  });
 });
