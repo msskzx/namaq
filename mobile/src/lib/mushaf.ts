@@ -29,6 +29,18 @@ export function pageOfAyah(key: string): number | undefined {
   return starts.get(key);
 }
 
+/** The first ayah that starts on a page (the page's فاصلة names it), or the ayah running onto it when none starts there. */
+export function firstAyahOfPage(page: number): string {
+  starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
+  let before = '1:1';
+  for (const [key, at] of starts) {
+    if (at === page) return key;
+    if (at > page) break;
+    before = key;
+  }
+  return before;
+}
+
 /** One ayah's words as the mushaf writes them, looked for from its surah's first page so that only a few pages are read. */
 export function ayahText(key: string): string {
   const surah = surahs.find(row => row.number === Number(key.split(':')[0]));
