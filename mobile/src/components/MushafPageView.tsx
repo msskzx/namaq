@@ -142,7 +142,11 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
 function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
-  const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
+  const flowing = zoom > 1;
+  // The body's size at the printed page and with flowing text, each kept, so a pinch back to the printed page sets its
+  // lines at once at the size they had (record R0058).
+  const [bodies, setBodies] = useState<{ page?: { width: number; height: number }; flow?: { width: number; height: number } }>({});
+  const laid = flowing ? bodies.flow ?? bodies.page ?? null : bodies.page ?? null;
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
   const [measured, setMeasured] = useState(() => naturals.get(page));
@@ -158,7 +162,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       setMeasured(naturals.get(page));
     }
   }, [page, pending, groupCount]);
-  const flowing = zoom > 1;
 
   const itemCount = data.items.length;
   // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
@@ -298,7 +301,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   let surahHere = top;
 
   return (
-    <View onLayout={onHeight ? event => onHeight(page, event.nativeEvent.layout.height) : undefined}
+    // Drawn anew when the text starts or stops flowing: on a phone the page changed its styles in place (minHeight to
+    // height, flexGrow to flex: 1) and kept its tall flowing height at the printed size (owner, 2026-11-17; record R0058).
+    <View key={flowing ? 'flow' : 'page'} onLayout={onHeight ? event => onHeight(page, event.nativeEvent.layout.height) : undefined}
       style={slice ? { width } : { width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
       {/* One height on every page, chip or not, so facing pages' frames line up. */}
       {!slice && <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
@@ -315,9 +320,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
           nothing to scroll (owner, 2026-11-17). The web export grows them anyway, as browsers keep a flex item's content height. */}
       <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
         <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
-          {/* Drawn anew when the text starts or stops flowing, so it measures itself again: on a phone, back at the printed
-              size it kept the tall height it had while flowing, and the 15 lines spread down past the frame (owner, 2026-11-17). */}
-          <Pressable key={flowing ? 'flow' : 'page'} {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => setBody({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+          <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => { const { width: w, height: h } = event.nativeEvent.layout; setBodies(prev => ({ ...prev, [flowing ? 'flow' : 'page']: { width: w, height: h } })); }}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
                 {lineAt.map(at => {
