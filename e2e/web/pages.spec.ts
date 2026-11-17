@@ -131,7 +131,7 @@ test.describe('pages with the database', () => {
     test.setTimeout(120_000);
     // Batches take the kinds in turn, one a batch; five batches on the days either side of today hold all seven, well inside
     // the server's two days.
-    const kinds = ['في أي سورة؟', 'أكمل الشجرة', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
     const seen = new Set<string>();
     for (const days of [-1, 1]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));

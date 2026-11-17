@@ -89,3 +89,18 @@ export function gradeWritten(asked: number[], typed: Record<number, string>, wor
   const wrong = asked.filter(at => !right.includes(at));
   return { right, wrong, typed: Object.fromEntries(wrong.map(at => [at, typed[at] ?? ''])) as Record<number, string> };
 }
+
+/**
+ * Where an ayah's opening ends among its words as the mushaf page sets them: the first page word past the opening's letters.
+ * The quiz's words (trees.json) and the page split a few ayat differently (لَّوْ مَا / لَّوۡمَا 15:7, إِلْ يَاسِينَ 37:130) and the
+ * page has the ۞ quarter sign, so the opening is counted in letters, not words.
+ */
+export function openingCut(pageWords: string[], opening: string[]): number {
+  const letters = opening.map(normalizeWord).join('').replace(/\s+/g, '').length;
+  let seen = 0;
+  for (let at = 0; at < pageWords.length; at++) {
+    if (seen >= letters && maxLetters(pageWords[at])) return at;
+    seen += normalizeWord(pageWords[at]).replace(/\s+/g, '').length;
+  }
+  return pageWords.length;
+}

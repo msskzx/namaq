@@ -78,7 +78,10 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
   const answers = typed ?? (question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
   return <>
     {question.ayah && <AskedAyah ayah={question.ayah} />}
-    <ChoiceQuran question={question} given={given} revealed={revealed || locked} onReveal={onReveal} ar={ar} />
+    <ChoiceQuran question={question} given={given} revealed={revealed || locked} onReveal={onReveal} ar={ar} onAnswer={value => {
+      if (value === FORGOT && question.ayahKey) markForgotten(question.ayahKey);
+      onAnswer(value);
+    }} />
     {question.compare ? (
       locked ? (
         <CompareFeedback key={question.key} question={question} typed={answers} ar={ar} hints={hints} />

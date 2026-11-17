@@ -40,6 +40,12 @@ export const hintsSeen = setting<HintId[]>(HINTS_SEEN, [], (value): value is Hin
 /** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
 
+/**
+ * A recite or which-surah question's mushaf page (owner, 2026-11-17): every other word an empty box by default, with no
+ * surah name or juz; on, the ayat before the asked one are written as in recite mode.
+ */
+export const quizPageBefore = setting('quiz-page-before', false, isBoolean);
+
 /** Tree or matrix: the default view of every tree, matrix unless the reader picks the tree (owner, 2026-11-17). */
 export type BranchView = 'tree' | 'matrix';
 export const branchView = setting<BranchView>('branches-view', 'matrix', (value): value is BranchView => value === 'tree' || value === 'matrix');

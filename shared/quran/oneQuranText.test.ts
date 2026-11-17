@@ -16,7 +16,7 @@ import { describe, expect, it } from 'vitest';
 const ROOT = join(__dirname, '..', '..');
 const BASELINE = join(__dirname, 'oneQuranText.baseline.json');
 
-/** The one Quran text: the Madina (KFGQPC Hafs) pages. */
+/** The one Quran text: the Madina (KFGQPC Hafs) pages. Nothing else stores it, not even regrouped (owner, 2026-11-17). */
 const SOURCE = ['shared/data/quran/mushaf/'];
 /** Where the Quran module lives, once built: the only code that may set the Quran font or shape Quran text. */
 const MODULE = ['shared/quran/quranText/', 'src/components/quran/text/', 'mobile/src/components/quran/text/'];

@@ -11,6 +11,8 @@ const ROOT = join(__dirname, '..', '..');
 const DIRS = ['src', 'mobile/src'];
 /** The one tree component of each platform, and the website's pieces of it (its lines, fans and boxes). */
 const DRAWERS = new Set(['src/app/quran/branches/BranchTree.tsx', 'src/app/quran/branches/Paths.tsx', 'src/app/quran/branches/TreeLinks.tsx', 'mobile/src/components/BranchTree.tsx']);
+/** Quizzes draw a tree's question as the matrix only, never as a tree (owner, 2026-11-17). */
+const QUIZ_MATRIX = new Set(['mobile/src/components/QuizTree.tsx', 'mobile/src/components/QuizExplainer.tsx']);
 
 function sources(dir: string): string[] {
   return readdirSync(join(ROOT, dir)).flatMap(name => {
@@ -38,7 +40,7 @@ describe('one tree', () => {
   });
 
   it('draws every tree through BranchTree: a component that takes tree nodes hands them to it', () => {
-    const takes = files.filter(file => file.path.endsWith('.tsx') && !DRAWERS.has(file.path) && /import\s+(type\s+)?\{[^}]*\bBranch\b[^}]*\}\s*from\s*'@shared\/quran\/branches'/.test(file.text));
+    const takes = files.filter(file => file.path.endsWith('.tsx') && !DRAWERS.has(file.path) && !QUIZ_MATRIX.has(file.path) && /import\s+(type\s+)?\{[^}]*\bBranch\b[^}]*\}\s*from\s*'@shared\/quran\/branches'/.test(file.text));
     expect(takes.length).toBeGreaterThan(0);
     expect(takes.filter(file => !/import BranchTree\b/.test(file.text)).map(file => file.path)).toEqual([]);
   });
@@ -55,6 +57,11 @@ describe('one tree', () => {
     const bare = [...files, ...sources('shared').map(path => ({ path, text: readFileSync(join(ROOT, path), 'utf8') }))].filter(file => /\bcreatePhrasePresenter\b/.test(file.text) && !['shared/quran/phraseTrees.ts', 'shared/quran/subtrees.ts'].includes(file.path));
     expect(bare.map(file => file.path)).toEqual([]);
     expect(readFileSync(join(ROOT, 'shared/quiz/branchQuestions.ts'), 'utf8')).toMatch(/createTreePresenter\(/);
+  });
+
+  it('draws no tree in a quiz: its questions are the matrix', () => {
+    const quiz = files.filter(file => QUIZ_MATRIX.has(file.path) || file.path.startsWith('src/app/quizzes/'));
+    expect(quiz.filter(file => /import BranchTree\b/.test(file.text)).map(file => file.path)).toEqual([]);
   });
 
   it('lets the quiz draw only its own boxes (to type in, or graded): every given box is drawn by BranchTree', () => {
