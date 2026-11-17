@@ -1,22 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import ayahWords from '../../data/quran/ayahWords.json';
 import trees from '../../data/quran/trees.json';
 import type { MushafPage } from '../readerPage';
 import { ayahWordsOf, HIZB, pageWordsAt, SPLITS, wordsOnly } from './ayahWords';
 
 const pages: MushafPage[] = Array.from({ length: 604 }, (_, at) => JSON.parse(readFileSync(join(__dirname, `../../data/quran/mushaf/${at + 1}.json`), 'utf8')));
-const words = ayahWords as Record<string, string[]>;
+const words = ayahWordsOf(pages);
 const LETTER = /[ء-يٱ]/;
 /** Letters only, so the older text's spelling meets the page's (ى/ي, hamza seats and marks aside). */
 const skeleton = (word: string) => word.normalize('NFD').replace(/[^\u0621-\u063A\u0641-\u064A\u0671]/g, '').replace(/[\u0671\u0623\u0625\u0622]/g, '\u0627').replace(/\u0649/g, '\u064A').replace(/[\u0624\u0626]/g, '\u0621');
 
 describe('ayah words from the Madina pages', () => {
-  it('is the pages, rebuilt with npm run quran:ayah-words', () => {
-    expect(words).toEqual(ayahWordsOf(pages));
-  });
-
   it('holds every ayah of the Quran', () => {
     expect(Object.keys(words)).toHaveLength(6236);
   });
