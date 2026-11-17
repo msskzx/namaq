@@ -18,7 +18,8 @@ import Tabs from '@/ui/Tabs';
 export type Jump = { page: number; key: string; mark: boolean };
 
 const name = (surah: { number: number }) => surahName(surah.number);
-const AROUND = 6;
+/** Words set as one run of text with a space after each, so a long ayah is three spans, not one per word. */
+const join = (words: string[]) => words.map(word => `${quranText(word)} `).join('');
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
 
@@ -138,19 +139,15 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
             </Pressable>
           );
           const [surah, ayah] = row.key.split(':').map(Number);
-          const start = Math.max(0, row.from - AROUND);
-          const end = Math.min(row.words.length, row.to + 1 + AROUND);
           return (
             <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link"
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
               <Text style={{ color: palette.ink, fontSize: 20, lineHeight: 36, fontFamily: QURAN_FONT }}>
-                {start > 0 ? '… ' : ''}
-                {row.words.slice(start, end).map((word, at) => {
-                  const inside = start + at >= row.from && start + at <= row.to;
-                  return <Text key={at} style={inside ? { color: palette.accent } : undefined}>{quranText(word)} </Text>;
-                })}
-                {end < row.words.length ? '…' : ''}
+                {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
+                {join(row.words.slice(0, row.from))}
+                <Text style={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</Text>
+                {join(row.words.slice(row.to + 1))}
               </Text>
             </Pressable>
           );

@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, Play, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -392,13 +392,14 @@ export default function Reader() {
       <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
           {/* No logo; the buttons at the right edge, under the thumb (owner, 2026-11-17). */}
           <TopBar away={!tools}>
+            {/* Search first, at the right edge; the sheet shows the surah list until something is typed (owner, 2026-11-17). */}
+            <IconButton Icon={Search} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
             {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
             <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
               accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
               hitSlop={6} style={{ padding: 9 }}>
               <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
             </Pressable>
-            <IconButton Icon={List} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
             <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
           </TopBar>
       </View>
