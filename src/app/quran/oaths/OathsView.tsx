@@ -9,6 +9,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import Button from '@/components/common/Button';
+import Card from '@/components/common/Card';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
@@ -36,7 +37,7 @@ function OathCard({ oath }: { oath: OathView }) {
         {oath.who && <p className="text-sm text-[var(--home-muted)]">{oath.who}</p>}
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
       </div>
-      <article className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-1.5">
+      <Card as="article" className="px-4 py-1.5">
         <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
           {oath.lines.map(line => (
             <span key={line.ayah}>
@@ -47,7 +48,7 @@ function OathCard({ oath }: { oath: OathView }) {
             </span>
           ))}
         </p>
-      </article>
+      </Card>
       <div className="flex items-center gap-1">
         <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>
         <Button size="round" variant="muted" onClick={() => shareOath(oath)} aria-label={`شارك ${place}`} title="شارك"><Send aria-hidden /></Button>

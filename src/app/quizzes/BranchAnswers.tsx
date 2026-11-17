@@ -17,6 +17,7 @@ import { addHint, hintsOf, type Hints } from "@shared/quiz/hints";
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
 import example from "@shared/data/quiz/example.json";
+import Card from '@/components/common/Card';
 
 type Question = ScoredQuestion;
 type Names = Record<number, string>;
@@ -60,7 +61,7 @@ function MatrixInputs({ question, values, input, names }: { question: Question; 
   return <div className="flex flex-col gap-2.5" dir="rtl" data-quiz-matrix>
     {matrixRows(tree, question.prefixes ?? []).map(({ leaf, path, words, before, ayahKeys }) => {
       const spans = shownAyat(leaf, words);
-      return <div key={`${path.join("-")}:${ayahKeys[0]}`} className="rounded-[14px] border border-[var(--home-rule)] bg-[var(--home-card)] p-2.5">
+      return <Card key={`${path.join("-")}:${ayahKeys[0]}`} className="p-2.5">
         <p className="text-xs text-[var(--home-muted)]">{ayahKeys.map(key => ayatLabel(spans[key], names)).join(" · ")}</p>
         <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
           {before.length > 0 && <MushafText>{before.join(" ")}</MushafText>}
@@ -69,7 +70,7 @@ function MatrixInputs({ question, values, input, names }: { question: Question; 
             ? <AskedBox key={index} node={nodes[index]}>{input(index)}</AskedBox>
             : <MushafText key={index}>{values[index]}</MushafText>)}
         </p>
-      </div>;
+      </Card>;
     })}
   </div>;
 }

@@ -5,7 +5,6 @@ import useSWR from "swr";
 import Button from "@/components/common/Button";
 import TreeFilters from "../TreeFilters";
 import { scopeSummary } from "@shared/quiz/scopeSummary";
-import styles from "@/components/common/PaperPage.module.css";
 import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
@@ -17,6 +16,7 @@ import type { PenRule } from "@shared/quran/writeAyah";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@shared/quiz/difficulty";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";
+import Card from '@/components/common/Card';
 
 const n = (value: number, ar: boolean) => ar ? num(value) : String(value);
 const duration = (seconds: number, ar: boolean) => seconds < 60
@@ -65,19 +65,19 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       ...(others ? [[ar ? "وقت السؤال" : "Time per question", duration(settings.seconds, ar)] as [string, string]] : []),
     ];
     return (
-      <section className={styles.panel} aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
+      <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
         <h2 className="mb-1 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
         <p className="mb-3 text-sm text-[var(--home-muted)]">{ar ? "يختارها المضيف." : "The host chooses these."}</p>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
           {rows.map(([label, value]) => <React.Fragment key={label}><dt className="text-[var(--home-muted)]">{label}</dt><dd className="text-[var(--home-ink)]">{value}</dd></React.Fragment>)}
         </dl>
         {branches && <div className="mt-4 border-t border-[var(--home-rule)] pt-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
-      </section>
+      </Card>
     );
   }
 
   return (
-    <section className={styles.panel} aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
+    <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
       <h2 className="mb-3 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
       {TOPIC_GROUPS.map((group) => (
         <Row key={group.en} label={group[ar ? "ar" : "en"]}>
@@ -129,6 +129,6 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         })}
         {availability && <span className="text-sm text-[var(--home-muted)]">{ar ? `${num(availability.available)} سؤالًا متاحًا` : `${availability.available} questions available`}</span>}
       </Row>
-    </section>
+    </Card>
   );
 }

@@ -13,6 +13,7 @@ import { PlaceReview } from './PlaceReview';
 import PlaceText from './PlaceText';
 import { groupColor, type StoryReview } from './StoryMap';
 import Button from '@/components/common/Button';
+import Card from '@/components/common/Card';
 
 /**
  * One event read across the surahs that tell it: a card for each surah, one under another, words another surah also has in colour.
@@ -60,11 +61,14 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
       </div>
       <div className="flex max-w-4xl flex-col gap-3">
         {places.map((place, k) => (
-          <article
+          <Card
+            as="article"
             key={place.surah}
             data-share-card
             data-surah={place.surah}
-            className={`flex flex-col gap-1 rounded-[var(--card-radius)] border bg-[var(--home-card)] p-4 ${review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false ? 'opacity-60' : ''} ${focus === place.surah ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'}`}
+            faded={review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false}
+            picked={focus === place.surah}
+            className="flex flex-col gap-1 p-4"
           >
             {/* In the image the place carries its event, as in the phone app. */}
             <div data-share-only hidden>
@@ -84,7 +88,7 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
             </header>
             <PlaceText place={place} shared={shared[k]} />
             {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}
-          </article>
+          </Card>
         ))}
       </div>
     </section>

@@ -43,6 +43,7 @@ import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLoo
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
 import { surahName } from '@shared/quran/surahNames';
+import Frame from '@/components/common/Card';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -626,9 +627,9 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
           <StepLink step={nextStep} forward ar={ar} />
         </nav>}
         </div>
-        <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
+        <Frame as="aside" ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col p-3 lg:flex">
           <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
-        </aside>
+        </Frame>
       </div>
       <Sheet ref={sheet} open={open} label={label} onClose={() => setOpen(false)} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className="p-3 lg:hidden">
         <div className="flex max-h-[calc(85dvh-1.5rem)] flex-col gap-2">

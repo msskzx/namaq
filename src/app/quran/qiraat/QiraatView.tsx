@@ -13,6 +13,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { wordDiff } from '@shared/quran/wordDiff';
 import { mushafText } from '@shared/quran/mushafText';
 import { surahName } from '@shared/quran/surahNames';
+import Card from '@/components/common/Card';
 
 export type QiraatEntry = { variant: Variant; text: string };
 
@@ -44,7 +45,7 @@ function hafsWordOf({ variant, text }: QiraatEntry) {
   return found ? words.display.slice(found.start, found.end).join(' ') : '';
 }
 
-function Card({ entry }: { entry: QiraatEntry }) {
+function VariantView({ entry }: { entry: QiraatEntry }) {
   const { variant, text } = entry;
   const words = ayahWords(text, false);
   const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
@@ -68,13 +69,13 @@ function Card({ entry }: { entry: QiraatEntry }) {
   return (
     <section className="flex flex-col gap-4">
       <AyahCard ayah={ayah} slots={slots} />
-      {!found && <p className="rounded-lg border border-red-400 p-4">تعذر تحديد الكلمة المختلف فيها في نص الآية، فلا يُعرض الفرق.</p>}
+      {!found && <Card as="p" className="p-4 text-[var(--home-accent)]">تعذر تحديد الكلمة المختلف فيها في نص الآية، فلا يُعرض الفرق.</Card>}
       {found && (
         <div className="flex flex-col gap-3">
           <div className="grid gap-3 md:grid-cols-2">
             {rows.map((_, i) => (
-              <div key={i} className="row-span-2 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
+              <Card key={i} className="row-span-2 grid grid-rows-subgrid gap-2 p-4">
+                <p className="text-sm text-[var(--home-muted)]">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
                 <p className="text-2xl leading-[2.2] font-quran">
                   {around(found.before)}{' '}
                   {spans[i].length === 0 && <mark className={`bg-transparent font-sans ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
@@ -85,10 +86,10 @@ function Card({ entry }: { entry: QiraatEntry }) {
                   ))}
                   {around(found.after)}
                 </p>
-              </div>
+              </Card>
             ))}
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{SECOND_LABEL}</p>
+          <p className="text-sm text-[var(--home-muted)]">{SECOND_LABEL}</p>
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -97,23 +98,23 @@ function Card({ entry }: { entry: QiraatEntry }) {
             const mine = states.filter(c => RIWAYAT.find(r => r.id === c.id)?.reader === reader.id);
             const same = mine.every(c => c.state === mine[0].state);
             return (
-              <li key={reader.id} className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-3">
+              <Card as="li" key={reader.id} className="flex flex-col gap-2 p-3">
                 <Badge size="sm" text={reader.name} color={same && mine[0].state !== null ? BADGE_COLORS[mine[0].state!] : 'gray'} />
-                <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-gray-300 dark:border-white/20">
+                <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-[var(--home-rule)]">
                   {mine.map(s => (
                     <li key={s.id} data-state={s.state ?? 'unknown'}>
                       <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
                     </li>
                   ))}
                 </ul>
-              </li>
+              </Card>
             );
           })}
         </ul>
         <div className="flex flex-wrap items-center gap-2 text-sm">
           {states.some(c => c.state === null) && <Badge size="sm" color="gray" text={UNCONFIRMED} />}
         </div>
-        {variant.note && <p className="text-sm text-gray-600 dark:text-gray-400">{variant.note}</p>}
+        {variant.note && <p className="text-sm text-[var(--home-muted)]">{variant.note}</p>}
       </div>
       {variant.meaning && (
         <div>
@@ -141,7 +142,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
     <option key={n} value={n}>{`${surahLabel(entries, n)} (${num(entries.filter(e => e.variant.surah === n).length)})`}</option>
   );
   return (
-    <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
+    <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-4 text-[var(--home-ink)]">
       <header className="flex flex-col gap-2">
         <h1 className="flex items-center gap-2 text-3xl">
           القراءات: الآية نفسها في أكثر من قراءة
@@ -154,13 +155,13 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           قوائم القرّاء من موسوعة القرآن (Quranpedia): الآيات الأولى من صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، وآيات جزء عمّ من ملف بيانات الموسوعة الرسمي للقراءات. ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
         </p>
       </header>
-      <div className="flex flex-col gap-3 rounded-lg border border-gray-200 dark:border-white/10 p-4">
+      <Card className="flex flex-col gap-3 p-4">
         <label className="flex flex-wrap items-center gap-3">
           <span>السورة</span>
           <select
             value={surah}
             onChange={ev => setSelected(entries.findIndex(e => e.variant.surah === Number(ev.target.value)))}
-            className="rounded-lg border border-gray-300 dark:border-white/20 bg-white dark:bg-black px-3 py-2"
+            className="rounded-lg border border-[var(--home-rule)] bg-[var(--home-card)] px-3 py-2"
           >
             <optgroup label="سور أخرى">{surahs.filter(n => n < JUZ_AMMA_FROM).map(option)}</optgroup>
             <optgroup label="جزء عمّ">{surahs.filter(n => n >= JUZ_AMMA_FROM).map(option)}</optgroup>
@@ -174,8 +175,8 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
             </Button>
           ))}
         </nav>
-      </div>
-      <Card key={selected} entry={entries[selected]} />
+      </Card>
+      <VariantView key={selected} entry={entries[selected]} />
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { surahPairHref } from "@shared/quran/curatedComparisons";
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, emptyCompareAnswers, type CompareAsk, type CompareLine, type Tone } from "@shared/quiz/compareAnswers";
 import { neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import type { Hints } from "@shared/quiz/hints";
+import Card from '@/components/common/Card';
 
 type Question = { compare?: CompareAsk };
 
@@ -29,14 +30,14 @@ const Words = ({ line, at }: { line: CompareLine; at: number[] }) =>
   <>{at.map(i => <span key={i} className={line.tones[i] ? TONES[line.tones[i]!] : undefined}><MushafText>{line.words[i]}</MushafText></span>)}</>;
 
 function Line({ line, ar, children, after }: { line: CompareLine; ar: boolean; children: React.ReactNode; after?: React.ReactNode }) {
-  return <div className="rounded-[14px] border border-[var(--home-rule)] bg-[var(--home-card)] p-2.5">
+  return <Card className="p-2.5">
     <p className="text-xs text-[var(--home-muted)]">{compareLabel(line.key)}</p>
     <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
       {children}
       <span className="text-[var(--home-muted)]">{ar ? num(Number(line.key.split(":")[1])) : line.key.split(":")[1]}</span>
     </p>
     {after}
-  </div>;
+  </Card>;
 }
 
 const Whole = ({ line, ar }: { line: CompareLine; ar: boolean }) => <Line line={line} ar={ar}><Words line={line} at={line.words.map((_, i) => i)} /></Line>;

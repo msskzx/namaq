@@ -5,6 +5,7 @@ import ExternalLink from "@/components/common/ExternalLink";
 import styles from "@/components/common/PaperPage.module.css";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { GROUPS, SOURCES, type Source } from "@shared/sources";
+import Card from '@/components/common/Card';
 
 /** What one source adds beyond its card: Siyar's scans and OCR text, the corpus's counting notes. */
 function Extra({ id, language }: { id: string; language: "ar" | "en" }) {
@@ -55,7 +56,7 @@ function Extra({ id, language }: { id: string; language: "ar" | "en" }) {
 function SourceCard({ source, language }: { source: Source; language: "ar" | "en" }) {
   const t = (bi: { ar: string; en: string }) => bi[language];
   return (
-    <section id={source.id} className="scroll-mt-20 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-3">
+    <Card as="section" id={source.id} className="scroll-mt-20 px-4 py-3">
       <h3 className="mb-2 text-xl" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         {t(source.title)}
       </h3>
@@ -95,7 +96,7 @@ function SourceCard({ source, language }: { source: Source; language: "ar" | "en
         </div>
       </dl>
       <Extra id={source.id} language={language} />
-    </section>
+    </Card>
   );
 }
 
