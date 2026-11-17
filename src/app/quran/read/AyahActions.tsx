@@ -11,9 +11,11 @@ import type { AyahLink } from './ayahLinks';
 type Kind = 'trees' | 'compare' | 'readings' | 'tafsir' | 'irab' | 'balagha';
 
 /** An icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is). */
-function Act({ label, name, on = false, pressed, popup = false, onClick, children }: { label: string; name: string; on?: boolean; pressed?: boolean; popup?: boolean; onClick: () => void; children: ReactNode }) {
+/** On (forgotten, saved, noted), the icon and its name take the mark's colour with nothing behind them, as in the app (owner, 2026-11-17). */
+function Act({ label, name, on = false, tint = 'var(--home-accent)', pressed, popup = false, onClick, children }: { label: string; name: string; on?: boolean; tint?: string; pressed?: boolean; popup?: boolean; onClick: () => void; children: ReactNode }) {
   return (
-    <Button size="lg" variant={on ? 'primary' : 'muted'} aria-label={label} title={label} aria-pressed={pressed} aria-haspopup={popup ? 'dialog' : undefined} onClick={onClick}
+    <Button size="lg" variant="muted" aria-label={label} title={label} aria-pressed={pressed} aria-haspopup={popup ? 'dialog' : undefined} onClick={onClick}
+      style={on ? { color: tint } : undefined}
       className="!h-auto !w-[3.25rem] flex-col !gap-1 py-1.5 text-[0.6875rem] leading-none">
       {children}
       <span aria-hidden className="whitespace-nowrap">{name}</span>
@@ -88,7 +90,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
     <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
       <Act label={forgotLabel} name={ar ? 'نسيتها' : 'Forgot'} on={!!forgot} onClick={() => { onForgot(); onClose(); }}><LightbulbOff aria-hidden /></Act>
       {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
-      <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
+      <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} tint="var(--home-root)" pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
       {onNote && <Act label={noteLabel} name={ar ? 'تأمّل' : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
       {onTopics && <Act label={ar ? 'موضوع الآية في السورة' : 'Topic of this ayah'} name={ar ? 'الموضوعات' : 'Topics'} popup onClick={() => { onTopics(); onClose(); }}><TableOfContents aria-hidden /></Act>}
       {!!links?.compare.length && <Act label={compareLabel} name={ar ? 'المقارنة' : 'Compare'} popup onClick={preview('compare')}><ArrowLeftRight aria-hidden /></Act>}

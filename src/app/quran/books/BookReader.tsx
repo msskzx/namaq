@@ -107,7 +107,7 @@ export default function BookReader({ id, title, page, total, name, printed, sour
       </article>
       {picked && (
         <div ref={toolbar} role="toolbar" aria-label="أزرار الفقرة" className={styles.actions}>
-          <Button size="lg" variant={isSaved ? 'primary' : 'muted'} aria-pressed={isSaved} aria-label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} title={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'}
+          <Button size="lg" variant="muted" style={isSaved ? { color: 'var(--home-root)' } : undefined} aria-pressed={isSaved} aria-label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} title={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'}
             onClick={() => { toggleSavedParagraph({ book: id, ...picked, ...printed, text: pickedText(picked).slice(0, 160) }); setPicked(null); }}><Bookmark aria-hidden fill={isSaved ? 'currentColor' : 'none'} /></Button>
           {pickedAyah && <Button size="lg" variant="muted" href={`/quran/read/ayah/${pickedAyah.replace(':', '/')}`} aria-label="افتح الآية في المصحف" title="افتح الآية في المصحف"><BookOpenText aria-hidden /></Button>}
           <Button size="lg" variant="ghost" aria-label="إغلاق" title="إغلاق" onClick={() => setPicked(null)}><X aria-hidden /></Button>

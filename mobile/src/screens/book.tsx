@@ -183,7 +183,7 @@ function BookReader({ id, book, palette, entry, at, ayah }: { id: ReaderBookId; 
       {actions && spot && (
         <View accessibilityRole="toolbar" accessibilityLabel="أزرار الفقرة"
           style={{ position: 'absolute', top: Math.max(insets.top + 60, actions.y - 76), left: Math.max(8, ((size?.width ?? 300) - barWidth) / 2), width: barWidth, flexDirection: 'row', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
-          <ActButton Icon={Bookmark} label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} name="احفظ" palette={palette} on={isSaved}
+          <ActButton Icon={Bookmark} label={isSaved ? 'أزلها من المحفوظات' : 'احفظ الفقرة'} name="احفظ" palette={palette} on={isSaved} tint={palette.root} filled
             onPress={() => { toggleSavedParagraph({ book: id, ...spot, ...where(spot), text: paragraphText(spot).slice(0, 160) }); setActions(null); setLit(null); }} />
           <ActButton Icon={BookOpenText} label="افتح الآية في المصحف" name="المصحف" palette={palette}
             onPress={() => { const { surah, from } = entries[spot.entry]; setActions(null); openAyah(surah, from); }} />
