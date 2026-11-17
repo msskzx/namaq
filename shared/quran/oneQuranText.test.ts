@@ -16,8 +16,8 @@ import { describe, expect, it } from 'vitest';
 const ROOT = join(__dirname, '..', '..');
 const BASELINE = join(__dirname, 'oneQuranText.baseline.json');
 
-/** The one Quran text: the Madina (KFGQPC Hafs) pages. */
-const SOURCE = ['shared/data/quran/mushaf/'];
+/** The one Quran text: the Madina (KFGQPC Hafs) pages, and their words by ayah (built from them, checked in quranText/ayahWords.test.ts). */
+const SOURCE = ['shared/data/quran/mushaf/', 'shared/data/quran/ayahWords.json'];
 /** Where the Quran module lives, once built: the only code that may set the Quran font or shape Quran text. */
 const MODULE = ['shared/quran/quranText/', 'src/components/quran/text/', 'mobile/src/components/quran/text/'];
 /** Where the font is declared, loaded or credited (not used): its @font-face, its name, the app's font loading, the sources list. */
