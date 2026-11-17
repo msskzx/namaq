@@ -15,7 +15,7 @@ describe('the website book page', () => {
 
   it('gives each passage starting on the page its pill to the mushaf, and splits its paragraphs', () => {
     const [first] = pageView('sadi', entries, pages[0]).slice(0, 2);
-    expect(first.head).toEqual({ label: 'الفاتحة ١–٧', href: '/quran/read/ayah/1/1' });
+    expect(first.head).toEqual({ label: 'الفَاتِحَةْ ١–٧', href: '/quran/read/ayah/1/1' });
     expect(first.paragraphs.map(p => p.at)).toEqual([0, 12]);
     expect(first.paragraphs[1].runs).toEqual([{ text: 'ثاني ', quran: false }, { text: '﴿الحمد لله﴾', quran: true }, { text: ' فقرة', quran: false }]);
     const cut = pageView('sadi', entries, pages[1])[0];
@@ -28,7 +28,7 @@ describe('the website book page', () => {
   });
 
   it('lists each surah at the page of its first passage', () => {
-    expect(contentsOf(entries, entry => (entry < 1 ? 0 : 1))).toEqual([{ surah: 1, name: 'الفاتحة', page: 1 }, { surah: 2, name: 'البقرة', page: 2 }]);
+    expect(contentsOf(entries, entry => (entry < 1 ? 0 : 1))).toEqual([{ surah: 1, name: 'الفَاتِحَةْ', page: 1 }, { surah: 2, name: 'البَقَرَةْ', page: 2 }]);
   });
 
   it('opens the page whose first paragraph is at or before the last place', () => {

@@ -46,7 +46,7 @@ describe('QuranComparePage', () => {
     await page({});
     const trigger = screen.getByRole('button', { name: /اختر سورتين/ });
     expect(screen.getByTestId('top-bar').contains(trigger)).toBe(true);
-    expect(trigger.textContent).toContain('سورة البقرة وسورة الأعراف');
+    expect(trigger.textContent).toContain('سورة البَقَرَةْ وسورة الأَعْرَافْ');
   });
 
   it('shows the similar ayat of the two surahs, with the stories pinned and mushaf order first', async () => {
@@ -57,7 +57,7 @@ describe('QuranComparePage', () => {
     const current = within(pane).getAllByRole('link', { current: 'page' });
     // The count follows the curated verdicts, which change as pairs are reviewed.
     const texts = current.map(link => link.textContent ?? '');
-    expect(texts.map(text => text.replace(/[٠-٩]+$/, ''))).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالأعراف · الشعراء', 'الشعراء']);
+    expect(texts.map(text => text.replace(/[٠-٩]+$/, ''))).toEqual(['مُوسَىٰ وَفِرۡعَوۡنُالأَعْرَافْ · الشُّعَرَاءْ', 'الشُّعَرَاءْ']);
     const counts = new Set(texts.map(text => text.match(/[٠-٩]+$/)?.[0]));
     expect(counts.size).toBe(1);
     const count = Number([...counts][0]!.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))));
@@ -88,11 +88,11 @@ describe('QuranComparePage', () => {
   it('opens the default pair for an old full-comparison link', async () => {
     await page({ view: 'similar', juzFrom: '25', juzTo: '30' });
     expect(redirect).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: /اختر سورتين/ }).textContent).toContain('سورة البقرة وسورة الأعراف');
+    expect(screen.getByRole('button', { name: /اختر سورتين/ }).textContent).toContain('سورة البَقَرَةْ وسورة الأَعْرَافْ');
   });
 
   it('opens the pair an old full-comparison link names by a and b', async () => {
     await page({ a: '26', b: '7', view: 'ayat', af: '10', at: '20' });
-    expect(screen.getByRole('button', { name: /اختر سورتين/ }).textContent).toContain('سورة الشعراء وسورة الأعراف');
+    expect(screen.getByRole('button', { name: /اختر سورتين/ }).textContent).toContain('سورة الشُّعَرَاءْ وسورة الأَعْرَافْ');
   });
 });

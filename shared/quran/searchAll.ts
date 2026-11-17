@@ -1,6 +1,7 @@
 import { normalizeWord, plainName } from './normalize';
 import { searchSurahs, type SearchableSurah } from './surahSearch';
 import { searchable } from './searchText';
+import { surahName } from './surahNames';
 
 /** One search across the app (owner, 2026-11-13): surah names always first, since they are few. docs/plans/search-everything.md */
 export type SearchHit =
@@ -51,7 +52,7 @@ export function searchAll(sources: SearchSources, query: string): SearchGroup[] 
   if (!typed) return [];
   const text = searchable(typed);
   const groups: Record<SearchKind, SearchHit[]> = {
-    surah: searchSurahs(sources.surahs, typed).map(surah => ({ kind: 'surah', number: surah.number, name: surah.name })),
+    surah: searchSurahs(sources.surahs, typed).map(surah => ({ kind: 'surah', number: surah.number, name: surahName(surah.number) })),
     ayah: text && sources.ayat ? sources.ayat(typed) : [],
     word: text && sources.words ? sources.words(typed) : [],
     tree: text && sources.trees ? sources.trees(typed) : [],

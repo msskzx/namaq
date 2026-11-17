@@ -8,7 +8,6 @@ import { faBookOpen, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { juzGroups, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { searchable, type AyahSearch } from '@shared/quran/ayahSearch';
@@ -16,6 +15,7 @@ import { preloadQuranSearch, searchQuran } from '@/lib/quran/quranText';
 import styles from '@/components/homepage/Home.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { surahName } from '@shared/quran/surahNames';
 
 const MUTED = 'text-[var(--home-muted)]';
 const AROUND = 6;
@@ -37,7 +37,7 @@ export default function SurahIndex({ surahs, fontClass, onNavigate, recite = fal
     .map(group => ({ ...group, entries: group.entries.filter(entry => keep(entry.surah)) }))
     .filter(group => group.entries.length > 0);
   const found = new Set(shown.flatMap(group => group.entries.map(entry => entry.surah.number))).size;
-  const name = (surah: IndexSurah) => plainName(surah.name).replace(/^سورة\s*/, '');
+  const name = (surah: IndexSurah) => surahName(surah.number);
   const wordSearch = !reference && searchable(query) ? query.trim() : '';
   const [ayat, setAyat] = useState<AyahSearch & { query: string; failed?: boolean }>({ query: '', total: 0, hits: [] });
   useEffect(() => { if (!onNavigate) preloadQuranSearch(); }, [onNavigate]);

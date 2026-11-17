@@ -4,19 +4,19 @@ import { BlurView } from 'expo-blur';
 import { Pause, Play, Repeat, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { ONCE, reciterName, reciterOf } from '@shared/quran/recitation';
 import { stopListening, togglePlaying, useListening } from '@/lib/listen';
 import { readListenPlan, serverListenPlan, subscribeListenPlan } from '@shared/listenSettings';
 import { surahNames } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { surahName } from '@shared/quran/surahNames';
 
 export const LISTEN_BAR = 58;
 
 const named = (key: string) => {
   const [surah, ayah] = key.split(':').map(Number);
-  return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`;
+  return `${surahName(surah)} ${num(ayah)}`;
 };
 /** «من البقرة ٣ إلى ٥», or with the surah again when the range crosses into another. */
 export const rangeText = (from: string, to: string) =>

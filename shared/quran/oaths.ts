@@ -1,6 +1,6 @@
-import surahRows from '../data/quran/surahs.json';
 import { normalizeWord } from './normalize';
 import type { AyahWordsOf } from './quranText/ayahWords';
+import { SURAH_NAMES } from './surahNames';
 
 /**
  * Every oath in the Quran (owner, 2026-11-13: the oaths page covers the whole Quran, app and website).
@@ -80,7 +80,7 @@ export const OTHER_OATHS: Oath[] = [
 
 export const OATHS: Record<OathKind, Oath[]> = { allah: ALLAH_OATHS, others: OTHER_OATHS };
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 export type OathWord = { text: string; sworn: boolean };
 export type OathView = { id: string; kind: OathKind; surah: number; name: string; range: [number, number]; who?: string; by: string[]; lines: { ayah: number; words: OathWord[] }[] };
 

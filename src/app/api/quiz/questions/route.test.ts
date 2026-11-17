@@ -81,8 +81,8 @@ describe('GET /api/quiz/questions', () => {
     const response = await GET(new Request('http://localhost/api/quiz/questions'));
     const body = await response.json();
     expect(body.questions[0].choiceDetails).toEqual({
-      '2:255': { text: 'page 2:255', reference: 'البقرة 2:255' },
-      '2:256': { text: 'page 2:256', reference: 'البقرة 2:256' },
+      '2:255': { text: 'page 2:255', reference: 'البَقَرَةْ 2:255' },
+      '2:256': { text: 'page 2:256', reference: 'البَقَرَةْ 2:256' },
     });
   });
 });

@@ -6,7 +6,6 @@ import Sheet from '@/ui/Sheet';
 import Reference from '@/ui/Reference';
 import { Chip, Group } from './FilterFields';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { ayatOf, EACH_AYAH, LISTEN_REFERENCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, sizeLabel, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { packBytes } from '@shared/quran/recitationSizes';
 import { isMemorized, readMemorized, serverMemorized, subscribeMemorized } from '@shared/memorized';
@@ -16,8 +15,8 @@ import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribe
 import { ayahCounts, surahNames } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { surahName } from '@shared/quran/surahNames';
 
-const surahName = (surah: number) => plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '');
 
 const ALL: Range = { from: '1:1', to: '114:6' };
 

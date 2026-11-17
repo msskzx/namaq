@@ -3,6 +3,7 @@ import { ayahWords } from '@shared/quran/normalize';
 import { findPassages, type Passage } from './passages';
 import { groupPassages, type PassageGroup } from './passageGroups';
 import { findPhrases, type Occ } from './shifts';
+import { surahName } from '@shared/quran/surahNames';
 
 export type RepetitionInput = { number: number; name: string; ayat: string[] }[];
 export type Repetition = {
@@ -48,7 +49,7 @@ export function buildRepetition(surahs: RepetitionInput): Repetition {
 
   const diagonal = new Map([...cells.values()].filter(c => c.a === c.b).map(c => [c.a, c.words]));
   return {
-    surahs: surahs.map(s => ({ number: s.number, name: s.name, ayat: s.ayat.length, words: diagonal.get(s.number) ?? 0 })),
+    surahs: surahs.map(s => ({ number: s.number, name: surahName(s.number), ayat: s.ayat.length, words: diagonal.get(s.number) ?? 0 })),
     cells: [...cells.values()].filter(c => c.words > 0).sort((p, q) => p.a - q.a || p.b - q.b),
     within,
     across: groupPassages(passages),

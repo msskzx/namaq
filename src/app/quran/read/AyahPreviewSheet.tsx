@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { ArrowLeftRight, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
-import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
 import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
@@ -19,12 +18,13 @@ import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 import BalaghaPanel from './BalaghaPanel';
 import type { BalaghaAyah } from './balagha';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
   | { kind: 'irab'; key: string; page: number; n: number };
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const load = async <T,>(api: string, key: string): Promise<T> => {
   const response = await fetch(`/api/quran/${api}?k=${encodeURIComponent(key)}`);
   if (!response.ok) throw new Error('preview');

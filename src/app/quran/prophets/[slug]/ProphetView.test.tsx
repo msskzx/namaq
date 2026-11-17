@@ -19,7 +19,7 @@ afterEach(() => { cleanup(); window.history.replaceState(null, '', '/'); });
 describe('a prophet story opened from the search', () => {
   it('opens the event in ?event=, found by its title in the kept story', () => {
     Element.prototype.scrollIntoView = vi.fn();
-    const all = buildStory(STORIES.musa.events, { names: {}, ayah: () => 'نص' });
+    const all = buildStory(STORIES.musa.events, { ayah: () => 'نص' });
     // A kept story without the first event: the place in the full story still finds the right one.
     const kept = all.slice(1).map((event, i) => ({ ...event, n: i + 1 }));
     window.history.replaceState(null, '', '/quran/prophets/musa?event=9');

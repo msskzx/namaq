@@ -8,10 +8,10 @@ import LoadingDots from '@/components/common/LoadingDots';
 import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
 import { num } from '@shared/quran/arabicNumber';
 import { loadQuranText } from '@/lib/quran/quranText';
-import surahRows from '@shared/data/quran/surahs.json';
 import { countsBySurah } from '@shared/quran/words';
 import { NOTE } from '../panel';
 import SurahStrip from './SurahStrip';
+import { surahName } from '@shared/quran/surahNames';
 
 export const PLACES_STEP = 20;
 
@@ -29,8 +29,6 @@ export function placesByAyah(places: string): Place[] {
 }
 
 const loadPlaces = () => import('./places.json').then(module => module.default.places as Record<string, string>);
-const names = new Map(surahRows.map(row => [row.number, row.name]));
-const surahName = (number: number) => names.get(number) ?? `سورة ${num(number)}`;
 
 export default function WordPlaces({ word, count }: { word: string; count: number }) {
   const [shown, setShown] = useState(PLACES_STEP);

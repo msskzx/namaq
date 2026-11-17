@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { surahName } from '@shared/quran/surahNames';
 
 const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindMany, surahFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
@@ -46,7 +47,7 @@ describe('GET /api/quiz', () => {
     assembleQuiz.mockResolvedValue(Array.from({ length: 5 }, () => question({ family: 'AYAH_REVEALED_ABOUT', attribute: '66:4', evidence: { claimKeys: [] } })));
     ayahFindMany.mockResolvedValue([{ number: 4, text: 'إِن تَتُوبَا إِلَى ٱللَّهِ', surah: { number: 66, name: 'التحريم' } }]);
     const body = await (await GET(request('?topic=AYAT&length=5'))).json();
-    expect(body.questions[0].ayah).toEqual({ text: 'page 66:4', reference: 'التحريم 66:4' });
+    expect(body.questions[0].ayah).toEqual({ text: 'page 66:4', reference: `${surahName(66)} 66:4` });
   });
 
   it('rejects an unknown topic', async () => {
@@ -150,7 +151,7 @@ describe('GET /api/quiz', () => {
     })]);
     const body = await (await GET(request('?topic=BRANCHES&length=5'))).json();
     expect(surahFindMany).toHaveBeenCalledWith(expect.objectContaining({ where: { number: { in: [52, 76] } } }));
-    expect(body.surahNames).toEqual({ 52: 'الطور' });
+    expect(body.surahNames).toEqual({ 52: 'الطُّورْ' });
   });
 
   it('combines repeated and comma-separated topics without duplicates', async () => {
@@ -178,7 +179,7 @@ describe('GET /api/quiz', () => {
     const body = await response.json();
     expect(body.questions[0].choiceDetails['2:255']).toEqual({
       text: 'page 2:255',
-      reference: 'البقرة 2:255',
+      reference: 'البَقَرَةْ 2:255',
     });
   });
 });
