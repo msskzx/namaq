@@ -63,7 +63,8 @@ export default function QuizPage({ ayah, opening, shown, nameless = false, onGra
     };
   }, [parts, ayah, open, before, nameless]);
   if (!pages || !parts || !view) return <div className="aspect-[2/3] w-full animate-pulse rounded-[14px] bg-[var(--home-paper-deep)]" />;
-  return <div lang="ar" dir="rtl" className="mb-4" onClick={writing ? boxes.focus : undefined}>
+  // The page sizes itself by its container (Mushaf.module.css .page), so the box it sits in is one page's shape.
+  return <div lang="ar" dir="rtl" className="mb-4 aspect-[0.66] w-full [container-type:size]" onClick={writing ? boxes.focus : undefined}>
     <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} hidden={view.hidden} titled={view.titled} next={view.next} anonymous={!before || nameless}
       write={writing ? { key: ayah, targets: parts.asked, typed: boxes.typed, current: boxes.current, before: 0, onBox: boxes.pick } : null}
       checked={graded ? { key: ayah, ...graded, before: 0 } : null} />
