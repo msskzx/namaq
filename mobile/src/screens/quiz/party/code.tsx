@@ -13,7 +13,7 @@ import type { ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
-import BackBar from '@/ui/BackBar';
+import TopBar from '@/ui/TopBar';
 import Button, { Row } from '@/ui/Button';
 import LoadingDots from '@/ui/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
@@ -416,10 +416,10 @@ export default function PartyRoom() {
   const title = view && (view.phase === 'question' || view.phase === 'reveal') ? `السؤال ${num(view.index + 1)} من ${num(view.total)}` : 'اختبار جماعي';
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <BackBar title={title}>
+      <TopBar back={() => router.back()} title={title}>
         {(status === 'connecting' || status === 'closed' || status === 'offline') && view ? <Text style={{ color: palette.muted, fontSize: 14 }}>يعيد الاتصال…</Text> : null}
         {joined && <Button variant="plain" Icon={LogOut} accessibilityLabel="غادر" onPress={leave} />}
-      </BackBar>
+      </TopBar>
       {joined && error && !['not-ready', 'name-taken', 'name-empty'].includes(error) ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right', padding: 12 }}>{ERRORS[error]}</Text> : null}
       {body}
     </KeyboardAvoidingView>

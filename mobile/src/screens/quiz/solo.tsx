@@ -4,7 +4,7 @@ import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft, Play } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import BackBar from '@/ui/BackBar';
+import TopBar from '@/ui/TopBar';
 import Button, { Row } from '@/ui/Button';
 import LoadingDots from '@/ui/LoadingDots';
 import QuizExplainer from '@/components/QuizExplainer';
@@ -76,7 +76,7 @@ export default function SoloSetup() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <BackBar title="اختبار فردي" />
+      <TopBar back={() => router.back()} title="اختبار فردي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
         {resumable && (
           <View style={{ borderWidth: 1, borderColor: palette.accent, ...CARD, padding: 14, gap: 10 }}>

@@ -4,6 +4,8 @@ import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, Compass, LayoutGrid, Library, LibraryBig, Settings, CircleHelp, Search } from 'lucide-react-native';
+import IconButton from '@/ui/IconButton';
+import { Text } from '@/ui/Text';
 import Logo from '@/components/Logo';
 import SettingsSheet from '@/components/SettingsSheet';
 import { usePalette } from '@/lib/theme';
@@ -24,8 +26,14 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * With bare (the mushaf reader, owner 2026-11-17) there is no logo: the page's buttons start at the right edge, under the thumb;
  * the home tab is in the bottom bar.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
+ * A pushed screen (a quiz, the library, an ayah, a prophet's story) passes back and a title, or middle for something that
+ * takes the title's room (the quiz's question circles): one bar for every screen (owner, 2026-11-17: shared first).
  */
-export default function TopBar({ children, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+export default function TopBar({ children, title, middle, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+  /** A pushed screen's short title, beside the back arrow. */
+  title?: string;
+  /** Drawn in the title's place, taking the bar's room (the quiz's question circles). */
+  middle?: React.ReactNode;
   /** No logo: the page's buttons start at the right edge (the reader). */
   bare?: boolean; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
   /** A grid in the logo's place that opens the Quran hub (the Quran's tools). */
@@ -63,36 +71,23 @@ export default function TopBar({ children, bare = false, settings: withSettings 
             <LibraryBig size={24} color={palette.ink} />
           </Pressable>
           : back
-          ? <Pressable onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+          ? <Pressable onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <ChevronRight size={28} color={palette.ink} />
           </Pressable>
           : <Pressable onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
             <Logo size={34} />
           </Pressable>}
+        {middle ? <View style={{ flex: 1, minWidth: 0 }}>{middle}</View>
+          : title ? <Text accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
         {center
           ? <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>
-          : <View style={{ flex: 1, flexDirection: 'row', justifyContent: bare ? 'flex-start' : 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
+          : <View style={{ flex: middle ? 0 : 1, flexDirection: 'row', justifyContent: bare ? 'flex-start' : 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
         {(help || refs) && center && <View style={{ flex: 1 }} />}
-        {refs && <Pressable onPress={refs} accessibilityRole="button" accessibilityLabel="المصادر" hitSlop={4}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <Library size={22} color={palette.muted} />
-        </Pressable>}
-        {help && <Pressable onPress={help} accessibilityRole="button" accessibilityLabel="مساعدة" hitSlop={4}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <CircleHelp size={22} color={palette.muted} />
-        </Pressable>}
-        {utilities && <Pressable onPress={utilities} accessibilityRole="button" accessibilityLabel="الأدوات" hitSlop={4}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <Compass size={22} color={palette.muted} />
-        </Pressable>}
-        {search && <Pressable onPress={search} accessibilityRole="button" accessibilityLabel="البحث" hitSlop={4}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <Search size={22} color={palette.muted} />
-        </Pressable>}
-        {withSettings && <Pressable onPress={() => setSettings(true)} accessibilityRole="button" accessibilityLabel="الإعدادات" hitSlop={4}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-          <Settings size={22} color={palette.muted} />
-        </Pressable>}
+        {refs && <IconButton Icon={Library} label="المصادر" onPress={refs} />}
+        {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
+        {utilities && <IconButton Icon={Compass} label="الأدوات" onPress={utilities} />}
+        {search && <IconButton Icon={Search} label="البحث" onPress={search} />}
+        {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
       </Animated.View>
       {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}
     </View>

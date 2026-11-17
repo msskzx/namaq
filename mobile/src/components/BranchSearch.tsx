@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Search, X } from 'lucide-react-native';
+import { Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
 import { quranText } from '@/lib/quranText';
@@ -12,6 +11,7 @@ import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import TopBar from '@/ui/TopBar';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** The new list, and where it opens: a picked phrase, else the search's best tree. */
@@ -23,7 +23,6 @@ type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClos
  * The keyboard waits for a tap on the box; the apply row rides above it, and a tap on empty space or a scroll closes it.
  */
 export default function BranchSearch({ state, bookmarks, palette, onClose, onApply }: Props) {
-  const insets = useSafeAreaInsets();
   // The see-through tab bar lies over this screen's bottom; with the keyboard up the keyboard covers it instead.
   const tabBarSpace = useTabBarSpace();
   const typing = useKeyboardShown();
@@ -43,11 +42,8 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
   return (
     <KeyboardAvoidingView behavior="padding"
       style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: palette.paper, zIndex: 10 }}>
-      <Pressable accessible={false} onPress={Keyboard.dismiss} style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
-        <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 6 }}>
-          <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={8} style={{ padding: 6 }}>
-            <ChevronRight size={26} color={palette.ink} />
-          </Pressable>
+      <Pressable accessible={false} onPress={Keyboard.dismiss}>
+        <TopBar back={onClose}>
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 20, paddingHorizontal: 10, height: 40 }}>
             <Search size={18} color={palette.muted} />
             <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
@@ -55,7 +51,7 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
               style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
             {typed && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
           </View>
-        </View>
+        </TopBar>
       </Pressable>
       {!suggesting && <>
         <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1 }}>

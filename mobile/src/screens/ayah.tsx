@@ -1,8 +1,8 @@
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
+import TopBar from '@/ui/TopBar';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { ayahOf, surahNames } from '@/lib/branches';
@@ -16,13 +16,7 @@ export default function AyahScreen() {
   const ayat = keys.split(',').flatMap(key => ayahOf(key) ?? []);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <View style={{ paddingTop: insets.top, borderBottomWidth: 1, borderColor: palette.rule }}>
-        <View style={{ height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
-          <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ padding: 6 }}>
-            <ChevronRight size={28} color={palette.ink} />
-          </Pressable>
-        </View>
-      </View>
+      <TopBar back={() => router.back()} />
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 14 }}>
         {ayat.map(ayah => {
           const [surah, number] = ayah.key.split(':').map(Number);
