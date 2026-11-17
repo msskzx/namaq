@@ -11,9 +11,8 @@ let syncReply: () => unknown;
 vi.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
 vi.mock('react', () => ({ useSyncExternalStore: () => 0 }));
 vi.mock('./branches', () => ({ WEBSITE: 'https://site' }));
-vi.mock('./storage', () => ({
-  readJson: (key: string) => (store.has(key) ? JSON.parse(store.get(key)!) : undefined),
-  writeJson: (key: string, value: unknown) => { store.set(key, JSON.stringify(value)); },
+vi.mock('./deviceStorage', () => ({
+  deviceStorage: { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => { store.set(key, value); } },
 }));
 vi.mock('expo-file-system', () => {
   class Directory {
