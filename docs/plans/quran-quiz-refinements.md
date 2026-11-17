@@ -30,7 +30,7 @@ quizzes. Keep other features reachable by URL. No feature flags or mobile rewrit
 
 Quiz settings, assembly, grading and feedback; shared tree viewport and context;
 homepage/navigation labels; Quran font styles and display lookup; colocated tests.
-Regenerate the font lookup with `node --import tsx scripts/quran/buildMushafWords.ts`.
+The font lookup (mushafWords.json) is now a fixed table for quoted Quran only; it can no longer be rebuilt.
 It must match all 6,236 ayat and reject ambiguous mappings or word-count drift.
 
 Lint, TypeScript, the production build and all 3,306 tests passed before PR review.
