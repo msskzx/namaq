@@ -71,7 +71,6 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, purpose: { ar: '', en: '' } },
   { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, purpose: { ar: '', en: '' } },
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
-  { href: '/quran/books', label: { ar: 'الكتب', en: 'Books' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
   { href: '/quran/lataif', label: { ar: 'لطائف', en: "Lata'if" }, purpose: { ar: '', en: '' } },
@@ -79,11 +78,12 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/order', label: { ar: 'ترتيب السور', en: 'Surah order' }, purpose: { ar: '', en: '' } },
 ];
 
-/** Utilities (prayer times, qibla, Hijri calendar) shows once the first of them lands, as in the app (SHOW_UTILITIES there). */
-export const SHOW_UTILITIES = true;
+/** The library: the book shelf and each book's pages. */
+export const LIBRARY = '/quran/books';
 
 /**
- * The app's five tab buttons (owner, 2026-11-13), first on the right: Quran, mushaf, home, quizzes, utilities.
+ * The app's five tab buttons, first on the right: Quran, mushaf, home, quizzes, library. The library took the utilities'
+ * place (owner, 2026-11-17); the utilities open from the compass beside the search, as in the app.
  * `paths` are the pages that light a section besides its own href and the pages under it.
  */
 export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
@@ -91,19 +91,22 @@ export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
   { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
-  ...(SHOW_UTILITIES ? [{ href: '/utilities', label: { ar: 'الأدوات', en: 'Utilities' }, groups: [] }] : []),
+  { href: LIBRARY, label: { ar: 'المكتبة', en: 'Library' }, groups: [] },
 ];
 
 const under = (pathname: string, href: string) => pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
 
 export function activeSection(path: string): string | undefined {
   const pathname = path.split('?')[0];
-  // The one search opens from home and lights it, as in the app.
-  if (pathname === '/search') return '/';
+  // The one search and the utilities open from home and light it, as in the app.
+  if (pathname === '/search' || pathname === '/utilities') return '/';
   return NAV_SECTIONS.find(section => section.href === '/quran'
     ? pathname === '/quran' || section.paths!.some(href => under(pathname, href))
     : under(pathname, section.href.split('?')[0]))?.href;
 }
+
+/** A book's pages (not the shelf): the phone top bar shows the library in the logo's place, back to the shelf, as in the app. */
+export const isBookPage = (path: string) => path.split('?')[0].startsWith(`${LIBRARY}/`);
 
 /** A Quran tool's page (not the hub): its phone top bar shows a back arrow to the Quran hub in the logo's place, as in the app. */
 export const isQuranTool = (path: string) => QURAN_TOOLS.some(tool => under(path.split('?')[0], tool.href));

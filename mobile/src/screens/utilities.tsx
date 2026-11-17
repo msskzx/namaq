@@ -5,7 +5,7 @@ import TabHint from '@/components/TabHint';
 import TopBar from '@/components/TopBar';
 import { PlaceSheet, UTILITY_VIEWS, UtilityPage, UtilityPicker } from '@/components/Utilities';
 import { useTabBarSpace } from '@/components/tabBarSpace';
-import { useTabRetap } from '@/lib/tabRetap';
+import { back } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import { utilityView, type UtilityView } from '@/lib/settings';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -69,10 +69,9 @@ export default function UtilitiesTab() {
     clearTimeout(quiet.current);
     quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
   }, [settle, width, progress]);
-  useTabRetap('utilities', () => scrollers.get(view)?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
+      <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
       <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setWidth(event.nativeEvent.layout.width)}>
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}

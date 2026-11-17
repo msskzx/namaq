@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, CircleHelp, Compass, Library, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Compass, Library, LibraryBig, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -27,7 +27,7 @@ export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran/read': BookOpen,
   '/': House,
   '/quizzes': Feather,
-  '/utilities': Compass,
+  '/quran/books': LibraryBig,
 };
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {
@@ -180,6 +180,15 @@ export function SearchButton({ className, children }: { className: string; child
   return <Link href="/search" className={className} aria-label={label} title={label}>{children ? children(icon) : icon}</Link>;
 }
 
+/** The utilities (prayer times, qibla, calendar) as a compass: in the side rail on desktop, and beside the search in the
+ *  homepage's top bar on phones, as in the app (owner, 2026-11-17: a compass says qibla, a clock says nothing). */
+export function UtilitiesButton({ className, children }: { className: string; children?: (icon: React.ReactNode) => React.ReactNode }) {
+  const { language } = useLanguage();
+  const label = language === 'ar' ? 'الأدوات' : 'Utilities';
+  const icon = <Compass size={children ? 24 : 22} strokeWidth={1.75} aria-hidden />;
+  return <Link href="/utilities" className={className} aria-label={label} title={label}>{children ? children(icon) : icon}</Link>;
+}
+
 /** Keeps page content clear of the phone tab bar; render it after the page. */
 export function TabSpacer() {
   return <div className={styles.tabSpacer} />;
@@ -210,6 +219,7 @@ export default function TabBar() {
           );
         })}
         <div ref={setRailSlot} className={styles.railActions} />
+        <UtilitiesButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</UtilitiesButton>
         <SearchButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SearchButton>
         <HelpButton className={`${styles.tab} ${styles.railOnly}`} />
         <SettingsButton className={`${styles.tab} ${styles.railOnly}`}>{icon => <span className={styles.tabPill}>{icon}</span>}</SettingsButton>
