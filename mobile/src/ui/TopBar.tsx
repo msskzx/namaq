@@ -18,29 +18,25 @@ const HEIGHT = 52;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
- * The phone top bar: the page's own buttons and the bar's (help, search, gear) on the right under the thumb, the logo (home) on the left
- * (owner, 2026-11-17: the logo is always on the left, so the buttons have the right side).
- * The gear shows only on the homepage (owner, 2026-11-10); the logo shows everywhere and opens home.
+ * The phone top bar: the page's own buttons and the bar's (help, search, gear) on the right under the thumb (owner, 2026-11-17).
+ * The gear (owner, 2026-11-10) and the logo, on the left, show only on the homepage (owner, 2026-11-17).
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
  * See-through with no line under it, like the see-through tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
- * With hub (the Quran button's tools) a grid takes the logo's place and opens the Quran hub, the page of all the Quran's tools
- * (owner, 2026-11-15: a chevron reads as "back" in a right-to-left app). With back (pushed screens) a back arrow leads on the right and there is no logo.
- * With bare (the mushaf reader, owner 2026-11-17) there is no logo: the page's buttons start at the right edge, under the thumb;
- * the home tab is in the bottom bar.
- * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
+ * With hub (the Quran button's tools) a grid leads on the right and opens the Quran hub, the page of all the Quran's tools
+ * (owner, 2026-11-15: a chevron reads as "back" in a right-to-left app). With back (pushed screens) a back arrow leads on the right.
+ * With center the page's buttons sit in the middle of the bar, clear of the buttons on both sides (the compare dropdown, owner 2026-11-10).
  * A pushed screen (a quiz, the library, an ayah, a prophet's story) passes back and a title, or middle for something that
  * takes the title's room (the quiz's question circles): one bar for every screen (owner, 2026-11-17: shared first).
  */
-export default function TopBar({ children, title, middle, away: putAway = false, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+export default function TopBar({ children, title, middle, away: putAway = false, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
   /** The whole bar slides up off the screen (the mushaf while reading); it stays drawn, so it comes back the same way. */
   away?: boolean;
   /** A pushed screen's short title, beside the back arrow. */
   title?: string;
   /** Drawn in the title's place, taking the bar's room (the quiz's question circles). */
   middle?: React.ReactNode;
-  /** No logo: the page's buttons start at the right edge (the reader). */
-  bare?: boolean; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+  settings?: boolean; hideOnScroll?: boolean; center?: boolean;
   /** A grid in the logo's place that opens the Quran hub (the Quran's tools). */
   hub?: boolean;
   /** The library's books in the logo's place, back to the shelf (a book in the reader, owner 2026-11-17). */
@@ -69,7 +65,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
       <Animated.View {...hiddenProps(folded)} style={[{ overflow: 'hidden' }, row.frame]}>
       <Animated.View style={[{ height: HEIGHT, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row.content]}>
-        {/* Everything the thumb presses sits on the right; the logo (home) stays on the left
+        {/* Everything the thumb presses sits on the right; the logo, on home only, stays on the left
             (owner, 2026-11-17). A back arrow is the one exception: it leads on the right, the way back in Arabic. */}
         {back && <Tap onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
           <ChevronRight size={28} color={palette.ink} />
@@ -92,7 +88,9 @@ export default function TopBar({ children, title, middle, away: putAway = false,
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
           {center ? null : children}
         </View>
-        {bare || back ? null : <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
+        {/* The logo only on home (owner, 2026-11-17): elsewhere it was a second home button beside the home tab. Home is
+            the one page with the gear, so the gear and the logo go together. */}
+        {withSettings && <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
           <Logo size={34} />
         </Tap>}
       </Animated.View>

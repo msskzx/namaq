@@ -55,17 +55,14 @@ test.describe('going back', () => {
     await expect(page).toHaveURL(/\/quran$/);
   });
 
-  test('the logo goes home without leaving the search over it', async ({ page }) => {
+  test('only the home page shows the logo; other pages go home by the home tab', async ({ page }) => {
     await open(page, '/');
-    await page.getByRole('button', { name: 'البحث' }).click();
-    await expect(page).toHaveURL(/\/search/);
-    await page.getByRole('tab', { name: 'المصحف' }).click();
-    await expect(page).toHaveURL(/\/read/);
+    await expect(page.getByRole('button', { name: 'الصفحة الرئيسية' })).toHaveCount(1);
     await page.getByRole('tab', { name: 'القرآن' }).click();
-    await page.getByRole('button', { name: 'الصفحة الرئيسية' }).last().click();
+    await expect(page).toHaveURL(/\/quran$/);
+    await expect(page.getByRole('button', { name: 'الصفحة الرئيسية' })).toHaveCount(0);
+    await page.getByRole('tab', { name: 'الرئيسية' }).click();
     await expect(page).toHaveURL(/\/$/);
-    // The search page left the home stack: only the home page is drawn there.
-    await expect(page.getByLabel('ابحث في كل شيء')).toHaveCount(0);
   });
 
   test('a tool opened again comes to the front with what it was opened for, not as a second copy', async ({ page }) => {
