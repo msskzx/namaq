@@ -12,12 +12,17 @@ function Dot({ delay, color }: { delay: number; color: string }) {
   return <Animated.View style={[{ width: 9, height: 9, borderRadius: 5, backgroundColor: color }, style]} />;
 }
 
-/** Three terracotta berries, the website's small loader. */
-export default function LoadingDots() {
+/**
+ * The one loader: three terracotta berries, the website's small loader. Inline where something small is coming (a button's
+ * download, a player's answer); `fill` centres it in the room it is given, for a page or a sheet waiting for its content.
+ * `label` says what is coming to a screen reader. The app's start screen (LoadingScreen) and the quiz timer (Hourglass) are not loaders.
+ */
+export default function LoadingDots({ label = 'جارٍ التحميل', fill = false }: { label?: string; fill?: boolean }) {
   const palette = usePalette();
-  return (
-    <View accessibilityLabel="جارٍ التحميل" style={{ flexDirection: 'row', gap: 6 }}>
+  const dots = (
+    <View accessible={!fill} accessibilityLabel={fill ? undefined : label} style={{ flexDirection: 'row', gap: 6 }}>
       {[0, 160, 320].map(delay => <Dot key={delay} delay={delay} color={palette.accent} />)}
     </View>
   );
+  return fill ? <View accessible accessibilityLabel={label} style={{ flexGrow: 1, minHeight: 80, alignItems: 'center', justifyContent: 'center' }}>{dots}</View> : dots;
 }

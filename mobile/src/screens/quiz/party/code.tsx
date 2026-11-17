@@ -430,7 +430,7 @@ export default function PartyRoom() {
   if (status === 'missing' || status === 'removed' || (status === 'offline' && !view)) body = <Notice status={status} palette={palette} />;
   else if (!joined && error === 'started') body = <Notice status="started" palette={palette} />;
   else if (!name || nameError) body = <NameForm initial={name ?? ''} error={nameError} palette={palette} onSubmit={value => { saveName(value); setName(value); }} />;
-  else if (!view) body = <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><LoadingDots /></View>;
+  else if (!view) body = <LoadingDots fill />;
   else if (view.phase === 'lobby') body = <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled"><Lobby view={view} send={send} error={error} palette={palette} /></ScrollView>;
   else if (view.phase === 'loading') body = <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}><LoadingDots /><Label palette={palette} muted>تُجهَّز الأسئلة…</Label></View>;
   else if (view.phase === 'final') body = <FinalResults view={view} send={send} palette={palette} />;

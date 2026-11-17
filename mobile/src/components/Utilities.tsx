@@ -15,6 +15,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -255,7 +256,7 @@ export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose:
           {shown.map(city => (
             <Radio key={city.name} label={city.name} on={place?.name === city.name} palette={palette} onPress={() => { prayerPlace.set(city); onClose(); }} />
           ))}
-          {!shown.length && <Text style={{ padding: 16, color: palette.muted, fontSize: 15, textAlign: 'center' }}>لا توجد نتيجة مطابقة.</Text>}
+          {!shown.length && <Empty text="لا توجد نتيجة مطابقة." palette={palette} />}
         </ScrollView>
       </View>
     </Sheet>

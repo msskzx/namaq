@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Download, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book, type BookKind } from '@shared/books';
 import { num } from '@shared/quran/arabicNumber';
@@ -6,6 +6,7 @@ import { Text } from '@/ui/Text';
 import { addBook, bookState, removeBook, useBooks } from '@/lib/books';
 import { type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
+import LoadingDots from '@/ui/LoadingDots';
 
 export const size = (book: Book) => (book.builtIn ? 'مع التطبيق' : `${num(Math.round(book.megabytes * 10) / 10).replace('.', '٫')} م.ب`);
 
@@ -20,7 +21,7 @@ function BookRow({ book, palette, first }: { book: Book; palette: Palette; first
           {state === 'failed' ? 'تعذّر التنزيل، تحقق من الاتصال' : `${book.by} · ${size(book)}`}
         </Text>
       </View>
-      {state === 'downloading' ? <View style={button}><ActivityIndicator color={palette.accent} /></View>
+      {state === 'downloading' ? <View style={button}><LoadingDots label={`ينزل ${book.title}`} /></View>
         : state === 'on' ? (
           <Pressable onPress={() => removeBook(book.id)} accessibilityRole="button" accessibilityLabel={`احذف ${book.title}`} style={({ pressed }) => [button, { opacity: pressed ? 0.6 : 1 }]}>
             <Trash2 size={20} color={palette.muted} />

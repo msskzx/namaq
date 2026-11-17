@@ -21,6 +21,7 @@ import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
+import Empty from '@/ui/Empty';
 
 const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 
@@ -78,7 +79,7 @@ export default function QuizPlay() {
       <View style={{ flex: 1, backgroundColor: palette.paper }}>
         <TopBar back={() => router.back()} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 16 }}>
-          <Text style={{ color: palette.muted, fontSize: 17, textAlign: 'center' }}>{run ? 'لا توجد أسئلة كافية لهذا الاختيار.' : 'لا يوجد اختبار مفتوح.'}</Text>
+          <Empty palette={palette} text={run ? 'لا توجد أسئلة كافية لهذا الاختيار.' : 'لا يوجد اختبار مفتوح.'} />
           <Button label="العودة للإعداد" onPress={() => { setRun(null); router.back(); }} />
         </View>
       </View>
