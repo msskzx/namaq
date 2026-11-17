@@ -51,7 +51,7 @@ describe('which surah', () => {
         expect(Math.max(...values) - Math.min(...values)).toBe(3);
         places.add([...values].sort((x, y) => x - y).indexOf(Number(question.correctAnswer)));
       }
-      if (lookAlikes.length) for (const value of values) expect(anchors.includes(value) || anchors.some(anchor => Math.abs(anchor - value) <= 2)).toBe(true);
+      if (lookAlikes.length) for (const value of values) expect(anchors.includes(value) || anchors.some(anchor => Math.abs(anchor - value) <= 4)).toBe(true);
     }
     expect([...places].sort()).toEqual([0, 1, 2, 3]);
     const adam = medium.find(question => question.ayahKey === '2:34')!;
