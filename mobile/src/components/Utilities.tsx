@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
-import { Text, TextInput } from '@/ui/Text';
+import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import { hijriDate } from '@shared/hijri';
 import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
@@ -14,6 +14,7 @@ import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
+import { SearchField } from '@/ui/Field';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -249,11 +250,7 @@ export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose:
       <View style={{ flex: 1, paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
         <Wide Icon={LocateFixed} label="موقعي الحالي" onPress={here} palette={palette} primary disabled={busy} />
         {refused && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'center' }}>تعذّر معرفة الموقع، فاختر مدينة.</Text>}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.paper }}>
-          <Search size={18} color={palette.muted} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن مدينة" placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن مدينة"
-            style={{ flex: 1, height: 42, color: palette.ink, fontSize: 16, textAlign: 'right' }} />
-        </View>
+        <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن مدينة" label="ابحث عن مدينة" palette={palette} />
         <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, borderRadius: 10 }}>
           {shown.map(city => (
             <Radio key={city.name} label={city.name} on={place?.name === city.name} palette={palette} onPress={() => { prayerPlace.set(city); onClose(); }} />

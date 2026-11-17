@@ -117,7 +117,7 @@ Drift: 9 round chips in `Reader.tsx` (3), `CardMenu.tsx` (2), `WordSheet`,
 **Home:** `Chip` (selected, removable).
 **PR:** one.
 
-### 8. Text field
+### 8. Text field (done: one framed look, 44 tall, 16px; search fields, note, party name and code)
 Drift: 14 inputs. Search fields in `BranchSearch`, `screens/search.tsx`,
 `screens/words.tsx`, `screens/book.tsx`, `CompareSheet`, `Utilities`; note
 and party fields in `NoteSheet`, `screens/quiz/party/*`. Writing boxes

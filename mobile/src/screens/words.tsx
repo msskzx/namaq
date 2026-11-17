@@ -1,10 +1,9 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Search, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { searchWords, WORDS_COUNTING, WORDS_SOURCE } from '@shared/quran/words';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import WordSheet from '@/components/WordSheet';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -12,9 +11,9 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { words } from '@/lib/words';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
-import IconButton from '@/ui/IconButton';
 import Reference from '@/ui/Reference';
 import { sourceById } from '@shared/sources';
+import { SearchField } from '@/ui/Field';
 
 /** Words listed with no search (the most frequent) and at most with one. */
 export const WORDS_SHOWN = 40;
@@ -41,13 +40,7 @@ export default function WordsScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.card }}>
-          <Search size={18} color={palette.muted} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" placeholderTextColor={palette.muted} returnKeyType="search"
-            accessibilityLabel="ابحث عن كلمة في القرآن"
-            style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 44 }} />
-          {query !== '' && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
-        </View>
+        <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" label="ابحث عن كلمة في القرآن" palette={palette} />
         {/* The page's source in the page, collapsed, as openings and oaths carry theirs (owner, 2026-11-17: no sources icon). */}
         {source && <View style={{ paddingTop: 8 }}>
           <Reference title={`المصدر: ${source.title.ar}`} quotes={WORDS_COUNTING.map(text => ({ text }))} palette={palette}

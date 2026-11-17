@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } from 'react-native';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
@@ -35,6 +35,7 @@ import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import type { QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
+import Field from '@/ui/Field';
 
 type Send = (action: PlayerAction) => void;
 type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[] };
@@ -66,8 +67,7 @@ function NameForm({ initial, error, onSubmit, palette }: { initial: string; erro
   return (
     <View style={{ padding: 16 }}>
       <Section title="اسمك" palette={palette}>
-        <TextInput value={name} onChangeText={setName} onSubmitEditing={submit} maxLength={NAME_MAX} autoFocus accessibilityLabel="اسمك"
-          style={{ fontSize: 18, color: palette.ink, borderWidth: 1, borderColor: palette.rule, borderRadius: 8, paddingHorizontal: 12, height: 48, textAlign: 'right' }} />
+        <Field value={name} onChangeText={setName} onSubmitEditing={submit} maxLength={NAME_MAX} autoFocus label="اسمك" palette={palette} />
         {/* A name error belongs to the name that was sent; editing the name clears it. */}
         {error && name.trim() === sent ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{error}</Text> : null}
         <View style={{ alignItems: 'flex-start' }}><Button variant="primary" label="انضم" disabled={!name.trim()} onPress={submit} /></View>

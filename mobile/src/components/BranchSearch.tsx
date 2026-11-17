@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
-import { Text, TextInput } from '@/ui/Text';
-import { Search, X } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
 import { quranText } from '@/lib/quranText';
@@ -10,9 +9,9 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
-import IconButton from '@/ui/IconButton';
 import TopBar from '@/ui/TopBar';
 import { surahName } from '@shared/quran/surahNames';
+import { SearchField } from '@/ui/Field';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** The new list, and where it opens: a picked phrase, else the search's best tree. */
@@ -45,13 +44,8 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
       style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: palette.paper, zIndex: 10 }}>
       <Pressable accessible={false} onPress={Keyboard.dismiss}>
         <TopBar back={onClose}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 20, paddingHorizontal: 10, height: 40 }}>
-            <Search size={18} color={palette.muted} />
-            <TextInput value={query} onChangeText={setQuery} placeholder="ابحث" placeholderTextColor={palette.muted} returnKeyType="search"
-              accessibilityLabel="ابحث عن عبارة مشتركة بين آيتين أو أكثر" onSubmitEditing={() => apply({}, { query: query.trim() })}
-              style={{ flex: 1, fontSize: 16, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 8, height: 40 }} />
-            {typed && <IconButton Icon={X} label="مسح" onPress={() => setQuery('')} size="small" />}
-          </View>
+          <SearchField value={query} onChangeText={setQuery} placeholder="ابحث" label="ابحث عن عبارة مشتركة بين آيتين أو أكثر"
+            onSubmitEditing={() => apply({}, { query: query.trim() })} palette={palette} style={{ flex: 1 }} />
         </TopBar>
       </Pressable>
       {!suggesting && <>
